@@ -17,6 +17,7 @@ import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadFonts} from '../dist/fonts-node.js';
 import {splitStartupFaces} from '../dist/fonts-browser.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/extra-lazy-fonts');
@@ -39,6 +40,8 @@ const decks = {
   plain: {name: 'Roboto deck', design: {fontScheme: 'roboto'}, slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]},
   mixed: {name: 'Aptos with code', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Code review', code: 'const total = 12 + 34;'}]},
 };
+// FA-23: the decks name gallery font schemes; the page registers them, the way a host does (only the records the decks use).
+const catalog = {source: defaultCatalog.source, fontSchemes: {roboto: defaultCatalog.fontSchemes.roboto, aptos: defaultCatalog.fontSchemes.aptos}};
 
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const errors = [];
@@ -65,15 +68,16 @@ try {
   });
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
-  await page.evaluate(async ({startup, extras, decks}) => {
+  await page.evaluate(async ({startup, extras, decks, catalog}) => {
     const {loadBrowserFonts} = window.opf;
     window.decks = decks;
-    window.registry = (await loadBrowserFonts({faces: [{url: '/start.ttf', family: startup.family, weight: startup.weight, italic: startup.italic}], substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`, extraLazyFonts: extras,})).registry;
-  }, {startup: {family: startup[0].family, weight: startup[0].weight, italic: startup[0].italic}, extras, decks});
+    window.catalogs = [catalog];
+    window.registry = (await loadBrowserFonts({faces: [{url: '/start.ttf', family: startup.family, weight: startup.weight, italic: startup.italic}], substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`, extraLazyFonts: extras, renderOptions: {catalogs: window.catalogs}})).registry;
+  }, {startup: {family: startup[0].family, weight: startup[0].weight, italic: startup[0].italic}, extras, decks, catalog});
 
   const state = deckName => page.evaluate(async deckName => {
     const registry = window.registry, {renderSlideSvg} = window.opf;
-    const host = document.querySelector('main'); host.innerHTML = renderSlideSvg(window.decks[deckName], 0, { fonts: {textMeasurement: registry.textMeasurement}});
+    const host = document.querySelector('main'); host.innerHTML = renderSlideSvg(window.decks[deckName], 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     await document.fonts.ready;
     const family = value => value.split(',')[0].trim().replace(/^"|"$/g, '');
     const runs = [...host.querySelectorAll('text[textLength], tspan[textLength]')].map(element => {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from '../dist/svg.js';
-import {colorSchemes} from '@openpresentation/opf';
+// The decks name gallery records (the roboto font scheme, every gallery colour scheme), so the host catalog is registered.
+import {defaultCatalog, renderSlideSvg} from './catalog-harness.mjs';
 import {PATTERN_PRESETS, patternBitmap, patternRuns, colorContrast, metricTrendColor, resolveCodeLanguage} from '@openpresentation/opf/composition';
 
 // RR-07: the preview draws code.language syntax colours, metric.trend arrows and every DrawingML preset pattern.
@@ -45,8 +45,10 @@ for (const language of ['klingon', 'plaintext', undefined]) {
 }
 assert.equal(resolveCodeLanguage('klingon'), undefined);
 
-// Every catalog colour scheme (and a degenerate one) keeps every token colour at >= 4.5:1 on the code panel.
-for (const scheme of [...colorSchemes.map(({id}) => id), {light1: '#000000', dark1: '#000000', accent1: '#000000', accent2: '#000000', accent3: '#000000'}, {light1: '#FFFFFF', dark1: '#FFFFFF', accent1: '#FFFFFF', accent2: '#FFFFFF', accent3: '#FFFFFF'}]) {
+// Every gallery colour scheme (and a degenerate one) keeps every token colour at >= 4.5:1 on the code panel.
+const colorSchemeIds = Object.keys(defaultCatalog.colorSchemes);
+assert.ok(colorSchemeIds.length > 0, 'the gallery has colour schemes');
+for (const scheme of [...colorSchemeIds, {light1: '#000000', dark1: '#000000', accent1: '#000000', accent2: '#000000', accent3: '#000000'}, {light1: '#FFFFFF', dark1: '#FFFFFF', accent1: '#FFFFFF', accent2: '#FFFFFF', accent3: '#FFFFFF'}]) {
   const svg = renderSlideSvg(codeDeck({source: SOURCE + '\nclass Box(Base): pass\n@dec\nTrue', language: 'python'}, {colorScheme: scheme}), 0);
   const fills = new Set([...svg.matchAll(/<tspan fill="(#[0-9A-F]{6})"/g)].map(match => match[1]));
   assert.ok(fills.size >= 6, `${JSON.stringify(scheme)}: distinct token colours`);
@@ -112,4 +114,4 @@ assert.deepEqual(patternBitmap('diagStripe'), patternBitmap('wdUpDiag'));
   renderSlideSvg(patternDeck('engine-defined-id'), 0, {onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.map(item => item.code), ['unsupported-pattern'], 'an unknown id still reports once and keeps the background colour');
 }
-console.log(`RR-07 preview polish: code syntax colours (exact text, contrast >= 4.5 on ${colorSchemes.length + 2} schemes), metric trend arrows and colours, ${PATTERN_PRESETS.length + 1} pattern presets drawn from the core bitmaps.`);
+console.log(`RR-07 preview polish: code syntax colours (exact text, contrast >= 4.5 on ${colorSchemeIds.length + 2} schemes), metric trend arrows and colours, ${PATTERN_PRESETS.length + 1} pattern presets drawn from the core bitmaps.`);

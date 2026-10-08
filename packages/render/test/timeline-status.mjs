@@ -2,7 +2,7 @@
 // and planned are drawn from the deck's colors and agree with core's timelineMarkerShapes / timelineTextColor.
 import assert from 'node:assert/strict';
 import { colorContrast, timelineMarkerShapes, timelineTextColor } from '@openpresentation/opf/composition';
-import { resolvePresentation, renderSlideSvg } from '../dist/svg.js';
+import { resolvePresentation, renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { loadFonts } from '../dist/fonts-node.js';
 
 const fonts = await loadFonts({ pack: 'base' });

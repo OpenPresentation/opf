@@ -6,7 +6,9 @@ import {spawnSync} from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {svgToPng, renderSvg} from '../dist/index.js';
+import {svgToPng} from '../dist/index.js';
+// A deck below names the gallery font scheme meiryo: it renders and selects scripts with the host catalog registered.
+import {catalogs, renderSvg} from './catalog-harness.mjs';
 import {loadFonts, detectPresentationScripts, autoScriptSelection, scriptFontPackages} from '../dist/fonts-node.js';
 import {detectScripts} from '../dist/fonts.js';
 import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
@@ -39,7 +41,7 @@ assert.deepEqual(detectPresentationScripts(deck('Roadmap','Ship 日本語 and م
 assert.deepEqual(detectPresentationScripts(deck('Review','Body',{language:'ja'})),[]);
 assert.deepEqual(detectPresentationScripts(deck('Review','Body',{language:'ar'})),[]);
 // Text that is never drawn does not load faces.
-assert.deepEqual(detectPresentationScripts(deck('Review','Body',{assets:{logo:{name:'ロゴ'}},catalogs:{fontSchemes:{records:[{name:'日本'}]}}})),[]);
+assert.deepEqual(detectPresentationScripts(deck('Review','Body',{assets:{logo:{name:'ロゴ'}},catalogs:{custom:{fontSchemes:{'x-jp':{name:'日本'}}}}})),[]);
 assert.deepEqual(detectPresentationScripts({...deck('Review'),slides:[{title:'Review',notes:'日本語のメモ'}]}),[]);
 // Nested content, tables and charts count.
 assert.deepEqual(detectPresentationScripts({slides:[{title:'T',blocks:[{table:{columns:['名前','Owner'],rows:[['A','B']]}},{chart:{type:'column',data:{columns:['Q','値'],rows:[['Q1',1]]}}}]}]}),['Hans']);
@@ -99,7 +101,7 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
 // loadFonts: layout, SVG and PNG agree, script faces stay out of embedded SVG, and raster reads them from fontFiles.
 {
   const presentation=deck('四半期レビュー 12%','Body text',{language:'ja',design:{fontScheme:'meiryo'}});
-  const prepared=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation});
+  const prepared=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation,renderOptions:{catalogs}});
   assert.deepEqual(prepared.registry.scriptSelection.scripts,['Jpan']);
   assert.equal(prepared.fontFiles.filter(file=>/noto-sans-jp/.test(file)).length,2);
   assert.equal(prepared.fontFiles.some(file=>/noto-sans-(sc|tc|kr|arabic)/.test(file)),false);

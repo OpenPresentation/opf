@@ -6,7 +6,7 @@
 // widths a browser (Chromium/HarfBuzz via Edge on Windows) measures for the same face at 100 px: the Latin sample and four Mongolian
 // samples are equal within 0.05 px; the fifth (with a variation selector) is 0.9% narrower, a known limit of skipping the lookup.
 import assert from 'node:assert/strict';
-import {renderSvg} from '../dist/index.js';
+import {renderSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 
 const prepared = await loadFonts({pack: 'office', scripts: ['Mong']}), {registry} = prepared;

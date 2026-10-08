@@ -1,26 +1,25 @@
-// FF-35 (font-fidelity-everywhere): one shared last-resort font scheme, aptos, for
-// every engine. A custom theme without a font scheme previews in the same fonts
-// that core pagination, opf-editor and opf-pptx export use, and takes the same
-// Aptos substitution path as a document with no design at all.
+// FF-35 (font-fidelity-everywhere) / FA-21: one shared last-resort font scheme for every engine, core's
+// ENGINE_DEFAULT_FONT_SCHEME (Aptos Display / Aptos, code, no catalog lookup). A custom theme without a font scheme
+// previews in the same fonts that core pagination, opf-editor and opf-pptx export use, and takes the same Aptos
+// substitution path as a document with no design at all. Documents that name gallery records (`roboto`, `code-1x`)
+// render with the gallery registered as the host catalog (./catalog-harness.mjs).
 import assert from 'node:assert/strict';
-import {DEFAULT_FONT_SCHEME} from '@openpresentation/opf/composition';
+import {ENGINE_DEFAULT_FONT_SCHEME, resolveFontFamilies} from '@openpresentation/opf/composition';
 import {paginate} from '@openpresentation/opf/pagination';
-import {engineDefaults, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {catalogs, defaultCatalog, engineDefaults, svgToPng, renderSlideSvg} from './catalog-harness.mjs';
 import { loadFonts } from '../dist/fonts-node.js';
 
-assert.equal(engineDefaults.fontScheme.pptx.latin, 'aptos');
-// Parity with core's exported constant.
-assert.equal(engineDefaults.fontScheme.pptx.latin, DEFAULT_FONT_SCHEME);
-// Kept only as the default for a future Google Slides target; no renderer path reads it.
-assert.equal(engineDefaults.fontScheme.google.latin, 'roboto');
+// Parity with core's exported engine default: the renderer re-exports it, and it draws as the gallery's aptos scheme.
+assert.deepEqual(engineDefaults.fontScheme, ENGINE_DEFAULT_FONT_SCHEME);
+assert.deepEqual(resolveFontFamilies(ENGINE_DEFAULT_FONT_SCHEME), {heading: 'Aptos Display', body: 'Aptos', code: 'Roboto Mono'});
+assert.deepEqual(resolveFontFamilies(ENGINE_DEFAULT_FONT_SCHEME), resolveFontFamilies(defaultCatalog.fontSchemes.aptos));
 
 const slide = { id: 't', title: 'Quarterly operating review', text: 'Revenue grew in every region.' };
-const bare = { $schema: 'https://openpresentation.org/schema/opf-theme/v1', id: 'bare', name: 'Bare' };
-const custom = { name: 'Theme without font scheme', design: { theme: 'bare' }, catalogs: { themes: { records: [bare] } }, slides: [slide] };
+const custom = { name: 'Theme without font scheme', design: { theme: 'bare' }, catalogs: { custom: { themes: { bare: { name: 'Bare' } } } }, slides: [slide] };
 const noDesign = { name: 'No design', slides: [slide] };
 const families = svg => [...new Set([...svg.matchAll(/font-family="([^"]+)"/g)].map(match => match[1]))].sort();
 
-// Estimated layout: the SVG names the Aptos families, as the default minimal theme does.
+// Estimated layout: the SVG names the Aptos families, as a document with no design does.
 assert.deepEqual(families(renderSlideSvg(custom, 0)), ['Aptos Display, sans-serif', 'Aptos, sans-serif']);
 assert.deepEqual(families(renderSlideSvg(custom, 0)), families(renderSlideSvg(noDesign, 0)));
 // A deck font scheme still wins over the last resort.
@@ -48,28 +47,28 @@ for (const deck of [custom, noDesign]) assert.deepEqual(families(renderSlideSvg(
 const baseMetric = await loadFonts({ pack: 'base', substitutionPolicy: 'metric' });
 for (const deck of [custom, noDesign]) assert.throws(() => renderSlideSvg(deck, 0, {fonts: baseMetric}), { code: 'font-unavailable' });
 
-console.log('shared default font scheme (aptos): estimated and measured previews match the default theme path');
+console.log('shared engine default font scheme (Aptos Display / Aptos): estimated and measured previews match the no-design path');
 
-// FF-35b: one rule for an unresolvable font scheme in every engine. The default
-// (aptos) record is the base, sibling overrides still apply, and one
-// `unresolved-font-scheme` diagnostic names the reference. Same table as opf
+// FF-35b: one rule for an unresolvable font scheme in every engine. The engine default font scheme is the base, sibling
+// overrides still apply, and one `unresolved-reference` diagnostic names the reference. Same table as opf
 // packages/javascript/test/font-scheme-defaults.test.mjs.
 const unknownCases = [
   ['string id', {design: {fontScheme: 'no-such-scheme'}}, ['Aptos', 'Aptos Display'], 'design.fontScheme'],
-  ['object id', {design: {fontScheme: {id: 'no-such-scheme'}}}, ['Aptos', 'Aptos Display'], 'design.fontScheme'],
-  ['object id with a family pair', {design: {fontScheme: {id: 'no-such-scheme', major: 'Inter', minor: 'Inter'}}}, ['Inter'], 'design.fontScheme'],
+  ['object id', {design: {fontScheme: {id: 'no-such-scheme'}}}, ['Aptos', 'Aptos Display'], 'design.fontScheme.id'],
+  ['object id with a family pair', {design: {fontScheme: {id: 'no-such-scheme', major: 'Inter', minor: 'Inter'}}}, ['Inter'], 'design.fontScheme.id'],
   ['slide design', {slideDesign: {fontScheme: 'no-such-scheme'}}, ['Aptos', 'Aptos Display'], 'slides.0.design.fontScheme'],
-  ['theme record', {design: {theme: 'bare-unknown'}, catalogs: {themes: {records: [{$schema: 'https://openpresentation.org/schema/opf-theme/v1', id: 'bare-unknown', name: 'Bare', fontScheme: 'no-such-scheme'}]}}}, ['Aptos', 'Aptos Display'], 'design.theme'],
+  ['theme record', {design: {theme: 'bare-unknown'}, catalogs: {custom: {themes: {'bare-unknown': {name: 'Bare', fontScheme: 'no-such-scheme'}}}}}, ['Aptos', 'Aptos Display'], 'catalogs.custom.themes.bare-unknown.fontScheme'],
   ['inline scheme without id', {design: {fontScheme: {major: 'Inter', minor: 'Inter'}}}, ['Inter'], undefined],
   ['inline code role without id', {design: {fontScheme: {code: 'JetBrains Mono'}}}, ['Aptos', 'Aptos Display'], undefined],
 ];
-const unknownDeck = ({design, slideDesign, catalogs}) => ({name: 'Unknown font scheme', ...(design ? {design} : {}), ...(catalogs ? {catalogs} : {}), slides: [{id: 't', title: 'Title', text: 'Body', ...(slideDesign ? {design: slideDesign} : {})}, {id: 'u', title: 'Second', text: 'Body'}]});
-const expectedDiagnostics = path => path ? [{code: 'unresolved-font-scheme', path, id: 'no-such-scheme', fallback: 'aptos', message: "Font scheme 'no-such-scheme' is not in the inline or bundled catalogs; using the default font scheme 'aptos'."}] : [];
-// Core pagination agreement: `paginate` measures with the fonts handle it is given, so the families it asks for are the ones the
-// renderer resolves.
+const unknownDeck = ({design, slideDesign, catalogs: groups}) => ({name: 'Unknown font scheme', ...(design ? {design} : {}), ...(groups ? {catalogs: groups} : {}), slides: [{id: 't', title: 'Title', text: 'Body', ...(slideDesign ? {design: slideDesign} : {})}, {id: 'u', title: 'Second', text: 'Body'}]});
+const expectedDiagnostics = path => path ? [{code: 'unresolved-reference', kind: 'fontSchemes', path, reference: 'no-such-scheme', fallback: 'engine-default'}] : [];
+const essentials = diagnostics => diagnostics.map(({code, kind, path, reference, fallback}) => ({code, kind, path, reference, fallback}));
+// Core pagination agreement: `paginate` measures with the fonts handle it is given (and the same host catalogs), so the families it
+// asks for and the diagnostics it reports are the ones the renderer resolves.
 const corePagination = deck => {
   const diagnostics = [], measured = new Set();
-  paginate(structuredClone(deck), {onDiagnostic: diagnostic => diagnostics.push(diagnostic), fonts: {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}}});
+  paginate(structuredClone(deck), {catalogs, onDiagnostic: diagnostic => diagnostics.push(diagnostic), fonts: {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}}});
   return {diagnostics, families: [...measured].sort()};
 };
 const checkCore = (deck, expected, diagnostics, name) => {
@@ -81,10 +80,11 @@ for (const [name, input, expected, path] of unknownCases) {
   const deck = unknownDeck(input), diagnostics = [];
   const svg = renderSlideSvg(deck, 0, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   assert.deepEqual(families(svg).map(stack => stack.replace(/, sans-serif$/, '')).sort(), expected, name);
-  assert.deepEqual(diagnostics, expectedDiagnostics(path), name);
+  assert.deepEqual(essentials(diagnostics), expectedDiagnostics(path), name);
+  for (const diagnostic of diagnostics) assert.match(diagnostic.message, /no-such-scheme/, `${name}: the message names the reference`);
   checkCore(deck, expected, diagnostics, name);
 }
 // A code role on an unresolved object reference still applies.
 const codeDeck = {name: 'Code', design: {fontScheme: {id: 'no-such-scheme', code: 'JetBrains Mono'}}, slides: [{id: 'c', layout: 'code-1x', title: 'Rule', code: {source: 'const x = 1;', language: 'ts'}}]};
 assert.ok(families(renderSlideSvg(codeDeck, 0)).includes('JetBrains Mono, monospace'));
-console.log('unresolved font schemes: default base and one diagnostic, as in every engine');
+console.log('unresolved font schemes: engine default base and one unresolved-reference diagnostic, as in every engine');

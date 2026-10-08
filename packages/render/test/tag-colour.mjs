@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from '../dist/svg.js';
+import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 // FF-59: the slide tag is the eyebrow label. The preview draws it in the scheme's primary colour (accent1),
 // which is what opf-pptx writes for the tag run; title, subtitle and body keep the text colour.

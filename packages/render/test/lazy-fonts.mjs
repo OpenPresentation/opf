@@ -7,7 +7,8 @@ import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {fontSchemes} from '@openpresentation/opf';
+// Font schemes are gallery records: the decks resolve with the gallery catalog registered, as a host renders them.
+import {catalogs, defaultCatalog} from './catalog-harness.mjs';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 import {createFontRegistry} from '../dist/font-registry.js';
 import {loadFonts as loadBrowserFonts, lazyFontEntries, lazyFontList, lazyFontsFor, presentationFamilies} from '../dist/fonts-browser.js';
@@ -56,7 +57,7 @@ assert.deepEqual(grown.addFaces([]), [], 'an empty batch is a no-op');
 // ---- which faces a document needs ----
 const deckWith = scheme => ({name: `Lazy ${scheme ?? 'default'}`, ...(scheme ? {design: {fontScheme: scheme}} : {}), slides: [{id: 'a', title: 'Quarterly review', text: 'Revenue grew.'}]});
 const held = registry => family => registry.describeFaces().some(face => face.family.toLowerCase() === family.toLowerCase());
-const needFor = (registryNow, deck) => lazyFontsFor(presentationFamilies(deck), {lazy: office.lazyFonts, hasFamily: held(registryNow)});
+const needFor = (registryNow, deck) => lazyFontsFor(presentationFamilies(deck, {catalogs}), {lazy: office.lazyFonts, hasFamily: held(registryNow)});
 const eagerOnly = () => createFontRegistry(eager, {substitutionPolicy: 'visual'});
 const aptosNeeds = needFor(eagerOnly(), deckWith());
 assert.deepEqual([...new Set(aptosNeeds.map(face => face.family))].sort(), ['Intos', 'Intos Display'], 'the default (Aptos) scheme needs Intos and Intos Display');
@@ -78,15 +79,15 @@ assert.deepEqual(forPolicy('none', ['Source Sans Pro']), [], 'without the alias 
 // Loading exactly what a document needs resolves like Node with every vendored face loaded.
 const lc = value => value.toLowerCase();
 let compared = 0;
-for (const scheme of fontSchemes) {
-  const deck = deckWith(scheme.id), partial = eagerOnly();
+for (const id of Object.keys(defaultCatalog.fontSchemes)) {
+  const deck = deckWith(id), partial = eagerOnly();
   const need = needFor(partial, deck);
   if (need.length) partial.addFaces(await Promise.all(need.map(async face => ({family: face.family, weight: face.weight, italic: face.italic, embed: 'used', data: new Uint8Array(await readFile(path.join(root, face.file)))}))));
-  for (const family of presentationFamilies(deck)) for (const [fontWeight, italic] of [[400, false], [700, false], [400, true]]) {
+  for (const family of presentationFamilies(deck, {catalogs})) for (const [fontWeight, italic] of [[400, false], [700, false], [400, true]]) {
     const expected = (() => { try { return office.resolveFont({fontFamily: family, fontWeight, italic}); } catch (error) { return {error: error.code}; } })();
     if (expected.resolvedFamily === 'Noto Sans') continue; // the glyph-fallback face (opf-render#57) loads through the script loader, not the eager list or the lazy set
     const actual = (() => { try { return partial.resolveFont({fontFamily: family, fontWeight, italic}); } catch (error) { return {error: error.code}; } })();
-    assert.deepEqual([actual.error, actual.resolvedFamily && lc(actual.resolvedFamily), actual.compatibility], [expected.error, expected.resolvedFamily && lc(expected.resolvedFamily), expected.compatibility], `${scheme.id}: ${family} ${fontWeight}${italic ? 'i' : ''} resolves as in Node`);
+    assert.deepEqual([actual.error, actual.resolvedFamily && lc(actual.resolvedFamily), actual.compatibility], [expected.error, expected.resolvedFamily && lc(expected.resolvedFamily), expected.compatibility], `${id}: ${family} ${fontWeight}${italic ? 'i' : ''} resolves as in Node`);
     compared++;
   }
 }

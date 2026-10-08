@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { chartHighlightColors, textColorForFill } from '@openpresentation/opf/composition';
-import { renderSlideSvg } from '../dist/svg.js';
+import { renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { CHART_TYPES } from '../src/charts.js';
 
 // FA-14: chart.highlight in the preview. Core resolves the marks (chartHighlightMarks) and the two colours

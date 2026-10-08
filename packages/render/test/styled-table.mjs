@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {composeSlide, layoutTable} from '@openpresentation/opf/composition';
 
 const table = {rows: [

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation, OPFRenderError, renderSlideSvg} from '../dist/index.js';
+import {renderSvg, resolvePresentation, OPFRenderError, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 // RR-32: a template plus values previews exactly like the hand-written deck, because the renderer
 // resolves variables with core resolveVariables before it composes anything.

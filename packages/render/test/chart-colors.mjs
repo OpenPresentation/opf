@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+// FA-23: the colour schemes below extend the gallery's `cool-horizon` record, so the host catalog is registered.
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 import {colorContrast,chartPaletteForFill} from '@openpresentation/opf/composition';
 import {CHART_SERIES_COLORS} from '../dist/charts.js';
 const cases=[
@@ -10,8 +11,8 @@ const cases=[
  {background:'#000000',surface:'#FFFFFF80',text:'#FFFFFF',expected:'#FFFFFF'},
 ];
 let checked=0;
-for(const fixture of cases)for(const type of ['column','bar','line','area','pie','donut','stacked-column']){
- const circular=['pie','donut'].includes(type);
+for(const fixture of cases)for(const type of ['column','bar','line','area','pie','doughnut','stacked-column']){
+ const circular=['pie','doughnut'].includes(type);
  const chart={type,data:{columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]}};
  const input={design:{background:fixture.background,colorScheme:{id:'cool-horizon',dark1:fixture.text,light1:fixture.text,dark2:fixture.surface,light2:fixture.surface}},slides:[{chart}]},original=structuredClone(input);
  const svg=renderSlideSvg(input, 0,{trace:true}),bound=resolvePresentation(input).slides[0];
@@ -50,4 +51,4 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
 // Unresolved data (a data source by asset, which the format no longer has, drawn with validation off) uses the same themed panel without inventing chart data.
 const missing={design:{background:'#000000',colorScheme:{id:'cool-horizon',dark2:'#334155',light1:'#FFFFFF'}},slides:[{chart:{type:'column',data:{src:'asset:missing'}}}]};
 const svg=renderSlideSvg(missing, 0, {validate:false});assert.ok(svg.includes('No chart data'));assert.ok(/<text[^>]*fill="#FFFFFF"[^>]*>No chart data<\/text>/.test(svg));
-console.log(`Chart colors passed: ${checked} simple/catalog paths, light/dark/opposite surfaces, retained alpha and unresolved data; no source mutation.`);
+console.log(`Chart colors passed: ${checked} chart-type paths, light/dark/opposite surfaces, retained alpha and unresolved data; no source mutation.`);

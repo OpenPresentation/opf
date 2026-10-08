@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvg, svgToPng} from '../dist/index.js';
+import {renderSvg, svgToPng} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {renderSvgDeck as renderBefore} from '../artifacts/timeline-before-runtime/dist/index.js';
 const before=path.resolve(process.argv[2]??'artifacts/readability-golden-after'),after=path.resolve(process.argv[3]??'artifacts/timeline-golden-after'),out=path.resolve(process.argv[4]??'docs/evidence/timeline-corpus-review');
 const original=JSON.parse(await readFile(path.join(before,'candidate.json'))),candidate=JSON.parse(await readFile(path.join(after,'candidate.json')));

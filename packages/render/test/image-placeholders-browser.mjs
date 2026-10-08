@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from '../dist/svg.js';
+import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fonts=(await loadFonts({pack: 'base'})).registry,fixtures=[];

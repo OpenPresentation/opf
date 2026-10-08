@@ -16,6 +16,9 @@ console.log('Browser bundle passed: no native raster modules. Serve /artifacts/j
 
 const {loadFonts}=await import('../dist/fonts-node.js');
 const {renderSlideSvg,resolvePresentation}=await import('../dist/svg.js');
+// FA-23: the deck names the gallery font scheme 'roboto'; register the gallery snapshot as a host does.
+const {defaultCatalog}=await import('@openpresentation/opf/catalog');
+const catalogs=[defaultCatalog];
 const fonts=await loadFonts();
 const quoteDirectory=new URL('../artifacts/quote-footer/browser/',import.meta.url);
 await mkdir(quoteDirectory,{recursive:true});
@@ -31,12 +34,12 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const expanded=repeats==='expanded-footer';
   const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:expanded?'Keep the complete source visible.':'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:expanded?'Long attribution '.repeat(60):'A reviewer',source:'Recorded interview'}}]};
   const diagnostics=[];
-  const svg=renderSlideSvg(deck,0,{trace:true,fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:value=>diagnostics.push(value)});
+  const svg=renderSlideSvg(deck,0,{trace:true,catalogs,fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:value=>diagnostics.push(value)});
   assert.equal(diagnostics.length,0);
   const id=`${dimensions.width}-${repeats}`,filename=id+'.svg';
   await writeFile(new URL(filename,quoteDirectory),svg);
   assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`));
-  const item=resolvePresentation(deck,{fonts:{textMeasurement:fonts.textMeasurement}}).slides[0].geometry.items.find(item=>item.field==='quote');
+  const item=resolvePresentation(deck,{catalogs,fonts:{textMeasurement:fonts.textMeasurement}}).slides[0].geometry.items.find(item=>item.field==='quote');
   const parts=item.quoteLayout.parts;
   cases.push({id,url:'./'+filename,...dimensions,cellBox:item.box,bodyBox:parts[0].box,footerBox:parts[1].box,body:parts[0].text,footer:parts[1].text});
 }

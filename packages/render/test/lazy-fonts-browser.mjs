@@ -14,7 +14,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {layouts} from '@openpresentation/opf/catalogs';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -44,7 +44,7 @@ const nearestFile = (family, weight) => vendoredFaces(family).filter(face => !fa
 const vendoredFaces = family => BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.vendored).flatMap(pkg => pkg.faces.filter(face => face.family === family).map(face => ({file: `${pkg.vendored}/${face.file}`, weight: face.weight, italic: face.italic})));
 const pairDeck = pair => ({
   design: {fontScheme: pair.name},
-  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: pair.name, name: pair.name, app: 'powerpoint', languageFamily: 'latin', languages: [], major: pair.major, minor: pair.minor, textSample: 'x', type: 'sans-serif'}]}},
+  catalogs: {custom: {fontSchemes: {[pair.name]: {name: pair.name, app: 'powerpoint', languageFamily: 'latin', languages: [], major: pair.major, minor: pair.minor, textSample: 'x', type: 'sans-serif'}}}},
   name: pair.name,
   slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region, led by the enterprise segment.'}],
 });
@@ -56,7 +56,8 @@ const decks = {
   roboto: {name: 'Roboto deck', design: {fontScheme: 'roboto'}, slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]},
 };
 
-const hostCatalogs = {layouts: [{...layouts.find(entry => entry.id === 'list-1x'), id: 'host-bullets', name: 'Host bullets'}]};
+// FA-23: the host registers one catalog (core Catalog), the default for bare ids: a layout only it has, and the font scheme the Roboto deck names.
+const hostCatalogs = [{source: 'https://host.test/opf', layouts: {'host-bullets': {...defaultCatalog.layouts['list-1x'], name: 'Host bullets'}}, fontSchemes: {roboto: defaultCatalog.fontSchemes.roboto}}];
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const errors = [], unexpected = [];
 try {
@@ -102,7 +103,7 @@ try {
       documentFaces: [...document.fonts].map(face => `${face.family.replace(/^"|"$/g, '')}|${Number(face.weight)}|${face.style === 'italic'}`).sort(),
       drawn: [...new Set(runs.map(run => run.family))], runs,
       resolved: registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}).resolvedFamily,
-      ...(window.decks[name].catalogs ? (() => { const record = window.decks[name].catalogs.fontSchemes.records[0]; return {resolvedMajor: registry.resolveFont({fontFamily: record.major, fontWeight: 400}).resolvedFamily, resolvedMinor: registry.resolveFont({fontFamily: record.minor, fontWeight: 400}).resolvedFamily}; })() : {}),
+      ...(window.decks[name].catalogs ? (() => { const record = Object.values(window.decks[name].catalogs.custom.fontSchemes)[0]; return {resolvedMajor: registry.resolveFont({fontFamily: record.major, fontWeight: 400}).resolvedFamily, resolvedMinor: registry.resolveFont({fontFamily: record.minor, fontWeight: 400}).resolvedFamily}; })() : {}),
     };
   }, name);
 
@@ -146,7 +147,7 @@ try {
   for (const run of italic.runs) { assert.ok(run.painted, `${run.family} is loaded`); assert.ok(Math.abs(run.natural - run.accepted) < 0.1, `italic: ${run.family} advance ${run.natural} differs from accepted ${run.accepted}`); }
   // FF-41: a layout id that only the host's catalogs know resolves through renderOptions; without them the slide composes with no layout and the same faces are needed.
   assert.deepEqual(await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), 'hostLayout'), [], 'the Intos faces the host-layout deck draws are already loaded');
-  const withoutCatalogs = await page.evaluate(name => { try { return window.registry.pendingLazyFonts(window.decks[name], {catalogs: {}}).map(face => face.file); } catch (error) { return error.code; } }, 'hostLayout');
+  const withoutCatalogs = await page.evaluate(name => { try { return window.registry.pendingLazyFonts(window.decks[name], {catalogs: []}).map(face => face.file); } catch (error) { return error.code; } }, 'hostLayout');
   assert.deepEqual(withoutCatalogs, [], 'without the host catalogs the slide composes with no layout and nothing more is pending');
   // FF-43: each replacement pair loads exactly its vendored families' files, and the document paints what the registry measured.
   const pairReport = [];

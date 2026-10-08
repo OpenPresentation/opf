@@ -114,7 +114,7 @@ export function scriptDeck(entry, sample) {
     $schema: 'https://openpresentation.org/schema/opf/v1',
     name: `Script fixture ${entry.family} ${sample.id}`,
     ...(sample.language ? {language: sample.language} : {}),
-    design: {fontScheme: {id: 'x-script-fixture', name: entry.family, major: entry.family, minor: entry.family, eastAsian: {major: entry.family, minor: entry.family}, complexScript: {major: entry.family, minor: entry.family}}},
+    design: {fontScheme: {name: entry.family, major: entry.family, minor: entry.family, eastAsian: {major: entry.family, minor: entry.family}, complexScript: {major: entry.family, minor: entry.family}}},
     slides: [{id: 'a', title: sample.text, text: [{text: sample.text}, {text: sample.text, bold: true}]}],
   };
 }

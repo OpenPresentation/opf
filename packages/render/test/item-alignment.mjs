@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 // Core composition resolves one alignment per composed item. The preview must
 // anchor text to it, because PPTX export reads the same value. This test runs

@@ -1,67 +1,12 @@
+// Slide backgrounds (solid, gradient stops, pattern colours) accept ColorRef: a hex value, a `var:` variable, or a colour scheme
+// slot or role. The colour scheme comes from the gallery snapshot, which the test registers as a host does (FA-23).
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
-import {colorSchemes} from '@openpresentation/opf';
+import {renderSlideSvg as render} from '../dist/svg.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 
-// --- catalogs.<kind>.source as an ordered search path (CatalogEntry.source: string | string[]) ---
-// First match wins, the engine default catalog is appended implicitly, engines never fetch.
-const custom = {id: 'acme-theme', name: 'Acme', colorScheme: 'forest-green', fontScheme: 'aptos'};
-const doc = (source, extra = {}) => ({
-  name: 'x',
-  design: {theme: 'acme-theme'},
-  catalogs: {themes: {source}},
-  slides: [{title: 'T', text: 'b'}],
-  ...extra
-});
-const sources = {'https://acme.test/themes': [custom]};
-
-// (a) a catalogSources record in a later entry resolves a custom id.
-for (const source of [['https://remote.invalid/none', 'https://acme.test/themes'], ['https://acme.test/themes']]) {
-  const svg = renderSlideSvg(doc(source), 0, {catalogSources: sources});
-  assert.ok(svg.startsWith('<svg'), 'array source renders');
-  assert.equal(resolvePresentation(doc(source), {catalogSources: sources}).slides[0].design.theme.id, 'acme-theme');
-}
-// Same id in two sources: the first match wins.
-const first = {...custom, colorScheme: 'cool-horizon'};
-const ordered = resolvePresentation(doc(['https://a.test/t', 'https://acme.test/themes']), {
-  catalogSources: {'https://a.test/t': [first], 'https://acme.test/themes': [custom]}
-}).slides[0].design.theme;
-assert.equal(ordered.colorScheme, 'cool-horizon');
-const reversed = resolvePresentation(doc(['https://acme.test/themes', 'https://a.test/t']), {
-  catalogSources: {'https://a.test/t': [first], 'https://acme.test/themes': [custom]}
-}).slides[0].design.theme;
-assert.equal(reversed.colorScheme, 'forest-green');
-// Non-string entries and an empty array are schema-invalid; with validation off they are ignored defensively.
-assert.ok(renderSlideSvg(doc([null, 7, 'https://acme.test/themes']), 0, {catalogSources: sources, validate: false}).startsWith('<svg'));
-assert.ok(renderSlideSvg(doc([]), 0, {validate: false, catalogSources: sources, catalogs: {themes: [custom]}}).startsWith('<svg'));
-
-// (b) the bundled default prefix inside the array resolves bundled records.
-const bundled = {name: 'x', design: {theme: 'classic'}, catalogs: {themes: {source: ['pkg:@openpresentation/opf/themes']}}, slides: [{title: 'T'}]};
-assert.ok(renderSlideSvg(bundled, 0).startsWith('<svg'));
-const gallery = {...bundled, catalogs: {themes: {source: ['https://www.pptx.gallery/themes']}}};
-assert.ok(renderSlideSvg(gallery, 0).startsWith('<svg'));
-
-// (c) an unknown remote URL in the array still renders with the bundled defaults (no fetch).
-const remote = {name: 'x', catalogs: {themes: {source: ['https://unknown.invalid/themes', 'https://other.invalid/themes']}}, slides: [{title: 'T', text: 'b'}]};
-assert.equal(renderSlideSvg(remote, 0), renderSlideSvg({name: 'x', slides: [{title: 'T', text: 'b'}]}, 0));
-// An unresolved id never throws: the theme falls back and the render reports `unresolved-theme`.
-const unresolved = [];
-assert.ok(renderSlideSvg(doc(['https://unknown.invalid/themes']), 0, {onDiagnostic: item => unresolved.push(item)}).startsWith('<svg'));
-assert.deepEqual(unresolved.map(item => item.code), ['unresolved-theme']);
-
-// socialPlatforms: a custom platform from a catalogSources record in a later array entry.
-const social = {
-  organization: {id: 'acme', name: 'Acme', socials: {mastodon: '@acme'}},
-  design: {footer: {right: {socials: true}}},
-  catalogs: {socialPlatforms: {source: ['https://unknown.invalid/sp', 'https://acme.test/sp']}},
-  slides: [{title: 'T', text: 'b'}]
-};
-const platform = {id: 'mastodon', name: 'Mastodon', profileUrlPattern: 'https://masto.test/{handle}', handlePrefix: '@'};
-const socialSvg = renderSlideSvg(social, 0, {catalogSources: {'https://acme.test/sp': [platform]}});
-assert.ok(socialSvg.includes('masto.test/acme'), 'array socialPlatforms source resolves the custom platform');
-assert.ok(renderSlideSvg({...social, organization: {id: 'acme', name: 'Acme', socials: {x: '@acme'}}}, 0).includes('>x.com/acme<'), 'bundled platforms still resolve');
-
+const renderSlideSvg = (deck, index, options = {}) => render(deck, index, {catalogs: [defaultCatalog], ...options});
 // --- SolidBackground / GradientBackground / PatternBackground accept ColorRef ---
-const scheme = colorSchemes.find(entry => entry.id === 'forest-green');
+const scheme = defaultCatalog.colorSchemes['forest-green'];
 const withBackground = (background, extra = {}) => ({
   name: 'x',
   variables: {brand: '#FF0000'},
@@ -110,4 +55,4 @@ assert.ok(darkPattern.includes(`fill="${scheme.dark1.toUpperCase()}"`) && /<path
 assert.equal(darkPattern.match(/<path d="[^"]*" fill="([^"]+)" shape-rendering="crispEdges"/)[1], scheme.dark1.toUpperCase(), 'pattern foreground text role is the scheme dark1');
 const textStop = renderSlideSvg(withBackground({type: 'gradient', gradient: {angle: 0, stops: [{position: 0, color: 'text'}, {position: 1, color: 'surface'}]}}), 0);
 assert.deepEqual([...textStop.matchAll(/stop-color="([^"]+)"/g)].map(match => match[1]), [scheme.dark1.toUpperCase(), scheme.light2.toUpperCase()]);
-console.log('Catalog source arrays and ColorRef backgrounds passed.');
+console.log('ColorRef backgrounds passed.');

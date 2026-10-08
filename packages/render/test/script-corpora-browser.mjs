@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from '../dist/index.js';
+import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
 

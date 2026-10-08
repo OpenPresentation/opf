@@ -1,35 +1,40 @@
 import assert from "node:assert/strict";
-import { catalogs } from "@openpresentation/opf";
+import { catalogDisplay } from "@openpresentation/opf/catalog";
+import { CHART_TYPES as CORE_CHART_TYPES, ENGINE_DEFAULT_CHART_TYPES } from "@openpresentation/opf/composition";
 import { CHART_TYPES, resolveChartType } from "../dist/charts.js";
+import { engineDefaults } from "../dist/index.js";
 
-// The renderer carries its own chart table (catalog ids and their construct). It must agree
-// with the installed core chart type catalog, so a catalog change fails here instead of drifting silently.
-const catalog = catalogs.chartTypes;
-assert.ok(Array.isArray(catalog) && catalog.length > 0, "core exposes catalogs.chartTypes");
-const byId = new Map(catalog.map((record) => [record.id, record]));
-const kept = catalog;
-assert.deepEqual(catalog.filter((record) => record.deprecation), [], "the bundled catalog holds no deprecated record");
+// OPF 0.15: chart.type is an engine vocabulary, core's CHART_TYPES (the schema enum), not a catalog kind. The renderer carries
+// its own chart table (each type and the construct it previews). It must agree with core's CHART_TYPES ids and with the
+// OOXML construct the gallery's display metadata names for each type (catalogDisplay.chartTypes[id].mappings.openxml, the
+// construct opf-pptx exports), so a vocabulary or mapping change fails here instead of drifting silently.
+assert.ok(Array.isArray(CORE_CHART_TYPES) && CORE_CHART_TYPES.length > 0, "core exports CHART_TYPES");
+const display = catalogDisplay.chartTypes;
+assert.ok(display && typeof display === "object", "catalogDisplay.chartTypes is keyed by id");
 
-// Same id sets.
-assert.deepEqual([...Object.keys(CHART_TYPES)].sort(), kept.map((record) => record.id).sort(), "kept ids match the catalog");
+// Same id sets: the renderer table, core's vocabulary and the display metadata.
+assert.deepEqual(Object.keys(CHART_TYPES).sort(), [...CORE_CHART_TYPES].sort(), "renderer ids match core CHART_TYPES");
+assert.deepEqual(Object.keys(display).sort(), [...CORE_CHART_TYPES].sort(), "catalogDisplay.chartTypes covers exactly CHART_TYPES");
+for (const id of ENGINE_DEFAULT_CHART_TYPES) assert.ok(CORE_CHART_TYPES.includes(id), `${id}: engine default chart type is in CHART_TYPES`);
+assert.equal(engineDefaults.chartType, ENGINE_DEFAULT_CHART_TYPES[0], "the renderer's engine default chart type is core's first engine default");
 
-// Every kept id resolves to itself and its renderer construct matches the OOXML mapping.
+// Every id resolves to itself and its renderer construct matches the OOXML mapping.
 const kindByElement = {
   barChart: "bar", lineChart: "line", areaChart: "area", pieChart: "pie", doughnutChart: "doughnut",
   scatterChart: "scatter", radarChart: "radar", treemapChart: "treemap", histogramChart: "histogram",
   boxWhiskerChart: "box", waterfallChart: "waterfall", funnelChart: "funnel", mapChart: "map"
 };
 const grouping = { standard: "standard", clustered: "clustered", stacked: "stacked", percentStacked: "percentStacked" };
-for (const record of kept) {
-  const id = record.id;
-  const openxml = record.mappings?.openxml;
+for (const id of CORE_CHART_TYPES) {
+  const openxml = display[id]?.mappings?.openxml;
   const spec = CHART_TYPES[id];
   assert.equal(resolveChartType(id), id, `${id}: resolves to itself`);
-  assert.ok(openxml?.element, `${id}: catalog carries mappings.openxml.element`);
-  // Pareto is a chartex histogram with an owned cumulative line; the catalog says so through `extension`. A mixed composition
+  assert.ok(openxml?.element, `${id}: catalogDisplay carries mappings.openxml.element`);
+  // Pareto is a chartex histogram with an owned cumulative line; the mapping says so through `extension`. A mixed composition
   // (combo, FA-15) is its own construct: clustered columns (its primary element) with line series.
   const expectedKind = id === "pareto" ? "pareto" : openxml.composition === "mixed" ? "combo" : kindByElement[openxml.element];
   assert.equal(spec.kind, expectedKind, `${id}: kind follows ${openxml.element}`);
+  if (spec.kind === "pareto") assert.equal(openxml.extension, "cx:paretoLine", `${id}: the owned Pareto line`);
   if (spec.kind === "combo") {
     assert.deepEqual(openxml.series.map((entry) => entry.element), ["barChart", "lineChart"], `${id}: a bar and a line chart`);
     assert.equal(spec.dir, openxml.barDir, `${id}: barDir`);
@@ -49,10 +54,10 @@ for (const record of kept) {
   }
 }
 
-// Ids outside the catalog stay outside (the retired aliases and -3x ids among them); the one preview-only alias is not a catalog id.
-assert.equal(byId.has("donut"), false, "donut is a renderer alias, not a catalog id");
-assert.equal(resolveChartType("donut"), "doughnut");
+// Values outside the vocabulary stay outside: the removed donut alias, the retired -3x ids and other names.
+assert.equal(CORE_CHART_TYPES.includes("donut"), false, "donut is not a chart type");
+assert.equal(resolveChartType("donut"), null, "the renderer no longer maps the removed donut alias");
 assert.equal(resolveChartType("no-such-chart"), null);
 for (const retired of ["stacked-column-3x", "clustered-column", "sparkline", "dot-plot", "australia"]) assert.equal(resolveChartType(retired), null, retired + " is not a chart type");
 
-console.log(`Chart catalog passed: ${kept.length} ids agree with core catalogs.chartTypes (barDir, grouping, marker, radarStyle).`);
+console.log(`Chart types table passed: ${CORE_CHART_TYPES.length} ids agree with core CHART_TYPES and catalogDisplay.chartTypes mappings (barDir, grouping, marker, radarStyle).`);

@@ -11,7 +11,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const pkg = BUNDLED_FONT_MANIFEST.packages.find(item => item.name === 'intos');

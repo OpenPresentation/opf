@@ -7,7 +7,7 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
-import {svgToPng, renderSvg} from '../dist/index.js';
+import {svgToPng, renderSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {readBaseline} from './golden-store.mjs';
 const [consumer,directory='artifacts/code-review']=process.argv.slice(2);assert.ok(consumer);
 const root=await realpath(consumer),base=await realpath(path.join(root,'node_modules/@openpresentation/opf-render'));

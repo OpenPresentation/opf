@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+// FA-23: the documents name gallery records, so they render with the gallery snapshot registered, as a host does. Core's
+// packed-ecosystem checks copy this file and rewrite its relative imports, so it registers the catalog itself.
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {resolvePresentation as resolvePresentationUnregistered, renderSlideSvg as renderSlideSvgUnregistered} from '../dist/svg.js';
+const catalogs = [defaultCatalog];
+const resolvePresentation = (deck, options = {}) => resolvePresentationUnregistered(deck, {catalogs, ...options});
+const renderSlideSvg = (deck, index, options = {}) => renderSlideSvgUnregistered(deck, index, {catalogs, ...options});
 import {loadFonts} from '../dist/fonts-node.js';
 import {validate} from '@openpresentation/opf';
 const fonts=(await loadFonts({pack: 'office'})).registry;
@@ -66,7 +72,7 @@ let invalidCases=0;
 for (const point of forbidden) for (const field of ['shorthand','source','filename','language']) {
   const value='A😀B'+String.fromCodePoint(point)+'Z',code=field==='shorthand'?value:{source:'Keep source',filename:'Keep.ts',language:'TypeScript',[field]:value};
   const deck={slides:[{blocks:[{code}]}]},before=structuredClone(deck);
-  assert.equal(validate(deck,{only:['format']}).valid,true,'Schema validity is separate from XML representability');
+  assert.equal(validate(deck,{only:['format'],catalogs}).valid,true,'Schema validity is separate from XML representability');
   const path='slides.0.blocks.0.code'+(field==='shorthand'?'':'.'+field);
   assert.throws(()=>renderSlideSvg(deck, 0),error=>error.code==='invalid-code-text'&&error.path===path&&error.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;

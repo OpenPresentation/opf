@@ -37,7 +37,7 @@ function difference(a, b) {
 }
 // Preserve the original aggregate limits, including both required conditions.
 const accepted = metric => metric.mean <= 1 && metric.largePercent <= 2;
-function referenceSvg(svg, orientation, imageFill, png) {
+function referenceSvg(svg, orientation, imageFit, png) {
   const tag = svg.match(/<image\b[^>]+\/>/)?.[0];
   if (!tag) throw new Error('Missing rendered image');
   const attribute = key => {
@@ -45,7 +45,7 @@ function referenceSvg(svg, orientation, imageFill, png) {
     if (value === undefined) throw new Error(`Missing image ${key}`);
     return value;
   };
-  const aspect = `xMidYMid ${imageFill === 'fit' ? 'meet' : 'slice'}`;
+  const aspect = `xMidYMid ${imageFit === 'contain' ? 'meet' : 'slice'}`;
   if (attribute('preserveAspectRatio') !== aspect) throw new Error('Incorrect fit/crop mode');
   // Keep sampling in the original pixel coordinates, as the JPEG decoder does.
   // Scaling an already-transposed PNG uses a different interpolation phase on
@@ -61,21 +61,21 @@ try {
     const decoded = difference(await pixels(jpeg, false), await pixels(png, false));
     report.decoded.push({orientation, ...decoded});
     if (decoded.max > 2) throw new Error(`Orientation ${orientation}: decoded pixels differ from Pillow`);
-    for (const imageFill of ['fit', 'crop']) {
-      const svg = renderSlideSvg({design: {imageFill}, slides: [{image: jpeg}]}, 0);
+    for (const imageFit of ['contain', 'cover']) {
+      const svg = renderSlideSvg({design: {imageFit}, slides: [{image: jpeg}]}, 0);
       const actual = await pixels(svg);
-      const expected = await pixels(referenceSvg(svg, orientation, imageFill, originalPng));
+      const expected = await pixels(referenceSvg(svg, orientation, imageFit, originalPng));
       const metric = difference(actual, expected);
-      report.measurements.push({orientation, imageFill, ...metric});
+      report.measurements.push({orientation, imageFit, ...metric});
       // Retain the original comparison as evidence of browser interpolation;
       // it no longer conflates sampling differences with EXIF orientation.
-      report.preOrientedPngMeasurements.push({orientation, imageFill, ...difference(actual, await pixels(svg.replace(jpeg, png)))});
-      if (!accepted(metric)) throw new Error(`Orientation ${orientation} ${imageFill}: excessive image mismatch`);
+      report.preOrientedPngMeasurements.push({orientation, imageFit, ...difference(actual, await pixels(svg.replace(jpeg, png)))});
+      if (!accepted(metric)) throw new Error(`Orientation ${orientation} ${imageFit}: excessive image mismatch`);
       const wrongJpeg = await toUri(`orientation-${orientation % 8 + 1}.jpg`, 'image/jpeg');
       const wrongOrientation = difference(await pixels(svg.replace(jpeg, wrongJpeg)), expected);
-      const wrongFillSvg = svg.replace(/preserveAspectRatio="xMidYMid (meet|slice)"/, `preserveAspectRatio="xMidYMid ${imageFill === 'fit' ? 'slice' : 'meet'}"`);
+      const wrongFillSvg = svg.replace(/preserveAspectRatio="xMidYMid (meet|slice)"/, `preserveAspectRatio="xMidYMid ${imageFit === 'contain' ? 'slice' : 'meet'}"`);
       const wrongFill = difference(await pixels(wrongFillSvg), expected);
-      report.controls.push({orientation, imageFill, wrongOrientation, wrongFill});
+      report.controls.push({orientation, imageFit, wrongOrientation, wrongFill});
       if (accepted(wrongOrientation) || accepted(wrongFill)) throw new Error('Incorrect orientation or fit/crop control was accepted');
       report.cases++;
     }

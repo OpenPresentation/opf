@@ -13,7 +13,8 @@
 // Offline and deterministic. The PPTX keeps the selected font names (checked in test/script-fonts.mjs and opf-pptx).
 import assert from 'node:assert/strict';
 import * as core from '@openpresentation/opf/composition';
-import {renderSlideSvg} from '../dist/index.js';
+// The decks name gallery font schemes (calibri, yu-gothic, ...): render and select scripts with the host catalog registered.
+import {catalogs, renderSlideSvg} from './catalog-harness.mjs';
 import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
 
 const short = name => name.replace('@expo-google-fonts/', '');
@@ -33,7 +34,7 @@ const unescape = text => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replac
 let checked = 0;
 /** Render one slide of `document` with a `scripts` registry; every run's face must have every glyph of its text. */
 async function render(label, document, {scripts = 'auto', policy = 'metric', slideIndex = 0} = {}) {
-  const fonts = await loadFonts({pack: 'office', substitutionPolicy: policy, scripts, presentation: document});
+  const fonts = await loadFonts({pack: 'office', substitutionPolicy: policy, scripts, presentation: document, renderOptions: {catalogs}});
   const strict = fonts.registry.textMeasurement;
   const svg = renderSlideSvg(document, slideIndex, {fonts});
   const runs = drawnRuns(svg);
@@ -150,10 +151,10 @@ for (const [label, document] of [
   assert.ok(result.packages.includes('noto-sans'), `${label}: Noto Sans loads as Sylfaen's replacement (${result.packages})`);
   assert.equal(result.fonts.registry.resolveFont({fontFamily: 'Sylfaen', fontWeight: 400, italic: false}).resolvedFamily, 'Noto Sans', `${label}: Sylfaen resolves`);
 }
-assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'sylfaen'})), {detected: [], scripts: ['Latn'], unavailable: []});
+assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'sylfaen'}), {catalogs}), {detected: [], scripts: ['Latn'], unavailable: []});
 // Every other deck keeps Noto Sans fallback-only (glyph fallback and its own name, no replacement for another family).
 {
-  const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: deck({title: 'Quarterly review', scheme: 'georgia'})});
+  const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: deck({title: 'Quarterly review', scheme: 'georgia'}), renderOptions: {catalogs}});
   assert.throws(() => fonts.registry.resolveFont({fontFamily: 'Sylfaen', fontWeight: 400, italic: false}), error => error.code === 'font-unavailable', 'a deck that does not select Latn keeps Noto Sans fallback-only');
   assert.equal(fonts.registry.resolveFont({fontFamily: 'Noto Sans', fontWeight: 400, italic: false}).resolvedFamily, 'Noto Sans', 'and it still answers to its own name');
 }
@@ -163,11 +164,11 @@ for (const scheme of [undefined, 'calibri', 'open-sans', 'roboto', 'georgia']) {
   assert.deepEqual(latin.packages, [], `${scheme ?? 'aptos'} loads no script package for Latin text`);
 }
 // The selection API reports it: `detected` stays what the text draws, `scripts` is what to load.
-assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'yu-gothic'})), {detected: [], scripts: ['Jpan'], unavailable: []});
-assert.deepEqual(detectPresentationScripts(deck({title: 'Quarterly review', scheme: 'yu-gothic'})), []);
-assert.deepEqual(autoScriptSelection(deck({title: '日本語', scheme: 'yu-gothic'})), {detected: ['Jpan'], scripts: ['Jpan'], unavailable: []});
-assert.deepEqual(autoScriptSelection(deck({title: '日本語'})), {detected: ['Hans'], scripts: ['Hans'], unavailable: []});
+assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'yu-gothic'}), {catalogs}), {detected: [], scripts: ['Jpan'], unavailable: []});
+assert.deepEqual(detectPresentationScripts(deck({title: 'Quarterly review', scheme: 'yu-gothic'}), {catalogs}), []);
+assert.deepEqual(autoScriptSelection(deck({title: '日本語', scheme: 'yu-gothic'}), {catalogs}), {detected: ['Jpan'], scripts: ['Jpan'], unavailable: []});
+assert.deepEqual(autoScriptSelection(deck({title: '日本語'}), {catalogs}), {detected: ['Hans'], scripts: ['Hans'], unavailable: []});
 // Kana pins Japanese, and a Simplified-only scheme still adds its own face: both load.
-assert.deepEqual(autoScriptSelection(deck({title: 'こんにちは', scheme: 'microsoft-yahei'})).scripts, ['Hans', 'Jpan']);
+assert.deepEqual(autoScriptSelection(deck({title: 'こんにちは', scheme: 'microsoft-yahei'}), {catalogs}).scripts, ['Hans', 'Jpan']);
 
 console.log(`Lazy face fallback passed: ${checked} renders (Aptos, Calibri and Open Sans with Japanese, Arabic, Greek and Cyrillic; script-named schemes), strict failures, selection API.`);

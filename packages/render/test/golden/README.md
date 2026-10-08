@@ -1,5 +1,7 @@
 # Raster regression baseline
 
+fa-stale-refs: history. The sections after "Layout, review notes and regeneration" record earlier baselines and name keys OPF 0.15 removed; the current model is core `docs/programs/format-audit/0.15-design.md`, and new baseline notes go in `notes/`.
+
 ## Layout, review notes and regeneration (RR-52)
 
 Each baseline is a directory, `test/golden/<name>/`, holding `_baseline.json` (every manifest field except `entries`: version, source digest, format, scale, font policy) and one file per example deck, `<deck path without .opf.json>.sha256.json` (`{ "deck": ..., "entries": { "<deck>.opf.json#<slide>": { "sha256", "bytes" } } }`). `test/golden-store.mjs` reassembles the exact manifest the single file used to hold (`scripts/golden-migrate.mjs verify --ref <old-layout ref>` proves the migration byte-for-byte), so the comparison is unchanged: exact PNG hashes at the baseline's scale, no tolerance.

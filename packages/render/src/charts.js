@@ -1,10 +1,9 @@
-// Chart previews for the OPF chart type catalog (FF-22).
+// Chart previews for the OPF chart types (FF-22).
 //
-// The core catalog keeps one chart type per Office chart construct (`mappings.openxml`).
-// The table below is carried here so the preview stays synchronous and
-// self-contained; test/chart-catalog.mjs checks it against the installed core
-// catalog. Catalog ids render the construct PowerPoint shows for the exported
-// chart; any other id returns null so the caller keeps its legacy single-series preview.
+// OPF 0.15 makes chart.type an engine vocabulary: core's schema enum and CHART_TYPES, one type per Office chart construct.
+// The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
+// against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
+// returns null so the caller keeps its legacy single-series preview.
 import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, formatDataNumber, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
@@ -81,12 +80,9 @@ export const CHART_TYPES = Object.freeze({
   combo: { kind: "combo", dir: "col", grouping: "clustered", markers: true }
 });
 
-const ALIASES = Object.freeze({ donut: "doughnut" });
-
-/** Resolve a chart type id to its kept catalog id, or null for ids outside the catalog. */
+/** Resolve a chart type (core's CHART_TYPES vocabulary, OPF 0.15) to its preview spec id, or null for any other value. */
 export function resolveChartType(type) {
-  const raw = String(type ?? "").trim().toLowerCase();
-  const id = ALIASES[raw] ?? raw;
+  const id = String(type ?? "").trim().toLowerCase();
   return Object.hasOwn(CHART_TYPES, id) ? id : null;
 }
 
@@ -114,7 +110,7 @@ const RENDERERS = {
 const CHARTEX_KINDS = new Set(["treemap", "histogram", "pareto", "box", "waterfall", "funnel", "map"]);
 
 /**
- * Render a catalog chart. Returns null when the id is outside the catalog, has
+ * Render a chart of a known type. Returns null when the type is outside CHART_TYPES, has
  * no preview renderer, or carries no inline category-major data, so the caller
  * can keep its legacy output ("No chart data" for unresolved sources).
  */

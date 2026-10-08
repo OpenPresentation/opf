@@ -4,10 +4,13 @@
 // design.contentAlignment from the layout record). The preview must anchor
 // every text to core's per-item alignment inside the same box the default
 // uses, so the PPTX export, which writes the same alignment inside the same
-// box, places every shape exactly as the preview does.
+// box, places every shape exactly as the preview does. OPF 0.15: most fixture
+// documents embed their layout record under `catalogs.default` (the gallery
+// source), the rest name it only; every document renders with the gallery
+// registered as the host catalog, as the gallery does.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {defaultCatalog, resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/gallery-alignment-layouts.json', import.meta.url), 'utf8'));
 assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layouts audit A flagged');
@@ -15,11 +18,12 @@ assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layo
 const anchors = {left: 'start', center: 'middle', right: 'end'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const tokens = text => text.split(/(?=<)/);
-// The gallery also derives the layout hints core composes (contentDirection, chartPrimary, listBullet);
-// they move boxes by design, so the default keeps them and drops only what is alignment (and the layout itself).
+// The gallery also derives the layout hints core composes (contentDirection, chartPrimary, listBullet, imageFit);
+// they move boxes or change how an image or bullet draws by design, so the default keeps them and drops only what
+// is alignment (and the layout itself). FA-22: imageFit ('contain' on the *-fit-* layouts) is one such hint.
 // A layout record's own composition.mode ranks above design.contentDirection (the gallery derives the hint from the
 // layout's direction), so a layout with a mode ignores the hint and the layout-less default must not apply it either.
-const LAYOUT_HINTS = ['contentDirection', 'chartPrimary', 'listBullet'];
+const LAYOUT_HINTS = ['contentDirection', 'chartPrimary', 'listBullet', 'imageFit'];
 const withoutLayout = (document, layoutMode) => {
   const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
@@ -38,7 +42,8 @@ for (const {id, document} of fixture.layouts) {
   const bound = resolvePresentation(document).slides[0];
   const base = withoutLayout(document, bound.layout?.composition?.mode);
   const baseBound = resolvePresentation(base).slides[0];
-  assert.equal(bound.layout?.id, id, `${id}: the preview resolves the layout`);
+  // Records carry no id in 0.15: the composed layout is the record the document embeds for this id, else the host's.
+  assert.deepEqual(bound.layout, document.catalogs?.default?.layouts?.[id] ?? defaultCatalog.layouts[id], `${id}: the preview resolves the layout`);
   assert.equal(bound.geometry.items.length, baseBound.geometry.items.length, `${id}: the layout adds or drops no composed item`);
 
   // 1. Core resolves one alignment per item from the gallery design; the

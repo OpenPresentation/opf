@@ -2,20 +2,22 @@ import assert from 'node:assert/strict';
 import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 import {CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 
-// FF-22: every kept catalog chart type previews its native construct.
+// FF-22: every chart type previews its native construct. OPF 0.15: chart.type is core's CHART_TYPES enum (an engine
+// vocabulary, no catalog); a value outside it is rejected at the validation boundary, and the renderer's legacy preview
+// for such a value is reached only with validation off. The documents here name no gallery record, so no catalog is registered.
 // FA-15: combo (clustered columns with line series) is a classic construct too: one barChart and one lineChart per value axis.
 const CLASSIC=['combo','column','stacked-column','100pct-stacked-column','bar','stacked-bar','100pct-stacked-bar','line','line-with-markers','stacked-line','stacked-line-with-markers','area','stacked-area','100pct-stacked-area','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
 const CHARTEX=['treemap','histogram','pareto','box-and-whisker','waterfall','funnel','world'];
 assert.deepEqual(Object.keys(CHART_TYPES).sort(),[...CLASSIC,...CHARTEX].sort(),'27 kept chart type ids');
 for(const id of Object.keys(CHART_TYPES))assert.equal(resolveChartType(id),id);
-assert.equal(resolveChartType('donut'),'doughnut');
+assert.equal(resolveChartType('donut'),null,'OPF 0.15 removed the donut alias: only doughnut is a chart type');
 assert.equal(resolveChartType(' Stacked-Column '),'stacked-column');
 for(const id of ['stacked-column-3x','stacked-column-2x','clustered-column','sparkline','dot-plot','australia'])assert.equal(resolveChartType(id),null,`${id} is not a chart type`);
 for(const id of ['mystery-chart','gantt','',undefined])assert.equal(resolveChartType(id),null);
 
 const PATH='slides.0.chart';
 const categoryData={columns:['Quarter','North','South','East'],rows:[['Q1',12,8,-3],['Q2',16,10,5],['Q3',21,-4,null],['Q4',18,13,9]]};
-const render=(type,data=categoryData,design)=>renderSlideSvg({...(design?{design}:{}),slides:[{chart:{type,data}}]}, 0,{trace:true});
+const render=(type,data=categoryData,design,options={})=>renderSlideSvg({...(design?{design}:{}),slides:[{chart:{type,data}}]}, 0,{trace:true,...options});
 const elements=(svg,name)=>[...svg.matchAll(new RegExp(`<${name}\\b([^>]*)/?>`,'g'))].map(([,attrs])=>Object.fromEntries([...attrs.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([,k,v])=>[k,v])));
 const marks=(svg,name,pattern)=>elements(svg,name).filter(a=>pattern.test(a['data-opf-path']??''));
 const texts=svg=>[...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([,t])=>t.replace(/<[^>]+>/g,''));
@@ -24,10 +26,10 @@ const bound=resolvePresentation({slides:[{chart:{type:'column',data:categoryData
 const palette=chartSeriesPalette(bound.design.colors.surface);
 let checks=0;
 
-// Every classic id takes the catalog path, never the legacy single-series fallback.
+// Every classic id takes the chart-type renderer, never the legacy single-series fallback.
 for(const id of CLASSIC){
   const svg=render(id);
-  assert.match(svg,new RegExp(`data-opf-chart="${id}"`),`${id}: catalog renderer`);
+  assert.match(svg,new RegExp(`data-opf-chart="${id}"`),`${id}: chart-type renderer`);
   assert.ok(elements(svg,'text').length>0,`${id}: labels are real text`);
   for(const a of elements(svg,'text'))assert.ok(a['font-family'].startsWith(bound.design.fonts.body),`${id}: body font`);
   checks++;
@@ -106,7 +108,7 @@ for(const id of ['area','stacked-area','100pct-stacked-area']){
 }
 
 // Pie and doughnut: first series only, one slice per category, category colours, per-category legend.
-for(const id of ['pie','doughnut','donut']){
+for(const id of ['pie','doughnut']){
   const svg=render(id,{columns:['Region','Share','Ignored'],rows:[['North',42,1],['South',31,2],['East',18,3],['West',9,4]]});
   const slices=marks(svg,'path',point);
   assert.equal(slices.length,4,`${id}: four slices`);
@@ -118,7 +120,7 @@ for(const id of ['pie','doughnut','donut']){
   assert.ok(['North','South','East','West'].every(t=>texts(svg).includes(t)));
   checks++;
 }
-assert.equal(render('donut',{columns:['a','b'],rows:[['x',1]]}).replace(/data-opf-chart="doughnut"/,''),render('doughnut',{columns:['a','b'],rows:[['x',1]]}).replace(/data-opf-chart="doughnut"/,''));
+assert.throws(()=>render('donut',{columns:['a','b'],rows:[['x',1]]}),error=>error.code==='invalid-opf'&&JSON.stringify(error.details).includes('/slides/0/chart/type'),'donut is not a chart type: the validator rejects it at chart.type');
 
 // Scatter: numeric X axis from columns[1], Y series from columns[2..], markers without lines.
 {
@@ -148,10 +150,10 @@ for(const [id,markers,filled] of [['radar',false,false],['radar-with-markers',tr
 // Single series: no legend.
 assert.equal(marks(render('column',{columns:['Q','Only'],rows:[['Q1',1],['Q2',2]]}),'rect',series).length,0,'single series has no legend');
 
-// Chartex constructs (FF-22b): every chartex id takes the catalog path with marks traced to its data.
+// Chartex constructs (FF-22b): every chartex id takes the chart-type renderer with marks traced to its data.
 for(const id of CHARTEX){
   const svg=render(id);
-  assert.match(svg,new RegExp(`data-opf-chart="${id}"`),`${id}: catalog renderer`);
+  assert.match(svg,new RegExp(`data-opf-chart="${id}"`),`${id}: chart-type renderer`);
   assert.equal(marks(svg,'rect',/^slides\.0\.chart\.data\.rows\.\d+$/).length,0,`${id}: no legacy bars`);
   assert.ok(elements(svg,'text').length>0,`${id}: labels are real text`);
   for(const a of elements(svg,'text'))assert.ok(a['font-family'].startsWith(bound.design.fonts.body),`${id}: body font`);
@@ -269,9 +271,10 @@ for(const id of CHARTEX){
   checks++;
 }
 
-// Ids outside the catalog keep the legacy preview; kept ids without inline rows keep the no-data panel.
+// A value outside CHART_TYPES is invalid; drawn with validation off it keeps the legacy preview.
 {
-  const svg=render('mystery-chart');
+  assert.throws(()=>render('mystery-chart'),error=>error.code==='invalid-opf','a type outside CHART_TYPES is rejected at the boundary');
+  const svg=render('mystery-chart',categoryData,undefined,{validate:false});
   assert.doesNotMatch(svg,/data-opf-chart=/);
   assert.equal(marks(svg,'rect',/^slides\.0\.chart\.data\.rows\.\d+$/).length,4,'legacy single-series bars');
   // A data source by asset is not part of the format (FA-07): it is rejected at the boundary.
@@ -279,4 +282,4 @@ for(const id of CHARTEX){
   checks++;
 }
 
-console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic and ${CHARTEX.length} chartex ids on the catalog renderer, unknown ids on the legacy preview.`);
+console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic and ${CHARTEX.length} chartex ids on the chart-type renderer, unknown values on the legacy preview.`);

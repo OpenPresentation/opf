@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { renderSlideSvg } from '../dist/svg.js';
+import { renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { CHART_TYPES } from '../src/charts.js';
 
 // FA-09: Chart.alt is the chart's accessible name in the preview. A role="img" group with aria-label wraps the chart, an empty alt

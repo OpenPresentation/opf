@@ -92,10 +92,10 @@ export function* drawnStrings(presentation) {
 /**
  * The script profile of a presentation: core `resolveScriptFonts` output, exactly what the renderer plans
  * with. When it throws, the renderer ignores the document language, so the profile is empty and Han text is
- * Simplified Chinese, as drawn.
+ * Simplified Chinese, as drawn. `renderOptions.catalogs` (the host's registered catalogs) resolve as they do for the renderer.
  */
-export function presentationScriptProfile(presentation) {
-  try { return resolveScriptFonts(presentation); } catch { /* the renderer falls back the same way */ }
+export function presentationScriptProfile(presentation, renderOptions) {
+  try { return resolveScriptFonts(presentation, renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}); } catch { /* the renderer falls back the same way */ }
   return {};
 }
 
@@ -123,9 +123,9 @@ function scriptOfFamily(family) {
  * scheme (`slide.design`), so each such slide is resolved too. `han` is the CJK script the scheme names, which tells
  * Han-only text apart when the language does not (a Yu Gothic deck whose language is English).
  *
- * `renderOptions` are the host's `renderSvg` options. Core resolves a font scheme id from the document and its bundled catalogs
- * only, while the renderer also reads `renderOptions.catalogs`; when a host passes catalogs the families the renderer resolves
- * per slide count too, so a scheme that exists only in the host's catalogs and names a script font still loads that font.
+ * `renderOptions` are the host's `renderSvg` options: their `catalogs` (core `Catalog[]`) go to core's `resolveScriptFonts`
+ * unchanged, and the families the renderer resolves per slide count too, so a scheme that exists only in the host's catalogs
+ * and names a script font still loads that font.
  */
 function designScripts(presentation, profile, renderOptions) {
   const scripts = new Set();
@@ -142,7 +142,7 @@ function designScripts(presentation, profile, renderOptions) {
   if (Array.isArray(presentation?.slides)) {
     presentation.slides.forEach((slide, slideIndex) => {
       if (!slide || typeof slide !== "object" || !slide.design || typeof slide.design !== "object") return;
-      try { note(resolveScriptFonts(presentation, { slideIndex })); } catch { /* the renderer reports it when it draws the slide */ }
+      try { note(resolveScriptFonts(presentation, { slideIndex, ...(renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}) })); } catch { /* the renderer reports it when it draws the slide */ }
     });
   }
   if (renderOptions?.catalogs) {
@@ -172,7 +172,8 @@ function* namedFontFamilies(value, key) {
  * `renderSvg` options) matter only for font schemes the host supplies in `renderOptions.catalogs`, which then resolve
  * like the renderer resolves them; a document that then does not resolve throws what `renderSvg` throws for it.
  */
-export function analyzePresentationScripts(presentation, profile = presentationScriptProfile(presentation), renderOptions) {
+export function analyzePresentationScripts(presentation, profile, renderOptions) {
+  profile ??= presentationScriptProfile(presentation, renderOptions);
   const scripts = new Set(), cjk = new Set();
   const design = designScripts(presentation, profile, renderOptions);
   // Han-only text in a deck whose language is not CJK draws with the scheme's own CJK face when the scheme names one.

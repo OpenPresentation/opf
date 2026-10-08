@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 const table={columns:[['Normal ',{text:'bold',bold:true}]],rows:[[['A ',{text:'red',color:'#AA0000',bold:true}]],[[{text:'link',link:'https://example.com',italic:true}]], [[]]]};
 const svg=renderSlideSvg({design:{theme:'classic',fontScheme:'roboto'},slides:[{table}]}, 0,{trace:true});
 assert.ok(/<tspan(?=[^>]*fill="#AA0000")(?=[^>]*font-weight="700")[^>]*>red<\/tspan>/.test(svg));

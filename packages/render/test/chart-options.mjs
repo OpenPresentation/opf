@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from '../dist/svg.js';
+import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { CHART_TYPES } from '../src/charts.js';
 
 // RR-35: chart options (axis titles, legend position, data labels) in the preview. Core owns the support table

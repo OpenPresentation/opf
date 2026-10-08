@@ -6,32 +6,33 @@ import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from '../dist/index.js';
+// The decks name gallery font schemes (meiryo, david, ...): render with the host catalog registered.
+import {renderSlideSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
 
 const prepared = await loadFonts({pack:'base',scripts:'all'}), {registry} = prepared;
 const deck=(language,fontScheme,title)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text:'Body'}]});
 const cases=[
-  ['cyrillic','russian','roboto','Квартальный обзор 12%'],
-  ['greek','greek','roboto','Τριμηνιαία ανασκόπηση 12%'],
-  ['ja','japanese','meiryo','四半期レビュー 12%'],
-  ['zh-Hans','chinese-simplified','microsoft-yahei','季度回顾 12%'],
-  ['zh-Hant','chinese-traditional','microsoft-jhenghei','季度回顧 12%'],
-  ['ko','korean','malgun-gothic','분기별 검토 12%'],
-  ['ar','arabic','arabic-typesetting','مراجعة ربع سنوية.'],
-  ['he','hebrew','david','סקירה רבעונית.'],
-  ['hi','hindi','mangal','तिमाही समीक्षा'],
-  ['th','thai','angsana-new','การทบทวนรายไตรมาส'],
-  ['latin-ja','japanese','roboto','Review 四半期 2026'],
+  ['cyrillic','ru','roboto','Квартальный обзор 12%'],
+  ['greek','el','roboto','Τριμηνιαία ανασκόπηση 12%'],
+  ['ja','ja','meiryo','四半期レビュー 12%'],
+  ['zh-Hans','zh-Hans','microsoft-yahei','季度回顾 12%'],
+  ['zh-Hant','zh-Hant','microsoft-jhenghei','季度回顧 12%'],
+  ['ko','ko','malgun-gothic','분기별 검토 12%'],
+  ['ar','ar','arabic-typesetting','مراجعة ربع سنوية.'],
+  ['he','he','david','סקירה רבעונית.'],
+  ['hi','hi','mangal','तिमाही समीक्षा'],
+  ['th','th','angsana-new','การทบทวนรายไตรมาส'],
+  ['latin-ja','ja','roboto','Review 四半期 2026'],
   // Glyph fallback: the chosen CJK face lacks the character, so another loaded CJK face draws it (kanji beside Hangul; Simplified-only hanzi in a Japanese deck).
-  ['kanji-hangul','english','roboto','Revenue 収益 성장 12%'],['hanzi-ja','japanese','meiryo','季度回顾 变 12%'],
-  // Further catalog scripts (gallery native names), held to the same gate.
-  ['bn','bengali','shonar-bangla','বাংলা'],['pa-Guru','punjabi-gurmukhi','raavi','ਪੰਜਾਬੀ'],['gu','gujarati','shruti','ગુજરાતી'],
-  ['or','odia','kalinga','ଓଡ଼ିଆ'],['ta','tamil','latha','தமிழ்'],['te','telugu','gautami','తెలుగు'],['kn','kannada','tunga','ಕನ್ನಡ'],
-  ['ml','malayalam','kartika','മലയാളം'],['km','khmer','daunpenh','ខ្មែរ'],['am','amharic','nyala','አማርኛ'],['hy','armenian','sylfaen','հայերեն'],
-  ['ka','georgian','sylfaen','ქართული'],['fa','persian','arabic-typesetting','فارسی'],['ur','urdu','arabic-typesetting','اردو'],['mr','marathi','mangal','मराठी'],
+  ['kanji-hangul','en','roboto','Revenue 収益 성장 12%'],['hanzi-ja','ja','meiryo','季度回顾 变 12%'],
+  // Further scripts of the language vocabulary (with gallery font schemes), held to the same gate.
+  ['bn','bn','shonar-bangla','বাংলা'],['pa-Guru','pa-Guru','raavi','ਪੰਜਾਬੀ'],['gu','gu','shruti','ગુજરાતી'],
+  ['or','or','kalinga','ଓଡ଼ିଆ'],['ta','ta','latha','தமிழ்'],['te','te','gautami','తెలుగు'],['kn','kn','tunga','ಕನ್ನಡ'],
+  ['ml','ml','kartika','മലയാളം'],['km','km','daunpenh','ខ្មែរ'],['am','am','nyala','አማርኛ'],['hy','hy','sylfaen','հայերեն'],
+  ['ka','ka','sylfaen','ქართული'],['fa','fa','arabic-typesetting','فارسی'],['ur','ur','arabic-typesetting','اردو'],['mr','mr','mangal','मराठी'],
   // Noto Sans Mongolian: fontkit cannot decode its GSUB type 8 lookup; the skipped lookup keeps Node advances equal to the browser's (FF-44).
-  ['mn-Mong','mongolian','noto-sans-mongolian','ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ'],
+  ['mn-Mong','mn','noto-sans-mongolian','ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ'],
 ].map(([id,language,scheme,title])=>({id,language,title,svg:renderSlideSvg(deck(language,scheme,title), 0, {fonts: prepared})}));
 
 // Serve every loaded face from a local route; nothing else may load.

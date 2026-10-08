@@ -9,6 +9,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadFonts,scriptFontPackages} from '../dist/fonts-node.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const outputDirectory=path.resolve(root,process.argv[2]??'artifacts/script-fonts-auto');
@@ -35,6 +36,9 @@ const decks={
   mixed:deck('ja','roboto','Review 四半期レビュー 2026','日本語です and English together'),
 };
 
+// FA-23: the decks name gallery font schemes; the page registers them, the way a host does (only the records the decks use).
+const catalog={source:defaultCatalog.source,fontSchemes:Object.fromEntries(['roboto','meiryo','arabic-typesetting'].map(id=>[id,defaultCatalog.fontSchemes[id]]))};
+
 const browser=await chromium.launch({channel:process.platform==='win32'&&!process.env.CI?'msedge':undefined});
 const errors=[],requests=[],unexpected=[];
 try{
@@ -53,6 +57,7 @@ try{
   });
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content:script});
+  await page.evaluate(catalog=>{window.catalogs=[catalog];},catalog);
 
   const step=async(name,source)=>{
     const before=requests.length;
@@ -61,13 +66,13 @@ try{
       if(name==='latin'||!window.registry){
         if(window.registry)window.registry.dispose();
         const data=new Uint8Array(await (await fetch('/roboto.ttf')).arrayBuffer());
-        window.registry=(await loadBrowserFonts({faces: [{data,family:'Roboto'}], substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:packRoot,scripts:'auto',presentation:source.latin})).registry;
+        window.registry=(await loadBrowserFonts({faces: [{data,family:'Roboto'}], substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:packRoot,scripts:'auto',presentation:source.latin,renderOptions:{catalogs:window.catalogs}})).registry;
       }
       const registry=window.registry;
       const document=source[name];
       const ensured=await registry.ensureScripts(document);
       const diagnostics=[];
-      const svg=renderSlideSvg(document, 0,{ fonts: {textMeasurement:registry.textMeasurement},onDiagnostic:value=>diagnostics.push(value.code)});
+      const svg=renderSlideSvg(document, 0,{ fonts: {textMeasurement:registry.textMeasurement},catalogs:window.catalogs,onDiagnostic:value=>diagnostics.push(value.code)});
       const host=window.document.querySelector('main');host.innerHTML=svg;
       await window.document.fonts.ready;
       // RR-38: an Arabic Typesetting title is drawn at 0.64 of the composed size (54 px), so its advance is checked at 34.5.

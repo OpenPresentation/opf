@@ -1,5 +1,5 @@
 {
- "$comment": "FF-51 fixture. One gallery document per layout that audit A (support-status.json at core 60e73d4) flagged \"export shape placement ignores layout that changes preview\". Each document is exactly what pptx-gallery lib/opf-snippets.ts buildOpfSnippet(\"layouts\", id) emits at the recorded gallery commit; regenerate with gallery-alignment-layouts.mjs.txt.",
+ "$comment": "FF-51 fixture. One gallery document per layout that audit A (support-status.json at core 60e73d4) flagged \"export shape placement ignores layout that changes preview\". Each document is exactly what pptx-gallery lib/opf-snippets.ts buildOpfSnippet(\"layouts\", id) emits at the recorded gallery commit; regenerate with gallery-alignment-layouts.mjs.txt. FA-23: converted to OPF 0.15 (each embedded layout record under catalogs.default with the gallery source, the old image fill hint as design.imageFit).",
  "gallery": "59ff36ca038867b280adfea1e9c1eb04ec3ff734",
  "layouts": [
   {
@@ -29,11 +29,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "quote-highlight",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "quote-highlight": {
         "name": "Quote_Highlight",
         "label": "Quote Highlight",
         "summary": "Large typography for testimonials or key statements. Add authority and emphasis to your message.",
@@ -80,7 +79,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -109,11 +108,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "one-column-explainer",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "one-column-explainer": {
         "name": "One_Column_Explainer",
         "label": "One-Column Explainer",
         "summary": "A single block of body text with a headline. Use when a concept needs paragraph-length explanation, not bullets.",
@@ -160,7 +158,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -189,11 +187,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "case-study",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "case-study": {
         "name": "Case_Study",
         "label": "Case Study",
         "summary": "Three-panel narrative of Challenge, Solution, and Impact. Turns a customer story into proof.",
@@ -240,7 +237,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -269,11 +266,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "venn-overlap",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "venn-overlap": {
         "name": "Venn_Overlap",
         "label": "Venn / Overlap",
         "summary": "Two or three intersecting circles showing shared and distinct attributes. Classic for positioning.",
@@ -320,7 +316,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -349,11 +345,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "circular-lifecycle",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "circular-lifecycle": {
         "name": "Circular_Lifecycle",
         "label": "Circular Lifecycle",
         "summary": "Stages arranged in a closed loop. Shows processes that repeat rather than end.",
@@ -400,7 +395,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -429,11 +424,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "hub-and-spoke",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "hub-and-spoke": {
         "name": "Hub_And_Spoke",
         "label": "Hub and Spoke",
         "summary": "Central node with radiating connections. Shows one-to-many relationships clearly.",
@@ -480,7 +474,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -509,11 +503,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "wheel-radial",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "wheel-radial": {
         "name": "Wheel_Radial",
         "label": "Wheel / Radial Model",
         "summary": "Circular frame with segments around a central theme. Good for frameworks with equal-weight components.",
@@ -560,7 +553,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -664,11 +657,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "chart-1x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "chart-1x-title-center": {
         "name": "Chart_1x_Title_Center",
         "label": "Chart 1x Title Center",
         "design": {
@@ -716,7 +708,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -877,11 +869,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "chart-2x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "chart-2x-title-center": {
         "name": "Chart_2x_Title_Center",
         "label": "Chart 2x Title Center",
         "design": {
@@ -940,7 +931,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1154,11 +1145,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "chart-3x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "chart-3x-title-center": {
         "name": "Chart_3x_Title_Center",
         "label": "Chart 3x Title Center",
         "design": {
@@ -1224,7 +1214,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1251,17 +1241,16 @@
        "contentBox": false,
        "contentAlignment": "center",
        "titleAlignment": "center",
-       "imageFill": "fit",
+       "imageFit": "contain",
        "contentDirection": "horizontal"
       }
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-1x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-1x-fit-title-center": {
         "name": "Image_1x_Fit_Title_Center",
         "label": "Image 1x Fit Title Center",
         "design": {
@@ -1269,7 +1258,7 @@
          "contentAlignment": "center",
          "contentBox": false,
          "contentDirection": "horizontal",
-         "imageFill": "fit"
+         "imageFit": "contain"
         },
         "groupDefault": false,
         "groupHash": "d4e97da0d18474d8a08d3b5a164a2a76503bc94c9d9327bf89719c6b4a8c1d49",
@@ -1310,7 +1299,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -1347,17 +1336,16 @@
        "contentBox": false,
        "contentAlignment": "center",
        "titleAlignment": "center",
-       "imageFill": "fit",
+       "imageFit": "contain",
        "contentDirection": "horizontal"
       }
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-2x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-2x-fit-title-center": {
         "name": "Image_2x_Fit_Title_Center",
         "label": "Image 2x Fit Title Center",
         "design": {
@@ -1365,7 +1353,7 @@
          "contentAlignment": "center",
          "contentBox": false,
          "contentDirection": "horizontal",
-         "imageFill": "fit"
+         "imageFit": "contain"
         },
         "groupDefault": false,
         "groupHash": "013a8df4c4b31eb72fbef27d61d2821c0143994381d157912cae0d7893c21a39",
@@ -1418,7 +1406,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1461,17 +1449,16 @@
        "contentBox": false,
        "contentAlignment": "center",
        "titleAlignment": "center",
-       "imageFill": "fit",
+       "imageFit": "contain",
        "contentDirection": "horizontal"
       }
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-3x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-3x-fit-title-center": {
         "name": "Image_3x_Fit_Title_Center",
         "label": "Image 3x Fit Title Center",
         "design": {
@@ -1479,7 +1466,7 @@
          "contentAlignment": "center",
          "contentBox": false,
          "contentDirection": "horizontal",
-         "imageFill": "fit"
+         "imageFit": "contain"
         },
         "groupDefault": false,
         "groupHash": "ddc0cb31db6ad048a25a4dfbcc9d47702f893d33625ffea9b9ccc7253cea2aa5",
@@ -1539,7 +1526,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1571,11 +1558,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-1x-crop-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-1x-crop-title-center": {
         "name": "Image_Only_1x_Crop_Title_Center",
         "label": "Image Only 1x Crop Title Center",
         "design": {
@@ -1623,7 +1609,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -1655,11 +1641,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-1x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-1x-fit-title-center": {
         "name": "Image_Only_1x_Fit_Title_Center",
         "label": "Image Only 1x Fit Title Center",
         "design": {
@@ -1707,7 +1692,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -1749,11 +1734,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-2x-crop-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-2x-crop-title-center": {
         "name": "Image_Only_2x_Crop_Title_Center",
         "label": "Image Only 2x Crop Title Center",
         "design": {
@@ -1812,7 +1796,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1854,11 +1838,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-2x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-2x-fit-title-center": {
         "name": "Image_Only_2x_Fit_Title_Center",
         "label": "Image Only 2x Fit Title Center",
         "design": {
@@ -1917,7 +1900,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -1965,11 +1948,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-3x-crop-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-3x-crop-title-center": {
         "name": "Image_Only_3x_Crop_Title_Center",
         "label": "Image Only 3x Crop Title Center",
         "design": {
@@ -2035,7 +2017,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -2083,11 +2065,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "image-only-3x-fit-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "image-only-3x-fit-title-center": {
         "name": "Image_Only_3x_Fit_Title_Center",
         "label": "Image Only 3x Fit Title Center",
         "design": {
@@ -2153,7 +2134,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -2187,11 +2168,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-1x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-1x-itemimage-title-center": {
         "name": "List_1x_ItemImage_Title_Center",
         "label": "List 1x ItemImage Title Center",
         "design": {
@@ -2241,7 +2221,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -2275,11 +2255,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-1x-itemimage-vertical-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-1x-itemimage-vertical-title-center": {
         "name": "List_1x_ItemImage_Vertical_Title_Center",
         "label": "List 1x ItemImage Vertical Title Center",
         "design": {
@@ -2330,7 +2309,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -2364,11 +2343,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-1x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-1x-title-center": {
         "name": "List_1x_Title_Center",
         "label": "List 1x Title Center",
         "design": {
@@ -2416,7 +2394,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -2450,11 +2428,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-1x-vertical-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-1x-vertical-title-center": {
         "name": "List_1x_Vertical_Title_Center",
         "label": "List 1x Vertical Title Center",
         "design": {
@@ -2503,7 +2480,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -2548,11 +2525,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-2x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-2x-itemimage-title-center": {
         "name": "List_2x_ItemImage_Title_Center",
         "label": "List 2x ItemImage Title Center",
         "design": {
@@ -2613,7 +2589,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -2658,11 +2634,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-2x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-2x-title-center": {
         "name": "List_2x_Title_Center",
         "label": "List 2x Title Center",
         "design": {
@@ -2722,7 +2697,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -2774,11 +2749,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-3x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-3x-itemimage-title-center": {
         "name": "List_3x_ItemImage_Title_Center",
         "label": "List 3x ItemImage Title Center",
         "design": {
@@ -2846,7 +2820,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -2898,11 +2872,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-3x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-3x-title-center": {
         "name": "List_3x_Title_Center",
         "label": "List 3x Title Center",
         "design": {
@@ -2969,7 +2942,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3028,11 +3001,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-4x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-4x-itemimage-title-center": {
         "name": "List_4x_ItemImage_Title_Center",
         "label": "List 4x ItemImage Title Center",
         "design": {
@@ -3108,7 +3080,7 @@
          "columns": 2
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3167,11 +3139,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-4x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-4x-title-center": {
         "name": "List_4x_Title_Center",
         "label": "List 4x Title Center",
         "design": {
@@ -3246,7 +3217,7 @@
          "columns": 2
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3312,11 +3283,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-5x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-5x-itemimage-title-center": {
         "name": "List_5x_ItemImage_Title_Center",
         "label": "List 5x ItemImage Title Center",
         "design": {
@@ -3399,7 +3369,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3465,11 +3435,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-5x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-5x-title-center": {
         "name": "List_5x_Title_Center",
         "label": "List 5x Title Center",
         "design": {
@@ -3551,7 +3520,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3624,11 +3593,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-6x-itemimage-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-6x-itemimage-title-center": {
         "name": "List_6x_ItemImage_Title_Center",
         "label": "List 6x ItemImage Title Center",
         "design": {
@@ -3718,7 +3686,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3791,11 +3759,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "list-6x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "list-6x-title-center": {
         "name": "List_6x_Title_Center",
         "label": "List 6x Title Center",
         "design": {
@@ -3884,7 +3851,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -3943,11 +3910,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-1x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-1x-title-center": {
         "name": "Number_1x_Title_Center",
         "label": "Number 1x Title Center",
         "design": {
@@ -3994,7 +3960,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -4073,11 +4039,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-2x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-2x-title-center": {
         "name": "Number_2x_Title_Center",
         "label": "Number 2x Title Center",
         "design": {
@@ -4136,7 +4101,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -4227,11 +4192,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-3x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-3x-title-center": {
         "name": "Number_3x_Title_Center",
         "label": "Number 3x Title Center",
         "design": {
@@ -4297,7 +4261,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -4400,11 +4364,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-4x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-4x-title-center": {
         "name": "Number_4x_Title_Center",
         "label": "Number 4x Title Center",
         "design": {
@@ -4478,7 +4441,7 @@
          "columns": 2
         }
        }
-      ]
+      }
      }
     }
    }
@@ -4593,11 +4556,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-5x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-5x-title-center": {
         "name": "Number_5x_Title_Center",
         "label": "Number 5x Title Center",
         "design": {
@@ -4678,7 +4640,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -4805,11 +4767,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "number-6x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "number-6x-title-center": {
         "name": "Number_6x_Title_Center",
         "label": "Number 6x Title Center",
         "design": {
@@ -4897,7 +4858,7 @@
          "columns": 3
         }
        }
-      ]
+      }
      }
     }
    }
@@ -4924,11 +4885,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-1x-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-1x-center": {
         "name": "Text_1x_Center",
         "label": "Text 1x Center",
         "design": {
@@ -4966,7 +4926,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -4995,11 +4955,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-1x-center-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-1x-center-title-center": {
         "name": "Text_1x_Center_Title_Center",
         "label": "Text 1x Center Title Center",
         "design": {
@@ -5046,7 +5005,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -5075,11 +5034,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-1x-center-title-left",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-1x-center-title-left": {
         "name": "Text_1x_Center_Title_Left",
         "label": "Text 1x Center Title Left",
         "design": {
@@ -5126,7 +5084,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -5155,11 +5113,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-1x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-1x-title-center": {
         "name": "Text_1x_Title_Center",
         "label": "Text 1x Title Center",
         "design": {
@@ -5206,7 +5163,7 @@
          }
         ]
        }
-      ]
+      }
      }
     }
    }
@@ -5240,11 +5197,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-2x-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-2x-center": {
         "name": "Text_2x_Center",
         "label": "Text 2x Center",
         "design": {
@@ -5294,7 +5250,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -5330,11 +5286,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-2x-center-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-2x-center-title-center": {
         "name": "Text_2x_Center_Title_Center",
         "label": "Text 2x Center Title Center",
         "design": {
@@ -5393,7 +5348,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -5429,11 +5384,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-2x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-2x-title-center": {
         "name": "Text_2x_Title_Center",
         "label": "Text 2x Title Center",
         "design": {
@@ -5492,7 +5446,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -5531,11 +5485,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-3x-center-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-3x-center-title-center": {
         "name": "Text_3x_Center_Title_Center",
         "label": "Text 3x Center Title Center",
         "design": {
@@ -5601,7 +5554,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }
@@ -5640,11 +5593,10 @@
      }
     ],
     "catalogs": {
-     "layouts": {
-      "records": [
-       {
-        "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-        "id": "text-3x-title-center",
+     "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+       "text-3x-title-center": {
         "name": "Text_3x_Title_Center",
         "label": "Text 3x Title Center",
         "design": {
@@ -5710,7 +5662,7 @@
          "mode": "row"
         }
        }
-      ]
+      }
      }
     }
    }

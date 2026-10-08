@@ -1,5 +1,5 @@
 import type { RenderFonts, ScriptFonts } from "./fonts.js";
-import type { Finding } from "@openpresentation/opf";
+import type { Catalog, Finding, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
 import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-render";
 
@@ -17,19 +17,12 @@ export declare const runtimePolicy: Readonly<{
   deterministicLocalExecution: true;
 }>;
 
+/** What draws when nothing resolves: core's engine defaults (OPF 0.15 ships no catalog records), and the chart type a chart without `type` previews as. */
 export declare const engineDefaults: Readonly<{
-  catalogs: Readonly<Record<string, Readonly<{ source: string }>>>;
-  theme: "minimal";
-  colorScheme: "cool-horizon";
-  language: "english";
-  narrative: "classic-story";
-  tone: "formal";
-  audience: "executives";
-  fontScheme: Readonly<{
-    pptx: Readonly<{ latin: "aptos"; ea: "microsoft-yahei"; cs: "nirmala-ui" }>;
-    google: Readonly<{ latin: "roboto"; ea: "noto-sans-sc"; cs: "noto-sans" }>;
-  }>;
-  chartTypes: readonly ["stacked-column", "stacked-area", "line-with-markers"];
+  theme: typeof import("@openpresentation/opf/composition").ENGINE_DEFAULT_THEME;
+  colorScheme: typeof import("@openpresentation/opf/composition").ENGINE_DEFAULT_COLOR_SCHEME;
+  fontScheme: typeof import("@openpresentation/opf/composition").ENGINE_DEFAULT_FONT_SCHEME;
+  chartType: string;
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
@@ -45,20 +38,7 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   code: "unsupported-pattern" | "variable-example-used" | "variable-builtin-missing" | "date-needs-value" | "language-preview-unresolved";
   path: string;
   message: string;
-} | {
-  /** A font-scheme id matched no record; the default font scheme (`aptos`) was used as the base. */
-  code: "unresolved-font-scheme";
-  path: string;
-  message: string;
-  id: string;
-  fallback: string;
-} | {
-  /** A layout, theme or colour-scheme id matched no record: the slide composed with no layout record, the `minimal` theme or the `cool-horizon` colour scheme. Never an error. */
-  code: "unresolved-layout" | "unresolved-theme" | "unresolved-color-scheme";
-  path: string;
-  message: string;
-  id: string;
-} | {
+} | UnresolvedReferenceDiagnostic | {
   code: "unresolved-asset";
   path: string;
   message: string;
@@ -101,13 +81,18 @@ export interface RenderSvgOptions {
    */
   date?: string;
   trace?: boolean;
-  catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
   /**
-   * Records for catalog sources the host has already fetched, keyed by the source string a document's
-   * `catalogs.<kind>.source` names (a single source or an ordered array; first match wins, the bundled
-   * default catalog is appended). The renderer never fetches a source itself.
+   * Catalogs the host registered (core `Catalog[]`), passed unchanged to core resolution: a reference the document does not
+   * embed resolves against the catalog whose `source` its group names, and the first entry is the default catalog for bare ids
+   * when the document omits `catalogs.default`. The renderer bundles and fetches no catalog; register the gallery snapshot with
+   * `import { defaultCatalog } from "@openpresentation/opf/catalog"` and `catalogs: [defaultCatalog]`. Omitted: only embedded
+   * records resolve, and anything else draws with core's engine defaults (reported as `unresolved-reference`).
+   * A malformed value throws core's `OPFCatalogsOptionError` (`code: "invalid-catalogs"`); a reference with an undeclared prefix
+   * (`foo:id` without `catalogs.foo`) fails the boundary check (`invalid-opf`, finding `opf/undeclared-catalog`).
    */
-  catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
+  catalogs?: readonly Catalog[];
+  /** Fail with `unresolved-reference` (an OPFRenderError whose `details.diagnostics` list the references) instead of falling back when a reference resolves nowhere. Default false. */
+  strictReferences?: boolean;
 }
 
 export interface SvgToPngOptions {
@@ -140,7 +125,7 @@ export interface ResolvedSlide {
   index: number;
   path: string;
   slide: unknown;
-  /** The layout record the slide names; absent when it names none or an id no catalog has (the slide then composes with no layout). */
+  /** The layout record the slide names; absent when it names none or a reference that resolves nowhere (the slide then composes automatically). */
   layout?: unknown;
   design: {
     theme: unknown;

@@ -3,6 +3,8 @@
 // already stops the module from loading; this test lists them anyway, and also checks that no source file feature-detects a core
 // export (`typeof core.x === "function"`, `"x" in core`), which is how right-to-left text, script fonts, pattern fills, code colours,
 // chart options, citations and numbered lists used to disappear silently when a name moved between core entries.
+// OPF 0.15 (FA-21/23): the renderer registers no catalog of its own (hosts pass core `Catalog[]`), so it needs no catalog export
+// and no source file imports `@openpresentation/opf/catalog`; what it falls back to is core's engine defaults.
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -22,9 +24,9 @@ const REQUIRED = {
     'template variables': ['resolveVariables', 'isTemplate', 'hasContentVariables'],
     'the slide context (fonts, canvas, theme, colour scheme)': ['resolveSlideContext'],
     'the boundary check': ['validate'],
-    'catalogs': ['catalogs'],
   },
   '@openpresentation/opf/composition': {
+    'engine defaults (FA-21)': ['ENGINE_DEFAULT_THEME', 'ENGINE_DEFAULT_COLOR_SCHEME', 'ENGINE_DEFAULT_FONT_SCHEME', 'ENGINE_DEFAULT_CHART_TYPES'],
     'layout': ['composeSlide', 'layoutTable', 'fitText', 'fitList', 'fitRichText', 'resolveTextStyle', 'textWidthMeasurer', 'resolveCanvasDimensions', 'resolveFontFamilies'],
     'script fonts and the language model': ['resolveScriptFonts', 'scriptFontRole'],
     'right-to-left text': ['paragraphDirection', 'physicalAlignment'],
@@ -82,6 +84,8 @@ for (const file of sourceFiles) {
   assert.doesNotMatch(text, /typeof\s+(?:core|opfCore|opfComposition|composition)\.\w+\s*[!=]==?\s*["']function["']/, `src/${file} feature-detects a core export`);
   assert.doesNotMatch(text, /["']\w+["']\s+in\s+(?:core|opfCore|opfComposition)\b/, `src/${file} feature-detects a core export with "in"`);
   assert.doesNotMatch(text, /import\s+\*\s+as\s+(?:core|opfCore|opfComposition)\s+from\s+["']@openpresentation\/opf/, `src/${file} reads core through a namespace; import the names it uses`);
+  // The renderer is a library: the host registers catalogs, so no source file imports the gallery snapshot.
+  assert.doesNotMatch(text, /(?:from|import\()\s*["']@openpresentation\/opf\/catalog["']/, `src/${file} imports a catalog; hosts register catalogs`);
 }
 assert.ok(checked > 40, `the source imports ${checked} core names`);
 

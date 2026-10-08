@@ -1,25 +1,30 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import * as core from '@openpresentation/opf/composition';
-import {renderSlideSvg} from '../dist/svg.js';
+// FA-23: the documents name the gallery's `roboto` font scheme, so the host catalog is registered.
+import {renderSlideSvg} from './catalog-harness.mjs';
 import { chartNumber, formatTick } from '../dist/charts.js';
 
 // RR-54: chart and table data in the preview. Strict chart numbers, number formats on data labels, value-axis ticks and table
 // cells, shared datasets, series mapping by column name, DataColumn headers, and trace paths. Core owns the resolution
 // (resolveChartData, tableCellDisplayValue); these tests assert what the preview draws from it.
+// OPF 0.15: chart.type is core's CHART_TYPES enum, so a type outside it (the `sketch` below, which exercises the renderer's
+// legacy single-series preview) no longer validates; those documents are drawn with validation off to reach that path.
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const plain = (html) => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
 // The text of every drawn <text> element (tags stripped), in document order.
 const words = (svg) => [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, body]) => plain(body));
 const paths = (svg) => [...svg.matchAll(/data-opf-path="([^"]*)"/g)].map(([, path]) => path);
-const render = (document, options = {}) => renderSlideSvg(document, 0, options);
+const LEGACY_TYPE = 'sketch';
+const drawsLegacyType = (document) => document.slides.some((slide) => [slide.chart, ...(slide.blocks ?? []).map((block) => block.chart)].some((chart) => chart?.type === LEGACY_TYPE));
+const render = (document, options = {}) => renderSlideSvg(document, 0, drawsLegacyType(document) ? { validate: false, ...options } : options);
 const doc = (slide, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [slide], ...extra });
 const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 0. Documents that use none of the new fields draw byte for byte as before. The digests below were taken from the renderer
-//    before RR-54 (RR54_PRINT_DIGESTS=1 prints them): one traced render per catalog chart type with numeric data, a legacy
+//    before RR-54 (RR54_PRINT_DIGESTS=1 prints them): one traced render per chart type with numeric data, a legacy
 //    sketch, and a styled table. A change here is a change to existing output and needs a reason. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
@@ -88,7 +93,7 @@ assert.equal(chartNumber(Number.POSITIVE_INFINITY), null);
   const svg = render(strings, { trace: true });
   assert.equal(svg, render(numbers, { trace: true }), 'string cells that are not strict numbers plot exactly like gaps; 1e6 plots as 1000000');
   assert.deepEqual(paths(svg).filter((path) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(path)).filter((path, i, all) => all.indexOf(path) === i), ['slides.0.chart.data.rows.1.1', 'slides.0.chart.data.rows.3.1'], 'only Q2 and Q4 draw a column');
-  // The legacy sketch (a chart type outside the catalog) reads the same strict values.
+  // The legacy sketch (a chart type outside CHART_TYPES) reads the same strict values.
   const legacy = (rows) => render(chartDoc({ type: 'sketch', data: { columns: ['Quarter', 'Revenue'], rows } }), { trace: true });
   assert.equal(legacy([['Q1', '12%'], ['Q2', '1e6'], ['Q3', '(5)'], ['Q4', 7]]), legacy([['Q1', null], ['Q2', 1000000], ['Q3', null], ['Q4', 7]]), 'the legacy sketch reads strict numbers too');
 }

@@ -9,13 +9,15 @@
 //   - hosts that resolve layouts and font schemes through renderOptions.catalogs get the same answer from presentationFamilies,
 //     presentationFaces, pendingLazyFonts, ensureLazyFonts, pendingScripts and ensureScripts, and a document that does not
 //     resolve throws what renderSvg throws (it is not reported as needing nothing).
+// OPF 0.15: the renderer registers no catalog. Decks that name gallery records (font schemes such as roboto, the example decks'
+// themes and layouts) resolve with the gallery catalog the host registers (`catalogs: [defaultCatalog]`), and a host catalog
+// is a registered `{source, layouts: {id: record}, ...}` keyed by id.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {examples} from '@openpresentation/opf/examples';
-import {layouts} from '@openpresentation/opf/catalogs';
-import {renderSlideSvg} from '../dist/svg.js';
+import {catalogs, defaultCatalog, renderSlideSvg} from './catalog-harness.mjs';
 import {createFontRegistry} from '../dist/font-registry.js';
 import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
 import {loadFonts as loadBrowserFonts, lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies} from '../dist/fonts-browser.js';
@@ -35,8 +37,8 @@ const code = presentationFaces(deck([{title: 'Hello', code: 'const value = 1;'}]
 assert.ok(code.some(face => face.family === 'Roboto Mono'), 'the code role is requested where code is drawn');
 assert.ok(!presentationFaces(deck([{title: 'Hello', text: 'World'}])).some(face => face.family === 'Roboto Mono'), 'and only there');
 assert.ok(presentationFamilies(deck([{title: 'Hello', text: 'World'}])).has('Roboto Mono'), 'presentationFamilies keeps listing the role families');
-assert.deepEqual(label(presentationFaces(deck([{title: 'One', text: 'a'}, {title: 'Two', text: 'b', design: {fontScheme: 'open-sans'}}]))), ['Aptos 400', 'Aptos Display 700', 'Open Sans 400', 'Open Sans 700'], 'a per-slide design override adds its own faces');
-assert.deepEqual(label(presentationFaces({name: 'faces', design: {fontScheme: 'roboto'}, slides: [{title: 'Hello', text: 'World'}]})), ['Roboto 400', 'Roboto 700']);
+assert.deepEqual(label(presentationFaces(deck([{title: 'One', text: 'a'}, {title: 'Two', text: 'b', design: {fontScheme: 'open-sans'}}]), {catalogs})), ['Aptos 400', 'Aptos Display 700', 'Open Sans 400', 'Open Sans 700'], 'a per-slide design override adds its own faces');
+assert.deepEqual(label(presentationFaces({name: 'faces', design: {fontScheme: 'roboto'}, slides: [{title: 'Hello', text: 'World'}]}, {catalogs})), ['Roboto 400', 'Roboto 700']);
 assert.deepEqual(label(presentationFaces(deck([{title: 'Hello', table: {columns: ['A', 'B'], rows: [['1', '2']]}}]))), ['Aptos 400', 'Aptos 700', 'Aptos Display 700'], 'table headers draw bold');
 assert.deepEqual(label(presentationFaces({name: 'faces', design: {footer: {right: {slideNumber: true}}}, slides: [{title: 'Hello'}]})), ['Aptos 400', 'Aptos Display 700'], 'furniture draws the body role');
 const before = structuredClone(deck([{title: 'Hello', text: 'World'}]));
@@ -45,7 +47,7 @@ presentationFaces(probe, { fonts: {textMeasurement: {measure: () => { throw new 
 assert.deepEqual(probe, before, 'the document is not modified');
 assert.deepEqual(presentationFaces(before), presentationFaces(before), 'deterministic');
 // A script run is requested in its script slot's family (Yu Gothic here), and the text of the other scripts draws in the design font.
-const yu = presentationFaces({name: 'faces', design: {fontScheme: 'yu-gothic'}, slides: [{title: 'Q3 レビュー', text: '日本語'}]});
+const yu = presentationFaces({name: 'faces', design: {fontScheme: 'yu-gothic'}, slides: [{title: 'Q3 レビュー', text: '日本語'}]}, {catalogs});
 assert.ok(yu.length > 0 && yu.every(face => face.weight > 0));
 
 // ---- examples: what a real registry paints is what the plan says it draws, and loading the plan is enough ----
@@ -69,16 +71,16 @@ const paintedFaces = svg => {
 
 let compared = 0, plannedFiles = 0, wholeFamilyFiles = 0, rendered = 0, oddWeights = 0;
 for (const {file, deck: example} of examples) {
-  const asNamed = presentationFaces(example);
+  const asNamed = presentationFaces(example, {catalogs});
   assert.ok(asNamed.length > 0, `${file}: draws text`);
   for (const policy of ['metric', 'visual']) {
-    const {registry: real, options} = full[policy];
+    const handle = full[policy], real = handle.registry;
     // What Node paints with every vendored face loaded is the plan's resolution against those faces.
-    const drawn = presentationFaces(example, {}, {faces: real.describeFaces(), policy});
+    const drawn = presentationFaces(example, {catalogs}, {faces: real.describeFaces(), policy});
     const drawnKeys = new Set(drawn.map(key));
     // A metric registry cannot draw a deck that names a family with only a visual replacement (Consolas); the plan still covers it.
     let svg;
-    try { svg = renderSlideSvg(example, 0, options); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
+    try { svg = renderSlideSvg(example, 0, {fonts: handle}); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
     if (svg !== undefined) {
       for (const painted of paintedFaces(svg)) {
         const [family, weight, italic] = painted.split('|');
@@ -89,9 +91,9 @@ for (const {file, deck: example} of examples) {
     }
     // A registry holding the eager faces plus exactly the planned vendored ones draws the same faces.
     const partial = createFontRegistry(eager.map(face => ({...face})), {substitutionPolicy: policy});
-    const need = lazyFacesNeeded(example, {}, {lazy: lazyList, held: partial.describeFaces(), policy});
+    const need = lazyFacesNeeded(example, {catalogs}, {lazy: lazyList, held: partial.describeFaces(), policy});
     partial.addFaces(await Promise.all(need.map(async face => ({family: face.family, weight: face.weight, italic: face.italic, embed: 'used', data: await bytesOf(face.file)}))));
-    assert.deepEqual(presentationFaces(example, {}, {faces: partial.describeFaces(), policy}).map(key), drawn.map(key), `${file} (${policy}): the planned faces draw as Node does with everything loaded`);
+    assert.deepEqual(presentationFaces(example, {catalogs}, {faces: partial.describeFaces(), policy}).map(key), drawn.map(key), `${file} (${policy}): the planned faces draw as Node does with everything loaded`);
     compared += drawn.length;
     // Nothing else is loaded: every planned file is drawn.
     for (const face of need) assert.ok(drawnKeys.has(key(face)), `${file} (${policy}): ${face.file} is loaded for no drawn face`);
@@ -100,15 +102,15 @@ for (const {file, deck: example} of examples) {
     assert.deepEqual(lazyFontsFor(drawn, {lazy: lazyList, held: eager, policy}).map(face => face.file).sort(), need.map(face => face.file).sort(), `${file} (${policy}): lazyFontsFor and lazyFacesNeeded agree`);
   }
   oddWeights += asNamed.some(face => face.weight !== 400 && face.weight !== 700) ? 1 : 0;
-  wholeFamilyFiles += lazyFontsFor(presentationFamilies(example), {lazy: lazyList, hasFamily: family => eager.some(held => lc(held.family) === lc(family)), policy: 'visual'}).length;
+  wholeFamilyFiles += lazyFontsFor(presentationFamilies(example, {catalogs}), {lazy: lazyList, hasFamily: family => eager.some(held => lc(held.family) === lc(family)), policy: 'visual'}).length;
 }
 assert.ok(compared > examples.length && rendered > examples.length, 'every example deck was checked');
 assert.ok(plannedFiles > 0 && plannedFiles < wholeFamilyFiles * 2 * 0.75, `the plans load fewer files than whole families (${plannedFiles} planned over two policies, ${wholeFamilyFiles} whole-family files per policy)`);
 assert.ok(oddWeights > 0, 'the corpus has decks with weights other than 400 and 700');
 // A label of weight 600 in an Aptos deck under metric policy: Aptos 600 has no metric face, its role family Intos resolves it to Intos 700.
 const labelDeck = examples.find(entry => entry.file.endsWith('technical/asset-source-forms.opf.json')).deck;
-assert.ok(presentationFaces(labelDeck).some(face => face.family === 'Aptos' && face.weight === 600));
-assert.ok(lazyFacesNeeded(labelDeck, {}, {lazy: lazyList, held: eager, policy: 'metric'}).some(face => face.family === 'Intos' && face.weight === 700), 'the bold face is planned although Aptos 600 itself has no metric replacement');
+assert.ok(presentationFaces(labelDeck, {catalogs}).some(face => face.family === 'Aptos' && face.weight === 600));
+assert.ok(lazyFacesNeeded(labelDeck, {catalogs}, {lazy: lazyList, held: eager, policy: 'metric'}).some(face => face.family === 'Intos' && face.weight === 700), 'the bold face is planned although Aptos 600 itself has no metric replacement');
 
 // ---- lazyFontsFor at face level ----
 const intos = family => lazyList.filter(face => face.family === family);
@@ -185,17 +187,21 @@ assert.deepEqual(registry.pendingLazyFonts(deck([{title: 'Code', code: 'const va
 registry.dispose();
 
 // ---- host catalogs (FF-41 issue 2) ----
-const bullets = {layouts: [{...layouts.find(entry => entry.id === 'list-1x'), id: 'bullets', name: 'Bullets'}]};
+// The host registers its own catalog: the gallery records plus a `bullets` layout (the gallery's list-1x under another id).
+const bullets = [{...defaultCatalog, source: 'https://catalog.example/host', layouts: {...defaultCatalog.layouts, bullets: {...defaultCatalog.layouts['list-1x'], name: 'Bullets'}}}];
 const catalogDeck = {name: 'x', design: {fontScheme: 'aptos'}, slides: [{layout: 'bullets', title: 'A', items: ['b']}]};
-// A layout id no catalog has never throws: the slide composes with no layout and the render reports `unresolved-layout`.
+// A layout id no registered catalog has never throws: the slide composes with no layout and the render reports one
+// `unresolved-reference` for the layout.
 const unresolvedLayout = [];
 assert.ok(renderSlideSvg(catalogDeck, 0, {onDiagnostic: item => unresolvedLayout.push(item)}).startsWith('<svg'));
-assert.deepEqual(unresolvedLayout.map(item => [item.code, item.id]), [['unresolved-layout', 'bullets']]);
-assert.ok(renderSlideSvg(catalogDeck, 0, {catalogs: bullets}).startsWith('<svg'));
-assert.deepEqual([...presentationFamilies(catalogDeck)].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono'], 'an unknown layout id does not change the families the deck draws');
+assert.deepEqual(unresolvedLayout.map(item => [item.code, item.kind, item.reference]), [['unresolved-reference', 'layouts', 'bullets']]);
+const resolvedLayout = [];
+assert.ok(renderSlideSvg(catalogDeck, 0, {catalogs: bullets, onDiagnostic: item => resolvedLayout.push(item)}).startsWith('<svg'));
+assert.deepEqual(resolvedLayout.filter(item => item.code === 'unresolved-reference'), [], 'the host catalog resolves the layout');
+assert.deepEqual([...presentationFamilies(catalogDeck, {catalogs})].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono'], 'an unknown layout id does not change the families the deck draws');
 assert.deepEqual([...presentationFamilies(catalogDeck, {catalogs: bullets})].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono']);
 assert.deepEqual(label(presentationFaces(catalogDeck, {catalogs: bullets})), ['Aptos 400', 'Aptos Display 700']);
-const hosted = await load();
+const hosted = await load({renderOptions: {catalogs}});
 assert.equal(hosted.pendingLazyFonts(catalogDeck).length, 2, 'an unknown layout id still names the faces the deck draws');
 assert.deepEqual(fileNames(hosted.pendingLazyFonts(catalogDeck, {catalogs: bullets})), ['IntosDisplay-Bold.ttf', 'Intos-Regular.ttf'].sort(), 'the catalogs a host passes resolve the document');
 served.length = 0;
@@ -209,18 +215,18 @@ assert.equal(withDefaults.pendingLazyFonts(catalogDeck, {catalogs: bullets}).len
 assert.equal((await withDefaults.ensureLazyFonts(catalogDeck, {signal: new AbortController().signal})).length, 2);
 withDefaults.dispose();
 // A font scheme that exists only in the host's catalogs and names a script font selects that font's script package.
-const yuScheme = {id: 'host-yu', name: 'Host Yu', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif', $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1'};
+const yuCatalog = [{source: 'https://catalog.example/yu', fontSchemes: {'host-yu': {name: 'Host Yu', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif'}}}];
 const yuDeck = {name: 'yu', design: {fontScheme: 'host-yu'}, slides: [{title: 'Review', text: 'Text'}]};
 const scriptRegistry = await load({scriptBaseUrl: 'https://fonts.example/scripts/'});
-assert.deepEqual(scriptRegistry.pendingScripts(yuDeck), [], 'core does not know the host scheme, so without catalogs no script face is named');
-assert.deepEqual(scriptRegistry.pendingScripts(yuDeck, {catalogs: {fontSchemes: [yuScheme]}}), ['@expo-google-fonts/noto-sans-jp'], 'with the host catalogs the scheme names Yu Gothic, which needs Noto Sans JP');
-assert.deepEqual(autoScriptSelection(yuDeck, {catalogs: {fontSchemes: [yuScheme]}}).scripts, ['Jpan']);
-assert.deepEqual(autoScriptSelection(yuDeck).scripts, []);
-assert.deepEqual(detectPresentationScripts(yuDeck, {catalogs: {fontSchemes: [yuScheme]}}), []);
+assert.deepEqual(scriptRegistry.pendingScripts(yuDeck, {catalogs}), [], 'the gallery catalog does not have the host scheme, so with it alone no script face is named');
+assert.deepEqual(scriptRegistry.pendingScripts(yuDeck, {catalogs: yuCatalog}), ['@expo-google-fonts/noto-sans-jp'], 'with the host catalogs the scheme names Yu Gothic, which needs Noto Sans JP');
+assert.deepEqual(autoScriptSelection(yuDeck, {catalogs: yuCatalog}).scripts, ['Jpan']);
+assert.deepEqual(autoScriptSelection(yuDeck, {catalogs}).scripts, []);
+assert.deepEqual(detectPresentationScripts(yuDeck, {catalogs: yuCatalog}), []);
 // Text-driven detection does not need the document to resolve.
 assert.deepEqual(scriptRegistry.pendingScripts({name: 'jp', language: 'ja', slides: [{layout: 'bullets', title: 'こんにちは', items: ['日本語']}]}), ['@expo-google-fonts/noto-sans-jp']);
 scriptRegistry.dispose();
-const scriptDefaults = await load({scriptBaseUrl: 'https://fonts.example/scripts/', renderOptions: {catalogs: {fontSchemes: [yuScheme]}}});
+const scriptDefaults = await load({scriptBaseUrl: 'https://fonts.example/scripts/', renderOptions: {catalogs: yuCatalog}});
 assert.deepEqual(scriptDefaults.pendingScripts(yuDeck), ['@expo-google-fonts/noto-sans-jp'], 'loader-level renderOptions reach the script analysis');
 scriptDefaults.dispose();
 assert.equal(fonts.size, 0, 'dispose removes every face');

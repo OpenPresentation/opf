@@ -3,7 +3,7 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const prepared = await loadFonts(), {registry} = prepared,output=path.resolve(process.argv[2]??'artifacts/plain-whitespace-browser');
 await mkdir(output,{recursive:true});

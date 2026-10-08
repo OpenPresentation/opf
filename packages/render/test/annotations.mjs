@@ -24,7 +24,8 @@ const ok = (condition, message) => { assert.ok(condition, message); checks += 1;
 const document = deck();
 const diagnostics = [];
 const svg = index => renderSlideSvg(document, index, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
-const geometry = index => composeSlide(document.slides[index], { presentation: document, slideIndex: index, layout: { id: 'blank' } });
+// Core's geometry for a slide with no layout record (automatic composition), as the preview composes these slides.
+const geometry = index => composeSlide(document.slides[index], { presentation: document, slideIndex: index });
 
 // Markers: superscript marker segments after their run, no source offsets, no link.
 {

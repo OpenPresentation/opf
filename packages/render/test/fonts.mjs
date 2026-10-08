@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {loadFonts} from "../dist/fonts-node.js";
 import {OPFFontError} from "../dist/fonts.js";
-import {resolvePresentation, svgToPng, renderSlideSvg} from "../dist/index.js";
+import {resolvePresentation, svgToPng, renderSlideSvg} from "./catalog-harness.mjs"; // FA-23: registers the gallery snapshot (the documents name gallery records)
 const handle=await loadFonts({pack: 'base'}),fonts=handle.registry;
 const style={fontFamily:"Roboto",fontWeight:400};
 const measure=fonts.textMeasurement.measure;

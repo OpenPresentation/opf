@@ -14,7 +14,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {examples} from '@openpresentation/opf/examples';
 import {createFontRegistry} from '../dist/font-registry.js';
-import {renderSlideSvg} from '../dist/svg.js';
+import {renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {lazyFacesNeeded, loadFonts as loadBrowserFonts, presentationFaces, splitStartupFaces} from '../dist/fonts-browser.js';
 
@@ -57,7 +57,7 @@ function fake() {
   };
   return {fonts, served, tampered, missing, document: {fonts, defaultView: {FontFace: Face}}, fetch: fetcher};
 }
-const load = (host, options = {}) => loadBrowserFonts({faces: startup.map(face => ({...face, data: face.data.slice()})), document: host.document, fetch: host.fetch, substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: 'https://fonts.example/', extraLazyFonts: extras, ...options}).then(fonts => fonts.registry);
+const load = (host, options = {}) => loadBrowserFonts({faces: startup.map(face => ({...face, data: face.data.slice()})), document: host.document, fetch: host.fetch, substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: 'https://fonts.example/', extraLazyFonts: extras, renderOptions: {catalogs}, ...options}).then(fonts => fonts.registry);
 const deck = (slides, design = {fontScheme: 'roboto'}) => ({name: 'extra faces', design, slides: slides.map((slide, index) => ({id: `s${index}`, ...slide}))});
 const faceNames = registry => registry.describeFaces().map(face => `${face.family} ${face.weight}${face.italic ? 'i' : ''}`).sort();
 
@@ -175,13 +175,13 @@ let decks = 0, planned = 0;
 for (const policy of ['metric', 'visual']) {
   const {registry: real} = await loadFonts({pack: 'office', substitutionPolicy: policy});
   for (const {file, deck: example} of examples) {
-    const drawn = presentationFaces(example, {}, {faces: real.describeFaces(), policy});
+    const drawn = presentationFaces(example, {catalogs}, {faces: real.describeFaces(), policy});
     const partial = createFontRegistry(startup.map(face => ({...face, data: face.data.slice()})), {substitutionPolicy: policy});
-    const need = lazyFacesNeeded(example, {}, {lazy: [...vendored, ...hostList], held: partial.describeFaces(), policy});
+    const need = lazyFacesNeeded(example, {catalogs}, {lazy: [...vendored, ...hostList], held: partial.describeFaces(), policy});
     partial.addFaces(await Promise.all(need.map(async face => face.package === 'host'
       ? {family: face.family, weight: face.weight, italic: face.italic, data: bytesByUrl.get(face.url)}
       : {family: face.family, weight: face.weight, italic: face.italic, embed: 'used', data: new Uint8Array(await readFile(path.join(root, face.file)))})));
-    assert.deepEqual(presentationFaces(example, {}, {faces: partial.describeFaces(), policy}).map(face => `${face.family}|${face.weight}|${face.italic}`), drawn.map(face => `${face.family}|${face.weight}|${face.italic}`), `${file} (${policy}): startup + planned faces draw as Node does with everything loaded`);
+    assert.deepEqual(presentationFaces(example, {catalogs}, {faces: partial.describeFaces(), policy}).map(face => `${face.family}|${face.weight}|${face.italic}`), drawn.map(face => `${face.family}|${face.weight}|${face.italic}`), `${file} (${policy}): startup + planned faces draw as Node does with everything loaded`);
     planned += need.length;
   }
   decks += examples.length;

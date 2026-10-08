@@ -7,7 +7,9 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import * as core from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvg, renderSlideSvg} from '../dist/index.js';
+// The example corpus and some decks name gallery records (themes, layouts, the roboto font scheme): they render, resolve and
+// detect scripts with the host catalog registered.
+import {catalogs, renderSvg, renderSlideSvg} from './catalog-harness.mjs';
 import {loadFonts,detectPresentationScripts,scriptFontPackages} from '../dist/fonts-node.js';
 import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
 import {scriptsOfText} from '../dist/script-fonts.js';
@@ -17,7 +19,7 @@ const short=name=>name.replace('@expo-google-fonts/','');
 const deck=(title,text='Body',extra={})=>({$schema:'https://openpresentation.org/schema/opf/v1',name:'Robust',slides:[{title,text}],...extra});
 
 // ---- Detection walks drawn text only ----
-assert.deepEqual(detectPresentationScripts({name:'日本語のデッキ',author:'山田',language:'en',slides:[{id:'スライド',title:'Plain',alt:'画像の説明',image:{src:'https://例え.jp/日本語.png',alt:'代替'},notes:'メモ'}],assets:{a:{name:'ロゴ'}},catalogs:{x:'日本語'},metadata:{k:'値'}}),[]);
+assert.deepEqual(detectPresentationScripts({name:'日本語のデッキ',author:'山田',language:'en',slides:[{id:'スライド',title:'Plain',alt:'画像の説明',image:{src:'https://例え.jp/日本語.png',alt:'代替'},notes:'メモ'}],assets:{a:{name:'ロゴ'}},catalogs:{custom:{fontSchemes:{'x-jp':{name:'日本語'}}}},metadata:{k:'値'}}),[]);
 // Drawn fields all count: titles, subtitle, list items, quotes, metrics, code, timelines, table cells, chart labels, footers.
 const drawn={
   title:['タイトルです'],subtitle:['サブタイトルです'],items:['項目です','Item'],
@@ -53,7 +55,7 @@ assert.deepEqual(scriptsOfText('“Hello”',{}),[]);
 // and every deck of the installed core's example corpus.
 const decode=text=>text.replace(/<[^>]+>/g,'').replace(/&(?:#x([0-9a-f]+)|#(\d+)|amp|lt|gt|quot|apos);/gi,(match,hex,decimal)=>hex?String.fromCodePoint(parseInt(hex,16)):decimal?String.fromCodePoint(Number(decimal)):{'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'"}[match.toLowerCase()]);
 const drawnScripts=(presentation,svgs)=>{
-  const profile=core.resolveScriptFonts(presentation);
+  const profile=core.resolveScriptFonts(presentation,{catalogs});
   const found=new Set();
   for(const svg of svgs)for(const [,content] of svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)){const text=decode(content);if(/^[•\u2022\d.\s]*$/.test(text))continue;for(const script of scriptsOfText(text,profile))found.add(script);}
   return [...found];
@@ -64,11 +66,11 @@ const mixed={$schema:'https://openpresentation.org/schema/opf/v1',name:'Parity',
 const rendered=renderSvg(mixed);
 const found=drawnScripts(mixed,rendered);
 assert.ok(found.length>=4,`the parity deck draws several scripts: ${found}`);
-for(const script of found)assert.ok(detectPresentationScripts(mixed).includes(script),`drawn script ${script} is detected`);
+for(const script of found)assert.ok(detectPresentationScripts(mixed,{catalogs}).includes(script),`drawn script ${script} is detected`);
 let corpus=0;
 for(const {deck:example} of examples){
   const drawnHere=drawnScripts(example,renderSvg(example));
-  for(const script of drawnHere)assert.ok(detectPresentationScripts(example).includes(script),`${script} drawn in an example deck is detected`);
+  for(const script of drawnHere)assert.ok(detectPresentationScripts(example,{catalogs}).includes(script),`${script} drawn in an example deck is detected`);
   corpus++;
 }
 assert.ok(corpus>=100,'the example corpus ran');

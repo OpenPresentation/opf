@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 
 // Core centers the heading group of cover slides (no body payload on a
 // heading-only layout). The preview must draw that group exactly where core
 // composed it: traced boxes equal the composed boxes and the drawn text sits
-// inside its box. Content slides keep their top-aligned headings.
+// inside its box. Content slides keep their top-aligned headings. The deck names gallery layouts and the roboto font
+// scheme, so it renders with the host catalog registered (./catalog-harness.mjs).
 const num = (attrs, name) => Number(new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1]);
 const tracedBox = (svg, path) => {
   const attrs = [...svg.matchAll(/<g\b([^>]*)>/g)].map(match => match[1]).find(candidate => candidate.includes(`data-opf-path="${path}"`) && candidate.includes('data-opf-box-y='));

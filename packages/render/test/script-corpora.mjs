@@ -11,12 +11,14 @@
 //      recorded `knownShapingLimits` (fontkit 2.0.4 has no Myanmar shaper, mis-joins one Syriac word and cannot position Nastaliq marks), whose
 //      deviations are bounded and must still exist (a limit that no longer deviates must be removed from the fixture);
 //   4. shaping really applied where the category says so (joining, conjuncts, vowel placement, tone marks change the glyph run).
-// It also checks that the corpus covers every script of the 93 catalog languages and every script slot the renderer names, and that the
-// catalog's own font-scheme samples are covered by the script faces. The report is written when a path is passed (CI uploads it).
+// It also checks that the corpus covers every script of the 93 languages of core's engine language vocabulary (`LANGUAGES`) and every script
+// slot the renderer names, and that the gallery catalog's own font-scheme samples are covered by the script faces. The report is written when
+// a path is passed (CI uploads it).
 import assert from 'node:assert/strict';
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
-import {fontSchemes, languages} from '@openpresentation/opf/catalogs';
+import {LANGUAGES} from '@openpresentation/opf/composition';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {svgToPng, renderSlideSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, itemizeScripts} from '../dist/script-fonts.js';
@@ -26,14 +28,13 @@ const corpora = await loadCorpora();
 const {faces, registry} = await loadFaces();
 const report = await qualify({faces, registry, corpora});
 
-// The corpus covers the catalog: every language's script and tag, and every script the renderer designates a face for.
+// The corpus covers the language vocabulary: every language's script and tag, and every script the renderer designates a face for.
 const groupByScript = new Map(corpora.groups.map(group => [group.script, group]));
-const languageRecords = languages.records ?? languages;
-assert.equal(languageRecords.length, 93);
+assert.equal(LANGUAGES.length, 93);
 const tagged = new Set(corpora.groups.flatMap(group => group.languages));
-for (const language of languageRecords) {
-  assert.ok(groupByScript.has(language.script), `${language.id}: no corpus group for script ${language.script}`);
-  assert.ok(tagged.has(language.bcp47), `${language.id}: bcp47 ${language.bcp47} is in no corpus group's languages`);
+for (const language of LANGUAGES) {
+  assert.ok(groupByScript.has(language.script), `${language.tag}: no corpus group for script ${language.script}`);
+  assert.ok(tagged.has(language.tag), `${language.tag} is in no corpus group's languages`);
 }
 for (const script of Object.keys(SCRIPT_FONT_FAMILIES)) assert.ok(groupByScript.has(script), `script slot ${script} has a corpus group`);
 for (const rule of SCRIPT_FONT_REPLACEMENTS) assert.ok(groupByScript.has(rule.script) || rule.script === 'Latn', `${rule.requestedFamily}: script ${rule.script} has a corpus group`);
@@ -93,16 +94,15 @@ for (const limit of corpora.knownShapingLimits) {
 // The characters a script face lacks (Latin, digits, punctuation in mixed samples) exist in some loaded face (the glyph-fallback chain).
 for (const character of common) assert.ok(faces.some(face => face.font.hasGlyphForCodePoint(character.codePointAt(0))), `U+${character.codePointAt(0).toString(16).toUpperCase()} is in no bundled script face`);
 
-// The catalog's own font-scheme samples (what the gallery shows for each script scheme) are covered by the script faces.
+// The gallery catalog's own font-scheme samples (what the gallery shows for each script scheme) are covered by the script faces.
 let schemeSamples = 0;
-const records = fontSchemes.records ?? fontSchemes;
-for (const scheme of records) {
+for (const [id, scheme] of Object.entries(defaultCatalog.fontSchemes)) {
   if (!scheme?.textSample || scheme.languageFamily === 'latin') continue;
   schemeSamples++;
   for (const run of itemizeScripts(scheme.textSample, {})) {
     if (run.script === 'Latn') continue;
     const missing = [...run.text].filter(character => !/[\s\p{P}\p{S}\p{M}\p{Cf}]/u.test(character) && !faces.some(face => face.font.hasGlyphForCodePoint(character.codePointAt(0))));
-    assert.deepEqual(missing, [], `${scheme.id}: sample characters in no script face`);
+    assert.deepEqual(missing, [], `${id}: sample characters in no script face`);
   }
 }
 assert.ok(schemeSamples >= 50, `${schemeSamples} script font-scheme samples checked`);
@@ -126,7 +126,7 @@ for (const entry of report.faces) {
 // test/script-corpora-browser.mjs for the browser proof). Only slides that draw such punctuation carry the style.
 {
   const deck = (language, title) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, slides: [{title, text: 'Body'}]});
-  const {options} = await loadFonts({pack: 'office', scripts: 'all'});
+  const prepared = await loadFonts({pack: 'office', scripts: 'all'});
   assert.match(renderSlideSvg(deck('ja', '「括弧」、（かっこ）。'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
   assert.match(renderSlideSvg(deck('zh-Hans', '，。！？；：'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
   assert.match(renderSlideSvg(deck('zh-Hans', '“引号”'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);

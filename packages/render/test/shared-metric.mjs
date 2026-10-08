@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {validate} from '@openpresentation/opf';
 const fonts=(await loadFonts({pack: 'office'})).registry,escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -51,7 +51,7 @@ let invalidCases=0;
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];
 for(const point of forbidden)for(const field of ['shorthand','value','unit','label','description','delta']){
   const value='A😀B'+String.fromCodePoint(point)+'Z',metric=field==='shorthand'?value:{value:0,[field]:value},deck={slides:[{metric}]},before=structuredClone(deck);
-  assert.equal(validate(deck,{only:['format']}).valid,true);
+  assert.equal(validate(deck,{only:['format'],catalogs}).valid,true);
   assert.throws(()=>renderSlideSvg(deck, 0),e=>e.code==='invalid-metric-text'&&e.path==='slides.0.metric'+(field==='shorthand'?'':'.'+field)&&e.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;
 }

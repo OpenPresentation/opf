@@ -2,13 +2,90 @@
   "name": "Quarterly review",
   "language": "en",
   "duration": 10,
-  "design": { "colorScheme": "cool-horizon" },
+  "design": {
+    "colorScheme": "cool-horizon"
+  },
   "slides": [
-    { "id": "cover", "title": "Quarterly review", "subtitle": "Q3 operating results", "notes": "Welcome everyone.\nThank the team before starting.", "section": "Opening" },
-    { "id": "agenda", "title": "Agenda", "items": ["Results", "Risks", "Decisions"], "notes": "Keep this under one minute.", "section": "Opening" },
-    { "id": "secret", "title": "Internal numbers", "text": "Not for the audience.", "hidden": true, "notes": "Hidden slide: never shown in the slideshow." },
-    { "id": "results", "title": "Revenue grew 18 percent", "text": "Growth came from enterprise accounts and from renewals in every region.", "notes": "Point at the enterprise bar.", "section": "Results" },
-    { "id": "quote", "title": "What customers say", "quote": { "text": "It paid for itself in a quarter.", "attribution": "A customer" } },
-    { "id": "close", "title": "Decisions needed", "items": ["Approve the hiring plan", "Fund the pilot"], "notes": "Ask for the decision explicitly.", "section": "Close" }
-  ]
+    {
+      "id": "cover",
+      "title": "Quarterly review",
+      "subtitle": "Q3 operating results",
+      "notes": "Welcome everyone.\nThank the team before starting.",
+      "section": "Opening"
+    },
+    {
+      "id": "agenda",
+      "title": "Agenda",
+      "items": [
+        "Results",
+        "Risks",
+        "Decisions"
+      ],
+      "notes": "Keep this under one minute.",
+      "section": "Opening"
+    },
+    {
+      "id": "secret",
+      "title": "Internal numbers",
+      "text": "Not for the audience.",
+      "hidden": true,
+      "notes": "Hidden slide: never shown in the slideshow."
+    },
+    {
+      "id": "results",
+      "title": "Revenue grew 18 percent",
+      "text": "Growth came from enterprise accounts and from renewals in every region.",
+      "notes": "Point at the enterprise bar.",
+      "section": "Results"
+    },
+    {
+      "id": "quote",
+      "title": "What customers say",
+      "quote": {
+        "text": "It paid for itself in a quarter.",
+        "attribution": "A customer"
+      }
+    },
+    {
+      "id": "close",
+      "title": "Decisions needed",
+      "items": [
+        "Approve the hiring plan",
+        "Fund the pilot"
+      ],
+      "notes": "Ask for the decision explicitly.",
+      "section": "Close"
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      }
+    }
+  }
 }

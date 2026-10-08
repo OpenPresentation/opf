@@ -16,7 +16,7 @@ const slides = [
   {title: 'مخطط', chart: {type: 'column', data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim()},
 ];
-const rtlDeck = {language: 'arabic', slides}, ltrDeck = {language: 'english', slides};
+const rtlDeck = {language: 'ar', slides}, ltrDeck = {language: 'en', slides};
 const render = (deck, index) => texts(renderSlideSvg(deck, index, {trace: true}));
 const find = (list, text, from = 0) => list.find(item => item.body.includes(text) && list.indexOf(item) >= from);
 

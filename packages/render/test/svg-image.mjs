@@ -3,7 +3,7 @@
 // A document that is not an SVG with a namespace and an intrinsic size keeps the "Image unavailable" placeholder.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import {renderSvg, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {renderSvg, svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
 const rect = `<svg ${NS} width="120" height="60"><rect width="120" height="60" fill="#00cc00"/></svg>`;
@@ -20,7 +20,8 @@ for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponen
   const [image] = images(svg);
   assert.ok(image, 'drawn as an image');
   assert.equal(attr(image, 'href'), base64(rect), 'normalized to base64');
-  assert.match(image, /preserveAspectRatio="xMidYMid meet"/);
+  // The engine default fit (design.imageFit, FA-22) is cover.
+  assert.match(image, /preserveAspectRatio="xMidYMid slice"/);
   assert.equal(attr(image, 'aria-label'), 'Chart');
   assert.deepEqual(diagnostics, []);
   assert.ok(!svg.includes('data-opf-asset-status'));
@@ -28,8 +29,8 @@ for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponen
 }
 
 // The box and the fit are the raster's: an SVG and a PNG of the same content get the same image element geometry.
-for (const fill of ['fit', 'crop']) {
-  const make = source => ({design: {imageFill: fill}, slides: [{title: 'T', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
+for (const fill of ['contain', 'cover', 'stretch']) {
+  const make = source => ({design: {imageFit: fill}, slides: [{title: 'T', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
   const [vector] = images(renderSlideSvg(make(base64(rect)), 0, {trace: true})), [bitmap] = images(renderSlideSvg(make(raster), 0, {trace: true}));
   for (const name of ['x', 'y', 'width', 'height', 'preserveAspectRatio']) assert.equal(attr(vector, name), attr(bitmap, name), `${fill} ${name}`);
   checked++;
@@ -38,13 +39,13 @@ for (const fill of ['fit', 'crop']) {
 // Every place an image appears.
 {
   const deck = {design: {logo: base64(rect), watermark: {src: base64(rect), opacity: .1}, header: {right: {image: {src: base64(rect), alt: 'Header'}}},
-    listBullet: 'image', background: {type: 'image', image: {src: base64(rect)}}}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Items', items: ['One', 'Two'], design: {slideImage: {src: base64(rect), position: 'right'}}}]};
+    listBullet: 'image', background: {type: 'image', src: base64(rect)}}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Items', blocks: [{type: 'image', image: base64(rect), placement: {edge: 'right'}}, {items: ['One', 'Two']}]}]};
   const diagnostics = [];
   const slides = renderSvg(deck, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   for (const svg of slides) assert.ok(!svg.includes('data-opf-asset-status'), 'no placeholder');
   assert.ok(images(slides[0]).length >= 4, 'background, watermark, logo and header image on the cover');
-  assert.ok(images(slides[1]).length >= 6, 'plus the slide image and two picture bullets');
+  assert.ok(images(slides[1]).length >= 6, 'plus the placed image block and two picture bullets');
   checked++;
 }
 

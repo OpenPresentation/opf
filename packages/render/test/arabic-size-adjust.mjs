@@ -4,7 +4,8 @@
 // and the exported size and core's composed geometry are unchanged. Offline and deterministic.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import {svgToPng, renderSvg} from '../dist/index.js';
+import {svgToPng} from '../dist/index.js';
+import {catalogs, renderSvg} from './catalog-harness.mjs';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import {loadFonts} from '../dist/fonts-node.js';
 import {FONT_POLICY, adjustedFontSize, baselineShift, createScriptFonts, fontPolicyFor, lineAscentFor, sizeAdjustFor} from '../dist/fonts.js';
@@ -69,10 +70,10 @@ near(aliased.textMeasurement.measure(TEXT, 100, typesetting), aliased.textMeasur
 
 // 3. The script planner: runs carry the multiplier, with and without a measurement provider.
 const deck = (fontScheme, language, text = WORDS) => ({name: 'RR-38', language, ...(fontScheme ? {design: {fontScheme}} : {}), slides: [{id: 'a', title: text, text}]});
-const profileOf = document => resolveScriptFonts(document);
+const profileOf = document => resolveScriptFonts(document, {catalogs});
 const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
 {
-  const profile = profileOf(deck(undefined, 'arabic'));
+  const profile = profileOf(deck(undefined, 'ar'));
   assert.equal(profile.body.complexScript, 'Arabic Typesetting');
   const measured = createScriptFonts(profile, registryMeasure);
   const runs = measured.plan(TEXT, style);
@@ -95,17 +96,17 @@ const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
 }
 {
   // The explicit font scheme sets the slot the same way in a Latin-language deck.
-  const profile = profileOf(deck('arabic-typesetting', 'english-us'));
+  const profile = profileOf(deck('arabic-typesetting', 'en-US'));
   const [run] = createScriptFonts(profile).plan(TEXT, {...style, fontFamily: 'Arabic Typesetting'});
   assert.equal(run.sizeAdjust, ADJUST);
 }
 {
   // Faces with no measured multiplier are untouched: an Arabic phrase in a Latin deck (the slot repeats Aptos), Hebrew in David.
-  const latinDeck = createScriptFonts(profileOf(deck(undefined, 'english-us')));
+  const latinDeck = createScriptFonts(profileOf(deck(undefined, 'en-US')));
   const [arabic] = latinDeck.plan(TEXT, style);
   assert.equal(arabic.sizeAdjust, undefined);
   assert.deepEqual(arabic.stack, ['Aptos', 'Noto Sans Arabic', 'Noto Naskh Arabic']);
-  const hebrew = createScriptFonts(profileOf(deck('calibri', 'hebrew')));
+  const hebrew = createScriptFonts(profileOf(deck('calibri', 'he')));
   const [run] = hebrew.plan('שלום עולם', {...style, fontFamily: 'Calibri'});
   assert.equal(run.sizeAdjust, undefined);
   assert.deepEqual(run.stack, ['David', 'Noto Sans Hebrew', 'Noto Serif Hebrew']);
@@ -119,8 +120,8 @@ const fontSizes = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[
 const estimatedFonts = {embeddedFonts: prepared.embeddedFonts, fontFiles: prepared.fontFiles, useBundledFonts: false};
 const estimatedOptions = {fonts: estimatedFonts};
 {
-  const adjusted = fontSizes(renderSvg(deck(undefined, 'arabic'), estimatedOptions)[0]);
-  const control = fontSizes(renderSvg(deck('noto-naksh-arabic', 'english-us'), estimatedOptions)[0]);
+  const adjusted = fontSizes(renderSvg(deck(undefined, 'ar'), estimatedOptions)[0]);
+  const control = fontSizes(renderSvg(deck('noto-naksh-arabic', 'en-US'), estimatedOptions)[0]);
   assert.ok(adjusted.length >= 2 && adjusted.length === control.length);
   for (const [index, item] of adjusted.entries()) {
     near(item.size, adjustedFontSize(control[index].size, ADJUST), 1e-9, `estimated line ${index}: drawn size is 0.64 of the composed size, on the quarter-pixel grid`);
@@ -131,7 +132,7 @@ const estimatedOptions = {fonts: estimatedFonts};
   assert.equal(control[0].family.split(',')[0], 'Noto Naskh Arabic');
 
   // Measured: the line is pinned to the width the registry measures at the size that is drawn, so measurement and drawing agree.
-  const measuredSvg = renderSvg(deck(undefined, 'arabic'), {fonts: prepared})[0];
+  const measuredSvg = renderSvg(deck(undefined, 'ar'), {fonts: prepared})[0];
   const lines = fontSizes(measuredSvg);
   assert.ok(lines.length >= 2);
   for (const item of lines) {
@@ -143,7 +144,7 @@ const estimatedOptions = {fonts: estimatedFonts};
 }
 {
   // Mixed Arabic and Latin, measured and not: the Arabic fragments are drawn at the adjusted size, the Latin run at the line's size.
-  const document = {name: 'RR-38', language: 'arabic', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint 365', bold: true}, ' أكثر من 50 لغة']}]};
+  const document = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint 365', bold: true}, ' أكثر من 50 لغة']}]};
   for (const options of [{fonts: prepared}, estimatedOptions]) {
     const svg = renderSvg(document, options)[0];
     const elements = [...svg.matchAll(/<(?:text|tspan)\b[^>]*font-family="([^"]*)"[^>]*font-size="([0-9.]+)"[^>]*>/g)].map(match => ({family: match[1], size: Number(match[2])}));
@@ -157,14 +158,14 @@ const estimatedOptions = {fonts: estimatedFonts};
   // The font scheme names Arabic Typesetting for every slot (the latin slot too), and the registry has no presentation: core resolves the
   // style to the replacement's name before measuring, and the line is still pinned to the width at the drawn (adjusted) size. This is the
   // path where an unadjusted measurement would pin the glyphs 1.56 times too wide.
-  const svg = renderSvg(deck('arabic-typesetting', 'arabic'), {fonts: prepared})[0];
+  const svg = renderSvg(deck('arabic-typesetting', 'ar'), {fonts: prepared})[0];
   const lines = fontSizes(svg);
   assert.ok(lines.length >= 2);
   for (const item of lines) {
     assert.equal(item.family.split(',')[0], 'Noto Naskh Arabic');
     near(Number(item.length), registryMeasure.measure(WORDS, item.size, {...naskh, fontWeight: item === lines[0] ? 700 : 400}), 0.01, `textLength equals the advance at the drawn size ${item.size}`);
   }
-  const control = fontSizes(renderSvg(deck('noto-naksh-arabic', 'english-us'), {fonts: prepared})[0]);
+  const control = fontSizes(renderSvg(deck('noto-naksh-arabic', 'en-US'), {fonts: prepared})[0]);
   near(lines[0].size, adjustedFontSize(control[0].size, ADJUST), 1e-9, 'the title is drawn at 0.64 of the composed size, on the quarter-pixel grid');
 }
 
@@ -174,19 +175,19 @@ const estimatedOptions = {fonts: estimatedFonts};
   const baselines = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => /font-family="Noto Naskh Arabic|font-family="(?:Aptos|Intos)/.test(tag))
     .map(tag => ({size: Number(/font-size="([0-9.]+)"/.exec(tag)[1]), y: Number(/ y="([0-9.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1]}));
   const estimated = estimatedOptions;
-  const arabic = baselines(renderSvg(deck(undefined, 'arabic'), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
-  const control = baselines(renderSvg(deck('noto-naksh-arabic', 'english-us'), estimated)[0]);
+  const arabic = baselines(renderSvg(deck(undefined, 'ar'), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
+  const control = baselines(renderSvg(deck('noto-naksh-arabic', 'en-US'), estimated)[0]);
   assert.equal(arabic.length, control.length);
   for (const [index, item] of arabic.entries()) near(control[index].y - item.y, 0.3 * control[index].size, 0.002, `estimated line ${index} moves up 0.30 em of the composed size`);
   // Measured: the same shift on the line's baseline (core's placed baseline of the same ink, minus 0.30 em).
-  const measuredArabic = baselines(renderSvg(deck(undefined, 'arabic'), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
+  const measuredArabic = baselines(renderSvg(deck(undefined, 'ar'), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
   assert.ok(measuredArabic.every(item => Number.isFinite(item.y)));
   // A line holding a Latin run moves up 0.22 em of the composed size; a Latin-only line in the same deck does not move.
-  const mixed = {name: 'RR-38', language: 'arabic', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
-  const mixedControl = {name: 'RR-38', language: 'english-us', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Title', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
+  const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
+  const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Title', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
   const mixedLine = baselines(renderSvg(mixed, estimated)[0]).filter(item => item.size < 40), mixedBase = baselines(renderSvg(mixedControl, estimated)[0]).filter(item => item.size < 40);
-  const latinOnly = baselines(renderSvg({name: 'RR-38', language: 'arabic', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
-  const latinControl = baselines(renderSvg({name: 'RR-38', language: 'english-us', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
+  const latinOnly = baselines(renderSvg({name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
+  const latinControl = baselines(renderSvg({name: 'RR-38', language: 'en-US', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   assert.deepEqual(latinOnly.map(item => item.y), latinControl.map(item => item.y), 'Latin-only lines keep core baselines');
   near(mixedBase[0].y - mixedLine[0].y, 0.22 * mixedBase[0].size, 0.002, 'a mixed line moves up 0.22 em');
   for (const item of mixedLine) near(item.y, mixedLine[0].y, 1e-9, 'every fragment of the line shares the shifted baseline');
@@ -194,7 +195,7 @@ const estimatedOptions = {fonts: estimatedFonts};
 
 // 5. Raster: the drawn ink is as wide as the adjusted advance says it should be (resvg draws the replacement at the adjusted size).
 {
-  const document = deck(undefined, 'arabic', WORDS);
+  const document = deck(undefined, 'ar', WORDS);
   const svg = renderSvg(document, estimatedOptions)[0];
   const body = fontSizes(svg).at(-1);
   const png = await svgToPng(svg, {scale: 1, fonts: estimatedFonts});

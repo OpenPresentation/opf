@@ -5,7 +5,7 @@ import {renderSlideSvg} from '../dist/svg.js';
 // Public-API axis invariants for ordinary values. The pinned core packed-ecosystem
 // harness (scripts/test-packed-ecosystem.mjs) runs this file by name against the
 // installed renderer, so it keeps the historical name while asserting the
-// catalog renderer's Office-like scale (test/chart-scale.mjs covers extremes).
+// chart-type renderer's Office-like scale (test/chart-scale.mjs covers extremes).
 
 const elements = (svg) => [...svg.matchAll(/<(rect|circle|line|polyline|path)\b([^>]*)\/?\s*>/g)].map(([, tag, attributes]) => ({
   tag, ...Object.fromEntries([...attributes.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]))

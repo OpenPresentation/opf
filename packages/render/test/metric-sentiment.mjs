@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { renderSlideSvg } from '../dist/svg.js';
+import { renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {colorContrast, metricTrendColor} from '@openpresentation/opf/composition';
 
 // FA-06: metric.sentiment says whether a change is good news. The preview draws the arrow in the trend's

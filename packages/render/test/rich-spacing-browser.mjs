@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 import {examples} from '@openpresentation/opf/examples';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2]??'artifacts/rich-spacing-browser';
 if(out)await mkdir(out,{recursive:true});

@@ -4,6 +4,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {OPFRenderError, renderSvg, resolvePresentation, svgToPdf, svgToPng, renderSlideSvg} from "../dist/index.js";
+// FA-23: the renderer registers no catalog. Documents that name gallery records (the example corpus, the `text-2x` layout
+// below) render through the harness, which registers the gallery snapshot the way a host does.
+import * as host from "./catalog-harness.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesCorpus = resolveExamplesCorpus();
@@ -51,29 +54,29 @@ assert.equal(resolved.slides.length, 3);
 // A slide with no layout composes with no layout record (core resolveSlideContext), whatever its content.
 assert.equal(resolved.slides[1].layout, undefined);
 
+// OPF 0.15: a document embeds its own records in catalog groups (`custom` here), keyed by id; they resolve with no host catalog.
 const inlineCatalogDeck = {
   name: "Inline Catalog Resolution",
   catalogs: {
-    layouts: {
-      records: [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-          id: "custom-title-text",
+    custom: {
+      layouts: {
+        "custom-title-text": {
           name: "Custom Title Text",
           placeholders: [{ type: "title" }, { type: "text" }]
         }
-      ]
+      }
     }
   },
   slides: [
     {
       layout: "custom-title-text",
       title: "Custom layout",
-      text: "Inline layout records resolve before bundled catalogs."
+      text: "Embedded layout records resolve without a host catalog."
     }
   ]
 };
 assert.match(renderSlideSvg(inlineCatalogDeck, 0, { trace: true }), /custom-title-text|Custom layout/);
+assert.equal(resolvePresentation(inlineCatalogDeck).slides[0].layout?.name, "Custom Title Text", "the embedded custom layout is the slide's layout");
 
 assert.throws(
   () => renderSlideSvg({ slides: "not an array" }, 0),
@@ -95,8 +98,8 @@ if (examplesCorpus) {
 
   for (const file of files) {
     const deck = JSON.parse(readFileSync(file, "utf8"));
-    const svgs = renderSvg(deck, { trace: true });
-    const repeat = renderSvg(deck, { trace: true });
+    const svgs = host.renderSvg(deck, { trace: true });
+    const repeat = host.renderSvg(deck, { trace: true });
     assert.deepEqual(svgs, repeat, `${path.relative(examplesCorpus.dir, file)} must render deterministically`);
     assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
     for (const svg of svgs) {
@@ -138,9 +141,9 @@ function listOpfExamples(dir) {
 const dynamic = { slides: [{ title: "Visible title", layout: "text-2x", blocks: [
   { text: "First" }, { text: "Second" }, { text: "Third" }, { text: "Fourth" }
 ] }] };
-const geometry = resolvePresentation(dynamic).slides[0].geometry;
+const geometry = host.resolvePresentation(dynamic).slides[0].geometry;
 assert.equal(geometry.items.length, 5);
-assert.match(renderSlideSvg(dynamic, 0), /Visible title/);
+assert.match(host.renderSlideSvg(dynamic, 0), /Visible title/);
 assert.equal(resolvePresentation({ slides: [{ text: "Contrast" }], design: { background: "#000" } }).slides[0].design.colors.text, "#FFFFFF");
 assert.deepEqual(resolvePresentation({ slides: [{ text: "Portrait" }], design: { dimensions: { widthInches: 7.5, heightInches: 40 / 3 } } }).slides[0].design.dimensions, { width: 720, height: 1280 });
 const overflowMessages = [];

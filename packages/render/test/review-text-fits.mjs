@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {examples} from '@openpresentation/opf/examples';
-import {resolvePresentation, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {resolvePresentation, svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 const root=fileURLToPath(new URL('../',import.meta.url)),[previousDir,currentDir,output]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(previousDir&&currentDir&&output,'Pass previous/current corpus and new output directories.');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),ref='053edb1797fd367ae401885fc1d2a8667f212e2d';

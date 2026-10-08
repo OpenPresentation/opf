@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from '../dist/svg.js';
+import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const fonts = (await loadFonts({pack: 'base'})).registry;
 let fitted = 0, rejected = 0;

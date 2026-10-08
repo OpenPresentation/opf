@@ -20,8 +20,9 @@ import {tmpdir} from 'node:os';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
-import {fontSchemes} from '@openpresentation/opf/catalogs';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {svgToPng} from '../dist/index.js';
+// The roboto deck names a gallery font scheme: render with the host catalog registered (the harness default).
+import {defaultCatalog, renderSlideSvg} from './catalog-harness.mjs';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 import {fontPolicyFor} from '../dist/fonts.js';
 import {isUnmodifiedUpstreamUrl} from '../scripts/font-license.mjs';
@@ -97,11 +98,11 @@ for (const [name, family, repository] of [['raleway', 'Raleway', 'googlefonts/Ra
   } finally { await rm(copy, {recursive: true, force: true}); }
 }
 
-// Every open family a font scheme selects (core catalog plus the four gallery-only legacy schemes) that is bundled resolves to its
-// own exact face in a strict office registry.
+// Every open family a font scheme of the gallery catalog selects that is bundled resolves to its own exact face in a strict office
+// registry.
 const strict = (await loadFonts({pack: 'office'})).registry;
 const selected = new Set(SCHEME_FAMILIES);
-for (const record of fontSchemes.records ?? fontSchemes) for (const family of [record.major, record.minor]) if (fontPolicyFor(family)?.licenseClass === 'open' && !/^Noto /.test(family)) selected.add(family);
+for (const record of Object.values(defaultCatalog.fontSchemes)) for (const family of [record.major, record.minor]) if (fontPolicyFor(family)?.licenseClass === 'open' && !/^Noto /.test(family)) selected.add(family);
 for (const family of SCHEME_FAMILIES) assert.ok(selected.has(family) || family === 'Source Sans Pro', `${family} is selected by a font scheme`);
 const NEW_FAMILIES = ['Barlow', 'Anton', 'Figtree', 'Work Sans', 'EB Garamond', 'Archivo Narrow', 'Libre Caslon Text', 'Bitter', 'Raleway', 'Playfair Display'];
 assert.deepEqual(byName('@expo-google-fonts/bitter').reservedFontNames, ['Bitter Pro']);
@@ -181,7 +182,7 @@ assert.equal(defaults.fontFiles.length, 131);
 assert.equal((await loadFonts({pack: 'base'})).embeddedFonts.length, 9);
 const schemeDocument = family => ({
   design: {fontScheme: 'x-open'},
-  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-open', name: family, app: 'google-slides', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
+  catalogs: {custom: {fontSchemes: {'x-open': {name: family, app: 'google-slides', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}}}},
   slides: [{title: 'Quarterly review', text: 'Revenue grew in every region.'}],
 });
 const embeddedFamilies = svg => [...new Set([...svg.matchAll(/font-family:"([^"]+)"/g)].map(match => match[1]))].sort();

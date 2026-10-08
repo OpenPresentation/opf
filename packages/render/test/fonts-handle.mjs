@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import { OPFFontError } from '../dist/fonts.js';
 import { loadFonts } from '../dist/fonts-node.js';
-import { OPFRenderError, renderSlideSvg, renderSvg, svgToPdf, svgToPng } from '../dist/index.js';
+import { OPFRenderError, renderSlideSvg, renderSvg, svgToPdf, svgToPng } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const deck = { name: 'Handle', design: { fontScheme: 'roboto' }, slides: [{ title: 'One', text: 'First slide' }, { title: 'Two', text: 'Second slide' }, { title: 'Three', items: ['a', 'b'] }] };
 const fonts = await loadFonts();

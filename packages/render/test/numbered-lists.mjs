@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+// The decks name the gallery font scheme roboto: render with the host catalog registered.
+import {renderSvg, resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 
 // RR-33: numbered lists. The preview draws the number core composed (marker.text) at core's marker geometry
 // (marker.x, marker.y, marker.fontSize) with the weight and slant core measured it at; bullets are untouched.

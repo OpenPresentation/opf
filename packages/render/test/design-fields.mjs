@@ -2,11 +2,12 @@
 // and section slides, furniture `logo: true`, picture bullets (design.listBullet: image) and the
 // fontScheme accent family on the tag and the quote body.
 //
-// The fields live in core composition (resolveLogo and the other layout engines).
+// The fields live in core composition (resolveLogo and the other layout engines). The decks name gallery records (the title
+// and section-divider layouts, the aptos font scheme), so they render with the host catalog registered (./catalog-harness.mjs).
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as composition from '@openpresentation/opf/composition';
-import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
+import {catalogs, resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 import { loadFonts } from '../dist/fonts-node.js';
 import { presentationFamilies, presentationFaces } from '../dist/lazy-fonts.js';
 
@@ -204,8 +205,8 @@ let checked = 0;
   // The preview prepares the accent face like any other family (look-alike policy and embedding).
   const office = await loadFonts({ pack: 'office' }), options = { fonts: office };
   const georgia = { design: { fontScheme: { id: 'aptos', accent: 'Georgia' } }, slides: deck.slides };
-  assert.ok(presentationFamilies(georgia).has('Georgia'), 'the accent family is collected like heading, body and code');
-  assert.ok(presentationFaces(georgia).some(face => face.family === 'Georgia'), 'tag and quote request the accent face');
+  assert.ok(presentationFamilies(georgia, { catalogs }).has('Georgia'), 'the accent family is collected like heading, body and code');
+  assert.ok(presentationFaces(georgia, { catalogs }).some(face => face.family === 'Georgia'), 'tag and quote request the accent face');
   const measured = resolvePresentation(georgia, options);
   assert.equal(measured.slides[0].design.fonts.accent, 'Gelasio', 'the accent family resolves through the font policy');
   for (const [index, prefix] of [[0, 'slides.0.tag'], [1, 'slides.1.quote']]) {

@@ -2,7 +2,9 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as core from '@openpresentation/opf/composition';
-import {renderSvg, resolvePresentation, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {svgToPng} from '../dist/index.js';
+// The decks name gallery font schemes (roboto, meiryo, ...): render with the host catalog registered.
+import {catalogs, renderSvg, resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 import {loadFonts,scriptFontPackages,BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
 import {createScriptFonts,createScriptTextMeasurement,detectScripts,itemizeScripts,scriptFontAliases,scriptFontRole,textRole,SCRIPT_FONT_FAMILIES,SCRIPT_FONT_REPLACEMENTS} from '../dist/fonts.js';
 
@@ -76,8 +78,8 @@ assert.equal(typeof core.paragraphDirection,'function','the linked core exports 
   };
   for(const [text,expected] of samples){
     assert.equal(core.paragraphDirection(text,'rtl'),expected,'core rule for '+JSON.stringify(text));
-    assert.equal(rendered(text,'arabic'),core.paragraphDirection(text,'rtl'),'preview direction equals core for '+JSON.stringify(text));
-    assert.equal(rendered(text,'english'),core.paragraphDirection(text,'ltr'),'left-to-right deck for '+JSON.stringify(text));
+    assert.equal(rendered(text,'ar'),core.paragraphDirection(text,'rtl'),'preview direction equals core for '+JSON.stringify(text));
+    assert.equal(rendered(text,'en'),core.paragraphDirection(text,'ltr'),'left-to-right deck for '+JSON.stringify(text));
   }
 }
 // Heading or body slots follow the text's role, not its latin family.
@@ -113,17 +115,17 @@ const svgFamilies=svg=>[...new Set([...svg.matchAll(/font-family="([^"]*)"/g)].m
 const scriptRuns=svg=>[...svg.matchAll(/<tspan font-family="([^",]*)[^"]*"[^>]*>([^<]*)<\/tspan>/g)].map(match=>[match[1],match[2]]);
 const deck=(language,fontScheme,title,text)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text}]});
 const classes=[
-  {id:'latin',language:'english',scheme:'roboto',title:'Quarterly review',text:'Revenue grew 12% year over year.',family:'Roboto',lang:'en',rtl:false},
-  {id:'cyrillic',language:'russian',scheme:'roboto',title:'Квартальный обзор',text:'Выручка выросла на 12%.',family:'Roboto',lang:'ru',rtl:false},
-  {id:'greek',language:'greek',scheme:'roboto',title:'Τριμηνιαία ανασκόπηση',text:'Τα έσοδα αυξήθηκαν 12%.',family:'Roboto',lang:'el',rtl:false},
-  {id:'ja',language:'japanese',scheme:'meiryo',title:'四半期レビュー',text:'売上は前年比12%増加しました。',family:'Noto Sans JP',lang:'ja',rtl:false,substitution:'Meiryo'},
-  {id:'zh-Hans',language:'chinese-simplified',scheme:'microsoft-yahei',title:'季度回顾',text:'收入同比增长12%。',family:'Noto Sans SC',lang:'zh-Hans',rtl:false,substitution:'Microsoft YaHei'},
-  {id:'zh-Hant',language:'chinese-traditional',scheme:'microsoft-jhenghei',title:'季度回顧',text:'營收年增12%。',family:'Noto Sans TC',lang:'zh-Hant',rtl:false,substitution:'Microsoft JhengHei'},
-  {id:'ko',language:'korean',scheme:'malgun-gothic',title:'분기별 검토',text:'매출이 전년 대비 12% 증가했습니다.',family:'Noto Sans KR',lang:'ko',rtl:false,substitution:'Malgun Gothic'},
-  {id:'ar',language:'arabic',scheme:'arabic-typesetting',title:'مراجعة ربع سنوية',text:'نمت الإيرادات بنسبة 12% على أساس سنوي.',family:'Noto Naskh Arabic',lang:'ar',rtl:true,substitution:'Arabic Typesetting'},
-  {id:'he',language:'hebrew',scheme:'david',title:'סקירה רבעונית',text:'ההכנסות גדלו ב-12% משנה לשנה.',family:'Noto Serif Hebrew',lang:'he',rtl:true,substitution:'David'},
-  {id:'hi',language:'hindi',scheme:'mangal',title:'तिमाही समीक्षा',text:'राजस्व में साल-दर-साल 12% की वृद्धि हुई।',family:'Noto Sans Devanagari',lang:'hi',rtl:false,substitution:'Mangal'},
-  {id:'th',language:'thai',scheme:'angsana-new',title:'การทบทวนรายไตรมาส',text:'รายได้เติบโตขึ้น 12% เมื่อเทียบกับปีก่อน',family:'Noto Sans Thai',lang:'th',rtl:false,substitution:'Angsana New'},
+  {id:'latin',language:'en',scheme:'roboto',title:'Quarterly review',text:'Revenue grew 12% year over year.',family:'Roboto',lang:'en',rtl:false},
+  {id:'cyrillic',language:'ru',scheme:'roboto',title:'Квартальный обзор',text:'Выручка выросла на 12%.',family:'Roboto',lang:'ru',rtl:false},
+  {id:'greek',language:'el',scheme:'roboto',title:'Τριμηνιαία ανασκόπηση',text:'Τα έσοδα αυξήθηκαν 12%.',family:'Roboto',lang:'el',rtl:false},
+  {id:'ja',language:'ja',scheme:'meiryo',title:'四半期レビュー',text:'売上は前年比12%増加しました。',family:'Noto Sans JP',lang:'ja',rtl:false,substitution:'Meiryo'},
+  {id:'zh-Hans',language:'zh-Hans',scheme:'microsoft-yahei',title:'季度回顾',text:'收入同比增长12%。',family:'Noto Sans SC',lang:'zh-Hans',rtl:false,substitution:'Microsoft YaHei'},
+  {id:'zh-Hant',language:'zh-Hant',scheme:'microsoft-jhenghei',title:'季度回顧',text:'營收年增12%。',family:'Noto Sans TC',lang:'zh-Hant',rtl:false,substitution:'Microsoft JhengHei'},
+  {id:'ko',language:'ko',scheme:'malgun-gothic',title:'분기별 검토',text:'매출이 전년 대비 12% 증가했습니다.',family:'Noto Sans KR',lang:'ko',rtl:false,substitution:'Malgun Gothic'},
+  {id:'ar',language:'ar',scheme:'arabic-typesetting',title:'مراجعة ربع سنوية',text:'نمت الإيرادات بنسبة 12% على أساس سنوي.',family:'Noto Naskh Arabic',lang:'ar',rtl:true,substitution:'Arabic Typesetting'},
+  {id:'he',language:'he',scheme:'david',title:'סקירה רבעונית',text:'ההכנסות גדלו ב-12% משנה לשנה.',family:'Noto Serif Hebrew',lang:'he',rtl:true,substitution:'David'},
+  {id:'hi',language:'hi',scheme:'mangal',title:'तिमाही समीक्षा',text:'राजस्व में साल-दर-साल 12% की वृद्धि हुई।',family:'Noto Sans Devanagari',lang:'hi',rtl:false,substitution:'Mangal'},
+  {id:'th',language:'th',scheme:'angsana-new',title:'การทบทวนรายไตรมาส',text:'รายได้เติบโตขึ้น 12% เมื่อเทียบกับปีก่อน',family:'Noto Sans Thai',lang:'th',rtl:false,substitution:'Angsana New'},
 ];
 const report=[];
 for(const value of classes){
@@ -144,7 +146,7 @@ for(const value of classes){
 
 // Script text inside a Latin deck: each run takes its slot's face, and the
 // measured advance is the sum of the per-run advances.
-const mixed=deck('english','roboto','Mixed 日本語 title','Body with 中文 and العربية text');
+const mixed=deck('en','roboto','Mixed 日本語 title','Body with 中文 and العربية text');
 const mixedSvg=renderSlideSvg(mixed, 0, {fonts: fonts});
 assert.deepEqual(scriptRuns(mixedSvg).map(([family])=>family),['Noto Sans SC','Noto Sans SC','Noto Sans Arabic']);
 for(const element of mixedSvg.match(/<text [^>]*>(?:(?!<\/text>).)*<\/text>/gs).filter(item=>item.includes('<tspan x='))){
@@ -164,14 +166,14 @@ assert.ok(measurement.outlineBounds('中文 and',25,style).width>0);
 
 // A Japanese language in a Latin deck: the East Asian slot is the language's
 // font (Meiryo), previewed with its designated replacement.
-const latinJapanese=renderSlideSvg(deck('japanese','roboto','Quarterly 四半期','Body'), 0, {fonts: fonts});
+const latinJapanese=renderSlideSvg(deck('ja','roboto','Quarterly 四半期','Body'), 0, {fonts: fonts});
 assert.deepEqual(scriptRuns(latinJapanese).map(([family])=>family),['Noto Sans JP']);
 // Han with a Traditional Chinese language uses the TC face.
-assert.deepEqual(scriptRuns(renderSlideSvg(deck('chinese-traditional','roboto','Report 季度','Body'), 0, {fonts: fonts})).map(([family])=>family),['Noto Sans TC']);
+assert.deepEqual(scriptRuns(renderSlideSvg(deck('zh-Hant','roboto','Report 季度','Body'), 0, {fonts: fonts})).map(([family])=>family),['Noto Sans TC']);
 
 // Right to left: a line with Arabic letters is one isolate; its runs are placed
 // from the right edge. A Latin-only line in the same deck keeps its order.
-const arabicMixed=renderSlideSvg(deck('arabic','roboto','العربية PowerPoint 365.','English only line.'), 0, {fonts: fonts});
+const arabicMixed=renderSlideSvg(deck('ar','roboto','العربية PowerPoint 365.','English only line.'), 0, {fonts: fonts});
 const title=arabicMixed.match(/<text [^>]*font-size="54"[^>]*>(.*?)<\/text>/s)[1];
 const positions=[...title.matchAll(/<tspan [^>]*x="([\d.]+)"[^>]*>\u2067([^<]*)\u2069<\/tspan>/g)].map(match=>[match[2],Number(match[1])]);
 assert.deepEqual(positions.map(([text])=>text),['العربية ','PowerPoint 365.']);
@@ -181,7 +183,7 @@ assert.match(arabicMixed,/>English only line\.</);
 
 // Direction is per paragraph: every wrapped line of an RTL paragraph is isolated,
 // including lines with only Latin words, and each paragraph decides on its own.
-const paragraphDeck=deck('arabic','roboto','Title','مرحبا '+'English words wrap here '.repeat(12)+'\nSecond paragraph in English.');
+const paragraphDeck=deck('ar','roboto','Title','مرحبا '+'English words wrap here '.repeat(12)+'\nSecond paragraph in English.');
 const svg=renderSlideSvg(paragraphDeck, 0, {fonts: fonts});
 const body=[...svg.matchAll(/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/g)].map(match=>match[1]);
 assert.ok(body.length>=3,'the RTL paragraph wraps');
@@ -193,24 +195,24 @@ assert.ok(!diagnostics.some(item=>/^language-preview/.test(item.code)),'no langu
 
 
 // Estimated previews (no registry) name every candidate so the host resolves glyphs.
-const estimated=renderSlideSvg(deck('japanese','roboto','Quarterly 四半期','Body'), 0);
+const estimated=renderSlideSvg(deck('ja','roboto','Quarterly 四半期','Body'), 0);
 assert.match(estimated,/<tspan font-family="Meiryo, Noto Sans JP, Noto Serif JP, sans-serif">四半期<\/tspan>/);
-assert.doesNotMatch(renderSlideSvg(deck('english','roboto','Quarterly review','Body'), 0),/<tspan/);
+assert.doesNotMatch(renderSlideSvg(deck('en','roboto','Quarterly review','Body'), 0),/<tspan/);
 
 // Raster output is deterministic and draws the script faces from fontFiles.
-const pngA=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
-const pngB=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
+const pngA=await svgToPng(renderSlideSvg(deck('ja','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
+const pngB=await svgToPng(renderSlideSvg(deck('ja','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
 assert.deepEqual(pngA,pngB);
-const withoutFace=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{ fonts: {...fonts, fontFiles:fonts.fontFiles.filter(file=>!/NotoSansJP/.test(file))},scale:.25});
+const withoutFace=await svgToPng(renderSlideSvg(deck('ja','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{ fonts: {...fonts, fontFiles:fonts.fontFiles.filter(file=>!/NotoSansJP/.test(file))},scale:.25});
 assert.notDeepEqual(pngA,withoutFace,'The raster uses the pinned Noto Sans JP face');
 
 // Deck-level API for pagination and editors: the same wrapper outside the renderer.
-const wrapped=createScriptTextMeasurement(fonts.registry.textMeasurement,core.resolveScriptFonts(deck('japanese','roboto','x','y')));
+const wrapped=createScriptTextMeasurement(fonts.registry.textMeasurement,core.resolveScriptFonts(deck('ja','roboto','x','y'),{catalogs}));
 assert.ok(wrapped.measure('四半期',20,style)>0);
 assert.equal(createScriptFonts({},wrapped).textMeasurement.measure('四半期',20,style),wrapped.measure('四半期',20,style),'Wrapping twice does not change measurement');
 
 // Without the script pack, a strict registry still reports what is missing.
 const strict=await loadFonts({pack:'base'});
-assert.throws(()=>renderSvg(deck('japanese','roboto','四半期','Body'), {fonts: strict}),{code:'missing-glyph'});
-assert.throws(()=>renderSvg(deck('japanese','meiryo','四半期','Body'), {fonts: strict}),{code:'font-unavailable'});
+assert.throws(()=>renderSvg(deck('ja','roboto','四半期','Body'), {fonts: strict}),{code:'missing-glyph'});
+assert.throws(()=>renderSvg(deck('ja','meiryo','四半期','Body'), {fonts: strict}),{code:'font-unavailable'});
 console.log(`Script fonts passed: ${classes.length} script classes (${report.map(item=>`${item.id}:${item.families.join('/')}`).join(', ')}), mixed-script runs, lang, RTL isolates, estimated stacks, deterministic raster and ${scriptPackages.length} pinned OFL packages.`);

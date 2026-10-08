@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+// The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
+import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
 const prepared = await loadFonts();
 const bytes=await readFile(new URL('fixtures/jpeg/expected-1.png',import.meta.url));
 const image={src:`data:image/png;base64,${bytes.toString('base64')}`,alt:'Visible furniture logo'};
 for(const measured of [false,true])for(const floor of [16,32])for(const [width,height]of [[1280,720],[720,1280]]){
- const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFill:'crop',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{image,text:'Keep both'},center:{organization:true},right:{section:true}},footer:{left:{date:'Literal date'},right:{slideNumber:true}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};
+ const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFit:'cover',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{image,text:'Keep both'},center:{organization:true},right:{section:true}},footer:{left:{date:'Literal date'},right:{slideNumber:true}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};
  const before=structuredClone(deck),config={...(measured?{fonts:prepared}:{}),trace:true},geometry=resolvePresentation(deck,config).slides[0].geometry,svg=renderSlideSvg(deck, 0,config);
  assert.deepEqual(geometry.diagnostics,[]);assert.deepEqual(deck,before);
  assert.ok(svg.includes('Visible furniture logo'));assert.ok(svg.includes('xMidYMid meet'));assert.ok(svg.includes('Keep both'));

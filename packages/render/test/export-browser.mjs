@@ -14,7 +14,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
-import {svgToPdf as nodeSvgToPdf, svgToPng as nodeSvgToPng, renderSvg} from '../dist/index.js';
+import {svgToPdf as nodeSvgToPdf, svgToPng as nodeSvgToPng, renderSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {compareImages, openPdf, pageItems, pageText, renderPdfPage} from './pdf-helpers.mjs';
 

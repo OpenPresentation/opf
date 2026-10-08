@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { examples } from "@openpresentation/opf/examples";
-import {svgToPdf, svgToPng, renderSvg} from "../dist/index.js";
+import {svgToPdf, svgToPng, renderSvg} from "./catalog-harness.mjs"; // FA-23: registers the gallery snapshot (the examples name gallery records)
 import { loadFonts } from "../dist/fonts-node.js";
 import { parseXml, textContent } from "../dist/pdf-xml.js";
 import { compareImages, openPdf, pageText, pdfiumText, percentile, renderPdfPage } from "./pdf-helpers.mjs";

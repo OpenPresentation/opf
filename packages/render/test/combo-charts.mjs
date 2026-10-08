@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { renderSlideSvg } from "../dist/svg.js";
+// The deck names the gallery font scheme roboto: render with the host catalog registered.
+import { renderSlideSvg } from "./catalog-harness.mjs";
 
 // FA-15: combo charts. Core resolves the plan (which series are columns, which are lines, which line uses the secondary
 // value axis); the preview draws clustered columns, lines with markers, a secondary axis at the right with ticks in the
@@ -89,7 +90,7 @@ const textsAt = (svg, path) => [...svg.matchAll(/<g\b([^>]*data-opf-source-text=
 {
   const bottom = render({ legend: "bottom" });
   assert.ok(marks(bottom.svg, "rect").some((rect) => rect["data-opf-path"] === "slides.0.chart.data.columns.1"), "the bottom legend keeps the column key");
-  const rtl = renderSlideSvg({ ...deck({ secondaryAxis: ["Margin"] }), language: "arabic" }, 0, { trace: true });
+  const rtl = renderSlideSvg({ ...deck({ secondaryAxis: ["Margin"] }), language: "ar" }, 0, { trace: true });
   const ticks = textsAt(rtl, "slides.0.chart");
   const percent = ticks.filter((tick) => /^\d+%$/.test(tick.text)), dollars = ticks.filter((tick) => /^\$/.test(tick.text));
   if (percent.length && dollars.length) assert.ok(Math.max(...percent.map((tick) => tick.x)) < Math.min(...dollars.map((tick) => tick.x)), "right to left, the secondary axis is at the left");

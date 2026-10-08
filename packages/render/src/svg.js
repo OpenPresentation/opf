@@ -5,10 +5,12 @@ import {
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
   metricTrendMark as coreMetricTrendMark, tokenizeCode, codeLineRuns, codeSyntaxPaletteForScheme, resolveChartData,
   resolveColorRoles, defaultSlideBackground, timelineMarkerShapes, timelineTextColor, layoutWatermark,
-  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
+  ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
+// The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
+// example `defaultCatalog` from `@openpresentation/opf/catalog`) and core resolves every reference against them.
 import {
-  catalogs as bundledCatalogs,
   hasContentVariables,
   isTemplate,
   resolveSlideContext,
@@ -37,34 +39,13 @@ export const runtimePolicy = Object.freeze({
   deterministicLocalExecution: true
 });
 
+// What draws when nothing resolves: core's engine defaults (OPF 0.15 ships no catalog records), and the chart type a chart
+// without one previews as.
 export const engineDefaults = Object.freeze({
-  catalogs: Object.freeze({
-    narratives: Object.freeze({ source: "https://www.pptx.gallery/narratives" }),
-    themes: Object.freeze({ source: "https://www.pptx.gallery/themes" }),
-    colorSchemes: Object.freeze({ source: "https://www.pptx.gallery/color-schemes" }),
-    fontSchemes: Object.freeze({ source: "https://www.pptx.gallery/font-schemes" }),
-    languages: Object.freeze({ source: "https://www.pptx.gallery/languages" }),
-    layouts: Object.freeze({ source: "https://www.pptx.gallery/layouts" }),
-    chartTypes: Object.freeze({ source: "https://www.pptx.gallery/chart-types" }),
-    tones: Object.freeze({ source: "https://www.pptx.gallery/tones" }),
-    audiences: Object.freeze({ source: "https://www.pptx.gallery/audiences" }),
-    socialPlatforms: Object.freeze({ source: "https://www.pptx.gallery/social-platforms" })
-  }),
-  theme: "minimal",
-  colorScheme: "cool-horizon",
-  language: "english",
-  narrative: "classic-story",
-  tone: "formal",
-  audience: "executives",
-  fontScheme: Object.freeze({
-    pptx: Object.freeze({ latin: "aptos", ea: "microsoft-yahei", cs: "nirmala-ui" }),
-    google: Object.freeze({ latin: "roboto", ea: "noto-sans-sc", cs: "noto-sans" })
-  }),
-  chartTypes: Object.freeze([
-    "stacked-column",
-    "stacked-area",
-    "line-with-markers"
-  ])
+  theme: ENGINE_DEFAULT_THEME,
+  colorScheme: ENGINE_DEFAULT_COLOR_SCHEME,
+  fontScheme: ENGINE_DEFAULT_FONT_SCHEME,
+  chartType: ENGINE_DEFAULT_CHART_TYPES[0]
 });
 
 /**
@@ -164,7 +145,6 @@ const FIELD_TYPE = Object.freeze({
 });
 
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
-const DEFAULT_SOURCE_PREFIX = "https://www.pptx.gallery/";
 
 
 function parseInput(input) {
@@ -220,8 +200,8 @@ function resolveTemplateInput(presentation, options) {
 
 // The boundary check is the format check only (schema and the cross-field rules a schema cannot say): layout, accessibility
 // and content findings are `validate`'s job, and drawing a slide reports what it cannot fit.
-function assertValidBoundary(presentation) {
-  const report = validate(presentation, { only: ["format"] });
+function assertValidBoundary(presentation, options) {
+  const report = validate(presentation, { only: ["format"], ...(options.catalogs !== undefined ? { catalogs: options.catalogs } : {}) });
   if (!report.valid) {
     throw new OPFRenderError("invalid-opf", "OPF validation failed.", {
       findings: report.findings.filter((finding) => finding.severity === "error"),
@@ -244,63 +224,6 @@ function cloneWithSortedKeys(value) {
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function normalizeSourceRecords(value) {
-  if (!value) return [];
-  if (Array.isArray(value)) return value;
-  if (Array.isArray(value.records)) return value.records;
-  return [];
-}
-
-function defaultCatalogFor(kind) {
-  return Array.isArray(bundledCatalogs[kind]) ? bundledCatalogs[kind] : [];
-}
-
-// CatalogEntry.source is one source or an ordered search path (first match wins; the
-// default catalog is appended by the callers). An array concatenates each source's
-// records in order, so the findById chain keeps the first match. Non-string entries are
-// ignored. Nothing is fetched: a source resolves from options.catalogSources or, for the
-// bundled default prefixes, from the bundled snapshot.
-function sourceRecordsFor(kind, source, options) {
-  if (Array.isArray(source)) return source.flatMap((entry) => sourceRecordsFor(kind, entry, options));
-  if (typeof source !== "string" || !source) return [];
-  const bySource = options.catalogSources?.[source];
-  if (bySource) return normalizeSourceRecords(bySource);
-  if (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith("pkg:@openpresentation/opf/")) {
-    return defaultCatalogFor(kind);
-  }
-  return [];
-}
-
-// The records a host adds to core's `resolveSlideContext`, which looks a layout, theme, colour scheme or font scheme up in the
-// deck's inline records, then these, then its bundled catalogs. In the renderer's order they are the records a
-// `catalogs.<kind>.source` names (a bundled source, or `options.catalogSources`), then `options.catalogs`.
-const CONTEXT_CATALOG_KINDS = ["themes", "colorSchemes", "fontSchemes", "layouts"];
-function contextCatalogs(context) {
-  if (context.contextCatalogs) return context.contextCatalogs;
-  const out = {};
-  for (const kind of CONTEXT_CATALOG_KINDS) {
-    const records = [
-      ...sourceRecordsFor(kind, context.presentation.catalogs?.[kind]?.source, context.options),
-      ...normalizeSourceRecords(context.options.catalogs?.[kind]),
-      ...sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options)
-    ];
-    if (records.length) out[kind] = records;
-  }
-  return (context.contextCatalogs = out);
-}
-
-// Generated socials furniture formats handles in core. Core applies inline
-// document records first; the host supplies the rest in resolution order, ahead of the bundled ones.
-function socialPlatformRecords(context, bundled) {
-  const kind = "socialPlatforms";
-  return [
-    ...sourceRecordsFor(kind, context.presentation.catalogs?.[kind]?.source, context.options),
-    ...normalizeSourceRecords(context.options.catalogs?.[kind]),
-    ...sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options),
-    ...bundled
-  ];
 }
 
 function colorFromScheme(scheme, slot, fallback) {
@@ -368,12 +291,15 @@ function resolveBackgroundColor(value, design, fallback) {
   return resolveColorRefIn(value, { colorScheme: design.colorScheme, colors: { primary, secondary, accent }, variables: design.variables }, fallback);
 }
 
+// Image sources the background string shorthand accepts (a cover image); any other string is a theme slot or a hex colour.
+const IMAGE_BACKGROUND_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
+
 // The slide's single background color, or null when there is none (a gradient, or no color the engine can read).
 // With no definition, or a picture, the scheme's default slide background (core defaultSlideBackground) is the canvas.
 function resolveBackground(background, colorScheme, design) {
   const canvas = defaultSlideBackground(colorScheme);
   if (!background) return canvas;
-  if (typeof background === "string") return colorFromScheme(colorScheme, background, canvas);
+  if (typeof background === "string") return IMAGE_BACKGROUND_SOURCE.test(background) ? canvas : colorFromScheme(colorScheme, background, canvas);
   if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, canvas);
   if (background.type === "solid") return resolveBackgroundColor(background.color, design, "#FFFFFF");
   if (background.type === "gradient") return null;
@@ -410,10 +336,9 @@ const LINK_URL = /^(https?:|mailto:|tel:)/i;
 
 // What the renderer paints with, from the records core's `resolveSlideContext` resolved (slide design, then deck design, then
 // theme, then the engine default, per field: the one order every engine uses). The theme and the colour scheme keep their
-// sorted keys, so the output does not depend on the order a catalog lists a field in. An id no catalog has never throws: the
-// context falls back (a theme to `minimal`, a colour scheme to `cool-horizon`, a font scheme to `aptos`, a layout to none) and
-// reports `unresolved-theme`, `unresolved-color-scheme`, `unresolved-font-scheme` or `unresolved-layout`, which are forwarded
-// as render diagnostics.
+// sorted keys, so the output does not depend on the order a catalog lists a field in. A reference that resolves nowhere never
+// throws (unless `strictReferences`): the context falls back to core's engine defaults (ENGINE_DEFAULT_THEME, _COLOR_SCHEME,
+// _FONT_SCHEME; a layout to automatic composition) and reports `unresolved-reference`, which is forwarded as a render diagnostic.
 function resolveDesign(presentation, slide, slideContext) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
@@ -468,7 +393,7 @@ function resolveDesign(presentation, slide, slideContext) {
  */
 function scriptProfile(presentation, index, design, context, language) {
   let resolved;
-  try { resolved = resolveScriptFonts(presentation, { slideIndex: index, ...(language === undefined ? {} : { language }) }); }
+  try { resolved = resolveScriptFonts(presentation, { slideIndex: index, ...(context.options.catalogs !== undefined ? { catalogs: context.options.catalogs } : {}), ...(language === undefined ? {} : { language }) }); }
   catch (error) {
     reportLanguageDiagnostic(context, { code: "language-preview-unresolved", path: "language",
       message: "Script fonts could not be resolved (" + (error instanceof Error ? error.message : String(error)) + "), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right." });
@@ -594,16 +519,35 @@ function normalizeFutureContent(slide, slidePath) {
   });
 }
 
+// The core catalog options every resolution takes: the host's catalogs, unchanged, and its strict reference policy.
+function catalogOptions(options) {
+  return { ...(options.catalogs !== undefined ? { catalogs: options.catalogs } : {}), ...(options.strictReferences === true ? { strictReferences: true } : {}) };
+}
+
+function resolveContext(presentation, index, context) {
+  try {
+    return resolveSlideContext(presentation, index, {
+      fonts: { textMeasurement: context.options.textMeasurement },
+      ...catalogOptions(context.options),
+      date: context.options.date
+    });
+  } catch (error) {
+    // Strict references: core refuses a reference that resolves nowhere (OPFUnresolvedReferenceError) instead of falling back.
+    if (Array.isArray(error?.diagnostics) && error.diagnostics.some(entry => entry?.code === "unresolved-reference")) {
+      throw new OPFRenderError("unresolved-reference", error.message, { diagnostics: error.diagnostics, path: error.diagnostics[0].path, cause: error.message });
+    }
+    throw error;
+  }
+}
+
 function bindSlide(presentation, slide, index, context) {
   const slidePath = `slides.${index}`;
   // Core resolves the slide's canvas, layout, theme, colour scheme, font scheme and family names the one way every engine must
-  // (slide design, deck design, theme, default); `fonts` carries the measurement the host loaded. A slide with no `layout`, or one
-  // that names an id no catalog has, composes with no layout record.
-  const slideContext = resolveSlideContext(presentation, index, {
-    fonts: { textMeasurement: context.options.textMeasurement },
-    catalogs: contextCatalogs(context),
-    date: context.options.date
-  });
+  // (slide design, deck design, theme, engine default), from the records the document embeds and the catalogs the host
+  // registered (`options.catalogs`, passed unchanged); `fonts` carries the measurement the host loaded. A slide with no
+  // `layout` composes automatically; one whose reference resolves nowhere does too, with an `unresolved-reference` diagnostic,
+  // or the render fails under `strictReferences`.
+  const slideContext = resolveContext(presentation, index, context);
   const layout = slideContext.options.layout;
   const placeholders = Array.isArray(layout?.placeholders) ? layout.placeholders : [];
   const titleBindings = [];
@@ -670,7 +614,7 @@ function bindSlide(presentation, slide, index, context) {
     const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
     design.fonts[role] = fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
   }
-  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement, socialPlatforms: socialPlatformRecords(context, slideContext.options.socialPlatforms) });
+  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement });
   return {
     scriptFonts,
     scriptFontsFor,
@@ -708,7 +652,7 @@ export function resolvePresentation(input, options = {}) {
 function resolveDeck(input, options) {
   const presentation = resolveTemplateInput(parseInput(input), options);
   if (options.validate !== false) {
-    assertValidBoundary(presentation);
+    assertValidBoundary(presentation, options);
   }
 
   const context = { presentation, options };
@@ -757,7 +701,6 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   const title = (Array.isArray(bound.slide.title) ? flattenText(bound.slide.title) : bound.slide.title) ?? resolved.presentation.name ?? `Slide ${slideIndex + 1}`;
   const content = [
     renderBackground(bound, width, height, options),
-    renderSlideImage(bound, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     ...renderSlideContent(bound, width, height, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
@@ -793,6 +736,8 @@ function renderResolvedSlide(resolved, slideIndex, options) {
 
 function renderBackground(bound, width, height, options) {
   const background = bound.design.background;
+  // An image background (core SlideComposition.backgroundImage) fills the canvas and moves nothing.
+  if (bound.geometry.backgroundImage) return renderBackgroundImage(bound.geometry.backgroundImage, bound, width, height, options);
   if (isPlainObject(background) && background.type === "gradient") {
     const id = `opf-s${bound.index + 1}-background`;
     const stops = Array.isArray(background.gradient?.stops) ? background.gradient.stops : [];
@@ -821,15 +766,6 @@ function renderBackground(bound, width, height, options) {
       })
     ].join("\n");
   }
-
-  if(isPlainObject(background) && background.type==='image'){
-    const imageItem={value:background.image,path:`${bound.path}.design.background.image`};
-    if(background.image.fit==='tile'){
-      const size=Math.min(width,height)/4,id=`opf-s${bound.index+1}-image-tile`;
-      return tag('g',{opacity:background.opacity??1},tag('defs',{},tag('pattern',{id,width:size,height:size,patternUnits:'userSpaceOnUse'},renderImage(imageItem,{x:0,y:0,width:size,height:size},bound,options)))+tag('rect',{width,height,fill:`url(#${id})`}));
-    }
-    return tag('g',{opacity:background.opacity??1},renderImage(imageItem,{x:0,y:0,width,height},bound,{...options,imageFit:background.image.fit??'cover'}));
-  }
   if(isPlainObject(background) && background.type==='pattern'){
     const pattern=background.pattern??{},id=`opf-s${bound.index+1}-pattern`,color=resolveBackgroundColor(pattern.foregroundColor,bound.design,bound.design.colors.text),preset=pattern.preset;
     // RR-07: every DrawingML preset (core PATTERN_PRESETS) is an 8x8 bitmap, one unit per 1/96 inch, anchored at the slide origin.
@@ -844,42 +780,80 @@ function renderBackground(bound, width, height, options) {
     y: 0,
     width,
     height,
-    opacity: typeof background==='object'?background?.opacity??1:1,
+    opacity: isPlainObject(background) && background.type !== 'image' ? background.opacity ?? 1 : 1,
     fill: bound.design.backgroundColor ?? bound.design.colors.background,
     ...traceAttrs(options, `${bound.path}.design.background`)
   });
 }
 
-// design.slideImage: the shared composition frame, beneath branding and content.
-// crop covers the frame and fit centers the whole image, matching native a:srcRect.
-// Treatments mirror the native picture: the preset mask (core outline), recolor
-// and alphaModFix on the pixels only, the centered line, then the overlay shape.
-function renderSlideImage(bound, options) {
-  const image = bound.geometry.slideImage;
-  if (!image) return '';
-  const trace = options.trace ? { 'data-opf-slide-image': image.path, 'data-opf-slide-image-position': image.position } : {};
-  const value = image.alt === undefined ? image.value : { ...normalizeAsset(image.value), alt: image.alt };
-  const picture = renderImage({ value, path: image.sourcePath }, image.box, bound, { ...options, imageFit: image.fill === 'crop' ? 'cover' : 'contain' });
-  // Unresolved sources keep the ordinary placeholder without treatments, like the export.
-  if (!picture.startsWith('<image')) return tag('g', trace, picture);
-  const id = `opf-s${bound.index + 1}-slide-image`, shape = image.shape, defs = [];
-  const masked = shape && shape.preset !== 'rect';
-  if (masked) defs.push(tag('clipPath', { id: `${id}-clip` }, tag('path', { d: shape.path })));
-  const matrix = slideImageRecolorMatrix(image.recolor, bound);
-  if (matrix) defs.push(tag('filter', { id: `${id}-recolor`, 'color-interpolation-filters': 'sRGB' }, tag('feColorMatrix', { type: 'matrix', values: matrix })));
-  let pixels = matrix || image.opacity !== undefined ? tag('g', { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
-  if (masked) pixels = tag('g', { 'clip-path': `url(#${id}-clip)` }, pixels);
-  const children = [defs.length ? tag('defs', {}, defs.join('')) : '', pixels];
-  if (image.border) {
-    const paint = slideImagePaint(image.border.color, bound, bound.design.colors.border);
-    children.push(tag('path', { d: shape?.path ?? rectanglePath(image.box), fill: 'none', stroke: paint.color, 'stroke-opacity': paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, 'stroke-width': stableNumber(image.border.width), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8 }));
-  }
-  if (image.overlay) {
-    const paint = slideImagePaint(image.overlay.color, bound, bound.design.colors.text);
-    children.push(tag('path', { d: image.overlay.shape?.path ?? rectanglePath(image.overlay.box), fill: paint.color, 'fill-opacity': preciseNumber(paint.alpha * image.overlay.opacity), ...(options.trace ? { 'data-opf-slide-image-overlay': `${image.path}.overlay` } : {}) }));
-  }
-  return tag('g', trace, children.filter(Boolean).join(''));
+// FA-22 image background, in the paint order of the geometry contract: the canvas colour (the colour scheme's default slide
+// background), the picture (recolor and opacity on its pixels only, as for an image block), then the overlay (the whole canvas
+// or an edge band). cover, contain
+// and stretch use the shared fit math with the focus point; tile repeats the picture at its intrinsic size (1 picture px = 1
+// reference px) from the canvas top-left. alt is the picture's accessible name; without alt the picture is decorative.
+function renderBackgroundImage(background, bound, width, height, options) {
+  const canvas = tag("rect", { x: 0, y: 0, width, height, fill: bound.design.backgroundColor ?? bound.design.colors.background, ...traceAttrs(options, `${bound.path}.design.background`) });
+  const item = { value: background.alt === undefined ? background.src : { src: background.src, alt: background.alt }, path: background.path };
+  const drawOptions = { ...options, imageDecorative: background.alt === undefined };
+  const picture = background.fit === "tile"
+    ? renderTiledImage(item, background.box, bound, drawOptions)
+    : renderImage(item, background.box, bound, { ...drawOptions, imageFit: background.fit, imageFocus: background.focus, imagePicture: background.picture });
+  // An unresolved source draws the ordinary placeholder at the background's opacity (as 0.14 did), without recolor or overlay.
+  if (isImagePlaceholder(picture)) return [canvas, background.opacity !== undefined ? tag("g", { opacity: background.opacity }, picture) : picture].join("\n");
+  const id = `opf-s${bound.index + 1}-background`, matrix = imageRecolorMatrix(background.recolor, bound);
+  const defs = matrix ? tag("defs", {}, tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix }))) : "";
+  const pixels = matrix || background.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: background.opacity === undefined ? undefined : preciseNumber(background.opacity) }, picture) : picture;
+  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : ""].filter(Boolean).join("\n");
 }
+
+// tile: a pattern cell of the picture's intrinsic size, anchored at the canvas origin.
+function renderTiledImage(item, box, bound, options) {
+  const { source, drawable } = resolveImageSource(item, bound, options);
+  if (!drawable) return renderImage(item, box, bound, options);
+  const size = intrinsicImageSize(source) ?? { width: Math.min(box.width, box.height) / 4, height: Math.min(box.width, box.height) / 4 };
+  const id = `opf-s${bound.index + 1}-background-tile`;
+  const cell = tag("image", { x: 0, y: 0, width: stableNumber(size.width), height: stableNumber(size.height), href: source, preserveAspectRatio: "none" });
+  return tag("defs", {}, tag("pattern", { id, x: 0, y: 0, width: stableNumber(size.width), height: stableNumber(size.height), patternUnits: "userSpaceOnUse" }, cell))
+    + tag("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: `url(#${id})`, ...imageAccessibility(normalizeAsset(item.value), options), ...traceAttrs(options, item.path) });
+}
+
+// FA-22 image block (core ComposedItem.image): the picture in its frame (image.box) with the block's fit and focus, clipped to
+// the frame's shape unless it is a rectangle, with recolor and opacity on the pixels only; then the line centered on the shape
+// outline; then the overlay (the frame's shape, or an edge band). The outlines are core's imageShape() paths, so the preview
+// draws exactly the native preset geometry, in the paint order the export writes. A placed block (image.placement) arrives
+// with its band as the region and needs nothing else. An unresolved source keeps the ordinary placeholder without treatments.
+function renderImageBlock(item, bound, options) {
+  const image = item.image;
+  if (!image) throw new OPFRenderError("missing-image-geometry", "Image rendering requires a coordinated core build with image block geometry (ComposedItem.image).", { path: item.path });
+  const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
+  const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
+  if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
+  const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
+  const masked = shape && shape.preset !== "rect";
+  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: shape.path })));
+  const matrix = imageRecolorMatrix(image.recolor, bound);
+  if (matrix) defs.push(tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix })));
+  let pixels = matrix || image.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
+  if (masked) pixels = tag("g", { "clip-path": `url(#${id}-clip)` }, pixels);
+  const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
+  if (image.border) {
+    const paint = imagePaint(image.border.color, bound, bound.design.colors.border);
+    children.push(tag("path", { d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
+  }
+  if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
+  return tag("g", trace, children.filter(Boolean).join(""));
+}
+
+// One overlay (shared by image backgrounds and image blocks): its outline filled with the colour, the colour's alpha times the
+// overlay opacity.
+function renderImageOverlay(overlay, bound, options) {
+  const paint = imagePaint(overlay.color, bound, bound.design.colors.text);
+  return tag("path", { d: overlay.shape?.path ?? rectanglePath(overlay.box), fill: paint.color, "fill-opacity": preciseNumber(paint.alpha * overlay.opacity), ...(options.trace ? { "data-opf-image-overlay": overlay.path } : {}) });
+}
+
+// The placeholder renderImage draws for a source it cannot resolve.
+const isImagePlaceholder = svg => svg.startsWith("<g") && svg.includes('data-opf-asset-status="unresolved"');
 
 // Native alpha and color-matrix values keep 1/100000 precision; three decimals would drift.
 const preciseNumber = value => String(Math.round(value * 1e6) / 1e6);
@@ -889,18 +863,18 @@ function rectanglePath(box) {
 }
 
 // ColorRef -> opaque #RRGGBB plus the AA byte as alpha, as the native srgbClr + alpha.
-function slideImagePaint(value, bound, fallback) {
+function imagePaint(value, bound, fallback) {
   const hex = resolveColorRef(value, bound, fallback) ?? fallback;
   const raw = normalizeColor(hex, fallback).slice(1);
   return { color: `#${raw.slice(0, 6).toUpperCase()}`, alpha: raw.length === 8 ? parseInt(raw.slice(6), 16) / 255 : 1 };
 }
 
 // Rec. 601 luminance on sRGB values; duotone maps it linearly from dark to light.
-function slideImageRecolorMatrix(recolor, bound) {
+function imageRecolorMatrix(recolor, bound) {
   if (!recolor) return undefined;
   const weights = [0.299, 0.587, 0.114];
   const channels = recolor.type === 'duotone'
-    ? [slideImagePaint(recolor.dark, bound, '#000000'), slideImagePaint(recolor.light, bound, '#FFFFFF')].map(paint => [1, 3, 5].map(at => parseInt(paint.color.slice(at, at + 2), 16) / 255))
+    ? [imagePaint(recolor.dark, bound, '#000000'), imagePaint(recolor.light, bound, '#FFFFFF')].map(paint => [1, 3, 5].map(at => parseInt(paint.color.slice(at, at + 2), 16) / 255))
     : [[0, 0, 0], [1, 1, 1]];
   const [dark, light] = channels;
   const rows = [0, 1, 2].map(channel => [...weights.map(weight => preciseNumber((light[channel] - dark[channel]) * weight)), 0, preciseNumber(dark[channel])].join(' '));
@@ -942,7 +916,7 @@ function renderPayload(item, box, bound, options) {
     case "table":
       return renderTable(item, box, bound, options);
     case "image":
-      return renderImage(item, box, bound, options);
+      return renderImageBlock(item, bound, options);
     case "video":
       return renderMedia(item, box, bound, options);
     case "code":
@@ -1023,6 +997,13 @@ function resolveImageSource(item, bound, options) {
   const svg = typeof source === "string" ? svgImageSource(source) : null;
   const drawable = svg !== null || (typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source));
   return { asset, source: svg ?? source, drawable, missingReference };
+}
+
+// The accessible name of a drawn picture: its alt text, else the caller's label; a decorative picture (an image background
+// without alt) is hidden from assistive technology.
+function imageAccessibility(asset, options) {
+  if (options.imageDecorative) return { "aria-hidden": "true" };
+  return { role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image" };
 }
 
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
@@ -1171,12 +1152,29 @@ function resolveBulletImage(bulletImage, bound, options) {
   return undefined;
 }
 
+// A drawable picture in `box` with `options.imageFit`: cover (the default for content), contain or stretch. cover takes
+// `options.imageFocus`: centered, it is the native center crop; anywhere else the picture is placed by core's fit math
+// (`options.imagePicture`, core's ImageFitPlacement when core read the aspect, else fitImage on core's intrinsicImageAspect
+// of the resolved source, for pictures a host imageResolver supplies) and
+// clipped to the box by a nested viewport. A logo keeps its anchor (`options.imageAnchor`).
 function renderImage(item, box, bound, options) {
   const { asset, source, drawable, missingReference } = resolveImageSource(item, bound, options);
   if (drawable) {
+    const fit = options.imageFit ?? "contain", focus = options.imageFocus;
+    const attrs = { href: source, ...imageAccessibility(asset, options), ...traceAttrs(options, item.path), ...generatedAttrs(options) };
+    if (fit === "cover" && focus && !options.imageAnchor && (focus.x !== 0.5 || focus.y !== 0.5)) {
+      // The drawable source (after asset references and the host imageResolver): core reads its size (intrinsicImageAspect).
+      const aspect = options.imagePicture ? undefined : intrinsicImageAspect(source);
+      const placement = options.imagePicture ?? (aspect ? fitImage(box, "cover", aspect, focus) : undefined);
+      if (placement) {
+        const picture = placement.image;
+        return tag("svg", { x: box.x, y: box.y, width: box.width, height: box.height, overflow: "hidden" },
+          tag("image", { x: stableNumber(picture.x - box.x), y: stableNumber(picture.y - box.y), width: stableNumber(picture.width), height: stableNumber(picture.height), preserveAspectRatio: "none", ...attrs }));
+      }
+    }
     return tag("image", { x: box.x, y: box.y, width: box.width, height: box.height,
-      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : options.imageAnchor === "right" ? "xMaxYMid meet" : (options.imageFit ?? (bound.geometry.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
-      ...traceAttrs(options, item.path), ...generatedAttrs(options) });
+      preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : options.imageAnchor === "right" ? "xMaxYMid meet" : fit === "cover" ? "xMidYMid slice" : fit === "stretch" ? "none" : "xMidYMid meet",
+      ...attrs });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
   const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster or SVG data URI, or a host imageResolver.';
@@ -1398,7 +1396,7 @@ function renderQuote(item, box, bound, options) {
 function renderQuotePhoto(photo, item, bound, options) {
   const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover' });
   // An unresolved source keeps the ordinary placeholder, unmasked, like the export.
-  if (!picture.startsWith('<image')) return picture;
+  if (isImagePlaceholder(picture)) return picture;
   const id = `opf-s${bound.index + 1}-quote-photo-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}`;
   return tag('g', {}, tag('defs', {}, tag('clipPath', { id }, tag('path', { d: photo.shape.path }))) + tag('g', { 'clip-path': `url(#${id})` }, picture));
 }
@@ -1516,7 +1514,7 @@ function renderChart(item, box, bound, options) {
   const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
   if (rendered) return rendered;
   const chart = item.value ?? {};
-  const chartType = chart.type ?? engineDefaults.chartTypes[0];
+  const chartType = chart.type ?? engineDefaults.chartType;
   const data = inlineChartRows(legacyChartData(chart, bound));
   // A dataset-backed chart has no data.rows of its own: its parts report the chart's authored path.
   const part = isDatasetChart(item, bound) ? () => item.path : (path) => path;

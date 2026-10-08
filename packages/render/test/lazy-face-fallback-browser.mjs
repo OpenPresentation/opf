@@ -17,6 +17,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadFonts} from '../dist/fonts-node.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/lazy-face-fallback');
@@ -44,6 +45,9 @@ const cases = [
   ['yu-gothic-latin', deck('Yu Gothic latin', {title: 'Quarterly review', text: 'Revenue grew 12%', scheme: 'yu-gothic'}), ['Noto Sans JP'], ['noto-sans-jp']],
 ];
 
+// FA-23: two decks name gallery font schemes; the page registers them, the way a host does (only the records the decks use).
+const catalog = {source: defaultCatalog.source, fontSchemes: {'open-sans': defaultCatalog.fontSchemes['open-sans'], 'yu-gothic': defaultCatalog.fontSchemes['yu-gothic']}};
+
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const errors = [];
 try {
@@ -67,13 +71,14 @@ try {
   });
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
+  await page.evaluate(catalog => { window.catalogs = [catalog]; }, catalog);
 
   const run = async (name, document) => {
     const before = {lazy: requests.lazy.length, pack: requests.pack.length};
     const result = await page.evaluate(async ({document, eager, origin}) => {
       const {loadBrowserFonts, renderSlideSvg} = window.opf;
-      const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`})).registry;
-      const draw = () => { const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}}); window.document.querySelector('main').innerHTML = svg; return svg; };
+      const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}})).registry;
+      const draw = () => { const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs}); window.document.querySelector('main').innerHTML = svg; return svg; };
       // The registry as a host has it after loading only the vendored faces: the script face is still pending.
       await registry.ensureLazyFonts(document);
       const pendingScripts = registry.pendingScripts(document).map(item => item.replace('@expo-google-fonts/', ''));
@@ -132,10 +137,10 @@ try {
   // Loading the script face before the vendored one (an editor that detects scripts first) reaches the same preview.
   const swapped = await page.evaluate(async ({document, eager, origin}) => {
     const {loadBrowserFonts, renderSlideSvg} = window.opf;
-    const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`})).registry;
+    const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}})).registry;
     await registry.ensureScripts(document);
     await registry.ensureLazyFonts(document);
-    const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}});
+    const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     const drawn = [...new Set([...svg.matchAll(/font-family="([^",]*)/g)].map(match => match[1]))];
     registry.dispose();
     return drawn;
@@ -143,9 +148,9 @@ try {
   assert.deepEqual(swapped.sort(), ['Intos', 'Intos Display', 'Noto Sans JP'], 'scripts first, vendored faces second');
   await page.evaluate(async ({document, eager, origin}) => {
     const {loadBrowserFonts, renderSlideSvg} = window.opf;
-    const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, scripts: 'auto', presentation: document})).registry;
+    const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}, scripts: 'auto', presentation: document})).registry;
     await registry.ensureLazyFonts(document);
-    window.document.querySelector('main').innerHTML = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}});
+    window.document.querySelector('main').innerHTML = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     await window.document.fonts.ready;
   }, {document: cases[0][1], eager: eager.map(({bytes, ...rest}) => rest), origin: ORIGIN});
   await page.locator('main svg').screenshot({path: path.join(outputDirectory, 'aptos-japanese.png')});

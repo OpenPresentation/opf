@@ -1,11 +1,12 @@
 // FA-05: the preview resolves the color-scheme roles and link colors through core resolveColorRoles, the definition opf-pptx
-// and the audit share (the cross-engine comparison is test/color-roles.mjs in opf-pptx).
+// and the audit share (the cross-engine comparison is test/color-roles.mjs in opf-pptx). The designs name the gallery's `classic`
+// theme and `cool-horizon` colour scheme, so the host catalog is registered (./catalog-harness.mjs).
 import assert from 'node:assert/strict';
-import { catalogs } from '@openpresentation/opf';
 import { resolveColorRoles } from '@openpresentation/opf/composition';
-import { renderSlideSvg } from '../dist/index.js';
+import { defaultCatalog, renderSlideSvg } from './catalog-harness.mjs';
 
-const cool = catalogs.colorSchemes.find(record => record.id === 'cool-horizon');
+const cool = defaultCatalog.colorSchemes['cool-horizon'];
+assert.ok(cool, 'the gallery cool-horizon colour scheme');
 const fillOf = (svg, label) => {
   const found = new RegExp(`<(?:tspan|text)[^>]*? fill="(#[0-9A-Fa-f]{6})"[^>]*>${label}</(?:tspan|text)>`).exec(svg);
   assert.ok(found, `${label} run in the SVG`);

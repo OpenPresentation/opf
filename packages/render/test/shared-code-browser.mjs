@@ -3,7 +3,13 @@ import assert from 'node:assert/strict';
 import {writeFile,readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
-import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+// FA-23: the documents name gallery records, so they render with the gallery snapshot registered, as a host does. Core's
+// packed-ecosystem checks copy this file and rewrite its relative imports, so it registers the catalog itself.
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {resolvePresentation as resolvePresentationUnregistered, renderSlideSvg as renderSlideSvgUnregistered} from '../dist/svg.js';
+const catalogs = [defaultCatalog];
+const resolvePresentation = (deck, options = {}) => resolvePresentationUnregistered(deck, {catalogs, ...options});
+const renderSlideSvg = (deck, index, options = {}) => renderSlideSvgUnregistered(deck, index, {catalogs, ...options});
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fonts=(await loadFonts({pack: 'office'})).registry,faces=fonts.embeddedFonts.filter(face=>face.family==='Cousine'&&[400,700].includes(face.weight)&&!face.italic);

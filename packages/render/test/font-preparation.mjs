@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {BUNDLED_FONT_MANIFEST,loadFonts} from '../dist/fonts-node.js';
-import {resolvePresentation, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {resolvePresentation, svgToPng, renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {paginate} from '@openpresentation/opf/pagination';
 
 const require=createRequire(import.meta.url),hash=b=>createHash('sha256').update(b).digest('hex');
@@ -31,7 +31,7 @@ for(const [i,face]of prepared.embeddedFonts.entries()){
   report.faces.push({family:face.family,weight:face.weight,italic:face.italic,fontSha256:hash(bytes),pngSha256:hash(complete)});
 }
 const deck={name:'Prepared font workflow',design:{fontScheme:'roboto'},slides:[{id:'prepared',title:'Measured typography',blocks:[{text:[{text:'Source ',bold:true},{text:'keeps its formatting.',italic:true}]},{text:'AVATAR iii WWW office affine. '.repeat(40)}]}]};
-const original=JSON.stringify(deck),pages=paginate(deck, {fonts: prepared});
+const original=JSON.stringify(deck),pages=paginate(deck, {fonts: prepared, catalogs});
 const svg=renderSlideSvg(pages.presentation, 0, {fonts: prepared});
 assert.equal(JSON.stringify(deck),original);
 assert.match(svg,/@font-face/);

@@ -27,7 +27,7 @@ renderSlideSvg(missing, 0,{onDiagnostic:issue=>missingDiagnostics.push(issue)});
 assert.ok(renderSlideSvg(missing, 0,{strictAssets:true,imageResolver:()=>raster}).includes('<image'));
 assert.throws(()=>renderSlideSvg({assets:{one:'asset:two',two:'asset:one'},slides:[{image:'asset:one'}]}, 0),{code:'invalid-asset-reference'});
 const repeated=[];renderSvg({assets:{a:{src:'./missing.png'}},design:{header:{right:{image:'asset:a'}}},slides:[{},{}]},{onDiagnostic:issue=>repeated.push(issue)});assert.equal(repeated.filter(d=>d.code==='unresolved-asset').length,2,'Report inherited failures on every rendered slide');
-const cropped={assets:{a:{src:raster}},design:{imageFill:'crop',header:{right:{image:'asset:a'}},footer:{left:{image:'asset:a'}},watermark:{src:'asset:a',opacity:.06}},slides:[{image:'asset:a'}]};
+const cropped={assets:{a:{src:raster}},design:{imageFit:'cover',header:{right:{image:'asset:a'}},footer:{left:{image:'asset:a'}},watermark:{src:'asset:a',opacity:.06}},slides:[{image:'asset:a'}]};
 const fitted=renderSlideSvg(cropped, 0,{trace:true,strictAssets:true});
 for(const [,attrs]of fitted.matchAll(/<image\b([^>]*)>/g))assert.ok(attrs.includes(attrs.includes('data-opf-path="slides.0.image"')?'preserveAspectRatio="xMidYMid slice"':'preserveAspectRatio="xMidYMid meet"'),'Crop content pictures while fitting complete header/footer/watermark artwork');
 assert.equal([...fitted.matchAll(/<image\b/g)].length,4);

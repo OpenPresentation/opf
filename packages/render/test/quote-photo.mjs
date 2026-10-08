@@ -1,7 +1,7 @@
 // FA-12: a quote's photo is drawn as an image clipped to the core circle frame, beside the footer lines; the role is a footer line.
 import assert from 'node:assert/strict';
 import {deflateSync} from 'node:zlib';
-import { resolvePresentation, renderSlideSvg } from '../dist/svg.js';
+import { resolvePresentation, renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 
 const fonts=await loadFonts({pack:'office'});
