@@ -1969,12 +1969,12 @@
         "items": {
           "type": "array",
           "items": { "$ref": "#/$defs/ListItem" },
-          "description": "Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks."
+          "description": "Full-slide structured list payload. Presence of this field infers type 'list'. Entries are strings, TextRun[] or objects with `text`, optional `description` (supporting detail under the entry), `level` and `start`. Use `items` when entries share a shape (features, steps, options, risks) or any entry needs a `description`; use `bullets` for plain talking points. Both draw the same marker, nesting and numbering; they differ in the inferred kind and in `description`, which only `items` accepts. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks, so `items` next to `text` or `bullets` composes as separate blocks side by side."
         },
         "bullets": {
           "type": "array",
           "items": { "$ref": "#/$defs/BulletItem" },
-          "description": "Full-slide text-style bullet payload. Presence of this field infers type 'text'."
+          "description": "Full-slide prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries are strings, TextRun[] or objects with `text`, `level` and `start`; there is no `description` (use `items` for entries with supporting detail)."
         },
         "numbering": {
           "$ref": "#/$defs/NumberingSpec",
@@ -2244,7 +2244,7 @@
         "items": {
           "type": "array",
           "items": { "$ref": "#/$defs/ListItem" },
-          "description": "Generic list payload. Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object. List nesting uses item.level rather than nested content payloads.",
+          "description": "Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payloads. Use `items` when entries share a shape or any entry needs a `description`; use `bullets` for plain talking points. Both draw the same marker, nesting and numbering. A block or region holds `items` or `bullets`, never both, and `items` cannot sit beside `text`.",
           "examples": [[
             "Sub-second agent latency",
             ["Drop-in compatible with ", { "text": "OpenAI tool-calling", "bold": true }],
@@ -2257,7 +2257,7 @@
         "bullets": {
           "type": "array",
           "items": { "$ref": "#/$defs/BulletItem" },
-          "description": "Text-style bullet payload. Presence of this field infers type 'text'.",
+          "description": "Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with supporting detail.",
           "examples": [["Sub-second agent latency", "Drop-in compatible with OpenAI tool-calling", "SOC 2 Type II"]]
         },
         "numbering": {

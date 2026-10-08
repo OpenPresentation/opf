@@ -9,8 +9,8 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | Field | Inferred type | Notes |
 | --- | --- | --- |
 | `text` | `text` | Plain string or `TextRun[]`. |
-| `bullets` | `text` | Simple text bullets, usually `string[]`. |
-| `items` | `list` | Generic list payload, usually `string[]` or `ListItem[]`. |
+| `bullets` | `text` | Prose bullets: plain talking points, usually `string[]`. |
+| `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
 | `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
@@ -22,12 +22,20 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 
 ## Items versus bullets
 
-Both fields draw a bulleted (or numbered) list and share the same nesting `level`, rich-text entries and `numbering`. They differ in what they say about the content:
+Both fields draw the same bulleted (or numbered) list: one marker, the same nesting `level`, rich-text entries and `numbering`, fitted by the same list engine. Nothing about the drawing differs. They differ in the kind they infer and in what an entry may carry:
 
-- `bullets` is **prose bullets**: short lines of an argument, written as text. It is inferred as a `text` payload, so layouts and regions that want text take it, and an entry is a string, `TextRun[]` or `{ text, level }`. Use it for talking points where each line stands alone.
-- `items` is a **structured list**: it is inferred as a `list` payload, and an entry may also carry a `description`, so one entry is a heading plus its detail (`{ "text": "Faster onboarding", "description": "First value in under a day." }`). Use it when entries have the same shape (features, steps, options, risks) or when any of them needs supporting detail.
+| | `bullets` | `items` |
+| --- | --- | --- |
+| Inferred kind | `text` | `list` |
+| Entry | string, `TextRun[]` or `{ text, level, start }` | string, `TextRun[]` or `{ text, description, level, start }` |
+| `description` | not allowed (a schema error) | supporting detail drawn under the entry |
+| Beside `text` in one block or region | allowed | an error (`list` and `text` are different kinds) |
 
-Pick `bullets` for plain talking points and `items` as soon as an entry has a description or the slide's layout expects a list. Do not put a heading and its detail into one string with a separator; that is what `description` is for. A payload holds one of the two, not both.
+**The rule.** Use `bullets` for plain talking points: short lines that each stand alone. Use `items` when the entries share a shape (features, steps, options, risks) or any entry needs a `description`; never fold a heading and its detail into one string with a separator, that is what `description` is for. When in doubt, use `items`, because it can grow a `description` later without changing the payload kind. The editor helper `convertListForm` switches a payload between the two; going to `bullets` drops the descriptions.
+
+Do not give one payload both. In a block or a promoted region, `items` next to `bullets` is the error "content payload mixes fields from incompatible content types". At slide root it validates, as the shorthand for two blocks, and composes as two lists side by side; write two blocks on purpose if you want that. `numbering` applies to every list in the payload.
+
+A layout's placeholder kind (`list` or `text`) is what layout pickers match on (`layoutContent`), but composition does not refuse the other field and draws both the same way: the choice states what the content is, it is not a switch for the look.
 
 ## Code highlight
 

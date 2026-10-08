@@ -8,9 +8,9 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Rich text | `{"text":[{"text":"Important","bold":true}," detail"]}` |
 | Inline code | `{"text":["Run ",{"text":"pnpm install","code":true}]}` (the design's code font; Markdown `` `backticks` `` are the same thing) |
 | Run in another language | `{"text":["The word ",{"text":"Zeitgeist","lang":"de"}]}` (BCP-47 tag; sets proofing and script fonts for that run) |
-| List | `{"items":["First point","Second point"]}` |
-| Prose bullets | `{"bullets":["A talking point","Another one"]}` (a `text` payload; pick `items` instead when any entry needs supporting detail) |
-| List with detail | `{"items":[{"text":"Faster onboarding","description":"First value in under a day."}]}` (`description` exists only on `items`) |
+| List | `{"items":["First point","Second point"]}` (a `list` payload for entries that share a shape or may need a `description`) |
+| Prose bullets | `{"bullets":["A talking point","Another one"]}` (a `text` payload for plain talking points that each stand alone; `bullets` entries have no `description`) |
+| List with detail | `{"items":[{"text":"Faster onboarding","description":"First value in under a day."}]}` (`description` exists only on `items`; use `items` whenever any entry needs detail) |
 | Numbered list | `{"items":["First step","Second step"],"numbering":"arabic"}` (also `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`; `{"style":"alpha-lower","start":3,"suffix":"paren"}`; an array is one entry per level; works on `bullets` too) |
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
