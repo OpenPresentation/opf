@@ -13,7 +13,7 @@ import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
 import {yamlCommand, YAML_USAGE, YAML_HELP} from './yaml.js';
-import {DeckReadError, commentWarning, decode, inputFormatOf, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
+import {DeckReadError, commentWarning, decode, deckExtension, fenceWarning, inputFormatOf, isDeckFormatFlag, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
 import {runValidate, VALIDATE_USAGE} from './validate.js';
@@ -24,26 +24,26 @@ declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
 declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 24)
-  opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml>] [--schema-comment] [--force]
+  opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml|markdown>] [--schema-comment] [--force]
 ${VALIDATE_USAGE}
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
-           [--dry-run] [--expect-sha256 <hash>] [--format <json|yaml>] [--force] [--fail-on <level>]
+           [--dry-run] [--expect-sha256 <hash>] [--format <json|yaml|markdown>] [--force] [--fail-on <level>]
   opf diff <a|-> <b|-> [--format <text|json|patch>] [--exit-code] [--threshold <0-1>]
   opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer <ours|theirs>]
-           [--report <file>] [--dry-run] [--threshold <0-1>] [--format <json|yaml>] [--fail-on <level>]
+           [--report <file>] [--dry-run] [--threshold <0-1>] [--format <json|yaml|markdown>] [--fail-on <level>]
   opf format <file|->... [--check | --in-place | --output <file|->]
-           [--indent <0-8>] [--eol <lf|crlf|preserve>] [--format <json|yaml>]
+           [--indent <0-8>] [--eol <lf|crlf|preserve>] [--format <json|yaml|markdown>]
   opf stats <file|-> [--format <json|text>] [--per-slide]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
-           [--dataset <id>] [--format yaml] [--force] [--fail-on <level>]
+           [--dataset <id>] [--format yaml|markdown] [--force] [--fail-on <level>]
   opf fill <template.opf.json|-> [--data <values.json|data.csv|data.tsv|->] [--format <csv|tsv|json>]
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
-           | --combine --output <file|->] [--partial] [--examples] [--format yaml] [--force] [--fail-on <level>]
-  opf paginate <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
-  opf embed <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
+           | --combine --output <file|->] [--partial] [--examples] [--format yaml|markdown] [--force] [--fail-on <level>]
+  opf paginate <input|-> <output|-> [--format <json|yaml|markdown>] [--force] [--fail-on <level>]
+  opf embed <input|-> <output|-> [--format <json|yaml|markdown>] [--force] [--fail-on <level>]
 ${MARKDOWN_USAGE}
 ${YAML_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
@@ -52,7 +52,7 @@ ${YAML_USAGE}
            [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
            [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
            [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
-  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml>] [--force] [--fail-on <level>] [--json]
+  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml|markdown>] [--force] [--fail-on <level>] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -61,8 +61,9 @@ ${YAML_USAGE}
              [--global | --directory <skills-directory>]
   opf --version
 
-Any command that reads a deck also takes --input-format <json|yaml> for stdin and for names
-that do not end .yaml/.yml (default json).
+Any command that reads a deck also takes --input-format <json|yaml|markdown> for stdin and for names
+that do not end .yaml, .yml or .opf.md (default json). A deck is JSON, YAML (.opf.yaml) or Markdown (.opf.md);
+JSON is canonical. A command that writes a deck writes the form of its output name or --format, else the form it read.
 
 JSON reports; '-' reads stdin or writes a document to stdout. Diagnostics for
 stdout documents go to stderr. Existing files require --force or --in-place.
@@ -148,7 +149,7 @@ async function readJson(file: string) {
   try { return { raw, value: JSON.parse(raw.replace(/^\uFEFF/, "")) as unknown }; }
   catch { throw new CliError(`Invalid JSON in ${file === "-" ? "stdin" : file}.`); }
 }
-/** A deck or patch from a file or stdin, JSON or YAML (a name ending .yaml/.yml, else --input-format). `rewrite` warns when YAML comments would be lost. */
+/** A deck or patch from a file or stdin, JSON, YAML or Markdown (a name ending .yaml, .yml or .opf.md, else --input-format). `rewrite` warns when YAML comments would be lost. */
 async function readDeck(file: string, rewrite = false, kind: "deck" | "patch" = "deck"): Promise<DeckSource> {
   const raw = file === "-" ? await stdin() : await readFile(file, "utf8");
   const source = decode(raw, file, inputFormatOf(file), kind);
@@ -196,7 +197,9 @@ async function saveText(file: string, text: string, overwrite: boolean, original
 }
 async function emit(document: unknown, output: string, options: Record<string, string | boolean>, original?: { file: string; raw: string }, extra = {}, source?: DeckSource, flag: string | boolean | null | undefined = options.format) {
   const validation = checked(document, failOnOf(options));
-  const { text } = render(document, output, options, source, flag);
+  const { text, format } = render(document, output, options, source, flag);
+  const fences = format === "markdown" ? fenceWarning(text, source, output === "-" ? "the output" : output) : undefined;
+  if (fences) process.stderr.write(fences);
   if (output === "-" || options["dry-run"]) {
     process.stdout.write(text);
     process.stderr.write(json({ valid: true, findings: validation.findings, dryRun: !!options["dry-run"], ...extra }));
@@ -206,7 +209,7 @@ async function emit(document: unknown, output: string, options: Record<string, s
   }
 }
 const cli: CliContext = { parse, arity, readJson, readDeck, stdin, emit, saveText, print, hash, json, fail: (message, code = 2, details, key) => new CliError(message, code, details, key) };
-/** Remove the global `--input-format <json|yaml>` option (anywhere before `--`) and apply it. */
+/** Remove the global `--input-format <json|yaml|markdown>` option (anywhere before `--`) and apply it. */
 function takeInputFormat(argv: string[]): string[] {
   const rest: string[] = [];
   let value: string | undefined, seen = false;
@@ -279,8 +282,8 @@ async function main(args0: string[]) {
       if (!Array.isArray(value) || !value.every(item => typeof item === 'string')) throw new CliError(`--${key} requires a JSON array of column names.`);
       return value;
     };
-    // --format yaml names the output (YAML); csv, tsv and json name the data.
-    const outFlag = options.format === 'yaml' ? 'yaml' : undefined;
+    // --format yaml or markdown names the output; csv, tsv and json name the data.
+    const outFlag = isDeckFormatFlag(options.format) ? String(options.format) : undefined;
     const format = (outFlag ? undefined : options.format) ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
     if (format !== undefined && !['csv','tsv','json'].includes(String(format))) throw new CliError('Unknown data format.');
     const raw = positional[0] === '-' ? await stdin() : await readFile(positional[0], 'utf8');
@@ -326,7 +329,7 @@ async function main(args0: string[]) {
     if (options.combine && options.output === undefined) throw new CliError("--combine requires --output <file|->.");
     if (positional[0] === "-" && options.data === "-") throw new CliError("stdin can supply only one input.");
     const templateSource = await readDeck(positional[0], true), template = templateSource.value;
-    const outFlag = options.format === "yaml" ? "yaml" : undefined; // csv, tsv and json name the data format
+    const outFlag = isDeckFormatFlag(options.format) ? String(options.format) : undefined; // csv, tsv and json name the data format
     let records: FillRecord[] = [{}];
     if (options.data !== undefined) {
       const data = String(options.data), raw = data === "-" ? await stdin() : await readFile(data, "utf8");
@@ -345,8 +348,10 @@ async function main(args0: string[]) {
       const outputs = [];
       for (const [offset, deck] of decks.entries()) {
         const kind = outputFormatOf("-", outFlag, templateSource);
-        const output = path.join(dir, `${names[offset]}.opf.${kind}`);
+        const output = path.join(dir, `${names[offset]}.${deckExtension(kind)}`);
         const { text } = render(deck.presentation, output, options, templateSource, outFlag ?? null);
+        const fences = kind === "markdown" ? fenceWarning(text, templateSource, output) : undefined;
+        if (fences) process.stderr.write(fences);
         await saveText(output, text, !!options.force);
         outputs.push({ record: deck.index, output, sha256: hash(text), findings: checks[offset]!.findings });
       }
@@ -399,6 +404,6 @@ async function main(args0: string[]) {
 }
 main(process.argv.slice(2)).catch((error: unknown) => {
   const code = error instanceof OPFPatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError || error instanceof SkillsError ? error.code : 2;
-  process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { [error.key]: error.details } : {}), ...(error instanceof DeckReadError && error.details ? { yaml: error.details } : {}) }));
+  process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { [error.key]: error.details } : {}), ...(error instanceof DeckReadError && error.details ? { [error.key]: error.details } : {}) }));
   process.exitCode = code;
 });

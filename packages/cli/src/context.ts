@@ -8,12 +8,13 @@ export interface CliContext {
   arity(args: string[], min: number, max?: number): void;
   /** A JSON-only input (a settings or data file). */
   readJson(file: string): Promise<{ raw: string; value: unknown }>;
-  /** A deck or patch, JSON or YAML. `rewrite` warns when YAML comments would be lost. */
+  /** A deck or patch: JSON, YAML or (a deck only) Markdown. `rewrite` warns when YAML comments would be lost. */
   readDeck(file: string, rewrite?: boolean, kind?: "deck" | "patch"): Promise<CliSource>;
   stdin(): Promise<string>;
   /**
    * Validate and write a document (stdout for `-`/dry-run, a file otherwise) and print the JSON report. It is written as YAML for an output
-   * ending .yaml/.yml or `--format yaml`, else as JSON; `source` (the deck that was read) decides when the output is stdout.
+   * ending .yaml/.yml or `--format yaml`, as Markdown for an output ending .opf.md or `--format markdown`, else as JSON; `source` (the
+   * deck that was read) decides when the output is stdout or has another name.
    */
   emit(document: unknown, output: string, options: CliOptions, original?: { file: string; raw: string }, extra?: object, source?: CliSource): Promise<void>;
   /** Atomically write text to a file; `overwrite` must be true to replace an existing file. */

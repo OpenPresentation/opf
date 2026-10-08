@@ -11,7 +11,8 @@ import { checkCatalogsOption, type Catalog } from "./catalog-refs.js";
 import { type Obj, same } from "./convert/shared.js";
 import type { Presentation } from "./types.js";
 import type { Finding, FindingLocation, FindingReport } from "./generated/types/finding.js";
-import { type ValidateOptions, validate } from "./validator.js";
+import { NOT_CHECKED } from "./not-checked.js";
+import { type ValidateOptions, type ValidationReport, validate } from "./validator.js";
 import { type EmbeddedPart, emitSlide } from "./markdown/emit.js";
 import { type ParseOptions, emptySegment, frontMatter, parseSlide, readYamlMapping, splitSegments } from "./markdown/parse.js";
 import { Ctx, OPFMarkdownError, lineRange, splitLines, writeYaml } from "./markdown/support.js";
@@ -31,14 +32,13 @@ export interface FromMarkdownOptions extends ParseOptions {
   catalogs?: readonly Catalog[];
 }
 
-export interface FromMarkdownResult {
+export interface FromMarkdownResult extends ValidationReport {
   /** The converted deck. Always an object; when `valid` is false it is a best effort that does not validate. */
   presentation: Presentation;
   /** True when there are no errors (Markdown syntax errors and OPF validation errors both count). */
   valid: boolean;
   /** Findings (the shared Finding format), in source order, each with `location` (UTF-16 offset and length, one-based line and column). */
   findings: (Finding & { location: FindingLocation })[];
-  counts: FindingReport["counts"];
 }
 
 /** Convert Markdown in the OPF dialect to an OPF document. Never throws for malformed content; read `valid` and `findings`. */
@@ -50,6 +50,7 @@ export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}
   let lines = splitLines(source);
   if (lines[0]?.text.startsWith("﻿")) lines = [{ ...lines[0], text: lines[0].text.slice(1), start: lines[0].start + 1 }, ...lines.slice(1)];
   const front: Obj = {};
+  let report: Omit<ValidationReport, "findings" | "counts" | "valid"> = { schemaValid: null, checks: NOT_CHECKED };
   let body = lines;
   const matter = frontMatter(lines);
   if (matter === "unterminated") {
@@ -87,6 +88,12 @@ export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}
   if (!slides.length) ctx.error("no-slides", "The Markdown has no slides.", "Write at least one slide: a # title or any content, with --- between slides.", { start: 0, end: Math.min(1, source.length) }, "/slides");
   else if (options.validate !== false) {
     const checked = validate(document, options.validate === true || options.validate === undefined ? { only: ["format", "references"], ...(options.catalogs ? { catalogs: options.catalogs } : {}) } : options.validate);
+    report = {
+      schemaValid: checked.schemaValid,
+      checks: { ...checked.checks, syntax: "checked" },
+      ...(checked.template === undefined ? {} : { template: checked.template }),
+      ...(checked.unfilledVariables === undefined ? {} : { unfilledVariables: checked.unfilledVariables }),
+    };
     for (const found of checked.findings) {
       const range = ctx.rangeOf(found.path) ?? ctx.rangeOf("") ?? { start: 0, end: 0 };
       ctx.findings.push({ ...found, location: ctx.location(range) });
@@ -95,7 +102,7 @@ export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}
   const findings = [...ctx.findings].sort((a, b) => a.location.offset - b.location.offset);
   const counts: FindingReport["counts"] = { error: 0, warning: 0, info: 0 };
   for (const entry of findings) counts[entry.severity]++;
-  return { presentation: document as unknown as Presentation, valid: counts.error === 0, findings, counts };
+  return { presentation: document as unknown as Presentation, valid: counts.error === 0, findings, counts, ...report };
 }
 
 export interface ToMarkdownOptions {

@@ -45,6 +45,10 @@ Every rule is listed, with its category, default severity, cost and the basis it
 
 With text, a syntax error or a duplicate key comes back with `location` (original-source UTF-16 offset and length, one-based line and column), and so does every finding about a value in the document; a finding about a missing field is located at the object that lacks it. Text that is not JSON reports its syntax errors (`opf/json-syntax`) whatever `only` says, because nothing else can run.
 
+### Reading a deck in any form
+
+`readDeck(text, { format, filename, catalogs, validate })` (the root and `@openpresentation/opf/deck`, RR-60) reads a deck from JSON, YAML or Markdown text and returns `{ presentation, format, ...report }`: the deck and the report `validate` gives it, whatever the form. The format is the `format` option (`"json"`, `"yaml"` or `"markdown"`), else the `filename` (`.opf.md` is Markdown, `.yaml` and `.yml` are YAML, anything else is JSON), and never the content: a plain `.md` name is not a deck. Findings are located in the text that was read: `opf/json-syntax` (line and column) for JSON, `yaml/<rule>` for YAML and `markdown/<rule>` for Markdown, and every `opf/` finding at the field it names. `validate` is `true` (format and references), a `ValidateOptions` object (`catalogs` is added when it names none) or `false` (only syntax errors are reported, `schemaValid` is `null`). It never throws for malformed content, only for a text that is not a string, an unknown format or a bad option. `writeDeck(presentation, { format | filename })` is the other direction: JSON as two-space JSON, YAML and Markdown in canonical form. Both are browser-safe. See [OPF as YAML](yaml.md) and [Markdown and outlines](markdown.md).
+
 The report is a [`FindingReport`](finding-schema-reference.md) (`spec/schemas/finding.schema.json`) with a few more fields:
 
 | Field | Meaning |
@@ -151,7 +155,7 @@ Contract paths are JSON Pointer patterns: `~0` escapes `~`, `~1` escapes `/`, an
 
 The JSON report (the default) is the `validate` report plus the source's SHA-256 (`sha256`), the bundled core version (`opfVersion`) and, with `--config`, the configuration file's path and hash (`context`). `--format text` prints one line per finding (`file:line:column  severity  rule  message`), the JSON Pointer path, a hint and any fix, then a summary. `--list-rules` prints every rule (`--format json` with its full metadata).
 
-A file ending `.yaml` or `.yml` (or stdin with `--input-format yaml`) is read as YAML through `fromYaml`, so the report is the same and every finding is located in the YAML; a YAML syntax or dialect error is a `yaml/<rule>` finding (`format`, exit 1).
+A file ending `.yaml` or `.yml` (or stdin with `--input-format yaml`) is read as YAML through `fromYaml`, so the report is the same and every finding is located in the YAML; a YAML syntax or dialect error is a `yaml/<rule>` finding (`format`, exit 1). A file ending `.opf.md` (or stdin with `--input-format markdown`) is read as a [Markdown deck](markdown.md#markdown-decks-in-every-command) the same way, and a Markdown error is a `markdown/<rule>` finding. A plain `.md` file is not a deck.
 
 `--only` and `--ignore` take comma-separated rule ids, bare names or category names. `--config` takes an explicit local JSON file, never `-`, holding `{ catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette }`; `--only` replaces the file's `only` and `--ignore` adds to its `ignore`.
 

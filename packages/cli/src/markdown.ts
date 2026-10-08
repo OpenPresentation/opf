@@ -20,6 +20,8 @@ defaults to stdout; errors carry line and column and exit 1. --split headings st
 slide at every '# ' heading (outlines). --title sets the deck name unless the front matter does.
 --fail-on <error|warning|info> picks the lowest finding severity that fails (default error). The document is
 written as YAML for an output ending .yaml/.yml or --format yaml.
+to-md also reads a deck in any form (a .yaml/.yml or .opf.md name, or --input-format), and every other command that reads a deck reads a file ending
+.opf.md as a Markdown deck, and writes one for an output ending .opf.md or --format markdown.
 to-md writes an OPF document as Markdown that from-md reads back unchanged. A part with no
 Markdown syntax (a design, regions that are not blocks, a styled table cell) is embedded as
 YAML in an opf-slide or opf-block fence, so nothing is lost; --drop-unsupported leaves it out
@@ -123,7 +125,9 @@ async function fromMarkdownCommand(positional: string[], options: Record<string,
   if (reaches(result.findings, failOn)) throw new MarkdownCommandError("Markdown conversion failed.", 1, { markdown: { sha256: hash(source), counts: result.counts, findings: result.findings } });
   let text: string;
   try {
-    text = serialize(result.presentation, outputFormatOf(output, options.format));
+    const format = outputFormatOf(output, options.format);
+    if (format === "markdown") throw new MarkdownCommandError("from-md writes JSON or YAML. To rewrite a Markdown deck in canonical form use opf format deck.opf.md.");
+    text = serialize(result.presentation, format);
   } catch (error) {
     if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message);
     if (error instanceof OPFYamlError) throw new MarkdownCommandError(error.message, error.code === "invalid-document" ? 1 : 2, { validation: error.details });
@@ -146,7 +150,7 @@ async function toMarkdownCommand(positional: string[], options: Record<string, s
   try {
     document = decode(raw, input, inputFormatOf(input)).value;
   } catch (error) {
-    if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message, 2, error.details ? { yaml: error.details } : undefined);
+    if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message, 2, error.details ? { [error.key]: error.details } : undefined);
     throw error;
   }
   const failOn = parseFailOn(options["fail-on"]);

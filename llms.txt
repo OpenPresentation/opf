@@ -15,7 +15,7 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 - [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
 - [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
 - [Stats](https://github.com/OpenPresentation/opf/blob/main/docs/stats.md): neutral facts about a deck (`stats()`, `opf stats`): slides, words, notes, images, charts, tables, assets, fonts, an estimated speaking time
-- [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`)
+- [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`, `.opf.md` decks in every command, `readDeck`/`writeDeck` in `@openpresentation/opf/deck`); JSON stays canonical
 - [OPF as YAML](https://github.com/OpenPresentation/opf/blob/main/docs/yaml.md): the strict JSON-compatible YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` in every command); JSON stays canonical
 - [Release process](https://github.com/OpenPresentation/opf/blob/main/docs/release-process.md): maintainer runbook for npm releases, trusted publishing, verification, and GitHub release notes
 

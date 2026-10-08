@@ -4,7 +4,7 @@
 import { type FindingSeverity, type ValidationReport, validate } from "@openpresentation/opf";
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
-import { DeckReadError, checkText, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
+import { DeckReadError, checkText, deckExtension, fenceWarning, formatNamed, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
 import { FileCommandError, arity, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
 import { type Diagnostic, PPTX_PACKAGE, loadPptx } from "./peers.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
@@ -24,8 +24,8 @@ async function run(args: string[], host: Host) {
 	const { positional, options } = parseOptions(args, { values: ["out", "signals", "format", "fail-on"], flags: ["force", "json"] });
 	arity(positional, 1);
 	const input = positional[0] as string;
-	if (options.format !== undefined && options.format !== "json" && options.format !== "yaml") throw new FileCommandError("--format takes json or yaml.");
-	const out = options.out === undefined ? (input === "-" ? "-" : `${stemOf(input)}.opf.${options.format === "yaml" ? "yaml" : "json"}`) : String(options.out);
+	if (options.format !== undefined && !formatNamed(options.format)) throw new FileCommandError("--format takes json, yaml or markdown (md).");
+	const out = options.out === undefined ? (input === "-" ? "-" : `${stemOf(input)}.${deckExtension(formatNamed(options.format) ?? "json")}`) : String(options.out);
 	let outFormat: DeckFormat;
 	try {
 		outFormat = outputFormatOf(out, options.format);
@@ -58,7 +58,7 @@ async function run(args: string[], host: Host) {
 	}
 
 	// An invalid deck is never written; its report is located in the JSON form, which every deck has.
-	const written: DeckFormat = outFormat === "yaml" && validate(imported, { only: ["format"] }).valid ? "yaml" : "json";
+	const written: DeckFormat = outFormat !== "json" && validate(imported, { only: ["format"] }).valid ? outFormat : "json";
 	const text = serialize(imported, written);
 	// The check of `opf validate` (format and references), over the document that would be written, so locations point into the output file.
 	const { report: check } = checkText(text, written, WRITE_CHECK);
@@ -71,6 +71,8 @@ async function run(args: string[], host: Host) {
 	const planned = [{ file: out, bytes: new TextEncoder().encode(text) }];
 	const signalsText = signalsFile !== undefined ? json(signals) : undefined;
 	if (signalsFile !== undefined && signalsText !== undefined) planned.push({ file: signalsFile, bytes: new TextEncoder().encode(signalsText) });
+	const fences = written === "markdown" ? fenceWarning(text, undefined, toStdout ? "the output" : out) : undefined;
+	if (fences) process.stderr.write(fences);
 	if (toStdout) process.stdout.write(text);
 	else await writeFiles(planned, !!options.force);
 	finishAndPrint(host, pptx.version, input, source.bytes, reporter, { check, text }, toStdout ? "-" : path.resolve(out), signalsFile === undefined || signalsText === undefined ? undefined : { file: path.resolve(signalsFile), sha256: sha256(signalsText), version: signals?.version }, failOn, true, toStdout);

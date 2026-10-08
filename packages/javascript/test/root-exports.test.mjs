@@ -109,7 +109,7 @@ describe("the short verbs", () => {
 
   test("the result fields that named the deck say presentation", () => {
     const converted = root.fromMarkdown("# One\n");
-    assert.deepEqual(Object.keys(converted).sort(), ["counts", "findings", "presentation", "valid"]);
+    assert.deepEqual(Object.keys(converted).sort(), ["checks", "counts", "findings", "presentation", "schemaValid", "valid"]);
     const patched = patch.applyPatchWithInverse({ slides: [{ title: "A" }] }, [{ op: "replace", path: "/slides/0/title", value: "B" }]);
     assert.equal(patched.presentation.slides[0].title, "B");
     assert.equal("document" in patched, false);

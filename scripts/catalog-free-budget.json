@@ -5,6 +5,7 @@
     "composition": 64765,
     "convert": 226064,
     "data": 8684,
+    "deck": 263564,
     "diff": 6223,
     "font-policy": 15052,
     "format": 45577,
@@ -35,6 +36,10 @@
     "data": {
       "minified": 22716,
       "gzip": 8431
+    },
+    "deck": {
+      "minified": 840644,
+      "gzip": 255887
     },
     "diff": {
       "minified": 15709,

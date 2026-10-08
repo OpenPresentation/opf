@@ -8,7 +8,7 @@ export async function statsCommand(args: string[], cli: CliContext): Promise<voi
   cli.arity(positional, 1);
   const format = String(options.format ?? "json");
   if (!["json", "text"].includes(format)) throw cli.fail("--format must be json or text.");
-  const { value } = await cli.readJson(positional[0] as string);
+  const { value } = await cli.readDeck(positional[0] as string);
   if (!value || typeof value !== "object" || Array.isArray(value)) throw cli.fail("stats needs a presentation object.", 1);
   const result = stats(value, { perSlide: !!options["per-slide"], catalogs: CLI_CATALOGS });
   if (format === "json") cli.print(result);

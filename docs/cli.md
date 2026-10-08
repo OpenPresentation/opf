@@ -122,7 +122,7 @@ whichever way the packages were installed.
 
 ## Markdown and YAML
 
-Two more groups of commands convert between a deck and text, with no renderer: they are core features (`@openpresentation/opf/markdown` and `@openpresentation/opf/yaml`) and need no optional peer.
+JSON stays the canonical form of a deck. YAML (`deck.opf.yaml`) and Markdown (`deck.opf.md`) are authoring forms of the same data, and every command that reads or writes a deck reads and writes all three. Two more groups of commands convert between a deck and text, with no renderer: they are core features (`@openpresentation/opf/markdown` and `@openpresentation/opf/yaml`) and need no optional peer.
 
 ```sh
 opf from-md deck.md deck.opf.json            # Markdown in the OPF dialect to a validated deck
@@ -130,12 +130,17 @@ opf to-md deck.opf.json deck.md              # a deck as Markdown that reads bac
 opf from-yaml deck.opf.yaml deck.opf.json    # strict YAML to a validated deck (--aliases expands anchors)
 opf to-yaml deck.opf.json deck.opf.yaml --schema-comment
 opf validate deck.opf.yaml                   # every command that reads a deck reads .yaml and .yml files
+opf validate deck.opf.md                     # ... and .opf.md Markdown decks (a plain .md file is never a deck)
+opf edit deck.opf.md --patch changes.json --in-place   # the file stays Markdown
+opf format deck.opf.md --check               # canonical Markdown
+opf render deck.opf.md --out slides
 opf edit deck.opf.json --patch changes.json --output deck.opf.yaml   # or --format yaml
-opf validate - --input-format yaml < deck.txt
+opf validate - --input-format yaml < deck.txt     # json (default), yaml or markdown (md)
 ```
 
 - `from-md` and `to-md` follow the Markdown dialect (YAML front matter, `---` between slides, `#` title, lists, tables, `chart`, `metric` and `timeline` fences, speaker notes): see [Markdown and outlines](markdown.md). `from-md --format yaml` or a `.yaml` output writes the deck as YAML.
 - `from-yaml` and `to-yaml` read and write a deck as JSON-compatible YAML 1.2, with canonical key order and an optional `# yaml-language-server` line for editor validation: see [OPF as YAML](yaml.md). A file ending `.yaml` or `.yml` is read as YAML by every command; stdin and other names are JSON unless `--input-format yaml` is given. Commands that write a deck write YAML for an output ending `.yaml`/`.yml` or with `--format yaml`. A YAML syntax error exits 2 with the line and column (`opf validate` reports it as a `yaml/<rule>` finding and exits 1); commands that rewrite a YAML file do not preserve its comments and say so on stderr.
+- A file ending `.opf.md` is read as a Markdown deck by every command, and `--input-format markdown` (or `md`) reads stdin and other names that way. A command that writes a deck writes Markdown for an output ending `.opf.md` or with `--format markdown`, and otherwise the format it read; `opf format deck.opf.md` canonicalizes it. A Markdown syntax error exits 2 with `line:column` (`opf validate` reports it as a `markdown/<rule>` finding and exits 1), and a rewrite that has to put content into an `opf-slide`/`opf-block` fence says so on stderr. See [Markdown decks in every command](markdown.md#markdown-decks-in-every-command).
 - All of them print JSON reports (on stderr when stdout carries the document) and use the exit codes below: 0 success, 1 invalid content, an output conflict or a finding at or above `--fail-on`, 2 usage, a read error or I/O.
 
 ## Diagnostics and exit codes

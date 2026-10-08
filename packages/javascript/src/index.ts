@@ -144,6 +144,9 @@ export { format, OPFFormatError } from './format.js';
 export type { FormatOptions } from './format.js';
 export { fromMarkdown, toMarkdown, OPFMarkdownError } from './markdown.js';
 export type { FromMarkdownOptions, FromMarkdownResult, ToMarkdownOptions, ToMarkdownResult } from './markdown.js';
+// RR-60: one reader and one writer for a deck in JSON, YAML or Markdown, chosen by option or file name.
+export { readDeck, writeDeck, deckFormatOf, DECK_FORMATS } from './deck.js';
+export type { DeckFormat, ReadDeckOptions, ReadDeckResult, WriteDeckOptions } from './deck.js';
 
 
 export { parseTabularData, importData, OPFDataImportError } from './data.js';
