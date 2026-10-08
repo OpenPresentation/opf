@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.14.0",
+  "version": "0.15.0-dev.0",
   "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; the pinned default catalog ships as the opt-in @openpresentation/opf/catalog.",
   "license": "MIT",
   "author": "Open Presentation",
