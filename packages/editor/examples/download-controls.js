@@ -120,6 +120,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
         pdfMode: format === 'pdf' ? value('download-pdf-mode') : undefined,
         scale: Number($('#download-scale').value),
         fonts, convert,
+        catalogs: editor.catalogs,
         signal: controller.signal,
         onProgress: ({ stage, done, total, message }) => {
           if (id !== token) return;

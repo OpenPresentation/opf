@@ -46,6 +46,8 @@ export interface ExportOptions {
   scale?: number;
   /** The options the host draws its preview with (`catalogs`, `date`, ...); the fonts go in `fonts`. */
   renderOptions?: RenderSvgOptions;
+  /** Host catalogs (merged with `renderOptions.catalogs`). The deck is embedded first (core `embed`), like a saved file. */
+  catalogs?: readonly import("@openpresentation/opf").Catalog[];
   /** The renderer's fonts handle (`loadFonts()`): it measures the text, loads the faces the deck needs before anything is drawn, and its registry's faces are what gets embedded. */
   fonts?: EditorFonts;
   /** Faces to embed instead of the registry's. */

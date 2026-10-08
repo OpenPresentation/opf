@@ -6,6 +6,7 @@ import { schemas, validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { resolveSlideContext } from "@openpresentation/opf";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import { switchDimension } from "../dist/switches.js";
 import {
@@ -35,14 +36,15 @@ const deck = () => ({
     { id: "data", title: "Data", blocks: [{ chart: { type: "column", data: { columns: ["Q", "V"], rows: [["Q1", 12], ["Q2", 18]] } } }, { text: "Supporting text" }] },
   ],
 });
-const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
-const svg = (presentation, slideIndex = 0) => renderSlideSvg(presentation, slideIndex);
+const catalogs = [defaultCatalog];
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs });
+const svg = (presentation, slideIndex = 0) => renderSlideSvg(presentation, slideIndex, { catalogs });
 
 // The descriptor list is the documented set, and every enum matches the installed schema.
 {
   assert.deepEqual(
     DESIGN_OPTIONS.map((option) => option.id),
-    ["titleAlignment", "contentAlignment", "contentDirection", "chartPrimary", "listBullet", "contentBox", "accentFont", "logo", "organizationLogo", "watermark", "slideImage"],
+    ["titleAlignment", "contentAlignment", "contentDirection", "chartPrimary", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "organizationLogo", "watermark"],
   );
   const design = schemas.presentation.$defs.Design.properties;
   for (const option of DESIGN_OPTIONS.filter((entry) => entry.type === "enum")) assert.deepEqual([...option.values], design[option.id].enum, `${option.id} values follow the schema`);
@@ -61,7 +63,7 @@ const cases = [
   { option: "logo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/design/logo", value: "asset:logo" } },
   { option: "organizationLogo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/organization/logo", value: "asset:logo" } },
   { option: "watermark", value: { src: "asset:mark", opacity: 0.1 }, slide: 1, patch: { op: "add", path: "/design/watermark", value: { src: "asset:mark", opacity: 0.1 } }, preview: true },
-  { option: "slideImage", value: { src: "asset:photo", position: "right" }, slide: 0, patch: { op: "add", path: "/design/slideImage", value: { src: "asset:photo", position: "right" } } },
+  { option: "imageFit", value: "contain", slide: 2, patch: { op: "add", path: "/design/imageFit", value: "contain" } },
   // listBullet "image" needs a logo to draw; the fixture sets one first.
   { option: "listBullet", value: "image", slide: 1, setup: (editor) => setDesignOption(editor, "logo", "asset:logo"), patch: { op: "add", path: "/design/listBullet", value: "image" }, preview: true },
 ];
@@ -92,7 +94,7 @@ for (const entry of cases) {
   // Preview and export follow the document.
   const switched = editor.presentation;
   if (entry.preview) assert.notEqual(svg(switched, entry.slide), before, `${entry.option}: the preview changes`);
-  const bytes = await pptx.toPptx(structuredClone(switched), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(switched), { strictAssets: true, catalogs });
   assert.ok(bytes.byteLength > 0, `${entry.option}: exports after the change`);
   // Undo and redo.
   assert.deepEqual(editor.undo().presentation, original, `${entry.option} undo`);
@@ -108,13 +110,15 @@ for (const entry of cases) {
   assert.equal(read.scope, "deck");
 }
 
-// A slide image on a slide is drawn by the renderer (design.slideImage).
+// OPF 0.15: the default image fit of a slide is drawn by the renderer; the slide image and image fill are gone.
 {
-  const editor = session();
-  const before = svg(editor.presentation, 0);
-  setDesignOption(editor, "slideImage", { src: "asset:photo", position: "right", size: 0.4 }, { slideIndex: 0 });
-  assert.notEqual(svg(editor.presentation, 0), before, "slideImage: the preview changes");
-  assert.deepEqual(editor.get("slides.0.design.slideImage"), { src: "asset:photo", position: "right", size: 0.4 });
+  const presentation = deck();
+  presentation.slides[2].blocks[1] = { image: "asset:photo" };
+  const editor = session(presentation);
+  const before = svg(editor.presentation, 2);
+  setDesignOption(editor, "imageFit", "contain", { slideIndex: 2 });
+  assert.equal(editor.get("slides.2.design.imageFit"), "contain");
+  assert.notEqual(svg(editor.presentation, 2), before, "imageFit: the preview changes");
 }
 
 // Slide scope writes the slide, never the deck; null removes it so the deck value shows again.
@@ -154,7 +158,8 @@ for (const entry of cases) {
     ["accentFont", "  ", "invalid-design-value"],
     ["watermark", { src: "asset:mark", opacity: 2 }, "invalid-design-value"],
     ["watermark", { src: "asset:mark", opacity: -1 }, "invalid-design-value"],
-    ["slideImage", { position: "diagonal" }, "invalid-design-value"],
+    ["imageFit", "crop", "invalid-design-value"],
+    ["slideImage", "asset:photo", "unknown-design-option"],
     ["logo", 4, "invalid-design-value"],
     ["nope", "x", "unknown-design-option"],
   ];
@@ -175,9 +180,9 @@ for (const entry of cases) {
     // The accent font draws the cover tag.
     const editor = session({ ...deck(), slides: [{ id: "cover", title: "Quarterly review", tag: "New", subtitle: "Design options" }] });
     setDesignOption(editor, "accentFont", "Georgia");
-    const fonts = resolveSlideContext(editor.presentation, 0).options.fontFamilies;
+    const fonts = resolveSlideContext(editor.presentation, 0, { catalogs }).options.fontFamilies;
     assert.equal(fonts.accent, "Georgia");
-    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
     const result = pptx.checkTypefaces(bytes, { families: Object.values(fonts), monospace: [fonts.code] });
     assert.deepEqual(result.violations, [], "the export names only the chosen fonts");
     assert.ok(result.fontsUsed.includes("Georgia"), "the export uses the accent font");
@@ -209,14 +214,6 @@ for (const entry of cases) {
   assert.equal(editor.get("slides.1.design.watermark"), false, "a slide can suppress the inherited watermark");
   setDesignOption(editor, "watermark", null);
   assert.equal(editor.get("design.watermark"), undefined);
-  setDesignOption(editor, "slideImage", { src: "asset:photo" });
-  assert.deepEqual(editor.get("design.slideImage"), { src: "asset:photo", position: "background" }, "position is required, so it defaults to background");
-  setDesignOption(editor, "slideImage", { position: "left", size: 0.4, shape: "circle", inset: true });
-  assert.deepEqual(editor.get("design.slideImage"), { src: "asset:photo", position: "left", size: 0.4, shape: "circle", inset: true });
-  setDesignOption(editor, "slideImage", { size: null, shape: null });
-  assert.deepEqual(editor.get("design.slideImage"), { src: "asset:photo", position: "left", inset: true });
-  setDesignOption(editor, "slideImage", null);
-  assert.equal(editor.get("design.slideImage"), undefined);
 }
 
 // Logo variants: a lone default is a bare source; more variants make a LogoSet; clearing collapses.
@@ -238,7 +235,7 @@ for (const entry of cases) {
   // Variant switching resolves by background: a light variant is chosen for a dark background.
   setLogoVariant(editor, "default", "asset:logo");
   setLogoVariant(editor, "light", "asset:mark");
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
   assert.ok(bytes.byteLength > 0);
 }
 
@@ -271,7 +268,7 @@ for (const entry of cases) {
   editor.set("slides.1.design", { footer: false });
   setHeaderFooterZone(editor, "footer", "left", { text: "Only here" }, { slideIndex: 1 });
   assert.deepEqual(editor.get("slides.1.design.footer"), { left: { text: "Only here" } });
-  const export_ = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const export_ = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
   assert.ok(export_.byteLength > 0);
   // Picture bullets without a logo are reported too.
   const bare = session();
@@ -362,7 +359,7 @@ for (const entry of cases) {
   setHeaderFooterZone(parts, "footer", "right", { slideNumber: true, slideNumberFormat: "Page {current} of {total}" });
   const drawn = svg(parts.presentation, 1);
   assert.ok(drawn.includes("Acme Corp") && drawn.includes("Confidential") && /Page 2 of 3/.test(drawn), "the zone parts draw");
-  assert.ok((await pptx.toPptx(structuredClone(parts.presentation), { strictAssets: true })).byteLength > 0);
+  assert.ok((await pptx.toPptx(structuredClone(parts.presentation), { strictAssets: true, catalogs })).byteLength > 0);
 }
 
 // Undo and redo through a sequence keep every step separate.

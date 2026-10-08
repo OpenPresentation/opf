@@ -34,7 +34,7 @@ const deck = () => ({
     { id: "blocks", title: "Blocks", notes: "Say hi", blocks: [{ id: "a", text: "A" }, { id: "b", text: "B" }, { id: "c", items: ["C"] }, { id: "d", text: "D" }] },
     { id: "regions", title: "Regions", left: { text: "Left" }, right: { items: ["Right"] } },
     { id: "photo", title: "Photo", blocks: [{ image: { src: "asset:photo", alt: "A pixel" } }, { text: "Body" }] },
-    { id: "design", title: "Design", text: "Text", design: { slideImage: { src: "asset:photo", position: "left" } } },
+    { id: "design", title: "Design", text: "Text", design: { background: { type: "image", src: "asset:photo", alt: "Harbour", fit: "contain", overlay: { color: "dark1", opacity: 0.4 } } } },
     { id: "long", title: "Long", blocks: [{ id: "essay", text: long }, { items: Array.from({ length: 50 }, (_, index) => ({ text: `Point ${index}`, description: "Detail." })) }] },
     { id: "last", title: "Last", text: "End" },
   ],
@@ -124,28 +124,26 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
 {
   const editor = session();
   const original = editor.presentation;
-  const promoted = moveImageToDesign(editor, "slides.3.blocks.0", "slideImage", { position: "right" });
-  assert.deepEqual(editor.get("slides.3.design.slideImage"), { src: "asset:photo", position: "right", alt: "A pixel" });
+  // OPF 0.15: a background keeps the block's alt text (and fit, focus, opacity, overlay); placing an image beside the content is its placement, not a move.
+  const promoted = moveImageToDesign(editor, "slides.3.blocks.0", "background");
+  assert.deepEqual(editor.get("slides.3.design.background"), { type: "image", src: "asset:photo", alt: "A pixel" });
   assert.deepEqual(editor.get("slides.3.blocks"), [{ text: "Body" }]);
   assert.equal(promoted.lossless, true);
   assert.equal(editor.snapshot().undoDepth, 1);
-  const demoted = moveImageToContent(editor, 3, "slideImage");
+  const demoted = moveImageToContent(editor, 3, "background");
   assert.deepEqual(editor.get("slides.3.blocks.1"), { image: { src: "asset:photo", alt: "A pixel" } });
-  assert.deepEqual(demoted.loss, ["image position and framing"]);
+  assert.equal(demoted.lossless, true);
   assert.equal(editor.get("slides.3.design"), undefined, "an emptied design object is removed");
-  undoAll(editor, original);
-  const background = moveImageToDesign(editor, "slides.3.blocks.0", "background");
-  assert.deepEqual(editor.get("slides.3.design.background"), { type: "image", image: { src: "asset:photo", fit: "cover" } });
-  assert.deepEqual(background.loss, ["image alt text"]);
   undoAll(editor, original);
   const watermark = moveImageToDesign(editor, "slides.3.blocks.0", "watermark", { opacity: 0.3 });
   assert.deepEqual(editor.get("slides.3.design.watermark"), { src: "asset:photo", opacity: 0.3 });
   assert.equal(watermark.changed, true);
   undoAll(editor, original);
-  const slideImage = moveImageToContent(editor, 4, "slideImage", { index: 0 });
-  assert.deepEqual(editor.get("slides.4.blocks"), [{ image: "asset:photo" }, { text: "Text" }]);
-  assert.equal(slideImage.changed, true);
-  refused(() => moveImageToDesign(editor, "slides.3.blocks.1", "slideImage"), /only an image/);
+  const backdrop = moveImageToContent(editor, 4, "background", { index: 0 });
+  assert.deepEqual(editor.get("slides.4.blocks"), [{ image: { src: "asset:photo", alt: "Harbour" }, fit: "contain", overlay: { color: "dark1", opacity: 0.4 } }, { text: "Text" }]);
+  assert.equal(backdrop.changed, true);
+  refused(() => moveImageToDesign(editor, "slides.3.blocks.1", "background"), /only an image/);
+  refused(() => moveImageToDesign(editor, "slides.3.blocks.0", "slideImage"), /background or watermark/);
   refused(() => moveImageToContent(editor, 3, "background"), /does not set/);
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }

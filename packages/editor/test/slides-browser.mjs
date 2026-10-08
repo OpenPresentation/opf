@@ -29,7 +29,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 
 const source = {
   name: 'Slide management',
-  language: 'english',
+  language: 'en-US',
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [
     { id: 'a', title: 'Alpha', text: 'First words', section: 'Intro' },

@@ -41,19 +41,18 @@ function checkZoneField(key, value) {
   if (key === "dateFormat" && (typeof value !== "string" || !value.trim())) throw bad(`A date format uses tokens such as ${DATE_FORMAT_TOKENS.join(", ")}.`);
 }
 
-const SLIDE_IMAGE_POSITIONS = ["background", "top", "bottom", "left", "right"];
-
 const ENUMS = Object.freeze({
   titleAlignment: ["left", "center", "right"],
   contentAlignment: ["left", "center", "right"],
   contentDirection: ["horizontal", "vertical"],
   chartPrimary: ["none", "top", "bottom", "left", "right"],
   listBullet: ["character", "image"],
+  imageFit: ["cover", "contain", "stretch"],
 });
 
 /**
  * Descriptors for every design option, in the order a panel shows them. `type` is "enum", "boolean",
- * "font", "asset", "logo", "watermark", "slide-image" or "organization-logo"; `scopes` says whether
+ * "font", "asset", "logo", "watermark" or "organization-logo"; `scopes` says whether
  * the option applies to the deck, one slide, or both.
  */
 export const DESIGN_OPTIONS = Object.freeze([
@@ -63,11 +62,11 @@ export const DESIGN_OPTIONS = Object.freeze([
   { id: "chartPrimary", label: "Primary chart position", type: "enum", values: ENUMS.chartPrimary, scopes: ["deck", "slide"], path: "design.chartPrimary" },
   { id: "listBullet", label: "List bullets", type: "enum", values: ENUMS.listBullet, scopes: ["deck", "slide"], path: "design.listBullet" },
   { id: "contentBox", label: "Content box", type: "boolean", scopes: ["deck", "slide"], path: "design.contentBox" },
+  { id: "imageFit", label: "Image fit", type: "enum", values: ENUMS.imageFit, scopes: ["deck", "slide"], path: "design.imageFit" },
   { id: "accentFont", label: "Accent font", type: "font", scopes: ["deck", "slide"], path: "design.fontScheme.accent" },
   { id: "logo", label: "Logo", type: "logo", scopes: ["deck", "slide"], path: "design.logo" },
   { id: "organizationLogo", label: "Organization logo", type: "organization-logo", scopes: ["deck"], path: "organization.logo" },
   { id: "watermark", label: "Watermark", type: "watermark", scopes: ["deck", "slide"], path: "design.watermark" },
-  { id: "slideImage", label: "Slide image", type: "slide-image", scopes: ["deck", "slide"], path: "design.slideImage" },
 ]);
 const BY_ID = Object.fromEntries(DESIGN_OPTIONS.map((option) => [option.id, option]));
 
@@ -173,22 +172,6 @@ function mergedWatermark(existing, value) {
   return merged;
 }
 
-function mergedSlideImage(existing, value) {
-  if (value === null) return null;
-  if (typeof value === "string") return value;
-  if (!isObject(value)) throw fail("invalid-design-value", "A slide image is an image source or an object with a position.", { value });
-  const base = typeof existing === "string" ? { src: existing } : isObject(existing) ? (existing.position ? { ...existing } : { src: existing.src, ...(existing.alt ? { alt: existing.alt } : {}) }) : {};
-  const merged = { ...base };
-  for (const [key, entry] of Object.entries(value)) {
-    if (entry === null || entry === undefined) delete merged[key];
-    else merged[key] = entry;
-  }
-  if (merged.src === undefined) delete merged.src;
-  if (merged.position === undefined) merged.position = "background";
-  if (!SLIDE_IMAGE_POSITIONS.includes(merged.position)) throw fail("invalid-design-value", `Slide image position is one of ${SLIDE_IMAGE_POSITIONS.join(", ")}.`, { value });
-  return merged;
-}
-
 function fontSchemeWithAccent(presentation, base, family) {
   // The slide's own font scheme, else the deck's: an object form is kept with its overrides.
   const own = ownDesign(presentation, base).fontScheme;
@@ -223,8 +206,8 @@ function collapseLogo(set) {
 
 /**
  * Compute the patch that sets one design option, without touching any session. `value === null`
- * removes the option at that scope so it is inherited again. Object-valued options (`watermark`,
- * `slideImage`) merge the fields you pass into the existing object; a `null` field removes it.
+ * removes the option at that scope so it is inherited again. The object-valued `watermark` merges the
+ * fields you pass into the existing object; a `null` field removes it.
  * Options: `slideIndex` (one slide instead of the deck), `clearSlideOverrides` (deck scope: also
  * remove slide-level values that hide it) and `index` (organizationLogo with several
  * organizations).
@@ -261,12 +244,9 @@ export function prepareDesignOption(presentation, option, value, options = {}) {
     } else if (descriptor.type === "logo") {
       if (value !== null && typeof value !== "string" && !isObject(value)) throw fail("invalid-design-value", "A logo is an image source, an asset object or a set of logo variants.", { option });
       entries = { logo: value };
-    } else if (descriptor.type === "watermark") {
+    } else {
       const existing = ownDesign(presentation, base).watermark;
       entries = { watermark: mergedWatermark(existing, value) };
-    } else {
-      const existing = ownDesign(presentation, base).slideImage;
-      entries = { slideImage: mergedSlideImage(existing, value) };
     }
     keys = Object.keys(entries);
     patches = designPatches(presentation, base, entries);

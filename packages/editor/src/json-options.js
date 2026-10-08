@@ -1,12 +1,23 @@
-import { catalogKinds, catalogSchemaNames, schemas, validateCatalogRecord } from "@openpresentation/opf";
 import { checkFormat, firstErrorMessage } from "./checks.js";
-import { getCatalogOptions } from "./index.js";
+import { listCatalogRecords } from "./catalogs.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { applyEdits, findNodeAtLocation, findNodeAtOffset, getNodePath, modify, parseTree } from "jsonc-parser";
 import { populateLayoutPlaceholders } from "./layout-placeholders.js";
-function catalogFor(description) {
-    return catalogKinds.find(kind => description.includes(`catalogs.${kind}`)
-        || new RegExp(`\\b${kind}['’]? catalog`).test(description));
+// The catalog kind a field references (OPF 0.15: every content kind is `id` or `name:id`), read from where the field sits.
+const ROOT_REFERENCES = { narrative: "narratives", audience: "audiences", purpose: "purposes", tone: "tones" };
+const DESIGN_REFERENCES = { theme: "themes", colorScheme: "colorSchemes", fontScheme: "fontSchemes" };
+function catalogAtPath(path) {
+    const parts = path.map(String);
+    // A reference's object form names its record with `id`; an audience array's entries are references too.
+    const field = parts.at(-1) === "id" ? parts.slice(0, -1) : parts;
+    const tail = /^\d+$/.test(field.at(-1) ?? "") && field.at(-2) === "audience" ? field.slice(0, -1) : field;
+    const key = tail.at(-1);
+    if (tail.length === 3 && tail[0] === "slides" && key === "layout") return "layouts";
+    if (tail.length === 1 && ROOT_REFERENCES[key]) return ROOT_REFERENCES[key];
+    if (DESIGN_REFERENCES[key] && ((tail.length === 2 && tail[0] === "design") || (tail.length === 4 && tail[0] === "slides" && tail[2] === "design"))) return DESIGN_REFERENCES[key];
+    // Inside an embedded record: a theme's colour or font scheme.
+    if (tail.length === 5 && tail[0] === "catalogs" && tail[2] === "themes" && (key === "colorScheme" || key === "fontScheme")) return DESIGN_REFERENCES[key];
+    return undefined;
 }
 // Compare declared placeholders, including multiplicity. This describes a layout
 // contract, not a claim that arbitrary slide content will render without overflow.
@@ -28,9 +39,8 @@ function placeholderSummary(types) {
     }).join(" + ");
 }
 const sourceDetails = {
-    "Built-in catalog": ["Standard OPF", "Included with OPF and available offline."],
-    "Loaded catalog": ["Provided by app", "Additional records supplied to the preview by this app; these are not fetched from a URL."],
-    "Document catalog": ["In this document", "Defined in this document’s catalogs. Takes precedence over app and standard records with the same ID."],
+    "Loaded catalog": ["Provided by app", "Records from a catalog this app registered; nothing is fetched from a URL. Saving embeds the record in the document."],
+    "Document catalog": ["In this document", "Embedded in this document’s catalogs. Takes precedence over the app’s records with the same reference."],
     "Current value": ["Custom value", "The current value is not in the available catalogs."],
     "Schema": ["OPF option", "Allowed by the OPF schema."],
 };
@@ -64,7 +74,7 @@ function describeOptions(choices, records, current, catalog) {
 }
 // The installed schema identifies fields; a document field merely named "layout"
 // inside arbitrary metadata is not mistaken for an OPF layout reference.
-export function getJsonFieldContext(source, position, loadedCatalogs = {}) {
+export function getJsonFieldContext(source, position, loadedCatalogs = []) {
     let presentation;
     try {
         presentation = JSON.parse(source);
@@ -87,42 +97,21 @@ export function getJsonFieldContext(source, position, loadedCatalogs = {}) {
         return null;
     const schema = schemaAtPath(presentation, path.map(String));
     const variants = schemaVariants(schema);
-    const description = String(schema.description ?? "");
-    let catalog = catalogFor(description);
-    // Audience arrays inherit the catalog context from the array property.
-    if (!catalog && typeof path.at(-1) === "number")
-        catalog = catalogFor(String(schemaAtPath(presentation, path.slice(0, -1).map(String)).description ?? ""));
+    const catalog = catalogAtPath(path);
     const options = new Map();
     const records = new Map();
-    let unloadedSource = false;
+    // A document group whose source no registered catalog matches: its records beyond the embedded ones are not available here.
+    const registered = new Set((Array.isArray(loadedCatalogs) ? loadedCatalogs : []).map(entry => entry?.source));
+    const unloadedSource = Boolean(catalog) && Object.entries(presentation.catalogs ?? {}).some(([name, group]) => name !== "custom" && group && typeof group === "object" && typeof group.source === "string" && !registered.has(group.source));
     if (catalog && typeof node.value === "string") {
-        const entries = presentation.catalogs;
-        const local = entries?.[catalog];
-        unloadedSource = Boolean(local?.source);
-        for (const option of getCatalogOptions(catalog)) {
+        const hostCatalogs = Array.isArray(loadedCatalogs) ? loadedCatalogs : [];
+        // A draft whose own catalogs are malformed still offers the host's records; a malformed host list offers nothing.
+        const attempt = (document) => { try { return listCatalogRecords(document, catalog, { catalogs: hostCatalogs }); } catch { return undefined; } };
+        const available = attempt(presentation) ?? attempt({ ...presentation, catalogs: undefined }) ?? [];
+        for (const option of available) {
             records.set(option.id, option.record);
-            options.set(option.id, { value: option.id, label: option.label, description: typeof option.record.description === "string" ? option.record.description : undefined,
-                source: "Built-in catalog" });
-        }
-        for (const { value, source } of [...(Array.isArray(loadedCatalogs?.[catalog]) ? loadedCatalogs[catalog] : []).map(value => ({ value, source: "Loaded catalog" })),
-            ...(Array.isArray(local?.records) ? local.records : []).map(value => ({ value, source: "Document catalog" }))]) {
-            if (!value || typeof value !== "object")
-                continue;
-            const record = value;
-            if (typeof record.id !== "string")
-                continue;
-            // Inline records may omit the standalone document's $schema marker.
-            // Supply it only for validation; never change the authored record.
-            const schemaId = schemas[catalogSchemaNames[catalog]].$id;
-            if (!validateCatalogRecord(catalog, { $schema: schemaId, ...record }).valid) {
-                options.delete(record.id);
-                records.delete(record.id);
-                continue;
-            }
-            records.set(record.id, record);
-            options.set(record.id, { value: record.id, label: typeof record.name === "string" ? record.name : record.id,
-                description: typeof record.description === "string" ? record.description : undefined,
-                source });
+            options.set(option.id, { value: option.id, label: option.label, description: option.description,
+                source: option.origin === "document" ? "Document catalog" : "Loaded catalog" });
         }
     }
     else {

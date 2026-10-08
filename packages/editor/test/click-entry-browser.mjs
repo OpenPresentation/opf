@@ -12,11 +12,12 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
+  import { defaultCatalog } from '@openpresentation/opf/catalog';
   window.mountClickEntry = async ({deck, faces, options = {}}) => {
     window.cv?.destroy(); window.fonts?.dispose();
     window.events = {selects: [], errors: [], commits: [], cancels: []};
     window.fonts = await loadFonts({ faces: faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });
-    window.editor = createEditorSession(deck, {rejectInvalid: true});
+    window.editor = createEditorSession(deck, {rejectInvalid: true, catalogs: [defaultCatalog]});
     window.cv = createCanvasEditor(document.querySelector('#canvas'), {editor, fonts, ...options,
       onSelect: (event) => events.selects.push(event.path), onError: (error) => events.errors.push(error.message),
       onCommit: (event) => events.commits.push(event.path), onCancel: (event) => events.cancels.push(event.path)});

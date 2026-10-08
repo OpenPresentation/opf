@@ -26,7 +26,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 
 const source = {
   name: 'Data grid',
-  language: 'english',
+  language: 'en-US',
   narrative: 'problem-solution',
   tone: 'formal',
   audience: ['executive'],

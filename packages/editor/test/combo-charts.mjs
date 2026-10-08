@@ -3,6 +3,7 @@
 // validated, undoable patch; switching to another type removes the combo-only fields. The preview and the PPTX export draw
 // the edited chart.
 import assert from "node:assert/strict";
+import { catalogDisplay } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 
 // `chart-option-adapted` (layout) and `chart-mapping-adapted` (content) are what core says when a combo option or mapping is dropped; `only: ["format"]` never reports them.
@@ -21,7 +22,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
 
 // 1. The picker offers combo for two or more series, not for one.
 {
-  const ids = (columns) => compatibleChartTypes({ slides: [{ title: "x", blocks: [{ chart: { type: "column", data: { columns, rows: [["Q1", ...columns.slice(1).map(() => 1)]] } } }] }] }, { slideIndex: 0 }).map((entry) => entry.id);
+  const ids = (columns) => compatibleChartTypes({ slides: [{ title: "x", blocks: [{ chart: { type: "column", data: { columns, rows: [["Q1", ...columns.slice(1).map(() => 1)]] } } }] }] }, { slideIndex: 0, vocabularies: catalogDisplay }).map((entry) => entry.id);
   assert.ok(ids(["Quarter", "Revenue", "Margin"]).includes("combo"), "two series can be a combo chart");
   assert.ok(ids(["Quarter", "A", "B", "C"]).includes("combo"), "three series too");
   assert.ok(!ids(["Quarter", "Revenue"]).includes("combo"), "one series cannot");

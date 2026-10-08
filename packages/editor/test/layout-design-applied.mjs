@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import {createEditorSession} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 
-const record = {$schema: 'https://openpresentation.org/schema/opf-layout/v1', id: 'centered', name: 'Centered', design: {titleAlignment: 'center', contentAlignment: 'right', contentBox: true}, placeholders: [{type: 'title'}, {type: 'text'}]};
-const document = {design: {fontScheme: 'roboto'}, catalogs: {layouts: {records: [record]}}, slides: [{layout: 'centered', title: 'Heading', text: 'Body'}]};
+const record = {name: 'Centered', design: {titleAlignment: 'center', contentAlignment: 'right', contentBox: true}, placeholders: [{type: 'title'}, {type: 'text'}]};
+const document = {design: {fontScheme: {major: 'Roboto', minor: 'Roboto'}}, catalogs: {custom: {layouts: {centered: record}}}, slides: [{layout: 'centered', title: 'Heading', text: 'Body'}]};
 const alignment = (editor, field) => editor.composeSlide(0).items.find(item => item.field === field).alignment;
 const frames = editor => editor.composeSlide(0).items.filter(item => item.frameBox).length;
 

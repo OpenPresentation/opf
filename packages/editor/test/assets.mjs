@@ -1,6 +1,7 @@
 // RR-06 gaps: image upload. A local file becomes an `assets` entry (or goes to the host's onAddAsset)
 // and is used by a logo, watermark, slide image, background or header/footer zone in one undo step.
 import assert from "node:assert/strict";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
@@ -75,8 +76,8 @@ const uploads = [
   { name: "logo variant", build: (ref, doc) => prepareLogoVariant(doc, "light", ref), check: (doc, ref) => assert.equal(doc.design.logo.light, ref) },
   { name: "organization logo", build: (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref), check: (doc, ref) => assert.equal(doc.organization.logo, ref) },
   { name: "watermark", build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }), check: (doc, ref) => assert.equal(doc.design.watermark, ref) },
-  { name: "slide image", build: (ref, doc) => prepareDesignOption(doc, "slideImage", { src: ref }, { slideIndex: 0 }), check: (doc, ref) => assert.equal(doc.slides[0].design.slideImage.src, ref) },
-  { name: "background", build: (ref, doc) => prepareBackground(doc, { type: "image", image: { src: ref, fit: "cover" } }), check: (doc, ref) => assert.equal(doc.design.background.image.src, ref) },
+  { name: "background shorthand", build: (ref, doc) => prepareBackground(doc, ref, { slideIndex: 0 }), check: (doc, ref) => assert.equal(doc.slides[0].design.background, ref) },
+  { name: "background", build: (ref, doc) => prepareBackground(doc, { type: "image", src: ref, fit: "contain", alt: "Backdrop" }), check: (doc, ref) => assert.equal(doc.design.background.src, ref) },
   { name: "footer image", build: (ref, doc) => prepareHeaderFooterZone(doc, "footer", "right", { image: ref }), check: (doc, ref) => assert.equal(doc.design.footer.right.image, ref) },
 ];
 for (const [index, entry] of uploads.entries()) {
@@ -97,7 +98,7 @@ for (const [index, entry] of uploads.entries()) {
   assert.equal(editor.snapshot().undoDepth, 1, `${entry.name}: one undo step`);
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, entry.name);
   assert.equal(change.patches[0].path.startsWith("/assets"), true);
-  if (index === 0) assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true })).byteLength > 0, "an uploaded logo exports");
+  if (index === 0) assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] })).byteLength > 0, "an uploaded logo exports");
   editor.undo();
   assert.deepEqual(editor.presentation, before, `${entry.name}: one Undo removes the asset and the use`);
   editor.redo();

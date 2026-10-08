@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 // RR-06 gaps in a real browser, on the built playground: image upload (file to asset, one undo step, alt text, refusals)
-// for the logo (all 12 variants), organization logo, watermark, slide image, background and zone images; every background
+// for the logo (all 12 variants), organization logo, watermark, background and zone images; every background
 // form (gradient with scheme-slot stops, image, all 54 patterns); and every header/footer part per zone with the scope rules.
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.ttf': 'font/ttf' };
@@ -26,7 +26,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=';
 const source = {
   name: 'Design controls',
-  language: 'english',
+  language: 'en-US',
   narrative: 'problem-solution',
   tone: 'formal',
   audience: ['executive'],
@@ -141,12 +141,6 @@ try {
   await field(design, 'Logo variant').selectOption('default');
   await step('upload: organization logo', () => upload(design, 'Upload organization logo (whole presentation) file', 'org.png', png, 'image/png'), current => current.organization.logo === 'asset:org');
   await step('upload: watermark', () => upload(design, 'Upload watermark file', 'wm.png', png, 'image/png'), current => current.design.watermark === 'asset:wm');
-  await field(design, 'Position').selectOption('right');
-  await waitDoc(current => current.design.slideImage?.position === 'right', 'slide image position');
-  await step('upload: slide image', () => upload(design, 'Upload slide image file', 'hero.jpg', jpeg, 'image/jpeg'), current => current.design.slideImage?.src === 'asset:hero' && current.design.slideImage.position === 'right');
-  await button('Undo').click();
-  await waitDoc(current => current.design.slideImage === undefined, 'slide image position undone');
-  await settle();
   await step('upload: footer image', () => upload(design, 'Upload image file', 'badge.svg', svgFile, 'image/svg+xml'), current => current.design.footer?.center?.image === 'asset:badge');
 
   // Alt text: typed before the upload it lands on the new asset; afterwards it edits that asset.
@@ -258,8 +252,8 @@ try {
   await waitDoc(current => current.tone === 'formal', 'tone undone');
   await settle();
   await step('background: solid scheme color with opacity', async () => { await bgType.selectOption('solid'); await field(design, 'Color').fill('accent2'); await field(design, 'Opacity (0 to 1, optional)').fill('0.5'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"solid","color":"accent2","opacity":0.5}', { preview: true });
-  await step('background: image with fit tile', async () => { await bgType.selectOption('image'); await field(design, 'Background image source').fill('asset:photo'); await field(design, 'Fit').first().selectOption('tile'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"image","image":{"src":"asset:photo","fit":"tile"}}');
-  await step('background: image from an uploaded file', async () => { await bgType.selectOption('image'); await field(design, 'Fit').first().selectOption('contain'); await upload(design, 'Upload background image file', 'bg.png', png, 'image/png'); }, current => JSON.stringify(current.design.background) === '{"type":"image","image":{"src":"asset:bg","fit":"contain"}}' && Boolean(current.assets.bg));
+  await step('background: image with fit tile', async () => { await bgType.selectOption('image'); await field(design, 'Background image source').fill('asset:photo'); await field(design, 'Fit').first().selectOption('tile'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"image","src":"asset:photo","fit":"tile"}');
+  await step('background: image from an uploaded file', async () => { await bgType.selectOption('image'); await field(design, 'Fit').first().selectOption('contain'); await upload(design, 'Upload background image file', 'bg.png', png, 'image/png'); }, current => JSON.stringify(current.design.background) === '{"type":"image","src":"asset:bg","fit":"contain"}' && Boolean(current.assets.bg));
   // Patterns: all 54 presets, grouped; any of them applies.
   {
     await bgType.selectOption('pattern');
@@ -367,7 +361,7 @@ try {
   // --- accessibility ------------------------------------------------------------------------------------
   const unlabeled = await page.evaluate(() => [...document.querySelectorAll('#design-controls select, #design-controls input')].filter(node => !node.labels?.length).map(node => node.id || node.outerHTML.slice(0, 80)));
   assert.deepEqual(unlabeled, [], 'every control, including every file input, is labelled');
-  assert.ok(await page.locator('#design-controls input[type=file]').count() >= 6, 'file inputs exist for logo, organization logo, watermark, slide image, background and zone image');
+  assert.ok(await page.locator('#design-controls input[type=file]').count() >= 5, 'file inputs exist for logo, organization logo, watermark, background and zone image');
   await page.locator('#design-controls input[type=file]:visible').first().focus();
   assert.equal(await page.evaluate(() => document.activeElement.type), 'file');
   mark('every control and file input is labelled; file inputs take keyboard focus');

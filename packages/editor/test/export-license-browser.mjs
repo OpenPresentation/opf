@@ -26,6 +26,7 @@ await build({
     contents: `
 import { exportDeck } from ${JSON.stringify(path.join(repo, 'src/export.js').replace(/\\/g, '/'))};
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 window.run = async ({ faces, licenses = {} }) => {
   const fonts = await loadFonts({ faces: faces.map((face) => ({ ...face, ...(licenses[face.weight] ? { license: licenses[face.weight] } : {}), data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0)) })), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });
   const deck = { name: 'License', design: { fontScheme: 'roboto' }, slides: [{ id: 'a', title: 'Quarterly review', text: 'Revenue grew in every region.' }] };
@@ -33,7 +34,7 @@ window.run = async ({ faces, licenses = {} }) => {
   const real = await import('@openpresentation/opf-render/export-browser');
   const convert = { svgToPng: real.svgToPng, svgToPdf: (svgs, options) => { seen.fontData = (options.fontData ?? []).map((item) => item.family); seen.handle = 'fonts' in options; return real.svgToPdf(svgs, options); } };
   try {
-    const result = await exportDeck(deck, { format: 'pdf', fonts, convert });
+    const result = await exportDeck(deck, { format: 'pdf', fonts, convert, catalogs: [defaultCatalog] });
     return { bytes: Array.from(result.download.bytes), diagnostics: result.diagnostics, fontData: seen.fontData, handlePassed: seen.handle };
   } catch (error) {
     return { error: { code: error.code, message: error.message, cause: error.cause?.message }, fontData: seen.fontData };

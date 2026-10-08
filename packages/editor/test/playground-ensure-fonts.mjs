@@ -42,7 +42,7 @@ const aptosJa = { ...deck({ language: 'ja', design: { theme: 'classic', fontSche
 const twoSlides = { ...aptosJa, name: 'Aptos two slides', slides: [aptosJa.slides[0], { id: 'second', title: 'ギャラリーから開く', text: '第二のスライドも日本語です。' }] };
 const latin = deck({ design: { theme: 'classic', fontScheme: 'roboto' } }, 'Quarterly review', 'Sales grew twelve percent.');
 // A font scheme record carried in the document's own catalog (what a gallery item does), naming a vendored lazy family.
-const barlow = { ...deck({ catalogs: { fontSchemes: { records: [{ $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'barlow-preview', name: 'Barlow', major: 'Barlow', minor: 'Barlow' }] } }, design: { theme: 'classic', fontScheme: 'barlow-preview' } }, 'Barlow headline', 'Body text in Barlow.'), name: 'Barlow' };
+const barlow = { ...deck({ catalogs: { custom: { fontSchemes: { 'barlow-preview': { name: 'Barlow', major: 'Barlow', minor: 'Barlow' } } } }, design: { theme: 'classic', fontScheme: 'barlow-preview' } }, 'Barlow headline', 'Body text in Barlow.'), name: 'Barlow' };
 const arabic = deck({ language: 'ar', design: { theme: 'classic', fontScheme: 'arabic-typesetting' } }, 'مراجعة ربع سنوية.', 'ارتفعت المبيعات بنسبة 12%.');
 const arabicPptx = await toPptx({ ...arabic, name: 'Arabic import' });
 

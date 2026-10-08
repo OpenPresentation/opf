@@ -107,8 +107,8 @@ const deck = () => ({
     { id: "block", title: "Block", blocks: [{ image: { src: "asset:photo", alt: "Block alt" } }, { text: "Beside the image" }] },
     { id: "string", title: "String", image: "asset:plain", text: "Text" },
     { id: "inline", title: "Inline", image: { src: PNG, alt: "inline" }, text: "Text" },
-    { id: "slide-image", title: "Slide image", design: { slideImage: { src: "asset:photo", position: "right", size: 0.4 } }, text: "Text" },
-    { id: "slide-image-asset", title: "Slide image string", design: { slideImage: "asset:plain" }, text: "Text" },
+    { id: "placed", title: "Placed image", blocks: [{ image: "asset:photo", placement: { edge: "right", size: 0.4 } }, { text: "Text" }] },
+    { id: "fitted", title: "Fitted image", blocks: [{ image: "asset:plain", fit: "contain", focus: { x: 0.2, y: 0.8 } }, { text: "Text" }] },
     { id: "svg", title: "Vector", image: "asset:vector", text: "Text" },
     { id: "url", title: "Hosted", image: "https://example.com/p.png", text: "Text" },
   ],
@@ -126,8 +126,9 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const string = describeImage(d, "slides.1.image");
   assert.equal(string.form, "string");
   assert.equal(string.srcPointer, "/slides/1/image");
-  assert.equal(describeImage(d, "slides.3.design.slideImage").assetId, "photo");
-  assert.equal(describeImage(d, "slides.4.design.slideImage").form, "string");
+  assert.equal(describeImage(d, "slides.3.blocks.0.image").assetId, "photo");
+  assert.equal(describeImage(d, "slides.4.blocks.0.image").form, "string");
+  assert.match(describeImage(d, "slides.3.design.slideImage").error, /not a picture/, "OPF 0.15 has no slide image");
   assert.match(describeImage(d, "slides.5.image").error, /vector/i);
   assert.match(describeImage(d, "slides.0.title").error, /not a picture/);
   assert.match(describeImage({ slides: [{ title: "x", image: "asset:gone" }] }, "slides.0.image").error, /missing/);
@@ -184,7 +185,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(prepareRestore(editor.presentation, "slides.0.blocks.0.image").patches.some((patch) => patch.op === "remove"), false);
 }
 
-// Other forms: string image, inline data image, slide image (object and string), no assets map.
+// Other forms: string image, inline data image, a placed and a fitted image block, no assets map.
 {
   const editor = session();
   editor.applyPatch(prepareCrop(editor.presentation, "slides.1.image", cropped()).patches, { rejectInvalid: true });
@@ -194,10 +195,10 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.deepEqual(editor.presentation.slides[2].image, { src: "asset:image-crop", alt: "inline" }, "an inline picture becomes an asset; its alt stays on the image");
   assert.equal(editor.presentation.assets["image-crop"].description, undefined, "no provenance for an inline original");
   assert.equal(prepareRestore(editor.presentation, "slides.2.image"), null);
-  editor.applyPatch(prepareCrop(editor.presentation, "slides.3.design.slideImage", cropped()).patches, { rejectInvalid: true });
-  assert.deepEqual(editor.presentation.slides[3].design.slideImage, { src: "asset:photo-crop", position: "right", size: 0.4 }, "slide image placement is kept");
-  editor.applyPatch(prepareCrop(editor.presentation, "slides.4.design.slideImage", cropped()).patches, { rejectInvalid: true });
-  assert.equal(typeof editor.presentation.slides[4].design.slideImage, "string");
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.3.blocks.0.image", cropped()).patches, { rejectInvalid: true });
+  assert.deepEqual(editor.presentation.slides[3].blocks[0], { image: "asset:photo-crop", placement: { edge: "right", size: 0.4 } }, "the block's placement is kept");
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.4.blocks.0.image", cropped()).patches, { rejectInvalid: true });
+  assert.deepEqual(editor.presentation.slides[4].blocks[0], { image: "asset:plain-crop-2", fit: "contain", focus: { x: 0.2, y: 0.8 } }, "the block's fit and focus are kept");
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(editor.presentation, { only: ["format"] }).findings));
   const bare = createEditorSession({ slides: [{ title: "x", image: { src: PNG } }] }, { rejectInvalid: true });
   bare.applyPatch(prepareCrop(bare.presentation, "slides.0.image", cropped()).patches, { rejectInvalid: true });

@@ -1,4 +1,4 @@
-// Content actions (RR-26): list levels, grouping, regions, images between content and design, and slide
+// Content actions (RR-26): list levels, grouping, regions, images between content and design (background or watermark), and slide
 // split and merge, as editor transactions. The pure transforms live in core (`@openpresentation/opf/convert`);
 // each action here finds its target in the document, calls the transform, turns the result into a guarded patch
 // (`test` of what was read, then `replace`, or per-slide `remove` and `add`), validates the document and, in the
@@ -143,12 +143,12 @@ export function prepareMoveRegion(presentation, slideIndex, from, to, options = 
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => moveRegion(slide, from, to, options), undefined, options.validate !== false);
 }
-/** Move the image block at `blockPath` into the slide's design as `slideImage`, `background` or `watermark`. */
+/** Move the image block at `blockPath` into the slide's design as its `background` or `watermark` (core's `promoteImage`). */
 export function prepareImageToDesign(presentation, blockPath, target, options = {}) {
   const { slideIndex, relative } = slideParts(presentation, blockPath, "an image block");
   return slideAction(presentation, slideIndex, (slide) => promoteImage(slide, asNumbers(relative), target, options), `slides.${slideIndex}`, options.validate !== false);
 }
-/** Move a slide's own `slideImage`, `background` image or `watermark` back into its content as an image block. */
+/** Move a slide's own `background` image or `watermark` back into its content as an image block (core's `demoteImage`). */
 export function prepareImageToContent(presentation, slideIndex, source, options = {}) {
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => demoteImage(slide, source, options), undefined, options.validate !== false);

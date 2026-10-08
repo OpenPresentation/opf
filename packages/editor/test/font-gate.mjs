@@ -57,7 +57,7 @@ assert.deepEqual(fontGate({ pending() { throw new Error("not a document"); }, en
 
 // FF-41: the render options (catalogs) reach the handle on every call, and the signal reaches ensure.
 {
-  const catalogs = { layouts: [{ id: "host-layout" }] };
+  const catalogs = [{ source: "pkg:host", layouts: { "host-layout": { name: "Host layout" } } }];
   const fonts = handle({ pendingFiles: ["p"] });
   const gate = fontGate(fonts);
   gate.pending(deck, { catalogs });

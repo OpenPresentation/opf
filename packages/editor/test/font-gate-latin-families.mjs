@@ -65,7 +65,7 @@ for (const name of ["Aptos", "Aptos Narrow", "Arial", "Calibri", "Garamond", "Se
 const deckFor = (family) => ({
   name: `Latin fixture ${family}`,
   design: { fontScheme: "x-latin-fixture" },
-  catalogs: { fontSchemes: { records: [{ $schema: "https://openpresentation.org/schema/opf-font-scheme/v1", id: "x-latin-fixture", name: family, app: "powerpoint", languageFamily: "latin", languages: [], major: family, minor: family, textSample: "x", type: "sans-serif" }] } },
+  catalogs: { custom: { fontSchemes: { "x-latin-fixture": { name: family, app: "powerpoint", languageFamily: "latin", languages: [], major: family, minor: family, textSample: "x", type: "sans-serif" } } } },
   slides: [{ id: "a", title: "Quarterly review", text: [{ text: "Regular" }, " ", { text: "Bold", bold: true }, " ", { text: "Italic", italic: true }, " ", { text: "BoldItalic", bold: true, italic: true }] }],
 });
 const key = (face) => `${face.family.toLowerCase()}|${face.weight}|${face.italic ? "i" : ""}`;

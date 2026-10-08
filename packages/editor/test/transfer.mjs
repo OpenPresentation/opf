@@ -43,16 +43,10 @@ assert.equal(
 const imported = {
   design: { theme: "minimal", fontScheme: "custom-font" },
   catalogs: {
-    fontSchemes: {
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-          id: "custom-font",
-          name: "Custom",
-          major: "Roboto",
-          minor: "Roboto",
-        },
-      ],
+    custom: {
+      fontSchemes: {
+        "custom-font": { name: "Custom", major: "Roboto", minor: "Roboto" },
+      },
     },
   },
   assets: { logo: "data:image/png;base64,AQ==", alias: "asset:logo" },
@@ -76,20 +70,24 @@ assert.equal(result.presentation.slides[1].image, "asset:logo-2");
 assert.equal(result.presentation.assets.alias, "asset:logo-2");
 assert.equal(result.presentation.assets.logo, source.assets.logo);
 assert.equal(result.presentation.slides[1].text, "asset:logo is literal text");
-assert.equal(result.presentation.slides[1].design.fontScheme, "import-custom-font");
-assert.equal(
-  result.presentation.catalogs.fontSchemes.records[0].id,
-  "import-custom-font",
-);
-const twice = prepareOpfImport(
+// FA-23: core's copySlides copies the record the slide uses under its own id when nothing conflicts (no import-<id> renaming).
+assert.equal(result.presentation.slides[1].design.fontScheme, "custom-font");
+assert.deepEqual(result.presentation.catalogs.custom.fontSchemes["custom-font"], imported.catalogs.custom.fontSchemes["custom-font"]);
+assert.deepEqual(result.renamed, []);
+// The same slides again reuse the identical record.
+const twiceResult = prepareOpfImport(
   result.presentation,
   parseOpfTransfer(JSON.stringify(imported)),
-).presentation;
-assert.ok(
-  twice.catalogs.fontSchemes.records.some(
-    (record) => record.id === "import-custom-font-2",
-  ),
 );
+const twice = twiceResult.presentation;
+assert.deepEqual(Object.keys(twice.catalogs.custom.fontSchemes), ["custom-font"]);
+assert.deepEqual(twiceResult.renamed, []);
+// A different record under the same custom id is renamed <id>-2 and reported.
+const differing = structuredClone(imported);
+differing.catalogs.custom.fontSchemes["custom-font"].major = "Lora";
+const renamed = prepareOpfImport(result.presentation, parseOpfTransfer(JSON.stringify(differing)));
+assert.equal(renamed.presentation.slides[renamed.slideIndex].design.fontScheme, "custom-font-2");
+assert.deepEqual(renamed.renamed.map((entry) => [entry.kind, entry.from, entry.to, entry.reason]), [["fontSchemes", "custom-font", "custom-font-2", "custom-conflict"]]);
 const editor = createEditorSession(source, { rejectInvalid: true });
 editor.applyPatch([{ op: "replace", path: "", value: result.presentation }]);
 editor.undo();
@@ -111,14 +109,18 @@ assert.deepEqual(
   }).presentation,
   imported,
 );
+// OPF 0.15 is a clean spec: the 0.14 catalog shape (`catalogs.<kind>.records`) is not OPF any more.
 assert.throws(() =>
-  prepareOpfImport(
-    source,
-    parseOpfTransfer(
-      '{"catalogs":{"layouts":{"source":"https://example.com/layouts.json"}},"slides":[{"title":"External"}]}',
-    ),
-  ),
+  parseOpfTransfer('{"catalogs":{"fontSchemes":{"records":[]}},"slides":[{"title":"Old shape"}]}'),
 );
+// A pasted deck that names a catalog group by source brings the group along (core copySlides matches groups by source).
+{
+  const named = { catalogs: { acme: { source: "pkg:@acme/opf-catalog", layouts: { hero: { name: "Hero", placeholders: [{ type: "title" }] } } } }, slides: [{ id: "acme", layout: "acme:hero", title: "Acme" }] };
+  const target = { catalogs: { brand: { source: "pkg:@acme/opf-catalog" } }, slides: [{ id: "host", title: "Host" }] };
+  const inserted = prepareOpfImport(target, parseOpfTransfer(JSON.stringify(named)), { mode: "insert", slideIndex: 0 });
+  assert.equal(inserted.presentation.slides[1].layout, "brand:hero", "references are rewritten to the target's name for that source");
+  assert.ok(inserted.presentation.catalogs.brand.layouts.hero);
+}
 const responses = new Map([
   [
     "https://gallery.example/registry.json",

@@ -22,9 +22,9 @@ the current layout plus exact/compatible alternatives; search always covers all
 available layouts. Matching describes declared placeholders, not rendering or
 content-fit guarantees. Unknown placeholder definitions are never assumed to match.
 
-Record resolution remains document > host-supplied > standard for the same ID.
-The stable `source` API values remain `Document catalog`, `Loaded catalog`, and
-`Built-in catalog`; `sourceLabel` and `sourceDescription` provide the clearer UI
-labels `In this document`, `Provided by app`, and `Standard OPF`. External gallery
+Record resolution is document (embedded records) > host-registered catalogs for
+the same reference (OPF 0.15 has no built-in records). The `source` API values are
+`Document catalog` and `Loaded catalog`; `sourceLabel` and `sourceDescription`
+provide the clearer UI labels `In this document` and `Provided by app`. External gallery
 or catalog URLs are not automatically loaded. The website carries the same option
 logic locally until a published editor package can replace its existing adapter.

@@ -56,7 +56,7 @@ try{
  assert.deepEqual(jsonBrowser.errors,[]);assert.deepEqual(jsonBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'JSON verification must not rebuild the installed editor');
  await writeFile(path.join(root,`artifacts/packed-json-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests:[...tests],jsonBrowser,boundary:'JSON control only, from a byte-matched installed candidate and registry dependencies. Full-package acceptance still requires every subsequent gate and a successful overall command exit.'},null,2)+'\n');
- for(const file of ['smoke.mjs','component-smoke.mjs','canvas-fields.mjs','transfer.mjs','schema.mjs','rich-text.mjs','layout.mjs','blocks.mjs','styled-table.mjs','switches.mjs','switches-export.mjs','block-convert.mjs','content-actions.mjs','design-options.mjs','table-options.mjs','data-grid.mjs','switches-ui.mjs','assets.mjs','background-options.mjs']){
+ for(const file of ['smoke.mjs','component-smoke.mjs','canvas-fields.mjs','transfer.mjs','schema.mjs','rich-text.mjs','layout.mjs','blocks.mjs','styled-table.mjs','switches.mjs','switches-export.mjs','block-convert.mjs','content-actions.mjs','design-options.mjs','table-options.mjs','data-grid.mjs','switches-ui.mjs','assets.mjs','background-options.mjs','image-options.mjs','catalogs.mjs']){
   const output=execFileSync(process.execPath,[path.join(fixture,'test',file)],{cwd:consumer,encoding:'utf8'});
   process.stdout.write(output);tests.push({file,fixtureSha256:hash(await readFile(path.join(fixture,'test',file))),output:output.trim()});
  }

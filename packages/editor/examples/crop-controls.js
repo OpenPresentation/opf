@@ -1,15 +1,16 @@
 // RR-25: the playground's picture tools. A selected picture shows "Crop picture" on the canvas itself (src/image-cropper.js);
-// this adds the same tools to the inspector, for the focal point and for a slide image (which has no canvas selection of its own).
+// this adds the same tools to the inspector, for the crop and the focal-point cut. A picture's fit and focus point fields are in the
+// "Selected image" section (OPF 0.15 image blocks).
 import { describeImage } from '../src/image-crop.js';
 
-export function installCropControls({ editor, getCanvas, getSelectedPath, getSlideIndex, status }) {
+export function installCropControls({ editor, getCanvas, getSelectedPath, status }) {
   const section = document.createElement('div');
   section.className = 'inspector-section picture-tools';
   section.id = 'picture-tools';
   section.hidden = true;
   section.innerHTML = '<div class="section-heading"><h2>Picture</h2></div>';
   const buttons = {};
-  for (const [id, label] of [['crop-picture', 'Crop picture'], ['crop-focal', 'Set focal point'], ['crop-slide-image', 'Crop slide image']]) {
+  for (const [id, label] of [['crop-picture', 'Crop picture'], ['crop-focal', 'Set focal point']]) {
     const button = document.createElement('button');
     button.id = id;
     button.type = 'button';
@@ -25,18 +26,15 @@ export function installCropControls({ editor, getCanvas, getSelectedPath, getSli
   section.append(help);
   document.getElementById('selection-controls').after(section);
 
-  const slideImagePath = () => `slides.${getSlideIndex()}.design.slideImage`;
   function targets() {
     const selected = getSelectedPath();
     const picture = selected && !describeImage(editor.presentation, selected).error ? selected : null;
-    const slideImage = !describeImage(editor.presentation, slideImagePath()).error ? slideImagePath() : null;
-    return { picture, slideImage };
+    return { picture };
   }
   function refresh() {
-    const { picture, slideImage } = targets();
+    const { picture } = targets();
     buttons['crop-picture'].hidden = buttons['crop-focal'].hidden = !picture;
-    buttons['crop-slide-image'].hidden = !slideImage;
-    section.hidden = !picture && !slideImage;
+    section.hidden = !picture;
   }
   async function open(path, tool) {
     const canvas = getCanvas();
@@ -46,7 +44,6 @@ export function installCropControls({ editor, getCanvas, getSelectedPath, getSli
   }
   buttons['crop-picture'].addEventListener('click', () => open(targets().picture, 'crop'));
   buttons['crop-focal'].addEventListener('click', () => open(targets().picture, 'focus'));
-  buttons['crop-slide-image'].addEventListener('click', () => open(targets().slideImage, 'crop'));
   editor.subscribe(refresh);
   refresh();
   return { refresh, open };

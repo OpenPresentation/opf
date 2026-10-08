@@ -50,8 +50,8 @@ export function opfCatalogSelect(node, params) {
     node.setAttribute?.("data-opf-catalog-kind", catalogKind);
     if (label) node.setAttribute?.("aria-label", label);
     replaceOptions(node, getCatalogOptions(catalogKind, {
+      editor,
       catalogs: nextParams.catalogs,
-      catalogSources: nextParams.catalogSources,
       presentation: nextParams.presentation ?? editor.presentation
     }));
 
@@ -61,7 +61,6 @@ export function opfCatalogSelect(node, params) {
     };
     const onChange = () => setCatalogId(editor, path, catalogKind, node.value, {
       catalogs: nextParams.catalogs,
-      catalogSources: nextParams.catalogSources,
       presentation: nextParams.presentation,
       source: "svelte-catalog-select"
     });

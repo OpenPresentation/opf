@@ -33,7 +33,7 @@ assert.ok(pkg.exports?.["./svelte"], "Must expose optional Svelte bindings as a 
 assert.ok(pkg.exports?.["./switches"], "Must expose the FF-16 dimension switches as a separate entry point.");
 assert.equal(pkg.exports["./switches"].default, "./dist/switches.js");
 assert.equal(pkg.exports["./switches"].types, "./dist/switches.d.ts");
-for (const [entry, file] of [["./block-convert", "block-convert"], ["./design-options", "design-options"], ["./tables", "table-options"], ["./design-controls", "design-controls"], ["./slides", "slides"], ["./outline", "outline"], ["./slide-manager", "slide-manager"], ["./outline-view", "outline-view"], ["./persistence", "persistence"], ["./persistence-ui", "persistence-ui"], ["./assets", "assets"], ["./backgrounds", "background-options"], ["./data-grid", "data-grid"], ["./chart-data", "chart-data"], ["./grid-text", "grid-text"], ["./content-actions", "content-actions"]]) {
+for (const [entry, file] of [["./block-convert", "block-convert"], ["./design-options", "design-options"], ["./tables", "table-options"], ["./design-controls", "design-controls"], ["./slides", "slides"], ["./outline", "outline"], ["./slide-manager", "slide-manager"], ["./outline-view", "outline-view"], ["./persistence", "persistence"], ["./persistence-ui", "persistence-ui"], ["./assets", "assets"], ["./backgrounds", "background-options"], ["./image-options", "image-options"], ["./data-grid", "data-grid"], ["./chart-data", "chart-data"], ["./grid-text", "grid-text"], ["./content-actions", "content-actions"]]) {
   assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-06).`);
   assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);

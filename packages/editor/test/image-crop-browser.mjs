@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { toPptx } from '@openpresentation/opf-pptx';
 import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { startPlayground } from './support/playground-harness.mjs';
 
 // RR-25 in a real browser, on the built playground: the in-canvas crop tool and the focal point picker. A 400 x 200 picture
@@ -30,7 +31,8 @@ try {
     slides: [
       { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' } }, { text: 'Beside the picture' }] },
       { id: 'root', title: 'Root picture', image: 'asset:photo', text: 'Text beside it' },
-      { id: 'slide-image', title: 'Slide image', design: { slideImage: { src: 'asset:photo', position: 'right', size: 0.45 } }, text: 'Text' },
+      // OPF 0.15: an image block placed along the right edge (FA-22 placement), in place of the 0.14 slide image.
+      { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'right', size: 0.45 } }, { text: 'Text' }] },
     ],
   };
   await app.load(source);
@@ -218,7 +220,7 @@ try {
   await undoCrop().catch(async () => { await page.locator('#undo').click(); await undoCrop(); });
   mark('Restore original returns to the source asset in one undo step');
 
-  // A string image on slide 2 and a slide image from the inspector.
+  // A string image on slide 2 and a placed image block on slide 3.
   await slide(1);
   await openCrop();
   await layer.getByLabel('Aspect ratio').selectOption('3:2');
@@ -227,29 +229,26 @@ try {
   assert.equal(typeof rootCrop.slides[1].image, 'string');
   await undoCrop();
   await slide(2);
-  assert.equal(await page.locator('#crop-slide-image').isVisible(), true, 'the inspector offers the slide image');
-  await page.locator('#crop-slide-image').click();
-  await layer.waitFor({ state: 'visible' });
+  await openCrop();
   await layer.getByLabel('Aspect ratio').selectOption('frame');
   const frameShape = await size();
-  assert.ok(Math.abs(frameShape.width / frameShape.height - 0.45 * 1280 / 720) < 0.05, `the frame shape of the slide image: ${JSON.stringify(frameShape)}`);
+  assert.ok(Math.abs(frameShape.width / frameShape.height - 0.45 * 1280 / 720) < 0.05, `the frame shape of the placed image: ${JSON.stringify(frameShape)}`);
   await page.getByRole('button', { name: 'Apply crop' }).click();
-  const slideCrop = await app.waitDoc((deck) => deck.slides[2].design.slideImage.src === 'asset:photo-crop', 'a slide image is cropped');
-  assert.equal(slideCrop.slides[2].design.slideImage.position, 'right');
-  assert.equal(slideCrop.slides[2].design.slideImage.size, 0.45);
+  const placedCrop = await app.waitDoc((deck) => deck.slides[2].blocks[0].image === 'asset:photo-crop', 'a placed image is cropped');
+  assert.deepEqual(placedCrop.slides[2].blocks[0].placement, { edge: 'right', size: 0.45 });
   await app.settle();
-  mark('a string picture and a slide image crop the same way and keep their placement');
+  mark('a string picture and a placed image block crop the same way and keep their placement');
 
   // Preview and PPTX agree: the exported picture is the cropped asset, placed like the preview draws it.
   const parity = async (deck, slideIndex, label) => {
-    for (const fill of [undefined, 'crop']) {
+    for (const fill of [undefined, 'cover']) {
       const variant = structuredClone(deck);
-      if (fill) variant.design.imageFill = fill;
-      const svg = renderSlideSvg(variant, slideIndex, { trace: true });
-      const tag = svg.match(/<image\b[^>]*data-opf-path="slides\.\d+\.(?:blocks\.0\.)?image"[^>]*>|<image\b[^>]*data-opf-path="slides\.\d+\.design\.slideImage"[^>]*>/)[0];
+      if (fill) variant.design.imageFit = fill;
+      const svg = renderSlideSvg(variant, slideIndex, { trace: true, catalogs: [defaultCatalog] });
+      const tag = svg.match(/<image\b[^>]*data-opf-path="slides\.\d+\.(?:blocks\.0\.)?image"[^>]*>/)[0];
       const attr = (name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))[1];
       const frame = { x: +attr('x'), y: +attr('y'), width: +attr('width'), height: +attr('height') };
-      const bytes = await toPptx(variant, { imageFormat: 'preserve', strictAssets: true });
+      const bytes = await toPptx(variant, { imageFormat: 'preserve', strictAssets: true, catalogs: [defaultCatalog] });
       const zip = await JSZip.loadAsync(bytes);
       const xml = await zip.file(`ppt/slides/slide${slideIndex + 1}.xml`).async('string');
       const pictures = [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map((match) => match[0]);
@@ -262,7 +261,8 @@ try {
       const media = await zip.file(`ppt/media/${target[1] ?? target[2]}`).async('uint8array');
       const view = new DataView(media.buffer, media.byteOffset);
       const dims = { width: view.getUint32(16), height: view.getUint32(20) };
-      const ref = variant.slides[slideIndex].blocks?.[0]?.image?.src ?? variant.slides[slideIndex].image?.src ?? variant.slides[slideIndex].image ?? variant.slides[slideIndex].design.slideImage.src;
+      const block = variant.slides[slideIndex].blocks?.[0]?.image;
+      const ref = block?.src ?? block ?? variant.slides[slideIndex].image?.src ?? variant.slides[slideIndex].image;
       const asset = variant.assets[ref.replace('asset:', '')];
       const expected = await pixels(asset.src, [[0, 0]]);
       assert.deepEqual(dims, { width: expected.width, height: expected.height }, `${label}: the exported media is the cropped asset (${JSON.stringify(dims)})`);
@@ -283,7 +283,7 @@ try {
     }
   };
   const finalDeck = await app.doc();
-  await parity(finalDeck, 2, 'slide image');
+  await parity(finalDeck, 2, 'placed image');
   await undoCrop().catch(() => {});
   // A block picture, cropped to the frame's shape, exports without any srcRect trimming left to do.
   await slide(0);

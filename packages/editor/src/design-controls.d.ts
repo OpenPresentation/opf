@@ -1,7 +1,13 @@
+import type { Catalog } from "@openpresentation/opf";
 import type { EditorSession } from "./index.js";
+import type { SwitchVocabularies } from "./switches.js";
 
-export type DesignControlSection = "look" | "background" | "slide-image" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "table" | "slide-content";
-/** Every section, in panel order. `selection` and `table` follow the host's current selection; `slide-content` (RR-26: blocks and regions, images between content and design) follows the current slide. */
+export type DesignControlSection = "look" | "background" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "image" | "table" | "slide-content" | "catalog";
+/**
+ * Every section, in panel order. `selection`, `image` (the selected image block's fit, focus, treatments and placement) and `table`
+ * follow the host's current selection; `slide-content` (RR-26: blocks and regions, images between content and design) follows the
+ * current slide; `catalog` lists the catalog reference findings and runs the explicit "Update from catalog".
+ */
 export declare const DESIGN_CONTROL_SECTIONS: readonly DesignControlSection[];
 
 export interface DesignControlsOptions {
@@ -14,9 +20,10 @@ export interface DesignControlsOptions {
   sections?: readonly DesignControlSection[];
   /** Initial "Applies to" choice. */
   scope?: "deck" | "slide";
-  /** Caller-loaded catalog records by kind (layouts, font schemes, themes, ...) for options the bundled catalogs do not have. */
-  catalogs?: Record<string, unknown>;
-  catalogSources?: Record<string, unknown>;
+  /** Host catalogs for the pickers, merged after the session's registered ones. */
+  catalogs?: readonly Catalog[];
+  /** Display metadata for the engine vocabularies (languages, chart types, social platforms): `catalogDisplay` from `@openpresentation/opf/catalog`. */
+  vocabularies?: SwitchVocabularies;
   /** Called after every committed change (never for a refused one). */
   onChange?: (change: unknown) => void;
   /** Called after a content conversion or replacement with the path to keep selected (the block, or the inline payload field), since the old selection path may no longer exist. */

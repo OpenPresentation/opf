@@ -1,5 +1,6 @@
 import {
   createEditorSession,
+  mergeCatalogs,
   opfPathToJsonPointer,
   applyJsonPatch,
   getValueAtPath,
@@ -67,12 +68,14 @@ export function createCanvasEditor(container, options = {}) {
     win = doc.defaultView;
   const editor =
     options.editor ??
-    createEditorSession(options.presentation, { rejectInvalid: true });
+    createEditorSession(options.presentation, { rejectInvalid: true, catalogs: options.catalogs });
   // `options.fonts` is the renderer's fonts handle (`loadFonts()`): it measures the text and draws the faces. A document whose faces
   // are not loaded yet is never rendered: the canvas has the handle load them first and shows "Loading fonts…" meanwhile. Without a
   // handle every document renders at once, with core's portable text estimate.
   const handle = options.fonts, fonts = fontGate(handle);
-  const drawOptions = (extra) => ({ ...renderOptions, fonts: previewFonts(handle), ...extra });
+  // The renderer draws with the session's registered catalogs (plus any `renderOptions.catalogs`): the same list core resolves with.
+  const resolveOptions = () => ({ ...renderOptions, catalogs: mergeCatalogs(editor.catalogs, renderOptions.catalogs) });
+  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: previewFonts(handle), ...extra });
   let slideIndex = options.slideIndex ?? 0,
     // RR-32: the canvas edits the document as authored, so a template's {{tokens}} stay visible and an inline edit never
     // overwrites one with its resolved text. The Fill template panel previews the resolved deck. Pass `variables` to override.
@@ -180,11 +183,11 @@ export function createCanvasEditor(container, options = {}) {
   // A synchronous render or validation of a document whose faces are still loading fails with a clear "fonts-pending"
   // error and starts the load, so the next attempt succeeds. It never draws glyphs the registry cannot provide.
   function requireFonts(presentation) {
-    const pending = fonts?.pending(presentation, renderOptions) ?? [];
+    const pending = fonts?.pending(presentation, resolveOptions()) ?? [];
     if (!pending.length) return;
     notice.hidden = false;
     notice.textContent = pendingMessage;
-    fonts.ensure(presentation, { renderOptions }).then(
+    fonts.ensure(presentation, { renderOptions: resolveOptions() }).then(
       () => { if (!disposed && notice.textContent === pendingMessage) clearNotice(); },
       (error) => { if (!disposed) report(error); },
     );
@@ -223,7 +226,7 @@ export function createCanvasEditor(container, options = {}) {
     if (disposed) return;
     const token = ++showToken;
     return whenFontsReady(fonts, target ?? editor.presentation, {
-      renderOptions,
+      renderOptions: resolveOptions(),
       isCurrent: () => !disposed && token === showToken,
       loading: (pending) => fontsState("loading", pending),
       ready: () => {
@@ -239,7 +242,7 @@ export function createCanvasEditor(container, options = {}) {
   }
   // Renders now when the document's fonts are loaded (errors throw to the caller), otherwise after loading them.
   function renderFor(presentation) {
-    if (fonts?.pending(presentation ?? editor.presentation, renderOptions).length) show(presentation);
+    if (fonts?.pending(presentation ?? editor.presentation, resolveOptions()).length) show(presentation);
     else render(presentation);
   }
   function render(presentation = editor.presentation) {
@@ -366,11 +369,11 @@ export function createCanvasEditor(container, options = {}) {
   }
   // An in-progress edit whose text needs faces that are not loaded yet waits for them, then draws again.
   function deferDraft(draft) {
-    if (!fonts?.pending(draft, renderOptions).length) return false;
+    if (!fonts?.pending(draft, resolveOptions()).length) return false;
     active.valid = false;
     notice.hidden = false;
     notice.textContent = pendingMessage;
-    fonts.ensure(draft, { renderOptions }).then(
+    fonts.ensure(draft, { renderOptions: resolveOptions() }).then(
       () => {
         if (disposed) return;
         if (notice.textContent === pendingMessage) clearNotice();
@@ -1020,7 +1023,7 @@ export function createCanvasEditor(container, options = {}) {
     get layoutEditing() { return layoutHandles.enabled; },
     /** True while the crop layer is open. */
     get cropping() { return !!imageCropper?.isOpen; },
-    /** Open the crop layer for the picture at `path` (an image block, a slide's `image`, a slide image). `tool: "focus"` starts with the focal point. */
+    /** Open the crop layer for the picture at `path` (an image block or a slide's `image`). `tool: "focus"` starts with the focal point. */
     cropImage(path, cropOptions) {
       if (!imageCropper) return Promise.resolve(false);
       return imageCropper.open(path, cropOptions);

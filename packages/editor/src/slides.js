@@ -11,6 +11,7 @@
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
 import { prepareDimensionSwitch } from "./switches.js";
+import { mergeCatalogs } from "./catalogs.js";
 import { checkFormat } from "./checks.js";
 
 const isIndex = (value) => Number.isInteger(value) && value >= 0;
@@ -130,10 +131,10 @@ function newSlideId(presentation) {
 }
 
 /**
- * Compute adding a slide. Options: `at` (the index the slide takes, default the end), `layout` (a layouts
- * catalog id; the layout's placeholders are added as empty slots, exactly like switching a slide's layout),
+ * Compute adding a slide. Options: `at` (the index the slide takes, default the end), `layout` (a layout
+ * reference, `id` or `name:id`; the layout's placeholders are added as empty slots, exactly like switching a slide's layout),
  * `title`, `text`, `id`, `section` (default: the section of the slide before it), `slide` (a ready slide to
- * insert, for hosts that build their own), `catalogs`/`record` for catalog lookup (as `prepareDimensionSwitch`).
+ * insert, for hosts that build their own), `catalogs`/`record`/`recordSource` for catalog lookup (as `prepareDimensionSwitch`).
  */
 export function prepareAddSlide(presentation, options = {}) {
   const slides = requireSlides(presentation);
@@ -153,7 +154,7 @@ export function prepareAddSlide(presentation, options = {}) {
     // Switch the layout on a scratch copy to reuse the placeholder rules and the catalog lookup.
     const scratch = { ...clone(presentation), slides: [...clone(slides)] };
     scratch.slides.splice(at, 0, slide);
-    const switched = prepareDimensionSwitch(scratch, "layouts", options.layout, { slideIndex: at, catalogs: options.catalogs, record: options.record });
+    const switched = prepareDimensionSwitch(scratch, "layouts", options.layout, { slideIndex: at, catalogs: options.catalogs, record: options.record, recordSource: options.recordSource });
     const catalogOps = switched.patches.filter((patch) => !patch.path.startsWith("/slides/"));
     slide = switched.presentation.slides[at];
     const patches = [...catalogOps, { op: "add", path: slidePointer(at), value: slide }];
@@ -164,7 +165,7 @@ export function prepareAddSlide(presentation, options = {}) {
 /** Add a slide (see `prepareAddSlide`) as one undoable step. The change reports `index`, `id` and `selection`. */
 export function addSlide(editor, options = {}, meta) {
   requireEditor(editor);
-  return apply(editor, prepareAddSlide(editor.presentation, options), meta, "add");
+  return apply(editor, prepareAddSlide(editor.presentation, { ...options, catalogs: mergeCatalogs(editor.catalogs, options.catalogs) }), meta, "add");
 }
 
 // --- duplicate -------------------------------------------------------------------------------------

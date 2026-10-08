@@ -31,7 +31,7 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 
 const edited = title => ({
   name: 'Autosaved deck',
-  language: 'english',
+  language: 'en-US',
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [{ id: 'one', title, text: 'First' }, { id: 'two', title: 'Second', text: 'Second words' }],
 });

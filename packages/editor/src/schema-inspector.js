@@ -18,7 +18,7 @@ export function createSchemaInspector(container, {editor,path='',onDraft,onCommi
   function showError(message){errorBox.textContent=message;}
   function check(){
     // The draft must be valid OPF (the format category, as every edit); unresolved references (an unknown variable, a missing asset) are listed as notes.
-    const report=validate(draft,{only:['format','references']});
+    const report=validate(draft,{only:['format','references'],...(editor?.catalogs?.length?{catalogs:editor.catalogs}:{})});
     const errors=report.findings.filter(finding=>finding.severity==='error'&&finding.category==='format'),warnings=report.findings.filter(finding=>finding.category!=='format'&&finding.severity!=='info');
     const validation={valid:!errors.length};
     apply.disabled=!dirty||!validation.valid;

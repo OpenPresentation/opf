@@ -1,8 +1,8 @@
 import { applyJsonPatch, createValuePatch, getValueAtPath } from "./index.js";
-import { catalogs, resolveSlideContext } from "@openpresentation/opf";
+import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME, copySlides, parseReference, resolveReference } from "@openpresentation/opf";
 import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
-import { DEFAULT_FONT_SCHEME } from "@openpresentation/opf/composition";
 import { checkFormat, firstErrorMessage } from "./checks.js";
+import { mergeCatalogs, prepareSave } from "./catalogs.js";
 export const MAX_OPF_BYTES = 20 * 1024 * 1024;
 const clone = (value) => structuredClone(value);
 export function assertOpf(presentation) {
@@ -66,15 +66,21 @@ export function parseOpfTransfer(text) {
     return { kind: "slides", value, presentation };
   return { kind: "selection", value };
 }
+/**
+ * The OPF text to copy or save. A presentation or a slide is self-contained: core's `embed` adds every catalog record it
+ * references (from `catalogs`, the host's registered list), so it renders the same where no catalog is registered.
+ */
 export function serializeOpfTransfer(
   presentation,
-  { scope = "presentation", slideIndex = 0, path, format = "pretty" } = {},
+  { scope = "presentation", slideIndex = 0, path, format = "pretty", catalogs } = {},
 ) {
   let value = presentation;
   if (scope === "slide") {
     if (!presentation.slides?.[slideIndex])
       throw new Error("Select a slide first.");
-    value = { ...presentation, slides: [presentation.slides[slideIndex]] };
+    value = prepareSave({ ...presentation, slides: [presentation.slides[slideIndex]] }, { catalogs }).document;
+  } else if (scope === "presentation") {
+    value = prepareSave(presentation, { catalogs }).document;
   } else if (scope === "selection") {
     value = getValueAtPath(presentation, path);
     if (value === undefined) throw new Error("Select some content first.");
@@ -82,22 +88,59 @@ export function serializeOpfTransfer(
   const json = JSON.stringify(value, null, format === "compact" ? 0 : 2);
   return format === "markdown" ? `\`\`\`json\n${json}\n\`\`\`` : json;
 }
-const catalogKeys = {
-  layouts: "layout",
-  themes: "theme",
-  fontSchemes: "fontScheme",
-  colorSchemes: "colorScheme",
-  narratives: "narrative",
-  languages: "language",
-  tones: "tone",
-  audiences: "audience",
-  purposes: "purpose",
-  socialPlatforms: "platform",
-};
+const RESERVED_GROUPS = new Set(["default", "custom"]);
+const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+// A reference read out of a record of `group` keeps naming that group's record when it is written on a slide.
+function qualified(value, group) {
+  const qualify = (reference) => {
+    const parsed = typeof reference === "string" ? parseReference(reference) : undefined;
+    return !parsed || parsed.group || RESERVED_GROUPS.has(group) ? reference : `${group}:${parsed.id}`;
+  };
+  if (typeof value === "string") return qualify(value);
+  if (isObject(value) && typeof value.id === "string") return { ...clone(value), id: qualify(value.id) };
+  return value === undefined ? undefined : clone(value);
+}
+
+/**
+ * Freeze the source deck's look on its slides before they move: each slide carries its colour scheme, font scheme, background
+ * and header/footer, so the target deck's design does not restyle it. A value the source takes from its theme is written with
+ * the theme's catalog group; one it takes from the engine default is written only when the target would not use the engine
+ * default too (core's `ENGINE_DEFAULT_*`, never a catalog id).
+ */
+function frozenSlides(incoming, current, catalogs) {
+  const target = isObject(current.design) ? current.design : {};
+  const targetDefault = (key) => target[key] === undefined && target.theme === undefined;
+  return incoming.slides.map((slide) => {
+    // A slide's design cannot set dimensions (a PPTX has one slide size): the inserted slide takes the host deck's.
+    const { dimensions: _deckSize, ...design } = { ...incoming.design, ...slide.design };
+    const theme = typeof design.theme === "string" ? resolveReference(incoming, "themes", design.theme, { catalogs }) : undefined;
+    const record = isObject(theme?.record) ? theme.record : {};
+    const next = { ...design };
+    const freeze = (key, engineDefault) => {
+      if (design[key] !== undefined) return;
+      if (record[key] !== undefined) next[key] = qualified(record[key], theme.group);
+      else if (!targetDefault(key)) next[key] = clone(engineDefault);
+    };
+    freeze("colorScheme", ENGINE_DEFAULT_COLOR_SCHEME);
+    freeze("fontScheme", ENGINE_DEFAULT_FONT_SCHEME);
+    freeze("background", ENGINE_DEFAULT_THEME.background);
+    next.header = design.header ?? false;
+    next.footer = design.footer ?? false;
+    return { ...slide, design: next };
+  });
+}
+
+/**
+ * Apply a parsed transfer to the current document. `mode` "selection" replaces the selected value, "replace" opens the transfer
+ * as the presentation, and "insert" copies its slides in after `slideIndex` with core's `copySlides`: catalog groups match by
+ * `source`, identical records are reused, a differing record is renamed, and `renamed` / `addedGroups` say what changed so the
+ * host can tell the user. Assets and shared datasets come along under free ids. `catalogs` are the host's registered catalogs.
+ * Returns `{ presentation, slideIndex, renamed, addedGroups }`.
+ */
 export function prepareOpfImport(
   current,
   transfer,
-  { mode = "insert", slideIndex = 0, path } = {},
+  { mode = "insert", slideIndex = 0, path, catalogs } = {},
 ) {
   if (mode === "selection") {
     const presentation = applyJsonPatch(
@@ -105,71 +148,21 @@ export function prepareOpfImport(
       createValuePatch(current, path, transfer.value),
     );
     assertOpf(presentation);
-    return { presentation, slideIndex };
+    return { presentation, slideIndex, renamed: [], addedGroups: [] };
   }
   if (!transfer.presentation)
     throw new Error(
       "This is a content fragment. Choose Replace selected content.",
     );
   if (mode === "replace")
-    return { presentation: assertOpf(clone(transfer.presentation)), slideIndex: 0 };
+    return { presentation: assertOpf(clone(transfer.presentation)), slideIndex: 0, renamed: [], addedGroups: [] };
   if (mode !== "insert") throw new Error("Unknown import action.");
+  const list = mergeCatalogs(catalogs);
   const incoming = clone(transfer.presentation),
-    presentation = clone(current);
-  // Freeze the source deck defaults on inserted slides before changing their catalog ids.
-  incoming.slides = incoming.slides.map((slide, index) => {
-    // A slide's design cannot set dimensions (a PPTX has one slide size): the inserted slide takes the host deck's.
-    const { dimensions: _deckSize, ...design } = { ...incoming.design, ...slide.design };
-    // The theme record the slide resolves to, as core resolves it for every engine (an unknown id falls back to `minimal`).
-    const theme = resolveSlideContext(incoming, index).resolved.theme;
-    return {
-      ...slide,
-      design: {
-        ...design,
-        theme: design.theme ?? "minimal",
-        colorScheme: design.colorScheme ?? theme.colorScheme ?? "cool-horizon",
-        fontScheme: design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
-        background: design.background ?? theme.background ?? "#FFFFFF",
-        header: design.header ?? false,
-        footer: design.footer ?? false,
-      },
-    };
-  });
-  const mappings = {},
-    assetMap = new Map();
-  let chartTypes = new Map();
-  for (const [kind, catalog] of Object.entries(incoming.catalogs ?? {})) {
-    const existing = presentation.catalogs?.[kind];
-    if (
-      catalog.source &&
-      existing?.source &&
-      JSON.stringify(catalog.source) !== JSON.stringify(existing.source)
-    )
-      throw new Error(
-        `The ${kind} gallery sources conflict. Open this as a separate presentation instead.`,
-      );
-    if (catalog.source && !existing?.source)
-      throw new Error(
-        `Resolve ${kind} records into this OPF before inserting, or open it as a presentation.`,
-      );
-    const used = new Set(
-      [...(existing?.records ?? []), ...(catalogs[kind] ?? [])].map(
-        (record) => record.id,
-      ),
-    );
-    const names = new Map();
-    for (const record of catalog.records ?? []) {
-      let id = `import-${record.id}`,
-        n = 2;
-      while (used.has(id)) id = `import-${record.id}-${n++}`;
-      used.add(id);
-      names.set(record.id, id);
-      record.id = id;
-    }
-    if (catalogKeys[kind]) mappings[catalogKeys[kind]] = names;
-    if (kind === "chartTypes") chartTypes = names;
-  }
-  const assetIds = new Set(Object.keys(presentation.assets ?? {}));
+    target = clone(current);
+  incoming.slides = frozenSlides(incoming, current, list);
+  const assetMap = new Map();
+  const assetIds = new Set(Object.keys(target.assets ?? {}));
   for (const id of Object.keys(incoming.assets ?? {})) {
     let next = id,
       n = 2;
@@ -187,11 +180,11 @@ export function prepareOpfImport(
     else if (key === "dataset" && typeof value === "string") usedDatasets.add(value);
   };
   collectDatasets(incoming.slides);
-  const datasetIds = new Set(Object.keys(presentation.datasets ?? {}));
+  const datasetIds = new Set(Object.keys(target.datasets ?? {}));
   for (const id of usedDatasets) {
     const mine = incoming.datasets && Object.hasOwn(incoming.datasets, id) ? incoming.datasets[id] : undefined;
     if (mine === undefined) continue;
-    if (datasetIds.has(id) && JSON.stringify(presentation.datasets[id]) === JSON.stringify(mine)) {
+    if (datasetIds.has(id) && JSON.stringify(target.datasets[id]) === JSON.stringify(mine)) {
       datasetMap.set(id, id);
       continue;
     }
@@ -203,70 +196,33 @@ export function prepareOpfImport(
   }
   const rewrite = (value, key = "") => {
     if (Array.isArray(value)) return value.map((child) => rewrite(child, key));
-    if (value && typeof value === "object") {
-      const result = Object.fromEntries(
-        Object.entries(value).map(([childKey, child]) => [
-          childKey,
-          rewrite(child, childKey),
-        ]),
-      );
-      if (key === "socials" && mappings.platform) {
-        for (const [id, child] of Object.entries(result)) {
-          if (mappings.platform.has(id)) {
-            delete result[id];
-            result[mappings.platform.get(id)] = child;
-          }
-        }
-      }
-      if (mappings[key]?.has(value.id)) result.id = mappings[key].get(value.id);
-      if (value.data && chartTypes.has(value.type))
-        result.type = chartTypes.get(value.type);
-      return result;
-    }
+    if (value && typeof value === "object")
+      return Object.fromEntries(Object.entries(value).map(([childKey, child]) => [childKey, rewrite(child, childKey)]));
     if (typeof value === "string") {
       if (key === "dataset" && datasetMap.has(value)) return datasetMap.get(value);
-      if (mappings[key]?.has(value)) return mappings[key].get(value);
-      if (
-        ["src", "image", "video", "poster"].includes(key) &&
-        value.startsWith("asset:") &&
-        assetMap.has(value.slice(6))
-      )
+      if (["src", "image", "video", "poster", "background"].includes(key) && value.startsWith("asset:") && assetMap.has(value.slice(6)))
         return `asset:${assetMap.get(value.slice(6))}`;
     }
     return value;
   };
-  const rewritten = rewrite(incoming);
-  if (incoming.catalogs) {
-    presentation.catalogs ??= {};
-    for (const [kind, catalog] of Object.entries(rewritten.catalogs))
-      presentation.catalogs[kind] = {
-        ...presentation.catalogs[kind],
-        ...catalog,
-        records: [
-          ...(presentation.catalogs[kind]?.records ?? []),
-          ...(catalog.records ?? []),
-        ],
-      };
-  }
+  incoming.slides = rewrite(incoming.slides);
   if (incoming.assets) {
-    presentation.assets ??= {};
-    for (const [id, asset] of Object.entries(rewritten.assets))
-      presentation.assets[assetMap.get(id)] =
-        typeof asset === "string" &&
-        asset.startsWith("asset:") &&
-        assetMap.has(asset.slice(6))
-          ? `asset:${assetMap.get(asset.slice(6))}`
-          : asset;
+    target.assets ??= {};
+    for (const [id, asset] of Object.entries(rewrite(incoming.assets)))
+      target.assets[assetMap.get(id)] =
+        typeof asset === "string" && asset.startsWith("asset:") && assetMap.has(asset.slice(6)) ? `asset:${assetMap.get(asset.slice(6))}` : asset;
   }
   for (const [id, next] of datasetMap) {
-    if (presentation.datasets && Object.hasOwn(presentation.datasets, next)) continue;
-    presentation.datasets ??= {};
-    presentation.datasets[next] = clone(incoming.datasets[id]);
+    if (target.datasets && Object.hasOwn(target.datasets, next)) continue;
+    target.datasets ??= {};
+    target.datasets[next] = clone(incoming.datasets[id]);
   }
-  const ids = new Set(collectReservedPresentationIds(presentation));
-  for (const slide of rewritten.slides) remapSlideTreeIds(slide, ids);
-  const index = Math.max(0, Math.min(presentation.slides.length, slideIndex + 1));
-  presentation.slides.splice(index, 0, ...rewritten.slides);
+  const index = Math.max(0, Math.min(target.slides.length, slideIndex + 1));
+  // Core copies the catalog records the slides use and rewrites their references (FA-20).
+  const copied = copySlides(incoming, target, incoming.slides.map((_, at) => at), { catalogs: list, at: index });
+  const presentation = clone(copied.document);
+  const ids = new Set(collectReservedPresentationIds({ ...presentation, slides: presentation.slides.filter((_, at) => !copied.slides.includes(at)) }));
+  for (const at of copied.slides) remapSlideTreeIds(presentation.slides[at], ids);
   assertOpf(presentation);
-  return { presentation, slideIndex: index };
+  return { presentation, slideIndex: copied.slides[0] ?? index, renamed: copied.renamed ?? [], addedGroups: copied.addedGroups ?? [] };
 }

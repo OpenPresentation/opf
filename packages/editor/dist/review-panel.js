@@ -6,6 +6,7 @@
 // document state: every fix is an undoable edit through the editor session. Importing this module does not need a DOM;
 // mounting does.
 import { validate } from "@openpresentation/opf";
+import { mergeCatalogs } from "./catalogs.js";
 import {
   applyReviewFix,
   countFindings,
@@ -115,6 +116,11 @@ function summaryText(counts, scopeLabel) {
  */
 export function createReviewPanel(container, options) {
   const { editor, getSlideIndex, getValidateOptions, onGoTo, onFocusField, onStatus, onIgnoredChange, onChange, review } = options;
+  // Core resolves the deck's references with the session's registered catalogs (and any the host adds): the same list as the preview.
+  const validateOptions = () => {
+    const host = getValidateOptions?.(editor.presentation) ?? {};
+    return { ...host, catalogs: mergeCatalogs(editor.catalogs, host.catalogs) };
+  };
   if (review !== undefined && typeof review !== "function") throw new TypeError("The Review panel's review hook must be a function (presentation, options) returning a FindingReport.");
   if (!editor || typeof editor.subscribe !== "function") throw new Error("The Review panel needs an editor session created by createEditorSession.");
   const doc = container.ownerDocument;
@@ -171,7 +177,7 @@ export function createReviewPanel(container, options) {
   function validateNow() {
     lastAuditError = undefined;
     try {
-      coreReport = validate(editor.presentation, getValidateOptions?.(editor.presentation) ?? {});
+      coreReport = validate(editor.presentation, validateOptions());
     } catch (error) {
       coreReport = undefined;
       lastAuditError = error;
@@ -204,7 +210,7 @@ export function createReviewPanel(container, options) {
     if (!coreReport && !lastAuditError) validateNow();
     renderList();
     try {
-      const result = await review(editor.presentation, { signal: controller.signal, report: coreReport, validateOptions: getValidateOptions?.(editor.presentation) ?? {} });
+      const result = await review(editor.presentation, { signal: controller.signal, report: coreReport, validateOptions: validateOptions() });
       if (destroyed || hookRunning !== running) return;
       if (!result || !Array.isArray(result.findings)) throw new TypeError("The review hook must resolve a FindingReport ({ valid, findings, counts }).");
       hookRunning = undefined;

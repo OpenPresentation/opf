@@ -27,11 +27,12 @@ const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
+  import { defaultCatalog } from '@openpresentation/opf/catalog';
   import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
   window.mountMetric=async({deck,faces})=>{
     window.metricCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;window.diagnostics=[];
     window.fonts=await loadFonts({ faces: faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})), substitutionPolicy:'visual',fallbackFamily:'Roboto' });
-    window.editor=createEditorSession(deck,{rejectInvalid:true});
+    window.editor=createEditorSession(deck,{rejectInvalid:true,catalogs:[defaultCatalog]});
     window.metricCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,fonts,onError:error=>failures.push(error.message)});
     await metricCanvas.ready;
     const action=(id,run)=>document.getElementById(id).onclick=async()=>{try{await run();}catch(error){failures.push(error.message);}};

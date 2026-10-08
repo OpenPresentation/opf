@@ -19,10 +19,12 @@ if(process.env.OPF_CORE_ROOT){
 }
 const bundle=await build({alias,stdin:{resolveDir,contents:`
   import {mountJsonCodeEditor} from ${JSON.stringify(editorImport)};
-  import {layouts} from '@openpresentation/opf/catalogs';
-  window.layoutContracts={count:layouts.length,metric:layouts.find(layout=>layout.id==='number-1x')?.placeholders.some(slot=>slot.type==='metric')};
+  import {defaultCatalog} from '@openpresentation/opf/catalog';
+  // OPF 0.15: the host (this page) registers the default catalog; extra layouts join it as the app's own records.
+  window.layoutContracts={count:Object.keys(defaultCatalog.layouts).length,chart1x:Object.keys(defaultCatalog.layouts).filter(id=>id.includes('chart-1x')).length,metric:defaultCatalog.layouts['number-1x']?.placeholders.some(slot=>slot.type==='metric')};
   window.changes=[];window.failures=[];
-  window.mount=(code,catalogs={})=>{
+  window.mount=(code,extra)=>{
+    const catalogs=[extra?{...defaultCatalog,layouts:{...defaultCatalog.layouts,...extra}}:defaultCatalog];
     window.control?.destroy();window.changes=[];
     window.control=mountJsonCodeEditor(document.querySelector('#editor'),{code,label:'OPF JSON',lineNumbers:true,catalogs,onChange:source=>changes.push(source),onError:error=>failures.push(error.message)});
   };`},bundle:true,platform:'browser',format:'iife',write:false,metafile:true});
@@ -71,9 +73,9 @@ try{
   checks.push('Dispatched clipboard event preserves observed mixed endings through undo/redo (OS clipboard not claimed)');
 
   const deck='{\r\n  "slides": [{"layout":"text-1x","title":"Keep title","text":"Keep  text"}]\n}';
-  await page.evaluate(code=>mount(code,{layouts:[{id:'partner-detail',name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}]}),deck);
+  await page.evaluate(code=>mount(code,{'partner-detail':{name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
-  // The suggested set is whatever the bundled catalog makes compatible with this deck's layout, so it is read back from the
+  // The suggested set is whatever the registered catalog makes compatible with this deck's layout, so it is read back from the
   // menu (current, same and compatible groups) rather than hard-coded, then checked against the filtered view.
   assert.ok((await menu.getByRole('option').first().innerText()).includes('Text 1x'));
   const similarLabel=await menu.getByRole('button',{name:/^Similar \(\d+\)$/}).innerText(),similarCount=Number(similarLabel.match(/\d+/)[0]);
@@ -86,7 +88,7 @@ try{
   assert.equal(grouped,similarCount,'Similar holds exactly the current, same and compatible groups');
   assert.ok((await menu.getByRole('group',{name:'Different counts',exact:true}).innerText()).includes('Text × 3'));
   await menu.getByRole('button',{name:`Similar (${similarCount})`,exact:true}).click();
-  await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),1);
+  await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),contracts.chart1x,'the search lists every registered layout matching chart-1x');
   await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),similarCount);
   await menu.getByRole('combobox').press('ArrowDown');
   const active=await menu.getByRole('combobox').getAttribute('aria-activedescendant');
@@ -96,14 +98,15 @@ try{
   // A real click on the highlighted key opens the same menu.
   await page.locator('[data-field="slides[0].layout"]').click();await menu.waitFor();
   await page.evaluate(()=>control.update(control.api.getValue().replace('Keep title','External title')));assert.equal(await menu.count(),0);
-  await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();await page.evaluate(()=>control.setCatalogs({}));assert.equal(await menu.count(),0);
+  await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();await page.evaluate(()=>control.setCatalogs([]));assert.equal(await menu.count(),0);
   checks.push('Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal');
 
   if(contracts.metric){
     const cover=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
     await page.evaluate(code=>mount(code),cover);await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();
     await menu.getByRole('combobox').fill('number-1x');
-    assert.ok((await menu.getByRole('option').innerText()).includes('Title + Metric'));
+    // The registered catalog has number-1x variants too; the exact id is listed first and highlighted.
+    assert.ok((await menu.getByRole('option').first().innerText()).includes('Title + Metric'));
     await menu.getByRole('combobox').press('Enter');
     const changed=await read();
     assert.deepEqual(JSON.parse(changed).slides[0],{...JSON.parse(cover).slides[0],layout:'number-1x',metric:{value:'',label:''}});

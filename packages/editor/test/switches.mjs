@@ -5,21 +5,21 @@ import assert from "node:assert/strict";
 import { resolveSlideContext, validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { OPFEditorError, createEditorSession } from "../dist/index.js";
-const fontFamiliesOf = (presentation, index) => resolveSlideContext(presentation, index).options.fontFamilies;
+const fontFamiliesOf = (presentation, index) => resolveSlideContext(presentation, index, { catalogs }).options.fontFamilies;
 import { prepareBlockReplace } from "../dist/layout.js";
 import { currentSwitchValue, prepareDimensionSwitch, switchDimension, SWITCH_DIMENSIONS } from "../dist/switches.js";
-import { EXTRA_DIMENSIONS, GALLERY_DIMENSIONS, SLIDE_SIZES, baseDeck, cases } from "./switch-fixture.mjs";
+import { EXTRA_DIMENSIONS, GALLERY_DIMENSIONS, SLIDE_SIZES, baseDeck, cases, catalogs } from "./switch-fixture.mjs";
 
 // Coverage: every gallery dimension, then slide-sizes and purposes (RR-41), has a switch and a case, and nothing else does.
 const ALL_DIMENSIONS = [...GALLERY_DIMENSIONS, ...EXTRA_DIMENSIONS];
 assert.deepEqual([...SWITCH_DIMENSIONS], ALL_DIMENSIONS);
 assert.deepEqual(cases.map((entry) => entry.dimension), ALL_DIMENSIONS);
 
-const session = (presentation = baseDeck()) => createEditorSession(presentation, { rejectInvalid: true });
-const svg = (presentation, slideIndex) => renderSlideSvg(presentation, slideIndex);
+const session = (presentation = baseDeck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs });
+const svg = (presentation, slideIndex) => renderSlideSvg(presentation, slideIndex, { catalogs });
 function measuredFamilies(presentation, slideIndex) {
   const families = new Set();
-  createEditorSession(presentation).composeSlide(slideIndex, {
+  createEditorSession(presentation, { catalogs }).composeSlide(slideIndex, {
     fonts: { textMeasurement: { measure: (text, size, style) => (families.add(style.fontFamily), text.length * size * 0.5) } },
   });
   return [...families].sort();
@@ -51,7 +51,7 @@ for (const entry of cases) {
   assert.equal(events[0].meta.dimension, dimension);
   assert.deepEqual(events[0].snapshot.presentation, editor.presentation, "the event carries the switched document");
   // prepareDimensionSwitch is the same patch without a session, and does not mutate its input.
-  const prepared = prepareDimensionSwitch(original, dimension, value, options);
+  const prepared = prepareDimensionSwitch(original, dimension, value, { ...options, catalogs });
   assert.deepEqual(prepared.patches, change.patches);
   assert.deepEqual(prepared.presentation, editor.presentation);
   assert.deepEqual(original, baseDeck());
@@ -129,20 +129,16 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.deepEqual(measuredFamilies(custom.presentation, 0), ["Georgia"]);
 }
 
-// Image treatments at deck scope write the gallery's snippet: slideImage and imageFill.
+// Image treatments belong to one image block (OPF 0.15): null removes a field. There is no deck-level slide image any more.
 {
   const editor = session();
-  const change = switchDimension(editor, "image-treatments", { slideImage: { src: "asset:cover", position: "right" }, imageFill: "crop" });
-  assert.deepEqual(change.patches, [
-    { op: "add", path: "/design/slideImage", value: { src: "asset:cover", position: "right" } },
-    { op: "add", path: "/design/imageFill", value: "crop" },
-  ]);
-  const removed = switchDimension(editor, "image-treatments", { slideImage: null });
-  assert.deepEqual(removed.patches, [{ op: "remove", path: "/design/slideImage" }]);
-  assert.equal(editor.get("design.imageFill"), "crop");
+  switchDimension(editor, "image-treatments", { fit: "contain", placement: { edge: "left", size: 0.4 } }, { path: "slides.2.blocks.2" });
+  const removed = switchDimension(editor, "image-treatments", { fit: null }, { path: "slides.2.blocks.2" });
+  assert.deepEqual(removed.patches, [{ op: "remove", path: "/slides/2/blocks/2/fit" }]);
+  assert.deepEqual(editor.get("slides.2.blocks.2.placement"), { edge: "left", size: 0.4 });
 }
 
-// Themes: the default writes the whole bundle so fonts follow; bundle:false changes only the id.
+// Themes: the default lets the theme's own schemes apply so fonts follow; bundle:false changes only the reference.
 {
   const editor = session();
   const plain = switchDimension(editor, "themes", "classic", { bundle: false });
@@ -161,13 +157,13 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.throws(() => switchDimension(editor, "font-schemes", "team-mono"), (error) => error.code === "unknown-catalog-id");
   const change = switchDimension(editor, "font-schemes", "team-mono", { record });
   assert.deepEqual(change.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["replace", "/design/fontScheme"]]);
-  assert.equal(editor.get("catalogs.fontSchemes.records.0.id"), "team-mono");
+  assert.equal(editor.get("catalogs.custom.fontSchemes.team-mono.major"), "Inter");
   assert.deepEqual(fontFamiliesOf(editor.presentation, 0), { heading: "Inter", body: "Inter", code: "JetBrains Mono" });
   assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Inter"]);
-  // With another inline catalog present, bundled ids stay available and records append.
+  // With embedded records present, the host catalog's ids stay available and new records join the custom group.
   switchDimension(editor, "font-schemes", "georgia");
   const second = switchDimension(editor, "font-schemes", "team-serif", { record: { id: "team-serif", name: "Team Serif", major: "Lora", minor: "Lora" } });
-  assert.deepEqual(second.patches.map((patch) => patch.path), ["/catalogs/fontSchemes/records/-", "/design/fontScheme"]);
+  assert.deepEqual(second.patches.map((patch) => patch.path), ["/catalogs/custom/fontSchemes/team-serif", "/design/fontScheme"]);
   assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Lora"]);
   assert.throws(() => switchDimension(editor, "font-schemes", "other", { record }), (error) => error.code === "record-id-mismatch");
   while (editor.canUndo) editor.undo();
@@ -303,7 +299,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 // and the SVG preview recompose at the new canvas, and undo restores the exact size.
 {
   const canvas = (presentation) => {
-    const composed = createEditorSession(presentation).composeSlide(0);
+    const composed = createEditorSession(presentation, { catalogs }).composeSlide(0);
     return { width: composed.width, height: composed.height };
   };
   const viewBox = (presentation) => svg(presentation, 0).match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/).slice(1).map(Number);
@@ -347,7 +343,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.deepEqual(custom.get("design.dimensions"), { preset: "a4", widthInches: 12 });
   // A theme's own size is what a document without design.dimensions has; the switch makes the choice explicit.
   const themed = session({ ...baseDeck(), design: { theme: "minimal" } });
-  assert.deepEqual(currentSwitchValue(themed.presentation, "slide-sizes"), { value: "widescreen", scope: "deck" });
+  assert.deepEqual(currentSwitchValue(themed.presentation, "slide-sizes", { catalogs }), { value: "widescreen", scope: "deck" });
   // A slide's design cannot set dimensions (FA-07): the deck switch is never shadowed, and a slide scope is refused.
   const deck = session();
   assert.deepEqual(switchDimension(deck, "slide-sizes", "4:3").shadowed, []);
@@ -355,11 +351,12 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   // A slide-scope theme switch writes no dimensions into the slide's design (the deck's size stays the one size).
   const slideTheme = switchDimension(session(), "themes", "classic", { slideIndex: 1 });
   assert.equal(slideTheme.patches.some((patch) => /dimensions/.test(patch.path) || (patch.value && typeof patch.value === "object" && "dimensions" in patch.value)), false);
-  // A theme switch still carries its own size and is a separate step from a slide-size switch.
+  // A deck theme switch brings the theme's own size (the deck's override is removed) and is a separate step from a slide-size switch.
   const bundle = session();
   switchDimension(bundle, "slide-sizes", "4:3");
   switchDimension(bundle, "themes", "classic");
-  assert.equal(bundle.get("design.dimensions"), "widescreen");
+  assert.equal(bundle.get("design.dimensions"), undefined);
+  assert.deepEqual(currentSwitchValue(bundle.presentation, "slide-sizes", { catalogs }), { value: "widescreen", scope: "deck" });
   assert.equal(bundle.snapshot().undoDepth, 2);
   assert.equal(bundle.undo().presentation.design.dimensions, "4:3");
 }
@@ -386,11 +383,11 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   // The preview does not change: purpose is authoring metadata.
   switchDimension(editor, "purposes", "sell");
   assert.equal(svg(editor.presentation, 0), svg(original, 0));
-  // A gallery item's record is added inline in the same transaction, then the purpose names it.
+  // A gallery item's record is embedded in the same transaction, then the purpose names it.
   const record = { id: "fundraise", name: "Fundraise", summary: "Raise a round.", outcome: "A term sheet." };
   const withRecord = switchDimension(session(), "purposes", "fundraise", { record });
   assert.deepEqual(withRecord.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["add", "/purpose"]]);
-  assert.equal(withRecord.presentation.catalogs.purposes.records[0].id, "fundraise");
+  assert.equal(withRecord.presentation.catalogs.custom.purposes.fundraise.name, "Fundraise");
   assert.throws(() => switchDimension(session(), "purposes", "other", { record }), (error) => error.code === "record-id-mismatch");
 }
 
@@ -414,7 +411,8 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("narratives", "no-such-narrative", {}, "unknown-catalog-id");
   reject("audiences", ["executive", "nobody"], {}, "unknown-catalog-id");
   reject("audiences", [], {}, "invalid-catalog-id");
-  reject("languages", "klingon-ish", {}, "unknown-catalog-id");
+  reject("languages", "", {}, "invalid-switch-value");
+  reject("languages", { name: "No tag" }, {}, "invalid-switch-value");
   reject("tones", "sarcastic", {}, "unknown-catalog-id");
   reject("charts", "no-such-chart", { slideIndex: 1 }, "unknown-catalog-id");
   reject("layouts", "text-2x", {}, "slide-index-out-of-range");
@@ -430,7 +428,9 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("charts", "line", { slideIndex: 1, path: "extensions" }, "path-slide-mismatch");
   reject("headers-footers", { header: 5 }, {}, "invalid-opf-edit");
   reject("headers-footers", { sidebar: {} }, {}, "invalid-switch-value");
-  reject("image-treatments", { imageFill: "stretch" }, {}, "invalid-opf-edit");
+  reject("image-treatments", { fit: "stretch" }, {}, "missing-path");
+  reject("image-treatments", { fit: "crop" }, { path: "slides.2.blocks.2" }, "invalid-image-treatment");
+  reject("image-treatments", { fit: "cover" }, { path: "slides.2.blocks.0" }, "not-an-image-block");
   reject("socials", { platform: "no-such-platform", handle: "x" }, {}, "unknown-catalog-id");
   reject("socials", { platform: "x", handle: "" }, {}, "invalid-switch-value");
   reject("blocks", "diagram", { path: "slides.2.blocks.0" }, "invalid-switch-value");
@@ -448,4 +448,4 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("purposes", { outcome: 5 }, {}, "invalid-opf-edit");
 }
 
-console.log(`Dimension switches passed: ${summary.length} dimensions (patch, one undo step, undo/redo, preview refresh; slide image preview checked; language preview ${languagePreview}).`);
+console.log(`Dimension switches passed: ${summary.length} dimensions (patch, one undo step, undo/redo, preview refresh; language preview ${languagePreview}).`);

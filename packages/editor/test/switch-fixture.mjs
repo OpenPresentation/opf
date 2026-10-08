@@ -1,5 +1,10 @@
 // Shared fixture for the FF-16 dimension-switch tests (switches.mjs, switches-export.mjs).
 // One case per pptx.gallery dimension, with the exact patch the switch must produce.
+// OPF 0.15 (FA-23): the deck's references resolve through the default catalog the tests register as the host.
+import { defaultCatalog } from "@openpresentation/opf/catalog";
+
+/** The host catalogs every switch test registers: the pptx.gallery snapshot core publishes as `/catalog`. */
+export const catalogs = [defaultCatalog];
 
 // The slide sizes (the schema's DimensionPreset) and each one's composed canvas in px (96 per inch)
 // and exported slide size in EMU (914400 per inch), as core and opf-pptx produce them.
@@ -43,7 +48,7 @@ const PIXEL =
 export const baseDeck = () => ({
   name: "Switch fixture",
   design: { theme: "minimal", fontScheme: "aptos", colorScheme: "cool-horizon" },
-  language: "english",
+  language: "en-US",
   narrative: "problem-solution",
   tone: "formal",
   audience: ["executive"],
@@ -58,7 +63,7 @@ export const baseDeck = () => ({
       title: "Revenue",
       chart: { type: "column", data: { columns: ["Series", "Q1", "Q2", "Q3"], rows: [["Revenue", 12, 19, 27]] } },
     },
-    { id: "blocks", layout: "text-1x", title: "Blocks", blocks: [{ text: "One" }, { items: ["First", "Second"] }] },
+    { id: "blocks", layout: "text-1x", title: "Blocks", blocks: [{ text: "One" }, { items: ["First", "Second"] }, { image: "asset:cover" }] },
   ],
 });
 
@@ -67,9 +72,8 @@ const footer = { center: { text: "Confidential" } };
 
 // `patches` is the exact patch for the fixture; `slide` is the slide whose preview must react.
 // `preview` says how the shared SVG preview changes: "svg" (different output), "metadata"
-// (authoring metadata; the SVG is deliberately identical), "image" (needs slide-image support
-// in the installed renderer) or "language" (a renderer with the FF-19 language model marks the
-// SVG lang; an older one draws the same SVG).
+// (authoring metadata; the SVG is deliberately identical) or "language" (a renderer with the FF-19
+// language model marks the SVG lang; an older one draws the same SVG).
 export const cases = [
   {
     dimension: "layouts",
@@ -104,11 +108,11 @@ export const cases = [
   },
   {
     dimension: "languages",
-    value: "japanese",
+    value: "ja",
     options: {},
     slide: 0,
     preview: "language",
-    patches: [{ op: "replace", path: "/language", value: "japanese" }],
+    patches: [{ op: "replace", path: "/language", value: "ja" }],
   },
   {
     dimension: "backgrounds",
@@ -140,13 +144,12 @@ export const cases = [
     options: {},
     slide: 0,
     preview: "svg",
-    // The theme bundle is written explicitly, as the gallery's theme snippet does. Classic's
-    // color scheme equals the deck's, so that key needs no patch.
+    // OPF 0.15: the theme's own colour and font schemes apply. The deck's overrides of them are removed; nothing is copied
+    // out of the record (the deck sets no background or size, so those need no patch).
     patches: [
       { op: "replace", path: "/design/theme", value: "classic" },
-      { op: "replace", path: "/design/fontScheme", value: "tenorite" },
-      { op: "add", path: "/design/background", value: { type: "theme", slot: "light1" } },
-      { op: "add", path: "/design/dimensions", value: "widescreen" },
+      { op: "remove", path: "/design/colorScheme" },
+      { op: "remove", path: "/design/fontScheme" },
     ],
     fonts: { heading: "Tenorite Display", body: "Tenorite" },
   },
@@ -199,13 +202,15 @@ export const cases = [
   },
   {
     dimension: "image-treatments",
-    value: { slideImage: { src: "asset:cover", position: "right" }, imageFill: "crop" },
-    // A deck-level slide image only reaches layouts that declare one, so the preview case is
-    // slide-scoped. The deck-level patch is asserted in switches.mjs.
-    options: { slideIndex: 0 },
-    slide: 0,
-    preview: "image",
-    patches: [{ op: "add", path: "/slides/0/design", value: { slideImage: { src: "asset:cover", position: "right" }, imageFill: "crop" } }],
+    // OPF 0.15: the treatments of one image block (FA-22).
+    value: { fit: "contain", shape: "rounded" },
+    options: { path: "slides.2.blocks.2" },
+    slide: 2,
+    preview: "svg",
+    patches: [
+      { op: "add", path: "/slides/2/blocks/2/fit", value: "contain" },
+      { op: "add", path: "/slides/2/blocks/2/shape", value: "rounded" },
+    ],
   },
   {
     dimension: "slide-sizes",

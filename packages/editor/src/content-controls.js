@@ -36,20 +36,20 @@ export const REGION_LAYOUTS = Object.freeze({
   4: [{ id: "grid", label: "Two by two", regions: ["top:left", "top:right", "bottom:left", "bottom:right"] }],
 });
 
-/** Where an image block can go in the slide's design. The value is `<target>` or `<target>:<position>`. */
+/**
+ * Where an image block can go in the slide's design (OPF 0.15): its background (a full-bleed photo behind the content) or its
+ * watermark. Bleeding an image to one edge beside the content is not a move: it is the block's `placement` (image-options.js).
+ */
 export const IMAGE_DESTINATIONS = Object.freeze([
-  { value: "slideImage:right", label: "Slide image, on the right", target: "slideImage", options: { position: "right" } },
-  { value: "slideImage:left", label: "Slide image, on the left", target: "slideImage", options: { position: "left" } },
-  { value: "slideImage:top", label: "Slide image, along the top", target: "slideImage", options: { position: "top" } },
-  { value: "slideImage:bottom", label: "Slide image, along the bottom", target: "slideImage", options: { position: "bottom" } },
-  { value: "slideImage:background", label: "Slide image, full slide behind the content", target: "slideImage", options: { position: "background" } },
-  { value: "background", label: "Slide background", target: "background", options: {} },
+  { value: "background", label: "Slide background, full slide behind the content", target: "background", options: {} },
   { value: "watermark", label: "Watermark", target: "watermark", options: {} },
 ]);
 
 const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
 const regionKeysOfSlide = (slide) => Object.keys(slide).filter((key) => REGION_KEY.test(key));
-const DESIGN_IMAGE_LABELS = { slideImage: "slide image", background: "background image", watermark: "watermark" };
+const DESIGN_IMAGE_LABELS = { background: "background image", watermark: "watermark" };
+// An image block's own framing fields (FA-22) do not stop it being "a block that holds only an image".
+const IMAGE_BLOCK_FIELDS = new Set(["id", "extensions", "type", "fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"]);
 const messageOf = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
 const lossText = (prepared) => (prepared.loss.length ? `Not carried over: ${prepared.loss.join(", ")}.` : "Nothing is lost.");
 
@@ -321,6 +321,6 @@ export function createContentControls(ctx) {
 function isImageBlock(editor, blockPath) {
   const block = editor.get(blockPath);
   if (!block || typeof block !== "object" || Array.isArray(block)) return false;
-  const keys = Object.keys(block).filter((key) => key !== "id" && key !== "extensions" && key !== "type");
+  const keys = Object.keys(block).filter((key) => !IMAGE_BLOCK_FIELDS.has(key));
   return keys.length === 1 && keys[0] === "image";
 }

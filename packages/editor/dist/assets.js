@@ -1,5 +1,5 @@
 // Image assets for the design controls (RR-06): turn a local file into an entry of the document's
-// `assets` map and reference it from a logo, watermark, slide image, background or header/footer
+// `assets` map and reference it from a logo, watermark, background or header/footer
 // zone in the same undoable patch. The file is validated before anything changes: the type must be
 // PNG, JPEG, GIF, WebP or SVG, its bytes must match that type, and its size must be under a cap with a
 // clear error. A host that keeps images elsewhere passes `onAddAsset` and gets the bytes instead.

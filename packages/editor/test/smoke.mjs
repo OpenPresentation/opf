@@ -10,6 +10,7 @@ import {
   jsonPointerToOpfPath,
   opfPathToJsonPointer
 } from "../dist/index.js";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 
 const presentation = {
   name: "Editor smoke",
@@ -24,7 +25,8 @@ const presentation = {
   ]
 };
 
-const editor = createEditorSession(presentation, { rejectInvalid: true });
+// OPF 0.15: the host registers its catalogs; references resolve in the document, then in them.
+const editor = createEditorSession(presentation, { rejectInvalid: true, catalogs: [defaultCatalog] });
 assert.equal(editor.validation.valid, true);
 assert.equal(opfPathToJsonPointer("slides.0.title"), "/slides/0/title");
 assert.equal(jsonPointerToOpfPath("/slides/0/title"), "slides.0.title");
@@ -52,7 +54,8 @@ assert.deepEqual(applyJsonPatch(applyJsonPatch(presentation, objectAddPatch), ob
 assert.equal(editor.undo()?.presentation.slides[0].title, "Original title");
 assert.equal(editor.redo()?.presentation.slides[0].title, "Edited title");
 
-const themeOptions = getCatalogOptions("themes");
+const themeOptions = getCatalogOptions("themes", { editor });
+assert.deepEqual(getCatalogOptions("themes"), [], "no catalog registered: nothing to offer");
 assert.ok(themeOptions.some((option) => option.id === "classic"));
 const themeChange = editor.setCatalog("design.theme", "themes", "classic");
 assert.deepEqual(themeChange.patches, [

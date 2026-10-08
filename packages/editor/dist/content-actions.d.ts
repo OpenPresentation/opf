@@ -72,9 +72,9 @@ export declare function ungroupBlock(editor: EditorSession, groupPath: string, m
 export declare function placeBlocksInRegions(editor: EditorSession, slideIndex: number, regions: string[], meta?: Record<string, unknown>): ContentActionChange;
 export declare function regionsAsBlocks(editor: EditorSession, slideIndex: number, meta?: Record<string, unknown>): ContentActionChange;
 export declare function moveSlideRegion(editor: EditorSession, slideIndex: number, from: string, to: string, options?: { swap?: boolean }, meta?: Record<string, unknown>): ContentActionChange;
-/** Move an image block into the slide's design as its slide image, background or watermark. */
+/** Move an image block into the slide's design as its background or watermark. */
 export declare function moveImageToDesign(editor: EditorSession, blockPath: string, target: ImageTarget, options?: PromoteImageOptions, meta?: Record<string, unknown>): ContentActionChange;
-/** Move a slide's own slide image, background image or watermark back into its content as an image block. */
+/** Move a slide's own background image or watermark back into its content as an image block. */
 export declare function moveImageToContent(editor: EditorSession, slideIndex: number, source: ImageTarget, options?: { index?: number; region?: string }, meta?: Record<string, unknown>): ContentActionChange;
 
 export declare function prepareSplitSlide(presentation: unknown, slideIndex: number, options?: { at?: number[]; each?: boolean; repeatHeadings?: boolean }): PreparedContentAction;

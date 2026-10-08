@@ -8,6 +8,7 @@
 //   // result.download is { name, type, bytes }: one PDF, one PNG or SVG, or a ZIP of the slides.
 
 import { renderSvg } from "@openpresentation/opf-render/svg";
+import { mergeCatalogs, prepareSave } from "./catalogs.js";
 import { fontGate } from "./font-gate.js";
 import { createZip } from "./zip.js";
 
@@ -125,6 +126,8 @@ async function loadConverters(options) {
  * - `pdfMode`: "vector" (default: selectable text, vector shapes) or "raster" (each slide an image).
  * - `scale`: PNG pixel density, 1 to 4 (default 2); also the raster PDF's density.
  * - `renderOptions`: the render options the host draws with (`catalogs`, `date`, ...), the same as its preview.
+ * - `catalogs`: the host's registered catalogs (`Catalog[]`, merged with `renderOptions.catalogs`). The deck is embedded first (core's
+ *   `embed`), so what is drawn is the self-contained document a save writes.
  * - `fonts`: the renderer's fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`), the one the preview uses. Its
  *   `textMeasurement` lays the slides out, the faces the deck needs load through its `ensure` before anything is drawn, and its registry's
  *   faces are what gets embedded: the SVG carries the faces its slides draw, and the PDF embeds the registry's faces (script faces included).
@@ -136,7 +139,7 @@ async function loadConverters(options) {
  * Resolves `{ download, files, diagnostics, slides }`. Rejects with an error whose `code` is `export-aborted`,
  * `export-fonts-unlicensed`, `export-no-slides`, `export-unavailable`, `fonts-unavailable` or a renderer code.
  */
-export async function exportDeck(deck, options = {}) {
+export async function exportDeck(input, options = {}) {
   const format = EXPORT_FORMATS[options.format];
   if (!format) throw exportError("export-format", `Choose a format: ${Object.keys(EXPORT_FORMATS).join(", ")}.`);
   const { signal } = options;
@@ -144,12 +147,14 @@ export async function exportDeck(deck, options = {}) {
   const note = (diagnostic) => { diagnostics.push(diagnostic); options.onDiagnostic?.(diagnostic); };
   const progress = (stage, done, total, message) => options.onProgress?.({ stage, done, total, message });
   const check = () => { if (signal?.aborted) throw exportError("export-aborted", "The export was cancelled."); };
-  const indexes = slidesToExport(deck, options);
+  const indexes = slidesToExport(input, options);
   if (!indexes.length) throw exportError("export-no-slides", "There are no slides to export.");
   const selected = new Set(indexes);
   const keep = (diagnostic) => diagnostic.slide === undefined || selected.has(diagnostic.slide);
   const scale = Math.min(MAX_PNG_SCALE, Math.max(1, Number(options.scale) || 2));
-  const renderOptions = options.renderOptions ?? {};
+  const catalogs = mergeCatalogs(options.catalogs, options.renderOptions?.catalogs);
+  const renderOptions = { ...(options.renderOptions ?? {}), catalogs };
+  const deck = prepareSave(input, { catalogs }).document;
 
   check();
   const gate = fontGate(options.fonts);

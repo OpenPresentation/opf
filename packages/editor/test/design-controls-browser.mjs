@@ -27,7 +27,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=';
 const source = {
   name: 'Design controls',
-  language: 'english',
+  language: 'en-US',
   narrative: 'problem-solution',
   tone: 'formal',
   audience: ['executive'],
@@ -161,24 +161,35 @@ try {
   }
 
   // The 14 gallery dimensions, each from its control.
-  await step('themes', () => field(design, 'Theme').selectOption('dark'), current => current.design.theme === 'dark' && current.design.colorScheme !== undefined, { preview: true });
+  // OPF 0.15: a theme brings its own schemes, so the deck's font scheme override is removed rather than a copy being written.
+  await step('themes', () => field(design, 'Theme').selectOption('dark'), current => current.design.theme === 'dark' && current.design.fontScheme === undefined && current.design.colorScheme === undefined, { preview: true });
   // The chart slide shows scheme colors; the cover only uses the theme.
   await slide(2);
   await step('color-schemes', () => field(design, 'Color scheme').selectOption('forest-green'), current => current.design.colorScheme === 'forest-green', { preview: true });
   await slide(0);
   await step('font-schemes', () => field(design, 'Font scheme').selectOption('georgia'), current => current.design.fontScheme === 'georgia', { preview: true });
-  await step('languages', () => field(design, 'Language').selectOption('japanese'), current => current.language === 'japanese');
+  await step('languages', () => field(design, 'Language').selectOption('ja'), current => current.language === 'ja');
   const applyBackground = async fill => { await fill(); await design.getByRole('button', { name: 'Apply background' }).click(); };
   await step('backgrounds (theme slot)', () => applyBackground(async () => { await field(design, 'Background type').selectOption('theme'); await field(design, 'Theme slot').selectOption('dark1'); }), current => current.design.background === 'dark1', { preview: true });
   await step('backgrounds (hex)', () => applyBackground(async () => { await field(design, 'Background type').selectOption('solid'); await field(design, 'Color').fill('#1f2937'); }), current => current.design.background === '#1F2937', { preview: true });
+  // FA-22: the flat image background with fit, focus, alt and overlay.
+  await step('backgrounds (image)', () => applyBackground(async () => {
+    await field(design, 'Background type').selectOption('image');
+    await field(design, 'Fit').selectOption('stretch');
+    await field(design, 'Background alt text').fill('A pixel backdrop');
+    await field(design, 'Focus down (0 top to 1 bottom)').fill('0.7');
+    await field(design, 'Overlay color').fill('dark1');
+    await field(design, 'Overlay opacity (0 to 1)').fill('0.4');
+    // The source last: leaving it applies the image with the settings above (Apply then has nothing left to change).
+    await field(design, 'Background image source').fill('asset:photo');
+  }), current => JSON.stringify(current.design.background) === JSON.stringify({ type: 'image', src: 'asset:photo', alt: 'A pixel backdrop', fit: 'stretch', focus: { x: 0.5, y: 0.7 }, overlay: { color: 'dark1', opacity: 0.4 } }), { preview: true });
   await step('layouts', () => field(design, 'Layout of this slide').selectOption('text-2x'), current => current.slides[0].layout === 'text-2x', { preview: true });
   await step('narratives', () => field(design, 'Narrative').selectOption('scqa'), current => current.narrative === 'scqa');
   await step('tones', () => field(design, 'Tone').selectOption('casual'), current => current.tone === 'casual');
   await step('audiences', () => field(design, 'Audience').selectOption(['executive', 'investor']), current => JSON.stringify(current.audience) === '["executive","investor"]');
   await step('socials', async () => { await field(design, 'Platform').selectOption('linkedin'); const input = field(design, 'Handle or address'); await input.fill('alice-chen'); await input.press('Enter'); }, current => current.speaker.socials?.linkedin === 'alice-chen');
   await step('headers-footers', async () => { const input = field(design, 'Text'); await input.fill('Confidential'); await input.press('Enter'); }, current => current.design.footer?.center?.text === 'Confidential');
-  await step('image-treatments (slide image)', () => field(design, 'Position').selectOption('right'), current => current.design.slideImage?.position === 'right');
-  await step('image placeholder fill', () => field(design, 'Image placeholders').selectOption('fit'), current => current.design.imageFill === 'fit');
+  await step('image fit default', () => field(design, 'Image fit').selectOption('contain'), current => current.design.imageFit === 'contain');
   // RR-41: slide size and purpose. The size is one deck-level choice; the preview recomposes at it.
   const previewBox = () => page.locator('#preview svg').first().getAttribute('viewBox');
   assert.equal(await previewBox(), '0 0 1280 720', 'the classic theme composes at widescreen');
@@ -273,13 +284,11 @@ try {
   await field(design, 'Zone').selectOption('right');
   await step('footer slide number', () => design.getByLabel('Show the slide number').check(), current => current.design.footer?.right?.slideNumber === true);
 
-  // Slide image fields appear once a position is set and write the same object.
-  await field(design, 'Position').selectOption('left');
-  await waitDoc(current => current.design.slideImage?.position === 'left', 'slide image position');
-  await step('slide image source', async () => { const input = field(design, 'Slide image source'); await input.fill('asset:photo'); await input.press('Enter'); }, current => current.design.slideImage?.src === 'asset:photo');
-  await step('slide image size', async () => { const input = field(design, 'Size \(share of the slide, 0.1 to 0.9\)'); await input.fill('0.4'); await input.press('Enter'); }, current => current.design.slideImage?.size === 0.4);
-  await step('slide image shape', () => field(design, 'Shape').selectOption('circle'), current => current.design.slideImage?.shape === 'circle');
-  await step('slide image removed', () => field(design, 'Position').selectOption(''), current => current.design.slideImage === undefined);
+  // FA-23: the catalog section checks for catalog updates on request (nothing embedded here, so nothing to update).
+  await design.getByRole('button', { name: 'Check for catalog updates', exact: true }).click();
+  assert.match(await status(), /Every embedded record matches its catalog/);
+  assert.equal(await design.locator('[data-role="reference-findings"] li').count(), 0, 'every reference resolves in the registered catalog');
+  mark('the catalog section checks for updates and lists reference findings');
   // Bad input is explained and changes nothing.
   {
     const before = await doc();
@@ -470,24 +479,28 @@ try {
   const imageUse = selection.getByLabel(label('Use this image as'));
   await imageUse.waitFor();
   const imageOptions = await imageUse.locator('option').evaluateAll(options => options.map(option => [option.value, option.textContent]));
-  assert.deepEqual(imageOptions.map(entry => entry[0]), ['', 'slideImage:right', 'slideImage:left', 'slideImage:top', 'slideImage:bottom', 'slideImage:background', 'background', 'watermark']);
-  assert.equal(imageOptions.find(entry => entry[0] === 'slideImage:right')[1], 'Slide image, on the right', 'alt text travels with a slide image');
+  assert.deepEqual(imageOptions.map(entry => entry[0]), ['', 'background', 'watermark'], 'OPF 0.15: a background or a watermark; an edge band is the block placement');
+  assert.doesNotMatch(imageOptions.find(entry => entry[0] === 'background')[1], /loses/, 'alt text travels with a background');
   assert.match(imageOptions.find(entry => entry[0] === 'watermark')[1], /loses image alt text/, 'what a destination loses is on the option');
-  await step('image to slide image', () => imageUse.selectOption('slideImage:left'), current => current.slides[4].design?.slideImage?.position === 'left' && current.slides[4].blocks.length === 1, { preview: true });
+  // FA-22: the selected image block's fit, focus, treatments and placement.
+  await step('image block fit', () => field(selection, 'Fit').selectOption('contain'), current => current.slides[4].blocks[0].fit === 'contain', { preview: true });
+  await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('left'), current => current.slides[4].blocks[0].placement?.edge === 'left', { preview: true });
+  await step('image block shape', () => field(selection, 'Shape').selectOption('circle'), current => current.slides[4].blocks[0].shape === 'circle', { preview: true });
+  mark('an image block sets its fit, shape and placement');
+  await step('image to background', () => imageUse.selectOption('background'), current => current.slides[4].design?.background?.type === 'image' && current.slides[4].design.background.alt === 'A pixel' && current.slides[4].blocks.length === 1, { preview: true });
   // The change moved the selection to the slide, so select the image block again.
   await page.locator('#preview [data-canvas-target][data-opf-path^="slides.4.blocks.0"]').first().click({ position: { x: 4, y: 4 } });
   await page.keyboard.press('Escape');
-  await imageUse.selectOption('slideImage:left');
-  await waitDoc(current => current.slides[4].design?.slideImage?.position === 'left', 'slide image for the move back');
+  await imageUse.selectOption('background');
+  await waitDoc(current => current.slides[4].design?.background?.type === 'image', 'background image for the move back');
   await settle();
-  const backImage = selection.getByRole('button', { name: 'Move the slide image into the content', exact: true });
+  const backImage = selection.getByRole('button', { name: 'Move the background image into the content', exact: true });
   await backImage.waitFor();
-  assert.match(await selection.locator('[data-role="back-slideImage-note"]').textContent(), /image position and framing/);
-  await step('slide image back into the content', () => backImage.click(), current => current.slides[4].design === undefined && current.slides[4].blocks.length === 2 && JSON.stringify(current.slides[4].blocks[1]) === '{"image":{"src":"asset:photo","alt":"A pixel"}}', { preview: true });
+  await step('background image back into the content', () => backImage.click(), current => current.slides[4].design === undefined && current.slides[4].blocks.length === 2 && JSON.stringify(current.slides[4].blocks[1]) === '{"image":{"src":"asset:photo","alt":"A pixel"}}', { preview: true });
   await button('Undo').click();
-  await waitDoc(current => current.slides[4].design === undefined, 'slide image undone');
+  await waitDoc(current => current.slides[4].design === undefined, 'background image undone');
   await settle();
-  mark('an image moves between the content and the slide design');
+  mark('an image moves between the content and the slide background');
 
   // Blocks into regions and back: layouts are offered by block count, the loss comes before the change.
   await slide(5);

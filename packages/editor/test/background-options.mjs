@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import {
   BACKGROUND_TYPES,
@@ -27,8 +28,9 @@ const deck = () => ({
     { id: "b", title: "Body", text: "Text" },
   ],
 });
-const session = () => createEditorSession(deck(), { rejectInvalid: true });
-const svg = (presentation, index = 0) => renderSlideSvg(presentation, index);
+const catalogs = [defaultCatalog];
+const session = () => createEditorSession(deck(), { rejectInvalid: true, catalogs });
+const svg = (presentation, index = 0) => renderSlideSvg(presentation, index, { catalogs });
 
 // The pattern list is the 54 DrawingML presets, once each, in five families.
 assert.equal(PATTERN_PRESETS.length, 54);
@@ -53,7 +55,9 @@ const forms = [
     stored: { type: "gradient", gradient: { angle: 45, stops: [{ color: "accent1", position: 0 }, { color: "#FFFFFF", position: 1 }] } },
     draws: true,
   },
-  { name: "image with fit", spec: { type: "image", image: { src: "asset:photo", fit: "tile" }, opacity: 0.8 }, stored: { type: "image", image: { src: "asset:photo", fit: "tile" }, opacity: 0.8 }, draws: false },
+  { name: "image with fit", spec: { type: "image", src: "asset:photo", fit: "tile", opacity: 0.8 }, stored: { type: "image", src: "asset:photo", fit: "tile", opacity: 0.8 }, draws: true },
+  { name: "image with focus, alt and overlay", spec: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, stored: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, draws: true },
+  { name: "image shorthand", spec: "asset:photo", stored: "asset:photo", draws: true },
   {
     name: "pattern with colors",
     spec: { type: "pattern", pattern: { preset: "wdUpDiag", foregroundColor: "accent1", backgroundColor: "#FFFFFF" } },
@@ -72,7 +76,7 @@ for (const form of forms) {
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, form.name);
   if (form.draws) assert.notEqual(svg(editor.presentation), beforeSvg, `${form.name}: the preview draws it`);
   assert.deepEqual(prepareBackground(before, form.spec).patches, change.patches, `${form.name}: prepare is the same patch`);
-  assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true })).byteLength > 0, `${form.name}: exports`);
+  assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs })).byteLength > 0, `${form.name}: exports`);
   assert.deepEqual(editor.undo().presentation, before);
   editor.redo();
   assert.equal(setBackground(editor, form.spec).changed, false, `${form.name}: repeat commits nothing`);
@@ -90,8 +94,11 @@ for (const form of forms) {
   fails({ type: "gradient", gradient: { angle: "steep", stops: [{ color: "#000", position: 0 }, { color: "#fff", position: 1 }] } }, /gradient angle is a number/);
   fails({ type: "solid", color: "nope" }, /solid background color must be a hex color/);
   fails({ type: "solid", color: "#000", opacity: 3 }, /opacity is a number from 0 to 1/);
-  fails({ type: "image", image: { src: "  " } }, /needs an image/);
-  fails({ type: "image", image: { src: "a", fit: "stretch" } }, /Image fit is one of cover, contain, tile/);
+  fails({ type: "image", src: "  " }, /needs an image/);
+  fails({ type: "image", src: "asset:photo", fit: "crop" }, /Image fit is one of cover, contain, stretch, tile/);
+  fails({ type: "image", src: "photo.jpg" }, /starts with asset:/);
+  fails({ type: "image", image: { src: "asset:photo" } }, /needs an image/);
+  fails("photo.jpg", /image source/);
   fails({ type: "pattern", pattern: { preset: "" } }, /needs a preset/);
   fails({ type: "pattern", pattern: { preset: "pct5", foregroundColor: "blue" } }, /pattern foreground color/);
   fails({ type: "theme", slot: "mid" }, /names a slot/);
@@ -113,7 +120,7 @@ for (const preset of PATTERN_PRESETS) {
   assert.equal(editor.get("design.background.pattern.preset"), preset);
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, preset);
   assert.equal(editor.snapshot().undoDepth, 1, preset);
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
   const back = await pptx.fromPptx(bytes);
   const background = (back.presentation ?? back).design?.background ?? (back.presentation ?? back).slides?.[0]?.design?.background;
   assert.equal(background?.pattern?.preset, preset, `${preset} survives export and reimport`);
@@ -145,7 +152,9 @@ for (const preset of PATTERN_PRESETS) {
   assert.deepEqual([read("light2").type, read("light2").slot], ["theme", "light2"]);
   assert.deepEqual([read("#abc").type, read("#abc").color], ["solid", "#abc"]);
   assert.deepEqual(read({ type: "gradient", gradient: { angle: 10, stops: [{ color: "#000", position: 0 }, { color: "#fff", position: 1 }] }, opacity: 0.4 }).stops.length, 2);
-  assert.equal(read({ type: "image", image: { src: "asset:photo", fit: "contain" } }).fit, "contain");
+  assert.equal(read({ type: "image", src: "asset:photo", fit: "contain" }).fit, "contain");
+  assert.deepEqual(read({ type: "image", src: "asset:photo", focus: { x: 0, y: 1 } }).focus, { x: 0, y: 1 });
+  assert.equal(read("asset:photo").type, "image", "an image source shorthand reads as an image");
   assert.equal(read(undefined).type, undefined);
 }
 

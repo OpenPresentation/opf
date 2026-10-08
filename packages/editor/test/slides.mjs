@@ -3,6 +3,7 @@
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import { collectReservedPresentationIds } from "../dist/presentation-ids.js";
 import {
@@ -21,7 +22,8 @@ const deck = () => ({
     { id: "e", title: "E", text: "Epsilon", section: "End" },
   ],
 });
-const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
+// OPF 0.15: the layouts the fixtures add come from the registered default catalog.
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs: [defaultCatalog] });
 const ids = (editor) => editor.presentation.slides.map((slide) => slide.id);
 const sections = (editor) => editor.presentation.slides.map((slide) => slide.section ?? "-");
 const valid = (presentation) => assert.equal(validate(presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(presentation, { only: ["format"] }).findings.slice(0, 2)));

@@ -2,6 +2,7 @@
 // patch; the Review panel's quick fix for opf/chart-text-alternative writes it; find and replace reaches it; the preview names the
 // chart with it and the PPTX export carries it.
 import assert from "node:assert/strict";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
@@ -34,7 +35,7 @@ assert.deepEqual([readChartOptions({ type: "column", data, alt: "" }).state.alt,
   assert.equal(editor.snapshot().undoDepth, 1);
   assert.equal(setChartOptions(editor, C, { alt: "Revenue doubled from 10 in Q1 to 20 in Q2." }).changed, false);
   assert.match(renderSlideSvg(editor.presentation, 0), /role="img"/, "the preview names the chart");
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] });
   const back = await pptx.fromPptx(bytes);
   assert.equal((back.slides[0].chart ?? back.slides[0].blocks.find((block) => block.chart).chart).alt, "Revenue doubled from 10 in Q1 to 20 in Q2.", "alt survives the PPTX round trip");
   // Emptying the field removes alt (the audit then asks for it again); it does not mark the chart decorative.

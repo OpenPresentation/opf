@@ -2,6 +2,7 @@
 // ({ name, format }), a chart or table that shows a shared top-level dataset (through its `fields` selection), a column's
 // number format and a chart's series mapping, each as one undoable patch. Documents without the new fields behave as before.
 import assert from "node:assert/strict";
+import { catalogDisplay } from "@openpresentation/opf/catalog";
 import * as core from "@openpresentation/opf";
 import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
@@ -485,7 +486,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 
   // chart type compatibility reads the resolved data (dataset, fields and mapping).
-  const ids = (path) => switches.compatibleChartTypes(editor.presentation, { path }).map((entry) => entry.id);
+  const ids = (path) => switches.compatibleChartTypes(editor.presentation, { path, vocabularies: catalogDisplay }).map((entry) => entry.id);
   assert.ok(ids("slides.0.blocks.1").includes("pie"), "a dataset chart with fields that select one series suits a pie");
   assert.ok(ids("slides.0.blocks.5").includes("pie") && !ids("slides.0.blocks.5").includes("stacked-column"), "a mapping that plots one series suits a pie");
   assert.ok(ids("slides.0.blocks.0").includes("stacked-column"), "inline DataColumn data suits two series");

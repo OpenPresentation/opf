@@ -6,7 +6,8 @@ const deck={slides:[{title:'Hello',text:[{text:'bold',bold:true}],blocks:[{compo
 assert.equal(schemaAtPath(deck,'/slides/0/text/0/bold').type,'boolean');
 assert.equal(schemaAtPath(deck,'/slides/0/blocks/0/blocks/0/text').oneOf.length,2);
 assert.equal(schemaAtPath(deck,'/slides/0/top:left').$ref,undefined);
-assert.equal(schemaVariants(schemaAtPath(deck,'/slides/0/design/background')).length,7);
+// OPF 0.15: three shorthand strings (theme slot, hex colour, image source) and five background objects.
+assert.equal(schemaVariants(schemaAtPath(deck,'/slides/0/design/background')).length,8);
 for(const type of ['theme','solid','gradient','image','pattern']){
  const schema=schemaVariants(schemaAtPath(deck,'/design/background')).find(s=>s.properties?.type?.const===type);
  const value=createSchemaValue(schema);
@@ -14,7 +15,9 @@ for(const type of ['theme','solid','gradient','image','pattern']){
  assert.equal(activeSchema(schemaAtPath(deck,'/design/background'),value).properties.type.const,type);
  assert.equal(validate({slides:[{title:'Background'}],design:{background:value}}, { only: ["format"] }).valid,true,JSON.stringify(value));
 }
-assert.equal(schemaAtPath(deck,'/catalogs/layouts/records/0').properties.id.type,'string');
+// An embedded record (catalogs.<group>.<kind>.<id>) is described by its catalog record schema.
+assert.ok(schemaAtPath(deck,'/catalogs/custom/layouts/mine').properties.placeholders,'an embedded layout record');
+assert.ok(schemaAtPath(deck,'/catalogs/acme/themes/brand').properties.colorScheme,'an embedded theme record');
 const fields=listSchemaFields();assert.ok(fields.length>600);
 for(const [name,schema]of Object.entries(schemas))for(const key of Object.keys(schema.properties??{}))assert.ok(fields.some(f=>f.schema===name&&f.path===`/properties/${key.replace(/~/g,'~0').replace(/\//g,'~1')}`));
 for(const [name,schema]of Object.entries(schemas.presentation.$defs))for(const key of Object.keys(schema.properties??{}))assert.ok(fields.some(f=>f.schema==='presentation'&&f.path===`/$defs/${name}/properties/${key}`));

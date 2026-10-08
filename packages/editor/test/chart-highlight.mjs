@@ -2,6 +2,7 @@
 // highlight is offered or written; the choices come from the chart's resolved data (a dataset chart offers its dataset's columns and
 // rows); the preview draws the change and the PPTX export carries it.
 import assert from "node:assert/strict";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
 
@@ -63,7 +64,7 @@ assert.deepEqual(readChartOptions({ type: "column", data: { src: "asset:missing"
   assert.equal(setChartOptions(editor, C, { highlight: { categories: [] } }).changed, false, "removing nothing is a no-op");
   setChartOptions(editor, C, { highlight: { series: ["South", "South"], categories: ["Q3"] } });
   assert.deepEqual(editor.get(`${C}.highlight`), { series: ["South"], categories: ["Q3"] }, "duplicates collapse");
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] });
   const back = await pptx.fromPptx(bytes);
   const block = (back.slides?.[0]?.blocks ?? []).find((entry) => entry.chart) ?? back.slides?.[0];
   assert.deepEqual(block.chart.highlight, { series: ["South"], categories: ["Q3"] }, "the highlight survives the PPTX round trip");

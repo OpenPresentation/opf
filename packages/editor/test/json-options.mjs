@@ -1,10 +1,14 @@
 import assert from 'node:assert/strict';
 import {getJsonFieldContext,replaceFieldOption,fieldOptionEdit} from '../dist/json-options.js';
 import {validate} from '@openpresentation/opf';
-const record=(id,name=id)=>({id,name,placeholders:[{type:'title'},{type:'text'}]});
-const deck={name:'Two  spaces',tone:'formal',slides:[{layout:'text-1x',title:'Keep title',text:'e\u0302',notes:'Keep\r\nnotes'}],catalogs:{layouts:{source:'https://example.invalid/catalog.json',records:[record('text-1x','Local override'),record('local')]}},'x-data':{layout:'text-1x'}};
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+// OPF 0.15: the document embeds records by group (`custom`, `default`, named groups); the host passes its catalogs (Catalog[]).
+const record=(name)=>({name,placeholders:[{type:'title'},{type:'text'}]});
+const deck={name:'Two  spaces',tone:'formal',slides:[{layout:'text-1x',title:'Keep title',text:'e\u0302',notes:'Keep\r\nnotes'}],catalogs:{gallery:{source:'https://example.invalid/catalog.json'},custom:{layouts:{'text-1x':record('Local override'),local:record('local')}}},'x-data':{layout:'text-1x'}};
 const original=JSON.stringify(deck,null,2).replace('"name":','"name"  :').replaceAll('\n','\r\n');
-const loaded={layouts:[record('text-1x','Loaded override'),record('loaded')]},snapshot=structuredClone(loaded);
+const loaded=[{source:'pkg:app',layouts:{'text-1x':record('Loaded override'),loaded:record('loaded')},tones:defaultCatalog.tones}],snapshot=structuredClone(loaded);
+// The host default catalog with extra records, for the ranking checks below.
+const withLayouts=(extra)=>[{...defaultCatalog,layouts:{...defaultCatalog.layouts,...extra}}];
 const at=(source,key,catalogs=loaded)=>getJsonFieldContext(source,source.indexOf(key)+1,catalogs);
 const context=at(original,'"layout"');assert.equal(context.catalog,'layouts');assert.equal(context.unloadedSource,true);
 assert.equal(context.options.find(option=>option.value==='text-1x').source,'Document catalog');
@@ -17,23 +21,23 @@ assert.equal(at(original,'"title"'),null);assert.equal(at('{"slides":[{"layout":
 assert.equal(getJsonFieldContext(original,original.lastIndexOf('"layout"')+1),null,'Extension keys must not gain schema behavior by name');
 assert.ok(at(original,'"tone"').options.some(option=>option.value==='casual'));
 const unknown='{"slides":[{"layout":"custom-current","title":"Keep"}]}';assert.equal(at(unknown,'"layout"').options[0].source,'Current value');
-const malformed='{"slides":[{"layout":"text-1x"}],"catalogs":{"layouts":{"records":true}}}';assert.ok(at(malformed,'"layout"',{layouts:true}));
+const malformed='{"slides":[{"layout":"text-1x"}],"catalogs":{"custom":{"layouts":true}}}';assert.ok(at(malformed,'"layout"'),'a malformed document catalog still offers the host records');
 const duplicate='{"slides":[{"layout":"text-1x","layout":"title-subtitle"}]}';assert.throws(()=>replaceFieldOption(at(duplicate,'"layout"'),'loaded'),/duplicate key/);
 console.log('JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass.');
 
 // Placeholder similarity outranks provenance, counts remain significant, and
 // layout metadata reflects the actual content kinds.
-const layouts=[
-  {id:'same-z',name:'Zulu exact',placeholders:[{type:'subtitle'},{type:'title'}]},
-  {id:'same-a',name:'Alpha exact',placeholders:[{type:'title'},{type:'subtitle'}]},
-  {id:'three',name:'AAA three texts',placeholders:[{type:'title'},{type:'text'},{type:'text'},{type:'text'}]},
-  {id:'unknown-slots',name:'No declared slots'},
-  {id:'wrong',name:'AAA chart',placeholders:[{type:'title'},{type:'chart'}]},
-];
-const rankedSource=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep',text:'Keep text'}],catalogs:{layouts:{records:layouts}}});
-const ranked=getJsonFieldContext(rankedSource,rankedSource.indexOf('title-subtitle')+1,{layouts:[{id:'app-list',name:'AAA app list',placeholders:[{type:'list'}]}]});
-// The bundled catalog is part of the option list, so expectations are rules over whatever it holds, never a
-// literal list of ids: any bundled layout with the current layout's placeholders (or a compatible set) joins the
+const layouts={
+  'same-z':{name:'Zulu exact',placeholders:[{type:'subtitle'},{type:'title'}]},
+  'same-a':{name:'Alpha exact',placeholders:[{type:'title'},{type:'subtitle'}]},
+  three:{name:'AAA three texts',placeholders:[{type:'title'},{type:'text'},{type:'text'},{type:'text'}]},
+  'unknown-slots':{name:'No declared slots'},
+  wrong:{name:'AAA chart',placeholders:[{type:'title'},{type:'chart'}]},
+};
+const rankedSource=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep',text:'Keep text'}],catalogs:{custom:{layouts}}});
+const ranked=getJsonFieldContext(rankedSource,rankedSource.indexOf('title-subtitle')+1,withLayouts({'app-list':{name:'AAA app list',placeholders:[{type:'list'}]}}));
+// The registered default catalog is part of the option list, so expectations are rules over whatever it holds, never a
+// literal list of ids: any registered layout with the current layout's placeholders (or a compatible set) joins the
 // groups below and sorts among the test records by label.
 const groupOrder=['Current layout','Same placeholders','Compatible placeholders','Different counts','Other layouts','Unspecified placeholders'];
 const values=ranked.options.map(option=>option.value);
@@ -60,18 +64,18 @@ assert.equal(ranked.options.find(option=>option.value==='wrong').layoutGroup,'Ot
 assert.equal(ranked.options.find(option=>option.value==='unknown-slots').layoutGroup,'Unspecified placeholders');
 assert.equal(ranked.options.find(option=>option.value==='app-list').sourceLabel,'Provided by app');
 assert.ok(!ranked.options.find(option=>option.value==='text-3x').suggested);
-const inline=JSON.stringify({slides:[{layout:'text-1x'}],catalogs:{layouts:{records:[{id:'text-1x',name:'Override',placeholders:[{type:'title'},{type:'chart'},{type:'text'}]}]}}});
-const inlineOptions=getJsonFieldContext(inline,inline.indexOf('text-1x')+1).options;
+const inline=JSON.stringify({slides:[{layout:'text-1x'}],catalogs:{custom:{layouts:{'text-1x':{name:'Override',placeholders:[{type:'title'},{type:'chart'},{type:'text'}]}}}}});
+const inlineOptions=getJsonFieldContext(inline,inline.indexOf('text-1x')+1,[defaultCatalog]).options;
 assert.equal(inlineOptions.find(option=>option.value==='chart-1x').layoutGroup,'Same placeholders','Document catalog overrides determine similarity');
 const noSlots='{"slides":[{"layout":"unknown-layout"}]}';
-const noSlotsOptions=getJsonFieldContext(noSlots,noSlots.indexOf('unknown-layout')+1).options;
+const noSlotsOptions=getJsonFieldContext(noSlots,noSlots.indexOf('unknown-layout')+1,[defaultCatalog]).options;
 assert.equal(noSlotsOptions[0].value,'unknown-layout');
 assert.equal(noSlotsOptions.filter(option=>option.related).length,1,'Unknown placeholders do not imply a match');
-const blank='{"slides":[{"layout":"blank"}],"catalogs":{"layouts":{"records":[{"id":"also-blank","name":"Also blank","placeholders":[]}]}}}';
-assert.equal(getJsonFieldContext(blank,blank.indexOf('blank')+1).options.find(option=>option.value==='also-blank').layoutGroup,'Same placeholders','Explicitly empty placeholders are known');
+const blank='{"slides":[{"layout":"blank"}],"catalogs":{"custom":{"layouts":{"also-blank":{"name":"Also blank","placeholders":[]}}}}}';
+assert.equal(getJsonFieldContext(blank,blank.indexOf('blank')+1,[defaultCatalog]).options.find(option=>option.value==='also-blank').layoutGroup,'Same placeholders','Explicitly empty placeholders are known');
 console.log('Layout ranking: current first, exact/compatible groups, counted placeholders, document overrides, provenance and unknown layouts pass.');
 
-const choose=(deck,value,catalogs={})=>{
+const choose=(deck,value,catalogs=[defaultCatalog])=>{
   const source=JSON.stringify(deck,null,2);
   const context=at(source,'"layout"',catalogs);
   const changed=replaceFieldOption(context,value);
@@ -84,7 +88,7 @@ const choose=(deck,value,catalogs={})=>{
 assert.deepEqual(choose({slides:[{layout:'text-1x',text:'Keep'}]},'text-3x').slides[0].blocks,[{text:'Keep'},{text:''},{text:''}]);
 assert.equal(choose({slides:[{layout:'text-1x',text:'Keep'}]},'title-subtitle').slides[0].subtitle,'');
 const cover={slides:[{layout:'title-subtitle',title:'Keep',subtitle:'Keep support',notes:'Keep notes',metric:0}]};
-const metricContext=at(JSON.stringify(cover),'"layout"',{});
+const metricContext=at(JSON.stringify(cover),'"layout"',[defaultCatalog]);
 assert.equal(metricContext.options.find(option=>option.value==='number-1x').placeholders,'Title + Metric');
 assert.equal(metricContext.options.find(option=>option.value==='number-1x').related,false);
 const metricDeck=choose({...cover,slides:[{...cover.slides[0],metric:undefined}]},'number-1x');
@@ -108,9 +112,9 @@ assert.deepEqual(positioned.slides[0].left,{text:'Keep left'});
 assert.deepEqual(positioned.slides[0].right.blocks,[{text:'Keep right'},{metric:{value:'',label:''}}]);
 const explicit=choose({slides:[{layout:'text-1x',type:'text',text:'Typed content'}]},'number-1x');
 assert.deepEqual(explicit.slides[0].blocks,[{type:'text',text:'Typed content'},{metric:{value:'',label:''}}]);
-const custom={id:'custom-metric',name:'Custom metric',placeholders:[{type:'title'},{type:'metric'},{type:'metric'}]};
-assert.equal(choose({slides:[{layout:'text-1x'}],catalogs:{layouts:{records:[custom]}}},custom.id).slides[0].blocks.length,2);
-assert.equal(choose({slides:[{layout:'text-1x'}]},custom.id,{layouts:[custom]}).slides[0].blocks.length,2);
+const custom={name:'Custom metric',placeholders:[{type:'title'},{type:'metric'},{type:'metric'}]};
+assert.equal(choose({slides:[{layout:'text-1x'}],catalogs:{custom:{layouts:{'custom-metric':custom}}}},'custom-metric').slides[0].blocks.length,2);
+assert.equal(choose({slides:[{layout:'text-1x'}]},'custom-metric',withLayouts({'custom-metric':custom})).slides[0].blocks.length,2);
 for(const layout of ['chart-1x','table-1x','image-1x','list-1x','quote-1x','timeline-1x']){
   choose({slides:[{layout:'title',title:'Keep'}]},layout);
 }

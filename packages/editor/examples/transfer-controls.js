@@ -15,6 +15,15 @@ import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { previewFonts, whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
+// FA-23: pasted slides bring their catalog records (core copySlides). Say which records did not keep their reference, so a renamed
+// layout or theme is never a surprise: "custom-conflict" (a different record of the same id), "catalog-revision" (another revision of
+// a catalog record, kept as a custom copy) or "group-name" (a catalog group renamed because the name was taken).
+const RENAME_REASONS = { "custom-conflict": "a different record had the same id", "catalog-revision": "kept as a copy of another catalog revision", "group-name": "catalog name taken" };
+function renameNote(result) {
+  const renamed = result?.renamed ?? [];
+  if (!renamed.length) return "";
+  return ` · renamed ${renamed.map((entry) => `${entry.from} → ${entry.to} (${RENAME_REASONS[entry.reason] ?? entry.reason})`).join(", ")}`;
+}
 export function installTransferControls({
   editor,
   getCanvas,
@@ -99,16 +108,18 @@ export function installTransferControls({
         mode,
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
+        catalogs: editor.catalogs,
       });
       // FF-41: the preview draws only once the faces the imported document needs (an Arabic .pptx, a Japanese deck) are loaded.
       whenFontsReady(fonts, result.presentation, {
+        renderOptions: { catalogs: editor.catalogs },
         isCurrent: () => run === previewRun && importDialog.open,
         loading: () => {
           $("import-preview").replaceChildren();
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          const svg = renderSlideSvg(result.presentation, result.slideIndex, { fonts: previewFonts(fonts) });
+          const svg = renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts: previewFonts(fonts) });
           $("import-preview").innerHTML = svg;
           prepared = result;
           error("");
@@ -117,7 +128,7 @@ export function installTransferControls({
           $("import-summary").textContent =
             mode === "selection"
               ? "Replace selected content"
-              : `${count} ${count === 1 ? "slide" : "slides"} · ${mode === "insert" ? `insert after slide ${getSlideIndex() + 1}` : "open as presentation (undoable)"}`;
+              : `${count} ${count === 1 ? "slide" : "slides"} · ${mode === "insert" ? `insert after slide ${getSlideIndex() + 1}` : "open as presentation (undoable)"}${renameNote(result)}`;
           $("import-apply").textContent =
             mode === "insert"
               ? "Insert slides"
@@ -202,6 +213,7 @@ export function installTransferControls({
       slideIndex: getSlideIndex(),
       path: getSelectedPath(),
       format: $("copy-format").value,
+      catalogs: editor.catalogs,
     });
     $("copy-output").value = text;
     $("copy-status").textContent =
@@ -470,23 +482,25 @@ export function installTransferControls({
         mode: $("import-action").value,
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
+        catalogs: editor.catalogs,
       });
       // The imported document becomes the document only after its faces are loaded (at once when they already are).
       whenFontsReady(fonts, result.presentation, {
+        renderOptions: { catalogs: editor.catalogs },
         isCurrent: () => importDialog.open,
         loading: () => {
           $("import-apply").disabled = true;
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          renderSlideSvg(result.presentation, result.slideIndex, { fonts: previewFonts(fonts) });
+          renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts: previewFonts(fonts) });
           setSlideIndex(result.slideIndex);
           editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",
             rejectInvalid: true,
           });
           closeImport();
-          status("OPF imported · Undo restores the previous document");
+          status(`OPF imported${renameNote(result)} · Undo restores the previous document`);
         },
         failed: (cause) => {
           $("import-apply").disabled = !prepared;
@@ -508,6 +522,7 @@ export function installTransferControls({
         scope: event.target.closest?.("#preview") ? "selection" : "slide",
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
+        catalogs: editor.catalogs,
       }),
     );
     event.preventDefault();

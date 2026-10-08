@@ -62,7 +62,7 @@ export function createOPFReactComponents(React) {
     const snapshot = useEditorSnapshot(editor);
     const value = getValueAtPath(snapshot.presentation, path, "");
     const currentId = value && typeof value === "object" ? value.id : value;
-    const options = catalogOptions ?? getCatalogOptions(catalogKind, { presentation: snapshot.presentation });
+    const options = catalogOptions ?? getCatalogOptions(catalogKind, { presentation: snapshot.presentation, catalogs: editor.catalogs });
 
     return React.createElement(
       "select",

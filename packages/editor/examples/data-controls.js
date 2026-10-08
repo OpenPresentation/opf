@@ -66,14 +66,14 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
    const deck=editor.presentation, preview={...deck,slides:[{title:$('data-slide-title').value,...content}]};
    // FF-41: the preview draws only once the faces the data needs (a CSV in Japanese or Arabic, an Aptos deck) are loaded.
    const show=()=>{
-    $('data-preview').innerHTML=renderSlideSvg(preview,0,{fonts:previewFonts(fonts),trace:false});
+    $('data-preview').innerHTML=renderSlideSvg(preview,0,{catalogs:editor.catalogs,fonts:previewFonts(fonts),trace:false});
     const table=document.createElement('table');
     for(const [i,row]of [data.columns,...data.rows.slice(0,8)].entries()){const tr=document.createElement('tr');for(const value of row){const td=document.createElement(i?'td':'th');td.textContent=value===null?'—':String(value);tr.append(td);}table.append(tr);}
     $('data-grid').append(table);$('data-summary').textContent=`${data.rows.length} rows · ${data.columns.length} columns${data.rows.length>8?' · first 8 rows shown below':''}`;
     try{prepare();}catch(error){failed(error);return;}$('data-apply').disabled=false;
    };
    const failed=error=>{content=undefined;$('data-apply').disabled=true;$('data-error').textContent=error.message;};
-   whenFontsReady(fonts,preview,{isCurrent:()=>run===previewRun,loading:()=>{$('data-summary').textContent='Loading fonts for this document…';},ready:show,failed});
+   whenFontsReady(fonts,preview,{renderOptions:{catalogs:editor.catalogs},isCurrent:()=>run===previewRun,loading:()=>{$('data-summary').textContent='Loading fonts for this document…';},ready:show,failed});
   }catch(error){content=undefined;$('data-error').textContent=error.message;}
  }
  // The dataset id starts as the first one the deck does not hold, so a second import does not replace the first one's rows. Typing an id (to replace one on purpose) keeps it.

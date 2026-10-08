@@ -2,6 +2,7 @@ import type { EditorSession } from "./index.js";
 import type { RenderSvgOptions } from "@openpresentation/opf-render";
 import type { BrowserFontsHandle } from "@openpresentation/opf-render/fonts-browser";
 import type { SlideComposition } from "@openpresentation/opf/composition";
+import type { Catalog } from "@openpresentation/opf";
 /**
  * The fonts the canvas, the export and `whenFontsReady` take: the renderer's handle from `loadFonts()` (`@openpresentation/opf-render/fonts-browser`).
  * Only `textMeasurement` is required to measure; `pending` and `ensure` make the canvas load script and vendored faces before it draws.
@@ -30,6 +31,12 @@ export declare function whenFontsReady(
 export interface CanvasEditorOptions {
   editor?: EditorSession;
   presentation?: unknown;
+  /**
+   * The host's catalogs (core `Catalog[]`, for example `[defaultCatalog]` from `@openpresentation/opf/catalog`) for the session the
+   * canvas creates from `presentation`. With `editor`, register them on that session instead (`createEditorSession(doc, { catalogs })`);
+   * `renderOptions.catalogs` adds catalogs for drawing only, merged after the session's.
+   */
+  catalogs?: readonly Catalog[];
   slideIndex?: number;
   /** Show keyboard-accessible dividers for resizing composition tracks. */
   layoutEditing?: boolean;
@@ -86,7 +93,7 @@ export interface CanvasEditor {
   /** True while the crop layer is open. */
   readonly cropping: boolean;
   /**
-   * Open the crop layer for the picture at `path` (an image block, a slide's `image`, or `slides.N.design.slideImage`); `tool: "focus"`
+   * Open the crop layer for the picture at `path` (an image block or a slide's `image`); `tool: "focus"`
    * starts with the focal point. Apply writes one undoable change (see `@openpresentation/opf-editor/image-crop`). Resolves to whether it opened.
    */
   cropImage(path: string, options?: { tool?: "crop" | "focus" }): Promise<boolean>;

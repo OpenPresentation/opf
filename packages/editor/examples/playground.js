@@ -8,7 +8,10 @@ import {installFindControls} from './find-controls.js';
 import {installCropControls} from './crop-controls.js';
 import {installMobileControls} from './mobile-controls.js';
 import {installTransferControls} from './transfer-controls.js';
-import { createEditorSession } from '../src/index.js';
+import { createEditorSession, saveDocument } from '../src/index.js';
+// FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog (the pptx.gallery
+// snapshot core publishes as an opt-in subpath) and hands the session's one list to every render, check, embed and export.
+import { catalogDisplay, defaultCatalog } from '@openpresentation/opf/catalog';
 import {createCanvasEditor} from '../src/canvas.js';
 import { previewFonts, whenFontsReady } from '../src/font-gate.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
@@ -44,18 +47,20 @@ const fontRegistry = fonts.registry;
 // document or draws a slide (initial load, Source Apply and the gallery handoff, import, undo and redo, font and language
 // switches, slide navigation, thumbnails, previews and export) goes through whenFontsReady(fonts, ...) or the canvas's own gate.
 // The faces a document needs that are not loaded yet; a document the renderer cannot resolve reports none and fails when it renders.
-const pendingFonts = deck => { try { return fonts.pending(deck); } catch { return []; } };
+const catalogs = [defaultCatalog];
+const renderOptions = () => ({ catalogs: editor.catalogs });
+const pendingFonts = deck => { try { return fonts.pending(deck, renderOptions()); } catch { return []; } };
 // renderSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
 // Intos Display has no glyph), but the session's composeSlide and paginateSlide take the handle's plain measurement, and that one is strict:
 // it throws "Font 'Intos Display' cannot display U+65E5" even with every face loaded. Give them the same per-document, script-aware
 // measurement (opf-render README: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(presentation))).
 const layoutFor = (deck,index) => {
-  try { return {fonts:{textMeasurement:renderFontCore.createScriptTextMeasurement(fonts.textMeasurement,resolveScriptFonts(deck,{slideIndex:index}))}}; }
+  try { return {fonts:{textMeasurement:renderFontCore.createScriptTextMeasurement(fonts.textMeasurement,resolveScriptFonts(deck,{slideIndex:index,catalogs:editor.catalogs}))}}; }
   catch { return {fonts}; }
 };
 const editor = createEditorSession({
   name: 'A presentation you can work on',
-  catalogs: {fontSchemes: {records: [{'$schema':'https://openpresentation.org/schema/opf-font-scheme/v1',id:'cambria',name:'Cambria',major:'Cambria',minor:'Cambria'}]}},
+  catalogs: {custom: {fontSchemes: {cambria: {name:'Cambria',major:'Cambria',minor:'Cambria'}}}},
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [{ id: 'recommendation', title: 'Start with a clear recommendation',
     composition: { mode: 'row', weights: [2, 1] },
@@ -77,13 +82,13 @@ const editor = createEditorSession({
       {timeline:[{when:'Now',what:'Prototype'},{when:'Next',what:'Review'}]}
     ]},
   ],
-}, { rejectInvalid: true });
+}, { rejectInvalid: true, catalogs });
 const element = id => document.getElementById(id);
 let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure, review, pendingContentFocus = false, pictureTools;
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
-const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
-const selectionControls = createDesignControls(element('selection-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'table', 'slide-content'], onSelectPath: path => select(path)});
+const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
+const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
 // RR-24: "Edit data" opens the data grid for the selected chart or table over the bottom of the canvas (it never moves the slide), so edits show in the preview at once.
 let dataGridOpen = false, dataGrid;
 const syncDataGrid = () => {
@@ -145,7 +150,7 @@ const thumbnailKey = (deck, index) => JSON.stringify([index, deck.slides.length,
 function thumbnailHtml(deck, index) {
   const key = thumbnailKey(deck, index);
   if (!thumbnailCache.has(key)) {
-    try { thumbnailCache.set(key, renderSlideSvg(deck, index, {fonts: previewFonts(fonts), trace: false})); }
+    try { thumbnailCache.set(key, renderSlideSvg(deck, index, {...renderOptions(), fonts: previewFonts(fonts), trace: false})); }
     catch { thumbnailCache.set(key, 'Preview unavailable'); }
   }
   return thumbnailCache.get(key);
@@ -281,6 +286,7 @@ function refresh() {
   const token = ++refreshToken;
   let loaded = false;
   return whenFontsReady(fonts, editor.presentation, {
+    renderOptions: renderOptions(),
     isCurrent: () => token === refreshToken,
     loading: () => { loaded = true; status('Loading fonts…'); if (!canvas) element('preview').textContent = 'Loading fonts…'; element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo; },
     ready: () => { fontsFailure = undefined; if (loaded) { thumbnailCache.clear(); if (/Loading fonts/.test(element('status').textContent)) status('Ready to edit'); } renderSafely(); },
@@ -288,6 +294,8 @@ function refresh() {
   });
 }
 editor.subscribe(refresh);
+// FA-23: an edit of a catalog's record (in Source, Properties or a panel) forks it into this deck's own records; tell the user.
+editor.subscribe(event => { if (event.meta?.notice) setTimeout(() => status(event.meta.notice)); });
 element('apply').onclick = () => act(() => editor.set(selectedPath, typeof selectedValue === 'string' ? element('value').value : JSON.parse(element('value').value)));
 element('undo').onclick = () => act(() => editor.undo());
 element('redo').onclick = () => act(() => editor.redo());
@@ -327,7 +335,7 @@ element('apply-json').onclick = async event => {
   if (pendingFonts(deck).length) {
     applying = true;
     element('json-error').textContent = 'Loading fonts for this document…';
-    try { await fonts.ensure(deck); }
+    try { await fonts.ensure(deck, renderOptions()); }
     catch (error) { element('json-error').textContent = error.message; return; }
     finally { applying = false; }
     if (!element('source-dialog').open || element('json').value !== applied) return;
@@ -357,12 +365,13 @@ function previewSource() {
     if(duplicate)throw new Error(duplicate);
   } catch(error) {fail(error);return;}
   whenFontsReady(fonts,deck,{
+    renderOptions:renderOptions(),
     isCurrent:()=>token===previewToken,
     // Apply stays enabled while the preview's faces load: it loads what the source needs itself before applying it, and a host that
     // clicks it the moment the page is ready (the gallery handoff) must not hit a disabled button because the starting deck's faces are still loading.
     loading:()=>{element('json-error').textContent='Loading fonts for this document…';},
     ready:()=>{
-      const svg=renderSlideSvg(deck,Math.min(slideIndex,(deck.slides?.length ?? 1)-1),{fonts:previewFonts(fonts)});
+      const svg=renderSlideSvg(deck,Math.min(slideIndex,(deck.slides?.length ?? 1)-1),{...renderOptions(),fonts:previewFonts(fonts)});
       element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
     },
     failed:fail,
@@ -383,7 +392,8 @@ element('document-name').onkeydown = event => { if(event.key==='Enter') event.cu
 element('apply-notes').onclick = () => act(() => editor.set(`slides.${slideIndex}.notes`,element('notes').value));
 element('download').onclick = () => {
   if(canvas && !canvas.commit())return;
-  const deck=editor.presentation, blob=new Blob([JSON.stringify(deck,null,2)],{type:'application/json'}), url=URL.createObjectURL(blob);
+  // Saving embeds every catalog record the deck uses (core embed), so the file renders the same where no catalog is registered.
+  const deck=saveDocument(editor).document, blob=new Blob([JSON.stringify(deck,null,2)],{type:'application/json'}), url=URL.createObjectURL(blob);
   const link=document.createElement('a'); link.href=url; link.download=`${(deck.name ?? 'presentation').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'') || 'presentation'}.opf.json`;
   link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); status('OPF file downloaded');
   persistence?.markSaved();
@@ -426,7 +436,7 @@ element('open-properties').onclick=()=>{
  propertiesDialog.showModal();
  propertiesInspector?.destroy();
  propertiesInspector=createSchemaInspector(element('schema-properties'),{editor,path:`/slides/${slideIndex}`,
-  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSlideSvg(deck,Math.min(slideIndex,deck.slides.length-1),{fonts:previewFonts(fonts),trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
+  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{renderOptions:renderOptions(),isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSlideSvg(deck,Math.min(slideIndex,deck.slides.length-1),{...renderOptions(),fonts:previewFonts(fonts),trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
   onCommit:()=>status('Presentation properties updated'),onError:error=>status(error.message)
  });
 };

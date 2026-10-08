@@ -33,13 +33,14 @@ const fetchLocal = async (url) => {
 const newFonts = (extra = {}) => browserFonts.loadFonts({ faces: eager.map((face) => ({ ...face })), ...extra, document: domDocument, fetch: fetchLocal, substitutionPolicy: "visual", fallbackFamily: "Roboto", lazyFontsBaseUrl: "https://fonts.example/", scriptBaseUrl: "https://fonts.example/scripts/" });
 const names = (files) => files.map((file) => file.split("/").pop()).sort();
 
-// A font scheme only the host's catalogs have: Lora, a vendored open family, under the host's own id.
-const catalogs = { fontSchemes: [{ id: "host-lora", name: "Host Lora", major: "Lora", minor: "Lora" }] };
+// A font scheme only the host's catalogs have: Lora, a vendored open family, under the host's own id. OPF 0.15: the host registers a
+// Catalog[]; the first is the host default, so the bare id resolves in it.
+const catalogs = [{ source: "pkg:host", fontSchemes: { "host-lora": { name: "Host Lora", major: "Lora", minor: "Lora" } } }];
 const hostDeck = { name: "Host scheme", design: { fontScheme: "host-lora" }, slides: [{ title: "Quarterly review", items: ["Revenue grew in every region."] }] };
 {
   const fonts = await newFonts();
   const gate = fontGate(fonts);
-  // Without the catalogs the scheme id is unknown: core falls back to the default (aptos) and the gate reports the faces that scheme draws.
+  // Without the catalogs the scheme id is unknown: core falls back to the engine default (Aptos) and the gate reports the faces it draws.
   assert.deepEqual(names(gate.pending(hostDeck)), ["Intos-Regular.ttf", "IntosDisplay-Bold.ttf"].sort(), "an unknown scheme id falls back to the default scheme's two faces");
   // With them the deck draws Lora: its regular and bold faces.
   assert.deepEqual(names(gate.pending(hostDeck, { catalogs })), ["Lora-Bold.ttf", "Lora-Regular.ttf"], "the catalog-only scheme resolves and needs its two faces");

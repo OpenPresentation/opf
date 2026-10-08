@@ -18,18 +18,19 @@ import { createEditorSession } from ${JSON.stringify(path.join(repo, 'src/index.
 import { createCanvasEditor } from ${JSON.stringify(path.join(repo, 'src/canvas.js').replace(/\\/g, '/'))};
 import { switchDimension } from ${JSON.stringify(path.join(repo, 'src/switches.js').replace(/\\/g, '/'))};
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
-import { layouts } from '@openpresentation/opf/catalogs';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 const faces = await fetch('./fonts.json').then(response => response.json());
 const fonts = await loadFonts({ faces: faces.map(face => ({ family: face.family, weight: face.weight, italic: face.italic, license: face.license, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), character => character.charCodeAt(0)) })), substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scriptBaseUrl: './script-fonts/', lazyFontsBaseUrl: new URL('./', document.baseURI).href });
 const editor = createEditorSession({ name: 'Canvas fonts', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [
   { id: 'one', title: 'Quarterly review', text: 'Sales grew twelve percent.' },
   { id: 'two', title: 'Second slide', text: 'More detail follows.' },
-] }, { rejectInvalid: true });
+] }, { rejectInvalid: true, catalogs: [defaultCatalog] });
 const events = [], errors = [];
-// FF-41: a layout id that only the host's catalogs know. The canvas hands its renderOptions (catalogs included) to the gate.
-const catalogs = { layouts: [{ ...layouts.find(entry => entry.id === 'list-1x'), id: 'host-bullets', name: 'Host bullets' }] };
-const renderOptions = { catalogs };
-const pending = document => fonts.pending(document, renderOptions);
+// FF-41: a layout only a host catalog knows, passed to the canvas as renderOptions.catalogs; the canvas merges it after the
+// session's registered catalogs and hands that one list to the gate (OPF 0.15: decks name it as host:host-bullets).
+const host = { source: 'pkg:host', layouts: { 'host-bullets': { ...defaultCatalog.layouts['list-1x'], name: 'Host bullets' } } };
+const renderOptions = { catalogs: [host] };
+const pending = document => fonts.pending(document, { catalogs: [defaultCatalog, host] });
 const canvas = createCanvasEditor(document.getElementById('canvas'), { editor, fonts, renderOptions,
   onFonts: event => events.push(event.state), onError: error => errors.push(error.message) });
 window.harness = { editor, canvas, switchDimension, fonts, pending, events, errors };
@@ -102,7 +103,7 @@ try {
   // FF-41: a deck whose layout exists only in the host's catalogs (the canvas's renderOptions) loads exactly the faces it draws:
   // Raleway Regular for the body and Raleway Bold for the title, not the four Raleway files, and nothing is drawn before they load.
   const catalogBefore = faceRequests.length;
-  const catalogPending = await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host-bullets', title: 'Quarterly review', items: ['Sales grew twelve percent.'] }] } }]); return window.harness.pending(window.harness.editor.presentation); });
+  const catalogPending = await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', catalogs: { host: { source: 'pkg:host' } }, design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host:host-bullets', title: 'Quarterly review', items: ['Sales grew twelve percent.'] }] } }]); return window.harness.pending(window.harness.editor.presentation); });
   assert.deepEqual(catalogPending.map(file => file.split('/').pop()).sort(), ['Raleway-Bold.ttf', 'Raleway-Regular.ttf'], `the catalog-only layout resolves and needs two Raleway faces: ${catalogPending}`);
   assert.equal(await tab.locator('#canvas svg').count(), 0, 'the host-layout deck is not drawn before its faces load');
   await settle();
@@ -111,18 +112,18 @@ try {
   assert.ok(now0.runs.length > 0 && now0.runs.every(run => run.family[0] === 'Raleway'), JSON.stringify(now0.runs.map(run => run.family[0])));
   // An italic run added by an edit fetches just the italic face.
   const italicBefore = faceRequests.length;
-  await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host-bullets', title: 'Quarterly review', text: ['Sales grew ', { text: 'twelve', italic: true }, ' percent.'] }] } }]); });
+  await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', catalogs: { host: { source: 'pkg:host' } }, design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host:host-bullets', title: 'Quarterly review', text: ['Sales grew ', { text: 'twelve', italic: true }, ' percent.'] }] } }]); });
   await settle();
   await clean('italic edit');
   assert.deepEqual(faceRequests.slice(italicBefore).map(url => url.split('/').pop()), ['Raleway-Italic.ttf'], 'the italic edit fetched just the italic face');
 
   // Han-only text draws with the face of the deck's language (Korean here). A language switch (a dimension switch) to Japanese
   // then needs another face: it loads before the canvas draws.
-  await run(() => window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Han', language: 'korean', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [{ id: 'a', title: '漢字', text: '漢字' }] } }]));
+  await run(() => window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Han', language: 'ko', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [{ id: 'a', title: '漢字', text: '漢字' }] } }]));
   await settle();
   assert.ok((await state()).loaded.includes('Noto Sans KR'), 'Han text in a Korean deck loads Noto Sans KR');
   const before = faceRequests.length;
-  const pendingAfterSwitch = await run(() => { window.harness.switchDimension(window.harness.editor, 'languages', 'japanese'); return window.harness.fonts.pending(window.harness.editor.presentation); });
+  const pendingAfterSwitch = await run(() => { window.harness.switchDimension(window.harness.editor, 'languages', 'ja'); return window.harness.pending(window.harness.editor.presentation); });
   assert.ok(pendingAfterSwitch.length > 0, 'the language switch left script faces pending');
   assert.equal(await tab.locator('#canvas svg').count(), 0, 'the canvas did not draw the document while its faces were pending');
   assert.match(await tab.locator('.opf-canvas-fonts').innerText(), /Loading fonts/);
@@ -146,12 +147,12 @@ try {
   // Font scheme switches to lazy families: Open Sans (catalog id) and Barlow (a record carried with the switch).
   await run(() => window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Latin', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [{ id: 'a', title: 'Quarterly review', text: 'Sales grew twelve percent.' }] } }]));
   await settle();
-  const pendingOpenSans = await run(() => { window.harness.switchDimension(window.harness.editor, 'font-schemes', 'open-sans'); return window.harness.fonts.pending(window.harness.editor.presentation); });
+  const pendingOpenSans = await run(() => { window.harness.switchDimension(window.harness.editor, 'font-schemes', 'open-sans'); return window.harness.pending(window.harness.editor.presentation); });
   assert.ok(pendingOpenSans.some(file => /open-sans/.test(file)), `Open Sans is pending: ${pendingOpenSans}`);
   await settle();
   now = await clean('font scheme Open Sans');
   assert.ok(now.runs.length > 0 && now.runs.every(run => run.family[0] === 'Open Sans'), JSON.stringify(now.runs.map(run => run.family[0])));
-  const pendingBarlow = await run(() => { window.harness.switchDimension(window.harness.editor, 'font-schemes', 'barlow-preview', { record: { id: 'barlow-preview', name: 'Barlow', major: 'Barlow', minor: 'Barlow' } }); return window.harness.fonts.pending(window.harness.editor.presentation); });
+  const pendingBarlow = await run(() => { window.harness.switchDimension(window.harness.editor, 'font-schemes', 'barlow-preview', { record: { id: 'barlow-preview', name: 'Barlow', major: 'Barlow', minor: 'Barlow' } }); return window.harness.pending(window.harness.editor.presentation); });
   assert.ok(pendingBarlow.some(file => /barlow/.test(file)), `Barlow is pending: ${pendingBarlow}`);
   await settle();
   now = await clean('font scheme Barlow');

@@ -2,15 +2,37 @@ import { paginateSlide } from "@openpresentation/opf/pagination";
 import { OPFPatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
 import { collectReservedPresentationIds } from "./presentation-ids.js";
 import { composeSlide } from "@openpresentation/opf/composition";
-import { catalogKinds, catalogs as bundledCatalogs, resolveSlideContext, stats } from "@openpresentation/opf";
+import { catalogKinds, resolveSlideContext, stats } from "@openpresentation/opf";
 import { checkFormat, errorFindings } from "./checks.js";
+import { forkEditedRecords, forkNotice, listCatalogRecords, mergeCatalogs } from "./catalogs.js";
+
+export {
+  REFERENCE_FINDING_CODES,
+  applyCatalogUpdate,
+  catalogRecordAt,
+  catalogRecordLabel,
+  catalogsFor,
+  checkCatalogUpdates,
+  editedCatalogRecords,
+  FORKED_RECORD_KINDS,
+  forkEditedRecords,
+  forkNotice,
+  listCatalogRecords,
+  mergeCatalogs,
+  moveToCustom,
+  prepareMoveToCustom,
+  prepareSave,
+  referenceFindings,
+  saveDocument,
+} from "./catalogs.js";
 
 // The options `composeSlide` and `paginateSlide` take for one slide of the open deck. Core's `resolveSlideContext` resolves the
 // slide's canvas, layout, theme, colour scheme and font families the one way every engine does (slide design, deck design,
-// theme, default), so the editor measures and composes what the renderer draws and the exporter writes. `options.fonts` is the
-// renderer's fonts handle (its `textMeasurement` measures); `options.onDiagnostic` hears each `unresolved-*` diagnostic;
+// theme, engine default), with the session's registered catalogs, so the editor measures and composes what the renderer draws
+// and the exporter writes. `options.fonts` is the renderer's fonts handle (its `textMeasurement` measures); `options.catalogs`
+// adds catalogs for this call; `options.onDiagnostic` hears each diagnostic (`unresolved-reference`);
 // any other option overrides the resolved one (`layout`, ...).
-function slideContext(presentation, slideIndex, { fonts, catalogs, onDiagnostic, ...overrides } = {}) {
+function slideContext(presentation, slideIndex, catalogs, { fonts, catalogs: _extra, onDiagnostic, ...overrides } = {}) {
   if (!Number.isInteger(slideIndex) || !presentation.slides?.[slideIndex]) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
   const { options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs });
   for (const diagnostic of diagnostics) onDiagnostic?.(diagnostic);
@@ -123,7 +145,10 @@ export function deckStats(editor, options) {
 
 export function createEditorSession(input, options = {}) {
   let presentation = parseInput(input);
-  let validation = checkFormat(presentation);
+  // The host's registered catalogs (FA-23): one list, handed to every core call, the renderer and the exporter.
+  let catalogs = mergeCatalogs(options.catalogs);
+  const check = (document) => checkFormat(document, { catalogs });
+  let validation = check(presentation);
   const undoStack = [];
   const redoStack = [];
   const listeners = new Set();
@@ -138,7 +163,7 @@ export function createEditorSession(input, options = {}) {
 
   function commitPatch(operations, meta = {}) {
     assertPatchOperations(operations);
-    const patches = operations.map(normalizeOperation);
+    let patches = operations.map(normalizeOperation);
     const before = presentation;
     let next, inversePatches;
     try {
@@ -146,7 +171,24 @@ export function createEditorSession(input, options = {}) {
     } catch (error) {
       throw editorPatchError(error);
     }
-    const nextValidation = checkFormat(next);
+    // Owner rule (FA-23): an edit of a record under catalogs.default or a named group forks it into catalogs.custom (every reference
+    // follows, the original is dropped), in this same undo step. Catalog updates and moves change catalog records on purpose.
+    let forks = [];
+    if (meta.catalogRecordEdit !== "in-place") {
+      const forked = forkEditedRecords(before, next, { catalogs, forkIds: meta.forkIds });
+      if (forked.forks.length) {
+        forks = forked.forks;
+        for (const key of new Set([...Object.keys(next), ...Object.keys(forked.document)]))
+          if (!jsonEqual(next[key], forked.document[key])) patches = [...patches, forked.document[key] === undefined ? { op: "remove", path: formatPointer([key]) } : { op: Object.hasOwn(next, key) ? "replace" : "add", path: formatPointer([key]), value: clone(forked.document[key]) }];
+        try {
+          ({ presentation: next, inverse: inversePatches } = applyPatchWithInverse(before, patches));
+        } catch (error) {
+          throw editorPatchError(error);
+        }
+        meta = { ...meta, forked: forks, notice: forks.map(forkNotice).join(" ") };
+      }
+    }
+    const nextValidation = check(next);
 
     if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
       throw new OPFEditorError("invalid-opf-edit", "OPF edit produced an invalid document.", {
@@ -174,7 +216,8 @@ export function createEditorSession(input, options = {}) {
       presentation: clone(presentation),
       patches: clonePatchOperations(patches),
       inversePatches: clonePatchOperations(inversePatches),
-      validation
+      validation,
+      ...(forks.length ? { forked: forks, notice: meta.notice } : {})
     };
   }
 
@@ -184,6 +227,20 @@ export function createEditorSession(input, options = {}) {
     },
     get validation() {
       return validation;
+    },
+    /** The catalogs the host registered (`Catalog[]`, frozen): the first is the host default. */
+    get catalogs() {
+      return catalogs;
+    },
+    /**
+     * Replace the registered catalogs (for example after the host loads a company catalog). The document is not changed; it is
+     * re-validated against the new list (reference findings depend on it) and one `catalogs` event tells every view to redraw.
+     */
+    setCatalogs(next, meta = {}) {
+      catalogs = mergeCatalogs(next);
+      validation = check(presentation);
+      emit({ type: "catalogs", patches: [], validation, meta });
+      return catalogs;
     },
     get canUndo() {
       return undoStack.length > 0;
@@ -218,13 +275,15 @@ export function createEditorSession(input, options = {}) {
       });
     },
     composeSlide(slideIndex, options = {}) {
-      return composeSlide(presentation.slides?.[slideIndex], slideContext(presentation, slideIndex, options));
+      return composeSlide(presentation.slides?.[slideIndex], slideContext(presentation, slideIndex, mergeCatalogs(catalogs, options.catalogs), options));
     },
     paginateSlide(slideIndex, options = {}, meta = {}) {
+      const list = mergeCatalogs(catalogs, options.catalogs);
       // Core pagination reads the measurement from `fonts`, so the resolved context hands it over that way.
-      const { textMeasurement, ...resolved } = slideContext(presentation, slideIndex, options);
+      const { textMeasurement, ...resolved } = slideContext(presentation, slideIndex, list, options);
       const pagination = paginateSlide(presentation.slides[slideIndex], {
         ...resolved,
+        catalogs: list,
         fonts: options.fonts ?? (textMeasurement ? { textMeasurement } : undefined),
         reservedIds: collectReservedPresentationIds(presentation),
       });
@@ -267,7 +326,7 @@ export function createEditorSession(input, options = {}) {
     restoreState(state, meta = {}) {
       if (!state || typeof state !== "object") throw new OPFEditorError("invalid-state", "restoreState needs { presentation, undo?, redo? }.");
       const next = parseInput(state.presentation);
-      const nextValidation = checkFormat(next);
+      const nextValidation = check(next);
       if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
         throw new OPFEditorError("invalid-opf-edit", "The restored document is not valid OPF.", { issues: errorFindings(nextValidation) });
       }
@@ -304,7 +363,7 @@ export function createEditorSession(input, options = {}) {
       const entry = undoStack.pop();
       if (!entry) return null;
       presentation = applyJsonPatch(presentation, entry.inversePatches);
-      validation = checkFormat(presentation);
+      validation = check(presentation);
       redoStack.push(entry);
       emit({
         type: "undo",
@@ -324,7 +383,7 @@ export function createEditorSession(input, options = {}) {
       const entry = redoStack.pop();
       if (!entry) return null;
       presentation = applyJsonPatch(presentation, entry.patches);
-      validation = checkFormat(presentation);
+      validation = check(presentation);
       undoStack.push(entry);
       emit({
         type: "redo",
@@ -415,29 +474,29 @@ export function createSvgTraceBinding(root, editor, options = {}) {
   };
 }
 
+/**
+ * The records a catalog control can offer for `catalogKind`, from core's `catalogRecords`: the document's embedded records,
+ * then the registered catalogs' (`options.catalogs`, merged with `options.editor`'s). Each is the record itself.
+ */
 export function getCatalogRecords(catalogKind, options = {}) {
-  assertCatalogKind(catalogKind);
-  const presentationCatalog = options.presentation?.catalogs?.[catalogKind];
-  const explicitCatalog = options.catalogs?.[catalogKind] ?? options.catalogSources?.[catalogKind];
-
-  return firstRecords(presentationCatalog)
-    ?? firstRecords(explicitCatalog)
-    ?? firstRecords(bundledCatalogs[catalogKind])
-    ?? [];
+  return getCatalogOptions(catalogKind, options).map((option) => option.record);
 }
 
+/**
+ * Picker options for `catalogKind`: `{ id, reference, label, record, group, source, origin }`, where `id` (= `reference`) is the
+ * reference to write, `id` or `name:id`. `options.presentation` is the document (default: `options.editor`'s), `options.catalogs`
+ * the host catalogs (merged after the session's registered ones).
+ */
 export function getCatalogOptions(catalogKind, options = {}) {
-  return getCatalogRecords(catalogKind, options).map((record) => ({
-    id: record.id,
-    label: catalogLabel(record),
-    record
-  }));
+  assertCatalogKind(catalogKind);
+  const presentation = options.presentation ?? options.editor?.presentation ?? {};
+  return listCatalogRecords(presentation, catalogKind, { catalogs: mergeCatalogs(options.editor?.catalogs, options.catalogs) });
 }
 
 export function assertCatalogId(catalogKind, id, options = {}) {
   assertCatalogKind(catalogKind);
   if (typeof id !== "string" || id.length === 0) {
-    throw new OPFEditorError("invalid-catalog-id", "Catalog control values must be non-empty catalog IDs.", {
+    throw new OPFEditorError("invalid-catalog-id", "Catalog control values must be non-empty catalog references.", {
       catalogKind,
       id
     });
@@ -445,7 +504,7 @@ export function assertCatalogId(catalogKind, id, options = {}) {
 
   const optionsById = new Set(getCatalogOptions(catalogKind, options).map((option) => option.id));
   if (!optionsById.has(id)) {
-    throw new OPFEditorError("unknown-catalog-id", `Unknown ${catalogKind} catalog ID: ${id}.`, {
+    throw new OPFEditorError("unknown-catalog-id", `Unknown ${catalogKind} catalog reference: ${id}.`, {
       catalogKind,
       id
     });
@@ -454,16 +513,16 @@ export function assertCatalogId(catalogKind, id, options = {}) {
   return id;
 }
 
+/** Write the catalog reference `id` at `path` (an object reference keeps its overrides and takes the new `id`). */
 export function setCatalogId(editor, path, catalogKind, id, meta = {}) {
   assertEditorSession(editor);
   const catalogId = assertCatalogId(catalogKind, id, {
     presentation: meta.presentation ?? editor.presentation,
-    catalogs: meta.catalogs,
-    catalogSources: meta.catalogSources
+    catalogs: mergeCatalogs(editor.catalogs, meta.catalogs)
   });
   const current = editor.get(path);
   const value = catalogReferenceValue(current, catalogId);
-  const { catalogs, catalogSources, presentation, ...commitMeta } = meta;
+  const { catalogs: _catalogs, presentation: _presentation, ...commitMeta } = meta;
   return editor.set(path, value, {
     ...commitMeta,
     catalogKind,
@@ -517,7 +576,7 @@ export function createCatalogSelect(editor, options) {
   if (options?.label) select.setAttribute("aria-label", options.label);
 
   for (const option of getCatalogOptions(catalogKind, {
-    ...options,
+    catalogs: mergeCatalogs(editor.catalogs, options?.catalogs),
     presentation: options?.presentation ?? editor.presentation
   })) {
     const optionElement = documentRef.createElement("option");
@@ -533,7 +592,6 @@ export function createCatalogSelect(editor, options) {
   const onChange = () => {
     setCatalogId(editor, path, catalogKind, select.value, {
       catalogs: options?.catalogs,
-      catalogSources: options?.catalogSources,
       presentation: options?.presentation,
       source: "catalog-select"
     });
@@ -675,20 +733,6 @@ function assertCatalogKind(catalogKind) {
       catalogKind
     });
   }
-}
-
-function firstRecords(value) {
-  if (Array.isArray(value)) return value.filter(isCatalogRecord);
-  if (Array.isArray(value?.records)) return value.records.filter(isCatalogRecord);
-  return null;
-}
-
-function isCatalogRecord(record) {
-  return Boolean(record && typeof record === "object" && typeof record.id === "string");
-}
-
-function catalogLabel(record) {
-  return String(record.name ?? record.title ?? record.label ?? record.id);
 }
 
 function catalogReferenceValue(current, id) {

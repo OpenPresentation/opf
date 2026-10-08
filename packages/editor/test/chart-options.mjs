@@ -1,6 +1,7 @@
 // RR-35: chart options in the editor. Axis titles, legend position and data labels edit as one validated, undoable
 // patch; only what the chart type can show is offered or written; the preview draws the change and the PPTX export carries it.
 import assert from "node:assert/strict";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
@@ -55,7 +56,7 @@ assert.equal(readChartOptions({ type: "treemap", data, dataLabels: false }).stat
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   assert.notEqual(svg(editor.presentation), beforeSvg, "the preview draws the titles");
   assert.match(svg(editor.presentation), /data-opf-path="slides\.0\.blocks\.0\.chart\.axisTitles\.value"/);
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] });
   const back = await pptx.fromPptx(bytes);
   const block = (back.slides?.[0]?.blocks ?? []).find((entry) => entry.chart) ?? back.slides?.[0];
   assert.deepEqual(block.chart.axisTitles, { category: "Quarter", value: "Revenue ($M)" }, "the titles survive the PPTX round trip");

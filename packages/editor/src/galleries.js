@@ -1,5 +1,4 @@
 import { assertOpf, unwrapOpf, MAX_OPF_BYTES } from "./transfer.js";
-import { catalogs } from "@openpresentation/opf";
 export function galleryUrl(input, base) {
   const url = new URL(input, base);
   if (
@@ -133,8 +132,6 @@ function fontRole(value) {
 // pair). `accent` is not part of the record schema and is dropped.
 function fontSchemeRecord(source, id) {
   const record = {
-    $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-    id,
     name: source.name ?? id,
     major:
       typeof source.major === "string"
@@ -151,10 +148,25 @@ function fontSchemeRecord(source, id) {
   if (code) record.code = code;
   return record;
 }
-function attachDefinition(presentation, descriptor) {
+const isPlain = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+// Embedded records carry no `$schema`, `id` or `x-*` display metadata (OPF 0.15): the key is the id.
+function embeddedRecord(source) {
+  return Object.fromEntries(
+    Object.entries(structuredClone(source)).filter(
+      ([key]) => key !== "$schema" && key !== "id" && key !== "slug" && !key.startsWith("x-"),
+    ),
+  );
+}
+/**
+ * A gallery item that describes one catalog record (a layout, theme, colour or font scheme) is embedded in the
+ * document it previews: under `default` with the gallery's origin as its `source` when the document has no default
+ * group (or its default is that gallery), else under `custom` (an item with no gallery URL, or another default
+ * catalog). Records the document already embeds are kept.
+ */
+function attachDefinition(presentation, descriptor, gallerySource) {
   const source = descriptor.metadata?.source,
     category = descriptor.category ?? descriptor.metadata?.category;
-  if (!source) return;
+  if (!isPlain(source)) return;
   const kind = {
     layouts: "layouts",
     "font-schemes": "fontSchemes",
@@ -163,12 +175,13 @@ function attachDefinition(presentation, descriptor) {
   }[category];
   if (!kind) return;
   const id = source.id ?? source.slug;
-  if (!id) return;
-  if (
-    catalogs[kind]?.some((record) => record.id === id) ||
-    presentation.catalogs?.[kind]?.records?.some((record) => record.id === id)
-  )
-    return;
+  if (typeof id !== "string" || !/^[a-z][a-z0-9-]*$/.test(id)) return;
+  const groups = (presentation.catalogs ??= {});
+  if (groups.custom?.[kind]?.[id] !== undefined || groups.default?.[kind]?.[id] !== undefined) return;
+  const group = gallerySource && (groups.default === undefined || groups.default?.source === gallerySource) ? "default" : "custom";
+  if (group === "default") groups.default ??= { source: gallerySource };
+  else groups.custom ??= {};
+  groups[group][kind] ??= {};
   let record;
   if (kind === "layouts") {
     // A gallery layout item is a layout record: its placeholders, design hints and composition are the
@@ -176,33 +189,17 @@ function attachDefinition(presentation, descriptor) {
     const placeholders = Array.isArray(source.placeholders)
       ? source.placeholders
           .filter((placeholder) => typeof placeholder?.type === "string")
-          .map((placeholder) => ({ type: placeholder.type }))
+          .map((placeholder) => structuredClone(placeholder))
       : [{ type: "title" }, { type: "text" }];
-    const plain = (value) =>
-      value && typeof value === "object" && !Array.isArray(value)
-        ? structuredClone(value)
-        : undefined;
     record = {
-      $schema: "https://openpresentation.org/schema/opf-layout/v1",
-      id,
       name: source.label ?? source.name ?? id,
-      ...(plain(source.design) ? { design: plain(source.design) } : {}),
+      ...(isPlain(source.design) ? { design: structuredClone(source.design) } : {}),
       placeholders,
-      ...(plain(source.composition)
-        ? { composition: plain(source.composition) }
-        : {}),
+      ...(isPlain(source.composition) ? { composition: structuredClone(source.composition) } : {}),
     };
   } else if (kind === "fontSchemes") record = fontSchemeRecord(source, id);
-  else {
-    record = {
-      ...source,
-      $schema: `https://openpresentation.org/schema/opf-${kind === "themes" ? "theme" : "color-scheme"}/v1`,
-    };
-  }
-  presentation.catalogs ??= {};
-  presentation.catalogs[kind] ??= { records: [] };
-  presentation.catalogs[kind].records ??= [];
-  presentation.catalogs[kind].records.push(record);
+  else record = embeddedRecord(source);
+  groups[group][kind][id] = record;
 }
 export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
   const base = gallery ?? options.base;
@@ -221,41 +218,9 @@ export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
   const presentation = structuredClone(unwrapOpf(descriptor));
   if (!presentation?.slides)
     throw new Error("This gallery item does not include a presentation.");
-  attachDefinition(presentation, descriptor);
-  // PPTX.gallery's older descriptors omit inline layout records. Resolve only named
-  // layout references from its known, same-origin registry; no arbitrary dependency crawl.
-  if (
-    url &&
-    ["www.pptx.gallery", "pptx.gallery"].includes(new URL(url).hostname)
-  ) {
-    const missing = [
-      ...new Set(
-        presentation.slides
-          .map((slide) => slide.layout)
-          .filter(
-            (id) =>
-              typeof id === "string" &&
-              !catalogs.layouts.some((record) => record.id === id) &&
-              !presentation.catalogs?.layouts?.records?.some(
-                (record) => record.id === id,
-              ),
-          ),
-      ),
-    ];
-    if (missing.length > 12)
-      throw new Error(
-        "This item needs too many layout definitions. Supply self-contained OPF.",
-      );
-    for (const id of missing) {
-      if (!/^[a-z][a-z0-9-]*$/.test(id))
-        throw new Error("Unsupported layout reference.");
-      const dependency = await fetchGalleryJson(
-        `/registry/layouts/${id}.json`,
-        { ...options, base: url, origin: new URL(url).origin },
-      );
-      attachDefinition(presentation, dependency);
-    }
-  }
+  // A gallery publishes self-contained OPF (every record a document uses is embedded, FA-23); the item's own record is
+  // embedded too when the snippet omits it. Nothing else is fetched.
+  attachDefinition(presentation, descriptor, url ? new URL(url).origin : undefined);
   assertOpf(presentation);
   return presentation;
 }

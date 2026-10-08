@@ -1,5 +1,13 @@
 import type { ConvertOptions } from "@openpresentation/opf/convert";
+import type { Catalog } from "@openpresentation/opf";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
+
+/** Display metadata for the engine vocabularies, in the shape of `catalogDisplay` (`@openpresentation/opf/catalog`): records by id, or a list of records with `id` (`bcp47` for a language). */
+export interface SwitchVocabularies {
+  languages?: unknown;
+  chartTypes?: unknown;
+  socialPlatforms?: unknown;
+}
 
 /** The schema's DimensionPreset values: the values of the slide-sizes switch. */
 export declare const SLIDE_SIZE_PRESETS: readonly ["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"];
@@ -29,14 +37,17 @@ export type SwitchDimension = (typeof SWITCH_DIMENSIONS)[number];
 export interface DimensionSwitchOptions {
   /** Required for layouts and charts; for design dimensions it scopes the switch to one slide (default: the deck). */
   slideIndex?: number;
-  /** blocks: the complete block (`slides.0.blocks.1`) or one-payload slide/region to replace. charts: the block holding the chart (default: the slide's first chart). */
+  /** blocks: the complete block (`slides.0.blocks.1`) or one-payload slide/region to replace. charts: the block holding the chart (default: the slide's first chart). image-treatments: the image block. */
   path?: string | string[];
-  /** A gallery item's catalog record, added inline in the same transaction when the id is not already defined. */
+  /** A gallery item's catalog record, embedded in the same transaction (under the group of `recordSource`, else `custom`) when it is not embedded yet. */
   record?: Record<string, unknown> & { id: string };
-  /** Extra caller-loaded catalog records by kind. */
-  catalogs?: Record<string, unknown>;
-  catalogSources?: Record<string, unknown>;
-  /** themes: also write the theme's color scheme, font scheme and background (and, for the deck, dimensions) to the design (default true). A slide's design cannot set dimensions. */
+  /** The catalog source of `record` (for example "https://www.pptx.gallery"). */
+  recordSource?: string;
+  /** Host catalogs (`Catalog[]`): references resolve in the document, then in these. */
+  catalogs?: readonly Catalog[];
+  /** Display metadata for languages, chart types and social platforms (labels in pickers). */
+  vocabularies?: SwitchVocabularies;
+  /** themes: the theme's own color scheme, font scheme and background (and, for the deck, dimensions) apply: overrides of those at the switched scope are removed; on a slide whose deck sets one, the theme's value is written on the slide (default true). */
   bundle?: boolean;
   /** Deck-scope design switches: remove slide-level values that would hide the switch. */
   clearSlideOverrides?: boolean;
@@ -55,12 +66,11 @@ export interface DimensionSwitchOptions {
 
 export type DimensionSwitchValue =
   | null /* backgrounds: remove it */
-  | string /* slide-sizes: a SlideSizePreset. purposes: a catalog id or free-form goal text. */
-  | string[] /* audiences: catalog ids */
+  | string /* slide-sizes: a SlideSizePreset. purposes: a catalog reference or free-form goal text. languages: a BCP-47 tag. Catalog dimensions: a reference, `id` or `name:id`. */
+  | string[] /* audiences: catalog references */
   | { platform: string; handle: string }
   | { header?: unknown; footer?: unknown }
-  | { slideImage?: unknown; imageFill?: string | null }
-  | Record<string, unknown>;
+  | Record<string, unknown> /* image-treatments: fit, focus, aspectRatio, shape, cornerRadius, border, opacity, recolor, overlay, placement (null removes) */;
 
 export interface PreparedDimensionSwitch {
   dimension: SwitchDimension;
@@ -92,18 +102,23 @@ export declare function prepareDimensionSwitch(presentation: unknown, dimension:
 export declare function switchDimension(editor: EditorSession, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): DimensionSwitchChange;
 
 export interface SwitchOption {
+  /** The value to switch to: for a catalog dimension the reference, `id` or `name:id`. */
   id: string;
   label: string;
   record?: Record<string, unknown>;
+  reference?: string;
+  group?: string;
+  source?: string;
+  origin?: "document" | "host";
 }
 export interface CompatibleChartType extends SwitchOption {
   /** True for the chart's present type, which is always listed. */
   current: boolean;
 }
-/** Values a picker can offer for a catalog-backed dimension (document inline records, caller catalogs, then the bundled catalog, without duplicates); `blocks` lists the content kinds and `slide-sizes` the presets (labelled with their inches). `purposes` lists the catalog; any other goal text is also a valid switch value. */
-export declare function listSwitchOptions(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "catalogSources">): SwitchOption[];
-/** Chart types the chart's inline data can use as it is (data-shape compatibility, not an engine-support claim). `path` or `slideIndex` picks the chart. */
-export declare function compatibleChartTypes(presentation: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "catalogSources">): CompatibleChartType[];
-/** The value a dimension currently has: `{ value, scope }`, with the catalog id for catalog dimensions. `slide-sizes` reads the deck's design.dimensions, else its theme's (a preset string, or the object for a custom size); `purposes` reads the goal text or Purpose id. */
-export declare function currentSwitchValue(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index">): { value: unknown; scope: "deck" | "slide" | "block" };
+/** Values a picker can offer: a catalog dimension lists core's `catalogRecords` (embedded records, then `catalogs`); `charts` and `socials` list core's vocabularies, `languages` core's `LANGUAGES` tags; `blocks` lists the content kinds and `slide-sizes` the presets. `purposes` lists the catalogs; any other goal text is also a valid switch value. */
+export declare function listSwitchOptions(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "vocabularies">): SwitchOption[];
+/** Chart types the chart's inline data can use as it is (data-shape compatibility from `vocabularies.chartTypes`, not an engine-support claim). `path` or `slideIndex` picks the chart. */
+export declare function compatibleChartTypes(presentation: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "vocabularies">): CompatibleChartType[];
+/** The value a dimension currently has: `{ value, scope }`, with the reference (`id` or `name:id`) for catalog dimensions. `slide-sizes` reads the deck's design.dimensions, else its theme's (a preset string, or the object for a custom size); `purposes` reads the goal text or Purpose id. */
+export declare function currentSwitchValue(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index" | "catalogs">): { value: unknown; scope: "deck" | "slide" | "block" };
 export { blockConversionTargets } from "./block-convert.js";

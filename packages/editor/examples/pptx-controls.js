@@ -41,13 +41,15 @@ export function installPptxExport({ editor, getCanvas, status, fonts, measuremen
     try {
       // Text is measured with the loaded faces, so the faces the deck needs load before conversion measures anything.
       const gate = fontGate(fonts);
-      if (gate?.pending(deck).length) {
+      if (gate?.pending(deck, { catalogs: editor.catalogs }).length) {
         $('export-summary').textContent = 'Loading fonts…';
-        await gate.ensure(deck);
+        await gate.ensure(deck, { renderOptions: { catalogs: editor.catalogs } });
         if (id !== request || !dialog.open) return;
         $('export-summary').textContent = `Preparing ${deck.slides.length} slides…`;
       }
+      // The same catalog list the preview resolves with (FA-23); the deck is embedded first, like a saved file.
       const result = await toPptx(deck, {
+        catalogs: editor.catalogs,
         // A script-aware measurement for this deck (Japanese under Aptos measures with Noto Sans JP), when the host supplies one.
         fonts: measurementFor ? { textMeasurement: measurementFor(deck) } : fonts,
         strictAssets: true,

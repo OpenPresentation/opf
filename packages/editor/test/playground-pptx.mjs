@@ -5,7 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
-import { validate } from '@openpresentation/opf';
+import { embed, validate } from '@openpresentation/opf';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 // RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
 import JSZip from 'jszip';
 
@@ -122,7 +123,10 @@ try {
   assert.deepEqual(await source(), imported);
   const opfEvent = page.waitForEvent('download');
   await button('Save OPF').click();
-  assert.deepEqual(JSON.parse(await readFile(await (await opfEvent).path(), 'utf8')), imported);
+  // FA-23: the saved file embeds every catalog record it uses, so it renders the same where no catalog is registered.
+  const saved = JSON.parse(await readFile(await (await opfEvent).path(), 'utf8'));
+  assert.deepEqual(saved, embed(imported, { catalogs: [defaultCatalog] }).document);
+  assert.deepEqual(validate(saved, { only: ['opf/unresolved-reference'] }).findings, [], 'the saved file resolves with no catalog registered');
 
   // Failed conversion cannot replace the current document or leave Apply enabled.
   await button('Import').click();

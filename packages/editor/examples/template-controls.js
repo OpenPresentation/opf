@@ -27,8 +27,8 @@ export function installTemplateControls({ editor, getCanvas, getSlideIndex, getS
     const run = ++previewRun;
     return new Promise((resolve, reject) => {
       const filled = previewTemplate(source, variables).presentation;
-      const draw = () => resolve(renderSlideSvg(source, slideIndex, { fonts: previewFonts(fonts), variables, trace: false }));
-      whenFontsReady(fonts, filled, { isCurrent: () => run === previewRun, loading() {}, ready: draw, failed: reject });
+      const draw = () => resolve(renderSlideSvg(source, slideIndex, { catalogs: editor.catalogs, fonts: previewFonts(fonts), variables, trace: false }));
+      whenFontsReady(fonts, filled, { renderOptions: { catalogs: editor.catalogs }, isCurrent: () => run === previewRun, loading() {}, ready: draw, failed: reject });
     });
   }
 

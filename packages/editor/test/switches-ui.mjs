@@ -1,36 +1,43 @@
 // RR-06: the picker-side API of the dimension switches: which values a dimension offers, which
 // chart types a chart's data can use, and the value a dimension has now.
 import assert from "node:assert/strict";
-import { catalogs } from "@openpresentation/opf";
+import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS } from "@openpresentation/opf";
+import { catalogDisplay, defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import { SLIDE_SIZE_PRESETS, SWITCH_DIMENSIONS, compatibleChartTypes, currentSwitchValue, listSwitchOptions, switchDimension } from "../dist/switches.js";
-import { baseDeck } from "./switch-fixture.mjs";
+import { baseDeck, catalogs } from "./switch-fixture.mjs";
 
-// Every catalog dimension lists exactly the bundled ids; document records come first and override.
+const sorted = (values) => [...values].sort();
+// OPF 0.15: a catalog dimension lists the host's registered catalog (core catalogRecords); there are no bundled records.
 for (const [dimension, kind] of [
   ["layouts", "layouts"],
   ["color-schemes", "colorSchemes"],
   ["font-schemes", "fontSchemes"],
-  ["languages", "languages"],
   ["narratives", "narratives"],
   ["themes", "themes"],
   ["audiences", "audiences"],
   ["tones", "tones"],
-  ["socials", "socialPlatforms"],
-  ["charts", "chartTypes"],
   ["purposes", "purposes"],
 ]) {
-  const options = listSwitchOptions({}, dimension);
-  assert.deepEqual(options.map((option) => option.id), catalogs[kind].map((record) => record.id), `${dimension} lists the bundled catalog`);
-  assert.ok(options.every((option) => typeof option.label === "string" && option.label), `${dimension} labels`);
+  const options = listSwitchOptions({}, dimension, { catalogs });
+  assert.deepEqual(sorted(options.map((option) => option.id)), sorted(Object.keys(defaultCatalog[kind])), `${dimension} lists the registered catalog`);
+  assert.ok(options.every((option) => typeof option.label === "string" && option.label && option.origin === "host" && option.group === "default"), `${dimension} labels`);
+  assert.deepEqual(listSwitchOptions({}, dimension), [], `${dimension}: no catalog registered, nothing to offer`);
 }
+// Engine vocabularies: core's tables, labelled from the host's display metadata.
+assert.deepEqual(listSwitchOptions({}, "languages").map((option) => option.id), LANGUAGES.map((language) => language.tag));
+assert.deepEqual(listSwitchOptions({}, "socials").map((option) => option.id), Object.keys(SOCIAL_PLATFORMS));
+assert.deepEqual(listSwitchOptions({}, "charts").map((option) => option.id), [...CHART_TYPES]);
+assert.equal(listSwitchOptions({}, "languages", { vocabularies: catalogDisplay }).find((option) => option.id === "ja").label, "Japanese");
 {
-  const presentation = { catalogs: { fontSchemes: { records: [{ id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter" }, { id: "georgia", name: "Georgia (team)", major: "Georgia", minor: "Georgia" }] } } };
-  const options = listSwitchOptions(presentation, "font-schemes", { catalogs: { fontSchemes: { records: [{ id: "caller", name: "Caller" }] } } });
-  assert.deepEqual(options.slice(0, 3).map((option) => option.id), ["team-mono", "georgia", "caller"]);
-  assert.equal(options[1].label, "Georgia (team)", "a document record overrides the bundled one");
+  const caller = { source: "pkg:caller", fontSchemes: { caller: { name: "Caller", major: "Inter", minor: "Inter" } } };
+  const presentation = { catalogs: { team: { source: "pkg:caller" }, custom: { fontSchemes: { "team-mono": { name: "Team Mono", major: "Inter", minor: "Inter" }, georgia: { name: "Georgia (team)", major: "Georgia", minor: "Georgia" } } } } };
+  const options = listSwitchOptions(presentation, "font-schemes", { catalogs: [defaultCatalog, caller] });
+  assert.deepEqual(options.slice(0, 2).map((option) => option.id), ["team-mono", "georgia"], "the document's records come first");
+  assert.equal(options[1].label, "Georgia (team)", "a document record shadows the catalog's record with the same reference");
   assert.equal(options.filter((option) => option.id === "georgia").length, 1, "no duplicates");
-  assert.equal(options.length, catalogs.fontSchemes.length + 2);
+  assert.ok(options.some((option) => option.id === "team:caller" && option.source === "pkg:caller"), "a named group's registered records use name:id");
+  assert.equal(options.length, Object.keys(defaultCatalog.fontSchemes).length + 2);
   assert.deepEqual(listSwitchOptions({}, "blocks").map((option) => option.id), ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"]);
   assert.deepEqual(listSwitchOptions({}, "backgrounds"), [], "free-form dimensions have no catalog");
   // RR-41: the slide sizes are the schema's ten presets, each labelled with its size in inches.
@@ -40,7 +47,7 @@ for (const [dimension, kind] of [
   assert.equal(sizes.find((option) => option.id === "4:5").label, "4:5 portrait (7.5 x 9.375 in)");
   assert.equal(sizes.find((option) => option.id === "a4").label, "A4 (11.69 x 8.27 in)");
   assert.ok(sizes.every((option) => /\d in\)$/.test(option.label)));
-  assert.deepEqual(catalogs.purposes.map((record) => record.id), ["inform", "decide", "align", "persuade", "educate", "report", "pitch", "sell", "plan"]);
+  assert.deepEqual(sorted(Object.keys(defaultCatalog.purposes)), sorted(["inform", "decide", "align", "persuade", "educate", "report", "pitch", "sell", "plan"]));
 }
 
 // Compatible chart types follow the data shape: the first column labels the categories and each
@@ -48,7 +55,8 @@ for (const [dimension, kind] of [
 {
   const data = (...series) => ({ columns: ["Quarter", ...series], rows: [["Q1", ...series.map(() => 1)], ["Q2", ...series.map(() => 2)]] });
   const chart = (shape, type = "column") => ({ slides: [{ title: "x", blocks: [{ chart: { type, data: shape } }] }] });
-  const ids = (presentation, options) => compatibleChartTypes(presentation, { slideIndex: 0, ...options }).map((entry) => entry.id);
+  // The chart display metadata (complexity, series, OOXML mapping) is the host's: catalogDisplay.chartTypes.
+  const ids = (presentation, options) => compatibleChartTypes(presentation, { slideIndex: 0, vocabularies: catalogDisplay, ...options }).map((entry) => entry.id);
   const one = ids(chart(data("Revenue")));
   for (const expected of ["column", "bar", "line", "area", "pie", "doughnut", "radar", "funnel", "treemap", "waterfall"]) assert.ok(one.includes(expected), `${expected} suits one series`);
   for (const rejected of ["stacked-column", "scatter", "histogram", "world", "box-and-whisker"]) assert.ok(!one.includes(rejected), `${rejected} does not suit one series`);
@@ -60,7 +68,7 @@ for (const [dimension, kind] of [
   const five = ids(chart(data("A", "B", "C", "D", "E")));
   assert.ok(five.includes("stacked-bar") && !five.includes("scatter"));
   // The current type is always listed and flagged, even when the data would not suit it.
-  const current = compatibleChartTypes(chart(data("Revenue"), "stacked-column"), { slideIndex: 0 });
+  const current = compatibleChartTypes(chart(data("Revenue"), "stacked-column"), { slideIndex: 0, vocabularies: catalogDisplay });
   assert.deepEqual(current.filter((entry) => entry.current).map((entry) => entry.id), ["stacked-column"]);
   // Every offered type is a valid switch for that chart.
   for (const id of one) {
@@ -81,14 +89,14 @@ for (const [dimension, kind] of [
   const presentation = baseDeck();
   presentation.speaker = { id: "alice", name: "Alice", socials: { linkedin: "alice" } };
   presentation.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { left: { text: "H" } } };
-  const at = (dimension, options) => currentSwitchValue(presentation, dimension, options);
+  const at = (dimension, options) => currentSwitchValue(presentation, dimension, { catalogs, ...options });
   assert.deepEqual(at("layouts", { slideIndex: 1 }), { value: "chart-1x", scope: "slide" });
   assert.deepEqual(at("color-schemes"), { value: "cool-horizon", scope: "deck" });
   assert.deepEqual(at("font-schemes"), { value: "aptos", scope: "deck" });
   assert.deepEqual(at("font-schemes", { slideIndex: 1 }), { value: "georgia", scope: "slide" }, "an object reads as its id");
   assert.deepEqual(at("font-schemes", { slideIndex: 0 }), { value: "aptos", scope: "deck" });
   assert.deepEqual(at("themes"), { value: "minimal", scope: "deck" });
-  assert.deepEqual(at("languages"), { value: "english", scope: "deck" });
+  assert.deepEqual(at("languages"), { value: "en-US", scope: "deck" });
   assert.deepEqual(at("narratives"), { value: "problem-solution", scope: "deck" });
   assert.deepEqual(at("tones"), { value: "formal", scope: "deck" });
   assert.deepEqual(at("audiences"), { value: ["executive"], scope: "deck" });
@@ -98,14 +106,15 @@ for (const [dimension, kind] of [
   assert.deepEqual(at("socials"), { value: { linkedin: "alice" }, scope: "deck" });
   assert.deepEqual(at("headers-footers", { slideIndex: 1 }), { value: { header: { left: { text: "H" } }, footer: undefined }, scope: "slide" });
   assert.equal(at("headers-footers", { slideIndex: 0 }).scope, "deck", "a slide with no value of its own reads the deck's");
-  assert.equal(at("image-treatments", { slideIndex: 1 }).scope, "deck");
-  assert.deepEqual(at("image-treatments").value, { slideImage: undefined, imageFill: undefined });
+  assert.deepEqual(at("image-treatments"), { value: undefined, scope: "block" }, "image treatments belong to one image block");
+  assert.deepEqual(at("image-treatments", { path: "slides.2.blocks.2" }).value.fit, undefined);
   assert.equal(at("blocks").scope, "block");
   // RR-41: slide sizes read the deck's design.dimensions, else the theme's; purposes read the goal text or Purpose id.
   assert.deepEqual(at("slide-sizes"), { value: "widescreen", scope: "deck" }, "no design.dimensions: the theme's size");
   assert.deepEqual(at("slide-sizes", { slideIndex: 1 }), { value: "widescreen", scope: "deck" });
   const sized = (dimensions, extra = {}) => ({ ...presentation, design: { ...presentation.design, dimensions }, ...extra });
   assert.deepEqual(currentSwitchValue(sized("a4"), "slide-sizes"), { value: "a4", scope: "deck" });
+  assert.deepEqual(currentSwitchValue(presentation, "slide-sizes"), { value: undefined, scope: "deck" }, "no catalog registered: the theme's size is unknown");
   assert.deepEqual(currentSwitchValue(sized({ preset: "letter" }), "slide-sizes"), { value: "letter", scope: "deck" }, "{preset} reads as the preset");
   assert.deepEqual(currentSwitchValue(sized({ preset: "a4", widthInches: 12 }), "slide-sizes").value, { preset: "a4", widthInches: 12 }, "a custom size reads as the object");
   // A slide cannot set its own size (FA-07): a slideIndex reads the deck's size.

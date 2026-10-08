@@ -26,9 +26,9 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   const error=add('p',undefined,'json-field-empty');error.setAttribute('role','alert');error.hidden=true;
   if(isLayout){
     const help=add('details',undefined,'json-field-catalog-help');add('summary','Where do these layouts come from?',undefined,help);
-    add('p','Standard OPF: included with OPF. Provided by app: extra records supplied by the host app. In this document: records in your JSON, which override matching IDs. External galleries are not automatically loaded.',undefined,help);
+    add('p','Provided by app: records from the catalogs the host app registered. In this document: records embedded in your JSON, which take precedence. Nothing is fetched; saving embeds every record the document uses.',undefined,help);
   }
-  add('p',context.unloadedSource?'Using available records. External catalog URLs are not loaded here.':'Choose an option or press Escape to keep editing JSON.','json-field-footnote');
+  add('p',context.unloadedSource?'Using the embedded records: a catalog this document names is not registered here.':'Choose an option or press Escape to keep editing JSON.','json-field-footnote');
   let selected=Math.max(0,context.options.findIndex(option=>option.value===context.value)),choices=[],disposed=false;
   function close(restore=false){if(disposed)return;disposed=true;observer.disconnect();root.remove();doc.removeEventListener('pointerdown',outside);doc.removeEventListener('wheel',outside,true);doc.removeEventListener('touchmove',outside,true);win.removeEventListener('resize',resize);onClose();if(restore){api.focus();api.setSelection(...selection);}}
   function outside(event){if(!root.contains(event.target))close();}

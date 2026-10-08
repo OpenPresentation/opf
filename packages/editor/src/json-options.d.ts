@@ -1,11 +1,11 @@
-/** Already-loaded catalog records by kind. No remote catalog URLs are fetched. */
-export type JsonCatalogContext = Readonly<Record<string, readonly Record<string, unknown>[]>>;
+/** The host's catalogs (core `Catalog[]`): records offered after the document's embedded ones. */
+export type JsonCatalogContext = readonly import("@openpresentation/opf").Catalog[];
 export type JsonOptionValue = string | number | boolean;
 export interface JsonFieldOption {
   value: JsonOptionValue;
   label: string;
   description?: string;
-  source: 'Built-in catalog' | 'Loaded catalog' | 'Document catalog' | 'Schema' | 'Current value';
+  source: 'Loaded catalog' | 'Document catalog' | 'Schema' | 'Current value';
   suggested?: boolean;
   /** User-facing provenance; source remains stable for existing consumers. */
   sourceLabel?: string;

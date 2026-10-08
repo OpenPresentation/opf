@@ -103,7 +103,7 @@ function skipDelimiter(view, delimiter) {
 }
 function mountJsonCodeEditor(parent, options) {
   const attributes = new Compartment(), indent = new Compartment();
-  let disposed=false, menu=null, catalogs=options.catalogs??{}, generation=0;
+  let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
   function closeOptions(){generation++;menu?.destroy();menu=null;}
   async function openOptions(left,top){
     closeOptions();
@@ -244,7 +244,7 @@ function mountJsonCodeEditor(parent, options) {
   return {
     api,
     openOptions,
-    setCatalogs(value){catalogs=value??{};closeOptions();},
+    setCatalogs(value){catalogs=value??[];closeOptions();},
     update(code, invalid=false, field=null, describedBy) {
       if(code!==api.getValue())closeOptions();
       const current = view.state.doc.toString(), normalized=textInputMap(code).text;

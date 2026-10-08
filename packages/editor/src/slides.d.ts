@@ -48,7 +48,7 @@ export type MoveSectionMode = "adopt" | "keep" | string | null;
 export interface AddSlideOptions {
   /** The index the slide takes (default: the end). */
   at?: number;
-  /** A layouts catalog id; the layout's placeholders are added as empty slots. */
+  /** A layout reference (`id` or `name:id`); the layout's placeholders are added as empty slots. */
   layout?: string;
   title?: string;
   text?: string;

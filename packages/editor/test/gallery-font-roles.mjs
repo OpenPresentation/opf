@@ -19,7 +19,8 @@ const apply = (source, slides = [codeSlide]) =>
       metadata: { category: "font-schemes", source },
     },
   });
-const attached = (presentation) => presentation.catalogs.fontSchemes.records[0];
+// FA-23: the item's record is embedded by id (no $schema or id) under `custom` (the item has no gallery URL here).
+const attached = (presentation) => Object.values(presentation.catalogs.custom.fontSchemes)[0];
 function measured(presentation, slideIndex = 0) {
   const families = new Set();
   createEditorSession(presentation).composeSlide(slideIndex, {
@@ -50,8 +51,6 @@ const gallery = await apply({
   headingStack: '"Inter", sans-serif',
 });
 assert.deepEqual(attached(gallery), {
-  $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-  id: "team-mono",
   name: "Team Mono",
   major: "Inter",
   minor: "Inter",
@@ -78,8 +77,6 @@ const roles = await apply(
   [textSlide, codeSlide],
 );
 assert.deepEqual(attached(roles), {
-  $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-  id: "role-scheme",
   name: "Role scheme",
   major: "Source Serif 4",
   minor: "Source Sans 3",
@@ -110,8 +107,6 @@ const explicit = await apply({
   type: "display",
 });
 assert.deepEqual(attached(explicit), {
-  $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-  id: "explicit-pair",
   name: "explicit-pair",
   major: "Aptos Display",
   minor: "Aptos",
@@ -123,8 +118,6 @@ const legacy = await apply(
   [textSlide],
 );
 assert.deepEqual(attached(legacy), {
-  $schema: "https://openpresentation.org/schema/opf-font-scheme/v1",
-  id: "legacy-sans",
   name: "Legacy Sans",
   major: "Arial",
   minor: "Arial",

@@ -26,7 +26,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12]] };
 const source = {
   name: 'Chart options',
-  language: 'english',
+  language: 'en-US',
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [
     { id: 'column', title: 'Column', blocks: [{ chart: { type: 'column', data } }, { text: 'Notes' }] },

@@ -69,7 +69,7 @@ export function schemaAtPath(presentation, path, root = schemas.presentation) {
   const parts=splitOpfPath(path);let current=root,value=presentation;
   for(let index=0; index<parts.length;index++) {
     const key=parts[index], resolved=activeSchema(current,value,root);
-    if(parts[0]==='catalogs' && parts[2]==='records' && index===3) current=schemas[catalogSchemaNames[parts[1]]]??{};
+    if(parts[0]==='catalogs' && index===3 && catalogSchemaNames[parts[2]]) current=schemas[catalogSchemaNames[parts[2]]]??{};
     else current=Array.isArray(value)||resolved.type==='array' ? resolved.items??{} : resolved.properties?.[key] ?? Object.entries(resolved.patternProperties??{}).find(([pattern])=>new RegExp(pattern).test(key))?.[1] ?? (typeof resolved.additionalProperties==='object'?resolved.additionalProperties:{});
     value=value?.[key];
   }

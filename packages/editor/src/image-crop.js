@@ -1,13 +1,12 @@
 // Image crop and focal point (RR-25): the model.
 //
-// The OPF schema has no crop rectangle and no focal point on an image (`Asset` is `src`, `alt`, `title`, `description`,
-// `mediaType`, `format`; the only fit controls are `design.imageFill` and a slide image's `fill`, both "crop" or "fit",
-// and a crop is always centred). `crop` and `focalPoint` are listed as deferred fields in core's
-// docs/content-item-design-overrides.md. So the editor writes a crop into the picture itself: the cropped pixels become a
-// new entry of `assets` and the image points at it, in ONE undoable change. Because the preview and the PPTX export both
-// read those pixels, they cannot disagree about what is shown; the fit the document already has (centred "crop" cover, or
-// "fit") then places the cropped picture in its frame exactly as before (opf-pptx writes the usual `a:srcRect` for that
-// placement, and none for a picture whose shape matches its frame).
+// The OPF schema has no crop rectangle on an image (`Asset` is `src`, `alt`, `title`, `description`, `mediaType`, `format`).
+// An image block has a `fit` (cover, contain, stretch) and, since OPF 0.15, a `focus` point that a cover fit keeps in view
+// (image-options.js sets both). A crop that removes part of the picture is still not a field, so the editor writes it into
+// the picture itself: the cropped pixels become a new entry of `assets` and the image points at it, in ONE undoable change.
+// Because the preview and the PPTX export both read those pixels, they cannot disagree about what is shown; the block's fit
+// then places the cropped picture in its frame exactly as before (opf-pptx writes the usual `a:srcRect` for that placement,
+// and none for a picture whose shape matches its frame).
 //
 // A focal point works the same way: the picture is cut to the frame's shape around the chosen point, so a centred cover
 // fit shows what was chosen. The original asset stays in `assets`, and the new asset's `description` says "Cropped from
@@ -159,7 +158,7 @@ export const isFullRect = (rect, bounds) => rect.x < 0.5 && rect.y < 0.5 && Math
 export function describeImage(presentation, path) {
   const segments = String(path).split(".");
   const last = segments.at(-1);
-  if (!["image", "slideImage"].includes(last)) return { error: "This is not a picture." };
+  if (last !== "image") return { error: "This is not a picture." };
   const value = getValueAtPath(presentation, path);
   const pointer = opfPathToJsonPointer(segments);
   let form;

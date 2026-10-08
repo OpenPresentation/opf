@@ -2,14 +2,22 @@
 // dimension that turns "switch this dimension to X" into a validated JSON Patch, and applies
 // it to an editor session as one undoable transaction. The preview recomposes and the PPTX
 // export follows from the same document, so no dimension needs a special refresh path.
-import { catalogSchemaNames, catalogs as bundledCatalogs, isXYChartType, resolveChartData, schemas } from "@openpresentation/opf";
+//
+// OPF 0.15 (FA-23): the catalog-backed dimensions (layouts, themes, colour and font schemes, narratives, audiences, purposes,
+// tones) resolve through core with the host's registered catalogs (`options.catalogs`, `Catalog[]`) and write the reference core
+// gives (`id` or `name:id`). Languages, chart types and social platforms are engine vocabularies, checked against core's
+// tables; their labels come from the host's display metadata (`options.vocabularies`, the shape of `catalogDisplay` from
+// `@openpresentation/opf/catalog`), never from data the editor ships.
+import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS, isXYChartType, parseReference, resolveChartData, resolveReference } from "@openpresentation/opf";
 import { chartOptionTarget } from "@openpresentation/opf/composition";
-import { OPFEditorError, createValuePatch, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
+import { createValuePatch, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { createContentBlock, prepareBlockReplace } from "./blocks.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
 import { populateLayoutPlaceholders } from "./layout-placeholders.js";
 import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 import { checkFormat } from "./checks.js";
+import { listCatalogRecords, mergeCatalogs } from "./catalogs.js";
+import { IMAGE_TREATMENT_FIELDS, imageTreatmentPatches, readImageTreatments } from "./image-options.js";
 
 /** The schema's DimensionPreset values (RR-41, FA-13: with the social-feed ratios), the values of the slide-sizes switch. */
 export const SLIDE_SIZE_PRESETS = Object.freeze(["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"]);
@@ -52,20 +60,19 @@ export const SWITCH_DIMENSIONS = Object.freeze([
   "purposes",
 ]);
 
-// Catalog kind behind each catalog-backed dimension.
+// Catalog kind behind each catalog-backed dimension (core's content kinds).
 const CATALOG_KIND = Object.freeze({
   layouts: "layouts",
   "color-schemes": "colorSchemes",
   "font-schemes": "fontSchemes",
-  languages: "languages",
   narratives: "narratives",
   themes: "themes",
   audiences: "audiences",
   tones: "tones",
-  socials: "socialPlatforms",
-  charts: "chartTypes",
   purposes: "purposes",
 });
+// Display metadata key (`options.vocabularies`) behind each engine-vocabulary dimension.
+const VOCABULARY = Object.freeze({ languages: "languages", charts: "chartTypes", socials: "socialPlatforms" });
 // Top-level document field for the simple metadata dimensions.
 const ROOT_FIELD = Object.freeze({ languages: "language", narratives: "narrative", tones: "tone", audiences: "audience" });
 // `design` keys for the design dimensions. A key set to `null` in the value is removed.
@@ -74,49 +81,80 @@ const DESIGN_KEYS = Object.freeze({
   "font-schemes": ["fontScheme"],
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
-  "image-treatments": ["slideImage", "imageFill"],
 });
 const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"];
+const RESERVED_GROUPS = new Set(["default", "custom"]);
+const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
-function recordList(source) {
-  const records = Array.isArray(source) ? source : source?.records;
-  return Array.isArray(records) ? records.filter((record) => record && typeof record.id === "string") : [];
+const catalogsOf = (options) => mergeCatalogs(options.catalogs);
+
+// A reference resolved the one way every engine resolves it (core's `resolveReference`, with the registered catalogs).
+function resolveRecord(presentation, kind, reference, options) {
+  if (typeof reference !== "string" || !reference) return undefined;
+  return resolveReference(presentation, kind, reference, { catalogs: catalogsOf(options) });
 }
 
-// Inline document records first (they override), then caller-loaded records, then the
-// bundled catalog. Unlike getCatalogRecords, an inline catalog never hides bundled ids.
-function findCatalogRecord(presentation, kind, id, options) {
-  return (
-    recordList(presentation.catalogs?.[kind]).find((record) => record.id === id) ??
-    recordList(options.catalogs?.[kind] ?? options.catalogSources?.[kind]).find((record) => record.id === id) ??
-    (options.record?.id === id ? options.record : undefined) ??
-    bundledCatalogs[kind]?.find((record) => record.id === id)
-  );
-}
-
-function requireCatalogId(presentation, dimension, id, options) {
-  const kind = CATALOG_KIND[dimension];
-  if (typeof id !== "string" || id.length === 0)
-    throw fail("invalid-catalog-id", `Switch ${dimension} to a non-empty catalog id.`, { dimension, id });
-  const record = findCatalogRecord(presentation, kind, id, options);
-  if (!record) throw fail("unknown-catalog-id", `Unknown ${kind} catalog ID: ${id}.`, { dimension, catalogKind: kind, id });
-  return record;
-}
-
-// A gallery item supplies its own record; add it inline in the same transaction when the
-// document and the bundled catalog do not already define the id.
-function catalogRecordPatches(presentation, dimension, options) {
+/**
+ * A record the caller supplies with the switch (a gallery item carries its own): it is embedded in the same transaction, in
+ * the group whose `source` is `options.recordSource` (`default` when the document has no default group yet), else under `custom`,
+ * with no `$schema`, `id` or `x-*` display fields. Returns the patches and the reference to write.
+ */
+function suppliedRecord(presentation, kind, options) {
   const record = options.record;
-  if (!record) return [];
+  if (!record) return undefined;
+  const id = record.id;
+  const groups = isObject(presentation.catalogs) ? presentation.catalogs : undefined;
+  let group = "custom";
+  if (typeof options.recordSource === "string" && options.recordSource) {
+    const named = groups && Object.entries(groups).find(([, value]) => isObject(value) && value.source === options.recordSource);
+    if (named) group = named[0];
+    else if (!groups || groups.default === undefined) group = "default";
+  }
+  const reference = RESERVED_GROUPS.has(group) ? id : `${group}:${id}`;
+  const { $schema: _schema, id: _id, ...fields } = record;
+  const value = Object.fromEntries(Object.entries(structuredClone(fields)).filter(([key]) => !key.startsWith("x-")));
+  if (isObject(groups?.[group]?.[kind]) && Object.hasOwn(groups[group][kind], id)) return { patches: [], reference, record: groups[group][kind][id], group };
+  const path = ["catalogs", group, kind, id];
+  let patches;
+  if (!groups) patches = [{ op: "add", path: "/catalogs", value: { [group]: { ...(group === "default" ? { source: options.recordSource } : {}), [kind]: { [id]: value } } } }];
+  else if (!isObject(groups[group])) patches = [{ op: "add", path: opfPathToJsonPointer(path.slice(0, 2)), value: { ...(group === "default" ? { source: options.recordSource } : {}), [kind]: { [id]: value } } }];
+  else if (!isObject(groups[group][kind])) patches = [{ op: "add", path: opfPathToJsonPointer(path.slice(0, 3)), value: { [id]: value } }];
+  else patches = [{ op: "add", path: opfPathToJsonPointer(path), value }];
+  return { patches, reference, record: value, group };
+}
+
+// The record a switched reference names: a supplied record, else core's resolution. Unknown references are refused.
+function requireRecord(presentation, dimension, reference, options) {
   const kind = CATALOG_KIND[dimension];
-  if (recordList(presentation.catalogs?.[kind]).some((entry) => entry.id === record.id) || bundledCatalogs[kind]?.some((entry) => entry.id === record.id)) return [];
-  const value = { $schema: schemas[catalogSchemaNames[kind]].$id, ...record };
-  if (!presentation.catalogs || typeof presentation.catalogs !== "object") return [{ op: "add", path: "/catalogs", value: { [kind]: { records: [value] } } }];
-  if (!presentation.catalogs[kind] || typeof presentation.catalogs[kind] !== "object")
-    return [{ op: "add", path: `/catalogs/${kind}`, value: { records: [value] } }];
-  if (!Array.isArray(presentation.catalogs[kind].records)) return [{ op: "add", path: `/catalogs/${kind}/records`, value: [value] }];
-  return [{ op: "add", path: `/catalogs/${kind}/records/-`, value }];
+  if (typeof reference !== "string" || reference.length === 0)
+    throw fail("invalid-catalog-id", `Switch ${dimension} to a non-empty catalog reference.`, { dimension, id: reference });
+  const resolved = resolveRecord(presentation, kind, reference, options);
+  if (!resolved) throw fail("unknown-catalog-id", `Unknown ${kind} catalog reference: ${reference}. Register the catalog that holds it, or add the record to the document.`, { dimension, catalogKind: kind, id: reference });
+  return resolved;
+}
+
+// A switch to a supplied record writes the reference it was embedded under; otherwise the reference must resolve.
+function catalogChoice(presentation, dimension, reference, options) {
+  const supplied = options.record && parseReference(reference)?.id === options.record.id ? suppliedRecord(presentation, CATALOG_KIND[dimension], options) : undefined;
+  if (supplied) return { patches: supplied.patches, reference: supplied.reference, record: supplied.record, group: supplied.group };
+  const resolved = requireRecord(presentation, dimension, reference, options);
+  return { patches: [], reference, record: resolved.record, group: resolved.group };
+}
+
+// A reference copied out of a record of group `group` into the document's design keeps naming that group's record.
+function qualify(reference, group) {
+  if (typeof reference !== "string") return reference;
+  const parsed = parseReference(reference);
+  if (!parsed || parsed.group || RESERVED_GROUPS.has(group)) return reference;
+  return `${group}:${parsed.id}`;
+}
+function qualifiedValue(key, value, group) {
+  if (key === "colorScheme" || key === "fontScheme") {
+    if (typeof value === "string") return qualify(value, group);
+    if (isObject(value) && typeof value.id === "string") return { ...structuredClone(value), id: qualify(value.id, group) };
+  }
+  return structuredClone(value);
 }
 
 function slideAt(presentation, slideIndex, what = "this switch") {
@@ -158,7 +196,8 @@ function socialsPatches(presentation, value, options) {
   if (!["speaker", "organization"].includes(owner)) throw fail("invalid-switch-value", "Socials owner must be 'speaker' or 'organization'.", { owner });
   if (!value || typeof value !== "object" || typeof value.platform !== "string" || typeof value.handle !== "string" || !value.handle)
     throw fail("invalid-switch-value", "Switch socials to { platform, handle } with a non-empty handle.", { value });
-  requireCatalogId(presentation, "socials", value.platform, options);
+  if (!Object.hasOwn(SOCIAL_PLATFORMS, value.platform))
+    throw fail("unknown-catalog-id", `Unknown social platform: ${value.platform}. Use one of ${Object.keys(SOCIAL_PLATFORMS).join(", ")}.`, { dimension: "socials", id: value.platform });
   const host = presentation[owner];
   const index = Array.isArray(host) ? (options.index ?? 0) : undefined;
   const target = Array.isArray(host) ? host[index] : host;
@@ -166,10 +205,15 @@ function socialsPatches(presentation, value, options) {
     throw fail("missing-owner", `Add the ${owner} to the document before setting their socials.`, { owner });
   const base = Array.isArray(host) ? [owner, String(index)] : [owner];
   const socials = target.socials;
-  const patches = catalogRecordPatches(presentation, "socials", options);
+  const patches = [];
   if (!socials || typeof socials !== "object") return [...patches, { op: "add", path: opfPathToJsonPointer([...base, "socials"]), value: { [value.platform]: value.handle } }];
   if (socials[value.platform] === value.handle) return patches;
   return [...patches, { op: Object.hasOwn(socials, value.platform) ? "replace" : "add", path: opfPathToJsonPointer([...base, "socials", value.platform]), value: value.handle }];
+}
+
+// Purposes take free goal text, so only a supplied record is embedded; any other string is written as it is.
+function catalogChoiceIfSupplied(presentation, dimension, value, options) {
+  return options.record ? catalogChoice(presentation, dimension, value, options) : undefined;
 }
 
 function blockValue(value, options) {
@@ -190,9 +234,9 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     throw fail("unknown-dimension", `Unknown dimension: ${dimension}. Use one of ${SWITCH_DIMENSIONS.join(", ")}.`, { dimension });
   if (!presentation || typeof presentation !== "object") throw fail("invalid-input", "Switch requires an OPF document object.");
   if (options.record) {
-    const ids = dimension === "audiences" ? [value].flat() : dimension === "socials" ? [value?.platform] : [value];
-    if (!CATALOG_KIND[dimension] || !ids.includes(options.record.id))
-      throw fail("record-id-mismatch", `The supplied record id must equal a switched ${dimension} id.`, { dimension, id: options.record.id });
+    const ids = (dimension === "audiences" ? [value].flat() : [value]).map((entry) => (typeof entry === "string" ? parseReference(entry)?.id : undefined));
+    if (!CATALOG_KIND[dimension] || typeof options.record?.id !== "string" || !ids.includes(options.record.id))
+      throw fail("record-id-mismatch", `The supplied record id must equal a switched ${dimension} id.`, { dimension, id: options.record?.id });
   }
   const before = checkFormat(presentation);
   const scopeIndex = options.slideIndex;
@@ -212,20 +256,22 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     // A slide's design cannot set dimensions (FA-07), so no slide can shadow the deck's size.
     patches = sameSize ? [] : designPatches(presentation, [], { dimensions: value });
   } else if (dimension === "purposes") {
-    // A catalog id, free-form goal text (no id check: any goal is valid) or an inline Purpose object; the schema validates it.
+    // A catalog reference, free-form goal text (no reference check: any goal is valid) or an inline Purpose object; the schema validates it.
     if (typeof value !== "string" && !(value && typeof value === "object" && !Array.isArray(value)))
-      throw fail("invalid-switch-value", "Switch purposes to a catalog id, a goal string or a purpose object.", { value });
+      throw fail("invalid-switch-value", "Switch purposes to a catalog reference, a goal string or a purpose object.", { value });
     if (typeof value === "string" && value.length === 0) throw fail("invalid-switch-value", "Switch purposes to a non-empty goal.", { value });
-    patches = [...catalogRecordPatches(presentation, dimension, options), ...rootPatch(presentation, "purpose", value)];
+    const supplied = typeof value === "string" ? catalogChoiceIfSupplied(presentation, dimension, value, options) : undefined;
+    patches = [...(supplied?.patches ?? []), ...rootPatch(presentation, "purpose", supplied?.reference ?? value)];
   } else if (dimension === "layouts") {
     slideIndex = scopeIndex;
     slideAt(presentation, slideIndex, "a layout switch");
     scope = "slide";
-    const record = requireCatalogId(presentation, dimension, value, options);
-    patches = catalogRecordPatches(presentation, dimension, options);
+    const choice = catalogChoice(presentation, dimension, value, options);
+    const record = choice.record;
+    patches = choice.patches;
     const withRecord = patches.length ? applyJsonPatch(presentation, patches) : presentation;
-    if (withRecord.slides[slideIndex].layout !== value) {
-      const layoutOps = createValuePatch(withRecord, ["slides", String(slideIndex), "layout"], value);
+    if (withRecord.slides[slideIndex].layout !== choice.reference) {
+      const layoutOps = createValuePatch(withRecord, ["slides", String(slideIndex), "layout"], choice.reference);
       const swapped = applyJsonPatch(withRecord, layoutOps);
       const types = Array.isArray(record.placeholders) ? record.placeholders.map((placeholder) => placeholder.type) : undefined;
       // Add the blank payloads the layout declares, as the JSON editor's layout choice does.
@@ -238,13 +284,13 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     slideIndex = scopeIndex;
     slideAt(presentation, slideIndex, "a chart switch");
     scope = "slide";
-    requireCatalogId(presentation, dimension, value, options);
+    if (typeof value !== "string" || !CHART_TYPES.includes(value)) throw fail("unknown-catalog-id", `Unknown chart type: ${value}. Use one of ${CHART_TYPES.join(", ")}.`, { dimension, id: value });
     const owner = options.path ? splitOpfPath(options.path) : findChartOwner(presentation, slideIndex);
     if (options.path && (owner[0] !== "slides" || owner[1] !== String(slideIndex)))
       throw fail("path-slide-mismatch", "options.path is not on the slide named by options.slideIndex.", { slideIndex, path: options.path });
     const chart = owner && getValueAtPath(presentation, [...owner, "chart"]);
     if (!chart || typeof chart !== "object") throw fail("chart-not-found", "This slide has no chart to switch. Insert a chart block first.", { slideIndex, path: options.path });
-    patches = [...catalogRecordPatches(presentation, dimension, options), ...(chart.type === value ? [] : [...createValuePatch(presentation, [...owner, "chart", "type"], value), ...staleMappingPatches(presentation, owner, chart, value), ...staleComboPatches(presentation, owner, chart, value)])];
+    patches = chart.type === value ? [] : [...createValuePatch(presentation, [...owner, "chart", "type"], value), ...staleMappingPatches(presentation, owner, chart, value), ...staleComboPatches(presentation, owner, chart, value)];
   } else if (dimension === "blocks") {
     if (options.path === undefined) throw fail("missing-path", "Choose the block to replace with options.path.");
     // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
@@ -263,30 +309,58 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     scope = "block";
   } else if (dimension === "socials") {
     patches = socialsPatches(presentation, value, options);
+  } else if (dimension === "image-treatments") {
+    // The treatments of one image block (FA-22): fit, focus, shape, corner radius, border, opacity, recolor, overlay, aspect ratio, placement.
+    if (options.path === undefined) throw fail("missing-path", "Choose the image block to treat with options.path.");
+    patches = imageTreatmentPatches(presentation, options.path, value);
+    const parts = splitOpfPath(options.path);
+    if (parts[0] === "slides") slideIndex = Number(parts[1]);
+    scope = "block";
+  } else if (dimension === "languages") {
+    // A BCP-47 tag (en-US) or a language object ({ bcp47, ... }); the schema checks the tag. Language catalog ids are gone.
+    if (!(typeof value === "string" && value) && !(isObject(value) && typeof value.bcp47 === "string"))
+      throw fail("invalid-switch-value", "Switch languages to a BCP-47 tag such as en-US, or a language object with bcp47.", { value });
+    patches = rootPatch(presentation, "language", value);
   } else if (ROOT_FIELD[dimension]) {
     const field = ROOT_FIELD[dimension];
-    let next = value;
+    let next;
     if (dimension === "audiences") {
-      next = Array.isArray(value) ? value : [value];
-      if (!next.length) throw fail("invalid-catalog-id", "Switch audiences to at least one catalog id.", { value });
-      for (const id of next) requireCatalogId(presentation, dimension, id, options);
-    } else requireCatalogId(presentation, dimension, value, options);
-    patches = [...catalogRecordPatches(presentation, dimension, options), ...rootPatch(presentation, field, next)];
+      const list = Array.isArray(value) ? value : [value];
+      if (!list.length) throw fail("invalid-catalog-id", "Switch audiences to at least one catalog reference.", { value });
+      next = [];
+      for (const reference of list) {
+        const choice = catalogChoice(applyJsonPatch(presentation, patches), dimension, reference, options);
+        patches = [...patches, ...choice.patches];
+        next.push(choice.reference);
+      }
+    } else {
+      const choice = catalogChoice(presentation, dimension, value, options);
+      patches = choice.patches;
+      next = choice.reference;
+    }
+    patches = [...patches, ...rootPatch(presentation, field, next)];
   } else {
     // Design dimensions: deck scope by default, or one slide with options.slideIndex.
     let entries;
     if (dimension === "themes") {
-      const record = requireCatalogId(presentation, dimension, value, options);
-      entries = { theme: value };
+      const choice = catalogChoice(presentation, dimension, value, options);
+      const record = choice.record ?? {};
+      entries = { theme: choice.reference };
       if (options.bundle !== false) {
-        // The gallery's theme snippet writes the whole bundle, so an explicit deck choice
-        // does not keep the previous theme's fonts, colors or background.
-        // A slide's design cannot set dimensions (a PPTX has one slide size), so only a deck-scope switch writes the theme's.
-        for (const key of ["colorScheme", "fontScheme", "background", ...(scopeIndex === undefined ? ["dimensions"] : [])]) if (record[key] !== undefined) entries[key] = record[key];
+        // An explicit theme choice brings the theme's own colour scheme, font scheme and background (and, for the deck, its
+        // slide size): an override of those at the same scope is removed so the theme's applies. Nothing is copied out of the
+        // record, except on a slide whose deck sets the key: there the theme's value is written on the slide (its references
+        // qualified with the theme's catalog group), because the deck's design would otherwise win over the slide's theme.
+        // A slide's design cannot set dimensions (a PPTX has one slide size), so only a deck-scope switch touches them.
+        for (const key of ["colorScheme", "fontScheme", "background", ...(scopeIndex === undefined ? ["dimensions"] : [])]) {
+          if (record[key] === undefined) continue;
+          entries[key] = scopeIndex !== undefined && presentation.design?.[key] !== undefined ? qualifiedValue(key, record[key], choice.group) : null;
+        }
       }
-      patches = catalogRecordPatches(presentation, dimension, options);
+      patches = choice.patches;
     } else if (dimension === "color-schemes" || dimension === "font-schemes") {
-      requireCatalogId(presentation, dimension, value, options);
+      const choice = catalogChoice(presentation, dimension, value, options);
+      value = choice.reference;
       entries = { [DESIGN_KEYS[dimension][0]]: value };
       if (dimension === "font-schemes") {
         // An accent font is its own choice, not part of the scheme being left: it stays (in the object form).
@@ -294,7 +368,7 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
         const own = getValueAtPath(presentation, [...scopeBase, "design", "fontScheme"]);
         if (own && typeof own === "object" && own.accent !== undefined) entries.fontScheme = { id: value, accent: structuredClone(own.accent) };
       }
-      patches = catalogRecordPatches(presentation, dimension, options);
+      patches = choice.patches;
     } else {
       // A background is an object or a shorthand string (theme slot or hex color); the schema
       // validates the candidate document, so a string that is neither is rejected below.
@@ -342,7 +416,8 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
 }
 
 /**
- * Switch one dimension of the session's document as a single undoable transaction. Returns the
+ * Switch one dimension of the session's document as a single undoable transaction, resolving references with the session's
+ * registered catalogs (and `options.catalogs`). Returns the
  * editor change plus `dimension`, `scope`, `changed` and `shadowed` (slides whose own design
  * hides a deck-level switch). Switching to the current value commits nothing.
  */
@@ -350,7 +425,8 @@ export function switchDimension(editor, dimension, value, options = {}) {
   if (!editor || typeof editor.applyPatch !== "function" || typeof editor.subscribe !== "function")
     throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
   const { meta, ...switchOptions } = options;
-  const prepared = prepareDimensionSwitch(editor.presentation, dimension, value, switchOptions);
+  // The session's registered catalogs first, then any the caller adds for this switch: the one list core resolves with.
+  const prepared = prepareDimensionSwitch(editor.presentation, dimension, value, { ...switchOptions, catalogs: mergeCatalogs(editor.catalogs, options.catalogs) });
   const { presentation, patches, ...summary } = prepared;
   void presentation;
   if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
@@ -360,28 +436,46 @@ export function switchDimension(editor, dimension, value, options = {}) {
 
 // --- options for pickers and current values ---------------------------------------------------
 
-const labelOf = (record) => record.name ?? record.id;
+// Host display metadata for an engine vocabulary (`options.vocabularies[key]`, the shape of `catalogDisplay`): a list of records
+// with `id` (or `bcp47` for a language), or an object keyed by id. Returns a Map id -> record.
+function displayRecords(options, key) {
+  const source = options.vocabularies?.[key];
+  const out = new Map();
+  if (Array.isArray(source)) {
+    for (const record of source) if (isObject(record) && typeof (record.id ?? record.bcp47) === "string") out.set(record.id ?? record.bcp47, record);
+  } else if (isObject(source)) {
+    for (const [id, record] of Object.entries(source)) out.set(isObject(record) && typeof record.bcp47 === "string" ? record.bcp47 : id, isObject(record) ? record : {});
+  }
+  return out;
+}
+const displayLabel = (record, id) => (typeof record?.name === "string" && record.name ? record.name : typeof record?.label === "string" && record.label ? record.label : id);
 
 /**
- * The values a picker can offer for a catalog-backed dimension, in document order: the document's
- * inline records first (they override), then caller-loaded records, then the bundled catalog,
- * without duplicates. `blocks` lists the content kinds. `charts` lists every chart type; use
- * `compatibleChartTypes` to narrow it to the types the chart's data can use.
+ * The values a picker can offer for a dimension. A catalog-backed dimension lists core's `catalogRecords` (the document's embedded
+ * records first, then `options.catalogs`'), each `{ id, label, record, reference, group, source, origin }` with `id` the reference
+ * to write. `charts` lists core's `CHART_TYPES` and `socials` core's `SOCIAL_PLATFORMS`, labelled from `options.vocabularies`;
+ * `languages` lists core's `LANGUAGES` tags. `blocks` lists the content
+ * kinds. Use `compatibleChartTypes` to narrow `charts` to the types the chart's data can use.
  */
 export function listSwitchOptions(presentation, dimension, options = {}) {
   if (dimension === "blocks") return BLOCK_KINDS.map((kind) => ({ id: kind, label: kind[0].toUpperCase() + kind.slice(1) }));
   if (dimension === "slide-sizes") return SLIDE_SIZE_PRESETS.map((preset) => ({ id: preset, label: SLIDE_SIZE_LABELS[preset] }));
+  if (dimension === "charts") {
+    const display = displayRecords(options, VOCABULARY.charts);
+    return CHART_TYPES.map((id) => ({ id, label: displayLabel(display.get(id), id), record: display.get(id) ?? {} }));
+  }
+  if (dimension === "socials") {
+    const display = displayRecords(options, VOCABULARY.socials);
+    return Object.keys(SOCIAL_PLATFORMS).map((id) => ({ id, label: displayLabel(display.get(id), id), record: { ...SOCIAL_PLATFORMS[id], ...display.get(id) } }));
+  }
+  if (dimension === "languages") {
+    // Core's language table (the tags engines know the script, direction and default fonts of), labelled from the host's display metadata.
+    const display = displayRecords(options, VOCABULARY.languages);
+    return LANGUAGES.map((language) => ({ id: language.tag, label: displayLabel(display.get(language.tag), language.tag), record: { ...language, ...display.get(language.tag) } }));
+  }
   const kind = CATALOG_KIND[dimension];
   if (!kind) return [];
-  const seen = new Set();
-  const out = [];
-  for (const source of [presentation?.catalogs?.[kind], options.catalogs?.[kind] ?? options.catalogSources?.[kind], bundledCatalogs[kind]])
-    for (const record of recordList(source)) {
-      if (seen.has(record.id)) continue;
-      seen.add(record.id);
-      out.push({ id: record.id, label: labelOf(record), record });
-    }
-  return out;
+  return listCatalogRecords(presentation ?? {}, kind, { catalogs: catalogsOf(options) });
 }
 
 const SINGLE_SERIES_ONLY = new Set(["pieChart", "doughnutChart", "funnelChart", "treemapChart", "waterfallChart"]);
@@ -423,7 +517,7 @@ function chartDataShape(chart, presentation) {
 }
 
 /**
- * Chart types the chart's inline data can use as it is, from the chartTypes catalog: simple,
+ * Chart types the chart's inline data can use as it is, from core's chart types and the host's chart display metadata: simple,
  * non-geographic, non-distribution types whose series count fits the data (the first column labels
  * the categories and each further column is a series; a type with N series needs exactly N value
  * columns, except that a stacked or percent-stacked type and a combination such as combo take N or more;
@@ -443,7 +537,8 @@ export function compatibleChartTypes(presentation, options = {}) {
     const record = option.record;
     const element = record.mappings?.openxml?.element;
     const current = option.id === chart.type;
-    const simple = record.complexity === "simple" && !DISTRIBUTION_ELEMENTS.has(element);
+    // Without the host's display metadata for a type (complexity, series, mappings) it is offered: compatibility is unknown, not refused.
+    const simple = record.complexity === undefined ? !DISTRIBUTION_ELEMENTS.has(element) : record.complexity === "simple" && !DISTRIBUTION_ELEMENTS.has(element);
     // A combination (composition "mixed", the FA-15 combo chart) needs at least its series count, like a stacked type.
     const atLeast = STACKED_GROUPINGS.has(record.mappings?.openxml?.grouping) || record.mappings?.openxml?.composition === "mixed";
     const seriesOk =
@@ -462,8 +557,8 @@ export function compatibleChartTypes(presentation, options = {}) {
 /**
  * The value a dimension currently has, for pickers: `{ value, scope }` where scope is "slide" when
  * `slideIndex` names a slide whose own design sets it, else "deck". `value` is undefined when the
- * dimension is unset. Catalog dimensions return the catalog id even when the document holds an
- * inline object.
+ * dimension is unset. Catalog dimensions return the reference (`id` or `name:id`) even when the document holds an
+ * object form with overrides. `options.catalogs` resolves the theme's slide size.
  */
 export function currentSwitchValue(presentation, dimension, options = {}) {
   const idOf = (reference) => (reference && typeof reference === "object" && !Array.isArray(reference) ? reference.id : reference);
@@ -478,18 +573,24 @@ export function currentSwitchValue(presentation, dimension, options = {}) {
     return { value: owner ? getValueAtPath(presentation, [...owner, "chart", "type"]) : undefined, scope: "slide" };
   }
   if (dimension === "blocks") return { value: undefined, scope: "block" };
+  if (dimension === "image-treatments") {
+    // The treatments of the image block at `options.path` (FA-22); without a path there is nothing to read.
+    if (options.path === undefined) return { value: undefined, scope: "block" };
+    const state = readImageTreatments(presentation, options.path);
+    return { value: Object.fromEntries(IMAGE_TREATMENT_FIELDS.map((key) => [key, state[key]])), scope: "block" };
+  }
   if (dimension === "slide-sizes") {
     // The size the deck composes at: its own design.dimensions, else the theme's; a {preset} object reads as its preset.
     // A custom size (inches without a preset) reads as the object itself. Unset reads as undefined (composed as widescreen).
     let size = presentation.design?.dimensions;
     if (size === undefined) {
-      const themeId = idOf(presentation.design?.theme);
-      size = themeId ? findCatalogRecord(presentation, "themes", themeId, {})?.dimensions : undefined;
+      const theme = presentation.design?.theme;
+      size = typeof theme === "string" ? resolveRecord(presentation, "themes", theme, options)?.record?.dimensions : undefined;
     }
     return { value: size && typeof size === "object" && !Array.isArray(size) && Object.keys(size).length === 1 && size.preset ? size.preset : size, scope: "deck" };
   }
   if (dimension === "purposes") {
-    // A catalog id or goal text reads as itself, a Purpose object as its id (else the object).
+    // A catalog reference or goal text reads as itself, a Purpose object as its id (else the object).
     const purpose = presentation.purpose;
     return { value: purpose && typeof purpose === "object" && !Array.isArray(purpose) ? (purpose.id ?? purpose) : purpose, scope: "deck" };
   }

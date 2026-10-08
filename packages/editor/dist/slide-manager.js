@@ -482,7 +482,7 @@ export function createSlideManager(container, options) {
     });
   }
   function layoutChoices() {
-    return options.layoutOptions ? options.layoutOptions(deck()) : listSwitchOptions(deck(), "layouts");
+    return options.layoutOptions ? options.layoutOptions(deck()) : listSwitchOptions(deck(), "layouts", { catalogs: editor.catalogs });
   }
   function openLayoutPicker() {
     const choices = layoutChoices();

@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import {
   TABLE_STYLE_PRESETS,
@@ -44,8 +45,10 @@ const deck = () => ({
     },
   ],
 });
-const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
-const svg = (presentation) => renderSlideSvg(presentation, 0);
+// OPF 0.15: the themes the fixtures name resolve through the registered default catalog.
+const catalogs = [defaultCatalog];
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs });
+const svg = (presentation) => renderSlideSvg(presentation, 0, { catalogs });
 const body = (row, column) => ({ section: "body", row, column });
 const header = (column) => ({ section: "header", column });
 
@@ -74,7 +77,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   const anchor = describeTableCell(editor.get(T), body(1, 1));
   assert.deepEqual([anchor.anchor, anchor.colSpan, anchor.rowSpan], [true, 2, 1]);
   // The merged table exports and its merge survives a round trip through PowerPoint.
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
   const back = await pptx.fromPptx(bytes);
   assert.ok(JSON.stringify(back.presentation ?? back).includes("colSpan"), "the exported merge reimports with a column span");
   editor.undo();
@@ -155,7 +158,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
     assert.equal(readTableStyle(editor.presentation, T).preset, preset, `${preset} reads back`);
     assert.notEqual(svg(editor.presentation), beforeSvg, `${preset}: the preview draws the style`);
     assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
-    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
     assert.ok(bytes.byteLength > 0, `${preset} exports`);
   }
   const banded = prepareTableStyle(before, T, "banded").presentation.slides[0].blocks[0].table;

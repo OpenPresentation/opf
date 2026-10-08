@@ -1,15 +1,16 @@
 import type { PaginationOptions, PaginationResult } from "@openpresentation/opf/pagination";
 import type { Composition, ComposeSlideOptions, SlideComposition } from "@openpresentation/opf/composition";
-import type { Fonts, PresentationStats, SlideContextDiagnostic, StatsOptions, ValidationReport } from "@openpresentation/opf";
+import type { Catalog, Fonts, PresentationStats, SlideContextDiagnostic, StatsOptions, ValidationReport } from "@openpresentation/opf";
+export * from "./catalogs.js";
 /**
  * What the editor adds to the options of `composeSlide` and `paginateSlide`: `fonts` is the renderer's fonts handle (`loadFonts()`), whose
- * `textMeasurement` measures the text; `catalogs` are host catalog records; `onDiagnostic` hears every `unresolved-font-scheme`,
- * `unresolved-layout`, `unresolved-theme` and `unresolved-color-scheme` diagnostic of core's `resolveSlideContext`. Any other option overrides
- * the resolved one.
+ * `textMeasurement` measures the text; `catalogs` are host catalogs for this call (merged after the session's registered ones);
+ * `onDiagnostic` hears every diagnostic of core's `resolveSlideContext` (`unresolved-reference`). Any other
+ * option overrides the resolved one.
  */
 export interface EditorDiagnosticOptions {
   fonts?: Fonts;
-  catalogs?: Record<string, readonly unknown[]>;
+  catalogs?: readonly Catalog[];
   onDiagnostic?: (diagnostic: SlideContextDiagnostic) => void;
 }
 export declare const packageName = "@openpresentation/opf-editor";
@@ -56,7 +57,8 @@ export interface EditorChange {
 }
 
 export interface EditorEvent {
-  type: "patch" | "undo" | "redo" | "restore";
+  /** `catalogs`: the registered catalogs changed (`setCatalogs`); the document did not. */
+  type: "patch" | "undo" | "redo" | "restore" | "catalogs";
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
@@ -73,7 +75,12 @@ export interface EditorSession {
   composeSlide(slideIndex: number, options?: ComposeSlideOptions & EditorDiagnosticOptions): SlideComposition;
   setComposition(slideIndex: number, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   readonly presentation: unknown;
+  /** The `format` report of the document plus the catalog reference rules, checked against the registered catalogs. */
   readonly validation: ValidationReport;
+  /** The host's registered catalogs, frozen; the first is the host default. */
+  readonly catalogs: readonly Catalog[];
+  /** Replace the registered catalogs: re-validates the document and emits one `catalogs` event. */
+  setCatalogs(catalogs: readonly Catalog[] | undefined, meta?: Record<string, unknown>): readonly Catalog[];
   readonly canUndo: boolean;
   readonly canRedo: boolean;
   snapshot(): EditorSnapshot;
@@ -94,18 +101,28 @@ export interface EditorSession {
 export interface CreateEditorSessionOptions {
   /** Refuse every edit whose result has an error finding (the default per edit is `meta.rejectInvalid`). */
   rejectInvalid?: boolean;
+  /** The host's catalogs (for example `[defaultCatalog]` from `@openpresentation/opf/catalog`): resolution, validation, pickers, embedding. */
+  catalogs?: readonly Catalog[];
 }
 
 export interface CatalogOption {
+  /** The reference to write: `id` or `name:id`. */
   id: string;
+  reference: string;
   label: string;
+  description?: string;
   record: Record<string, unknown>;
+  /** The catalog group the record resolves in (`custom`, `default` or a named group). */
+  group: string;
+  source?: string;
+  origin: "document" | "host";
 }
 
 export interface CatalogOptionsInput {
   presentation?: { catalogs?: Record<string, unknown> } | Record<string, unknown>;
-  catalogs?: Record<string, unknown>;
-  catalogSources?: Record<string, unknown>;
+  /** Host catalogs, merged after `editor`'s registered ones. */
+  catalogs?: readonly Catalog[];
+  editor?: EditorSession;
   [key: string]: unknown;
 }
 
