@@ -77,10 +77,8 @@
       "design": {
         "background": {
           "type": "image",
-          "image": {
-            "src": "asset:cover-image",
-            "fit": "cover"
-          },
+          "src": "asset:cover-image",
+          "fit": "cover",
           "opacity": 0.28
         }
       },

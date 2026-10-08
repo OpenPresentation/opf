@@ -13,7 +13,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -69,14 +69,16 @@
     {
       "title": "Image Fill Override",
       "design": {
-        "imageFill": "fit",
-        "slideImage": {
-          "src": "asset:context-photo",
-          "position": "right"
-        }
+        "imageFit": "contain"
       },
-      "type": "image",
-      "image": "asset:context-photo"
+      "blocks": [
+        {
+          "image": "asset:context-photo",
+          "placement": {
+            "edge": "right"
+          }
+        }
+      ]
     }
   ],
   "assets": {

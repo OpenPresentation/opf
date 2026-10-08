@@ -62,10 +62,8 @@
     "dimensions": "widescreen",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "left",
@@ -73,7 +71,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -359,16 +353,13 @@
     {
       "id": "s79-image",
       "section": "Context",
-      "layout": "image-bleed",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "Tax administration context photo for Department of Revenue Services",
-        "title": "Tax administration context"
-      },
       "design": {
-        "slideImage": "asset:supporting-photo"
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "Tax administration context photo for Department of Revenue Services"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },

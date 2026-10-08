@@ -310,7 +310,7 @@
       "design": {
         "background": { "type": "theme", "slot": "dark2" },
         "colorScheme": "acme-night",
-        "imageFill": "crop"
+        "imageFit": "cover"
       },
       "notes": "Slide-level design override resolving an inline catalog record (acme-night)."
     },

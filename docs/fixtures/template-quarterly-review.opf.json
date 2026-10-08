@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Quarterly review for {{client}}",
   "template": true,
-  "design": { "theme": "classic", "colorScheme": "cool-horizon", "fontScheme": "roboto" },
+  "design": { "theme": "classic", "colorScheme": "cool-horizon", "fontScheme": "roboto", "imageFit": "contain" },
   "variables": {
     "client": { "type": "text", "label": "Client", "description": "The customer this review is for.", "example": "Acme Corp" },
     "headline": { "type": "text", "label": "Headline", "example": [{ "text": "Renewal is ", "bold": true }, "on track"] },

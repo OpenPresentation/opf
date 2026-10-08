@@ -70,7 +70,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -100,10 +100,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [

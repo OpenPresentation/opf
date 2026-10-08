@@ -61,7 +61,7 @@
       "type": "chart"
     },
     "image-focus": {
-      "layout": "image-bleed",
+      "layout": "image-focus",
       "type": "image"
     },
     "timeline": {
@@ -90,7 +90,7 @@
       "gallerySubtitle": true,
       "gallerySlideType": "text",
       "type": "image",
-      "layout": "image-bleed"
+      "layout": "image-focus"
     },
     {
       "narrative": "heros-journey",
