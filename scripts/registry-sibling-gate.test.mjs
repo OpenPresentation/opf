@@ -15,7 +15,7 @@ test('a sibling without the field always runs its registry harness', () => {
 
 test('a Depends-On sibling that needs an unreleased core skips its harness on a pull request or merge-queue run only', () => {
   assert.equal(decide().run, false);
-  assert.match(decide().message, /requiresUnreleasedCore 0\.15\.0.*published @openpresentation\/opf 0\.14\.0/);
+  assert.match(decide().message, /requiresUnreleasedCore\).*needs @openpresentation\/opf 0\.15\.0, and the installed published version is 0\.14\.0/);
   assert.equal(decide({ event: 'merge_group' }).run, false);
   // Main and releases keep the hard gate: an unreleased requirement there is an error, never a skip.
   for (const event of ['push', 'schedule', 'workflow_dispatch', '']) assert.throws(() => decide({ event }), /only a pull request or merge-queue run/, event);

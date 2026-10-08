@@ -3,28 +3,33 @@
 // sibling's own harness from its checkout (`node ../opf-editor/test/json-editor-browser.mjs ... registry-consumer`). On a
 // pull request (or its merge-queue run) with `Depends-On: OpenPresentation/<sibling>#N`, that checkout is the sibling pull
 // request, and a sibling that declares `"opf": { "requiresUnreleasedCore": "X.Y.Z" }` has rewritten its harness for a core
-// that is not on npm yet. Run against the published core it cannot even bundle. This gate skips exactly that sibling
-// harness, with a ::notice::, while the published core the registry consumer installed is lower than X.Y.Z: the same rule
-// the siblings apply to their own packed install. It never skips on push, the nightly run or a manual run (the lock's
-// siblings are released, and a release deletes the field), so main and releases keep the hard gate.
+// that is not on npm yet. This gate skips exactly that sibling harness, with a ::notice::, while the published core the
+// registry consumer installed is lower than X.Y.Z. The rule is scripts/unreleased-gate.mjs (shared with the CLI's peer
+// tests): never a skip on push, the nightly run, a manual run or a release, so main and releases keep the hard gate.
 //
 //   node scripts/registry-sibling-gate.mjs <sibling checkout> <registry consumer>   prints `run` or `skip`
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compareVersions, isVersion, unreleasedCoreOf } from './release-train.mjs';
+import { SKIP_EVENTS, gate } from './unreleased-gate.mjs';
 
 /** Events on which a Depends-On sibling replaces the lock's (ecosystem-refs). */
-export const DEPENDS_ON_EVENTS = new Set(['pull_request', 'merge_group']);
+export const DEPENDS_ON_EVENTS = SKIP_EVENTS;
 
 /** { run, message }: whether the sibling's harness runs against the registry consumer. */
 export function decideSiblingHarness({ sibling, declared, installed, event }) {
   if (declared === null) return { run: true };
   if (!isVersion(declared)) throw new Error(`${sibling} declares opf.requiresUnreleasedCore ${JSON.stringify(declared)}, which is not a version`);
   if (!isVersion(installed ?? '')) throw new Error(`cannot read the published @openpresentation/opf the registry consumer installed (${JSON.stringify(installed)})`);
-  if (compareVersions(installed, declared) >= 0) return { run: true, message: `${sibling} declares opf.requiresUnreleasedCore ${declared}; the published core ${installed} satisfies it, so its harness runs` };
-  if (!DEPENDS_ON_EVENTS.has(event)) throw new Error(`${sibling} declares opf.requiresUnreleasedCore ${declared} but the published core is ${installed}, on a ${event || 'local'} run: only a pull request or merge-queue run with Depends-On may skip its registry harness; publish core ${declared} or roll the lock back to a released sibling`);
-  return { run: false, message: `RR-55: ${sibling} (Depends-On) declares opf.requiresUnreleasedCore ${declared} and the registry consumer installed the published @openpresentation/opf ${installed}, so its harness, rewritten for the unreleased core, is skipped against the published packages. Every other registry check still runs; push to main and releases run it.` };
+  return gate({
+    subject: `${sibling} (Depends-On, opf.requiresUnreleasedCore)`,
+    required: `@openpresentation/opf ${declared}`,
+    installed,
+    met: compareVersions(installed, declared) >= 0,
+    event,
+    what: 'its harness against the published packages',
+  });
 }
 
 export function siblingGate(siblingDir, consumerDir, event = process.env.GITHUB_EVENT_NAME ?? '') {
@@ -42,7 +47,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   }
   try {
     const result = siblingGate(path.resolve(siblingDir), path.resolve(consumerDir));
-    if (result.message) console.error(result.run ? result.message : `::notice title=Registry sibling harness skipped::${result.message}`);
+    if (!result.run) console.error(`::notice title=Registry sibling harness skipped::${result.message}`);
     console.log(result.run ? 'run' : 'skip');
   } catch (error) {
     console.error(`::error title=Registry sibling harness::${error.message}`);
