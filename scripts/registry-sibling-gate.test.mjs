@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { decideSiblingHarness, siblingGate } from './registry-sibling-gate.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const decide = (extra) => decideSiblingHarness({ sibling: '@openpresentation/opf-editor', declared: '0.15.0', installed: '0.14.0', event: 'pull_request', ...extra });
+const decide = (extra) => decideSiblingHarness({ sibling: '@openpresentation/opf-editor', declared: '0.15.0', installed: '0.14.0', event: 'pull_request', ref: 'refs/heads/main', ...extra });
 
 test('a sibling without the field always runs its registry harness', () => {
   for (const event of ['pull_request', 'merge_group', 'push', 'schedule', '']) assert.equal(decideSiblingHarness({ sibling: 'x', declared: null, installed: '0.14.0', event }).run, true, event);

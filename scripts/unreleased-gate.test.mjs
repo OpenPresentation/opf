@@ -25,7 +25,7 @@ test('satisfies follows npm caret, tilde and exact rules, 0.x included', () => {
 
 test('an unmet requirement skips only on a pull request or merge-queue run, and fails everywhere else', () => {
   assert.deepEqual([...SKIP_EVENTS].sort(), ['merge_group', 'pull_request']);
-  const unmet = (event) => gate({ subject: 'x', required: 'y@^0.15.0', installed: '0.14.0', met: false, event, what: 'its tests' });
+  const unmet = (event) => gate({ subject: 'x', required: 'y@^0.15.0', installed: '0.14.0', met: false, event, ref: 'refs/heads/main', what: 'its tests' });
   for (const event of ['pull_request', 'merge_group']) {
     const result = unmet(event);
     assert.equal(result.run, false, event);
@@ -58,16 +58,16 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
   install('@openpresentation/opf-pptx', '0.14.0');
   const names = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'];
   const executable = pathToFileURL(path.join(cli, 'dist/index.js')).href;
-  const skipped = cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request' });
+  const skipped = cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request', ref: 'refs/heads/main' });
   assert.equal(skipped.run, false);
   assert.match(skipped.message, /opf-render@\^0\.15\.0 and @openpresentation\/opf-pptx@\^0\.15\.0/);
-  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }), /only a pull request, merge-queue or roller-candidate run/);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/heads/main' }), /only a pull request, merge-queue or roller-candidate run/);
   install('@openpresentation/opf-render', '0.15.0');
   install('@openpresentation/opf-pptx', '0.15.1');
-  assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }).run, true);
+  assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/heads/main' }).run, true);
   // The packed-install test names the versions it installs.
   assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request', installedVersions: { '@openpresentation/opf-render': '0.14.0', '@openpresentation/opf-pptx': '0.14.0' } }).run, false);
-  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names: ['@openpresentation/opf-editor'], event: 'push' }), /no peer range/);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names: ['@openpresentation/opf-editor'], event: 'push', ref: 'refs/heads/main' }), /no peer range/);
 });
 
 test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES', () => {
