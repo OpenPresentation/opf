@@ -343,5 +343,8 @@
   },
   "bin": {
     "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+  },
+  "opf": {
+    "requiresUnreleasedCore": "0.16.0"
   }
 }

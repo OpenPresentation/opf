@@ -15,6 +15,13 @@ import {defaultCatalog, resolvePresentation, renderSlideSvg} from './catalog-har
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/gallery-alignment-layouts.json', import.meta.url), 'utf8'));
 assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layouts audit A flagged');
 
+// FA-26: chart-2x and chart-3x (named here, not embedded) now pair each chart with its note in a column placeholder group,
+// so their boxes move by design and they are no longer alignment-only layouts; test/placeholder-groups.mjs covers nested
+// records. Any other fixture layout whose host record gains groups must be reviewed the same way.
+const NESTED_RECORDS = ['chart-2x', 'chart-3x'];
+const nested = ({id, document}) => !document.catalogs?.default?.layouts?.[id] && (defaultCatalog.layouts[id]?.placeholders ?? []).some(entry => entry?.type === 'group');
+assert.deepEqual(fixture.layouts.filter(nested).map(layout => layout.id), NESTED_RECORDS);
+
 const anchors = {left: 'start', center: 'middle', right: 'end'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const tokens = text => text.split(/(?=<)/);
@@ -37,6 +44,7 @@ const boxes = svg => [...svg.matchAll(/<(rect|image|circle|path|line)\b[^>]*>/g)
 
 let traced = 0, layoutEffects = 0;
 for (const {id, document} of fixture.layouts) {
+  if (NESTED_RECORDS.includes(id)) continue;
   const slide = document.slides[0];
   assert.equal(slide.layout, id);
   const bound = resolvePresentation(document).slides[0];
@@ -77,4 +85,4 @@ for (const {id, document} of fixture.layouts) {
   assert.ok(changes > 0, `${id}: the layout changes text alignment in the preview`);
   layoutEffects++;
 }
-console.log(`Gallery layout alignment passed: ${fixture.layouts.length} flagged layouts (pptx-gallery ${fixture.gallery.slice(0, 7)}), ${traced} traced texts at core's item alignment, ${layoutEffects} layouts changing only the text anchor with every composed box unchanged.`);
+console.log(`Gallery layout alignment passed: ${fixture.layouts.length - NESTED_RECORDS.length} flagged layouts (${NESTED_RECORDS.length} now nested) (pptx-gallery ${fixture.gallery.slice(0, 7)}), ${traced} traced texts at core's item alignment, ${layoutEffects} layouts changing only the text anchor with every composed box unchanged.`);
