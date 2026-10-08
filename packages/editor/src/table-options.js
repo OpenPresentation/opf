@@ -394,6 +394,44 @@ export function readTableStyleOfTable(table) {
 // Table structure (RR-24): insert, delete, move and sort rows and columns, the header row, cell values.
 export * from "./table-structure.js";
 
+// --- text alternative (FA-27) -----------------------------------------------------------------
+
+/**
+ * The table's text alternative as form state, like a chart's: `alt` is the text (empty when absent or decorative) and `decorative`
+ * is the empty alt, a reviewed choice and not a missing one.
+ */
+export function readTableAlt(table) {
+  return { alt: typeof table?.alt === "string" ? table.alt : "", decorative: table?.alt === "" };
+}
+
+/**
+ * Compute the patch that changes the table's text alternative. `change` is `{ alt?, decorative? }`: `alt` is trimmed and an empty string
+ * or `null` removes it, `decorative: true` writes the empty alt (and wins over `alt`), `decorative: false` removes an empty alt. It works
+ * on an inline table and on a table that shows a shared dataset, because `alt` belongs to the table and not to its data. The document
+ * is not modified.
+ */
+export function prepareTableAlt(presentation, tablePath, change) {
+  const before = checkFormat(presentation);
+  const parts = splitOpfPath(tablePath);
+  const table = getValueAtPath(presentation, parts);
+  if (!isObject(table) || (!Array.isArray(table.rows) && typeof table.dataset !== "string")) throw fail("table-not-found", "Choose a table (a path ending in .table).", { tablePath });
+  if (!isObject(change)) throw fail("invalid-table-option", "A table alt change is { alt?, decorative? }.", { change });
+  let wanted;
+  if (change.decorative === true) wanted = "";
+  else if (change.alt !== undefined) wanted = typeof change.alt === "string" && change.alt.trim() ? change.alt.trim() : undefined;
+  else if (change.decorative === false && table.alt === "") wanted = undefined;
+  else wanted = table.alt;
+  const pointer = opfPathToJsonPointer([...parts, "alt"]);
+  const present = Object.hasOwn(table, "alt");
+  const patches = [];
+  if (wanted === undefined) {
+    if (present) patches.push({ op: "remove", path: pointer });
+  } else if (!present) patches.push({ op: "add", path: pointer, value: wanted });
+  else if (table.alt !== wanted) patches.push({ op: "replace", path: pointer, value: wanted });
+  const next = checkedDocument(presentation, patches, before);
+  return { action: "table-alt", tablePath: parts.join("."), changed: patches.length > 0, patches, presentation: clone(next) };
+}
+
 // --- session forms ----------------------------------------------------------------------------
 
 function commit(editor, prepared, meta = {}) {
@@ -422,6 +460,11 @@ export function splitTableCell(editor, tablePath, cell, meta = {}) {
 export function setTableCellStyle(editor, tablePath, cells, style, meta = {}) {
   checkEditor(editor);
   return commit(editor, prepareTableCellStyle(editor.presentation, tablePath, cells, style), meta);
+}
+/** Change the table's text alternative as one undoable transaction. See {@link prepareTableAlt}. */
+export function setTableAlt(editor, tablePath, change, meta = {}) {
+  checkEditor(editor);
+  return commit(editor, prepareTableAlt(editor.presentation, tablePath, change), meta);
 }
 /** Apply a table style as one undoable transaction. See {@link prepareTableStyle}. */
 export function setTableStyle(editor, tablePath, preset, meta = {}) {

@@ -36,7 +36,7 @@ import {
 import { createContentControls } from "./content-controls.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
-import { describeTableCell, mergeTableCells, parseTableCellPath, readTableStyle, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
+import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, readTableStyle, setTableAlt, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
 export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "header-footer", "brand", "layout-options", "info", "selection", "image", "table", "slide-content", "catalog"]);
@@ -1158,8 +1158,19 @@ export function createDesignControls(container, options = {}) {
     const align = selectField("cell-align", "Cell text alignment", { empty: "Default", onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { align: value === "" ? null : value }), "Cell alignment changed.") });
     align.setOptions(["left", "center", "right"].map((value) => ({ value, label: titleCase(value) })));
     const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap);
-    body.append(summary, headerStyle.wrap, banding.wrap, borders.wrap, resetStyle, cellBox);
-    dynamic.table = { details, summary, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, join };
+    // FA-27: the table's text alternative, like a chart's. It belongs to the table, so a dataset-backed table has it too.
+    const alt = textField("table-alt", "Alt text", {
+      help: "What the table shows: its point and the key numbers, not \"a table\". Optional, because a screen reader reads a table cell by cell. Press Enter to apply.",
+      placeholder: "What the table shows",
+      onCommit: (value) => run(() => setTableAlt(editor, dynamic.tablePath, { alt: value }), "Table alt text changed."),
+    });
+    alt.input.setAttribute("aria-label", "Table alt text");
+    const decorative = checkField("table-decorative", "Decorative (no alt text)", {
+      onChange: (checked) => run(() => setTableAlt(editor, dynamic.tablePath, { decorative: checked }), checked ? "Table marked decorative." : "The table is no longer decorative."),
+    });
+    const styleControls = [headerStyle.wrap, banding.wrap, borders.wrap, resetStyle, cellBox];
+    body.append(summary, alt.wrap, decorative.wrap, ...styleControls);
+    dynamic.table = { details, summary, alt, decorative, styleControls, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, join };
   }
 
   // --- sync -----------------------------------------------------------------------------------------
@@ -1210,12 +1221,21 @@ export function createDesignControls(container, options = {}) {
       const tablePath = parsed?.tablePath ?? (content?.key === "table" ? `${blockPath}.table` : undefined);
       dynamic.tablePath = tablePath;
       dynamic.cell = parsed?.cell;
-      // A table that shows a shared dataset (RR-54) has no cell styles or merges: the table panel is for inline tables.
+      // A table that shows a shared dataset (RR-54) has no cell styles or merges: the style and merge controls are for inline tables.
+      // Its alt text (FA-27) belongs to the table and not to the data, so the panel still opens for it.
       const tableValue = tablePath ? editor.get(tablePath) : undefined;
-      tableUi.details.hidden = !tablePath || !Array.isArray(tableValue?.rows);
+      const inline = Array.isArray(tableValue?.rows);
+      tableUi.details.hidden = !tablePath || !(inline || typeof tableValue?.dataset === "string");
       if (tablePath && !tableUi.details.hidden) {
-        const table = tableValue;
         tableUi.summary.textContent = `Table (${tablePath})`;
+        const textAlternative = readTableAlt(tableValue);
+        tableUi.alt.set(textAlternative.alt);
+        tableUi.alt.input.disabled = textAlternative.decorative;
+        tableUi.decorative.set(textAlternative.decorative);
+        for (const node of tableUi.styleControls) node.hidden = !inline;
+      }
+      if (tablePath && !tableUi.details.hidden && inline) {
+        const table = tableValue;
         const style = readTableStyle(document_, tablePath);
         dynamic.tableStyle = style.preset === "custom" ? { header: "theme", banding: false, borders: "theme" } : { header: style.header, banding: style.banding, borders: style.borders };
         tableUi.headerStyle.set(style.header);

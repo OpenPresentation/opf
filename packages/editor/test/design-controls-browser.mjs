@@ -383,6 +383,10 @@ try {
   await button('Undo').click();
   await waitDoc(current => !JSON.stringify(current.slides[2].blocks[1].table).includes('style'), 'grid undone');
   await settle();
+  // FA-27: the table's text alternative, typed once (Enter applies) and marked decorative.
+  const tableAlt = selection.getByLabel('Table alt text', { exact: true });
+  await step('table alt text', async () => { await tableAlt.fill('d leads the first row.'); await tableAlt.press('Enter'); }, current => current.slides[2].blocks[1].table.alt === 'd leads the first row.', { preview: true });
+  await step('table decorative', () => selection.getByLabel('Decorative (no alt text)').check(), current => current.slides[2].blocks[1].table.alt === '', { preview: true });
   // Merge the empty cells next to "d" (the cell stays selected); Split puts them back.
   await selection.getByLabel(label('Columns to merge')).fill('3');
   await step('table merge', () => selection.getByRole('button', { name: 'Merge cells' }).click(), current => JSON.stringify(current.slides[2].blocks[1].table.rows[1]) === '[{"value":"d","colSpan":3},null,null]', { preview: true });

@@ -37,7 +37,7 @@ export interface TableCellState extends TableCellAddress {
   rows: number;
 }
 export interface PreparedTableChange {
-  action: "merge" | "split" | "style" | "table-style";
+  action: "merge" | "split" | "style" | "table-style" | "table-alt";
   tablePath: string;
   presentation: unknown;
   patches: JsonPatchOperation[];
@@ -72,6 +72,11 @@ export declare function mergeTableCells(editor: EditorSession, tablePath: string
 export declare function splitTableCell(editor: EditorSession, tablePath: string, cell: TableCellAddress, meta?: Record<string, unknown>): TableChange;
 export declare function setTableCellStyle(editor: EditorSession, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null, meta?: Record<string, unknown>): TableChange;
 export declare function setTableStyle(editor: EditorSession, tablePath: string, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>, meta?: Record<string, unknown>): TableChange;
+/** FA-27: the table's text alternative as form state: `alt` (empty when absent or decorative) and `decorative` (the empty alt). */
+export declare function readTableAlt(table: unknown): { alt: string; decorative: boolean };
+/** FA-27: change the table's text alternative. `alt` is trimmed and an empty string or null removes it; `decorative: true` writes the empty alt and wins over `alt`; `decorative: false` removes an empty alt. Works on inline and dataset-backed tables. */
+export declare function prepareTableAlt(presentation: unknown, tablePath: string, change: { alt?: string | null; decorative?: boolean }): PreparedTableChange;
+export declare function setTableAlt(editor: EditorSession, tablePath: string, change: { alt?: string | null; decorative?: boolean }, meta?: Record<string, unknown>): TableChange;
 /** {@link readTableStyle} for a table object. */
 export declare function readTableStyleOfTable(table: unknown): (TableStyle | { header: "custom"; banding: "custom"; borders: "custom" }) & { preset: keyof typeof TABLE_STYLE_PRESETS | "custom" };
 /** Apply a table style to a table object in place (the structure operations use it to keep banding, header fill and borders correct). */
