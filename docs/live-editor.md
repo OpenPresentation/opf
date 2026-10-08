@@ -46,6 +46,7 @@ Mount after the host DOM exists. The container controls width; the slide retains
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 
 // Copy these licensed font files into your application's static assets first.
 // Use pinned, static faces; include every weight/style required by your deck.
@@ -60,6 +61,7 @@ const canvas = createCanvasEditor(document.querySelector('#slide'), {
     design: { theme: 'classic', fontScheme: 'roboto' },
     slides: [{ title: 'An editable presentation', text: 'Click to edit.' }],
   },
+  catalogs: [defaultCatalog], // core ships no records: register the catalog the theme and font scheme above come from
   fonts,
   onCommit: ({ editor }) => {
     const updatedOPF = editor.presentation; // Host owns saving and collaboration.
