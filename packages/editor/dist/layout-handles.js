@@ -60,6 +60,19 @@ export function createLayoutHandles(root, options) {
     lastGeometry=geometry;
     layer.replaceChildren();
     if(!enabled||options.isTextEditing())return;
+    // FA-26: the slots of a layout record with placeholder groups, drawn under the handles while arranging: each group and
+    // region as a dashed outline at its cell, deeper groups inset, an empty region labelled with its kind. They are the
+    // record's, not the document's, so they are not editable here; the content in a slot keeps its own selection.
+    for(const slot of geometry.slots??[]){
+      const node=doc.createElement('div');
+      node.dataset.layoutSlot=slot.path;node.dataset.layoutSlotType=slot.type;node.setAttribute('aria-hidden','true');
+      const group=slot.type==='group',empty=!group&&!slot.content;
+      node.title=group?`Layout group (${slot.path})`:`${empty?'Empty ':''}${slot.type} slot (${slot.path})`;
+      const inset=group?Math.min(4,slot.depth*2):0;
+      node.style.cssText=`position:absolute;pointer-events:none;box-sizing:border-box;left:calc(${slot.box.x/geometry.width*100}% + ${inset}px);top:calc(${slot.box.y/geometry.height*100}% + ${inset}px);width:calc(${slot.box.width/geometry.width*100}% - ${2*inset}px);height:calc(${slot.box.height/geometry.height*100}% - ${2*inset}px);border:1px dashed ${group?'#8170d5':'#8a78d7aa'};border-radius:4px;${empty?'background:#8a78d714;':''}`;
+      if(empty){const label=doc.createElement('span');label.textContent=`Empty ${slot.type} slot`;label.style.cssText='position:absolute;left:6px;top:4px;font:11px system-ui;color:#675394';node.append(label);}
+      layer.append(node);
+    }
     for(const flow of geometry.flows??[]){
       const {axis,size,tracks}=trackData(flow);
       if(tracks.length<2||tracks.length>12||flow.itemCount!==flow.slotCount)continue;

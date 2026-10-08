@@ -13,7 +13,7 @@ import { chartOptionTarget } from "@openpresentation/opf/composition";
 import { createValuePatch, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { createContentBlock, prepareBlockReplace } from "./blocks.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
-import { populateLayoutPlaceholders } from "./layout-placeholders.js";
+import { layoutSlotTypes, populateLayoutPlaceholders } from "./layout-placeholders.js";
 import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 import { checkFormat } from "./checks.js";
 import { listCatalogRecords, mergeCatalogs } from "./catalogs.js";
@@ -273,7 +273,8 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     if (withRecord.slides[slideIndex].layout !== choice.reference) {
       const layoutOps = createValuePatch(withRecord, ["slides", String(slideIndex), "layout"], choice.reference);
       const swapped = applyJsonPatch(withRecord, layoutOps);
-      const types = Array.isArray(record.placeholders) ? record.placeholders.map((placeholder) => placeholder.type) : undefined;
+      // FA-26: a record's placeholder groups contribute their leaf regions, in reading order.
+      const types = layoutSlotTypes(record);
       // Add the blank payloads the layout declares, as the JSON editor's layout choice does.
       const populated = types ? populateLayoutPlaceholders(swapped, slideIndex, types) : swapped;
       patches = same(populated.slides[slideIndex], swapped.slides[slideIndex])

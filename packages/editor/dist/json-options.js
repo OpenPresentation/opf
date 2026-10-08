@@ -2,7 +2,7 @@ import { checkFormat, firstErrorMessage } from "./checks.js";
 import { listCatalogRecords } from "./catalogs.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { applyEdits, findNodeAtLocation, findNodeAtOffset, getNodePath, modify, parseTree } from "jsonc-parser";
-import { populateLayoutPlaceholders } from "./layout-placeholders.js";
+import { layoutSlotSummary, layoutSlotTypes, populateLayoutPlaceholders } from "./layout-placeholders.js";
 // The catalog kind a field references (OPF 0.15: every content kind is `id` or `name:id`), read from where the field sits.
 const ROOT_REFERENCES = { narrative: "narratives", audience: "audiences", purpose: "purposes", tone: "tones" };
 const DESIGN_REFERENCES = { theme: "themes", colorScheme: "colorSchemes", fontScheme: "fontSchemes" };
@@ -21,10 +21,9 @@ function catalogAtPath(path) {
 }
 // Compare declared placeholders, including multiplicity. This describes a layout
 // contract, not a claim that arbitrary slide content will render without overflow.
+// FA-26: a record's placeholder groups compare by their leaf regions, the slots its content fills.
 function layoutTypes(record) {
-    if (!Array.isArray(record?.placeholders))
-        return undefined;
-    return record.placeholders.map(p => p.type).sort();
+    return layoutSlotTypes(record)?.sort();
 }
 function placeholderSummary(types) {
     if (!types)
@@ -57,8 +56,10 @@ function describeOptions(choices, records, current, catalog) {
         if (catalog !== "layouts")
             continue;
         const types = layoutTypes(option.value === current ? currentRecord : records.get(String(option.value)));
-        option.placeholderTypes = records.get(String(option.value))?.placeholders?.map(placeholder => placeholder.type);
-        option.placeholders = placeholderSummary(types);
+        const record = records.get(String(option.value));
+        option.placeholderTypes = layoutSlotTypes(record);
+        // A record with placeholder groups also shows how its slots nest.
+        option.placeholders = placeholderSummary(types) + (record?.placeholders?.some?.(entry => entry?.type === "group") ? ` · ${layoutSlotSummary(record)}` : "");
         const same = types && currentTypes && signature(types) === signature(currentTypes);
         const equivalent = types && currentTypes && signature(compatible(types)) === signature(compatible(currentTypes));
         const sameKinds = types && currentTypes && signature([...new Set(compatible(types))]) === signature([...new Set(compatible(currentTypes))]);

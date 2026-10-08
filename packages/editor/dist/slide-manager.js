@@ -7,6 +7,7 @@ import {
   addSection, addSlide, duplicateSlides, hasSections, listSections, moveSection, moveSlides, moveSlidesBy, removeSection, removeSlides, renameSection, setHidden, setSection, slideTitle,
 } from "./slides.js";
 import { listSwitchOptions } from "./switches.js";
+import { layoutSlotSummary } from "./layout-placeholders.js";
 
 let instances = 0;
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -503,7 +504,8 @@ export function createSlideManager(container, options) {
     };
     const describe = () => {
       const choice = choices.find((entry) => entry.id === select.value);
-      const slots = Array.isArray(choice?.record?.placeholders) ? choice.record.placeholders.map((slot) => slot.type).join(", ") : "";
+      // FA-26: nested placeholder groups show with their mode, for example `title, column (text, text), chart`.
+      const slots = layoutSlotSummary(choice?.record);
       detail.textContent = choice ? `${choice.record?.description ?? ""}${slots ? ` Slots: ${slots}.` : choice.record?.placeholders ? " An empty slide." : ""}`.trim() : "No layout matches.";
     };
     const form = el("form", { method: "dialog" },

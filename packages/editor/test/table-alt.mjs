@@ -26,7 +26,9 @@ assert.deepEqual(readTableAlt({ ...table, alt: "" }), { alt: "", decorative: tru
   assert.equal(editor.get(`${T}.alt`), "North America leads EMEA in Q4, $18.1M to $11.5M.");
   assert.equal(editor.snapshot().undoDepth, 1);
   assert.equal(setTableAlt(editor, T, { alt: "North America leads EMEA in Q4, $18.1M to $11.5M." }).changed, false);
-  assert.match(renderSlideSvg(editor.presentation, 0), /role="img"/, "the preview names the table");
+  // The renderer labels the table's group with its alt (role="img" before opf-render's FA-30, role="group" since, so the
+  // cells stay readable); either way the alt text is the accessible name.
+  assert.match(renderSlideSvg(editor.presentation, 0), /aria-label="North America leads EMEA in Q4, \$18\.1M to \$11\.5M\." role="(?:img|group)"|role="(?:img|group)"[^>]*aria-label="North America leads EMEA in Q4/, "the preview names the table");
   const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] });
   const back = await pptx.fromPptx(bytes);
   assert.equal((back.slides[0].table ?? back.slides[0].blocks.find((block) => block.table).table).alt, "North America leads EMEA in Q4, $18.1M to $11.5M.", "alt survives the PPTX round trip");

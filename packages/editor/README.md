@@ -722,6 +722,8 @@ The canvas can show draggable, keyboard-accessible dividers for root and nested 
 
 ### Move complete blocks
 
+When the slide's layout record has placeholder groups (FA-26, `{ "type": "group", "composition", "placeholders" }`), Arrange also outlines every slot of the record at its cell (`geometry.slots`): groups, filled regions and labelled empty regions. The slots belong to the record, so they are shown, not edited; the slide's content in them keeps its own selection and handles. Layout pickers and the JSON field menu describe such a record as `title, column (text, text), chart` and compare layouts by their leaf regions.
+
 Arrange mode also shows numbered block handles. Drag to reorder siblings, use arrow keys for earlier/later, or click a handle to choose an existing destination group/slide and insertion position. The move preserves the whole block, including rich text, table/chart data, and nested groups. Each move is validated, preflighted by the renderer, and undoable. Parent weights stay with layout positions; moves that leave an empty container or create a containment cycle are rejected.
 
 Agents can import `prepareBlockMove` and `listBlockContainers` from `@openpresentation/opf-editor/layout`. The prepared result includes a full candidate document, guarded atomic patches, the new block path, and a changed flag. Destination indexes refer to the pre-removal document. Use `canvas.openBlockMenu(path)` for the corresponding browser controls.

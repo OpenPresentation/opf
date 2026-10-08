@@ -1,4 +1,19 @@
+import {layoutLeaves,layoutStructure} from '@openpresentation/opf/composition';
 import {listBlockContainers,prepareBlockInsert} from './blocks.js';
+
+/**
+ * The slot kinds a layout record declares, in reading order: its headings and the leaf regions of its placeholder groups
+ * (FA-26), the kinds a slide's flat content fills. Undefined when the record states no placeholders.
+ */
+export function layoutSlotTypes(record){
+  if(!Array.isArray(record?.placeholders))return undefined;
+  try{return layoutLeaves(record).map(leaf=>leaf.type);}catch{return record.placeholders.filter(entry=>entry?.type!=='group').map(entry=>entry?.type);}
+}
+/** A one-line description of a record's slots, nested groups in parentheses: `title, column (text, text), chart`. */
+export function layoutSlotSummary(record){
+  if(!Array.isArray(record?.placeholders))return '';
+  try{return layoutStructure(record);}catch{return layoutSlotTypes(record).join(', ');}
+}
 
 const payloadFields=['text','items','bullets','image','video','chart','table','code','metric','quote','timeline'];
 const headingFields=new Set(['title','subtitle','tag']);
