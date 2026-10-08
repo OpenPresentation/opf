@@ -155,7 +155,9 @@ for (const expected of cases) {
   assert.deepEqual([...langs(xml)], ['en-US']);
   const major = themeFonts(xml, 'majorFont'), minor = themeFonts(xml, 'minorFont');
   assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], [major.latin, '', minor.latin, '']);
-  assert.equal((await fromPptx((await read(deck(undefined))).bytes)).language, 'en-US', 'the run tag imports as a BCP-47 tag');
+  // RR-59: the round trip leaves the unstated language absent; a plain package (no provenance) imports the run tag as a BCP-47 tag.
+  assert.equal((await fromPptx((await read(deck(undefined))).bytes)).language, undefined, 'the unstated language stays absent');
+  assert.equal((await fromPptx((await read(deck(undefined), {provenance: false})).bytes)).language, 'en-US', 'the run tag imports as a BCP-47 tag');
 }
 
 // FF-05: East Asian text in a deck whose language selects no East Asian font. The theme ea slot names a font for that

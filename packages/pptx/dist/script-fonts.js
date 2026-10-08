@@ -465,6 +465,13 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
 export function reconcileLanguage(groups, observed, report) {
   const index = groups.findIndex(item => item.field === "language");
   if (index < 0 || observed.lang === undefined) return groups;
+  // RR-59: a language the source left absent stays absent while the runs carry the engine default the export wrote them in;
+  // a language set in PowerPoint is imported as observed.
+  if (groups[index].ops.some(op => op.remove && op.path?.length === 1 && op.path[0] === "language")) {
+    let fallback;
+    try { fallback = resolver({}, {}, observed.catalogs).lang; } catch { fallback = undefined; }
+    return typeof fallback === "string" && fallback.toLowerCase() === observed.lang.toLowerCase() ? groups : groups.filter((_, position) => position !== index);
+  }
   const stored = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === "language")?.value;
   if (stored === undefined) return groups;
   const resolved = resolver({language: stored}, {}, observed.catalogs);

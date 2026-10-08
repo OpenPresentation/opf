@@ -42,7 +42,7 @@ per-record diagnostic and fallback.
 
 ## What is embedded: `toPptx(document, {provenance})`
 
-Only values the document states are stored; engine defaults are not. A document that states none of the values below gets no tags and its bytes are unchanged.
+Only values the document states are stored; engine defaults are not. In `'full'` mode the document tag also lists the document-level defaults the document leaves to the engine (`absent`, below), so every `'full'` export carries `OPF_DOCUMENT_V1` and the slide tags. In `'references-only'` mode a document that states none of the values below gets no tags and its bytes are unchanged.
 
 | field | `'full'` (default) | `'references-only'` | `false` |
 |---|---|---|---|
@@ -59,8 +59,25 @@ Only values the document states are stored; engine defaults are not. A document 
 | the whole `assets` registry (referenced or not), one field per asset id | yes | no | |
 | embedded `catalogs` records referenced by the stored values, in their groups, and every group declaration | yes | yes | |
 | native evidence (hashes and theme values, below) | yes | yes | |
+| `absent`: the unstated document-level defaults (RR-59, below) | yes | no | |
 
 Slide `section` labels are additionally written as PowerPoint's native section list whatever the mode (below).
+
+### Absent document defaults (RR-59)
+
+Export bakes engine defaults into the package whatever the document states: the package title (`name`, else `filename`, else `OPF Presentation`), the canonical `$schema` the importer writes, the runs' `lang` (the engine default `en-US`), and the generated theme's colour scheme, fonts and slide size. Without a record the import reads them back as authored values, so a deck that never set them gained `$schema`, `name`, `language`, `design.colorScheme` and `design.dimensions` (and a theme-only deck its theme's `colorScheme`). In `'full'` mode `OPF_DOCUMENT_V1.absent` lists, from `$schema`, `name`, `language`, `design.theme`, `design.colorScheme`, `design.fontScheme` and `design.dimensions`, the keys the document did not state. It is a top-level key, which every published importer ignores. Import leaves each listed key absent while the native value it would be read from is still the default the export wrote, so an untouched round trip is deep-equal to the source:
+
+| listed key | left absent while |
+|---|---|
+| `$schema` | always (no native field holds it); an importer `schema` option still names it |
+| `name` | `dc:title` still equals the title export wrote (the stored `filename`, else `OPF Presentation`) |
+| `language` | the most common run `lang` is still the engine default |
+| `design.theme` | the theme colours and fonts are unchanged |
+| `design.colorScheme` | the theme colours are unchanged |
+| `design.fontScheme` | the theme fonts are unchanged |
+| `design.dimensions` | `p:sldSz` is unchanged |
+
+A value edited in PowerPoint (a theme colour, the slide size, the title, the run language) is imported as observed, without a diagnostic, since nothing the document stated was lost. The author and the deck background already return absent whenever the document tag exists (the default creator is dropped, and unchanged slides that inherited the engine background drop it). The export itself does not depend on whether these keys exist: apart from the tags, the package is byte-identical. Unknown paths in `absent` are ignored; a list that is not an array of at most 64 strings rejects the tag (`invalid-document-provenance`). A tag without `absent` (an older exporter) imports as before. `'references-only'` records no absence, because it leaves stated values out, so a missing key there proves nothing.
 
 ### Compatibility with published importers (`supplement`)
 
@@ -215,7 +232,7 @@ With `structure: 'match'`, the layout id, composition and slide hints are alread
 
 ## Follow-ups
 
-- Keys that FF-24 theme recovery infers but the source never stated remain in the import. For example, a theme-only deck gains `design.colorScheme`.
+- Keys that FF-24 theme recovery infers but the source never stated stay absent in a `'full'` round trip while the theme is unchanged (RR-59, above); a `'references-only'` or untagged package still gains them (a theme-only deck gains `design.colorScheme`).
 - FF-24's `theme-unverified` diagnostic is suppressed when the stored `design.theme` is restored, because the two would contradict each other.
 - An image block's own fields (`fit`, `focus`, treatments, `placement`) are not stored in the document tag; they and `design.watermark` are recovered from their own tagged native pictures (`OPF_IMAGE_V1`, `OPF_IMAGE_OVERLAY_V1`, `OPF_WATERMARK_V1`) while those are unchanged. An image background is a design reference here (`design.background`, gated by the slide's native background); its alt-text picture and its overlay are tagged too, so an export with `provenance: false` still recovers it. `design.logo` and `extensions` are stored since spec-gap P1. The drawn cover logo is a tagged native picture (`OPF_LOGO_V1`): it is consumed on import, `design.logo` returns from this tag, and the picture's own image is the fallback only when nothing restored a logo. Header/footer `logo: true` is listed in the furniture manifest's `logos` key, outside `parts` and `definitions`, which released importers validate strictly (spec-gap P2).
 - A native PowerPoint save/reopen of a tagged deck, and Document Inspector behaviour, are separate Office gates.

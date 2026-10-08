@@ -230,6 +230,7 @@ const roundTrip = async slide => {
 
 // Modes: 'references-only' and false store no topology; a deck that states
 // nothing but content still gets slide tags; deeper nesting is reported, not stored.
+// In 'full' mode a deck without content still records the defaults it leaves absent (RR-59).
 {
   const slide = {title: 'Probe', blocks: [{type: 'group', blocks: [{type: 'text', text: 'A'}]}]};
   const refs = unzipSync(await toPptx({name: 'Modes', design: {fontScheme: 'arial'}, slides: [slide]}, {...EXPORT, provenance: 'references-only'}));
@@ -240,7 +241,10 @@ const roundTrip = async slide => {
   assert.ok(plain['ppt/tags/opfSlide1.xml'], 'Content topology alone is worth a slide tag.');
   assert.ok(plain['ppt/tags/opfDocument.xml'], 'The document tag carries the native evidence.');
   const empty = unzipSync(await toPptx({name: 'Modes', slides: [{title: 'Only a title'}]}, EXPORT));
-  assert.equal(Object.keys(empty).some(path => /opfDocument|opfSlide/.test(path)), false, 'A deck without content states nothing.');
+  assert.deepEqual(tagValue(dec.decode(empty['ppt/tags/opfDocument.xml'])).absent, ['$schema', 'language', 'design.theme', 'design.colorScheme', 'design.fontScheme', 'design.dimensions'], 'A deck without content records the defaults it leaves absent.');
+  assert.equal(tagValue(dec.decode(empty['ppt/tags/opfSlide1.xml'])).content, undefined);
+  const emptyRefs = unzipSync(await toPptx({name: 'Modes', slides: [{title: 'Only a title'}]}, {...EXPORT, provenance: 'references-only'}));
+  assert.equal(Object.keys(emptyRefs).some(path => /opfDocument|opfSlide/.test(path)), false, "A 'references-only' deck without content states nothing.");
   let deep = {type: 'text', text: 'Deep'};
   for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) deep = {type: 'group', blocks: [deep]};
   const issues = [];

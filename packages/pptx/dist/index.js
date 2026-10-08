@@ -42,7 +42,7 @@ import {importBackground} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
-import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
+import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
@@ -460,6 +460,8 @@ export async function fromPptx(input, options = {}) {
       // Stored layout ids also resolve in the host's registered catalogs (FA-23).
       catalogs: options.catalogs,
       nativeSections: slideSections,
+      // An importer `schema` option names the document's $schema, so an absent source $schema does not remove it (RR-59).
+      schemaOption: options.schema !== undefined,
       slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships, contentBounds: furnitureContexts[index].contentBounds}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
@@ -2227,8 +2229,8 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
   if (!resolved) {
-    // RR-59 (AUTO-26): a content picture never vanishes silently. A background reports its own fallback (the slide colour).
-    if (role !== 'background' && !outcome.reported) options.onDiagnostic?.({code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
+    // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide colour).
+    if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
     return undefined;
   }
   const name = objectName ?? imageName(1 + [...context.images.keys()].filter(key => /^OPF image \d+$/.test(key)).length);
@@ -2320,10 +2322,8 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       fit: background.fit, focus: background.focus, effects: background.opacity === undefined && !background.recolor ? null : effects, shrink: false,
       treatment, alt, role: 'background', objectName: backgroundImageName(slidePath)
     });
-    if (!name) {
-      options.onDiagnostic?.({code: 'unresolved-asset', path: background.path, message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
-      return;
-    }
+    // addImagePicture reported the unresolved source once (opf-pptx#210).
+    if (!name) return;
     owner = name;
     overlayName = imageOverlayName(name);
   } else {
@@ -2331,7 +2331,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     const outcome = { box, cover: background.fit === 'cover' };
     const resolved = await resolveImage(background.src, presentation, options, background.path, outcome);
     if (!resolved) {
-      if (!outcome.reported) options.onDiagnostic?.({code: 'unresolved-asset', path: background.path, message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
+      if (!outcome.reported) options.onDiagnostic?.(backgroundUnresolved(background.path));
       return;
     }
     // PptxGenJS embeds the raster and its relationship; packaging replaces its stretched fill with the fitted native fill.
@@ -2343,6 +2343,8 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
   }
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
 }
+
+const backgroundUnresolved = path => ({code: 'unresolved-asset', path, reason: 'unresolved-source', message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
 
 // design.watermark: one native picture per slide, added after the slide image
 // (and its overlay) and before all content, the preview's paint order. The
@@ -2959,6 +2961,8 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   const outcome = { box, cover: true };
   const resolved = await resolveImage(photo.value, presentation, options, photo.path, outcome);
   if (!resolved) {
+    // opf-pptx#210: the headshot placeholder reports its cause like every other picture, so strict export (--fail-on warning) gates it.
+    if (!outcome.reported) options.onDiagnostic?.({code: 'unresolved-asset', path: photo.path, reason: 'unresolved-source', message: 'The quote photo needs an embedded raster, a declared asset or a host imageResolver; the photo exports as the unavailable-image placeholder. Remote images are never fetched.'});
     addImagePlaceholder(slide, presentation, photo.value, box, photo.path, context, options);
     return;
   }
@@ -3457,6 +3461,14 @@ async function resolveImage(asset, presentation, options, path, outcome = {}) {
       return null;
     }
     return resolveSvgImage(file, options, path, outcome);
+  }
+  // opf-pptx#210: a local raster PptxGenJS cannot read used to fail the whole export (pptxgen-failed) on every picture path.
+  // It is unresolved like any other source: the placeholder (or the path's own fallback) and one diagnostic.
+  if (resolved?.path && !(await localFileReadable(resolved.path))) {
+    if (options.strictAssets) throw new OPFPptxError("missing-asset", "The local image file could not be read.", { path, src: resolved.path, reason: "file-unreadable" });
+    options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "file-unreadable", message: "The local image file could not be read; the image exports as the unavailable-image placeholder (or the picture's fallback)." });
+    outcome.reported = true;
+    return null;
   }
   if (!resolved?.data) return resolved;
   const bytes = dataUriBytes(resolved.data);

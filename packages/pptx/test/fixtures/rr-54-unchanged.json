@@ -2,7 +2,7 @@
  "source": {
   "repository": "OpenPresentation/opf-pptx",
   "commit": "438ce8801701f2fa2531ac56537234d274e36aa7",
-  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59: the three entries with a table (table, styled-table, mixed-blocks) are repinned because full provenance now records every inline table as authored (the OPF_DATA_V1 tag); previousSha256 keeps the FA-23 hash and nativeSlideSha256 locks the slide XML without its customer-data tags, which is unchanged."
+  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59: the three entries with a table (table, styled-table, mixed-blocks) are repinned because full provenance now records every inline table as authored (the OPF_DATA_V1 tag); previousSha256 keeps the FA-23 hash and nativeSlideSha256 locks the slide XML without its customer-data tags, which is unchanged. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed."
  },
  "entries": {
   "column": {
@@ -45,7 +45,7 @@
      }
     ]
    },
-   "sha256": "cda9c4cbec50d19424d93dde3a3523a5eb1c5abba52fc51dc950ff5fcecdd6d9"
+   "sha256": "85196b38e1c71527b9c7d1c8d527bfbeb2244c182ce6a850634c3ae273f45685"
   },
   "column-labels": {
    "deck": {
@@ -92,7 +92,7 @@
      }
     ]
    },
-   "sha256": "734e28b7821e729320addf91d9488a1c8ae7a8128b023c8fc6edf78d885b8a63"
+   "sha256": "e1793caa675c7637a6c5c6e81dcde1cb76e7e317d17988ae9c2778d49745cbd6"
   },
   "bar": {
    "deck": {
@@ -135,7 +135,7 @@
      }
     ]
    },
-   "sha256": "67a50fa76655041e8ff53a702754db135742e0d366a8dcf555207de200ef8a0f"
+   "sha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc"
   },
   "line": {
    "deck": {
@@ -177,7 +177,7 @@
      }
     ]
    },
-   "sha256": "d677a42b672192ed94eaeeea88489c09c7d976ff5ad2b8849339cd2a213e403b"
+   "sha256": "4fc5d67908d8de2e60ce18c2db685d57c934a872f06bbc583896d3047aa319cb"
   },
   "area": {
    "deck": {
@@ -219,7 +219,7 @@
      }
     ]
    },
-   "sha256": "f802af5bca5fbe3a9ba7c787663d9c53eae831466350ddb7515af2e918c6bd4a"
+   "sha256": "ebb99026f09b4375688f73bd314a543c1546d70a17fa5ce5d0a3134d241bd8cc"
   },
   "stacked-column": {
    "deck": {
@@ -261,7 +261,7 @@
      }
     ]
    },
-   "sha256": "9e2b6ecf16ef39bd52e7abed146edc210b4ba86a5ac100529223f041685dd19b"
+   "sha256": "fbf8c62f3f49ebbdfaad0567bbcdc0fbe6d43e257cd6615ff4a4679728f070a1"
   },
   "percent-stacked": {
    "deck": {
@@ -303,7 +303,7 @@
      }
     ]
    },
-   "sha256": "11246e6b88a7953245c047a34d7dd269baf1584b35094087d00127088db9e198"
+   "sha256": "f065e1ade5d975245e4df8c11d5be367ad27ddf53ee2f786527af53ac396b377"
   },
   "pie": {
    "deck": {
@@ -351,7 +351,7 @@
      }
     ]
    },
-   "sha256": "53c619995056cae8232d689e10c6ddcda419fd57772bcabe6eb9406f5d61ecf3"
+   "sha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e"
   },
   "doughnut": {
    "deck": {
@@ -393,7 +393,7 @@
      }
     ]
    },
-   "sha256": "ff0ca46805fe47efd987bc5bc56834947f43c8b88fd8b753d3e423197b3de810"
+   "sha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df"
   },
   "radar": {
    "deck": {
@@ -435,7 +435,7 @@
      }
     ]
    },
-   "sha256": "6794348e13167652f13a2cb228eff7d59779654e47b98aa614a2160e0564772c"
+   "sha256": "17afa5c1028516fd59cf3be557b001e0c9b4cf840eeb9aaa74d053dbfc203d68"
   },
   "scatter": {
    "deck": {
@@ -476,7 +476,7 @@
      }
     ]
    },
-   "sha256": "21ef41bd40d3892185b9d69939af6d6ca708260b999c1fb81fa4ea3cc657f5cc"
+   "sha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b"
   },
   "scatter-two-columns": {
    "deck": {
@@ -505,7 +505,7 @@
      }
     ]
    },
-   "sha256": "cd1a6eef27d0cc15bce1790744b51633259b22f316229d47067c6d29ef9c640a"
+   "sha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5"
   },
   "single-column": {
    "deck": {
@@ -543,7 +543,7 @@
      }
     ]
    },
-   "sha256": "3695fe339a07755efec23b5bb20be342c4a6b50a96e7008ccdd85a4fcd82a71c"
+   "sha256": "7184993d0ee22c4e7c90ae9d17b3a2aefe55ec5972a331b117951d727f2d7059"
   },
   "scatter-labels": {
    "deck": {
@@ -576,7 +576,7 @@
      }
     ]
    },
-   "sha256": "01453755997c413d88f879c4b13ea750fb7aedc9103b7633c45424f5d4841407"
+   "sha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575"
   },
   "chartex-native-map": {
    "deck": {
@@ -605,7 +605,7 @@
      }
     ]
    },
-   "sha256": "a91c7f616dd530c849d19b6abc492d844b5d5f313e5b796abda5fd146b4169a0"
+   "sha256": "f1be128128cf4c62067070de0f37f61f04cc85743797a1af745f0d2c8fec9849"
   },
   "histogram": {
    "deck": {
@@ -649,7 +649,7 @@
      }
     ]
    },
-   "sha256": "67e10cfe9188b4707ff589a7eef6bcacbbffa773612b56811eaef05ad553f883"
+   "sha256": "94207febff494aa3726d8c29013f11b1d6a6c951554df30b29bc5b790f571e15"
   },
   "treemap": {
    "deck": {
@@ -682,7 +682,7 @@
      }
     ]
    },
-   "sha256": "52719ccdd65ae2f65c8b0044ad0dd8318f6960394b895c41d4bf01ef69b51137"
+   "sha256": "a08a0d0fd687e9b672cdc95973a800ceb9cfee1acc6d3c584e0f1d44183d9c3b"
   },
   "waterfall": {
    "deck": {
@@ -716,7 +716,7 @@
      }
     ]
    },
-   "sha256": "d04d9c6b3176d3b9c394401c2f3efdd93a4330b90246bef0b60568e145011854"
+   "sha256": "4d82a4539fd94b5292bf557f14810e7110b84a1dc49ac71d84e83e1b7211f7b9"
   },
   "table": {
    "deck": {
@@ -750,7 +750,7 @@
      }
     ]
    },
-   "sha256": "0b2695b9b66d00d1e26d3dd2de2827fb9a972b66c5350547cf837510f0f7b316",
+   "sha256": "fbde00acffa3b05124898c12a778761ee225620efce42ac1633c05a8d6b2344a",
    "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
    "nativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
@@ -795,7 +795,7 @@
      }
     ]
    },
-   "sha256": "51c79dad29c71bca6cd7a003ff5360c0d520597e2e6b3dd826fd3ee0be9270db",
+   "sha256": "a19e88a696d20a9f038549f641bb4bb185f3a326ee5bddfa0a80da23b352f32f",
    "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
    "nativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
@@ -845,7 +845,7 @@
      }
     ]
    },
-   "sha256": "d9d10445d956816e7058b36459d40699b5a813d4b083668dd419323b41b76cef",
+   "sha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
    "previousSha256": "c5617168f7ff0601b401c939e0d174f70586d02ea0f7268bd36e491398f2eb75",
    "nativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."

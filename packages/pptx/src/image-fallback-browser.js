@@ -43,3 +43,8 @@ export async function svgToPng() {
 export async function readLocalFile() {
   throw new Error('A browser cannot read a local file: pass the SVG as a data URI or through imageResolver.');
 }
+
+// A browser cannot check a local path; PptxGenJS loads it as before.
+export async function localFileReadable() {
+  return true;
+}

@@ -273,9 +273,10 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(renamed.deck.organization, {id: 'acme', name: 'Acme Corp'});
 }
 
-// Documents that state nothing keep their package unchanged; oversized metadata is reported, not stored.
+// In 'references-only' mode documents that state nothing keep their package unchanged ('full' records the defaults they
+// leave absent, test/rr-59-absent-defaults.mjs); oversized metadata is reported, not stored.
 {
-  const plain = unzipSync(await toPptx({name: 'Plain', slides: [{title: 'Only text'}]}));
+  const plain = unzipSync(await toPptx({name: 'Plain', slides: [{title: 'Only text'}]}, {provenance: 'references-only'}));
   assert.equal(Object.keys(plain).some(path => /opfDocument|opfSlide/.test(path)), false);
   assert.doesNotMatch(dec.decode(plain['ppt/presentation.xml']), /custDataLst/);
   const issues = [];

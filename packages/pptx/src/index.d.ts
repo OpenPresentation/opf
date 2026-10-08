@@ -45,10 +45,12 @@ export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; pat
  * `"svg-malformed"` (not well-formed XML, or no `xmlns` SVG root), `"svg-no-size"` (no width and height and no viewBox), `"svg-too-large"` (over 8 MiB),
  * `"svg-unsafe"` (a DOCTYPE with external or markup entities), `"svg-rasterizer-unavailable"` (no `options.svgRasterizer` and `@openpresentation/opf-render`
  * is not installed; always the case in a browser build without `svgRasterizer`) `"svg-render-failed"` (the rasterizer threw or returned no PNG) or `"svg-unreadable"` (a local `.svg` path that could not be read).
+ * `reason: "file-unreadable"`: a local raster path that is not a readable file (Node; a browser build leaves local paths to the engine).
  * `strictAssets` throws `unsupported-image-dimensions` for an unreadable raster, `invalid-svg-image` for the SVG content reasons above (and `svg-unreadable`), `svg-rasterizer-unavailable` for a
- * missing rasterizer and `svg-render-failed` for a failed one instead.
+ * missing rasterizer, `svg-render-failed` for a failed one and `missing-asset` for an unreadable local file instead.
+ * Every picture path reports this (image blocks and region images, quote photos, background pictures, watermarks, logos, header/footer images, picture bullets), once per picture.
  */
-export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unresolved-source" | "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" }
+export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unresolved-source" | "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" | "file-unreadable" }
 /** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */
 export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; message: string }
 /** An SVG image block with a duotone recolor or a non-rectangular shape (or an SVG image background with the tile fit) exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */

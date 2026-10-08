@@ -31,3 +31,9 @@ export async function readLocalFile(path) {
   const { readFile } = await import('node:fs/promises');
   return new Uint8Array(await readFile(path));
 }
+
+// Whether PptxGenJS will be able to read a local raster path (it reads the file itself, and fails the whole export when it cannot).
+export async function localFileReadable(path) {
+  const { stat } = await import('node:fs/promises');
+  try { return (await stat(path)).isFile(); } catch { return false; }
+}

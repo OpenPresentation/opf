@@ -84,8 +84,14 @@ for (const record of themes) {
   assert.equal(resolve(background, theme.colors), hex(scheme[slot]));
   const {document, theme: reports} = await importWith(bytes);
   assert.equal(document.design.theme, record.id);
-  assert.equal(document.design.colorScheme, record.colorScheme);
+  // RR-59: the colour scheme the theme brings was not authored, so the round trip leaves it absent.
+  assert.equal(document.design.colorScheme, undefined, `${record.id}: the unstated colour scheme stays absent`);
   assert.deepEqual(reports, []);
+  // FF-24 recovers both ids from a plain package (no provenance) with the catalog registered.
+  const plain = await importWith(await toPptx({name: record.id, design: {theme: record.id}, slides: [{title: 'Theme'}]}, {provenance: false}));
+  assert.equal(plain.document.design.theme, record.id);
+  assert.equal(plain.document.design.colorScheme, record.colorScheme);
+  assert.deepEqual(plain.theme, []);
   // The recovered design exports the same theme part.
   assert.equal(themeOf(parts(await toPptx(document))).xml, theme.xml, `${record.id} theme part round-trips`);
   // No registered catalog on import: no theme id is recovered from the name alone.
@@ -238,7 +244,10 @@ const defaults = themeOf(bare);
 assert.equal(defaults.schemeName, 'OpenPresentation');
 assert.equal(defaults.name, 'Office Theme');
 for (const [slot, element] of SLOTS) assert.equal(defaults.colors[element], hex(cool[slot]), `engine default ${slot}`);
-assert.equal((await importWith(zipSync(bare))).document.design.colorScheme, 'cool-horizon');
-assert.equal(typeof (await importWith(zipSync(bare), {})).document.design.colorScheme, 'object', 'inline without catalogs');
+// RR-59: the full round trip leaves the unstated design absent; FF-24 recovers it from a plain package (no provenance).
+assert.equal((await importWith(zipSync(bare))).document.design, undefined, 'the unstated colour scheme stays absent');
+const plainBare = await exportPptx({slides: [{title: 'Base'}]}, {provenance: false});
+assert.equal((await importWith(plainBare)).document.design.colorScheme, 'cool-horizon');
+assert.equal(typeof (await importWith(plainBare, {})).document.design.colorScheme, 'object', 'inline without catalogs');
 
 console.log(JSON.stringify({test: 'theme-colors', passed: true, colorSchemes: colorSchemes.length, themes: themes.length}));

@@ -495,8 +495,11 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     const {entries, diagnostics} = await open({slides: [{title: 'T', image: 'logo.svg'}]}, {baseDir: directory, strictAssets: true});
     assert.deepEqual(diagnostics, []);
     await assertNative(entries, 0, pictures(slideXml(entries))[0], wideText, 'path source');
-    // A name that merely ends in "svg" is no SVG path: it follows the raster path (PptxGenJS cannot read it here, so the export fails as for any missing raster).
-    await assert.rejects(open({slides: [{title: 'T', image: 'logosvg'}]}, {baseDir: directory}), error => error.code !== 'invalid-svg-image');
+    // A name that merely ends in "svg" is no SVG path: it follows the raster path, and a raster file that cannot be read is
+    // unresolved like any other source (opf-pptx#210; it used to fail the whole export).
+    const notSvg = await open({slides: [{title: 'T', image: 'logosvg'}]}, {baseDir: directory});
+    assert.deepEqual(notSvg.diagnostics.map(({code, reason}) => ({code, reason})), [{code: 'unresolved-asset', reason: 'file-unreadable'}]);
+    await assert.rejects(open({slides: [{title: 'T', image: 'logosvg'}]}, {baseDir: directory, strictAssets: true}), error => error.code === 'missing-asset');
     const missing = await open({slides: [{title: 'T', image: 'missing.svg'}]}, {baseDir: directory});
     assert.deepEqual(missing.diagnostics.map(({code, reason}) => ({code, reason})), [{code: 'unresolved-asset', reason: 'svg-unreadable'}]);
     await assert.rejects(open({slides: [{title: 'T', image: 'missing.svg'}]}, {baseDir: directory, strictAssets: true}), error => error.code === 'invalid-svg-image');

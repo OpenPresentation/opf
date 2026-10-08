@@ -125,6 +125,16 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 // every new design or metadata key here, never to the legacy sections.
 const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
 const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS});
+// RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
+// canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, colour scheme, font scheme
+// and slide size of the generated theme. In `full` mode OPF_DOCUMENT_V1.absent lists the ones the source did not state
+// (a top-level key, which every published importer ignores), and import leaves each of them absent while the native
+// value it would be read from is still the default the export wrote; a value edited in PowerPoint is imported as observed.
+// (`author`, the deck background and the slides inheriting it already return absent whenever the document tag exists.)
+export const DEFAULTED = Object.freeze(['$schema', 'name', 'language', 'design.theme', 'design.colorScheme', 'design.fontScheme', 'design.dimensions']);
+// The package title export writes when the document has no `name` (and no `filename`).
+export const DEFAULT_TITLE = 'OPF Presentation';
+const statedAt = (presentation, path) => path.startsWith('design.') ? own(presentation.design, path.slice(7)) : own(presentation, path);
 
 // Storage shape: move the supplement keys out of the legacy sections.
 function toStoredShape(record, spec) {
@@ -496,6 +506,11 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
     return record;
   });
   const document = {v: 1, slides: slides.length};
+  // 'references-only' stores no absence: it leaves stated values out, so a missing key there proves nothing.
+  if (!referencesOnly) {
+    const absent = DEFAULTED.filter(path => !statedAt(presentation, path));
+    if (absent.length) document.absent = absent;
+  }
   if (Object.keys(design).length) document.design = design;
   if (Object.keys(metadata).length) document.metadata = metadata;
   // 'full' stores the whole registry, so unreferenced assets return as authored;
@@ -504,8 +519,9 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
   // The embedded records (and group declarations) the stored values reference.
   const catalogRecords = referencedCatalogs(presentation.catalogs, documentReferences({...metadata, design, slides}));
   if (catalogRecords) document.catalogs = catalogRecords;
-  // Slide content topology is added per slide by the exporter (recordContentTopology).
-  const stated = Object.keys(design).length || Object.keys(metadata).length || document.assets !== undefined || slides.some(record => Object.keys(record).length > 2);
+  // Slide content topology is added per slide by the exporter (recordContentTopology). In 'full' mode every document states
+  // something: the defaults it leaves to the engine (`absent`) are worth the tags, so import can leave them absent.
+  const stated = !referencesOnly || Object.keys(design).length || Object.keys(metadata).length || document.assets !== undefined || slides.some(record => Object.keys(record).length > 2);
   return {mode, document, slides, report, stated: Boolean(stated)};
 }
 
@@ -648,6 +664,7 @@ function storable(entries, provenance) {
   };
   const source = provenance.document;
   const document = {v: 1, slides: source.slides};
+  if (source.absent) document.absent = [...source.absent];
   const assets = {};
   for (const [id, asset] of Object.entries(source.assets ?? {})) {
     const value = prepare(`assets.${id}`, asset);
@@ -738,8 +755,9 @@ function storable(entries, provenance) {
  * `entries` maps part paths to bytes and is updated in place.
  */
 export function attachDocumentProvenance(entries, provenance) {
-  // A document that states nothing (no references, metadata, slide fields or
-  // content topology) gets no tags and its bytes are unchanged.
+  // A document that states nothing (in 'references-only' mode: no references,
+  // metadata, slide fields or content topology) gets no tags and its bytes are
+  // unchanged. In 'full' mode the defaults it leaves absent are always recorded.
   if (!provenance || !(provenance.stated || provenance.slides.some(record => record.content !== undefined))) return;
   const presentationXml = dec.decode(entries['ppt/presentation.xml']);
   const presentationRoot = parser.parse(presentationXml)['p:presentation'];
@@ -829,6 +847,9 @@ function validateDocument(stored) {
   const references = stored.references;
   if (references !== undefined && (!Array.isArray(references) || references.length > 4096 || !references.every(object))) throw Error('Invalid references record.');
   validateOmitted(value.omitted);
+  // Untrusted: only a short list of strings is read, and a path this importer does not know is ignored (a newer exporter's).
+  if (value.absent !== undefined && (!Array.isArray(value.absent) || value.absent.length > 64 || !value.absent.every(path => typeof path === 'string' && path.length <= 256))) throw Error('Invalid absent field list.');
+  if (value.absent !== undefined) value.absent = value.absent.filter(path => DEFAULTED.includes(path));
   if (author !== undefined || references !== undefined) {
     const {author: _author, references: _references, ...rest} = value;
     return {...rest, metadata: {...rest.metadata, ...(author !== undefined ? {author} : {}), ...(references !== undefined ? {references} : {})}};
@@ -928,7 +949,7 @@ export function slideListBreaks(entries, path, root, rels) {
  * `nativeSections` is the package's native section list as one name (or
  * undefined) per slide, or null when the package has no list.
  */
-export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, speakerConflict = false, catalogs: hostCatalogs, nativeSections = null}, report) {
+export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, speakerConflict = false, catalogs: hostCatalogs, nativeSections = null, schemaOption = false}, report) {
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
   try {
@@ -1079,6 +1100,21 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     group(`design.${key}`, [set(['design', key], value)]);
   }
   const styleIntact = STYLE_REFERENCES.every(key => restoredStyle[key] !== false);
+  // RR-59: a default the source left absent stays absent while the native value it is read from is the one export wrote
+  // (FF-24's theme recovery, for example, gives a theme-only deck its colour scheme). A native edit is imported as observed.
+  const absent = new Set(array(document.absent));
+  const defaultGates = {theme: match.colors && match.fonts, colorScheme: match.colors, fontScheme: match.fonts, dimensions: match.size};
+  for (const [key, unchanged] of Object.entries(defaultGates)) {
+    if (absent.has(`design.${key}`) && unchanged && storedDesign[key] === undefined && own(imported.design, key)) group(`design.${key}`, [remove(['design', key])]);
+  }
+  // No native field holds `$schema`; an importer option that names one keeps it.
+  if (absent.has('$schema') && !schemaOption && own(imported, '$schema')) group('$schema', [remove(['$schema'])]);
+  // The package title export wrote for a document with no name: its filename, else the default title.
+  const defaultTitle = own(document.metadata, 'filename') ? document.metadata.filename : array(document.omitted).includes('filename') ? undefined : DEFAULT_TITLE;
+  if (absent.has('name') && defaultTitle !== undefined && imported.name === defaultTitle) group('name', [remove(['name'])]);
+  // The runs' language is compared with the engine default in reconcileLanguage (src/script-fonts.js), which keeps this
+  // removal only while the runs still carry that default.
+  if (absent.has('language') && own(imported, 'language')) group('language', [remove(['language'])]);
   // Brand images have no native gate (the P2 logo picture is consumed separately).
   for (const key of BRAND_ASSETS) {
     if (storedDesign[key] === undefined) continue;
