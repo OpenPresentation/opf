@@ -1,6 +1,22 @@
 # Measured fonts and reproducible previews
 
-For the starter set and delivery priorities, see the [font roadmap](plans/font-roadmap.md).
+## Start with the installed package
+
+Use the coordinated versions in the [quickstart](quickstart.md). Load fonts once per worker with
+`loadFonts({pack: 'office', scripts: 'auto', presentation})` from `@openpresentation/opf-render/fonts-node`,
+and pass the same handle as `{fonts}` to preview and export. When reusing a worker for another deck,
+ensure its required faces are loaded before rendering; bound concurrency and measure memory with your own decks.
+For an authored Roboto deck, `pack: 'base'` avoids loading Office replacements. Neither loader reads system fonts by default.
+
+In browsers, serve the renderer's pinned font files from your own origin and await the font handle's `ensure(presentation)`
+before measuring or editing. The renderer README documents font copying and the player integration. Standalone SVG must
+carry the used font bytes; script faces require `embedScriptFonts: true` in the Node loader. The CLI's default SVG mode
+requests this automatically; `--svg-fonts none` needs matching viewer fonts. PPTX normally names the authored families
+and requires them on the recipient's machine; it does not automatically embed the preview fonts.
+
+The policy below is current. Version-specific measurements and implementation history are evidence for their named
+checkpoints, not transfer-size budgets for every release. The [font roadmap](plans/font-roadmap.md) records historical
+planning; use installed package APIs and measured output when choosing a deployment strategy.
 
 ## Font policy (FF-31)
 

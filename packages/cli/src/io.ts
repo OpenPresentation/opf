@@ -3,6 +3,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { lstat, mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { OPFApiError } from "./errors.js";
 
 /** Exit 2 is a usage, I/O or environment problem; exit 1 is a document, diagnostic or conflict problem. */
 export class FileCommandError extends Error {
@@ -68,18 +69,18 @@ export async function readStdin(): Promise<Buffer> {
 }
 
 /** `1,3-5`, `2-` (to the end) and `-3` (from the start), one-based, in ascending order without repeats. */
-export function parseSlideSelection(spec: string, total: number): number[] {
-	if (total < 1) throw new FileCommandError("The presentation has no slides.", 1);
+export function parseSlideSelection(spec: string, total: number, label = "--slides"): number[] {
+	if (total < 1) throw new OPFApiError("The presentation has no slides.", "no-slides");
 	const chosen = new Set<number>();
 	for (const part of spec.split(",")) {
 		const text = part.trim();
 		const match = /^(\d*)(-?)(\d*)$/.exec(text);
-		if (!text || !match || (!match[1] && !match[3])) throw new FileCommandError(`--slides needs numbers like 1,3-5 (got "${spec}").`);
+		if (!text || !match || (!match[1] && !match[3])) throw new OPFApiError(`${label} needs numbers like 1,3-5 (got "${spec}").`, "invalid-option");
 		const [, from, dash, to] = match as unknown as [string, string, string, string];
 		const first = from ? Number(from) : 1;
 		const last = dash ? (to ? Number(to) : total) : first;
-		if (first < 1 || last < first) throw new FileCommandError(`--slides range "${text}" is not valid (slides count from 1).`);
-		if (last > total) throw new FileCommandError(`--slides ${text} is outside the presentation, which has ${total} slide${total === 1 ? "" : "s"}.`);
+		if (first < 1 || last < first) throw new OPFApiError(`${label} range "${text}" is not valid (slides count from 1).`, "invalid-option");
+		if (last > total) throw new OPFApiError(`${label} ${text} is outside the presentation, which has ${total} slide${total === 1 ? "" : "s"}.`, "invalid-option");
 		for (let n = first; n <= last; n++) chosen.add(n);
 	}
 	return [...chosen].sort((a, b) => a - b);
@@ -163,4 +164,11 @@ export function pointerOf(location: string): string {
 	if (location === "" || location.startsWith("/")) return location;
 	// Renderer and importer paths are dotted (`slides.0.title`); validate uses JSON Pointers.
 	return /^[A-Za-z_$][\w$-]*(\.[\w$-]+)*$/.test(location) ? `/${location.split(".").join("/")}` : location;
+}
+
+/** An API error of the engines as the command's failure: exit 1 for a state of the document, 2 for the request or the environment; the error report names the code unless it is a plain usage error. */
+export function commandError(error: OPFApiError): FileCommandError {
+	const document = ["invalid-presentation", "no-slides", "all-slides-hidden", "export-failed", "import-failed"].includes(error.code);
+	const plain = ["invalid-option", "no-slides", "all-slides-hidden"].includes(error.code);
+	return new FileCommandError(error.message, document ? 1 : 2, plain ? {} : { code: error.code, ...error.details });
 }

@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { importData, OPFDataImportError, paginate, embed, catalogKinds, catalogDisplayKinds, schemaEntries, validate, type FindingSeverity } from "@openpresentation/opf";
+import { importData, OPFDataImportError, paginate, embed, catalogKinds, catalogDisplayKinds, CHART_TYPES, schemaEntries, validate, type FindingSeverity, type ImportedChartType } from "@openpresentation/opf";
 import { catalogDisplay, defaultCatalog } from "@openpresentation/opf/catalog";
 import { CLI_CATALOGS } from "./catalogs.js";
 import { applyPatch, getAtPointer, parsePointer, OPFPatchError } from "@openpresentation/opf/patch";
@@ -21,9 +22,9 @@ import {FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches} from './check.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
 declare const CLI_VERSION: string;
-declare const OPF_VERSION: string;
+import { OPF_VERSION } from "./version.js";
 declare const OPF_SKILLS: SkillBundle;
-const usage = `OPF — local presentation files for agents (Node 24)
+const usage = `OPF — local presentation files for agents (Node >=22)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml|markdown>] [--schema-comment] [--force]
 ${VALIDATE_USAGE}
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
@@ -286,8 +287,11 @@ async function main(args0: string[]) {
     const outFlag = isDeckFormatFlag(options.format) ? String(options.format) : undefined;
     const format = (outFlag ? undefined : options.format) ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
     if (format !== undefined && !['csv','tsv','json'].includes(String(format))) throw new CliError('Unknown data format.');
+    // OPF 0.15: chart types are an engine vocabulary; an unknown one would only surface as an invalid deck later.
+    const chartType = options['chart-type'] === undefined ? undefined : String(options['chart-type']);
+    if (chartType !== undefined && !CHART_TYPES.includes(chartType)) throw new CliError(`Unknown chart type: ${chartType}. Run opf catalog chart-types for the ids.`);
     const raw = positional[0] === '-' ? await stdin() : await readFile(positional[0], 'utf8');
-    const imported = importData(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
+    const imported = importData(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:chartType as ImportedChartType|undefined});
     // RR-54: --dataset <id> writes the data into the top-level datasets map (replacing that dataset's columns and rows,
     // keeping its title, description and source) and references it from the table or chart.
     const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
@@ -338,7 +342,9 @@ async function main(args0: string[]) {
       records = recordsFromData(raw, format as "csv" | "tsv" | "json", { delimiter: options.delimiter as string | undefined, header: !options["no-header"] });
     }
     const decks = fillRecords(template, records, { template: false, partial: !!options.partial, examples: !!options.examples });
-    const errors = decks.flatMap(deck => deck.diagnostics.filter(entry => entry.severity === "error").map(entry => ({ record: deck.index, ...entry })));
+    const errors = decks.flatMap(deck => deck.diagnostics.filter(entry => entry.severity === "error").map(entry => ({ record: deck.index, ...entry,
+      ...(entry.code === "variable-unfilled" ? { message: `Required variable '${entry.id}' has no value. Supply it with --data, use --examples, or keep an incomplete result with --partial.` } : {}),
+    })));
     if (errors.length) throw new CliError(`Filling failed: ${errors[0]?.message}`, 1, { errors });
     const fill = { records: decks.length, complete: decks.every(deck => deck.complete), unfilled: [...new Set(decks.flatMap(deck => deck.unfilled))], diagnostics: summarizeDiagnostics(decks) };
     if (options["out-dir"] !== undefined) {
@@ -388,7 +394,8 @@ async function main(args0: string[]) {
   }
   if (command === "catalog") {
     const { positional } = parse(args, []); arity(positional, 1, 2);
-    const kind = positional[0] as string;
+    // `opf catalogs` lists camelCase kinds; the website spells them with hyphens (color-schemes, chart-types).
+    const kind = (positional[0] as string).replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
     const records = (catalogKinds as readonly string[]).includes(kind)
       ? defaultCatalog[kind as (typeof catalogKinds)[number]]
       : (catalogDisplayKinds as readonly string[]).includes(kind) ? catalogDisplay[kind as (typeof catalogDisplayKinds)[number]] : undefined;

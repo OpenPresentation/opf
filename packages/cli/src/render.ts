@@ -1,38 +1,24 @@
 // `opf render` and `opf export`: per-slide SVG and PNG, PDF and PPTX from an OPF document, through the optional
 // peers opf-render and opf-pptx (see peers.ts). The command reads the document, checks its format and references with
-// `validate` (the check of `opf validate`), prepares the bundled fonts, renders, and prints one JSON report. Nothing is
-// written when the document is invalid, a render error occurred or a finding reaches --fail-on.
-import { type Fonts, paginate } from "@openpresentation/opf";
+// `validate` (the check of `opf validate`), runs the one export engine (export.ts, the engine behind `exportDeck` of
+// `@openpresentation/cli/api`), and prints one JSON report. Nothing is written when the document is invalid, a render
+// error occurred or a finding reaches --fail-on.
 import path from "node:path";
-import { createImageResolver } from "./assets.js";
-import { checkText, inputFormatOf } from "./deck.js";
-import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
-import {
-	FileCommandError,
-	type PlannedFile,
-	arity,
-	json,
-	parseOptions,
-	parseSlideSelection,
-	readBytes,
-	sha256,
-	deckStem,
-	writeFiles,
-} from "./io.js";
-import { type Diagnostic, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
-import { CLI_CATALOGS } from "./catalogs.js";
-import { Reporter, finishReport, reportThrown } from "./reporter.js";
-import { createZip } from "./zip.js";
+import { checkText, inputFormatOf } from "./deck.js";
+import { OPFApiError } from "./errors.js";
+import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, VERSIONS, checkDate, checkScale, resolveExportOptions, runExport } from "./export.js";
+import { listFontDirectories } from "./fonts.js";
+import { FileCommandError, type PlannedFile, arity, commandError, deckStem, json, parseOptions, readBytes, sha256, writeFiles } from "./io.js";
+import { loadPptx, loadRenderer } from "./peers.js";
+import { Reporter, finishReport } from "./reporter.js";
 
 export interface Host {
 	cliVersion: string;
 	opfVersion: string;
 }
 
-type Format = "svg" | "png" | "pdf" | "pptx";
-/** A fonts object that loads nothing: an SVG picture without text needs no faces, so its PNG fallback skips the font files. */
-const NO_FONTS = { fontFiles: [], useBundledFonts: false, loadSystemFonts: false } as const;
+type Format = ExportFormat;
 const RASTER_FORMATS = ["svg", "png"] as const;
 const SPEC = {
 	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts", "fail-on"],
@@ -47,39 +33,20 @@ const oneOf = <T extends string>(name: string, value: string | boolean | undefin
 	return value as T;
 };
 
-function checkDate(value: string | boolean | undefined) {
-	if (value === undefined) return undefined;
-	const text = String(value);
-	const parsed = /^\d{4}-\d{2}-\d{2}$/.test(text) ? new Date(`${text}T00:00:00Z`) : undefined;
-	if (!parsed || Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== text) throw new FileCommandError("--date must be a real calendar date, YYYY-MM-DD.");
-	return text;
-}
-
-function checkScale(value: string | boolean | undefined) {
-	if (value === undefined) return 1;
-	const scale = Number(value);
-	if (!Number.isFinite(scale) || scale < 0.1 || scale > 8) throw new FileCommandError("--scale must be a number from 0.1 to 8 (1 draws the 1280 x 720 reference slide at 1280 x 720 pixels).");
-	return scale;
-}
-
-const svgSize = (svg: string) => {
-	const tag = /<svg\b[^>]*>/.exec(svg)?.[0] ?? "";
-	const width = Number(/\bwidth="([\d.]+)"/.exec(tag)?.[1]);
-	const height = Number(/\bheight="([\d.]+)"/.exec(tag)?.[1]);
-	return Number.isFinite(width) && Number.isFinite(height) ? { width, height } : {};
-};
-const pngSize = (bytes: Uint8Array) => (bytes.length > 24 ? { width: new DataView(bytes.buffer, bytes.byteOffset).getUint32(16), height: new DataView(bytes.buffer, bytes.byteOffset).getUint32(20) } : {});
-
-interface Prepared {
-	deck: Record<string, unknown>;
-	raw: string;
+/** A check of the engine (an option out of range) as the command's usage error, named as the flag. */
+function flagged<T>(check: () => T): T {
+	try {
+		return check();
+	} catch (error) {
+		throw error instanceof OPFApiError ? commandError(error) : error;
+	}
 }
 
 export async function runRenderCommand(command: "render" | "export", args: string[], host: Host) {
 	try {
 		await run(command, args, host);
 	} catch (error) {
-		const failure = error instanceof FileCommandError ? error : new FileCommandError(error instanceof Error ? error.message : String(error));
+		const failure = error instanceof FileCommandError ? error : error instanceof OPFApiError ? commandError(error) : new FileCommandError(error instanceof Error ? error.message : String(error));
 		process.stderr.write(json({ error: failure.message, ...failure.extra }));
 		process.exitCode = failure.code;
 	}
@@ -92,7 +59,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const out = options.out === undefined ? undefined : String(options.out);
 
 	// Format. `render` is svg or png; `export` also pdf and pptx, and infers the format from --out when it can.
-	const allowed = command === "render" ? RASTER_FORMATS : ([...RASTER_FORMATS, "pdf", "pptx"] as const);
+	const allowed: readonly Format[] = command === "render" ? RASTER_FORMATS : EXPORT_FORMATS;
 	let format = oneOf<Format>("--format", options.format, allowed);
 	if (!format && command === "render") format = "svg";
 	if (!format && out) {
@@ -111,9 +78,9 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const chartex = oneOf("--chartex", options.chartex, ["auto", "native", "fallback"] as const);
 	const provenance = oneOf("--provenance", options.provenance, ["full", "references-only", "none"] as const);
 	const imageFormat = oneOf("--image-format", options["image-format"], ["compatible", "preserve"] as const);
-	const svgFonts = oneOf("--svg-fonts", options["svg-fonts"], ["used", "none"] as const, "used") as "used" | "none";
-	const scale = checkScale(options.scale);
-	const date = checkDate(options.date);
+	const svgFonts = oneOf("--svg-fonts", options["svg-fonts"], ["used", "none"] as const);
+	const scale = flagged(() => checkScale(options.scale, "--scale"));
+	const date = flagged(() => checkDate(options.date, "--date"));
 	const failOn = parseFailOn(options["fail-on"]);
 	if (!failOn) throw new FileCommandError(FAIL_ON_MESSAGE);
 
@@ -133,8 +100,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		sha256: inputSha,
 		opfVersion: host.opfVersion,
 		cli: host.cliVersion,
-		renderer: { package: RENDER_PACKAGE, version: renderer.render.version },
-		...(pptx ? { pptx: { package: PPTX_PACKAGE, version: pptx.version } } : {}),
+		...VERSIONS(renderer, pptx),
 	};
 	const toStdout = out === "-";
 	const report = (extra: Record<string, unknown>, outputs: unknown[], written: boolean) => {
@@ -149,152 +115,71 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		report({}, [], false);
 		return;
 	}
-	const prepared: Prepared = { deck: checkedDeck as Prepared["deck"], raw };
-	let deck: unknown = prepared.deck;
-	const resolver = createImageResolver(assetRoot, reporter);
-	const fonts = await prepareFonts(renderer, deck, userFonts, reporter);
-	const fontSummary = () => ({
-		pack: "office",
-		substitutionPolicy: "visual",
-		userFonts: fonts.userFonts,
-		substitutions: substitutionRows(fonts.handle),
-		...(fonts.handle.registry.scriptSelection ? { scripts: fonts.handle.registry.scriptSelection } : {}),
-	});
 
-	let pagination: Record<string, unknown> | undefined;
-	if (options.paginate) {
-		try {
-			const result = paginate(deck, { fonts: fonts.handle as Fonts, catalogs: CLI_CATALOGS });
-			deck = result.presentation;
-			pagination = { pages: result.pages };
-		} catch (error) {
-			reportThrown(reporter, "render", error);
-			report({ fonts: fontSummary() }, [], false);
-			return;
-		}
-	}
-	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
-	// Per-slide output and PDF skip hidden slides (the presenter's sequence) unless --include-hidden; slides named with --slides
-	// are exactly the slides written, hidden or not. The slide numbers in file names and reports stay the document's own.
-	const isHidden = (number: number) => (deck as { slides?: { hidden?: unknown }[] }).slides?.[number - 1]?.hidden === true;
-	const everySlide = Array.from({ length: slideCount }, (_, index) => index + 1);
-	const selected =
-		format === "pptx"
-			? []
-			: options.slides !== undefined
-				? parseSlideSelection(String(options.slides), slideCount)
-				: options["include-hidden"]
-					? everySlide
-					: everySlide.filter((number) => !isHidden(number));
-	const skippedHidden = format === "pptx" || options.slides !== undefined || options["include-hidden"] ? [] : everySlide.filter(isHidden);
-	if (format !== "pptx" && !selected.length)
-		throw new FileCommandError(skippedHidden.length ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "The presentation has no slides.", 1);
-	const onRender = (diagnostic: Diagnostic) => reporter.add("render", diagnostic);
-	const planned: { file: string; bytes: Uint8Array; entry: Record<string, unknown> }[] = [];
-	const finish = async (extra: Record<string, unknown>) => {
-		const outputs = planned.map((item) => ({ file: item.file === "-" ? "-" : path.resolve(item.file), ...item.entry, sha256: sha256(item.bytes), bytes: item.bytes.length }));
-		const finished = finishReport(check, reporter, failOn);
-		if (!finished.ok) {
-			report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...extra }, outputs.map((item) => ({ ...item, planned: true })), false);
-			return;
-		}
-		if (toStdout) {
-			if (planned.length !== 1) throw new FileCommandError("--out - needs exactly one output; choose one slide with --slides or a file format.");
-			process.stdout.write(planned[0]?.bytes as Uint8Array);
-			report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...extra }, outputs, true);
-			return;
-		}
-		await writeFiles(planned.map((item) => ({ file: item.file, bytes: item.bytes }) as PlannedFile), !!options.force);
-		report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...extra }, outputs, true);
-	};
-
-	const stem = deckStem(prepared.deck, input);
-	// One fonts handle for every call: layout and SVG read its measurement and the faces to embed, PNG and PDF its font files.
-	const svgOptions = (embedded: unknown[]) => ({
-		fonts: { textMeasurement: fonts.handle.textMeasurement, embeddedFonts: embedded },
-		imageResolver: resolver.forSvg,
-		onDiagnostic: onRender,
-		catalogs: CLI_CATALOGS,
+	// Where svg and png go: one file (--out names a file of the format, or -), one zip (--out ends .zip) or a directory.
+	const toFile = out !== undefined && (format === "svg" || format === "png") && (out === "-" || path.extname(out).toLowerCase() === `.${format}`);
+	const toZip = out !== undefined && !toFile && (format === "svg" || format === "png") && path.extname(out).toLowerCase() === ".zip";
+	const exportOptions: ExportOptions = {
+		format,
+		assetDir: assetRoot,
+		filename: input,
+		...(options.scale !== undefined ? { scale } : {}),
+		...(svgFonts ? { svgFonts } : {}),
+		...(options.slides !== undefined ? { slides: String(options.slides) } : {}),
+		...(options["include-hidden"] ? { includeHidden: true } : {}),
+		...(options.paginate ? { paginate: true } : {}),
+		...(pdfMode ? { pdfMode } : {}),
+		...(chartex ? { chartex } : {}),
+		...(provenance ? { provenance } : {}),
+		...(imageFormat ? { imageFormat } : {}),
 		...(date ? { date } : {}),
-	});
-
-	const generate = async (): Promise<Record<string, unknown>> => {
-		if (format === "pptx") {
-			const module = (pptx as NonNullable<typeof pptx>).module;
-			const bytes = await module.toPptx(deck, {
-				fonts: fonts.handle,
-				imageResolver: resolver.forPptx,
-				// The PNG fallback of an SVG picture is drawn by the same renderer the preview uses, with the same fonts handle,
-				// so SVG pictures export whichever way opf-pptx would find opf-render. A picture without text needs no faces.
-				svgRasterizer: async (svg: string, size: { scale: number; text: boolean }) =>
-					new Uint8Array(await renderer.render.module.svgToPng(svg, { scale: size.scale, background: "rgba(0, 0, 0, 0)", fonts: size.text ? fonts.handle : NO_FONTS })),
-				onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pptx", diagnostic),
-				catalogs: CLI_CATALOGS,
-				...(chartex ? { chartex } : {}),
-				...(provenance ? { provenance: provenance === "none" ? false : provenance } : {}),
-				...(imageFormat ? { imageFormat } : {}),
-				...(date ? { date } : {}),
-			});
-			planned.push({ file: out ?? `${stem}.pptx`, bytes, entry: { mediaType: "application/vnd.openxmlformats-officedocument.presentationml.presentation" } });
-			return {};
-		}
-
-		const svgs: { slide: number; id: unknown; svg: string }[] = [];
-		const embedded = format === "svg" ? embeddedFor(fonts.handle, svgFonts) : [];
-		for (const number of selected) {
-			const svg = renderer.render.module.renderSlideSvg(deck, number - 1, svgOptions(embedded));
-			svgs.push({ slide: number, id: (deck as { slides: { id?: unknown }[] }).slides[number - 1]?.id, svg });
-		}
-		const width = Math.max(3, String(slideCount).length);
-		const name = (slide: number, extension: string) => `${stem}-${String(slide).padStart(width, "0")}.${extension}`;
-
-		if (format === "pdf") {
-			const mode = pdfMode ?? "vector";
-			const title = typeof prepared.deck.name === "string" ? prepared.deck.name : undefined;
-			const bytes = await renderer.render.module.svgToPdf(
-				svgs.map((item) => item.svg),
-				{ fonts: fonts.handle, scale, ...(pdfMode ? { mode: pdfMode } : {}), ...(mode === "vector" && title ? { metadata: { title } } : {}), onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pdf", diagnostic) },
-			);
-			planned.push({ file: out ?? `${stem}.pdf`, bytes, entry: { mediaType: "application/pdf", pages: svgs.length, slides: selected } });
-			return { pdf: { mode }, skippedHidden };
-		}
-
-		// svg or png: one file per slide in a directory, a single file, or a zip.
-		const extension = format;
-		const mediaType = format === "svg" ? "image/svg+xml" : "image/png";
-		const items: { slide: number; id: unknown; bytes: Uint8Array; entry: Record<string, unknown> }[] = [];
-		for (const item of svgs) {
-			if (format === "svg") {
-				const bytes = new TextEncoder().encode(item.svg);
-				items.push({ slide: item.slide, id: item.id, bytes, entry: { slide: item.slide, id: item.id, mediaType, ...svgSize(item.svg) } });
-			} else {
-				const bytes = await renderer.render.module.svgToPng(item.svg, { fonts: fonts.handle, scale });
-				items.push({ slide: item.slide, id: item.id, bytes, entry: { slide: item.slide, id: item.id, mediaType, ...pngSize(bytes) } });
-			}
-		}
-		const target = out;
-		const toFile = target !== undefined && (target === "-" || path.extname(target).toLowerCase() === `.${extension}`);
-		if (toFile) {
-			if (items.length !== 1) throw new FileCommandError(`--out ${target} names one file but ${items.length} slides were selected. Choose one slide with --slides, or give a directory or a .zip.`);
-			const only = items[0] as (typeof items)[number];
-			planned.push({ file: target, bytes: only.bytes, entry: only.entry });
-		} else if (target !== undefined && path.extname(target).toLowerCase() === ".zip") {
-			const bytes = createZip(items.map((item) => ({ name: name(item.slide, extension), bytes: item.bytes })));
-			planned.push({ file: target, bytes, entry: { mediaType: "application/zip", entries: items.map((item) => name(item.slide, extension)) } });
-		} else {
-			const directory = target ?? `${stem}-slides`;
-			for (const item of items) planned.push({ file: path.join(directory, name(item.slide, extension)), bytes: item.bytes, entry: item.entry });
-		}
-		return { skippedHidden };
+		...(toZip ? { zip: true } : {}),
 	};
-	let extra: Record<string, unknown>;
-	try {
-		extra = await generate();
-	} catch (error) {
-		if (error instanceof FileCommandError) throw error;
-		reportThrown(reporter, format === "pptx" ? "pptx" : "render", error);
-		report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}) }, [], false);
+	const result = await runExport(checkedDeck, resolveExportOptions(exportOptions), { reporter, renderer, ...(pptx ? { pptx } : {}), userFonts, flags: true });
+	const extra = (more: Record<string, unknown> = {}) => ({ fonts: result.fonts, ...(result.pagination ? { pagination: result.pagination } : {}), ...more });
+	if (result.failure) {
+		report(extra(), [], false);
 		return;
 	}
-	await finish(extra);
+
+	const planned: { file: string; bytes: Uint8Array; entry: Record<string, unknown> }[] = [];
+	let tail: Record<string, unknown> = {};
+	if (format === "pptx") {
+		const file = result.files[0] as ExportFile;
+		planned.push({ file: out ?? file.name, bytes: file.bytes, entry: { mediaType: file.type } });
+	} else if (format === "pdf") {
+		const file = result.files[0] as ExportFile;
+		planned.push({ file: out ?? file.name, bytes: file.bytes, entry: { mediaType: file.type, pages: file.pages, slides: file.slides } });
+		tail = { pdf: result.pdf, skippedHidden: result.skippedHidden };
+	} else if (toZip) {
+		const file = result.files[0] as ExportFile;
+		planned.push({ file: out as string, bytes: file.bytes, entry: { mediaType: file.type, entries: file.entries } });
+		tail = { skippedHidden: result.skippedHidden };
+	} else {
+		const entryOf = (file: ExportFile) => ({ slide: file.slide, id: file.id, mediaType: file.type, ...(file.width === undefined || file.height === undefined ? {} : { width: file.width, height: file.height }) });
+		if (toFile) {
+			if (result.files.length !== 1) throw new FileCommandError(`--out ${out} names one file but ${result.files.length} slides were selected. Choose one slide with --slides, or give a directory or a .zip.`);
+			const only = result.files[0] as ExportFile;
+			planned.push({ file: out as string, bytes: only.bytes, entry: entryOf(only) });
+		} else {
+			const directory = out ?? `${deckStem(checkedDeck, input)}-slides`;
+			for (const file of result.files) planned.push({ file: path.join(directory, file.name), bytes: file.bytes, entry: entryOf(file) });
+		}
+		tail = { skippedHidden: result.skippedHidden };
+	}
+
+	const outputs = planned.map((item) => ({ file: item.file === "-" ? "-" : path.resolve(item.file), ...item.entry, sha256: sha256(item.bytes), bytes: item.bytes.length }));
+	const finished = finishReport(check, reporter, failOn);
+	if (!finished.ok) {
+		report(extra(tail), outputs.map((item) => ({ ...item, planned: true })), false);
+		return;
+	}
+	if (toStdout) {
+		if (planned.length !== 1) throw new FileCommandError("--out - needs exactly one output; choose one slide with --slides or a file format.");
+		process.stdout.write(planned[0]?.bytes as Uint8Array);
+		report(extra(tail), outputs, true);
+		return;
+	}
+	await writeFiles(planned.map((item) => ({ file: item.file, bytes: item.bytes }) as PlannedFile), !!options.force);
+	report(extra(tail), outputs, true);
 }

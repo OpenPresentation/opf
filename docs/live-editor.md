@@ -1,18 +1,18 @@
 # Browser preview and live editing
 
-Published editor 0.14.2 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.15.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.14.0, renderer 0.14.0, editor 0.14.2 and PPTX 0.14.0:
+Use Node 24 with core 0.15.1, renderer 0.15.0, editor 0.15.0 and PPTX 0.15.0:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.14.0 @openpresentation/opf-render@0.14.0 @openpresentation/opf-editor@0.14.2 @openpresentation/opf-pptx@0.14.0
+npm install --save-exact @openpresentation/opf@0.15.1 @openpresentation/opf-render@0.15.0 @openpresentation/opf-editor@0.15.0 @openpresentation/opf-pptx@0.15.0
 ```
 
-No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.11.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
+No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.15.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 For library development, separately regenerate unpublished local preview tarballs from sibling checkouts:
 
@@ -26,6 +26,8 @@ pnpm test:packed-ecosystem
 The packed consumer installs actual tarballs without workspace aliases, exercises editing/SVG/PPTX, checks TypeScript declarations, and bundles a browser entry without Node shims. For a public release, advance source versions and downstream minimums/lockfiles together and follow the release process.
 
 The gallery host example also offers local PPTX file import with preview/diagnostics and editable PowerPoint download. It commits active canvas text before export, shares preview text measurements and applies imports as a single undoable change. Save OPF to preserve the original source; native PowerPoint positions, fonts and unsupported features can change during conversion. The browser E2E checks run offline after loading and inspect the downloaded native merged table, then reimport and undo/redo. Native edit/save/reopen is a separate targeted check, not a pixel-equivalence claim.
+
+The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, read it with `readDeck` and call `exportDeck(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` from `@openpresentation/cli/api`, which draws with the same engines and the bundled fonts and returns the file bytes; `importDeck` reads a PowerPoint file back into a presentation for the editor ([CLI reference](cli.md#library-api)).
 
 `pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
 
@@ -211,4 +213,4 @@ editor.applyPatch(prepared.patches, {rejectInvalid: true});
 // canvas.openInsertMenu(containerPath?, index?) opens the browser palette.
 ```
 
-The headless helpers return `{document, patches, path, changed}` and include expected-value guards. Preserve those guards when applying patches. They need no browser, AI provider, account or hosted service. These helpers are published in editor 0.8.0; use the coordinated versions above and check installed exports when working with older packages. `/create-tests.html` and its installed-package equivalent exercise creation, image bytes, regions, duplication, deletion, strict-fit rejection, keyboard focus and undo.
+The headless helpers return `{presentation, patches, path, changed}` and include expected-value guards. Preserve those guards when applying patches. They need no browser, AI provider, account or hosted service. These helpers are published in editor 0.8.0; use the coordinated versions above and check installed exports when working with older packages. `/create-tests.html` and its installed-package equivalent exercise creation, image bytes, regions, duplication, deletion, strict-fit rejection, keyboard focus and undo.

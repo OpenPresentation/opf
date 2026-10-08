@@ -3,6 +3,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { reportStale } from "./tracker-staleness.mjs";
 import {
   FILES,
   GAP_CODES,
@@ -107,8 +108,11 @@ test("columns use their documented values and unknown where nothing measured", (
   for (const r of committed.records.filter((x) => x.columns.compose === "unknown")) assert.ok(r.gaps.some((g) => g.code === "unknown"), `${r.type}/${r.id}: unknown column without an unknown gap`);
 });
 
-test("the committed tracker is fresh", () => {
-  assert.deepEqual(checkTracker().drift, []);
+test("the committed tracker follows the configured freshness policy", () => {
+  const { drift } = checkTracker();
+  // RR-46 deliberately warns on PRs; the unit runner must use the same policy as the CLI below it.
+  // The default remains strict for local, main and release checks.
+  if (drift.length) assert.equal(reportStale(`Gallery tracker is stale: ${drift.join(', ')}`), false);
 });
 
 test("rules match by gap, type, id and detail; links resolve against the burndown", () => {

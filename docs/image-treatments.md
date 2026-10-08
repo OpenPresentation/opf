@@ -29,7 +29,7 @@ The effective background is the slide's `design.background`, then the deck's, th
 | Property | Meaning |
 |---|---|
 | `src` | The picture: `asset:<id>`, an HTTPS URL, a data URI or a relative path. |
-| `alt` | Alternative text. With `alt` the picture is meaningful, and PPTX export draws it as a full-slide picture at the back that carries the text. Without `alt` it is decorative and exports as the native slide background. A referenced asset's alt text does not count. |
+| `alt` | Alternative text. With `alt` the picture is meaningful, and PPTX export draws it as a full-slide picture at the back that carries the text. Without `alt` it is decorative and exports as the native slide background. A referenced asset's alt text does not count. In the preview a picture with `alt` is an image with that name, and one with `alt: ""` is hidden from assistive technology. |
 | `fit` | `cover` (the default) fills the slide and crops around `focus`. `contain` shows the whole picture over the colour scheme's default background. `stretch` scales it to the slide. `tile` repeats it at its own size from the top-left corner. |
 | `focus` | `{ x, y }` in 0 to 1: the point of the picture that a `cover` crop keeps in view. The default is the center. |
 | `opacity` | Picture opacity. The overlay keeps its own. |

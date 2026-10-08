@@ -40,8 +40,8 @@ each version to appear on the registry before starting the next:
 Each sibling's release-prep PR raises its dependency floors to the just-published
 versions. Its lockfile can only be refreshed after the upstream version exists on
 npm (`npm install --package-lock-only`), so merge sibling release PRs only after
-the upstream publish. `@openpresentation/cli` bundles core and is released
-separately by `cli-publish.yml` (`cli-vX.Y.Z`) when a fresh bundle is needed.
+the upstream publish. `@openpresentation/cli` depends on core (a regular dependency; its floor is raised by the release-prep PR like the others, `@openpresentation/cli/api` shares that core with the application) and is released
+separately by `cli-publish.yml` (`cli-vX.Y.Z`) when a CLI release is needed.
 
 A sibling pull request that needs a core that is not on npm yet (a breaking core release and its sibling PRs, `Depends-On: OpenPresentation/opf#N`) declares it in its `package.json` as `"opf": { "requiresUnreleasedCore": "X.Y.Z" }` (RR-55). Its CI then skips only the packed install against published dependencies (`npm run test:packed`, with a `::notice::`) while the installed published `@openpresentation/opf` is lower than `X.Y.Z`; every linked-ecosystem step still runs. The field is for pull requests only: `release-train.mjs prep` deletes it (and refuses a field above the core of the train), and `plan` flags a release commit whose `package.json` still carries it.
 

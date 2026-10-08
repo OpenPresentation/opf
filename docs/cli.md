@@ -3,7 +3,7 @@
 The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, edits, paginates and bundles documents (see
 [its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Three commands
 produce and read files: `opf render`, `opf export` and `opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
-and ship in CLI 0.10.0, the first CLI release after 0.9.2.
+and ship in CLI 0.10.0, the first CLI release after 0.9.2. The same code is a library: [`@openpresentation/cli/api`](#library-api) (`exportDeck`, `importDeck`, `readDeck`).
 
 All three are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
 and installed package versions give the same bytes on every operating system.
@@ -15,16 +15,79 @@ and installed package versions give the same bytes on every operating system.
 first time a command needs them. Install them next to the CLI:
 
 ```sh
-npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 # a project that depends on the CLI
-npm install -D @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -D @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 # one run, nothing installed
-npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf export deck.opf.json --format pptx
+npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx -p @resvg/resvg-js -p sharp -p @expo-google-fonts/roboto@0.4.3 -p @expo-google-fonts/roboto-mono@0.4.2 -p @expo-google-fonts/caladea@0.4.2 -p @expo-google-fonts/arimo@0.4.3 -p @expo-google-fonts/tinos@0.4.2 -p @expo-google-fonts/cousine@0.4.3 -p @expo-google-fonts/gelasio@0.4.1 -p @expo-google-fonts/noto-sans@0.4.2 opf export deck.opf.json --format pptx
 ```
 
 The CLI looks for a peer beside itself first (a global install, an npx run, a project dependency) and in the working
 directory second. Without it the command exits 2 with `code: "peer-not-installed"` and the install command. The
 commands check the functions they call and name the version to install when an older peer lacks one.
+
+From opf-render 0.16 the renderer's own dependencies are optional peers too: the converters (`pdf-lib`, `@resvg/resvg-js`,
+`sharp`) and every `@expo-google-fonts/*` package, so a host installs only what its outputs use. The CLI and
+`exportDeck` always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
+
+| Output | Also install |
+| --- | --- |
+| every format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
+| `png` | `@resvg/resvg-js@^2.6.2 sharp@^0.35.5` |
+| `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--pdf-mode raster`; `sharp@^0.35.5` when the deck has pictures |
+| `svg` | the fonts only |
+| `pptx`, `import` | `@openpresentation/opf-pptx` (an SVG picture in a PPTX is rasterized by the renderer, so `@resvg/resvg-js`) |
+
+A converter or font package that is missing is reported as the same missing-peer error as a missing renderer: the command
+exits 2 with `code: "peer-not-installed"` and the renderer's own install command in `error`, with `package` (or `packages`),
+`range`, `install` and `purpose` beside it; `exportDeck` throws `OPFExportError` with the same `code` and `details`.
+
+## Library API
+
+`@openpresentation/cli/api` gives an application the engines of these commands without spawning a process. Core reads and
+writes the text formats (`readDeck`, `writeDeck`, `validate`); this entry reads and writes files (`exportDeck`,
+`importDeck`). `opf render`, `opf export` and `opf import` are thin wrappers over `exportDeck` and `importDeck`: they add
+reading the document, `--out`, atomic writes, the JSON report and the exit codes, and nothing else.
+
+```ts
+import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+
+const { presentation, findings } = readDeck(text, { filename: "deck.opf.md" });  // JSON, YAML or .opf.md (core)
+const out = await exportDeck(presentation, { format: "pdf" });                    // { files: [{ name, type, bytes }], findings, ... }
+const { presentation: back } = await importDeck(pptxBytes, { catalogs });         // PPTX to OPF
+```
+
+| Command option | `exportDeck` option |
+| --- | --- |
+| `--format svg\|png\|pdf\|pptx` | `format` (required) |
+| `--slides 1,3-5`, `--include-hidden`, `--paginate` | `slides` (`"1,3-5"` or `[1, 3]`), `includeHidden`, `paginate` |
+| `--scale`, `--pdf-mode`, `--svg-fonts` | `scale`, `pdfMode`, `svgFonts` |
+| `--chartex`, `--provenance`, `--image-format` | `chartex`, `provenance`, `imageFormat` |
+| `--date YYYY-MM-DD` | `date` |
+| `--font-dir <dir>` (repeatable) | `fontDirs` (or `fonts`: a prepared `loadFonts()` handle, reused across calls) |
+| `--asset-dir <dir>` | `assetDir` (without it no local image file is read) |
+| `--out x.zip` | `zip: true` |
+| the input file name | `filename` (names the files when the presentation has no `filename` or `name`) |
+| the default catalog | `catalogs` (core's `defaultCatalog` when omitted) |
+
+What `exportDeck` returns, per format: `png` and `svg` one file per slide (`<name>-001.png`, with `slide`, `id`, `width`
+and `height`), or one `<name>.zip` with `zip: true` (`entries` lists the names); `pdf` one file with `pages` and `slides`;
+`pptx` one file. Also `findings` (the format and references check's warnings and notes, and the diagnostics of the fonts,
+layout, SVG, PDF and PPTX writers, each with a `render/`, `pptx/`, `pdf/`, `fonts/` or `cli/` rule prefix), `fonts` (the pack,
+the font files and the substitutions made), `skippedHidden` and the engines' packages and versions. `importDeck` returns
+`{ presentation, findings, pptx, signals? }`.
+
+The function does what the command does for a document it has already read: it checks format and references (an invalid
+presentation throws `invalid-presentation` with the error findings; the command prints the same findings as its report),
+draws with the bundled fonts, and returns bytes. It never writes a file, reads a clock or fetches anything. Errors are
+`OPFExportError` and `OPFImportError` (both extend `OPFApiError`) with `code`, `details` and `findings`. The codes are the
+command's: `peer-not-installed`, `peer-too-old` and `peer-load-failed` (command exit 2), `invalid-option` (2),
+`invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed` and `import-failed` (1).
+
+`@openpresentation/opf-render` and `@openpresentation/opf-pptx` are the same optional peers as for the command, loaded the
+first time a function needs them. Core (`@openpresentation/opf`) is a regular dependency of the CLI package, not a bundled
+copy, so the command, `/api` and an application that imports core directly run one core: the classes core throws
+(`OPFValidationError`) are the ones the application catches.
 
 ## `opf render`
 
@@ -96,7 +159,7 @@ not. The report lists the slide numbers left out in `skippedHidden`. A deck whos
 | `--asset-dir <directory>` | The folder relative image paths resolve against and the only folder read. Default: the document's folder (the working directory for stdin). |
 | `--fail-on <error\|warning\|info>` | Findings at or above this severity fail, and nothing is written (default `error`). `--fail-on warning` fails on warnings; every command that checks a document takes it. |
 | `--force` | Replace existing outputs. Without it any existing destination exits 1 before anything is written. |
-| `--json` | Accepted for scripts that pass it everywhere. Reports are always JSON; this is the default. |
+| `--json` | Accepted for scripts that pass it everywhere. JSON is the default report format; `--format text` selects human-readable diagnostics on commands that support it. |
 
 ## Fonts
 
@@ -109,6 +172,8 @@ Font substitutions are listed under `fonts.substitutions` in the report with the
 Scripts beyond Latin, Greek and Cyrillic need the optional Noto script packages of the renderer
 (`@expo-google-fonts/noto-sans-jp` and so on). Install the ones named in the `fonts/script-font-not-installed`
 diagnostic next to the CLI; without them, text the loaded faces cannot draw is the error `render/missing-glyph`.
+Standalone SVG (`--svg-fonts used`, the default) embeds the installed script faces its text uses, just like Latin faces.
+`--svg-fonts none` omits all font bytes and requires the viewer to provide the matching families.
 
 ## Images and assets
 
@@ -116,7 +181,9 @@ Relative image paths and `file:` paths resolve against the document's folder (or
 `.jpeg`, `.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are
 resolved first), so a document cannot pull another file on the machine into an output. URLs are never fetched. For SVG
 and PNG output, an unreadable image draws the renderer's placeholder with an `unresolved-asset` or `cli/asset-blocked`
-warning. For PPTX it stops the export (`pptx/asset-unresolved`): opf-pptx would otherwise read the path itself. SVG
+warning. For PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`): opf-pptx would otherwise read the path itself.
+An unresolved remote URL is never fetched; the exporter can write an unavailable-image placeholder with a
+`pptx/unresolved-asset` warning. Use `--fail-on warning` to reject that incomplete output before any file is written. SVG
 pictures in a PPTX get their PNG fallback from the CLI's own opf-render install (`svgRasterizer`), so they export
 whichever way the packages were installed.
 
@@ -161,20 +228,19 @@ Exit `0`: success (warnings allowed). Exit `1`: invalid document, error finding,
 existing output. Exit `2`: usage, I/O, a missing or too-old peer, a font directory problem. (`opf validate` has the
 same codes; text that is not valid JSON is an invalid document, exit `1`, with an `opf/json-syntax` finding.)
 
-## Decisions (RR-27, vetoable)
+## Runtime choices
 
 - **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
   native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
   turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
-  validating or editing a document would pay for it. The tarball stays small and `dependencies` stays empty.
-- **Reports are always JSON; `--json` is a no-op alias.** The CLI contract is JSON reports and JSON errors; a second
-  text reporter would split every consumer.
+  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, shared with `@openpresentation/cli/api`).
+- **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
+  human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.
 - **Fonts are the bundled pack plus `--font-dir`.** Never system fonts (owner font policy).
 - **Stored zip entries.** Deflate output differs between zlib builds, which would make archive hashes host-dependent.
 
-## Follow-up (openpresentation.org)
+## Catalog names
 
-The site's CLI and developer docs should gain a "Render, export and import" page from this file (install block,
-the three commands, the report fields), and its quickstart should stop saying the CLI does not render. No public
-support or progress status goes on the site (program invariant); the page documents commands, not coverage.
+`opf catalogs` lists canonical camelCase names such as `colorSchemes` and `fontSchemes`.
+`opf catalog` also accepts the website-style `color-schemes`, `font-schemes` and `chart-types` spellings.

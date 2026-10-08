@@ -24,7 +24,7 @@ node skills/opf-inspect/scripts/opf-inspect.mjs validate custom-layout.json layo
 
 ## Installed CLI alternative
 
-The published CLI provides `opf validate deck.opf.json`, `opf schemas`, `opf schema presentation '/$defs/Composition'`, `opf catalogs`, and `opf catalog fontSchemes roboto`. `opf --version` reports its bundled core version. Validation emits findings (stable rule id, severity, category, JSON Pointer path, line and column, a hint and sometimes suggested fixes), counts and the file SHA-256; `--fail-on warning` exits 1 for warnings too. Unlike the helper below, the CLI bundles its own core (with its default catalog, which every command registers) and does not resolve the host's core package. Choose the version matching the target project. Check command availability with `opf --help` before using an older installation.
+The published CLI provides `opf validate deck.opf.json`, `opf schemas`, `opf schema presentation '/$defs/Composition'`, `opf catalogs`, and `opf catalog fontSchemes roboto`. `opf --version` reports the CLI and the core it runs on. Validation emits findings (stable rule id, severity, category, JSON Pointer path, line and column, a hint and sometimes suggested fixes), counts and the file SHA-256; `--fail-on warning` exits 1 for warnings too. Unlike the helper below, the CLI runs on the core it depends on (with its default catalog, which every command registers), not on the host project's core package. Choose the version matching the target project. Check command availability with `opf --help` before using an older installation.
 
 ## Facts about a deck
 
