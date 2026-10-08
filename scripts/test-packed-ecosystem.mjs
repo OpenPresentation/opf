@@ -46,7 +46,38 @@ async function readHarnessBytes(repo, file) {
   return result.stdout;
 }
 async function readHarness(repo, file) {
-  return (await readHarnessBytes(repo, file)).toString('utf8');
+  const source = (await readHarnessBytes(repo, file)).toString('utf8');
+  if (repo !== 'opf' && /^test\/.+\.m?js$/.test(file)) await installLocalImports(repo, file, source);
+  return source;
+}
+const SIBLING_PACKAGES = {'opf-render': '@openpresentation/opf-render', 'opf-pptx': '@openpresentation/opf-pptx', 'opf-editor': '@openpresentation/opf-editor'};
+const installedLocal = new Set();
+/**
+ * OPF 0.15 (FA-23): a sibling test copied into the consumer may import local test modules (`./helpers/default-catalog.mjs`,
+ * `./catalog-harness.mjs`: the helpers that register the default catalog the way a host does). Install every such module,
+ * and the ones it imports in turn, at the same path under the consumer, with its imports of the sibling's own build
+ * (`../dist/index.js`, `../../dist/index.js`) resolved to the installed package. A copied test is written at the consumer
+ * root, so its local imports resolve there.
+ */
+async function installLocalImports(repo, file, source) {
+  const base = path.posix.dirname(file);
+  for (const match of source.matchAll(/(?:from|import)\s*\(?\s*['"](\.\/[^'"]+\.m?js)['"]/g)) {
+    const relative = path.posix.normalize(match[1]);
+    if (relative.startsWith('..')) continue;
+    const local = path.posix.join(base, relative);
+    if (!local.startsWith('test/')) continue;
+    const key = `${repo}:${local}`;
+    if (installedLocal.has(key)) continue;
+    let text;
+    try { text = (await readHarnessBytes(repo, local)).toString('utf8'); } catch (error) { if (error.code === 'ENOENT' || /Cannot read/.test(error.message)) continue; throw error; }
+    installedLocal.add(key);
+    const depth = local.split('/').length - 2;
+    const dist = `${'../'.repeat(depth + 1)}dist/index.js`;
+    const target = path.join(consumer, relative.split('/').join(path.sep));
+    await mkdir(path.dirname(target), {recursive: true});
+    await writeFile(target, text.replaceAll(`'${dist}'`, `'${SIBLING_PACKAGES[repo]}'`).replaceAll(`"${dist}"`, `"${SIBLING_PACKAGES[repo]}"`));
+    await installLocalImports(repo, local, text);
+  }
 }
 const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : registry ? "registry-consumer" : "consumer");
 const manifest = registry
@@ -111,19 +142,6 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
-// OPF 0.15 (FA-23): a library registers no catalog, so the siblings' harnesses that name gallery records import a small
-// helper that registers the default catalog the way a host does. Install those helpers next to the copied harnesses,
-// resolving the engine from the installed package; a harness ref older than the helpers has none and imports none.
-for (const [repo, file, target, from, to] of [
-  ['opf-render', 'test/catalog-harness.mjs', 'catalog-harness.mjs', "'../dist/index.js'", "'@openpresentation/opf-render'"],
-  ['opf-pptx', 'test/helpers/default-catalog.mjs', 'helpers/default-catalog.mjs', "'../../dist/index.js'", "'@openpresentation/opf-pptx'"],
-]) {
-  let source;
-  try { source = await readHarness(repo, file); } catch (error) { if (error.code === 'ENOENT' || /Cannot read/.test(error.message)) continue; throw error; }
-  if (!source.includes(from)) throw new Error(`${repo} ${file} no longer imports ${from}; update the installed rewrite`);
-  await mkdir(path.dirname(path.join(consumer, target)), {recursive: true});
-  await writeFile(path.join(consumer, target), source.replaceAll(from, to));
-}
 if (verifyColorRefs) {
   await mkdir(path.join(consumer, 'fixtures'), {recursive: true});
   await writeFile(path.join(consumer, 'fixtures/color-references.opf.json'),
