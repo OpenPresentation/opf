@@ -85,6 +85,16 @@ const manifest = registry
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
+// RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). The consumer is the host, so it installs
+// the ones the checks below use, at the versions the renderer tests: an older renderer that still ships them as dependencies adds nothing.
+const rendererPeers = {};
+if (manifest.artifacts.some(item => item.name === '@openpresentation/opf-render')) {
+  const rendererPackage = JSON.parse(await readHarness('opf-render', 'package.json'));
+  for (const [name, range] of Object.entries(rendererPackage.peerDependencies ?? {})) {
+    const wanted = ['sharp', '@resvg/resvg-js', 'pdf-lib'].includes(name) || name.startsWith('@expo-google-fonts/') && ['roboto', 'roboto-mono', 'arimo', 'caladea', 'cousine', 'gelasio', 'tinos', 'noto-sans'].includes(name.slice('@expo-google-fonts/'.length));
+    if (wanted && rendererPackage.peerDependenciesMeta?.[name]?.optional === true && !rendererPackage.dependencies?.[name]) rendererPeers[name] = rendererPackage.devDependencies?.[name] ?? range;
+  }
+}
 await mkdir(out,{recursive:true});
 const actualRoot=await realpath(root), actualOut=await realpath(out);
 if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
@@ -102,9 +112,10 @@ await writeFile(
       private: true,
       type: "module",
       ...(!registry ? {devDependencies: {'@types/node': createRequire(new URL('../packages/javascript/package.json', import.meta.url))('@types/node/package.json').version}} : {}),
-      dependencies: Object.fromEntries(
-        manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
-      ),
+      dependencies: {
+        ...rendererPeers,
+        ...Object.fromEntries(manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`])),
+      },
     },
     null,
     2,
