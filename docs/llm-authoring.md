@@ -24,7 +24,7 @@ Choose one content structure per slide:
 - `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
 - Promoted regions such as `left`, `center+right`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
 
-Use catalog IDs from the installed package or supply inline records in `catalogs`. A gallery route is a stable identifier, but an extended gallery layout may need the inline record included in the copied document. Do not invent an unresolvable layout or assume a network lookup will happen.
+Reference records by id from the default catalog (`@openpresentation/opf/catalog`) or a catalog the host registers (`name:id` for a named group), and put the deck's own records in `catalogs.custom`. Embed what a deck uses before saving it (`embed`, `opf embed`), so it renders the same with no catalog registered. Do not invent an unresolvable layout or assume a network lookup will happen.
 
 A testimonial quote is `{ "quote": { "text": "...", "attribution": "Priya Raman", "role": "VP Operations, Acme", "photo": { "src": "asset:priya", "alt": "Priya Raman" } } }`: the attribution holds the name, `role` the title and organization, and `photo` a circular headshot that needs alt text.
 
@@ -40,7 +40,7 @@ Do not retype the speaker, organization or deck name into slide text. Put them i
 
 ## Revision loop
 
-1. Validate with `validate` (or `opf validate`). Fix error findings at their returned JSON paths, then read the warnings: unknown catalog IDs, missing alt text, low contrast, overflow and placeholder text each have a rule id and a suggested fix ([validate](validate.md)).
+1. Validate with `validate` (or `opf validate`). Fix error findings at their returned JSON paths, then read the warnings: references that resolve nowhere (`opf/unresolved-reference`), missing alt text, low contrast, overflow and placeholder text each have a rule id and a suggested fix ([validate](validate.md)).
 2. Render with `onDiagnostic` and inspect `text-overflow` / `small-cell` paths. Shorten text, reduce the number of blocks, change composition, or explicitly split the slide. Revalidate after edits.
 3. Use `composition.overflow: "error"` for a strict text-layout gate. It does not certify chart readability, font availability, or exact PowerPoint rendering.
 4. Inspect the actual preview and exported PPTX. Geometry is shared; font substitution and specialized objects can still differ. Previews draw an open look-alike where the license-restricted font cannot be bundled (metric-compatible where one exists, for example Carlito for Calibri; Intos for Aptos), but the exported PPTX keeps the font name the user selected.

@@ -3,6 +3,7 @@ import {mkdir, readFile, writeFile, realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {withRecords} from './ecosystem-records.mjs';
 import path from 'node:path';
 
 // Candidate-only integration: historical registry fixtures remain immutable.
@@ -230,6 +231,7 @@ try {
       slides: paginate ? [{title: 'Paginated fields', text: 'First sentence with enough detail. '.repeat(160)}, {title: 'Last slide', text: 'Last source body.'}]
         : [{title: 'Hidden title footer', text: 'The title still counts.', design: {footer: false}}, {title: 'Second slide', text: 'Authored second body.'}, {title: 'Third slide', text: 'Authored third body.'}]};
     if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSize: 32, overflow: 'error'};
+    Object.assign(deck, withRecords(deck)); // OPF 0.15: the page registers no catalog, so the deck embeds the font scheme it names
     const original = structuredClone(deck);
     await page.evaluate(args => mount(args), {deck, faces: registry.embeddedFonts, date: '2026-09-22', paginate});
     const mounted = await page.evaluate(() => ({source: editor.presentation, authored, pagination, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));

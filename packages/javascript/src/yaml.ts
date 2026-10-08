@@ -10,6 +10,7 @@
  *
  * The same input always gives the same output.
  */
+import { checkCatalogsOption, type Catalog } from "./catalog-refs.js";
 import { same } from "./convert/shared.js";
 import { sortPresentationKeys } from "./format.js";
 import { presentation } from "./schemas.js";
@@ -31,6 +32,8 @@ export interface FromYamlOptions {
    * and `references`; options pick other rules or categories (`{}` runs every rule); `false` skips the check.
    */
   validate?: boolean | ValidateOptions;
+  /** Catalogs the host registered, for the references check of `validate: true` (the default). Nothing is fetched. */
+  catalogs?: readonly Catalog[];
   /**
    * Expand anchors, aliases and `<<` merge keys (default false: they are an error). The expansion is capped at 100 aliases
    * and an alias inside its own anchor is rejected, so the result is always finite JSON-compatible data.
@@ -61,11 +64,12 @@ const NOT_CHECKED: ValidationChecks = { syntax: "checked", schema: "not-run", re
  */
 export function fromYaml(yaml: string, options: FromYamlOptions = {}): FromYamlResult {
   if (typeof yaml !== "string") throw new TypeError("fromYaml expects a string.");
+  checkCatalogsOption(options.catalogs, "fromYaml");
   const parsed = readYamlDocument(yaml, options.aliases === true);
   const findings: YamlFinding[] = [...parsed.findings];
   let report: Omit<ValidationReport, "findings" | "counts" | "valid"> = { schemaValid: null, checks: NOT_CHECKED };
   if (!parsed.errors && options.validate !== false) {
-    const checked = validate(parsed.value, options.validate === true || options.validate === undefined ? { only: ["format", "references"] } : options.validate);
+    const checked = validate(parsed.value, options.validate === true || options.validate === undefined ? { only: ["format", "references"], ...(options.catalogs ? { catalogs: options.catalogs } : {}) } : options.validate);
     report = {
       schemaValid: checked.schemaValid,
       checks: { ...checked.checks, syntax: "checked" },

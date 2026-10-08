@@ -3,16 +3,16 @@
   "name": "Port Dwell Time Improvement Plan",
   "description": "Port Dwell Time Improvement Plan is a fictional OPF example for ports and logistics teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "port-dwell-time-improvement-plan",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "investor",
+    "executive",
     {
-      "id": "all-hands",
+      "id": "marketing",
       "attentionBudgetMinutes": 24,
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "company-intro"
+        "classic-story"
       ],
       "recommendedTones": [
         "technical"
@@ -62,10 +62,8 @@
     "dimensions": "widescreen",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "left",
@@ -73,7 +71,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "left",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "top"
     }
   },
   "slides": [
@@ -136,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -306,7 +300,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bar",
+            "type": "pie",
             "data": {
               "columns": [
                 "Quarter",
@@ -359,16 +353,13 @@
     {
       "id": "s7-image",
       "section": "Context",
-      "layout": "image-bleed",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "Ports and logistics context photo for Bluewater Logistics",
-        "title": "Ports and logistics context"
-      },
       "design": {
-        "slideImage": "asset:supporting-photo"
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "Ports and logistics context photo for Bluewater Logistics"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -518,15 +509,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "port-dwell-time-improvement-plan-arc",
+    "custom": {
+      "narratives": {
+        "port-dwell-time-improvement-plan-arc": {
           "name": "Ports And Logistics Decision Arc",
           "summary": "A custom arc for Bluewater Logistics.",
           "description": "Port Dwell Time Improvement Plan uses a compact evidence-to-decision arc for Bluewater Logistics.",
@@ -551,13 +536,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "bluewater-logistics-theme",
+      },
+      "themes": {
+        "bluewater-logistics-theme": {
           "name": "Bluewater Logistics Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "bookman",
@@ -570,14 +551,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "bluewater-logistics-signal",
+      },
+      "colorSchemes": {
+        "bluewater-logistics-signal": {
           "name": "Bluewater Logistics Signal Palette",
           "accent1": "#334155",
           "accent2": "#F8FAFC",
@@ -592,31 +568,468 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Precise, evidence-led voice for engineering, research, and product-detail audiences.",
+          "description": "Lead with the question or claim, then walk through the mechanism and the numbers. Use exact terminology; assume the audience can handle and prefers it. Diagrams, tables, and benchmarks are first-class.",
+          "voiceCues": [
+            "State the claim, then the mechanism, then the evidence.",
+            "Use exact terminology — don't soften technical terms for general readability.",
+            "Quote benchmarks with conditions (cold/warm, p50/p95/p99, dataset, hardware).",
+            "Prefer diagrams and tables over prose paragraphs for structural information."
+          ],
+          "avoid": [
+            "Vague claims ('much faster', 'better', 'easier').",
+            "Marketing framing without supporting data.",
+            "Glossing over caveats and tradeoffs.",
+            "Casual register that obscures precision."
+          ],
+          "samplePhrases": [
+            "p95 inference latency is 38ms on a single A100, down from 312ms on the prior runtime.",
+            "We replaced the streaming serializer with a batched protobuf path; throughput rose 4.2× under load.",
+            "The result holds for context windows up to 32k tokens; beyond that, see appendix B."
+          ],
+          "recommendedNarratives": [
+            "challenge-resolution",
+            "innovation",
+            "conference-talk",
+            "status-update"
+          ],
+          "tags": [
+            "technical",
+            "engineering",
+            "research"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "deep-purple": {
+          "name": "Deep Purple",
+          "accent1": "#6A1B9A",
+          "accent2": "#7B1FA2",
+          "accent3": "#8E24AA",
+          "accent4": "#9C27B0",
+          "accent5": "#AB47BC",
+          "accent6": "#4A148C",
+          "dark1": "#000000",
+          "dark2": "#2B0B3E",
+          "followedHyperlink": "#6A1B9A",
+          "hyperlink": "#4A148C",
+          "light1": "#FFFFFF",
+          "light2": "#F8F2FC",
+          "summary": "Purple-led palette for innovation and premium positioning.",
+          "description": "A focused purple palette for decks that need to feel creative, distinctive, and premium.",
+          "tags": [
+            "innovative",
+            "creative",
+            "premium",
+            "distinctive",
+            "modern"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "bookman": {
+          "name": "Bookman",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Bookman Old Style",
+          "minor": "Bookman Old Style",
+          "textSample": "Classic serif style",
+          "type": "serif",
+          "description": "Bookman is a serif OPF font scheme for Latin presentations, using Bookman Old Style for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "number-1x": {
+          "name": "Number 1x",
+          "summary": "Reach for it when one figure is the point of the slide.",
+          "description": "A title above a single large metric. Use it for the headline number of a result, a target or a milestone, with its label.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Focus"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x.svg"
+          }
+        },
+        "number-4x": {
+          "name": "Number 4x",
+          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
+          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Matrix"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

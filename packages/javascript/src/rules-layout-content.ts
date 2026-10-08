@@ -1,3 +1,4 @@
+import { imageBackground } from './composition.js';
 import { intrinsicImageSize } from './image-aspect.js';
 import type { ValidationRule } from './rule-context.js';
 import { rule } from './rule-context.js';
@@ -165,7 +166,7 @@ const resolutionRule = rule(
 		cost: 'composition',
 		thresholds: ['minImagePpi'],
 		approximations:
-			'Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed box (cropped images are measured as the cover scale, fitted ones as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.',
+			'Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed frame (cover and stretch are measured as the cover scale, contain as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.',
 	},
 );
 const resolutionRules: ValidationRule[] = [
@@ -193,12 +194,10 @@ const resolutionRules: ValidationRule[] = [
 			for (const slide of context.slides) {
 				const composition = slide.composition;
 				if (composition) {
-					const fill = composition.design.imageFill;
-					for (const item of composition.items) if (item.field === 'image') check(pointerOfDotted(item.path), item.value, item.box, fill === 'crop', slide);
-					if (composition.slideImage) check(pointerOfDotted(composition.slideImage.sourcePath), composition.slideImage.value, composition.slideImage.box, composition.slideImage.fill === 'crop', slide);
+					for (const item of composition.items) if (item.field === 'image') check(pointerOfDotted(item.path), item.value, item.image?.box ?? item.box, item.image?.fit !== 'contain', slide);
 				}
 				const background = slide.design.backgroundImage;
-				if (background && background.fit !== 'tile') check(background.path, rec({ src: background.source }), slide.design.dimensions, background.fit === 'cover', background.path.startsWith('/slides/') ? slide : undefined);
+				if (background && background.fit !== 'tile') check(background.path, rec({ src: background.source }), slide.design.dimensions, background.fit !== 'contain', background.path.startsWith('/slides/') ? slide : undefined);
 			}
 		},
 	},
@@ -236,7 +235,7 @@ const unusedBeatRule = rule(
 	'The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.',
 	{
 		approximations:
-			'Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in the `catalogs` option, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
+			'Resolved like every content reference: the document\'s catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
 	},
 );
 const PLACEHOLDERS: { pattern: RegExp; label: string }[] = [
@@ -287,7 +286,7 @@ const contentRules: ValidationRule[] = [
 	{
 		info: unusedBeatRule,
 		run(context) {
-			const narrative = resolveNarrative(context.document, context.options.catalogs?.narratives);
+			const narrative = resolveNarrative(context.document, context.options);
 			if (!narrative) return;
 			const id = String(context.document.narrative);
 			for (const { beat, index } of unreferencedBeats(context.document, narrative))
@@ -307,8 +306,8 @@ const contentRules: ValidationRule[] = [
 				const has = (value: unknown) => value !== undefined && value !== null && !(typeof value === 'string' && value.trim() === '') && !(Array.isArray(value) && value.length === 0);
 				const hasText = slide.texts.some((tv) => plainText(tv.value).trim() !== '');
 				const hasObject = slidePayloads(slide.slide, slide.path).some((p) => ['image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'].some((field) => has(p.node[field])));
-				const hasSlideImage = has(rec(slide.slide.design).slideImage);
-				if (hasText || hasObject || hasSlideImage) continue;
+				const hasBackgroundImage = imageBackground(rec(slide.slide.design).background) !== undefined;
+				if (hasText || hasObject || hasBackgroundImage) continue;
 				context.report(emptySlideRule, { path: slide.path, slide, message: `Slide ${slide.index + 1} has no title and no content.`, help: 'Add content, delete the slide, or give it the blank layout if it is intentionally empty.' });
 			}
 		},

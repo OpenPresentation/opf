@@ -3,16 +3,16 @@
   "name": "Renewal Save Plan",
   "description": "Renewal Save Plan is a fictional OPF example for customer success teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "renewal-save-plan",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "executive",
+    "candidates",
     {
-      "id": "sales",
+      "id": "general-public",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "trend-analysis"
+        "star-method"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "trend-analysis",
+  "narrative": "star-method",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -69,7 +69,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -87,10 +87,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -338,6 +334,457 @@
       "density": "medium",
       "scenario": "renewal-save-plan",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "star-method": {
+          "name": "STAR Method",
+          "summary": "Results-focused framework that demonstrates impact through concrete examples.",
+          "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
+          "audienceFit": [
+            "hr-and-talent",
+            "performance-reviewers",
+            "award-committees"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 15
+          },
+          "tags": [
+            "case-study",
+            "proof",
+            "results",
+            "retrospective"
+          ],
+          "beats": [
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Describe the context and background of the scenario.",
+              "instructions": "Describe the relevant context and constraints.",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "task",
+              "name": "Task",
+              "description": "Explain your specific role and responsibilities in this situation.",
+              "instructions": "Explain the responsibility or target outcome.",
+              "type": "list",
+              "layout": "list-2x"
+            },
+            {
+              "id": "action",
+              "name": "Action",
+              "description": "Detail the specific steps you took to address the challenge.",
+              "instructions": "Detail the actions taken and choices made.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "result",
+              "name": "Result",
+              "description": "Share the measurable outcomes and impact of your actions.",
+              "instructions": "Show measurable impact and proof.",
+              "type": "metric",
+              "layout": "number-1x"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        },
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        }
+      },
+      "purposes": {
+        "sell": {
+          "name": "Sell",
+          "summary": "Move a buyer or evaluator toward purchase, adoption, renewal, or expansion.",
+          "description": "Use for customer-facing decks where the goal is commercial movement. Focus on pain, value, proof, differentiation, and the next buying step.",
+          "outcome": "The buyer advances to the next step in the commercial process.",
+          "successCriteria": [
+            "Customer pain is named clearly",
+            "Value is tied to customer outcomes",
+            "Next commercial step is clear"
+          ],
+          "recommendedNarratives": [
+            "persuasive-sales",
+            "problem-solution",
+            "challenge-resolution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "commercial"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#FAF3DD",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "montserrat": {
+          "name": "Montserrat",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Montserrat",
+          "minor": "Montserrat",
+          "textSample": "This is beautiful",
+          "type": "sans-serif",
+          "description": "Montserrat is a sans serif OPF font scheme for Latin presentations, using Montserrat for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
     }
   }
 }

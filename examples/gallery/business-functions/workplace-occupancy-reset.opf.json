@@ -3,16 +3,16 @@
   "name": "Workplace Occupancy Reset",
   "description": "Workplace Occupancy Reset is a fictional OPF example for facilities teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "workplace-occupancy-reset",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "customer",
+    "media",
     {
-      "id": "marketing",
+      "id": "technical",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "challenge-resolution"
+        "underdog-victory"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "challenge-resolution",
+  "narrative": "underdog-victory",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -69,7 +69,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "top",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -94,10 +94,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -132,7 +128,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -340,6 +336,487 @@
       "density": "medium",
       "scenario": "workplace-occupancy-reset",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "underdog-victory": {
+          "name": "Underdog Victory",
+          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
+          "audienceFit": [
+            "general-audience",
+            "internal-teams",
+            "candidates"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "storytelling",
+            "inspirational",
+            "founder",
+            "team"
+          ],
+          "beats": [
+            {
+              "id": "origin",
+              "name": "Origin",
+              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
+              "instructions": "Establish opening scene",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
+              "instructions": "Highlight initial setbacks",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "determination",
+              "name": "Determination",
+              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
+              "instructions": "Showcase enduring passion",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "crisis",
+              "name": "Crisis",
+              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+              "instructions": "Identify lowest point",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "resolve",
+              "name": "Resolve",
+              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
+              "instructions": "Articulate strong will",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
+              "instructions": "Reward of perseverance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "triumph",
+              "name": "Triumph",
+              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+              "instructions": "Reveal ultimate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
+              "layout": "title",
+              "instructions": "Share long-lasting impact",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        },
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        }
+      },
+      "purposes": {
+        "report": {
+          "name": "Report",
+          "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+          "description": "Use for business reviews, project updates, research summaries, and recurring operating cadences. Prioritize the metric, the movement, the reason, and the implication.",
+          "outcome": "The audience understands what happened, why it happened, and what it means.",
+          "successCriteria": [
+            "Key metrics are easy to scan",
+            "Variance and drivers are explained",
+            "Implications are explicit"
+          ],
+          "recommendedNarratives": [
+            "qbr",
+            "business-review",
+            "status-update",
+            "survey-analysis"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical"
+          ],
+          "tags": [
+            "performance",
+            "progress",
+            "findings"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "bold-red": {
+          "name": "Bold Red",
+          "accent1": "#A41410",
+          "accent2": "#2693A1",
+          "accent3": "#EFA517",
+          "accent4": "#E86D1F",
+          "accent5": "#324472",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#232323",
+          "followedHyperlink": "#2693A1",
+          "hyperlink": "#324472",
+          "light1": "#FFFFFF",
+          "light2": "#DCDCDC",
+          "summary": "Confident red and teal accents for urgent, high-salience stories.",
+          "description": "A bold red-led scheme with teal and navy support. Use it when the deck needs urgency, contrast, and clear emphasis.",
+          "tags": [
+            "bold",
+            "urgent",
+            "energetic",
+            "decisive",
+            "impactful"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-bengali": {
+          "name": "Noto Sans Bengali",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "bn",
+            "ctg"
+          ],
+          "major": "Noto Sans Bengali",
+          "minor": "Noto Sans Bengali",
+          "textSample": "এটা সুন্দর বই",
+          "type": "sans-serif",
+          "description": "Noto Sans Bengali is a sans serif OPF font scheme for complex script presentations, using Noto Sans Bengali for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

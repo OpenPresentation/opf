@@ -13,6 +13,7 @@ import {
 } from "../dist/examples.js";
 import { docs, getDoc } from "../dist/docs.js";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
+import { defaultCatalog } from './support/catalog.mjs';
 
 describe("example catalog sanity", () => {
   test("has at least one example", () => {
@@ -30,28 +31,23 @@ describe("example catalog sanity", () => {
 
 describe("every bundled example validates cleanly", () => {
   for (const example of examples) {
-    test(`example '${example.slug}' has the expected shape and validates without warnings`, () => {
+    test(`example '${example.slug}' has the expected shape and validates without warnings, with no catalog registered`, () => {
       assert.equal(typeof example.slug, "string");
       assert.ok(example.file.startsWith("examples/"));
       assert.equal(typeof example.category, "string");
       assert.ok(example.deck && typeof example.deck === "object");
-      const result = check(example.deck, { only: ['format', 'references'] });
+      // OPF 0.15 (FA-21): an example embeds every record it uses, so it resolves with no catalog registered.
+      const result = check(example.deck, { only: ['format', 'references'], catalogs: [] });
       assert.equal(
         result.valid,
         true,
         `Example ${example.slug} failed validation: ${JSON.stringify(errorsOf(result), null, 2)}`,
       );
-      // The published example corpus is pinned by the renderer golden baseline,
-      // so examples still referencing FF-22 deprecated chart types migrate with
-      // the coordinated 0.12.0 removal (docs/migrations/0.12.0.md). Until then
-      // only deprecation warnings that name a replacement are tolerated.
-      const unexpected = warningsOf(result).filter(
-        (warning) => !(warning.ruleId === "opf/deprecated-catalog-id" && warning.validation?.params?.kind === "chartTypes"),
-      );
+      const unexpected = warningsOf(result);
       assert.equal(
         unexpected.length,
         0,
-        `Example ${example.slug} references unknown catalog ids: ${JSON.stringify(unexpected, null, 2)}`,
+        `Example ${example.slug} has references that resolve nowhere: ${JSON.stringify(unexpected, null, 2)}`,
       );
     });
   }
@@ -135,7 +131,8 @@ describe("fenced JSON presentation examples embedded in docs", () => {
 
   for (const { doc, parsed, blockIndex } of fencedPresentationExamples) {
     test(`doc '${doc.slug}' fenced JSON example #${blockIndex} validates cleanly`, () => {
-      const result = check(parsed, { only: ['format', 'references'] });
+      // A doc snippet names gallery records without embedding them; the host registers the default catalog.
+      const result = check(parsed, { only: ['format', 'references'], catalogs: [defaultCatalog] });
       assert.equal(
         result.valid,
         true,
@@ -146,7 +143,7 @@ describe("fenced JSON presentation examples embedded in docs", () => {
       assert.equal(
         unexpected.length,
         0,
-        `doc ${doc.slug} example references unknown catalog ids: ${JSON.stringify(unexpected, null, 2)}`,
+        `doc ${doc.slug} example has references that resolve nowhere: ${JSON.stringify(unexpected, null, 2)}`,
       );
     });
   }

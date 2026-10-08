@@ -21,6 +21,7 @@ import {
 } from "./io.js";
 import { type Diagnostic, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
+import { CLI_CATALOGS } from "./catalogs.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
@@ -163,7 +164,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	let pagination: Record<string, unknown> | undefined;
 	if (options.paginate) {
 		try {
-			const result = paginate(deck, { fonts: fonts.handle as Fonts });
+			const result = paginate(deck, { fonts: fonts.handle as Fonts, catalogs: CLI_CATALOGS });
 			deck = result.presentation;
 			pagination = { pages: result.pages };
 		} catch (error) {
@@ -213,6 +214,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		fonts: { textMeasurement: fonts.handle.textMeasurement, embeddedFonts: embedded },
 		imageResolver: resolver.forSvg,
 		onDiagnostic: onRender,
+		catalogs: CLI_CATALOGS,
 		...(date ? { date } : {}),
 	});
 
@@ -227,6 +229,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 				svgRasterizer: async (svg: string, size: { scale: number; text: boolean }) =>
 					new Uint8Array(await renderer.render.module.svgToPng(svg, { scale: size.scale, background: "rgba(0, 0, 0, 0)", fonts: size.text ? fonts.handle : NO_FONTS })),
 				onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pptx", diagnostic),
+				catalogs: CLI_CATALOGS,
 				...(chartex ? { chartex } : {}),
 				...(provenance ? { provenance: provenance === "none" ? false : provenance } : {}),
 				...(imageFormat ? { imageFormat } : {}),

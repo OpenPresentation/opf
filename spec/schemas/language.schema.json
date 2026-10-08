@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-language/v1",
   "title": "Language",
-  "description": "Schema for language records in the pptx.gallery library. Each record names a presentation language, carries a BCP-47 language tag, and pairs it with sensible default font schemes for PowerPoint and Google Slides output. Languages are referenced from OPF documents via language; the engine resolves the reference against catalogs.languages (inline) → catalogs.languages.source → the default catalog at https://www.pptx.gallery/languages. The presentation language field also accepts BCP-47 tags directly or inline Language objects for engine-aware language records that carry default-font hints.",
+  "description": "Schema for language records: display metadata for the language pickers of authoring tools (name, ISO code, the default font schemes a picker suggests). The document's 'language' is an engine vocabulary, a BCP-47 tag validated directly; engines never look a language record up, and their script, direction, OOXML tag and default script fonts come from spec/reference/engine-vocabularies.json. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.languages.",
   "type": "object",
   "required": [
     "$schema",
@@ -19,7 +19,7 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this language via language. Lowercase kebab-case.",
+      "description": "The record's id in the gallery's language catalog, lowercase kebab-case. Documents name a language by its BCP-47 tag ('bcp47'), never by this id.",
       "examples": [
         "english",
         "spanish",
@@ -36,27 +36,6 @@
         "Japanese",
         "Chinese (simplified)"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this language is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated language record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "code": {
       "type": "string",
@@ -83,23 +62,23 @@
     },
     "ooxmlLang": {
       "type": "string",
-      "description": "Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engines emit it instead of 'bcp47' when the document names the language by catalog id or by a tag without a region; a region-bearing tag written by the author is emitted as written. Curated rather than inferred so output does not depend on the runtime's locale data.",
+      "description": "Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engines emit it instead of 'bcp47' for a tag without a region; a region-bearing tag written by the author is emitted as written. Display metadata here: engines take the curated tag from their language vocabulary. Curated rather than inferred so output does not depend on the runtime's locale data.",
       "examples": ["en-US", "ja-JP", "ar-SA", "ms-MY", "nb-NO", "zh-CN"]
     },
     "direction": {
       "type": "string",
       "enum": ["ltr", "rtl"],
-      "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. Bundled language records state it explicitly.",
+      "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows.",
       "examples": ["ltr", "rtl"]
     },
     "script": {
       "type": "string",
-      "description": "ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsian slot; complex scripts (for example Arab, Hebr, Syrc, Thaa, Deva, Beng, Guru, Gujr, Orya, Taml, Telu, Knda, Mlym, Sinh, Thai, Laoo, Tibt, Mymr, Khmr, Mong) use the complexScript slot; every other script (Latn, Cyrl, Grek, Armn, Geor, Ethi, ...) uses the latin slot. When omitted, engines infer it from the BCP-47 tag. Bundled language records state it explicitly. See docs/programs/font-fidelity-everywhere/script-font-model.md.",
+      "description": "ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsian slot; complex scripts (for example Arab, Hebr, Syrc, Thaa, Deva, Beng, Guru, Gujr, Orya, Taml, Telu, Knda, Mlym, Sinh, Thai, Laoo, Tibt, Mymr, Khmr, Mong) use the complexScript slot; every other script (Latn, Cyrl, Grek, Armn, Geor, Ethi, ...) uses the latin slot. When omitted, engines infer it from the BCP-47 tag. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows. See docs/programs/font-fidelity-everywhere/script-font-model.md.",
       "examples": ["Latn", "Cyrl", "Grek", "Arab", "Hebr", "Jpan", "Kore", "Hans", "Hant", "Deva", "Thai"]
     },
     "fontScheme": {
       "type": "string",
-      "description": "Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script') unless the effective design font scheme sets that slot itself; the latin slot always follows the design font scheme.",
+      "description": "The font-scheme id a picker suggests for this language when targeting PowerPoint output. Display metadata: engines take a language's default script fonts from their own vocabulary.",
       "examples": [
         "aptos",
         "microsoft-yahei",
@@ -108,7 +87,7 @@
     },
     "googleFontScheme": {
       "type": "string",
-      "description": "Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resolving script fonts for Google Slides output.",
+      "description": "The font-scheme id a picker suggests for this language when targeting Google Slides output. Display metadata.",
       "examples": [
         "roboto",
         "noto-sans",

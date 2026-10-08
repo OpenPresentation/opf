@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Image treatments reference",
-  "description": "One slide per pptx.gallery image treatment, expressed with the design.slideImage treatment vocabulary. See docs/image-treatments.md for support status and gaps.",
+  "description": "One slide per pptx.gallery image treatment, expressed with 0.15 image backgrounds and image blocks (fit, treatments and placement). See docs/image-treatments.md for support status and gaps.",
   "assets": {
     "hero": {
       "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABkBAMAAADzmCa8AAAAMFBMVEU2hqFVaY82aKFyZ35ThpAhWFfwvjw3WEqTZmpMWD1uiYBfWDGseFuwZFiXjGeyi1fEUblAAAAACXBIWXMAAAPoAAAD6AG1e1JrAAABR0lEQVRYw+3QwU3EMBCF4W1hRQXQAhLiipQTd0QHFieuiA72EAqggRzmQAO04NVWQAeRKcFskjXJjAcF24PwYf4CPs2bzQXpfIu7JF3vcC8fuE0puFNQQQUlwK2CCip4zO5lwdZaWz+4JFNBM/aweOHUPhM0hoo2lAUaE4nf4OnIJPBqBo0EuPSC2FqLyVXwjBs8j0bg8MgEEB94OtHS/hMk3rS5AKQHjie20qBdB5umQSDAD4vHzQxIa0I3ARz6AzBePGxOAacg1DGgc/WDvTRITzz46sCeeLKg9+WgI1452GOvZtALgQ57vwch9h7dfKKXBQ8+A+z4xYng7TroFnuTQOAXH0/0mWDHH+g+qwGBX1wAduyBBSASnQQIzOAyEBivDITYSwMh6s3RFFRQwQzwjuv+ien5Ne49SkEFFVRQQQUVrAf8AtnA+Gh85eJ6AAAAAElFTkSuQmCC",
@@ -18,10 +18,9 @@
       "title": "Full-Bleed",
       "subtitle": "pptx.gallery image-treatments/full-bleed",
       "design": {
-        "slideImage": {
+        "background": {
+          "type": "image",
           "src": "asset:hero",
-          "position": "background",
-          "fill": "crop",
           "overlay": {
             "color": "dark1",
             "opacity": 0.2
@@ -34,10 +33,9 @@
       "title": "Text Overlay",
       "subtitle": "pptx.gallery image-treatments/text-overlay",
       "design": {
-        "slideImage": {
+        "background": {
+          "type": "image",
           "src": "asset:hero",
-          "position": "background",
-          "fill": "crop",
           "overlay": {
             "color": "dark1",
             "opacity": 0.55
@@ -49,25 +47,25 @@
       "id": "side-by-side",
       "title": "Side-by-Side",
       "subtitle": "pptx.gallery image-treatments/side-by-side",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "left",
-          "size": 0.46,
-          "fill": "crop"
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
+          "placement": {
+            "edge": "left",
+            "size": 0.46
+          }
         }
-      }
+      ]
     },
     {
       "id": "caption-overlay",
       "title": "Caption Overlay",
       "subtitle": "pptx.gallery image-treatments/caption-overlay",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "background",
-          "inset": true,
-          "fill": "crop",
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
           "overlay": {
             "color": "dark1",
             "opacity": 0.75,
@@ -75,66 +73,67 @@
             "size": 0.25
           }
         }
-      }
+      ]
     },
     {
       "id": "masked-shape",
       "title": "Masked Shape",
       "subtitle": "pptx.gallery image-treatments/masked-shape",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "right",
-          "inset": true,
-          "shape": "hexagon",
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
           "aspectRatio": 1.1547,
-          "fill": "crop"
+          "shape": "hexagon",
+          "placement": {
+            "edge": "right",
+            "inset": true
+          }
         }
-      }
+      ]
     },
     {
       "id": "circular-crop",
       "title": "Circular Crop",
       "subtitle": "pptx.gallery image-treatments/circular-crop",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "left",
-          "size": 0.4,
-          "inset": true,
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
           "shape": "circle",
-          "fill": "crop"
+          "placement": {
+            "edge": "left",
+            "size": 0.4,
+            "inset": true
+          }
         }
-      }
+      ]
     },
     {
       "id": "rounded-card",
       "title": "Rounded Card",
       "subtitle": "pptx.gallery image-treatments/rounded-card",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "background",
-          "inset": true,
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
           "shape": "rounded",
           "cornerRadius": 0.05,
-          "fill": "crop",
           "border": {
             "color": "accent5",
             "width": 1
           }
         }
-      }
+      ]
     },
     {
       "id": "duotone",
       "title": "Duotone",
       "subtitle": "pptx.gallery image-treatments/duotone",
       "design": {
-        "slideImage": {
+        "background": {
+          "type": "image",
           "src": "asset:hero",
-          "position": "background",
-          "fill": "crop",
           "recolor": {
             "dark": "accent1",
             "light": "light1"
@@ -148,10 +147,9 @@
       "subtitle": "pptx.gallery image-treatments/background-blur",
       "design": {
         "contentBox": true,
-        "slideImage": {
+        "background": {
+          "type": "image",
           "src": "asset:hero",
-          "position": "background",
-          "fill": "crop",
           "overlay": {
             "color": "light1",
             "opacity": 0.4
@@ -163,20 +161,22 @@
       "id": "image-strip",
       "title": "Image Strip",
       "subtitle": "pptx.gallery image-treatments/image-strip",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "bottom",
-          "size": 0.3,
-          "fill": "crop"
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
+          "placement": {
+            "edge": "bottom",
+            "size": 0.3
+          }
         }
-      }
+      ]
     },
     {
       "id": "collage-grid",
       "title": "Collage Grid",
       "design": {
-        "imageFill": "crop"
+        "imageFit": "cover"
       },
       "composition": {
         "mode": "grid",
@@ -201,62 +201,122 @@
       "id": "device-frame",
       "title": "Device Frame",
       "subtitle": "pptx.gallery image-treatments/device-frame",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "right",
-          "inset": true,
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
           "aspectRatio": 0.5,
           "shape": "rounded",
           "cornerRadius": 0.12,
-          "fill": "crop",
           "border": {
             "color": "dark1",
             "width": 12
+          },
+          "placement": {
+            "edge": "right",
+            "inset": true
           }
         }
-      }
+      ]
     },
     {
       "id": "cutout-subject",
       "title": "Cutout Subject",
       "subtitle": "pptx.gallery image-treatments/cutout-subject",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "right",
-          "fill": "fit"
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "contain",
+          "placement": {
+            "edge": "right"
+          }
         }
-      }
+      ]
     },
     {
       "id": "watermark",
       "title": "Watermark",
       "subtitle": "pptx.gallery image-treatments/watermark",
-      "design": {
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "background",
-          "inset": true,
-          "fill": "fit",
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "contain",
           "opacity": 0.1,
           "recolor": "grayscale"
         }
-      }
+      ]
     },
     {
       "id": "cinematic-crop",
       "title": "Cinematic Crop",
       "subtitle": "pptx.gallery image-treatments/cinematic-crop",
+      "blocks": [
+        {
+          "image": "asset:hero",
+          "fit": "cover",
+          "aspectRatio": 2.39
+        }
+      ],
       "design": {
-        "background": "dark1",
-        "slideImage": {
-          "src": "asset:hero",
-          "position": "background",
-          "aspectRatio": 2.39,
-          "fill": "crop"
+        "background": "dark1"
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
         }
       }
     }
-  ]
+  }
 }

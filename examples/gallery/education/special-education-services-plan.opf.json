@@ -1,12 +1,12 @@
 {
   "name": "Special Education Services Plan",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "board"
+    "regulatory"
   ],
   "purpose": "report",
   "tone": "persuasive",
-  "narrative": "problem-solution",
+  "narrative": "failure-analysis",
   "design": {
     "theme": "classic",
     "colorScheme": "corporate-blue",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-bar",
+        "type": "combo",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,411 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "failure-analysis": {
+          "name": "Failure Analysis",
+          "summary": "Walk through what went wrong, why, and what changes — a structured post-mortem for stakeholder reviews. Pairs honest accountability with a credible recovery plan.",
+          "audienceFit": [
+            "leadership",
+            "customers",
+            "stakeholders",
+            "partners"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "postmortem",
+            "incident",
+            "review",
+            "accountability"
+          ],
+          "beats": [
+            {
+              "id": "opening-remark",
+              "name": "Opening Remark",
+              "description": "Set an empathetic, accountable tone before any analysis. Acknowledge the impact on the people in the room and the customers affected. Authenticity here earns you the credibility you'll need for the rest of the deck.",
+              "instructions": "Set an empathetic tone",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "incident-breakdown",
+              "name": "Incident Breakdown",
+              "description": "Walk through what happened, in time order. Stick to facts: what systems, what users, what timeline. No causal claims yet — just an accurate, neutral reconstruction the audience can trust.",
+              "instructions": "Detail the failure",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "impact-analysis",
+              "name": "Impact Analysis",
+              "description": "Quantify the damage. Customer-hours lost, revenue at risk, SLA breaches, downstream knock-ons. Be specific and direct; vague impact statements undermine the rest of the post-mortem.",
+              "instructions": "Describe failure's effects",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "root-cause",
+              "name": "Root Cause",
+              "description": "Trace the failure to its underlying cause, not the most visible symptom. Use a 'five whys' or fishbone framing if useful. Distinguish between the proximate trigger and the systemic conditions that allowed it.",
+              "instructions": "Analyze underlying reasons",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "proposed-solutions",
+              "name": "Proposed Solutions",
+              "description": "Present the corrective actions you're taking. Lead with the highest-leverage fix; sequence the rest. For each action, name an owner and a date — solutions without owners are aspirations.",
+              "instructions": "Suggest corrective measures",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Lay out the rollout: what ships when, how it's verified, who signs off. Show that 'fixed' has a definition and a deadline, not just intent.",
+              "instructions": "Map out steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "evaluate-outcome",
+              "name": "Evaluate Outcome",
+              "description": "Define the metrics that will tell you the fix worked. Pre/post comparisons, monitoring SLOs, error budgets — whatever proves the failure mode is closed and not just deferred.",
+              "instructions": "Assess corrective actions",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "lessons-learned",
+              "name": "Lessons Learned",
+              "description": "Distill the broader lessons that outlive this specific incident. What does the team or organization now know that it didn't before? What patterns will you watch for elsewhere?",
+              "instructions": "Reflect on failure lessons",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "preventive-measures",
+              "name": "Preventive Measures",
+              "description": "List the systemic safeguards being added — process changes, automated checks, on-call procedures, review gates. Show how this category of failure becomes harder to recur, not just this specific instance.",
+              "instructions": "List safeguards",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-thoughts",
+              "name": "Closing Thoughts",
+              "description": "Close with humility and forward momentum. Re-affirm accountability, thank the audience for their patience, and signal confidence in the path forward without overclaiming.",
+              "layout": "title",
+              "instructions": "Empathize, trust, and encourage",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
+          ]
+        }
+      },
+      "purposes": {
+        "report": {
+          "name": "Report",
+          "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+          "description": "Use for business reviews, project updates, research summaries, and recurring operating cadences. Prioritize the metric, the movement, the reason, and the implication.",
+          "outcome": "The audience understands what happened, why it happened, and what it means.",
+          "successCriteria": [
+            "Key metrics are easy to scan",
+            "Variance and drivers are explained",
+            "Implications are explicit"
+          ],
+          "recommendedNarratives": [
+            "qbr",
+            "business-review",
+            "status-update",
+            "survey-analysis"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical"
+          ],
+          "tags": [
+            "performance",
+            "progress",
+            "findings"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-thai": {
+          "name": "Noto Sans Thai",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "th"
+          ],
+          "major": "Noto Sans Thai",
+          "minor": "Noto Sans Thai",
+          "textSample": "นี่คือสวยงาม",
+          "type": "sans-serif",
+          "description": "Noto Sans Thai is a sans serif OPF font scheme for complex script presentations, using Noto Sans Thai for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
+    }
+  }
 }

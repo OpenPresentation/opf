@@ -1,12 +1,12 @@
 {
   "name": "STEM Lab Funding Proposal",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "board"
+    "candidates"
   ],
   "purpose": "plan",
   "tone": "conversational",
-  "narrative": "focus",
+  "narrative": "capacity-planning",
   "design": {
     "theme": "minimal",
     "colorScheme": "luxury",
@@ -18,7 +18,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar-with-markers",
+        "type": "treemap",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,389 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "capacity-planning": {
+          "name": "Capacity Planning",
+          "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
+          "audienceFit": [
+            "leadership",
+            "operations",
+            "hr-partners",
+            "finance"
+          ],
+          "duration": {
+            "min": 20,
+            "max": 45
+          },
+          "tags": [
+            "workforce",
+            "operations",
+            "planning",
+            "resource-management"
+          ],
+          "beats": [
+            {
+              "id": "kickoff",
+              "name": "Kickoff",
+              "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
+              "layout": "title",
+              "instructions": "Introduce the topic",
+              "type": "text"
+            },
+            {
+              "id": "urgency",
+              "name": "Urgency",
+              "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
+              "instructions": "Show needs",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
+              "instructions": "Highlight current resources",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "projection",
+              "name": "Projection",
+              "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
+              "instructions": "Predict future demands",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "tactics",
+              "name": "Tactics",
+              "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
+              "instructions": "Suggest coping strategies",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "implementation",
+              "name": "Implementation",
+              "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
+              "instructions": "Discuss deployment plans",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "revision",
+              "name": "Revision",
+              "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
+              "instructions": "Evaluate and adjust",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
+              "layout": "title",
+              "instructions": "Wrap-up & recommendations",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "luxury": {
+          "name": "Luxury",
+          "accent1": "#997929",
+          "accent2": "#C15937",
+          "accent3": "#951233",
+          "accent4": "#1D483F",
+          "accent5": "#4B6977",
+          "accent6": "#639391",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "Muted metallic and deep tones for premium, high-stakes decks.",
+          "description": "A restrained luxury palette with gold, terracotta, dark green, and blue-gray support for premium narratives.",
+          "tags": [
+            "luxury",
+            "premium",
+            "sophisticated",
+            "grounded",
+            "exclusive"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-kannada": {
+          "name": "Noto Sans Kannada",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "kn"
+          ],
+          "major": "Noto Sans Kannada",
+          "minor": "Noto Sans Kannada",
+          "textSample": "ಇದು ಸುಂದರ ಪುಸ್ತಕ",
+          "type": "sans-serif",
+          "description": "Noto Sans Kannada is a sans serif OPF font scheme for complex script presentations, using Noto Sans Kannada for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
+    }
+  }
 }

@@ -3,16 +3,16 @@
   "name": "Transit Corridor Alternatives",
   "description": "Transit Corridor Alternatives is a fictional OPF example for transportation teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "transit-corridor-alternatives",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "marketing",
+    "candidates",
     {
-      "id": "board",
+      "id": "general-public",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "scqa"
+        "marketing-strategy"
       ],
       "recommendedTones": [
         "inspirational"
@@ -69,7 +69,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "right",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -94,10 +94,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -132,7 +128,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-line-with-markers",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -302,7 +298,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar",
+            "type": "stacked-line",
             "data": {
               "columns": [
                 "Quarter",
@@ -495,15 +491,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "transit-corridor-alternatives-arc",
+    "custom": {
+      "narratives": {
+        "transit-corridor-alternatives-arc": {
           "name": "Transportation Decision Arc",
           "summary": "A custom arc for Metro Transit Authority.",
           "description": "Transit Corridor Alternatives uses a compact evidence-to-decision arc for Metro Transit Authority.",
@@ -528,13 +518,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "metro-transit-authority-theme",
+      },
+      "themes": {
+        "metro-transit-authority-theme": {
           "name": "Metro Transit Authority Working Theme",
           "colorScheme": "slate-gray",
           "fontScheme": "raavi",
@@ -547,14 +533,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "metro-transit-authority-signal",
+      },
+      "colorSchemes": {
+        "metro-transit-authority-signal": {
           "name": "Metro Transit Authority Signal Palette",
           "accent1": "#F8FAFC",
           "accent2": "#E2E8F0",
@@ -569,31 +550,519 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        },
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "slate-gray": {
+          "name": "Slate Gray",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#1B1B1B",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#F8F8F8",
+          "summary": "Neutral gray palette for understated executive communication.",
+          "description": "A disciplined gray scale with strong neutral contrast. Use it when the content should feel calm, mature, and analytical.",
+          "tags": [
+            "neutral",
+            "minimal",
+            "mature",
+            "analytical",
+            "restrained"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "raavi": {
+          "name": "Raavi",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "pa-Guru"
+          ],
+          "major": "Raavi",
+          "minor": "Raavi",
+          "textSample": "ਇਹ ਰਾਵੀ ਫੌਂਟ ਵਿੱਚ ਲਿਖਿਆ ਗਿਆ ਹੈ",
+          "type": "sans-serif",
+          "description": "Raavi is a sans serif OPF font scheme for complex script presentations, using Raavi for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "number-2x": {
+          "name": "Number 2x",
+          "summary": "Reach for it when two figures belong together, such as a before and an after or a target and an actual.",
+          "description": "A title above two metrics side by side. Use it to pair two headline numbers, a baseline with its result, or two measures that explain each other.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-2x.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "media-1x": {
+          "name": "Media 1x",
+          "summary": "Reach for it when a video is the content and a short note frames it.",
+          "description": "A title above one video with a text block beside it. Use it for a product demo, a customer clip or a recording the audience should watch.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "video"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Video",
+            "Demo",
+            "Showcase"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/media-1x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-5x": {
+          "name": "List 5x",
+          "summary": "Reach for it when five groups of points need parallel lists on one slide.",
+          "description": "A title above five lists in a three-column grid. Use it for five categories, stages or capabilities when each has only a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x.svg"
+          }
+        }
+      }
     }
   }
 }

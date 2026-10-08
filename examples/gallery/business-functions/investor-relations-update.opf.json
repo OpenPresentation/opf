@@ -3,16 +3,16 @@
   "name": "Investor Relations Update",
   "description": "Investor Relations Update is a fictional OPF example for investor relations teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "investor-relations-update",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "sales",
+    "all-hands",
     {
-      "id": "customer",
+      "id": "engineering-team",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "employee-review"
+        "business-narrative"
       ],
       "recommendedTones": [
         "authoritative"
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "bottom",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -91,10 +91,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [
@@ -129,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "pie",
+        "type": "stacked-line",
         "data": {
           "columns": [
             "Quarter",
@@ -299,7 +295,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -497,15 +493,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "investor-relations-update-arc",
+    "custom": {
+      "narratives": {
+        "investor-relations-update-arc": {
           "name": "Investor Relations Decision Arc",
           "summary": "A custom arc for Asteria Robotics.",
           "description": "Investor Relations Update uses a compact evidence-to-decision arc for Asteria Robotics.",
@@ -530,13 +520,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "asteria-robotics-theme",
+      },
+      "themes": {
+        "asteria-robotics-theme": {
           "name": "Asteria Robotics Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "noto-sans-hebrew",
@@ -549,14 +535,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "asteria-robotics-signal",
+      },
+      "colorSchemes": {
+        "asteria-robotics-signal": {
           "name": "Asteria Robotics Signal Palette",
           "accent1": "#047857",
           "accent2": "#B45309",
@@ -571,31 +552,532 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "inspirational",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "company-wide"
+          ]
+        },
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#FAF3DD",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-hebrew": {
+          "name": "Noto Sans Hebrew",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "he"
+          ],
+          "major": "Noto Sans Hebrew",
+          "minor": "Noto Sans Hebrew",
+          "textSample": "זה ספר יפהפה",
+          "type": "sans-serif",
+          "description": "Noto Sans Hebrew is a sans serif OPF font scheme for complex script presentations, using Noto Sans Hebrew for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "number-2x": {
+          "name": "Number 2x",
+          "summary": "Reach for it when two figures belong together, such as a before and an after or a target and an actual.",
+          "description": "A title above two metrics side by side. Use it to pair two headline numbers, a baseline with its result, or two measures that explain each other.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-2x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        },
+        "media-1x": {
+          "name": "Media 1x",
+          "summary": "Reach for it when a video is the content and a short note frames it.",
+          "description": "A title above one video with a text block beside it. Use it for a product demo, a customer clip or a recording the audience should watch.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "video"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Video",
+            "Demo",
+            "Showcase"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/media-1x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-5x": {
+          "name": "List 5x",
+          "summary": "Reach for it when five groups of points need parallel lists on one slide.",
+          "description": "A title above five lists in a three-column grid. Use it for five categories, stages or capabilities when each has only a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x.svg"
+          }
+        }
+      }
     }
   }
 }

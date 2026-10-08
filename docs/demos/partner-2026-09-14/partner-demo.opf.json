@@ -127,5 +127,120 @@
       ],
       "notes": "This is a proposed next step, not a committed schedule or a claim of measured savings."
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "deep-purple": {
+          "name": "Deep Purple",
+          "accent1": "#6A1B9A",
+          "accent2": "#7B1FA2",
+          "accent3": "#8E24AA",
+          "accent4": "#9C27B0",
+          "accent5": "#AB47BC",
+          "accent6": "#4A148C",
+          "dark1": "#000000",
+          "dark2": "#2B0B3E",
+          "followedHyperlink": "#6A1B9A",
+          "hyperlink": "#4A148C",
+          "light1": "#FFFFFF",
+          "light2": "#F8F2FC",
+          "summary": "Purple-led palette for innovation and premium positioning.",
+          "description": "A focused purple palette for decks that need to feel creative, distinctive, and premium.",
+          "tags": [
+            "innovative",
+            "creative",
+            "premium",
+            "distinctive",
+            "modern"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        }
+      }
+    }
+  }
 }

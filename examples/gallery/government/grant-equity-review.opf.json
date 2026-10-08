@@ -1,12 +1,12 @@
 {
   "name": "Grant Equity Review",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "board"
+    "general-public"
   ],
   "purpose": "sell",
   "tone": "casual",
-  "narrative": "survey-analysis",
+  "narrative": "persuasive-sales",
   "design": {
     "theme": "minimal",
     "colorScheme": "bold-red",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap",
+        "type": "radar-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,416 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "persuasive-sales": {
+          "name": "Persuasive Sales",
+          "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
+          "audienceFit": [
+            "prospects",
+            "customers",
+            "buyers"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "sales",
+            "go-to-market",
+            "outbound",
+            "discovery"
+          ],
+          "beats": [
+            {
+              "id": "intro",
+              "name": "Introduction",
+              "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
+              "instructions": "Name & logo",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "big-change",
+              "name": "Big Change",
+              "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
+              "instructions": "Highlight market shift",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "response-to-change",
+              "name": "Winners and Losers",
+              "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
+              "instructions": "Show winners & losers",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "benefits",
+              "name": "Benefits",
+              "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
+              "instructions": "Describe benefits, paint a vivid picture",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "capabilities",
+              "name": "Capabilities",
+              "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
+              "instructions": "Present unique features as 'magic gifts' to the customer",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
+              "instructions": "Share testimonials",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
+              "layout": "title",
+              "instructions": "Encourage decision-making",
+              "type": "text"
+            },
+            {
+              "id": "close",
+              "name": "Close",
+              "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
+              "layout": "title",
+              "instructions": "Logo & contact info",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        }
+      },
+      "purposes": {
+        "sell": {
+          "name": "Sell",
+          "summary": "Move a buyer or evaluator toward purchase, adoption, renewal, or expansion.",
+          "description": "Use for customer-facing decks where the goal is commercial movement. Focus on pain, value, proof, differentiation, and the next buying step.",
+          "outcome": "The buyer advances to the next step in the commercial process.",
+          "successCriteria": [
+            "Customer pain is named clearly",
+            "Value is tied to customer outcomes",
+            "Next commercial step is clear"
+          ],
+          "recommendedNarratives": [
+            "persuasive-sales",
+            "problem-solution",
+            "challenge-resolution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "commercial"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "bold-red": {
+          "name": "Bold Red",
+          "accent1": "#A41410",
+          "accent2": "#2693A1",
+          "accent3": "#EFA517",
+          "accent4": "#E86D1F",
+          "accent5": "#324472",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#232323",
+          "followedHyperlink": "#2693A1",
+          "hyperlink": "#324472",
+          "light1": "#FFFFFF",
+          "light2": "#DCDCDC",
+          "summary": "Confident red and teal accents for urgent, high-salience stories.",
+          "description": "A bold red-led scheme with teal and navy support. Use it when the deck needs urgency, contrast, and clear emphasis.",
+          "tags": [
+            "bold",
+            "urgent",
+            "energetic",
+            "decisive",
+            "impactful"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "sakkal-majalla": {
+          "name": "Sakkal Majalla",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "ar",
+            "ur",
+            "fa"
+          ],
+          "major": "Sakkal Majalla",
+          "minor": "Sakkal Majalla",
+          "textSample": "هذا كتاب رائع",
+          "type": "sans-serif",
+          "description": "Sakkal Majalla is a sans serif OPF font scheme for complex script presentations, using Sakkal Majalla for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
+    }
+  }
 }

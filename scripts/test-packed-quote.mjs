@@ -5,9 +5,11 @@ import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation,renderSlideSvg} from '@openpresentation/opf-render/svg';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const fonts=await loadFonts();
-const options={fonts};
+// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme); a 0.14 core has no /catalog.
+const host=await import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({}));
+const options={...host,fonts};
 const source={design:{fontScheme:'roboto'},slides:[{title:'Installed quote',quote:{text:'Retain the selected source.',attribution:'Reviewer',source:'Recorded interview'}}]};
-const editor=createEditorSession(source);
+const editor=createEditorSession(source,host);
 const before=editor.presentation;
 assert.ok(editor.paginateSlide(0,options).change,'A single-page readability policy must be committed');
 const accepted=editor.presentation;

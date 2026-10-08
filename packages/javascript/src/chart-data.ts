@@ -434,7 +434,7 @@ export function unusedDatasets(document: unknown): string[] {
 // ---------------------------------------------------------------------------------------------------------------
 // Charts
 
-/** True for a chart type with an X value axis (scatter; deprecated ids resolve through their replacement first). */
+/** True for a chart type with an X value axis (scatter). */
 export function isXYChartType(type: unknown): boolean {
   return chartOptionTarget(type)?.kind === 'scatter';
 }

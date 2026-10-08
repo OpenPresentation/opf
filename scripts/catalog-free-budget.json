@@ -1,0 +1,104 @@
+{
+  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. The catalog entry (@openpresentation/opf/catalog, the full pptx.gallery catalog) is the only one that carries catalog data. `measured` is the size when it was last updated.",
+  "entries": {
+    "catalog": 104506,
+    "composition": 64765,
+    "convert": 226064,
+    "data": 8684,
+    "diff": 6223,
+    "font-policy": 15052,
+    "format": 45577,
+    "index": 310098,
+    "markdown": 259131,
+    "pagination": 212712,
+    "patch": 210016,
+    "schemas": 62092,
+    "spec-files": 11314,
+    "symbol-font-encodings": 36084,
+    "types": 21,
+    "validator": 208157,
+    "yaml": 243752
+  },
+  "measured": {
+    "catalog": {
+      "minified": 596384,
+      "gzip": 101462
+    },
+    "composition": {
+      "minified": 186717,
+      "gzip": 62878
+    },
+    "convert": {
+      "minified": 726047,
+      "gzip": 219479
+    },
+    "data": {
+      "minified": 22716,
+      "gzip": 8431
+    },
+    "diff": {
+      "minified": 15709,
+      "gzip": 6041
+    },
+    "docs": {
+      "minified": 1195953,
+      "gzip": 395115
+    },
+    "examples": {
+      "minified": 4038861,
+      "gzip": 2104352
+    },
+    "font-policy": {
+      "minified": 115511,
+      "gzip": 14613
+    },
+    "format": {
+      "minified": 162574,
+      "gzip": 44249
+    },
+    "index": {
+      "minified": 1159964,
+      "gzip": 301066
+    },
+    "markdown": {
+      "minified": 828926,
+      "gzip": 251583
+    },
+    "pagination": {
+      "minified": 686100,
+      "gzip": 206516
+    },
+    "patch": {
+      "minified": 683495,
+      "gzip": 203899
+    },
+    "repo-readme": {
+      "minified": 13576,
+      "gzip": 5151
+    },
+    "schemas": {
+      "minified": 233141,
+      "gzip": 60283
+    },
+    "spec-files": {
+      "minified": 153634,
+      "gzip": 10984
+    },
+    "symbol-font-encodings": {
+      "minified": 170679,
+      "gzip": 35033
+    },
+    "types": {
+      "minified": 0,
+      "gzip": 20
+    },
+    "validator": {
+      "minified": 677467,
+      "gzip": 202094
+    },
+    "yaml": {
+      "minified": 785948,
+      "gzip": 236652
+    }
+  }
+}

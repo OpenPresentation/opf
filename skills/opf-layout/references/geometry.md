@@ -2,7 +2,7 @@
 
 The shared reference coordinates use 96 pixels per inch. Default widescreen dimensions are resolved by the engine; use the resolved dimensions rather than assuming every deck is 1280×720. Composition gap and padding are fractions of the container's shorter edge. Body font minima use reference pixels at a 720-pixel canvas short edge.
 
-Default heading geometry is a reference-engine policy, not extra JSON. Title and subtitle share the padded width of the free area. Cover slides (no body payload on `title`, `title-subtitle`, an all-heading layout or no layout; a root `image` counts as body; empty payloads such as `blocks: []` or `text: ""` do not; whitespace-only text is body) center the tag/title/subtitle group vertically inside the image-safe area between header and footer furniture; wrapping recenters the group and a group that fills the area is not moved. Content slides keep headings at the top. Reuse `item.box` (and accepted internal part boxes, line and outline origins) for preview, selection and export. Do not silently truncate; report overflow.
+Default heading geometry is a reference-engine policy, not extra JSON. Title and subtitle share the padded width of the free area. Cover slides (no body payload on `title`, `title-subtitle`, an all-heading layout or no layout; a flowed image counts as body, a placed image does not; empty payloads such as `blocks: []` or `text: ""` do not; whitespace-only text is body) center the tag/title/subtitle group vertically inside the free area beside any placed image, between header and footer furniture; wrapping recenters the group and a group that fills the area is not moved. Content slides keep headings at the top. Reuse `item.box` (and accepted internal part boxes, line and outline origins) for preview, selection and export. Do not silently truncate; report overflow.
 
 Current bounds: columns 1–12; gap 0–0.1; padding 0–0.2; positive weights up to 100; minFontSize 8–32. Check the installed schema before relying on these bounds. Nesting is bounded at 32 group levels. Groups inherit only readability constraints (`minFontSize`, `overflow`), and a strict ancestor cannot be weakened by a child. Child padding defaults to zero.
 
@@ -29,12 +29,13 @@ For raw geometry, `composeSlide(slide, options)` expects validated input. `resol
 
 ```js
 import { resolveSlideContext } from '@openpresentation/opf';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { composeSlide } from '@openpresentation/opf/composition';
-const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement } });
+const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement }, catalogs: [defaultCatalog] });
 const geometry = composeSlide(document.slides[slideIndex], options);
 // geometry.items: leaf paths and boxes; geometry.groups: nested group bounds.
-// diagnostics reports unresolved-font-scheme, unresolved-layout, unresolved-theme and unresolved-color-scheme references;
-// each falls back (no layout record, minimal, cool-horizon, the default font scheme) and none throws.
+// diagnostics holds one unresolved-reference per layout, theme, colour or font scheme reference that resolves nowhere;
+// each falls back (automatic composition, or the engine default) and none throws unless strictReferences is set.
 console.log(geometry.diagnostics);
 ```
 
@@ -75,5 +76,7 @@ Shared content cards are published in core 0.10.0 and later. The effective `desi
 `geometry.flows` exposes exact track offsets/sizes and container paths. The editor's `prepareTrackResize(document, flow, boundary, fraction)` from `@openpresentation/opf-editor/layout` returns a validated candidate and guarded JSON Patch. The fraction is the first track's share of an adjacent pair, clamped to 5–95%. Row/grid flows resize columns; column flows resize rows. An automatic layout becomes an explicit grid with its currently chosen columns. Preview before applying, especially under strict overflow. Promoted regions do not move; nested flows within them can be resized. Reserved placeholder slots require an explicit arrangement, and flows with more than twelve tracks should be grouped first. Canvas users can choose Arrange or call `setLayoutEditing(true)`.
 
 ## Footnote areas and caption bands
+
+Core 0.15 (FA-22) gives a top-level image block with `placement: {edge, size, inset}` a band along that slide edge (`size` of the slide width or height, default 0.5, edge to edge or inside the padding); the headings and the body compose in the rest. Every image item carries `item.image` (frame `box`, `fit`, `focus`, `shape`, `border`, `opacity`, `recolor`, `overlay`, `placement`), and a picture background is `geometry.backgroundImage`, which moves nothing.
 
 Core after 0.11.4 (RR-34) reserves two regions only for decks that use the fields. A slide whose runs carry `cite` or `footnote` markers gets `geometry.footnotes` (`footnote-area-v1`): a rule and `<n> <text>` lines directly above the footer band with the content area's left edge and width, at the furniture size; the content area shrinks by exactly that height plus half the slide gap and nothing above it moves. The area takes at most 35% of the heading-to-footer span; a note that does not fit reports `text-overflow` at `references.N` or the run's path. Markers are fragments with `kind: "marker"` after the marked run's last fragment (0.7 of the run size, raised 0.3 of its own size, zero source length). A captioned `image`, `chart`, `table` or `video` leaf carries `item.caption` (the band, at most 35% of the region, below or above) and `item.box` is the remaining media box; grid selection scores the leaf on that media box. Pass the same `presentation` and `slideIndex` to every consumer so the numbering agrees.

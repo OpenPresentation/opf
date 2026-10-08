@@ -13,7 +13,7 @@ assert.deepEqual(current,second,'Node 20/24 corpus manifests must agree exactly'
 for(const key of ['version','format','scale','systemFonts'])assert.deepEqual(current[key],before[key]);
 const keys=Object.keys(current.entries);assert.equal(keys.length,805);assert.deepEqual(keys,Object.keys(before.entries));
 const corpus=new Map(examples.map(({file,deck})=>[file.replace(/^examples\//,''),deck]));
-const containsImage=value=>value&&typeof value==='object'&&(Object.keys(value).some(key=>['image','watermark','logo','slideImage'].includes(key))||Object.values(value).some(containsImage));
+const containsImage=value=>value&&typeof value==='object'&&(Object.keys(value).some(key=>['image','watermark','logo','background'].includes(key))||Object.values(value).some(containsImage));
 const changed=[];
 for(const [index,key]of keys.entries()){
  const name=`${String(index).padStart(4,'0')}.png`;

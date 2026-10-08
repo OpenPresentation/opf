@@ -3,16 +3,16 @@
   "name": "Battery Line Supplier Readiness",
   "description": "Battery Line Supplier Readiness is a fictional OPF example for automotive supply teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "battery-line-supplier-readiness",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "investor",
+    "academic",
     {
-      "id": "all-hands",
+      "id": "customer",
       "attentionBudgetMinutes": 34,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "marketing-strategy"
+        "heros-journey"
       ],
       "recommendedTones": [
         "conversational"
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "left",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -93,10 +93,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "top"
     }
   },
   "slides": [
@@ -131,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -141,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              28,
+              25
             ],
             [
               "Q2",
-              16,
-              10
+              32,
+              27
             ],
             [
               "Q3",
-              21,
-              13
+              35,
+              29
             ],
             [
               "Q4",
-              26,
-              15
+              39,
+              31
             ]
           ]
         }
@@ -301,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "world",
+            "type": "waterfall",
             "data": {
               "columns": [
                 "Quarter",
@@ -498,15 +494,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "battery-line-supplier-readiness-arc",
+    "custom": {
+      "narratives": {
+        "battery-line-supplier-readiness-arc": {
           "name": "Automotive Supply Decision Arc",
           "summary": "A custom arc for Voltcrest Components.",
           "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
@@ -531,13 +521,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "voltcrest-components-theme",
+      },
+      "themes": {
+        "voltcrest-components-theme": {
           "name": "Voltcrest Components Working Theme",
           "colorScheme": "boost",
           "fontScheme": "garamond",
@@ -550,14 +536,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "voltcrest-components-signal",
+      },
+      "colorSchemes": {
+        "voltcrest-components-signal": {
           "name": "Voltcrest Components Signal Palette",
           "accent1": "#6D28D9",
           "accent2": "#0369A1",
@@ -572,31 +553,469 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+          "seniority": "mixed",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
+          ]
+        },
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        }
+      },
+      "purposes": {
+        "report": {
+          "name": "Report",
+          "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+          "description": "Use for business reviews, project updates, research summaries, and recurring operating cadences. Prioritize the metric, the movement, the reason, and the implication.",
+          "outcome": "The audience understands what happened, why it happened, and what it means.",
+          "successCriteria": [
+            "Key metrics are easy to scan",
+            "Variance and drivers are explained",
+            "Implications are explicit"
+          ],
+          "recommendedNarratives": [
+            "qbr",
+            "business-review",
+            "status-update",
+            "survey-analysis"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical"
+          ],
+          "tags": [
+            "performance",
+            "progress",
+            "findings"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "garamond": {
+          "name": "Garamond",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Garamond",
+          "minor": "Garamond",
+          "textSample": "Timeless book feel",
+          "type": "serif",
+          "description": "Garamond is a serif OPF font scheme for Latin presentations, using Garamond for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "number-5x": {
+          "name": "Number 5x",
+          "summary": "Reach for it when five figures need to be read together.",
+          "description": "A title above five metrics in a three-column grid. Use it for a scorecard of five measures when none outranks the others.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Grid"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-5x.svg"
+          }
+        },
+        "blank": {
+          "name": "Blank",
+          "summary": "Reach for it when the slide is one hand-built composition with no title or content slots.",
+          "description": "An empty slide with no placeholders. Use it for a full-bleed visual, a diagram you place yourself, or any slide whose content does not follow a title-and-body pattern.",
+          "placeholders": [],
+          "tags": [
+            "Minimal",
+            "Freeform",
+            "Visual"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/blank.svg"
+          }
+        },
+        "image-1x": {
+          "name": "Image 1x",
+          "summary": "Reach for it when one picture deserves the slide, with a caption or explanation.",
+          "description": "A title above one image with a text block beside it. Use it for a product shot, a diagram or a photo that the text refers to.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "image"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Visual",
+            "Showcase",
+            "Detail"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-1x.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
     }
   }
 }

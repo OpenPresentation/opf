@@ -15,7 +15,7 @@ const KEYS = {
   contentBox: [true, false],
   contentDirection: ['vertical', 'horizontal'],
   chartPrimary: ['left', 'top'],
-  imageFill: ['crop', 'fit'],
+  imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
 };
 
@@ -129,9 +129,12 @@ test('layout contentDirection and chartPrimary rank below the deck and slide val
   assert.equal(mode({title: 'T', blocks, design: {contentDirection: 'horizontal'}}, {layout: record, presentation: {design: {contentDirection: 'vertical'}}}), 'row');
 });
 
-test('the composed design reports the effective imageFill for engines that draw images', () => {
-  const record = layout('crop')({imageFill: 'crop'});
-  assert.equal(composeSlide({title: 'T', image: asset('x')}, {layout: record}).design.imageFill, 'crop');
-  assert.equal(composeSlide({title: 'T', image: asset('x')}, {layout: record, presentation: {design: {imageFill: 'fit'}}}).design.imageFill, 'fit');
-  assert.equal(composeSlide({title: 'T'}, {}).design.imageFill, undefined);
+test('the effective imageFit is the fit of every image item that sets none, cover by default', () => {
+  const record = layout('contain')({imageFit: 'contain'});
+  const fit = (slide, options) => composeSlide(slide, options).items.find(item => item.field === 'image').image.fit;
+  assert.equal(composeSlide({title: 'T', image: asset('x')}, {layout: record}).design.imageFit, 'contain');
+  assert.equal(fit({title: 'T', image: asset('x')}, {layout: record}), 'contain');
+  assert.equal(fit({title: 'T', image: asset('x')}, {layout: record, presentation: {design: {imageFit: 'stretch'}}}), 'stretch');
+  assert.equal(fit({title: 'T', image: asset('x')}, {}), 'cover');
+  assert.equal(composeSlide({title: 'T'}, {}).design.imageFit, undefined);
 });

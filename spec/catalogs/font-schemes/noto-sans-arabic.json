@@ -5,9 +5,9 @@
   "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "arabic",
-    "pashto",
-    "punjabi-shahmukhi"
+    "ar",
+    "ps",
+    "pa-Arab"
   ],
   "major": "Noto Naskh Arabic",
   "minor": "Noto Naskh Arabic",

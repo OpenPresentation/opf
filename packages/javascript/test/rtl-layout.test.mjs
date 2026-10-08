@@ -6,23 +6,23 @@ import { resolveSlideDirection } from '../dist/composition.js';
 // RR-05: right-to-left layout. Alignment is logical (`left` is the start edge), the arrangement mirrors, lists put markers at the
 // right, tables run right to left, and every wrapped line shares its paragraph's direction. Left-to-right decks are untouched.
 const arabic = 'العنصر الأول مع رقم 2026 وهذه جملة طويلة تلتف على أكثر من سطر واحد داخل الصندوق';
-const doc = (extra = {}, slide = {}) => ({language: 'arabic', slides: [{title: 'عنوان', ...slide}], ...extra});
+const doc = (extra = {}, slide = {}) => ({language: 'ar', slides: [{title: 'عنوان', ...slide}], ...extra});
 const measure = (text, size) => Array.from(text).length * size * 0.5;
 const textMeasurement = {measure: (text, size) => measure(text, size)};
 const compose = (presentation, slide = presentation.slides[0], options = {}) => composeSlide(slide, {presentation, slideIndex: 0, textMeasurement, ...options});
 
 describe('direction resolution', () => {
   it('derives the deck direction from the presentation language', () => {
-    assert.equal(resolveSlideDirection({language: 'arabic', slides: []}), 'rtl');
-    assert.equal(resolveSlideDirection({language: 'hebrew', slides: [{}]}, 0), 'rtl');
-    assert.equal(resolveSlideDirection({language: 'english', slides: []}), 'ltr');
+    assert.equal(resolveSlideDirection({language: 'ar', slides: []}), 'rtl');
+    assert.equal(resolveSlideDirection({language: 'he', slides: [{}]}, 0), 'rtl');
+    assert.equal(resolveSlideDirection({language: 'en', slides: []}), 'ltr');
     assert.equal(resolveSlideDirection({slides: []}), 'ltr');
     assert.equal(resolveSlideDirection(undefined), 'ltr');
-    assert.equal(resolveSlideDirection({language: 'arabic', slides: [{}]}, 9), 'rtl', 'an out-of-range slide index falls back to the deck');
+    assert.equal(resolveSlideDirection({language: 'ar', slides: [{}]}, 9), 'rtl', 'an out-of-range slide index falls back to the deck');
   });
 
   it('composes a left-to-right deck exactly as before', () => {
-    const presentation = {language: 'english', slides: [{title: 'Title', left: {text: 'Left'}, right: {items: ['One', 'Two']}}]};
+    const presentation = {language: 'en', slides: [{title: 'Title', left: {text: 'Left'}, right: {items: ['One', 'Two']}}]};
     const composed = compose(presentation);
     assert.equal(composed.direction, undefined);
     for (const item of composed.items) assert.equal(item.text?.directions, undefined);
@@ -45,7 +45,7 @@ describe('mirrored arrangement', () => {
     const [first, second] = ['left', 'right'].map(side => composed.items.find(item => item.path === `slides.0.${side}.text`));
     assert.equal(composed.direction, 'rtl');
     assert.ok(first.box.x > second.box.x, 'the authored left region is the rightmost');
-    const mirrored = compose({...presentation, language: 'english'});
+    const mirrored = compose({...presentation, language: 'en'});
     assert.ok(mirrored.items.find(item => item.path === 'slides.0.left.text').box.x < mirrored.items.find(item => item.path === 'slides.0.right.text').box.x);
     // Same sizes, only the places swap.
     assert.equal(first.box.width, mirrored.items.find(item => item.path === 'slides.0.left.text').box.width);
@@ -54,7 +54,7 @@ describe('mirrored arrangement', () => {
 
   it('puts the first column at the right and keeps the weights with their tracks', () => {
     const slide = {title: 'عنوان', blocks: [{text: 'أ'}, {text: 'ب'}, {text: 'ج'}], composition: {mode: 'row', weights: [3, 1, 1]}};
-    const ltr = compose({language: 'english', slides: [slide]}), rtl = compose({language: 'arabic', slides: [slide]});
+    const ltr = compose({language: 'en', slides: [slide]}), rtl = compose({language: 'ar', slides: [slide]});
     const boxes = composed => composed.items.filter(item => item.field === 'text' && item.path.includes('blocks')).map(item => item.box);
     const left = boxes(ltr), right = boxes(rtl);
     assert.equal(right[0].width, left[0].width, 'the first column keeps its weight');
@@ -63,13 +63,14 @@ describe('mirrored arrangement', () => {
     assert.ok(Math.abs((rtl.flows[0].box.x + track[0].offset) - right[0].x) < 1e-6, 'flow tracks mirror with the boxes');
   });
 
-  it('mirrors a banded slide image, the cover logo and header/footer zones', () => {
-    const presentation = {language: 'arabic', design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}, logo: 'logo.png'}, slides: [{title: 'x', text: 'نص', design: {slideImage: {src: 'a.png', position: 'left'}}}]};
+  it('mirrors a placed image, the cover logo and header/footer zones', () => {
+    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}, logo: 'logo.png'}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'left'}}, {text: 'نص'}]}]};
     const composed = compose(presentation);
-    assert.equal(composed.slideImage.position, 'right');
-    assert.ok(composed.slideImage.region.x > 0);
-    const english = compose({...presentation, language: 'english'});
-    assert.equal(english.slideImage.position, 'left');
+    const placed = composed.items.find(item => item.field === 'image');
+    assert.equal(placed.image.placement.edge, 'right');
+    assert.ok(placed.image.region.x > 0);
+    const english = compose({...presentation, language: 'en'});
+    assert.equal(english.items.find(item => item.field === 'image').image.placement.edge, 'left');
     const parts = composed.furniture.parts.filter(part => part.type === 'text');
     const leftPart = parts.find(part => part.zone === 'left'), rightPart = parts.find(part => part.zone === 'right');
     assert.ok(leftPart.box.x > rightPart.box.x, 'the authored left zone is drawn at the right');
@@ -79,12 +80,12 @@ describe('mirrored arrangement', () => {
   });
 
   it('mirrors cover logos', () => {
-    const presentation = {language: 'arabic', design: {logo: 'data:image/png;base64,AAAA'}, slides: [{layout: 'title', title: 'عنوان'}]};
+    const presentation = {language: 'ar', design: {logo: 'data:image/png;base64,AAAA'}, slides: [{layout: 'title', title: 'عنوان'}]};
     const layout = {id: 'title', placeholders: [{type: 'title'}]};
     const composed = compose(presentation, presentation.slides[0], {layout});
     assert.equal(composed.logo.anchor, 'right');
     assert.ok(composed.logo.box.x + composed.logo.box.width > composed.width / 2);
-    assert.equal(compose({...presentation, language: 'english'}, presentation.slides[0], {layout}).logo.anchor, 'left');
+    assert.equal(compose({...presentation, language: 'en'}, presentation.slides[0], {layout}).logo.anchor, 'left');
   });
 });
 
@@ -241,7 +242,7 @@ describe('metric and timeline', () => {
 
 describe('furniture', () => {
   it('derives its direction like composition', () => {
-    const presentation = {language: 'arabic', design: {footer: {left: {text: 'يسار'}}}, slides: [{title: 'x'}]};
+    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}}}, slides: [{title: 'x'}]};
     const layout = layoutFurniture(presentation.slides[0], {presentation, slideIndex: 0});
     assert.equal(layout.parts[0].zone, 'left');
     assert.equal(layout.parts[0].alignment, 'right');

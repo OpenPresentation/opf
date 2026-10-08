@@ -23,11 +23,9 @@
     }
   ],
   "catalogs": {
-    "narratives": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "technical-proof",
+    "custom": {
+      "narratives": {
+        "technical-proof": {
           "name": "Technical Proof",
           "description": "A compact arc that states the contract, proves it, and asks for adoption.",
           "audienceFit": [
@@ -65,7 +63,7 @@
             "max": 20
           }
         }
-      ]
+      }
     }
   }
 }

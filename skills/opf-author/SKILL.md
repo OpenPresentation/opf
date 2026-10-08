@@ -10,7 +10,7 @@ Deliver ordinary `*.opf.json` that the user can edit, validate, preview, and exp
 
 ## Start from the actual format
 
-Find the host project's installed `@openpresentation/opf` version. In this repository, `spec/schemas/opf.schema.json` and `spec/catalogs/` are authoritative; in an npm consumer, use `schemas` and `catalogs` exported by that installed package. A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
+Find the host project's installed `@openpresentation/opf` version. In this repository, `spec/schemas/opf.schema.json` and `spec/catalogs/` are authoritative; in an npm consumer, use the `schemas` that package exports and the default catalog of `@openpresentation/opf/catalog` (the root carries no catalog records). A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
 
 Use the [content guide](references/content.md) for payload shapes. [The starter](assets/decision-brief.opf.json) is a valid complete document; its example content is illustrative, not evidence for the user's presentation.
 
@@ -42,7 +42,7 @@ A template is an incomplete OPF file: root `"template": true`, a `variables` map
 - Prefer a clear assertion in each title and enough evidence to support it. Preserve uncertainty and citations; never fill example metrics with invented business results.
 - Cite sources with run `cite` ids into a top-level `references` list and add inline notes with run `footnote`; caption images, charts, tables and videos with `caption`; give every chart an `alt` (what the data shows, not "a chart"; `""` marks it decorative). Markers and the slide's footnote area are drawn by every engine; a cited id must exist. See the [content guide](references/content.md#citations-footnotes-and-captions).
 - Use stable slide IDs when revisions or integrations need them. Resolve IDs to current indices before later edits.
-- Select existing catalog IDs or embed valid custom records. Gallery slugs can differ from bundled IDs; a copied example may need its inline catalogs.
+- Reference existing catalog records by id (or `name:id` for a named catalog group) and put the deck's own records in `catalogs.custom`. Embed what the deck uses before handing it off (`embed(document, { catalogs })` or `opf embed`), so it renders with no catalog registered; a copied example already carries its records.
 - Preserve the user's design and fonts unless changing them is part of the request. Choosing a font scheme alone does not load font files. The selected font name stays in the document and in PPTX export; previews may draw an open look-alike when the license-restricted font is not bundled.
 
 Validate the complete document with `validate(document)` (or `opf validate`). Fix error findings first, then read the warnings (unresolved references, alt text, contrast, overflow); a valid deck can still carry them. When preview tools are available, inspect the rendered slides and repair overflow without losing facts, notes, or trailing text. If rendering is unavailable, report schema validation as such; do not label it visual verification.

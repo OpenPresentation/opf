@@ -3,16 +3,16 @@
   "name": "Research Grant Pitch",
   "description": "Research Grant Pitch is a fictional OPF example for research teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "research-grant-pitch",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "executive",
+    "general-public",
     {
-      "id": "sales",
+      "id": "media",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "marketing-strategy"
+        "company-intro"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "marketing-strategy",
+  "narrative": "company-intro",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,7 +74,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -92,10 +92,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -130,7 +126,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -338,6 +334,495 @@
       "density": "medium",
       "scenario": "research-grant-pitch",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "company-intro": {
+          "name": "Company Intro",
+          "summary": "Standard company-overview deck: who you are, what's distinctive about you, who you serve, and why they win. Built for first-touch sales meetings, partner intros, and 'about us' decks attached to outbound emails.",
+          "audienceFit": [
+            "prospects",
+            "partners",
+            "press",
+            "candidates"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 30
+          },
+          "tags": [
+            "overview",
+            "go-to-market",
+            "marketing",
+            "intro"
+          ],
+          "beats": [
+            {
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
+              "layout": "title",
+              "instructions": "Establish brand identity",
+              "type": "text"
+            },
+            {
+              "id": "about",
+              "name": "About",
+              "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds.",
+              "instructions": "Capture attention",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "competitive-advantage",
+              "name": "Competitive Advantage",
+              "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words.",
+              "instructions": "Stand out",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "company-story",
+              "name": "Company Story",
+              "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography.",
+              "instructions": "Share origin",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "offerings",
+              "name": "Offerings",
+              "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message.",
+              "instructions": "Highlight products/services",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "ideal-customer",
+              "name": "Ideal Customer",
+              "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy.",
+              "instructions": "Define target market",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "key-benefits",
+              "name": "Key Benefits",
+              "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'",
+              "instructions": "Emphasize value",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "success-story",
+              "name": "Success Story",
+              "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to.",
+              "instructions": "Showcase satisfied customer",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-cta",
+              "name": "Closing & CTA",
+              "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
+              "layout": "title",
+              "instructions": "Encourage action",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        },
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        }
+      },
+      "purposes": {
+        "decide": {
+          "name": "Drive a Decision",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "tones": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Precise, evidence-led voice for engineering, research, and product-detail audiences.",
+          "description": "Lead with the question or claim, then walk through the mechanism and the numbers. Use exact terminology; assume the audience can handle and prefers it. Diagrams, tables, and benchmarks are first-class.",
+          "voiceCues": [
+            "State the claim, then the mechanism, then the evidence.",
+            "Use exact terminology — don't soften technical terms for general readability.",
+            "Quote benchmarks with conditions (cold/warm, p50/p95/p99, dataset, hardware).",
+            "Prefer diagrams and tables over prose paragraphs for structural information."
+          ],
+          "avoid": [
+            "Vague claims ('much faster', 'better', 'easier').",
+            "Marketing framing without supporting data.",
+            "Glossing over caveats and tradeoffs.",
+            "Casual register that obscures precision."
+          ],
+          "samplePhrases": [
+            "p95 inference latency is 38ms on a single A100, down from 312ms on the prior runtime.",
+            "We replaced the streaming serializer with a batched protobuf path; throughput rose 4.2× under load.",
+            "The result holds for context windows up to 32k tokens; beyond that, see appendix B."
+          ],
+          "recommendedNarratives": [
+            "challenge-resolution",
+            "innovation",
+            "conference-talk",
+            "status-update"
+          ],
+          "tags": [
+            "technical",
+            "engineering",
+            "research"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "vibes": {
+          "name": "Vibes",
+          "accent1": "#4A1BE4",
+          "accent2": "#B8E109",
+          "accent3": "#95928C",
+          "accent4": "#E48A1B",
+          "accent5": "#9E1BE4",
+          "accent6": "#1BE4A1",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#C30052",
+          "hyperlink": "#0078D7",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "Expressive purple, green, and orange accents for creative decks.",
+          "description": "A vibrant mixed-accent scheme for presentations that need personality, motion, and visual variety.",
+          "tags": [
+            "creative",
+            "playful",
+            "vibrant",
+            "expressive",
+            "distinctive"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-mongolian": {
+          "name": "Noto Sans Mongolian",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "mn"
+          ],
+          "major": "Noto Sans Mongolian",
+          "minor": "Noto Sans Mongolian",
+          "textSample": "Энэ маш сайхан",
+          "type": "sans-serif",
+          "description": "Noto Sans Mongolian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Mongolian for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

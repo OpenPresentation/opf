@@ -504,9 +504,9 @@ components:
         catalogs:
           type: object
           additionalProperties: true
-          description: Optional per-kind catalog overrides (inline records and/or a non-default source).
+          description: The catalog records the document embeds, grouped by catalog (default, custom and named groups with a source).
         narrative:
-          description: Narrative plan by reference. A catalog id, an HTTPS URL or a `pkg:` reference; a custom narrative is a record in `catalogs.narratives.records`.
+          description: Narrative plan by reference, a bare id or `name:id`; a narrative the document defines is a record in `catalogs.custom.narratives`.
           type: string
         audience:
           description: Intended audience(s). A string shorthand, or an array of strings/inline audience objects.
@@ -527,7 +527,7 @@ components:
             - type: object
               additionalProperties: true
         language:
-          description: Presentation language. A BCP-47 tag or catalog id string, or an inline language object.
+          description: Presentation language. A BCP-47 tag, or an inline language object with a bcp47 tag.
           oneOf:
             - type: string
             - type: object

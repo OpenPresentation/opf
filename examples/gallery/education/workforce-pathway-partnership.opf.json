@@ -3,16 +3,16 @@
   "name": "Workforce Pathway Partnership",
   "description": "Workforce Pathway Partnership is a fictional OPF example for community college teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "workforce-pathway-partnership",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "investor",
+    "internal-team",
     {
-      "id": "all-hands",
+      "id": "partner",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "low",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "performance-improvement-plan"
+        "conference-talk"
       ],
       "recommendedTones": [
         "authoritative"
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "left",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -93,10 +93,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "top"
     }
   },
   "slides": [
@@ -131,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -141,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              17,
+              14
             ],
             [
               "Q2",
-              16,
-              10
+              21,
+              16
             ],
             [
               "Q3",
-              21,
-              13
+              24,
+              18
             ],
             [
               "Q4",
-              26,
-              15
+              28,
+              20
             ]
           ]
         }
@@ -301,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line",
+            "type": "histogram",
             "data": {
               "columns": [
                 "Quarter",
@@ -503,15 +499,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "workforce-pathway-partnership-arc",
+    "custom": {
+      "narratives": {
+        "workforce-pathway-partnership-arc": {
           "name": "Community College Decision Arc",
           "summary": "A custom arc for Metro Technical College.",
           "description": "Workforce Pathway Partnership uses a compact evidence-to-decision arc for Metro Technical College.",
@@ -536,13 +526,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "metro-technical-college-theme",
+      },
+      "themes": {
+        "metro-technical-college-theme": {
           "name": "Metro Technical College Working Theme",
           "colorScheme": "black-and-white",
           "fontScheme": "noto-sans-oriya",
@@ -555,14 +541,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "metro-technical-college-signal",
+      },
+      "colorSchemes": {
+        "metro-technical-college-signal": {
           "name": "Metro Technical College Signal Palette",
           "accent1": "#E2E8F0",
           "accent2": "#F59E0B",
@@ -577,31 +558,513 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
+          ]
+        },
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "partner",
+            "channel",
+            "enablement"
+          ]
+        }
+      },
+      "purposes": {
+        "educate": {
+          "name": "Educate",
+          "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+          "description": "Use when the primary job is learning. Structure around concepts, examples, practice, and checks for understanding rather than persuasion or reporting.",
+          "outcome": "The audience understands the material well enough to apply it.",
+          "successCriteria": [
+            "Definitions and examples are clear",
+            "Audience can apply the concept",
+            "Complexity builds progressively"
+          ],
+          "recommendedNarratives": [
+            "educate",
+            "focus",
+            "company-intro"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "technical"
+          ],
+          "tags": [
+            "learning",
+            "training",
+            "enablement"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "black-and-white": {
+          "name": "Black & White",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#000000",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#FFFFFF",
+          "summary": "Strict monochrome contrast for formal, document-style decks.",
+          "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+          "tags": [
+            "minimal",
+            "formal",
+            "neutral",
+            "high-contrast",
+            "restrained"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-oriya": {
+          "name": "Noto Sans Oriya",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "or"
+          ],
+          "major": "Noto Sans Oriya",
+          "minor": "Noto Sans Oriya",
+          "textSample": "ଏହା ବହୁତ ସୁନ୍ଦର",
+          "type": "sans-serif",
+          "description": "Noto Sans Oriya is a sans serif OPF font scheme for complex script presentations, using Noto Sans Oriya for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "number-3x": {
+          "name": "Number 3x",
+          "summary": "Reach for it when three headline figures summarise a result.",
+          "description": "A title above three metrics in a row. Use it for a three-number summary, such as revenue, margin and growth, or a before, during and after.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-3x.svg"
+          }
+        },
+        "blank": {
+          "name": "Blank",
+          "summary": "Reach for it when the slide is one hand-built composition with no title or content slots.",
+          "description": "An empty slide with no placeholders. Use it for a full-bleed visual, a diagram you place yourself, or any slide whose content does not follow a title-and-body pattern.",
+          "placeholders": [],
+          "tags": [
+            "Minimal",
+            "Freeform",
+            "Visual"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/blank.svg"
+          }
+        },
+        "image-1x": {
+          "name": "Image 1x",
+          "summary": "Reach for it when one picture deserves the slide, with a caption or explanation.",
+          "description": "A title above one image with a text block beside it. Use it for a product shot, a diagram or a photo that the text refers to.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "image"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Visual",
+            "Showcase",
+            "Detail"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-1x.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
     }
   }
 }

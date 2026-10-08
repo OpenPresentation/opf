@@ -23,11 +23,11 @@ try {
   run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
   const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);assert.equal(validated.schemaValid,true);
   const warning=JSON.stringify({design:{theme:'not-a-bundled-theme'},slides:[{title:'Warning'}]});
-  assert.ok(run(['validate','-','--only','format,references'],{input:warning}).json.findings.some(item=>item.ruleId==='opf/catalog-reference'&&item.severity==='warning'));
+  assert.ok(run(['validate','-','--only','format,references'],{input:warning}).json.findings.some(item=>item.ruleId==='opf/unresolved-reference'&&item.severity==='warning'));
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
-  // CLI 0.9.1 bundles core 0.11.3: the 70 legacy gallery layout ids are bundled, so none is an unknown id.
-  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.ok(layouts.length>=100);
+  // The CLI registers the default catalog (OPF 0.15, FA-21): the full gallery catalog, so every layout id the snapshot lists resolves.
+  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,JSON.parse(await readFile(new URL('../../../spec/catalogs/layouts/index.json',import.meta.url),'utf8')).records.length);
    for(const id of ['title-slide','two-column','action-plan','swot-analysis','data-visualization','executive-summary'])assert.ok(layouts.includes(id),id);
    const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);
@@ -42,7 +42,7 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
   assert.equal(run(['validate','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
   assert.ok(run(['validate','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.findings.some(issue=>issue.ruleId==='opf/duplicate-key'));
-  const config={catalogs:{layouts:[{id:'pratner',name:'Authoritative custom spelling',placeholders:[{type:'title'}]}]}},configRaw=JSON.stringify(config);
+  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',placeholders:[{type:'title'}]}}}]},configRaw=JSON.stringify(config);
   await writeFile(path.join(temp,'house-config.json'),configRaw);
   const configured=run(['validate','target.opf.json','--only','format,references','--config','house-config.json','--fail-on','warning']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
   config.contracts=[{path:'/slides/*/layout',allowedValues:['text-1x'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));

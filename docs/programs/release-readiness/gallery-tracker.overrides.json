@@ -76,16 +76,6 @@
       "next": "The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46)."
     },
     {
-      "id": "layouts-subset-by-design",
-      "gap": "missing-spec",
-      "types": [
-        "layouts"
-      ],
-      "link": "https://github.com/OpenPresentation/opf/issues/292",
-      "descoped": true,
-      "next": "Decided (RR-41, 2026-10-02): core keeps the 100 bundled layouts on purpose. Bundling the other 385 adds 54 KB to the packed core but 382 KB (19 KB gzipped) to every renderer, editor and exporter browser bundle, which never read a layout record. They resolve through the default catalog online or an inline record. Revisit after opf#318 splits the catalogs module per kind."
-    },
-    {
       "id": "legacy-font-pairings",
       "gap": "missing-spec",
       "types": [

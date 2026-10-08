@@ -3,16 +3,16 @@
   "name": "Policy Briefing for Advisors",
   "description": "Policy Briefing for Advisors is a fictional OPF example for policy briefing teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "policy-briefing-for-advisors",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "marketing",
+    "general-public",
     {
-      "id": "board",
+      "id": "media",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "educate"
+        "survey-analysis"
       ],
       "recommendedTones": [
         "formal"
@@ -74,7 +74,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "right",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -99,10 +99,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -137,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -307,7 +303,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bar",
+            "type": "pie",
             "data": {
               "columns": [
                 "Quarter",
@@ -502,15 +498,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "policy-briefing-for-advisors-arc",
+    "custom": {
+      "narratives": {
+        "policy-briefing-for-advisors-arc": {
           "name": "Policy Briefing Decision Arc",
           "summary": "A custom arc for Civic Futures Lab.",
           "description": "Policy Briefing for Advisors uses a compact evidence-to-decision arc for Civic Futures Lab.",
@@ -535,13 +525,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "civic-futures-lab-theme",
+      },
+      "themes": {
+        "civic-futures-lab-theme": {
           "name": "Civic Futures Lab Working Theme",
           "colorScheme": "burnt-orange",
           "fontScheme": "vrinda",
@@ -554,14 +540,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "civic-futures-lab-signal",
+      },
+      "colorSchemes": {
+        "civic-futures-lab-signal": {
           "name": "Civic Futures Lab Signal Palette",
           "accent1": "#BE123C",
           "accent2": "#6D28D9",
@@ -576,31 +557,494 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        },
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "vrinda": {
+          "name": "Vrinda",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "bn"
+          ],
+          "major": "Vrinda",
+          "minor": "Vrinda",
+          "textSample": "এটি ভ্রিন্দা ফন্টে লেখা হয়েছে।",
+          "type": "sans-serif",
+          "description": "Vrinda is a sans serif OPF font scheme for complex script presentations, using Vrinda for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "number-4x": {
+          "name": "Number 4x",
+          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
+          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Matrix"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "media-1x": {
+          "name": "Media 1x",
+          "summary": "Reach for it when a video is the content and a short note frames it.",
+          "description": "A title above one video with a text block beside it. Use it for a product demo, a customer clip or a recording the audience should watch.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "video"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Video",
+            "Demo",
+            "Showcase"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/media-1x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
     }
   }
 }

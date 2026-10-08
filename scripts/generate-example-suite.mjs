@@ -1,7 +1,9 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { defaultCatalog } from "../packages/javascript/dist/catalog.js";
 import { colorContrast } from "../packages/javascript/dist/composition.js";
+import { embed } from "../packages/javascript/dist/index.js";
 import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -274,7 +276,8 @@ function backgroundFor(index) {
     },
     {
       type: "image",
-      image: { src: "asset:cover-bg", fit: "cover" },
+      src: "asset:cover-bg",
+      fit: "cover",
       opacity: 0.2,
     },
     {
@@ -375,7 +378,7 @@ function designFor(spec, index, catalogs, density) {
     contentBox: index % 3 === 0,
     contentDirection: pick(["horizontal", "vertical"], index),
     chartPrimary: pick(["none", "left", "right", "top", "bottom"], index),
-    imageFill: pick(["crop", "fit"], index),
+    imageFit: pick(["cover", "contain"], index),
     listBullet: pick(["character", "image"], index),
   };
 
@@ -404,10 +407,6 @@ function designFor(spec, index, catalogs, density) {
       left: { organization: true },
       center: { text: index % 2 === 0 ? "Internal planning draft" : "Decision review" },
       right: { slideNumber: true },
-    },
-    slideImage: {
-      src: "asset:cover-bg",
-      position: pick(["background", "top", "bottom", "left", "right"], index),
     },
   };
 }
@@ -460,18 +459,18 @@ function timelinePayload(spec, index) {
 
 function languageFor(spec, index, catalogs, density) {
   const specific = [
-    ["Japan", "japanese"],
-    ["India", "english-in"],
-    ["Brazil", "portuguese"],
-    ["German", "german"],
-    ["Arabic", "arabic"],
+    ["Japan", "ja"],
+    ["India", "en-IN"],
+    ["Brazil", "pt"],
+    ["German", "de"],
+    ["Arabic", "ar"],
   ].find(([needle]) => spec.title.includes(needle));
 
   if (specific) {
     const id = specific[1];
-    if (id === "arabic") {
+    if (id === "ar") {
       return {
-        id,
+        bcp47: id,
         name: "Arabic",
         direction: "rtl",
         script: "Arab",
@@ -482,14 +481,14 @@ function languageFor(spec, index, catalogs, density) {
     return id;
   }
 
-  if (spec.title.includes("Rural Payments")) return "english-in";
-  if (spec.title.includes("Works Council")) return "german";
-  if (spec.title.includes("Climate Adaptation")) return "portuguese";
-  if (spec.title.includes("Market Entry")) return "japanese";
+  if (spec.title.includes("Rural Payments")) return "en-IN";
+  if (spec.title.includes("Works Council")) return "de";
+  if (spec.title.includes("Climate Adaptation")) return "pt";
+  if (spec.title.includes("Market Entry")) return "ja";
 
   if (density === "dense" && index % 11 === 0) {
     return {
-      id: "english-us",
+      bcp47: "en-US",
       name: "English (United States)",
       direction: "ltr",
       fontScheme: pick(catalogs.fontSchemes, index),
@@ -497,7 +496,7 @@ function languageFor(spec, index, catalogs, density) {
     };
   }
 
-  return pick(["english-us", "english-gb", "english-ca", "english-au"], index);
+  return pick(["en-US", "en-GB", "en-CA", "en-AU"], index);
 }
 
 function richText(spec, index) {
@@ -528,8 +527,9 @@ function numberLayout(index) {
   return pick(["number-1x", "number-2x", "number-3x", "number-4x", "number-5x", "number-6x"], index);
 }
 
+/** An image layout, or undefined for a full-bleed photo, which is the slide's background rather than a layout (FA-22). */
 function imageLayout(index) {
-  return pick(["image-1x", "image-2x", "image-3x", "image-bleed"], index);
+  return pick(["image-1x", "image-2x", "image-3x", undefined], index);
 }
 
 function promotedRegionSlide(spec, index, catalogs) {
@@ -612,6 +612,15 @@ function codeSlide(spec, index, catalogs) {
 function mediaSlide(spec, index, catalogs) {
   if (index % 2 === 0) {
     const layout = imageLayout(Math.floor(index / 2));
+    const alt = `${spec.area} context photo for ${spec.org}`;
+    // A full-bleed photo is the slide's image background: it fills the slide behind the title and moves nothing.
+    if (layout === undefined) return {
+      id: `s${index + 1}-image`,
+      section: "Context",
+      title: "Field Context",
+      design: { background: { type: "image", src: "asset:supporting-photo", alt } },
+      notes: "Use the image as context, not decoration.",
+    };
     return {
       id: `s${index + 1}-image`,
       section: "Context",
@@ -620,12 +629,9 @@ function mediaSlide(spec, index, catalogs) {
       type: "image",
       image: {
         src: "asset:supporting-photo",
-        alt: `${spec.area} context photo for ${spec.org}`,
+        alt,
         title: `${spec.area} context`,
       },
-      // RR-58: image-bleed draws the slide's picture full-bleed behind the title. The slide names it as its slide image
-      // (same source), and the layout record places it at position background.
-      ...(layout === "image-bleed" ? { design: { slideImage: "asset:supporting-photo" } } : {}),
       notes: "Use the image as context, not decoration.",
     };
   }
@@ -742,18 +748,14 @@ function slidesFor(spec, index, catalogs, density) {
   return slides;
 }
 
+// The deck's own records (OPF 0.15): catalogs.custom, keyed by id. Gallery records are referenced by bare id and
+// resolve in the default catalog; the example embedding script outside the repository embeds them.
 function catalogOverrides(spec, index, catalogs) {
   const customId = `${slug(spec.title)}-arc`;
   return {
-    narratives: {
-      source: [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives",
-      ],
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-narrative/v1",
-          id: customId,
+    custom: {
+      narratives: {
+        [customId]: {
           name: `${titleCase(spec.area)} Decision Arc`,
           summary: `A custom arc for ${spec.org}.`,
           description: `${spec.title} uses a compact evidence-to-decision arc for ${spec.org}.`,
@@ -763,13 +765,9 @@ function catalogOverrides(spec, index, catalogs) {
             { id: "decision", name: "Decision", type: "list", layout: "list-3x" },
           ],
         },
-      ],
-    },
-    themes: {
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-theme/v1",
-          id: `${slug(spec.org)}-theme`,
+      },
+      themes: {
+        [`${slug(spec.org)}-theme`]: {
           name: `${spec.org} Working Theme`,
           colorScheme: pick(catalogs.colorSchemes, index),
           fontScheme: pick(catalogs.fontSchemes, index),
@@ -778,14 +776,9 @@ function catalogOverrides(spec, index, catalogs) {
           background: { type: "theme", slot: pick(["light1", "dark1", "light2"], index) },
           tags: [slug(spec.area), "example"],
         },
-      ],
-    },
-    colorSchemes: {
-      source: "https://www.pptx.gallery/color-schemes",
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-color-scheme/v1",
-          id: `${slug(spec.org)}-signal`,
+      },
+      colorSchemes: {
+        [`${slug(spec.org)}-signal`]: {
           name: `${spec.org} Signal Palette`,
           accent1: color(index, 1),
           accent2: color(index, 2),
@@ -800,31 +793,7 @@ function catalogOverrides(spec, index, catalogs) {
           hyperlink: "#2563EB",
           followedHyperlink: "#7C3AED",
         },
-      ],
-    },
-    fontSchemes: {
-      source: "pkg:@openpresentation/gallery/font-schemes",
-    },
-    layouts: {
-      source: "https://www.pptx.gallery/layouts",
-    },
-    chartTypes: {
-      source: "https://www.pptx.gallery/chart-types",
-    },
-    languages: {
-      source: "https://www.pptx.gallery/languages",
-    },
-    audiences: {
-      source: "https://www.pptx.gallery/audiences",
-    },
-    purposes: {
-      source: "https://www.pptx.gallery/purposes",
-    },
-    tones: {
-      source: "https://www.pptx.gallery/tones",
-    },
-    socialPlatforms: {
-      source: "https://www.pptx.gallery/social-platforms",
+      },
     },
   };
 }
@@ -896,7 +865,7 @@ function deckFor(rawSpec, index, catalogs) {
             "Do not over-explain obvious context.",
           ],
         },
-    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    // A dense deck points at its own record in catalogs.custom.narratives (see catalogOverrides).
     narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
@@ -936,7 +905,7 @@ function deckFor(rawSpec, index, catalogs) {
         "Do not over-explain obvious context.",
       ],
     },
-    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    // A dense deck points at its own record in catalogs.custom.narratives (see catalogOverrides).
     narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
@@ -1030,13 +999,7 @@ function deckFor(rawSpec, index, catalogs) {
   return { deck, folder, filename: `${slug(title)}.opf.json` };
 }
 
-async function writeJson(file, value) {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-}
-
-async function writeReadme() {
-  const readme = `# OPF Example Gallery
+const readme = `# OPF Example Gallery
 
 This folder contains broader OPF examples organized by scenario instead of by isolated schema feature.
 
@@ -1052,36 +1015,73 @@ The root-level examples one directory up remain compact regression fixtures. The
 
 Brand marks, header icons, watermarks and cover artwork are original MIT-licensed abstract illustrations embedded as PNG data URIs. They work offline without fonts or an image resolver and can be regenerated with \`scripts/gallery-artwork.mjs\`. They are fictional demonstration artwork, not photographs or third-party logos. Supporting-photo, demo-video and external-data references remain explicit authoring examples; their actual resources and supported playback/data resolution still require completion.
 `;
-  await mkdir(examplesRoot, { recursive: true });
-  await writeFile(path.join(examplesRoot, "README.md"), readme, "utf8");
+
+async function loadCatalogs() {
+  return Object.fromEntries(
+    await Promise.all(Object.entries(catalogKinds).map(async ([name, kind]) => [name, await loadCatalogIds(kind)])),
+  );
 }
 
-async function main() {
-  const catalogs = Object.fromEntries(
-    await Promise.all(
-      Object.entries(catalogKinds).map(async ([name, kind]) => [name, await loadCatalogIds(kind)]),
-    ),
-  );
+/**
+ * One finished gallery deck (OPF 0.15): deckFor's document with every record it references embedded under
+ * catalogs.default by core `embed`, with the default catalog registered. Throws when a reference resolves nowhere.
+ */
+function embeddedDeckFor(spec, index, catalogs) {
+  const { deck, folder, filename } = deckFor(spec, index, catalogs);
+  const { document, unresolved } = embed(deck, { catalogs: [defaultCatalog] });
+  if (unresolved.length) throw new Error(`${folder}/${filename}: ${unresolved.map((entry) => entry.message).join("; ")}`);
+  return { deck: document, folder, filename };
+}
 
-  await writeReadme();
+/** Every file the generator owns, as [absolute path, exact contents]. */
+async function generatedFiles() {
+  const catalogs = await loadCatalogs();
+  const files = [[path.join(examplesRoot, "README.md"), readme]];
+  for (const [index, spec] of scenarioSpecs.entries()) {
+    const { deck, folder, filename } = embeddedDeckFor(spec, index, catalogs);
+    files.push([path.join(examplesRoot, folder, filename), `${JSON.stringify(deck, null, 2)}\n`]);
+  }
+  return files;
+}
 
-  for (let index = 0; index < scenarioSpecs.length; index += 1) {
-    const { deck, folder, filename } = deckFor(scenarioSpecs[index], index, catalogs);
-    await writeJson(path.join(examplesRoot, folder, filename), deck);
+async function readOrNull(file) {
+  try {
+    return await readFile(file, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
 
-    if ((index + 1) % 10 === 0) {
-      // Private checkpoint hook: keep output generic so coverage stats do not enter repo logs or docs.
-      console.log(`generated ${index + 1} examples`);
+// node scripts/generate-example-suite.mjs           regenerate examples/gallery (README and the 100 decks)
+// node scripts/generate-example-suite.mjs --check   read-only: exit 1 when a committed file differs from the generator
+async function main(argv) {
+  const check = argv.includes("--check");
+  const files = await generatedFiles();
+  const drift = [];
+  for (const [file, contents] of files) {
+    if ((await readOrNull(file)) === contents) continue;
+    drift.push(path.relative(repoRoot, file));
+    if (!check) {
+      await mkdir(path.dirname(file), { recursive: true });
+      await writeFile(file, contents, "utf8");
     }
   }
-
-  console.log(`wrote ${scenarioSpecs.length} OPF gallery examples`);
+  if (check) {
+    if (drift.length) {
+      console.error(`generate-example-suite: ${drift.length} of ${files.length} generated files differ from the generator (run node scripts/generate-example-suite.mjs and review the diff):`);
+      for (const file of drift) console.error(`  ${file}`);
+      process.exitCode = 1;
+    } else console.log(`generate-example-suite: ${files.length} generated files match the generator`);
+    return;
+  }
+  console.log(`wrote ${drift.length} of ${files.length} generated files (${scenarioSpecs.length} OPF gallery examples and the README)`);
 }
 
-export { scenarioSpecs, deckFor, loadCatalogIds, catalogKinds };
+export { scenarioSpecs, deckFor, embeddedDeckFor, generatedFiles, loadCatalogIds, loadCatalogs, catalogKinds };
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch((error) => {
+  main(process.argv.slice(2)).catch((error) => {
     console.error(error);
     process.exit(1);
   });

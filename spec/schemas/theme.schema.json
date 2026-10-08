@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-theme/v1",
   "title": "Theme",
-  "description": "Schema for theme records in the pptx.gallery library. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default theme-controlled background, and a slide size. Themes are referenced from OPF documents via design.theme or design.theme.id; the engine resolves the reference against catalogs.themes (inline) → catalogs.themes.source → the default catalog at https://www.pptx.gallery/themes. Inline overrides on design.colorScheme / design.fontScheme / design.background / design.dimensions take precedence over a resolved theme.",
+  "description": "Schema for theme records. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default theme-controlled background, and a slide size. Documents reference a theme from design.theme; design.colorScheme, design.fontScheme, design.background and design.dimensions take precedence over the resolved theme. The theme's own colorScheme and fontScheme references resolve in the theme's group first, so a catalog's theme finds that catalog's schemes.\n\nA document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' and 'id'; the copy a document embeds under catalogs.<group>.<kind>.<id> carries neither (the key is the id) and no 'x-*' display metadata.",
   "type": "object",
   "required": [
     "$schema",
@@ -13,12 +13,12 @@
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-theme/v1",
-      "description": "Identifies this record as a theme in the openpresentation.org catalog."
+      "description": "Identifies a published record file as a theme record. Required in a published file; an embedded copy omits it."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this theme via design.theme. Lowercase kebab-case.",
+      "description": "The theme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "minimal",
         "classic",
@@ -35,27 +35,6 @@
         "Dark",
         "Bold"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this theme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated theme record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "summary": {
       "type": "string",
@@ -74,22 +53,15 @@
     },
     "colorScheme": {
       "type": "string",
-      "description": "Catalog reference to the theme's default color scheme — resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference.",
-      "examples": [
-        "cool-horizon",
-        "boost",
-        "burnt-orange"
-      ]
+      "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
+      "description": "The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first.",
+      "examples": ["cool-horizon", "boost", "burnt-orange"]
     },
     "fontScheme": {
       "type": "string",
-      "description": "Catalog reference to the theme's default font scheme — resolved against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference.",
-      "examples": [
-        "aptos",
-        "tenorite",
-        "seaford",
-        "impact"
-      ]
+      "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
+      "description": "The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first.",
+      "examples": ["aptos", "tenorite", "seaford", "impact"]
     },
     "background": {
       "$ref": "#/$defs/ThemeBackground"

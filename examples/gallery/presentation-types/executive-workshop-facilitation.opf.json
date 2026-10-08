@@ -3,16 +3,16 @@
   "name": "Executive Workshop Facilitation",
   "description": "Executive Workshop Facilitation is a fictional OPF example for workshop teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "executive-workshop-facilitation",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "engineering-team",
+    "customer",
     {
-      "id": "regulatory",
+      "id": "internal-team",
       "attentionBudgetMinutes": 30,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "company-intro"
+        "status-update"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "company-intro",
+  "narrative": "status-update",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -70,7 +70,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -100,10 +100,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [
@@ -138,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-area",
+        "type": "area",
         "data": {
           "columns": [
             "Quarter",
@@ -369,6 +365,446 @@
       "density": "medium",
       "scenario": "executive-workshop-facilitation",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "status-update": {
+          "name": "Status Update",
+          "summary": "Concise progress-report arc for keeping a stakeholder informed: headline, brief, progress, results, plan, feedback. Optimized for short, repeated updates rather than one-time deep dives.",
+          "audienceFit": [
+            "stakeholders",
+            "managers",
+            "customers",
+            "executives"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 15
+          },
+          "tags": [
+            "reporting",
+            "operations",
+            "customer-relationship",
+            "weekly"
+          ],
+          "beats": [
+            {
+              "id": "headline",
+              "name": "Headline",
+              "description": "Open with the single most important sentence the audience needs to know — on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
+              "layout": "title",
+              "instructions": "Title & date",
+              "type": "text"
+            },
+            {
+              "id": "brief",
+              "name": "Brief",
+              "description": "State the objective for the period and what was promised. One slide, three lines. Frames the rest of the update so progress is read against a clear bar.",
+              "instructions": "Summary/objectives",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "progress",
+              "name": "Progress",
+              "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater — list outcomes and material moves, not activity for its own sake.",
+              "instructions": "Explain actions taken",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "results",
+              "name": "Results",
+              "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp — versus plan, versus last period, versus benchmark.",
+              "instructions": "Show outcomes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Outline the next steps and who owns them. Be specific about the next decision point and what would have to happen to slip the schedule.",
+              "instructions": "Outline next steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Invite the audience to weigh in: where you'd like input, where you need a decision, where help would unblock you. End the update with an open hand, not a closed file.",
+              "layout": "title",
+              "instructions": "Ask for response",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        },
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
+          ]
+        }
+      },
+      "purposes": {
+        "inform": {
+          "name": "Inform",
+          "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+          "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+          "outcome": "The audience understands the situation and can repeat the important facts.",
+          "successCriteria": [
+            "Audience can summarize the key facts",
+            "No immediate decision is required",
+            "Follow-up questions are about implications, not basic context"
+          ],
+          "recommendedNarratives": [
+            "status-update",
+            "focus",
+            "educate"
+          ],
+          "recommendedTones": [
+            "formal",
+            "conversational"
+          ],
+          "tags": [
+            "awareness",
+            "context",
+            "status"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "black-and-white": {
+          "name": "Black & White",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#000000",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#FFFFFF",
+          "summary": "Strict monochrome contrast for formal, document-style decks.",
+          "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+          "tags": [
+            "minimal",
+            "formal",
+            "neutral",
+            "high-contrast",
+            "restrained"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "trebuchet-ms": {
+          "name": "Trebuchet MS",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Trebuchet MS",
+          "minor": "Trebuchet MS",
+          "textSample": "Casual web style",
+          "type": "sans-serif",
+          "description": "Trebuchet MS is a sans serif OPF font scheme for Latin presentations, using Trebuchet MS for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
     }
   }
 }

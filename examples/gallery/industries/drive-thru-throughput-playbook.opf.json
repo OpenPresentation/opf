@@ -3,16 +3,16 @@
   "name": "Drive Thru Throughput Playbook",
   "description": "Drive Thru Throughput Playbook is a fictional OPF example for quick service restaurants teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "drive-thru-throughput-playbook",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "executive",
+    "technical",
     {
-      "id": "sales",
+      "id": "candidates",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "justice"
+        "golden-circle"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "justice",
+  "narrative": "golden-circle",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,7 +74,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -92,10 +92,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -130,7 +126,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",
@@ -341,6 +337,444 @@
       "density": "medium",
       "scenario": "drive-thru-throughput-playbook",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "golden-circle": {
+          "name": "Golden Circle (Why / How / What)",
+          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
+          "audienceFit": [
+            "customers",
+            "employees",
+            "general-audience",
+            "press"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 30
+          },
+          "tags": [
+            "keynote",
+            "brand",
+            "mission",
+            "sinek"
+          ],
+          "beats": [
+            {
+              "id": "why",
+              "name": "Why",
+              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+            },
+            {
+              "id": "how",
+              "name": "How",
+              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
+            },
+            {
+              "id": "what",
+              "name": "What",
+              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+            },
+            {
+              "id": "proof",
+              "name": "Proof",
+              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
+            },
+            {
+              "id": "invitation",
+              "name": "Invitation",
+              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        },
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "bold-red": {
+          "name": "Bold Red",
+          "accent1": "#A41410",
+          "accent2": "#2693A1",
+          "accent3": "#EFA517",
+          "accent4": "#E86D1F",
+          "accent5": "#324472",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#232323",
+          "followedHyperlink": "#2693A1",
+          "hyperlink": "#324472",
+          "light1": "#FFFFFF",
+          "light2": "#DCDCDC",
+          "summary": "Confident red and teal accents for urgent, high-salience stories.",
+          "description": "A bold red-led scheme with teal and navy support. Use it when the deck needs urgency, contrast, and clear emphasis.",
+          "tags": [
+            "bold",
+            "urgent",
+            "energetic",
+            "decisive",
+            "impactful"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "fangsong": {
+          "name": "FangSong",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "zh-Hans"
+          ],
+          "major": "FangSong",
+          "minor": "FangSong",
+          "textSample": "这是用仿宋字体写的",
+          "type": "serif",
+          "description": "FangSong is a serif OPF font scheme for East Asian presentations, using FangSong for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
     }
   }
 }

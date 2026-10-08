@@ -2,52 +2,131 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Numbered Lists",
   "description": "Fixture for the numbering field: every style and suffix, start numbers, per-level styles with nesting and restarts, wide markers, bullets, an entry start, and a numbered list beside other blocks. See docs/numbered-lists.md.",
-  "design": { "theme": "classic", "colorScheme": "forest-green" },
+  "design": {
+    "theme": "classic",
+    "colorScheme": "forest-green"
+  },
   "slides": [
     {
       "id": "styles",
       "title": "Styles",
       "blocks": [
-        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "arabic" },
-        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "roman-upper" },
-        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "alpha-lower" }
+        {
+          "items": [
+            "Define the goal",
+            "Pick the owner",
+            "Ship it"
+          ],
+          "numbering": "arabic"
+        },
+        {
+          "items": [
+            "Define the goal",
+            "Pick the owner",
+            "Ship it"
+          ],
+          "numbering": "roman-upper"
+        },
+        {
+          "items": [
+            "Define the goal",
+            "Pick the owner",
+            "Ship it"
+          ],
+          "numbering": "alpha-lower"
+        }
       ]
     },
     {
       "id": "suffix-and-start",
       "title": "Suffix and start",
-      "items": ["Review the draft", "Collect comments", "Resolve conflicts", "Publish"],
-      "numbering": { "style": "alpha-upper", "start": 3, "suffix": "paren" }
+      "items": [
+        "Review the draft",
+        "Collect comments",
+        "Resolve conflicts",
+        "Publish"
+      ],
+      "numbering": {
+        "style": "alpha-upper",
+        "start": 3,
+        "suffix": "paren"
+      }
     },
     {
       "id": "per-level",
       "title": "Per-level styles",
       "items": [
         "Freeze the schema",
-        { "text": "Migrate the data", "level": 1 },
-        { "text": "Verify the counts", "level": 1 },
-        { "text": "Sample ten tables", "level": 2 },
+        {
+          "text": "Migrate the data",
+          "level": 1
+        },
+        {
+          "text": "Verify the counts",
+          "level": 1
+        },
+        {
+          "text": "Sample ten tables",
+          "level": 2
+        },
         "Switch traffic",
-        { "text": "Watch the error rate", "level": 1 },
+        {
+          "text": "Watch the error rate",
+          "level": 1
+        },
         "Retire the old service"
       ],
-      "numbering": ["arabic", { "style": "alpha-lower", "suffix": "paren" }, { "style": "roman-lower", "suffix": "paren-both" }]
+      "numbering": [
+        "arabic",
+        {
+          "style": "alpha-lower",
+          "suffix": "paren"
+        },
+        {
+          "style": "roman-lower",
+          "suffix": "paren-both"
+        }
+      ]
     },
     {
       "id": "wide-markers",
       "title": "Wide markers",
-      "items": ["Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"],
-      "numbering": { "style": "roman-lower", "start": 8, "suffix": "paren-both" }
+      "items": [
+        "Eight",
+        "Nine",
+        "Ten",
+        "Eleven",
+        "Twelve",
+        "Thirteen",
+        "Fourteen",
+        "Fifteen"
+      ],
+      "numbering": {
+        "style": "roman-lower",
+        "start": 8,
+        "suffix": "paren-both"
+      }
     },
     {
       "id": "bullets-and-restart",
       "title": "Bullets and an entry start",
       "left": {
-        "bullets": ["First point", "Second point", { "text": "Resumed at six", "start": 6 }, "Seventh point"],
+        "bullets": [
+          "First point",
+          "Second point",
+          {
+            "text": "Resumed at six",
+            "start": 6
+          },
+          "Seventh point"
+        ],
         "numbering": "arabic"
       },
       "right": {
-        "items": ["Plain bullet", "Plain bullet again"]
+        "items": [
+          "Plain bullet",
+          "Plain bullet again"
+        ]
       }
     },
     {
@@ -55,15 +134,108 @@
       "title": "Beside other blocks",
       "left": {
         "items": [
-          { "text": "Collect the requirements", "description": "Interviews and the support backlog." },
-          { "text": "Draft the proposal", "description": "One page, with the trade-offs." },
-          { "text": "Decide", "description": "Owner signs off." }
+          {
+            "text": "Collect the requirements",
+            "description": "Interviews and the support backlog."
+          },
+          {
+            "text": "Draft the proposal",
+            "description": "One page, with the trade-offs."
+          },
+          {
+            "text": "Decide",
+            "description": "Owner signs off."
+          }
         ],
         "numbering": "arabic"
       },
       "right": {
-        "metric": { "value": "3", "label": "steps to a decision" }
+        "metric": {
+          "value": "3",
+          "label": "steps to a decision"
+        }
       }
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#FAF3DD",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  }
 }

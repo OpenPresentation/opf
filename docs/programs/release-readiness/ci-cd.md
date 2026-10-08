@@ -181,7 +181,7 @@ Step profile of core `packages` (job 110962648427, 26.8 min):
 |---|---|
 | Container, checkouts, install, build and link | 1.6 |
 | Sibling suites at pinned SHAs (render 10.2, pptx 5.3, editor 0.2) | 15.7 |
-| Core ecosystem tests (`test:skills` to `test:slide-images`) | 1.5 |
+| Core ecosystem tests (`test:skills` to `test:image-treatments`) | 1.5 |
 | Editor demo, packing, packed ecosystem, packed CLI | 1.6 |
 | Installed-tarball browser interactions | 1.2 |
 | Metric outline browser check | 2.5 |

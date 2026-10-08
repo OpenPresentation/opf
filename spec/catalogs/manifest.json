@@ -1,29 +1,29 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
-  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync. `layouts` is a subset by design (RR-41, opf#292), not by omission: it bundles 100 of the gallery's 485 layouts, and the other 385 resolve through the default catalog or an inline record, because bundling them adds about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter for records none of them read.",
+  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. Only @openpresentation/opf/catalog carries it; no other entry of core imports catalog data (pnpm check:catalog-free).",
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
-    "commit": "04792ccce2c0d6764a9513b87ba6790bf1957407",
+    "commit": "5645db8e4e9e09d0dd819c39538b1c783ee91aa1",
     "path": "public"
   },
   "kinds": {
     "audiences": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 16,
       "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314",
       "gallery": {
-        "records": 22,
-        "contentSha256": "bfb44226b533a2da04c92077eb39c689dde43181e0b9979fb15c247dfaba1f98"
+        "records": 16,
+        "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314"
       }
     },
     "chart-types": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 27,
       "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
       "gallery": {
-        "records": 76,
-        "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67"
+        "records": 27,
+        "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c"
       }
     },
     "color-schemes": {
@@ -38,10 +38,10 @@
     "font-schemes": {
       "mode": "mirror",
       "records": 89,
-      "contentSha256": "184c652ed0973ee199fb17bc96dafc6b090a43c188ad5c217688ca335541354c",
+      "contentSha256": "7d19dc9155e05e6037a5888e7cced933c3f275b6cb86f51157eaae7ba1dd8e5e",
       "gallery": {
         "records": 89,
-        "contentSha256": "184c652ed0973ee199fb17bc96dafc6b090a43c188ad5c217688ca335541354c"
+        "contentSha256": "7d19dc9155e05e6037a5888e7cced933c3f275b6cb86f51157eaae7ba1dd8e5e"
       }
     },
     "languages": {
@@ -54,21 +54,21 @@
       }
     },
     "layouts": {
-      "mode": "subset",
-      "records": 100,
-      "contentSha256": "e076dd737083e0daaba396f6033d19d196b483b01e957045002de018c8f97fa2",
+      "mode": "mirror",
+      "records": 278,
+      "contentSha256": "f9121c466032011762d58ee27cd3e50f43a388cc75b841219f87b8001f7632a3",
       "gallery": {
-        "records": 485,
-        "contentSha256": "f245b0fbcc4197e5533dcb9453d30bbba88015ed1dbc02a43939aadc7cd0cf3e"
+        "records": 278,
+        "contentSha256": "f9121c466032011762d58ee27cd3e50f43a388cc75b841219f87b8001f7632a3"
       }
     },
     "narratives": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 48,
-      "contentSha256": "9222e36d1fb1a54f0811b9851c5359e05f570a0a931cceca31bdbe27a888d582",
+      "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220",
       "gallery": {
         "records": 48,
-        "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029"
+        "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220"
       }
     },
     "purposes": {

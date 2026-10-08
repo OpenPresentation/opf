@@ -1,12 +1,12 @@
 {
   "name": "FY27 Budget Tradeoff Deck",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "all-hands"
+    "sales"
   ],
   "purpose": "inform",
   "tone": "conversational",
-  "narrative": "strategic-advisory",
+  "narrative": "rags-to-riches",
   "design": {
     "theme": "dark",
     "colorScheme": "boost",
@@ -18,7 +18,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "area",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,345 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "rags-to-riches": {
+          "name": "Rags to Riches",
+          "summary": "Underdog journey from initial failure to eventual success. Pulls on resilience, grit, and perseverance — useful for founder stories, brand stories, and any deck where the audience needs to feel the cost behind the win.",
+          "audienceFit": [
+            "general-audience",
+            "customers",
+            "press",
+            "candidates"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "storytelling",
+            "founder",
+            "brand",
+            "inspirational"
+          ],
+          "beats": [
+            {
+              "id": "origin",
+              "name": "Origin",
+              "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows.",
+              "instructions": "Humble beginning",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "inspiration",
+              "name": "Inspiration",
+              "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill.",
+              "instructions": "Discover true calling",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "opportunity",
+              "name": "Opportunity",
+              "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them.",
+              "instructions": "Spot golden chance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "adversity",
+              "name": "Adversity",
+              "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real.",
+              "instructions": "Face hardest struggles",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "overcoming",
+              "name": "Overcoming",
+              "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted.",
+              "instructions": "Surmount tough obstacles",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "impactful-change",
+              "name": "Impactful Change",
+              "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage.",
+              "instructions": "Alter the status quo",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "lasting-legacy",
+              "name": "Lasting Legacy",
+              "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
+              "layout": "title",
+              "instructions": "Create enduring effect",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "inform": {
+          "name": "Inform",
+          "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+          "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+          "outcome": "The audience understands the situation and can repeat the important facts.",
+          "successCriteria": [
+            "Audience can summarize the key facts",
+            "No immediate decision is required",
+            "Follow-up questions are about implications, not basic context"
+          ],
+          "recommendedNarratives": [
+            "status-update",
+            "focus",
+            "educate"
+          ],
+          "recommendedTones": [
+            "formal",
+            "conversational"
+          ],
+          "tags": [
+            "awareness",
+            "context",
+            "status"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "meiryo": {
+          "name": "Meiryo",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "ja"
+          ],
+          "major": "Meiryo",
+          "minor": "Meiryo",
+          "textSample": "これはメイリオフォントで書かれています",
+          "type": "sans-serif",
+          "description": "Meiryo is a sans serif OPF font scheme for East Asian presentations, using Meiryo for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
+    }
+  }
 }

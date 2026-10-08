@@ -1,12 +1,12 @@
 {
   "name": "Digital Services Modernization",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "all-hands"
+    "executive"
   ],
   "purpose": "report",
   "tone": "authoritative",
-  "narrative": "strategic-narrative",
+  "narrative": "persuade",
   "design": {
     "theme": "dark",
     "colorScheme": "black-and-white",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,410 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
+          "audienceFit": [
+            "general-audience",
+            "policymakers",
+            "industry-peers"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 30
+          },
+          "tags": [
+            "keynote",
+            "persuasive",
+            "advocacy",
+            "talk"
+          ],
+          "beats": [
+            {
+              "id": "gripping-introduction",
+              "name": "Gripping Introduction",
+              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
+              "instructions": "Draw in the audience with a compelling opener",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenge-status-quo",
+              "name": "Challenge the Status Quo",
+              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
+            },
+            {
+              "id": "present-problem",
+              "name": "Present the Problem",
+              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
+            },
+            {
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
+              "instructions": "Share significant stories to illuminate the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "statistic-shock",
+              "name": "Statistic Shock",
+              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
+              "instructions": "Use impactful stats to highlight the gravity of the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "historical-context",
+              "name": "Historical Context",
+              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
+              "instructions": "Show the evolution or history of the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "weave-narrative",
+              "name": "Weave a Narrative",
+              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+            },
+            {
+              "id": "major-revelation",
+              "name": "Major Revelation",
+              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
+              "instructions": "Deliver a surprising or significant discovery",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "propose-solution",
+              "name": "Propose Solution",
+              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
+              "instructions": "Advocate for change or propose an actionable solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "final-question",
+              "name": "Final Question",
+              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+              "layout": "title",
+              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        }
+      },
+      "purposes": {
+        "report": {
+          "name": "Report",
+          "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+          "description": "Use for business reviews, project updates, research summaries, and recurring operating cadences. Prioritize the metric, the movement, the reason, and the implication.",
+          "outcome": "The audience understands what happened, why it happened, and what it means.",
+          "successCriteria": [
+            "Key metrics are easy to scan",
+            "Variance and drivers are explained",
+            "Implications are explicit"
+          ],
+          "recommendedNarratives": [
+            "qbr",
+            "business-review",
+            "status-update",
+            "survey-analysis"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical"
+          ],
+          "tags": [
+            "performance",
+            "progress",
+            "findings"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "black-and-white": {
+          "name": "Black & White",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#000000",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#FFFFFF",
+          "summary": "Strict monochrome contrast for formal, document-style decks.",
+          "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+          "tags": [
+            "minimal",
+            "formal",
+            "neutral",
+            "high-contrast",
+            "restrained"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "rockwell": {
+          "name": "Rockwell",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Rockwell",
+          "minor": "Rockwell",
+          "textSample": "Solid slab serif",
+          "type": "serif",
+          "description": "Rockwell is a serif OPF font scheme for Latin presentations, using Rockwell for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "list-5x": {
+          "name": "List 5x",
+          "summary": "Reach for it when five groups of points need parallel lists on one slide.",
+          "description": "A title above five lists in a three-column grid. Use it for five categories, stages or capabilities when each has only a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x.svg"
+          }
+        }
+      }
+    }
+  }
 }

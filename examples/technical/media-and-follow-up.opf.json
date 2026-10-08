@@ -1,5 +1,8 @@
 {
   "name": "Media And Follow-Up Example",
+  "design": {
+    "imageFit": "contain"
+  },
   "slides": [
     {
       "title": "Product Snapshot",

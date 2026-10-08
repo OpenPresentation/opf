@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import { colorSchemes } from '../dist/index.js'; import { METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, colorContrast, layoutMetric, metricTrendColor, metricTrendMark, metricTrendPoints } from '../dist/composition.js';
+import { colorSchemes } from './support/catalog.mjs'; import { METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, colorContrast, layoutMetric, metricTrendColor, metricTrendMark, metricTrendPoints } from '../dist/composition.js';
 
 const box={x:40,y:60,width:600,height:400};
 

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {readFile} from 'node:fs/promises';
 import { colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, resolveColorRef, normalizeHexColor, resolveColorRoles, isDarkColor, defaultSlideBackground } from '../dist/composition.js';
-import { colorSchemes } from '../dist/index.js';
+import { colorSchemes } from './support/catalog.mjs';
 
 const forestGreen = colorSchemes.find((scheme) => scheme.id === 'forest-green');
 

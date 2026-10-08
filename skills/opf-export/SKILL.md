@@ -16,7 +16,7 @@ When the `opf` CLI is available, `opf render`, `opf export` and `opf import` pro
 
 Use coordinated versions of `@openpresentation/opf`, `opf-render`, and `opf-pptx`. The repository's preview tarballs can contain APIs absent from published packages. Determine the actual installed exports before using them.
 
-Resolve design, dimensions, catalog records, assets, and required font faces. Core validation does not fetch catalog sources. SVG accepts embedded raster data or an explicit host image resolver; PPTX has a separate resolver contract and may require different handling. Resolve only the resources needed for the user's task. Do not treat a resource URL as authorization to upload the deck elsewhere.
+Resolve design, dimensions, catalog records, assets, and required font faces. Pass the catalogs the host registered (`{ catalogs }`) to every engine, or embed the records first (`embed`); nothing fetches a catalog, and a strict export fails on a reference that resolves nowhere. SVG accepts embedded raster data or an explicit host image resolver; PPTX has a separate resolver contract and may require different handling. Resolve only the resources needed for the user's task. Do not treat a resource URL as authorization to upload the deck elsewhere.
 
 Pass the same text measurement provider to preview and PPTX export. Use identical pinned font files in the browser and measurement engine. Rendering a named family without loading its bytes can silently substitute fonts and change line breaks.
 

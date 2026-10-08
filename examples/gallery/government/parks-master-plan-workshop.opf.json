@@ -3,16 +3,16 @@
   "name": "Parks Master Plan Workshop",
   "description": "Parks Master Plan Workshop is a fictional OPF example for parks and recreation teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "parks-master-plan-workshop",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "executive",
+    "media",
     {
-      "id": "sales",
+      "id": "technical",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "underdog-victory"
+        "project-proposal"
       ],
       "recommendedTones": [
         "persuasive"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "underdog-victory",
+  "narrative": "project-proposal",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -69,7 +69,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -87,10 +87,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -125,7 +121,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -336,6 +332,497 @@
       "density": "medium",
       "scenario": "parks-master-plan-workshop",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "project-proposal": {
+          "name": "Project Proposal",
+          "summary": "Internal proposal arc for greenlighting a project: hook, problem, idea, benefits, justification, plan, timeline, risks, outlook, ask. Designed to take a sponsor from 'never heard of this' to 'approved' inside a single meeting.",
+          "audienceFit": [
+            "executives",
+            "sponsors",
+            "managers",
+            "internal-teams"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "management",
+            "proposal",
+            "internal",
+            "planning"
+          ],
+          "beats": [
+            {
+              "id": "elevator-pitch",
+              "name": "Elevator Pitch",
+              "description": "Open with the proposal in one slide: the project name, the audience, the goal, and the headline benefit. If a sponsor reads only this slide, they should still know what they're being asked to approve.",
+              "instructions": "Audience hook & objectives",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "problem-statement",
+              "name": "Problem Statement",
+              "description": "Articulate the problem this project solves and why it deserves resources now. Tie it to a known business goal or pain. Vague problems produce vague approvals.",
+              "instructions": "Highlight struggles & project necessity",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "core-concept",
+              "name": "Core Concept",
+              "description": "Describe the central idea of the project in plain language. The 'what' before the 'how.' A reader should be able to repeat the concept in one sentence after this slide.",
+              "instructions": "Share actionable idea",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "benefits",
+              "name": "Benefits",
+              "description": "Quantify the impact: revenue, cost, risk, customer, capability. Use numbers where possible and clear comparisons where not. Each benefit should map to a metric the sponsor cares about.",
+              "instructions": "Spotlight key metrics",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "justification",
+              "name": "Justification",
+              "description": "Connect the project to broader strategy, OKRs, or constraints the audience already cares about. Show why this project is more important than the alternatives competing for the same resources.",
+              "instructions": "Strategic alignment & significance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "approach",
+              "name": "Approach",
+              "description": "Lay out how the project will be executed: the solution, the team shape, the budget envelope. Enough detail to feel credible, not so much that it pre-commits to choices that will mature in flight.",
+              "instructions": "Solution, resources, & budget",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "timeline",
+              "name": "Timeline",
+              "description": "Show the project phases on a timeline, with major milestones and decision points marked. Sponsors are buying a sequence of bets, not a single launch — make those bets visible.",
+              "instructions": "Outline project phases",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "risks",
+              "name": "Risks",
+              "description": "Name the top risks honestly and pair each with a mitigation or open question. Listing risks without mitigations signals you haven't thought it through; hiding risks signals worse.",
+              "instructions": "Consider potential challenges",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "outlook",
+              "name": "Outlook",
+              "description": "Paint the picture of what the organization looks like a quarter or year after the project ships. Stretch beyond the immediate deliverable to the second-order benefits.",
+              "instructions": "Envision project impact",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "wrap-up",
+              "name": "Wrap Up",
+              "description": "Recap the proposal and state the specific decision you're asking for: approval, budget, headcount, sponsorship. Make it easy to say yes today.",
+              "layout": "title",
+              "instructions": "Summarize & persuade",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        },
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        }
+      },
+      "purposes": {
+        "inform": {
+          "name": "Inform",
+          "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+          "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+          "outcome": "The audience understands the situation and can repeat the important facts.",
+          "successCriteria": [
+            "Audience can summarize the key facts",
+            "No immediate decision is required",
+            "Follow-up questions are about implications, not basic context"
+          ],
+          "recommendedNarratives": [
+            "status-update",
+            "focus",
+            "educate"
+          ],
+          "recommendedTones": [
+            "formal",
+            "conversational"
+          ],
+          "tags": [
+            "awareness",
+            "context",
+            "status"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "shonar-bangla": {
+          "name": "Shonar Bangla",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "bn",
+            "ctg"
+          ],
+          "major": "Shonar Bangla",
+          "minor": "Shonar Bangla",
+          "textSample": "এটা খুব সুন্দর",
+          "type": "sans-serif",
+          "description": "Shonar Bangla is a sans serif OPF font scheme for complex script presentations, using Shonar Bangla for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
     }
   }
 }

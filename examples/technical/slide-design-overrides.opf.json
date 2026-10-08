@@ -13,7 +13,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -69,20 +69,114 @@
     {
       "title": "Image Fill Override",
       "design": {
-        "imageFill": "fit",
-        "slideImage": {
-          "src": "asset:context-photo",
-          "position": "right"
-        }
+        "imageFit": "contain"
       },
-      "type": "image",
-      "image": "asset:context-photo"
+      "blocks": [
+        {
+          "image": "asset:context-photo",
+          "placement": {
+            "edge": "right"
+          }
+        }
+      ]
     }
   ],
   "assets": {
     "context-photo": {
       "src": "./assets/context-photo.jpg",
       "alt": "Context photo"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
     }
   }
 }

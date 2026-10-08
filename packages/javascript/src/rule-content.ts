@@ -156,7 +156,7 @@ export function runsOf(tv: TextValue): Run[] {
 export interface AssetRef {
 	path: string;
 	value: unknown;
-	kind: 'image' | 'video' | 'slide-image' | 'logo' | 'furniture' | 'speaker' | 'organization' | 'quote-photo';
+	kind: 'image' | 'video' | 'logo' | 'furniture' | 'speaker' | 'organization' | 'quote-photo';
 }
 
 /** Alt text of an asset value: its own `alt`, else the registry entry an `asset:<id>` source points to. */
@@ -188,9 +188,6 @@ export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeD
 		if (rec(payload.node.quote).photo !== undefined) out.push({ path: at('quote', 'photo'), value: rec(payload.node.quote).photo, kind: 'quote-photo' });
 	}
 	const designRefs = (design: Rec, base: string) => {
-		const slideImage = design.slideImage;
-		if (slideImage && (typeof slideImage === 'string' || typeof slideImage.src === 'string'))
-			out.push({ path: `${base}/slideImage`, value: slideImage, kind: 'slide-image' });
 		const logo = design.logo;
 		if (typeof logo === 'string' || (logo && typeof logo.src === 'string')) out.push({ path: `${base}/logo`, value: logo, kind: 'logo' });
 		else if (logo && typeof logo === 'object')

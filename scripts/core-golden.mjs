@@ -9,7 +9,15 @@
 //   node scripts/core-golden.mjs compare --expected <fixture> --actual <candidate.json>
 //   node scripts/core-golden.mjs report --base <main fixture> --candidate <candidate.json> --branch-fixture <file> --out-dir <dir> [--note k=v ...] [--github-output]
 //   node scripts/core-golden.mjs verify --base <main fixture> --candidate <file>
-//   node scripts/core-golden.mjs paths --root <checkout> --allow <repo-relative path>
+//   node scripts/core-golden.mjs paths --root <checkout> --allow <fixture> [--allow ecosystem.lock.json --allow scripts/fixtures/README.md]
+//   node scripts/core-golden.mjs plan --main-golden <path> --branch-golden <path> --main-renderer <sha> --branch-renderer <sha> [--renderer-ref <ref> --fixture-name <name>] [--github-output]
+//   node scripts/core-golden.mjs set-lock-golden --lock <ecosystem.lock.json> --path <fixture> --main-golden <path> --note <text>
+//   node scripts/core-golden.mjs review-record --readme <file> --fixture <path> --branch <name> --head <sha> --renderer <sha> --renderer-ref <ref> --base-sha <sha> --changed-slides <n> --changed-decks <n> [--run-url <url>]
+//
+// renderer-ref (FA wave C, for one coordinated change such as OPF 0.15): the branch is rendered with that opf-render
+// branch or commit instead of the locked renderer, into a NEW fixture (scripts/fixtures/opf-examples-png.<name>.sha256.json)
+// that the branch's ecosystem.lock.json `golden` then selects; main's fixture is never overwritten. The guard still renders
+// main with the locked renderer.
 //
 // Every command exits 1 with a message on a violated rule. `--github-output` appends step outputs to $GITHUB_OUTPUT.
 import { spawnSync } from "node:child_process";
@@ -20,6 +28,11 @@ import { parseLock } from "./ecosystem-lock.mjs";
 
 /** A core fixture the workflow may write: a manifest directly under scripts/fixtures. */
 export const FIXTURE_PATH = /^scripts\/fixtures\/[A-Za-z0-9._-]+\.sha256\.json$/u;
+/** Files the push job may change besides the fixture, and only for a renderer-ref run: the lock's golden and the review record. */
+export const RENDERER_REF_FILES = ["ecosystem.lock.json", "scripts/fixtures/README.md"];
+/** The name of a new fixture: scripts/fixtures/opf-examples-png.<name>.sha256.json. */
+export const FIXTURE_NAME = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/u;
+
 /** Paths whose change on main moves what a branch renders (or which fixture is selected). */
 export const GOLDEN_INPUT_PREFIXES = ["examples/", "packages/", "spec/", "scripts/fixtures/", "ecosystem.lock.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "package.json"];
 
@@ -38,6 +51,65 @@ export function branchErrors(name, defaultBranch = "main") {
   if (/^[0-9a-f]{40}$/u.test(name)) errors.push(`"${name}" is a commit SHA; a branch name is required`);
   if (name === defaultBranch) errors.push(`"${name}" is the default branch; regenerate a pull request branch`);
   return errors;
+}
+
+/** Reasons `ref` cannot name an OpenPresentation/opf-render branch or commit (a plain branch name or a 7-40 digit SHA). */
+export function rendererRefErrors(ref) {
+  if (typeof ref !== "string" || ref === "") return ["renderer-ref is empty"];
+  if (/^[0-9a-f]{7,40}$/u.test(ref)) return [];
+  const errors = [];
+  if (ref.includes(":")) errors.push(`renderer-ref "${ref}" looks like <owner>:<branch>; only a branch or commit of OpenPresentation/opf-render is accepted`);
+  if (!/^[A-Za-z0-9][A-Za-z0-9._/-]*$/u.test(ref) || ref.includes("..") || ref.includes("//") || ref.endsWith("/") || ref.endsWith(".lock") || ref.endsWith(".")) errors.push(`renderer-ref "${ref}" is not a plain branch name or commit SHA`);
+  if (/^(refs\/|origin\/|pull\/)/u.test(ref)) errors.push(`renderer-ref "${ref}" is a ref, not a branch name`);
+  return errors;
+}
+
+/** The fixture a renderer-ref run writes. */
+export function fixturePathFor(name) {
+  if (typeof name !== "string" || !FIXTURE_NAME.test(name) || name.includes("..")) throw new Error(`fixture-name "${name}" must be lowercase letters, digits, . and - (it names scripts/fixtures/opf-examples-png.<name>.sha256.json)`);
+  return `scripts/fixtures/opf-examples-png.${name}.sha256.json`;
+}
+
+/**
+ * Which renderer renders the branch and which fixture it writes. Without a renderer-ref: the locked renderer, which the
+ * branch must lock too, and the branch lock's own golden. With one: that renderer and a new fixture (never main's), and
+ * the branch lock may lock another renderer (it is not the renderer that renders), so that check is relaxed.
+ */
+export function rendererPlan({ rendererRef = "", fixtureName = "", mainGolden, branchGolden, mainRenderer, branchRenderer }) {
+  const errors = [], notes = [];
+  if (!rendererRef) {
+    if (fixtureName) errors.push("fixture-name is only for a renderer-ref run; without one the branch lock's golden is regenerated");
+    if (mainRenderer !== branchRenderer) errors.push(`The branch locks opf-render ${branchRenderer}, main locks ${mainRenderer}. Rebase onto main (the lock is written by the roller) and dispatch again, or pass renderer-ref.`);
+    return { override: false, fixturePath: branchGolden, errors, notes };
+  }
+  errors.push(...rendererRefErrors(rendererRef));
+  let fixturePath = "";
+  if (!fixtureName) errors.push("renderer-ref needs fixture-name: the run writes a new fixture, scripts/fixtures/opf-examples-png.<name>.sha256.json");
+  else {
+    try { fixturePath = fixturePathFor(fixtureName); } catch (error) { errors.push(error.message); }
+    if (fixturePath && fixturePath === mainGolden) errors.push(`${fixturePath} is main's fixture, which main's lock still selects; choose another fixture-name`);
+  }
+  if (mainRenderer !== branchRenderer) notes.push(`renderer-ref ${rendererRef} renders the branch, so the branch lock's opf-render (${branchRenderer.slice(0, 12)}) need not equal main's (${mainRenderer.slice(0, 12)}): the "branch lock renderer must equal main's" check is relaxed for this run.`);
+  else notes.push(`renderer-ref ${rendererRef} renders the branch instead of the locked renderer ${mainRenderer.slice(0, 12)}.`);
+  return { override: true, fixturePath, errors, notes };
+}
+
+/** The lock text with `golden.path` (and `golden.note`) replaced, keeping the roller's formatting. */
+export function lockWithGolden(lockText, fixturePath, note) {
+  const lock = parseLock(lockText);
+  if (!isFixturePath(fixturePath)) throw new Error(`${fixturePath} is not scripts/fixtures/<name>.sha256.json`);
+  const golden = /("golden"\s*:\s*\{[^{}]*?"path"\s*:\s*)"[^"]*"/u;
+  if (!golden.test(lockText)) throw new Error("ecosystem.lock.json has no golden.path to replace");
+  let next = lockText.replace(golden, `$1${JSON.stringify(fixturePath)}`);
+  if (note !== undefined) next = /("golden"\s*:\s*\{[^{}]*?"note"\s*:\s*)"(?:[^"\\]|\\.)*"/u.test(next) ? next.replace(/("golden"\s*:\s*\{[^{}]*?"note"\s*:\s*)"(?:[^"\\]|\\.)*"/u, `$1${JSON.stringify(note)}`) : next;
+  const parsed = parseLock(next);
+  if (parsed.golden.path !== fixturePath || parsed.golden.repository !== lock.golden.repository) throw new Error("rewriting golden.path changed something else");
+  return next;
+}
+
+/** The paragraph a renderer-ref run appends to scripts/fixtures/README.md (the fixture review record). */
+export function reviewRecord({ fixture, branch, head, renderer, rendererRef, baseSha, changedSlides, changedDecks, runUrl = "" }) {
+  return `\n\`${path.basename(fixture)}\` was written by the \`regenerate-core-golden\` workflow${runUrl ? ` ([run](${runUrl}))` : ""} for \`${branch}\` @ \`${head.slice(0, 12)}\` with opf-render \`${renderer}\` (renderer-ref \`${rendererRef}\`, not the locked renderer), scale 0.25, systemFonts false. The same run first reproduced main @ \`${baseSha.slice(0, 12)}\`'s committed fixture with the locked renderer byte for byte. Against main's fixture, ${changedSlides} slides change in ${changedDecks} decks. The branch's ecosystem.lock.json \`golden\` selects this file; main's fixture is unchanged.\n`;
 }
 
 /** The lock's core golden: the repository must be opf and the file a core fixture. Also returns the locked renderer commit. */
@@ -108,12 +180,12 @@ export function slideLines(diff) {
   ];
 }
 
-export function commitMessage(diff, { baseLabel = "main", runUrl = "", renderer = "", image = "" } = {}) {
+export function commitMessage(diff, { baseLabel = "main", runUrl = "", renderer = "", image = "", rendererRef = "" } = {}) {
   const meta = diff.meta.map((row) => `${row.field}: ${row.old} -> ${row.new}`);
   return [
     `Regenerate examples golden: ${slideCount(diff)} slides in ${deckCount(diff)} decks`,
     "",
-    `Rendered by the regenerate-core-golden workflow${runUrl ? ` (${runUrl})` : ""}${renderer ? ` with opf-render ${renderer} (ecosystem.lock.json)` : ""}, scale 0.25, systemFonts false${image ? `, in ${image}` : ""}. The same environment first reproduced ${baseLabel}'s committed fixture byte for byte. Compared with that fixture:`,
+    `Rendered by the regenerate-core-golden workflow${runUrl ? ` (${runUrl})` : ""}${renderer ? ` with opf-render ${renderer} (${rendererRef ? `renderer-ref ${rendererRef}, not the locked renderer` : "ecosystem.lock.json"})` : ""}, scale 0.25, systemFonts false${image ? `, in ${image}` : ""}. The same environment first reproduced ${baseLabel}'s committed fixture byte for byte. Compared with that fixture:`,
     ...(meta.length ? ["", ...meta] : []),
     "",
     ...(slideCount(diff) ? slideLines(diff).map((line) => `- ${line}`) : ["- no slide hash changes"]),
@@ -122,9 +194,9 @@ export function commitMessage(diff, { baseLabel = "main", runUrl = "", renderer 
 }
 
 /** Markdown for the job summary: a per-deck list the author pastes into the PR body (reason for each change), then every hash. */
-export function summaryMarkdown(diff, { branch = "", head = "", base = "", goldenPath = "", renderer = "", notes = [] } = {}) {
+export function summaryMarkdown(diff, { branch = "", head = "", base = "", goldenPath = "", renderer = "", rendererRef = "", notes = [] } = {}) {
   const lines = [`### Regenerated core golden: ${branch} @ ${head.slice(0, 12)}`, ""];
-  lines.push(`- Fixture \`${goldenPath}\`, compared with main @ ${base.slice(0, 12)}; renderer opf-render @ ${renderer.slice(0, 12)} (ecosystem.lock.json).`);
+  lines.push(`- Fixture \`${goldenPath}\`, compared with main @ ${base.slice(0, 12)}; renderer opf-render @ ${renderer.slice(0, 12)} (${rendererRef ? `renderer-ref ${rendererRef}` : "ecosystem.lock.json"}).`);
   for (const note of notes) lines.push(`- ${note}`);
   for (const row of diff.meta) lines.push(`- \`${row.field}\`: ${row.old} -> ${row.new}`);
   lines.push(`- **${slideCount(diff)} slides changed in ${deckCount(diff)} decks** (${diff.changed.length} changed, ${diff.added.length} added, ${diff.removed.length} removed) of ${diff.total} slides.`, "");
@@ -167,14 +239,17 @@ export function changedPaths(root) {
   return result.stdout.split("\0").filter(Boolean).map((record) => record.slice(3));
 }
 export function pathErrors(changed, allowed) {
+  const [fixture, ...also] = Array.isArray(allowed) ? allowed : [allowed];
   const errors = [];
-  if (!isFixturePath(allowed)) errors.push(`${allowed} is not a core fixture (scripts/fixtures/<name>.sha256.json)`);
-  for (const file of changed) if (file !== allowed) errors.push(`unexpected change outside the fixture: ${file}`);
+  if (!isFixturePath(fixture)) errors.push(`${fixture} is not a core fixture (scripts/fixtures/<name>.sha256.json)`);
+  for (const extra of also) if (!RENDERER_REF_FILES.includes(extra)) errors.push(`${extra} may not change (only ${RENDERER_REF_FILES.join(" and ")} besides the fixture)`);
+  const permitted = new Set([fixture, ...also]);
+  for (const file of changed) if (!permitted.has(file)) errors.push(`unexpected change outside the fixture: ${file}`);
   return errors;
 }
 
 function parseArguments(argv) {
-  const options = { notes: [] };
+  const options = { notes: [], allow: [] };
   const flags = new Set(["github-output"]);
   for (let index = 1; index < argv.length; index += 1) {
     const argument = argv[index];
@@ -184,6 +259,7 @@ function parseArguments(argv) {
     const value = argv[++index];
     if (value === undefined) throw new Error(`--${name} needs a value`);
     if (name === "note") options.notes.push(value);
+    else if (name === "allow") options.allow.push(value);
     else options[name] = value;
   }
   return options;
@@ -228,16 +304,29 @@ function main(argv) {
     if (errors.length) fail(errors.join("; "));
     const diff = diffManifests(base, candidate);
     const fixture = options["branch-fixture"] && options["branch-fixture"] !== "none" ? (() => { try { return readFileSync(options["branch-fixture"]); } catch { return undefined; } })() : undefined;
-    const context = { branch: options.branch, head: options.head ?? "", base: options["base-sha"] ?? "", goldenPath: options["golden-path"] ?? "", renderer: options.renderer ?? "", notes: options.notes };
+    const context = { branch: options.branch, head: options.head ?? "", base: options["base-sha"] ?? "", goldenPath: options["golden-path"] ?? "", renderer: options.renderer ?? "", rendererRef: options["renderer-ref"] ?? "", notes: options.notes };
     mkdirSync(options["out-dir"], { recursive: true });
     writeFileSync(path.join(options["out-dir"], "changes.json"), `${JSON.stringify(diff, null, 2)}\n`);
     writeFileSync(path.join(options["out-dir"], "summary.md"), summaryMarkdown(diff, context));
-    writeFileSync(path.join(options["out-dir"], "commit-message.txt"), commitMessage(diff, { baseLabel: `main ${context.base.slice(0, 12)}`, runUrl: options["run-url"] ?? "", renderer: context.renderer.slice(0, 12), image: options.image ?? "" }));
+    writeFileSync(path.join(options["out-dir"], "commit-message.txt"), commitMessage(diff, { baseLabel: `main ${context.base.slice(0, 12)}`, runUrl: options["run-url"] ?? "", renderer: context.rendererRef ? context.renderer : context.renderer.slice(0, 12), image: options.image ?? "", rendererRef: context.rendererRef }));
     output(options, { "changed-slides": slideCount(diff), "changed-decks": deckCount(diff), "push-needed": !fixture || !fixture.equals(candidateText) });
   } else if (command === "paths") {
     const errors = pathErrors(changedPaths(options.root), options.allow);
     if (errors.length) fail(errors.join("; "));
-    console.log(`only ${options.allow} changed`);
+    console.log(`only ${options.allow.join(", ")} changed`);
+  } else if (command === "plan") {
+    const plan = rendererPlan({ rendererRef: options["renderer-ref"] ?? "", fixtureName: options["fixture-name"] ?? "", mainGolden: options["main-golden"], branchGolden: options["branch-golden"], mainRenderer: options["main-renderer"], branchRenderer: options["branch-renderer"] });
+    for (const note of plan.notes) console.log(`::notice title=regenerate-core-golden::${note}`);
+    if (plan.errors.length) fail(plan.errors.join("; "));
+    output(options, { override: plan.override, "fixture-path": plan.fixturePath });
+  } else if (command === "set-lock-golden") {
+    if (options.path === options["main-golden"]) fail(`${options.path} is main's fixture; a renderer-ref run writes a new one`);
+    writeFileSync(options.lock, lockWithGolden(readFileSync(options.lock, "utf8"), options.path, options.note));
+    console.log(`${options.lock} golden.path = ${options.path}`);
+  } else if (command === "review-record") {
+    if (rendererRefErrors(options["renderer-ref"]).length) fail(rendererRefErrors(options["renderer-ref"]).join("; "));
+    appendFileSync(options.readme, reviewRecord({ fixture: options.fixture, branch: options.branch, head: options.head, renderer: options.renderer, rendererRef: options["renderer-ref"], baseSha: options["base-sha"], changedSlides: options["changed-slides"], changedDecks: options["changed-decks"], runUrl: options["run-url"] ?? "" }));
+    console.log(`appended the review record to ${options.readme}`);
   } else {
     fail(`unknown command ${command ?? "(none)"}`);
   }

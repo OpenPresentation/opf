@@ -3,7 +3,7 @@
   "kind": "narratives",
   "version": "1",
   "description": "Catalog of narrative templates available in the openpresentation.org catalog. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
-  "contentSha256": "9222e36d1fb1a54f0811b9851c5359e05f570a0a931cceca31bdbe27a888d582",
+  "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220",
   "records": [
     {
       "id": "problem-solution",

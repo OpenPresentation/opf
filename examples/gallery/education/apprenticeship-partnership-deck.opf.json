@@ -3,16 +3,16 @@
   "name": "Apprenticeship Partnership Deck",
   "description": "Apprenticeship Partnership Deck is a fictional OPF example for workforce education teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "apprenticeship-partnership-deck",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "engineering-team",
+    "academic",
     {
-      "id": "regulatory",
+      "id": "customer",
       "attentionBudgetMinutes": 28,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "qbr"
+        "heros-journey"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "qbr",
+  "narrative": "heros-journey",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -93,10 +93,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [
@@ -131,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-column",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -342,6 +338,417 @@
       "density": "medium",
       "scenario": "apprenticeship-partnership-deck",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "heros-journey": {
+          "name": "Hero's Journey",
+          "summary": "Storytelling framework that takes the audience on an emotional journey of change and growth.",
+          "description": "A storytelling framework that takes the audience on an emotional journey of change and growth. Show where things started, the obstacle that forced a change, the path taken and the obstacles overcome, the turning point, and the improved reality with the lessons it taught. The tone is narrative: it builds an emotional arc and invites the audience to identify with the protagonist, whether that is a customer, a team, or the company itself. Best for case studies, brand stories, and change management; typical decks run 5-10 slides (brand story, startup pitch, culture deck, change story).",
+          "audienceFit": [
+            "general-public",
+            "employees",
+            "community"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "storytelling",
+            "brand",
+            "change",
+            "emotional"
+          ],
+          "beats": [
+            {
+              "id": "status-quo",
+              "name": "Status Quo",
+              "description": "Establish the starting point. What was normal life like before the challenge?",
+              "instructions": "Establish the starting world before change.",
+              "type": "image",
+              "layout": "image-focus"
+            },
+            {
+              "id": "challenge",
+              "name": "Challenge",
+              "description": "Introduce the disruption or opportunity that demanded change.",
+              "instructions": "Introduce the disruption that makes change necessary.",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "journey",
+              "name": "Journey",
+              "description": "Walk through the process of transformation. Include obstacles overcome.",
+              "instructions": "Walk through the path, obstacles, and choices.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "transformation",
+              "name": "Transformation",
+              "description": "Show the pivotal moment or insight that changed everything.",
+              "instructions": "Show the turning point that changes the outcome.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "new-reality",
+              "name": "New Reality",
+              "description": "Reveal the improved state and the lessons that will benefit your audience.",
+              "instructions": "Reveal the improved state and lesson learned.",
+              "type": "text",
+              "layout": "text-2x"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+          "seniority": "mixed",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
+          ]
+        },
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        }
+      },
+      "purposes": {
+        "decide": {
+          "name": "Drive a Decision",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "golden-yellow": {
+          "name": "Golden Yellow",
+          "accent1": "#FCC82B",
+          "accent2": "#44ADAD",
+          "accent3": "#3E506B",
+          "accent4": "#E23A59",
+          "accent5": "#0F5E8C",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#3D2E02",
+          "followedHyperlink": "#44ADAD",
+          "hyperlink": "#E23A59",
+          "light1": "#FFFFFF",
+          "light2": "#FEFCF0",
+          "summary": "Bright yellow and teal accents for optimistic, high-visibility decks.",
+          "description": "A warm yellow palette balanced by teal and navy. It is expressive, optimistic, and useful for bright public-facing stories.",
+          "tags": [
+            "optimistic",
+            "bright",
+            "friendly",
+            "creative",
+            "visible"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "pmingliu": {
+          "name": "PMingLiU",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "zh-Hant"
+          ],
+          "major": "PMingLiU",
+          "minor": "PMingLiU",
+          "textSample": "這是以新細明體字型撰寫的",
+          "type": "serif",
+          "description": "PMingLiU is a serif OPF font scheme for East Asian presentations, using PMingLiU for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
     }
   }
 }

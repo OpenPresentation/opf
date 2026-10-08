@@ -31,7 +31,7 @@ the 126 decks in `@openpresentation/opf/examples`. Verify the install came from 
 and that you did not add `file:` dependencies on this repository.
 
 The [format card](format-card.md) describes ColorRef, named variables and the
-current source contract. `opf bundle` can inline resolved catalog records for
+current source contract. `opf embed` embeds the catalog records a deck uses for
 portable offline authoring; it does not download remote assets. Keep the
 ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
@@ -78,11 +78,11 @@ const { presentation, pages } = paginate(document, { fonts });
 `design.fontScheme: 'roboto'`. It returns the fonts handle: every deck-level
 verb (`paginate`, `renderSvg`, `svgToPng`, `svgToPdf`, `toPptx`) takes it as
 `{ fonts }` and reads what it needs from it (the `textMeasurement`, the faces
-to embed, the font files). `resolveSlideContext(document, index, { fonts })` resolves
+to embed, the font files). `resolveSlideContext(document, index, { fonts, catalogs })` resolves
 one slide's layout, canvas, theme and font families (slide design, then deck
-design, then theme, then the default font scheme) into the options `composeSlide`
-takes, so you never look up a font scheme yourself; an unknown font-scheme id
-comes back as an `unresolved-font-scheme` diagnostic. `paginate`
+design, then theme, then the engine default font scheme) into the options `composeSlide`
+takes, so you never look up a font scheme yourself; a reference that resolves
+nowhere comes back as an `unresolved-reference` diagnostic. `paginate`
 does the same for every slide. The helper does not install system fonts or
 change the authored scheme. Reuse the same `fonts` for SVG preview and PPTX
 export.

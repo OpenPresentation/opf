@@ -8,16 +8,42 @@
       "chart": {
         "type": "column",
         "data": {
-          "columns": ["Quarter", "Revenue", "Costs"],
+          "columns": [
+            "Quarter",
+            "Revenue",
+            "Costs"
+          ],
           "rows": [
-            ["Q1", 12, 8],
-            ["Q2", 18, 11],
-            ["Q3", 24, 15],
-            ["Q4", 22, 14]
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              18,
+              11
+            ],
+            [
+              "Q3",
+              24,
+              15
+            ],
+            [
+              "Q4",
+              22,
+              14
+            ]
           ]
         },
-        "axisTitles": { "value": "$M" },
-        "highlight": { "series": ["Revenue"] }
+        "axisTitles": {
+          "value": "$M"
+        },
+        "highlight": {
+          "series": [
+            "Revenue"
+          ]
+        }
       }
     },
     {
@@ -25,16 +51,37 @@
       "chart": {
         "type": "bar",
         "data": {
-          "columns": ["Quarter", "Revenue"],
+          "columns": [
+            "Quarter",
+            "Revenue"
+          ],
           "rows": [
-            ["Q1", 12],
-            ["Q2", 18],
-            ["Q3", 24],
-            ["Q4", 22]
+            [
+              "Q1",
+              12
+            ],
+            [
+              "Q2",
+              18
+            ],
+            [
+              "Q3",
+              24
+            ],
+            [
+              "Q4",
+              22
+            ]
           ]
         },
-        "dataLabels": { "position": "inside-end" },
-        "highlight": { "categories": ["Q3"] }
+        "dataLabels": {
+          "position": "inside-end"
+        },
+        "highlight": {
+          "categories": [
+            "Q3"
+          ]
+        }
       }
     },
     {
@@ -42,15 +89,37 @@
       "chart": {
         "type": "pie",
         "data": {
-          "columns": ["Region", "Share of revenue"],
+          "columns": [
+            "Region",
+            "Share of revenue"
+          ],
           "rows": [
-            ["EMEA", 42],
-            ["APAC", 31],
-            ["Americas", 27]
+            [
+              "EMEA",
+              42
+            ],
+            [
+              "APAC",
+              31
+            ],
+            [
+              "Americas",
+              27
+            ]
           ]
         },
-        "dataLabels": { "content": ["category", "percent"], "position": "outside-end" },
-        "highlight": { "categories": ["EMEA"] }
+        "dataLabels": {
+          "content": [
+            "category",
+            "percent"
+          ],
+          "position": "outside-end"
+        },
+        "highlight": {
+          "categories": [
+            "EMEA"
+          ]
+        }
       }
     }
   ]

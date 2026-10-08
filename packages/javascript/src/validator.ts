@@ -1,5 +1,4 @@
-import type { CatalogKind } from './catalogs.js';
-import { catalogKinds } from './catalogs.js';
+import { catalogSchemaNames, type CatalogRecordKind } from './catalog-schemas.js';
 import {
 	checkDocumentOptions,
 	contractFindings,
@@ -7,11 +6,12 @@ import {
 	issueFinding,
 	issueRuleId,
 	referenceFindings,
+	undeclaredCatalogFindings,
 	variableFindings,
 } from './check-document.js';
 import { parseSource, type ParsedSource } from './check-source.js';
 import type { Finding, FindingSeverity } from './generated/types/finding.js';
-import { createLookup, type Rec } from './rule-design.js';
+import type { Rec } from './rule-design.js';
 import { splitPointer } from './rule-content.js';
 import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
@@ -55,7 +55,7 @@ export { promotedRegionKeys } from './schema-check.js';
  * returns one list of findings, each with a stable `opf/<rule>` id, a severity and one of six categories:
  *
  * - `format`: is it well-formed OPF (JSON syntax, duplicate keys, schema and semantic rules);
- * - `references`: does everything it points at resolve (catalog ids, assets, citations, datasets);
+ * - `references`: does everything it points at resolve (content references, assets, citations, datasets);
  * - `policy`: does it follow the host's `contracts`;
  * - `accessibility`: WCAG 2.2 and PowerPoint accessibility checker rules;
  * - `layout`: will it present as authored (fit, minimum size, image resolution, fonts);
@@ -230,7 +230,7 @@ function syntaxReport(parsed: ParsedSource, run: Resolved): ValidationReport {
 }
 
 function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource): ValidationReport {
-	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values });
+	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}) });
 	const schemaValid = engine.errors.length === 0;
 	const slides = isObject(document) && Array.isArray(document.slides) ? document.slides : [];
 	const auditWanted = auditInfos.some((info) => run.enabled(info));
@@ -243,6 +243,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 	// format: the engine's errors and the coded warnings of every category (cheap; the schema check runs in any case).
 	findings.push(...engineFindings(document, engine, (ruleId) => enabledRule(findValidationRule(ruleId))));
 	if (enabledRule(findValidationRule('opf/variable-unfilled'))) findings.push(...variableFindings(document, engine, schemaValid));
+	if (enabledRule(findValidationRule('opf/undeclared-catalog'))) findings.push(...undeclaredCatalogFindings(document));
 	if (parsed) {
 		findings.push(...parsed.duplicates.filter((entry) => enabledRule(findValidationRule(entry.ruleId))));
 	}
@@ -265,13 +266,11 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 	const auditRan = new Set<string>();
 	if (schemaValid && auditWanted) {
 		const doc = document as Rec;
-		const lookup = createLookup(doc, run.options.catalogs);
 		const context: ValidationContext = {
 			document: doc,
 			slides: buildSlides(doc, run.options),
 			thresholds: run.thresholds,
 			options: run.options,
-			lookup,
 			chartPalette: run.chartPalette,
 			report(info: ValidationRuleInfo, input: FindingInput): Finding {
 				const severity = run.severity(info) ?? input.severity ?? info.severity;
@@ -378,16 +377,15 @@ export function assertValid(value: unknown, options: ValidateOptions = {}): asse
 }
 
 /**
- * Check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same
- * shape as `validate`'s; every finding is `format` and a record that links to an unknown id warns.
+ * Check one published catalog record file (an audience, theme, layout, font scheme, chart type and so on) against its
+ * companion schema, `$schema` and `id` included. The report has the same shape as `validate`'s; every finding is `format`.
+ * A record a document embeds is checked by `validate`, keyed by its id and without `$schema`.
  */
-export function validateCatalogRecord(kind: CatalogKind, value: unknown): ValidationReport {
-	if (!(catalogKinds as readonly string[]).includes(kind)) throw new TypeError(`Unknown catalog kind ${JSON.stringify(kind)}. Kinds: ${catalogKinds.join(', ')}.`);
+export function validateCatalogRecord(kind: CatalogRecordKind, value: unknown): ValidationReport {
+	const kinds = Object.keys(catalogSchemaNames);
+	if (!kinds.includes(kind)) throw new TypeError(`Unknown catalog kind ${JSON.stringify(kind)}. Kinds: ${kinds.join(', ')}.`);
 	const engine: SchemaCheckResult = validateAgainstSchema(value, kind);
-	const findings: Finding[] = [
-		...engine.errors.map((issue) => issueFinding(issue, issueRuleId(issue), engine.schemaName)),
-		...engine.warnings.map((issue) => issueFinding(issue, 'opf/catalog-reference', engine.schemaName, '', 'document', 'warning')),
-	];
+	const findings: Finding[] = engine.errors.map((issue) => issueFinding(issue, issueRuleId(issue), engine.schemaName));
 	const tally = counts(findings);
 	const checks: ValidationChecks = {
 		syntax: 'not-applicable',
@@ -402,7 +400,7 @@ export function validateCatalogRecord(kind: CatalogKind, value: unknown): Valida
 	return { valid: tally.error === 0, schemaValid: engine.valid, findings, counts: tally, checks };
 }
 
-export function assertValidCatalogRecord(kind: CatalogKind, value: unknown): void {
+export function assertValidCatalogRecord(kind: CatalogRecordKind, value: unknown): void {
 	const report = validateCatalogRecord(kind, value);
 	if (!report.valid) throw new OPFValidationError(report);
 }

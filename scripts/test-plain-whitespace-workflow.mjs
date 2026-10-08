@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright');
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
+import {withRecords} from './ecosystem-records.mjs';
 const output=path.resolve(process.argv[2]??'artifacts/plain-whitespace-workflow');await mkdir(output,{recursive:true});
 const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
 const installedRequire=installed?createRequire(path.join(consumer,'package.json')):null;
@@ -33,7 +34,7 @@ try {
  const page=await browser.newPage({viewport:{width:1400,height:1000}});page.on('pageerror',e=>errors.push(e.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
  await page.setContent('<button id="undo">Undo</button><button id="redo">Redo</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');await page.addScriptTag({content:bundle});
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const original of ['  A  B\tC\u00a0D\r\n\r\ntrail  \r','\r\n\r\n','']) {
-  const deck={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Whitespace editing',text:original}]};
+  const deck=withRecords({design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Whitespace editing',text:original}]});
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
   const target=page.locator('[data-canvas-target][data-opf-path="slides.0.text"]');assert.equal(await target.count(),1);
   const geometry=await page.evaluate(()=>editor.composeSlide(0,renderOptions).items.find(item=>item.field==='text'));

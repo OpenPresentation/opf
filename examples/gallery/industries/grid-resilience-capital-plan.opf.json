@@ -3,11 +3,11 @@
   "name": "Grid Resilience Capital Plan",
   "description": "Grid Resilience Capital Plan is a fictional OPF example for energy utilities teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "grid-resilience-capital-plan",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "engineering-team",
+    "customer",
     {
-      "id": "regulatory",
+      "id": "internal-team",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "low",
       "decisionPower": "advisory",
@@ -70,7 +70,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -100,10 +100,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [
@@ -138,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -349,6 +345,431 @@
       "density": "medium",
       "scenario": "grid-resilience-capital-plan",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "challenge-resolution": {
+          "name": "Challenge → Resolution",
+          "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
+          "audienceFit": [
+            "executives",
+            "managers",
+            "stakeholders",
+            "internal-teams"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 30
+          },
+          "tags": [
+            "management",
+            "strategy",
+            "consulting",
+            "advisory"
+          ],
+          "beats": [
+            {
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
+              "instructions": "Capture audience attention",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "dilemma",
+              "name": "Dilemma",
+              "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
+              "instructions": "Present the problem",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "backdrop",
+              "name": "Backdrop",
+              "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
+              "instructions": "Provide context",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "remedy",
+              "name": "Remedy",
+              "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
+              "instructions": "Propose a solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
+              "instructions": "Demonstrate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "motivate",
+              "name": "Motivate",
+              "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
+              "instructions": "Encourage action",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
+              "layout": "title",
+              "instructions": "Recap and end powerfully",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        },
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "arial": {
+          "name": "Arial",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Arial Black",
+          "minor": "Arial",
+          "textSample": "Simple and clear",
+          "type": "sans-serif",
+          "description": "Arial is a sans serif OPF font scheme for Latin presentations, using Arial Black for headings with Arial for body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
     }
   }
 }

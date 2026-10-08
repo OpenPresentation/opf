@@ -1,12 +1,12 @@
 {
   "name": "Onboarding Experience Redesign",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "board"
+    "technical"
   ],
   "purpose": "persuade",
   "tone": "formal",
-  "narrative": "strategic-narrative",
+  "narrative": "reveal",
   "design": {
     "theme": "minimal",
     "colorScheme": "burnt-orange",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,392 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "reveal": {
+          "name": "Reveal",
+          "summary": "Insight-driven keynote arc inspired by Amy Cuddy's 2012 talk on body language: connect through personal story, ground in research, illustrate with anecdote, summarize, break stereotypes, advise, demonstrate authenticity, close with impact. For talks that aim to change how the audience sees something they thought they understood.",
+          "audienceFit": [
+            "general-audience",
+            "academics",
+            "professionals"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 25
+          },
+          "tags": [
+            "keynote",
+            "research",
+            "talk",
+            "inspirational"
+          ],
+          "beats": [
+            {
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
+              "instructions": "Share personal experiences to connect with the audience",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "research-exposition",
+              "name": "Research Exposition",
+              "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
+              "instructions": "Unravel scientific data backing the premise",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "real-life-anecdote",
+              "name": "Real-Life Anecdote",
+              "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
+              "instructions": "Illustrate with stories to make the point relatable",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "critical-insights",
+              "name": "Critical Insights",
+              "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
+              "instructions": "Summarize key points",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "break-stereotypes",
+              "name": "Break Stereotypes",
+              "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
+              "instructions": "Question redundant norms and belief systems",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "empowering-advice",
+              "name": "Empowering Advice",
+              "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
+              "instructions": "Motivational message to act upon",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "authenticity",
+              "name": "Authenticity",
+              "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
+              "instructions": "Honest and real communication to demonstrate authenticity",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "close-with-impact",
+              "name": "Close With Impact",
+              "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
+              "layout": "title",
+              "instructions": "End on a motivational high",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "microsoft-jhenghei": {
+          "name": "Microsoft JhengHei",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "zh-Hant"
+          ],
+          "major": "Microsoft JhengHei",
+          "minor": "Microsoft JhengHei",
+          "textSample": "這是用微軟正黑體寫的",
+          "type": "sans-serif",
+          "description": "Microsoft JhengHei is a sans serif OPF font scheme for East Asian presentations, using Microsoft JhengHei for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
+    }
+  }
 }

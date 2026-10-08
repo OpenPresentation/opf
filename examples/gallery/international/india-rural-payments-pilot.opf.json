@@ -1,12 +1,12 @@
 {
   "name": "India Rural Payments Pilot",
-  "language": "english-in",
+  "language": "en-IN",
   "audience": [
-    "board"
+    "media"
   ],
   "purpose": "decide",
   "tone": "authoritative",
-  "narrative": "golden-circle",
+  "narrative": "underdog-victory",
   "design": {
     "theme": "minimal",
     "colorScheme": "forest-green",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,379 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "underdog-victory": {
+          "name": "Underdog Victory",
+          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
+          "audienceFit": [
+            "general-audience",
+            "internal-teams",
+            "candidates"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "storytelling",
+            "inspirational",
+            "founder",
+            "team"
+          ],
+          "beats": [
+            {
+              "id": "origin",
+              "name": "Origin",
+              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
+              "instructions": "Establish opening scene",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
+              "instructions": "Highlight initial setbacks",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "determination",
+              "name": "Determination",
+              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
+              "instructions": "Showcase enduring passion",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "crisis",
+              "name": "Crisis",
+              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+              "instructions": "Identify lowest point",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "resolve",
+              "name": "Resolve",
+              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
+              "instructions": "Articulate strong will",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
+              "instructions": "Reward of perseverance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "triumph",
+              "name": "Triumph",
+              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+              "instructions": "Reveal ultimate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
+              "layout": "title",
+              "instructions": "Share long-lasting impact",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        }
+      },
+      "purposes": {
+        "decide": {
+          "name": "Drive a Decision",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#FAF3DD",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
+    }
+  }
 }

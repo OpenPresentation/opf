@@ -96,7 +96,11 @@ test('a registry read failure is an error, never a silent skip or a silent run',
   await assert.rejects(cliPeerMismatches(plan(), { readPeers: failing }), /Cannot read the peer ranges/);
 });
 
-test("this checkout's CLI declares ranges that the 0.14 plan satisfies, so a plan that names it runs the CLI", async () => {
+test("this checkout's CLI declares ranges that a plan at their floors satisfies, so a plan that names it runs the CLI", async () => {
+  // Before a coordinated release the ranges name the unreleased line (0.15), above the published plan; the plan that
+  // releases them carries the siblings at those floors.
   const manifest = JSON.parse(await readFile(new URL('../packages/cli/package.json', import.meta.url), 'utf8'));
-  assert.equal(await cliSkipNotice(plan({ cli: '0.14.0' }), { readPeers: reader(manifest.peerDependencies) }), null);
+  const floor = (name) => manifest.peerDependencies[name].replace(/^[\^~]/, '');
+  const released = plan({ cli: manifest.version.replace(/-.*/, ''), render: floor('@openpresentation/opf-render'), pptx: floor('@openpresentation/opf-pptx') });
+  assert.equal(await cliSkipNotice(released, { readPeers: reader(manifest.peerDependencies) }), null);
 });

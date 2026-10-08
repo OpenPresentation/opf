@@ -3,16 +3,16 @@
   "name": "German Works Council Update",
   "description": "German Works Council Update is a fictional OPF example for labor relations teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "german-works-council-update",
-  "language": "german",
+  "language": "de",
   "audience": [
-    "customer",
+    "regulatory",
     {
-      "id": "marketing",
+      "id": "all-hands",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "justice"
+        "vision-roadmap"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "justice",
+  "narrative": "vision-roadmap",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -82,7 +82,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "top",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -107,10 +107,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -145,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "line",
         "data": {
           "columns": [
             "Quarter",
@@ -356,6 +352,458 @@
       "density": "medium",
       "scenario": "german-works-council-update",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "vision-roadmap": {
+          "name": "Vision to Roadmap",
+          "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
+          "description": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action. Open with a specific three-to-five-year North Star, honestly diagnose the gap between today and that vision, organize the strategy into two to four named pillars, show the phased roadmap with milestones and dependencies, and end with concrete, assigned first steps for the next 30-90 days. The tone is inspirational and strategic: it creates shared direction and commitment to a plan. Best for strategic planning, annual kickoffs, product strategy, and OKR launches; typical decks run 8-20 slides.",
+          "audienceFit": [
+            "leadership-teams",
+            "board",
+            "product-and-strategy-teams",
+            "all-hands"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "strategy",
+            "roadmap",
+            "planning",
+            "vision"
+          ],
+          "beats": [
+            {
+              "id": "vision",
+              "name": "Vision",
+              "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
+              "instructions": "Paint the future state clearly.",
+              "type": "text",
+              "layout": "title-subtitle"
+            },
+            {
+              "id": "current-state-gap",
+              "name": "Current State Gap",
+              "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
+              "instructions": "Define the gap between today and the vision.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "strategic-pillars",
+              "name": "Strategic Pillars",
+              "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
+              "instructions": "Name the strategic pillars that close the gap.",
+              "type": "text",
+              "layout": "text-3x"
+            },
+            {
+              "id": "roadmap",
+              "name": "Roadmap",
+              "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
+              "instructions": "Sequence the initiatives over time.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "first-steps",
+              "name": "First Steps",
+              "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
+              "instructions": "Identify the immediate moves that start execution.",
+              "type": "text",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
+          ]
+        },
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "inspirational",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "company-wide"
+          ]
+        }
+      },
+      "purposes": {
+        "inform": {
+          "name": "Inform",
+          "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+          "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+          "outcome": "The audience understands the situation and can repeat the important facts.",
+          "successCriteria": [
+            "Audience can summarize the key facts",
+            "No immediate decision is required",
+            "Follow-up questions are about implications, not basic context"
+          ],
+          "recommendedNarratives": [
+            "status-update",
+            "focus",
+            "educate"
+          ],
+          "recommendedTones": [
+            "formal",
+            "conversational"
+          ],
+          "tags": [
+            "awareness",
+            "context",
+            "status"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "luxury": {
+          "name": "Luxury",
+          "accent1": "#997929",
+          "accent2": "#C15937",
+          "accent3": "#951233",
+          "accent4": "#1D483F",
+          "accent5": "#4B6977",
+          "accent6": "#639391",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "Muted metallic and deep tones for premium, high-stakes decks.",
+          "description": "A restrained luxury palette with gold, terracotta, dark green, and blue-gray support for premium narratives.",
+          "tags": [
+            "luxury",
+            "premium",
+            "sophisticated",
+            "grounded",
+            "exclusive"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "arial": {
+          "name": "Arial",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Arial Black",
+          "minor": "Arial",
+          "textSample": "Simple and clear",
+          "type": "sans-serif",
+          "description": "Arial is a sans serif OPF font scheme for Latin presentations, using Arial Black for headings with Arial for body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
     }
   }
 }

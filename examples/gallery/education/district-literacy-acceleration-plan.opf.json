@@ -1,12 +1,12 @@
 {
   "name": "District Literacy Acceleration Plan",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "all-hands"
+    "board"
   ],
   "purpose": "pitch",
   "tone": "casual",
-  "narrative": "failure-analysis",
+  "narrative": "business-review",
   "design": {
     "theme": "dark",
     "colorScheme": "golden-yellow",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar",
+        "type": "stacked-line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,443 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "business-review": {
+          "name": "Business Review",
+          "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
+          "audienceFit": [
+            "customers",
+            "partners",
+            "stakeholders",
+            "leadership"
+          ],
+          "duration": {
+            "min": 30,
+            "max": 90
+          },
+          "tags": [
+            "customer-relationship",
+            "review",
+            "operations"
+          ],
+          "beats": [
+            {
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
+              "layout": "title",
+              "instructions": "Identity & representation",
+              "type": "text"
+            },
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
+              "instructions": "Meeting context & goals",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "review",
+              "name": "Review",
+              "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
+              "instructions": "Outline recent activities",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "successes",
+              "name": "Successes",
+              "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
+              "instructions": "Recognize achievements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
+              "instructions": "Address problems faced",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "solutions",
+              "name": "Solutions",
+              "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
+              "instructions": "Discuss implemented fixes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "outcome",
+              "name": "Outcome",
+              "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
+              "instructions": "Display results achieved",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "insights",
+              "name": "Insights",
+              "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
+              "instructions": "Highlight key learnings",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-strategy",
+              "name": "Future Strategy",
+              "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
+              "instructions": "Define next steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
+              "instructions": "Capture audience thoughts",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "next-review",
+              "name": "Next Review",
+              "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
+              "instructions": "Plan for follow-up",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
+              "layout": "title",
+              "instructions": "Recap and express optimism",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        }
+      },
+      "purposes": {
+        "pitch": {
+          "name": "Pitch",
+          "summary": "Present an opportunity and ask for investment, approval, partnership, or sponsorship.",
+          "description": "Use when the deck needs to create interest and move a high-stakes audience toward backing the opportunity. Lead with the opportunity, prove credibility, and make the ask concrete.",
+          "outcome": "The audience agrees to invest, sponsor, approve, or continue the conversation.",
+          "successCriteria": [
+            "Opportunity is clear",
+            "Evidence builds confidence",
+            "Ask and next step are explicit"
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "fundraising",
+            "opportunity",
+            "ask"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "golden-yellow": {
+          "name": "Golden Yellow",
+          "accent1": "#FCC82B",
+          "accent2": "#44ADAD",
+          "accent3": "#3E506B",
+          "accent4": "#E23A59",
+          "accent5": "#0F5E8C",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#3D2E02",
+          "followedHyperlink": "#44ADAD",
+          "hyperlink": "#E23A59",
+          "light1": "#FFFFFF",
+          "light2": "#FEFCF0",
+          "summary": "Bright yellow and teal accents for optimistic, high-visibility decks.",
+          "description": "A warm yellow palette balanced by teal and navy. It is expressive, optimistic, and useful for bright public-facing stories.",
+          "tags": [
+            "optimistic",
+            "bright",
+            "friendly",
+            "creative",
+            "visible"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-jp": {
+          "name": "Noto Sans JP",
+          "app": "google-slides",
+          "languageFamily": "ea",
+          "languages": [
+            "ja"
+          ],
+          "major": "Noto Sans JP",
+          "minor": "Noto Sans JP",
+          "textSample": "これは美しいです",
+          "type": "sans-serif",
+          "description": "Noto Sans JP is a sans serif OPF font scheme for East Asian presentations, using Noto Sans JP for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
+    }
+  }
 }

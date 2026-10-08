@@ -24,13 +24,13 @@ For every design field independently, the most specific source wins:
 1. **Slide design** — `slides[].design.*`
 2. **Deck design** — `design.*` on the presentation root
 3. **Resolved theme** — defaults carried by the theme record (`colorScheme`, `fontScheme`, `background`, `dimensions`)
-4. **Engine defaults** — engine configuration such as [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json)
+4. **Engine defaults** — [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json), compiled into core as `ENGINE_DEFAULT_THEME`, `ENGINE_DEFAULT_COLOR_SCHEME` and `ENGINE_DEFAULT_FONT_SCHEME`
 
 Resolution is **per field**, not per object. A slide that sets only `design.contentAlignment` inherits everything else from the deck design; a deck that sets only `design.colorScheme` keeps the theme's font scheme and background.
 
 Two field-level rules complete the picture:
 
-- **Base-plus-overrides within one object.** Wherever a reference object carries an `id` (`Theme`, `ColorScheme`, `FontScheme`), the `id` resolves a catalog record as the base and sibling fields override the resolved record per key. The string shorthand (`"colorScheme": "cool-horizon"`) is equivalent to setting only `id`.
+- **Base-plus-overrides within one object.** Wherever a reference object carries an `id` (`ColorScheme`, `FontScheme`, and the inline `Audience`, `Purpose` and `Tone`), the `id` resolves a catalog record as the base and sibling fields override the resolved record per key. `design.theme` is a reference string only. The string shorthand (`"colorScheme": "cool-horizon"`) is equivalent to setting only `id`.
 
   ```
   "colorScheme": { "id": "cool-horizon", "accent1": "#0F4C81" }
@@ -46,7 +46,7 @@ Two field-level rules complete the picture:
   ```
 - **Explicit suppression.** `watermark`, `header`, and `footer` accept `false` to switch off an inherited value — distinct from omitting the field, which inherits.
 
-Catalog lookups inside this chain follow the standard resolution order (inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → default catalog); see [`how-opf-works.md`](./how-opf-works.md).
+Every reference inside this chain resolves the one way every content reference does: `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host registered for its source (`name:id` in `catalogs.<name>`, then the host catalog for its source); see [`how-opf-works.md`](./how-opf-works.md) and [the catalogs page](default-catalog.md).
 
 ## Worked example 1: color scheme through every level
 
@@ -137,19 +137,16 @@ The heading and body families are never reused as the code fallback, so choosing
 
 ### Engine default font scheme
 
-The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one. Every bundled theme names a font scheme (`minimal` uses `aptos`), and engines default the theme to `minimal`, so a document with no `design` gets `aptos` in every engine.
+The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one, or when the reference resolves nowhere. It is an engine default in code, not a catalog record: `ENGINE_DEFAULT_FONT_SCHEME` (`{ major: "Aptos Display", minor: "Aptos", languageFamily: "latin" }`, the drawing fields of the gallery's `aptos` scheme), recorded in [`engine-defaults.json`](../spec/reference/engine-defaults.json) and exported from the package root and `@openpresentation/opf/composition`. A document with no `design` uses the engine default theme (`ENGINE_DEFAULT_THEME`, which names no font scheme), so it gets Aptos in every engine without any catalog registered.
 
-Every engine shares one last resort, `aptos`, so a custom theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts. `@openpresentation/opf/composition` exports it as `DEFAULT_FONT_SCHEME` (`resolveScriptFonts()` uses it too), and [`engine-defaults.json`](../spec/reference/engine-defaults.json) records it as `fontScheme.pptx.latin`:
+Every engine shares this one last resort, so a theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts:
 
 | Engine | Last resort | Where |
 | --- | --- | --- |
-| Core pagination | `DEFAULT_FONT_SCHEME` (`aptos`) | `packages/javascript/src/pagination.ts` |
-| opf-render preview | `aptos` (`engineDefaults.fontScheme.pptx.latin`) | `src/svg.js` |
-| opf-editor composition and slide transfer | `aptos` | `src/font-defaults.js` |
-| opf-pptx export | `aptos` (`DEFAULTS.fontScheme`) | `src/index.js` |
-
-
-`fontScheme.google` (`roboto`, `noto-sans-sc`, `noto-sans`) is not read by any current engine. It is kept as the intended default for a future Google Slides exporter, whose output renders in Google-hosted fonts.
+| Core pagination and validate | `ENGINE_DEFAULT_FONT_SCHEME` | `packages/javascript/src/design-records.ts` |
+| opf-render preview | core's `resolveSlideContext` | `src/svg.js` |
+| opf-editor composition and slide transfer | core's `resolveSlideContext` | `src/font-defaults.js` |
+| opf-pptx export | core's `resolveSlideContext` | `src/index.js` |
 
 Aptos is not openly licensed, so no OPF package bundles it. Previews take the same path for the last resort as for any `aptos` deck:
 
@@ -157,27 +154,20 @@ Aptos is not openly licensed, so no OPF package bundles it. Previews take the sa
 - **Measured layout** with the opf-render office font pack (`loadFonts({pack: 'office'})`): `Aptos` and `Aptos Display` resolve to Intos and Intos Display, metric-compatible replacements from the OPF font policy (0.000% mean width difference against Aptos 2.01), and the substitution report lists both. With only the base pack and `substitutionPolicy: "visual"` they fall back to the visual alternates Roboto and Carlito. The PPTX always names Aptos. See [font-fidelity.md](font-fidelity.md#font-policy-ff-31).
 - **Measured layout with only the base pack under the metric policy**: `font-unavailable` for Aptos, as for a document with no `design`. Supply licensed Aptos faces, allow visual substitution, or set a `fallbackFamily`.
 
-Until FF-35 (font-fidelity-everywhere), core pagination, opf-render and opf-editor fell back to `roboto` while opf-pptx used `aptos`, so such a deck was measured in Roboto but exported with Aptos. None of the 126 bundled examples reaches the last resort: all 805 renderer golden rasters and all 126 exported PPTX files are byte-identical before and after the change. `packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
+`packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
 
-### Unknown layout, theme and colour scheme
+### References that resolve nowhere
 
-The same rule holds for the other catalog references, and no engine throws for them:
+A layout, theme, colour scheme or font scheme reference that neither the document embeds nor a registered catalog defines falls back, and no engine throws for it (unless the host asks for a strict export, `strictReferences`, which throws `OPFUnresolvedReferenceError`):
 
-- **Layout.** A slide with no `layout`, or with an id that no inline record, host catalog or default catalog defines, is composed with **no layout record**: title, subtitle, tag and content are arranged automatically, a slide with no body payload is a cover (the title block vertically centred) and the design hints apply. An engine must not substitute a different layout for an omitted one. An unknown id reports `unresolved-layout` (and `validate` a `catalog-reference` warning).
-- **Theme.** An unknown theme id uses the `minimal` record and reports `unresolved-theme`. An object reference with fields of its own is an inline record and reports nothing; an object with an `id` is laid over that id's record, and an object without an `id` over the default record (`minimal` for a theme, `cool-horizon` for a colour scheme), so a partial inline scheme keeps the slots it does not name.
-- **Colour scheme.** An unknown colour scheme id uses `cool-horizon` and reports `unresolved-color-scheme`; the theme's own colour scheme counts as the reference when the deck and slide name none.
+- **Layout.** A slide with no `layout` is composed with **no layout record**, and that is not a finding: title, subtitle, tag and content are arranged automatically, a slide with no body payload is a cover (the title block vertically centred) and the design hints apply. A layout reference that resolves nowhere composes the same way. An engine never substitutes a different layout.
+- **Theme.** A theme reference that resolves nowhere uses the engine default theme (`ENGINE_DEFAULT_THEME`: the background and dimensions of the gallery's `minimal`).
+- **Colour scheme.** A colour-scheme reference that resolves nowhere uses `ENGINE_DEFAULT_COLOR_SCHEME` (the twelve slots of `cool-horizon`). The theme's own colour scheme counts as the reference when the deck and slide name none, and resolves in the theme's catalog group first. An object without an `id` is laid over the engine default, so a partial inline scheme keeps the slots it does not name.
+- **Font scheme.** A font-scheme reference that resolves nowhere uses `ENGINE_DEFAULT_FONT_SCHEME`. Sibling fields on an object reference still override it per key, so `{ "id": "no-such-scheme", "major": "Inter", "minor": "Inter" }` uses Inter, and a `code` role still applies. An object without `id` is an inline scheme on the same base and reports nothing.
 
-Both diagnostics are `{ code, path, id, fallback, message }` with `path` where the id is written (`slides.N.layout`, `slides.N.design.theme`, `design.colorScheme`, ...). `resolveSlideContext` reports them, and it also returns `darkBackground` (the preview's decision: the one colour the background names, resolved through the colour scheme and the deck's `variables` so `var:brand`, a scheme slot or `primary`/`secondary`/`accent` work, has a WCAG relative luminance below 0.179; a gradient counts as light, a picture reads `light1`, a pattern its `backgroundColor`; no opacity is applied), which `composeSlide` uses to pick logo variants. Core pagination continues with the fallbacks and passes each diagnostic to `onDiagnostic`.
+Each is one `unresolved-reference` diagnostic: `{ code, kind, reference, path, group, source?, fallback, message }`, with `path` where the reference is written (`slides.N.layout`, `slides.N.design.theme`, `design.colorScheme`, `design.fontScheme.id`, or `catalogs.<group>.themes.<id>.colorScheme` for a reference inside an embedded theme), `fallback` `automatic` for a layout and `engine-default` otherwise, and a message that names the reference and the catalog source it was looked for in. `validate` reports the same references as `opf/unresolved-reference` warnings.
 
-### Unknown font scheme
-
-A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-such-scheme"`, `{ "id": "no-such-scheme", ... }`, or a theme record that names one) is handled the same way in every engine. The document still validates, because an id may name a record from a catalog the engine has not loaded:
-
-1. The `DEFAULT_FONT_SCHEME` record (`aptos`) is the base. Sibling fields on an object reference still override it per key, so `{ "id": "no-such-scheme", "major": "Inter", "minor": "Inter" }` uses Inter, and a `code` role still applies.
-2. The engine reports one `unresolved-font-scheme` diagnostic: `{ code, path, id, fallback: "aptos", message }`. `path` is where the id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the `slides.N.design.theme` / `design.theme` reference whose record names it.
-3. An object without `id` is an inline scheme on the same base and reports nothing.
-
-`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf/composition` implements this rule, and `resolveSlideContext(presentation, index, { fonts })` (package root) applies it, with the slide, deck and theme precedence above, for core pagination and the layout checks: it returns the `ComposeSlideOptions` for one slide (canvas, layout, families as `fontFamilies`, alignment, measurement) plus an `unresolved-font-scheme` diagnostic. Hosts that compose a slide call it instead of repeating the chain. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `validate()` already warns about the unknown id (`opf/catalog-reference`).
+`resolveSlideContext(presentation, index, { catalogs, fonts })` (package root) applies these rules with the slide, deck and theme precedence above. It returns the `ComposeSlideOptions` for one slide (canvas, layout, families as `fontFamilies`, measurement), the diagnostics, and `darkBackground` (the preview's decision: the one colour the background names, resolved through the colour scheme and the deck's `variables` so `var:brand`, a scheme slot or `primary`/`secondary`/`accent` work, has a WCAG relative luminance below 0.179; a gradient counts as light, a picture reads `light1`, a pattern its `backgroundColor`; no opacity is applied), which `composeSlide` uses to pick logo variants. `resolveDesignRecords` and `resolveFontScheme` expose the same resolution for hosts that need only the records. Core pagination continues with the fallbacks and passes each diagnostic to `onDiagnostic`.
 
 | Engine | Diagnostic channel | Reported |
 | --- | --- | --- |
@@ -186,16 +176,7 @@ A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-su
 | opf-editor | `session.composeSlide` / `paginateSlide` `onDiagnostic` option | once per call |
 | opf-pptx export | `toPptx(..., { onDiagnostic })` | once per path per export |
 
-Before FF-35b, core pagination and opf-editor measured such decks in Roboto and opf-render threw `catalog-resolution-failed`. opf-pptx already exported Aptos, but reported nothing. None of the 126 bundled examples names an unknown font scheme. The 805 example SVGs, the 805 golden rasters and the 126 exported PPTX files are byte-identical before and after the change.
-
-### Sibling agreement checks
-
-opf-render, opf-editor and opf-pptx run the same unknown-scheme cases as core (`test/default-font-scheme.mjs`). Each package keeps a local copy of the default, and in opf-editor of the resolver. Their checks against core's `DEFAULT_FONT_SCHEME`, `resolveFontSchemeReference` and `paginate` run only when the installed core exports them. Those checks are skipped today: the siblings install the published `@openpresentation/opf` 0.11.0, which predates FF-35. They activate in either of two ways:
-
-- **Sibling CI:** after a core release that includes FF-35 and FF-35b is published, and each sibling's `@openpresentation/opf` dependency and lockfile move to it. After that release, the local copies can import core directly.
-- **Core ecosystem CI** (`.github/workflows/ecosystem-ci.yml`), which links this checkout's core into pinned sibling commits and runs their `npm test`: after those pins move to sibling commits that contain the FF-35 and FF-35b tests (the program's sibling pin bump).
-
-Until then, the equality with core is established by running the sibling tests against a locally linked core.
+Every engine passes the catalogs its host registered (the `catalogs` option) to core, so a record a host registers resolves the same in preview, editor and export.
 
 ## Color references in content
 
@@ -264,10 +245,10 @@ The 2026-09-30 spec coverage audit found that `design.logo`, `organization.logo`
 A layout record (`opf-layout/v1`) holds what it contains in `placeholders` and how it is meant to look in `design`. The content kinds are one vocabulary: `title`, `subtitle`, `tag`, `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote` and `timeline`.
 
 - `layoutContent(record)` (exported from `@openpresentation/opf`) derives `{ kind, count, heading: { title, subtitle, tag } }` from the placeholders. `kind` is the most frequent body placeholder kind (a tie goes to the first in placeholder order), or `title` when there is none; `count` is the number of body placeholders. Nothing derived is stored on the record.
-- `design` uses the keys and lowercase values of the deck's and a slide's `design`: `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet` and `slideImage: { position }`. An absent key means the layout has no opinion. `pnpm check:spec` verifies that the layout schema's `DesignHints` and `Design` agree.
-- **One merge, per key, the slide winning:** the slide's `design`, then the deck's `design`, then the slide's layout record `design`, then the engine default. This holds for `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill` and `listBullet`, so a slide overrides exactly what its layout sets, by the same name, and a layout value nobody overrides is honored without copying it anywhere. `resolveDesignHints({ slide, layout, presentation, slideIndex })` (exported from `@openpresentation/opf/composition`) is the one place that computes it; it also reports which level supplied each key. `composeSlide()` returns the result as `SlideComposition.design`, and the renderer, the PPTX exporter, pagination and `validate` take `titleAlignment`, `contentAlignment`, `contentBox`, `imageFill` and `listBullet` from there instead of re-deriving them. A value the schema does not allow for its key is skipped, so the next level answers.
+- `design` uses the keys and lowercase values of the deck's and a slide's `design`: `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit` and `listBullet`. An absent key means the layout has no opinion. `pnpm check:spec` verifies that the layout schema's `DesignHints` and `Design` agree.
+- **One merge, per key, the slide winning:** the slide's `design`, then the deck's `design`, then the slide's layout record `design`, then the engine default. This holds for `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit` and `listBullet`, so a slide overrides exactly what its layout sets, by the same name, and a layout value nobody overrides is honored without copying it anywhere. `resolveDesignHints({ slide, layout, presentation, slideIndex })` (exported from `@openpresentation/opf/composition`) is the one place that computes it; it also reports which level supplied each key. `composeSlide()` returns the result as `SlideComposition.design`, and the renderer, the PPTX exporter, pagination and `validate` take `titleAlignment`, `contentAlignment`, `contentBox` and `listBullet` from there instead of re-deriving them; every image item carries its resolved fit (the block's own, else the effective `imageFit`, else `cover`) in `item.image.fit`. A value the schema does not allow for its key is skipped, so the next level answers.
 - The layout's `composition.mode` still ranks above the design hint: `contentDirection` acts below it (see the decision below), and a layout's own `composition` columns and weights are overridden only by an effective `chartPrimary`.
-- `slideImage.position` is not a per-key merge: a layout whose record sets `slideImage` is what lets a deck-wide `design.slideImage` apply, and its `position` is the fallback when the slide's or the deck's value gives none.
+- A layout's `image` placeholder may carry `placement` (FA-22): the slide's n-th top-level image bleeds to that edge unless its block sets its own placement. A layout does not opt into a picture: any layout sits on any background ([images](image-treatments.md)).
 - Hosts no longer need to copy a layout's `design` into the deck or a slide. The pptx.gallery example builder and the editor's layout apply still do, which is harmless: a copied value is a deck or slide value and ranks above the record.
 - **Decision, 2026-10-06 (agent decision, vetoable).** On a cover, `tag` and `subtitle` follow `titleAlignment` unless the slide's own `design.contentAlignment` is set; a deck or layout `contentAlignment` does not split the heading group, exactly as a deck value did before.
 
@@ -298,7 +279,7 @@ Hosts pass their own background luminance test as `composeSlide(..., { darkBackg
 
 ### Where the logo is drawn (vetoable)
 
-1. **Cover and section slides.** A slide with no body payload on a heading-only layout (`title`, `title-subtitle`, `section-divider`, any layout whose placeholders are all headings, or no layout: the same rule that centers covers) draws the `lockup` logo at the top-left of the free area, inside the slide padding and below any header furniture. `composeSlide` returns it as `geometry.logo` (`{ box, slot: 'lockup', path, source, variant, anchor: 'left' }`): `x = area.left + padding`, `y` at the image-safe heading top, `height = 56` reference pixels at a 720-pixel short edge, `width = min(4 * height, free width)`. Headings start one gap below the box and the cover-centering rule centers the tag/title/subtitle group in the remaining span; the logo itself does not move. Consumers fit the image inside the box preserving its aspect ratio, anchored left and vertically centered (SVG `preserveAspectRatio="xMinYMid meet"`; PPTX computes the fitted size from the raster dimensions and places it at `box.x`). Nothing is drawn when no logo resolves. **Content slides never get an automatic logo** (vetoable: it would move every content area).
+1. **Cover and section slides.** A slide with no body payload on a heading-only layout (`title`, `title-subtitle`, `section-divider`, any layout whose placeholders are all headings or placed images, or no layout: the same rule that centers covers) draws the `lockup` logo at the top-left of the free area, inside the slide padding and below any header furniture. `composeSlide` returns it as `geometry.logo` (`{ box, slot: 'lockup', path, source, variant, anchor: 'left' }`): `x = area.left + padding`, `y` at the image-safe heading top, `height = 56` reference pixels at a 720-pixel short edge, `width = min(4 * height, free width)`. Headings start one gap below the box and the cover-centering rule centers the tag/title/subtitle group in the remaining span; the logo itself does not move. Consumers fit the image inside the box preserving its aspect ratio, anchored left and vertically centered (SVG `preserveAspectRatio="xMinYMid meet"`; PPTX computes the fitted size from the raster dimensions and places it at `box.x`). Nothing is drawn when no logo resolves. **Content slides never get an automatic logo** (vetoable: it would move every content area).
 2. **Headers and footers.** `HeaderFooterItem.logo: true` generates an image furniture part with `field: 'logo'`, `generated: true`, `image: resolved.source`, `path: <zone>.logo` and `sourcePath: resolved.path`, from the `icon` slot, in the same box as a zone `image`: as wide as the icon's proportions make it at the band height (a square when core cannot read them), flush with the zone's left edge, centered, or flush with its right edge like the zone's text. Fields in a zone stack in the order logo, image, text, organization, socials, section, slide number, date. Without a logo the engine reports `unresolved-content` at `<zone>.logo` ("Generated logo needs design.logo or a primary organization logo.").
 3. **Picture bullets.** See `listBullet` below.
 4. `organization.logo` is therefore drawn wherever the deck logo is: it is the fallback source, never a separate placement.

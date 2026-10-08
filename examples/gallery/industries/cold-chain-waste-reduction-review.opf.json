@@ -3,11 +3,11 @@
   "name": "Cold Chain Waste Reduction Review",
   "description": "Cold Chain Waste Reduction Review is a fictional OPF example for retail grocery teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "cold-chain-waste-reduction-review",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "candidates",
+    "board",
     {
-      "id": "investor",
+      "id": "executive",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "right",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -91,10 +91,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -129,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -337,6 +333,500 @@
       "density": "medium",
       "scenario": "cold-chain-waste-reduction-review",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "business-review": {
+          "name": "Business Review",
+          "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
+          "audienceFit": [
+            "customers",
+            "partners",
+            "stakeholders",
+            "leadership"
+          ],
+          "duration": {
+            "min": 30,
+            "max": 90
+          },
+          "tags": [
+            "customer-relationship",
+            "review",
+            "operations"
+          ],
+          "beats": [
+            {
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
+              "layout": "title",
+              "instructions": "Identity & representation",
+              "type": "text"
+            },
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
+              "instructions": "Meeting context & goals",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "review",
+              "name": "Review",
+              "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
+              "instructions": "Outline recent activities",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "successes",
+              "name": "Successes",
+              "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
+              "instructions": "Recognize achievements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
+              "instructions": "Address problems faced",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "solutions",
+              "name": "Solutions",
+              "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
+              "instructions": "Discuss implemented fixes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "outcome",
+              "name": "Outcome",
+              "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
+              "instructions": "Display results achieved",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "insights",
+              "name": "Insights",
+              "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
+              "instructions": "Highlight key learnings",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-strategy",
+              "name": "Future Strategy",
+              "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
+              "instructions": "Define next steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
+              "instructions": "Capture audience thoughts",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "next-review",
+              "name": "Next Review",
+              "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
+              "instructions": "Plan for follow-up",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
+              "layout": "title",
+              "instructions": "Recap and express optimism",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        },
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        }
+      },
+      "purposes": {
+        "educate": {
+          "name": "Educate",
+          "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+          "description": "Use when the primary job is learning. Structure around concepts, examples, practice, and checks for understanding rather than persuasion or reporting.",
+          "outcome": "The audience understands the material well enough to apply it.",
+          "successCriteria": [
+            "Definitions and examples are clear",
+            "Audience can apply the concept",
+            "Complexity builds progressively"
+          ],
+          "recommendedNarratives": [
+            "educate",
+            "focus",
+            "company-intro"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "technical"
+          ],
+          "tags": [
+            "learning",
+            "training",
+            "enablement"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "list-5x": {
+          "name": "List 5x",
+          "summary": "Reach for it when five groups of points need parallel lists on one slide.",
+          "description": "A title above five lists in a three-column grid. Use it for five categories, stages or capabilities when each has only a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x.svg"
+          }
+        }
+      }
     }
   }
 }

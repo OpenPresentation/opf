@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { catalogs } from "../dist/index.js";
+import { defaultCatalog } from "../dist/catalog.js";
 import { OPFValidationError, assertValid, assertValidCatalogRecord, validate, validateCatalogRecord } from "../dist/validator.js";
 
 // The format and references findings of a presentation, split by severity: what the schema and semantic checks and the
@@ -323,7 +323,7 @@ describe("presentation shapes that must validate", () => {
       design: {
         logo: { src: "asset:product-shot", alt: "Product screenshot" },
         watermark: { src: "asset:product-shot", opacity: 0.08 },
-        slideImage: { src: "asset:product-shot", position: "background" },
+        background: "asset:product-shot",
       },
       slides: [
         { title: "Image Asset Ref", type: "image", image: "asset:product-shot" },
@@ -799,7 +799,7 @@ describe("presentation shapes that must be rejected", () => {
       name: "Incomplete Language",
       language: { name: "Custom Language" },
       slides: [{ title: "Slide Title" }],
-    }, "must match a schema in anyOf");
+    }, "must have required property 'bcp47'");
   });
 
   test("Incomplete Audience", () => {
@@ -844,76 +844,44 @@ describe("presentation shapes that must be rejected", () => {
 
 });
 
-describe("catalog-id warning behavior", () => {
-  test("a deprecated alias keeps resolving and warns with the canonical id", () => {
-    const record = (id, extra = {}) => ({ $schema: "https://openpresentation.org/schema/opf-theme/v1", id, name: id, ...extra });
-    const doc = {
-      name: "Deprecated Theme Alias",
-      design: { theme: "legacy-look" },
-      catalogs: { themes: { records: [record("legacy-look", { deprecation: { replacedBy: "minimal" } })] } },
-      slides: [{ title: "Slide Title" }],
-    };
-    const result = checked(doc);
-    assert.equal(result.valid, true, "deprecated ids must warn, never error");
-    assert.deepEqual(
-      result.warnings.map(({ ruleId, path, message, validation }) => ({ ruleId, path, message, params: validation.params })),
-      [
-        {
-          ruleId: "opf/deprecated-catalog-id",
-          path: "/design/theme",
-          message: 'Deprecated themes catalog id "legacy-look"; use "minimal" instead.',
-          params: { kind: "themes", id: "legacy-look", replacedBy: "minimal" },
-        },
-      ],
-    );
-    assert.equal(
-      checked({ ...doc, design: { theme: "minimal" } }).warnings.length,
-      0,
-      "the canonical id is quiet",
-    );
-    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: { replacedBy: "minimal" } })).valid, true);
-    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: { replacedBy: "Not An Id" } })).valid, false);
-    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: {} })).valid, false);
-  });
+describe("content-reference warning behavior (OPF 0.15)", () => {
+  const catalogs = [defaultCatalog];
+  const withCatalog = (value) => checked(value, { catalogs });
 
-  test("unknown narrative id warns but does not invalidate", () => {
+  test("an unknown narrative warns opf/unresolved-reference but does not invalidate", () => {
     const unknownNarrativeDoc = {
       name: "Unknown Narrative",
       narrative: "definitely-not-a-narrative",
       slides: [{ title: "Slide Title" }],
     };
-    const unknownNarrativeResult = checked(unknownNarrativeDoc);
-    assert.equal(unknownNarrativeResult.valid, true, "unknown catalog ids must warn, never error");
+    const unknownNarrativeResult = withCatalog(unknownNarrativeDoc);
+    assert.equal(unknownNarrativeResult.valid, true, "an unresolved reference must warn, never error");
     assert.ok(
       unknownNarrativeResult.warnings.some(
-        (warning) => warning.path === "/narrative" && warning.message.includes('Unknown narratives catalog id "definitely-not-a-narrative"'),
+        (warning) => warning.path === "/narrative" && warning.ruleId === "opf/unresolved-reference" && warning.message.includes("'definitely-not-a-narrative'"),
       ),
       JSON.stringify(unknownNarrativeResult.warnings, null, 2),
     );
-    assert.doesNotThrow(() => assertValid(unknownNarrativeDoc), "warnings must not throw in assertValid");
+    assert.doesNotThrow(() => assertValid(unknownNarrativeDoc, { catalogs }), "warnings must not throw in assertValid");
   });
 
-  test("known narrative id produces no warnings", () => {
-    assert.equal(checked({
-      name: "Known Narrative",
-      narrative: "classic-story",
-      slides: [{ title: "Slide Title" }],
-    }).warnings.length, 0);
+  test("a narrative of the registered default catalog produces no warnings", () => {
+    assert.equal(withCatalog({ name: "Known Narrative", narrative: "classic-story", slides: [{ title: "Slide Title" }] }).warnings.length, 0);
   });
 
-  test("a custom narrative is an inline catalog record, and the narrative field is a string only", () => {
-    assert.equal(checked({
-      name: "Custom Inline Narrative",
+  test("a narrative the document defines is a record in catalogs.custom, and the narrative field is a reference string only", () => {
+    assert.equal(withCatalog({
+      name: "Custom Narrative",
       narrative: "my-own-arc",
-      catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "hook", name: "Hook" }] }] } },
+      catalogs: { custom: { narratives: { "my-own-arc": { name: "My Own Arc", beats: [{ id: "hook", name: "Hook" }] } } } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
-    const object = checked({
+    const object = withCatalog({
       name: "Inline Narrative Object",
       narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
       slides: [{ title: "Slide Title" }],
     });
-    assert.equal(object.valid, false, "an inline narrative object is no longer part of the format");
+    assert.equal(object.valid, false, "an inline narrative object is not part of the format");
     const narrativeRecord = (extra) => validateCatalogRecord("narratives", {
       $schema: "https://openpresentation.org/schema/opf-narrative/v1",
       id: "x", name: "X", beats: [{ id: "a", name: "A", ...extra.beat }], ...extra.record,
@@ -926,7 +894,7 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("unknown design references warn at their respective paths", () => {
-    const unknownDesignResult = checked({
+    const unknownDesignResult = withCatalog({
       name: "Unknown Design References",
       design: { theme: "no-such-theme", colorScheme: { id: "no-such-scheme", accent1: "#112233" } },
       slides: [
@@ -934,131 +902,84 @@ describe("catalog-id warning behavior", () => {
       ],
     });
     assert.equal(unknownDesignResult.valid, true);
-    assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/design/theme"));
-    assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/design/colorScheme/id"));
-    assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/slides/0/design/fontScheme"));
+    assert.deepEqual(unknownDesignResult.warnings.filter((warning) => warning.ruleId === "opf/unresolved-reference").map((warning) => warning.path), ["/design/theme", "/design/colorScheme/id", "/slides/0/design/fontScheme"]);
   });
 
-  test("unknown chart type id warns at the chart type path", () => {
-    const unknownChartTypeResult = checked({
+  test("chart.type is an engine vocabulary: an unknown type is a schema error at the chart type path", () => {
+    const result = withCatalog({
       name: "Unknown Chart Type",
       slides: [{
         title: "Slide Title",
         left: { chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
       }],
     });
-    assert.equal(unknownChartTypeResult.valid, true);
-    assert.ok(
-      unknownChartTypeResult.warnings.some(
-        (warning) => warning.path === "/slides/0/left/chart/type" && warning.message.includes('Unknown chartTypes catalog id "no-such-chart"'),
-      ),
-      JSON.stringify(unknownChartTypeResult.warnings, null, 2),
-    );
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some((error) => error.path === "/slides/0/left/chart/type"), JSON.stringify(result.errors, null, 2));
   });
 
-  test("the bundled catalog holds no deprecated records and the retired chart type and audience ids are unknown", () => {
-    for (const [kind, records] of Object.entries(catalogs)) {
-      assert.deepEqual(records.filter((record) => record.deprecation).map((record) => record.id), [], `bundled ${kind} records carry no deprecation`);
-    }
+  test("the retired chart types and plural audience ids are gone: errors and unresolved references", () => {
     const retired = ["bullet-column", "clustered-column", "sparkline", "dot-plot", "australia", "stacked-column-3x", "stacked-column-2x"];
-    const result = checked({
-      name: "Retired Ids",
-      audience: ["executives", "sales-team", "executive"],
-      slides: [
-        ...retired.map((type) => ({ title: type, chart: { type, data: { columns: ["A", "B"], rows: [["x", 1]] } } })),
-        { title: "Stacked column", chart: { type: "stacked-column", data: { columns: ["A", "B", "C"], rows: [["x", 1, 2]] } } },
-      ],
-    });
-    assert.equal(result.valid, true, "an unknown catalog id warns, never errors");
-    assert.deepEqual(
-      result.warnings.map((warning) => warning.message),
-      [
-        'Unknown audiences catalog id "executives" in the available local context.',
-        'Unknown audiences catalog id "sales-team" in the available local context.',
-        ...retired.map((id) => `Unknown chartTypes catalog id "${id}" in the available local context.`),
-      ],
-    );
+    for (const type of retired)
+      assert.equal(withCatalog({ name: "Retired", slides: [{ title: type, chart: { type, data: { columns: ["A", "B"], rows: [["x", 1]] } } }] }).valid, false, type);
+    const audiences = withCatalog({ name: "Retired Ids", audience: ["executives", "sales-team", "executive"], slides: [{ title: "x" }] });
+    assert.equal(audiences.valid, true);
+    assert.deepEqual(audiences.warnings.map((warning) => warning.path), ["/audience/0", "/audience/1"]);
   });
 
-  test("an inline chart type record can still deprecate an id", () => {
-    const result = checked({
-      name: "Inline Deprecated Chart Type",
-      catalogs: { chartTypes: { records: [{ $schema: "https://openpresentation.org/schema/opf-chart-type/v1", id: "my-column", name: "My column", mappings: { openxml: { element: "barChart", barDir: "col", grouping: "clustered", composition: "single" } }, deprecation: { replacedBy: "column" } }] } },
-      slides: [{ title: "Old", chart: { type: "my-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } }],
-    });
-    assert.equal(result.valid, true);
-    assert.deepEqual(result.warnings.map((warning) => warning.message), ['Deprecated chartTypes catalog id "my-column"; use "column" instead.']);
-  });
-
-  test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {
-    // Inline catalog records and custom sources legitimize ids the bundled catalogs don't know.
-    assert.equal(checked({
-      name: "Inline Catalog Record",
+  test("a document's own record legitimizes an id no catalog defines", () => {
+    assert.equal(withCatalog({
+      name: "Own Record",
       design: { colorScheme: "my-brand" },
-      catalogs: { colorSchemes: { records: [{ id: "my-brand", name: "My brand", accent1: "#0F4C81" }] } },
+      catalogs: { custom: { colorSchemes: { "my-brand": { name: "My brand", accent1: "#0F4C81" } } } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
   });
 
-  test("custom catalog source legitimizes an id the bundled catalogs don't know", () => {
-    assert.equal(checked({
-      name: "Custom Catalog Source",
-      narrative: "internal-arc",
-      catalogs: { narratives: { source: "https://catalogs.example.com/narratives" } },
-      slides: [{ title: "Slide Title" }],
-    }).warnings.length, 0);
+  test("a named catalog group resolves only what it embeds or what the host registers for its source", () => {
+    const document = { name: "Named Group", narrative: "acme:internal-arc", catalogs: { acme: { source: "https://catalogs.example.com" } }, slides: [{ title: "Slide Title" }] };
+    assert.deepEqual(withCatalog(document).warnings.map((warning) => warning.ruleId), ["opf/unresolved-reference"]);
+    const registered = { source: "https://catalogs.example.com", narratives: { "internal-arc": { name: "Internal arc", beats: [{ id: "a", name: "A" }] } } };
+    assert.equal(checked(document, { catalogs: [defaultCatalog, registered] }).warnings.length, 0);
   });
 
   test("unknown audience ids warn like narratives; free-form audiences stay quiet", () => {
-    const single = checked({
-      name: "Unknown Audience",
-      audience: "no-such-audience",
-      slides: [{ title: "Slide Title" }],
-    });
-    assert.equal(single.valid, true, "unknown catalog ids must warn, never error");
+    const single = withCatalog({ name: "Unknown Audience", audience: "no-such-audience", slides: [{ title: "Slide Title" }] });
+    assert.equal(single.valid, true, "unresolved references must warn, never error");
     assert.ok(
-      single.warnings.some(
-        (warning) => warning.path === "/audience" && warning.message.includes('Unknown audiences catalog id "no-such-audience"'),
-      ),
+      single.warnings.some((warning) => warning.path === "/audience" && warning.message.includes("'no-such-audience'")),
       JSON.stringify(single.warnings, null, 2),
     );
 
-    const list = checked({
+    const list = withCatalog({
       name: "Unknown Audience Entries",
       audience: ["executive", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }],
       slides: [{ title: "Slide Title" }],
     });
     assert.deepEqual(list.warnings.map((warning) => warning.path).sort(), ["/audience/1", "/audience/2/id"]);
 
-    // Free-form descriptions, URLs, and custom inline audiences are not catalog references.
-    assert.equal(checked({
+    // Free-form descriptions and custom inline audiences are not references.
+    assert.equal(withCatalog({
       name: "Free-form Audience",
-      audience: ["Series B investors", "https://acme.com/decks/audiences/acme-board.json", { name: "Regional Sales Leaders" }],
+      audience: ["Series B investors", "Regional Sales, EMEA", { name: "Regional Sales Leaders" }],
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
-    assert.equal(checked({
+    assert.equal(withCatalog({
       name: "Free-form Audience String",
       audience: "Biology Students and Wildlife Enthusiasts",
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
   });
 
-  test("inline records and custom sources legitimize unknown audience ids", () => {
-    assert.equal(checked({
-      name: "Inline Audience Record",
+  test("a document's own audience record legitimizes an unknown audience id", () => {
+    assert.equal(withCatalog({
+      name: "Own Audience Record",
       audience: ["acme-board"],
-      catalogs: { audiences: { records: [{ id: "acme-board", name: "Acme Board" }] } },
-      slides: [{ title: "Slide Title" }],
-    }).warnings.length, 0);
-    assert.equal(checked({
-      name: "Custom Audience Source",
-      audience: "acme-board",
-      catalogs: { audiences: { source: "https://catalogs.example.com/audiences" } },
+      catalogs: { custom: { audiences: { "acme-board": { name: "Acme Board" } } } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
   });
 
-  test("every pptx.gallery narrative and audience id resolves in the bundled catalogs", () => {
+  test("every pptx.gallery narrative and audience id resolves in the default catalog", () => {
     // FF-28: the gallery's narrative pages, audience pages, and content blocks reference these ids.
     const galleryNarratives = [
       "problem-solution", "heros-journey", "what-so-what-now-what", "situation-complication-resolution",
@@ -1069,10 +990,10 @@ describe("catalog-id warning behavior", () => {
       "internal-team", "customer", "general-public", "media", "partner", "regulatory", "all-hands",
     ];
     for (const narrative of galleryNarratives) {
-      const result = checked({ name: "Gallery Narrative", narrative, slides: [{ title: "Slide Title" }] });
+      const result = withCatalog({ name: "Gallery Narrative", narrative, slides: [{ title: "Slide Title" }] });
       assert.deepEqual(result.warnings, [], narrative);
     }
-    const result = checked({ name: "Gallery Audiences", audience: galleryAudiences, slides: [{ title: "Slide Title" }] });
+    const result = withCatalog({ name: "Gallery Audiences", audience: galleryAudiences, slides: [{ title: "Slide Title" }] });
     assert.deepEqual(result.warnings, []);
   });
 });

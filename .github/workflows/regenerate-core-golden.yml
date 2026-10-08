@@ -4,17 +4,27 @@ name: Regenerate core golden
 #
 #   gh workflow run regenerate-core-golden.yml -f branch=<branch>            # render, push one fixture commit, dispatch CI
 #   gh workflow run regenerate-core-golden.yml -f branch=<branch> -f dry-run=true   # render and report only
+#   gh workflow run regenerate-core-golden.yml --ref <branch> -f branch=<branch> -f renderer-ref=<opf-render branch or SHA> -f fixture-name=<name>
 #
 # Why: a pull request that changes examples/ (or the core code that composes them) moves the corpus digest and slide
 # hashes in the fixture. opf-render's `regenerate-goldens` reads only ecosystem.lock.json, so it cannot see an unmerged
 # core pull request. The manual method of RR-20 (opf#367) is this: the locked renderer's test/golden.mjs, core linked,
 # scale 0.25, systemFonts false, on Linux. docs/ecosystem-development.md ("Regenerating core's golden") has the merge rhythm.
 #
+# renderer-ref (FA wave C): for one coordinated change whose renderer is not merged yet (OPF 0.15 and FA-23), the branch
+# is rendered with that opf-render branch or commit instead of the locked renderer. The guard is unchanged (main's corpus,
+# main's core and the LOCKED renderer must reproduce main's committed fixture). The run writes a NEW fixture,
+# scripts/fixtures/opf-examples-png.<fixture-name>.sha256.json, points the branch's ecosystem.lock.json `golden` at it,
+# appends the review record to scripts/fixtures/README.md, and never overwrites main's fixture. Such a run may be
+# dispatched on the branch itself (`--ref <branch>`), so it uses that branch's workflow and scripts.
+#
 # Two jobs, so the job that runs the branch's code (install, build, render) holds no write token:
 #   regenerate (contents: read)  renders main (the reproducibility guard), then the branch, and writes the report;
-#   push (contents: write)       runs only trusted scripts from the default branch: re-validates, commits only the
-#                                fixture, pushes without force, dispatches `OPF CI` and `Coordinated public packages`.
-# A workflow_dispatch only sees workflows on the default branch, so this workflow is dispatched on `main`.
+#   push (contents: write)       runs only the scripts of the dispatched ref (main, or the branch for renderer-ref):
+#                                re-validates, commits only the fixture (and, for renderer-ref, the lock's golden and the
+#                                review record), pushes without force, dispatches `OPF CI` and `Coordinated public packages`.
+# A workflow_dispatch only sees workflows on the default branch, so this workflow is dispatched on `main`, except a
+# renderer-ref run, which may be dispatched on the branch it regenerates.
 on:
   workflow_dispatch:
     inputs:
@@ -32,6 +42,16 @@ on:
         required: false
         type: boolean
         default: true
+      renderer-ref:
+        description: Optional branch or commit of OpenPresentation/opf-render that renders the branch instead of the locked renderer (needs fixture-name)
+        required: false
+        type: string
+        default: ""
+      fixture-name:
+        description: With renderer-ref, the new fixture scripts/fixtures/opf-examples-png.<name>.sha256.json the branch lock will select
+        required: false
+        type: string
+        default: ""
 permissions:
   contents: read
 concurrency:
@@ -43,32 +63,52 @@ jobs:
     runs-on: ubuntu-24.04
     # The same digest as the ecosystem-render job in ecosystem-ci.yml (scripts/core-golden.test.mjs fails when they differ).
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    timeout-minutes: 75
+    timeout-minutes: 90
     env:
       OPF_PLAYWRIGHT_IMAGE: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
       BRANCH: ${{ inputs.branch }}
+      RENDERER_REF: ${{ inputs.renderer-ref }}
+      FIXTURE_NAME: ${{ inputs.fixture-name }}
     outputs:
       head: ${{ steps.branch.outputs.head }}
+      main-sha: ${{ steps.branch.outputs.main-sha }}
+      main-golden: ${{ steps.lock.outputs.main-golden }}
+      fixture-path: ${{ steps.lock.outputs.fixture-path }}
+      override: ${{ steps.lock.outputs.override }}
+      branch-renderer: ${{ steps.renderer.outputs.sha }}
       push-needed: ${{ steps.report.outputs.push-needed }}
       changed-slides: ${{ steps.report.outputs.changed-slides }}
+      changed-decks: ${{ steps.report.outputs.changed-decks }}
     steps:
-      - name: Run only from the default branch
+      - name: Run only from the default branch (or, for renderer-ref, from the branch itself)
         env:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          if [ "$GITHUB_REF" != "refs/heads/$DEFAULT_BRANCH" ]; then
-            echo "::error title=regenerate-core-golden::Dispatch this workflow on $DEFAULT_BRANCH (gh workflow run regenerate-core-golden.yml -f branch=<branch>), not on $GITHUB_REF."
+          if [ "$GITHUB_REF" = "refs/heads/$DEFAULT_BRANCH" ]; then
+            echo "dispatched on $DEFAULT_BRANCH: its workflow and scripts run"
+          elif [ -n "$RENDERER_REF" ] && [ "$GITHUB_REF" = "refs/heads/$BRANCH" ]; then
+            echo "::notice title=regenerate-core-golden::Dispatched on $BRANCH with renderer-ref $RENDERER_REF: this run uses $BRANCH's workflow and scripts (one coordinated change); main is still the guard."
+          else
+            echo "::error title=regenerate-core-golden::Dispatch this workflow on $DEFAULT_BRANCH (gh workflow run regenerate-core-golden.yml -f branch=<branch>), or on the branch itself with renderer-ref, not on $GITHUB_REF."
             exit 1
           fi
           git config --global --add safe.directory '*'
-      # main: the trusted tooling (this script and the lock reader), the baseline fixture and the baseline corpus.
+      # The dispatched ref: the tooling (this script and the lock reader).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
+          path: tools
+          persist-credentials: false
+      # main: the baseline fixture and the baseline corpus (the dispatched commit when dispatched on main).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name == github.event.repository.default_branch && github.sha || github.event.repository.default_branch }}
           path: opf-base
           persist-credentials: false
       - name: Accept only a branch of this repository
-        run: node opf-base/scripts/core-golden.mjs check-branch --branch "$BRANCH" --default-branch "${{ github.event.repository.default_branch }}"
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: node tools/scripts/core-golden.mjs check-branch --branch "$BRANCH" --default-branch "$DEFAULT_BRANCH"
       # No `repository:` key: the branch is looked up in this repository only, so a fork cannot be named.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -78,40 +118,39 @@ jobs:
           persist-credentials: false
       - name: Pin the branch head and refuse a stale branch
         id: branch
-        env:
-          MAIN_SHA: ${{ github.sha }}
         run: |
           head="$(git -C opf rev-parse HEAD)"
+          main_sha="$(git -C opf-base rev-parse HEAD)"
           remote="$(git -C opf rev-parse --verify --quiet "refs/remotes/origin/$BRANCH" || true)"
           if [ "$remote" != "$head" ]; then
             echo "::error title=regenerate-core-golden::$BRANCH is not a branch of this repository (or moved during checkout)."
             exit 1
           fi
           echo "head=$head" >> "$GITHUB_OUTPUT"
-          fork="$(git -C opf merge-base "$head" "$MAIN_SHA")"
-          git -C opf diff --name-only "$fork" "$MAIN_SHA" > main-since-fork.txt
-          behind="$(git -C opf rev-list --count "$head..$MAIN_SHA")"
+          echo "main-sha=$main_sha" >> "$GITHUB_OUTPUT"
+          fork="$(git -C opf merge-base "$head" "$main_sha")"
+          git -C opf diff --name-only "$fork" "$main_sha" > main-since-fork.txt
+          behind="$(git -C opf rev-list --count "$head..$main_sha")"
           echo "behind=$behind" >> "$GITHUB_OUTPUT"
           if [ "$behind" != 0 ]; then echo "::warning title=regenerate-core-golden::$BRANCH is $behind commit(s) behind main; rebase before merging if main changed examples or core code."; fi
-          node opf-base/scripts/core-golden.mjs behind --paths-file main-since-fork.txt
-      # The renderer is the commit ecosystem.lock.json locks on main (what the ecosystem jobs and the reproducibility
-      # guard use). A branch whose lock moves the renderer must be rebased: the guard could not prove its fixture.
+          node tools/scripts/core-golden.mjs behind --paths-file main-since-fork.txt
+      # The guard renderer is the commit ecosystem.lock.json locks on main (what the ecosystem jobs use). Without
+      # renderer-ref, a branch whose lock moves the renderer must be rebased: the guard could not prove its fixture. With
+      # renderer-ref, the branch is rendered with that renderer instead, so `plan` relaxes the check and says why.
       - name: Read the lock of main and of the branch
         id: lock
         run: |
-          lock_value() { node opf-base/scripts/core-golden.mjs resolve --lock "$1" | sed -n "s/^$2=//p"; }
+          lock_value() { node tools/scripts/core-golden.mjs resolve --lock "$1" | sed -n "s/^$2=//p"; }
           main_golden="$(lock_value opf-base/ecosystem.lock.json golden-path)"
           main_renderer="$(lock_value opf-base/ecosystem.lock.json renderer-sha)"
           branch_golden="$(lock_value opf/ecosystem.lock.json golden-path)"
           branch_renderer="$(lock_value opf/ecosystem.lock.json renderer-sha)"
           if [ -z "$main_golden" ] || [ -z "$branch_golden" ]; then exit 1; fi
-          if [ "$main_renderer" != "$branch_renderer" ]; then
-            echo "::error title=regenerate-core-golden::The branch locks opf-render $branch_renderer, main locks $main_renderer. Rebase onto main (the lock is written by the roller) and dispatch again."
-            exit 1
-          fi
+          node tools/scripts/core-golden.mjs plan --main-golden "$main_golden" --branch-golden "$branch_golden" \
+            --main-renderer "$main_renderer" --branch-renderer "$branch_renderer" \
+            --renderer-ref "$RENDERER_REF" --fixture-name "$FIXTURE_NAME" --github-output
           {
             echo "main-golden=$main_golden"
-            echo "branch-golden=$branch_golden"
             echo "renderer=$main_renderer"
           } >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -120,6 +159,27 @@ jobs:
           ref: ${{ steps.lock.outputs.renderer }}
           path: opf-render
           persist-credentials: false
+      - if: ${{ inputs.renderer-ref != '' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ inputs.renderer-ref }}
+          path: opf-render-branch
+          persist-credentials: false
+      - name: Name the renderer that renders the branch
+        id: renderer
+        env:
+          LOCKED: ${{ steps.lock.outputs.renderer }}
+        run: |
+          if [ -n "$RENDERER_REF" ]; then
+            sha="$(git -C opf-render-branch rev-parse HEAD)"
+            echo "::notice title=regenerate-core-golden::The branch renders with opf-render $sha (renderer-ref $RENDERER_REF); main's guard renders with the locked $LOCKED."
+            echo "dir=opf-render-branch" >> "$GITHUB_OUTPUT"
+          else
+            sha="$LOCKED"
+            echo "dir=opf-render" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           version: 10.33.2
@@ -128,7 +188,7 @@ jobs:
           node-version: 24
           cache: pnpm
           cache-dependency-path: opf-base/pnpm-lock.yaml
-      - name: Install and build main, the branch and the renderer
+      - name: Install and build main, the branch and the renderers
         run: |
           pnpm --dir opf-base install --frozen-lockfile
           pnpm --dir opf install --frozen-lockfile
@@ -136,40 +196,47 @@ jobs:
           pnpm --dir opf-base build
           pnpm --dir opf build
           npm run build --prefix opf-render
+          if [ -n "$RENDERER_REF" ]; then
+            npm ci --prefix opf-render-branch
+            npm run build --prefix opf-render-branch
+          fi
       # Step one, the reproducibility guard: main's corpus, main's core and the locked renderer must write main's committed
       # fixture byte for byte. If not, this environment cannot be trusted to write a fixture, and nothing is pushed.
-      # Step two renders the branch the same way. OPF_GOLDEN_ARTIFACTS=changed keeps the PNGs of the slides that differ
-      # from main's fixture (the review sheets in the artifact).
+      # Step two renders the branch the same way (with the renderer-ref renderer when one is given).
+      # OPF_GOLDEN_ARTIFACTS=changed keeps the PNGs of the slides that differ from main's fixture (the review sheets).
       - name: Render main and prove the fixture reproduces
         env:
           MAIN_GOLDEN: ${{ steps.lock.outputs.main-golden }}
+          BRANCH_RENDERER_DIR: ${{ steps.renderer.outputs.dir }}
         run: |
-          link_core() {
-            rm -rf opf-render/node_modules/@openpresentation/opf
-            ln -s "$GITHUB_WORKSPACE/$1/packages/javascript" opf-render/node_modules/@openpresentation/opf
+          link_core() { # <renderer dir> <core checkout>
+            rm -rf "$1/node_modules/@openpresentation/opf"
+            ln -s "$GITHUB_WORKSPACE/$2/packages/javascript" "$1/node_modules/@openpresentation/opf"
           }
-          render() { # <core checkout> <output dir>
-            link_core "$1"
-            (cd opf-render && OPF_EXAMPLES_DIR="$GITHUB_WORKSPACE/$1/examples" OPF_GOLDEN_OUT="$GITHUB_WORKSPACE/$2" OPF_GOLDEN_BASELINE="$GITHUB_WORKSPACE/opf-base/$MAIN_GOLDEN" OPF_GOLDEN_ARTIFACTS=changed node test/golden.mjs --update)
+          render() { # <core checkout> <output dir> [renderer dir]
+            renderer="${3:-opf-render}"
+            link_core "$renderer" "$1"
+            (cd "$renderer" && OPF_EXAMPLES_DIR="$GITHUB_WORKSPACE/$1/examples" OPF_GOLDEN_OUT="$GITHUB_WORKSPACE/$2" OPF_GOLDEN_BASELINE="$GITHUB_WORKSPACE/opf-base/$MAIN_GOLDEN" OPF_GOLDEN_ARTIFACTS=changed node test/golden.mjs --update)
           }
           render opf-base out/main
-          node opf-base/scripts/core-golden.mjs compare --expected "opf-base/$MAIN_GOLDEN" --actual out/main/candidate.json
-          render opf out/branch
+          node tools/scripts/core-golden.mjs compare --expected "opf-base/$MAIN_GOLDEN" --actual out/main/candidate.json
+          render opf out/branch "$BRANCH_RENDERER_DIR"
       - name: Report the changed slides
         id: report
         env:
           MAIN_GOLDEN: ${{ steps.lock.outputs.main-golden }}
-          BRANCH_GOLDEN: ${{ steps.lock.outputs.branch-golden }}
+          FIXTURE_PATH: ${{ steps.lock.outputs.fixture-path }}
           HEAD: ${{ steps.branch.outputs.head }}
-          RENDERER: ${{ steps.lock.outputs.renderer }}
+          MAIN_SHA: ${{ steps.branch.outputs.main-sha }}
+          RENDERER: ${{ steps.renderer.outputs.sha }}
           BEHIND: ${{ steps.branch.outputs.behind }}
         run: |
-          node opf-base/scripts/core-golden.mjs report \
-            --base "opf-base/$MAIN_GOLDEN" --candidate out/branch/candidate.json --branch-fixture "opf/$BRANCH_GOLDEN" \
-            --out-dir out/report --branch "$BRANCH" --head "$HEAD" --base-sha "$GITHUB_SHA" --golden-path "$BRANCH_GOLDEN" \
-            --renderer "$RENDERER" --image "$OPF_PLAYWRIGHT_IMAGE" \
+          node tools/scripts/core-golden.mjs report \
+            --base "opf-base/$MAIN_GOLDEN" --candidate out/branch/candidate.json --branch-fixture "opf/$FIXTURE_PATH" \
+            --out-dir out/report --branch "$BRANCH" --head "$HEAD" --base-sha "$MAIN_SHA" --golden-path "$FIXTURE_PATH" \
+            --renderer "$RENDERER" --renderer-ref "$RENDERER_REF" --image "$OPF_PLAYWRIGHT_IMAGE" \
             --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
-            --note "Reproducibility guard passed: main @ $(printf '%.12s' "$GITHUB_SHA") rendered with the locked renderer wrote $MAIN_GOLDEN byte for byte." \
+            --note "Reproducibility guard passed: main @ $(printf '%.12s' "$MAIN_SHA") rendered with the locked renderer wrote $MAIN_GOLDEN byte for byte." \
             --note "Branch is $BEHIND commit(s) behind main (no golden-affecting change missing)." \
             --github-output
           cp out/branch/candidate.json out/report/fixture.json
@@ -204,16 +271,30 @@ jobs:
       BRANCH: ${{ inputs.branch }}
       HEAD: ${{ needs.regenerate.outputs.head }}
       GH_TOKEN: ${{ github.token }}
+      FIXTURE_PATH: ${{ needs.regenerate.outputs.fixture-path }}
+      OVERRIDE: ${{ needs.regenerate.outputs.override }}
+      RENDERER: ${{ needs.regenerate.outputs.branch-renderer }}
+      RENDERER_REF: ${{ inputs.renderer-ref }}
+      MAIN_SHA: ${{ needs.regenerate.outputs.main-sha }}
     steps:
-      # Trusted code only: the default branch's scripts. Nothing from the branch is executed in this job.
+      # Trusted code only: the dispatched ref's scripts (main, or the branch for a renderer-ref run). Nothing the
+      # regenerate job built from the branch is executed in this job.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
           path: tools
           persist-credentials: false
+      # main at the commit the guard rendered: its lock names the base fixture the candidate is verified against.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.regenerate.outputs.main-sha }}
+          path: base
+          persist-credentials: false
       - name: Re-validate the branch and that it has not moved
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          node tools/scripts/core-golden.mjs check-branch --branch "$BRANCH" --default-branch "${{ github.event.repository.default_branch }}"
+          node tools/scripts/core-golden.mjs check-branch --branch "$BRANCH" --default-branch "$DEFAULT_BRANCH"
           tip="$(git ls-remote "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/heads/$BRANCH" | cut -f1)"
           if [ "$tip" != "$HEAD" ]; then
             echo "::error title=regenerate-core-golden::$BRANCH moved from $(printf '%.12s' "$HEAD") to $(printf '%.12s' "$tip") while rendering. Dispatch again."
@@ -230,15 +311,29 @@ jobs:
           path: artifact
       - name: Commit only the fixture
         id: commit
+        env:
+          CHANGED_SLIDES: ${{ needs.regenerate.outputs.changed-slides }}
+          CHANGED_DECKS: ${{ needs.regenerate.outputs.changed-decks }}
         run: |
-          main_golden="$(node tools/scripts/core-golden.mjs resolve --lock tools/ecosystem.lock.json | sed -n 's/^golden-path=//p')"
-          branch_golden="$(node tools/scripts/core-golden.mjs resolve --lock branch/ecosystem.lock.json | sed -n 's/^golden-path=//p')"
-          node tools/scripts/core-golden.mjs verify --base "tools/$main_golden" --candidate artifact/report/fixture.json
-          cp artifact/report/fixture.json "branch/$branch_golden"
-          node tools/scripts/core-golden.mjs paths --root branch --allow "$branch_golden"
+          main_golden="$(node tools/scripts/core-golden.mjs resolve --lock base/ecosystem.lock.json | sed -n 's/^golden-path=//p')"
+          node tools/scripts/core-golden.mjs verify --base "base/$main_golden" --candidate artifact/report/fixture.json
+          cp artifact/report/fixture.json "branch/$FIXTURE_PATH"
+          if [ "$OVERRIDE" = true ]; then
+            # renderer-ref: a new fixture, selected by the branch lock, with its review record; main's fixture is untouched.
+            node tools/scripts/core-golden.mjs set-lock-golden --lock branch/ecosystem.lock.json --path "$FIXTURE_PATH" --main-golden "$main_golden" \
+              --note "core fixture rendered with opf-render $RENDERER (renderer-ref $RENDERER_REF) by regenerate-core-golden"
+            node tools/scripts/core-golden.mjs review-record --readme branch/scripts/fixtures/README.md --fixture "$FIXTURE_PATH" \
+              --branch "$BRANCH" --head "$HEAD" --renderer "$RENDERER" --renderer-ref "$RENDERER_REF" --base-sha "$MAIN_SHA" \
+              --changed-slides "$CHANGED_SLIDES" --changed-decks "$CHANGED_DECKS" \
+              --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            node tools/scripts/core-golden.mjs paths --root branch --allow "$FIXTURE_PATH" --allow ecosystem.lock.json --allow scripts/fixtures/README.md
+            git -C branch add -- "$FIXTURE_PATH" ecosystem.lock.json scripts/fixtures/README.md
+          else
+            node tools/scripts/core-golden.mjs paths --root branch --allow "$FIXTURE_PATH"
+            git -C branch add -- "$FIXTURE_PATH"
+          fi
           git -C branch config user.name "github-actions[bot]"
           git -C branch config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C branch add -- "$branch_golden"
           # git -C resolves -F relative to branch/, so name the message by its absolute path (RR-58: the relative path failed).
           git -C branch commit -q -F "$GITHUB_WORKSPACE/artifact/report/commit-message.txt"
           echo "sha=$(git -C branch rev-parse HEAD)" >> "$GITHUB_OUTPUT"

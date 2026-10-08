@@ -1,0 +1,72 @@
+import assert from 'node:assert/strict';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { SKIP_EVENTS, cliPeerGate, gate, satisfies } from './unreleased-gate.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+test('satisfies follows npm caret, tilde and exact rules, 0.x included', () => {
+  assert.equal(satisfies('0.15.0', '^0.15.0'), true);
+  assert.equal(satisfies('0.15.3', '^0.15.0'), true);
+  assert.equal(satisfies('0.16.0', '^0.15.0'), false);
+  assert.equal(satisfies('0.14.9', '^0.15.0'), false);
+  assert.equal(satisfies('0.15.0-dev.0', '^0.15.0'), false, 'a prerelease is below its release');
+  assert.equal(satisfies('1.4.0', '^1.2.0'), true);
+  assert.equal(satisfies('2.0.0', '^1.2.0'), false);
+  assert.equal(satisfies('0.15.2', '~0.15.1'), true);
+  assert.equal(satisfies('0.14.0', '0.14.0'), true);
+  assert.equal(satisfies('0.14.1', '0.14.0'), false);
+  assert.equal(satisfies('3.0.0', '>=0.14.0'), true);
+  assert.throws(() => satisfies('0.14.0', 'workspace:*'), /unsupported range/);
+});
+
+test('an unmet requirement skips only on a pull request or merge-queue run, and fails everywhere else', () => {
+  assert.deepEqual([...SKIP_EVENTS].sort(), ['merge_group', 'pull_request']);
+  const unmet = (event) => gate({ subject: 'x', required: 'y@^0.15.0', installed: '0.14.0', met: false, event, what: 'its tests' });
+  for (const event of ['pull_request', 'merge_group']) {
+    const result = unmet(event);
+    assert.equal(result.run, false, event);
+    assert.match(result.message, /x needs y@\^0\.15\.0, and the installed published version is 0\.14\.0, so its tests skip/);
+  }
+  for (const event of ['push', 'schedule', 'workflow_dispatch', 'release', '']) assert.throws(() => unmet(event), /only a pull request or merge-queue run may skip its tests/, event);
+  for (const event of ['push', 'pull_request', '']) assert.deepEqual(gate({ subject: 'x', required: 'y', installed: '1', met: true, event }), { run: true });
+});
+
+test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'unreleased-gate-'));
+  const cli = path.join(dir, 'cli');
+  mkdirSync(path.join(cli, 'dist'), { recursive: true });
+  writeFileSync(path.join(cli, 'package.json'), JSON.stringify({ name: '@openpresentation/cli', peerDependencies: { '@openpresentation/opf-render': '^0.15.0', '@openpresentation/opf-pptx': '^0.15.0' } }));
+  writeFileSync(path.join(cli, 'dist/index.js'), '');
+  const install = (name, version) => {
+    mkdirSync(path.join(cli, 'node_modules', name), { recursive: true });
+    writeFileSync(path.join(cli, 'node_modules', name, 'package.json'), JSON.stringify({ name, version }));
+  };
+  install('@openpresentation/opf-render', '0.14.0');
+  install('@openpresentation/opf-pptx', '0.14.0');
+  const names = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'];
+  const executable = pathToFileURL(path.join(cli, 'dist/index.js')).href;
+  const skipped = cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request' });
+  assert.equal(skipped.run, false);
+  assert.match(skipped.message, /opf-render@\^0\.15\.0 and @openpresentation\/opf-pptx@\^0\.15\.0/);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }), /only a pull request or merge-queue run/);
+  install('@openpresentation/opf-render', '0.15.0');
+  install('@openpresentation/opf-pptx', '0.15.1');
+  assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }).run, true);
+  // The packed-install test names the versions it installs.
+  assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request', installedVersions: { '@openpresentation/opf-render': '0.14.0', '@openpresentation/opf-pptx': '0.14.0' } }).run, false);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names: ['@openpresentation/opf-editor'], event: 'push' }), /no peer range/);
+});
+
+test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES', () => {
+  for (const file of ['packages/cli/test/files.mjs', 'packages/cli/test/packed-files.mjs']) assert.match(readFileSync(path.join(root, file), 'utf8'), /cliPeerGate\(/, file);
+  const manifest = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8'));
+  const peers = readFileSync(path.join(root, 'packages/cli/src/peers.ts'), 'utf8');
+  for (const [name, range] of Object.entries(manifest.peerDependencies)) {
+    const constant = name.endsWith('opf-render') ? 'RENDER_PACKAGE' : 'PPTX_PACKAGE';
+    assert.match(peers, new RegExp(`\\[${constant}\\]: "${range.replace(/[.^]/g, '\\$&')}"`), name);
+  }
+});

@@ -12,10 +12,10 @@ for(const type of ['column','bar','line','area']){
  if(type==='line')assert.equal((svg.match(/<polyline/g)??[]).length,4);
  if(type==='area')assert.equal((svg.match(/<path/g)??[]).length,2);
 }
-for(const type of ['pie','donut']){
+for(const type of ['pie','doughnut']){
  const content=importData('Q,V\nA,2\nB,3',{as:'chart',chartType:type});
  const svg=renderSlideSvg({slides:[content]},0,{trace:true});assert.match(svg,/<path/);// Renderer 0.11.3+ draws a doughnut as ring paths: an outer and an inner arc per slice (a pie slice has one arc).
- if(type==='donut')assert.equal((svg.match(/ A /g)??[]).length,4);else assert.equal((svg.match(/ A /g)??[]).length,2);
+ if(type==='doughnut')assert.equal((svg.match(/ A /g)??[]).length,4);else assert.equal((svg.match(/ A /g)??[]).length,2);
 }
 const numericCategory=importData([{year:2025,sales:2},{year:2026,sales:-1}],{as:'chart'});
 assert.match(renderSlideSvg({slides:[numericCategory]},0),/2025/);

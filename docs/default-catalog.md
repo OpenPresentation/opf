@@ -1,38 +1,172 @@
-# The default catalog
+# Catalogs and the default catalog
 
-Every OPF catalog reference resolves through the same chain: inline
-`catalogs.<kind>.records[]`, then `catalogs.<kind>.source`, then engine defaults,
-then the **default catalog** at `https://www.pptx.gallery/<kind>`. The
-referencing fields are `narrative`, `language`, `tone`, `audience`, `purpose`,
-`design.theme`, `design.colorScheme`, `design.fontScheme`, `Slide.layout`,
-`Chart.type` and the platform keys in `socials`.
+OPF 0.15 keeps catalogs out of the engine. A document embeds every record it uses, hosts register the catalogs they
+trust, and core ships no records in its main entry. pptx.gallery publishes the **default catalog**; core carries a
+pinned snapshot of it only as the opt-in subpath `@openpresentation/opf/catalog`.
 
-This page defines who publishes that catalog, how to fetch it, and how the copy
-bundled in `@openpresentation/opf` stays tied to it.
+This page is the contract: the document shape, the one resolution rule, how hosts register catalogs, the authoring
+helpers, the diagnostics, and how the snapshot stays tied to pptx.gallery. The design behind it is
+[0.15-design.md](programs/format-audit/0.15-design.md).
 
-## Contract
+## Catalogs in a document
 
-- **pptx.gallery publishes the catalog; core is the source of truth for its
-  content.** Since the FF-37 decision (2026-10-02) a record can change here first:
-  the gallery's CI checks its published files against the `@openpresentation/opf`
-  release in its lockfile (`pnpm check:core-catalog`) and adopts the change with
-  the next core release.
-- **Each id has one owner (RR-58).** Core owns every record bundled in
-  `spec/catalogs/` (the shared records); pptx.gallery owns the records only it
-  publishes (most layouts). A gallery-only record enters the snapshot through the
-  sync below (`--include`) and is core-owned from then on. For a subset kind the
-  sync refuses a published copy of a bundled record that differs in any field,
-  `name` included, and the gallery's `check:core-catalog` fails on a gallery data
-  item that restates a core record differently. A mirrored kind publishes exactly
-  core's records, so an edit may start on either side but lands identically on
-  both.
-- **`spec/catalogs/` is a pinned snapshot.** `spec/catalogs/manifest.json`
-  records the gallery commit and a content hash per kind.
-- **Engines never fetch at run time by default.** Renderers, exporters,
-  validators and the CLI resolve the default catalog from the bundled snapshot,
-  so resolution is deterministic offline and in the cloud.
-- **A declared `catalogs.<kind>.source` is an opt-in.** The engine's caller
-  performs that fetch; the OPF packages do not.
+`catalogs` groups the records a document embeds by the catalog they came from. Inside a group, records are keyed by
+kind and then by id:
+
+```json
+"catalogs": {
+  "default": {
+    "source": "https://www.pptx.gallery",
+    "layouts": { "two-column": { "name": "Two column", "placeholders": [{ "type": "title" }, { "type": "text" }, { "type": "text" }] } },
+    "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
+  },
+  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "placeholders": [{ "type": "title" }] } } },
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "placeholders": [{ "type": "title" }, { "type": "chart" }] } } }
+}
+```
+
+- **`default`** is the catalog bare ids come from. It needs a `source` when it holds records. Omitted: bare ids fall
+  back to the host's default catalog. `"default": false`: no catalog fallback at all, so every bare id must be embedded.
+- **`custom`** holds the records the document defines itself. It has no source. Forking a catalog record copies it here
+  under a new id, so the change of ownership is visible.
+- **Any other name** (lowercase kebab-case) is an extra catalog, identified by its `source`: an HTTPS URL or a `pkg:`
+  package reference. The name is the prefix its references use (`acme:hero`).
+- The kinds are `layouts`, `themes`, `colorSchemes`, `fontSchemes`, `narratives`, `audiences`, `purposes` and `tones`.
+- An embedded record has the fields of its kind's companion schema without `$schema` and `id` (the key is the id), and
+  without the catalog's `x-*` display metadata. `validate` checks each one against the companion schema
+  (`opf/catalog-record`).
+
+## References
+
+Every content reference is a bare `id` or `name:id`, and every prefix must name a group (`opf/undeclared-catalog`
+otherwise, a format error that engines reject at their format check). URLs and `pkg:` strings are not references; a named group replaces them. The references are
+`Slide.layout`, `design.theme`, `design.colorScheme` (or its `id`), `design.fontScheme` (or its `id`), the same three on
+`Slide.design`, `narrative`, `audience`, `purpose` and `tone` (a string or an object's `id`), a theme record's
+`colorScheme` and `fontScheme`, and a `language` object's `fontScheme` and `googleFontScheme`. An `audience` or
+`purpose` string that is not an id (it has spaces, capitals or punctuation) is free text, never looked up.
+
+## Resolution
+
+One rule for every kind; nothing is ever fetched:
+
+1. A bare id: `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host
+   registered for `default.source` (the host's default catalog when `default` is omitted; nothing when it is `false`).
+2. `name:id`: the records embedded under `catalogs.<name>`, then the catalog the host registered for its `source`.
+3. A reference written inside an embedded record (a theme's `colorScheme`) resolves in that record's own group first,
+   so acme's `brand` theme finds acme's `ocean` before the default catalog's.
+4. Otherwise the reference is **unresolved**: the `opf/unresolved-reference` warning names the reference and the
+   source it was looked for in, a slide composes automatically, and a design uses the engine default. A strict export
+   fails with the same reference.
+
+A record embedded under `catalogs.default` or a named group whose registered catalog has no record of that kind and id is the warning `opf/catalog-record-not-in-source`: it is the document's own record and belongs in `catalogs.custom`. The check is silent when no catalog is registered for the group's source, for a record the catalog has with other content (an update difference) and for `custom`; rendering is unchanged.
+
+A slide with no `layout` is automatic composition, not a missing reference, and has no finding. Engines never
+substitute a different layout for one that does not resolve.
+
+## Registering catalogs
+
+Every entry point that resolves references takes the same option, `catalogs`: the catalogs the host registered,
+matched by `source`.
+
+> **The host-default rule.** The first registered catalog is the default for documents that omit `catalogs.default`:
+> their bare ids resolve in `custom`, then in that catalog. A document whose `default` names a `source` uses the
+> registered catalog with that source, and nothing when the host did not register it, even if it registered others.
+> `"default": false` uses no catalog for bare ids. Without the `catalogs` option nothing is registered: core has no
+> fallback of its own, so only what the document embeds resolves. Hosts (the CLI, the editor app, the sites) register
+> `@openpresentation/opf/catalog`; libraries and engines pass the option through.
+
+```js
+import { validate, resolveSlideContext, paginate, embed } from '@openpresentation/opf';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
+
+const catalogs = [defaultCatalog, acmeCatalog]; // acmeCatalog = { source: 'pkg:@acme/opf-catalog', layouts: { hero: { … } } }
+validate(document, { catalogs });
+resolveSlideContext(document, 0, { catalogs, strictReferences: true }); // throws OPFUnresolvedReferenceError
+paginate(document, { catalogs });
+```
+
+A registered catalog has the shape of a document group with `source` required: `{ source, layouts?: { <id>: record },
+themes?, … }`. Records may keep their `x-*` display metadata there; embedding strips it. `resolveSlideContext`,
+`paginate`, `validate`, `stats`, `resolveScriptFonts` (`/composition`), `resolveReference`, `catalogRecords`, `embed`,
+`copySlides`, `moveToCustom` and `updateFromCatalog` all take it, and opf-render, opf-pptx and opf-editor pass it through to core, so a
+record a host registers resolves the same in preview, editor and export. Without it only what the document embeds
+resolves. A `catalogs` value that is not an array of registered catalogs throws `OPFCatalogsOptionError`
+(`code: "invalid-catalogs"`) at every entry point. `resolveSlideContext(...).resolved.provenance` (and
+`resolveDesignRecords(...).provenance`) says where each resolved layout, theme, colour scheme and font scheme came from
+(`{ kind, reference, id, group, source?, origin }`, origin `document` or `host`), so engines record provenance without
+resolving again.
+
+`@openpresentation/opf/catalog` exports:
+
+| Export | What it is |
+| --- | --- |
+| `defaultCatalog` | The snapshot's content records, keyed by kind and id, registered under `DEFAULT_CATALOG_SOURCE` |
+| `DEFAULT_CATALOG_SOURCE` | `https://www.pptx.gallery` |
+| `catalogDisplay` | Display metadata for pickers: `chartTypes`, `languages` and `socialPlatforms` by id |
+| `catalogIndexes` | Each kind's `index.json` from the snapshot |
+| `layoutPreviews`, `layoutPreviewIndex`, `getLayoutPreview`, `hasLayoutPreview` | The static HTML layout previews |
+
+No other entry of the package imports catalog data; `pnpm check:catalog-free` holds that with an esbuild metafile
+budget.
+
+## Authoring helpers
+
+- **`embed(document, { catalogs })`** embeds each referenced record once, in the group it resolves in, together with
+  the records it references (a theme's colour and font schemes). A bare id from the host default goes under
+  `catalogs.default` with the catalog's source. Records already embedded are kept as they are; `x-*`, `$schema` and `id`
+  are stripped. It returns `{ document, added, unresolved }` and is idempotent. Authoring tools call it on save and
+  export; `opf embed` does it on the command line.
+- **`copySlides(from, to, indexes, { catalogs, at })`** copies slides with their records. Groups match by `source`, not
+  by name: references are rewritten to the target's name for that source, and a missing group is added (renamed
+  `<name>-2` when its name is taken). A source document without `catalogs.default` inherits the host default's
+  source; when the target's default has another source, or is `false`, that catalog is added to the target as a named
+  group and the copied bare references get its prefix, so copied slides never change catalog. A record the target
+  already has with the same content is reused. A `custom` id
+  the target uses for different content is renamed `<id>-2`. A catalog record whose revision differs from the one the
+  target resolves moves into `custom` as `<id>-2`, so the copied slides look the same, and is listed in `renamed`.
+  `renamed` lists only the records a call creates under a new id: a later copy that reuses one is not a rename.
+- **`moveToCustom(document, { kind, reference }, { catalogs })`** moves a record embedded under `default` or a named
+  group into `custom`: the fix `opf/catalog-record-not-in-source` suggests. Every reference that named it is rewritten
+  to name it in `custom`, and its own references keep naming what they named. It keeps its id unless `custom` holds a
+  different record under it (then `<id>-2` and up, reported in `renamed`; an identical one is reused). It returns
+  `{ document, from, to, references, patch, renamed? }`, where `patch` is RFC 6902 for review and undo, and throws
+  `OPFMoveToCustomError` (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`). Fork:
+  `moveToCustom(document, ref, { id })` copies the record into `custom` under the new id (`<id>-2` on conflict) and
+  rewrites every reference to the copy, qualified references inside other records included, so the original is dropped
+  from its group; an editor calls it on the first edit of a catalog record and applies the edit to the copy.
+- **`updateFromCatalog(document, catalogs, refs?)`** compares the records embedded under `default` and the named groups
+  with the registered catalogs' current ones and returns `{ changes, patch }`. Nothing changes until the author applies
+  `patch` (`applyPatch`); `custom` records are never compared.
+- **`resolveReference`**, **`parseReference`** and **`catalogRecords`** (the records a picker can offer, with the
+  reference to write for each) are the building blocks.
+
+## Engine vocabularies and engine defaults
+
+Values an engine must understand to draw are not catalog references:
+
+- `chart.type` is a schema enum;
+- the keys of `Organization.socials` and `Speaker.socials` are a schema enum, linked with URL patterns in code;
+- `language` is a BCP-47 tag (or a `Language` object with a `bcp47` tag); engines know the script, direction, OOXML
+  culture tag and default script fonts of the vocabulary's tags and infer the script of any other well-formed tag.
+
+They are listed in [`spec/reference/engine-vocabularies.json`](../spec/reference/engine-vocabularies.json) and exported
+as `CHART_TYPES`, `SOCIAL_PLATFORMS` and `LANGUAGES`. Their labels, descriptions and icons stay in the catalog as
+display metadata (`catalogDisplay`).
+
+When nothing names a theme, colour scheme or font scheme, or a reference resolves nowhere, every engine draws with the
+same engine defaults: [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json), exported as
+`ENGINE_DEFAULT_THEME`, `ENGINE_DEFAULT_COLOR_SCHEME` and `ENGINE_DEFAULT_FONT_SCHEME`. They are the drawing fields of
+the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
+
+## Ownership
+
+- **pptx.gallery owns every catalog record** and publishes it; each id has one owner. Its display metadata lives under
+  `x-*` members.
+- **`spec/catalogs/` is a pinned, one-way snapshot.** `spec/catalogs/manifest.json` records the gallery commit and a
+  content hash per kind. Records change in the gallery and reach core through the sync below; a record rewrite that the
+  0.15 spec itself requires lands in the snapshot and in the gallery in the same release train.
+- **A catalog release never needs a core release.** Hosts register the catalog version they choose; documents carry
+  the records they were saved with.
 
 ## Endpoints
 
@@ -40,43 +174,32 @@ bundled in `@openpresentation/opf` stays tied to it.
 | --- | --- |
 | `GET https://www.pptx.gallery/<kind>/index.json` | Catalog index |
 | `GET https://www.pptx.gallery/<kind>` with `Accept: application/json` | Same catalog index |
-| `GET https://www.pptx.gallery/<kind>/<id>.json` | One record |
+| `GET https://www.pptx.gallery/<kind>/<id>.json` | One published record |
 | `GET https://www.pptx.gallery/<kind>/<id>` with `Accept: application/json` | Same record |
 | Either URL from a browser | The gallery's HTML page |
 
-`/<kind>/index.json` is the stable explicit alias. It is the index-file form that
-the `CatalogSource` contract already defines, so both
-`"source": "https://www.pptx.gallery/tones"` (directory form, records at
-`<base>/<id>.json`) and `"source": "https://www.pptx.gallery/tones/index.json"`
-(index form) address the published catalog. Catalog files are served with
-`Access-Control-Allow-Origin: *`, and negotiated URLs send `Vary: Accept`.
+Engines never call these. A host may, to build the catalog it registers. Catalog files are served with
+`Access-Control-Allow-Origin: *`, and negotiated URLs send `Vary: Accept`. The older
+`https://www.pptx.gallery/api/<dimension>.json` envelopes carry the gallery's presentation data in its own shape; they
+are not OPF records and link their catalog index with `Link: <…/<kind>/index.json>; rel="alternate"`.
 
-The older `https://www.pptx.gallery/api/<dimension>.json` envelopes carry the
-gallery's presentation data in the gallery's own shape. They stay
-backward compatible, but they are not OPF records. Each one now links its
-catalog index with `Link: <…/<kind>/index.json>; rel="alternate"`.
+## Kinds
 
-## Kinds and URL mapping
+| `<kind>` (URL and snapshot directory) | Key | Record schema | Role | Snapshot mode |
+| --- | --- | --- | --- | --- |
+| `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | mirror |
+| `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | content, `design.colorScheme` | mirror |
+| `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | content, `design.fontScheme` | mirror |
+| `layouts` | `layouts` | `opf-layout/v1` | content, `Slide.layout` | mirror |
+| `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | mirror |
+| `purposes` | `purposes` | `opf-purpose/v1` | content, `purpose` | mirror |
+| `themes` | `themes` | `opf-theme/v1` | content, `design.theme` | mirror |
+| `tones` | `tones` | `opf-tone/v1` | content, `tone` | mirror |
+| `chart-types` | `chartTypes` | `opf-chart-type/v1` | display metadata for `chart.type` | mirror |
+| `languages` | `languages` | `opf-language/v1` | display metadata for `language` | mirror |
+| `social-platforms` | `socialPlatforms` | `opf-social-platform/v1` | display metadata for `socials` keys | mirror |
 
-The URL segment is the one each `Catalogs` property names as its default source
-in `spec/schemas/opf.schema.json`. It is also the `spec/catalogs/<kind>`
-directory name.
-
-| `<kind>` | `catalogs.<key>` | Record schema | Referenced from | Gallery page | Snapshot mode |
-| --- | --- | --- | --- | --- | --- |
-| `audiences` | `audiences` | `opf-audience/v1` | `audience` | `/audiences` | subset |
-| `chart-types` | `chartTypes` | `opf-chart-type/v1` | `Chart.type` | `/charts` | subset |
-| `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | `design.colorScheme` | `/colors` | mirror |
-| `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | `design.fontScheme` | `/font-schemes` | mirror |
-| `languages` | `languages` | `opf-language/v1` | `language` | `/languages` | mirror |
-| `layouts` | `layouts` | `opf-layout/v1` | `Slide.layout` | `/layouts` | subset |
-| `narratives` | `narratives` | `opf-narrative/v1` | `narrative` | `/narratives` | subset |
-| `purposes` | `purposes` | `opf-purpose/v1` | `purpose` | none yet | mirror |
-| `social-platforms` | `socialPlatforms` | `opf-social-platform/v1` | `socials` keys | `/socials` | mirror |
-| `themes` | `themes` | `opf-theme/v1` | `design.theme` | `/themes` | mirror |
-| `tones` | `tones` | `opf-tone/v1` | `tone` | `/tones` | mirror |
-
-Record schema ids are `https://openpresentation.org/schema/<name>`.
+Record schema ids are `https://openpresentation.org/schema/<name>`. A font scheme's `languages` list holds BCP-47 tags.
 
 ## Index and record shape
 
@@ -95,38 +218,17 @@ An index validates against `spec/schemas/catalog-index.schema.json`:
 
 - `records` is in canonical order. `file` is relative to the index.
 - `version` is the index format version.
-- `contentSha256` is the lowercase hex SHA-256 of the canonical JSON of the full
-  records in index order, with every top-level `x-*` member removed. Canonical
-  JSON sorts object keys and has no insignificant whitespace
-  (`canonicalJson()` in `scripts/catalog-snapshot.mjs`). The bundled index and
-  the published index carry the same value for a mirrored kind.
+- `contentSha256` is the lowercase hex SHA-256 of the canonical JSON of the full records in index order, with every
+  top-level `x-*` member removed. Canonical JSON sorts object keys and has no insignificant whitespace (`canonicalJson()`
+  in `scripts/catalog-snapshot.mjs`). The bundled index and the published index carry the same value for a mirrored kind.
 
-Each record validates against its kind's companion schema and names it in
-`$schema`. Publishers may add top-level `x-*` extension members. pptx.gallery
-puts its presentation metadata (page URL, mood tags, contrast notes, font stacks)
-in `x-gallery`. Consumers ignore `x-*` members, and the snapshot never carries
-them.
+A **published record file** names its companion schema in `$schema` and carries its `id`; `validateCatalogRecord(kind,
+record)` checks one. Publishers may add top-level `x-*` members (pptx.gallery puts page URLs, mood tags, contrast
+notes and font stacks in `x-gallery`); the snapshot never carries them. The copy a document embeds has neither
+`$schema` nor `id` nor `x-*` members.
 
-## Deprecation
-
-The bundled catalog holds **no deprecated records**. Before v1 an id is renamed or
-removed outright (the FA-03 cleanup deleted 50 chart-type aliases and 6 audience
-aliases and dropped the `-3x` suffix from the chart-type ids), so a document that
-names a retired id gets an `unknown <kind> catalog id` warning, not a redirect.
-
-The mechanism stays in the record schemas and in `validate` for after v1.
-Any record may carry `deprecation: { "replacedBy": "<id>", "reason"?, "removal"? }`
-(FF-22). The record stays for backward compatibility:
-
-- the old id keeps resolving to its own record, unchanged;
-- `validate` warns with `opf/deprecated-catalog-id` (`Deprecated <kind> catalog id "<id>"; use "<replacedBy>" instead.`) and suggests the replacement;
-- pickers and generators should offer only non-deprecated records. Index entries
-  carry `"deprecated": true` and `replacedBy`, so a picker can hide the old id
-  without loading records.
-
-`check:spec` requires the replacement to be a bundled record of the same kind
-that is not deprecated itself: rule (f) for chart types, rule (h) for every
-other kind. Inline `catalogs.<kind>.records` may use the same field.
+Before v1 an id is renamed or removed outright: there are no deprecated records, aliases or redirects. A document that
+names a retired id gets `opf/unresolved-reference`.
 
 ## The snapshot
 
@@ -142,46 +244,15 @@ other kind. Inline `catalogs.<kind>.records` may use the same field.
 }
 ```
 
-- **mirror**: the snapshot holds every published record of the kind.
-- **subset**: the snapshot keeps the ids it already bundles, with core's content
-  (the publisher must serve those records unchanged), while the publisher also serves records that are not
-  reconciled for bundling yet (for example the gallery's extra layouts).
+Every kind is `mirror`: the snapshot holds every record the gallery publishes (all 278 layouts, for example), so
+`@openpresentation/opf/catalog` is the full gallery catalog and a host registers it as is. It costs nothing in the
+engine bundles: only `/catalog` carries the snapshot, and `pnpm check:catalog-free` budgets it on its own.
 
-The snapshot never loses an id. Removing a catalog record is a breaking change,
-so the sync refuses a publisher that stopped serving a bundled id. The one waiver
-is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) lets
-the sync drop exactly those ids from the snapshot and delete their files, and
-rejects an id the snapshot does not hold. It exists for removals and renames
-decided on purpose before v1 (the FA-03 chart-type cleanup), for example when the
-gallery adopts a core change first:
-
-```sh
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --allow-removed chart-types:<old-id> --include chart-types:<new-id>
-```
-
-A core-first removal needs no waiver: delete the records and index entries, then
-run `--rehash`.
+The snapshot never loses an id by accident: the sync refuses a publisher that stopped serving a held id. The one waiver
+is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) drops exactly those ids and deletes their
+files.
 
 ### Updating it
-
-Either side can start a change. To start in core (a deprecation, a wording
-fix), edit the records and index entries under `spec/catalogs/<kind>/`, then
-rewrite the hashes and counts:
-
-```sh
-node scripts/sync-gallery-catalog.mjs --rehash   # index contentSha256, manifest records and contentSha256
-```
-
-`--rehash` leaves the manifest `source` and each kind's `gallery` block alone,
-because they describe the pinned gallery commit, and it does not touch `mode`. A
-mirrored kind must also match the gallery hash, so a core-first change to a mirror
-kind needs the gallery to publish it first, or the kind to move to `subset`; when the gallery change that
-publishes the same records is already in review, `--rehash --match-gallery` also sets that kind's `gallery`
-block to the new hash. The
-gallery adopts a core-first change with the next `@openpresentation/opf` release
-(its `check:core-catalog` reads that release).
-
-To start in the gallery:
 
 ```sh
 # in the pptx-gallery checkout: edit data/, then
@@ -190,84 +261,32 @@ git commit                        # the snapshot pins a commit
 
 # in this repository
 node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery          # writes spec/catalogs + manifest
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts and gallery-only ids
+node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts
 ```
 
-The sync validates every published index and record against the schemas in
-`spec/schemas/`, checks the published `contentSha256`, drops `x-*` members, and
-rewrites only the files whose content changed. Writes require a clean gallery
-checkout so the manifest commit identifies the actual catalog bytes.
-`--url https://www.pptx.gallery` reads the live site for inspection and requires
-`--check` or `--report`; a live response cannot prove a source commit.
-Dirty checkout inspection also stays read-only: `--allow-dirty` is accepted only
-with `--check` or `--report` and cannot bypass the write guard.
+The sync validates every published index and record against the schemas in `spec/schemas/`, checks the published
+`contentSha256`, drops `x-*` members, and rewrites only the files whose content changed. Writes require a clean gallery
+checkout so the manifest commit identifies the actual catalog bytes. `--url https://www.pptx.gallery` reads the live
+site for inspection and requires `--check` or `--report`. Every kind takes every published record; there is no
+per-id selection.
 
-To bundle more of a subset kind, reconcile it in the gallery first, then change
-its `mode` to `mirror` in the manifest and re-run the sync. To bundle only some of
-the published ids, pass them once with `--include <kind>:<id>[,<id>...]`
-(repeatable); the snapshot keeps them from then on, like every bundled id, and
-the sync reports an id the gallery does not publish. The layouts snapshot uses
-this for the 70 legacy gallery slugs (FF-55): it holds 100 of the gallery's 485
-layouts, and the rest stay gallery-only.
+A record rewrite the spec itself requires (the 0.15 font-scheme `languages` tags, for example) is edited under
+`spec/catalogs/<kind>/` and rehashed, and the gallery publishes the same records in the same train:
 
-### Layouts stay a subset by design (RR-41, opf#292)
-
-`layouts` is a permanent `subset`, decided on 2026-10-02 (vetoable by the owner).
-The other 385 layouts (the Dark master; 24 of them deprecated aliases from FF-52)
-are published only by pptx.gallery. A document names one of them and resolves it
-online through the default catalog, or offline with an inline
-`catalogs.layouts.records` entry, which the gallery snippets add and
-`bundle` inlines for the 100 bundled ids. All 485 compose, validate
-and export; this decision is about where the records live, not about the engines.
-
-Measured on `@openpresentation/opf` 0.12.0 with all 485 layouts synced (`npm pack
---dry-run`, then minified esbuild browser bundles of the published `opf-render`
-0.12.0 against each core build, and of the gallery editor playground at the
-`opf-editor` 0.11.1 release commit):
-
-| | 100 layouts (now) | 485 layouts | Change |
-| --- | ---: | ---: | ---: |
-| Packed tarball | 2,925,351 B | 2,979,596 B | +54,245 B (+1.9%) |
-| Unpacked | 9,177,405 B | 10,327,874 B | +1,150,469 B (+12.5%) |
-| Files | 645 | 1,030 | +385 |
-| `opf-render` bundle (minified / gzip) | 1,186,297 / 307,353 B | 1,568,259 / 326,443 B | +381,962 / +19,090 B (+32% / +6.2%) |
-| Gallery editor playground bundle (minified / gzip) | 3,656,803 / 1,207,310 B | 4,038,759 / 1,225,176 B | +381,956 / +17,866 B (+10.4% / +1.5%) |
-
-The packed growth is small (gzip compresses the repetitive records). The bundle
-growth is not: `opf-render`, `opf-editor` and `opf-pptx` never import
-`@openpresentation/opf/catalogs` and never read a layout record from the bundled
-catalog, but `composition`, `validator`, `pagination` and `convert` all reach the
-one generated catalogs chunk, which a bundler cannot tree-shake, so every browser
-bundle would carry about 382 KB more for data it does not use. The catalog is not
-lazily loadable today. The supervisor rule was to bundle only when the packed
-core grows by less than about 1.5 MB and the bundles do not meaningfully grow;
-the second condition fails, so the subset is kept on purpose. Narrative layout
-hints do not need the rest: the FF-28 beat table references 17 gallery layouts,
-13 of them already bundled, and the other four (`text-1x-left`, `title-left`,
-`title-center`, `list-2x-title-center`) can be added with `--include` if the
-hints are restored.
-
-To revisit: split the generated catalogs module per kind (or load it lazily) so a
-consumer that does not read layouts does not carry them. After that, bundling all
-485 costs about 54 KB of packed size and nothing in the browser bundles, and the
-kind can be switched to `mirror` with a core release.
+```sh
+node scripts/sync-gallery-catalog.mjs --rehash                  # index contentSha256, manifest records and contentSha256
+node scripts/sync-gallery-catalog.mjs --rehash --match-gallery  # also each kind's gallery block
+```
 
 ### Checks
 
-- `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline
-  that every kind's records still hash to the value in its index and the
-  manifest. A hand edit to `spec/catalogs/` fails here until `--rehash` (core
-  first) or the sync (gallery first) has rewritten them.
-- Drift between the gallery and this snapshot is checked on the gallery side
-  (FF-37): pptx-gallery's `pnpm check:core-catalog` compares its
-  published `public/<kind>/` files with `spec/catalogs` of the
-  `@openpresentation/opf` release it depends on, in its own CI. Core is the source
-  of truth and the package is public, so no secret is needed. The core CI no longer
-  reads the private gallery. `sync-gallery-catalog.mjs --check` still compares a
-  local gallery checkout when you sync.
+- `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline that every kind's records still hash
+  to the value in its index and the manifest.
+- `pnpm check:catalog-free` fails when a catalog module reappears in the import graph of core's root or of any subpath
+  other than `/catalog`, or when their gzip size passes the recorded budget.
+- `sync-gallery-catalog.mjs --check` compares a local gallery checkout with the snapshot.
 
 ## Reconciliation status
 
-The per-kind divergence between the gallery and this snapshot, and the plan for
-the subset kinds, is in
+The per-kind divergence between the gallery and this snapshot is in
 [`programs/font-fidelity-everywhere/ff-37-catalog-divergence.md`](programs/font-fidelity-everywhere/ff-37-catalog-divergence.md).

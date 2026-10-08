@@ -3,16 +3,16 @@
   "name": "Model Governance Review",
   "description": "Model Governance Review is a fictional OPF example for analytics teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "model-governance-review",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "regulatory",
+    "executive",
     {
-      "id": "candidates",
+      "id": "marketing",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "weekly-progress"
+        "strategic-narrative"
       ],
       "recommendedTones": [
         "formal"
@@ -62,10 +62,8 @@
     "dimensions": "4:3",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "right",
@@ -73,7 +71,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -136,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "funnel",
+        "type": "histogram",
         "data": {
           "columns": [
             "Quarter",
@@ -306,7 +300,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line-with-markers",
+            "type": "stacked-bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -359,16 +353,13 @@
     {
       "id": "s39-image",
       "section": "Context",
-      "layout": "image-bleed",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "Analytics context photo for ClearLake Data",
-        "title": "Analytics context"
-      },
       "design": {
-        "slideImage": "asset:supporting-photo"
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "Analytics context photo for ClearLake Data"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -503,15 +494,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "model-governance-review-arc",
+    "custom": {
+      "narratives": {
+        "model-governance-review-arc": {
           "name": "Analytics Decision Arc",
           "summary": "A custom arc for ClearLake Data.",
           "description": "Model Governance Review uses a compact evidence-to-decision arc for ClearLake Data.",
@@ -536,13 +521,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "clearlake-data-theme",
+      },
+      "themes": {
+        "clearlake-data-theme": {
           "name": "ClearLake Data Working Theme",
           "colorScheme": "pastel-red",
           "fontScheme": "noto-naksh-arabic",
@@ -555,14 +536,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "clearlake-data-signal",
+      },
+      "colorSchemes": {
+        "clearlake-data-signal": {
           "name": "ClearLake Data Signal Palette",
           "accent1": "#B45309",
           "accent2": "#BE123C",
@@ -577,31 +553,507 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "educate": {
+          "name": "Educate",
+          "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+          "description": "Use when the primary job is learning. Structure around concepts, examples, practice, and checks for understanding rather than persuasion or reporting.",
+          "outcome": "The audience understands the material well enough to apply it.",
+          "successCriteria": [
+            "Definitions and examples are clear",
+            "Audience can apply the concept",
+            "Complexity builds progressively"
+          ],
+          "recommendedNarratives": [
+            "educate",
+            "focus",
+            "company-intro"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "technical"
+          ],
+          "tags": [
+            "learning",
+            "training",
+            "enablement"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "pastel-red": {
+          "name": "Pastel Red",
+          "accent1": "#FE938C",
+          "accent2": "#E6B89C",
+          "accent3": "#EAD2AC",
+          "accent4": "#9CAFB7",
+          "accent5": "#4281A4",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#0C6268",
+          "followedHyperlink": "#E6B89C",
+          "hyperlink": "#FE938C",
+          "light1": "#FFFFFF",
+          "light2": "#FFEFEE",
+          "summary": "Soft red and blue accents for approachable consumer stories.",
+          "description": "A pastel red scheme with warm neutrals and blue support, suited to friendly, human-centered decks.",
+          "tags": [
+            "warm",
+            "friendly",
+            "soft",
+            "approachable",
+            "human"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-naksh-arabic": {
+          "name": "Noto Naskh Arabic",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "fa"
+          ],
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic",
+          "textSample": "هذا نص جميل",
+          "type": "sans-serif",
+          "description": "Noto Naskh Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "number-3x": {
+          "name": "Number 3x",
+          "summary": "Reach for it when three headline figures summarise a result.",
+          "description": "A title above three metrics in a row. Use it for a three-number summary, such as revenue, margin and growth, or a before, during and after.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-3x.svg"
+          }
+        },
+        "number-4x": {
+          "name": "Number 4x",
+          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
+          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Matrix"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
     }
   }
 }

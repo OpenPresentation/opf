@@ -193,8 +193,8 @@ describe("decks read from YAML by every command", () => {
     assert.equal(report.findings[0].ruleId, "yaml/duplicate-key");
     assert.equal(report.findings[0].category, "format");
     assert.deepEqual([report.findings[0].location.line, report.findings[0].location.column], [5, 5]);
-    for (const args of [["format", "--check"], ["to-md"], ["paginate"], ["bundle"]]) {
-      const extra = args[0] === "paginate" || args[0] === "bundle" ? ["bad.opf.yaml", "out.opf.json"] : ["bad.opf.yaml"];
+    for (const args of [["format", "--check"], ["to-md"], ["paginate"], ["embed"]]) {
+      const extra = args[0] === "paginate" || args[0] === "embed" ? ["bad.opf.yaml", "out.opf.json"] : ["bad.opf.yaml"];
       const result = run([args[0], ...extra, ...args.slice(1)]);
       assert.equal(result.status, 2, `${args[0]}: ${result.stderr}`);
       const error = JSON.parse(result.stderr);
@@ -234,7 +234,7 @@ describe("decks read from YAML by every command", () => {
     const result = JSON.parse(checked.stdout);
     assert.equal(result.valid, true);
     assert.equal(result.counts.warning, 1);
-    assert.equal(result.findings[0].ruleId, "opf/catalog-reference");
+    assert.equal(result.findings[0].ruleId, "opf/unresolved-reference");
     assert.deepEqual([result.findings[0].location.line, result.findings[0].location.column], [4, 13]);
     assert.equal(run(["validate", "check.opf.yaml", "--only", "references", "--fail-on", "warning"]).status, 1);
     const broken = run(["validate", "-", "--input-format", "yaml"], "name: x\nname: y\n");
@@ -344,7 +344,7 @@ describe("decks read from YAML by every command", () => {
     assert.equal(JSON.parse(read("merged.opf.json")).slides[1].text, "Theirs");
   });
 
-  test("import-data, paginate and bundle read and write YAML", () => {
+  test("import-data, paginate and embed read and write YAML", () => {
     write("data.csv", "Quarter,Revenue\nQ1,12\nQ2,18\n");
     write("data-deck.opf.yaml", deckYaml);
     const into = run(["import-data", "data.csv", "--as", "chart", "--into", "data-deck.opf.yaml", "--in-place"]);
@@ -361,8 +361,8 @@ describe("decks read from YAML by every command", () => {
     assert.equal(paginated.status, 0, paginated.stderr);
     assert.match(read("paginated.opf.yaml"), /^# yaml-language-server: /);
     write("deck.opf.yaml", deckYaml);
-    assert.equal(run(["bundle", "deck.opf.yaml", "bundled.opf.yaml"]).status, 0);
-    assert.match(read("bundled.opf.yaml"), /name: Q3 Review/);
+    assert.equal(run(["embed", "deck.opf.yaml", "embedded.opf.yaml"]).status, 0);
+    assert.match(read("embedded.opf.yaml"), /name: Q3 Review/);
   });
 
   test("fill reads a YAML template, JSON data, and writes YAML next to the template's format", () => {

@@ -1,6 +1,8 @@
-import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference } from "./composition.js";
+import { checkCatalogsOption, resolveReference, type CatalogOptions } from "./catalog-refs.js";
+import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
-import { catalogs } from "./generated/catalogs.js";
+import { resolveDesignRecords } from "./design-records.js";
+import { LANGUAGES, type LanguageVocabulary } from "./engine-vocabularies.js";
 
 /**
  * Language/script font model (font-fidelity-everywhere FF-18).
@@ -8,13 +10,13 @@ import { catalogs } from "./generated/catalogs.js";
  * Resolves, for a presentation's language and effective font scheme, the font
  * family for each OOXML script slot (`a:latin`, `a:ea`, `a:cs`) of the major
  * (heading) and minor (body) theme fonts, plus the language tags and base
- * direction. Pure: no DOM, fonts, network or mutation. Catalog references
- * resolve against inline `catalogs.<kind>.records[]` first and the bundled
- * catalogs second; a custom `source` is not fetched.
+ * direction. Pure: no DOM, fonts, network or mutation. Font-scheme references
+ * resolve like every content reference (the document's catalogs groups, then the
+ * registered catalogs); nothing is fetched.
  *
- * Catalog ids and catalog tags resolve deterministically from vendored tables.
- * Only a tag that matches no catalog record may consult the runtime's ICU
- * likely subtags (`Intl.Locale#maximize`) to find its script.
+ * The language is an engine vocabulary: tags the vocabulary knows resolve
+ * deterministically from vendored tables. Only a tag outside it may consult the
+ * runtime's ICU likely subtags (`Intl.Locale#maximize`) to find its script.
  *
  * Design: docs/programs/font-fidelity-everywhere/script-font-model.md.
  */
@@ -64,12 +66,12 @@ export interface ScriptFontSupplement {
   body: string;
 }
 
-export interface ResolveScriptFontsOptions {
-  /** Which language font-scheme default applies. Defaults to `powerpoint` (`language.fontScheme`); `google-slides` prefers `language.googleFontScheme`. */
+export interface ResolveScriptFontsOptions extends CatalogOptions {
+  /** Which language font default applies. Defaults to `powerpoint` (`language.fontScheme`, else the vocabulary default); `google-slides` prefers `language.googleFontScheme`. */
   app?: ScriptFontApp;
   /** Merge `slides[slideIndex].design` over the deck design, per field, before resolving the font scheme. */
   slideIndex?: number;
-  /** Language reference to resolve instead of the document's `language` (catalog id, BCP-47 tag or Language object). */
+  /** Language to resolve instead of the document's `language` (a BCP-47 tag or a Language object). */
   language?: unknown;
   /** Language tag used when neither the document nor `options.language` names a resolvable language. Defaults to `en-US`. */
   defaultLanguage?: string;
@@ -78,13 +80,11 @@ export interface ResolveScriptFontsOptions {
 export interface ResolvedScriptFonts extends ScriptFontSlots {
   /**
    * Tag for OOXML `a:rPr/@lang` (and `a:endParaRPr/@lang`): an authored tag that carries a region,
-   * else the language record's curated `ooxmlLang`, else the canonical BCP-47 tag.
+   * else the curated `ooxmlLang` of the language vocabulary, else the canonical BCP-47 tag.
    */
   lang: string;
-  /** Canonically cased BCP-47 tag for HTML/SVG `lang`: the authored tag, else the record's `bcp47`. */
+  /** Canonically cased BCP-47 tag for HTML/SVG `lang`: the authored tag. */
   bcp47: string;
-  /** Matched languages catalog record id, when one matched. */
-  languageId?: string;
   /** `default` when the tag came from `defaultLanguage` because no language resolved. */
   languageSource: "document" | "option" | "default";
   /** ISO 15924 script (`Zzzz` when it cannot be determined). */
@@ -124,11 +124,11 @@ const latinSlotScripts = new Set(["Latn", "Cyrl", "Grek", "Zyyy", "Zzzz"]);
 /** Deprecated language subtags replaced in returned tags (IANA registry Preferred-Value). */
 const deprecatedLanguages: Record<string, string> = { iw: "he", in: "id", ji: "yi" };
 
-/** Language subtags treated as equal when matching a tag to a catalog record. */
+/** Language subtags treated as equal when matching a tag to the vocabulary. */
 const matchingLanguages: Record<string, string> = { ...deprecatedLanguages, no: "nb", zsm: "ms", ku: "kmr" };
 
 /**
- * Vendored CLDR likely scripts for the catalog languages written in more than
+ * Vendored CLDR likely scripts for the vocabulary languages written in more than
  * one script, so their tags resolve without the runtime's locale data.
  */
 const likelyScripts: Record<string, { script: string; regions?: Record<string, string> }> = {
@@ -212,7 +212,7 @@ function vendoredScript(language: string, region?: string): string | undefined {
   return entry ? ((region && entry.regions?.[region]) ?? entry.script) : undefined;
 }
 
-/** Script of a tag outside the catalogs: explicit, vendored, then the runtime's ICU likely subtags. */
+/** Script of a tag outside the vocabulary: explicit, vendored, then the runtime's ICU likely subtags. */
 function inferScript(tag: string): string | undefined {
   const parts = splitTag(tag);
   if (!parts) return undefined;
@@ -225,92 +225,57 @@ function inferScript(tag: string): string | undefined {
   }
 }
 
-type CatalogKey = "languages" | "fontSchemes" | "themes";
-type Lookup = (kind: CatalogKey, id: string) => Record<string, unknown> | undefined;
-
-function inlineRecords(document: Record<string, unknown>, kind: CatalogKey): Record<string, unknown>[] {
-  const kinds = isRecord(document.catalogs) ? document.catalogs : {};
-  const entry = kinds[kind];
-  return isRecord(entry) && Array.isArray(entry.records) ? entry.records.filter(isRecord) : [];
-}
-
-function allRecords(document: Record<string, unknown>, kind: CatalogKey): Record<string, unknown>[] {
-  return [...inlineRecords(document, kind), ...(catalogs[kind] as unknown as Record<string, unknown>[])];
-}
-
-/** Resolve a string id or `{ id, ...overrides }` object into one record. */
-function resolveReference(lookup: Lookup, kind: CatalogKey, reference: unknown): Record<string, unknown> | undefined {
-  if (typeof reference === "string") return lookup(kind, reference);
-  if (!isRecord(reference)) return undefined;
-  const base = typeof reference.id === "string" ? lookup(kind, reference.id) : undefined;
-  return { ...base, ...reference };
-}
-
 /**
- * Match a BCP-47 tag to a language record without locale data: an exact
- * (case-insensitive, deprecated subtags replaced) tag first, then the same
- * language and script preferring the same region, then a record without a
- * region. A tag without a script matches any script unless the vendored table
- * names one.
+ * Match a BCP-47 tag to the engine's language vocabulary without locale data: an exact (case-insensitive,
+ * deprecated subtags replaced) tag first, then the same language and script preferring the same region, then an
+ * entry without a region. A tag without a script matches any script unless the vendored table names one.
  */
-function matchLanguageTag(document: Record<string, unknown>, tag: string): Record<string, unknown> | undefined {
+function matchLanguageTag(tag: string): LanguageVocabulary | undefined {
   const wanted = splitTag(tag);
   if (!wanted) return undefined;
-  const records = allRecords(document, "languages").filter((record) => typeof record.bcp47 === "string");
   const key = canonicalTag(tag).toLowerCase();
-  const exact = records.find((record) => canonicalTag(record.bcp47 as string).toLowerCase() === key);
+  const exact = LANGUAGES.find((entry) => canonicalTag(entry.tag).toLowerCase() === key);
   if (exact) return exact;
   const language = matchingLanguages[wanted.language] ?? wanted.language;
   const script = wanted.script ?? vendoredScript(language, wanted.region);
-  const candidates = records.flatMap((record) => {
-    const parts = splitTag(record.bcp47 as string);
+  const candidates = LANGUAGES.flatMap((entry) => {
+    const parts = splitTag(entry.tag);
     if (!parts || (matchingLanguages[parts.language] ?? parts.language) !== language) return [];
-    const recordScript = normalizeScript(record.script) ?? parts.script ?? vendoredScript(language, parts.region);
-    if (script && recordScript && script !== recordScript) return [];
-    return [{ record, region: parts.region }];
+    const entryScript = normalizeScript(entry.script) ?? parts.script ?? vendoredScript(language, parts.region);
+    if (script && entryScript && script !== entryScript) return [];
+    return [{ entry, region: parts.region }];
   });
   return (
-    candidates.find((candidate) => wanted.region && candidate.region === wanted.region)?.record ??
-    candidates.find((candidate) => !candidate.region)?.record ??
-    candidates[0]?.record
+    candidates.find((candidate) => wanted.region && candidate.region === wanted.region)?.entry ??
+    candidates.find((candidate) => !candidate.region)?.entry ??
+    candidates[0]?.entry
   );
 }
 
 interface ResolvedLanguage {
-  record: Record<string, unknown>;
-  /** The tag the author wrote, when the language was named by tag. */
-  authoredTag?: string;
-  /** An `ooxmlLang` written on the document's own Language object. */
-  authoredOoxmlLang?: string;
-  languageId?: string;
+  /** The authored tag, canonical casing applied later. */
+  tag: string;
+  /** The vocabulary entry the tag matched, if any. */
+  known?: LanguageVocabulary;
+  /** The document's own Language object, whose fields override the vocabulary. */
+  overrides: Record<string, unknown>;
 }
 
-function resolveLanguage(document: Record<string, unknown>, lookup: Lookup, reference: unknown): ResolvedLanguage | undefined {
+function resolveLanguage(reference: unknown): ResolvedLanguage | undefined {
   if (typeof reference === "string") {
     const value = reference.trim();
-    const byId = bareLanguageId.test(value) ? lookup("languages", value) : undefined;
-    if (byId) return { record: byId, languageId: value };
-    // URLs and pkg: references cannot be resolved locally; `und` and empty tags name no language.
-    if (/^[a-z][a-z0-9+.-]*:/i.test(value) || !splitTag(value)) return undefined;
-    const matched = matchLanguageTag(document, value);
-    if (matched) return { record: matched, authoredTag: value, languageId: text(matched.id) };
-    // Outside the catalogs, accept only a tag whose script is known, so an
-    // unknown catalog id is not emitted as a tag.
-    return inferScript(value) ? { record: {}, authoredTag: value } : undefined;
+    // `und`, empty and malformed tags name no language.
+    if (!splitTag(value)) return undefined;
+    const known = matchLanguageTag(value);
+    // Outside the vocabulary, accept only a tag whose script is known.
+    if (!known && !inferScript(value)) return undefined;
+    return { tag: value, ...(known ? { known } : {}), overrides: {} };
   }
   if (!isRecord(reference)) return undefined;
-  const authoredTag = text(reference.bcp47);
-  if (authoredTag !== undefined && !splitTag(authoredTag)) return undefined;
-  const base =
-    typeof reference.id === "string"
-      ? lookup("languages", reference.id)
-      : authoredTag
-        ? matchLanguageTag(document, authoredTag)
-        : undefined;
-  const record = { ...base, ...reference };
-  const tag = text(record.bcp47);
+  const tag = text(reference.bcp47);
   if (!tag || !splitTag(tag)) return undefined;
-  return { record, authoredTag, authoredOoxmlLang: text(reference.ooxmlLang), languageId: text(base?.id) };
+  const known = matchLanguageTag(tag);
+  return { tag, ...(known ? { known } : {}), overrides: reference };
 }
 
 function pairFamilies(value: unknown): { heading: string; body: string } | undefined {
@@ -323,15 +288,21 @@ function pairFamilies(value: unknown): { heading: string; body: string } | undef
 }
 
 /**
- * Whether a font scheme's `languages` list (languages catalog ids) admits the
- * language: an empty list admits every language; otherwise an entry must equal
- * the language record's id.
+ * Whether a font scheme's `languages` list (BCP-47 tags) admits the language: an empty list admits every language;
+ * otherwise an entry must have the language's language subtag and, when the entry names a script, its script.
  */
-function schemeServesLanguage(scheme: Record<string, unknown>, language: Record<string, unknown>): boolean {
+function schemeServesLanguage(scheme: Record<string, unknown>, tag: string, script: string): boolean {
   const entries = Array.isArray(scheme.languages) ? scheme.languages.filter((entry): entry is string => typeof entry === "string") : [];
   if (entries.length === 0) return true;
-  const id = text(language.id);
-  return id !== undefined && entries.includes(id);
+  const wanted = splitTag(tag);
+  if (!wanted) return false;
+  const language = matchingLanguages[wanted.language] ?? wanted.language;
+  return entries.some((entry) => {
+    const parts = splitTag(entry);
+    if (!parts || (matchingLanguages[parts.language] ?? parts.language) !== language) return false;
+    const entryScript = parts.script ?? vendoredScript(language, parts.region);
+    return !entryScript || entryScript === script;
+  });
 }
 
 /**
@@ -340,7 +311,7 @@ function schemeServesLanguage(scheme: Record<string, unknown>, language: Record<
  *
  * The latin slot follows the effective design font scheme exactly as
  * `resolveFontFamilies` does; when nothing names a font scheme it falls back to
- * the shared `DEFAULT_FONT_SCHEME`. Each of the eastAsian and complexScript slots
+ * the engine default font scheme. Each of the eastAsian and complexScript slots
  * takes, in order: the design font scheme's explicit slot; the scheme's own
  * families when its `languageFamily` names the slot and its `languages` list
  * is empty or names the language; the language's font scheme when the
@@ -348,68 +319,55 @@ function schemeServesLanguage(scheme: Record<string, unknown>, language: Record<
  */
 export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOptions = {}): ResolvedScriptFonts {
   const document = isRecord(input) ? input : {};
-  const lookup: Lookup = (kind, id) =>
-    inlineRecords(document, kind).find((record) => record.id === id) ??
-    (catalogs[kind] as unknown as Record<string, unknown>[]).find((record) => record.id === id);
-
-  let design = isRecord(document.design) ? document.design : {};
   if (options.slideIndex !== undefined) {
     const slides = Array.isArray(document.slides) ? document.slides : [];
     if (!Number.isInteger(options.slideIndex) || options.slideIndex < 0 || options.slideIndex >= slides.length) {
       throw new RangeError(`slideIndex must be an integer between 0 and ${slides.length - 1}.`);
     }
-    const slide = slides[options.slideIndex];
-    if (isRecord(slide) && isRecord(slide.design)) design = { ...design, ...slide.design };
   }
-
-  const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveFontSchemeReference(design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME, (id) => lookup("fontSchemes", id)).scheme;
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'resolveScriptFonts') };
+  const scheme = resolveDesignRecords(document, options.slideIndex, catalogs).fontScheme;
   const latin = resolveFontFamilies(scheme);
 
-  const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;
-  const fromDocument = fromOption ? undefined : resolveLanguage(document, lookup, document.language);
+  const fromOption = options.language !== undefined ? resolveLanguage(options.language) : undefined;
+  const fromDocument = fromOption ? undefined : resolveLanguage(document.language);
   const requestedDefault = text(options.defaultLanguage);
   const fallbackTag = requestedDefault && splitTag(requestedDefault) ? requestedDefault : "en-US";
-  const language = fromOption ??
-    fromDocument ??
-    resolveLanguage(document, lookup, fallbackTag) ?? { record: {}, authoredTag: fallbackTag };
+  const language = fromOption ?? fromDocument ?? resolveLanguage(fallbackTag) ?? { tag: fallbackTag, overrides: {} };
   const languageSource = fromOption ? "option" : fromDocument ? "document" : "default";
-  const record = language.record;
+  const overrides = language.overrides;
+  const known = language.known;
 
-  const bcp47 = canonicalTag(language.authoredTag ?? text(record.bcp47) ?? fallbackTag);
-  const curated = text(record.ooxmlLang);
-  const lang = language.authoredOoxmlLang
-    ? canonicalTag(language.authoredOoxmlLang)
-    : language.authoredTag && splitTag(language.authoredTag)?.region
-      ? canonicalTag(language.authoredTag)
-      : curated
-        ? canonicalTag(curated)
+  const bcp47 = canonicalTag(language.tag);
+  const authoredOoxml = text(overrides.ooxmlLang);
+  const lang = authoredOoxml
+    ? canonicalTag(authoredOoxml)
+    : splitTag(language.tag)?.region
+      ? bcp47
+      : known
+        ? canonicalTag(known.ooxmlLang)
         : bcp47;
 
-  // A catalog record's script is its own `script`, its tag's explicit or
-  // vendored script, or the script of the bundled record its tag matches —
-  // never the runtime's locale data. Only tags outside the catalogs may fall
-  // through to ICU likely subtags.
+  // A vocabulary language's script is its own entry's, or the tag's explicit or vendored script, never the
+  // runtime's locale data. Only tags outside the vocabulary may fall through to ICU likely subtags.
   const parts = splitTag(bcp47);
   const script =
-    normalizeScript(record.script) ??
-    (language.languageId
-      ? (parts?.script ??
-        (parts ? vendoredScript(matchingLanguages[parts.language] ?? parts.language, parts.region) : undefined) ??
-        normalizeScript(matchLanguageTag({}, bcp47)?.script))
-      : inferScript(bcp47)) ??
+    normalizeScript(overrides.script) ??
+    (known ? (normalizeScript(known.script) ?? parts?.script ?? (parts ? vendoredScript(matchingLanguages[parts.language] ?? parts.language, parts.region) : undefined)) : inferScript(bcp47)) ??
     "Zzzz";
   const scriptRole = scriptFontRole(script);
-  const declaredDirection = record.direction;
+  const declaredDirection = overrides.direction ?? known?.direction;
   const direction: "ltr" | "rtl" =
     declaredDirection === "rtl" || declaredDirection === "ltr" ? declaredDirection : rtlScripts.has(script) ? "rtl" : "ltr";
 
   const app = options.app ?? "powerpoint";
-  const preferred = app === "google-slides" ? record.googleFontScheme : record.fontScheme;
-  const alternate = app === "google-slides" ? record.fontScheme : record.googleFontScheme;
-  const languageScheme = resolveReference(lookup, "fontSchemes", preferred) ?? resolveReference(lookup, "fontSchemes", alternate);
+  // The language's script fonts: a font scheme the document's Language object names for the target app, else the
+  // vocabulary default for the app, else the scheme it names for the other app.
+  const named = (key: "fontScheme" | "googleFontScheme") => (typeof overrides[key] === "string" ? resolveReference(document, "fontSchemes", overrides[key], catalogs)?.record : undefined);
+  const languageScheme =
+    app === "google-slides" ? (named("googleFontScheme") ?? known?.fonts.google ?? named("fontScheme")) : (named("fontScheme") ?? known?.fonts.powerpoint ?? named("googleFontScheme"));
   const languageFamilies = pairFamilies(languageScheme);
-  const schemeAdmitsLanguage = schemeServesLanguage(scheme, record);
+  const schemeAdmitsLanguage = schemeServesLanguage(scheme, bcp47, script);
 
   const slot = (role: Exclude<ScriptRole, "latin">, family: "ea" | "cs") => {
     const explicit = pairFamilies(scheme[role]);
@@ -427,14 +385,14 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   let supplement: ScriptFontSupplement | undefined;
   if (!latinSlotScripts.has(script)) {
     // A script the latin slot covers (Armenian, Georgian, Ethiopic) has no slot of its own, so its theme entry is the only
-    // place its script font is named, and the catalog labels the scheme of such a language `cs` (picker grouping). The deck
-    // chooses the family for it through the complex-script slot, the only slot the catalog and the native FF-46 decks use for
-    // these scripts: an explicit `complexScript` pair (source `fontScheme`), or a `cs` scheme for the deck's language
-    // (its `languageFamily` is `cs` and its `languages` list is empty or names the language: `schemeFamily`). The entry then
-    // names that family, not the language's catalog default (FF-46, opf#375: an Amharic deck on Ebrima wrote `Ethi` as Nyala,
-    // and PowerPoint listed Nyala in Presentation.Fonts). A latin-only scheme, an `ea` slot and a `cs` scheme for another
-    // language name no family for these scripts, so the language's default stays. The `eastAsian` and `complexScript` scripts
-    // read their own resolved slot below, which already follows an explicit slot.
+    // place its script font is named. The deck chooses the family for it through the complex-script slot, the only slot
+    // the native FF-46 decks use for these scripts: an explicit `complexScript` pair (source `fontScheme`), or a `cs`
+    // scheme for the deck's language (its `languageFamily` is `cs` and its `languages` list is empty or names the
+    // language: `schemeFamily`). The entry then names that family, not the language's default (FF-46, opf#375: an
+    // Amharic deck on Ebrima wrote `Ethi` as Nyala, and PowerPoint listed Nyala in Presentation.Fonts). A latin-only
+    // scheme, an `ea` slot and a `cs` scheme for another language name no family for these scripts, so the language's
+    // default stays. The `eastAsian` and `complexScript` scripts read their own resolved slot below, which already
+    // follows an explicit slot.
     const chosen = complexScript.source === "fontScheme" || complexScript.source === "schemeFamily" ? complexScript : undefined;
     const families =
       scriptRole === "latin"
@@ -449,7 +407,6 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
     ...body,
     lang,
     bcp47,
-    ...(language.languageId ? { languageId: language.languageId } : {}),
     languageSource,
     script,
     scriptRole,

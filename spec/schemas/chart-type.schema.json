@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-chart-type/v1",
   "title": "Chart Type",
-  "description": "Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition \"mixed\"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
+  "description": "Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.chartTypes.",
   "type": "object",
   "additionalProperties": false,
   "patternProperties": {
@@ -25,7 +25,7 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming.",
+      "description": "The chart-type value (`chart.type`) this record describes. Lowercase kebab-case; it may start with a digit (e.g., '100pct-stacked-column') to mirror conventional chart naming.",
       "examples": [
         "column",
         "bar",
@@ -63,10 +63,6 @@
     "mappings": {
       "$ref": "#/$defs/ChartTypeMappings",
       "description": "Canonical and optional renderer-specific mappings used by engines to render this chart type."
-    },
-    "deprecation": {
-      "$ref": "#/$defs/ChartTypeDeprecation",
-      "description": "Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. The bundled default catalog holds no deprecated records; a publisher or an inline `catalogs.chartTypes.records` entry can still use the field."
     },
     "group": {
       "type": "string",
@@ -165,35 +161,6 @@
     }
   },
   "$defs": {
-    "ChartTypeDeprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "replacedBy"
-      ],
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$",
-          "description": "Id of the non-deprecated chart type that documents should reference instead.",
-          "examples": [
-            "column",
-            "stacked-column"
-          ]
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog.",
-          "examples": [
-            "0.12.0"
-          ]
-        }
-      }
-    },
     "ChartTypeMappings": {
       "type": "object",
       "additionalProperties": false,

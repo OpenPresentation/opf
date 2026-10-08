@@ -1,6 +1,7 @@
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
+import { checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
@@ -141,7 +142,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
   // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
-  // slide-image treatment, never clear by splitting content; hosts report them from their own
+  // image treatment, never clear by splitting content; hosts report them from their own
   // composition and the pages keep the source design.
   const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || !!initial.furniture?.diagnostics.includes(issue));
   const repeatedMappings = (pageIndex: number): PaginationMapping[] => {
@@ -265,7 +266,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   return {slides,pages};
 }
 
-export interface PresentationPaginationOptions {
+export interface PresentationPaginationOptions extends CatalogOptions {
   /** The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. */
   fonts?: Fonts;
   /** Unscaled reference-pixel clearance for supplied vector text outlines. */
@@ -274,7 +275,9 @@ export interface PresentationPaginationOptions {
   maxSlides?: number;
   /** Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. */
   date?: string;
-  /** Receives each `unresolved-font-scheme`, `unresolved-theme`, `unresolved-color-scheme` and `unresolved-layout` diagnostic once per reference path; pagination continues with the fallback. */
+  /** Throw OPFUnresolvedReferenceError for a reference that resolves nowhere, instead of falling back (strict export). */
+  strictReferences?: boolean;
+  /** Receives each `unresolved-reference` diagnostic once per reference path; pagination continues with the fallback. */
   onDiagnostic?: (diagnostic: SlideContextDiagnostic) => void;
 }
 export interface PresentationPaginationResult {
@@ -288,8 +291,9 @@ const usesSlideTotal = (presentation: Record<string, any>): boolean => [presenta
     return content?.slideNumber === true && typeof content.slideNumberFormat === 'string' && content.slideNumberFormat.includes('{total}');
   })));
 
-/** Resolve local catalogs and paginate a complete presentation without mutating it. */
+/** Resolve the slides' references (the document's catalogs groups, then the registered catalogs) and paginate a complete presentation without mutating it. */
 export function paginate(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
+  checkCatalogsOption(options.catalogs, 'paginate');
   assertValid(input, { only: ['format'] });
   const presentation = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
@@ -302,9 +306,9 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
   const run = (slideCount: number) => {
     const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [], reservedIds = [...authoredIds];
     presentation.slides.forEach((slide: Record<string,any>, index: number) => {
-      const context = resolveSlideContext(presentation,index,{slideNumber:output.length+1,slideCount,date:options.date});
+      const context = resolveSlideContext(presentation,index,{slideNumber:output.length+1,slideCount,date:options.date,...(options.catalogs?{catalogs:options.catalogs}:{}),...(options.strictReferences?{strictReferences:true}:{})});
       for (const diagnostic of context.diagnostics) {
-        // An unresolved id falls back (no layout record, `minimal`, `cool-horizon`, the default font scheme) and is reported once per code and path.
+        // An unresolved reference falls back (automatic composition, or the engine default record) and is reported once per path.
         const key = `${diagnostic.code}:${diagnostic.path}`;
         if (!reported.has(key)) { reported.add(key); options.onDiagnostic?.(diagnostic); }
       }

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import { layouts, validateCatalogRecord } from '../dist/index.js';
+import { validateCatalogRecord } from '../dist/index.js';
+import { layouts } from './support/catalog.mjs';
 import { layoutContent } from '../dist/composition.js';
 
 const HEAD = ['title', 'subtitle', 'tag'];
@@ -22,7 +23,9 @@ test('the placeholder kinds are one vocabulary', () => {
 });
 
 test('every bundled layout record uses the new shape', () => {
-  assert.equal(layouts.length, 100);
+  // The snapshot mirrors the gallery (OPF 0.15): every layout it publishes, as many as the snapshot index lists.
+  assert.equal(layouts.length, JSON.parse(readFileSync(new URL('../../../spec/catalogs/layouts/index.json', import.meta.url), 'utf8')).records.length);
+  assert.ok(layouts.length > 100);
   for (const record of layouts) {
     assert.equal(validateCatalogRecord('layouts', record).valid, true, record.id);
     for (const key of Object.keys(record)) assert.ok(key in layoutSchema.properties, `${record.id}: ${key}`);

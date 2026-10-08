@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { describe, test } from "node:test";
 
-import { catalogEntries, schemaEntries } from "@openpresentation/opf";
+import { catalogDisplayKinds, catalogKinds, schemaEntries } from "@openpresentation/opf";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_BIN = path.resolve(__dirname, "../dist/index.js");
@@ -76,44 +77,33 @@ describe("opf usage", () => {
 });
 
 describe("opf catalogs", () => {
-  test("lists every bundled catalog kind with its record count", () => {
+  test("lists every kind of the default catalog the CLI registers, and the display kinds", () => {
     const result = runCli(["catalogs"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const parsed = JSON.parse(result.stdout);
     assert.ok(Array.isArray(parsed));
-    assert.equal(parsed.length, catalogEntries.length);
-    const expectedKinds = catalogEntries.map((entry) => entry.kind).sort();
-    const actualKinds = parsed.map((entry) => entry.kind).sort();
-    assert.deepEqual(actualKinds, expectedKinds);
-    for (const entry of catalogEntries) {
-      const match = parsed.find((candidate) => candidate.kind === entry.kind);
-      assert.ok(match, `expected catalogs output to include kind ${entry.kind}`);
-      const deprecated = entry.records.filter((record) => record.deprecation).length;
-      assert.equal(match.count, entry.records.length - deprecated);
-      assert.equal(match.deprecated, deprecated || undefined);
+    assert.deepEqual(parsed.map((entry) => entry.kind), [...catalogKinds, ...catalogDisplayKinds]);
+    for (const kind of catalogKinds) {
+      const match = parsed.find((candidate) => candidate.kind === kind);
+      assert.equal(match.count, Object.keys(defaultCatalog[kind] ?? {}).length, kind);
+      assert.equal(match.source, defaultCatalog.source);
     }
+    for (const kind of catalogDisplayKinds) assert.equal(parsed.find((candidate) => candidate.kind === kind).display, true, kind);
   });
 });
 
 describe("opf catalog", () => {
-  const chartTypes = catalogEntries.find((entry) => entry.kind === "chartTypes").records;
-
-  test("the bundled chart types carry no deprecated records, so the default listing is the whole catalog", () => {
-    assert.equal(chartTypes.filter((record) => record.deprecation).length, 0);
-    const result = runCli(["catalog", "chartTypes"]);
+  test("lists a kind's records with their ids, and an exact id resolves", () => {
+    const result = runCli(["catalog", "layouts"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const ids = JSON.parse(result.stdout).map((record) => record.id);
-    assert.equal(ids.length, chartTypes.length);
-    assert.ok(ids.includes("column"));
-    assert.ok(ids.includes("stacked-column"));
-    assert.equal(ids.includes("bullet-column"), false);
-  });
-
-  test("--all lists the same records and an exact id resolves", () => {
-    const all = JSON.parse(runCli(["catalog", "chartTypes", "--all"]).stdout);
-    assert.equal(all.length, chartTypes.length);
+    assert.equal(ids.length, Object.keys(defaultCatalog.layouts).length);
+    assert.ok(ids.includes("title-subtitle"));
     const record = JSON.parse(runCli(["catalog", "chartTypes", "stacked-column"]).stdout);
+    assert.equal(record.id, "stacked-column");
     assert.equal(record.name, "Stacked Column");
+    assert.equal(runCli(["catalog", "layouts", "no-such-layout"]).status, 2);
+    assert.equal(runCli(["catalog", "layouts", "--all"]).status, 2, "--all is gone: the catalog has no deprecated records");
   });
 });
 
@@ -136,32 +126,34 @@ describe("opf schemas", () => {
   });
 });
 
-describe("opf bundle", () => {
+describe("opf embed", () => {
   const BUNDLE_DECK = path.resolve(__dirname, "fixtures/bundle-deck.json");
 
-  test("inlines referenced catalog records and reports what was added", () => {
-    const result = runCli(["bundle", BUNDLE_DECK, "-"]);
+  test("embeds the records a deck references, under catalogs.default, and reports what was added", () => {
+    const result = runCli(["embed", BUNDLE_DECK, "-"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const document = JSON.parse(result.stdout);
     const report = JSON.parse(result.stderr);
     assert.equal(report.valid, true);
-    for (const kind of ["narratives", "tones", "themes", "layouts", "chartTypes", "colorSchemes", "fontSchemes"]) {
-      assert.ok(report.bundle.added[kind]?.length, `expected ${kind} in bundle report: ${JSON.stringify(report.bundle.added)}`);
-      assert.ok(document.catalogs[kind].records.length > 0, `expected inlined ${kind} records`);
+    assert.equal(document.catalogs.default.source, defaultCatalog.source);
+    for (const kind of ["narratives", "tones", "themes", "layouts", "colorSchemes", "fontSchemes"]) {
+      assert.ok(report.embed.added.some((entry) => entry.kind === kind), `expected ${kind} in the embed report: ${JSON.stringify(report.embed.added)}`);
+      assert.ok(Object.keys(document.catalogs.default[kind]).length > 0, `expected embedded ${kind} records`);
     }
+    assert.deepEqual(report.embed.unresolved, []);
   });
 
-  test("bundling a deck without catalog references is a no-op", () => {
-    const result = runCli(["bundle", VALID_DECK, "-"]);
+  test("embedding a deck without catalog references is a no-op", () => {
+    const result = runCli(["embed", VALID_DECK, "-"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const document = JSON.parse(result.stdout);
     const report = JSON.parse(result.stderr);
-    assert.deepEqual(report.bundle.added, {});
+    assert.deepEqual(report.embed.added, []);
     assert.equal(document.catalogs, undefined);
   });
 
-  test("rejects an invalid document before bundling", () => {
-    const result = runCli(["bundle", INVALID_DECK, "-"]);
+  test("rejects an invalid document before embedding", () => {
+    const result = runCli(["embed", INVALID_DECK, "-"]);
     assert.equal(result.status, 1);
   });
 });

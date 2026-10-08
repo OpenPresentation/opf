@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "chart-3x-right-title-center",
+  "name": "Chart_3x_Right_Title_Center",
+  "summary": "Canonical OPF chart 3x title layout.",
+  "description": "Chart 3x Right Title Center OPF layout with 3 chart zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "chartPrimary": "right"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Chart",
+    "3 zones",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x-right-title-center.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      1,
+      1,
+      2
+    ]
+  }
+}

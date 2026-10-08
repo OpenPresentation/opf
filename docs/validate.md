@@ -28,8 +28,8 @@ Every finding has one of six categories. They say what kind of question the find
 
 | Category | Asks | Errors by default | Examples |
 | --- | --- | --- | --- |
-| `format` | Is it well-formed OPF? | yes | JSON syntax, duplicate keys, schema, a citation of an unknown reference, an unknown dataset, a required variable with no value (a warning in a template) |
-| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record; unknown or deprecated catalog id and unused dataset are warnings | `asset:` references, catalog ids, citations and datasets nobody uses |
+| `format` | Is it well-formed OPF? | yes | JSON syntax, duplicate keys, schema, a citation of an unknown reference, an unknown dataset, a required variable with no value (a warning in a template), a `name:id` prefix that names no catalog group |
+| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record; a reference that resolves nowhere and an unused dataset are warnings | `asset:` references, catalog references, citations and datasets nobody uses |
 | `policy` | Does it follow the host's house rules? | the host sets it (default `error`) | "only these layouts", brand fonts: the `contracts` option |
 | `accessibility` | Can everyone read it? | no: warning and info | contrast, alt text, slide titles, reading order, link text, language |
 | `layout` | Will it present as authored? | no: warning | overflow, minimum type size, image resolution, fonts outside the scheme |
@@ -70,7 +70,7 @@ validate(presentation, {
   ignore: ['layout'],                             // do not run these
   severity: { 'opf/text-contrast': 'error', content: 'off' }, // per rule or category: error, warning, info or off
   ignorePaths: [{ rule: 'opf/text-contrast', path: '/slides/3' }], // an accepted exception, by JSON Pointer prefix
-  catalogs: loadedCatalogRecords,                 // records the host already loaded; nothing is fetched
+  catalogs: [defaultCatalog, acmeCatalog],        // the catalogs the host registered (the first is the default); nothing is fetched
   contracts,                                      // host policy (below)
   thresholds: { contrastNormal: 7 },              // see DEFAULT_VALIDATION_THRESHOLDS
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
@@ -116,11 +116,11 @@ A fix is a suggestion that core never applies. A host such as the editor's Revie
 
 ## Catalog context and contracts
 
-Catalog ids are resolved against the document's own `catalogs` records, then the records the host passed in `catalogs`, then the bundled catalogs. An unknown id is a warning (`opf/catalog-reference`), never an error, and engine-defined layouts may be valid; a `source` that names an external catalog is reported as not fetched (`opf/catalog-source`) and, unless the host loaded that source's records, the ids it may define are not judged. Free-form audience and purpose descriptions, arbitrary `extensions` data, and language strings in [BCP-47 syntax](https://www.rfc-editor.org/rfc/rfc5646.html#section-2.1) (regional, extended, private-use and grandfathered forms) do not become catalog references because of their spelling; an explicit `language.id` is still a catalog reference. Supplied and inline catalog records are validated, and a repeated id or an invalid override is an error (`opf/catalog-record`). Suggestions name records actually present in the checked context.
+Content references resolve the way every engine resolves them ([catalogs](default-catalog.md)): `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host registered (the `catalogs` option) for its source; `name:id` in `catalogs.<name>`, then the catalog registered for its source. A reference that resolves nowhere is a warning (`opf/unresolved-reference`), never an error; a prefix that names no group is a format error (`opf/undeclared-catalog`): it can never resolve, so engines reject the document at their format check (`validate(document, { only: ["format"] })`) instead of drawing a fallback. A `catalogs` option that is not an array of registered catalogs throws `OPFCatalogsOptionError` (`code: "invalid-catalogs"`) at every entry point. Nothing is fetched, and without the `catalogs` option only the records the document embeds resolve. Free-form audience and purpose descriptions (any string that is not a bare id or `name:id`) and arbitrary `extensions` data are never references; the `language` tag, `chart.type` and the `socials` keys are engine vocabularies the schema checks. Embedded records, and registered records the document uses, are validated against their companion schema (`opf/catalog-record`). A record under `catalogs.default` or a named group that the catalog registered for the group's source does not publish is `opf/catalog-record-not-in-source` (move it to `catalogs.custom`); with no catalog registered for that source the check is silent. Suggestions name records actually present in the checked context (`origin` `document` or `registered`).
 
 An `asset:` reference that names no entry of the document's `assets` registry is an error (`opf/asset-reference`), and so is a cycle of `asset:` sources (`opf/asset-cycle`); resource bytes are never fetched. Chart and table data findings keep their code as the rule id (`opf/dataset-unknown`, `opf/chart-value-not-numeric`, ...), and a `opf/chart-value-not-numeric` cell whose column is written in one display style (`"12%"`, `"$1,234"`) carries `fixes` ([chart and table data](chart-table-data.md#migration-help)). Citation and caption errors keep theirs too (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`).
 
-A custom narrative is an inline `catalogs.narratives.records` entry, and `narrative` is always a string. When the narrative resolves locally, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an inline record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background colour warns like any other colour reference (`opf/variable-reference-unknown`).
+A narrative the document defines is a record in `catalogs.custom.narratives`, and `narrative` is always a reference string. When the narrative resolves, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an embedded record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background colour warns like any other colour reference (`opf/variable-reference-unknown`).
 
 Host policy comes from explicit options, never from the document: fields under `extensions` are data and cannot install policy. `contracts` and `catalogs` may live in a local JSON file for the CLI (`--config`).
 
@@ -170,7 +170,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--input-format yaml`) is read as
 1. **Background.** Design resolves per field: slide design, deck design, theme, engine default. The background is a theme slot or colour (`solid`), the card surface for content on a `contentBox` card, a table cell's fill, a gradient or a pattern. Solid, gradient-stop and pattern colours are read as literal hex colours, as the preview reads them (anything else falls back as it does there). Translucent backgrounds are composited over white.
 2. **Text colour.** Titles, body, lists and tags use the scheme's `dark1`, or `light1` when the background is dark (luminance below 0.179). Furniture and quote attributions use the muted colour, metric values the primary colour, and explicit run and table colours the author's `ColorRef` resolved the same way the renderer resolves it. As the preview does, a gradient background has no single colour and counts as light, so a dark gradient behind default text is reported.
 3. **Gradients.** The gradient is sampled on a 5 by 5 grid over the area the text covers (the lines' measured ink, aligned as the text is), using the preview's gradient geometry, and the worst colour decides. A pattern contributes both of its colours.
-4. **Pictures.** Pixels are never read. A background picture is bounded by a grey ramp from black to white, composited through the picture opacity and any full-frame `design.slideImage.overlay`. Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed. An overlay limited to an edge band is not counted.
+4. **Pictures.** Pixels are never read. A background picture is bounded by a grey ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`). Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed. An overlay limited to an edge band is not counted.
 5. **Ratio and size.** The WCAG 2.x relative-luminance contrast ratio is compared with 4.5:1, or 3:1 for large text: at least 18 pt, or 14 pt and bold. Sizes are the fitted sizes, expressed at the 13.33 by 7.5 in reference slide (96 px per inch). The default body size, 18.75 pt, is large text under WCAG, so default body text passes at 3:1; set `contrastLarge` to 4.5 for a stricter policy.
 
 Approximations: anti-aliasing, text shadows, font weight and the exact glyph coverage are not modelled; chart and code text are not checked (charts pick label colours against their surface; code uses its own panel colours). See each rule below for what it cannot see.
@@ -200,6 +200,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/cite-unknown-reference`](#opfcite-unknown-reference) | Format | error | structure | A citation names a reference that does not exist. |
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
+| [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
+| [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
@@ -212,12 +214,12 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
 | [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run colour is none of the documented forms. |
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
+| [`opf/undeclared-catalog`](#opfundeclared-catalog) | Format | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
-| [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | A supplied or inline catalog record is invalid, or repeats an id. |
-| [`opf/catalog-reference`](#opfcatalog-reference) | References | warning | structure | A catalog id is not in the available context. |
-| [`opf/deprecated-catalog-id`](#opfdeprecated-catalog-id) | References | warning | structure | A catalog id is deprecated. |
-| [`opf/catalog-source`](#opfcatalog-source) | References | info | structure | An external catalog source was not fetched. |
+| [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
+| [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
+| [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
 | [`opf/unused-dataset`](#opfunused-dataset) | References | warning | structure | A dataset is never used. |
 | [`opf/unknown-beat`](#opfunknown-beat) | References | warning | structure | A slide names a beat its narrative does not define. |
@@ -322,6 +324,22 @@ Default severity: **error**. Cost: structure. A caption is on a payload that can
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/image-option-unsupported-payload`
+
+Default severity: **error**. Cost: structure. An image option is on a payload that is not an image.
+
+**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`) and `placement` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/image-placement-invalid`
+
+Default severity: **error**. Cost: structure. An image placement cannot be honoured.
+
+**Why.** A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
 ### `opf/dataset-unknown`
 
 Default severity: **error**. Cost: structure. A chart or table names a dataset that does not exist.
@@ -418,6 +436,14 @@ Default severity: **warning**. Cost: structure. A list entry sets `start` where 
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/undeclared-catalog`
+
+Default severity: **error**. Cost: structure. A reference names a catalog group the document does not declare.
+
+**Why.** The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve, whatever the host registers, so it is a format error: engines reject the document at their format check instead of drawing a fallback.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
 
 ## References rules
 
@@ -441,33 +467,31 @@ Default severity: **error**. Cost: structure. Asset references form a cycle.
 
 ### `opf/catalog-record`
 
-Default severity: **error**. Cost: structure. A supplied or inline catalog record is invalid, or repeats an id.
+Default severity: **error**. Cost: structure. An embedded or registered catalog record is invalid.
 
-**Why.** A record that fails its catalog schema cannot be resolved, and a repeated id makes the override ambiguous. Invalid records are left out of the lookup, so the references to them are reported too.
+**Why.** A record that fails its companion schema cannot be resolved. Invalid records are left out of the lookup, so the references to them are reported too.
 
 **Basis.** spec/schemas/<kind>.schema.json
 
-### `opf/catalog-reference`
+### `opf/unresolved-reference`
 
-Default severity: **warning**. Cost: structure. A catalog id is not in the available context.
+Default severity: **warning**. Cost: structure. A content reference resolves nowhere.
 
-**Why.** A theme, layout, font scheme or other catalog id that no record defines falls back to the engine default. Custom ids are legitimate when the host supplies their records, so this is advisory.
+**Why.** A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.
 
-**Approximations.** Resolved against the document's inline records, the records the host passed in `catalogs`, then the bundled catalogs. External sources and `pkg:` records are never fetched. Free-form audience and purpose text, and BCP 47 language tags, are not catalog references.
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-### `opf/deprecated-catalog-id`
+**Approximations.** Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference.
 
-Default severity: **warning**. Cost: structure. A catalog id is deprecated.
+### `opf/catalog-record-not-in-source`
 
-**Why.** A deprecated record still resolves, so nothing breaks, but the replacement is the one that will be maintained.
+Default severity: **warning**. Cost: structure. A record embedded under a catalog group is not in that catalog.
 
-**Basis.** spec/catalogs `deprecation.replacedBy`
+**Why.** A record under catalogs.default or a named group says it came from the catalog its source names. When the catalog the host registered for that source has no record of that kind and id, the record is the document's own and belongs in catalogs.custom, where an update from the catalog never looks for it. Rendering is unchanged: the embedded record still wins.
 
-### `opf/catalog-source`
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-Default severity: **info**. Cost: structure. An external catalog source was not fetched.
-
-**Why.** A catalog `source` is a URL or package the checker never loads, so ids defined there are not verified.
+**Approximations.** Checked only against a catalog the host registered for the group's source (the first registered catalog for an omitted default.source); with none registered for it the check is silent. A record the catalog has with different content is an update difference (updateFromCatalog), not this finding. catalogs.custom is never checked.
 
 ### `opf/unused-reference`
 
@@ -493,7 +517,7 @@ Default severity: **warning**. Cost: structure. A slide names a beat its narrati
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** The narrative resolves offline: the inline catalogs.narratives.records, then the `catalogs` option, then the bundled catalog. A narrative no local source defines is not checked.
+**Approximations.** The narrative resolves like every content reference: the document's catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked.
 
 ### `opf/slide-theme-dimensions`
 
@@ -575,7 +599,7 @@ Default severity: **info**. Cost: composition. Text sits on a background picture
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.slideImage.overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.
+**Approximations.** Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.background overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.
 
 ### `opf/missing-alt-text`
 
@@ -585,7 +609,7 @@ Default severity: **warning**. Cost: structure. A picture has no alt text and is
 
 **Basis.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
+**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
 
 ### `opf/poor-alt-text`
 
@@ -728,7 +752,7 @@ Default severity: **warning**. Cost: composition. An image has too few pixels fo
 
 **Thresholds.** `minImagePpi` (default 96)
 
-**Approximations.** Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed box (cropped images are measured as the cover scale, fitted ones as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.
+**Approximations.** Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed frame (cover and stretch are measured as the cover scale, contain as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.
 
 
 ## Content rules
@@ -819,7 +843,7 @@ Default severity: **info**. Cost: structure. A beat of the narrative has no slid
 
 **Why.** The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.
 
-**Approximations.** Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in the `catalogs` option, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
+**Approximations.** Resolved like every content reference: the document's catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
 
 ### `opf/empty-slide`
 

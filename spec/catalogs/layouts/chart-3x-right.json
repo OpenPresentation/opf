@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "chart-3x-right",
+  "name": "Chart_3x_Right",
+  "summary": "Canonical OPF chart 3x layout.",
+  "description": "Chart 3x Right OPF layout with 3 chart zones.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "chartPrimary": "right"
+  },
+  "placeholders": [
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Chart",
+    "3 zones",
+    "Center aligned"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x-right.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      1,
+      1,
+      2
+    ]
+  }
+}

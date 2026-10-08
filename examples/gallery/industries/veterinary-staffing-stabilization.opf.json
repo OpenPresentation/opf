@@ -3,16 +3,16 @@
   "name": "Veterinary Staffing Stabilization",
   "description": "Veterinary Staffing Stabilization is a fictional OPF example for veterinary care teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "veterinary-staffing-stabilization",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "candidates",
+    "executive",
     {
-      "id": "investor",
+      "id": "marketing",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "problem-solution"
+        "persuade"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "problem-solution",
+  "narrative": "persuade",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -62,10 +62,8 @@
     "dimensions": "letter",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "center",
@@ -73,7 +71,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "right",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -136,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "stacked-line",
         "data": {
           "columns": [
             "Quarter",
@@ -344,6 +338,444 @@
       "density": "medium",
       "scenario": "veterinary-staffing-stabilization",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
+          "audienceFit": [
+            "general-audience",
+            "policymakers",
+            "industry-peers"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 30
+          },
+          "tags": [
+            "keynote",
+            "persuasive",
+            "advocacy",
+            "talk"
+          ],
+          "beats": [
+            {
+              "id": "gripping-introduction",
+              "name": "Gripping Introduction",
+              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
+              "instructions": "Draw in the audience with a compelling opener",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenge-status-quo",
+              "name": "Challenge the Status Quo",
+              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
+            },
+            {
+              "id": "present-problem",
+              "name": "Present the Problem",
+              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
+            },
+            {
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
+              "instructions": "Share significant stories to illuminate the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "statistic-shock",
+              "name": "Statistic Shock",
+              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
+              "instructions": "Use impactful stats to highlight the gravity of the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "historical-context",
+              "name": "Historical Context",
+              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
+              "instructions": "Show the evolution or history of the issue",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "weave-narrative",
+              "name": "Weave a Narrative",
+              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+            },
+            {
+              "id": "major-revelation",
+              "name": "Major Revelation",
+              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
+              "instructions": "Deliver a surprising or significant discovery",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "propose-solution",
+              "name": "Propose Solution",
+              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
+              "instructions": "Advocate for change or propose an actionable solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "final-question",
+              "name": "Final Question",
+              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+              "layout": "title",
+              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "golden-yellow": {
+          "name": "Golden Yellow",
+          "accent1": "#FCC82B",
+          "accent2": "#44ADAD",
+          "accent3": "#3E506B",
+          "accent4": "#E23A59",
+          "accent5": "#0F5E8C",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#3D2E02",
+          "followedHyperlink": "#44ADAD",
+          "hyperlink": "#E23A59",
+          "light1": "#FFFFFF",
+          "light2": "#FEFCF0",
+          "summary": "Bright yellow and teal accents for optimistic, high-visibility decks.",
+          "description": "A warm yellow palette balanced by teal and navy. It is expressive, optimistic, and useful for bright public-facing stories.",
+          "tags": [
+            "optimistic",
+            "bright",
+            "friendly",
+            "creative",
+            "visible"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
     }
   }
 }

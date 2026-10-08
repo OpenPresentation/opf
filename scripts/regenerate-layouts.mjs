@@ -116,9 +116,11 @@ function layoutDesign(layout) {
   if (typeof layout.content_box === "boolean") design.contentBox = layout.content_box;
   set("contentDirection", lowerNone(layout.slide_layout_direction));
   set("chartPrimary", lowerNone(layout.content_type_chart_primary));
-  set("imageFill", lowerNone(layout.content_type_image_fill));
+  // FA-22: the extract's crop/fit is the 0.15 fit vocabulary's cover/contain.
+  set("imageFit", { crop: "cover", fit: "contain" }[lowerNone(layout.content_type_image_fill)]);
   set("listBullet", lowerNone(layout.content_type_list_bullet));
-  if (layout.slide_image) design.slideImage = { position: lowerNone(layout.slide_image_alignment) ?? "background" };
+  // The extract's slide_image flag only let a deck-wide slide image apply; 0.15 has no such opt-in (a full-bleed photo
+  // is the slide's background and an edge image is a placed image block), so it is not carried.
   return Object.keys(design).length > 0 ? design : undefined;
 }
 

@@ -1,12 +1,12 @@
 {
   "name": "Food Bank Distribution Capacity Plan",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "all-hands"
+    "customer"
   ],
   "purpose": "educate",
   "tone": "technical",
-  "narrative": "persuasive-sales",
+  "narrative": "performance-improvement-plan",
   "design": {
     "theme": "bold",
     "colorScheme": "deep-purple",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,405 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "performance-improvement-plan": {
+          "name": "Performance Improvement Plan",
+          "summary": "Structured PIP arc that helps a struggling employee see expectations clearly, understand the gap, and walk into a credible improvement path. Designed to be respectful, specific, and outcome-focused — not punitive.",
+          "audienceFit": [
+            "employee",
+            "manager",
+            "hr-partner"
+          ],
+          "duration": {
+            "min": 30,
+            "max": 60
+          },
+          "tags": [
+            "workforce",
+            "hr",
+            "performance",
+            "manager"
+          ],
+          "beats": [
+            {
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Begin respectfully and set a constructive tone. Be clear about what this conversation is and isn't. The opening shouldn't catastrophize or sugarcoat — clarity is kinder than either.",
+              "instructions": "Begin respectfully and positively",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "set-expectations",
+              "name": "Set Expectations",
+              "description": "Detail the level of performance expected in the role. Specific behaviors, deliverables, and standards. Expectations the employee can't quote back are expectations they can't meet.",
+              "instructions": "Detail desired performance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "identify-problems",
+              "name": "Identify Problems",
+              "description": "Name the gap between expected and observed performance. Use specific examples and dates rather than impressions. Avoid characterizing the person; focus on the work product and the impact.",
+              "instructions": "Highlight struggles and weaknesses",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "possible-solutions",
+              "name": "Possible Solutions",
+              "description": "Suggest improvement strategies tailored to the gaps named above. Behavior changes, structural changes, support structures. Frame them as paths the employee can choose, not orders to follow.",
+              "instructions": "Suggest improvement strategies",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "offer-resources",
+              "name": "Offer Resources",
+              "description": "Make explicit what tools, coaching, training, or peer support is available. Resources demonstrate that the organization is investing in the outcome, not setting the employee up to fail.",
+              "instructions": "Propose help and tools",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "motivate-change",
+              "name": "Motivate Change",
+              "description": "Connect improvement to what the employee values: their growth, their team, their career. Inspire action without minimizing the seriousness of the situation.",
+              "instructions": "Inspire improvement action",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "follow-up",
+              "name": "Follow Up",
+              "description": "Schedule the check-ins. Frequency, format, criteria for progress. Predictable follow-up turns a PIP from a threat into a plan.",
+              "instructions": "Schedule progress check-ins",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Close with confidence in the path forward and a clear restatement of what success looks like. End the meeting having both raised the bar and reaffirmed the relationship.",
+              "layout": "title",
+              "instructions": "Encourage and remind success",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        }
+      },
+      "purposes": {
+        "educate": {
+          "name": "Educate",
+          "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+          "description": "Use when the primary job is learning. Structure around concepts, examples, practice, and checks for understanding rather than persuasion or reporting.",
+          "outcome": "The audience understands the material well enough to apply it.",
+          "successCriteria": [
+            "Definitions and examples are clear",
+            "Audience can apply the concept",
+            "Complexity builds progressively"
+          ],
+          "recommendedNarratives": [
+            "educate",
+            "focus",
+            "company-intro"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "technical"
+          ],
+          "tags": [
+            "learning",
+            "training",
+            "enablement"
+          ]
+        }
+      },
+      "tones": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Precise, evidence-led voice for engineering, research, and product-detail audiences.",
+          "description": "Lead with the question or claim, then walk through the mechanism and the numbers. Use exact terminology; assume the audience can handle and prefers it. Diagrams, tables, and benchmarks are first-class.",
+          "voiceCues": [
+            "State the claim, then the mechanism, then the evidence.",
+            "Use exact terminology — don't soften technical terms for general readability.",
+            "Quote benchmarks with conditions (cold/warm, p50/p95/p99, dataset, hardware).",
+            "Prefer diagrams and tables over prose paragraphs for structural information."
+          ],
+          "avoid": [
+            "Vague claims ('much faster', 'better', 'easier').",
+            "Marketing framing without supporting data.",
+            "Glossing over caveats and tradeoffs.",
+            "Casual register that obscures precision."
+          ],
+          "samplePhrases": [
+            "p95 inference latency is 38ms on a single A100, down from 312ms on the prior runtime.",
+            "We replaced the streaming serializer with a batched protobuf path; throughput rose 4.2× under load.",
+            "The result holds for context windows up to 32k tokens; beyond that, see appendix B."
+          ],
+          "recommendedNarratives": [
+            "challenge-resolution",
+            "innovation",
+            "conference-talk",
+            "status-update"
+          ],
+          "tags": [
+            "technical",
+            "engineering",
+            "research"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "deep-purple": {
+          "name": "Deep Purple",
+          "accent1": "#6A1B9A",
+          "accent2": "#7B1FA2",
+          "accent3": "#8E24AA",
+          "accent4": "#9C27B0",
+          "accent5": "#AB47BC",
+          "accent6": "#4A148C",
+          "dark1": "#000000",
+          "dark2": "#2B0B3E",
+          "followedHyperlink": "#6A1B9A",
+          "hyperlink": "#4A148C",
+          "light1": "#FFFFFF",
+          "light2": "#F8F2FC",
+          "summary": "Purple-led palette for innovation and premium positioning.",
+          "description": "A focused purple palette for decks that need to feel creative, distinctive, and premium.",
+          "tags": [
+            "innovative",
+            "creative",
+            "premium",
+            "distinctive",
+            "modern"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "grandview": {
+          "name": "Grandview",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Grandview Display",
+          "minor": "Grandview",
+          "textSample": "Bold road sign",
+          "type": "sans-serif",
+          "description": "Grandview is a sans serif OPF font scheme for Latin presentations, using Grandview Display for headings with Grandview for body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
+    }
+  }
 }

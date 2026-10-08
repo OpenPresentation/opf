@@ -3,16 +3,16 @@
   "name": "Online Program Launch Plan",
   "description": "Online Program Launch Plan is a fictional OPF example for higher education teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "online-program-launch-plan",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "customer",
+    "engineering-team",
     {
-      "id": "marketing",
+      "id": "investor",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "innovation"
+        "change-story"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "innovation",
+  "narrative": "change-story",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -82,7 +82,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "top",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -107,10 +107,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -145,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",
@@ -353,6 +349,467 @@
       "density": "medium",
       "scenario": "online-program-launch-plan",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "change-story": {
+          "name": "Change Story",
+          "summary": "A change management narrative that addresses the emotional and rational objections employees face when asked to change.",
+          "description": "A change management narrative that addresses the emotional and rational objections people face when asked to change. Establish the burning platform, explain why the timing is urgent, show the chosen path and the alternatives it was chosen over, make the stakes concrete for the organization, the team, and individuals, and close on a shared vision in which the audience is the protagonist. The tone is motivational and empathetic: it acknowledges that change is hard while building conviction. Best for organizational change, transformation announcements, restructuring communications, and all-hands meetings; typical decks run 8-15 slides.",
+          "audienceFit": [
+            "employees",
+            "team-leads",
+            "cross-functional-teams"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "change-management",
+            "transformation",
+            "internal",
+            "alignment"
+          ],
+          "beats": [
+            {
+              "id": "why-change",
+              "name": "Why Change",
+              "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
+              "instructions": "Explain why the current state cannot continue.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the urgency. What changes if we wait? What window is closing?",
+              "instructions": "Make the timing urgent and concrete.",
+              "type": "metric",
+              "layout": "number-1x"
+            },
+            {
+              "id": "why-this-way",
+              "name": "Why This Way",
+              "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
+              "instructions": "Describe the proposed path and why it fits.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "whats-at-stake",
+              "name": "What's at Stake",
+              "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
+              "instructions": "Show the risks and rewards attached to the choice.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "how-we-win-together",
+              "name": "How We Win Together",
+              "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
+              "instructions": "Close with shared ownership and first commitments.",
+              "type": "text",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        },
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "external",
+            "capital",
+            "fundraising"
+          ]
+        }
+      },
+      "purposes": {
+        "sell": {
+          "name": "Sell",
+          "summary": "Move a buyer or evaluator toward purchase, adoption, renewal, or expansion.",
+          "description": "Use for customer-facing decks where the goal is commercial movement. Focus on pain, value, proof, differentiation, and the next buying step.",
+          "outcome": "The buyer advances to the next step in the commercial process.",
+          "successCriteria": [
+            "Customer pain is named clearly",
+            "Value is tied to customer outcomes",
+            "Next commercial step is clear"
+          ],
+          "recommendedNarratives": [
+            "persuasive-sales",
+            "problem-solution",
+            "challenge-resolution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "commercial"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "slate-gray": {
+          "name": "Slate Gray",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#1B1B1B",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#F8F8F8",
+          "summary": "Neutral gray palette for understated executive communication.",
+          "description": "A disciplined gray scale with strong neutral contrast. Use it when the content should feel calm, mature, and analytical.",
+          "tags": [
+            "neutral",
+            "minimal",
+            "mature",
+            "analytical",
+            "restrained"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-kr": {
+          "name": "Noto Sans KR",
+          "app": "google-slides",
+          "languageFamily": "ea",
+          "languages": [
+            "ko"
+          ],
+          "major": "Noto Sans KR",
+          "minor": "Noto Sans KR",
+          "textSample": "이것은 아름답다",
+          "type": "sans-serif",
+          "description": "Noto Sans KR is a sans serif OPF font scheme for East Asian presentations, using Noto Sans KR for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
     }
   }
 }

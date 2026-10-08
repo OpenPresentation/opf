@@ -139,48 +139,46 @@ test('headers and footers bound the centered group', () => {
   assert.ok(Math.abs((top + bottom) / 2 - (safeTop + safeBottom) / 2) < 1e-6);
 });
 
-test('slide image bands: the cover centers inside the image-safe area', () => {
+test('placed image bands: the cover centers inside the free area', () => {
   const regions = {
     left: {x: 0, y: 0, width: 640, height: 720}, right: {x: 640, y: 0, width: 640, height: 720},
     top: {x: 0, y: 0, width: 1280, height: 360}, bottom: {x: 0, y: 360, width: 1280, height: 360},
   };
   const padding = 0.08 * 720;
-  for (const [position, region] of Object.entries(regions)) {
-    const presentation = {design: {slideImage: {src: photo, position}}};
-    const result = composeSlide({title: 'Cover beside a photo', subtitle: 'Centered in what is left'}, {presentation, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
-    assert.equal(result.slideImage.position, position);
+  for (const [edge, region] of Object.entries(regions)) {
+    const result = composeSlide({title: 'Cover beside a photo', subtitle: 'Centered in what is left', blocks: [{image: photo, placement: {edge}}]}, {layout: titleSubtitle});
+    assert.deepEqual(byField(result, 'image').box, region, edge);
     const area = {
-      left: position === 'left' ? region.width : 0, right: position === 'right' ? region.x : 1280,
-      top: position === 'top' ? region.height : 0, bottom: position === 'bottom' ? region.y : 720,
+      left: edge === 'left' ? region.width : 0, right: edge === 'right' ? region.x : 1280,
+      top: edge === 'top' ? region.height : 0, bottom: edge === 'bottom' ? region.y : 720,
     };
     const {headings, top, bottom} = headingGroup(result);
-    assert.ok(Math.abs((top + bottom) / 2 - ((area.top + padding) + (area.bottom - padding)) / 2) < 1e-6, `${position} band center`);
+    assert.ok(Math.abs((top + bottom) / 2 - ((area.top + padding) + (area.bottom - padding)) / 2) < 1e-6, `${edge} band center`);
     for (const {box} of headings) {
-      assert.ok(Math.abs(box.x - (area.left + padding)) < 1e-6, `${position} band x starts at the free area`);
+      assert.ok(Math.abs(box.x - (area.left + padding)) < 1e-6, `${edge} band x starts at the free area`);
       assert.ok(Math.abs(box.x + box.width - (area.right - padding)) < 1e-6);
       assert.ok(box.y >= area.top + padding - 1e-6 && box.y + box.height <= area.bottom - padding + 1e-6);
     }
   }
-  // Background images do not reserve an area; the cover centers on the whole slide.
-  const background = composeSlide({title: 'Cover on a photo', subtitle: 'Full bleed'}, {presentation: {design: {slideImage: {src: photo, position: 'background'}}}, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
+  // A background image reserves no area; the cover centers on the whole slide.
+  const background = composeSlide({title: 'Cover on a photo', subtitle: 'Full bleed', design: {background: {type: 'image', src: photo}}}, {layout: titleSubtitle});
   const {top, bottom} = headingGroup(background);
   assert.ok(Math.abs((top + bottom) / 2 - 360) < 1e-6);
 });
 
-test('a root image drawn as the slide image counts as body and keeps the content origin', () => {
-  const presentation = {design: {slideImage: {src: photo, position: 'left'}}};
+test('a flowed image is body and keeps the content origin; a placed image is not body', () => {
   const layout = {...titleSubtitle, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'image'}]};
-  const result = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {presentation, layout});
-  assert.equal(result.slideImage.replacesContent, true);
   const padding = 0.08 * 720;
-  assert.ok(Math.abs(byField(result, 'title').box.y - padding) < 1e-6);
-  // The same slide without the image is a cover.
-  const cover = composeSlide({title: 'Image slide', subtitle: 'Not a cover'}, {presentation, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
-  assert.ok(byField(cover, 'title').box.y > padding + 1);
-  // Picture-slot removal is untouched: no picture placeholder box remains for the replaced image.
-  assert.equal(result.items.filter(item => item.field === 'image').length, 0);
+  const flowed = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {layout});
+  assert.ok(Math.abs(byField(flowed, 'title').box.y - padding) < 1e-6);
+  // The same image placed along an edge by the layout leaves a cover beside it.
+  const placedLayout = {...layout, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'image', placement: {edge: 'left'}}]};
+  const placed = composeSlide({title: 'Image slide', subtitle: 'A cover beside it', image: {src: photo, alt: 'Harbor'}}, {layout: placedLayout});
+  assert.ok(byField(placed, 'title').box.y > padding + 1);
+  assert.deepEqual(byField(placed, 'image').box, {x: 0, y: 0, width: 640, height: 720});
+  // The placed image's slot is not reserved in the flow, so no empty picture box remains.
+  assert.equal(placed.items.filter(item => item.field === 'image').length, 1);
 });
-
 test('content and region slides keep the pre-centering geometry', () => {
   const padding = 0.08 * 720;
   const content = composeSlide({title: 'Content', text: 'Body'}, {layout: text1x});

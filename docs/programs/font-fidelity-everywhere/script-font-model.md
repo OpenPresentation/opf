@@ -1,5 +1,11 @@
 # Language and script font model (FF-18)
 
+> **OPF 0.15 (FA-20/21).** The language is an engine vocabulary, not a catalog reference: `language` is a BCP-47 tag
+> (or a `Language` object with a `bcp47` tag), never a languages catalog id such as `english-us`. The script,
+> direction, curated `ooxmlLang` and default script fonts this model reads from a language record now come from the
+> engine table in [`spec/reference/engine-vocabularies.json`](../../../spec/reference/engine-vocabularies.json)
+> (`LANGUAGES`), and a font scheme's `languages` list holds BCP-47 tags. Everything else below still holds.
+
 Program: font-fidelity-everywhere, item FF-18. Consumers: FF-07 (PPTX exporter)
 and FF-19 (renderer). Source finding: the font-flow map's gap G7. The
 `language` field is read by nothing, theme `ea`/`cs` are empty, and every run

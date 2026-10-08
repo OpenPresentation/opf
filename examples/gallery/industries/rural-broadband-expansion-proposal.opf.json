@@ -1,12 +1,12 @@
 {
   "name": "Rural Broadband Expansion Proposal",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "all-hands"
+    "marketing"
   ],
   "purpose": "decide",
   "tone": "formal",
-  "narrative": "employee-review",
+  "narrative": "early-startup-pitch",
   "design": {
     "theme": "dark",
     "colorScheme": "pastel-red",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,436 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "early-startup-pitch": {
+          "name": "Early-Stage Startup Pitch",
+          "summary": "Seed and pre-seed pitch arc tuned for vision-heavy stories where revenue and traction are still thin. Anchors the narrative in market change, founder insight, and credible early signal — not metrics yet.",
+          "audienceFit": [
+            "seed-investors",
+            "angels",
+            "advisors"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 20
+          },
+          "tags": [
+            "startup",
+            "fundraising",
+            "seed",
+            "pitch"
+          ],
+          "beats": [
+            {
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with the company name, logo, and one-line positioning. Simple, branded, confident.",
+              "layout": "title",
+              "instructions": "Establish presence",
+              "type": "text"
+            },
+            {
+              "id": "monumental-change",
+              "name": "Monumental Change",
+              "description": "Open by naming a large, undeniable shift in the world. Tech, regulatory, behavioral. The shift is the reason this company exists — investors should feel its weight before they hear about the product.",
+              "instructions": "Highlight market transformation",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "past-struggle",
+              "name": "Past Struggle",
+              "description": "Show what the world tried to do about the problem before the shift, and why those approaches fell short. Honest credit to predecessors makes the new game more credible.",
+              "instructions": "Emphasize previous challenges",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "innovative-breakthrough",
+              "name": "Innovative Breakthrough",
+              "description": "Present the founding insight or breakthrough that makes a new approach possible. This is the 'secret' the company is built on — name it plainly.",
+              "instructions": "Present innovative solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "unique-offering",
+              "name": "Unique Offering",
+              "description": "Detail the product or service. Lead with the customer-visible thing they touch; the architecture can wait. Show why this offering is structurally different from the past struggle.",
+              "instructions": "Detail product or service",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "costly-issues",
+              "name": "Costly Issues",
+              "description": "Quantify the pain customers experience without your offering. Time, dollars, opportunity cost. Specific numbers convert sympathy into urgency.",
+              "instructions": "Quantify problems faced",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "effective-solutions",
+              "name": "Effective Solutions",
+              "description": "Demonstrate the customer outcome your offering produces. Before/after numbers from early users, even small N. Early-stage pitches are won by leading indicators, not by trailing ones.",
+              "instructions": "Demonstrate benefits",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "unit-economics",
+              "name": "Unit Economics",
+              "description": "Explain the financial model. Cost to acquire, gross margin, payback. Investors don't expect maturity — they expect that you've thought about it.",
+              "instructions": "Explain financial model",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "talented-team",
+              "name": "Talented Team",
+              "description": "Introduce the founders and key early hires. Show why this team uniquely sees and can execute on this opportunity. Insight beats résumé at the seed stage.",
+              "instructions": "Introduce key players",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "traction",
+              "name": "Traction",
+              "description": "Showcase the early signal: pilots, design partners, waitlist, retention data, anything credible. Frame it honestly — investors at this stage discount inflation aggressively.",
+              "instructions": "Showcase accomplishments",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "investment-opportunity",
+              "name": "Investment Opportunity",
+              "description": "Detail the round size, structure, and use of funds. Tie the raise to specific milestones it takes the company to. Specificity here signals operational maturity.",
+              "instructions": "Detail funding needs",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-logo",
+              "name": "Closing Logo",
+              "description": "Close on the brand and contact info. Leave the room with the line you most want repeated when the partner pitches you to the rest of the firm.",
+              "layout": "title",
+              "instructions": "Leave a lasting impression",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "decide": {
+          "name": "Drive a Decision",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "pastel-red": {
+          "name": "Pastel Red",
+          "accent1": "#FE938C",
+          "accent2": "#E6B89C",
+          "accent3": "#EAD2AC",
+          "accent4": "#9CAFB7",
+          "accent5": "#4281A4",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#0C6268",
+          "followedHyperlink": "#E6B89C",
+          "hyperlink": "#FE938C",
+          "light1": "#FFFFFF",
+          "light2": "#FFEFEE",
+          "summary": "Soft red and blue accents for approachable consumer stories.",
+          "description": "A pastel red scheme with warm neutrals and blue support, suited to friendly, human-centered decks.",
+          "tags": [
+            "warm",
+            "friendly",
+            "soft",
+            "approachable",
+            "human"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "constantia": {
+          "name": "Constantia",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Constantia",
+          "minor": "Constantia",
+          "textSample": "Elegant modern serif",
+          "type": "serif",
+          "description": "Constantia is a serif OPF font scheme for Latin presentations, using Constantia for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "list-5x": {
+          "name": "List 5x",
+          "summary": "Reach for it when five groups of points need parallel lists on one slide.",
+          "description": "A title above five lists in a three-column grid. Use it for five categories, stages or capabilities when each has only a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x.svg"
+          }
+        }
+      }
+    }
+  }
 }

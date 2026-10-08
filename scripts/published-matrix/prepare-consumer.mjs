@@ -93,6 +93,8 @@ export {createEditorSession} from '@openpresentation/opf-editor';
 // The harness of the plan core's release tag (published-matrix.yml runs opf-v<core> as released) reads the deck of an editor session through
 // this accessor; the current harness uses editor.presentation. Drop it when the plan's core tag has a harness without it.
 export const presentationOf = (editor) => editor.presentation;
+// The published packages are checked with the harness of their release tag, so this adapter keeps the published line's API
+// (core 0.14: the catalogs array, resolveFontSchemeReference) until the 0.15 release-prep moves it to engines-source.mjs's names.
 export {catalogs} from '@openpresentation/opf/catalogs';
 export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {validate} from '@openpresentation/opf';

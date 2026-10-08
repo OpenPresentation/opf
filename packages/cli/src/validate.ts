@@ -7,6 +7,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { type Finding, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
 import { FAIL_ON_MESSAGE, parseFailOn, reaches } from "./check.js";
+import { cliCatalogs } from "./catalogs.js";
 import { checkText, inputFormatOf } from "./deck.js";
 
 declare const OPF_VERSION: string;
@@ -17,7 +18,7 @@ export const VALIDATE_USAGE = `  opf validate <file|-> [--config <local-json-fil
 
 const usage = `${VALIDATE_USAGE}
 
-The one checker for an OPF presentation: format (JSON syntax, duplicate keys, schema), references (catalog ids,
+The one checker for an OPF presentation: format (JSON syntax, duplicate keys, schema), references (catalog references,
 assets, citations, datasets), policy (host contracts), accessibility, layout and content. Findings have stable rule ids
 (opf/text-contrast), a severity, a category and a JSON Pointer path; with a file they carry line and column. Only format,
 references and policy produce errors by default, so "valid"
@@ -136,6 +137,9 @@ export async function runValidate(args: string[]): Promise<void> {
 	if (configFile === "-") throw new ValidateUsageError("The validate configuration must be an explicit local JSON file.");
 	const configRaw = configFile ? await readFile(configFile, "utf8").catch((error: unknown) => { throw new ValidateUsageError(`Cannot read ${configFile}: ${(error as Error).message}`); }) : undefined;
 	const options: ValidateOptions = configRaw ? loadConfig(configRaw, configFile as string) : {};
+	// The CLI registers the default catalog after any catalog the configuration names (the first is the host default).
+	if (options.catalogs !== undefined && !Array.isArray(options.catalogs)) throw new ValidateUsageError("The validate configuration's catalogs must be an array of catalogs: { source, <kind>: { <id>: record } }.");
+	options.catalogs = cliCatalogs(options.catalogs ?? []);
 	const only = list(flags.get("only")), ignore = list(flags.get("ignore"));
 	checkNames([...only, ...ignore], "--only or --ignore");
 	if (flags.has("only")) options.only = only;

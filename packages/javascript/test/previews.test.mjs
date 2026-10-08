@@ -7,7 +7,7 @@ import {
   hasLayoutPreview,
   layoutPreviewIndex,
   layoutPreviews,
-} from "../dist/previews.js";
+} from "../dist/catalog.js";
 
 describe("layoutPreviews export", () => {
   test("is a non-empty record of HTML strings", () => {

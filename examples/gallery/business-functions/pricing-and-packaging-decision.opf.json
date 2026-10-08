@@ -3,16 +3,16 @@
   "name": "Pricing and Packaging Decision",
   "description": "Pricing and Packaging Decision is a fictional OPF example for pricing teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "pricing-and-packaging-decision",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "marketing",
+    "technical",
     {
-      "id": "board",
+      "id": "candidates",
       "attentionBudgetMinutes": 29,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "early-startup-pitch"
+        "what-so-what-now-what"
       ],
       "recommendedTones": [
         "persuasive"
@@ -74,7 +74,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "right",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -99,10 +99,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -137,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-with-markers",
+        "type": "stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -307,7 +303,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line",
+            "type": "100pct-stacked-column",
             "data": {
               "columns": [
                 "Quarter",
@@ -499,15 +495,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "pricing-and-packaging-decision-arc",
+    "custom": {
+      "narratives": {
+        "pricing-and-packaging-decision-arc": {
           "name": "Pricing Decision Arc",
           "summary": "A custom arc for Northbeam Software.",
           "description": "Pricing and Packaging Decision uses a compact evidence-to-decision arc for Northbeam Software.",
@@ -532,13 +522,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "northbeam-software-theme",
+      },
+      "themes": {
+        "northbeam-software-theme": {
           "name": "Northbeam Software Working Theme",
           "colorScheme": "corporate-blue",
           "fontScheme": "noto-sans-gujarati",
@@ -551,14 +537,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "northbeam-software-signal",
+      },
+      "colorSchemes": {
+        "northbeam-software-signal": {
           "name": "Northbeam Software Signal Palette",
           "accent1": "#0F172A",
           "accent2": "#1D4ED8",
@@ -573,31 +554,469 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        },
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        }
+      },
+      "purposes": {
+        "educate": {
+          "name": "Educate",
+          "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+          "description": "Use when the primary job is learning. Structure around concepts, examples, practice, and checks for understanding rather than persuasion or reporting.",
+          "outcome": "The audience understands the material well enough to apply it.",
+          "successCriteria": [
+            "Definitions and examples are clear",
+            "Audience can apply the concept",
+            "Complexity builds progressively"
+          ],
+          "recommendedNarratives": [
+            "educate",
+            "focus",
+            "company-intro"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "technical"
+          ],
+          "tags": [
+            "learning",
+            "training",
+            "enablement"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-gujarati": {
+          "name": "Noto Sans Gujarati",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "gu"
+          ],
+          "major": "Noto Sans Gujarati",
+          "minor": "Noto Sans Gujarati",
+          "textSample": "આ સારી સ્થિતિ છે",
+          "type": "sans-serif",
+          "description": "Noto Sans Gujarati is a sans serif OPF font scheme for complex script presentations, using Noto Sans Gujarati for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "number-6x": {
+          "name": "Number 6x",
+          "summary": "Reach for it when a dashboard-style set of six figures belongs on one slide.",
+          "description": "A title above six metrics in a three-column grid. Use it for a full scorecard or a summary of six measures at a glance.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Grid"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-6x.svg"
+          }
+        },
+        "media-1x": {
+          "name": "Media 1x",
+          "summary": "Reach for it when a video is the content and a short note frames it.",
+          "description": "A title above one video with a text block beside it. Use it for a product demo, a customer clip or a recording the audience should watch.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "video"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Video",
+            "Demo",
+            "Showcase"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/media-1x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        }
+      }
     }
   }
 }

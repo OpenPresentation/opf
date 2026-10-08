@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-audience/v1",
   "title": "Audience",
-  "description": "Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) → catalogs.audiences.source → the default catalog at https://www.pptx.gallery/audiences. The audience field also accepts free-form strings; this catalog is for engine-aware audience archetypes that carry generation hints.",
+  "description": "Schema for audience records. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Documents reference an audience from 'audience', which also accepts free-form text.\n\nA document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' and 'id'; the copy a document embeds under catalogs.<group>.<kind>.<id> carries neither (the key is the id) and no 'x-*' display metadata.",
   "type": "object",
   "required": [
     "$schema",
@@ -13,12 +13,12 @@
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-audience/v1",
-      "description": "Identifies this record as an audience in the openpresentation.org catalog."
+      "description": "Identifies a published record file as a audience record. Required in a published file; an embedded copy omits it."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this audience via audience. Lowercase kebab-case.",
+      "description": "The audience's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "executive",
         "board",
@@ -47,27 +47,6 @@
         "Candidates",
         "Regulators"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this audience is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated audience record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "summary": {
       "type": "string",
@@ -125,7 +104,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Soft cross-link: narrative-catalog ids that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Validators warn on unknown ids; never error.",
+      "description": "Soft cross-link: ids of narratives in the same catalog that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Never resolved, embedded or validated as references.",
       "examples": [
         ["scqa", "board-meeting", "qbr"]
       ]
@@ -135,7 +114,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Soft cross-link: tone-catalog ids that work well for this audience.",
+      "description": "Soft cross-link: ids of tones in the same catalog that work well for this audience. Never resolved, embedded or validated as references.",
       "examples": [
         ["formal", "authoritative"]
       ]

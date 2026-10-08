@@ -261,7 +261,7 @@ npm install @openpresentation/opf@X.Y.Z
 node --input-type=module -e "import {validate} from '@openpresentation/opf'; console.log(validate({name:'t', narrative:'not-a-real-id', slides:[{title:'t'}]}, {only:['format','references']}).findings)"
 ```
 
-The expected result is one warning about an unknown narratives catalog id.
+The expected result is one `opf/unresolved-reference` warning for the narrative (no catalog is registered).
 
 ## GitHub Release Notes
 

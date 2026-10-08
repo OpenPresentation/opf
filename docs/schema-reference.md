@@ -19,22 +19,22 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (Organization.role 'primary', else the first item) su... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. The first speaker is the primary speaker: the built-in variables 'speaker.<field>' and the 'speaker' header/footer field read it, 'speake... |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
-| `audience` | no | `oneOf:string / ref:Audience / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts any of: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference. - A singl... |
-| `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string shorthand: free-form goal ('Raise a Series B round of $30M'), a purposes catalog id ('decide', 'align'), an HTTPS URL, or a 'pkg:' reference. - An inline Pu... |
-| `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
-| `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
+| `audience` | no | `oneOf:string / ref:Audience / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts any of: - A single string: an audiences reference ('executive', or 'acme:board' for a record of the catalogs.acme group), or free-form text ('Series B investors'). A st... |
+| `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string: a purposes reference ('decide', or 'acme:fundraise' for a record of the catalogs.acme group), or a free-form goal ('Raise a Series B round of $30M'). A str... |
+| `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of the presentation content, an engine vocabulary: a BCP-47 language tag, validated directly with no catalog lookup. Accepts either: - A BCP-47 tag ('en-US', 'en-GB', 'ja', 'zh-Hans', 'ar-SA'). - An inline La... |
+| `tone` | no | `oneOf:ref:CatalogReference / ref:Tone` | Desired tone for the presentation. Accepts either: - A tones reference: a bare id ('formal') or 'name:id' for a record of a named catalogs group. - An inline Tone object for custom tone metadata or overrides on a refe... |
 | `takeaway` | no | `oneOf:string / array<string>` | Audience-facing takeaway the presentation should leave behind. Array form supports multiple takeaways. Deck-level intent used by AI to seed and pressure-test slide content. |
 | `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core validate warns when it lies outside the resolved narrative's 'duration' range.... |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
 | `variables` | no | `ref:Variables` | Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables a... |
 | `template` | no | `boolean` | Marks this document as a template: an incomplete OPF file. A template declares variables (top-level 'variables') and references them from content, and may leave required variables unfilled; validation then reports the... |
-| `narrative` | no | `string` | The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the p... |
+| `narrative` | no | `ref:CatalogReference` | The deck's narrative plan, by reference: a bare narratives id ('classic-story') or 'name:id' for a record of a named catalogs group ('acme:founder-pitch'). The deck holds only this pointer; the plan (the arc, its beat... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
-| `catalogs` | no | `ref:Catalogs` | Optional per-kind catalog overrides. Each kind may declare a non-default 'source' and/or inline 'records' that override or supplement the default catalog at https://www.pptx.gallery/<kind>. References elsewhere in the... |
+| `catalogs` | no | `ref:Catalogs` | The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', ref... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
 ## Object And Type Reference
@@ -61,12 +61,12 @@ _No named properties._
 
 - Type: `anyOf:schema / schema`
 - Required fields: none
-- Purpose: Inline audience metadata for the presentation. Use 'id' to reference an audiences catalog record and override selected fields, or use 'name' for a custom inline audience.
+- Purpose: Inline audience metadata for the presentation. Use 'id' to reference an audiences record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline audience.
 - Conditional requirement: `id` or `name`
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Optional audiences catalog id to resolve before applying inline overrides. |
+| `id` | no | `ref:CatalogReference` | Optional audiences reference (a bare id or 'name:id') resolved before applying the inline overrides. |
 | `name` | no | `string` | Human-readable audience name shown in pickers. |
 | `summary` | no | `string` | One-sentence positioning of the audience. |
 | `description` | no | `string` | Longer prose describing the audience and how to address them. |
@@ -74,8 +74,8 @@ _No named properties._
 | `technicalFluency` | no | `enum:low \| medium \| high \| mixed` | Typical technical fluency of the audience. |
 | `decisionPower` | no | `enum:informational \| advisory \| decision-maker` | Whether the audience is expected to be informed, advise, or decide. |
 | `attentionBudgetMinutes` | no | `number` | Realistic upper bound on focused attention for a single presentation, in minutes. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this audience. |
-| `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this audience. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative ids that work well for this audience, for picker UIs. Never resolved, embedded or validated as references. |
+| `recommendedTones` | no | `array<string>` | Soft cross-link: tone ids that work well for this audience, for picker UIs. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 
 
@@ -83,40 +83,38 @@ _No named properties._
 
 - Type: `anyOf:schema / schema`
 - Required fields: none
-- Purpose: Inline purpose metadata for the presentation. Use 'id' to reference a purposes catalog record and override selected fields, or use 'name' for a custom inline purpose.
+- Purpose: Inline purpose metadata for the presentation. Use 'id' to reference a purposes record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline purpose.
 - Conditional requirement: `id` or `name`
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Optional purposes catalog id to resolve before applying inline overrides. |
+| `id` | no | `ref:CatalogReference` | Optional purposes reference (a bare id or 'name:id') resolved before applying the inline overrides. |
 | `name` | no | `string` | Human-readable purpose name shown in pickers. |
 | `summary` | no | `string` | One-sentence positioning of the purpose. |
 | `description` | no | `string` | Longer prose describing when to use this purpose and how it should shape a deck. |
 | `outcome` | no | `string` | Desired audience outcome after the presentation. |
 | `successCriteria` | no | `array<string>` | Observable signals that the deck accomplished this purpose. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this purpose. |
-| `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this purpose. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative ids that work well for this purpose, for picker UIs. Never resolved, embedded or validated as references. |
+| `recommendedTones` | no | `array<string>` | Soft cross-link: tone ids that work well for this purpose, for picker UIs. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 
 
 ### Language
 
-- Type: `anyOf:schema / schema`
-- Required fields: none
-- Purpose: Inline language metadata for the presentation. Use 'id' to reference a languages catalog record and override selected fields, or use 'bcp47' for a custom language tag without a catalog record.
-- Conditional requirement: `id` or `bcp47`
+- Type: `object`
+- Required fields: `bcp47`
+- Purpose: Inline language metadata for the presentation: a BCP-47 'bcp47' tag plus overrides of what engines know about it. Languages are an engine vocabulary, not catalog records, so there is no 'id'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Optional languages catalog id to resolve before applying inline overrides. |
 | `name` | no | `string` | Human-readable language name. |
-| `bcp47` | no | `string` | BCP-47 language tag used for locale-aware rendering, proofing, and accessibility metadata. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form. |
-| `ooxmlLang` | no | `string` | Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engine... |
+| `bcp47` | yes | `ref:LanguageTag` | BCP-47 language tag used for locale-aware rendering, proofing, and accessibility metadata. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form. |
+| `ooxmlLang` | no | `string` | Culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Without it, en... |
 | `code` | no | `string` | ISO 639-3 or 639-2 language code carried for engines that prefer ISO codes. |
 | `direction` | no | `enum:ltr \| rtl` | Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi... |
 | `script` | no | `string` | ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsia... |
-| `fontScheme` | no | `string` | Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language'... |
-| `googleFontScheme` | no | `string` | Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resol... |
+| `fontScheme` | no | `ref:CatalogReference` | Font-scheme reference (a bare id or 'name:id') for this language's script slot when targeting PowerPoint output. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script'... |
+| `googleFontScheme` | no | `ref:CatalogReference` | Font-scheme reference (a bare id or 'name:id') used in place of 'fontScheme' when resolving script fonts for Google Slides output. |
 | `summary` | no | `string` | One-sentence note about coverage or font defaults. |
 | `description` | no | `string` | Longer prose describing the language record and any font-pairing rationale. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
@@ -126,19 +124,19 @@ _No named properties._
 
 - Type: `anyOf:schema / schema`
 - Required fields: none
-- Purpose: Inline tone metadata for the presentation. Use 'id' to reference a tones catalog record and override selected fields, or use 'name' for a custom inline tone.
+- Purpose: Inline tone metadata for the presentation. Use 'id' to reference a tones record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline tone.
 - Conditional requirement: `id` or `name`
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Optional tones catalog id to resolve before applying inline overrides. |
+| `id` | no | `ref:CatalogReference` | Optional tones reference (a bare id or 'name:id') resolved before applying the inline overrides. |
 | `name` | no | `string` | Human-readable tone name shown in pickers. |
 | `summary` | no | `string` | One-sentence positioning of the tone. |
 | `description` | no | `string` | Longer prose describing the tone and the kinds of decks it suits. |
 | `voiceCues` | no | `array<string>` | Short directives that shape AI generation toward this tone. |
 | `avoid` | no | `array<string>` | Anti-patterns that AI generation should not produce when this tone is active. |
 | `samplePhrases` | no | `array<string>` | Short example phrases that exemplify this tone. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids this tone pairs well with. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative ids this tone pairs well with, for picker UIs. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 
 
@@ -185,7 +183,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern and handle prefix that engines use to render and link the profile URL, plus brand color and themed icons as catalog metadata for authoring UIs (engines render the profile URL, not icons or brand colors). Keys resolve to the 'id' of a 'socialPlatforms' catalog record. Re...
+- Purpose: Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colours and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colours. Used both for organization and speaker records.
 
 _No named properties._
 
@@ -198,11 +196,11 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `theme` | no | `oneOf:string / ref:Theme` | Theme for the deck. Accepts two forms: - String shorthand: 'design.theme = "minimal"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'themes' catalog record. - Object form: a Theme with an optional... |
-| `colorScheme` | no | `oneOf:string / ref:ColorScheme` | Color scheme for the presentation. Accepts two forms: - String shorthand: 'design.colorScheme = "cool-horizon"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'colorSchemes' catalog record. - Objec... |
-| `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - String shorthand: 'design.fontScheme = "aptos"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'fontSchemes' catalog recor... |
+| `theme` | no | `ref:CatalogReference` | Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, d... |
+| `colorScheme` | no | `oneOf:string / ref:ColorScheme` | Color scheme for the presentation. Accepts two forms: - A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean'). - Object form: a ColorScheme with an optional 'id' reference as the base plus s... |
+| `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
-| `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
+| `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
 | `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
@@ -210,30 +208,10 @@ _No named properties._
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.titleAlignment, then the engine default. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.contentAlignment, then the engine default. A cove... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' i... |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mod... |
-| `imageFill` | no | `enum:crop \| fit` | How images fill their allocated region: crop covers the region, fit shows the whole image. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFill, then the engine default. |
+| `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch'... |
 | `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'i... |
-
-
-### Theme
-
-- Type: `object`
-- Required fields: none
-- Purpose: Theme bundle used by the design system. In design.theme, 'id' resolves a themes catalog record as the base; any sibling fields override the resolved theme. The string shorthand on design.theme is equivalent to setting only 'id'.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | no | `string` | Theme reference. Resolves to the 'id' of a 'themes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'minimal'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Field overrides on the surro... |
-| `name` | no | `string` | Human-readable theme name shown in pickers. |
-| `summary` | no | `string` | One-sentence positioning of the theme - when to reach for it. |
-| `description` | no | `string` | Longer prose describing what the theme looks and feels like and the kinds of decks it suits. |
-| `colorScheme` | no | `oneOf:string / ref:ColorScheme` | Default color scheme for this theme. A string resolves against catalogs.colorSchemes; an object may provide an 'id' base reference plus overrides. |
-| `fontScheme` | no | `oneOf:string / ref:FontScheme` | Default font scheme for this theme. A string resolves against catalogs.fontSchemes; an object may provide an 'id' base reference plus overrides. |
-| `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default background for this theme. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors. |
-| `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Default slide size for this theme. A string preset is equivalent to { preset: value }. |
-| `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 
 
 ### ColorScheme
@@ -244,7 +222,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Color scheme reference. Resolves to the 'id' of a 'colorSchemes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'cool-horizon'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Slot and r... |
+| `id` | no | `ref:CatalogReference` | Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme. |
 | `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
 | `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
 | `accent3` | no | `ref:HexColor` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
@@ -274,7 +252,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | no | `string` | Font scheme reference. Resolves to the 'id' of a 'fontSchemes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'aptos'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Field overrides on... |
+| `id` | no | `ref:CatalogReference` | Font-scheme reference (a bare id or 'name:id') resolved as the base; field overrides on the surrounding FontScheme object take precedence over the resolved scheme. |
 | `major` | no | `string` | Heading (major) font family mirrors the OOXML majorFont entry. Pairs with 'minor'. |
 | `minor` | no | `string` | Body (minor) font family mirrors the OOXML minorFont entry. Pairs with 'major'. |
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
@@ -285,7 +263,7 @@ _No named properties._
 | `heading` | no | `string` | Abstract role: font family name used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `string` | Abstract role: font family name used for body copy. Maps onto the OOXML minor slot when serializing. |
 | `accent` | no | `string` | Abstract role: font family name used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns... |
-| `code` | no | `string` | Abstract role: monospaced font family name used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas... |
+| `code` | no | `string` | Abstract role: monospaced font family name used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved font-scheme record's 'code' (for example Cons... |
 
 
 ### SlideDesign
@@ -489,9 +467,18 @@ _No named properties._
 
 ### BackgroundShortcut
 
-- Type: `oneOf:ref:ThemeBackgroundSlot / ref:HexColor`
+- Type: `oneOf:ref:ThemeBackgroundSlot / ref:HexColor / ref:ImageSource`
 - Required fields: none
-- Purpose: String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }.
+- Purpose: String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }; an image source (starting with 'asset:', 'https://', 'data:', './' or '../') is equivalent to { type: 'image', src: value }, a cover image. Any other string is invalid.
+
+_No named properties._
+
+
+### ImageSource
+
+- Type: `string`
+- Required fields: none
+- Purpose: An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).
 
 _No named properties._
 
@@ -546,14 +533,79 @@ _No named properties._
 ### ImageBackground
 
 - Type: `object`
-- Required fields: `type`, `image`
-- Purpose: Fixed image slide background fill.
+- Required fields: `type`, `src`
+- Purpose: Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `const:"image"` | Fixed image background fill. |
-| `image` | yes | `object` | Image fill definition. |
-| `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
+| `type` | yes | `const:"image"` | Picture background. |
+| `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
+| `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
+| `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
+| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
+| `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
+| `overlay` | no | `ref:Overlay` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. |
+
+
+### ImageFocus
+
+- Type: `object`
+- Required fields: `x`, `y`
+- Purpose: A point of a picture as fractions of its width and height, from the top-left corner. A cover fit centers this point in the frame as far as the picture still covers the frame, so it always stays in view: { x: 0.5, y: 0.5 } (the default) is a center crop, { x: 0, y: 0 } keeps the top-left corner.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `x` | yes | `number` | Horizontal position, 0 (left edge) to 1 (right edge). |
+| `y` | yes | `number` | Vertical position, 0 (top edge) to 1 (bottom edge). |
+
+
+### Overlay
+
+- Type: `object`
+- Required fields: `color`, `opacity`
+- Purpose: Solid scrim over a picture: the whole frame in the frame's shape, or a band along one edge. Shared by image backgrounds and image blocks. Drawn directly above its picture and beneath headings and content; PowerPoint export writes one native shape above the picture.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `ref:ColorRef` | Overlay fill color: a hex color (eight-digit hex keeps its alpha), a color-scheme slot or role name, or a 'var:<id>' variable reference. |
+| `opacity` | yes | `number` | Overlay fill opacity. |
+| `edge` | no | `enum:top \| bottom \| left \| right` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
+| `size` | no | `number` | Band share of the frame for an edge overlay. Default 0.3. Ignored without edge. |
+
+
+### ImagePlacement
+
+- Type: `object`
+- Required fields: `edge`
+- Purpose: Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge; a layout's image placeholder may carry the same placement for the slide's image. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a ba...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. |
+| `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
+| `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false. |
+
+
+### ImageBorder
+
+- Type: `object`
+- Required fields: `color`, `width`
+- Purpose: Solid line along the image frame's shape, centered on the outline with a miter join, like a native picture line. A thick dark border on a rounded portrait frame gives a device bezel.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `ref:ColorRef` | Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
+| `width` | yes | `number` | Line width in reference pixels at a 720-pixel short edge. 0 removes the line. |
+
+
+### ImageRecolor
+
+- Type: `oneOf:const:"grayscale" / object`
+- Required fields: none
+- Purpose: Color treatment for the image pixels. Luminance uses Rec. 601 weights (0.299, 0.587, 0.114) on sRGB values.
+
+_No named properties._
 
 
 ### PatternBackground
@@ -649,7 +701,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
-| `layout` | no | `string` | Optional. Resolves to the 'id' of a 'layouts' catalog record. When omitted, or when it names an id that no inline record, host catalog or default catalog defines, the slide is composed with no layout record: engines a... |
+| `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('title-subtitle') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically,... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a ci... |
 | `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, b... |
 | `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link,... |
@@ -657,7 +709,7 @@ _No named properties._
 | `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks. |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
-| `image` | no | `ref:Asset` | Full-slide image source. Presence of this field infers type 'image'. |
+| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A layout's image placeholder may place it along an edge (placement). For f... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
@@ -739,6 +791,16 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `image` | no | `ref:Asset` | Source for an image item. |
+| `fit` | no | `enum:cover \| contain \| stretch` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered; 'stretch' scales it to the frame exactly. Default: the effectiv... |
+| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
+| `shape` | no | `enum:rectangle \| rounded \| circle \| hexagon` | Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'. |
+| `cornerRadius` | no | `number` | Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default. |
+| `border` | no | `ref:ImageBorder` | Image payloads only. Line along the frame's shape. |
+| `opacity` | no | `number` | Image payloads only. Picture opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1. |
+| `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
+| `overlay` | no | `ref:Overlay` | Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame. |
+| `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
@@ -908,7 +970,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
+| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types Aspose.Slides officially supports, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engin... |
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
@@ -1170,40 +1232,65 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Catalog overrides for the in-document references. Every property is optional. The default catalog for a kind lives at https://www.pptx.gallery/<kind> (e.g. https://www.pptx.gallery/narratives, https://www.pptx.gallery/themes). pptx.gallery is its canonical publisher: GET https://www.pptx.gallery/<kind>/index.json (or https://www.pptx.gallery/<kind> with Accept: application/json) returns a catalog index (https://openpresentation.org/schema/opf-catalog-index/v1) and https://www.pptx.gallery/<ki...
+- Purpose: The catalog records a document embeds, grouped by the catalog they came from. Each property is a group; inside a group, records are keyed by kind and then by id. - 'default': the catalog bare ids come from. It needs a 'source' when it holds records. Omitted: bare ids fall back to the host's default catalog. false: no catalog fallback, so every bare id must be embedded (under 'custom' or 'default'). - 'custom': the records the document defines itself. It has no source. - any other name ('acme'...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `narratives` | no | `ref:CatalogEntry` | Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative goes in 'catalogs.narratives.records' and is referenced by its id from the root 'narrat... |
-| `themes` | no | `ref:CatalogEntry` | Catalog of themes. Records validate against https://openpresentation.org/schema/opf-theme/v1. Default source: https://www.pptx.gallery/themes. |
-| `colorSchemes` | no | `ref:CatalogEntry` | Catalog of color schemes. Records validate against https://openpresentation.org/schema/opf-color-scheme/v1. Default source: https://www.pptx.gallery/color-schemes. |
-| `fontSchemes` | no | `ref:CatalogEntry` | Catalog of font schemes. Records validate against https://openpresentation.org/schema/opf-font-scheme/v1. Default source: https://www.pptx.gallery/font-schemes. |
-| `languages` | no | `ref:CatalogEntry` | Catalog of languages. Records validate against https://openpresentation.org/schema/opf-language/v1. Default source: https://www.pptx.gallery/languages. |
-| `layouts` | no | `ref:CatalogEntry` | Catalog of slide layouts. Records validate against https://openpresentation.org/schema/opf-layout/v1. Default source: https://www.pptx.gallery/layouts. |
-| `chartTypes` | no | `ref:CatalogEntry` | Catalog of chart types. Records validate against https://openpresentation.org/schema/opf-chart-type/v1. Default source: https://www.pptx.gallery/chart-types. |
-| `tones` | no | `ref:CatalogEntry` | Catalog of presentation tones. Records validate against https://openpresentation.org/schema/opf-tone/v1. Default source: https://www.pptx.gallery/tones. Referenced from tone. |
-| `purposes` | no | `ref:CatalogEntry` | Catalog of presentation purposes. Records validate against https://openpresentation.org/schema/opf-purpose/v1. Default source: https://www.pptx.gallery/purposes. Referenced from purpose. |
-| `audiences` | no | `ref:CatalogEntry` | Catalog of presentation audiences. Records validate against https://openpresentation.org/schema/opf-audience/v1. Default source: https://www.pptx.gallery/audiences. Referenced from audience. |
-| `socialPlatforms` | no | `ref:CatalogEntry` | Catalog of social-media platforms. Records validate against https://openpresentation.org/schema/opf-social-platform/v1. Default source: https://www.pptx.gallery/social-platforms. Referenced via the property keys of an... |
+| `default` | no | `oneOf:allOf:ref:CatalogGroup + schema / const:false` | The catalog bare ids come from: its source and the records of it this document embeds. false turns off the catalog fallback for bare ids. |
+| `custom` | no | `allOf:ref:CatalogGroup + schema` | Records the document defines itself, referenced by bare id. Checked first for every bare id. Forking a catalog record copies it here under a new id, so the change of ownership is visible. |
 
 
-### CatalogEntry
+### CatalogGroup
 
 - Type: `object`
 - Required fields: none
-- Purpose: A catalog override for one record kind. 'source' replaces the default registry; 'records' adds inline records that take precedence over anything fetched from a source. Either or both may be provided; both omitted means the kind uses its default catalog.
+- Purpose: One catalog group: the catalog's source and the records of it the document embeds, by kind and then by id.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `source` | no | `oneOf:ref:CatalogSource / array<ref:CatalogSource>` | Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Engines never fetch a source. The... |
-| `records` | no | `array<object>` | Inline catalog records embedded in this OPF document. Each record validates against the kind's companion schema (e.g. https://openpresentation.org/schema/opf-narrative/v1 for narratives). Inline records win over anyth... |
+| `source` | no | `ref:CatalogSource` |  |
+| `layouts` | no | `ref:CatalogRecords` | Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v1. Referenced from Slide.layout. |
+| `themes` | no | `ref:CatalogRecords` | Theme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-theme/v1. Referenced from design.theme. |
+| `colorSchemes` | no | `ref:CatalogRecords` | Colour-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme. |
+| `fontSchemes` | no | `ref:CatalogRecords` | Font-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-font-scheme/v1. Referenced from design.fontScheme, a theme's fontScheme and a language's font schemes. |
+| `narratives` | no | `ref:CatalogRecords` | Narrative records keyed by id, each with the fields of https://openpresentation.org/schema/opf-narrative/v1. Referenced from narrative. |
+| `audiences` | no | `ref:CatalogRecords` | Audience records keyed by id, each with the fields of https://openpresentation.org/schema/opf-audience/v1. Referenced from audience. |
+| `purposes` | no | `ref:CatalogRecords` | Purpose records keyed by id, each with the fields of https://openpresentation.org/schema/opf-purpose/v1. Referenced from purpose. |
+| `tones` | no | `ref:CatalogRecords` | Tone records keyed by id, each with the fields of https://openpresentation.org/schema/opf-tone/v1. Referenced from tone. |
 
 
 ### CatalogSource
 
 - Type: `string`
 - Required fields: none
-- Purpose: Catalog source location. Accepts: - A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'. - A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. Index files follow https://openpresentation.org/schema/opf-catalog-index/v1; the default catalog's index is https://www.pptx.gallery/<...
+- Purpose: Identity of a catalog: an HTTPS URL ('https://www.pptx.gallery') or a package reference ('pkg:@acme/opf-catalog'). It names the catalog; engines never fetch or install it. A host registers the catalog's records under this exact string, and copying slides between documents matches groups by it.
+
+_No named properties._
+
+
+### CatalogRecords
+
+- Type: `object`
+- Required fields: none
+- Purpose: Embedded records of one kind, keyed by id. The key is the record's id; an embedded record carries no '$schema', 'id', origin or digest. Catalog display metadata ('x-*' members) is stripped when a record is embedded.
+
+_No named properties._
+
+
+### CatalogReference
+
+- Type: `string`
+- Required fields: none
+- Purpose: A content reference: a bare id ('two-column') or 'name:id' ('acme:hero'), where the prefix names a group of 'catalogs'. URLs and 'pkg:' strings are not references; a named catalog group replaces them. See Catalogs for the resolution order.
+
+_No named properties._
+
+
+### LanguageTag
+
+- Type: `string`
+- Required fields: none
+- Purpose: A BCP-47 language tag ('en-US', 'ja', 'zh-Hans', 'sr-Latn-ME'), an engine vocabulary. Use 'en-GB' for UK English; 'en-UK' is not a valid region.
 
 _No named properties._
 

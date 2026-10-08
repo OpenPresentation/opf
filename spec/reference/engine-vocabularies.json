@@ -1,0 +1,1577 @@
+{
+  "description": "Engine vocabularies of OPF 0.15: the values an engine must understand to draw, validated directly with no catalog lookup. chartTypes are the values of chart.type; socialPlatforms are the keys of Organization.socials and Speaker.socials with the URL patterns engines link a handle with; languages are the BCP-47 tags engines know the script, base direction, OOXML language tag and default script fonts of (any other well-formed tag is accepted, with its script inferred). Labels, descriptions, icons and brand colours are catalog display metadata, published by pptx.gallery and shipped in @openpresentation/opf/catalog. Core compiles this file into its engine code (scripts/generate.mjs).",
+  "chartTypes": [
+    "100pct-stacked-area",
+    "100pct-stacked-bar",
+    "100pct-stacked-column",
+    "area",
+    "bar",
+    "box-and-whisker",
+    "column",
+    "combo",
+    "doughnut",
+    "filled-radar",
+    "funnel",
+    "histogram",
+    "line",
+    "line-with-markers",
+    "pareto",
+    "pie",
+    "radar",
+    "radar-with-markers",
+    "scatter",
+    "stacked-area",
+    "stacked-bar",
+    "stacked-column",
+    "stacked-line",
+    "stacked-line-with-markers",
+    "treemap",
+    "waterfall",
+    "world"
+  ],
+  "socialPlatforms": {
+    "linkedin": {
+      "baseUrl": "https://linkedin.com",
+      "profileUrlPattern": "https://linkedin.com/in/{handle}",
+      "companyUrlPattern": "https://linkedin.com/company/{handle}",
+      "handlePrefix": ""
+    },
+    "x": {
+      "baseUrl": "https://x.com",
+      "profileUrlPattern": "https://x.com/{handle}",
+      "handlePrefix": "@"
+    },
+    "github": {
+      "baseUrl": "https://github.com",
+      "profileUrlPattern": "https://github.com/{handle}",
+      "companyUrlPattern": "https://github.com/{handle}",
+      "handlePrefix": ""
+    },
+    "youtube": {
+      "baseUrl": "https://youtube.com",
+      "profileUrlPattern": "https://youtube.com/@{handle}",
+      "handlePrefix": "@"
+    },
+    "instagram": {
+      "baseUrl": "https://instagram.com",
+      "profileUrlPattern": "https://instagram.com/{handle}",
+      "handlePrefix": "@"
+    },
+    "facebook": {
+      "baseUrl": "https://facebook.com",
+      "profileUrlPattern": "https://facebook.com/{handle}",
+      "companyUrlPattern": "https://facebook.com/{handle}",
+      "handlePrefix": ""
+    },
+    "tiktok": {
+      "baseUrl": "https://tiktok.com",
+      "profileUrlPattern": "https://tiktok.com/@{handle}",
+      "handlePrefix": "@"
+    },
+    "threads": {
+      "baseUrl": "https://threads.net",
+      "profileUrlPattern": "https://threads.net/@{handle}",
+      "handlePrefix": "@"
+    },
+    "mastodon": {
+      "baseUrl": "https://mastodon.social",
+      "profileUrlPattern": "https://mastodon.social/@{handle}",
+      "handlePrefix": "@"
+    },
+    "bluesky": {
+      "baseUrl": "https://bsky.app",
+      "profileUrlPattern": "https://bsky.app/profile/{handle}",
+      "handlePrefix": ""
+    }
+  },
+  "languages": [
+    {
+      "tag": "af",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "af-ZA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sq",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sq-AL",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "am",
+      "script": "Ethi",
+      "direction": "ltr",
+      "ooxmlLang": "am-ET",
+      "fonts": {
+        "powerpoint": {
+          "major": "Nyala",
+          "minor": "Nyala"
+        },
+        "google": {
+          "major": "Noto Sans Ethiopic",
+          "minor": "Noto Sans Ethiopic"
+        }
+      }
+    },
+    {
+      "tag": "ar",
+      "script": "Arab",
+      "direction": "rtl",
+      "ooxmlLang": "ar-SA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Arabic Typesetting",
+          "minor": "Arabic Typesetting"
+        },
+        "google": {
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic"
+        }
+      }
+    },
+    {
+      "tag": "hy",
+      "script": "Armn",
+      "direction": "ltr",
+      "ooxmlLang": "hy-AM",
+      "fonts": {
+        "powerpoint": {
+          "major": "Sylfaen",
+          "minor": "Sylfaen"
+        },
+        "google": {
+          "major": "Noto Sans Armenian",
+          "minor": "Noto Sans Armenian"
+        }
+      }
+    },
+    {
+      "tag": "ay",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ay-BO",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "az",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "az-Latn-AZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "bn",
+      "script": "Beng",
+      "direction": "ltr",
+      "ooxmlLang": "bn-BD",
+      "fonts": {
+        "powerpoint": {
+          "major": "Shonar Bangla",
+          "minor": "Shonar Bangla"
+        },
+        "google": {
+          "major": "Noto Sans Bengali",
+          "minor": "Noto Sans Bengali"
+        }
+      }
+    },
+    {
+      "tag": "ber-Latn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "tzm-Latn-DZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "bs-Latn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "bs-Latn-BA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "bg",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "bg-BG",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "ca",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ca-ES",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ceb",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ceb-PH",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "zh-Hans",
+      "script": "Hans",
+      "direction": "ltr",
+      "ooxmlLang": "zh-CN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Microsoft YaHei",
+          "minor": "Microsoft YaHei"
+        },
+        "google": {
+          "major": "Noto Sans SC",
+          "minor": "Noto Sans SC"
+        }
+      }
+    },
+    {
+      "tag": "zh-Hant",
+      "script": "Hant",
+      "direction": "ltr",
+      "ooxmlLang": "zh-TW",
+      "fonts": {
+        "powerpoint": {
+          "major": "Microsoft JhengHei",
+          "minor": "Microsoft JhengHei"
+        },
+        "google": {
+          "major": "Noto Sans TC",
+          "minor": "Noto Sans TC"
+        }
+      }
+    },
+    {
+      "tag": "ctg",
+      "script": "Beng",
+      "direction": "ltr",
+      "ooxmlLang": "bn-BD",
+      "fonts": {
+        "powerpoint": {
+          "major": "Vrinda",
+          "minor": "Vrinda"
+        },
+        "google": {
+          "major": "Noto Sans Bengali",
+          "minor": "Noto Sans Bengali"
+        }
+      }
+    },
+    {
+      "tag": "hr",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "hr-HR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "cs",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "cs-CZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "da",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "da-DK",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "nl",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "nl-NL",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-US",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en-AU",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-AU",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en-CA",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-CA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en-GB",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-GB",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en-IN",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "en-US",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "en-US",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "et",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "et-EE",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "fil",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "fil-PH",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "fi",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "fi-FI",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "fr",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "fr-FR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ff",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ff-Latn-SN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "gl",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "gl-ES",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ka",
+      "script": "Geor",
+      "direction": "ltr",
+      "ooxmlLang": "ka-GE",
+      "fonts": {
+        "powerpoint": {
+          "major": "Sylfaen",
+          "minor": "Sylfaen"
+        },
+        "google": {
+          "major": "Noto Sans Georgian",
+          "minor": "Noto Sans Georgian"
+        }
+      }
+    },
+    {
+      "tag": "de",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "de-DE",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "el",
+      "script": "Grek",
+      "direction": "ltr",
+      "ooxmlLang": "el-GR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "gu",
+      "script": "Gujr",
+      "direction": "ltr",
+      "ooxmlLang": "gu-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Shruti",
+          "minor": "Shruti"
+        },
+        "google": {
+          "major": "Noto Sans Gujarati",
+          "minor": "Noto Sans Gujarati"
+        }
+      }
+    },
+    {
+      "tag": "ha",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ha-Latn-NG",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "he",
+      "script": "Hebr",
+      "direction": "rtl",
+      "ooxmlLang": "he-IL",
+      "fonts": {
+        "powerpoint": {
+          "major": "David",
+          "minor": "David"
+        },
+        "google": {
+          "major": "Noto Sans Hebrew",
+          "minor": "Noto Sans Hebrew"
+        }
+      }
+    },
+    {
+      "tag": "hi",
+      "script": "Deva",
+      "direction": "ltr",
+      "ooxmlLang": "hi-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Mangal",
+          "minor": "Mangal"
+        },
+        "google": {
+          "major": "Noto Sans Devanagari",
+          "minor": "Noto Sans Devanagari"
+        }
+      }
+    },
+    {
+      "tag": "hu",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "hu-HU",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ig",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ig-NG",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "id",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "id-ID",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "it",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "it-IT",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ja",
+      "script": "Jpan",
+      "direction": "ltr",
+      "ooxmlLang": "ja-JP",
+      "fonts": {
+        "powerpoint": {
+          "major": "Meiryo",
+          "minor": "Meiryo"
+        },
+        "google": {
+          "major": "Noto Sans JP",
+          "minor": "Noto Sans JP"
+        }
+      }
+    },
+    {
+      "tag": "kn",
+      "script": "Knda",
+      "direction": "ltr",
+      "ooxmlLang": "kn-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Tunga",
+          "minor": "Tunga"
+        },
+        "google": {
+          "major": "Noto Sans Kannada",
+          "minor": "Noto Sans Kannada"
+        }
+      }
+    },
+    {
+      "tag": "kk",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "kk-KZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "km",
+      "script": "Khmr",
+      "direction": "ltr",
+      "ooxmlLang": "km-KH",
+      "fonts": {
+        "powerpoint": {
+          "major": "DaunPenh",
+          "minor": "DaunPenh"
+        },
+        "google": {
+          "major": "Noto Sans Khmer",
+          "minor": "Noto Sans Khmer"
+        }
+      }
+    },
+    {
+      "tag": "rw",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "rw-RW",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ko",
+      "script": "Kore",
+      "direction": "ltr",
+      "ooxmlLang": "ko-KR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Malgun Gothic",
+          "minor": "Malgun Gothic"
+        },
+        "google": {
+          "major": "Noto Sans KR",
+          "minor": "Noto Sans KR"
+        }
+      }
+    },
+    {
+      "tag": "kmr",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "kmr-TR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "lv",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "lv-LV",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "lt",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "lt-LT",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "mk",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "mk-MK",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "mg",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "mg-MG",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "zsm",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ms-MY",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ml",
+      "script": "Mlym",
+      "direction": "ltr",
+      "ooxmlLang": "ml-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Kartika",
+          "minor": "Kartika"
+        },
+        "google": {
+          "major": "Noto Sans Malayalam",
+          "minor": "Noto Sans Malayalam"
+        }
+      }
+    },
+    {
+      "tag": "mi",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "mi-NZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "mr",
+      "script": "Deva",
+      "direction": "ltr",
+      "ooxmlLang": "mr-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Mangal",
+          "minor": "Mangal"
+        },
+        "google": {
+          "major": "Noto Sans Devanagari",
+          "minor": "Noto Sans Devanagari"
+        }
+      }
+    },
+    {
+      "tag": "mn",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "mn-MN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans Mongolian",
+          "minor": "Noto Sans Mongolian"
+        }
+      }
+    },
+    {
+      "tag": "ne",
+      "script": "Deva",
+      "direction": "ltr",
+      "ooxmlLang": "ne-NP",
+      "fonts": {
+        "powerpoint": {
+          "major": "Mangal",
+          "minor": "Mangal"
+        },
+        "google": {
+          "major": "Noto Sans Devanagari",
+          "minor": "Noto Sans Devanagari"
+        }
+      }
+    },
+    {
+      "tag": "no",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "nb-NO",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "or",
+      "script": "Orya",
+      "direction": "ltr",
+      "ooxmlLang": "or-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Kalinga",
+          "minor": "Kalinga"
+        },
+        "google": {
+          "major": "Noto Sans Oriya",
+          "minor": "Noto Sans Oriya"
+        }
+      }
+    },
+    {
+      "tag": "om",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "om-ET",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ps",
+      "script": "Arab",
+      "direction": "rtl",
+      "ooxmlLang": "ps-AF",
+      "fonts": {
+        "powerpoint": {
+          "major": "Arial Black",
+          "minor": "Arial"
+        },
+        "google": {
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic"
+        }
+      }
+    },
+    {
+      "tag": "fa",
+      "script": "Arab",
+      "direction": "rtl",
+      "ooxmlLang": "fa-IR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Arabic Typesetting",
+          "minor": "Arabic Typesetting"
+        },
+        "google": {
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic"
+        }
+      }
+    },
+    {
+      "tag": "pl",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "pl-PL",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "pt",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "pt-BR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "pa-Guru",
+      "script": "Guru",
+      "direction": "ltr",
+      "ooxmlLang": "pa-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Raavi",
+          "minor": "Raavi"
+        },
+        "google": {
+          "major": "Noto Sans Gurmukhi",
+          "minor": "Noto Sans Gurmukhi"
+        }
+      }
+    },
+    {
+      "tag": "pa-Arab",
+      "script": "Arab",
+      "direction": "rtl",
+      "ooxmlLang": "pa-Arab-PK",
+      "fonts": {
+        "powerpoint": {
+          "major": "Arial Black",
+          "minor": "Arial"
+        },
+        "google": {
+          "major": "Noto Nastaliq Urdu",
+          "minor": "Noto Nastaliq Urdu"
+        }
+      }
+    },
+    {
+      "tag": "ro",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "ro-RO",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "ru",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "ru-RU",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "sr-Cyrl",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "sr-Cyrl-RS",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "sr-Latn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sr-Latn-RS",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sn-Latn-ZW",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sk",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sk-SK",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sl",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sl-SI",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "so",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "so-SO",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "es",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "es-ES",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sw",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sw-KE",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "sv",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "sv-SE",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "tl",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "fil-PH",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "tg",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "tg-Cyrl-TJ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "ta",
+      "script": "Taml",
+      "direction": "ltr",
+      "ooxmlLang": "ta-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Latha",
+          "minor": "Latha"
+        },
+        "google": {
+          "major": "Noto Sans Tamil",
+          "minor": "Noto Sans Tamil"
+        }
+      }
+    },
+    {
+      "tag": "te",
+      "script": "Telu",
+      "direction": "ltr",
+      "ooxmlLang": "te-IN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Gautami",
+          "minor": "Gautami"
+        },
+        "google": {
+          "major": "Noto Sans Telugu",
+          "minor": "Noto Sans Telugu"
+        }
+      }
+    },
+    {
+      "tag": "th",
+      "script": "Thai",
+      "direction": "ltr",
+      "ooxmlLang": "th-TH",
+      "fonts": {
+        "powerpoint": {
+          "major": "Angsana New",
+          "minor": "Angsana New"
+        },
+        "google": {
+          "major": "Noto Sans Thai",
+          "minor": "Noto Sans Thai"
+        }
+      }
+    },
+    {
+      "tag": "tr",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "tr-TR",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "uk",
+      "script": "Cyrl",
+      "direction": "ltr",
+      "ooxmlLang": "uk-UA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Noto Sans",
+          "minor": "Noto Sans"
+        }
+      }
+    },
+    {
+      "tag": "ur",
+      "script": "Arab",
+      "direction": "rtl",
+      "ooxmlLang": "ur-PK",
+      "fonts": {
+        "powerpoint": {
+          "major": "Arabic Typesetting",
+          "minor": "Arabic Typesetting"
+        },
+        "google": {
+          "major": "Noto Nastaliq Urdu",
+          "minor": "Noto Nastaliq Urdu"
+        }
+      }
+    },
+    {
+      "tag": "uz-Latn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "uz-Latn-UZ",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "vi-Latn",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "vi-VN",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "xh",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "xh-ZA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "yo",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "yo-NG",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    },
+    {
+      "tag": "zu",
+      "script": "Latn",
+      "direction": "ltr",
+      "ooxmlLang": "zu-ZA",
+      "fonts": {
+        "powerpoint": {
+          "major": "Aptos Display",
+          "minor": "Aptos"
+        },
+        "google": {
+          "major": "Roboto",
+          "minor": "Roboto"
+        }
+      }
+    }
+  ]
+}

@@ -3,16 +3,16 @@
   "name": "Tax Portal Modernization",
   "description": "Tax Portal Modernization is a fictional OPF example for tax administration teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "tax-portal-modernization",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "regulatory",
+    "sales",
     {
-      "id": "candidates",
+      "id": "board",
       "attentionBudgetMinutes": 24,
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "board-meeting"
+        "rags-to-riches"
       ],
       "recommendedTones": [
         "casual"
@@ -62,10 +62,8 @@
     "dimensions": "widescreen",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "left",
@@ -73,7 +71,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -136,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "treemap",
         "data": {
           "columns": [
             "Quarter",
@@ -306,7 +300,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-column",
+            "type": "column",
             "data": {
               "columns": [
                 "Quarter",
@@ -359,16 +353,13 @@
     {
       "id": "s79-image",
       "section": "Context",
-      "layout": "image-bleed",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "Tax administration context photo for Department of Revenue Services",
-        "title": "Tax administration context"
-      },
       "design": {
-        "slideImage": "asset:supporting-photo"
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "Tax administration context photo for Department of Revenue Services"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -518,15 +509,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "tax-portal-modernization-arc",
+    "custom": {
+      "narratives": {
+        "tax-portal-modernization-arc": {
           "name": "Tax Administration Decision Arc",
           "summary": "A custom arc for Department of Revenue Services.",
           "description": "Tax Portal Modernization uses a compact evidence-to-decision arc for Department of Revenue Services.",
@@ -551,13 +536,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "department-of-revenue-services-theme",
+      },
+      "themes": {
+        "department-of-revenue-services-theme": {
           "name": "Department of Revenue Services Working Theme",
           "colorScheme": "golden-yellow",
           "fontScheme": "skeena",
@@ -570,14 +551,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "department-of-revenue-services-signal",
+      },
+      "colorSchemes": {
+        "department-of-revenue-services-signal": {
           "name": "Department of Revenue Services Signal Palette",
           "accent1": "#334155",
           "accent2": "#F8FAFC",
@@ -592,31 +568,472 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "golden-yellow": {
+          "name": "Golden Yellow",
+          "accent1": "#FCC82B",
+          "accent2": "#44ADAD",
+          "accent3": "#3E506B",
+          "accent4": "#E23A59",
+          "accent5": "#0F5E8C",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#3D2E02",
+          "followedHyperlink": "#44ADAD",
+          "hyperlink": "#E23A59",
+          "light1": "#FFFFFF",
+          "light2": "#FEFCF0",
+          "summary": "Bright yellow and teal accents for optimistic, high-visibility decks.",
+          "description": "A warm yellow palette balanced by teal and navy. It is expressive, optimistic, and useful for bright public-facing stories.",
+          "tags": [
+            "optimistic",
+            "bright",
+            "friendly",
+            "creative",
+            "visible"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "skeena": {
+          "name": "Skeena",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Skeena Display",
+          "minor": "Skeena",
+          "textSample": "Balanced contemporary style",
+          "type": "sans-serif",
+          "description": "Skeena is a sans serif OPF font scheme for Latin presentations, using Skeena Display for headings with Skeena for body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "number-1x": {
+          "name": "Number 1x",
+          "summary": "Reach for it when one figure is the point of the slide.",
+          "description": "A title above a single large metric. Use it for the headline number of a result, a target or a milestone, with its label.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Focus"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x.svg"
+          }
+        },
+        "number-4x": {
+          "name": "Number 4x",
+          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
+          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Matrix"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

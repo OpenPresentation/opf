@@ -155,7 +155,7 @@ A custom registry can mix inline OPF and relative document URLs:
 }
 ```
 
-Imported documents should contain their required inline catalog records and assets. Inserting namespaces catalog IDs and conflicting asset/slide IDs, preserves the source slides' main design defaults, and leaves existing slides intact. It does not merge presentation-level speakers, organizations, or narrative metadata into the current deck. Open as a presentation to retain the complete source document. Conflicting or unresolved external catalog sources require a self-contained document before insertion.
+Imported documents should embed the catalog records and assets they use. Inserting slides copies their records with core `copySlides`: groups match by `source`, an identical record is reused, a differing `custom` record is renamed `<id>-2` and a differing catalog revision moves into `custom` as `<id>-2`, so the inserted slides look the same and the existing slides stay intact. It does not merge presentation-level speakers, organizations, or narrative metadata into the current deck. Open as a presentation to retain the complete source document.
 
 The reusable npm APIs are browser-safe and independent of the demo UI:
 

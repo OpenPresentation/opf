@@ -5,9 +5,9 @@
   "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "arabic",
-    "urdu",
-    "pashto"
+    "ar",
+    "ur",
+    "ps"
   ],
   "major": "Traditional Arabic",
   "minor": "Traditional Arabic",

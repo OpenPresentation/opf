@@ -3,16 +3,16 @@
   "name": "Defect Escape Reduction Review",
   "description": "Defect Escape Reduction Review is a fictional OPF example for quality assurance teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "defect-escape-reduction-review",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
-    "candidates",
+    "marketing",
     {
-      "id": "investor",
+      "id": "sales",
       "attentionBudgetMinutes": 24,
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "capacity-planning"
+        "trend-analysis"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "capacity-planning",
+  "narrative": "trend-analysis",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -66,7 +66,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "right",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -91,10 +91,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -129,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",
@@ -357,6 +353,455 @@
       "density": "medium",
       "scenario": "defect-escape-reduction-review",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "trend-analysis": {
+          "name": "Trend Analysis",
+          "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next. Useful for market reviews, strategic outlooks, and any deck where the audience must act on a direction-of-travel call.",
+          "audienceFit": [
+            "executives",
+            "analysts",
+            "leadership"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "data-driven",
+            "forecasting",
+            "strategy",
+            "analysis"
+          ],
+          "beats": [
+            {
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
+              "instructions": "Ignite interest, establish significance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "historical-comparison",
+              "name": "Historical Comparison",
+              "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
+              "instructions": "Contrast current and past data",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "pattern-identification",
+              "name": "Pattern Identification",
+              "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
+              "instructions": "Point out recurring outcomes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-prediction",
+              "name": "Future Prediction",
+              "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
+              "instructions": "Predict using established patterns",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
+              "instructions": "Strategies based on prediction",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "implementation",
+              "name": "Implementation",
+              "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
+              "instructions": "Discuss strategy execution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
+              "layout": "title",
+              "instructions": "Summarize key points",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        },
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "authoritative": {
+          "name": "Authoritative",
+          "summary": "Expert, declarative voice for category-defining and analyst-style decks.",
+          "description": "Adopt the perspective of someone who's seen the full landscape and is willing to call it. Use plain declaratives — strong claims with the receipts to back them. Step back from internal-only context and frame in terms the wider industry would recognize.",
+          "voiceCues": [
+            "Use declarative sentences; trust the reader to follow.",
+            "Frame in industry-wide terms, not company-internal language.",
+            "Cite outside sources — analysts, benchmarks, public peers.",
+            "Take a position; avoid 'on the other hand' symmetry without a verdict."
+          ],
+          "avoid": [
+            "Hedging ('we believe', 'in our view') unless deliberately contrasting.",
+            "Internal jargon and unexplained acronyms.",
+            "First-person plural overload — speak for the work, not the team.",
+            "Tentative phrasing that softens strong claims."
+          ],
+          "samplePhrases": [
+            "Agent latency is the bottleneck of the next AI cycle.",
+            "Three categories will absorb 80% of enterprise budget; we're built for the second.",
+            "The benchmarks are public; the gap holds across every comparable workload."
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "pitch-deck",
+            "conference-talk",
+            "marketing-strategy"
+          ],
+          "tags": [
+            "industry",
+            "category",
+            "analyst"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "black-and-white": {
+          "name": "Black & White",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#000000",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#FFFFFF",
+          "summary": "Strict monochrome contrast for formal, document-style decks.",
+          "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+          "tags": [
+            "minimal",
+            "formal",
+            "neutral",
+            "high-contrast",
+            "restrained"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-armenian": {
+          "name": "Noto Sans Armenian",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "hy"
+          ],
+          "major": "Noto Sans Armenian",
+          "minor": "Noto Sans Armenian",
+          "textSample": "Սա հիանալի է",
+          "type": "sans-serif",
+          "description": "Noto Sans Armenian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Armenian for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
     }
   }
 }

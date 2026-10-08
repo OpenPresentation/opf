@@ -3,16 +3,16 @@
   "name": "Enterprise Account Expansion Plan",
   "description": "Enterprise Account Expansion Plan is a fictional OPF example for sales teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "enterprise-account-expansion-plan",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "executive",
+    "investor",
     {
-      "id": "sales",
+      "id": "regulatory",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "qbr"
+        "problem-solution"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "qbr",
+  "narrative": "problem-solution",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -66,7 +66,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -84,10 +84,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -122,7 +118,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "waterfall",
         "data": {
           "columns": [
             "Quarter",
@@ -330,6 +326,461 @@
       "density": "medium",
       "scenario": "enterprise-account-expansion-plan",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "problem-solution": {
+          "name": "Problem → Solution",
+          "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
+          "audienceFit": [
+            "customers",
+            "stakeholders",
+            "executives",
+            "internal-teams"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 30
+          },
+          "tags": [
+            "business",
+            "sales",
+            "general",
+            "proposal"
+          ],
+          "beats": [
+            {
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
+              "layout": "title"
+            },
+            {
+              "id": "problem",
+              "name": "The Problem",
+              "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
+            },
+            {
+              "id": "stakes",
+              "name": "Why It Matters",
+              "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
+            },
+            {
+              "id": "solution",
+              "name": "The Solution",
+              "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
+            },
+            {
+              "id": "mechanism",
+              "name": "How It Works",
+              "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
+            },
+            {
+              "id": "evidence",
+              "name": "Proof",
+              "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
+            },
+            {
+              "id": "ask",
+              "name": "The Ask",
+              "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "external",
+            "capital",
+            "fundraising"
+          ]
+        },
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
+          ]
+        }
+      },
+      "purposes": {
+        "report": {
+          "name": "Report",
+          "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+          "description": "Use for business reviews, project updates, research summaries, and recurring operating cadences. Prioritize the metric, the movement, the reason, and the implication.",
+          "outcome": "The audience understands what happened, why it happened, and what it means.",
+          "successCriteria": [
+            "Key metrics are easy to scan",
+            "Variance and drivers are explained",
+            "Implications are explicit"
+          ],
+          "recommendedNarratives": [
+            "qbr",
+            "business-review",
+            "status-update",
+            "survey-analysis"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical"
+          ],
+          "tags": [
+            "performance",
+            "progress",
+            "findings"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "slate-gray": {
+          "name": "Slate Gray",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#1B1B1B",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#F8F8F8",
+          "summary": "Neutral gray palette for understated executive communication.",
+          "description": "A disciplined gray scale with strong neutral contrast. Use it when the content should feel calm, mature, and analytical.",
+          "tags": [
+            "neutral",
+            "minimal",
+            "mature",
+            "analytical",
+            "restrained"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "khmer-ui": {
+          "name": "Khmer UI",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "km"
+          ],
+          "major": "Khmer UI",
+          "minor": "Khmer UI",
+          "textSample": "ភាសាខ្មែរពិតជាស្រស់ស្អាត",
+          "type": "sans-serif",
+          "description": "Khmer UI is a sans serif OPF font scheme for complex script presentations, using Khmer UI for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

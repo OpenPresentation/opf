@@ -38,5 +38,8 @@
   ],
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/image-3x.svg"
+  },
+  "design": {
+    "imageFit": "contain"
   }
 }

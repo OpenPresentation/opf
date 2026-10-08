@@ -1,12 +1,12 @@
 {
   "name": "Partner Ecosystem Launch Kit",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "board"
+    "investor"
   ],
   "purpose": "pitch",
   "tone": "technical",
-  "narrative": "business-review",
+  "narrative": "transformation-arc",
   "design": {
     "theme": "classic",
     "colorScheme": "vibes",
@@ -18,7 +18,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "pareto",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,380 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "transformation-arc": {
+          "name": "Transformation Arc (Before / After / Bridge)",
+          "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
+          "audienceFit": [
+            "customers",
+            "prospects",
+            "marketing-teams",
+            "general-audience"
+          ],
+          "duration": {
+            "min": 3,
+            "max": 15
+          },
+          "tags": [
+            "marketing",
+            "copywriting",
+            "pitch",
+            "persuasive"
+          ],
+          "beats": [
+            {
+              "id": "before",
+              "name": "Before",
+              "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
+            },
+            {
+              "id": "after",
+              "name": "After",
+              "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
+            },
+            {
+              "id": "bridge",
+              "name": "Bridge",
+              "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
+            },
+            {
+              "id": "ask",
+              "name": "Ask",
+              "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "external",
+            "capital",
+            "fundraising"
+          ]
+        }
+      },
+      "purposes": {
+        "pitch": {
+          "name": "Pitch",
+          "summary": "Present an opportunity and ask for investment, approval, partnership, or sponsorship.",
+          "description": "Use when the deck needs to create interest and move a high-stakes audience toward backing the opportunity. Lead with the opportunity, prove credibility, and make the ask concrete.",
+          "outcome": "The audience agrees to invest, sponsor, approve, or continue the conversation.",
+          "successCriteria": [
+            "Opportunity is clear",
+            "Evidence builds confidence",
+            "Ask and next step are explicit"
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "fundraising",
+            "opportunity",
+            "ask"
+          ]
+        }
+      },
+      "tones": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Precise, evidence-led voice for engineering, research, and product-detail audiences.",
+          "description": "Lead with the question or claim, then walk through the mechanism and the numbers. Use exact terminology; assume the audience can handle and prefers it. Diagrams, tables, and benchmarks are first-class.",
+          "voiceCues": [
+            "State the claim, then the mechanism, then the evidence.",
+            "Use exact terminology — don't soften technical terms for general readability.",
+            "Quote benchmarks with conditions (cold/warm, p50/p95/p99, dataset, hardware).",
+            "Prefer diagrams and tables over prose paragraphs for structural information."
+          ],
+          "avoid": [
+            "Vague claims ('much faster', 'better', 'easier').",
+            "Marketing framing without supporting data.",
+            "Glossing over caveats and tradeoffs.",
+            "Casual register that obscures precision."
+          ],
+          "samplePhrases": [
+            "p95 inference latency is 38ms on a single A100, down from 312ms on the prior runtime.",
+            "We replaced the streaming serializer with a batched protobuf path; throughput rose 4.2× under load.",
+            "The result holds for context windows up to 32k tokens; beyond that, see appendix B."
+          ],
+          "recommendedNarratives": [
+            "challenge-resolution",
+            "innovation",
+            "conference-talk",
+            "status-update"
+          ],
+          "tags": [
+            "technical",
+            "engineering",
+            "research"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "vibes": {
+          "name": "Vibes",
+          "accent1": "#4A1BE4",
+          "accent2": "#B8E109",
+          "accent3": "#95928C",
+          "accent4": "#E48A1B",
+          "accent5": "#9E1BE4",
+          "accent6": "#1BE4A1",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#C30052",
+          "hyperlink": "#0078D7",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "Expressive purple, green, and orange accents for creative decks.",
+          "description": "A vibrant mixed-accent scheme for presentations that need personality, motion, and visual variety.",
+          "tags": [
+            "creative",
+            "playful",
+            "vibrant",
+            "expressive",
+            "distinctive"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-arabic": {
+          "name": "Noto Sans Arabic",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "ar",
+            "ps",
+            "pa-Arab"
+          ],
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic",
+          "textSample": "نص عربي أنيق",
+          "type": "sans-serif",
+          "description": "Noto Sans Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
+    }
+  }
 }

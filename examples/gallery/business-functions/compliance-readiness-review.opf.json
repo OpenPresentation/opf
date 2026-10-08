@@ -3,16 +3,16 @@
   "name": "Compliance Readiness Review",
   "description": "Compliance Readiness Review is a fictional OPF example for compliance teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "compliance-readiness-review",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "regulatory",
+    "academic",
     {
-      "id": "candidates",
+      "id": "customer",
       "attentionBudgetMinutes": 30,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "educate"
+        "board-meeting"
       ],
       "recommendedTones": [
         "technical"
@@ -66,7 +66,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -93,10 +93,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -131,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "pareto",
+        "type": "stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -141,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              26,
+              23
             ],
             [
               "Q2",
-              16,
-              10
+              30,
+              25
             ],
             [
               "Q3",
-              21,
-              13
+              33,
+              27
             ],
             [
               "Q4",
-              26,
-              15
+              37,
+              29
             ]
           ]
         }
@@ -301,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line",
+            "type": "area",
             "data": {
               "columns": [
                 "Quarter",
@@ -513,15 +509,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "compliance-readiness-review-arc",
+    "custom": {
+      "narratives": {
+        "compliance-readiness-review-arc": {
           "name": "Compliance Decision Arc",
           "summary": "A custom arc for Tandem BioSystems.",
           "description": "Compliance Readiness Review uses a compact evidence-to-decision arc for Tandem BioSystems.",
@@ -546,13 +536,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "tandem-biosystems-theme",
+      },
+      "themes": {
+        "tandem-biosystems-theme": {
           "name": "Tandem BioSystems Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "noto-sans-gurmukhi",
@@ -565,14 +551,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "tandem-biosystems-signal",
+      },
+      "colorSchemes": {
+        "tandem-biosystems-signal": {
           "name": "Tandem BioSystems Signal Palette",
           "accent1": "#1D4ED8",
           "accent2": "#047857",
@@ -587,31 +568,475 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
+      }
     },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "audiences": {
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+          "seniority": "mixed",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
+          ]
+        },
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        }
+      },
+      "purposes": {
+        "inform": {
+          "name": "Inform",
+          "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+          "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+          "outcome": "The audience understands the situation and can repeat the important facts.",
+          "successCriteria": [
+            "Audience can summarize the key facts",
+            "No immediate decision is required",
+            "Follow-up questions are about implications, not basic context"
+          ],
+          "recommendedNarratives": [
+            "status-update",
+            "focus",
+            "educate"
+          ],
+          "recommendedTones": [
+            "formal",
+            "conversational"
+          ],
+          "tags": [
+            "awareness",
+            "context",
+            "status"
+          ]
+        }
+      },
+      "tones": {
+        "technical": {
+          "name": "Technical",
+          "summary": "Precise, evidence-led voice for engineering, research, and product-detail audiences.",
+          "description": "Lead with the question or claim, then walk through the mechanism and the numbers. Use exact terminology; assume the audience can handle and prefers it. Diagrams, tables, and benchmarks are first-class.",
+          "voiceCues": [
+            "State the claim, then the mechanism, then the evidence.",
+            "Use exact terminology — don't soften technical terms for general readability.",
+            "Quote benchmarks with conditions (cold/warm, p50/p95/p99, dataset, hardware).",
+            "Prefer diagrams and tables over prose paragraphs for structural information."
+          ],
+          "avoid": [
+            "Vague claims ('much faster', 'better', 'easier').",
+            "Marketing framing without supporting data.",
+            "Glossing over caveats and tradeoffs.",
+            "Casual register that obscures precision."
+          ],
+          "samplePhrases": [
+            "p95 inference latency is 38ms on a single A100, down from 312ms on the prior runtime.",
+            "We replaced the streaming serializer with a batched protobuf path; throughput rose 4.2× under load.",
+            "The result holds for context windows up to 32k tokens; beyond that, see appendix B."
+          ],
+          "recommendedNarratives": [
+            "challenge-resolution",
+            "innovation",
+            "conference-talk",
+            "status-update"
+          ],
+          "tags": [
+            "technical",
+            "engineering",
+            "research"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "deep-purple": {
+          "name": "Deep Purple",
+          "accent1": "#6A1B9A",
+          "accent2": "#7B1FA2",
+          "accent3": "#8E24AA",
+          "accent4": "#9C27B0",
+          "accent5": "#AB47BC",
+          "accent6": "#4A148C",
+          "dark1": "#000000",
+          "dark2": "#2B0B3E",
+          "followedHyperlink": "#6A1B9A",
+          "hyperlink": "#4A148C",
+          "light1": "#FFFFFF",
+          "light2": "#F8F2FC",
+          "summary": "Purple-led palette for innovation and premium positioning.",
+          "description": "A focused purple palette for decks that need to feel creative, distinctive, and premium.",
+          "tags": [
+            "innovative",
+            "creative",
+            "premium",
+            "distinctive",
+            "modern"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-gurmukhi": {
+          "name": "Noto Sans Gurmukhi",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "pa-Guru"
+          ],
+          "major": "Noto Sans Gurmukhi",
+          "minor": "Noto Sans Gurmukhi",
+          "textSample": "ਇਹ ਬਹੁਤ ਸੋਹਣਾ ਹੈ",
+          "type": "sans-serif",
+          "description": "Noto Sans Gurmukhi is a sans serif OPF font scheme for complex script presentations, using Noto Sans Gurmukhi for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "number-1x": {
+          "name": "Number 1x",
+          "summary": "Reach for it when one figure is the point of the slide.",
+          "description": "A title above a single large metric. Use it for the headline number of a result, a target or a milestone, with its label.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "metric"
+            }
+          ],
+          "tags": [
+            "Numbers",
+            "KPIs",
+            "Focus"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x.svg"
+          }
+        },
+        "blank": {
+          "name": "Blank",
+          "summary": "Reach for it when the slide is one hand-built composition with no title or content slots.",
+          "description": "An empty slide with no placeholders. Use it for a full-bleed visual, a diagram you place yourself, or any slide whose content does not follow a title-and-body pattern.",
+          "placeholders": [],
+          "tags": [
+            "Minimal",
+            "Freeform",
+            "Visual"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/blank.svg"
+          }
+        },
+        "image-1x": {
+          "name": "Image 1x",
+          "summary": "Reach for it when one picture deserves the slide, with a caption or explanation.",
+          "description": "A title above one image with a text block beside it. Use it for a product shot, a diagram or a photo that the text refers to.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "image"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Visual",
+            "Showcase",
+            "Detail"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-1x.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        },
+        "code-1x": {
+          "name": "Code 1x",
+          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
+          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "code"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Code",
+            "Demo",
+            "Technical"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

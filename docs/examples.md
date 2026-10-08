@@ -35,9 +35,9 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 - Technical fixtures that isolate validator and renderer behavior.
 - Sparse gallery documents that use shorthand catalog references and a small slide list.
 - Medium documents with schema ids, metadata, organization and speaker records, design overrides, assets, and richer slide payloads.
-- Dense documents with inline `catalogs` sources and records, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, logo sets, watermarks, and extensions.
+- Dense documents with their own records in `catalogs.custom`, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, logo sets, watermarks, and extensions.
 - Mixed content payloads across text, bullets, lists, image, video, chart, table, code, metric, quote, and timeline slides.
-- Catalog references across narratives, layouts, chart types, themes, color schemes, font schemes, languages, audiences, purposes, tones, and social platforms.
+- Catalog references across narratives, layouts, themes, color schemes, font schemes, audiences, purposes and tones, every record embedded under `catalogs.default` or `catalogs.custom`, so each deck validates and renders with no catalog registered; chart types, languages and social platforms as engine vocabularies.
 
 ## Validation
 

@@ -123,7 +123,7 @@
       "properties": {
         "value": { "type": ["string", "number", "boolean", "null"] },
         "label": { "type": "string" },
-        "origin": { "type": "string", "description": "Where the suggestion comes from: `schema`, `built-in`, `loaded`, `document` or `contract`." },
+        "origin": { "type": "string", "description": "Where the suggestion comes from: `schema`, `document` (a record the document embeds), `registered` (a catalog the host registered) or `contract`." },
         "definition": { "type": "string", "description": "Where the suggested record or constraint is defined." }
       }
     },

@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Catalog Overrides",
-  "description": "Technical fixture for document-local catalog sources and inline records.",
+  "description": "Technical fixture for catalog groups: the document defines its own theme, schemes, audience, purpose and tone in catalogs.custom, and takes its narrative from a named catalog group (example:fixture-proof).",
   "audience": [
     {
       "id": "technical-reviewers",
@@ -23,15 +23,10 @@
       "Prefer short exact claims."
     ]
   },
-  "narrative": "fixture-proof",
+  "narrative": "example:fixture-proof",
   "design": {
-    "theme": {
-      "id": "fixture-theme",
-      "name": "Fixture Theme",
-      "colorScheme": "fixture-scheme",
-      "fontScheme": "fixture-fonts",
-      "background": "light1"
-    },
+    "theme": "fixture-theme",
+    "background": "light1",
     "colorScheme": {
       "id": "fixture-scheme",
       "primary": "#0F766E",
@@ -89,12 +84,10 @@
     }
   ],
   "catalogs": {
-    "narratives": {
-      "source": "pkg:@example/opf/narratives",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "fixture-proof",
+    "example": {
+      "source": "pkg:@example/opf-catalog",
+      "narratives": {
+        "fixture-proof": {
           "name": "Fixture Proof",
           "beats": [
             {
@@ -117,24 +110,18 @@
             }
           ]
         }
-      ]
+      }
     },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "fixture-theme",
+    "custom": {
+      "themes": {
+        "fixture-theme": {
           "name": "Fixture Theme",
           "colorScheme": "fixture-scheme",
           "fontScheme": "fixture-fonts"
         }
-      ]
-    },
-    "colorSchemes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "fixture-scheme",
+      },
+      "colorSchemes": {
+        "fixture-scheme": {
           "name": "Fixture Scheme",
           "accent1": "#0F766E",
           "accent2": "#0F172A",
@@ -149,52 +136,36 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
-          "id": "fixture-fonts",
+      },
+      "fontSchemes": {
+        "fixture-fonts": {
           "name": "Fixture Fonts",
           "major": "Aptos Display",
           "minor": "Aptos"
         }
-      ]
-    },
-    "audiences": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-audience/v1",
-          "id": "technical-reviewers",
+      },
+      "audiences": {
+        "technical-reviewers": {
           "name": "Technical Reviewers",
           "technicalFluency": "high",
           "decisionPower": "advisory"
         }
-      ]
-    },
-    "purposes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
-          "id": "technical-approval",
+      },
+      "purposes": {
+        "technical-approval": {
           "name": "Technical Approval",
           "outcome": "Approve the fixture contract"
         }
-      ]
-    },
-    "tones": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-tone/v1",
-          "id": "precise-plain",
+      },
+      "tones": {
+        "precise-plain": {
           "name": "Precise Plain",
           "voiceCues": [
             "Name the object shape before the rationale.",
             "Prefer short exact claims."
           ]
         }
-      ]
+      }
     }
   }
 }

@@ -1,12 +1,12 @@
 {
   "name": "Monthly Board Update",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "board"
+    "all-hands"
   ],
   "purpose": "align",
   "tone": "inspirational",
-  "narrative": "capacity-planning",
+  "narrative": "situation-complication-resolution",
   "design": {
     "theme": "classic",
     "colorScheme": "slate-gray",
@@ -22,7 +22,7 @@
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "left",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image"
   },
   "slides": [
@@ -57,7 +57,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "100pct-stacked-area",
         "data": {
           "columns": [
             "Quarter",
@@ -100,5 +100,345 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "situation-complication-resolution": {
+          "name": "Situation-Complication-Resolution",
+          "summary": "McKinsey-style structure that builds tension before delivering insights.",
+          "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
+          "audienceFit": [
+            "senior-leadership",
+            "consultants",
+            "strategy-teams"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "strategy",
+            "consulting",
+            "minto",
+            "recommendation"
+          ],
+          "beats": [
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Set the scene with relevant background and context everyone agrees on.",
+              "instructions": "State the shared context the audience already accepts.",
+              "type": "list",
+              "layout": "list-1x"
+            },
+            {
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce what has changed or what challenge has emerged.",
+              "instructions": "Introduce the change, risk, or tension.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "question",
+              "name": "Question",
+              "description": "Articulate the key question that the complication raises.",
+              "instructions": "Frame the decision question raised by the complication.",
+              "type": "text",
+              "layout": "title"
+            },
+            {
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver your recommendation or insight that resolves the question.",
+              "instructions": "Deliver the recommendation that resolves the question.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "inspirational",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "company-wide"
+          ]
+        }
+      },
+      "purposes": {
+        "align": {
+          "name": "Align",
+          "summary": "Create shared understanding and commitment across people who need to move together.",
+          "description": "Use when stakeholders need a common view of goals, constraints, priorities, or responsibilities. Emphasize shared language, explicit tradeoffs, and next steps.",
+          "outcome": "Stakeholders leave with the same priorities and operating assumptions.",
+          "successCriteria": [
+            "Teams agree on priorities",
+            "Open disagreements are surfaced",
+            "Owners and next steps are clear"
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "transformation-arc",
+            "business-review"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "alignment",
+            "strategy",
+            "coordination"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "slate-gray": {
+          "name": "Slate Gray",
+          "accent1": "#9E9E9E",
+          "accent2": "#424242",
+          "accent3": "#616161",
+          "accent4": "#757575",
+          "accent5": "#9E9E9E",
+          "accent6": "#212121",
+          "dark1": "#000000",
+          "dark2": "#1B1B1B",
+          "followedHyperlink": "#424242",
+          "hyperlink": "#212121",
+          "light1": "#FFFFFF",
+          "light2": "#F8F8F8",
+          "summary": "Neutral gray palette for understated executive communication.",
+          "description": "A disciplined gray scale with strong neutral contrast. Use it when the content should feel calm, mature, and analytical.",
+          "tags": [
+            "neutral",
+            "minimal",
+            "mature",
+            "analytical",
+            "restrained"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
+    }
+  }
 }

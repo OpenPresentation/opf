@@ -1,12 +1,12 @@
 {
   "name": "School Safety Preparedness Brief",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "all-hands"
+    "partner"
   ],
   "purpose": "plan",
   "tone": "inspirational",
-  "narrative": "pitch-deck",
+  "narrative": "employee-review",
   "design": {
     "theme": "bold",
     "colorScheme": "cool-horizon",
@@ -18,7 +18,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character"
   },
   "slides": [
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-area",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -96,5 +96,376 @@
         "Return with the first progress readout."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "employee-review": {
+          "name": "Employee Review",
+          "summary": "Constructive performance-review arc that recognizes work, gives candid feedback, and sets growth goals together. For one-on-one performance conversations and formal year-end reviews.",
+          "audienceFit": [
+            "employee",
+            "manager",
+            "hr-partner"
+          ],
+          "duration": {
+            "min": 30,
+            "max": 60
+          },
+          "tags": [
+            "workforce",
+            "hr",
+            "review",
+            "manager"
+          ],
+          "beats": [
+            {
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open with the period covered and the spirit of the conversation: collaborative, honest, growth-focused. Frame the meeting so both sides know what to expect.",
+              "layout": "title",
+              "instructions": "Name & date",
+              "type": "text"
+            },
+            {
+              "id": "performance",
+              "name": "Performance",
+              "description": "Review job execution against the role's expectations. Specific examples, dated. Avoid characterizing the person; describe the work and its impact.",
+              "instructions": "Review job execution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "achievements",
+              "name": "Achievements",
+              "description": "Acknowledge what went well. Name the projects, the moves, the moments where the employee made a difference. Specific recognition lands harder than generic praise.",
+              "instructions": "Acknowledge success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Provide constructive feedback grounded in observation. Distinguish patterns from one-offs. Tell the employee something they can act on, not something they can only feel.",
+              "instructions": "Provide positive remarks",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "constructive-criticism",
+              "name": "Constructive Criticism",
+              "description": "Suggest improvements in language that respects the employee's intelligence. Pair each piece of criticism with a concrete example and a specific behavior change you'd like to see.",
+              "instructions": "Suggest improvements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "development-opportunities",
+              "name": "Development Opportunities",
+              "description": "Highlight growth areas and the experiences that could stretch the employee. Frame development as an investment, not a fix.",
+              "instructions": "Highlight growth areas",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "goals",
+              "name": "Goals",
+              "description": "Outline next-period goals together. Specific, measurable, with explicit support. The strongest goals are co-authored, not handed down.",
+              "instructions": "Outline next steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "mentoring",
+              "name": "Mentoring",
+              "description": "Encourage continued learning through mentorship, training, peer pairings. Close the review with the message that growth is a shared responsibility, not a one-way evaluation.",
+              "layout": "title",
+              "instructions": "Encourage continuous learning",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "partner",
+            "channel",
+            "enablement"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "inspirational": {
+          "name": "Inspirational",
+          "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+          "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+          "voiceCues": [
+            "Open with belief; close with action.",
+            "Use rhythm — paired phrases, repetition, deliberate beats.",
+            "Pair every aspirational claim with a concrete proof point.",
+            "Speak in present tense to make the future feel inevitable."
+          ],
+          "avoid": [
+            "Empty hype without evidence.",
+            "Stacked superlatives ('the very best, world-changing, revolutionary').",
+            "Cynical or hedging language.",
+            "Dense data tables — push numbers into supporting slides."
+          ],
+          "samplePhrases": [
+            "We're building the runtime that makes agents feel instant.",
+            "When latency disappears, what becomes possible?",
+            "The next decade of software belongs to teams who treat speed as a feature."
+          ],
+          "recommendedNarratives": [
+            "golden-circle",
+            "conference-talk",
+            "venture-pitch",
+            "company-intro"
+          ],
+          "tags": [
+            "motivational",
+            "keynote",
+            "founder"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-telugu": {
+          "name": "Noto Sans Telugu",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "te"
+          ],
+          "major": "Noto Sans Telugu",
+          "minor": "Noto Sans Telugu",
+          "textSample": "ఇది చక్కనిది",
+          "type": "sans-serif",
+          "description": "Noto Sans Telugu is a sans serif OPF font scheme for complex script presentations, using Noto Sans Telugu for both headings and body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
+    }
+  }
 }

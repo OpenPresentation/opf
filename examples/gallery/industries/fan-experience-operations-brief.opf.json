@@ -3,16 +3,16 @@
   "name": "Fan Experience Operations Brief",
   "description": "Fan Experience Operations Brief is a fictional OPF example for sports venues teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "fan-experience-operations-brief",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
-    "customer",
+    "general-public",
     {
-      "id": "marketing",
+      "id": "media",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "product-launch"
+        "persuasive-sales"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "product-launch",
+  "narrative": "persuasive-sales",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,7 +74,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "top",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -99,10 +99,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -137,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "stacked-line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -345,6 +341,488 @@
       "density": "medium",
       "scenario": "fan-experience-operations-brief",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "persuasive-sales": {
+          "name": "Persuasive Sales",
+          "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
+          "audienceFit": [
+            "prospects",
+            "customers",
+            "buyers"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "sales",
+            "go-to-market",
+            "outbound",
+            "discovery"
+          ],
+          "beats": [
+            {
+              "id": "intro",
+              "name": "Introduction",
+              "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
+              "instructions": "Name & logo",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "big-change",
+              "name": "Big Change",
+              "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
+              "instructions": "Highlight market shift",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "response-to-change",
+              "name": "Winners and Losers",
+              "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
+              "instructions": "Show winners & losers",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "benefits",
+              "name": "Benefits",
+              "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
+              "instructions": "Describe benefits, paint a vivid picture",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "capabilities",
+              "name": "Capabilities",
+              "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
+              "instructions": "Present unique features as 'magic gifts' to the customer",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
+              "instructions": "Share testimonials",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
+              "layout": "title",
+              "instructions": "Encourage decision-making",
+              "type": "text"
+            },
+            {
+              "id": "close",
+              "name": "Close",
+              "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
+              "layout": "title",
+              "instructions": "Logo & contact info",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "casual",
+            "inspirational"
+          ],
+          "tags": [
+            "public",
+            "education",
+            "accessible"
+          ]
+        },
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "formal"
+          ],
+          "tags": [
+            "external",
+            "press",
+            "analyst"
+          ]
+        }
+      },
+      "purposes": {
+        "pitch": {
+          "name": "Pitch",
+          "summary": "Present an opportunity and ask for investment, approval, partnership, or sponsorship.",
+          "description": "Use when the deck needs to create interest and move a high-stakes audience toward backing the opportunity. Lead with the opportunity, prove credibility, and make the ask concrete.",
+          "outcome": "The audience agrees to invest, sponsor, approve, or continue the conversation.",
+          "successCriteria": [
+            "Opportunity is clear",
+            "Evidence builds confidence",
+            "Ask and next step are explicit"
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "fundraising",
+            "opportunity",
+            "ask"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "minimal": {
+          "name": "Minimal",
+          "background": {
+            "type": "theme",
+            "slot": "dark2"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+          "fontScheme": "aptos",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "luxury": {
+          "name": "Luxury",
+          "accent1": "#997929",
+          "accent2": "#C15937",
+          "accent3": "#951233",
+          "accent4": "#1D483F",
+          "accent5": "#4B6977",
+          "accent6": "#639391",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "Muted metallic and deep tones for premium, high-stakes decks.",
+          "description": "A restrained luxury palette with gold, terracotta, dark green, and blue-gray support for premium narratives.",
+          "tags": [
+            "luxury",
+            "premium",
+            "sophisticated",
+            "grounded",
+            "exclusive"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "kalinga": {
+          "name": "Kalinga",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "or"
+          ],
+          "major": "Kalinga",
+          "minor": "Kalinga",
+          "textSample": "ଏହା କଳିଙ୍ଗ ଫଣ୍ଟରେ ଲେଖାଯାଇଛି",
+          "type": "sans-serif",
+          "description": "Kalinga is a sans serif OPF font scheme for complex script presentations, using Kalinga for both headings and body text."
+        },
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
     }
   }
 }

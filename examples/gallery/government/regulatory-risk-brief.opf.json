@@ -3,16 +3,16 @@
   "name": "Regulatory Risk Brief",
   "description": "Regulatory Risk Brief is a fictional OPF example for regulators teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "regulatory-risk-brief",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
-    "candidates",
+    "internal-team",
     {
-      "id": "investor",
+      "id": "partner",
       "attentionBudgetMinutes": 18,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "survival-story"
+        "pitch-deck"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "survival-story",
+  "narrative": "pitch-deck",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -70,7 +70,7 @@
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "right",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": {
       "default": "asset:brand-logo",
@@ -97,10 +97,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "bottom"
     }
   },
   "slides": [
@@ -135,7 +131,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -361,6 +357,481 @@
       "density": "medium",
       "scenario": "regulatory-risk-brief",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "pitch-deck": {
+          "name": "Startup Pitch Deck",
+          "summary": "The canonical investor-pitch arc, drawn from Sequoia and Y Combinator's templates. Optimized for 10–20 minute meetings with VCs and angels. Each beat answers the question an investor will ask next.",
+          "audienceFit": [
+            "investors",
+            "venture-capitalists",
+            "angels",
+            "advisors"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 20
+          },
+          "tags": [
+            "startup",
+            "fundraising",
+            "pitch",
+            "investor"
+          ],
+          "beats": [
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered — this is the cover.",
+              "layout": "title"
+            },
+            {
+              "id": "purpose",
+              "name": "Company Purpose",
+              "description": "State in a single sentence what the company does and why it exists. Should be immediately understandable without industry jargon. Often doubles as the answer to 'so what do you do?'"
+            },
+            {
+              "id": "problem",
+              "name": "Problem",
+              "description": "Describe the pain point you solve. Make it concrete with a specific user or customer scenario. The more visceral and recognizable the problem, the stronger the rest of the pitch lands."
+            },
+            {
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the technological, regulatory, behavioral, or market shift that makes this opportunity possible today and impossible five years ago. Investors want to know why this is a window, not just an idea."
+            },
+            {
+              "id": "market",
+              "name": "Market Size",
+              "description": "Size the opportunity. Top-down (TAM/SAM/SOM) or bottom-up (units × price). Show how big the prize is if you win, and why this market is attractive to a venture-scale outcome."
+            },
+            {
+              "id": "competition",
+              "name": "Competition",
+              "description": "Map the competitive landscape honestly. A 2x2 matrix or feature-comparison grid is fine; what matters is showing you understand the alternatives and where you uniquely fit. Naïve 'no competition' answers tank credibility."
+            },
+            {
+              "id": "solution",
+              "name": "Solution",
+              "description": "Show how you solve the problem and why your approach is uniquely better. Lead with the outcome for the customer, then show the mechanism. This is where you connect problem to product."
+            },
+            {
+              "id": "product",
+              "name": "Product",
+              "description": "Give the product its own moment. Screenshots or a key visual that captures what users actually see and feel. Pick one strong frame over a montage of small ones."
+            },
+            {
+              "id": "demo",
+              "name": "Demo",
+              "description": "Walk through the core user flow end-to-end. Show real software solving a real problem in a real workflow — not a marketing reel. If a live demo is too risky, use a tightly edited recording with narration."
+            },
+            {
+              "id": "traction",
+              "name": "Traction",
+              "description": "Prove momentum with one credible headline metric. Revenue, users, growth rate, customer logos — whatever best shows the business is working. One strong chart beats five vanity numbers."
+            },
+            {
+              "id": "growth",
+              "name": "Growth Drivers",
+              "description": "Show how the headline metric got there and where it's going. Cohorts, retention, expansion, channel mix — whatever explains the engine behind the number. Investors back the trajectory, not the snapshot."
+            },
+            {
+              "id": "business-model",
+              "name": "Business Model",
+              "description": "Explain how the company makes money. Pricing, unit economics, sales motion, payback period. Should answer: what does it cost to acquire a customer, and what do they pay you?"
+            },
+            {
+              "id": "team",
+              "name": "Team",
+              "description": "Establish why this team uniquely wins this market. Founder backgrounds, relevant experience, prior outcomes, key advisors. Investors back people first; make the case."
+            },
+            {
+              "id": "financials",
+              "name": "Financials",
+              "description": "Show the financial picture: historical revenue, burn, runway, and forward projection. Be conservative-but-credible — investors will discount aggressive numbers and reward defensible ones."
+            },
+            {
+              "id": "ask",
+              "name": "The Ask",
+              "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific — investors should leave knowing exactly what you want and what they get.",
+              "layout": "title"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Close on a strong final image: logo, contact info, and the one line you most want the investor to remember. Leave space for the conversation that follows.",
+              "layout": "title"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
+          ]
+        },
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "partner",
+            "channel",
+            "enablement"
+          ]
+        }
+      },
+      "purposes": {
+        "align": {
+          "name": "Align",
+          "summary": "Create shared understanding and commitment across people who need to move together.",
+          "description": "Use when stakeholders need a common view of goals, constraints, priorities, or responsibilities. Emphasize shared language, explicit tradeoffs, and next steps.",
+          "outcome": "Stakeholders leave with the same priorities and operating assumptions.",
+          "successCriteria": [
+            "Teams agree on priorities",
+            "Open disagreements are surfaced",
+            "Owners and next steps are clear"
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "transformation-arc",
+            "business-review"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "alignment",
+            "strategy",
+            "coordination"
+          ]
+        }
+      },
+      "tones": {
+        "conversational": {
+          "name": "Conversational",
+          "summary": "Direct, dialog-style voice for podcasts, fireside chats, and small-group reviews.",
+          "description": "Sound like one half of a real conversation. Ask questions on the slide and answer them; keep paragraphs short; lean into examples over abstractions. Useful when the deck is meant to support a discussion rather than to lecture.",
+          "voiceCues": [
+            "Ask a question on the slide, then answer it on the next.",
+            "Use second person — speak to the room, not at it.",
+            "Lean on stories and concrete examples over abstract framing.",
+            "Keep each idea to one short paragraph; let the dialog do the rest."
+          ],
+          "avoid": [
+            "Lecture-style monologue across many bullets.",
+            "Hedge-laden academic phrasing.",
+            "Stuffing slides — leave room for the discussion.",
+            "Inside-baseball references the room may not share."
+          ],
+          "samplePhrases": [
+            "Why now? Two things changed in the last six months.",
+            "Here's the part that surprised us — and what we did about it.",
+            "If you take one thing from this section, take this."
+          ],
+          "recommendedNarratives": [
+            "focus",
+            "company-intro",
+            "weekly-progress",
+            "performance-review"
+          ],
+          "tags": [
+            "dialog",
+            "podcast",
+            "discussion"
+          ]
+        }
+      },
+      "themes": {
+        "bold": {
+          "name": "Bold",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "burnt-orange",
+          "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+          "fontScheme": "impact",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        },
+        "burnt-orange": {
+          "name": "Burnt Orange",
+          "accent1": "#F77F00",
+          "accent2": "#D62828",
+          "accent3": "#003049",
+          "accent4": "#FCBF49",
+          "accent5": "#EAE2B7",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#341B00",
+          "followedHyperlink": "#D62828",
+          "hyperlink": "#003049",
+          "light1": "#FFFFFF",
+          "light2": "#FFFBF7",
+          "summary": "Warm orange and red accents for energetic commercial decks.",
+          "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
+          "tags": [
+            "warm",
+            "energetic",
+            "approachable",
+            "commercial",
+            "attention-grabbing"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        },
+        "impact": {
+          "name": "Impact",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Impact",
+          "minor": "Grandview",
+          "textSample": "Strong bold headline",
+          "type": "sans-serif",
+          "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import type { CatalogKind } from './catalogs.js';
+import type { Catalog } from './catalog-refs.js';
 import type { TextMeasurement } from './composition.js';
 import type { FindingReport, FindingSeverity } from './generated/types/finding.js';
 import type { JsonPrimitive } from './json.js';
@@ -93,8 +93,8 @@ export interface ValidateOptions {
 	 * `{ rule: 'opf/text-contrast', path: '/slides/3' }`. A prefix matches whole path segments.
 	 */
 	ignorePaths?: readonly { rule: string; path: string }[];
-	/** Catalog records already loaded by the host, consulted after the document's own `catalogs`. Nothing is fetched. */
-	catalogs?: Partial<Record<CatalogKind, readonly unknown[]>>;
+	/** Catalogs the host registered, matched by source; the first is the host default for an omitted catalogs.default. Nothing is fetched. */
+	catalogs?: readonly Catalog[];
 	/** Host policy (category `policy`). */
 	contracts?: readonly Contract[];
 	thresholds?: Partial<ValidationThresholds>;
@@ -112,7 +112,7 @@ export interface ValidationChecks {
 	/** `checked` for text input (JSON syntax and duplicate keys), `not-applicable` for a parsed document. */
 	syntax: 'checked' | 'not-applicable';
 	schema: 'checked' | 'not-run';
-	/** Catalog ids, assets, datasets and references, resolved against the document, supplied catalogs and the bundled ones. Nothing is fetched. */
+	/** Content references, assets, datasets and citations, resolved against the document's catalogs groups and the registered catalogs. Nothing is fetched. */
 	references: 'checked' | 'not-run';
 	policy: 'checked' | 'not-run';
 	accessibility: 'checked' | 'not-run';

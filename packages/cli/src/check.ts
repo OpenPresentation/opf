@@ -1,12 +1,16 @@
 // What every command shares about checking a document: the failure threshold of `--fail-on` (it replaces the old
 // `--strict` on every command) and the check the write, render, export and import commands run before they write.
 import { type FindingSeverity, type ValidateOptions } from "@openpresentation/opf";
+import { CLI_CATALOGS } from "./catalogs.js";
 
 /** The values of `--fail-on`: fail on findings at or above this severity. */
 export const FAIL_ON_LEVELS = ["error", "warning", "info"] as const;
 
-/** The check a command that writes a document runs first: format and references, so a contrast warning never blocks a write. */
-export const WRITE_CHECK: ValidateOptions = { only: ["format", "references"] };
+/**
+ * The check a command that writes a document runs first: format and references, so a contrast warning never blocks a write.
+ * References resolve in the document's own catalogs groups, then in the default catalog the CLI registers.
+ */
+export const WRITE_CHECK: ValidateOptions = { only: ["format", "references"], catalogs: CLI_CATALOGS };
 
 const rank: Record<FindingSeverity, number> = { error: 3, warning: 2, info: 1 };
 

@@ -2,31 +2,192 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Quarterly review for {{client}}",
   "template": true,
-  "design": { "theme": "classic", "colorScheme": "cool-horizon", "fontScheme": "roboto" },
+  "design": {
+    "theme": "classic",
+    "colorScheme": "cool-horizon",
+    "fontScheme": "roboto",
+    "imageFit": "contain"
+  },
   "variables": {
-    "client": { "type": "text", "label": "Client", "description": "The customer this review is for.", "example": "Acme Corp" },
-    "headline": { "type": "text", "label": "Headline", "example": [{ "text": "Renewal is ", "bold": true }, "on track"] },
-    "revenue": { "type": "number", "label": "Quarterly revenue", "format": "$#,##0", "example": 1250000 },
-    "growth": { "type": "number", "format": "0.#%", "value": 0.124 },
-    "kickoff": { "type": "date", "label": "Kickoff date", "example": "2026-10-01" },
-    "wins": { "type": "list", "label": "Wins", "example": ["Faster onboarding", "Lower churn"] },
-    "logo": { "type": "image", "label": "Client logo", "required": false },
-    "site": { "type": "url", "label": "Client website", "required": false },
+    "client": {
+      "type": "text",
+      "label": "Client",
+      "description": "The customer this review is for.",
+      "example": "Acme Corp"
+    },
+    "headline": {
+      "type": "text",
+      "label": "Headline",
+      "example": [
+        {
+          "text": "Renewal is ",
+          "bold": true
+        },
+        "on track"
+      ]
+    },
+    "revenue": {
+      "type": "number",
+      "label": "Quarterly revenue",
+      "format": "$#,##0",
+      "example": 1250000
+    },
+    "growth": {
+      "type": "number",
+      "format": "0.#%",
+      "value": 0.124
+    },
+    "kickoff": {
+      "type": "date",
+      "label": "Kickoff date",
+      "example": "2026-10-01"
+    },
+    "wins": {
+      "type": "list",
+      "label": "Wins",
+      "example": [
+        "Faster onboarding",
+        "Lower churn"
+      ]
+    },
+    "logo": {
+      "type": "image",
+      "label": "Client logo",
+      "required": false
+    },
+    "site": {
+      "type": "url",
+      "label": "Client website",
+      "required": false
+    },
     "risk": "#B42318"
   },
   "slides": [
-    { "id": "cover", "title": "Quarterly review: {{client}}", "subtitle": "Kickoff {{kickoff}}", "image": "var:logo" },
-    { "id": "headline", "title": "Where we stand", "text": "var:headline" },
+    {
+      "id": "cover",
+      "title": "Quarterly review: {{client}}",
+      "subtitle": "Kickoff {{kickoff}}",
+      "image": "var:logo"
+    },
+    {
+      "id": "headline",
+      "title": "Where we stand",
+      "text": "var:headline"
+    },
     {
       "id": "wins",
       "title": "Wins this quarter",
-      "bullets": ["Revenue {{revenue}}, up {{growth}}", "var:wins", [{ "text": "Watch: renewal timing", "color": "var:risk" }]]
+      "bullets": [
+        "Revenue {{revenue}}, up {{growth}}",
+        "var:wins",
+        [
+          {
+            "text": "Watch: renewal timing",
+            "color": "var:risk"
+          }
+        ]
+      ]
     },
     {
       "id": "revenue",
       "title": "Revenue",
-      "chart": { "type": "column", "data": { "columns": ["Quarter", "Revenue"], "rows": [["Previous", 1100000], ["This quarter", "var:revenue"]] } }
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue"
+          ],
+          "rows": [
+            [
+              "Previous",
+              1100000
+            ],
+            [
+              "This quarter",
+              "var:revenue"
+            ]
+          ]
+        }
+      }
     },
-    { "id": "next", "title": "Next steps", "text": [{ "text": "Visit {{site}}", "link": "var:site" }] }
-  ]
+    {
+      "id": "next",
+      "title": "Next steps",
+      "text": [
+        {
+          "text": "Visit {{site}}",
+          "link": "var:site"
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  }
 }

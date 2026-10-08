@@ -370,29 +370,19 @@ describe("ids and extensions below slide level", () => {
   });
 });
 
-describe("catalog sources", () => {
-  test("a custom source suppresses unknown-id warnings as a string or a search path", () => {
-    const unknownId = "house-narrative-arc";
-    const bare = checked(deck({ narrative: unknownId }));
-    assert.ok(
-      bare.warnings.some((warning) => warning.ruleId === "opf/catalog-reference" && warning.path === "/narrative" && warning.message.includes(`narratives catalog id "${unknownId}"`)),
-      JSON.stringify(warningsOf(bare)),
-    );
-
-    for (const source of ["https://a.example/x", ["https://a.example/x"], ["https://a.example/x", "pkg:@acme/decks"]]) {
-      const result = checked(deck({
-        catalogs: { narratives: { source } },
-        narrative: unknownId,
-      }));
-      assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
-      assert.deepEqual(
-        result.warnings.filter((warning) => warning.message.includes("narratives catalog id")),
-        [],
-        JSON.stringify(source),
-      );
-      // The source is reported as not fetched, so the id is unverified rather than wrong.
-      assert.deepEqual(result.findings.map((entry) => [entry.ruleId, entry.severity]), [["opf/catalog-source", "info"]]);
-    }
+describe("catalog groups", () => {
+  test("a named group resolves its own records or the catalog the host registered for its source; nothing is fetched", () => {
+    const reference = "acme:house-narrative-arc";
+    const named = deck({ catalogs: { acme: { source: "https://a.example/catalog" } }, narrative: reference });
+    const unresolved = checked(named);
+    assert.equal(unresolved.valid, true, JSON.stringify(errorsOf(unresolved)));
+    assert.deepEqual(unresolved.findings.map((entry) => [entry.ruleId, entry.severity, entry.path]), [["opf/unresolved-reference", "warning", "/narrative"]]);
+    assert.ok(unresolved.findings[0].message.includes("https://a.example/catalog"), unresolved.findings[0].message);
+    const record = { name: "House arc", beats: [{ id: "a", name: "A" }] };
+    assert.deepEqual(checked(named, { catalogs: [{ source: "https://a.example/catalog", narratives: { "house-narrative-arc": record } }] }).findings, []);
+    assert.deepEqual(checked(deck({ catalogs: { acme: { source: "https://a.example/catalog", narratives: { "house-narrative-arc": record } } }, narrative: reference })).findings, []);
+    // A source is a single string; a search path is not part of the format.
+    assert.equal(checked(deck({ catalogs: { acme: { source: ["https://a.example/x"] } } })).valid, false);
   });
 });
 

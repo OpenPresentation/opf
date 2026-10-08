@@ -4,7 +4,7 @@
   "description": "Arabic Digital Services Brief is a fictional OPF example for public services teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "arabic-digital-services-brief",
   "language": {
-    "id": "arabic",
+    "bcp47": "ar",
     "name": "Arabic",
     "direction": "rtl",
     "script": "Arab",
@@ -15,14 +15,14 @@
     ]
   },
   "audience": [
-    "engineering-team",
+    "sales",
     {
-      "id": "regulatory",
+      "id": "board",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "marketing-strategy"
+        "weekly-progress"
       ],
       "recommendedTones": [
         "formal"
@@ -48,7 +48,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "marketing-strategy",
+  "narrative": "weekly-progress",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -72,10 +72,8 @@
     "dimensions": "letter",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "center",
@@ -83,7 +81,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -108,10 +106,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "right"
     }
   },
   "slides": [
@@ -146,7 +140,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -354,6 +348,474 @@
       "density": "medium",
       "scenario": "arabic-digital-services-brief",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "weekly-progress": {
+          "name": "Weekly Progress",
+          "summary": "Tight rhythm-of-business arc for weekly progress reports: objectives, achievements, progress, challenges, opportunities, recognition, plan, discussion, conclusion. Designed for fifteen-to-thirty-minute team check-ins, not deep dives.",
+          "audienceFit": [
+            "managers",
+            "teams",
+            "cross-functional-partners"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 30
+          },
+          "tags": [
+            "rhythm-of-business",
+            "weekly",
+            "internal",
+            "operations"
+          ],
+          "beats": [
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the initiative name, the date, and the one-line headline for the week. Frame the meeting in fifteen seconds so the rest of the time is content.",
+              "layout": "title",
+              "instructions": "Initiative name & date",
+              "type": "text"
+            },
+            {
+              "id": "objectives",
+              "name": "Objectives",
+              "description": "State what the team set out to do this week. Specific, measurable. The audience should be able to read this slide alone and know what 'on track' would mean.",
+              "instructions": "Set the expectations",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "achievements",
+              "name": "Achievements",
+              "description": "Celebrate the week's wins. Concrete, attributable, dated. Brevity here — the meeting is for what's next, not a victory lap.",
+              "instructions": "Celebrate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "overall-progress",
+              "name": "Overall Progress",
+              "description": "Evaluate performance against the objectives. Use a simple status indicator (green/yellow/red) plus the leading metric. Help the audience scan the state in seconds.",
+              "instructions": "Evaluate performance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Address what's hard right now: blockers, slipping items, surfaced risks. Tie each challenge to either an owner working it or a discussion you want this week.",
+              "instructions": "Address difficulties",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "opportunities-for-improvement",
+              "name": "Opportunities for Improvement",
+              "description": "Surface where the team can level up. Process tweaks, tooling needs, ways of working. Improvement opportunities should feel like seeds, not corrections.",
+              "instructions": "Seek growth",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "highlights-recognition",
+              "name": "Highlights & Recognition",
+              "description": "Recognize specific contributions by name. Recognition belongs in the deck, not just in the meeting — written acknowledgment travels further than verbal.",
+              "instructions": "Appreciate efforts",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "goals-next-week",
+              "name": "Goals Next Week",
+              "description": "Plan the week ahead with three to five specific goals. Each should be small enough to finish, large enough to matter, and clearly owned.",
+              "instructions": "Plan ahead",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "discussion-feedback",
+              "name": "Discussion & Feedback",
+              "description": "Open the floor with two or three prompts — decisions you need, opinions you want, blockers you'd like cleared. End the recap actively.",
+              "instructions": "Encourage input",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Close with one line that motivates the team into the next week. Echo the headline so the meeting feels closed.",
+              "layout": "title",
+              "instructions": "Recap & motivate",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-arabic": {
+          "name": "Noto Sans Arabic",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "ar",
+            "ps",
+            "pa-Arab"
+          ],
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic",
+          "textSample": "نص عربي أنيق",
+          "type": "sans-serif",
+          "description": "Noto Sans Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+        },
+        "batang": {
+          "name": "Batang",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "ko"
+          ],
+          "major": "BatangChe",
+          "minor": "Batang",
+          "textSample": "이것은 바탕 폰트로 쓰여졌습니다",
+          "type": "serif",
+          "description": "Batang is a serif OPF font scheme for East Asian presentations, using BatangChe for headings with Batang for body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "pastel-red": {
+          "name": "Pastel Red",
+          "accent1": "#FE938C",
+          "accent2": "#E6B89C",
+          "accent3": "#EAD2AC",
+          "accent4": "#9CAFB7",
+          "accent5": "#4281A4",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#0C6268",
+          "followedHyperlink": "#E6B89C",
+          "hyperlink": "#FE938C",
+          "light1": "#FFFFFF",
+          "light2": "#FFEFEE",
+          "summary": "Soft red and blue accents for approachable consumer stories.",
+          "description": "A pastel red scheme with warm neutrals and blue support, suited to friendly, human-centered decks.",
+          "tags": [
+            "warm",
+            "friendly",
+            "soft",
+            "approachable",
+            "human"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
     }
   }
 }

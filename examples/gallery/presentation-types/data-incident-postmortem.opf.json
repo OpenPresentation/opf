@@ -3,16 +3,16 @@
   "name": "Data Incident Postmortem",
   "description": "Data Incident Postmortem is a fictional OPF example for incident review teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "data-incident-postmortem",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
-    "executive",
+    "engineering-team",
     {
-      "id": "sales",
+      "id": "investor",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "conference-talk"
+        "strategic-advisory"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "conference-talk",
+  "narrative": "strategic-advisory",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -82,7 +82,7 @@
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
-    "imageFill": "fit",
+    "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -100,10 +100,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "background"
     }
   },
   "slides": [
@@ -138,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -346,6 +342,486 @@
       "density": "medium",
       "scenario": "data-incident-postmortem",
       "generatedBy": "scripts/generate-example-suite.mjs"
+    }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "strategic-advisory": {
+          "name": "Strategic Advisory",
+          "summary": "Consulting-style advisory deck applying Minto's pyramid: title, situation/complication/question, the answer in one sentence, and three argued points with a process. Use when the audience expects a recommendation and the case for it, in that order.",
+          "audienceFit": [
+            "executives",
+            "boards",
+            "leadership-teams",
+            "clients"
+          ],
+          "duration": {
+            "min": 15,
+            "max": 45
+          },
+          "tags": [
+            "consulting",
+            "advisory",
+            "strategy",
+            "minto"
+          ],
+          "beats": [
+            {
+              "id": "title",
+              "name": "Title",
+              "description": "Open with a one-line summary statement that captures the recommendation, not the topic. The title slide is the headline of the entire engagement — make it specific enough that someone reading only this slide already understands the position.",
+              "layout": "title",
+              "instructions": "Brief summary sentence",
+              "type": "text"
+            },
+            {
+              "id": "scq",
+              "name": "Situation, Complication, Question",
+              "description": "Frame the engagement on a single slide: the relevant status quo, what needs to change, and the question that needs to be resolved. This is the SCQ shorthand — context, tension, prompt. Don't yet answer."
+            },
+            {
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver the recommendation in a single sentence. No arguments yet, no caveats. The answer is the apex of the pyramid; the rest of the deck supports it.",
+              "instructions": "A solution in one sentence, no arguments yet",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "arguments",
+              "name": "Arguments",
+              "description": "Preview the three top-level arguments that defend the answer. One slide naming all three so the audience knows where the deck is going. Each argument should be a complete claim, not a topic.",
+              "instructions": "Support the solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "argument-1",
+              "name": "Argument 1",
+              "description": "Develop the first argument with supporting data, examples, and reasoning. Lead with the claim, then the evidence — Minto-style. The slide should stand alone if pulled out.",
+              "instructions": "First key point",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "argument-2",
+              "name": "Argument 2",
+              "description": "Develop the second argument the same way. Vary the type of evidence — quantitative, qualitative, comparative — so the audience hears the case from multiple angles.",
+              "instructions": "Second key point",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "argument-3",
+              "name": "Argument 3",
+              "description": "Develop the third argument and walk through the supporting process or methodology. This is often where the 'how' lives — the implementation insight that makes the recommendation feel actionable.",
+              "instructions": "Third key point with a process",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "summary",
+              "name": "Summary",
+              "description": "Recap the answer and arguments in a single slide and point to additional resources. Close with the explicit next step you want the audience to take.",
+              "layout": "title",
+              "instructions": "Recap the answer, provide additional resources",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        },
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "external",
+            "capital",
+            "fundraising"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "casual": {
+          "name": "Casual",
+          "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+          "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+          "voiceCues": [
+            "Use first and second person.",
+            "Use contractions ('we're', 'it's', 'don't').",
+            "Favor short sentences and active voice.",
+            "Frame metrics with a human-scale anchor when possible."
+          ],
+          "avoid": [
+            "Stiff corporate jargon.",
+            "Long compound sentences.",
+            "Overuse of superlatives.",
+            "Bureaucratic passive voice."
+          ],
+          "samplePhrases": [
+            "We shipped the new dashboard last week, and customers are already moving over.",
+            "Here's where we ended up on hiring this quarter.",
+            "It's been a busy month — here's the recap."
+          ],
+          "recommendedNarratives": [
+            "weekly-progress",
+            "status-update",
+            "company-intro",
+            "focus"
+          ],
+          "tags": [
+            "internal",
+            "warm",
+            "conversational"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "bold-red": {
+          "name": "Bold Red",
+          "accent1": "#A41410",
+          "accent2": "#2693A1",
+          "accent3": "#EFA517",
+          "accent4": "#E86D1F",
+          "accent5": "#324472",
+          "accent6": "#EFECCA",
+          "dark1": "#000000",
+          "dark2": "#232323",
+          "followedHyperlink": "#2693A1",
+          "hyperlink": "#324472",
+          "light1": "#FFFFFF",
+          "light2": "#DCDCDC",
+          "summary": "Confident red and teal accents for urgent, high-salience stories.",
+          "description": "A bold red-led scheme with teal and navy support. Use it when the deck needs urgency, contrast, and clear emphasis.",
+          "tags": [
+            "bold",
+            "urgent",
+            "energetic",
+            "decisive",
+            "impactful"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "tunga": {
+          "name": "Tunga",
+          "app": "powerpoint",
+          "languageFamily": "cs",
+          "languages": [
+            "kn"
+          ],
+          "major": "Tunga",
+          "minor": "Tunga",
+          "textSample": "ಇದು ತುಂಗ ಫಾಂಟ್‌ನಲ್ಲಿ ಬರೆಯಲಾಗಿದೆ",
+          "type": "sans-serif",
+          "description": "Tunga is a sans serif OPF font scheme for complex script presentations, using Tunga for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-4x": {
+          "name": "List 4x",
+          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
+          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "List",
+            "Matrix",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          }
+        }
+      }
     }
   }
 }

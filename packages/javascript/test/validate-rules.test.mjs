@@ -29,7 +29,7 @@ const png = (width, height) => {
 
 test('every rule has a stable id, a category, a cost, a rationale and an entry in docs/validate.md', () => {
 	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8');
-	assert.equal(validationRules.length, 64);
+	assert.equal(validationRules.length, 66);
 	const seen = new Set();
 	for (const info of validationRules) {
 		assert.match(info.id, /^opf\/[a-z][a-z0-9-]*$/);
@@ -50,7 +50,7 @@ test('every rule has a stable id, a category, a cost, a rationale and an entry i
 	const engineWarnings = ['opf/chart-option-adapted', 'opf/chart-value-not-numeric', 'opf/chart-mapping-adapted', 'opf/chart-highlight-adapted', 'opf/code-highlight-out-of-range', 'opf/code-highlight-range-reversed', 'opf/variable-builtin-missing', 'opf/duration-outside-narrative', 'opf/narrative-duration-range'];
 	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !engineWarnings.includes(info.id)).length, 21);
 	assert.equal(findValidationRule('variable-unfilled').category, 'format');
-	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document'])
+	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document', 'catalog-reference', 'deprecated-catalog-id', 'catalog-source'])
 		assert.equal(findValidationRule(gone), undefined, gone);
 	// Only the composition-cost rules build layouts.
 	assert.deepEqual(validationRules.filter((info) => info.cost === 'composition').map((info) => info.name).sort(), ['image-resolution', 'layout-failed', 'min-font-size', 'reading-order', 'text-contrast', 'text-on-image', 'text-overflow', 'unresolved-content']);
@@ -186,7 +186,7 @@ test('opf/text-contrast: ignores charts, images and code, and honours severity, 
 // ------------------------------------------------------------ text-on-image
 
 test('opf/text-on-image: a picture background cannot be measured; a strong full-frame overlay can', () => {
-	const slide = (overlay) => ({ title: 'On a picture', design: { slideImage: { src: 'https://example.com/hero.jpg', alt: '', position: 'background', ...(overlay ? { overlay } : {}) } } });
+	const slide = (overlay) => ({ title: 'On a picture', design: { background: { type: 'image', src: 'https://example.com/hero.jpg', ...(overlay ? { overlay } : {}) } } });
 	const bare = only(deck([slide()], { design: white }), 'text-on-image');
 	assert.equal(bare.length, 1);
 	assert.equal(bare[0].severity, 'info');
@@ -194,7 +194,10 @@ test('opf/text-on-image: a picture background cannot be measured; a strong full-
 	// default text is dark1 on a light deck; an overlay that cannot lighten every pixel enough still fails the ramp
 	assert.ok(has(deck([slide({ color: '#FFFFFF', opacity: 0.3 })], { design: white }), 'text-on-image'));
 	// a background image on the deck
-	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: { type: 'image', image: { src: 'https://example.com/a.png' } } } }), 'text-on-image'));
+	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: { type: 'image', src: 'https://example.com/a.png' } } }), 'text-on-image'));
+	// the shorthand is a cover picture too, and an edge band does not certify the whole slide
+	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: 'https://example.com/a.png' } }), 'text-on-image'));
+	assert.ok(has(deck([slide({ color: '#FFFFFF', opacity: 1, edge: 'bottom' })], { design: white }), 'text-on-image'));
 });
 
 // ------------------------------------------------------------ alt text
@@ -225,12 +228,13 @@ test('opf/missing-alt-text: images, video, logos, header images; "" is the decor
 	assert.deepEqual(objectImage.fixes[1].patch, [{ op: 'add', path: '/slides/3/blocks/0/image/alt', value: '' }]);
 });
 
-test('opf/missing-alt-text: asset registry alt text and the slide image count', () => {
+test('opf/missing-alt-text: asset registry alt text and placed image blocks count; a background is decorative without alt', () => {
 	const registry = { assets: { hero: { src: 'https://example.com/hero.jpg', alt: 'Team at the offsite' }, bare: 'https://example.com/bare.jpg' } };
 	assert.ok(!has(deck([{ title: 'A', image: 'asset:hero' }], registry), 'missing-alt-text'));
 	assert.ok(has(deck([{ title: 'A', image: 'asset:bare' }], registry), 'missing-alt-text'));
-	assert.ok(has(deck([{ title: 'A', text: 'x', design: { slideImage: { src: 'https://example.com/s.jpg', position: 'left' } } }]), 'missing-alt-text'));
-	assert.ok(!has(deck([{ title: 'A', text: 'x', design: { slideImage: { src: 'https://example.com/s.jpg', position: 'left', alt: 'Sunrise' } } }]), 'missing-alt-text'));
+	assert.ok(has(deck([{ title: 'A', blocks: [{ image: 'https://example.com/s.jpg', placement: { edge: 'left' } }, { text: 'x' }] }]), 'missing-alt-text'));
+	assert.ok(!has(deck([{ title: 'A', blocks: [{ image: { src: 'https://example.com/s.jpg', alt: 'Sunrise' }, placement: { edge: 'left' } }, { text: 'x' }] }]), 'missing-alt-text'));
+	assert.ok(!has(deck([{ title: 'A', text: 'x', design: { background: 'https://example.com/s.jpg' } }]), 'missing-alt-text'));
 });
 
 test('opf/poor-alt-text: file names, generic words, URLs, "image of" and very long text', () => {
@@ -391,7 +395,7 @@ test('opf/text-overflow: a host text measurement replaces the estimate', () => {
 });
 
 test('opf/layout-failed: a composition error is a finding, and the rest of the rules still run', () => {
-	const catalogs = { layouts: [{ id: 'broken', name: 'Broken', placeholders: [{ type: 'title' }], composition: { padding: 5 } }] };
+	const catalogs = [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', placeholders: [{ type: 'title' }], composition: { padding: 5 } } } }];
 	const found = only(deck([{ title: 'T', layout: 'broken', text: 'x' }, { title: 'U', text: 'y' }]), 'layout-failed', { catalogs });
 	assert.equal(found.length, 1);
 	assert.equal(found[0].path, '/slides/0');
@@ -467,8 +471,9 @@ test('opf/image-resolution: embedded images measured at their displayed size; UR
 	assert.ok(!has(image('https://example.com/huge.png'), 'image-resolution'));
 	assert.ok(!has(image('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>'), 'image-resolution'));
 	assert.ok(has(deck([{ title: 'T', image: 'asset:s' }], { assets: { s: { src: small, alt: 'x' } } }), 'image-resolution'));
-	assert.ok(has(deck([{ title: 'T', text: 'x', design: { slideImage: { src: small, alt: 'x', position: 'left' } } }]), 'image-resolution'));
-	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: { type: 'image', image: { src: small } } } }), 'image-resolution'));
+	assert.ok(has(deck([{ title: 'T', blocks: [{ image: { src: small, alt: 'x' }, placement: { edge: 'left' } }, { text: 'x' }] }]), 'image-resolution'));
+	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: { type: 'image', src: small } } }), 'image-resolution'));
+	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: small } }), 'image-resolution'));
 	assert.ok(!has(image(small), 'image-resolution', { thresholds: { minImagePpi: 5 } }));
 });
 
@@ -487,7 +492,9 @@ test('opf/placeholder-text, opf/empty-text and opf/empty-slide', () => {
 	assert.equal(only(deck([{ title: 'T', text: 'x' }, { id: 'blank-one' }]), 'empty-slide')[0].slideId, 'blank-one');
 	assert.ok(!has(deck([{ layout: 'blank' }]), 'empty-slide'));
 	assert.ok(!has(deck([{ title: 'Only a title' }]), 'empty-slide'));
-	assert.ok(!has(deck([{ design: { slideImage: { src: 'https://e.com/a.jpg', alt: '', position: 'background' } } }]), 'empty-slide'));
+	assert.ok(!has(deck([{ design: { background: { type: 'image', src: 'https://e.com/a.jpg' } } }]), 'empty-slide'));
+	assert.ok(!has(deck([{ design: { background: 'https://e.com/a.jpg' } }]), 'empty-slide'));
+	assert.ok(has(deck([{ title: 'T', text: 'x' }, { design: { background: 'dark1' } }]), 'empty-slide'));
 });
 
 test('opf/variable-unfilled: a normal deck errors, a template warns, tokens left in a plain deck warn', () => {

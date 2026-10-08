@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { audience, audiences, catalogEntries, catalogs, languages, presentation, purposes, socialPlatform, socialPlatforms, validateCatalogRecord } from "../dist/index.js";
-import { tones } from "../dist/catalogs.js";
+import * as root from "../dist/index.js";
+import { CHART_TYPES, audience, catalogKinds, presentation, socialPlatform, validateCatalogRecord } from "../dist/index.js";
+import { catalogDisplay, catalogIndexes, defaultCatalog } from "../dist/catalog.js";
+import { audiences, chartTypes, languages, purposes, records, socialPlatforms, tones } from "./support/catalog.mjs";
 import { repoReadme } from "../dist/repo-readme.js";
 
 describe("schema $ids", () => {
@@ -19,88 +21,65 @@ describe("schema $ids", () => {
   });
 });
 
-describe("catalog export shapes", () => {
-  test("audiences catalog is non-empty", () => {
-    assert.ok(audiences.length > 0);
+describe("catalog export shapes (@openpresentation/opf/catalog)", () => {
+  test("the root carries no catalog data; /catalog exports the default catalog keyed by kind and id", () => {
+    for (const name of ["catalogs", "catalogEntries", "catalogIndexes", "audiences", "tones", "themes", "layouts", "chartTypes", "narratives", "socialPlatforms", "languages", "colorSchemes", "fontSchemes", "layoutPreviews"])
+      assert.equal(root[name], undefined, name);
+    assert.equal(defaultCatalog.source, "https://www.pptx.gallery");
+    assert.deepEqual(Object.keys(defaultCatalog).filter((key) => key !== "source").sort(), [...catalogKinds].sort());
+    for (const kind of catalogKinds) assert.ok(Object.keys(defaultCatalog[kind]).length > 0, kind);
+    assert.deepEqual(Object.keys(catalogDisplay).sort(), ["chartTypes", "languages", "socialPlatforms"]);
+    assert.equal(catalogIndexes.audiences.records.length, audiences.length);
   });
 
-  test("tones catalog is non-empty", () => {
-    assert.ok(tones.length > 0);
+  test("records are keyed by id and carry no $schema, id or x-* member", () => {
+    for (const kind of catalogKinds)
+      for (const [id, record] of Object.entries(defaultCatalog[kind])) {
+        assert.equal("$schema" in record || "id" in record, false, `${kind}/${id}`);
+        assert.deepEqual(Object.keys(record).filter((key) => key.startsWith("x-")), [], `${kind}/${id}`);
+      }
   });
 
-  test("socialPlatforms catalog is non-empty", () => {
-    assert.ok(socialPlatforms.length > 0);
-  });
-
-  test("catalogs.audiences matches the audiences export length", () => {
-    assert.equal(catalogs.audiences.length, audiences.length);
-  });
-
-  test("catalogs.socialPlatforms matches the socialPlatforms export length", () => {
-    assert.equal(catalogs.socialPlatforms.length, socialPlatforms.length);
-  });
-
-  test("catalogs.chartTypes is non-empty", () => {
-    assert.ok(catalogs.chartTypes.length > 0);
-  });
-
-  test("chartTypes catalog has one record per chart type: no -3x suffixes and no country maps", () => {
-    const ids = catalogs.chartTypes.map((record) => record.id);
+  test("chartTypes display records have one record per chart type: no -3x suffixes and no country maps", () => {
+    const ids = chartTypes.map((record) => record.id);
     assert.ok(ids.includes("world"));
     assert.ok(ids.includes("stacked-column"));
     assert.deepEqual(ids.filter((id) => /-[0-9]x$/.test(id)), []);
     for (const removed of ["united-kingdom", "united-states", "canada", "australia"]) assert.equal(ids.includes(removed), false, removed);
-    for (const record of catalogs.chartTypes) {
+    for (const record of chartTypes) {
       assert.equal(record.label, undefined, `${record.id} has no label`);
       assert.match(record.name, /^[A-Z0-9]/, `${record.id} name is the display name`);
       assert.equal(record.name.includes("_"), false, `${record.id} name is not an enum constant`);
     }
+    assert.deepEqual([...ids].sort(), [...CHART_TYPES].sort(), "the display records describe exactly the chart.type vocabulary");
   });
 
-  test("chartTypes catalogEntries entry has the expected schemaName and files", () => {
-    const entry = catalogEntries.find((candidate) => candidate.kind === "chartTypes");
-    assert.equal(entry?.schemaName, "chartType");
-    assert.ok(entry?.files.includes("world.json"));
-    assert.equal(entry?.files.includes("united-kingdom.json"), false);
-  });
-
-  test("socialPlatforms catalogEntries entry has the expected schemaName", () => {
-    assert.equal(catalogEntries.find((entry) => entry.kind === "socialPlatforms")?.schemaName, "socialPlatform");
-  });
-
-  test("purposes catalog is non-empty", () => {
-    assert.ok(purposes.length > 0);
-  });
-
-  test("languages catalog includes English (US) and English (GB) with correct bcp47 tags", () => {
+  test("the language display records include English (US) and English (GB) with correct bcp47 tags", () => {
     assert.ok(languages.some((record) => record.id === "english-us" && record.bcp47 === "en-US"));
     assert.ok(languages.some((record) => record.id === "english-gb" && record.bcp47 === "en-GB"));
+    assert.ok(socialPlatforms.length > 0 && purposes.length > 0 && tones.length > 0);
   });
 });
 
-describe("catalog entries validate", () => {
-  for (const entry of catalogEntries) {
-    test(`catalog '${entry.kind}' has records and its first record validates`, () => {
-      assert.ok(entry.records.length > 0, `${entry.kind} should have records`);
-      const result = validateCatalogRecord(entry.kind, entry.records[0]);
-      assert.equal(result.valid, true, `${entry.kind}: ${JSON.stringify(result.findings, null, 2)}`);
+describe("catalog records validate as published files", () => {
+  for (const kind of [...catalogKinds, "chartTypes", "languages", "socialPlatforms"]) {
+    test(`catalog '${kind}' has records and its first record validates`, () => {
+      const list = records(kind);
+      assert.ok(list.length > 0, `${kind} should have records`);
+      const result = validateCatalogRecord(kind, list[0]);
+      assert.equal(result.valid, true, `${kind}: ${JSON.stringify(result.findings, null, 2)}`);
     });
   }
 });
 
-describe("catalog cross-links resolve", () => {
-  // Cross-links inside the bundled catalogs must resolve: a bundled record that
-  // recommends an unknown narrative or tone id is a broken link in the spec.
+describe("catalog records carry no broken soft cross-links", () => {
+  // A record that recommends a narrative or tone the catalog does not have is a broken link in the spec, even though
+  // documents never resolve these soft links.
   for (const kind of ["audiences", "purposes", "tones"]) {
-    const entry = catalogEntries.find((candidate) => candidate.kind === kind);
-    for (const record of entry.records) {
+    for (const record of records(kind)) {
       test(`${kind}/${record.id} has no broken cross-links`, () => {
-        const result = validateCatalogRecord(kind, record);
-        assert.equal(
-          result.counts.warning,
-          0,
-          `${kind}/${record.id} has broken cross-links: ${JSON.stringify(result.findings, null, 2)}`,
-        );
+        for (const id of record.recommendedNarratives ?? []) assert.ok(defaultCatalog.narratives[id], `${kind}/${record.id} recommends unknown narrative ${id}`);
+        for (const id of record.recommendedTones ?? []) assert.ok(defaultCatalog.tones[id], `${kind}/${record.id} recommends unknown tone ${id}`);
       });
     }
   }
@@ -119,16 +98,11 @@ describe("catalog cross-links resolve", () => {
     );
   });
 
-  test("broken cross-links in a catalog record warn, never error", () => {
+  test("soft cross-links in a catalog record are never checked as references", () => {
     const audienceTemplate = audiences.find((record) => record.id === "executive");
-    const brokenAudienceResult = validateCatalogRecord("audiences", {
-      ...audienceTemplate,
-      recommendedNarratives: ["no-such-narrative", "classic-story"],
-    });
-    assert.equal(brokenAudienceResult.valid, true, "broken cross-links must warn, never error");
-    assert.equal(brokenAudienceResult.counts.warning, 1, JSON.stringify(brokenAudienceResult.findings, null, 2));
-    assert.equal(brokenAudienceResult.findings[0].path, "/recommendedNarratives/0");
-    assert.equal(brokenAudienceResult.findings[0].ruleId, "opf/catalog-reference");
+    const result = validateCatalogRecord("audiences", { ...audienceTemplate, recommendedNarratives: ["no-such-narrative", "classic-story"] });
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.findings, []);
   });
 });
 
