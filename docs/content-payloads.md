@@ -430,3 +430,9 @@ The same payload objects work inside regions — here, the sidebar-plus-main sha
   }
 }
 ```
+
+## Accessibility of the preview
+
+The SVG preview and the PowerPoint export agree on what a reader can reach. The slide root is a labelled container (`role="group"`, `aria-roledescription="slide"`, `aria-label` set to the slide title), never an image: an image makes everything inside it presentational, so a screen reader would hear only the title. Text stays reachable, in the order it is drawn: tag, title and subtitle, the content in layout order, footnotes, then header and footer. That covers body text, list entries, quotes, metric values and labels, table cells, timeline entries, captions and furniture text.
+
+A picture with `alt` is an image with that name. Purely decorative drawing is hidden (`aria-hidden`): the background and its overlay, card frames, table cell fills and borders, dividers, timeline markers, watermarks, list bullets, a picture or chart whose `alt` is `""`, and a header or footer picture without `alt` (a logo repeated on every slide). A chart with `alt` is an image with that name, and its drawn marks are not announced separately. The deck element, the player and `renderDeckHtml` in `@openpresentation/opf-render` put the one slide container (region or figure) around the drawing, so a slide is announced once.
