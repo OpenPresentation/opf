@@ -15,7 +15,63 @@
       "type": "title"
     },
     {
-      "type": "text"
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
     }
   ],
   "tags": [
@@ -25,5 +81,14 @@
   ],
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/business-model-canvas.svg"
+  },
+  "composition": {
+    "mode": "column",
+    "weights": [
+      2,
+      1
+    ],
+    "padding": 0.04,
+    "gap": 0.02
   }
 }

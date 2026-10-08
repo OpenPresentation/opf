@@ -233,8 +233,12 @@ const contentBlocks = {
 // A layout's family is its primary content kind, read from its placeholders, so the family list does not change when the
 // bundled catalog gains layouts (FF-55 bundles the 70 legacy gallery ids next to the structural ones): the first
 // placeholder that is not a heading names the family, a heading-only layout is a title, and no placeholder is blank.
+// FA-26: a placeholder group counts through its leaves, in reading order. Written here, not imported, so the published
+// matrix (OPF_MATRIX_ENGINES) runs against packages that predate layoutLeaves.
+const layoutLeaves = (record) => (record.placeholders ?? []).flatMap((entry) => (entry.type === 'group' ? layoutLeaves(entry) : [entry]));
 const layoutFamily = (record) => {
-  const types = (record.placeholders ?? []).map((placeholder) => placeholder.type);
+  // FA-26: placeholder groups count through their leaves, in reading order.
+  const types = layoutLeaves(record).map((placeholder) => placeholder.type);
   const body = types.find((type) => !['title', 'subtitle', 'tag'].includes(type));
   if (body !== undefined) return body;
   return types.length ? 'title' : 'blank';
@@ -254,7 +258,7 @@ const placeholderBlock = {
   video: () => ({video: 'asset:clip'})
 };
 function layoutSlide(id, layoutId, text) {
-  const types = byId('layouts', layoutId).placeholders.map((placeholder) => placeholder.type);
+  const types = layoutLeaves(byId('layouts', layoutId)).map((placeholder) => placeholder.type);
   const content = types.filter((type) => type !== 'title' && type !== 'subtitle');
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => placeholderBlock[type](text))} : {})};
 }

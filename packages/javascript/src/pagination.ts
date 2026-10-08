@@ -135,6 +135,20 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   let evaluations = 0;
   const {fonts,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
   const composeOptions: ComposeSlideOptions = {...engineOptions,...(fonts?.textMeasurement?{textMeasurement:fonts.textMeasurement}:{})};
+  // FA-26: a layout record's placeholder groups carry compositions of their own, which the slide cannot reach. Evaluate
+  // them under the same readability policy as content groups: no group reads below the pagination floor, and no group's
+  // overflow: 'error' aborts the measurement that decides where to split.
+  const readableLayout = (layout: unknown): unknown => {
+    if (!isRecord(layout) || !Array.isArray(layout.placeholders) || !layout.placeholders.some(entry => isRecord(entry) && entry.type === 'group')) return layout;
+    // A group without its own minFontSize inherits the root's, which withReadability has already raised.
+    const visit = (entries: unknown[]): unknown[] => entries.map(entry => {
+      if (!isRecord(entry) || entry.type !== 'group') return entry;
+      const own = isRecord(entry.composition) ? entry.composition : {};
+      return {...entry, composition: {...own, ...(typeof own.minFontSize === 'number' ? {minFontSize: Math.max(minFontSize, own.minFontSize)} : {}), overflow: 'warn'}, placeholders: Array.isArray(entry.placeholders) ? visit(entry.placeholders) : entry.placeholders};
+    });
+    return {...layout, placeholders: visit(layout.placeholders)};
+  };
+  if (options.layout !== undefined) composeOptions.layout = readableLayout(options.layout) as ComposeSlideOptions['layout'];
   const geometry = (slide: Record<string, any>, pageIndex = 0) => {
     if (++evaluations > 20000) throw new OPFPaginationError('Pagination exceeded its layout evaluation limit. Split the input into smaller sections.');
     return composeSlide(withReadability(slide,true), {...composeOptions,slideNumber:(options.slideNumber??sourceIndex+1)+pageIndex});

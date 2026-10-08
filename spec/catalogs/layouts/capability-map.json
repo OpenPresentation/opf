@@ -8,15 +8,62 @@
     "titleAlignment": "left",
     "contentAlignment": "left",
     "contentBox": true,
-    "contentDirection": "horizontal",
-    "imageFit": "cover"
+    "contentDirection": "horizontal"
   },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "image"
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
     }
   ],
   "tags": [
@@ -26,5 +73,8 @@
   ],
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/capability-map.svg"
+  },
+  "composition": {
+    "mode": "row"
   }
 }

@@ -750,7 +750,7 @@
         "chartPrimary": {
           "type": "string",
           "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight."
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. It is shorthand for a placeholder group (layout.schema.json PlaceholderGroup): the slide composes exactly as on a layout record whose root composition is that weighted row or column and whose placeholders are the chart and one automatic group of the other content, and while it applies it replaces the layout record's own placeholder groups as well."
         },
         "imageFit": {
           "type": "string",
@@ -3854,7 +3854,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
+      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups (content groups here, placeholder groups in a layout record) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
       "properties": {
         "mode": {
           "type": "string",

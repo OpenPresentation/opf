@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import { validateCatalogRecord } from '../dist/index.js';
 import { layouts } from './support/catalog.mjs';
-import { layoutContent } from '../dist/composition.js';
+import { layoutContent, layoutLeaves } from '../dist/composition.js';
 
 const HEAD = ['title', 'subtitle', 'tag'];
 const KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'];
@@ -30,8 +30,9 @@ test('every bundled layout record uses the new shape', () => {
     assert.equal(validateCatalogRecord('layouts', record).valid, true, record.id);
     for (const key of Object.keys(record)) assert.ok(key in layoutSchema.properties, `${record.id}: ${key}`);
     const content = layoutContent(record);
-    for (const placeholder of record.placeholders ?? []) assert.ok([...HEAD, ...KINDS].includes(placeholder.type), `${record.id}: ${placeholder.type}`);
-    assert.equal(content.count, (record.placeholders ?? []).filter(p => KINDS.includes(p.type)).length, record.id);
+    // FA-26: a placeholder group is not a kind; its leaves are.
+    for (const placeholder of layoutLeaves(record)) assert.ok([...HEAD, ...KINDS].includes(placeholder.type), `${record.id}: ${placeholder.type}`);
+    assert.equal(content.count, layoutLeaves(record).filter(p => KINDS.includes(p.type)).length, record.id);
     for (const value of Object.values(record.design ?? {})) assert.notEqual(value, 'None');
   }
 });

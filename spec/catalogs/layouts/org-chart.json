@@ -7,7 +7,7 @@
   "design": {
     "titleAlignment": "left",
     "contentAlignment": "left",
-    "contentBox": false,
+    "contentBox": true,
     "contentDirection": "horizontal"
   },
   "placeholders": [
@@ -15,10 +15,57 @@
       "type": "title"
     },
     {
-      "type": "chart"
+      "type": "text"
     },
     {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        }
+      ]
     }
   ],
   "tags": [
@@ -30,10 +77,10 @@
     "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
   },
   "composition": {
-    "mode": "row",
+    "mode": "column",
     "weights": [
-      2,
-      1
+      1,
+      3
     ]
   }
 }

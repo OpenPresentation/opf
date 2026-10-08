@@ -6,7 +6,7 @@
   "inputs": {
     "catalogs": {
       "dir": "spec/catalogs",
-      "gallery": "5645db8",
+      "gallery": "db31c09",
       "kinds": 11
     },
     "gallery": {

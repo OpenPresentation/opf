@@ -15,13 +15,58 @@
       "type": "title"
     },
     {
-      "type": "metric"
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
     },
     {
-      "type": "metric"
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
     },
     {
-      "type": "metric"
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
     }
   ],
   "tags": [

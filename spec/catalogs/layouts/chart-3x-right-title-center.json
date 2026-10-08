@@ -3,23 +3,30 @@
   "id": "chart-3x-right-title-center",
   "name": "Chart_3x_Right_Title_Center",
   "summary": "Canonical OPF chart 3x title layout.",
-  "description": "Chart 3x Right Title Center OPF layout with 3 chart zones and a slide title.",
+  "description": "Chart 3x Right Title Center OPF layout: a centered slide title over two supporting charts stacked on the left and a primary chart on the right.",
   "design": {
     "titleAlignment": "center",
     "contentAlignment": "center",
     "contentBox": false,
-    "contentDirection": "horizontal",
-    "chartPrimary": "right"
+    "contentDirection": "horizontal"
   },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "chart"
-    },
-    {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
     },
     {
       "type": "chart"
@@ -37,9 +44,8 @@
   "composition": {
     "mode": "row",
     "weights": [
-      1,
-      1,
-      2
+      2,
+      3
     ]
   }
 }

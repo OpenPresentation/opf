@@ -7,6 +7,7 @@ import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
+import { MAX_PLACEHOLDER_GROUP_DEPTH } from "./layout-content.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
@@ -970,6 +971,39 @@ function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
     });
 }
 
+// FA-26: placeholder groups in a layout record. The schema already rejects a group nested deeper than
+// MAX_PLACEHOLDER_GROUP_DEPTH, a heading inside a group and a placement inside a group, through its if/else entries; these
+// issues name the rule at the offending entry instead, and replace the schema's generic errors there and above it.
+const placeholderHeadings = new Set(["title", "subtitle", "tag"]);
+function placeholderGroupIssues(value: unknown): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  if (!isRecord(value) || !Array.isArray(value.placeholders)) return issues;
+  const walk = (entries: unknown[], path: string, depth: number): void => entries.forEach((entry, index) => {
+    if (!isRecord(entry)) return;
+    const at = `${path}/${index}`;
+    if (entry.type === "group") {
+      if (depth >= MAX_PLACEHOLDER_GROUP_DEPTH) issues.push(semanticIssue(at, `placeholder groups nest at most ${MAX_PLACEHOLDER_GROUP_DEPTH} levels inside a layout record; this group would be level ${depth + 1}`, { code: "layout-placeholder-group", depth: depth + 1, maxDepth: MAX_PLACEHOLDER_GROUP_DEPTH }));
+      else if (Array.isArray(entry.placeholders)) walk(entry.placeholders, `${at}/placeholders`, depth + 1);
+      return;
+    }
+    if (depth === 0) return;
+    if (typeof entry.type === "string" && placeholderHeadings.has(entry.type)) issues.push(semanticIssue(`${at}/type`, `a placeholder group holds body regions only; a '${entry.type}' placeholder belongs at the record's top level`, { code: "layout-placeholder-group" }));
+    if (hasOwn(entry, "placement")) issues.push(semanticIssue(`${at}/placement`, "placement is only valid on a top-level image placeholder; a region inside a placeholder group cannot bleed to a slide edge", { code: "image-placement-invalid" }));
+  });
+  walk(value.placeholders, "/placeholders", 0);
+  return issues;
+}
+function withPlaceholderGroupIssues(errors: ValidationIssue[], value: unknown): ValidationIssue[] {
+  const issues = placeholderGroupIssues(value);
+  // An entry's own errors go. So does the if/else wrapper of every placeholder entry that holds a reported error: it
+  // only repeats that the entry failed its branch.
+  const entries = issues.map((issue) => issue.path.replace(/\/(type|placement)$/, ""));
+  const covered = (error: ValidationIssue) => entries.some((entry) => error.path === entry || error.path.startsWith(`${entry}/`));
+  const kept = errors.filter((error) => !covered(error));
+  const reported = [...kept.filter((error) => error.keyword !== "if"), ...issues].map((error) => error.path);
+  return [...kept.filter((error) => error.keyword !== "if" || !reported.some((path) => path === error.path || path.startsWith(`${error.path}/`))), ...issues];
+}
+
 export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind = "presentation", options: SchemaCheckOptions = {}): SchemaCheckResult {
   const resolved = resolveValidator(schemaOrKind);
   if (resolved.schemaName === "presentation") {
@@ -1006,7 +1040,8 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   }
   const valid = resolved.validate(subject) === true;
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
-  const errors = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
+  const mapped = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
+  const errors = resolved.schemaName === "layout" ? withPlaceholderGroupIssues(mapped, subject) : mapped;
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {

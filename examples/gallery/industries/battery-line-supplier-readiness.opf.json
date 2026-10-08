@@ -817,16 +817,40 @@
               "type": "title"
             },
             {
-              "type": "chart"
+              "type": "group",
+              "composition": {
+                "mode": "column",
+                "weights": [
+                  2,
+                  1
+                ]
+              },
+              "placeholders": [
+                {
+                  "type": "chart"
+                },
+                {
+                  "type": "text"
+                }
+              ]
             },
             {
-              "type": "text"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+              "type": "group",
+              "composition": {
+                "mode": "column",
+                "weights": [
+                  2,
+                  1
+                ]
+              },
+              "placeholders": [
+                {
+                  "type": "chart"
+                },
+                {
+                  "type": "text"
+                }
+              ]
             }
           ],
           "composition": {

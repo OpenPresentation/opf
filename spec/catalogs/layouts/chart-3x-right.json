@@ -3,19 +3,26 @@
   "id": "chart-3x-right",
   "name": "Chart_3x_Right",
   "summary": "Canonical OPF chart 3x layout.",
-  "description": "Chart 3x Right OPF layout with 3 chart zones.",
+  "description": "Chart 3x Right OPF layout: two supporting charts stacked on the left, a primary chart on the right.",
   "design": {
     "contentAlignment": "center",
     "contentBox": false,
-    "contentDirection": "horizontal",
-    "chartPrimary": "right"
+    "contentDirection": "horizontal"
   },
   "placeholders": [
     {
-      "type": "chart"
-    },
-    {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
     },
     {
       "type": "chart"
@@ -32,9 +39,8 @@
   "composition": {
     "mode": "row",
     "weights": [
-      1,
-      1,
-      2
+      2,
+      3
     ]
   }
 }

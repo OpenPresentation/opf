@@ -57,8 +57,8 @@
     },
     "placeholders": {
       "type": "array",
-      "items": { "$ref": "#/$defs/Placeholder" },
-      "description": "Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutContent in @openpresentation/opf), never stored separately. The engine fills 'title', 'subtitle' and 'tag' placeholders from Slide.title, Slide.subtitle and Slide.tag. The other placeholders are content-kind regions that composition uses to size the body and that pickers use to match layouts. Slide content itself lives either in root payload fields or promoted region keys on Slide. Chrome (slide number, footer, date) is not included here; it is owned by Design.header / Design.footer."
+      "items": { "$ref": "#/$defs/PlaceholderEntry" },
+      "description": "Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutContent in @openpresentation/opf, which counts the leaves of placeholder groups), never stored separately. The engine fills 'title', 'subtitle' and 'tag' placeholders from Slide.title, Slide.subtitle and Slide.tag. The other placeholders are content-kind regions that composition uses to size the body and that pickers use to match layouts. An entry may instead be a placeholder group ({ \"type\": \"group\", \"composition\", \"placeholders\" }) that arranges its own regions inside one cell of this record's composition, so a record can say 'two stacked panels beside a chart' once; groups nest at most three levels. Slide content stays flat: its body payloads fill the leaf regions in reading order (depth first, in array order). Slide content itself lives either in root payload fields, blocks or promoted region keys on Slide. Chrome (slide number, footer, date) is not included here; it is owned by Design.header / Design.footer."
     },
     "tags": {
       "type": "array",
@@ -116,6 +116,173 @@
     }
   },
   "$defs": {
+    "PlaceholderEntry": {
+      "description": "One entry of a layout's placeholders: a region (Placeholder) or, when its type is 'group', a placeholder group (PlaceholderGroup).",
+      "if": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "const": "group"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/PlaceholderGroup"
+      },
+      "else": {
+        "$ref": "#/$defs/Placeholder"
+      }
+    },
+    "PlaceholderGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "placeholders"
+      ],
+      "description": "A placeholder group: regions arranged by their own composition inside one cell of the record's composition, the way a content group (a block with blocks) arranges its children. Slide content fills the group's leaf regions in reading order, as part of one flat sequence for the whole record. A group holds body regions and groups only (no title, subtitle or tag, and no placement), and groups nest at most three levels inside a record: this is the first. Groups draw nothing of their own and have no slide path; design.chartPrimary is shorthand for a record whose root holds the chart and one group of the other content.",
+      "properties": {
+        "type": {
+          "const": "group",
+          "description": "Marks the entry as a placeholder group."
+        },
+        "composition": {
+          "$ref": "#/$defs/Composition",
+          "description": "How the group arranges its regions, with the semantics of a content group's composition: only minFontSize and overflow inherit from the enclosing composition; padding defaults to 0 and gap is a fraction of the group's short edge. Omitted, the group arranges its regions automatically."
+        },
+        "placeholders": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/PlaceholderGroupEntry2"
+          },
+          "description": "The group's regions and nested groups, in reading order."
+        }
+      }
+    },
+    "PlaceholderGroupEntry2": {
+      "description": "An entry of a first-level group: a region (GroupedPlaceholder) or a second-level group (PlaceholderGroup2).",
+      "if": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "const": "group"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/PlaceholderGroup2"
+      },
+      "else": {
+        "$ref": "#/$defs/GroupedPlaceholder"
+      }
+    },
+    "PlaceholderGroup2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "placeholders"
+      ],
+      "description": "A placeholder group nested in another (the second level). Same fields as PlaceholderGroup.",
+      "properties": {
+        "type": {
+          "const": "group",
+          "description": "Marks the entry as a placeholder group."
+        },
+        "composition": {
+          "$ref": "#/$defs/Composition",
+          "description": "How the group arranges its regions; see PlaceholderGroup.composition."
+        },
+        "placeholders": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/PlaceholderGroupEntry3"
+          },
+          "description": "The group's regions and nested groups, in reading order."
+        }
+      }
+    },
+    "PlaceholderGroupEntry3": {
+      "description": "An entry of a second-level group: a region (GroupedPlaceholder) or a third-level group (PlaceholderGroup3).",
+      "if": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "const": "group"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/PlaceholderGroup3"
+      },
+      "else": {
+        "$ref": "#/$defs/GroupedPlaceholder"
+      }
+    },
+    "PlaceholderGroup3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "placeholders"
+      ],
+      "description": "The innermost placeholder group (the third level): it holds regions only, never another group.",
+      "properties": {
+        "type": {
+          "const": "group",
+          "description": "Marks the entry as a placeholder group."
+        },
+        "composition": {
+          "$ref": "#/$defs/Composition",
+          "description": "How the group arranges its regions; see PlaceholderGroup.composition."
+        },
+        "placeholders": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/GroupedPlaceholder"
+          },
+          "description": "The group's regions, in reading order."
+        }
+      }
+    },
+    "GroupedPlaceholder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "description": "A region inside a placeholder group: a body content kind only. Headings ('title', 'subtitle', 'tag') stay at the record's top level, and only a top-level image placeholder may carry a placement.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "list",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "code",
+            "metric",
+            "quote",
+            "timeline"
+          ],
+          "description": "The content kind of the region, from the one OPF content-kind vocabulary (see Placeholder.type)."
+        }
+      }
+    },
     "Placeholder": {
       "type": "object",
       "required": [
@@ -156,7 +323,7 @@
         },
         "placement": {
           "$ref": "#/$defs/ImagePlacement",
-          "description": "Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder places the slide's n-th top-level image (Slide.image or an image block in blocks) unless that block sets its own placement. The headings and the other content compose in the rest of the slide."
+          "description": "Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder (counting the image regions of placeholder groups too, in reading order) places the slide's n-th top-level image (Slide.image or an image block in blocks) unless that block sets its own placement. Only a top-level image placeholder may carry a placement; a region inside a placeholder group cannot bleed to a slide edge. The headings and the other content compose in the rest of the slide."
         }
       }
     },
@@ -234,7 +401,7 @@
             "left",
             "right"
           ],
-          "description": "Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there."
+          "description": "Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. It is shorthand for a placeholder group: a record can state the same structure explicitly as a root row or column of the chart and one PlaceholderGroup of the other regions, weighted 3:2."
         },
         "imageFit": {
           "type": "string",
@@ -258,7 +425,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
+      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups (placeholder groups here, content groups in a slide) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
       "properties": {
         "mode": {
           "type": "string",
