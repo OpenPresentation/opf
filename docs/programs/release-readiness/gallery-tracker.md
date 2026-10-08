@@ -94,7 +94,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Input | Source |
 | --- | --- |
-| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `5645db8`) |
+| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `db31c09`) |
 | pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `5645db8`, captured 2026-10-08) |
 | Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.14.2 `09f4ce2`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
 | Audits A and B | `docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json`, `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json` (opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, pptx-gallery `c349a61`) |

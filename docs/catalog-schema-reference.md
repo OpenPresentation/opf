@@ -282,12 +282,82 @@ _No named properties._
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `design` | no | `ref:DesignHints` | The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Eve... |
-| `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutCon... |
+| `placeholders` | no | `array<ref:PlaceholderEntry>` | Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutCon... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `composition` | no | `ref:Composition` |  |
 
 ### Nested Types
+
+#### PlaceholderEntry
+
+- Type: `schema`
+- Required fields: none
+- Purpose: One entry of a layout's placeholders: a region (Placeholder) or, when its type is 'group', a placeholder group (PlaceholderGroup).
+
+_No named properties._
+
+#### PlaceholderGroup
+
+- Type: `object`
+- Required fields: `type`, `placeholders`
+- Purpose: A placeholder group: regions arranged by their own composition inside one cell of the record's composition, the way a content group (a block with blocks) arranges its children. Slide content fills the group's leaf regions in reading order, as part of one flat sequence for the whole record. A group holds body regions and groups only (no title, subtitle or tag, and no placement), and groups nest at most three levels...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
+| `composition` | no | `ref:Composition` | How the group arranges its regions, with the semantics of a content group's composition: only minFontSize and overflow inherit from the enclosing composition; padding defaults to 0 and gap is a fraction of the group's... |
+| `placeholders` | yes | `array<ref:PlaceholderGroupEntry2>` | The group's regions and nested groups, in reading order. |
+
+#### PlaceholderGroupEntry2
+
+- Type: `schema`
+- Required fields: none
+- Purpose: An entry of a first-level group: a region (GroupedPlaceholder) or a second-level group (PlaceholderGroup2).
+
+_No named properties._
+
+#### PlaceholderGroup2
+
+- Type: `object`
+- Required fields: `type`, `placeholders`
+- Purpose: A placeholder group nested in another (the second level). Same fields as PlaceholderGroup.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
+| `composition` | no | `ref:Composition` | How the group arranges its regions; see PlaceholderGroup.composition. |
+| `placeholders` | yes | `array<ref:PlaceholderGroupEntry3>` | The group's regions and nested groups, in reading order. |
+
+#### PlaceholderGroupEntry3
+
+- Type: `schema`
+- Required fields: none
+- Purpose: An entry of a second-level group: a region (GroupedPlaceholder) or a third-level group (PlaceholderGroup3).
+
+_No named properties._
+
+#### PlaceholderGroup3
+
+- Type: `object`
+- Required fields: `type`, `placeholders`
+- Purpose: The innermost placeholder group (the third level): it holds regions only, never another group.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
+| `composition` | no | `ref:Composition` | How the group arranges its regions; see PlaceholderGroup.composition. |
+| `placeholders` | yes | `array<ref:GroupedPlaceholder>` | The group's regions, in reading order. |
+
+#### GroupedPlaceholder
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A region inside a placeholder group: a body content kind only. Headings ('title', 'subtitle', 'tag') stay at the record's top level, and only a top-level image placeholder may carry a placement.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | The content kind of the region, from the one OPF content-kind vocabulary (see Placeholder.type). |
 
 #### Placeholder
 
@@ -298,7 +368,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' a... |
-| `placement` | no | `ref:ImagePlacement` | Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder places the slide's n-th top-level image (Slide.image or an image bloc... |
+| `placement` | no | `ref:ImagePlacement` | Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder (counting the image regions of placeholder groups too, in reading ord... |
 
 #### ImagePlacement
 
@@ -324,7 +394,7 @@ _No named properties._
 | `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. It is shorthand for a placeholder group... |
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
 | `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
 
@@ -332,7 +402,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups (placeholder groups here, content groups in a slide) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

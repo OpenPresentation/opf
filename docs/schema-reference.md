@@ -1300,7 +1300,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups (content groups here, placeholder groups in a layout record) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

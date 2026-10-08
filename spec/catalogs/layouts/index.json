@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "Catalog of slide layouts available in the openpresentation.org catalog. Each entry is a lightweight summary; full layout records live in the per-id JSON files alongside this index.",
-  "contentSha256": "f9121c466032011762d58ee27cd3e50f43a388cc75b841219f87b8001f7632a3",
+  "contentSha256": "877c1cd335cbbb8258a5b93e78e112d740906c33c9910586c8b12c63482b5adb",
   "records": [
     {
       "id": "title-slide",

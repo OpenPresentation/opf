@@ -1,0 +1,622 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Placeholder groups",
+  "description": "FA-26 cross-engine fixture: layout records with nested placeholder groups, and design.chartPrimary as the group it stands for. Self-contained (no host catalog); preview, editor and PPTX must place every leaf in the same box.",
+  "language": "en",
+  "catalogs": {
+    "default": false,
+    "custom": {
+      "layouts": {
+        "stacked-text-chart-right": {
+          "name": "Stacked text, chart right",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "group",
+              "composition": {
+                "mode": "column",
+                "weights": [
+                  1,
+                  1
+                ]
+              },
+              "placeholders": [
+                {
+                  "type": "text"
+                },
+                {
+                  "type": "text"
+                }
+              ]
+            },
+            {
+              "type": "chart"
+            }
+          ],
+          "composition": {
+            "mode": "row",
+            "weights": [
+              2,
+              3
+            ]
+          }
+        },
+        "chart-left-stacked": {
+          "name": "Chart left, two stacked",
+          "summary": "A primary chart beside two stacked charts: chartPrimary left, written as a group.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "group",
+              "composition": {
+                "mode": "column"
+              },
+              "placeholders": [
+                {
+                  "type": "chart"
+                },
+                {
+                  "type": "chart"
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "mode": "row",
+            "weights": [
+              3,
+              2
+            ]
+          }
+        },
+        "three-level": {
+          "name": "Three levels",
+          "summary": "A canvas: a top band of three columns, the middle one split twice, over a bottom band of two cells.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "group",
+              "composition": {
+                "mode": "row",
+                "weights": [
+                  1,
+                  2,
+                  1
+                ]
+              },
+              "placeholders": [
+                {
+                  "type": "text"
+                },
+                {
+                  "type": "group",
+                  "composition": {
+                    "mode": "column"
+                  },
+                  "placeholders": [
+                    {
+                      "type": "text"
+                    },
+                    {
+                      "type": "group",
+                      "composition": {
+                        "mode": "row"
+                      },
+                      "placeholders": [
+                        {
+                          "type": "metric"
+                        },
+                        {
+                          "type": "metric"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text"
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "composition": {
+                "mode": "row"
+              },
+              "placeholders": [
+                {
+                  "type": "text"
+                },
+                {
+                  "type": "text"
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              3,
+              1
+            ]
+          }
+        }
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "nested-example",
+      "layout": "stacked-text-chart-right",
+      "title": "Revenue grew 18% on two drivers",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "text",
+          "text": "Churn down to 2.1%"
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nested-fewer",
+      "layout": "stacked-text-chart-right",
+      "title": "One driver so far",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        }
+      ]
+    },
+    {
+      "id": "nested-more",
+      "layout": "stacked-text-chart-right",
+      "title": "More content than regions",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "text",
+          "text": "Churn down to 2.1%"
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Pipeline is the next lever"
+        }
+      ]
+    },
+    {
+      "id": "nested-override",
+      "layout": "stacked-text-chart-right",
+      "title": "The slide overrides the root weights",
+      "composition": {
+        "weights": [
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "text",
+          "text": "Churn down to 2.1%"
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "three-level",
+      "layout": "three-level",
+      "title": "Business model on one page",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Partners"
+        },
+        {
+          "type": "text",
+          "text": "Value proposition"
+        },
+        {
+          "type": "metric",
+          "metric": {
+            "value": 42,
+            "label": "Segments"
+          }
+        },
+        {
+          "type": "metric",
+          "metric": {
+            "value": 7,
+            "label": "Channels"
+          }
+        },
+        {
+          "type": "text",
+          "text": "Customers"
+        },
+        {
+          "type": "text",
+          "text": "Costs"
+        },
+        {
+          "type": "text",
+          "text": "Revenue"
+        }
+      ]
+    },
+    {
+      "id": "chart-left-stacked",
+      "layout": "chart-left-stacked",
+      "title": "Three charts, one primary",
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Margin by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Margin"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  31
+                ],
+                [
+                  "Q2",
+                  33
+                ],
+                [
+                  "Q3",
+                  34
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Seats by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Seats"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  120
+                ],
+                [
+                  "Q2",
+                  135
+                ],
+                [
+                  "Q3",
+                  160
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-left",
+      "title": "chartPrimary left",
+      "design": {
+        "chartPrimary": "left"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-right",
+      "title": "chartPrimary right",
+      "design": {
+        "chartPrimary": "right"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-top",
+      "title": "chartPrimary top",
+      "design": {
+        "chartPrimary": "top"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-bottom",
+      "title": "chartPrimary bottom",
+      "design": {
+        "chartPrimary": "bottom"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    }
+  ]
+}

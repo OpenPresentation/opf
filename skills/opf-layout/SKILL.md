@@ -14,6 +14,7 @@ Work on the supplied OPF document without silently rewriting or dropping content
 - `weights` size columns in row/grid/auto and rows in column mode. They describe relative allocation, not percentages or absolute pixels.
 - Nested groups keep related content together. Each group contains `blocks` and optionally `composition`; it is not also a leaf `text`/`image` payload.
 - Promoted regions (`left`, `center+right`, `top:left`, and the other schema-defined regions) preserve placement on a 3×3 vocabulary. Use disjoint regions; flow direction and weights do not relocate them.
+- A layout record can carry the structure instead of every slide: a placeholder may be a group `{ "type": "group", "composition", "placeholders" }` (at most three levels, body regions only). The slide's content stays flat and fills the record's leaf regions in reading order, so write the blocks in the order the record reads (`layoutStructure(record)` shows it, for example `title, column (text, text), chart`). `design.chartPrimary` is shorthand for such a group.
 
 Read [geometry and repair](references/geometry.md) before measuring or paginating. The format schema is the source of numeric bounds; do not invent arbitrary `x`, `y`, `width`, or `fontSize` fields on leaf payloads.
 

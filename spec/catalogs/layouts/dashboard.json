@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "dashboard",
   "name": "Dashboard",
-  "summary": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
-  "description": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
+  "summary": "Headline metrics above a row of small charts for an at-a-glance overview. Bird's-eye view of a business or function.",
+  "description": "Headline metrics above a row of small charts for an at-a-glance overview. Bird's-eye view of a business or function.",
   "design": {
     "titleAlignment": "left",
     "contentAlignment": "left",
@@ -15,10 +15,38 @@
       "type": "title"
     },
     {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        }
+      ]
     },
     {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
     }
   ],
   "tags": [
@@ -30,6 +58,10 @@
     "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
   },
   "composition": {
-    "mode": "row"
+    "mode": "column",
+    "weights": [
+      2,
+      3
+    ]
   }
 }

@@ -3,7 +3,7 @@
   "id": "market-size",
   "name": "Market_Size",
   "summary": "Nested TAM / SAM / SOM visualization showing total market, addressable segment, and obtainable share.",
-  "description": "Nested TAM / SAM / SOM visualization showing total market, addressable segment, and obtainable share.",
+  "description": "Nested TAM / SAM / SOM visualization beside the three numbers stacked: total market, addressable segment, and obtainable share.",
   "design": {
     "titleAlignment": "left",
     "contentAlignment": "left",
@@ -15,7 +15,24 @@
       "type": "title"
     },
     {
-      "type": "text"
+      "type": "image"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        }
+      ]
     }
   ],
   "tags": [
@@ -25,5 +42,12 @@
   ],
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/market-size.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      3,
+      2
+    ]
   }
 }

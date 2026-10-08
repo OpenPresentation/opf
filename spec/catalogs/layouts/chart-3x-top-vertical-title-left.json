@@ -3,13 +3,12 @@
   "id": "chart-3x-top-vertical-title-left",
   "name": "Chart_3x_Top_Vertical_Title_Left",
   "summary": "Canonical OPF chart 3x title vertical layout.",
-  "description": "Chart 3x Top Vertical Title Left OPF layout with 3 chart zones in a vertical reading flow and a slide title.",
+  "description": "Chart 3x Top Vertical Title Left OPF layout: a slide title over a primary chart, with two supporting charts side by side below it.",
   "design": {
     "titleAlignment": "left",
     "contentAlignment": "center",
     "contentBox": false,
-    "contentDirection": "vertical",
-    "chartPrimary": "top"
+    "contentDirection": "vertical"
   },
   "placeholders": [
     {
@@ -19,10 +18,18 @@
       "type": "chart"
     },
     {
-      "type": "chart"
-    },
-    {
-      "type": "chart"
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
     }
   ],
   "tags": [
@@ -38,9 +45,8 @@
   "composition": {
     "mode": "column",
     "weights": [
-      2,
-      1,
-      1
+      3,
+      2
     ]
   }
 }

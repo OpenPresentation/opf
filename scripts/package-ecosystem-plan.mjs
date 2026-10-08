@@ -16,7 +16,7 @@
 //                        `test:contract` runs its full `test` instead (resolveStep), so a stale lock only costs time.
 export const siblingNames = ['opf-render', 'opf-editor', 'opf-pptx'];
 
-const coreTasks = ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts', 'test:image-treatments'];
+const coreTasks = ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts', 'test:image-treatments', 'test:placeholder-groups'];
 
 /** One step is {command, args, sibling?}: `sibling` names the checkout the command runs in (default: core). */
 function siblingSteps(name, tier = 'full') {
