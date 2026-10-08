@@ -2,11 +2,11 @@
   "name": "STEM Lab Funding Proposal",
   "language": "en-AU",
   "audience": [
-    "board"
+    "candidates"
   ],
   "purpose": "plan",
   "tone": "conversational",
-  "narrative": "focus",
+  "narrative": "capacity-planning",
   "design": {
     "theme": "minimal",
     "colorScheme": "luxury",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar-with-markers",
+        "type": "treemap",
         "data": {
           "columns": [
             "Quarter",
@@ -101,150 +101,117 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "focus": {
-          "name": "Focus",
-          "summary": "Long-term, principle-driven business arc inspired by Jeff Bezos's 1997 letter to shareholders: name the focus, account for performance, articulate the framework, and commit to the discipline that will keep the company on track. For founder letters, all-hands narratives, and any deck where the audience needs to feel the through-line.",
+        "capacity-planning": {
+          "name": "Capacity Planning",
+          "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
           "audienceFit": [
-            "shareholders",
             "leadership",
-            "all-hands",
-            "board"
+            "operations",
+            "hr-partners",
+            "finance"
           ],
           "duration": {
             "min": 20,
             "max": 45
           },
           "tags": [
-            "inspirational",
-            "leadership",
-            "principles",
-            "all-hands"
+            "workforce",
+            "operations",
+            "planning",
+            "resource-management"
           ],
           "beats": [
             {
-              "id": "welcome",
-              "name": "Welcome",
-              "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven.",
-              "instructions": "Overview and objectives",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "accomplishments",
-              "name": "Accomplishments",
-              "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline.",
-              "instructions": "Showcase recent achievements",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "potential",
-              "name": "Potential",
-              "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful.",
-              "instructions": "Detail market opportunities",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "competitive-edge",
-              "name": "Competitive Edge",
-              "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words.",
-              "instructions": "Reveal strategic positioning",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "long-term-vision",
-              "name": "Long-Term Vision",
-              "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on.",
-              "instructions": "Emphasize focused future orientation",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "performance-metrics",
-              "name": "Performance Metrics",
-              "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter.",
-              "instructions": "Illuminate growth indicators",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "growth-achievement",
-              "name": "Growth Achievement",
-              "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real.",
-              "instructions": "Certify tangible progress",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "strategic-framework",
-              "name": "Strategic Framework",
-              "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior.",
-              "instructions": "Explain decision principles",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "expansion",
-              "name": "Expansion",
-              "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter.",
-              "instructions": "Detail growth potential",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "future-objectives",
-              "name": "Future Objectives",
-              "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode.",
-              "instructions": "Forecast upcoming targets",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "acknowledgment",
-              "name": "Acknowledgment",
-              "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks.",
-              "instructions": "Recognize contributions and successes",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-remarks",
-              "name": "Closing Remarks",
-              "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
+              "id": "kickoff",
+              "name": "Kickoff",
+              "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
               "layout": "title",
-              "instructions": "Recap, thank, inspire",
+              "instructions": "Introduce the topic",
+              "type": "text"
+            },
+            {
+              "id": "urgency",
+              "name": "Urgency",
+              "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
+              "instructions": "Show needs",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
+              "instructions": "Highlight current resources",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "projection",
+              "name": "Projection",
+              "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
+              "instructions": "Predict future demands",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "tactics",
+              "name": "Tactics",
+              "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
+              "instructions": "Suggest coping strategies",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "implementation",
+              "name": "Implementation",
+              "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
+              "instructions": "Discuss deployment plans",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "revision",
+              "name": "Revision",
+              "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
+              "instructions": "Evaluate and adjust",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
+              "layout": "title",
+              "instructions": "Wrap-up & recommendations",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
           ],
           "recommendedTones": [
-            "formal",
+            "inspirational",
+            "casual",
             "authoritative"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "hiring",
+            "recruiting"
           ]
         }
       },

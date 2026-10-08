@@ -5,14 +5,14 @@
   "filename": "german-works-council-update",
   "language": "de",
   "audience": [
-    "customer",
+    "regulatory",
     {
-      "id": "marketing",
+      "id": "all-hands",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "justice"
+        "vision-roadmap"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "justice",
+  "narrative": "vision-roadmap",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "line",
         "data": {
           "columns": [
             "Quarter",
@@ -358,162 +358,118 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "justice": {
-          "name": "Justice",
-          "summary": "Advocacy arc inspired by the rhetorical structure of Martin Luther King Jr.'s 'I Have a Dream' speech: name the inequality, share the dream, build urgency, layer further visions, emphasize unity, call to action, and close on hope. For movement-building keynotes and mission-driven speeches.",
+        "vision-roadmap": {
+          "name": "Vision to Roadmap",
+          "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
+          "description": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action. Open with a specific three-to-five-year North Star, honestly diagnose the gap between today and that vision, organize the strategy into two to four named pillars, show the phased roadmap with milestones and dependencies, and end with concrete, assigned first steps for the next 30-90 days. The tone is inspirational and strategic: it creates shared direction and commitment to a plan. Best for strategic planning, annual kickoffs, product strategy, and OKR launches; typical decks run 8-20 slides.",
           "audienceFit": [
-            "general-audience",
-            "advocates",
-            "policymakers",
-            "community"
+            "leadership-teams",
+            "board",
+            "product-and-strategy-teams",
+            "all-hands"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "inspirational",
-            "advocacy",
-            "movement",
-            "keynote"
+            "strategy",
+            "roadmap",
+            "planning",
+            "vision"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Set the stage with a moment that earns the audience's full attention. Speak in the moral register the rest of the talk will require. Avoid throat-clearing — open as if the speech were already underway.",
-              "instructions": "Set the stage",
+              "id": "vision",
+              "name": "Vision",
+              "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
+              "instructions": "Paint the future state clearly.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "title-subtitle"
             },
             {
-              "id": "give-context",
-              "name": "Give Context",
-              "description": "Place the issue in its historical and current context. What promises were made, what has and hasn't been kept. Context turns the speech from opinion into accountability.",
-              "instructions": "Put in historical and current context",
+              "id": "current-state-gap",
+              "name": "Current State Gap",
+              "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
+              "instructions": "Define the gap between today and the vision.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "highlight-inequality",
-              "name": "Highlight Inequality",
-              "description": "Show specific, undeniable examples of the inequality at issue. Concrete moments and people, not abstractions. The audience should feel the gap between what is and what was promised.",
-              "instructions": "Show examples of inequality",
+              "id": "strategic-pillars",
+              "name": "Strategic Pillars",
+              "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
+              "instructions": "Name the strategic pillars that close the gap.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-3x"
             },
             {
-              "id": "share-dream",
-              "name": "Share the Dream",
-              "description": "Describe the future you envision in vivid, specific detail. The dream must be both ambitious and recognizable — a world the audience can picture themselves living in.",
-              "instructions": "Describe your vision",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "roadmap",
+              "name": "Roadmap",
+              "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
+              "instructions": "Sequence the initiatives over time.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             },
             {
-              "id": "create-urgency",
-              "name": "Create Urgency",
-              "description": "Explain why the time for change is now. The cost of waiting, the moment that won't return. Urgency converts shared vision into shared movement.",
-              "instructions": "Explain the need for immediate change",
+              "id": "first-steps",
+              "name": "First Steps",
+              "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
+              "instructions": "Identify the immediate moves that start execution.",
               "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "another-dream",
-              "name": "Continue the Vision",
-              "description": "Layer additional visions of the future in parallel structure. Repetition and rhythm build momentum the way a single image cannot.",
-              "instructions": "Continue to elaborate on your vision",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "emphasize-unity",
-              "name": "Emphasize Unity",
-              "description": "Speak to the collective power of the audience together. Name common ground that crosses lines the issue normally divides. Unity is the engine that turns dream into march.",
-              "instructions": "Talk about collective power",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "last-dream",
-              "name": "Final Vision",
-              "description": "Deliver one more, fully realized vision of the world you're calling for. Specific enough to be remembered, expansive enough to inspire.",
-              "instructions": "Further share dreams of ideal in-depth",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Ask the audience to participate in the change. Be specific about what 'doing something' looks like — show, march, give, vote, organize. Vague CTAs produce vague action.",
-              "instructions": "Ask audience to participate in change",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "show-determination",
-              "name": "Show Determination",
-              "description": "Encourage persistence in the face of resistance. Acknowledge what will be hard. Determination, named honestly, is more durable than easy optimism.",
-              "instructions": "Encourage persistence",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "create-hope",
-              "name": "Create Hope",
-              "description": "Close on hope grounded in evidence: progress already made, victories already won, ground already moved. Hope as a conclusion lands strongest when it sounds like it has been earned.",
-              "layout": "title",
-              "instructions": "Inspire hope for future",
-              "type": "text"
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "situation-complication-resolution",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "casual",
-            "persuasive",
-            "conversational"
+            "formal",
+            "technical",
+            "authoritative"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "compliance",
+            "policy"
           ]
         },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
           "seniority": "mixed",
-          "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "data-story",
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
             "what-so-what-now-what"
           ],
           "recommendedTones": [
             "casual",
-            "persuasive",
-            "authoritative"
+            "inspirational",
+            "conversational"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "internal",
+            "company-wide"
           ]
         }
       },

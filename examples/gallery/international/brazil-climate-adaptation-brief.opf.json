@@ -5,14 +5,14 @@
   "filename": "brazil-climate-adaptation-brief",
   "language": "pt",
   "audience": [
-    "candidates",
+    "partner",
     {
-      "id": "investor",
+      "id": "academic",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "low",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "innovation"
+        "venture-pitch"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "innovation",
+  "narrative": "venture-pitch",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "histogram",
         "data": {
           "columns": [
             "Quarter",
@@ -351,148 +351,158 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "innovation": {
-          "name": "Innovation",
-          "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage-set, reveal, demonstrate, wow, differentiate, reframe the category, build excitement, call to action, and thank the audience. For category-defining product moments.",
+        "venture-pitch": {
+          "name": "Venture Pitch",
+          "summary": "Series A/B fundraising arc structured around the canonical investor questions.",
           "audienceFit": [
-            "customers",
-            "press",
-            "developers",
-            "general-audience"
+            "investors",
+            "venture-capitalists",
+            "series-a",
+            "series-b"
           ],
           "duration": {
-            "min": 20,
-            "max": 60
+            "min": 10,
+            "max": 30
           },
           "tags": [
-            "inspirational",
-            "keynote",
-            "launch",
-            "product"
+            "startup",
+            "fundraising",
+            "pitch",
+            "investor",
+            "series-a"
           ],
           "beats": [
             {
               "id": "opening",
               "name": "Opening",
-              "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
-              "layout": "title",
-              "instructions": "Set the stage",
-              "type": "text"
-            },
-            {
-              "id": "revelation",
-              "name": "Revelation",
-              "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
-              "instructions": "Announce product",
+              "instructions": "Establish identity",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "demonstration",
-              "name": "Demonstration",
-              "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
-              "instructions": "Showcase the product",
+              "id": "purpose",
+              "name": "Purpose",
+              "instructions": "State your mission",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "wow-factor",
-              "name": "Wow Factor",
-              "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
-              "instructions": "Highlight cutting-edge features",
+              "id": "problem",
+              "name": "Problem",
+              "instructions": "Present the challenge",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "differentiation",
-              "name": "Differentiation",
-              "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
-              "instructions": "Distinctive factors",
+              "id": "solution",
+              "name": "Solution",
+              "instructions": "Propose your idea",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "revolution",
-              "name": "Revolution",
-              "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
-              "instructions": "Change in the playing field",
+              "id": "why-now",
+              "name": "Why Now",
+              "instructions": "Explain timing importance",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "excitement",
-              "name": "Excitement",
-              "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
-              "instructions": "Build anticipation",
+              "id": "market-size",
+              "name": "Market Size",
+              "instructions": "Demonstrate potential",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
-              "instructions": "Urge to explore",
+              "id": "competition",
+              "name": "Competition",
+              "instructions": "Analyze competitive landscape",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "gratitude",
-              "name": "Gratitude",
-              "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-              "layout": "title",
-              "instructions": "Thank the audience",
-              "type": "text"
+              "id": "product",
+              "name": "Product",
+              "instructions": "Showcase features/benefits",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "business-model",
+              "name": "Business Model",
+              "instructions": "Detail revenue streams",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "team",
+              "name": "Team",
+              "instructions": "Highlight key members",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "financials",
+              "name": "Financials",
+              "instructions": "Show projections/needs",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "instructions": "Reinforce brand",
+              "type": "text",
+              "layout": "text-1x"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "problem-solution",
+            "heros-journey"
           ],
           "recommendedTones": [
-            "inspirational",
+            "persuasive",
             "casual",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "partner",
+            "channel",
+            "enablement"
           ]
         },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
           "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "persuasive",
-            "authoritative",
-            "inspirational"
+            "technical",
+            "formal"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "research",
+            "education",
+            "analytical"
           ]
         }
       },

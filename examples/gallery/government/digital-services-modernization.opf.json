@@ -2,11 +2,11 @@
   "name": "Digital Services Modernization",
   "language": "en-CA",
   "audience": [
-    "all-hands"
+    "executive"
   ],
   "purpose": "report",
   "tone": "authoritative",
-  "narrative": "strategic-narrative",
+  "narrative": "persuade",
   "design": {
     "theme": "dark",
     "colorScheme": "black-and-white",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -101,91 +101,120 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "strategic-narrative": {
-          "name": "Strategic Narrative",
-          "summary": "The change-driven founder/sales arc: a tectonic shift creates winners and losers, the audience must respond, and your product is the only credible way to land in the winners' camp. Used for top-of-funnel sales pitches, board re-positioning, and high-stakes founder talks.",
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
           "audienceFit": [
-            "customers",
-            "prospects",
-            "board",
-            "investors",
-            "executives"
+            "general-audience",
+            "policymakers",
+            "industry-peers"
           ],
           "duration": {
-            "min": 10,
+            "min": 15,
             "max": 30
           },
           "tags": [
-            "strategic",
-            "sales",
-            "positioning",
-            "category"
+            "keynote",
+            "persuasive",
+            "advocacy",
+            "talk"
           ],
           "beats": [
             {
-              "id": "shift",
-              "name": "The Shift",
-              "description": "Open by naming a large, undeniable change in the world that the audience already half-believes. Technology, regulation, customer behavior, economics — pick the shift that recasts the audience's reality. The shift, not your product, is the protagonist of the first half of the deck."
+              "id": "gripping-introduction",
+              "name": "Gripping Introduction",
+              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
+              "instructions": "Draw in the audience with a compelling opener",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "stakes",
-              "name": "Winners and Losers",
-              "description": "Make the consequences of the shift concrete. Who wins, who loses, by how much, on what timeframe. Use specific examples — companies, products, segments — that have already moved or are about to. The audience should feel that standing still is the riskiest choice."
+              "id": "challenge-status-quo",
+              "name": "Challenge the Status Quo",
+              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
             },
             {
-              "id": "promised-land",
-              "name": "Promised Land",
-              "description": "Paint a vivid picture of the future state your audience could occupy if they navigate the shift well. Describe outcomes, not features. The promised land must feel desirable, achievable, and meaningfully different from where they are today."
+              "id": "present-problem",
+              "name": "Present the Problem",
+              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
             },
             {
-              "id": "obstacles",
-              "name": "Old Game",
-              "description": "Show why the existing playbook can't get the audience to the promised land. Name the legacy approach honestly and credit what it once did, then explain why the shift has rendered it insufficient. Avoid strawmen — the more fairly you state the old game, the more credible your new game becomes."
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
+              "instructions": "Share significant stories to illuminate the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "mechanism",
-              "name": "New Game",
-              "description": "Introduce your category-defining approach as the way to play the new game. Show the principles or capabilities that make it possible only now. Emphasize what's structurally different from the old game, not what's marginally better."
+              "id": "statistic-shock",
+              "name": "Statistic Shock",
+              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
+              "instructions": "Use impactful stats to highlight the gravity of the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Prove the new game works. Customer outcomes, named logos, before/after data, third-party validation. Choose evidence that maps directly to the shift you opened with — proof that other audiences in the same boat made it to the promised land."
+              "id": "historical-context",
+              "name": "Historical Context",
+              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
+              "instructions": "Show the evolution or history of the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "ask",
-              "name": "Call to Action",
-              "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
-              "layout": "title"
+              "id": "weave-narrative",
+              "name": "Weave a Narrative",
+              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+            },
+            {
+              "id": "major-revelation",
+              "name": "Major Revelation",
+              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
+              "instructions": "Deliver a surprising or significant discovery",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "propose-solution",
+              "name": "Propose Solution",
+              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
+              "instructions": "Advocate for change or propose an actionable solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "final-question",
+              "name": "Final Question",
+              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+              "layout": "title",
+              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "casual",
-            "inspirational",
-            "conversational"
+            "formal",
+            "authoritative",
+            "persuasive"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "leadership",
+            "decision-making"
           ]
         }
       },

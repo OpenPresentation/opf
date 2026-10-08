@@ -5,14 +5,14 @@
   "filename": "renewal-save-plan",
   "language": "en-AU",
   "audience": [
-    "executive",
+    "candidates",
     {
-      "id": "sales",
+      "id": "general-public",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "trend-analysis"
+        "star-method"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "trend-analysis",
+  "narrative": "star-method",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -340,128 +340,108 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "trend-analysis": {
-          "name": "Trend Analysis",
-          "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next. Useful for market reviews, strategic outlooks, and any deck where the audience must act on a direction-of-travel call.",
+        "star-method": {
+          "name": "STAR Method",
+          "summary": "Results-focused framework that demonstrates impact through concrete examples.",
+          "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
           "audienceFit": [
-            "executives",
-            "analysts",
-            "leadership"
+            "hr-and-talent",
+            "performance-reviewers",
+            "award-committees"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 5,
+            "max": 15
           },
           "tags": [
-            "data-driven",
-            "forecasting",
-            "strategy",
-            "analysis"
+            "case-study",
+            "proof",
+            "results",
+            "retrospective"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
-              "instructions": "Ignite interest, establish significance",
+              "id": "situation",
+              "name": "Situation",
+              "description": "Describe the context and background of the scenario.",
+              "instructions": "Describe the relevant context and constraints.",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "historical-comparison",
-              "name": "Historical Comparison",
-              "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
-              "instructions": "Contrast current and past data",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "task",
+              "name": "Task",
+              "description": "Explain your specific role and responsibilities in this situation.",
+              "instructions": "Explain the responsibility or target outcome.",
+              "type": "list",
+              "layout": "list-2x"
             },
             {
-              "id": "pattern-identification",
-              "name": "Pattern Identification",
-              "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
-              "instructions": "Point out recurring outcomes",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "action",
+              "name": "Action",
+              "description": "Detail the specific steps you took to address the challenge.",
+              "instructions": "Detail the actions taken and choices made.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             },
             {
-              "id": "future-prediction",
-              "name": "Future Prediction",
-              "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
-              "instructions": "Predict using established patterns",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "action-plan",
-              "name": "Action Plan",
-              "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
-              "instructions": "Strategies based on prediction",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "implementation",
-              "name": "Implementation",
-              "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
-              "instructions": "Discuss strategy execution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
-              "layout": "title",
-              "instructions": "Summarize key points",
-              "type": "text"
+              "id": "result",
+              "name": "Result",
+              "description": "Share the measurable outcomes and impact of your actions.",
+              "instructions": "Show measurable impact and proof.",
+              "type": "metric",
+              "layout": "number-1x"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
+            "inspirational",
+            "casual",
+            "authoritative"
           ],
           "tags": [
-            "leadership",
-            "decision-making"
+            "external",
+            "hiring",
+            "recruiting"
           ]
         },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
           "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "persuasive",
             "conversational",
-            "casual"
+            "casual",
+            "inspirational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "public",
+            "education",
+            "accessible"
           ]
         }
       },

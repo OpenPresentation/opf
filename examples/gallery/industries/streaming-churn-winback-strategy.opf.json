@@ -5,14 +5,14 @@
   "filename": "streaming-churn-winback-strategy",
   "language": "en-GB",
   "audience": [
-    "executive",
+    "engineering-team",
     {
-      "id": "sales",
+      "id": "investor",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "classic-story"
+        "change-story"
       ],
       "recommendedTones": [
         "persuasive"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "classic-story",
+  "narrative": "change-story",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "box-and-whisker",
         "data": {
           "columns": [
             "Quarter",
@@ -348,127 +348,116 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "classic-story": {
-          "name": "Classic Story",
-          "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, and close with hope. A versatile go-to when you need to make information feel like a story.",
+        "change-story": {
+          "name": "Change Story",
+          "summary": "A change management narrative that addresses the emotional and rational objections employees face when asked to change.",
+          "description": "A change management narrative that addresses the emotional and rational objections people face when asked to change. Establish the burning platform, explain why the timing is urgent, show the chosen path and the alternatives it was chosen over, make the stakes concrete for the organization, the team, and individuals, and close on a shared vision in which the audience is the protagonist. The tone is motivational and empathetic: it acknowledges that change is hard while building conviction. Best for organizational change, transformation announcements, restructuring communications, and all-hands meetings; typical decks run 8-15 slides.",
           "audienceFit": [
-            "general-audience",
-            "customers",
-            "internal-teams"
+            "employees",
+            "team-leads",
+            "cross-functional-teams"
           ],
           "duration": {
-            "min": 5,
-            "max": 30
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "storytelling",
-            "general",
-            "engagement"
+            "change-management",
+            "transformation",
+            "internal",
+            "alignment"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble.",
-              "instructions": "Capture audience attention",
+              "id": "why-change",
+              "name": "Why Change",
+              "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
+              "instructions": "Explain why the current state cannot continue.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "context",
-              "name": "Context",
-              "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine.",
-              "instructions": "Give background & importance",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the urgency. What changes if we wait? What window is closing?",
+              "instructions": "Make the timing urgent and concrete.",
+              "type": "metric",
+              "layout": "number-1x"
             },
             {
-              "id": "villain",
-              "name": "Villain",
-              "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out.",
-              "instructions": "Introduce problem",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "why-this-way",
+              "name": "Why This Way",
+              "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
+              "instructions": "Describe the proposed path and why it fits.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             },
             {
-              "id": "despair",
-              "name": "Despair",
-              "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land.",
-              "instructions": "Emphasize negative impact",
+              "id": "whats-at-stake",
+              "name": "What's at Stake",
+              "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
+              "instructions": "Show the risks and rewards attached to the choice.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "hero",
-              "name": "Hero",
-              "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé.",
-              "instructions": "Present solution",
+              "id": "how-we-win-together",
+              "name": "How We Win Together",
+              "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
+              "instructions": "Close with shared ownership and first commitments.",
               "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "plan",
-              "name": "Plan",
-              "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable.",
-              "instructions": "Detail implementation",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing",
-              "name": "Closing",
-              "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
-              "layout": "title",
-              "instructions": "Inspire & conclude",
-              "type": "text"
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
+            "technical",
+            "casual",
+            "conversational"
           ],
           "tags": [
-            "leadership",
-            "decision-making"
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
             "persuasive",
-            "conversational",
-            "casual"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "external",
+            "capital",
+            "fundraising"
           ]
         }
       },

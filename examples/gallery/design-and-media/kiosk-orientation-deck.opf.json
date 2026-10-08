@@ -14,14 +14,14 @@
     ]
   },
   "audience": [
-    "sales",
+    "candidates",
     {
-      "id": "customer",
+      "id": "general-public",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "pitch-deck"
+        "capacity-planning"
       ],
       "recommendedTones": [
         "casual"
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -311,7 +311,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "scatter",
+            "type": "100pct-stacked-area",
             "data": {
               "columns": [
                 "Quarter",
@@ -571,50 +571,52 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
-          ],
-          "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
-          ],
-          "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
-          ]
-        },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
           "seniority": "mixed",
           "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        },
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
             "heros-journey",
             "problem-solution"
           ],
           "recommendedTones": [
+            "conversational",
             "casual",
-            "persuasive",
-            "conversational"
+            "inspirational"
           ],
           "tags": [
-            "external",
-            "customer",
-            "product"
+            "public",
+            "education",
+            "accessible"
           ]
         }
       },

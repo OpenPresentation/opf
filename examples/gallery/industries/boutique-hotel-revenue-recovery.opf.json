@@ -5,14 +5,14 @@
   "filename": "boutique-hotel-revenue-recovery",
   "language": "en-US",
   "audience": [
-    "regulatory",
+    "internal-team",
     {
-      "id": "candidates",
+      "id": "partner",
       "attentionBudgetMinutes": 26,
       "technicalFluency": "low",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "early-startup-pitch"
+        "conference-talk"
       ],
       "recommendedTones": [
         "casual"
@@ -127,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-area",
+        "type": "doughnut",
         "data": {
           "columns": [
             "Quarter",
@@ -137,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              20,
+              17
             ],
             [
               "Q2",
-              16,
-              10
+              24,
+              19
             ],
             [
               "Q3",
-              21,
-              13
+              27,
+              21
             ],
             [
               "Q4",
-              26,
-              15
+              31,
+              23
             ]
           ]
         }
@@ -297,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "box-and-whisker",
+            "type": "radar-with-markers",
             "data": {
               "columns": [
                 "Quarter",
@@ -558,52 +558,50 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "what-so-what-now-what",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "formal",
-            "technical",
+            "casual",
+            "conversational",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "internal",
+            "operations",
+            "team"
           ]
         },
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "problem-solution",
+            "heros-journey"
           ],
           "recommendedTones": [
-            "inspirational",
+            "persuasive",
             "casual",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "partner",
+            "channel",
+            "enablement"
           ]
         }
       },

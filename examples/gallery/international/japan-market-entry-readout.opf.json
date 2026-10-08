@@ -2,11 +2,11 @@
   "name": "Japan Market Entry Readout",
   "language": "ja",
   "audience": [
-    "all-hands"
+    "marketing"
   ],
   "purpose": "align",
   "tone": "technical",
-  "narrative": "focus",
+  "narrative": "trend-analysis",
   "design": {
     "theme": "dark",
     "colorScheme": "deep-purple",
@@ -57,7 +57,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "filled-radar",
         "data": {
           "columns": [
             "Quarter",
@@ -105,150 +105,106 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "focus": {
-          "name": "Focus",
-          "summary": "Long-term, principle-driven business arc inspired by Jeff Bezos's 1997 letter to shareholders: name the focus, account for performance, articulate the framework, and commit to the discipline that will keep the company on track. For founder letters, all-hands narratives, and any deck where the audience needs to feel the through-line.",
+        "trend-analysis": {
+          "name": "Trend Analysis",
+          "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next. Useful for market reviews, strategic outlooks, and any deck where the audience must act on a direction-of-travel call.",
           "audienceFit": [
-            "shareholders",
-            "leadership",
-            "all-hands",
-            "board"
+            "executives",
+            "analysts",
+            "leadership"
           ],
           "duration": {
-            "min": 20,
+            "min": 15,
             "max": 45
           },
           "tags": [
-            "inspirational",
-            "leadership",
-            "principles",
-            "all-hands"
+            "data-driven",
+            "forecasting",
+            "strategy",
+            "analysis"
           ],
           "beats": [
             {
-              "id": "welcome",
-              "name": "Welcome",
-              "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven.",
-              "instructions": "Overview and objectives",
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
+              "instructions": "Ignite interest, establish significance",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "accomplishments",
-              "name": "Accomplishments",
-              "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline.",
-              "instructions": "Showcase recent achievements",
+              "id": "historical-comparison",
+              "name": "Historical Comparison",
+              "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
+              "instructions": "Contrast current and past data",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "potential",
-              "name": "Potential",
-              "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful.",
-              "instructions": "Detail market opportunities",
+              "id": "pattern-identification",
+              "name": "Pattern Identification",
+              "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
+              "instructions": "Point out recurring outcomes",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "competitive-edge",
-              "name": "Competitive Edge",
-              "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words.",
-              "instructions": "Reveal strategic positioning",
+              "id": "future-prediction",
+              "name": "Future Prediction",
+              "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
+              "instructions": "Predict using established patterns",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "long-term-vision",
-              "name": "Long-Term Vision",
-              "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on.",
-              "instructions": "Emphasize focused future orientation",
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
+              "instructions": "Strategies based on prediction",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "performance-metrics",
-              "name": "Performance Metrics",
-              "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter.",
-              "instructions": "Illuminate growth indicators",
+              "id": "implementation",
+              "name": "Implementation",
+              "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
+              "instructions": "Discuss strategy execution",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "growth-achievement",
-              "name": "Growth Achievement",
-              "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real.",
-              "instructions": "Certify tangible progress",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "strategic-framework",
-              "name": "Strategic Framework",
-              "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior.",
-              "instructions": "Explain decision principles",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "expansion",
-              "name": "Expansion",
-              "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter.",
-              "instructions": "Detail growth potential",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "future-objectives",
-              "name": "Future Objectives",
-              "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode.",
-              "instructions": "Forecast upcoming targets",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "acknowledgment",
-              "name": "Acknowledgment",
-              "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks.",
-              "instructions": "Recognize contributions and successes",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-remarks",
-              "name": "Closing Remarks",
-              "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
               "layout": "title",
-              "instructions": "Recap, thank, inspire",
+              "instructions": "Summarize key points",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
+            "data-story",
             "what-so-what-now-what"
           ],
           "recommendedTones": [
             "casual",
-            "inspirational",
-            "conversational"
+            "persuasive",
+            "authoritative"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "marketing",
+            "brand",
+            "go-to-market"
           ]
         }
       },

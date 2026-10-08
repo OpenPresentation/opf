@@ -5,14 +5,14 @@
   "filename": "online-program-launch-plan",
   "language": "en-GB",
   "audience": [
-    "customer",
+    "engineering-team",
     {
-      "id": "marketing",
+      "id": "investor",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "innovation"
+        "change-story"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "innovation",
+  "narrative": "change-story",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",
@@ -355,108 +355,101 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "innovation": {
-          "name": "Innovation",
-          "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage-set, reveal, demonstrate, wow, differentiate, reframe the category, build excitement, call to action, and thank the audience. For category-defining product moments.",
+        "change-story": {
+          "name": "Change Story",
+          "summary": "A change management narrative that addresses the emotional and rational objections employees face when asked to change.",
+          "description": "A change management narrative that addresses the emotional and rational objections people face when asked to change. Establish the burning platform, explain why the timing is urgent, show the chosen path and the alternatives it was chosen over, make the stakes concrete for the organization, the team, and individuals, and close on a shared vision in which the audience is the protagonist. The tone is motivational and empathetic: it acknowledges that change is hard while building conviction. Best for organizational change, transformation announcements, restructuring communications, and all-hands meetings; typical decks run 8-15 slides.",
           "audienceFit": [
-            "customers",
-            "press",
-            "developers",
-            "general-audience"
+            "employees",
+            "team-leads",
+            "cross-functional-teams"
           ],
           "duration": {
-            "min": 20,
-            "max": 60
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "inspirational",
-            "keynote",
-            "launch",
-            "product"
+            "change-management",
+            "transformation",
+            "internal",
+            "alignment"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
-              "layout": "title",
-              "instructions": "Set the stage",
-              "type": "text"
-            },
-            {
-              "id": "revelation",
-              "name": "Revelation",
-              "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
-              "instructions": "Announce product",
+              "id": "why-change",
+              "name": "Why Change",
+              "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
+              "instructions": "Explain why the current state cannot continue.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "demonstration",
-              "name": "Demonstration",
-              "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
-              "instructions": "Showcase the product",
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the urgency. What changes if we wait? What window is closing?",
+              "instructions": "Make the timing urgent and concrete.",
+              "type": "metric",
+              "layout": "number-1x"
+            },
+            {
+              "id": "why-this-way",
+              "name": "Why This Way",
+              "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
+              "instructions": "Describe the proposed path and why it fits.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "whats-at-stake",
+              "name": "What's at Stake",
+              "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
+              "instructions": "Show the risks and rewards attached to the choice.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "wow-factor",
-              "name": "Wow Factor",
-              "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
-              "instructions": "Highlight cutting-edge features",
+              "id": "how-we-win-together",
+              "name": "How We Win Together",
+              "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
+              "instructions": "Close with shared ownership and first commitments.",
               "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "differentiation",
-              "name": "Differentiation",
-              "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
-              "instructions": "Distinctive factors",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "revolution",
-              "name": "Revolution",
-              "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
-              "instructions": "Change in the playing field",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "excitement",
-              "name": "Excitement",
-              "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
-              "instructions": "Build anticipation",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
-              "instructions": "Urge to explore",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "gratitude",
-              "name": "Gratitude",
-              "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-              "layout": "title",
-              "instructions": "Thank the audience",
-              "type": "text"
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        },
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -464,37 +457,14 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "casual",
             "persuasive",
-            "conversational"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
-          ]
-        },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "data-story",
-            "what-so-what-now-what"
-          ],
-          "recommendedTones": [
-            "casual",
-            "persuasive",
-            "authoritative"
-          ],
-          "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "capital",
+            "fundraising"
           ]
         }
       },

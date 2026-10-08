@@ -5,14 +5,14 @@
   "filename": "broadband-public-hearing-deck",
   "language": "en-AU",
   "audience": [
-    "sales",
+    "technical",
     {
-      "id": "customer",
+      "id": "candidates",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "business-narrative"
+        "reveal"
       ],
       "recommendedTones": [
         "conversational"
@@ -133,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "waterfall",
         "data": {
           "columns": [
             "Quarter",
@@ -303,7 +303,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-column",
+            "type": "combo",
             "data": {
               "columns": [
                 "Quarter",
@@ -559,50 +559,52 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
-          ],
-          "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
-          ]
-        },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
-          ],
-          "recommendedTones": [
-            "casual",
-            "persuasive",
+            "technical",
+            "authoritative",
             "conversational"
           ],
           "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        },
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
             "external",
-            "customer",
-            "product"
+            "hiring",
+            "recruiting"
           ]
         }
       },

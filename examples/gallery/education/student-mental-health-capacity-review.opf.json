@@ -5,14 +5,14 @@
   "filename": "student-mental-health-capacity-review",
   "language": "en-AU",
   "audience": [
-    "customer",
+    "technical",
     {
-      "id": "marketing",
+      "id": "candidates",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "project-proposal"
+        "golden-circle"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "project-proposal",
+  "narrative": "golden-circle",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -137,7 +137,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-column",
+        "type": "filled-radar",
         "data": {
           "columns": [
             "Quarter",
@@ -359,154 +359,102 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "project-proposal": {
-          "name": "Project Proposal",
-          "summary": "Internal proposal arc for greenlighting a project: hook, problem, idea, benefits, justification, plan, timeline, risks, outlook, ask. Designed to take a sponsor from 'never heard of this' to 'approved' inside a single meeting.",
+        "golden-circle": {
+          "name": "Golden Circle (Why / How / What)",
+          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
           "audienceFit": [
-            "executives",
-            "sponsors",
-            "managers",
-            "internal-teams"
+            "customers",
+            "employees",
+            "general-audience",
+            "press"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 10,
+            "max": 30
           },
           "tags": [
-            "management",
-            "proposal",
-            "internal",
-            "planning"
+            "keynote",
+            "brand",
+            "mission",
+            "sinek"
           ],
           "beats": [
             {
-              "id": "elevator-pitch",
-              "name": "Elevator Pitch",
-              "description": "Open with the proposal in one slide: the project name, the audience, the goal, and the headline benefit. If a sponsor reads only this slide, they should still know what they're being asked to approve.",
-              "instructions": "Audience hook & objectives",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "why",
+              "name": "Why",
+              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
             },
             {
-              "id": "problem-statement",
-              "name": "Problem Statement",
-              "description": "Articulate the problem this project solves and why it deserves resources now. Tie it to a known business goal or pain. Vague problems produce vague approvals.",
-              "instructions": "Highlight struggles & project necessity",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "how",
+              "name": "How",
+              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
             },
             {
-              "id": "core-concept",
-              "name": "Core Concept",
-              "description": "Describe the central idea of the project in plain language. The 'what' before the 'how.' A reader should be able to repeat the concept in one sentence after this slide.",
-              "instructions": "Share actionable idea",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "what",
+              "name": "What",
+              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
             },
             {
-              "id": "benefits",
-              "name": "Benefits",
-              "description": "Quantify the impact: revenue, cost, risk, customer, capability. Use numbers where possible and clear comparisons where not. Each benefit should map to a metric the sponsor cares about.",
-              "instructions": "Spotlight key metrics",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "proof",
+              "name": "Proof",
+              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
             },
             {
-              "id": "justification",
-              "name": "Justification",
-              "description": "Connect the project to broader strategy, OKRs, or constraints the audience already cares about. Show why this project is more important than the alternatives competing for the same resources.",
-              "instructions": "Strategic alignment & significance",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "approach",
-              "name": "Approach",
-              "description": "Lay out how the project will be executed: the solution, the team shape, the budget envelope. Enough detail to feel credible, not so much that it pre-commits to choices that will mature in flight.",
-              "instructions": "Solution, resources, & budget",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "timeline",
-              "name": "Timeline",
-              "description": "Show the project phases on a timeline, with major milestones and decision points marked. Sponsors are buying a sequence of bets, not a single launch — make those bets visible.",
-              "instructions": "Outline project phases",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "risks",
-              "name": "Risks",
-              "description": "Name the top risks honestly and pair each with a mitigation or open question. Listing risks without mitigations signals you haven't thought it through; hiding risks signals worse.",
-              "instructions": "Consider potential challenges",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "outlook",
-              "name": "Outlook",
-              "description": "Paint the picture of what the organization looks like a quarter or year after the project ships. Stretch beyond the immediate deliverable to the second-order benefits.",
-              "instructions": "Envision project impact",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "wrap-up",
-              "name": "Wrap Up",
-              "description": "Recap the proposal and state the specific decision you're asking for: approval, budget, headcount, sponsorship. Make it easy to say yes today.",
-              "layout": "title",
-              "instructions": "Summarize & persuade",
-              "type": "text"
+              "id": "invitation",
+              "name": "Invitation",
+              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
-          ],
-          "recommendedTones": [
-            "casual",
-            "persuasive",
-            "conversational"
-          ],
-          "tags": [
-            "external",
-            "customer",
-            "product"
-          ]
-        },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "low",
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
           "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
             "data-story",
-            "what-so-what-now-what"
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
+          ]
+        },
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
             "casual",
-            "persuasive",
             "authoritative"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "external",
+            "hiring",
+            "recruiting"
           ]
         }
       },

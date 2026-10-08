@@ -5,14 +5,14 @@
   "filename": "consulting-margin-recovery-plan",
   "language": "en-CA",
   "audience": [
-    "engineering-team",
+    "sales",
     {
-      "id": "regulatory",
+      "id": "board",
       "attentionBudgetMinutes": 32,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "innovation"
+        "focus"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "innovation",
+  "narrative": "focus",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -130,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "pareto",
         "data": {
           "columns": [
             "Quarter",
@@ -349,148 +349,173 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "innovation": {
-          "name": "Innovation",
-          "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage-set, reveal, demonstrate, wow, differentiate, reframe the category, build excitement, call to action, and thank the audience. For category-defining product moments.",
+        "focus": {
+          "name": "Focus",
+          "summary": "Long-term, principle-driven business arc inspired by Jeff Bezos's 1997 letter to shareholders: name the focus, account for performance, articulate the framework, and commit to the discipline that will keep the company on track. For founder letters, all-hands narratives, and any deck where the audience needs to feel the through-line.",
           "audienceFit": [
-            "customers",
-            "press",
-            "developers",
-            "general-audience"
+            "shareholders",
+            "leadership",
+            "all-hands",
+            "board"
           ],
           "duration": {
             "min": 20,
-            "max": 60
+            "max": 45
           },
           "tags": [
             "inspirational",
-            "keynote",
-            "launch",
-            "product"
+            "leadership",
+            "principles",
+            "all-hands"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
+              "id": "welcome",
+              "name": "Welcome",
+              "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven.",
+              "instructions": "Overview and objectives",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "accomplishments",
+              "name": "Accomplishments",
+              "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline.",
+              "instructions": "Showcase recent achievements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "potential",
+              "name": "Potential",
+              "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful.",
+              "instructions": "Detail market opportunities",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "competitive-edge",
+              "name": "Competitive Edge",
+              "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words.",
+              "instructions": "Reveal strategic positioning",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "long-term-vision",
+              "name": "Long-Term Vision",
+              "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on.",
+              "instructions": "Emphasize focused future orientation",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "performance-metrics",
+              "name": "Performance Metrics",
+              "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter.",
+              "instructions": "Illuminate growth indicators",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "growth-achievement",
+              "name": "Growth Achievement",
+              "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real.",
+              "instructions": "Certify tangible progress",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "strategic-framework",
+              "name": "Strategic Framework",
+              "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior.",
+              "instructions": "Explain decision principles",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "expansion",
+              "name": "Expansion",
+              "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter.",
+              "instructions": "Detail growth potential",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-objectives",
+              "name": "Future Objectives",
+              "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode.",
+              "instructions": "Forecast upcoming targets",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "acknowledgment",
+              "name": "Acknowledgment",
+              "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks.",
+              "instructions": "Recognize contributions and successes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-remarks",
+              "name": "Closing Remarks",
+              "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
               "layout": "title",
-              "instructions": "Set the stage",
-              "type": "text"
-            },
-            {
-              "id": "revelation",
-              "name": "Revelation",
-              "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
-              "instructions": "Announce product",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "demonstration",
-              "name": "Demonstration",
-              "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
-              "instructions": "Showcase the product",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "wow-factor",
-              "name": "Wow Factor",
-              "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
-              "instructions": "Highlight cutting-edge features",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "differentiation",
-              "name": "Differentiation",
-              "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
-              "instructions": "Distinctive factors",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "revolution",
-              "name": "Revolution",
-              "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
-              "instructions": "Change in the playing field",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "excitement",
-              "name": "Excitement",
-              "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
-              "instructions": "Build anticipation",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
-              "instructions": "Urge to explore",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "gratitude",
-              "name": "Gratitude",
-              "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-              "layout": "title",
-              "instructions": "Thank the audience",
+              "instructions": "Recap, thank, inspire",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
-          "technicalFluency": "high",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
-          ],
-          "recommendedTones": [
-            "technical",
-            "casual",
-            "conversational"
-          ],
-          "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
-          ]
-        },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "formal",
-            "technical",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         }
       },

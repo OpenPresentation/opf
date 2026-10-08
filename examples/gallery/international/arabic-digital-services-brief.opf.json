@@ -15,14 +15,14 @@
     ]
   },
   "audience": [
-    "engineering-team",
+    "sales",
     {
-      "id": "regulatory",
+      "id": "board",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "marketing-strategy"
+        "weekly-progress"
       ],
       "recommendedTones": [
         "formal"
@@ -48,7 +48,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "marketing-strategy",
+  "narrative": "weekly-progress",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -140,7 +140,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -354,163 +354,156 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "marketing-strategy": {
-          "name": "Marketing Strategy",
-          "summary": "Comprehensive go-to-market strategy arc structured around the 4Ps. Use for category launches, annual marketing plans, and any deck where the audience needs to see customer, market, competition, and tactics in one coherent picture.",
+        "weekly-progress": {
+          "name": "Weekly Progress",
+          "summary": "Tight rhythm-of-business arc for weekly progress reports: objectives, achievements, progress, challenges, opportunities, recognition, plan, discussion, conclusion. Designed for fifteen-to-thirty-minute team check-ins, not deep dives.",
           "audienceFit": [
-            "marketing-leaders",
-            "executives",
+            "managers",
+            "teams",
             "cross-functional-partners"
           ],
           "duration": {
-            "min": 30,
-            "max": 60
+            "min": 15,
+            "max": 30
           },
           "tags": [
-            "go-to-market",
-            "marketing",
-            "strategy",
-            "planning"
+            "rhythm-of-business",
+            "weekly",
+            "internal",
+            "operations"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open by establishing the product or service this strategy is for, and what window of time it covers. One slide that tells the audience exactly which world they're being asked to weigh in on.",
-              "instructions": "Establish product/service specifics",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "objective",
-              "name": "Objective",
-              "description": "State the marketing goals in measurable terms: revenue, pipeline, awareness, share. Two or three goals, ranked. Goals without ranking get equal energy and equal mediocrity.",
-              "instructions": "Share marketing goals",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "customer",
-              "name": "Customer",
-              "description": "Detail the target audience. Segments, jobs-to-be-done, decision criteria, where they live in the buying cycle. Specificity here is the foundation everything else stands on.",
-              "instructions": "Detail target audience",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "market",
-              "name": "Market",
-              "description": "Describe the market landscape: size, growth, segments, behavioral trends. Use external data for credibility and your own research for nuance. Show how the market is changing, not just how big it is.",
-              "instructions": "Discuss market landscape",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "competition",
-              "name": "Competition",
-              "description": "Map the competitive set honestly. Direct, indirect, and substitutes. A 2x2 or feature-comparison framework helps; what matters is that the audience trusts your read of the field.",
-              "instructions": "Analyze competitive environment",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "strategy",
-              "name": "Strategy",
-              "description": "Articulate the marketing approach in one sentence and a single supporting frame. Positioning, primary motion, where you choose to play and not play. Clarity here is what makes the tactics that follow coherent.",
-              "instructions": "Elaborate marketing approach",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "product",
-              "name": "Product",
-              "description": "Highlight the unique value the product brings to the strategy. Lead with the customer outcome; tie it directly back to the customer beat. Avoid feature soup.",
-              "instructions": "Highlight unique value",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "price",
-              "name": "Price",
-              "description": "Justify pricing and packaging. Show the logic — cost-plus, value-based, competitor-anchored — and the levers you'll use over the period. Price decisions are strategy decisions.",
-              "instructions": "Justify pricing strategy",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "place",
-              "name": "Place",
-              "description": "Describe distribution channels and the role each plays. Direct, partner, marketplace, retail. Channel mix is often where strategies quietly succeed or fail.",
-              "instructions": "Discuss distribution channels",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "promotion",
-              "name": "Promotion",
-              "description": "Reveal the campaign and content tactics that bring the strategy to market. Pair each tactic with the audience and metric it serves. Avoid listing channels for their own sake.",
-              "instructions": "Reveal promotional tactics",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "summary",
-              "name": "Summary",
-              "description": "Recap the strategy in a single page: customer, position, motion, expected outcome. End with the decision or commitment you need from the audience.",
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the initiative name, the date, and the one-line headline for the week. Frame the meeting in fifteen seconds so the rest of the time is content.",
               "layout": "title",
-              "instructions": "Recap key points",
+              "instructions": "Initiative name & date",
+              "type": "text"
+            },
+            {
+              "id": "objectives",
+              "name": "Objectives",
+              "description": "State what the team set out to do this week. Specific, measurable. The audience should be able to read this slide alone and know what 'on track' would mean.",
+              "instructions": "Set the expectations",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "achievements",
+              "name": "Achievements",
+              "description": "Celebrate the week's wins. Concrete, attributable, dated. Brevity here — the meeting is for what's next, not a victory lap.",
+              "instructions": "Celebrate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "overall-progress",
+              "name": "Overall Progress",
+              "description": "Evaluate performance against the objectives. Use a simple status indicator (green/yellow/red) plus the leading metric. Help the audience scan the state in seconds.",
+              "instructions": "Evaluate performance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Address what's hard right now: blockers, slipping items, surfaced risks. Tie each challenge to either an owner working it or a discussion you want this week.",
+              "instructions": "Address difficulties",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "opportunities-for-improvement",
+              "name": "Opportunities for Improvement",
+              "description": "Surface where the team can level up. Process tweaks, tooling needs, ways of working. Improvement opportunities should feel like seeds, not corrections.",
+              "instructions": "Seek growth",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "highlights-recognition",
+              "name": "Highlights & Recognition",
+              "description": "Recognize specific contributions by name. Recognition belongs in the deck, not just in the meeting — written acknowledgment travels further than verbal.",
+              "instructions": "Appreciate efforts",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "goals-next-week",
+              "name": "Goals Next Week",
+              "description": "Plan the week ahead with three to five specific goals. Each should be small enough to finish, large enough to matter, and clearly owned.",
+              "instructions": "Plan ahead",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "discussion-feedback",
+              "name": "Discussion & Feedback",
+              "description": "Open the floor with two or three prompts — decisions you need, opinions you want, blockers you'd like cleared. End the recap actively.",
+              "instructions": "Encourage input",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Close with one line that motivates the team into the next week. Echo the headline so the meeting feels closed.",
+              "layout": "title",
+              "instructions": "Recap & motivate",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
-          "technicalFluency": "high",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
-          ],
-          "recommendedTones": [
-            "technical",
-            "casual",
-            "conversational"
-          ],
-          "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
-          ]
-        },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "formal",
-            "technical",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         }
       },

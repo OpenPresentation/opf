@@ -2,11 +2,11 @@
   "name": "District Literacy Acceleration Plan",
   "language": "en-CA",
   "audience": [
-    "all-hands"
+    "board"
   ],
   "purpose": "pitch",
   "tone": "casual",
-  "narrative": "failure-analysis",
+  "narrative": "business-review",
   "design": {
     "theme": "dark",
     "colorScheme": "golden-yellow",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar",
+        "type": "stacked-line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -101,134 +101,149 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "failure-analysis": {
-          "name": "Failure Analysis",
-          "summary": "Walk through what went wrong, why, and what changes — a structured post-mortem for stakeholder reviews. Pairs honest accountability with a credible recovery plan.",
+        "business-review": {
+          "name": "Business Review",
+          "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
           "audienceFit": [
-            "leadership",
             "customers",
+            "partners",
             "stakeholders",
-            "partners"
+            "leadership"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 30,
+            "max": 90
           },
           "tags": [
-            "postmortem",
-            "incident",
+            "customer-relationship",
             "review",
-            "accountability"
+            "operations"
           ],
           "beats": [
             {
-              "id": "opening-remark",
-              "name": "Opening Remark",
-              "description": "Set an empathetic, accountable tone before any analysis. Acknowledge the impact on the people in the room and the customers affected. Authenticity here earns you the credibility you'll need for the rest of the deck.",
-              "instructions": "Set an empathetic tone",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "incident-breakdown",
-              "name": "Incident Breakdown",
-              "description": "Walk through what happened, in time order. Stick to facts: what systems, what users, what timeline. No causal claims yet — just an accurate, neutral reconstruction the audience can trust.",
-              "instructions": "Detail the failure",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "impact-analysis",
-              "name": "Impact Analysis",
-              "description": "Quantify the damage. Customer-hours lost, revenue at risk, SLA breaches, downstream knock-ons. Be specific and direct; vague impact statements undermine the rest of the post-mortem.",
-              "instructions": "Describe failure's effects",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "root-cause",
-              "name": "Root Cause",
-              "description": "Trace the failure to its underlying cause, not the most visible symptom. Use a 'five whys' or fishbone framing if useful. Distinguish between the proximate trigger and the systemic conditions that allowed it.",
-              "instructions": "Analyze underlying reasons",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "proposed-solutions",
-              "name": "Proposed Solutions",
-              "description": "Present the corrective actions you're taking. Lead with the highest-leverage fix; sequence the rest. For each action, name an owner and a date — solutions without owners are aspirations.",
-              "instructions": "Suggest corrective measures",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "action-plan",
-              "name": "Action Plan",
-              "description": "Lay out the rollout: what ships when, how it's verified, who signs off. Show that 'fixed' has a definition and a deadline, not just intent.",
-              "instructions": "Map out steps",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "evaluate-outcome",
-              "name": "Evaluate Outcome",
-              "description": "Define the metrics that will tell you the fix worked. Pre/post comparisons, monitoring SLOs, error budgets — whatever proves the failure mode is closed and not just deferred.",
-              "instructions": "Assess corrective actions",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "lessons-learned",
-              "name": "Lessons Learned",
-              "description": "Distill the broader lessons that outlive this specific incident. What does the team or organization now know that it didn't before? What patterns will you watch for elsewhere?",
-              "instructions": "Reflect on failure lessons",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "preventive-measures",
-              "name": "Preventive Measures",
-              "description": "List the systemic safeguards being added — process changes, automated checks, on-call procedures, review gates. Show how this category of failure becomes harder to recur, not just this specific instance.",
-              "instructions": "List safeguards",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-thoughts",
-              "name": "Closing Thoughts",
-              "description": "Close with humility and forward momentum. Re-affirm accountability, thank the audience for their patience, and signal confidence in the path forward without overclaiming.",
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
               "layout": "title",
-              "instructions": "Empathize, trust, and encourage",
+              "instructions": "Identity & representation",
+              "type": "text"
+            },
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
+              "instructions": "Meeting context & goals",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "review",
+              "name": "Review",
+              "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
+              "instructions": "Outline recent activities",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "successes",
+              "name": "Successes",
+              "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
+              "instructions": "Recognize achievements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
+              "instructions": "Address problems faced",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "solutions",
+              "name": "Solutions",
+              "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
+              "instructions": "Discuss implemented fixes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "outcome",
+              "name": "Outcome",
+              "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
+              "instructions": "Display results achieved",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "insights",
+              "name": "Insights",
+              "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
+              "instructions": "Highlight key learnings",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-strategy",
+              "name": "Future Strategy",
+              "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
+              "instructions": "Define next steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
+              "instructions": "Capture audience thoughts",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "next-review",
+              "name": "Next Review",
+              "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
+              "instructions": "Plan for follow-up",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
+              "layout": "title",
+              "instructions": "Recap and express optimism",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
+            "board-meeting",
             "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "casual",
-            "inspirational",
-            "conversational"
+            "formal",
+            "authoritative"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         }
       },

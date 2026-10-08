@@ -5,14 +5,14 @@
   "filename": "video-demo-sales-narrative",
   "language": "en-US",
   "audience": [
-    "investor",
+    "academic",
     {
-      "id": "all-hands",
+      "id": "customer",
       "attentionBudgetMinutes": 24,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "performance-review"
+        "board-meeting"
       ],
       "recommendedTones": [
         "persuasive"
@@ -127,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",
@@ -137,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              23,
+              20
             ],
             [
               "Q2",
-              16,
-              10
+              27,
+              22
             ],
             [
               "Q3",
-              21,
-              13
+              30,
+              24
             ],
             [
               "Q4",
-              26,
-              15
+              34,
+              26
             ]
           ]
         }
@@ -297,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "scatter",
+            "type": "treemap",
             "data": {
               "columns": [
                 "Quarter",
@@ -573,12 +573,34 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
           "seniority": "mixed",
-          "technicalFluency": "medium",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
+          ]
+        },
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -586,40 +608,14 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "persuasive",
-            "authoritative",
-            "inspirational"
-          ],
-          "tags": [
-            "external",
-            "capital",
-            "fundraising"
-          ]
-        },
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
-          ],
-          "recommendedTones": [
             "casual",
-            "inspirational",
+            "persuasive",
             "conversational"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "external",
+            "customer",
+            "product"
           ]
         }
       },

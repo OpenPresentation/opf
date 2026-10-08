@@ -5,14 +5,14 @@
   "filename": "campus-energy-action-brief",
   "language": "en-US",
   "audience": [
-    "candidates",
+    "customer",
     {
-      "id": "investor",
+      "id": "internal-team",
       "attentionBudgetMinutes": 34,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "golden-circle"
+        "challenge-resolution"
       ],
       "recommendedTones": [
         "formal"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "golden-circle",
+  "narrative": "challenge-resolution",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "waterfall",
         "data": {
           "columns": [
             "Quarter",
@@ -351,87 +351,92 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "golden-circle": {
-          "name": "Golden Circle (Why / How / What)",
-          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
+        "challenge-resolution": {
+          "name": "Challenge → Resolution",
+          "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
           "audienceFit": [
-            "customers",
-            "employees",
-            "general-audience",
-            "press"
+            "executives",
+            "managers",
+            "stakeholders",
+            "internal-teams"
           ],
           "duration": {
             "min": 10,
             "max": 30
           },
           "tags": [
-            "keynote",
-            "brand",
-            "mission",
-            "sinek"
+            "management",
+            "strategy",
+            "consulting",
+            "advisory"
           ],
           "beats": [
             {
-              "id": "why",
-              "name": "Why",
-              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
+              "instructions": "Capture audience attention",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "how",
-              "name": "How",
-              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
+              "id": "dilemma",
+              "name": "Dilemma",
+              "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
+              "instructions": "Present the problem",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "what",
-              "name": "What",
-              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+              "id": "backdrop",
+              "name": "Backdrop",
+              "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
+              "instructions": "Provide context",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "proof",
-              "name": "Proof",
-              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
+              "id": "remedy",
+              "name": "Remedy",
+              "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
+              "instructions": "Propose a solution",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "invitation",
-              "name": "Invitation",
-              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-              "layout": "title"
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
+              "instructions": "Demonstrate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "motivate",
+              "name": "Motivate",
+              "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
+              "instructions": "Encourage action",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
+              "layout": "title",
+              "instructions": "Recap and end powerfully",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
-          ],
-          "recommendedTones": [
-            "inspirational",
-            "casual",
-            "authoritative"
-          ],
-          "tags": [
-            "external",
-            "hiring",
-            "recruiting"
-          ]
-        },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -439,14 +444,37 @@
             "problem-solution"
           ],
           "recommendedTones": [
+            "casual",
             "persuasive",
-            "authoritative",
-            "inspirational"
+            "conversational"
           ],
           "tags": [
             "external",
-            "capital",
-            "fundraising"
+            "customer",
+            "product"
+          ]
+        },
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
           ]
         }
       },

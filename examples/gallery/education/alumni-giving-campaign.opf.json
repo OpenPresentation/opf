@@ -5,14 +5,14 @@
   "filename": "alumni-giving-campaign",
   "language": "en-CA",
   "audience": [
-    "candidates",
+    "sales",
     {
-      "id": "investor",
+      "id": "board",
       "attentionBudgetMinutes": 26,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "product-launch"
+        "focus"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "product-launch",
+  "narrative": "focus",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -130,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-bar",
+        "type": "doughnut",
         "data": {
           "columns": [
             "Quarter",
@@ -344,156 +344,173 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "product-launch": {
-          "name": "Product Launch",
-          "summary": "Persuasive launch arc: open with brand, hook with a promise, set the conflict, raise the stakes, reveal the product, raise stakes again, sell, and call to action. Tuned for keynote-style launches and major announcement decks.",
+        "focus": {
+          "name": "Focus",
+          "summary": "Long-term, principle-driven business arc inspired by Jeff Bezos's 1997 letter to shareholders: name the focus, account for performance, articulate the framework, and commit to the discipline that will keep the company on track. For founder letters, all-hands narratives, and any deck where the audience needs to feel the through-line.",
           "audienceFit": [
-            "customers",
-            "press",
-            "general-audience",
-            "partners"
+            "shareholders",
+            "leadership",
+            "all-hands",
+            "board"
           ],
           "duration": {
-            "min": 15,
+            "min": 20,
             "max": 45
           },
           "tags": [
-            "startup",
-            "launch",
-            "marketing",
-            "keynote"
+            "inspirational",
+            "leadership",
+            "principles",
+            "all-hands"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Open with the company brand and a confident visual. Set the tone — this is a moment, not a meeting. One slide that signals the audience is somewhere worth being.",
+              "id": "welcome",
+              "name": "Welcome",
+              "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven.",
+              "instructions": "Overview and objectives",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "accomplishments",
+              "name": "Accomplishments",
+              "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline.",
+              "instructions": "Showcase recent achievements",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "potential",
+              "name": "Potential",
+              "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful.",
+              "instructions": "Detail market opportunities",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "competitive-edge",
+              "name": "Competitive Edge",
+              "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words.",
+              "instructions": "Reveal strategic positioning",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "long-term-vision",
+              "name": "Long-Term Vision",
+              "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on.",
+              "instructions": "Emphasize focused future orientation",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "performance-metrics",
+              "name": "Performance Metrics",
+              "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter.",
+              "instructions": "Illuminate growth indicators",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "growth-achievement",
+              "name": "Growth Achievement",
+              "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real.",
+              "instructions": "Certify tangible progress",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "strategic-framework",
+              "name": "Strategic Framework",
+              "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior.",
+              "instructions": "Explain decision principles",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "expansion",
+              "name": "Expansion",
+              "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter.",
+              "instructions": "Detail growth potential",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "future-objectives",
+              "name": "Future Objectives",
+              "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode.",
+              "instructions": "Forecast upcoming targets",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "acknowledgment",
+              "name": "Acknowledgment",
+              "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks.",
+              "instructions": "Recognize contributions and successes",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-remarks",
+              "name": "Closing Remarks",
+              "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
               "layout": "title",
-              "instructions": "Show company branding",
-              "type": "text"
-            },
-            {
-              "id": "promise",
-              "name": "Promise",
-              "description": "Hook the audience with the promise of the talk. Tell them, in one sentence, what they're about to see and why it matters to them. Specific promises buy patient audiences.",
-              "instructions": "Hook the audience",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "context",
-              "name": "Context",
-              "description": "Set the stage with the world the product enters. The customer reality, the market state, the unmet expectation. Context turns the launch from a product release into a moment in a larger story.",
-              "instructions": "Set the stage",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conflict",
-              "name": "Conflict",
-              "description": "Introduce the villain — the problem, friction, or status quo the product opposes. Make the conflict concrete enough that the audience can name a moment they've felt it themselves.",
-              "instructions": "Introduce villain/problem",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "stakes",
-              "name": "Stakes",
-              "description": "Emphasize what's at risk if the conflict isn't resolved. Quantify, personalize, dramatize. Stakes are what convert a curious audience into an invested one.",
-              "instructions": "Emphasize importance",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "reveal",
-              "name": "Reveal",
-              "description": "Showcase the product. One striking visual, one defining capability, one sentence that captures what's new. Earn the applause line; don't bury it under a bullet list.",
-              "instructions": "Showcase the solution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "raise-stakes",
-              "name": "Raise the Stakes",
-              "description": "Highlight where the alternatives fall short and what they cost the customer. Re-energize the room midway by sharpening the contrast with the reveal.",
-              "instructions": "Highlight shortcomings of alternatives",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "raise-stakes-again",
-              "name": "Reinforce the Need",
-              "description": "Reinforce why change is non-negotiable now. A second beat of stakes, framed differently — perhaps a customer voice or a future cost. Cement the reason to act.",
-              "instructions": "Reinforce the need for change",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "sell",
-              "name": "Sell",
-              "description": "Make the audience want the product. Lead with the outcome it produces in their lives. Pricing, packaging, availability go here, but only after the desire is built.",
-              "instructions": "Make them want your solution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "cta",
-              "name": "Call to Action",
-              "description": "Close with the single action you want from the audience. Pre-order, sign up, attend, share. Make it simple, specific, and immediate.",
-              "layout": "title",
-              "instructions": "Inspire action",
+              "instructions": "Recap, thank, inspire",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
-          ],
-          "recommendedTones": [
-            "inspirational",
-            "casual",
-            "authoritative"
-          ],
-          "tags": [
-            "external",
-            "hiring",
-            "recruiting"
-          ]
-        },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "problem-solution",
+            "heros-journey"
           ],
           "recommendedTones": [
             "persuasive",
-            "authoritative",
-            "inspirational"
+            "conversational",
+            "casual"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
           ]
         }
       },

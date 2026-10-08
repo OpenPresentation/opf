@@ -2,11 +2,11 @@
   "name": "Grant Equity Review",
   "language": "en-AU",
   "audience": [
-    "board"
+    "general-public"
   ],
   "purpose": "sell",
   "tone": "casual",
-  "narrative": "survey-analysis",
+  "narrative": "persuasive-sales",
   "design": {
     "theme": "minimal",
     "colorScheme": "bold-red",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap",
+        "type": "radar-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -101,134 +101,114 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "survey-analysis": {
-          "name": "Survey Analysis",
-          "summary": "Structured walk-through of survey results: topic, executive summary, methodology, findings, analysis, implications, recommendations. Built so a reader who only sees the second slide already knows the headline insight.",
+        "persuasive-sales": {
+          "name": "Persuasive Sales",
+          "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
           "audienceFit": [
-            "executives",
-            "researchers",
-            "stakeholders",
-            "marketing-teams"
+            "prospects",
+            "customers",
+            "buyers"
           ],
           "duration": {
-            "min": 20,
-            "max": 60
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "data-driven",
-            "research",
-            "insights",
-            "voice-of-customer"
+            "sales",
+            "go-to-market",
+            "outbound",
+            "discovery"
           ],
           "beats": [
             {
-              "id": "introduction",
+              "id": "intro",
               "name": "Introduction",
-              "description": "Open by naming the question the survey was meant to answer. Why this, why now, who commissioned it. Anchor the audience in the decision the survey is designed to inform.",
-              "instructions": "Present survey topic",
+              "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
+              "instructions": "Name & logo",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "executive-summary",
-              "name": "Executive Summary",
-              "description": "State the top three findings in plain language on a single slide. A reader who only sees this slide should still be able to make the right call. Avoid hedging — synthesis is the point.",
-              "instructions": "Summarize key findings",
+              "id": "big-change",
+              "name": "Big Change",
+              "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
+              "instructions": "Highlight market shift",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "context",
-              "name": "Context",
-              "description": "Detail the situation behind the survey: prior knowledge, related research, the gap this work fills. Just enough to position the findings as new information rather than restated common sense.",
-              "instructions": "Detail survey background",
+              "id": "response-to-change",
+              "name": "Winners and Losers",
+              "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
+              "instructions": "Show winners & losers",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "data-methodology",
-              "name": "Data & Methodology",
-              "description": "Describe how the data was collected and from whom. Sample size, recruitment, instrument, timing. Be honest about limitations; methodological transparency is what gives the findings their weight.",
-              "instructions": "Discuss sourcing and collection",
+              "id": "benefits",
+              "name": "Benefits",
+              "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
+              "instructions": "Describe benefits, paint a vivid picture",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "data-summary",
-              "name": "Data Summary",
-              "description": "Give the audience an overview of the dataset before drilling in. Demographics, response rates, distribution of key variables. Help them calibrate what 'most' and 'few' mean in this study.",
-              "instructions": "Provide data overview",
+              "id": "capabilities",
+              "name": "Capabilities",
+              "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
+              "instructions": "Present unique features as 'magic gifts' to the customer",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "findings",
-              "name": "Findings",
-              "description": "Present the key insights one at a time. Lead each finding with the claim, then the chart. Avoid burying the point under the visualization — captions should restate the insight in words.",
-              "instructions": "Highlight key insights",
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
+              "instructions": "Share testimonials",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "data-analysis",
-              "name": "Data Analysis",
-              "description": "Break down the data behind each finding: cross-tabs, segment splits, statistical confidence. This is the slide skeptics will scrutinize — make it scrutinizable.",
-              "instructions": "Break down data",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "implications",
-              "name": "Implications",
-              "description": "Translate findings into 'so what.' What changes for product, marketing, ops, the customer? Implications without consequences are interesting trivia, not research.",
-              "instructions": "Discuss survey implications",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "recommendations",
-              "name": "Recommendations",
-              "description": "Provide the actions that follow from the implications. Prioritize, attach owners, mark which require decisions. This is where research becomes useful.",
-              "instructions": "Provide action plans",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the headline finding and the most important recommendation. End with the next step — a follow-on study, a workshop, a decision — so the work doesn't sit on a shelf.",
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
               "layout": "title",
-              "instructions": "Recap and finalize",
+              "instructions": "Encourage decision-making",
+              "type": "text"
+            },
+            {
+              "id": "close",
+              "name": "Close",
+              "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
+              "layout": "title",
+              "instructions": "Logo & contact info",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "conversational",
+            "casual",
+            "inspirational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "public",
+            "education",
+            "accessible"
           ]
         }
       },

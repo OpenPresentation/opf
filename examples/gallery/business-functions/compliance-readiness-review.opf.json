@@ -5,14 +5,14 @@
   "filename": "compliance-readiness-review",
   "language": "en-US",
   "audience": [
-    "regulatory",
+    "academic",
     {
-      "id": "candidates",
+      "id": "customer",
       "attentionBudgetMinutes": 30,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "educate"
+        "board-meeting"
       ],
       "recommendedTones": [
         "technical"
@@ -127,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "pareto",
+        "type": "stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -137,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              26,
+              23
             ],
             [
               "Q2",
-              16,
-              10
+              30,
+              25
             ],
             [
               "Q3",
-              21,
-              13
+              33,
+              27
             ],
             [
               "Q4",
-              26,
-              15
+              37,
+              29
             ]
           ]
         }
@@ -297,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line",
+            "type": "area",
             "data": {
               "columns": [
                 "Quarter",
@@ -573,52 +573,49 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
           "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "formal",
             "technical",
-            "authoritative"
+            "formal"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "research",
+            "education",
+            "analytical"
           ]
         },
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "inspirational",
             "casual",
-            "authoritative"
+            "persuasive",
+            "conversational"
           ],
           "tags": [
             "external",
-            "hiring",
-            "recruiting"
+            "customer",
+            "product"
           ]
         }
       },

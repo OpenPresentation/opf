@@ -5,14 +5,14 @@
   "filename": "satellite-maintenance-readiness-review",
   "language": "en-GB",
   "audience": [
-    "customer",
+    "regulatory",
     {
-      "id": "marketing",
+      "id": "all-hands",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "golden-circle"
+        "failure-analysis"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "golden-circle",
+  "narrative": "failure-analysis",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "area",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -355,100 +355,157 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "golden-circle": {
-          "name": "Golden Circle (Why / How / What)",
-          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
+        "failure-analysis": {
+          "name": "Failure Analysis",
+          "summary": "Walk through what went wrong, why, and what changes — a structured post-mortem for stakeholder reviews. Pairs honest accountability with a credible recovery plan.",
           "audienceFit": [
+            "leadership",
             "customers",
-            "employees",
-            "general-audience",
-            "press"
+            "stakeholders",
+            "partners"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "keynote",
-            "brand",
-            "mission",
-            "sinek"
+            "postmortem",
+            "incident",
+            "review",
+            "accountability"
           ],
           "beats": [
             {
-              "id": "why",
-              "name": "Why",
-              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+              "id": "opening-remark",
+              "name": "Opening Remark",
+              "description": "Set an empathetic, accountable tone before any analysis. Acknowledge the impact on the people in the room and the customers affected. Authenticity here earns you the credibility you'll need for the rest of the deck.",
+              "instructions": "Set an empathetic tone",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "how",
-              "name": "How",
-              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
+              "id": "incident-breakdown",
+              "name": "Incident Breakdown",
+              "description": "Walk through what happened, in time order. Stick to facts: what systems, what users, what timeline. No causal claims yet — just an accurate, neutral reconstruction the audience can trust.",
+              "instructions": "Detail the failure",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "what",
-              "name": "What",
-              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+              "id": "impact-analysis",
+              "name": "Impact Analysis",
+              "description": "Quantify the damage. Customer-hours lost, revenue at risk, SLA breaches, downstream knock-ons. Be specific and direct; vague impact statements undermine the rest of the post-mortem.",
+              "instructions": "Describe failure's effects",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "proof",
-              "name": "Proof",
-              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
+              "id": "root-cause",
+              "name": "Root Cause",
+              "description": "Trace the failure to its underlying cause, not the most visible symptom. Use a 'five whys' or fishbone framing if useful. Distinguish between the proximate trigger and the systemic conditions that allowed it.",
+              "instructions": "Analyze underlying reasons",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "invitation",
-              "name": "Invitation",
-              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-              "layout": "title"
+              "id": "proposed-solutions",
+              "name": "Proposed Solutions",
+              "description": "Present the corrective actions you're taking. Lead with the highest-leverage fix; sequence the rest. For each action, name an owner and a date — solutions without owners are aspirations.",
+              "instructions": "Suggest corrective measures",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Lay out the rollout: what ships when, how it's verified, who signs off. Show that 'fixed' has a definition and a deadline, not just intent.",
+              "instructions": "Map out steps",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "evaluate-outcome",
+              "name": "Evaluate Outcome",
+              "description": "Define the metrics that will tell you the fix worked. Pre/post comparisons, monitoring SLOs, error budgets — whatever proves the failure mode is closed and not just deferred.",
+              "instructions": "Assess corrective actions",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "lessons-learned",
+              "name": "Lessons Learned",
+              "description": "Distill the broader lessons that outlive this specific incident. What does the team or organization now know that it didn't before? What patterns will you watch for elsewhere?",
+              "instructions": "Reflect on failure lessons",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "preventive-measures",
+              "name": "Preventive Measures",
+              "description": "List the systemic safeguards being added — process changes, automated checks, on-call procedures, review gates. Show how this category of failure becomes harder to recur, not just this specific instance.",
+              "instructions": "List safeguards",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-thoughts",
+              "name": "Closing Thoughts",
+              "description": "Close with humility and forward momentum. Re-affirm accountability, thank the audience for their patience, and signal confidence in the path forward without overclaiming.",
+              "layout": "title",
+              "instructions": "Empathize, trust, and encourage",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "situation-complication-resolution",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "casual",
-            "persuasive",
-            "conversational"
+            "formal",
+            "technical",
+            "authoritative"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "compliance",
+            "policy"
           ]
         },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
           "seniority": "mixed",
-          "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "data-story",
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
             "what-so-what-now-what"
           ],
           "recommendedTones": [
             "casual",
-            "persuasive",
-            "authoritative"
+            "inspirational",
+            "conversational"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "internal",
+            "company-wide"
           ]
         }
       },

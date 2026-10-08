@@ -5,14 +5,14 @@
   "filename": "workplace-occupancy-reset",
   "language": "en-AU",
   "audience": [
-    "customer",
+    "media",
     {
-      "id": "marketing",
+      "id": "technical",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "challenge-resolution"
+        "underdog-victory"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "challenge-resolution",
+  "narrative": "underdog-victory",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -128,7 +128,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -342,130 +342,136 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "challenge-resolution": {
-          "name": "Challenge → Resolution",
-          "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
+        "underdog-victory": {
+          "name": "Underdog Victory",
+          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
           "audienceFit": [
-            "executives",
-            "managers",
-            "stakeholders",
-            "internal-teams"
+            "general-audience",
+            "internal-teams",
+            "candidates"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "management",
-            "strategy",
-            "consulting",
-            "advisory"
+            "storytelling",
+            "inspirational",
+            "founder",
+            "team"
           ],
           "beats": [
             {
-              "id": "hook",
-              "name": "Hook",
-              "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
-              "instructions": "Capture audience attention",
+              "id": "origin",
+              "name": "Origin",
+              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
+              "instructions": "Establish opening scene",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "dilemma",
-              "name": "Dilemma",
-              "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
-              "instructions": "Present the problem",
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
+              "instructions": "Highlight initial setbacks",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "backdrop",
-              "name": "Backdrop",
-              "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
-              "instructions": "Provide context",
+              "id": "determination",
+              "name": "Determination",
+              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
+              "instructions": "Showcase enduring passion",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "remedy",
-              "name": "Remedy",
-              "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
-              "instructions": "Propose a solution",
+              "id": "crisis",
+              "name": "Crisis",
+              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+              "instructions": "Identify lowest point",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
-              "instructions": "Demonstrate success",
+              "id": "resolve",
+              "name": "Resolve",
+              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
+              "instructions": "Articulate strong will",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "motivate",
-              "name": "Motivate",
-              "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
-              "instructions": "Encourage action",
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
+              "instructions": "Reward of perseverance",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
+              "id": "triumph",
+              "name": "Triumph",
+              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+              "instructions": "Reveal ultimate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
               "layout": "title",
-              "instructions": "Recap and end powerfully",
+              "instructions": "Share long-lasting impact",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "casual",
-            "persuasive",
-            "conversational"
+            "authoritative",
+            "formal"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "press",
+            "analyst"
           ]
         },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "low",
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
           "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
             "data-story",
-            "what-so-what-now-what"
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "casual",
-            "persuasive",
-            "authoritative"
+            "technical",
+            "authoritative",
+            "conversational"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "internal",
+            "technical",
+            "practitioner"
           ]
         }
       },

@@ -5,14 +5,14 @@
   "filename": "customer-qbr-renewal-deck",
   "language": "en-CA",
   "audience": [
-    "candidates",
+    "board",
     {
-      "id": "investor",
+      "id": "executive",
       "attentionBudgetMinutes": 28,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "challenge-resolution"
+        "sparkline"
       ],
       "recommendedTones": [
         "persuasive"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "challenge-resolution",
+  "narrative": "sparkline",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -339,132 +339,108 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "challenge-resolution": {
-          "name": "Challenge → Resolution",
-          "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
+        "sparkline": {
+          "name": "Sparkline",
+          "summary": "A tight comparison arc showing the transformation from an inferior state to a superior one, anchored by contrast.",
+          "description": "A tight comparison arc that shows the move from an inferior state to a superior one, anchored by contrast. Make the painful before state vivid, reveal the product, decision, or event that changes the trajectory, present the new reality in concrete terms, then prove it with data or testimonial. The tone is contrastive: it makes the gap between old and new viscerally clear. Best for product demos, case study summaries, ROI presentations, and before-and-after technology comparisons; typical decks run 4-6 slides.",
           "audienceFit": [
-            "executives",
-            "managers",
-            "stakeholders",
-            "internal-teams"
+            "prospective-buyers",
+            "skeptical-stakeholders",
+            "evaluation-committees"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 3,
+            "max": 15
           },
           "tags": [
-            "management",
-            "strategy",
-            "consulting",
-            "advisory"
+            "contrast",
+            "transformation",
+            "product",
+            "roi"
           ],
           "beats": [
             {
-              "id": "hook",
-              "name": "Hook",
-              "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
-              "instructions": "Capture audience attention",
+              "id": "before-state",
+              "name": "Before State",
+              "description": "Make the current pain or limitation vivid with numbers, stories, or visuals that make the problem real.",
+              "instructions": "Make the current pain or limitation vivid.",
+              "type": "text",
+              "layout": "text-2x"
+            },
+            {
+              "id": "contrast-moment",
+              "name": "Contrast Moment",
+              "description": "Introduce the change agent, product, or decision that shifts the trajectory.",
+              "instructions": "Introduce the decision, product, or event that changes the trajectory.",
+              "type": "text",
+              "layout": "title"
+            },
+            {
+              "id": "after-state",
+              "name": "After State",
+              "description": "Show the improved reality. Make it concrete and specific instead of relying on vague benefit language.",
+              "instructions": "Show the new reality created by the change.",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "dilemma",
-              "name": "Dilemma",
-              "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
-              "instructions": "Present the problem",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "backdrop",
-              "name": "Backdrop",
-              "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
-              "instructions": "Provide context",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "remedy",
-              "name": "Remedy",
-              "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
-              "instructions": "Propose a solution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
-              "instructions": "Demonstrate success",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "motivate",
-              "name": "Motivate",
-              "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
-              "instructions": "Encourage action",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
-              "layout": "title",
-              "instructions": "Recap and end powerfully",
-              "type": "text"
+              "id": "proof",
+              "name": "Proof",
+              "description": "Validate the after state with metrics, testimonials, or third-party evidence.",
+              "instructions": "Validate the change with evidence.",
+              "type": "metric",
+              "layout": "number-1x"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
+          "attentionBudgetMinutes": 90,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "inspirational",
-            "casual",
+            "formal",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
-          "seniority": "mixed",
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "persuasive",
+            "formal",
             "authoritative",
-            "inspirational"
+            "persuasive"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "leadership",
+            "decision-making"
           ]
         }
       },

@@ -5,14 +5,14 @@
   "filename": "engineering-capacity-planning",
   "language": "en-US",
   "audience": [
-    "regulatory",
+    "partner",
     {
-      "id": "candidates",
+      "id": "academic",
       "attentionBudgetMinutes": 28,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "scqa"
+        "pyramid-principle"
       ],
       "recommendedTones": [
         "authoritative"
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -144,23 +144,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              23,
+              20
             ],
             [
               "Q2",
-              16,
-              10
+              27,
+              22
             ],
             [
               "Q3",
-              21,
-              13
+              30,
+              24
             ],
             [
               "Q4",
-              26,
-              15
+              34,
+              26
             ]
           ]
         }
@@ -304,7 +304,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "filled-radar",
+            "type": "funnel",
             "data": {
               "columns": [
                 "Quarter",
@@ -569,52 +569,49 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
-          ],
-          "recommendedTones": [
-            "formal",
-            "technical",
-            "authoritative"
-          ],
-          "tags": [
-            "external",
-            "compliance",
-            "policy"
-          ]
-        },
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "problem-solution",
+            "heros-journey"
           ],
           "recommendedTones": [
-            "inspirational",
+            "persuasive",
             "casual",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "partner",
+            "channel",
+            "enablement"
+          ]
+        },
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+          "seniority": "mixed",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
           ]
         }
       },

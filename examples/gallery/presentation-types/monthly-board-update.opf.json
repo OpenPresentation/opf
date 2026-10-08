@@ -2,11 +2,11 @@
   "name": "Monthly Board Update",
   "language": "en-GB",
   "audience": [
-    "board"
+    "all-hands"
   ],
   "purpose": "align",
   "tone": "inspirational",
-  "narrative": "capacity-planning",
+  "narrative": "situation-complication-resolution",
   "design": {
     "theme": "classic",
     "colorScheme": "slate-gray",
@@ -57,7 +57,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "100pct-stacked-area",
         "data": {
           "columns": [
             "Quarter",
@@ -105,118 +105,86 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "capacity-planning": {
-          "name": "Capacity Planning",
-          "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
+        "situation-complication-resolution": {
+          "name": "Situation-Complication-Resolution",
+          "summary": "McKinsey-style structure that builds tension before delivering insights.",
+          "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
           "audienceFit": [
-            "leadership",
-            "operations",
-            "hr-partners",
-            "finance"
+            "senior-leadership",
+            "consultants",
+            "strategy-teams"
           ],
           "duration": {
-            "min": 20,
-            "max": 45
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "workforce",
-            "operations",
-            "planning",
-            "resource-management"
+            "strategy",
+            "consulting",
+            "minto",
+            "recommendation"
           ],
           "beats": [
             {
-              "id": "kickoff",
-              "name": "Kickoff",
-              "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
-              "layout": "title",
-              "instructions": "Introduce the topic",
-              "type": "text"
-            },
-            {
-              "id": "urgency",
-              "name": "Urgency",
-              "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
-              "instructions": "Show needs",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
               "id": "situation",
               "name": "Situation",
-              "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
-              "instructions": "Highlight current resources",
-              "type": "text",
-              "layout": "text-1x"
+              "description": "Set the scene with relevant background and context everyone agrees on.",
+              "instructions": "State the shared context the audience already accepts.",
+              "type": "list",
+              "layout": "list-1x"
             },
             {
-              "id": "projection",
-              "name": "Projection",
-              "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
-              "instructions": "Predict future demands",
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce what has changed or what challenge has emerged.",
+              "instructions": "Introduce the change, risk, or tension.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "tactics",
-              "name": "Tactics",
-              "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
-              "instructions": "Suggest coping strategies",
+              "id": "question",
+              "name": "Question",
+              "description": "Articulate the key question that the complication raises.",
+              "instructions": "Frame the decision question raised by the complication.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "title"
             },
             {
-              "id": "implementation",
-              "name": "Implementation",
-              "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
-              "instructions": "Discuss deployment plans",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "revision",
-              "name": "Revision",
-              "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
-              "instructions": "Evaluate and adjust",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
-              "layout": "title",
-              "instructions": "Wrap-up & recommendations",
-              "type": "text"
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver your recommendation or insight that resolves the question.",
+              "instructions": "Deliver the recommendation that resolves the question.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "board-meeting",
+            "company-intro",
+            "weekly-progress",
             "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "casual",
+            "inspirational",
+            "conversational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "internal",
+            "company-wide"
           ]
         }
       },

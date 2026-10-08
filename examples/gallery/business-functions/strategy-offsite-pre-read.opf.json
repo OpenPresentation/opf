@@ -5,14 +5,14 @@
   "filename": "strategy-offsite-pre-read",
   "language": "en-GB",
   "audience": [
-    "marketing",
+    "engineering-team",
     {
-      "id": "board",
+      "id": "investor",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "venture-pitch"
+        "strategic-advisory"
       ],
       "recommendedTones": [
         "conversational"
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "filled-radar",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -311,7 +311,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line-with-markers",
+            "type": "stacked-area",
             "data": {
               "columns": [
                 "Quarter",
@@ -568,53 +568,52 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "low",
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
           "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "data-story",
-            "what-so-what-now-what"
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
           ],
           "recommendedTones": [
+            "technical",
             "casual",
-            "persuasive",
-            "authoritative"
+            "conversational"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         },
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "persuasive",
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "capital",
+            "fundraising"
           ]
         }
       },

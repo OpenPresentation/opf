@@ -2,11 +2,11 @@
   "name": "Seed Pitch for Climate Risk API",
   "language": "en-US",
   "audience": [
-    "all-hands"
+    "academic"
   ],
   "purpose": "sell",
   "tone": "formal",
-  "narrative": "business-review",
+  "narrative": "scqa",
   "design": {
     "theme": "bold",
     "colorScheme": "pastel-red",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",
@@ -101,149 +101,81 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "business-review": {
-          "name": "Business Review",
-          "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
+        "scqa": {
+          "name": "SCQA (Situation–Complication–Question–Answer)",
+          "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
           "audienceFit": [
-            "customers",
-            "partners",
-            "stakeholders",
-            "leadership"
+            "executives",
+            "boards",
+            "leadership-teams"
           ],
           "duration": {
-            "min": 30,
-            "max": 90
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "customer-relationship",
-            "review",
-            "operations"
+            "executive",
+            "strategy",
+            "consulting",
+            "minto",
+            "pyramid"
           ],
           "beats": [
             {
-              "id": "logo",
-              "name": "Logo",
-              "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
-              "layout": "title",
-              "instructions": "Identity & representation",
-              "type": "text"
+              "id": "situation",
+              "name": "Situation",
+              "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
             },
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
-              "instructions": "Meeting context & goals",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible."
             },
             {
-              "id": "review",
-              "name": "Review",
-              "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
-              "instructions": "Outline recent activities",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "question",
+              "name": "Key Question",
+              "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
             },
             {
-              "id": "successes",
-              "name": "Successes",
-              "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
-              "instructions": "Recognize achievements",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
+              "layout": "title"
             },
             {
-              "id": "challenges",
-              "name": "Challenges",
-              "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
-              "instructions": "Address problems faced",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "key-arguments",
+              "name": "Key Arguments",
+              "description": "Lay out the two or three top-level reasons the answer is correct. One slide per argument, or one summary slide naming all of them. Each argument should stand alone as a compelling reason; together they should be exhaustive of the case."
             },
             {
-              "id": "solutions",
-              "name": "Solutions",
-              "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
-              "instructions": "Discuss implemented fixes",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "outcome",
-              "name": "Outcome",
-              "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
-              "instructions": "Display results achieved",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "insights",
-              "name": "Insights",
-              "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
-              "instructions": "Highlight key learnings",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "future-strategy",
-              "name": "Future Strategy",
-              "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
-              "instructions": "Define next steps",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "feedback",
-              "name": "Feedback",
-              "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
-              "instructions": "Capture audience thoughts",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "next-review",
-              "name": "Next Review",
-              "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
-              "instructions": "Plan for follow-up",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing",
-              "name": "Closing",
-              "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
-              "layout": "title",
-              "instructions": "Recap and express optimism",
-              "type": "text"
+              "id": "supporting-evidence",
+              "name": "Supporting Evidence",
+              "description": "Present the data, examples, and case studies that ground each argument. Pyramid-principle style: every claim above is backed by something verifiable here. Cite sources; show the numbers; let the evidence carry the weight."
             }
           ]
         }
       },
       "audiences": {
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "casual",
-            "inspirational",
-            "conversational"
+            "technical",
+            "formal"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "research",
+            "education",
+            "analytical"
           ]
         }
       },

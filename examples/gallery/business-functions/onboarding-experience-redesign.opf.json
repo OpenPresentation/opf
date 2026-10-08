@@ -2,11 +2,11 @@
   "name": "Onboarding Experience Redesign",
   "language": "en-AU",
   "audience": [
-    "board"
+    "technical"
   ],
   "purpose": "persuade",
   "tone": "formal",
-  "narrative": "strategic-narrative",
+  "narrative": "reveal",
   "design": {
     "theme": "minimal",
     "colorScheme": "burnt-orange",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -101,91 +101,114 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "strategic-narrative": {
-          "name": "Strategic Narrative",
-          "summary": "The change-driven founder/sales arc: a tectonic shift creates winners and losers, the audience must respond, and your product is the only credible way to land in the winners' camp. Used for top-of-funnel sales pitches, board re-positioning, and high-stakes founder talks.",
+        "reveal": {
+          "name": "Reveal",
+          "summary": "Insight-driven keynote arc inspired by Amy Cuddy's 2012 talk on body language: connect through personal story, ground in research, illustrate with anecdote, summarize, break stereotypes, advise, demonstrate authenticity, close with impact. For talks that aim to change how the audience sees something they thought they understood.",
           "audienceFit": [
-            "customers",
-            "prospects",
-            "board",
-            "investors",
-            "executives"
+            "general-audience",
+            "academics",
+            "professionals"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 15,
+            "max": 25
           },
           "tags": [
-            "strategic",
-            "sales",
-            "positioning",
-            "category"
+            "keynote",
+            "research",
+            "talk",
+            "inspirational"
           ],
           "beats": [
             {
-              "id": "shift",
-              "name": "The Shift",
-              "description": "Open by naming a large, undeniable change in the world that the audience already half-believes. Technology, regulation, customer behavior, economics — pick the shift that recasts the audience's reality. The shift, not your product, is the protagonist of the first half of the deck."
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
+              "instructions": "Share personal experiences to connect with the audience",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "stakes",
-              "name": "Winners and Losers",
-              "description": "Make the consequences of the shift concrete. Who wins, who loses, by how much, on what timeframe. Use specific examples — companies, products, segments — that have already moved or are about to. The audience should feel that standing still is the riskiest choice."
+              "id": "research-exposition",
+              "name": "Research Exposition",
+              "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
+              "instructions": "Unravel scientific data backing the premise",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "promised-land",
-              "name": "Promised Land",
-              "description": "Paint a vivid picture of the future state your audience could occupy if they navigate the shift well. Describe outcomes, not features. The promised land must feel desirable, achievable, and meaningfully different from where they are today."
+              "id": "real-life-anecdote",
+              "name": "Real-Life Anecdote",
+              "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
+              "instructions": "Illustrate with stories to make the point relatable",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "obstacles",
-              "name": "Old Game",
-              "description": "Show why the existing playbook can't get the audience to the promised land. Name the legacy approach honestly and credit what it once did, then explain why the shift has rendered it insufficient. Avoid strawmen — the more fairly you state the old game, the more credible your new game becomes."
+              "id": "critical-insights",
+              "name": "Critical Insights",
+              "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
+              "instructions": "Summarize key points",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "mechanism",
-              "name": "New Game",
-              "description": "Introduce your category-defining approach as the way to play the new game. Show the principles or capabilities that make it possible only now. Emphasize what's structurally different from the old game, not what's marginally better."
+              "id": "break-stereotypes",
+              "name": "Break Stereotypes",
+              "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
+              "instructions": "Question redundant norms and belief systems",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Prove the new game works. Customer outcomes, named logos, before/after data, third-party validation. Choose evidence that maps directly to the shift you opened with — proof that other audiences in the same boat made it to the promised land."
+              "id": "empowering-advice",
+              "name": "Empowering Advice",
+              "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
+              "instructions": "Motivational message to act upon",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "ask",
-              "name": "Call to Action",
-              "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
-              "layout": "title"
+              "id": "authenticity",
+              "name": "Authenticity",
+              "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
+              "instructions": "Honest and real communication to demonstrate authenticity",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "close-with-impact",
+              "name": "Close With Impact",
+              "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
+              "layout": "title",
+              "instructions": "End on a motivational high",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
+            "data-story",
             "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "technical",
+            "authoritative",
+            "conversational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "internal",
+            "technical",
+            "practitioner"
           ]
         }
       },

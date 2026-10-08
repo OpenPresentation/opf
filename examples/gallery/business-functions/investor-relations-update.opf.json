@@ -5,14 +5,14 @@
   "filename": "investor-relations-update",
   "language": "en-GB",
   "audience": [
-    "sales",
+    "all-hands",
     {
-      "id": "customer",
+      "id": "engineering-team",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "employee-review"
+        "business-narrative"
       ],
       "recommendedTones": [
         "authoritative"
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "pie",
+        "type": "stacked-line",
         "data": {
           "columns": [
             "Quarter",
@@ -295,7 +295,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -557,50 +557,55 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
-          ],
-          "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
-          ],
-          "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
-          ]
-        },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
           "seniority": "mixed",
           "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
             "heros-journey",
-            "problem-solution"
+            "what-so-what-now-what"
           ],
           "recommendedTones": [
             "casual",
-            "persuasive",
+            "inspirational",
             "conversational"
           ],
           "tags": [
-            "external",
-            "customer",
-            "product"
+            "internal",
+            "company-wide"
+          ]
+        },
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         }
       },

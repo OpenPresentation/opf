@@ -1,7 +1,9 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { defaultCatalog } from "../packages/javascript/dist/catalog.js";
 import { colorContrast } from "../packages/javascript/dist/composition.js";
+import { embed } from "../packages/javascript/dist/index.js";
 import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -997,13 +999,7 @@ function deckFor(rawSpec, index, catalogs) {
   return { deck, folder, filename: `${slug(title)}.opf.json` };
 }
 
-async function writeJson(file, value) {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-}
-
-async function writeReadme() {
-  const readme = `# OPF Example Gallery
+const readme = `# OPF Example Gallery
 
 This folder contains broader OPF examples organized by scenario instead of by isolated schema feature.
 
@@ -1019,36 +1015,73 @@ The root-level examples one directory up remain compact regression fixtures. The
 
 Brand marks, header icons, watermarks and cover artwork are original MIT-licensed abstract illustrations embedded as PNG data URIs. They work offline without fonts or an image resolver and can be regenerated with \`scripts/gallery-artwork.mjs\`. They are fictional demonstration artwork, not photographs or third-party logos. Supporting-photo, demo-video and external-data references remain explicit authoring examples; their actual resources and supported playback/data resolution still require completion.
 `;
-  await mkdir(examplesRoot, { recursive: true });
-  await writeFile(path.join(examplesRoot, "README.md"), readme, "utf8");
+
+async function loadCatalogs() {
+  return Object.fromEntries(
+    await Promise.all(Object.entries(catalogKinds).map(async ([name, kind]) => [name, await loadCatalogIds(kind)])),
+  );
 }
 
-async function main() {
-  const catalogs = Object.fromEntries(
-    await Promise.all(
-      Object.entries(catalogKinds).map(async ([name, kind]) => [name, await loadCatalogIds(kind)]),
-    ),
-  );
+/**
+ * One finished gallery deck (OPF 0.15): deckFor's document with every record it references embedded under
+ * catalogs.default by core `embed`, with the default catalog registered. Throws when a reference resolves nowhere.
+ */
+function embeddedDeckFor(spec, index, catalogs) {
+  const { deck, folder, filename } = deckFor(spec, index, catalogs);
+  const { document, unresolved } = embed(deck, { catalogs: [defaultCatalog] });
+  if (unresolved.length) throw new Error(`${folder}/${filename}: ${unresolved.map((entry) => entry.message).join("; ")}`);
+  return { deck: document, folder, filename };
+}
 
-  await writeReadme();
+/** Every file the generator owns, as [absolute path, exact contents]. */
+async function generatedFiles() {
+  const catalogs = await loadCatalogs();
+  const files = [[path.join(examplesRoot, "README.md"), readme]];
+  for (const [index, spec] of scenarioSpecs.entries()) {
+    const { deck, folder, filename } = embeddedDeckFor(spec, index, catalogs);
+    files.push([path.join(examplesRoot, folder, filename), `${JSON.stringify(deck, null, 2)}\n`]);
+  }
+  return files;
+}
 
-  for (let index = 0; index < scenarioSpecs.length; index += 1) {
-    const { deck, folder, filename } = deckFor(scenarioSpecs[index], index, catalogs);
-    await writeJson(path.join(examplesRoot, folder, filename), deck);
+async function readOrNull(file) {
+  try {
+    return await readFile(file, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
 
-    if ((index + 1) % 10 === 0) {
-      // Private checkpoint hook: keep output generic so coverage stats do not enter repo logs or docs.
-      console.log(`generated ${index + 1} examples`);
+// node scripts/generate-example-suite.mjs           regenerate examples/gallery (README and the 100 decks)
+// node scripts/generate-example-suite.mjs --check   read-only: exit 1 when a committed file differs from the generator
+async function main(argv) {
+  const check = argv.includes("--check");
+  const files = await generatedFiles();
+  const drift = [];
+  for (const [file, contents] of files) {
+    if ((await readOrNull(file)) === contents) continue;
+    drift.push(path.relative(repoRoot, file));
+    if (!check) {
+      await mkdir(path.dirname(file), { recursive: true });
+      await writeFile(file, contents, "utf8");
     }
   }
-
-  console.log(`wrote ${scenarioSpecs.length} OPF gallery examples`);
+  if (check) {
+    if (drift.length) {
+      console.error(`generate-example-suite: ${drift.length} of ${files.length} generated files differ from the generator (run node scripts/generate-example-suite.mjs and review the diff):`);
+      for (const file of drift) console.error(`  ${file}`);
+      process.exitCode = 1;
+    } else console.log(`generate-example-suite: ${files.length} generated files match the generator`);
+    return;
+  }
+  console.log(`wrote ${drift.length} of ${files.length} generated files (${scenarioSpecs.length} OPF gallery examples and the README)`);
 }
 
-export { scenarioSpecs, deckFor, loadCatalogIds, catalogKinds };
+export { scenarioSpecs, deckFor, embeddedDeckFor, generatedFiles, loadCatalogIds, loadCatalogs, catalogKinds };
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch((error) => {
+  main(process.argv.slice(2)).catch((error) => {
     console.error(error);
     process.exit(1);
   });

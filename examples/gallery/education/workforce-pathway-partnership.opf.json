@@ -5,14 +5,14 @@
   "filename": "workforce-pathway-partnership",
   "language": "en-US",
   "audience": [
-    "investor",
+    "internal-team",
     {
-      "id": "all-hands",
+      "id": "partner",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "low",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "performance-improvement-plan"
+        "conference-talk"
       ],
       "recommendedTones": [
         "authoritative"
@@ -127,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -137,23 +137,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              17,
+              14
             ],
             [
               "Q2",
-              16,
-              10
+              21,
+              16
             ],
             [
               "Q3",
-              21,
-              13
+              24,
+              18
             ],
             [
               "Q4",
-              26,
-              15
+              28,
+              20
             ]
           ]
         }
@@ -297,7 +297,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line",
+            "type": "histogram",
             "data": {
               "columns": [
                 "Quarter",
@@ -563,53 +563,50 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
+          "decisionPower": "informational",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
-          ],
-          "recommendedTones": [
-            "persuasive",
-            "authoritative",
-            "inspirational"
-          ],
-          "tags": [
-            "external",
-            "capital",
-            "fundraising"
-          ]
-        },
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
+            "what-so-what-now-what",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "casual",
-            "inspirational",
-            "conversational"
+            "conversational",
+            "authoritative"
           ],
           "tags": [
             "internal",
-            "company-wide"
+            "operations",
+            "team"
+          ]
+        },
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "partner",
+            "channel",
+            "enablement"
           ]
         }
       },

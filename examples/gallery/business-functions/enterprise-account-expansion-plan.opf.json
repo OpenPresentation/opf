@@ -5,14 +5,14 @@
   "filename": "enterprise-account-expansion-plan",
   "language": "en-GB",
   "audience": [
-    "executive",
+    "investor",
     {
-      "id": "sales",
+      "id": "regulatory",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "qbr"
+        "problem-solution"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "qbr",
+  "narrative": "problem-solution",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -118,7 +118,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "waterfall",
         "data": {
           "columns": [
             "Quarter",
@@ -332,134 +332,111 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "qbr": {
-          "name": "Quarterly Business Review",
-          "summary": "Standard QBR / business-review arc for internal leadership reviews. Recap commitments, show what the numbers say, separate wins from challenges, lay out the plan, surface risks, and request the asks the team needs to execute.",
+        "problem-solution": {
+          "name": "Problem → Solution",
+          "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
           "audienceFit": [
-            "leadership",
+            "customers",
+            "stakeholders",
             "executives",
-            "cross-functional-partners"
+            "internal-teams"
           ],
           "duration": {
-            "min": 30,
-            "max": 90
+            "min": 5,
+            "max": 30
           },
           "tags": [
-            "internal",
-            "review",
-            "operations",
-            "reporting"
+            "business",
+            "sales",
+            "general",
+            "proposal"
           ],
           "beats": [
             {
-              "id": "objectives",
-              "name": "Objectives",
-              "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
-              "layout": "title",
-              "instructions": "Set the expectations",
-              "type": "text"
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
+              "layout": "title"
             },
             {
-              "id": "recap",
-              "name": "Recap",
-              "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse — this grounds the review in prior context, but the meat is ahead."
+              "id": "problem",
+              "name": "The Problem",
+              "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
             },
             {
-              "id": "performance-headline",
-              "name": "Performance Headline",
-              "description": "Show the top three to five KPIs with target vs actual and direction-of-travel. One slide that lets a busy executive grasp the quarter's outcome at a glance. Lead with the number, not the methodology."
+              "id": "stakes",
+              "name": "Why It Matters",
+              "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
             },
             {
-              "id": "performance-detail",
-              "name": "Performance Detail",
-              "description": "Drill into the supporting metrics by area or function. One chart per metric; clear y-axis, clear unit, clear comparison period. Call out anomalies before someone else does."
+              "id": "solution",
+              "name": "The Solution",
+              "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
             },
             {
-              "id": "wins",
-              "name": "Wins",
-              "description": "Highlight the quarter's biggest wins and who drove them. Be specific — name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
+              "id": "mechanism",
+              "name": "How It Works",
+              "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
             },
             {
-              "id": "challenges",
-              "name": "Challenges",
-              "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't.",
-              "instructions": "Address difficulties",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "evidence",
+              "name": "Proof",
+              "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
             },
             {
-              "id": "insights",
-              "name": "Insights",
-              "description": "Translate the numbers into 'so what.' What did the data tell you about customers, the market, your operations, your bets? Insights should be opinions backed by evidence, not restatements of the metrics."
-            },
-            {
-              "id": "priorities",
-              "name": "Next-Quarter Priorities",
-              "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max — laundry lists are a tell that the team hasn't decided what matters most."
-            },
-            {
-              "id": "sequencing",
-              "name": "Sequencing",
-              "description": "Show the order in which priorities ship and how they fit together. Dependencies, milestones, target dates. The audience should leave able to predict what comes when, not just what."
-            },
-            {
-              "id": "risks",
-              "name": "Risks",
-              "description": "Name the risks to the plan honestly. Dependencies, assumptions, capacity gaps, market factors. For each risk, state the mitigation or the open question the audience can help resolve."
-            },
-            {
-              "id": "asks",
-              "name": "Asks",
-              "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
+              "id": "ask",
+              "name": "The Ask",
+              "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
               "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
-          ],
-          "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
-          ],
-          "tags": [
-            "leadership",
-            "decision-making"
-          ]
-        },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
             "persuasive",
-            "conversational",
-            "casual"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "external",
+            "capital",
+            "fundraising"
+          ]
+        },
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
           ]
         }
       },

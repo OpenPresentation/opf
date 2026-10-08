@@ -5,14 +5,14 @@
   "filename": "airline-disruption-recovery-review",
   "language": "en-CA",
   "audience": [
-    "regulatory",
+    "board",
     {
-      "id": "candidates",
+      "id": "executive",
       "attentionBudgetMinutes": 18,
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "performance-review"
+        "justice"
       ],
       "recommendedTones": [
         "inspirational"
@@ -129,7 +129,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -299,7 +299,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "column",
+            "type": "100pct-stacked-area",
             "data": {
               "columns": [
                 "Quarter",
@@ -572,52 +572,52 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
-          "seniority": "mixed",
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "attentionBudgetMinutes": 90,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "formal",
-            "technical",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         },
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "inspirational",
-            "casual",
-            "authoritative"
+            "formal",
+            "authoritative",
+            "persuasive"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "leadership",
+            "decision-making"
           ]
         }
       },

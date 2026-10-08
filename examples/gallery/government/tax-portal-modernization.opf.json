@@ -5,14 +5,14 @@
   "filename": "tax-portal-modernization",
   "language": "en-CA",
   "audience": [
-    "regulatory",
+    "sales",
     {
-      "id": "candidates",
+      "id": "board",
       "attentionBudgetMinutes": 24,
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "board-meeting"
+        "rags-to-riches"
       ],
       "recommendedTones": [
         "casual"
@@ -130,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "treemap",
         "data": {
           "columns": [
             "Quarter",
@@ -300,7 +300,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-column",
+            "type": "column",
             "data": {
               "columns": [
                 "Quarter",
@@ -573,52 +573,53 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        },
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "formal",
-            "technical",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
-          ]
-        },
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
-          ],
-          "recommendedTones": [
-            "inspirational",
-            "casual",
-            "authoritative"
-          ],
-          "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         }
       },

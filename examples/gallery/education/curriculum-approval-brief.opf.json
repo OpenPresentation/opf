@@ -5,14 +5,14 @@
   "filename": "curriculum-approval-brief",
   "language": "en-AU",
   "audience": [
-    "sales",
+    "media",
     {
-      "id": "customer",
+      "id": "technical",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "persuasive-sales"
+        "educate"
       ],
       "recommendedTones": [
         "formal"
@@ -128,7 +128,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-area",
+        "type": "box-and-whisker",
         "data": {
           "columns": [
             "Quarter",
@@ -298,7 +298,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line-with-markers",
+            "type": "pareto",
             "data": {
               "columns": [
                 "Quarter",
@@ -555,50 +555,49 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
-          ],
-          "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
-          ]
-        },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
-          ],
-          "recommendedTones": [
-            "casual",
-            "persuasive",
-            "conversational"
+            "authoritative",
+            "formal"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "press",
+            "analyst"
+          ]
+        },
+        "technical": {
+          "name": "Technical",
+          "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+          "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "technical",
+            "authoritative",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "technical",
+            "practitioner"
           ]
         }
       },

@@ -2,11 +2,11 @@
   "name": "Claims Triage Operating Model",
   "language": "en-AU",
   "audience": [
-    "board"
+    "media"
   ],
   "purpose": "educate",
   "tone": "inspirational",
-  "narrative": "failure-analysis",
+  "narrative": "educate",
   "design": {
     "theme": "minimal",
     "colorScheme": "slate-gray",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "histogram",
         "data": {
           "columns": [
             "Quarter",
@@ -101,134 +101,121 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "failure-analysis": {
-          "name": "Failure Analysis",
-          "summary": "Walk through what went wrong, why, and what changes — a structured post-mortem for stakeholder reviews. Pairs honest accountability with a credible recovery plan.",
+        "educate": {
+          "name": "Educate",
+          "summary": "Engaging-explainer arc inspired by Mary Roach: surprise the audience with a fact, walk them through evidence and anecdote, scrutinize the assumptions, then close on a memorable insight. For technical, scientific, or analytical talks that need to feel more like discovery than instruction.",
           "audienceFit": [
-            "leadership",
-            "customers",
-            "stakeholders",
-            "partners"
+            "general-audience",
+            "students",
+            "practitioners"
           ],
           "duration": {
             "min": 15,
             "max": 45
           },
           "tags": [
-            "postmortem",
-            "incident",
-            "review",
-            "accountability"
+            "keynote",
+            "education",
+            "explainer",
+            "science"
           ],
           "beats": [
             {
-              "id": "opening-remark",
-              "name": "Opening Remark",
-              "description": "Set an empathetic, accountable tone before any analysis. Acknowledge the impact on the people in the room and the customers affected. Authenticity here earns you the credibility you'll need for the rest of the deck.",
-              "instructions": "Set an empathetic tone",
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Introduce the topic in a way that respects the audience's time and curiosity. Frame why this question is worth asking, and signal the shape of the journey ahead without giving away the destination.",
+              "instructions": "Introduce the topic",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "incident-breakdown",
-              "name": "Incident Breakdown",
-              "description": "Walk through what happened, in time order. Stick to facts: what systems, what users, what timeline. No causal claims yet — just an accurate, neutral reconstruction the audience can trust.",
-              "instructions": "Detail the failure",
+              "id": "surprising-fact",
+              "name": "Surprising Fact",
+              "description": "Lead with a single curious fact that recasts how the audience thinks about the topic. The fact should be small, specific, and unforgettable — the cognitive door the rest of the talk walks through.",
+              "instructions": "Share a curious fact",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "impact-analysis",
-              "name": "Impact Analysis",
-              "description": "Quantify the damage. Customer-hours lost, revenue at risk, SLA breaches, downstream knock-ons. Be specific and direct; vague impact statements undermine the rest of the post-mortem.",
-              "instructions": "Describe failure's effects",
+              "id": "experiment",
+              "name": "Experiment",
+              "description": "Walk through a method, study, or thought experiment that probes the surprising fact. Show how knowledge here gets made — the audience should feel like they're shoulder-to-shoulder with the investigator.",
+              "instructions": "Explain a tried method",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "root-cause",
-              "name": "Root Cause",
-              "description": "Trace the failure to its underlying cause, not the most visible symptom. Use a 'five whys' or fishbone framing if useful. Distinguish between the proximate trigger and the systemic conditions that allowed it.",
-              "instructions": "Analyze underlying reasons",
+              "id": "amusing-anecdote",
+              "name": "Amusing Anecdote",
+              "description": "Drop in a story or moment from the field that brings the topic to human scale. Personality and humor here keep the audience leaning forward; technical depth without warmth loses the room.",
+              "instructions": "Relay an interesting story",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "proposed-solutions",
-              "name": "Proposed Solutions",
-              "description": "Present the corrective actions you're taking. Lead with the highest-leverage fix; sequence the rest. For each action, name an owner and a date — solutions without owners are aspirations.",
-              "instructions": "Suggest corrective measures",
+              "id": "intriguing-information",
+              "name": "Intriguing Information",
+              "description": "Layer in the more complex data or detail. By this point the audience is invested enough to do real work alongside you. Visualize generously — make the numbers tangible.",
+              "instructions": "Share complex data",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "action-plan",
-              "name": "Action Plan",
-              "description": "Lay out the rollout: what ships when, how it's verified, who signs off. Show that 'fixed' has a definition and a deadline, not just intent.",
-              "instructions": "Map out steps",
+              "id": "skeptical-scrutiny",
+              "name": "Skeptical Scrutiny",
+              "description": "Question the easy interpretations. Challenge the audience's defaults and your own. Showing where the evidence is contested is what separates a teacher from a publicist.",
+              "instructions": "Encourage questioning of accepted truths",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "evaluate-outcome",
-              "name": "Evaluate Outcome",
-              "description": "Define the metrics that will tell you the fix worked. Pre/post comparisons, monitoring SLOs, error budgets — whatever proves the failure mode is closed and not just deferred.",
-              "instructions": "Assess corrective actions",
+              "id": "extraordinary-explanation",
+              "name": "Extraordinary Explanation",
+              "description": "Present the most counterintuitive or beautiful explanation the topic offers. Take your time here — this is the payoff slide the audience came for.",
+              "instructions": "Break down unusual research findings",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "lessons-learned",
-              "name": "Lessons Learned",
-              "description": "Distill the broader lessons that outlive this specific incident. What does the team or organization now know that it didn't before? What patterns will you watch for elsewhere?",
-              "instructions": "Reflect on failure lessons",
+              "id": "unconventional-use",
+              "name": "Unconventional Use",
+              "description": "Show an unexpected application or implication of the idea. Surprise reinforces the lesson and gives the audience a story to retell tomorrow.",
+              "instructions": "Expand on unique aspects",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "preventive-measures",
-              "name": "Preventive Measures",
-              "description": "List the systemic safeguards being added — process changes, automated checks, on-call procedures, review gates. Show how this category of failure becomes harder to recur, not just this specific instance.",
-              "instructions": "List safeguards",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-thoughts",
-              "name": "Closing Thoughts",
-              "description": "Close with humility and forward momentum. Re-affirm accountability, thank the audience for their patience, and signal confidence in the path forward without overclaiming.",
+              "id": "captivating-conclusion",
+              "name": "Captivating Conclusion",
+              "description": "Close with a thoughtful, slightly poetic wrap-up. Echo the surprising fact, name the lesson, and leave the audience with a new question instead of a tidy answer.",
               "layout": "title",
-              "instructions": "Empathize, trust, and encourage",
+              "instructions": "Provide a thoughtful wrap-up",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "authoritative",
+            "formal"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "press",
+            "analyst"
           ]
         }
       },

@@ -5,14 +5,14 @@
   "filename": "court-backlog-reduction-plan",
   "language": "en-GB",
   "audience": [
-    "customer",
+    "investor",
     {
-      "id": "marketing",
+      "id": "regulatory",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "transformation-arc"
+        "problem-solution"
       ],
       "recommendedTones": [
         "formal"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "transformation-arc",
+  "narrative": "problem-solution",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "stacked-area",
         "data": {
           "columns": [
             "Quarter",
@@ -339,62 +339,73 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "transformation-arc": {
-          "name": "Transformation Arc (Before / After / Bridge)",
-          "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
+        "problem-solution": {
+          "name": "Problem → Solution",
+          "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
           "audienceFit": [
             "customers",
-            "prospects",
-            "marketing-teams",
-            "general-audience"
+            "stakeholders",
+            "executives",
+            "internal-teams"
           ],
           "duration": {
-            "min": 3,
-            "max": 15
+            "min": 5,
+            "max": 30
           },
           "tags": [
-            "marketing",
-            "copywriting",
-            "pitch",
-            "persuasive"
+            "business",
+            "sales",
+            "general",
+            "proposal"
           ],
           "beats": [
             {
-              "id": "before",
-              "name": "Before",
-              "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
+              "layout": "title"
             },
             {
-              "id": "after",
-              "name": "After",
-              "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
+              "id": "problem",
+              "name": "The Problem",
+              "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
             },
             {
-              "id": "bridge",
-              "name": "Bridge",
-              "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
+              "id": "stakes",
+              "name": "Why It Matters",
+              "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
+            },
+            {
+              "id": "solution",
+              "name": "The Solution",
+              "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
+            },
+            {
+              "id": "mechanism",
+              "name": "How It Works",
+              "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
             },
             {
               "id": "evidence",
-              "name": "Evidence",
-              "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
+              "name": "Proof",
+              "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
             },
             {
               "id": "ask",
-              "name": "Ask",
-              "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
+              "name": "The Ask",
+              "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
               "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -402,37 +413,37 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "casual",
             "persuasive",
-            "conversational"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "capital",
+            "fundraising"
           ]
         },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
           "seniority": "mixed",
-          "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "data-story",
-            "what-so-what-now-what"
+            "situation-complication-resolution",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "casual",
-            "persuasive",
+            "formal",
+            "technical",
             "authoritative"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "external",
+            "compliance",
+            "policy"
           ]
         }
       },

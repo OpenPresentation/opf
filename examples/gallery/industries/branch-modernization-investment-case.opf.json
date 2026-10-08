@@ -2,7 +2,7 @@
   "name": "Branch Modernization Investment Case",
   "language": "en-GB",
   "audience": [
-    "board"
+    "all-hands"
   ],
   "purpose": "decide",
   "tone": "casual",
@@ -188,30 +188,30 @@
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "board-meeting",
+            "company-intro",
+            "weekly-progress",
             "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "casual",
+            "inspirational",
+            "conversational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "internal",
+            "company-wide"
           ]
         }
       },

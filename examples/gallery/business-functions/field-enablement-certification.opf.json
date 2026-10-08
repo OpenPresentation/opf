@@ -5,14 +5,14 @@
   "filename": "field-enablement-certification",
   "language": "en-GB",
   "audience": [
-    "executive",
+    "regulatory",
     {
-      "id": "sales",
+      "id": "all-hands",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "company-intro"
+        "vision-roadmap"
       ],
       "recommendedTones": [
         "formal"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "company-intro",
+  "narrative": "vision-roadmap",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -138,7 +138,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-with-markers",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -355,145 +355,118 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "company-intro": {
-          "name": "Company Intro",
-          "summary": "Standard company-overview deck: who you are, what's distinctive about you, who you serve, and why they win. Built for first-touch sales meetings, partner intros, and 'about us' decks attached to outbound emails.",
+        "vision-roadmap": {
+          "name": "Vision to Roadmap",
+          "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
+          "description": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action. Open with a specific three-to-five-year North Star, honestly diagnose the gap between today and that vision, organize the strategy into two to four named pillars, show the phased roadmap with milestones and dependencies, and end with concrete, assigned first steps for the next 30-90 days. The tone is inspirational and strategic: it creates shared direction and commitment to a plan. Best for strategic planning, annual kickoffs, product strategy, and OKR launches; typical decks run 8-20 slides.",
           "audienceFit": [
-            "prospects",
-            "partners",
-            "press",
-            "candidates"
+            "leadership-teams",
+            "board",
+            "product-and-strategy-teams",
+            "all-hands"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 15,
+            "max": 45
           },
           "tags": [
-            "overview",
-            "go-to-market",
-            "marketing",
-            "intro"
+            "strategy",
+            "roadmap",
+            "planning",
+            "vision"
           ],
           "beats": [
             {
-              "id": "logo",
-              "name": "Logo",
-              "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
-              "layout": "title",
-              "instructions": "Establish brand identity",
-              "type": "text"
-            },
-            {
-              "id": "about",
-              "name": "About",
-              "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds.",
-              "instructions": "Capture attention",
+              "id": "vision",
+              "name": "Vision",
+              "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
+              "instructions": "Paint the future state clearly.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "title-subtitle"
             },
             {
-              "id": "competitive-advantage",
-              "name": "Competitive Advantage",
-              "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words.",
-              "instructions": "Stand out",
+              "id": "current-state-gap",
+              "name": "Current State Gap",
+              "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
+              "instructions": "Define the gap between today and the vision.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-2x"
             },
             {
-              "id": "company-story",
-              "name": "Company Story",
-              "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography.",
-              "instructions": "Share origin",
+              "id": "strategic-pillars",
+              "name": "Strategic Pillars",
+              "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
+              "instructions": "Name the strategic pillars that close the gap.",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text-3x"
             },
             {
-              "id": "offerings",
-              "name": "Offerings",
-              "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message.",
-              "instructions": "Highlight products/services",
+              "id": "roadmap",
+              "name": "Roadmap",
+              "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
+              "instructions": "Sequence the initiatives over time.",
+              "type": "timeline",
+              "layout": "timeline-1x"
+            },
+            {
+              "id": "first-steps",
+              "name": "First Steps",
+              "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
+              "instructions": "Identify the immediate moves that start execution.",
               "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "ideal-customer",
-              "name": "Ideal Customer",
-              "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy.",
-              "instructions": "Define target market",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "key-benefits",
-              "name": "Key Benefits",
-              "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'",
-              "instructions": "Emphasize value",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "success-story",
-              "name": "Success Story",
-              "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to.",
-              "instructions": "Showcase satisfied customer",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-cta",
-              "name": "Closing & CTA",
-              "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
-              "layout": "title",
-              "instructions": "Encourage action",
-              "type": "text"
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
-          ],
-          "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
-          ],
-          "tags": [
-            "leadership",
-            "decision-making"
-          ]
-        },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "situation-complication-resolution",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
+            "formal",
+            "technical",
+            "authoritative"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "external",
+            "compliance",
+            "policy"
+          ]
+        },
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "inspirational",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "company-wide"
           ]
         }
       },

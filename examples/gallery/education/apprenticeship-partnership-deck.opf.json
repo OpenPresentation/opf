@@ -5,14 +5,14 @@
   "filename": "apprenticeship-partnership-deck",
   "language": "en-US",
   "audience": [
-    "engineering-team",
+    "academic",
     {
-      "id": "regulatory",
+      "id": "customer",
       "attentionBudgetMinutes": 28,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "qbr"
+        "heros-journey"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "qbr",
+  "narrative": "heros-journey",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -127,7 +127,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-column",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -344,137 +344,113 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "qbr": {
-          "name": "Quarterly Business Review",
-          "summary": "Standard QBR / business-review arc for internal leadership reviews. Recap commitments, show what the numbers say, separate wins from challenges, lay out the plan, surface risks, and request the asks the team needs to execute.",
+        "heros-journey": {
+          "name": "Hero's Journey",
+          "summary": "Storytelling framework that takes the audience on an emotional journey of change and growth.",
+          "description": "A storytelling framework that takes the audience on an emotional journey of change and growth. Show where things started, the obstacle that forced a change, the path taken and the obstacles overcome, the turning point, and the improved reality with the lessons it taught. The tone is narrative: it builds an emotional arc and invites the audience to identify with the protagonist, whether that is a customer, a team, or the company itself. Best for case studies, brand stories, and change management; typical decks run 5-10 slides (brand story, startup pitch, culture deck, change story).",
           "audienceFit": [
-            "leadership",
-            "executives",
-            "cross-functional-partners"
+            "general-public",
+            "employees",
+            "community"
           ],
           "duration": {
-            "min": 30,
-            "max": 90
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "internal",
-            "review",
-            "operations",
-            "reporting"
+            "storytelling",
+            "brand",
+            "change",
+            "emotional"
           ],
           "beats": [
             {
-              "id": "objectives",
-              "name": "Objectives",
-              "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
-              "layout": "title",
-              "instructions": "Set the expectations",
-              "type": "text"
+              "id": "status-quo",
+              "name": "Status Quo",
+              "description": "Establish the starting point. What was normal life like before the challenge?",
+              "instructions": "Establish the starting world before change.",
+              "type": "image",
+              "layout": "image-focus"
             },
             {
-              "id": "recap",
-              "name": "Recap",
-              "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse — this grounds the review in prior context, but the meat is ahead."
-            },
-            {
-              "id": "performance-headline",
-              "name": "Performance Headline",
-              "description": "Show the top three to five KPIs with target vs actual and direction-of-travel. One slide that lets a busy executive grasp the quarter's outcome at a glance. Lead with the number, not the methodology."
-            },
-            {
-              "id": "performance-detail",
-              "name": "Performance Detail",
-              "description": "Drill into the supporting metrics by area or function. One chart per metric; clear y-axis, clear unit, clear comparison period. Call out anomalies before someone else does."
-            },
-            {
-              "id": "wins",
-              "name": "Wins",
-              "description": "Highlight the quarter's biggest wins and who drove them. Be specific — name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
-            },
-            {
-              "id": "challenges",
-              "name": "Challenges",
-              "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't.",
-              "instructions": "Address difficulties",
+              "id": "challenge",
+              "name": "Challenge",
+              "description": "Introduce the disruption or opportunity that demanded change.",
+              "instructions": "Introduce the disruption that makes change necessary.",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "insights",
-              "name": "Insights",
-              "description": "Translate the numbers into 'so what.' What did the data tell you about customers, the market, your operations, your bets? Insights should be opinions backed by evidence, not restatements of the metrics."
+              "id": "journey",
+              "name": "Journey",
+              "description": "Walk through the process of transformation. Include obstacles overcome.",
+              "instructions": "Walk through the path, obstacles, and choices.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             },
             {
-              "id": "priorities",
-              "name": "Next-Quarter Priorities",
-              "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max — laundry lists are a tell that the team hasn't decided what matters most."
+              "id": "transformation",
+              "name": "Transformation",
+              "description": "Show the pivotal moment or insight that changed everything.",
+              "instructions": "Show the turning point that changes the outcome.",
+              "type": "text",
+              "layout": "text-2x"
             },
             {
-              "id": "sequencing",
-              "name": "Sequencing",
-              "description": "Show the order in which priorities ship and how they fit together. Dependencies, milestones, target dates. The audience should leave able to predict what comes when, not just what."
-            },
-            {
-              "id": "risks",
-              "name": "Risks",
-              "description": "Name the risks to the plan honestly. Dependencies, assumptions, capacity gaps, market factors. For each risk, state the mitigation or the open question the audience can help resolve."
-            },
-            {
-              "id": "asks",
-              "name": "Asks",
-              "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
-              "layout": "title"
+              "id": "new-reality",
+              "name": "New Reality",
+              "description": "Reveal the improved state and the lessons that will benefit your audience.",
+              "instructions": "Reveal the improved state and lesson learned.",
+              "type": "text",
+              "layout": "text-2x"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+          "seniority": "mixed",
           "technicalFluency": "high",
           "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "technical",
+            "formal"
+          ],
+          "tags": [
+            "research",
+            "education",
+            "analytical"
+          ]
+        },
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
             "casual",
+            "persuasive",
             "conversational"
           ],
           "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
-          ]
-        },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
-          ],
-          "recommendedTones": [
-            "formal",
-            "technical",
-            "authoritative"
-          ],
-          "tags": [
             "external",
-            "compliance",
-            "policy"
+            "customer",
+            "product"
           ]
         }
       },

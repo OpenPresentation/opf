@@ -5,14 +5,14 @@
   "filename": "supplier-risk-heatmap",
   "language": "en-US",
   "audience": [
-    "investor",
+    "customer",
     {
-      "id": "all-hands",
+      "id": "internal-team",
       "attentionBudgetMinutes": 18,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "underdog-victory"
+        "status-update"
       ],
       "recommendedTones": [
         "casual"
@@ -138,7 +138,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "filled-radar",
         "data": {
           "columns": [
             "Quarter",
@@ -148,23 +148,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              14,
+              11
             ],
             [
               "Q2",
-              16,
-              10
+              18,
+              13
             ],
             [
               "Q3",
               21,
-              13
+              15
             ],
             [
               "Q4",
-              26,
-              15
+              25,
+              17
             ]
           ]
         }
@@ -308,7 +308,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line-with-markers",
+            "type": "scatter",
             "data": {
               "columns": [
                 "Quarter",
@@ -583,12 +583,12 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
           "seniority": "mixed",
-          "technicalFluency": "medium",
+          "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -596,40 +596,37 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "persuasive",
-            "authoritative",
-            "inspirational"
-          ],
-          "tags": [
-            "external",
-            "capital",
-            "fundraising"
-          ]
-        },
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
-          ],
-          "recommendedTones": [
             "casual",
-            "inspirational",
+            "persuasive",
             "conversational"
           ],
           "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        },
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "what-so-what-now-what",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
             "internal",
-            "company-wide"
+            "operations",
+            "team"
           ]
         }
       },

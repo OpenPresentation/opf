@@ -5,14 +5,14 @@
   "filename": "police-training-program-update",
   "language": "en-CA",
   "audience": [
-    "engineering-team",
+    "marketing",
     {
-      "id": "regulatory",
+      "id": "sales",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "trend-analysis"
+        "product-launch"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "trend-analysis",
+  "narrative": "product-launch",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "waterfall",
+        "type": "stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -339,131 +339,154 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "trend-analysis": {
-          "name": "Trend Analysis",
-          "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next. Useful for market reviews, strategic outlooks, and any deck where the audience must act on a direction-of-travel call.",
+        "product-launch": {
+          "name": "Product Launch",
+          "summary": "Persuasive launch arc: open with brand, hook with a promise, set the conflict, raise the stakes, reveal the product, raise stakes again, sell, and call to action. Tuned for keynote-style launches and major announcement decks.",
           "audienceFit": [
-            "executives",
-            "analysts",
-            "leadership"
+            "customers",
+            "press",
+            "general-audience",
+            "partners"
           ],
           "duration": {
             "min": 15,
             "max": 45
           },
           "tags": [
-            "data-driven",
-            "forecasting",
-            "strategy",
-            "analysis"
+            "startup",
+            "launch",
+            "marketing",
+            "keynote"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
-              "instructions": "Ignite interest, establish significance",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "historical-comparison",
-              "name": "Historical Comparison",
-              "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
-              "instructions": "Contrast current and past data",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "pattern-identification",
-              "name": "Pattern Identification",
-              "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
-              "instructions": "Point out recurring outcomes",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "future-prediction",
-              "name": "Future Prediction",
-              "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
-              "instructions": "Predict using established patterns",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "action-plan",
-              "name": "Action Plan",
-              "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
-              "instructions": "Strategies based on prediction",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "implementation",
-              "name": "Implementation",
-              "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
-              "instructions": "Discuss strategy execution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the company brand and a confident visual. Set the tone — this is a moment, not a meeting. One slide that signals the audience is somewhere worth being.",
               "layout": "title",
-              "instructions": "Summarize key points",
+              "instructions": "Show company branding",
+              "type": "text"
+            },
+            {
+              "id": "promise",
+              "name": "Promise",
+              "description": "Hook the audience with the promise of the talk. Tell them, in one sentence, what they're about to see and why it matters to them. Specific promises buy patient audiences.",
+              "instructions": "Hook the audience",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "context",
+              "name": "Context",
+              "description": "Set the stage with the world the product enters. The customer reality, the market state, the unmet expectation. Context turns the launch from a product release into a moment in a larger story.",
+              "instructions": "Set the stage",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "conflict",
+              "name": "Conflict",
+              "description": "Introduce the villain — the problem, friction, or status quo the product opposes. Make the conflict concrete enough that the audience can name a moment they've felt it themselves.",
+              "instructions": "Introduce villain/problem",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "stakes",
+              "name": "Stakes",
+              "description": "Emphasize what's at risk if the conflict isn't resolved. Quantify, personalize, dramatize. Stakes are what convert a curious audience into an invested one.",
+              "instructions": "Emphasize importance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "reveal",
+              "name": "Reveal",
+              "description": "Showcase the product. One striking visual, one defining capability, one sentence that captures what's new. Earn the applause line; don't bury it under a bullet list.",
+              "instructions": "Showcase the solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "raise-stakes",
+              "name": "Raise the Stakes",
+              "description": "Highlight where the alternatives fall short and what they cost the customer. Re-energize the room midway by sharpening the contrast with the reveal.",
+              "instructions": "Highlight shortcomings of alternatives",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "raise-stakes-again",
+              "name": "Reinforce the Need",
+              "description": "Reinforce why change is non-negotiable now. A second beat of stakes, framed differently — perhaps a customer voice or a future cost. Cement the reason to act.",
+              "instructions": "Reinforce the need for change",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "sell",
+              "name": "Sell",
+              "description": "Make the audience want the product. Lead with the outcome it produces in their lives. Pricing, packaging, availability go here, but only after the desire is built.",
+              "instructions": "Make them want your solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "cta",
+              "name": "Call to Action",
+              "description": "Close with the single action you want from the audience. Pre-order, sign up, attend, share. Make it simple, specific, and immediate.",
+              "layout": "title",
+              "instructions": "Inspire action",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
-          "technicalFluency": "high",
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
           "decisionPower": "advisory",
           "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
+            "data-story",
+            "what-so-what-now-what"
           ],
           "recommendedTones": [
-            "technical",
             "casual",
-            "conversational"
-          ],
-          "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
-          ]
-        },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
-          "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
-          ],
-          "recommendedTones": [
-            "formal",
-            "technical",
+            "persuasive",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        },
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
           ]
         }
       },

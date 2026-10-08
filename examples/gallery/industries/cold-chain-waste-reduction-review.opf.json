@@ -5,9 +5,9 @@
   "filename": "cold-chain-waste-reduction-review",
   "language": "en-CA",
   "audience": [
-    "candidates",
+    "board",
     {
-      "id": "investor",
+      "id": "executive",
       "attentionBudgetMinutes": 20,
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -458,52 +458,52 @@
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
+          "attentionBudgetMinutes": 90,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "inspirational",
-            "casual",
+            "formal",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
+            "governance",
+            "oversight",
+            "leadership"
           ]
         },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
-          "seniority": "mixed",
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "persuasive",
+            "formal",
             "authoritative",
-            "inspirational"
+            "persuasive"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "leadership",
+            "decision-making"
           ]
         }
       },

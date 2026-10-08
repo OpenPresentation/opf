@@ -5,14 +5,14 @@
   "filename": "vaccination-outreach-briefing",
   "language": "en-GB",
   "audience": [
-    "executive",
+    "all-hands",
     {
-      "id": "sales",
+      "id": "engineering-team",
       "attentionBudgetMinutes": 29,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "rags-to-riches"
+        "innovation"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "rags-to-riches",
+  "narrative": "innovation",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -118,7 +118,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-line",
+        "type": "histogram",
         "data": {
           "columns": [
             "Quarter",
@@ -332,129 +332,151 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "rags-to-riches": {
-          "name": "Rags to Riches",
-          "summary": "Underdog journey from initial failure to eventual success. Pulls on resilience, grit, and perseverance — useful for founder stories, brand stories, and any deck where the audience needs to feel the cost behind the win.",
+        "innovation": {
+          "name": "Innovation",
+          "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage-set, reveal, demonstrate, wow, differentiate, reframe the category, build excitement, call to action, and thank the audience. For category-defining product moments.",
           "audienceFit": [
-            "general-audience",
             "customers",
             "press",
-            "candidates"
+            "developers",
+            "general-audience"
           ],
           "duration": {
-            "min": 5,
-            "max": 20
+            "min": 20,
+            "max": 60
           },
           "tags": [
-            "storytelling",
-            "founder",
-            "brand",
-            "inspirational"
+            "inspirational",
+            "keynote",
+            "launch",
+            "product"
           ],
           "beats": [
             {
-              "id": "origin",
-              "name": "Origin",
-              "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows.",
-              "instructions": "Humble beginning",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "inspiration",
-              "name": "Inspiration",
-              "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill.",
-              "instructions": "Discover true calling",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "opportunity",
-              "name": "Opportunity",
-              "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them.",
-              "instructions": "Spot golden chance",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "adversity",
-              "name": "Adversity",
-              "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real.",
-              "instructions": "Face hardest struggles",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "overcoming",
-              "name": "Overcoming",
-              "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted.",
-              "instructions": "Surmount tough obstacles",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "impactful-change",
-              "name": "Impactful Change",
-              "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage.",
-              "instructions": "Alter the status quo",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "lasting-legacy",
-              "name": "Lasting Legacy",
-              "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
+              "id": "opening",
+              "name": "Opening",
+              "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
               "layout": "title",
-              "instructions": "Create enduring effect",
+              "instructions": "Set the stage",
+              "type": "text"
+            },
+            {
+              "id": "revelation",
+              "name": "Revelation",
+              "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
+              "instructions": "Announce product",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "demonstration",
+              "name": "Demonstration",
+              "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
+              "instructions": "Showcase the product",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "wow-factor",
+              "name": "Wow Factor",
+              "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
+              "instructions": "Highlight cutting-edge features",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "differentiation",
+              "name": "Differentiation",
+              "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
+              "instructions": "Distinctive factors",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "revolution",
+              "name": "Revolution",
+              "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
+              "instructions": "Change in the playing field",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "excitement",
+              "name": "Excitement",
+              "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
+              "instructions": "Build anticipation",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
+              "instructions": "Urge to explore",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "gratitude",
+              "name": "Gratitude",
+              "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
+              "layout": "title",
+              "instructions": "Thank the audience",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "all-hands": {
+          "name": "All Hands",
+          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "company-intro",
+            "weekly-progress",
+            "qbr",
+            "rags-to-riches",
+            "heros-journey",
+            "what-so-what-now-what"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
+            "casual",
+            "inspirational",
+            "conversational"
           ],
           "tags": [
-            "leadership",
-            "decision-making"
+            "internal",
+            "company-wide"
           ]
         },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
+            "technical",
+            "casual",
+            "conversational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         }
       },

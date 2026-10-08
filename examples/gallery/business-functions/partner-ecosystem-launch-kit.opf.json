@@ -2,11 +2,11 @@
   "name": "Partner Ecosystem Launch Kit",
   "language": "en-GB",
   "audience": [
-    "board"
+    "investor"
   ],
   "purpose": "pitch",
   "tone": "technical",
-  "narrative": "business-review",
+  "narrative": "transformation-arc",
   "design": {
     "theme": "classic",
     "colorScheme": "vibes",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "pareto",
         "data": {
           "columns": [
             "Quarter",
@@ -101,149 +101,77 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "business-review": {
-          "name": "Business Review",
-          "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
+        "transformation-arc": {
+          "name": "Transformation Arc (Before / After / Bridge)",
+          "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
           "audienceFit": [
             "customers",
-            "partners",
-            "stakeholders",
-            "leadership"
+            "prospects",
+            "marketing-teams",
+            "general-audience"
           ],
           "duration": {
-            "min": 30,
-            "max": 90
+            "min": 3,
+            "max": 15
           },
           "tags": [
-            "customer-relationship",
-            "review",
-            "operations"
+            "marketing",
+            "copywriting",
+            "pitch",
+            "persuasive"
           ],
           "beats": [
             {
-              "id": "logo",
-              "name": "Logo",
-              "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
-              "layout": "title",
-              "instructions": "Identity & representation",
-              "type": "text"
+              "id": "before",
+              "name": "Before",
+              "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
             },
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
-              "instructions": "Meeting context & goals",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "after",
+              "name": "After",
+              "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
             },
             {
-              "id": "review",
-              "name": "Review",
-              "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
-              "instructions": "Outline recent activities",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "bridge",
+              "name": "Bridge",
+              "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
             },
             {
-              "id": "successes",
-              "name": "Successes",
-              "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
-              "instructions": "Recognize achievements",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
             },
             {
-              "id": "challenges",
-              "name": "Challenges",
-              "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
-              "instructions": "Address problems faced",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "solutions",
-              "name": "Solutions",
-              "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
-              "instructions": "Discuss implemented fixes",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "outcome",
-              "name": "Outcome",
-              "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
-              "instructions": "Display results achieved",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "insights",
-              "name": "Insights",
-              "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
-              "instructions": "Highlight key learnings",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "future-strategy",
-              "name": "Future Strategy",
-              "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
-              "instructions": "Define next steps",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "feedback",
-              "name": "Feedback",
-              "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
-              "instructions": "Capture audience thoughts",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "next-review",
-              "name": "Next Review",
-              "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
-              "instructions": "Plan for follow-up",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing",
-              "name": "Closing",
-              "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
-              "layout": "title",
-              "instructions": "Recap and express optimism",
-              "type": "text"
+              "id": "ask",
+              "name": "Ask",
+              "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+          "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "persuasive",
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "capital",
+            "fundraising"
           ]
         }
       },

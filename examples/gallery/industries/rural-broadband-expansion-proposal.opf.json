@@ -2,11 +2,11 @@
   "name": "Rural Broadband Expansion Proposal",
   "language": "en-CA",
   "audience": [
-    "all-hands"
+    "marketing"
   ],
   "purpose": "decide",
   "tone": "formal",
-  "narrative": "employee-review",
+  "narrative": "early-startup-pitch",
   "design": {
     "theme": "dark",
     "colorScheme": "pastel-red",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -101,117 +101,146 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "employee-review": {
-          "name": "Employee Review",
-          "summary": "Constructive performance-review arc that recognizes work, gives candid feedback, and sets growth goals together. For one-on-one performance conversations and formal year-end reviews.",
+        "early-startup-pitch": {
+          "name": "Early-Stage Startup Pitch",
+          "summary": "Seed and pre-seed pitch arc tuned for vision-heavy stories where revenue and traction are still thin. Anchors the narrative in market change, founder insight, and credible early signal — not metrics yet.",
           "audienceFit": [
-            "employee",
-            "manager",
-            "hr-partner"
+            "seed-investors",
+            "angels",
+            "advisors"
           ],
           "duration": {
-            "min": 30,
-            "max": 60
+            "min": 10,
+            "max": 20
           },
           "tags": [
-            "workforce",
-            "hr",
-            "review",
-            "manager"
+            "startup",
+            "fundraising",
+            "seed",
+            "pitch"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open with the period covered and the spirit of the conversation: collaborative, honest, growth-focused. Frame the meeting so both sides know what to expect.",
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with the company name, logo, and one-line positioning. Simple, branded, confident.",
               "layout": "title",
-              "instructions": "Name & date",
+              "instructions": "Establish presence",
               "type": "text"
             },
             {
-              "id": "performance",
-              "name": "Performance",
-              "description": "Review job execution against the role's expectations. Specific examples, dated. Avoid characterizing the person; describe the work and its impact.",
-              "instructions": "Review job execution",
+              "id": "monumental-change",
+              "name": "Monumental Change",
+              "description": "Open by naming a large, undeniable shift in the world. Tech, regulatory, behavioral. The shift is the reason this company exists — investors should feel its weight before they hear about the product.",
+              "instructions": "Highlight market transformation",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "achievements",
-              "name": "Achievements",
-              "description": "Acknowledge what went well. Name the projects, the moves, the moments where the employee made a difference. Specific recognition lands harder than generic praise.",
-              "instructions": "Acknowledge success",
+              "id": "past-struggle",
+              "name": "Past Struggle",
+              "description": "Show what the world tried to do about the problem before the shift, and why those approaches fell short. Honest credit to predecessors makes the new game more credible.",
+              "instructions": "Emphasize previous challenges",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "feedback",
-              "name": "Feedback",
-              "description": "Provide constructive feedback grounded in observation. Distinguish patterns from one-offs. Tell the employee something they can act on, not something they can only feel.",
-              "instructions": "Provide positive remarks",
+              "id": "innovative-breakthrough",
+              "name": "Innovative Breakthrough",
+              "description": "Present the founding insight or breakthrough that makes a new approach possible. This is the 'secret' the company is built on — name it plainly.",
+              "instructions": "Present innovative solution",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "constructive-criticism",
-              "name": "Constructive Criticism",
-              "description": "Suggest improvements in language that respects the employee's intelligence. Pair each piece of criticism with a concrete example and a specific behavior change you'd like to see.",
-              "instructions": "Suggest improvements",
+              "id": "unique-offering",
+              "name": "Unique Offering",
+              "description": "Detail the product or service. Lead with the customer-visible thing they touch; the architecture can wait. Show why this offering is structurally different from the past struggle.",
+              "instructions": "Detail product or service",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "development-opportunities",
-              "name": "Development Opportunities",
-              "description": "Highlight growth areas and the experiences that could stretch the employee. Frame development as an investment, not a fix.",
-              "instructions": "Highlight growth areas",
+              "id": "costly-issues",
+              "name": "Costly Issues",
+              "description": "Quantify the pain customers experience without your offering. Time, dollars, opportunity cost. Specific numbers convert sympathy into urgency.",
+              "instructions": "Quantify problems faced",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "goals",
-              "name": "Goals",
-              "description": "Outline next-period goals together. Specific, measurable, with explicit support. The strongest goals are co-authored, not handed down.",
-              "instructions": "Outline next steps",
+              "id": "effective-solutions",
+              "name": "Effective Solutions",
+              "description": "Demonstrate the customer outcome your offering produces. Before/after numbers from early users, even small N. Early-stage pitches are won by leading indicators, not by trailing ones.",
+              "instructions": "Demonstrate benefits",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "mentoring",
-              "name": "Mentoring",
-              "description": "Encourage continued learning through mentorship, training, peer pairings. Close the review with the message that growth is a shared responsibility, not a one-way evaluation.",
+              "id": "unit-economics",
+              "name": "Unit Economics",
+              "description": "Explain the financial model. Cost to acquire, gross margin, payback. Investors don't expect maturity — they expect that you've thought about it.",
+              "instructions": "Explain financial model",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "talented-team",
+              "name": "Talented Team",
+              "description": "Introduce the founders and key early hires. Show why this team uniquely sees and can execute on this opportunity. Insight beats résumé at the seed stage.",
+              "instructions": "Introduce key players",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "traction",
+              "name": "Traction",
+              "description": "Showcase the early signal: pilots, design partners, waitlist, retention data, anything credible. Frame it honestly — investors at this stage discount inflation aggressively.",
+              "instructions": "Showcase accomplishments",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "investment-opportunity",
+              "name": "Investment Opportunity",
+              "description": "Detail the round size, structure, and use of funds. Tie the raise to specific milestones it takes the company to. Specificity here signals operational maturity.",
+              "instructions": "Detail funding needs",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-logo",
+              "name": "Closing Logo",
+              "description": "Close on the brand and contact info. Leave the room with the line you most want repeated when the partner pitches you to the rest of the firm.",
               "layout": "title",
-              "instructions": "Encourage continuous learning",
+              "instructions": "Leave a lasting impression",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
-          "attentionBudgetMinutes": 60,
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
+            "data-story",
             "what-so-what-now-what"
           ],
           "recommendedTones": [
             "casual",
-            "inspirational",
-            "conversational"
+            "persuasive",
+            "authoritative"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "marketing",
+            "brand",
+            "go-to-market"
           ]
         }
       },

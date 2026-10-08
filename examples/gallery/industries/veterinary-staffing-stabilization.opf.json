@@ -5,14 +5,14 @@
   "filename": "veterinary-staffing-stabilization",
   "language": "en-CA",
   "audience": [
-    "candidates",
+    "executive",
     {
-      "id": "investor",
+      "id": "marketing",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "problem-solution"
+        "persuade"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "problem-solution",
+  "narrative": "persuade",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -130,7 +130,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "stacked-line",
         "data": {
           "columns": [
             "Quarter",
@@ -344,113 +344,143 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "problem-solution": {
-          "name": "Problem → Solution",
-          "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
           "audienceFit": [
-            "customers",
-            "stakeholders",
-            "executives",
-            "internal-teams"
+            "general-audience",
+            "policymakers",
+            "industry-peers"
           ],
           "duration": {
-            "min": 5,
+            "min": 15,
             "max": 30
           },
           "tags": [
-            "business",
-            "sales",
-            "general",
-            "proposal"
+            "keynote",
+            "persuasive",
+            "advocacy",
+            "talk"
           ],
           "beats": [
             {
-              "id": "hook",
-              "name": "Hook",
-              "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
-              "layout": "title"
+              "id": "gripping-introduction",
+              "name": "Gripping Introduction",
+              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
+              "instructions": "Draw in the audience with a compelling opener",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "problem",
-              "name": "The Problem",
-              "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
+              "id": "challenge-status-quo",
+              "name": "Challenge the Status Quo",
+              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
             },
             {
-              "id": "stakes",
-              "name": "Why It Matters",
-              "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
+              "id": "present-problem",
+              "name": "Present the Problem",
+              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
             },
             {
-              "id": "solution",
-              "name": "The Solution",
-              "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
+              "instructions": "Share significant stories to illuminate the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "mechanism",
-              "name": "How It Works",
-              "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
+              "id": "statistic-shock",
+              "name": "Statistic Shock",
+              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
+              "instructions": "Use impactful stats to highlight the gravity of the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "evidence",
-              "name": "Proof",
-              "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
+              "id": "historical-context",
+              "name": "Historical Context",
+              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
+              "instructions": "Show the evolution or history of the issue",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "ask",
-              "name": "The Ask",
-              "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
-              "layout": "title"
+              "id": "weave-narrative",
+              "name": "Weave a Narrative",
+              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+            },
+            {
+              "id": "major-revelation",
+              "name": "Major Revelation",
+              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
+              "instructions": "Deliver a surprising or significant discovery",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "propose-solution",
+              "name": "Propose Solution",
+              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
+              "instructions": "Advocate for change or propose an actionable solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "final-question",
+              "name": "Final Question",
+              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+              "layout": "title",
+              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
-          ],
-          "recommendedTones": [
-            "inspirational",
-            "casual",
-            "authoritative"
-          ],
-          "tags": [
-            "external",
-            "hiring",
-            "recruiting"
-          ]
-        },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
-          "seniority": "mixed",
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "persuasive",
+            "formal",
             "authoritative",
-            "inspirational"
+            "persuasive"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "leadership",
+            "decision-making"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
           ]
         }
       },

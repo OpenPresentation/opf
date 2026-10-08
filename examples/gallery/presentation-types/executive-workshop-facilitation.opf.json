@@ -5,14 +5,14 @@
   "filename": "executive-workshop-facilitation",
   "language": "en-US",
   "audience": [
-    "engineering-team",
+    "customer",
     {
-      "id": "regulatory",
+      "id": "internal-team",
       "attentionBudgetMinutes": 30,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "company-intro"
+        "status-update"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "company-intro",
+  "narrative": "status-update",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-area",
+        "type": "area",
         "data": {
           "columns": [
             "Quarter",
@@ -371,148 +371,122 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "company-intro": {
-          "name": "Company Intro",
-          "summary": "Standard company-overview deck: who you are, what's distinctive about you, who you serve, and why they win. Built for first-touch sales meetings, partner intros, and 'about us' decks attached to outbound emails.",
+        "status-update": {
+          "name": "Status Update",
+          "summary": "Concise progress-report arc for keeping a stakeholder informed: headline, brief, progress, results, plan, feedback. Optimized for short, repeated updates rather than one-time deep dives.",
           "audienceFit": [
-            "prospects",
-            "partners",
-            "press",
-            "candidates"
+            "stakeholders",
+            "managers",
+            "customers",
+            "executives"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 5,
+            "max": 15
           },
           "tags": [
-            "overview",
-            "go-to-market",
-            "marketing",
-            "intro"
+            "reporting",
+            "operations",
+            "customer-relationship",
+            "weekly"
           ],
           "beats": [
             {
-              "id": "logo",
-              "name": "Logo",
-              "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
+              "id": "headline",
+              "name": "Headline",
+              "description": "Open with the single most important sentence the audience needs to know — on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
               "layout": "title",
-              "instructions": "Establish brand identity",
+              "instructions": "Title & date",
               "type": "text"
             },
             {
-              "id": "about",
-              "name": "About",
-              "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds.",
-              "instructions": "Capture attention",
+              "id": "brief",
+              "name": "Brief",
+              "description": "State the objective for the period and what was promised. One slide, three lines. Frames the rest of the update so progress is read against a clear bar.",
+              "instructions": "Summary/objectives",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "competitive-advantage",
-              "name": "Competitive Advantage",
-              "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words.",
-              "instructions": "Stand out",
+              "id": "progress",
+              "name": "Progress",
+              "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater — list outcomes and material moves, not activity for its own sake.",
+              "instructions": "Explain actions taken",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "company-story",
-              "name": "Company Story",
-              "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography.",
-              "instructions": "Share origin",
+              "id": "results",
+              "name": "Results",
+              "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp — versus plan, versus last period, versus benchmark.",
+              "instructions": "Show outcomes",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "offerings",
-              "name": "Offerings",
-              "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message.",
-              "instructions": "Highlight products/services",
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "Outline the next steps and who owns them. Be specific about the next decision point and what would have to happen to slip the schedule.",
+              "instructions": "Outline next steps",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "ideal-customer",
-              "name": "Ideal Customer",
-              "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy.",
-              "instructions": "Define target market",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "key-benefits",
-              "name": "Key Benefits",
-              "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'",
-              "instructions": "Emphasize value",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "success-story",
-              "name": "Success Story",
-              "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to.",
-              "instructions": "Showcase satisfied customer",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing-cta",
-              "name": "Closing & CTA",
-              "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
+              "id": "feedback",
+              "name": "Feedback",
+              "description": "Invite the audience to weigh in: where you'd like input, where you need a decision, where help would unblock you. End the update with an open hand, not a closed file.",
               "layout": "title",
-              "instructions": "Encourage action",
+              "instructions": "Ask for response",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
-          "technicalFluency": "high",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "technical",
             "casual",
+            "persuasive",
             "conversational"
           ],
           "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
+            "external",
+            "customer",
+            "product"
           ]
         },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "what-so-what-now-what",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "formal",
-            "technical",
+            "casual",
+            "conversational",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "internal",
+            "operations",
+            "team"
           ]
         }
       },

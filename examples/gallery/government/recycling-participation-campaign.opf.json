@@ -5,14 +5,14 @@
   "filename": "recycling-participation-campaign",
   "language": "en-US",
   "audience": [
-    "investor",
+    "partner",
     {
-      "id": "all-hands",
+      "id": "academic",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "low",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "venture-pitch"
+        "pyramid-principle"
       ],
       "recommendedTones": [
         "technical"
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "stacked-line",
         "data": {
           "columns": [
             "Quarter",
@@ -144,23 +144,23 @@
           "rows": [
             [
               "Q1",
-              12,
-              8
+              20,
+              17
             ],
             [
               "Q2",
-              16,
-              10
+              24,
+              19
             ],
             [
               "Q3",
-              21,
-              13
+              27,
+              21
             ],
             [
               "Q4",
-              26,
-              15
+              31,
+              23
             ]
           ]
         }
@@ -304,7 +304,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -564,53 +564,49 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
+            "problem-solution",
+            "heros-journey"
           ],
           "recommendedTones": [
             "persuasive",
-            "authoritative",
-            "inspirational"
+            "casual",
+            "authoritative"
           ],
           "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "partner",
+            "channel",
+            "enablement"
           ]
         },
-        "all-hands": {
-          "name": "All Hands",
-          "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
-          "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+        "academic": {
+          "name": "Academic",
+          "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+          "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "informational",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
           "attentionBudgetMinutes": 60,
           "recommendedNarratives": [
-            "company-intro",
-            "weekly-progress",
-            "qbr",
-            "rags-to-riches",
-            "heros-journey",
-            "what-so-what-now-what"
+            "data-story",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "casual",
-            "inspirational",
-            "conversational"
+            "technical",
+            "formal"
           ],
           "tags": [
-            "internal",
-            "company-wide"
+            "research",
+            "education",
+            "analytical"
           ]
         }
       },

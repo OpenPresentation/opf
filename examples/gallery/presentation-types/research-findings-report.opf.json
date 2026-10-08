@@ -5,14 +5,14 @@
   "filename": "research-findings-report",
   "language": "en-GB",
   "audience": [
-    "sales",
+    "investor",
     {
-      "id": "customer",
+      "id": "regulatory",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "failure-analysis"
+        "transformation-arc"
       ],
       "recommendedTones": [
         "persuasive"
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "area",
+        "type": "doughnut",
         "data": {
           "columns": [
             "Quarter",
@@ -295,7 +295,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "column",
+            "type": "radar-with-markers",
             "data": {
               "columns": [
                 "Quarter",
@@ -552,35 +552,12 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
-          ],
-          "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
-          ],
-          "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
-          ]
-        },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -588,14 +565,37 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "casual",
             "persuasive",
-            "conversational"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "capital",
+            "fundraising"
+          ]
+        },
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
           ]
         }
       },

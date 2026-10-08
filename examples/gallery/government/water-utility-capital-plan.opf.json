@@ -5,14 +5,14 @@
   "filename": "water-utility-capital-plan",
   "language": "en-GB",
   "audience": [
-    "sales",
+    "engineering-team",
     {
-      "id": "customer",
+      "id": "investor",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "strategic-advisory"
+        "performance-review"
       ],
       "recommendedTones": [
         "technical"
@@ -141,7 +141,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",
@@ -311,7 +311,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar",
+            "type": "treemap",
             "data": {
               "columns": [
                 "Quarter",
@@ -571,35 +571,37 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
+            "technical",
+            "casual",
+            "conversational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         },
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
+          "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
@@ -607,14 +609,14 @@
             "problem-solution"
           ],
           "recommendedTones": [
-            "casual",
             "persuasive",
-            "conversational"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
             "external",
-            "customer",
-            "product"
+            "capital",
+            "fundraising"
           ]
         }
       },

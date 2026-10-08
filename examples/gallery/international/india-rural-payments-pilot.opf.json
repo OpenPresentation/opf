@@ -2,11 +2,11 @@
   "name": "India Rural Payments Pilot",
   "language": "en-IN",
   "audience": [
-    "board"
+    "media"
   ],
   "purpose": "decide",
   "tone": "authoritative",
-  "narrative": "golden-circle",
+  "narrative": "underdog-victory",
   "design": {
     "theme": "minimal",
     "colorScheme": "forest-green",
@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",
@@ -101,80 +101,113 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "golden-circle": {
-          "name": "Golden Circle (Why / How / What)",
-          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
+        "underdog-victory": {
+          "name": "Underdog Victory",
+          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
           "audienceFit": [
-            "customers",
-            "employees",
             "general-audience",
-            "press"
+            "internal-teams",
+            "candidates"
           ],
           "duration": {
-            "min": 10,
-            "max": 30
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "keynote",
-            "brand",
-            "mission",
-            "sinek"
+            "storytelling",
+            "inspirational",
+            "founder",
+            "team"
           ],
           "beats": [
             {
-              "id": "why",
-              "name": "Why",
-              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+              "id": "origin",
+              "name": "Origin",
+              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
+              "instructions": "Establish opening scene",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "how",
-              "name": "How",
-              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
+              "instructions": "Highlight initial setbacks",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "what",
-              "name": "What",
-              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+              "id": "determination",
+              "name": "Determination",
+              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
+              "instructions": "Showcase enduring passion",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "proof",
-              "name": "Proof",
-              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
+              "id": "crisis",
+              "name": "Crisis",
+              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+              "instructions": "Identify lowest point",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "invitation",
-              "name": "Invitation",
-              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-              "layout": "title"
+              "id": "resolve",
+              "name": "Resolve",
+              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
+              "instructions": "Articulate strong will",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
+              "instructions": "Reward of perseverance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "triumph",
+              "name": "Triumph",
+              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+              "instructions": "Reveal ultimate success",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
+              "layout": "title",
+              "instructions": "Share long-lasting impact",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "authoritative",
+            "formal"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "press",
+            "analyst"
           ]
         }
       },

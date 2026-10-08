@@ -5,14 +5,14 @@
   "filename": "support-deflection-program",
   "language": "en-CA",
   "audience": [
-    "engineering-team",
+    "board",
     {
-      "id": "regulatory",
+      "id": "executive",
       "attentionBudgetMinutes": 34,
       "technicalFluency": "high",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "transformation-arc"
+        "sparkline"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "transformation-arc",
+  "narrative": "sparkline",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -125,7 +125,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "scatter",
+        "type": "combo",
         "data": {
           "columns": [
             "Quarter",
@@ -339,102 +339,108 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "transformation-arc": {
-          "name": "Transformation Arc (Before / After / Bridge)",
-          "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
+        "sparkline": {
+          "name": "Sparkline",
+          "summary": "A tight comparison arc showing the transformation from an inferior state to a superior one, anchored by contrast.",
+          "description": "A tight comparison arc that shows the move from an inferior state to a superior one, anchored by contrast. Make the painful before state vivid, reveal the product, decision, or event that changes the trajectory, present the new reality in concrete terms, then prove it with data or testimonial. The tone is contrastive: it makes the gap between old and new viscerally clear. Best for product demos, case study summaries, ROI presentations, and before-and-after technology comparisons; typical decks run 4-6 slides.",
           "audienceFit": [
-            "customers",
-            "prospects",
-            "marketing-teams",
-            "general-audience"
+            "prospective-buyers",
+            "skeptical-stakeholders",
+            "evaluation-committees"
           ],
           "duration": {
             "min": 3,
             "max": 15
           },
           "tags": [
-            "marketing",
-            "copywriting",
-            "pitch",
-            "persuasive"
+            "contrast",
+            "transformation",
+            "product",
+            "roi"
           ],
           "beats": [
             {
-              "id": "before",
-              "name": "Before",
-              "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
+              "id": "before-state",
+              "name": "Before State",
+              "description": "Make the current pain or limitation vivid with numbers, stories, or visuals that make the problem real.",
+              "instructions": "Make the current pain or limitation vivid.",
+              "type": "text",
+              "layout": "text-2x"
             },
             {
-              "id": "after",
-              "name": "After",
-              "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
-            },
-            {
-              "id": "bridge",
-              "name": "Bridge",
-              "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
-            },
-            {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
-            },
-            {
-              "id": "ask",
-              "name": "Ask",
-              "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
+              "id": "contrast-moment",
+              "name": "Contrast Moment",
+              "description": "Introduce the change agent, product, or decision that shifts the trajectory.",
+              "instructions": "Introduce the decision, product, or event that changes the trajectory.",
+              "type": "text",
               "layout": "title"
+            },
+            {
+              "id": "after-state",
+              "name": "After State",
+              "description": "Show the improved reality. Make it concrete and specific instead of relying on vague benefit language.",
+              "instructions": "Show the new reality created by the change.",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "proof",
+              "name": "Proof",
+              "description": "Validate the after state with metrics, testimonials, or third-party evidence.",
+              "instructions": "Validate the change with evidence.",
+              "type": "metric",
+              "layout": "number-1x"
             }
           ]
         }
       },
       "audiences": {
-        "engineering-team": {
-          "name": "Engineering Team",
-          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
-          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
-          "seniority": "ic",
-          "technicalFluency": "high",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "status-update",
-            "challenge-resolution",
-            "innovation",
-            "weekly-progress"
-          ],
-          "recommendedTones": [
-            "technical",
-            "casual",
-            "conversational"
-          ],
-          "tags": [
-            "internal",
-            "engineering",
-            "practitioner"
-          ]
-        },
-        "regulatory": {
-          "name": "Regulatory / Compliance",
-          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
-          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
-          "seniority": "mixed",
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 60,
+          "attentionBudgetMinutes": 90,
           "recommendedNarratives": [
-            "situation-complication-resolution",
-            "pyramid-principle"
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
             "formal",
-            "technical",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "compliance",
-            "policy"
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        },
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
           ]
         }
       },

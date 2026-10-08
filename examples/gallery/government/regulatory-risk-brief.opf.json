@@ -5,14 +5,14 @@
   "filename": "regulatory-risk-brief",
   "language": "en-US",
   "audience": [
-    "candidates",
+    "internal-team",
     {
-      "id": "investor",
+      "id": "partner",
       "attentionBudgetMinutes": 18,
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "survival-story"
+        "pitch-deck"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "survival-story",
+  "narrative": "pitch-deck",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -131,7 +131,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -363,155 +363,157 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "survival-story": {
-          "name": "Survival Story",
-          "summary": "Narrative arc of overcoming adversity through determination: catastrophe, backstory, plan, danger, effort, struggle, pivot, breakthrough, legacy, takeaway. For brand stories, founder histories, and leadership talks where the lesson lives in the comeback.",
+        "pitch-deck": {
+          "name": "Startup Pitch Deck",
+          "summary": "The canonical investor-pitch arc, drawn from Sequoia and Y Combinator's templates. Optimized for 10–20 minute meetings with VCs and angels. Each beat answers the question an investor will ask next.",
           "audienceFit": [
-            "general-audience",
-            "internal-teams",
-            "press"
+            "investors",
+            "venture-capitalists",
+            "angels",
+            "advisors"
           ],
           "duration": {
             "min": 10,
-            "max": 30
+            "max": 20
           },
           "tags": [
-            "storytelling",
-            "inspirational",
-            "founder",
-            "comeback"
+            "startup",
+            "fundraising",
+            "pitch",
+            "investor"
           ],
           "beats": [
             {
-              "id": "catastrophe",
-              "name": "Catastrophe",
-              "description": "Open in the middle of the disaster. Specific moment, specific stakes, specific damage. Drop the audience into the worst point of the story before walking them back.",
-              "instructions": "Present initial disaster",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered — this is the cover.",
+              "layout": "title"
             },
             {
-              "id": "backstory",
-              "name": "Backstory",
-              "description": "Detail the events that led up to the catastrophe. Just enough for the audience to understand how the disaster could have happened. Avoid moralizing — the story does the work.",
-              "instructions": "Detail past events",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "purpose",
+              "name": "Company Purpose",
+              "description": "State in a single sentence what the company does and why it exists. Should be immediately understandable without industry jargon. Often doubles as the answer to 'so what do you do?'"
             },
             {
-              "id": "blueprint",
-              "name": "Blueprint",
-              "description": "Illustrate the recovery plan. Specific moves, specific bets, specific people. The audience should see the strategy as more than 'try hard.'",
-              "instructions": "Illustrate recovery plans",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "problem",
+              "name": "Problem",
+              "description": "Describe the pain point you solve. Make it concrete with a specific user or customer scenario. The more visceral and recognizable the problem, the stronger the rest of the pitch lands."
             },
             {
-              "id": "danger",
-              "name": "Danger",
-              "description": "Highlight the emerging threats to the recovery plan. New risks, returning ones. Tension here makes the eventual triumph credible.",
-              "instructions": "Highlight emerging threats",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the technological, regulatory, behavioral, or market shift that makes this opportunity possible today and impossible five years ago. Investors want to know why this is a window, not just an idea."
             },
             {
-              "id": "endeavor",
-              "name": "Endeavor",
-              "description": "Show the determined effort underway. The hours, the trade-offs, the discipline. The audience must feel the work, not just hear about it.",
-              "instructions": "Show determination effort",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "market",
+              "name": "Market Size",
+              "description": "Size the opportunity. Top-down (TAM/SAM/SOM) or bottom-up (units × price). Show how big the prize is if you win, and why this market is attractive to a venture-scale outcome."
             },
             {
-              "id": "struggles",
-              "name": "Struggles",
-              "description": "Showcase challenging moments along the way: the setbacks, the false starts, the hard calls. Honest setbacks make eventual success feel earned.",
-              "instructions": "Showcase challenging encounters",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "competition",
+              "name": "Competition",
+              "description": "Map the competitive landscape honestly. A 2x2 matrix or feature-comparison grid is fine; what matters is showing you understand the alternatives and where you uniquely fit. Naïve 'no competition' answers tank credibility."
             },
             {
-              "id": "pivot",
-              "name": "Pivot",
-              "description": "Highlight the strategic shift that changed the trajectory. What got reconsidered, what got dropped, what got doubled down on. The pivot is the moment the protagonist became something new.",
-              "instructions": "Highlight strategy shift",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "solution",
+              "name": "Solution",
+              "description": "Show how you solve the problem and why your approach is uniquely better. Lead with the outcome for the customer, then show the mechanism. This is where you connect problem to product."
             },
             {
-              "id": "breakthrough",
-              "name": "Breakthrough",
-              "description": "Emphasize the moment adversity finally broke. Concrete result, concrete date. Let the slide land — the audience came for this turn.",
-              "instructions": "Emphasize overcoming adversity",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "product",
+              "name": "Product",
+              "description": "Give the product its own moment. Screenshots or a key visual that captures what users actually see and feel. Pick one strong frame over a montage of small ones."
             },
             {
-              "id": "legacy",
-              "name": "Legacy",
-              "description": "Discuss the enduring impact. What survival made possible afterward, who benefited, what was built on top. Survival stories are most powerful when they create more than they restore.",
-              "instructions": "Discuss enduring impact",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "demo",
+              "name": "Demo",
+              "description": "Walk through the core user flow end-to-end. Show real software solving a real problem in a real workflow — not a marketing reel. If a live demo is too risky, use a tightly edited recording with narration."
             },
             {
-              "id": "takeaway",
-              "name": "Takeaway",
-              "description": "Share the lesson the audience can carry away. One transferable insight, framed for their own challenges — not a general moral.",
-              "layout": "title",
-              "instructions": "Share important lessons",
-              "type": "text"
+              "id": "traction",
+              "name": "Traction",
+              "description": "Prove momentum with one credible headline metric. Revenue, users, growth rate, customer logos — whatever best shows the business is working. One strong chart beats five vanity numbers."
+            },
+            {
+              "id": "growth",
+              "name": "Growth Drivers",
+              "description": "Show how the headline metric got there and where it's going. Cohorts, retention, expansion, channel mix — whatever explains the engine behind the number. Investors back the trajectory, not the snapshot."
+            },
+            {
+              "id": "business-model",
+              "name": "Business Model",
+              "description": "Explain how the company makes money. Pricing, unit economics, sales motion, payback period. Should answer: what does it cost to acquire a customer, and what do they pay you?"
+            },
+            {
+              "id": "team",
+              "name": "Team",
+              "description": "Establish why this team uniquely wins this market. Founder backgrounds, relevant experience, prior outcomes, key advisors. Investors back people first; make the case."
+            },
+            {
+              "id": "financials",
+              "name": "Financials",
+              "description": "Show the financial picture: historical revenue, burn, runway, and forward projection. Be conservative-but-credible — investors will discount aggressive numbers and reward defensible ones."
+            },
+            {
+              "id": "ask",
+              "name": "The Ask",
+              "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific — investors should leave knowing exactly what you want and what they get.",
+              "layout": "title"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Close on a strong final image: logo, contact info, and the one line you most want the investor to remember. Leave space for the conversation that follows.",
+              "layout": "title"
             }
           ]
         }
       },
       "audiences": {
-        "candidates": {
-          "name": "Candidates",
-          "summary": "Potential hires evaluating company, role, and people.",
-          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+        "internal-team": {
+          "name": "Internal Team",
+          "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+          "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
           "seniority": "mixed",
-          "technicalFluency": "mixed",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 45,
+          "technicalFluency": "medium",
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "company-intro",
-            "golden-circle",
-            "rags-to-riches",
-            "venture-pitch"
+            "what-so-what-now-what",
+            "situation-complication-resolution"
           ],
           "recommendedTones": [
-            "inspirational",
+            "casual",
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "internal",
+            "operations",
+            "team"
+          ]
+        },
+        "partner": {
+          "name": "Partner / Channel",
+          "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+          "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
             "casual",
             "authoritative"
           ],
           "tags": [
-            "external",
-            "hiring",
-            "recruiting"
-          ]
-        },
-        "investor": {
-          "name": "Investor",
-          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
-          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
-          "recommendedNarratives": [
-            "heros-journey",
-            "problem-solution"
-          ],
-          "recommendedTones": [
-            "persuasive",
-            "authoritative",
-            "inspirational"
-          ],
-          "tags": [
-            "external",
-            "capital",
-            "fundraising"
+            "partner",
+            "channel",
+            "enablement"
           ]
         }
       },

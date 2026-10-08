@@ -5,14 +5,14 @@
   "filename": "developer-conference-talk",
   "language": "en-AU",
   "audience": [
-    "customer",
+    "candidates",
     {
-      "id": "marketing",
+      "id": "general-public",
       "attentionBudgetMinutes": 29,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "classic-story"
+        "star-method"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "classic-story",
+  "narrative": "star-method",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -51,8 +51,7 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "accent5": "#CBD5E1"
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "traditional-arabic",
@@ -73,6 +72,10 @@
     "imageFit": "contain",
     "listBullet": "image",
     "logo": "asset:brand-logo",
+    "watermark": {
+      "src": "asset:watermark",
+      "opacity": 0.06
+    },
     "header": {
       "left": {
         "section": true
@@ -86,7 +89,7 @@
         "organization": true
       },
       "center": {
-        "text": "Developer conference"
+        "text": "Decision review"
       },
       "right": {
         "slideNumber": true
@@ -100,8 +103,8 @@
       "layout": "title",
       "tag": "Conference talk",
       "title": "Developer Conference Talk",
-      "subtitle": "Designing observable agent workflows",
-      "notes": "Open with the problem: agents fail quietly unless the workflow is designed to be observed."
+      "subtitle": "VectorTrail Conference talk",
+      "notes": "Open by naming the decision: Teach builders how to design observable agent workflows."
     },
     {
       "id": "s2",
@@ -109,28 +112,28 @@
       "layout": "text-3x",
       "title": "Why This Matters",
       "text": [
-        "Agents fail quietly. VectorTrail helps builders ",
+        "VectorTrail should focus the next cycle on ",
         {
-          "text": "design agent workflows they can observe",
+          "text": "teach builders how to design observable agent workflows",
           "bold": true,
           "color": "#0F172A"
         },
-        ": every step traced, every tool call measured, every regression caught before users notice."
+        " while making the operating tradeoffs clear to conference talk stakeholders."
       ]
     },
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-1x",
+      "layout": "chart-3x",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-with-markers",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
-            "Traced workflows (%)",
-            "Baseline (%)"
+            "Current",
+            "Baseline"
           ],
           "rows": [
             [
@@ -171,20 +174,20 @@
         ],
         "rows": [
           [
-            "Tracing SDK",
-            "Platform",
-            "On track",
-            "Ship the public beta"
+            "Conference talk",
+            "Program lead",
+            "At risk",
+            "Continue"
           ],
           [
-            "Evaluation dashboards",
+            "Data and reporting",
             "Analytics",
-            "At risk",
+            "On track",
             "Tighten metric definitions"
           ],
           [
-            "Docs and samples",
-            "Developer relations",
+            "Field adoption",
+            "Operations",
             "Watch",
             "Add weekly office hours"
           ]
@@ -198,11 +201,11 @@
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
-        "name": "From pilot to default",
-        "description": "Milestones for VectorTrail tracing.",
+        "name": "Conference talk execution path",
+        "description": "Major milestones for VectorTrail.",
         "events": [
           {
-            "when": "Apr",
+            "when": "Oct",
             "what": "Baseline",
             "description": "Confirm current state, owners, and constraints."
           },
@@ -231,15 +234,15 @@
       "title": "The Ask",
       "bullets": [
         {
-          "text": "Instrument one agent workflow end to end this week.",
+          "text": "Approve the next milestone for teach builders how to design observable agent workflows.",
           "level": 0
         },
         {
-          "text": "Pick one owner for traces, evaluations and alerts.",
+          "text": "Assign an executive sponsor and one accountable owner.",
           "level": 0
         },
         {
-          "text": "Review the regressions you caught at your next retro.",
+          "text": "Review progress in the next operating meeting.",
           "level": 0
         }
       ]
@@ -319,6 +322,12 @@
       "src": "./data/developer-conference-talk.csv",
       "mediaType": "text/csv",
       "title": "Developer Conference Talk data"
+    },
+    "watermark": {
+      "src": "data:image/png;base64,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",
+      "alt": "VectorTrail watermark",
+      "mediaType": "image/png",
+      "description": "Original abstract demonstration artwork for this fictional organization. MIT licensed with OpenPresentation/opf; generated by scripts/gallery-artwork.mjs (v1). No fonts or external images are used."
     }
   },
   "extensions": {
@@ -333,128 +342,108 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "classic-story": {
-          "name": "Classic Story",
-          "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, and close with hope. A versatile go-to when you need to make information feel like a story.",
+        "star-method": {
+          "name": "STAR Method",
+          "summary": "Results-focused framework that demonstrates impact through concrete examples.",
+          "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
           "audienceFit": [
-            "general-audience",
-            "customers",
-            "internal-teams"
+            "hr-and-talent",
+            "performance-reviewers",
+            "award-committees"
           ],
           "duration": {
             "min": 5,
-            "max": 30
+            "max": 15
           },
           "tags": [
-            "storytelling",
-            "general",
-            "engagement"
+            "case-study",
+            "proof",
+            "results",
+            "retrospective"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble.",
-              "instructions": "Capture audience attention",
+              "id": "situation",
+              "name": "Situation",
+              "description": "Describe the context and background of the scenario.",
+              "instructions": "Describe the relevant context and constraints.",
               "type": "text",
               "layout": "text-1x"
             },
             {
-              "id": "context",
-              "name": "Context",
-              "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine.",
-              "instructions": "Give background & importance",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "task",
+              "name": "Task",
+              "description": "Explain your specific role and responsibilities in this situation.",
+              "instructions": "Explain the responsibility or target outcome.",
+              "type": "list",
+              "layout": "list-2x"
             },
             {
-              "id": "villain",
-              "name": "Villain",
-              "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out.",
-              "instructions": "Introduce problem",
-              "type": "text",
-              "layout": "text-1x"
+              "id": "action",
+              "name": "Action",
+              "description": "Detail the specific steps you took to address the challenge.",
+              "instructions": "Detail the actions taken and choices made.",
+              "type": "timeline",
+              "layout": "timeline-1x"
             },
             {
-              "id": "despair",
-              "name": "Despair",
-              "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land.",
-              "instructions": "Emphasize negative impact",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "hero",
-              "name": "Hero",
-              "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé.",
-              "instructions": "Present solution",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "plan",
-              "name": "Plan",
-              "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable.",
-              "instructions": "Detail implementation",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "closing",
-              "name": "Closing",
-              "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
-              "layout": "title",
-              "instructions": "Inspire & conclude",
-              "type": "text"
+              "id": "result",
+              "name": "Result",
+              "description": "Share the measurable outcomes and impact of your actions.",
+              "instructions": "Show measurable impact and proof.",
+              "type": "metric",
+              "layout": "number-1x"
             }
           ]
         }
       },
       "audiences": {
-        "customer": {
-          "name": "Customer",
-          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
-          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+        "candidates": {
+          "name": "Candidates",
+          "summary": "Potential hires evaluating company, role, and people.",
+          "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
           "seniority": "mixed",
           "technicalFluency": "mixed",
           "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "company-intro",
+            "golden-circle",
+            "rags-to-riches",
+            "venture-pitch"
+          ],
+          "recommendedTones": [
+            "inspirational",
+            "casual",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "hiring",
+            "recruiting"
+          ]
+        },
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
             "heros-journey",
             "problem-solution"
           ],
           "recommendedTones": [
+            "conversational",
             "casual",
-            "persuasive",
-            "conversational"
+            "inspirational"
           ],
           "tags": [
-            "external",
-            "customer",
-            "product"
-          ]
-        },
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
-          "seniority": "mixed",
-          "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
-          "recommendedNarratives": [
-            "data-story",
-            "what-so-what-now-what"
-          ],
-          "recommendedTones": [
-            "casual",
-            "persuasive",
-            "authoritative"
-          ],
-          "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "public",
+            "education",
+            "accessible"
           ]
         }
       },
@@ -660,10 +649,10 @@
             "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
           }
         },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
           "design": {
             "contentAlignment": "center",
             "contentBox": false,
@@ -678,18 +667,31 @@
             },
             {
               "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
             }
           ],
           "composition": {
-            "mode": "row"
+            "mode": "grid",
+            "columns": 3
           },
           "tags": [
             "Charts",
-            "Data",
-            "Analytics"
+            "Multi-chart",
+            "Triads"
           ],
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
           }
         },
         "table-1x": {

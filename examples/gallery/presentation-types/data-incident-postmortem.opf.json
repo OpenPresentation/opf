@@ -5,14 +5,14 @@
   "filename": "data-incident-postmortem",
   "language": "en-GB",
   "audience": [
-    "executive",
+    "engineering-team",
     {
-      "id": "sales",
+      "id": "investor",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "conference-talk"
+        "strategic-advisory"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "conference-talk",
+  "narrative": "strategic-advisory",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -134,7 +134,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -348,103 +348,137 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "conference-talk": {
-          "name": "Conference Talk",
-          "summary": "Stage-talk arc for a 15–45 minute conference or industry-event session: hook the room, promise a payoff, deliver evidence, expose the underlying mechanism, show how to apply it, and end with a memorable recap. Engineered for audiences that came to learn something they can use Monday.",
+        "strategic-advisory": {
+          "name": "Strategic Advisory",
+          "summary": "Consulting-style advisory deck applying Minto's pyramid: title, situation/complication/question, the answer in one sentence, and three argued points with a process. Use when the audience expects a recommendation and the case for it, in that order.",
           "audienceFit": [
-            "practitioners",
-            "general-audience",
-            "industry-peers"
+            "executives",
+            "boards",
+            "leadership-teams",
+            "clients"
           ],
           "duration": {
             "min": 15,
             "max": 45
           },
           "tags": [
-            "talk",
-            "conference",
-            "keynote",
-            "education"
+            "consulting",
+            "advisory",
+            "strategy",
+            "minto"
           ],
           "beats": [
             {
-              "id": "hook",
-              "name": "Hook",
-              "description": "Earn the first sixty seconds with a story, surprising claim, or vivid moment. Make the audience curious enough to put their phones down. Avoid agendas, bios, and 'today I'm going to talk about' openings — those are filler that competes with your real opening."
+              "id": "title",
+              "name": "Title",
+              "description": "Open with a one-line summary statement that captures the recommendation, not the topic. The title slide is the headline of the entire engagement — make it specific enough that someone reading only this slide already understands the position.",
+              "layout": "title",
+              "instructions": "Brief summary sentence",
+              "type": "text"
             },
             {
-              "id": "promise",
-              "name": "Promise",
-              "description": "Tell the audience exactly what they'll know, feel, or be able to do by the end of the talk. A clear promise sets the implicit contract for the next thirty minutes and lets you redirect attention later when needed."
+              "id": "scq",
+              "name": "Situation, Complication, Question",
+              "description": "Frame the engagement on a single slide: the relevant status quo, what needs to change, and the question that needs to be resolved. This is the SCQ shorthand — context, tension, prompt. Don't yet answer."
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Deliver the substantive case for your promise. Data, examples, demonstrations, or strong stories — whatever a skeptical attendee would need to update their beliefs. This is the densest section of the talk; pace and visualize accordingly."
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver the recommendation in a single sentence. No arguments yet, no caveats. The answer is the apex of the pyramid; the rest of the deck supports it.",
+              "instructions": "A solution in one sentence, no arguments yet",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "mechanism",
-              "name": "Mechanism",
-              "description": "Reveal the underlying principle or framework that explains why the evidence holds. The mechanism is what audiences quote later — the moment of 'oh, that's why.' Keep it crisp and namable."
+              "id": "arguments",
+              "name": "Arguments",
+              "description": "Preview the three top-level arguments that defend the answer. One slide naming all three so the audience knows where the deck is going. Each argument should be a complete claim, not a topic.",
+              "instructions": "Support the solution",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "application",
-              "name": "Application",
-              "description": "Show the audience how to use the mechanism in their own work. Concrete, specific, low-friction first steps. The talk earns its keep here — abstract insight without an applied path is forgotten by lunch."
+              "id": "argument-1",
+              "name": "Argument 1",
+              "description": "Develop the first argument with supporting data, examples, and reasoning. Lead with the claim, then the evidence — Minto-style. The slide should stand alone if pulled out.",
+              "instructions": "First key point",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
-              "id": "recap",
-              "name": "Recap",
-              "description": "Restate the promise, the mechanism, and the call to action in a single short slide. Give the audience the line they'll repeat to a colleague and the one image that will stick with them after the lights come up.",
-              "layout": "title"
+              "id": "argument-2",
+              "name": "Argument 2",
+              "description": "Develop the second argument the same way. Vary the type of evidence — quantitative, qualitative, comparative — so the audience hears the case from multiple angles.",
+              "instructions": "Second key point",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "argument-3",
+              "name": "Argument 3",
+              "description": "Develop the third argument and walk through the supporting process or methodology. This is often where the 'how' lives — the implementation insight that makes the recommendation feel actionable.",
+              "instructions": "Third key point with a process",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "summary",
+              "name": "Summary",
+              "description": "Recap the answer and arguments in a single slide and point to additional resources. Close with the explicit next step you want the audience to take.",
+              "layout": "title",
+              "instructions": "Recap the answer, provide additional resources",
+              "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
           "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
+            "technical",
+            "casual",
+            "conversational"
           ],
           "tags": [
-            "leadership",
-            "decision-making"
+            "internal",
+            "engineering",
+            "practitioner"
           ]
         },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "investor": {
+          "name": "Investor",
+          "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+          "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
           "seniority": "mixed",
           "technicalFluency": "medium",
           "decisionPower": "decision-maker",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
             "persuasive",
-            "conversational",
-            "casual"
+            "authoritative",
+            "inspirational"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "external",
+            "capital",
+            "fundraising"
           ]
         }
       },

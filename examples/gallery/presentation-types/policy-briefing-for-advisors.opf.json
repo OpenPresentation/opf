@@ -5,14 +5,14 @@
   "filename": "policy-briefing-for-advisors",
   "language": "en-AU",
   "audience": [
-    "marketing",
+    "general-public",
     {
-      "id": "board",
+      "id": "media",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "mixed",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "educate"
+        "survey-analysis"
       ],
       "recommendedTones": [
         "formal"
@@ -133,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -303,7 +303,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bar",
+            "type": "pie",
             "data": {
               "columns": [
                 "Quarter",
@@ -562,53 +562,49 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "audiences": {
-        "marketing": {
-          "name": "Marketing",
-          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
-          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
           "seniority": "mixed",
           "technicalFluency": "low",
-          "decisionPower": "advisory",
-          "attentionBudgetMinutes": 45,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "data-story",
-            "what-so-what-now-what"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
+            "conversational",
             "casual",
-            "persuasive",
-            "authoritative"
+            "inspirational"
           ],
           "tags": [
-            "marketing",
-            "brand",
-            "go-to-market"
+            "public",
+            "education",
+            "accessible"
           ]
         },
-        "board": {
-          "name": "Board of Directors",
-          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
-          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
-          "seniority": "c-suite",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+          "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 90,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "board-meeting",
-            "qbr",
-            "scqa",
-            "strategic-advisory",
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative"
+            "authoritative",
+            "formal"
           ],
           "tags": [
-            "governance",
-            "oversight",
-            "leadership"
+            "external",
+            "press",
+            "analyst"
           ]
         }
       },

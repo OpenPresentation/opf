@@ -5,14 +5,14 @@
   "filename": "research-grant-pitch",
   "language": "en-AU",
   "audience": [
-    "executive",
+    "general-public",
     {
-      "id": "sales",
+      "id": "media",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "marketing-strategy"
+        "company-intro"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "marketing-strategy",
+  "narrative": "company-intro",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -126,7 +126,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -340,160 +340,145 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "marketing-strategy": {
-          "name": "Marketing Strategy",
-          "summary": "Comprehensive go-to-market strategy arc structured around the 4Ps. Use for category launches, annual marketing plans, and any deck where the audience needs to see customer, market, competition, and tactics in one coherent picture.",
+        "company-intro": {
+          "name": "Company Intro",
+          "summary": "Standard company-overview deck: who you are, what's distinctive about you, who you serve, and why they win. Built for first-touch sales meetings, partner intros, and 'about us' decks attached to outbound emails.",
           "audienceFit": [
-            "marketing-leaders",
-            "executives",
-            "cross-functional-partners"
+            "prospects",
+            "partners",
+            "press",
+            "candidates"
           ],
           "duration": {
-            "min": 30,
-            "max": 60
+            "min": 10,
+            "max": 30
           },
           "tags": [
+            "overview",
             "go-to-market",
             "marketing",
-            "strategy",
-            "planning"
+            "intro"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open by establishing the product or service this strategy is for, and what window of time it covers. One slide that tells the audience exactly which world they're being asked to weigh in on.",
-              "instructions": "Establish product/service specifics",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "objective",
-              "name": "Objective",
-              "description": "State the marketing goals in measurable terms: revenue, pipeline, awareness, share. Two or three goals, ranked. Goals without ranking get equal energy and equal mediocrity.",
-              "instructions": "Share marketing goals",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "customer",
-              "name": "Customer",
-              "description": "Detail the target audience. Segments, jobs-to-be-done, decision criteria, where they live in the buying cycle. Specificity here is the foundation everything else stands on.",
-              "instructions": "Detail target audience",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "market",
-              "name": "Market",
-              "description": "Describe the market landscape: size, growth, segments, behavioral trends. Use external data for credibility and your own research for nuance. Show how the market is changing, not just how big it is.",
-              "instructions": "Discuss market landscape",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "competition",
-              "name": "Competition",
-              "description": "Map the competitive set honestly. Direct, indirect, and substitutes. A 2x2 or feature-comparison framework helps; what matters is that the audience trusts your read of the field.",
-              "instructions": "Analyze competitive environment",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "strategy",
-              "name": "Strategy",
-              "description": "Articulate the marketing approach in one sentence and a single supporting frame. Positioning, primary motion, where you choose to play and not play. Clarity here is what makes the tactics that follow coherent.",
-              "instructions": "Elaborate marketing approach",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "product",
-              "name": "Product",
-              "description": "Highlight the unique value the product brings to the strategy. Lead with the customer outcome; tie it directly back to the customer beat. Avoid feature soup.",
-              "instructions": "Highlight unique value",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "price",
-              "name": "Price",
-              "description": "Justify pricing and packaging. Show the logic — cost-plus, value-based, competitor-anchored — and the levers you'll use over the period. Price decisions are strategy decisions.",
-              "instructions": "Justify pricing strategy",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "place",
-              "name": "Place",
-              "description": "Describe distribution channels and the role each plays. Direct, partner, marketplace, retail. Channel mix is often where strategies quietly succeed or fail.",
-              "instructions": "Discuss distribution channels",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "promotion",
-              "name": "Promotion",
-              "description": "Reveal the campaign and content tactics that bring the strategy to market. Pair each tactic with the audience and metric it serves. Avoid listing channels for their own sake.",
-              "instructions": "Reveal promotional tactics",
-              "type": "text",
-              "layout": "text-1x"
-            },
-            {
-              "id": "summary",
-              "name": "Summary",
-              "description": "Recap the strategy in a single page: customer, position, motion, expected outcome. End with the decision or commitment you need from the audience.",
+              "id": "logo",
+              "name": "Logo",
+              "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
               "layout": "title",
-              "instructions": "Recap key points",
+              "instructions": "Establish brand identity",
+              "type": "text"
+            },
+            {
+              "id": "about",
+              "name": "About",
+              "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds.",
+              "instructions": "Capture attention",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "competitive-advantage",
+              "name": "Competitive Advantage",
+              "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words.",
+              "instructions": "Stand out",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "company-story",
+              "name": "Company Story",
+              "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography.",
+              "instructions": "Share origin",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "offerings",
+              "name": "Offerings",
+              "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message.",
+              "instructions": "Highlight products/services",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "ideal-customer",
+              "name": "Ideal Customer",
+              "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy.",
+              "instructions": "Define target market",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "key-benefits",
+              "name": "Key Benefits",
+              "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'",
+              "instructions": "Emphasize value",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "success-story",
+              "name": "Success Story",
+              "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to.",
+              "instructions": "Showcase satisfied customer",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing-cta",
+              "name": "Closing & CTA",
+              "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
+              "layout": "title",
+              "instructions": "Encourage action",
               "type": "text"
             }
           ]
         }
       },
       "audiences": {
-        "executive": {
-          "name": "Executive",
-          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
-          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
-          "seniority": "c-suite",
-          "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
+        "general-public": {
+          "name": "General Public",
+          "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+          "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "informational",
           "attentionBudgetMinutes": 30,
           "recommendedNarratives": [
-            "pyramid-principle",
-            "situation-complication-resolution"
+            "heros-journey",
+            "problem-solution"
           ],
           "recommendedTones": [
-            "formal",
-            "authoritative",
-            "persuasive"
+            "conversational",
+            "casual",
+            "inspirational"
           ],
           "tags": [
-            "leadership",
-            "decision-making"
+            "public",
+            "education",
+            "accessible"
           ]
         },
-        "sales": {
-          "name": "Sales",
-          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
-          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+        "media": {
+          "name": "Media & Press",
+          "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+          "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
           "seniority": "mixed",
           "technicalFluency": "medium",
-          "decisionPower": "decision-maker",
-          "attentionBudgetMinutes": 30,
+          "decisionPower": "informational",
+          "attentionBudgetMinutes": 20,
           "recommendedNarratives": [
-            "problem-solution",
-            "heros-journey"
+            "what-so-what-now-what",
+            "pyramid-principle"
           ],
           "recommendedTones": [
-            "persuasive",
-            "conversational",
-            "casual"
+            "authoritative",
+            "formal"
           ],
           "tags": [
-            "sales",
-            "customer",
-            "go-to-market"
+            "external",
+            "press",
+            "analyst"
           ]
         }
       },
