@@ -65,7 +65,16 @@ export function report(result) {
  * peer ranges: { run, message?, peers: [{ name, range, installed }] }. `installedVersions` overrides the resolution (the
  * packed-install test installs exact versions it names itself).
  */
-export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event, ref }) {
+/**
+ * Whether `ref` is a release tag of the core package (@openpresentation/opf), whose publish run (npm-publish.yml) runs the
+ * whole workspace's tests but ships only core. Core publishes before its siblings, so the CLI's tests through the published
+ * siblings wait there; the CLI's own release (cli-v* tags, cli-publish.yml) keeps the hard gate.
+ */
+export function isCoreReleaseRef(ref = '') {
+  return /^refs\/tags\/(opf-v|@openpresentation\/opf@v)\d/.test(ref);
+}
+
+export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event, ref = process.env.GITHUB_REF ?? '' }) {
   const manifest = JSON.parse(readFileSync(path.join(cliRoot, 'package.json'), 'utf8'));
   const require = createRequire(executable);
   const peers = names.map((name) => {
@@ -79,6 +88,10 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
   });
   const unmet = peers.filter((peer) => !peer.met);
   if (!unmet.length) return { run: true, peers };
+  if (isCoreReleaseRef(ref)) {
+    const required = unmet.map((peer) => `${peer.name}@${peer.range}`).join(' and ');
+    return { run: false, peers, message: `RR-55: ${ref.replace('refs/tags/', '')} publishes @openpresentation/opf only, before its siblings; the CLI tests through the published peers (${required}) skip here and run with the hard gate in the CLI's own release (cli-publish.yml).` };
+  }
   const result = gate({
     subject: '@openpresentation/cli',
     required: unmet.map((peer) => `${peer.name}@${peer.range}`).join(' and '),
