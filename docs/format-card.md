@@ -56,7 +56,7 @@ Reusable records live in catalogs; a reference is a bare id or `name:id`: `narra
 
 ## Prefer / never
 
-Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists (`bullets` only for plain text-style bullets).
+Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists and `bullets` only for plain talking points (never both in one block or region; see [content payloads](content-payloads.md#items-versus-bullets)).
 
 Never: loose chart or table fields directly on a slide; region keys mixed with a root payload; overlapping region keys; `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry (it does not exist in OPF).
 
