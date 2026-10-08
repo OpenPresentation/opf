@@ -236,6 +236,36 @@ the placeholders. **After:**
   - Developers get one `$ref` to a shared `DesignHints` definition, one enum
     style, and no `None`.
 
+## Wave C: the 0.15 spec (owner decisions of 2026-10-07)
+
+Design: [0.15-design.md](0.15-design.md). The owner adopted it after a review
+of the catalog shape and the background and image model, and added: "nobody
+uses this yet we don't need migrations or anything just publish a clean spec".
+
+1. **Zero built-in records.** Core's main entry imports no catalog data. The
+   gallery snapshot ships only as the opt-in subpath `@openpresentation/opf/catalog`.
+   Hosts register catalogs; engines never fetch.
+2. **Catalogs group records by where they came from**: `catalogs.default`,
+   named catalogs (`catalogs.acme`, referenced as `acme:hero`) and
+   `catalogs.custom`. A group has a `source`; embedded records carry no
+   `$schema`, `id`, origin or digest. Every content reference is `id` or
+   `name:id`; URL and `pkg:` references are removed.
+3. **Engine vocabularies are not catalog references**: `chart.type`, `language`
+   tags and social platform keys are validated directly.
+4. **Backgrounds and images**: a full-bleed photo is an image background; every
+   content picture is an image block with fit, the image treatments and
+   `placement`; one Overlay; one fit vocabulary. `design.slideImage`,
+   `design.imageFill` and the `image-bleed` layout are removed.
+5. **No migration path.** No `opf migrate`, no deprecation window. The
+   repositories' own examples, narratives, records and sites are rewritten.
+6. **Catalog ownership.** This supersedes invariant 5: pptx.gallery owns every
+   catalog record and core keeps a pinned one-way snapshot (RR-58). For the 0.15
+   switch, record rewrites land in core's snapshot and in the gallery in the
+   same train.
+7. **Phase 0 folds into 0.15.** There is no core 0.14.1. The 0.14.x
+   consistency fixes (PPTX host catalogs, `paginate()` catalogs, editor catalog
+   merge, doc mismatches) land as part of FA-23 and FA-20.
+
 ## Work items
 
 [burndown.md](burndown.md) lists the items, their acceptance criteria and
