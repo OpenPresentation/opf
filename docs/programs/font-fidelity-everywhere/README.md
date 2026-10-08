@@ -149,6 +149,25 @@ linked, and specifically:
 
 ## Decisions
 
+### Provisional replacement picks (FF-31, owner may revise)
+
+Moved here from the public [font guide](../../font-fidelity.md) on 2026-10-08 (RR-59), which states the current policy only.
+Three choices about which open face stands in for a family are pending with the owner. The policy in the guide is settled;
+only these replacement picks are provisional. Root resolved them provisionally with the recommended defaults:
+
+| Decision | Families | Replacement |
+| --- | --- | --- |
+| `aptos-preview` | Aptos (the default `aptos` scheme) | Intos (metric, owner policy 2026-09-29; Roboto and Carlito are alternates) |
+| `segoe-ui-preview` | Segoe UI, Semibold, Light and Semilight | Red Hat Display (visual) |
+| `cambria-tier` | Cambria | Caladea, reclassified from metric to visual. Its `metricModeFallback` keeps metric-mode registries previewing Cambria with Caladea, reported as visual, as they did before FF-31. |
+
+All three live in one block, `provisionalDecisions`, at the top of [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json).
+The rows that follow a decision carry no replacement family of their own. A change of decision is therefore a one-line
+edit. When a decision changes, a stored measurement of the old family is dropped as unmeasured until
+`scripts/measure-font-replacements.mjs` is run again. The generated [font licensing table](font-licensing.md) marks the rows that follow a decision.
+
+### Decision log
+
 - 2026-10-01 (owner decision; FF-58): the `world` region map is parked for post-v1 ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133), label `parked`). It leaves the every-config-`works` denominator, which is 818 (818 of 818 measured on the published set), and FF-58 closes. This confirms the FF-56 agent decision below; building an offline `cx:geoCache` map export is future work under that issue.
 - 2026-09-30 (agent decision, vetoable; FF-56): the `world` map chart is an accepted limitation of the every-config-`works` goal. Desktop PowerPoint draws a map chart only with online geodata: a `cx:regionMap` part is accepted (ChartType 140) only when the `mc:Choice` requires `cx3`, `cx4` or `cx6` and then shows "There was a problem getting the information for your map chart" and draws nothing without a populated `cx:geoCache` (evidence in opf#222). `toPptx` therefore keeps `world` on the clustered column fallback with a `chart-data-adapted` diagnostic (`chartex: 'native'` writes the map for hosts that want it); no provider data is fabricated and no audit check is relaxed. The audit keeps reporting it as `partial`, so `pnpm report:works` prints **818 of 819** with this one named. The owner can veto it (for example by requiring bundled map geodata, a separate large item, or by counting the fallback as `works`).
 
