@@ -94,7 +94,10 @@ console.log('Player and <opf-deck> entry points load from the installed package.
   assert.ok(core.resolved.startsWith('https://registry.npmjs.org/')&&core.integrity.startsWith('sha512-')&&!core.link);
   const actualCore=await realpath(path.join(consumer,'node_modules/@openpresentation/opf'));
   assert.ok(actualCore.startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Core must be installed inside the clean consumer');
-  for(const file of ['shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs','chart-scale.mjs','aptos-preview.mjs']){
+  // Helpers the copied tests import (FA-23: catalog-harness registers the default catalog the way a host does) are installed
+  // next to them, rewritten to the installed package, and not run themselves.
+  const helpers=['catalog-harness.mjs'];
+  for(const file of [...helpers,'shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs','chart-scale.mjs','aptos-preview.mjs']){
     const source=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll('new URL("../dist/svg.js", import.meta.url).href','import.meta.resolve("@openpresentation/opf-render/svg")')
       .replaceAll('"../dist/svg.js"','"@openpresentation/opf-render/svg"')
@@ -102,6 +105,7 @@ console.log('Player and <opf-deck> entry points load from the installed package.
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-render'");
     await writeFile(path.join(consumer,file),source);
+    if(helpers.includes(file))continue;
     process.stdout.write(execFileSync(process.execPath,[file],{cwd:consumer,encoding:'utf8'}));
   }
   const audit=JSON.parse(npm(['audit','--json'],consumer));
