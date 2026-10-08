@@ -1,11 +1,21 @@
 /** Local CSV/TSV/JSON ingestion. No file access or network requests. */
 import { chartNumber } from './chart-data.js';
+import type { Chart } from './generated/types/presentation.js';
 
 // RR-54: chart and table data (strict numbers, number formats, datasets, series mapping) are also on this entry.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 export type DataCell = string | number | boolean | null;
 export interface TabularData { columns: string[]; rows: DataCell[][] }
+/** Chart import rejects empty columns and rows before returning a schema-compatible payload. */
+export interface ImportedChartData extends TabularData {
+  columns: [string, ...string[]];
+  rows: [DataCell[], ...DataCell[][]];
+}
+/** A `chart.type` value (OPF 0.15: an engine vocabulary, `CHART_TYPES`). */
+export type ImportedChartType = Chart['type'];
+export interface ImportedTable { table: TabularData }
+export interface ImportedChart { chart: { type: ImportedChartType; data: ImportedChartData } }
 export interface DataImportOptions {
   format?: 'csv' | 'tsv' | 'json';
   delimiter?: string;
@@ -14,7 +24,8 @@ export interface DataImportOptions {
 }
 export interface ImportDataOptions extends DataImportOptions {
   as: 'table' | 'chart';
-  chartType?: string;
+  /** Default `column`. Values outside `CHART_TYPES` make an invalid chart; the CLI checks `--chart-type` first. */
+  chartType?: ImportedChartType;
   category?: string;
   series?: string[];
 }
@@ -99,7 +110,10 @@ function measure(value: DataCell, location: string): number {
   if (number !== null) return number;
   return fail(`${location}: expected a numeric chart value; found ${JSON.stringify(value)}. Clean the value or select another series.`);
 }
-export function importData(input: unknown, options: ImportDataOptions): { table: TabularData } | { chart: { type: string; data: TabularData } } {
+export function importData(input: unknown, options: ImportDataOptions & { as: 'table' }): ImportedTable;
+export function importData(input: unknown, options: ImportDataOptions & { as: 'chart' }): ImportedChart;
+export function importData(input: unknown, options: ImportDataOptions): ImportedTable | ImportedChart;
+export function importData(input: unknown, options: ImportDataOptions): ImportedTable | ImportedChart {
   const data = parseTabularData(input, options);
   if (options.as === 'table') return { table: data };
   if (options.as !== 'chart') return fail('Choose table or chart.');
@@ -121,5 +135,8 @@ export function importData(input: unknown, options: ImportDataOptions): { table:
     if (circular && numeric < 0) fail(`Row ${i + 1}: pie and donut values cannot be negative.`);
     return numeric;
   }));
-  return { chart: { type: options.chartType ?? 'column', data: { columns: names, rows } } };
+  // labels() rejects empty columns, and the row guard above runs before this length-preserving map.
+  return { chart: { type: options.chartType ?? 'column', data: {
+    columns: names as ImportedChartData['columns'], rows: rows as ImportedChartData['rows'],
+  } } };
 }

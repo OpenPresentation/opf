@@ -41,12 +41,13 @@ export async function listFontDirectories(directories: string[], label = "--font
  * routes to, with lazy faces loaded on demand), visual substitution, and Noto script packages for the scripts the
  * deck's text draws when they are installed. `faces` are the --font-dir files, loaded first.
  */
-export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter): Promise<PreparedFonts> {
+export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<PreparedFonts> {
 	try {
 		const handle = await renderer.fonts.loadFonts({
 			pack: "office",
 			substitutionPolicy: "visual",
 			scripts: "auto",
+			embedScriptFonts,
 			presentation,
 			faces: userFonts.map((file) => ({ path: file })),
 			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", scriptDiagnostic(diagnostic)),
