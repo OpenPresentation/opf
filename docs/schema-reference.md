@@ -565,7 +565,8 @@ _No named properties._
 | `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
 | `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
 | `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
-| `overlay` | no | `ref:Overlay` | Scrim over the whole picture or along one edge, beneath furniture and content, for example to keep a title readable over a busy photo. |
+| `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
+| `overlay` | no | `ref:Overlay` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. |
 
 
 ### ImageFocus

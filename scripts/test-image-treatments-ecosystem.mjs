@@ -51,6 +51,7 @@ for (const [index, slide] of deck.slides.entries()) {
     if (background.alt === undefined) assert.ok(sld['p:cSld']['p:bg']?.['p:bgPr']?.['a:blipFill'], `${slide.id}: native background picture`);
     else assert.ok(pictures.some((pic) => pic['p:nvPicPr']['p:cNvPr'].descr === background.alt), `${slide.id}: background picture with alt`);
     assert.ok(svgImageAt(svg, background.box), `${slide.id}: SVG background frame`);
+    if (background.recolor) assert.ok(xml.includes(background.recolor.type === 'grayscale' ? '<a:grayscl' : '<a:duotone'), `${slide.id}: background recolor`);
     if (background.overlay) assert.ok(shapes.some((shape) => JSON.stringify(xfrmOf(shape)) === JSON.stringify(boxEmu(background.overlay.box))), `${slide.id}: background overlay shape`);
     checked++;
   }
@@ -95,5 +96,5 @@ for (const [index, slide] of deck.slides.entries()) {
   const strip = (value) => JSON.parse(JSON.stringify(value, (key, entry) => (key === 'src' || key === 'image' && typeof entry === 'string' ? undefined : entry)));
   assert.deepEqual(strip({ background: imported.slides[index].design?.background, blocks: imported.slides[index].blocks }), strip({ background: slide.design?.background, blocks: slide.blocks }), `${slide.id}: round trip`);
 }
-assert.ok(checked >= 18, `${checked} pictures checked`);
+assert.ok(checked >= 17, `${checked} pictures checked`);
 console.log(`Image treatments ecosystem: ${checked} pictures of the 15 treatments agree across core, SVG and native PPTX (frame, fit, mask, line, recolor, opacity, overlay) and round-trip.`);

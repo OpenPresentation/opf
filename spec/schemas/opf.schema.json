@@ -1665,9 +1665,13 @@
           "maximum": 1,
           "description": "Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1."
         },
+        "recolor": {
+          "$ref": "#/$defs/ImageRecolor",
+          "description": "Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above."
+        },
         "overlay": {
           "$ref": "#/$defs/Overlay",
-          "description": "Scrim over the whole picture or along one edge, beneath furniture and content, for example to keep a title readable over a busy photo."
+          "description": "Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo."
         }
       },
       "examples": [

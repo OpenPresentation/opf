@@ -332,7 +332,7 @@ export interface ComposedImage {
  * The slide's picture background (FA-22): the effective `design.background` (the slide's, then the deck's, then
  * `ComposeSlideOptions.themeBackground`) when it is an image, in object form or as an image-source string. It fills
  * the whole canvas behind everything and never moves content. Paint order: the colour scheme's default slide
- * background, the picture (with `opacity`), the overlay, then furniture and content.
+ * background, the picture (with `recolor` and `opacity` on its pixels), the overlay, then furniture and content.
  */
 export interface ComposedBackgroundImage {
   /** Where the background is written: `slides.N.design.background`, `design.background`, or `theme` (ComposeSlideOptions.themeBackground). */
@@ -346,6 +346,8 @@ export interface ComposedBackgroundImage {
   box: LayoutBox;
   /** Picture opacity below 1; the overlay keeps its own. */
   opacity?: number;
+  /** Luminance-based recolor of the pixels (Rec. 601 weights on sRGB values), as on an image block. */
+  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
   overlay?: ComposedOverlay;
   /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
   picture?: ImageFitPlacement;
@@ -587,7 +589,7 @@ export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus:
 }
 
 /** The background a value describes when it is an image: the object form, or an image-source string (a cover image). */
-export function imageBackground(value: unknown): { src: string; alt?: string; fit: BackgroundImageFit; focus: ImageFocus; opacity?: number; overlay?: unknown } | undefined {
+export function imageBackground(value: unknown): { src: string; alt?: string; fit: BackgroundImageFit; focus: ImageFocus; opacity?: number; recolor?: unknown; overlay?: unknown } | undefined {
   if (typeof value === 'string') return IMAGE_SOURCE.test(value) ? { src: value, fit: 'cover', focus: { x: 0.5, y: 0.5 } } : undefined;
   const background = record(value);
   if (background.type !== 'image' || typeof background.src !== 'string' || !background.src) return undefined;
@@ -595,8 +597,15 @@ export function imageBackground(value: unknown): { src: string; alt?: string; fi
   return {
     src: background.src, ...(typeof background.alt === 'string' ? { alt: background.alt } : {}),
     fit: (BACKGROUND_FITS as readonly unknown[]).includes(background.fit) ? background.fit : 'cover', focus: imageFocus(background.focus),
-    ...(opacity !== undefined ? { opacity } : {}), ...(background.overlay !== undefined ? { overlay: background.overlay } : {}),
+    ...(opacity !== undefined ? { opacity } : {}), ...(background.recolor !== undefined ? { recolor: background.recolor } : {}), ...(background.overlay !== undefined ? { overlay: background.overlay } : {}),
   };
+}
+
+/** Grayscale, or duotone from dark to light; anything else is no recolor. */
+function composeRecolor(value: unknown): ComposedImage['recolor'] {
+  if (value === 'grayscale') return { type: 'grayscale' };
+  const duotone = record(value);
+  return duotone.dark !== undefined && duotone.light !== undefined ? { type: 'duotone', dark: duotone.dark, light: duotone.light } : undefined;
 }
 
 /** Overlay geometry on a frame: the frame's shape, or an edge band of a rectangle frame (any other shape reports and draws none). */
@@ -638,8 +647,8 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
   const opacity = finite(host.opacity, 0, 1);
   if (opacity !== undefined && opacity < 1) result.opacity = opacity;
-  if (host.recolor === 'grayscale') result.recolor = { type: 'grayscale' };
-  else if (record(host.recolor).dark !== undefined && record(host.recolor).light !== undefined) result.recolor = { type: 'duotone', dark: host.recolor.dark, light: host.recolor.light };
+  const recolor = composeRecolor(host.recolor);
+  if (recolor) result.recolor = recolor;
   const overlay = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
@@ -658,6 +667,8 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
   const box: LayoutBox = { x: 0, y: 0, width, height };
   const result: ComposedBackgroundImage = { path: at, src: background.src, ...(background.alt !== undefined ? { alt: background.alt } : {}), fit: background.fit, focus: background.focus, box };
   if (background.opacity !== undefined && background.opacity < 1) result.opacity = background.opacity;
+  const recolor = composeRecolor(background.recolor);
+  if (recolor) result.recolor = recolor;
   const overlay = composeOverlay(background.overlay, box, imageShape('rectangle', box), `${at}.overlay`, mirrorSide, diagnostics);
   if (overlay) result.overlay = overlay;
   const aspect = background.fit === 'tile' ? undefined : intrinsicImageAspect(background.src, record(presentation).assets);

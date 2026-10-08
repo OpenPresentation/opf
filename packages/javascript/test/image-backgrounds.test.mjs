@@ -95,6 +95,16 @@ test('focus at a corner stays inside the visible crop on a 16:9 and a 4:3 deck',
   near(fitImage(canvas, 'cover', 2, { x: 0.25, y: 0.5 }).image.x, 0, 'a focus left of center is clamped at the edge');
 });
 
+test('recolor applies to the background picture as on an image block: grayscale or duotone', () => {
+  const recolor = (value) => composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, opacity: 0.5, recolor: value, overlay: { color: 'dark1', opacity: 0.3, edge: 'top' } } } }).backgroundImage;
+  assert.deepEqual(recolor('grayscale').recolor, { type: 'grayscale' });
+  const duotone = recolor({ dark: 'accent1', light: '#FFFFFF' });
+  assert.deepEqual(duotone.recolor, { type: 'duotone', dark: 'accent1', light: '#FFFFFF' });
+  assert.equal(duotone.opacity, 0.5);
+  assert.equal(duotone.overlay.edge, 'top');
+  assert.equal(recolor(undefined).recolor, undefined);
+});
+
 test('an overlay covers the whole picture, or a band along one edge', () => {
   const whole = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: 'dark1', opacity: 0.4 } } } }).backgroundImage.overlay;
   assert.deepEqual(whole, { path: 'slides.0.design.background.overlay', color: 'dark1', opacity: 0.4, box: canvas, shape: { kind: 'rectangle', preset: 'rect', adjust: {}, path: 'M0 0H1280V720H0Z' } });
@@ -124,7 +134,7 @@ test('the string shorthand: image sources are cover images, theme slots and hex 
 });
 
 test('the flat image background validates; the 0.14 image wrapper and unknown keys do not', () => {
-  const ok = { type: 'image', src: 'asset:hero', alt: 'Harbour', fit: 'tile', focus: { x: 0, y: 1 }, opacity: 0.5, overlay: { color: 'text', opacity: 0.3, edge: 'top', size: 0.2 } };
+  const ok = { type: 'image', src: 'asset:hero', alt: 'Harbour', fit: 'tile', focus: { x: 0, y: 1 }, opacity: 0.5, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.3, edge: 'top', size: 0.2 } };
   assert.equal(check(deck({ title: 'T' }, { background: ok })).valid, true);
   for (const bad of [
     { type: 'image', image: { src: 'asset:hero', fit: 'cover' } },
@@ -132,7 +142,8 @@ test('the flat image background validates; the 0.14 image wrapper and unknown ke
     { type: 'image', src: 'asset:hero', focus: { x: 2, y: 0 } },
     { type: 'image', src: 'asset:hero', focus: { x: 0.5 } },
     { type: 'image', src: 'asset:hero', overlay: { color: 'dark1' } },
-    { type: 'image', src: 'asset:hero', recolor: 'grayscale' },
+    { type: 'image', src: 'asset:hero', recolor: 'sepia' },
+    { type: 'image', src: 'asset:hero', shape: 'circle' },
   ]) assert.equal(check(deck({ title: 'T' }, { background: bad })).valid, false, JSON.stringify(bad));
 });
 

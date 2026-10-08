@@ -33,11 +33,12 @@ The effective background is the slide's `design.background`, then the deck's, th
 | `fit` | `cover` (the default) fills the slide and crops around `focus`. `contain` shows the whole picture over the colour scheme's default background. `stretch` scales it to the slide. `tile` repeats it at its own size from the top-left corner. |
 | `focus` | `{ x, y }` in 0 to 1: the point of the picture that a `cover` crop keeps in view. The default is the center. |
 | `opacity` | Picture opacity. The overlay keeps its own. |
-| `overlay` | A scrim over the whole picture, or a band along one edge (see [Overlay](#overlay)). |
+| `recolor` | `"grayscale"`, or `{ dark, light }` for duotone, as on an image block. Recolor and opacity apply to the picture's pixels; the overlay is drawn above them. |
+| `overlay` | A scrim over the whole picture, or a band along one edge (`edge`, `size`; see [Overlay](#overlay)). |
 
 The string shorthand `"asset:hero"` (or any source starting with `asset:`, `https://`, `data:`, `./` or `../`) is a cover picture background. Theme slots (`light1`) and hex colours keep their meaning, and any other string is invalid.
 
-`composeSlide` reports the picture as `SlideComposition.backgroundImage`: the canvas `box`, `fit`, `focus`, `opacity`, the overlay box, and the fit placement when core can read the picture's proportions. The headings and the body compose exactly as on a slide without the background. A slide with only a title over a picture background is a cover, and its title centers like any cover's.
+`composeSlide` reports the picture as `SlideComposition.backgroundImage`: the canvas `box`, `fit`, `focus`, `opacity`, `recolor`, the overlay box, and the fit placement when core can read the picture's proportions. The headings and the body compose exactly as on a slide without the background. A slide with only a title over a picture background is a cover, and its title centers like any cover's.
 
 ## Image blocks
 
@@ -89,11 +90,11 @@ An unchanged export imports back as the same OPF: the background and the image b
 | full-bleed | background `{type: image, src, overlay: {color: dark1, opacity: 0.2}}` | supported | |
 | text-overlay | background with `overlay: {color: dark1, opacity: 0.55}` | supported | Heading color still follows the theme background. Use a dark theme or background for light text over photos. |
 | side-by-side | image block, `placement: {edge: left, size: 0.46}` | supported | |
-| caption-overlay | image block, `overlay: {color: dark1, opacity: 0.75, edge: bottom, size: 0.25}` | supported | Square corners. An edge band cannot follow a rounded mask as one native shape. The picture is content below the headings: 0.15 draws nothing behind the headings but the background. |
+| caption-overlay | image block, `overlay: {color: dark1, opacity: 0.75, edge: bottom, size: 0.25}` | supported | Square corners. An edge band cannot follow a rounded mask as one native shape. The gallery's card sits inside the slide padding, which a background cannot do, so the picture is content below the headings. Without the inset it is a background with the same edge-band overlay. |
 | masked-shape | image block, `shape: hexagon, aspectRatio: 1.1547, placement: {edge: right, inset: true}` | supported | Masks are limited to the four presets. Arbitrary polygon and custom-geometry masks are not in the vocabulary. |
 | circular-crop | image block, `shape: circle, placement: {edge: left, size: 0.4, inset: true}` | supported | The gallery's small shadow is not drawn (see shadows). |
 | rounded-card | image block, `shape: rounded, cornerRadius: 0.05, border: {color: accent5, width: 1}` | supported, without shadow | The optional card shadow is unsupported (see shadows). |
-| duotone | image block, `recolor: {dark: accent1, light: light1}` | supported | Backgrounds have no recolor, so a duotone picture is content. Native raster parity of PowerPoint's luminance weights is unverified (see fidelity). |
+| duotone | background with `recolor: {dark: accent1, light: light1}` | supported | Native raster parity of PowerPoint's luminance weights is unverified (see fidelity). |
 | background-blur | background with `overlay: {color: light1, opacity: 0.4}`, plus `contentBox: true` | **unsupported: blur** | Blur is not expressible. The mapping keeps the light scrim and the sharp card, without the blur. |
 | image-strip | image block, `placement: {edge: bottom, size: 0.3}` | partial | A placed block is one picture. A strip of several images is content: image blocks in a row composition. |
 | collage-grid | 4 image blocks, `composition: {mode: grid, columns: 2}`, `imageFit: cover` | supported via content blocks | A collage is content composition, not a single-image treatment. |
@@ -102,7 +103,7 @@ An unchanged export imports back as the same OPF: the background and the image b
 | watermark | image block, `fit: contain, opacity: 0.1, recolor: grayscale` | supported | `design.watermark` remains a separate, preview-only feature. |
 | cinematic-crop | image block, `aspectRatio: 2.39`, with `design.background: dark1` | supported | |
 
-The frames of full-bleed, text-overlay, background-blur, side-by-side, masked-shape, circular-crop, image-strip, device-frame, cutout-subject and collage-grid are those of core 0.14. Caption-overlay, rounded-card, duotone, watermark and cinematic-crop were 0.14 slide images behind the headings. In 0.15 they are image blocks below the headings, and their treatment geometry within the frame is unchanged. The gallery snippets themselves live in pptx.gallery (FF-30).
+The frames of full-bleed, text-overlay, background-blur, duotone, side-by-side, masked-shape, circular-crop, image-strip, device-frame, cutout-subject and collage-grid are those of core 0.14. Caption-overlay, rounded-card, watermark and cinematic-crop were 0.14 slide images behind the headings that need an inset, a mask, a line or an aspect ratio, which a background does not have. In 0.15 they are image blocks below the headings, and their treatment geometry within the frame is unchanged. The gallery snippets themselves live in pptx.gallery (FF-30).
 
 ## Unsupported effects
 
@@ -113,7 +114,7 @@ These effects are left out of the vocabulary on purpose. A value that both engin
 - **Background removal**: this is a bitmap edit, not an effect. Use a transparent source.
 - **Device artwork and arbitrary masks**: these would need custom geometry and composed artwork. The treatment vocabulary is limited to preset masks and a line.
 - **Tint, brightness and contrast** (`a:lum`, `a:clrChange`, `a:tint`): no gallery treatment needs them. They are left out until they have the same luminance-formula verification as grayscale and duotone.
-- **Treatments on backgrounds**: a background has fit, focus, opacity and an overlay only. A masked, bordered or recolored picture is an image block.
+- **Frame treatments on backgrounds**: a background has fit, focus, opacity, recolor and an overlay (with edge bands). A masked, bordered, inset or aspect-ratio picture is an image block.
 
 ## Fidelity boundary
 

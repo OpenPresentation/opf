@@ -130,16 +130,16 @@
       "id": "duotone",
       "title": "Duotone",
       "subtitle": "pptx.gallery image-treatments/duotone",
-      "blocks": [
-        {
-          "image": "asset:hero",
-          "fit": "cover",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "asset:hero",
           "recolor": {
             "dark": "accent1",
             "light": "light1"
           }
         }
-      ]
+      }
     },
     {
       "id": "background-blur",

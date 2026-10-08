@@ -126,13 +126,16 @@ test('the fixture holds the 15 gallery treatments, all valid 0.15 documents', ()
   assert.deepEqual(errorsOf(check(fixture)), []);
 });
 
-test('backgrounds: full-bleed, text-overlay and background-blur keep 0.14 frames and overlays', () => {
-  for (const id of ['full-bleed', 'text-overlay', 'background-blur']) {
+test('backgrounds: full-bleed, text-overlay, background-blur and duotone keep 0.14 frames, recolor, overlays and headings', () => {
+  for (const id of ['full-bleed', 'text-overlay', 'background-blur', 'duotone']) {
     const geometry = composeTreatment(fixture.slides.find((slide) => slide.id === id));
     const expected = golden[id];
     assert.deepEqual(geometry.backgroundImage.box, expected.box, id);
     assert.equal(geometry.backgroundImage.fit, expected.fit, id);
-    assert.deepEqual({ color: geometry.backgroundImage.overlay.color, opacity: geometry.backgroundImage.overlay.opacity, box: geometry.backgroundImage.overlay.box, shape: geometry.backgroundImage.overlay.shape }, expected.overlay, id);
+    const overlay = geometry.backgroundImage.overlay;
+    assert.deepEqual(overlay && { color: overlay.color, opacity: overlay.opacity, box: overlay.box, shape: overlay.shape }, expected.overlay, id);
+    assert.deepEqual(geometry.backgroundImage.recolor, expected.recolor, `${id} recolor`);
+    assert.equal(geometry.items.some((item) => item.field === 'image'), false, `${id}: no content picture`);
     assert.deepEqual(geometry.items.filter((item) => item.field !== 'image').map((item) => item.box), expected.headings, `${id} headings`);
   }
 });
@@ -149,11 +152,11 @@ test('placed image blocks: side-by-side, masked-shape, circular-crop, image-stri
   }
 });
 
-test('frame treatments behind 0.14 headings (caption-overlay, rounded-card, duotone, watermark, cinematic-crop) compose the same frame as an image block filling the content area', () => {
-  // 0.15 draws nothing behind the headings but the background, so these five are content image blocks. With no
+test('frame treatments behind 0.14 headings (caption-overlay, rounded-card, watermark, cinematic-crop) compose the same frame as an image block filling the content area', () => {
+  // A background has no inset, shape, border or aspect ratio, so these four are content image blocks. With no
   // headings, the content area is exactly 0.14's frame region: the slide inside the default padding for an inset
   // treatment, the whole slide with composition.padding 0 otherwise. The treatment code then gives 0.14's frames.
-  for (const id of ['caption-overlay', 'rounded-card', 'duotone', 'watermark', 'cinematic-crop']) {
+  for (const id of ['caption-overlay', 'rounded-card', 'watermark', 'cinematic-crop']) {
     const slide = fixture.slides.find((entry) => entry.id === id);
     const expected = golden[id];
     const inset = expected.region.width !== expected.box.width && expected.box.x === 57.6;
