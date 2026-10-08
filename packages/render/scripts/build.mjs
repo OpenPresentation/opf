@@ -12,3 +12,6 @@ for (const name of ["svg.js","svg.d.ts","charts.js","annotations.js","chart-opti
 
 // RR-28: the player and the <opf-deck> element (`/player`, `/element`, `/element/define`), kept on their own line so other work on the list above does not collide.
 for (const name of ["deck-runtime.js","preview-fonts.js","preview-fonts-node.js","preview-fonts-cli.js","element.js","element.d.ts","element-define.js","element-define.d.ts","player.js","player.d.ts","preview-fonts.d.ts","preview-fonts-node.d.ts"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));
+
+// RR-63: the lazy converter loader and the PNG and PDF format entries (`/png`, `/pdf`).
+for (const name of ["converters.js","png.js","png.d.ts","pdf.js","pdf.d.ts"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));

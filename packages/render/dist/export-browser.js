@@ -8,6 +8,9 @@ import { OPFRenderError, packageName } from "./svg.js";
 // to hand one over) and nothing is fetched: faces come from the SVG's own @font-face data (the `embeddedFonts` of the fonts handle
 // `renderSvg` was given), from the faces the `fonts` handle holds (`loadFonts` from `/fonts-browser`, so script faces the SVG does not
 // embed reach the PDF too), or from `fontData`.
+//
+// RR-63: this entry imports no converter. The one optional piece is pdf-lib, for `mode: "raster"` only (the default vector PDF
+// needs nothing): the host imports it and passes it as `options.pdfLib`, so a bundler never has to resolve it.
 
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const MAX_PIXELS = 40_000_000;
@@ -32,7 +35,7 @@ export async function svgToPng(svg, options = {}) {
  * Convert SVG slides to a PDF, one slide per page (1 SVG pixel is 1 PDF point, as in Node). `mode: "vector"` (default) writes
  * real text, paths, gradients and images; `"raster"` draws each slide as an image (`scale`, default 2). Takes the options of
  * the Node `svgToPdf` that make sense here (`metadata`, `tagged`, `strict`, `compress`, `onDiagnostic`, the generic family
- * names, `rasterFallbackScale`), `fonts` (the handle `loadFonts()` returns: every face it holds can be embedded), `fontData`
+ * names, `rasterFallbackScale`), `pdfLib` (raster mode only: `import * as pdfLib from "pdf-lib"`), `fonts` (the handle `loadFonts()` returns: every face it holds can be embedded), `fontData`
  * (`[{ data, family? }]`, extra face bytes without a handle), `signal` (an AbortSignal, checked between pages) and
  * `onProgress({ page, pages })`.
  */
@@ -70,7 +73,7 @@ export async function svgToPdf(svgs, options = {}) {
 }
 
 async function rasterPdf(inputs, options) {
-  const { PDFDocument } = await import("pdf-lib");
+  const { PDFDocument } = options.pdfLib ?? await importPdfLib();
   const pdf = await PDFDocument.create({ updateMetadata: false });
   pdf.setCreator(packageName);
   pdf.setProducer(packageName);
@@ -85,6 +88,17 @@ async function rasterPdf(inputs, options) {
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
   return pdf.save({ addDefaultPage: false, useObjectStreams: false });
+}
+
+// pdf-lib for raster mode when the host did not pass it. The specifier is not a literal, so a browser bundler leaves it alone (and
+// never fails for a host that does not install pdf-lib); it resolves where the page can import it by name, for example with an import map.
+async function importPdfLib() {
+  const name = "pdf-lib";
+  try {
+    return await import(/* webpackIgnore: true */ /* @vite-ignore */ name);
+  } catch (error) {
+    throw new OPFRenderError("converter-missing", 'Raster-mode PDF output needs pdf-lib, an optional peer dependency of @openpresentation/opf-render: run `npm install pdf-lib@^1.17.1` and pass it as the pdfLib option (import * as pdfLib from "pdf-lib"). The default vector mode needs nothing.', { package: "pdf-lib", range: "^1.17.1", install: "npm install pdf-lib@^1.17.1", cause: error instanceof Error ? error.message : String(error) });
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------

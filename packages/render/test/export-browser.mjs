@@ -21,8 +21,14 @@ import {compareImages, openPdf, pageItems, pageText, renderPdfPage} from './pdf-
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/export-browser');
 await mkdir(outputDirectory, {recursive: true});
-const bundle = await build({
+// RR-63: the entry holds no pdf-lib; the page imports it for raster mode and passes it as `pdfLib` (a second bundle of the entry alone proves the first part).
+const entryOnly = await build({
   stdin: {contents: "import {svgToPdf,svgToPng,sniffImage} from './dist/export-browser.js';window.opfExport={svgToPdf,svgToPng,sniffImage};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
+});
+assert.ok(!Object.keys(entryOnly.metafile.inputs).some(input => /pdf-lib/.test(input)), 'the browser export entry bundles no pdf-lib');
+const bundle = await build({
+  stdin: {contents: "import * as pdfLib from 'pdf-lib';import {svgToPdf,svgToPng,sniffImage} from './dist/export-browser.js';window.opfExport={svgToPdf,svgToPng,sniffImage};window.opfPdfLib=pdfLib;", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
 });
 const inputs = Object.keys(bundle.metafile.inputs);
@@ -146,13 +152,15 @@ try {
     const one = await svgToPng(input.svgs[0]);
     const double = await svgToPng(input.svgs[0], {scale: 2});
     const clear = await svgToPng(input.bare, {background: 'transparent'});
-    const raster = await svgToPdf(input.svgs, {mode: 'raster', scale: 1});
+    const raster = await svgToPdf(input.svgs, {mode: 'raster', scale: 1, pdfLib: window.opfPdfLib});
+    let noPdfLib = null;
+    try { await svgToPdf(input.svgs, {mode: 'raster', scale: 1}); } catch (error) { noPdfLib = error.code + ':' + error.details?.package; }
     const controller = new AbortController();
     let cancelled = null;
     try { await svgToPdf(input.svgs, {signal: controller.signal, onProgress: () => controller.abort()}); } catch (error) { cancelled = error.name; }
     let tooLarge = null;
     try { await svgToPng(input.svgs[0], {scale: 100}); } catch (error) { tooLarge = error.code; }
-    return {one: toBase64(one), double: toBase64(double), clear: toBase64(clear), raster: toBase64(raster), cancelled, tooLarge};
+    return {one: toBase64(one), double: toBase64(double), clear: toBase64(clear), raster: toBase64(raster), noPdfLib, cancelled, tooLarge};
   `, {svgs, bare: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="10" y="10" width="10" height="10" fill="#d03030"/></svg>'});
   const one = await sharp(toBytes(outputs.one)).metadata(), double = await sharp(toBytes(outputs.double)).metadata();
   assert.deepEqual([one.width, one.height], [1280, 720]);
@@ -168,6 +176,7 @@ try {
   assert.ok(compared.mae < 6 && compared.largePercent < 3, `the browser PNG matches the resvg PNG: ${JSON.stringify(compared)}`);
   const clearCorner = await sharp(toBytes(outputs.clear)).ensureAlpha().extract({left: 0, top: 0, width: 1, height: 1}).raw().toBuffer();
   assert.ok(clearCorner[3] < 255, 'a transparent PNG keeps transparent pixels');
+  assert.equal(outputs.noPdfLib, 'converter-missing:pdf-lib', 'raster mode without the pdfLib option says which package to install');
   const rasterDoc = await openPdf(toBytes(outputs.raster));
   assert.equal(rasterDoc.numPages, 3);
   assert.equal(await pageText(rasterDoc, 1), '', 'raster mode has no text layer');

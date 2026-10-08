@@ -1,7 +1,7 @@
 // RR-28: fill a self-hosted font root (the layout of `preview-fonts.js`) from the installed packages, for hosts that serve
 // `<opf-deck fonts="/opf-fonts/">`. Node only. Every file is copied unmodified and checked against its pinned SHA-256 and
 // every license notice travels with it (LICENSES.txt). Nothing is downloaded: the faces come from this package's `fonts`
-// directory and the installed `@expo-google-fonts/*` packages.
+// directory and the installed `@expo-google-fonts/*` packages (optional peer dependencies of this package: install the ones you copy).
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -50,7 +50,7 @@ export function copyPreviewFonts({ outDir, scripts = false, cwd, manifest = BUND
     const sourceDirectory = pkg.vendored ? within(rendererRoot, pkg.vendored) : resolvePackageDirectory(pkg.name, cwd);
     if (!sourceDirectory || !fs.existsSync(sourceDirectory)) {
       if (pkg.pack === "scripts") { missing.push(pkg.name); continue; }
-      throw new Error(`${pkg.name} is not installed: reinstall @openpresentation/opf-render.`);
+      throw new Error(`${pkg.name} is not installed: it is an optional peer dependency of @openpresentation/opf-render, so run "npm install ${pkg.name}@${pkg.version}".`);
     }
     if (!pkg.vendored) {
       const installed = JSON.parse(fs.readFileSync(path.join(sourceDirectory, "package.json"), "utf8"));

@@ -47,3 +47,11 @@ await writeFile(new URL('fixtures.json',quoteDirectory),JSON.stringify({fonts:fo
 await build({entryPoints:[fileURLToPath(new URL('../test/quote-footer-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',quoteDirectory))});
 await writeFile(new URL('index.html',quoteDirectory),'<!doctype html><meta charset="utf-8"><title>Quote footer verification</title><h1>Quote footer verification</h1><pre>Running…</pre><main></main><script type="module" src="bundle.js"></script>');
 console.log('Quote browser fixtures ready: actual glyph containment with four bundled open font faces.');
+// RR-63: the converters and font packages are optional peers of the Node entries. No browser entry may reach them: a page that only draws SVG
+// (`/svg`, `/fonts-browser`) or exports in the browser (`/export-browser`) bundles no pdf-lib, resvg, sharp, Node font loader or @expo-google-fonts file.
+for(const entry of ['svg','fonts-browser','export-browser','player','element']){
+  const bundle=await build({stdin:{contents:`import * as entry from './dist/${entry}.js';globalThis.entry=entry;`,resolveDir:fileURLToPath(new URL('../',import.meta.url)),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,logLevel:'error',metafile:true});
+  const forbidden=Object.keys(bundle.metafile.inputs).filter(path=>/(^|\/)(pdf-lib|@pdf-lib|@resvg|sharp|@img|@expo-google-fonts|converters\.js|fonts-node\.js|raster[a-z-]*\.js|preview-fonts-node\.js)(\/|$)/.test(path));
+  assert.deepEqual(forbidden,[],`The /${entry} browser bundle must not reach the optional converters or Node font loading`);
+}
+console.log('Browser entries (/svg, /fonts-browser, /export-browser, /player, /element) bundle no converter or font package.');

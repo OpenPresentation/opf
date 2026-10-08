@@ -724,6 +724,8 @@ class Converter {
         result = { resource, object, width: info.width, height: info.height };
       }
     } catch (error) {
+      // A missing converter is the host's install, not a bad picture: say so instead of writing a PDF without its pictures.
+      if (error?.code === "converter-missing") throw error;
       this.unsupported("pdf-image-skipped", `An embedded image could not be decoded and is not drawn: ${error instanceof Error ? error.message : String(error)}`, { path: tracePath });
     }
     this.images.set(digest, result);

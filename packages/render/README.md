@@ -7,6 +7,8 @@
 - An image background (`design.background: { type: "image", src, alt, fit, focus, opacity, recolor, overlay }`, or an image source string) draws from core's `geometry.backgroundImage`: the canvas colour, the picture (cover, contain, stretch or tile; recolor and opacity on the pixels only), then the overlay (the whole slide or an edge band). `alt` is the picture's accessible name; without it the picture is decorative.
 - Every content picture is an image block drawn from `item.image`: frame, fit (`cover`, `contain`, `stretch`; default `design.imageFit`, else `cover`), focus, shape mask, border, opacity, recolor and overlay, and a placed block (`placement`) at its edge band.
 
+**Lighter install (RR-63, unreleased, 0.16.0).** `pdf-lib`, `@resvg/resvg-js`, `sharp` and every `@expo-google-fonts/*` font package are optional peer dependencies, loaded on first use: an SVG-only install holds none of them. Add what you export (see [Install](#install-what-to-add-for-what-rr-63)); a missing converter rejects with `converter-missing`. New `/png` and `/pdf` entries beside `/svg`. Rendered output is unchanged.
+
 **0.14.0 (RR-55, with core 0.14.0, opf-pptx 0.14.0 and opf-editor 0.14.0).** One fonts handle, whole-deck and one-slide render functions, and core's slide context. This release renames and deletes outright (no aliases; the CHANGELOG has the old-to-new table):
 
 - `renderSvg(deck, options)` returns `string[]`, one SVG per slide; `renderSlideSvg(deck, index, options)` returns the SVG of one slide.
@@ -84,12 +86,69 @@ Version 0.8.0 resolves OpenType preferred-family groups, so a Roboto request at 
 
 Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
+## Install: what to add for what (RR-63)
+
+`npm install @openpresentation/opf-render` brings the SVG renderer, layout and text measurement (`@openpresentation/opf`, `fontkit`, `bidi-js`, `pako`) and the vendored font files under `fonts/`. The heavy pieces are **optional peer dependencies**, so you install only what your output needs. npm 7+ and pnpm do not install optional peers; add them yourself:
+
+| You want | Import | Also install |
+| --- | --- | --- |
+| SVG in a browser (the host serves its own font files) | `@openpresentation/opf-render/svg` (+ `/fonts-browser`) | nothing |
+| SVG in Node, no fonts handle (estimated widths) | `@openpresentation/opf-render/svg` | nothing |
+| SVG in Node with exact text measurement | `/svg` and `loadFonts` from `/fonts-node` | the font packages of the pack (below) |
+| PNG in Node | `/png` (or the root) | `npm install @resvg/resvg-js` (`sharp` too for WebP and rotated JPEG pictures) and the fonts of the pack |
+| PDF in Node (vector, the default) | `/pdf` (or the root) | the fonts of the pack; `sharp` for pictures; `@resvg/resvg-js` for the rare element drawn as an image (a filter, a mask) |
+| PDF in Node, `mode: "raster"` | `/pdf` (or the root) | `pdf-lib`, `@resvg/resvg-js`, `sharp` and the fonts of the pack |
+| PNG and PDF in a browser | `/export-browser` | nothing (`mode: "raster"` needs `pdf-lib`, see below) |
+| Slideshow, `<opf-deck>`, server markup | `/player`, `/element`, `/element/define` | nothing |
+
+The font packages are pinned exactly (`@expo-google-fonts/*`, each a pinned optional peer; what each pack holds is described under `pack` above and in [Script fonts](#script-fonts-lang-and-right-to-left-text-ff-19)). `loadFonts()` (pack `base`) needs `@expo-google-fonts/roboto@0.4.3` and `roboto-mono@0.4.2`; `loadFonts({ pack: 'office' })` also needs `arimo`, `caladea`, `cousine`, `gelasio`, `tinos` and `noto-sans`. A script face (`scripts: ['Jpan']`, `scripts: 'auto'`) needs its own `@expo-google-fonts/noto-*` package. The `fonts/` directory (the vendored Carlito, Intos and open families, about 28 MB) ships inside the package.
+
+Converter ranges: `@resvg/resvg-js@^2.6.2`, `sharp@^0.35.5`, `pdf-lib@^1.17.1`.
+
+### The format entries
+
+| Entry | What it is | Runs in |
+| --- | --- | --- |
+| `@openpresentation/opf-render/svg` | `renderSvg`, `renderSlideSvg`, `resolvePresentation`, `OPFRenderError` and the types. No converter, no Node module. | browser and Node |
+| `@openpresentation/opf-render/png` | `svgToPng` | Node |
+| `@openpresentation/opf-render/pdf` | `svgToPdf` | Node |
+| `@openpresentation/opf-render/export-browser` | `svgToPng` and `svgToPdf` for a page (canvas) | browser |
+| `@openpresentation/opf-render/element`, `/element/define`, `/player` | `renderDeckHtml`, `<opf-deck>`, `present` (the HTML output) | browser (`renderDeckHtml` also on a server) |
+| `@openpresentation/opf-render` | all of `/svg`, plus `svgToPng` and `svgToPdf` | Node (a browser bundler picks `/svg`) |
+
+There is no `/html` entry: it would only repeat `/element` (`renderDeckHtml`, `defineOpfDeck`) and `/player` (`present`) under a second name. A bundler that bundles Node code (a server framework) sees the converters' dynamic `import()` in the root and in `/png` and `/pdf`; an app that only draws SVG should import `/svg`, which has none, and an app that exports should list the converters as installed (or external) in its bundler.
+
+### A missing converter or font package
+
+An export that needs a converter that is not installed rejects with `OPFRenderError` code `converter-missing`. `details` holds `package`, `range`, `install` (the command), `purpose` and `installed` (`false` when the package is absent; `true` when it is installed but cannot load, for example a native binary missing for the platform):
+
+```js
+try { await svgToPng(svg); }
+catch (error) {
+  // error.code === 'converter-missing'
+  // error.message: '@resvg/resvg-js is not installed. It is an optional peer dependency of @openpresentation/opf-render, used for PNG output, ...: run `npm install @resvg/resvg-js@^2.6.2`.'
+}
+```
+
+`svgToPng` needs `@resvg/resvg-js`; a WebP or rotated JPEG picture in it also needs `sharp`. `svgToPdf` (vector) needs no converter for text and shapes, `sharp` for pictures and `@resvg/resvg-js` for an element it has to draw as an image (reported as `pdf-raster-fallback`); `mode: "raster"` needs `pdf-lib` and `@resvg/resvg-js`. A picture is never silently dropped from a PDF because `sharp` is absent: the export rejects instead.
+
+A font pack whose `@expo-google-fonts/*` packages are not all installed rejects `loadFonts` with `OPFFontError` code `font-resource-unavailable`; `details.packages` and the message name every missing package with the `npm install` command. `scripts: 'auto'` still reports a missing script package as the `script-font-not-installed` diagnostic instead of failing. In a browser, `export-browser` imports no converter: `mode: "raster"` PDF takes the module as an option (`svgToPdf(svgs, { mode: 'raster', pdfLib })` with `import * as pdfLib from 'pdf-lib'`), so a bundle of the entry holds no PDF library; without it raster mode rejects with `converter-missing`.
+
+Installed size, measured on Windows with `npm install --ignore-scripts`, unpacked. sharp brings its 19 MiB libvips build on each platform; of the SVG-only install, 28 MiB is the vendored font files under `fonts/`, 13 MiB core and 6 MiB fontkit:
+
+| Install | 0.15.0 | with RR-63 |
+| --- | --- | --- |
+| SVG only, in a browser (`/svg` + `/fonts-browser`) | 135 MiB | **56 MiB** |
+| Node SVG and PNG (base pack) | 135 MiB | **89 MiB** |
+| Everything (office pack, all converters) | 135 MiB | 135 MiB |
+
 ## Scope
 
 - Package: `@openpresentation/opf-render`
 - Repository: `OpenPresentation/opf-render`
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
+- Entry points: root, `/svg`, `/png`, `/pdf`, `/export-browser`, `/fonts-node`, `/fonts-browser`, `/fonts`, `/player`, `/element`, `/element/define`, `/preview-fonts`, `/preview-fonts-node` (see [Install](#install-what-to-add-for-what-rr-63))
 - Public API: `renderSvg(opf, opts)` (every slide), `renderSlideSvg(opf, index, opts)` (one slide), `resolvePresentation(opf, opts)`, `svgToPng(svg, opts)`, `svgToPdf(svgs, opts)` and `loadFonts(opts)` (`/fonts-node`, `/fonts-browser`)
 - Player and embedding (RR-28): `<opf-deck>` and a slideshow with a speaker view, see [Player and `<opf-deck>`](#player-and-opf-deck-rr-28)
 
@@ -351,7 +410,7 @@ Embedding: open faces are flagged `embed: "used"`. `registry.embeddedFonts` stay
 
 Previews itemize text by Unicode script. Each run uses the OOXML script slot its script belongs to (`latin`, `eastAsian` or `complexScript`), as resolved by core `resolveScriptFonts` from the document's language and font scheme. Latin, Greek and Cyrillic text stays in the design font. The text's role picks the major (heading) or minor (body) slots: title, subtitle and tag text is heading, as in the exporter's heading shapes, and all other text is body. Licensed script fonts are never bundled. With a measured registry, a proprietary family (for example Meiryo, Microsoft YaHei, Malgun Gothic, Arabic Typesetting, David, Mangal or Angsana New) is previewed with its designated open replacement from `SCRIPT_FONT_REPLACEMENTS`, and each replacement is recorded in `registry.substitutions` as `visual`. The PPTX keeps the chosen family. If the slot's face has no glyph for a run, the run falls back by coverage to the designated OFL Noto family for its script.
 
-The replacement faces are an optional, hash-pinned font pack: 70 static faces from 37 `@expo-google-fonts/*` packages (SIL OFL 1.1): 63 regular and bold Noto script faces from 31 packages, plus the FF-45 symbol packs (`noto-sans-symbols`, `noto-sans-symbols-2` and `noto-sans-math`, under `Zsym`: the Symbol, Wingdings and Webdings code tables draw with them), the FF-45 emoji pack (`noto-color-emoji`: Noto Color Emoji, COLRv1 and OT-SVG colour glyphs, 24.0 MiB; `noto-emoji`: the monochrome face the raster path draws) under the pseudo-script `Zsye` and the math pack (`stix-two-math`, `noto-sans-math`) under `Zmth` (Noto Sans Math serves both Zmth and Zsym). The pinned script faces total 66.9 MiB, of which 55.9 MiB is CJK; the emoji and math faces add 27.5 MiB and the symbol faces another 1.3 MiB. Installing all 37 packages takes about 361 MiB, because they also ship weights the manifest does not pin. Thirty-six of the 37 are exact optional peer dependencies, so the renderer install does not grow. The exception is `@expo-google-fonts/noto-sans` (Latin, Cyrillic and Greek; regular, bold, italic and bold italic, about 14 MiB installed), which is a pinned runtime dependency because it is the default glyph-fallback face: `loadFonts({ pack: 'office' })` always loads it, marked fallback-only (it serves glyph fallback and requests for Noto Sans, never stands in for another family, and is embedded in a standalone SVG only when its text draws it, like the open families (embed "used"); raster output reads it from `fontFiles`). Install only the other scripts you need, then load them. Segoe UI Emoji previews with Noto Color Emoji and Cambria Math with STIX Two Math once their packs are loaded (`scripts: 'auto'` loads them for text with emoji-presentation clusters or mathematical notation, or a scheme that names the family); emoji sequences stay one run and one glyph, browsers draw them in colour, and PNG/PDF output draws the monochrome Noto Emoji because resvg has no colour-glyph support. The emoji pack is opt-in by use: `scripts: 'auto'` (Node) and `ensureScripts` (browsers) load Noto Color Emoji (24 MiB) only for a deck with emoji-presentation text or a scheme that names Segoe UI Emoji, and it is an optional peer dependency, so it is not in the npm tarball; `scripts: 'all'` loads it too, so pass an explicit script list when memory or download size matters. The PPTX keeps the chosen family either way:
+The replacement faces are an optional, hash-pinned font pack: 70 static faces from 37 `@expo-google-fonts/*` packages (SIL OFL 1.1): 63 regular and bold Noto script faces from 31 packages, plus the FF-45 symbol packs (`noto-sans-symbols`, `noto-sans-symbols-2` and `noto-sans-math`, under `Zsym`: the Symbol, Wingdings and Webdings code tables draw with them), the FF-45 emoji pack (`noto-color-emoji`: Noto Color Emoji, COLRv1 and OT-SVG colour glyphs, 24.0 MiB; `noto-emoji`: the monochrome face the raster path draws) under the pseudo-script `Zsye` and the math pack (`stix-two-math`, `noto-sans-math`) under `Zmth` (Noto Sans Math serves both Zmth and Zsym). The pinned script faces total 66.9 MiB, of which 55.9 MiB is CJK; the emoji and math faces add 27.5 MiB and the symbol faces another 1.3 MiB. Installing all 37 packages takes about 361 MiB, because they also ship weights the manifest does not pin. All 37 are exact optional peer dependencies, so the renderer install does not grow (RR-63: `@expo-google-fonts/noto-sans`, the default Latin, Cyrillic and Greek glyph-fallback face, about 14 MiB installed, was the one pinned runtime dependency and is now an optional peer like the rest; the office pack names it in its install error). It is the default glyph-fallback face: `loadFonts({ pack: 'office' })` always loads it, marked fallback-only (it serves glyph fallback and requests for Noto Sans, never stands in for another family, and is embedded in a standalone SVG only when its text draws it, like the open families (embed "used"); raster output reads it from `fontFiles`). Install only the other scripts you need, then load them. Segoe UI Emoji previews with Noto Color Emoji and Cambria Math with STIX Two Math once their packs are loaded (`scripts: 'auto'` loads them for text with emoji-presentation clusters or mathematical notation, or a scheme that names the family); emoji sequences stay one run and one glyph, browsers draw them in colour, and PNG/PDF output draws the monochrome Noto Emoji because resvg has no colour-glyph support. The emoji pack is opt-in by use: `scripts: 'auto'` (Node) and `ensureScripts` (browsers) load Noto Color Emoji (24 MiB) only for a deck with emoji-presentation text or a scheme that names Segoe UI Emoji, and it is an optional peer dependency, so it is not in the npm tarball; `scripts: 'all'` loads it too, so pass an explicit script list when memory or download size matters. The PPTX keeps the chosen family either way:
 
 ```js
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
@@ -456,13 +515,13 @@ The package runtime must stay local and deterministic:
 Dependency policy:
 
 - `@openpresentation/opf` is the compatibility source for schemas, validation, resolution and composition. The renderer imports no catalog data; hosts register catalogs (`@openpresentation/opf/catalog` holds the gallery snapshot).
-- `@resvg/resvg-js` is used only for local SVG rasterization in Node; it makes no network calls and does not require a browser.
-- `pdf-lib` assembles raster-mode PDF bytes locally. Metadata timestamps are disabled so repeated PDF output is byte-stable for the same SVG input and options.
+- `@resvg/resvg-js` (optional peer, RR-63) is used only for local SVG rasterization in Node; it makes no network calls and does not require a browser. `sharp` (optional peer) decodes WebP, rotated JPEG and the pictures of a vector PDF. Both load on first use; see [Install](#install-what-to-add-for-what-rr-63).
+- `pdf-lib` (optional peer, RR-63) assembles raster-mode PDF bytes locally. Metadata timestamps are disabled so repeated PDF output is byte-stable for the same SVG input and options.
 - Vector PDF output is written by a small deterministic PDF writer in this package, with `pako` for Flate compression (pure JavaScript, so independent of the platform zlib build), `fontkit` for shaping and font metrics and `bidi-js` for the Unicode bidirectional algorithm. No hosted service, network call or system font is involved.
-- Bundled OFL Roboto and Roboto Mono TTF files provide the default deterministic font fallback.
+- Bundled OFL Roboto and Roboto Mono TTF files (the optional peers `@expo-google-fonts/roboto` and `roboto-mono`, which Node `loadFonts()` and the PNG/PDF default read) provide the default deterministic font fallback.
 - `svgToPng` and `svgToPdf` disable system-font loading by default. Hosts that require branded fonts should pass a handle with explicit `fontFiles` (or `fontDirs`); `fonts: { loadSystemFonts: true }` is an opt-in escape hatch for PNG and raster-mode PDF output and can make it environment-dependent. Vector-mode PDF rejects it (`pdf-system-fonts-unsupported`): it embeds only fonts you supply, so a system font can never be embedded by accident.
 
-Browser support boundary: `renderSvg`, `renderSlideSvg`, and `resolvePresentation` are browser-importable pure JavaScript APIs. The root `svgToPng` and `svgToPdf` are Node APIs because they depend on the Node builds of resvg and sharp. For a page, `@openpresentation/opf-render/export-browser` has the same two names (see below).
+Browser support boundary: `renderSvg`, `renderSlideSvg`, and `resolvePresentation` are browser-importable pure JavaScript APIs. The root `svgToPng` and `svgToPdf` (also `/png` and `/pdf`) are Node APIs because they depend on the Node builds of resvg and sharp, which are optional peers loaded on first use (`converter-missing` when absent). For a page, `@openpresentation/opf-render/export-browser` has the same two names (see below).
 
 Chartex chart previews (FF-22b) draw the constructs opf-pptx exports as Office 2016 chartex parts: `treemap` (squarified tiles of the first series, one colour per tile, category labels), `histogram` (a lone value column binned like PowerPoint with Scott's rule count and right-closed bins, or one column per category), `pareto` (columns sorted descending with the cumulative-percentage line on a 0-100% axis), `box-and-whisker` (rows grouped by category, one box per series, exclusive quartiles, whiskers within 1.5 IQR, mean markers, outlier points), `waterfall` (floating bars from the running total, increases and decreases in the first two palette colours, connector lines) and `funnel` (centred bars with value labels). `world` is an honest non-geographic preview: one tile per region shaded by value with its name and value. No geography data is shipped; PowerPoint draws the real map from Bing geodata it fetches itself, so the preview and the native map agree on labels, values and the series colour, not on shapes. Each chartex kind also accepts a lone value column (row numbers as categories; histogram and pareto bin the values). Every mark and label keeps a `data-opf-path` (bins and boxes trace to their value column).
 

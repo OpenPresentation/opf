@@ -3,6 +3,7 @@ import {OPFRenderError,packageName} from './svg.js';
 import {separateLigatures} from './font-compatibility.js';
 import {monochromeColorFonts,rasterFontFiles} from './color-fonts.js';
 import {pinScriptClusters} from './raster-text.js';
+import {loadConverter} from './converters.js';
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const DEFAULT_RASTER_SCALE = 1;
 const DEFAULT_RASTER_BACKGROUND = "#FFFFFF";
@@ -100,7 +101,7 @@ async function vectorPdf(inputs, options) {
 // The picture decoder of the Node vector export (the browser entry passes a canvas one). sharp loads on first use.
 function sharpImageCodec() {
   let loaded;
-  const sharp = () => (loaded ??= import("sharp").then((module) => module.default));
+  const sharp = () => (loaded ??= loadConverter("sharp").then((module) => module.default));
   return {
     metadata: async (bytes) => (await sharp())(bytes, { limitInputPixels: 40_000_000, animated: false }).metadata(),
     rgba: async (bytes, { orient }) => {
@@ -162,25 +163,8 @@ async function rasterizeSvg(svgInput, options) {
   }
 }
 
-async function loadResvg() {
-  try {
-    return await import("@resvg/resvg-js");
-  } catch (error) {
-    throw new OPFRenderError("png-renderer-unavailable", "PNG/PDF conversion requires the Node runtime dependency @resvg/resvg-js.", {
-      cause: error instanceof Error ? error.message : String(error)
-    });
-  }
-}
-
-async function loadPdfLib() {
-  try {
-    return await import("pdf-lib");
-  } catch (error) {
-    throw new OPFRenderError("pdf-writer-unavailable", "PDF conversion requires the runtime dependency pdf-lib.", {
-      cause: error instanceof Error ? error.message : String(error)
-    });
-  }
-}
+const loadResvg = () => loadConverter("@resvg/resvg-js");
+const loadPdfLib = () => loadConverter("pdf-lib");
 
 async function bundledFontFiles() {
   if (!bundledFontFilesCache) {

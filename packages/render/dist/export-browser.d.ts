@@ -14,6 +14,12 @@ export interface BrowserSvgToPdfOptions extends Pick<SvgToPdfOptions, "mode" | "
   /** Raster mode: pixel density of each page image (default 2). */
   scale?: number;
   /**
+   * Raster mode only: the pdf-lib module (`import * as pdfLib from "pdf-lib"`), an optional peer of the renderer that this entry never imports itself, so a
+   * bundle of it holds no PDF library. Without it raster mode tries to import "pdf-lib" by name and rejects with `OPFRenderError` `converter-missing`
+   * when the page cannot. The default vector mode needs no option.
+   */
+  pdfLib?: { PDFDocument: { create(options?: { updateMetadata?: boolean }): Promise<any> } };
+  /**
    * The browser fonts handle (`loadFonts` from `/fonts-browser`): every face it holds can be embedded in the PDF, including script faces
    * a standalone SVG does not carry. Faces an SVG embeds as `@font-face` data (the `embeddedFonts` of the handle `renderSvg` was given) need no entry.
    */

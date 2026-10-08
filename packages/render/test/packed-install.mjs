@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
+import {existsSync} from 'node:fs';
 import {mkdtemp,mkdir,readFile,writeFile,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
@@ -13,9 +14,32 @@ const npm=(args,cwd)=>execFileSync(process.execPath,[npmCli,...args],{cwd,encodi
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 try{
   const packed=JSON.parse(npm(['pack','--json','--pack-destination',temporary],root))[0];
+  const rootManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
+  // RR-63: the lean install. The tarball alone brings no converter and no font package: SVG output works, and an export or font pack that needs an
+  // optional peer says which package to install.
+  const lean=path.join(temporary,'lean');await mkdir(lean);
+  await writeFile(path.join(lean,'package.json'),JSON.stringify({private:true,type:'module'}));
+  npm(['install','--ignore-scripts','--no-fund','--no-audit',path.join(temporary,packed.filename)],lean);
+  for(const absent of ['sharp','@resvg','pdf-lib','@expo-google-fonts','@img'])assert.ok(!existsSync(path.join(lean,'node_modules',absent)),`The lean install holds no ${absent}`);
+  await writeFile(path.join(lean,'lean.mjs'),`import assert from 'node:assert/strict';
+import {renderSvg} from '@openpresentation/opf-render/svg';
+import {svgToPng} from '@openpresentation/opf-render/png';
+import {svgToPdf} from '@openpresentation/opf-render/pdf';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const svg=renderSvg({slides:[{title:'Lean'}]})[0];
+assert.match(svg,/^<svg /);
+await assert.rejects(svgToPng(svg),error=>error.code==='converter-missing'&&error.details.package==='@resvg/resvg-js'&&error.message.includes('npm install @resvg/resvg-js@'));
+await assert.rejects(svgToPdf(svg,{mode:'raster'}),error=>error.code==='converter-missing'&&error.details.package==='pdf-lib');
+await assert.rejects(loadFonts(),error=>error.code==='font-resource-unavailable'&&error.message.includes('npm install @expo-google-fonts/roboto@'));
+console.log('Lean install: SVG works; PNG, raster PDF and font packs name what to install.');
+`);
+  process.stdout.write(execFileSync(process.execPath,['lean.mjs'],{cwd:lean,encoding:'utf8'}));
+  // The full install: the same tarball plus the optional peers the checks below exercise (pinned as the repository tests them).
   const consumer=path.join(temporary,'consumer');await mkdir(consumer);
   await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
-  npm(['install','--ignore-scripts','--no-fund','--no-audit',path.join(temporary,packed.filename)],consumer);
+  const peers=[...Object.keys(rootManifest.peerDependencies)].filter(name=>/^@expo-google-fonts\/(roboto|roboto-mono|arimo|caladea|cousine|gelasio|tinos|noto-sans)$/.test(name)||['sharp','@resvg/resvg-js','pdf-lib'].includes(name)).map(name=>`${name}@${rootManifest.devDependencies[name]}`);
+  assert.equal(peers.length,11);
+  npm(['install','--ignore-scripts','--no-fund','--no-audit',path.join(temporary,packed.filename),...peers],consumer);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-render');
   const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
   assert.equal(manifest.version,JSON.parse(await readFile(path.join(root,'package.json'),'utf8')).version);
@@ -26,7 +50,7 @@ try{
     assert.equal(hash(bytes),hash(await readFile(path.join(root,file))),`Installed package file differs: ${file}`);
     files[file]=hash(bytes);
   }
-  for(const entry of ['dist/index.js','dist/svg.js','dist/fonts-node.js','dist/fonts-browser.js','dist/svg.d.ts','dist/element.js','dist/element.d.ts','dist/element-define.js','dist/player.js','dist/player.d.ts','dist/deck-runtime.js','dist/preview-fonts.js','dist/preview-fonts-node.js','dist/preview-fonts-cli.js','LICENSE'])assert.ok(files[entry],`Missing public entry: ${entry}`);
+  for(const entry of ['dist/index.js','dist/svg.js','dist/png.js','dist/png.d.ts','dist/pdf.js','dist/pdf.d.ts','dist/converters.js','dist/fonts-node.js','dist/fonts-browser.js','dist/svg.d.ts','dist/element.js','dist/element.d.ts','dist/element-define.js','dist/player.js','dist/player.d.ts','dist/deck-runtime.js','dist/preview-fonts.js','dist/preview-fonts-node.js','dist/preview-fonts-cli.js','LICENSE'])assert.ok(files[entry],`Missing public entry: ${entry}`);
   // FF-31: vendored upstream fonts (fonts/carlito) ship in the tarball and load from the installed package.
   const {BUNDLED_FONT_MANIFEST}=await import(pathToFileURL(path.join(root,'dist/font-manifest.js')));
   const vendored=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.vendored);

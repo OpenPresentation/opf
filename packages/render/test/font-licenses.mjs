@@ -125,9 +125,12 @@ for(const pkg of packages){
     }
   }else{
     assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
-    // Noto Sans (Latn, Cyrl, Grek) is the default glyph-fallback face: a script-pack entry pinned as a runtime dependency.
-    const pinned=rootPackage.dependencies?.[pkg.name]??(pkg.pack==='scripts'?rootPackage.devDependencies:undefined)?.[pkg.name];
+    // RR-63: every npm font package is an exact optional peer dependency (the host installs the faces it uses), pinned as a devDependency for tests.
+    const pinned=rootPackage.devDependencies?.[pkg.name];
     assert.equal(pinned,pkg.version,`${label}: package.json must pin this exact version (no range)`);
+    assert.equal(rootPackage.peerDependencies?.[pkg.name],pkg.version,`${label}: declare it as an exact optional peer`);
+    assert.equal(rootPackage.peerDependenciesMeta?.[pkg.name]?.optional,true,`${label}: the peer must be optional`);
+    assert.equal(rootPackage.dependencies?.[pkg.name],undefined,`${label}: a font package must not be a runtime dependency`);
     assert.match(pinned,/^\d+\.\d+\.\d+$/,`${label}: pin must be an exact version`);
     directory=path.dirname(require.resolve(`${pkg.name}/package.json`));
     const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));

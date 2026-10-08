@@ -51,6 +51,14 @@
       "types": "./dist/export-browser.d.ts",
       "default": "./dist/export-browser.js"
     },
+    "./png": {
+      "types": "./dist/png.d.ts",
+      "default": "./dist/png.js"
+    },
+    "./pdf": {
+      "types": "./dist/pdf.d.ts",
+      "default": "./dist/pdf.js"
+    },
     "./svg": {
       "types": "./dist/svg.d.ts",
       "default": "./dist/svg.js"
@@ -131,27 +139,21 @@
     "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs"
   },
   "dependencies": {
+    "@openpresentation/opf": "^0.15.1",
+    "bidi-js": "1.1.0",
+    "fontkit": "^2.0.4",
+    "pako": "1.0.11"
+  },
+  "peerDependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",
     "@expo-google-fonts/gelasio": "0.4.1",
-    "@expo-google-fonts/noto-sans": "0.4.2",
-    "@expo-google-fonts/roboto": "0.4.3",
-    "@expo-google-fonts/roboto-mono": "0.4.2",
-    "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf": "^0.15.1",
-    "@resvg/resvg-js": "^2.6.2",
-    "bidi-js": "1.1.0",
-    "fontkit": "^2.0.4",
-    "pako": "1.0.11",
-    "pdf-lib": "^1.17.1",
-    "sharp": "0.35.5"
-  },
-  "peerDependencies": {
     "@expo-google-fonts/noto-color-emoji": "0.4.6",
     "@expo-google-fonts/noto-emoji": "0.4.7",
     "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
     "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+    "@expo-google-fonts/noto-sans": "0.4.2",
     "@expo-google-fonts/noto-sans-arabic": "0.4.3",
     "@expo-google-fonts/noto-sans-armenian": "0.4.2",
     "@expo-google-fonts/noto-sans-bengali": "0.4.4",
@@ -183,9 +185,27 @@
     "@expo-google-fonts/noto-sans-thai": "0.4.2",
     "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
-    "@expo-google-fonts/stix-two-math": "0.4.0"
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/stix-two-math": "0.4.0",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@resvg/resvg-js": "^2.6.2",
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.35.5"
   },
   "peerDependenciesMeta": {
+    "@expo-google-fonts/arimo": {
+      "optional": true
+    },
+    "@expo-google-fonts/caladea": {
+      "optional": true
+    },
+    "@expo-google-fonts/cousine": {
+      "optional": true
+    },
+    "@expo-google-fonts/gelasio": {
+      "optional": true
+    },
     "@expo-google-fonts/noto-color-emoji": {
       "optional": true
     },
@@ -196,6 +216,9 @@
       "optional": true
     },
     "@expo-google-fonts/noto-nastaliq-urdu": {
+      "optional": true
+    },
+    "@expo-google-fonts/noto-sans": {
       "optional": true
     },
     "@expo-google-fonts/noto-sans-arabic": {
@@ -291,15 +314,38 @@
     "@expo-google-fonts/noto-serif-tibetan": {
       "optional": true
     },
+    "@expo-google-fonts/roboto": {
+      "optional": true
+    },
+    "@expo-google-fonts/roboto-mono": {
+      "optional": true
+    },
     "@expo-google-fonts/stix-two-math": {
+      "optional": true
+    },
+    "@expo-google-fonts/tinos": {
+      "optional": true
+    },
+    "@resvg/resvg-js": {
+      "optional": true
+    },
+    "pdf-lib": {
+      "optional": true
+    },
+    "sharp": {
       "optional": true
     }
   },
   "devDependencies": {
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
     "@expo-google-fonts/noto-color-emoji": "0.4.6",
     "@expo-google-fonts/noto-emoji": "0.4.7",
     "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
     "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+    "@expo-google-fonts/noto-sans": "0.4.2",
     "@expo-google-fonts/noto-sans-arabic": "0.4.3",
     "@expo-google-fonts/noto-sans-armenian": "0.4.2",
     "@expo-google-fonts/noto-sans-bengali": "0.4.4",
@@ -331,15 +377,21 @@
     "@expo-google-fonts/noto-sans-thai": "0.4.2",
     "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/stix-two-math": "0.4.0",
+    "@expo-google-fonts/tinos": "0.4.2",
     "@hyzyla/pdfium": "2.1.13",
     "@jspawn/qpdf-wasm": "0.0.2",
     "@napi-rs/canvas": "1.0.9",
+    "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
     "harfbuzzjs": "1.6.2",
+    "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.3.289",
-    "playwright": "1.63.0"
+    "playwright": "1.63.0",
+    "sharp": "0.35.5"
   },
   "bin": {
     "opf-preview-fonts": "./dist/preview-fonts-cli.js"

@@ -25,10 +25,24 @@ async function verifiedFile(file, expected, details) {
 // The default Latin, Cyrillic and Greek glyph-fallback face (the office pack always loads it, fallback-only).
 const FALLBACK_PACKAGE = "@expo-google-fonts/noto-sans";
 
+// RR-63: every `@expo-google-fonts/*` package is an optional peer dependency, so a host installs only the faces it uses. A request that
+// needs packages that are not installed fails once, naming all of them and the install command, instead of one package at a time.
+function requireInstalled(packages, what) {
+  const missing = packages.filter(pkg => {
+    if (pkg.vendored) return false;
+    try { require.resolve(`${pkg.name}/package.json`); return false; } catch { return true; }
+  });
+  if (!missing.length) return;
+  const install = `npm install ${missing.map(pkg => `${pkg.name}@${pkg.version}`).join(" ")}`;
+  throw new OPFFontError("font-resource-unavailable", `${what} needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), install});
+}
+
 // `skipped`: an optional npm package that is not installed is recorded there instead of failing (scripts: 'auto').
 // `fallbackOnly`: the faces serve glyph fallback and requests by their own name, never a replacement for another family.
-async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
+// `what`: how the request is named in the error for a package that is not installed, for example "The 'office' font pack".
+async function loadPackages(packages, skipped, {fallbackOnly = false, what = "This font request"} = {}) {
   const entries = [], fontFiles = [];
+  if (!skipped) requireInstalled(packages, what);
   for (const pkg of packages) {
     if (pkg.vendored) {
       // FF-31: vendored faces ship inside this package (pkg.vendored, for example fonts/carlito), hash-pinned like the npm packs. The open pack is
@@ -53,7 +67,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
       installed = JSON.parse(await readFile(manifestPath, "utf8"));
     } catch (error) {
       if (skipped) { skipped.push({package: pkg.name, version: pkg.version, scripts: [...pkg.scripts]}); continue; }
-      throw new OPFFontError("font-resource-unavailable", `Install ${pkg.name}@${pkg.version} to use this offline font pack.`, {package:pkg.name, cause:error.code});
+      throw new OPFFontError("font-resource-unavailable", `Install ${pkg.name}@${pkg.version} to use ${what}.`, {package:pkg.name, cause:error.code});
     }
     if (installed.version !== pkg.version) throw new OPFFontError("font-version-mismatch", `Expected ${pkg.name}@${pkg.version}; reinstall the pinned package.`, {package:pkg.name, expected:pkg.version, actual:installed.version});
     const directory = path.dirname(manifestPath);
@@ -73,7 +87,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
 const renamedAliases = () => Object.fromEntries(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "open" && item.renamedFrom).map(item => [item.renamedFrom, item.faces[0].family]));
 // The vendored faces this registry holds that are embed "used": a host that serves fonts itself lists them to copy their files.
 const lazyOf = registry => lazyFontList().filter(face => registry.describeFaces().some(held => held.family === face.family && held.weight === face.weight && held.italic === face.italic));
-const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack));
+const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack), undefined, {what: `The '${pack}' font pack`});
 
 /**
  * Adds the script pack. `scripts` is 'all', ISO 15924 codes, or 'auto' (FF-19): detect the scripts the
@@ -86,7 +100,7 @@ async function withScripts(loaded, scripts, {presentation, onDiagnostic, renderO
   // A package the registry already loaded (the default Noto Sans fallback) is never loaded twice.
   const notLoaded = list => list.filter(pkg => !loaded.packages?.includes(pkg.name));
   if (scripts !== "auto") {
-    const extra = await loadPackages(notLoaded(scriptFontPackages(scripts)));
+    const extra = await loadPackages(notLoaded(scriptFontPackages(scripts)), undefined, {what: `The requested script fonts (${Array.isArray(scripts) ? scripts.join(", ") : scripts})`});
     return {...loaded, entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages]};
   }
   if (presentation === null || typeof presentation !== "object") throw new OPFFontError("invalid-font-scripts", "scripts: 'auto' needs the presentation whose text decides the scripts.", {scripts});
@@ -160,6 +174,11 @@ async function withFaces(loaded, faces) {
  */
 async function buildRegistry(pack, {scripts, faces, presentation, onDiagnostic, renderOptions, ...options}) {
   let loaded, registryOptions = options;
+  // RR-63: name every npm font package the pack needs at once, before loading any of them.
+  if (pack === "base" || pack === "office") {
+    const packs = pack === "base" ? ["base"] : ["office", ...(options.includeBaseFonts === false ? [] : ["base"])];
+    requireInstalled([...BUNDLED_FONT_MANIFEST.packages.filter(item => packs.includes(item.pack)), ...(pack === "office" ? scriptFontPackages(["Latn"]) : [])], `The '${pack}' font pack`);
+  }
   if (pack === "office") {
     const {entries, fontFiles, packages} = await loadPack("office");
     for (const [include, name] of [[options.includeOpenFonts, "open"], [options.includeBaseFonts, "base"]]) {
@@ -177,7 +196,7 @@ async function buildRegistry(pack, {scripts, faces, presentation, onDiagnostic, 
     // an explicit list does; a presentation that does not select Latn keeps it fallback-only.
     const requested = scripts === "auto" && presentation !== null && typeof presentation === "object" ? scriptFontPackages(autoScriptSelection(presentation, renderOptions).scripts).map(pkg => pkg.name)
       : scripts === undefined || scripts === "auto" || (Array.isArray(scripts) && !scripts.length) ? [] : scriptFontPackages(scripts).map(pkg => pkg.name);
-    const fallback = await loadPackages(scriptFontPackages(["Latn"]).filter(pkg => !requested.includes(pkg.name)), undefined, {fallbackOnly:true});
+    const fallback = await loadPackages(scriptFontPackages(["Latn"]).filter(pkg => !requested.includes(pkg.name)), undefined, {fallbackOnly:true, what: "The 'office' font pack (its default glyph-fallback face)"});
     fontFiles.push(...fallback.fontFiles);
     entries.push(...fallback.entries);
     packages.push(...fallback.packages);

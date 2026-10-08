@@ -47,6 +47,18 @@ assert.equal(typeof element.renderDeckHtml, "function");
 assert.equal(element.defineOpfDeck(), undefined);
 assert.equal(typeof (await import(new URL("../dist/player.js", import.meta.url))).present, "function");
 
+// RR-63: the converters and the font packages are optional peers, never runtime dependencies: an SVG-only install holds none of them.
+for (const name of ["pdf-lib", "@resvg/resvg-js", "sharp"]) {
+  assert.equal(pkg.dependencies[name], undefined, `${name} must not be a runtime dependency`);
+  assert.ok(pkg.peerDependencies[name], `${name} must be a peer dependency`);
+  assert.equal(pkg.peerDependenciesMeta[name]?.optional, true, `${name} must be an optional peer`);
+}
+for (const name of Object.keys(pkg.dependencies)) assert.ok(!name.startsWith("@expo-google-fonts/"), `${name} must be an optional peer, not a runtime dependency`);
+// RR-63: the format entries (`/svg`, `/png`, `/pdf`) resolve; /png and /pdf are the Node converters.
+for (const key of ["./svg", "./png", "./pdf"]) assert.ok(pkg.exports[key], `Missing export ${key}`);
+assert.equal(typeof (await import(new URL("../dist/png.js", import.meta.url))).svgToPng, "function");
+assert.equal(typeof (await import(new URL("../dist/pdf.js", import.meta.url))).svgToPdf, "function");
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }
