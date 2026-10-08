@@ -127,7 +127,8 @@
     "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs",
     "test:emoji-math-browser": "node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json",
     "test:player": "node test/player-unit.mjs",
-    "test:player-browser": "node test/player-browser.mjs artifacts/player"
+    "test:player-browser": "node test/player-browser.mjs artifacts/player",
+    "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/arimo": "0.4.3",

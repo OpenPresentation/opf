@@ -118,15 +118,17 @@ export function svgDimensions(svg) {
 
 /**
  * The renderer's SVG made responsive and readable: the fixed `width` and `height` go (the viewBox scales it), and the root's
- * `role="img"` plus `aria-label` go too, so the slide's own text nodes reach a screen reader in document order, which is the
- * reading order (title, then content, then furniture) the renderer paints. The slide section carries the accessible name.
+ * labelled-container attributes (`role="group"`, `aria-roledescription="slide"`, `aria-label`) go too, because the slide section or figure around it
+ * carries the one accessible name, so a slide is announced once. The slide's own text nodes reach a screen reader in document order,
+ * which is the reading order (tag, title, content, footnotes, then header and footer) the renderer paints; purely decorative drawing
+ * keeps its `aria-hidden`.
  * `idPrefix` renames the ids the slide defines (gradients, patterns, clip paths) so a thumbnail of a slide and the slide
  * itself never share an id in one tree.
  */
 export function prepareSlideSvg(svg, { idPrefix } = {}) {
   const match = /^<svg\b[^>]*>/.exec(svg);
   if (!match) return svg;
-  let root = match[0].replace(/\s(?:width|height|role|aria-label)="[^"]*"/g, "");
+  let root = match[0].replace(/\s(?:width|height|role|aria-roledescription|aria-label)="[^"]*"/g, "");
   root = root.replace(/^<svg\b/, '<svg class="opf-slide" preserveAspectRatio="xMidYMid meet" focusable="false"');
   let rest = svg.slice(match[0].length);
   if (idPrefix) {

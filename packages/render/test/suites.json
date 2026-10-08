@@ -17,6 +17,7 @@
     "packed-install.mjs",
     "pdf-helpers.mjs",
     "platform-residual-probe.mjs",
+    "preview-a11y-fixture.mjs",
     "probe-text-ink.mjs",
     "readability-review-sheets.mjs",
     "review-code-raster.mjs",

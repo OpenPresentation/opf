@@ -20,7 +20,7 @@ const textFill = (svg, path) => {
 const plain = renderSlideSvg(deckOf([]), 0, options);
 assert.ok(!plain.includes('status'));
 assert.equal(circles(plain).length, 3);
-for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['cx', 'cy', 'data-opf-path', 'fill', 'r']);
+for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['aria-hidden', 'cx', 'cy', 'data-opf-path', 'fill', 'r']); // FA-30: the marker is decorative
 const done = renderSlideSvg(deckOf(['done', 'done', 'done']), 0, options);
 assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(plain));
 assert.equal(renderSlideSvg(deckOf(['done', 'done', 'done']), 0, { fonts: { textMeasurement: fonts.textMeasurement } }), renderSlideSvg(deckOf([]), 0, { fonts: { textMeasurement: fonts.textMeasurement } }));

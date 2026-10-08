@@ -13,6 +13,10 @@
           "command": "npm run test:player-browser"
         },
         {
+          "id": "browser:preview-a11y-browser",
+          "command": "npm run test:preview-a11y-browser"
+        },
+        {
           "id": "browser:web-delivery",
           "command": "node scripts/measure-web-delivery.mjs"
         },

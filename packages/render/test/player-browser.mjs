@@ -259,6 +259,7 @@ try {
   assert.equal(regionName, 'Quarterly review', 'the deck is a region named after the deck');
   assert.deepEqual(await slideText(page), ['Quarterly review', 'Q3 operating results'], 'the slide text is live text in reading order, not an image');
   assert.equal(await page.evaluate(() => document.getElementById('d').shadowRoot.querySelector('.slide svg').getAttribute('role')), null, 'the svg is not an opaque image');
+  assert.equal(await page.evaluate(() => { const slide = document.getElementById('d').shadowRoot.querySelector('.slide'); return [slide.querySelector('svg').getAttribute('aria-roledescription'), slide.querySelector('svg').getAttribute('aria-label'), slide.querySelectorAll('[aria-roledescription="slide"]').length + document.getElementById('d').shadowRoot.querySelectorAll('[role=group][aria-roledescription="slide"]').length].join('|'); }), '||1', 'FA-30: the drawing is not a second slide container; the viewport is the one (announced once)');
   const snapshot = await deckEl(page).ariaSnapshot();
   assert.match(snapshot, /Quarterly review/);
   assert.ok(snapshot.indexOf('Quarterly review') < snapshot.indexOf('Q3 operating results'), 'screen readers meet the title before the subtitle');

@@ -721,7 +721,9 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     "svg",
     {
       xmlns: "http://www.w3.org/2000/svg",
-      role: "img",
+      // FA-30: a labelled container, not an image: role="img" makes every text node inside presentational.
+      role: "group",
+      "aria-roledescription": "slide",
       "aria-label": title,
       viewBox: `0 0 ${width} ${height}`,
       width,
@@ -757,6 +759,7 @@ function renderBackground(bound, width, height, options) {
         y2: `${50+dy}%`
       }, stopTags.join(""))),
       tag("rect", {
+        ...HIDDEN,
         x: 0,
         y: 0,
         width,
@@ -774,9 +777,10 @@ function renderBackground(bound, width, height, options) {
     const runs=patternRuns(preset);
     const mark=runs?tag('path',{d:runs.map(run=>`M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(''),fill:color,'shape-rendering':'crispEdges'}):'';
     if(!mark)reportDiagnostic({code:'unsupported-pattern',path:`${bound.path}.design.background.pattern.preset`,message:`Pattern ${preset} is not implemented by the SVG preview.`},options);
-    return tag('g',{opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??'#FFFFFF'})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
+    return tag('g',{...HIDDEN,opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??'#FFFFFF'})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
   }
   return tag("rect", {
+    ...HIDDEN,
     x: 0,
     y: 0,
     width,
@@ -793,9 +797,9 @@ function renderBackground(bound, width, height, options) {
 // and stretch use the shared fit math with the focus point; tile repeats the picture at its intrinsic size (1 picture px = 1
 // reference px) from the canvas top-left. alt is the picture's accessible name; without alt the picture is decorative.
 function renderBackgroundImage(background, bound, width, height, options) {
-  const canvas = tag("rect", { x: 0, y: 0, width, height, fill: bound.design.backgroundColor ?? bound.design.colors.background, ...traceAttrs(options, `${bound.path}.design.background`) });
+  const canvas = tag("rect", { ...HIDDEN, x: 0, y: 0, width, height, fill: bound.design.backgroundColor ?? bound.design.colors.background, ...traceAttrs(options, `${bound.path}.design.background`) });
   const item = { value: background.alt === undefined ? background.src : { src: background.src, alt: background.alt }, path: background.path };
-  const drawOptions = { ...options, imageDecorative: background.alt === undefined };
+  const drawOptions = { ...options, imageDecorative: background.alt === undefined || background.alt === "" };
   const picture = background.fit === "tile"
     ? renderTiledImage(item, background.box, bound, drawOptions)
     : renderImage(item, background.box, bound, { ...drawOptions, imageFit: background.fit, imageFocus: background.focus, imagePicture: background.picture });
@@ -839,7 +843,7 @@ function renderImageBlock(item, bound, options) {
   const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
   if (image.border) {
     const paint = imagePaint(image.border.color, bound, bound.design.colors.border);
-    children.push(tag("path", { d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
+    children.push(tag("path", { ...HIDDEN, d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
@@ -850,7 +854,7 @@ function renderImageBlock(item, bound, options) {
 // overlay opacity.
 function renderImageOverlay(overlay, bound, options) {
   const paint = imagePaint(overlay.color, bound, bound.design.colors.text);
-  return tag("path", { d: overlay.shape?.path ?? rectanglePath(overlay.box), fill: paint.color, "fill-opacity": preciseNumber(paint.alpha * overlay.opacity), ...(options.trace ? { "data-opf-image-overlay": overlay.path } : {}) });
+  return tag("path", { ...HIDDEN, d: overlay.shape?.path ?? rectanglePath(overlay.box), fill: paint.color, "fill-opacity": preciseNumber(paint.alpha * overlay.opacity), ...(options.trace ? { "data-opf-image-overlay": overlay.path } : {}) });
 }
 
 // The placeholder renderImage draws for a source it cannot resolve.
@@ -886,7 +890,7 @@ function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
     const frame=item.frameBox;
-    const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
+    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
     return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
   });
@@ -1002,10 +1006,17 @@ function resolveImageSource(item, bound, options) {
   return { asset, source: svg ?? source, drawable, missingReference };
 }
 
+// FA-30: purely decorative drawing is hidden from assistive technology so the slide's text and real pictures are what a reader meets
+// (background, overlays, card frames, dividers, table cell fills and borders, accent shapes). SVG-AAM already leaves an unnamed shape
+// out of the tree; the attribute states the intent for the readers that do not.
+const HIDDEN = Object.freeze({ "aria-hidden": "true" });
+
 // The accessible name of a drawn picture: its alt text, else the caller's label; a decorative picture (an image background
 // without alt) is hidden from assistive technology.
 function imageAccessibility(asset, options) {
-  if (options.imageDecorative) return { "aria-hidden": "true" };
+  // An empty alt marks the picture decorative (FA-30), as it does a chart; a picture that is only furniture (a header or footer
+  // logo repeated on every slide) is decorative unless the author named it.
+  if (options.imageDecorative || asset.alt === "" || (options.imageUnlabelled && asset.alt === undefined)) return HIDDEN;
   return { role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image" };
 }
 
@@ -1230,6 +1241,7 @@ function renderMedia(item, box, bound, options) {
   const iconBox = centeredBox(box, 72, 72);
   const children = [
     tag("rect", {
+      ...HIDDEN,
       x: box.x,
       y: box.y,
       width: box.width,
@@ -1240,6 +1252,7 @@ function renderMedia(item, box, bound, options) {
       ...traceAttrs(options, item.path)
     }),
     tag("circle", {
+      ...HIDDEN,
       cx: iconBox.x + iconBox.width / 2,
       cy: iconBox.y + iconBox.height / 2,
       r: 36,
@@ -1247,6 +1260,7 @@ function renderMedia(item, box, bound, options) {
       ...traceAttrs(options, item.path)
     }),
     tag("path", {
+      ...HIDDEN,
       d: trianglePath(iconBox.x + 28, iconBox.y + 22, 28, 28),
       fill: "#FFFFFF",
       ...traceAttrs(options, item.path)
@@ -1277,6 +1291,7 @@ function renderCode(item, box, bound, options) {
   const highlight = codeHighlight(item, layout, bound);
   const children = [
     tag("rect", {
+      ...HIDDEN,
       x: box.x,
       y: box.y,
       width: box.width,
@@ -1293,6 +1308,7 @@ function renderCode(item, box, bound, options) {
     const body = layout.parts.find(part => part.role === "body");
     for (const band of highlight.bands) {
       children.push(tag("rect", {
+        ...HIDDEN,
         x: stableNumber(box.x + 1), y: stableNumber(body.box.y + band.first * body.fit.lineHeight), width: stableNumber(box.width - 2),
         height: stableNumber((band.last - band.first + 1) * body.fit.lineHeight), fill: highlight.colors.band,
         ...(options.trace ? { "data-opf-code-highlight": "true" } : {})
@@ -1408,16 +1424,16 @@ function renderTimeline(item, box, bound, options) {
   const layout=item.timelineLayout;
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const children=[tag('line',{...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
   const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
     if(!marker.status){
-      children.push(tag('circle',{cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
+      children.push(tag('circle',{...HIDDEN,cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
       continue;
     }
-    for(const shape of timelineMarkerShapes(marker,statusColors))children.push(tag('circle',{cx:shape.cx,cy:shape.cy,r:shape.radius,fill:shape.fill??'none',...(shape.stroke?{stroke:shape.stroke.color,'stroke-width':shape.stroke.width}:{}),...traceAttrs(options,marker.path),...(options.trace?{'data-opf-timeline-status':marker.status,'data-opf-timeline-shape':shape.role}:{})}));
+    for(const shape of timelineMarkerShapes(marker,statusColors))children.push(tag('circle',{...HIDDEN,cx:shape.cx,cy:shape.cy,r:shape.radius,fill:shape.fill??'none',...(shape.stroke?{stroke:shape.stroke.color,'stroke-width':shape.stroke.width}:{}),...traceAttrs(options,marker.path),...(options.trace?{'data-opf-timeline-status':marker.status,'data-opf-timeline-shape':shape.role}:{})}));
   }
   for(const part of layout.parts){
     if(!part.fit)throw new OPFRenderError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,diagnostics:layout.diagnostics});
@@ -1448,6 +1464,7 @@ function renderTable(item, box, bound, options) {
       ? defaultText
       : resolveColorRef(style.color, bound, defaultText);
     children.push(tag("rect", {
+      ...HIDDEN,
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
       fill,
@@ -1503,6 +1520,7 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
       ? defaultColor
       : resolveColorRef(border.color, bound, defaultColor);
     return [tag('line', {
+      ...HIDDEN,
       x1:stableNumber(x1), y1:stableNumber(y1), x2:stableNumber(x2), y2:stableNumber(y2),
       stroke, 'stroke-width':stableNumber(width),
       'stroke-dasharray':border?.dash === 'dash' ? `${width*4} ${width*3}` : border?.dash === 'dot' ? `${width} ${width*2}` : undefined,
@@ -1640,7 +1658,7 @@ function renderFurniture(bound, presentation, width, height, options, kind) {
   }
   return tag('g',{},layout.parts.filter(part=>part.kind===kind).map(part=>{
     const trace=options.trace?{'data-opf-furniture-kind':kind,'data-opf-furniture-field':part.field,'data-opf-furniture-generated':String(part.generated),'data-opf-furniture-editable':!part.generated?'true':undefined,'data-opf-furniture-source':part.sourcePath}:{};
-    if(part.type==='image')return tag('g',trace,renderImage({value:part.image,path:part.path},part.box,bound,{...options,imageFit:'contain'}));
+    if(part.type==='image')return tag('g',trace,renderImage({value:part.image,path:part.path},part.box,bound,{...options,imageFit:'contain',imageUnlabelled:true}));
     return tag('g',trace,renderTextBox(part.text,part.box,bound,{path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.style.fontFamily,align:part.alignment,fill:bound.design.colors.mutedText,diagnosticsHandled:true,options}));
   }).join(''));
 }
@@ -1653,12 +1671,13 @@ function renderBranding(bound,presentation,width,height,options) {
     if(mark){
       const opacity=typeof design.watermark.opacity==='number'&&Number.isFinite(design.watermark.opacity)?Math.min(1,Math.max(0,design.watermark.opacity)):.08;
       const cx=width/2,cy=height/2;
-      pieces.push(tag('g',{opacity:stableNumber(opacity),transform:`rotate(${stableNumber(mark.rotation)} ${stableNumber(cx)} ${stableNumber(cy)})`,...traceAttrs(options,rootFor('watermark'))},
+      pieces.push(tag('g',{...HIDDEN,opacity:stableNumber(opacity),transform:`rotate(${stableNumber(mark.rotation)} ${stableNumber(cx)} ${stableNumber(cy)})`,...traceAttrs(options,rootFor('watermark'))},
         tag('text',{x:stableNumber(cx),y:stableNumber(cy+mark.fontSize*.35),'text-anchor':'middle','font-family':fontStack(mark.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(mark.fontSize),'font-weight':mark.fontWeight,
           fill:bound.design.colors.text,'xml:space':'preserve','text-rendering':'geometricPrecision'},escapeText(mark.text))));
     }
   } else if(design.watermark){
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain'})));
+    // The group keeps its bare opacity attribute (opf-pptx's watermark parity test reads it); the picture itself is hidden.
+    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true})));
   }
   // Cover and section slides: the deck logo core composed at the top-left of the free area, anchored left.
   const logo=bound.geometry.logo;

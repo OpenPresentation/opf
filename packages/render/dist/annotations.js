@@ -31,7 +31,7 @@ export function renderFootnotes(bound, options, draw) {
   if (!footnotes) return "";
   const untraced = { ...options, trace: false };
   const { rule } = footnotes;
-  const line = draw.tag("line", { x1: rule.x, y1: rule.y + rule.thickness / 2, x2: rule.x + rule.width, y2: rule.y + rule.thickness / 2, stroke: bound.design.colors.border, "stroke-width": rule.thickness });
+  const line = draw.tag("line", { "aria-hidden": "true", x1: rule.x, y1: rule.y + rule.thickness / 2, x2: rule.x + rule.width, y2: rule.y + rule.thickness / 2, stroke: bound.design.colors.border, "stroke-width": rule.thickness });
   const entries = footnotes.entries.map(entry => {
     const config = { path: undefined, fit: entry.fit, textStyle: entry.textStyle, fontFamily: entry.textStyle?.fontFamily ?? bound.design.fonts.body, fontSize: 13, align: "left", fill: bound.design.colors.mutedText, diagnosticsHandled: true, options: untraced, rich: Array.isArray(entry.value) };
     const body = Array.isArray(entry.value)

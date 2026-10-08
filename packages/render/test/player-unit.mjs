@@ -91,10 +91,10 @@ assert.equal(formatDuration(-5000), '-0:05');
 // --- svg preparation ---------------------------------------------------------------------------------------------
 {
   const svg = renderSlideSvg(deck, 0);
-  assert.match(svg, /^<svg aria-label="Quarterly review" height="720" [^>]*role="img"/);
+  assert.match(svg, /^<svg aria-label="Quarterly review" aria-roledescription="slide" height="720" [^>]*role="group"/); // FA-30: a labelled container, not an image
   const prepared = prepareSlideSvg(svg);
   const rootTag = /^<svg\b[^>]*>/.exec(prepared)[0];
-  assert.ok(!/\s(width|height|role|aria-label)=/.test(rootTag), 'the fixed size and the img role go, so the slide text reaches a screen reader');
+  assert.ok(!/\s(width|height|role|aria-roledescription|aria-label)=/.test(rootTag), 'the fixed size and the root labelling go: the slide section is the one container, and the slide text reaches a screen reader');
   assert.match(rootTag, /viewBox="0 0 1280 720"/);
   assert.deepEqual(svgDimensions(svg), {width: 1280, height: 720});
   assert.ok(prepared.includes('>Quarterly review</text>'), 'the slide text is still there');
