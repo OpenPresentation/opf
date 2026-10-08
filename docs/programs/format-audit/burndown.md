@@ -44,7 +44,7 @@ Waves: A runs first and in parallel; B starts once the A schema PRs it touches a
 
 ## Progress log
 
-- 2026-10-08: the owner asked for the audit's residual items: FA-27 (table alt text), FA-28 (items versus bullets), FA-29 (language-tag lint) and FA-18; they ship in the 0.15.x patch train (core 0.15.2, siblings 0.15.1). Table alt is a summary, not a replacement: the preview names the table group (`role="group"`) instead of `role="img"`, so cells stay readable, as PowerPoint keeps them with a table frame `descr`.
+- 2026-10-08: the owner asked for the audit's residual items: FA-27 (table alt text), FA-28 (items versus bullets), FA-29 (language-tag lint) and FA-18; they ship in the lockstep 0.16.0 (core, render, pptx, editor and CLI). Table alt is a summary, not a replacement: the preview names the table group (`role="group"`) instead of `role="img"`, so cells stay readable, as PowerPoint keeps them with a table frame `descr`.
 
 - 2026-10-07: wave C opened for the 0.15 spec ([0.15-design.md](0.15-design.md)); owner: "nobody uses this yet we don't need migrations or anything just publish a clean spec". Core FA-20/21 and FA-22 start in parallel; engines (FA-23) follow on the core integration branch; one integration PR per repository, released as one 0.15.0 train.
 
