@@ -2,7 +2,7 @@
 
 OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use promoted regions when relative placement is meaningful. `composition` on a slide overrides fields in the resolved layout's `composition`. Existing documents remain valid.
 
-The current published Node 24 train is core 0.14.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.2 and CLI 0.11.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
+The current published Node 24 train is core 0.15.1, renderer 0.15.0, PPTX 0.15.0, editor 0.15.0 and CLI 0.15.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
 
 ```json
 {
@@ -66,7 +66,7 @@ A top-level image block with `placement: { edge, size, inset }`, or the slide's 
 
 ### Shared content cards
 
-Shared content cards are published in core 0.10.0 and later, including current core 0.14.0. For `design.contentBox: true`, each body leaf carries a `frameBox` at its outer allocation and a `box` padded inward by 12 reference pixels at a 720-pixel short edge, capped at one quarter of the frame's width or height. Scoring, accepted payload measurement, strict overflow and pagination all use that rounded interior. Headings remain unframed, nested groups keep their original padding, and explicit outer regions/track weights remain authoritative. Automatic candidates may change because their available content space changes.
+Shared content cards are published in core 0.10.0 and later, including current core 0.15.1. For `design.contentBox: true`, each body leaf carries a `frameBox` at its outer allocation and a `box` padded inward by 12 reference pixels at a 720-pixel short edge, capped at one quarter of the frame's width or height. Scoring, accepted payload measurement, strict overflow and pagination all use that rounded interior. Headings remain unframed, nested groups keep their original padding, and explicit outer regions/track weights remain authoritative. Automatic candidates may change because their available content space changes.
 
 Every composed item carries its resolved horizontal text `alignment` (`left`, `center` or `right`). The title uses `titleAlignment`; every other item, including subtitle, tag, body text, lists, tables and metrics, uses `contentAlignment`. The value is the effective `design` key: the slide's design, then the deck's design (or the host option), then the layout record's `design`, then `left`, so a layout that sets `contentAlignment: center` centers its content with no deck or slide value. The title never inherits `contentAlignment`. A cover (a slide with no body payload on a heading-only layout) has no content region, so its tag and subtitle join the title's alignment: they follow `titleAlignment`, and only a `contentAlignment` set on the slide's own design keeps them apart (a deck or layout value does not). Accepted outline placement and metric internals use the same value. The renderer and the PPTX exporter anchor preview and native text to `item.alignment`, so both engines place a layout's text the same way.
 
@@ -118,7 +118,7 @@ console.log(result.explanation.textMeasurement);
 console.log(result.explanation.unmeasuredPayloads);
 ```
 
-`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. Core 0.8.0 identifies its explanation as `grid-score-v2`; core 0.9.0 advances to `grid-score-v3` to include complete code metadata/body measurements. Current core 0.14.0 reports `grid-score-v9`. These versions record containers in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
+`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. Core 0.8.0 identifies its explanation as `grid-score-v2`; core 0.9.0 advances to `grid-score-v3` to include complete code metadata/body measurements. Current core 0.15.1 reports `grid-score-v9`. These versions record containers in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
 
 Each candidate has `columns`, `rows`, `score` and additive `penalties`:
 

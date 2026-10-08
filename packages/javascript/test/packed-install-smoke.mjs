@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFile as execFileCallback } from "node:child_process";
+import { execFile as execFileCallback, spawnSync } from "node:child_process";
 import { mkdir, mkdtemp, rm, stat, writeFile, readFile, realpath } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -8,6 +8,8 @@ import { promisify } from "node:util";
 import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
+import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {createRequire} from 'node:module';
 
 const execFile = promisify(execFileCallback);
@@ -33,7 +35,7 @@ const projectDir = path.join(tmpRoot, "project");
 
 async function run(command, args, options = {}) {
   try {
-    if (command === 'npm') ({command,args}=packageManagerInvocation(command,args));
+    if (command === 'npm' || command === 'pnpm') ({command,args}=packageManagerInvocation(command,args));
     return await execFile(command, args, {
       maxBuffer: 10 * 1024 * 1024,
       ...options,
@@ -89,8 +91,25 @@ try {
 
   assert.equal(files.some((file) => file.endsWith(".map")), false, "npm package should not ship source maps");
 
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
-  await checkPackedTypes(projectDir, {downstream: downstream.length > 0});
+  // RR-62: the packed CLI joins the same installation, so `@openpresentation/cli/api` is compiled and run next to the core
+  // under test (one core: the override below points the CLI's dependency at the candidate core tarball).
+  let cliTarball;
+  if (!registry) {
+    await run('pnpm', ['--filter', '@openpresentation/cli', 'build'], { cwd: path.resolve(packageRoot, '../..') });
+    const runSync = (command, args, cwd) => {
+      if (command === 'npm') ({command, args} = packageManagerInvocation(command, args));
+      const result = spawnSync(command, args, { cwd, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+      if (result.error || result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed: ${result.error?.message ?? result.stderr}`);
+      return result.stdout;
+    };
+    cliTarball = (await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync })).cliTarball;
+  }
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
+  await checkPackedTypes(projectDir, {downstream: downstream.length > 0, cli: !!cliTarball});
+  if (cliTarball) {
+    const one = await assertOneCore(path.join(projectDir, 'node_modules'));
+    assert.equal(one.version, manifest.version, 'The one installed core is the candidate under test');
+  }
   // Resolve and load every runtime export, including newly added subpaths.
   await writeFile(path.join(projectDir, 'exports.mjs'), `
 import manifest from '@openpresentation/opf/package.json' with {type: 'json'};

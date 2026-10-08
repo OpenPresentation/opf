@@ -65,7 +65,7 @@ try {
 
   await writeFile(path.join(projectDir, 'workflow.mjs'), `import assert from 'node:assert/strict';
 import {readFile, writeFile} from 'node:fs/promises';
-import { validate, paginate, resolveSlideContext, fontSchemes } from '@openpresentation/opf'; import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
+import { validate, paginate, resolveSlideContext } from '@openpresentation/opf'; import { defaultCatalog } from '@openpresentation/opf/catalog'; import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {renderSvg, svgToPng, svgToPdf} from '@openpresentation/opf-render';
@@ -74,17 +74,19 @@ import {toPptx} from '@openpresentation/opf-pptx';
 const source = await readFile('deck.opf.json', 'utf8');
 const document = JSON.parse(source);
 // One checker: a parsed document and its JSON text give the findings of every category (the text adds line and column).
-const validation = validate(document);
+const validation = validate(document, {catalogs: [defaultCatalog]});
 assert.equal(validation.valid, true, JSON.stringify(validation.findings, null, 2));
 const textValidation = validate(source);
 assert.equal(textValidation.valid, true, JSON.stringify(textValidation.findings, null, 2));
 
 const fonts = await loadFonts({pack: 'base'});
 assert.ok((fonts.registry.embeddedFonts?.length ?? 0) >= 1, 'bundled Roboto faces must be available offline');
-const families = resolveFontFamilies(fontSchemes.find((scheme) => scheme.id === 'roboto'));
+// OPF 0.15: the default catalog is the opt-in /catalog subpath; this host registers it with every call.
+const catalogs = [defaultCatalog];
+const families = resolveFontFamilies(defaultCatalog.fontSchemes.roboto);
 assert.equal(families.body, 'Roboto');
 
-const {options} = resolveSlideContext(document, 0, {fonts});
+const {options} = resolveSlideContext(document, 0, {fonts, catalogs});
 const geometry = composeSlide(document.slides[0], options);
 assert.deepEqual(geometry.diagnostics, []);
 assert.equal(geometry.furniture.algorithm, 'furniture-flow-v2');
@@ -92,12 +94,12 @@ assert.ok(geometry.furniture.headerBottom > 0);
 assert.ok(geometry.contentBox.y >= geometry.furniture.headerBottom);
 assert.ok(geometry.contentBox.y + geometry.contentBox.height <= geometry.furniture.footerTop);
 
-const {presentation, pages} = paginate(document, {fonts, minFontSize: 32});
+const {presentation, pages} = paginate(document, {fonts, catalogs, minFontSize: 32});
 assert.equal(validate(presentation, {only: ['format']}).valid, true);
 assert.ok(pages.length >= 2, 'dense overflow slide must paginate into more than one page');
 assert.ok(presentation.slides.every((slide) => typeof slide.title === 'string' && slide.title.length > 0));
 
-const editor = createEditorSession(document, {rejectInvalid: true});
+const editor = createEditorSession(document, {rejectInvalid: true, catalogs});
 const originalTitle = editor.presentation.slides[3].title;
 assert.equal(originalTitle, 'Next  steps');
 editor.set('slides.3.title', 'Edited title');
@@ -106,7 +108,7 @@ assert.equal(editor.canUndo, true);
 editor.undo();
 assert.equal(editor.presentation.slides[3].title, originalTitle);
 
-const svgs = renderSvg(presentation, {fonts});
+const svgs = renderSvg(presentation, {fonts, catalogs});
 assert.ok(svgs.length >= 2);
 assert.match(svgs[0], /Install published OPF packages/);
 assert.match(svgs[0], /Developer  quickstart/);
@@ -114,7 +116,7 @@ const png = await svgToPng(svgs[0], {fonts});
 assert.ok(png.length > 1000);
 const pdf = await svgToPdf(svgs, {fonts});
 assert.ok(pdf.length > 1000);
-const pptx = await toPptx(presentation, {fonts});
+const pptx = await toPptx(presentation, {fonts, catalogs});
 assert.ok(pptx.length > 1000);
 await writeFile('preview.svg', svgs[0]);
 await writeFile('preview.png', png);

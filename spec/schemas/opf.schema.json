@@ -3313,6 +3313,11 @@
         "fields": {
           "$ref": "#/$defs/DatasetFields",
           "description": "Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPoint export writes it as the table frame's alternative text (descr); import reads it back. An empty string hides a purely decorative table, with the same meaning as an empty Asset alt. The alt is a summary read before the cells, which stay readable, so it is most useful for a large or dense table; validate does not require one and does not report a missing one.",
+          "examples": ["North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."]
         }
       }
     },
