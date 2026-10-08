@@ -263,6 +263,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/empty-text`](#opfempty-text) | Content | info | structure | A text field is present but empty. |
 | [`opf/unused-beat`](#opfunused-beat) | Content | info | structure | A beat of the narrative has no slide that references it. |
 | [`opf/empty-slide`](#opfempty-slide) | Content | warning | structure | A slide has no content at all. |
+| [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region or is not in canonical case. |
 
 ## Format rules
 
@@ -693,7 +694,7 @@ Default severity: **info**. Cost: structure. The presentation does not declare i
 
 **Basis.** WCAG 2.2 SC 3.1.1 Language of Page, level A
 
-**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (OPF has no per-run language).
+**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).
 
 
 ## Layout rules
@@ -854,5 +855,15 @@ Default severity: **info**. Cost: structure. A beat of the narrative has no slid
 Default severity: **warning**. Cost: structure. A slide has no content at all.
 
 **Why.** A slide with no title, no content and no picture is almost always an accident of editing. (A deliberately blank slide can use the blank layout.)
+
+### `opf/language-tag`
+
+Default severity: **warning**. Cost: structure. A language tag is malformed, uses an unassigned region or is not in canonical case.
+
+**Why.** Engines read the deck language and each run's `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
+
+**Basis.** BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)
+
+**Approximations.** Checks the root `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
 
 <!-- validate-rules:end -->
