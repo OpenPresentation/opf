@@ -195,7 +195,9 @@ export async function runExport(presentation: unknown, options: ReturnType<typeo
 
 	let deck: unknown = presentation;
 	const resolver = createImageResolver(assetRoot(options.assetDir, ctx.flags), reporter, ctx.flags ? "pass --asset-dir" : "pass assetDir");
-	const handle: FontsHandle = options.fonts ?? (await prepareFonts(renderer, deck, userFonts, reporter)).handle;
+	// RR-59: a standalone SVG (svgFonts "used") carries the installed script faces its text draws; raster, PDF and PPTX read
+	// them from the font files, so they skip the script data URLs.
+	const handle: FontsHandle = options.fonts ?? (await prepareFonts(renderer, deck, userFonts, reporter, format === "svg" && options.svgFonts === "used")).handle;
 	const fontSummary = (): ExportFontSummary => ({
 		pack: "office",
 		substitutionPolicy: "visual",

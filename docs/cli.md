@@ -159,7 +159,7 @@ not. The report lists the slide numbers left out in `skippedHidden`. A deck whos
 | `--asset-dir <directory>` | The folder relative image paths resolve against and the only folder read. Default: the document's folder (the working directory for stdin). |
 | `--fail-on <error\|warning\|info>` | Findings at or above this severity fail, and nothing is written (default `error`). `--fail-on warning` fails on warnings; every command that checks a document takes it. |
 | `--force` | Replace existing outputs. Without it any existing destination exits 1 before anything is written. |
-| `--json` | Accepted for scripts that pass it everywhere. Reports are always JSON; this is the default. |
+| `--json` | Accepted for scripts that pass it everywhere. JSON is the default report format; `--format text` selects human-readable diagnostics on commands that support it. |
 
 ## Fonts
 
@@ -172,6 +172,8 @@ Font substitutions are listed under `fonts.substitutions` in the report with the
 Scripts beyond Latin, Greek and Cyrillic need the optional Noto script packages of the renderer
 (`@expo-google-fonts/noto-sans-jp` and so on). Install the ones named in the `fonts/script-font-not-installed`
 diagnostic next to the CLI; without them, text the loaded faces cannot draw is the error `render/missing-glyph`.
+Standalone SVG (`--svg-fonts used`, the default) embeds the installed script faces its text uses, just like Latin faces.
+`--svg-fonts none` omits all font bytes and requires the viewer to provide the matching families.
 
 ## Images and assets
 
@@ -179,7 +181,9 @@ Relative image paths and `file:` paths resolve against the document's folder (or
 `.jpeg`, `.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are
 resolved first), so a document cannot pull another file on the machine into an output. URLs are never fetched. For SVG
 and PNG output, an unreadable image draws the renderer's placeholder with an `unresolved-asset` or `cli/asset-blocked`
-warning. For PPTX it stops the export (`pptx/asset-unresolved`): opf-pptx would otherwise read the path itself. SVG
+warning. For PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`): opf-pptx would otherwise read the path itself.
+An unresolved remote URL is never fetched; the exporter can write an unavailable-image placeholder with a
+`pptx/unresolved-asset` warning. Use `--fail-on warning` to reject that incomplete output before any file is written. SVG
 pictures in a PPTX get their PNG fallback from the CLI's own opf-render install (`svgRasterizer`), so they export
 whichever way the packages were installed.
 
@@ -224,20 +228,19 @@ Exit `0`: success (warnings allowed). Exit `1`: invalid document, error finding,
 existing output. Exit `2`: usage, I/O, a missing or too-old peer, a font directory problem. (`opf validate` has the
 same codes; text that is not valid JSON is an invalid document, exit `1`, with an `opf/json-syntax` finding.)
 
-## Decisions (RR-27, vetoable)
+## Runtime choices
 
 - **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
   native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
   turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
   validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, shared with `@openpresentation/cli/api`).
-- **Reports are always JSON; `--json` is a no-op alias.** The CLI contract is JSON reports and JSON errors; a second
-  text reporter would split every consumer.
+- **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
+  human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.
 - **Fonts are the bundled pack plus `--font-dir`.** Never system fonts (owner font policy).
 - **Stored zip entries.** Deflate output differs between zlib builds, which would make archive hashes host-dependent.
 
-## Follow-up (openpresentation.org)
+## Catalog names
 
-The site's CLI and developer docs should gain a "Render, export and import" page from this file (install block,
-the three commands, the report fields), and its quickstart should stop saying the CLI does not render. No public
-support or progress status goes on the site (program invariant); the page documents commands, not coverage.
+`opf catalogs` lists canonical camelCase names such as `colorSchemes` and `fontSchemes`.
+`opf catalog` also accepts the website-style `color-schemes`, `font-schemes` and `chart-types` spellings.

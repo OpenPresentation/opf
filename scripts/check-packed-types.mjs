@@ -89,7 +89,20 @@ const valid: boolean = report.valid;
 const firstFinding: Finding | undefined = report.findings[0];
 const pages = paginate(deck).presentation;
 composeSlide(pages.slides[0]);
-importData('Name,Value\\nA,1', {as: 'table'});
+const importedTable = importData('Name,Value\\nA,1', {as: 'table'});
+const importedChart = importData('Name,Value\\nA,1', {as: 'chart'});
+const importedDeck: Presentation = {slides: [importedTable, importedChart]};
+const columns: [string, ...string[]] = importedChart.chart.data.columns;
+const rows: [unknown[], ...unknown[][]] = importedChart.chart.data.rows;
+const tableRows: unknown[][] = importedTable.table.rows;
+const dynamicMode: 'chart' | 'table' = Math.random() > 0.5 ? 'chart' : 'table';
+const dynamicImport = importData('Name,Value\\nA,1', {as: dynamicMode});
+const dynamicDeck: Presentation = {slides: [dynamicImport]};
+// @ts-expect-error A literal table request exposes only its table payload.
+importedTable.chart;
+// @ts-expect-error A literal chart request exposes only its chart payload.
+importedChart.table;
+void importedDeck; void columns; void rows; void tableRows; void dynamicDeck;
 const converted: ConvertedContent = convertContent({text: 'a'}, 'list');
 const lossless: boolean = converted.lossless;
 // @ts-expect-error unknown content kind must be rejected
