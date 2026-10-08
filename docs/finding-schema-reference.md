@@ -98,7 +98,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `value` | yes | `string \| number \| boolean \| null` |  |
 | `label` | yes | `string` |  |
-| `origin` | yes | `string` | Where the suggestion comes from: `schema`, `built-in`, `loaded`, `document` or `contract`. |
+| `origin` | yes | `string` | Where the suggestion comes from: `schema`, `document` (a record the document embeds), `registered` (a catalog the host registered) or `contract`. |
 | `definition` | no | `string` | Where the suggested record or constraint is defined. |
 
 

@@ -32,8 +32,6 @@ export {
   catalogs,
   catalogEntries,
   catalogIndexes,
-  catalogSchemaNames,
-  catalogKinds,
 } from "./catalogs.js";
 export type {
   CatalogEntry,
@@ -119,9 +117,49 @@ export type {
   SpecFileKind,
 } from "./spec-files.js";
 
-export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, FontSchemeDiagnostic, ComposeSlideOptions } from "./composition.js";
+export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, ComposeSlideOptions } from "./composition.js";
+
+// OPF 0.15 catalogs: references, the one resolution rule, and the authoring helpers (FA-20).
+export {
+  CATALOG_GROUP_PATTERN,
+  CATALOG_REFERENCE_PATTERN,
+  OPFUnresolvedReferenceError,
+  catalogGroupSource,
+  catalogKinds,
+  catalogRecords,
+  catalogReferenceSites,
+  parseReference,
+  resolveReference,
+  unresolvedReference,
+} from "./catalog-refs.js";
+export type {
+  Catalog,
+  CatalogKind,
+  CatalogOptions,
+  CatalogRecordMap,
+  CatalogRecords,
+  CatalogReferenceSite,
+  ResolvedReference,
+  UnresolvedReferenceDiagnostic,
+} from "./catalog-refs.js";
+export { catalogDisplayKinds, catalogSchemaNames } from "./catalog-schemas.js";
+export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
+export { copySlides, embed, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
+export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord } from "./catalog-helpers.js";
+export { resolveDesignRecords, resolveFontScheme } from "./design-records.js";
+export type { ResolvedDesignRecords } from "./design-records.js";
+export {
+  CHART_TYPES,
+  ENGINE_DEFAULT_CHART_TYPES,
+  ENGINE_DEFAULT_COLOR_SCHEME,
+  ENGINE_DEFAULT_FONT_SCHEME,
+  ENGINE_DEFAULT_THEME,
+  LANGUAGES,
+  SOCIAL_PLATFORMS,
+} from "./engine-vocabularies.js";
+export type { LanguageVocabulary, SocialPlatformVocabulary } from "./engine-vocabularies.js";
 export { resolveSlideContext } from './slide-context.js';
-export type { SlideContext, SlideContextDiagnostic, SlideContextOptions, SlideContextReferenceDiagnostic } from './slide-context.js';
+export type { SlideContext, SlideContextDiagnostic, SlideContextOptions } from './slide-context.js';
 export { stats } from './stats.js';
 export type { PresentationStats, StatsOptions, SlideStats, StatsSlideRef, ReferenceFact, SlideSizeFact, HeaderFooterFact, TableFact, DatasetFact } from './stats.js';
 
@@ -138,8 +176,6 @@ export type { FormatOptions } from './format.js';
 export { fromMarkdown, toMarkdown, OPFMarkdownError } from './markdown.js';
 export type { FromMarkdownOptions, FromMarkdownResult, ToMarkdownOptions, ToMarkdownResult } from './markdown.js';
 
-export { bundle } from './bundle.js';
-export type { BundleReport, BundleResult } from './bundle.js';
 
 export { parseTabularData, importData, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, DataImportOptions, ImportDataOptions } from './data.js';

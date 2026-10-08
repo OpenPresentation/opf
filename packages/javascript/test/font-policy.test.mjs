@@ -3,7 +3,8 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { describe, test } from "node:test";
 
-import { FONT_POLICY, applyFontPolicyDecisions, fontAvailabilityDiagnostics, fontPolicyFor, fontSchemes } from "../dist/index.js"; import { resolveFontFamilies, DEFAULT_FONT_SCHEME } from "../dist/composition.js";
+import { ENGINE_DEFAULT_FONT_SCHEME, FONT_POLICY, applyFontPolicyDecisions, fontAvailabilityDiagnostics, fontPolicyFor } from "../dist/index.js"; import { resolveFontFamilies } from "../dist/composition.js"; import { defaultCatalog } from "../dist/catalog.js";
+const fontSchemes = Object.entries(defaultCatalog.fontSchemes).map(([id, scheme]) => ({ id, ...scheme }));
 import * as subpath from "../dist/font-policy.js";
 
 // FF-31: one machine-readable font policy table. Renderers take replacements from it; exporters
@@ -49,7 +50,7 @@ describe("font policy table", () => {
       const roles = resolveFontFamilies(scheme);
       for (const family of [scheme.major, scheme.minor, roles.heading, roles.body, roles.code]) if (family) families.add(family);
     }
-    const defaults = resolveFontFamilies(fontSchemes.find((scheme) => scheme.id === DEFAULT_FONT_SCHEME));
+    const defaults = resolveFontFamilies(ENGINE_DEFAULT_FONT_SCHEME);
     for (const family of Object.values(defaults)) families.add(family);
     const missing = [...families].filter((family) => !fontPolicyFor(family));
     assert.deepEqual(missing, []);

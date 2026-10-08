@@ -19,7 +19,7 @@ import * as markdown from "../dist/markdown.js";
 const compositionNames = [
   "composeSlide", "resolveCanvasDimensions", "fitText", "fitList", "fitRichText", "wrapText", "measureText", "measureTextOutline", "placeTextLines",
   "snapFontSizeDown", "snapFontSizeUp", "FONT_SIZE_GRID_PER_PX", "MAX_COMPOSITION_DEPTH", "OPFCompositionError",
-  "resolveFontFamilies", "resolveFontSchemeReference", "DEFAULT_FONT_SCHEME", "resolveTextStyle", "textWidthMeasurer",
+  "resolveFontFamilies", "resolveTextStyle", "textWidthMeasurer",
   "layoutQuote", "layoutCode", "layoutMetric", "layoutTimeline", "layoutFurniture", "layoutCaption", "layoutFootnotes",
   "resolveSocialProfile", "resolveLogo", "PICTURE_BULLET_SCALE", "formatFurnitureDate", "formatSlideNumber", "DEFAULT_FURNITURE_DATE_FORMAT", "DEFAULT_SLIDE_NUMBER_FORMAT",
   "NUMBERING_STYLES", "NUMBERING_SUFFIXES", "MAX_NUMBERING_VALUE", "MAX_ROMAN_VALUE", "MAX_NUMBERING_LEVELS", "formatListNumber", "listNumbers", "resolveNumbering", "numberingAtLevel", "numberingStyleDraws", "sliceNumberedItems",
@@ -50,12 +50,17 @@ describe("package root", () => {
   });
 
   test("the app-level verbs, data helpers and font policy stay at the root", () => {
-    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "bundle", "importData", "parseTabularData", "resolveVariables", "listVariables", "catalogs", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
+    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "embed", "copySlides", "updateFromCatalog", "importData", "parseTabularData", "resolveVariables", "listVariables", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
     for (const name of dataNames) { assert.equal(typeof root[name], "function", name); assert.equal(root[name], data[name], name); }
     for (const name of ["FONT_POLICY", "fontPolicyFor", "applyFontPolicyDecisions", "fontAvailabilityDiagnostics"]) { assert.notEqual(root[name], undefined, name); assert.equal(root[name], fontPolicy[name], name); }
   });
 
   test("a name exported from two entries is the same binding", () => {
+    // The catalog references and the engine defaults and vocabularies are on both: hosts resolve at the root, engines on /composition.
+    for (const name of ["resolveReference", "parseReference", "catalogRecords", "catalogKinds", "OPFUnresolvedReferenceError", "ENGINE_DEFAULT_THEME", "ENGINE_DEFAULT_COLOR_SCHEME", "ENGINE_DEFAULT_FONT_SCHEME", "CHART_TYPES", "SOCIAL_PLATFORMS", "LANGUAGES"]) {
+      assert.notEqual(composition[name], undefined, `composition.${name}`);
+      assert.equal(root[name], composition[name], name);
+    }
     for (const name of ["paragraphDirection", "physicalAlignment", "formatListNumber", "resolveChartData", "chartNumber"]) {
       const home = composition[name];
       if (home !== undefined && root[name] !== undefined) assert.equal(root[name], home, name);
@@ -67,7 +72,7 @@ describe("package root", () => {
 // RR-55: the verbs of the CLI are exported from the root and keep their subpaths. Hosts (render, PPTX, editor, the CLI)
 // feature-detect some of these names with typeof, so a rename that drops one must fail here, not silently turn a feature off.
 const verbs = {
-  validate: validator, assertValid: validator, paginate: pagination, paginateSlide: pagination, bundle: root,
+  validate: validator, assertValid: validator, paginate: pagination, paginateSlide: pagination, embed: root, copySlides: root, updateFromCatalog: root,
   diff: diffModule, merge: diffModule, format: formatModule, fromMarkdown: markdown, toMarkdown: markdown,
   applyPatch: patch, importData: data, resolveVariables: root, toExcelNumberFormat: data, fromExcelNumberFormat: data,
 };
@@ -76,6 +81,8 @@ const removed = [
   "paginatePresentation", "bundlePresentation", "formatPresentation", "diffPresentations", "mergePresentations", "markdownToOpf", "opfToMarkdown",
   "createDataContent", "excelNumberFormat", "numberFormatFromExcel", "PatchError", "PatchValidationError", "FormatError",
   "validatePresentation", "assertValidPresentation", "lintSource", "lintPresentation", "auditSource", "auditPresentation",
+  // OPF 0.15 (FA-20): embed replaces bundle; font schemes resolve like every content reference, with an engine default record.
+  "bundle", "resolveFontSchemeReference", "DEFAULT_FONT_SCHEME",
 ];
 
 describe("the short verbs", () => {

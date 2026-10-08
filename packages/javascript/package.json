@@ -42,6 +42,10 @@
       "types": "./dist/catalogs.d.ts",
       "import": "./dist/catalogs.js"
     },
+    "./catalog": {
+      "types": "./dist/catalog.d.ts",
+      "import": "./dist/catalog.js"
+    },
     "./validator": {
       "types": "./dist/validator.d.ts",
       "import": "./dist/validator.js"

@@ -3,7 +3,7 @@
   "name": "Retail Launch Readiness Deck",
   "description": "Retail Launch Readiness Deck is a fictional OPF example for beauty retail teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "retail-launch-readiness-deck",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "engineering-team",
     {

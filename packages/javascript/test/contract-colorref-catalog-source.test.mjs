@@ -1,6 +1,6 @@
 // Contract the engines implement (opf-render and opf-pptx, 2026-09-30): background colors are ColorRefs and
-// `catalogs.<kind>.source` may be an ordered search path. The schema keeps both as plain strings / string arrays, so
-// these documents validate; the docs (design-resolution.md, how-opf-works.md) state what engines do with them.
+// a catalog group names its catalog by one `source` string (OPF 0.15: no search paths). The docs
+// (design-resolution.md, how-opf-works.md, default-catalog.md) state what engines do with them.
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import { check } from './support/validation.mjs';
@@ -21,10 +21,11 @@ test('solid, gradient and pattern background colors accept ColorRef forms', () =
   }
 });
 
-test('catalogs.<kind>.source accepts a string or a non-empty ordered array', () => {
-  for (const source of ['https://acme.example/narratives', ['https://acme.example/a', 'pkg:@acme/decks/narratives']]) {
-    const result = check({name: 'Deck', catalogs: {narratives: {source}}, slides: [slide]});
+test('a catalog group names one source: an HTTPS URL or a pkg: reference, never a search path', () => {
+  for (const source of ['https://acme.example/catalog', 'pkg:@acme/opf-catalog']) {
+    const result = check({name: 'Deck', catalogs: {acme: {source}}, slides: [slide]});
     assert.equal(result.valid, true, JSON.stringify(source));
   }
-  assert.equal(check({name: 'Deck', catalogs: {narratives: {source: []}}, slides: [slide]}).valid, false, 'an empty search path is invalid');
+  for (const source of [['https://acme.example/a'], '', 'http://acme.example', 'acme'])
+    assert.equal(check({name: 'Deck', catalogs: {acme: {source}}, slides: [slide]}).valid, false, JSON.stringify(source));
 });

@@ -3,7 +3,7 @@
   "name": "Scope 3 Reporting Readiness",
   "description": "Scope 3 Reporting Readiness is a fictional OPF example for sustainability teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "scope-3-reporting-readiness",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "engineering-team",
     {

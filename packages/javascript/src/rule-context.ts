@@ -1,7 +1,7 @@
 import type { LayoutDiagnostic, SlideComposition, TextMeasurement } from './composition.js';
 import type { Finding, FindingFix, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Payload, TextValue } from './rule-content.js';
-import type { Lookup, Rec, ResolvedDesign } from './rule-design.js';
+import type { Rec, ResolvedDesign } from './rule-design.js';
 import type {
 	ValidateOptions,
 	ValidationCategory,
@@ -52,7 +52,6 @@ export interface ValidationContext {
 	slides: RuleSlide[];
 	thresholds: ValidationThresholds;
 	options: ValidateOptions;
-	lookup: Lookup;
 	chartPalette: readonly string[];
 	report(rule: ValidationRuleInfo, finding: FindingInput): Finding;
 }

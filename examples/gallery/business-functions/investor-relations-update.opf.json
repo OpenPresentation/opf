@@ -3,7 +3,7 @@
   "name": "Investor Relations Update",
   "description": "Investor Relations Update is a fictional OPF example for investor relations teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "investor-relations-update",
-  "language": "english-gb",
+  "language": "en-GB",
   "audience": [
     "sales",
     {
@@ -497,15 +497,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "investor-relations-update-arc",
+    "custom": {
+      "narratives": {
+        "investor-relations-update-arc": {
           "name": "Investor Relations Decision Arc",
           "summary": "A custom arc for Asteria Robotics.",
           "description": "Investor Relations Update uses a compact evidence-to-decision arc for Asteria Robotics.",
@@ -530,13 +524,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "asteria-robotics-theme",
+      },
+      "themes": {
+        "asteria-robotics-theme": {
           "name": "Asteria Robotics Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "noto-sans-hebrew",
@@ -549,14 +539,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "asteria-robotics-signal",
+      },
+      "colorSchemes": {
+        "asteria-robotics-signal": {
           "name": "Asteria Robotics Signal Palette",
           "accent1": "#047857",
           "accent2": "#B45309",
@@ -571,31 +556,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

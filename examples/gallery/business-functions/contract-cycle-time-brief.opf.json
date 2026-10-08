@@ -3,7 +3,7 @@
   "name": "Contract Cycle Time Brief",
   "description": "Contract Cycle Time Brief is a fictional OPF example for legal operations teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "contract-cycle-time-brief",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "candidates",
     {

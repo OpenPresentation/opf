@@ -3,7 +3,7 @@
   "name": "Revenue Forecast Inspection",
   "description": "Revenue Forecast Inspection is a fictional OPF example for revenue operations teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "revenue-forecast-inspection",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
     "investor",
     {
@@ -503,15 +503,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "revenue-forecast-inspection-arc",
+    "custom": {
+      "narratives": {
+        "revenue-forecast-inspection-arc": {
           "name": "Revenue Operations Decision Arc",
           "summary": "A custom arc for FoundryGrid.",
           "description": "Revenue Forecast Inspection uses a compact evidence-to-decision arc for FoundryGrid.",
@@ -536,13 +530,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "foundrygrid-theme",
+      },
+      "themes": {
+        "foundrygrid-theme": {
           "name": "FoundryGrid Working Theme",
           "colorScheme": "cool-horizon",
           "fontScheme": "noto-sans-georgian",
@@ -555,14 +545,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "foundrygrid-signal",
+      },
+      "colorSchemes": {
+        "foundrygrid-signal": {
           "name": "FoundryGrid Signal Palette",
           "accent1": "#14B8A6",
           "accent2": "#0F172A",
@@ -577,31 +562,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

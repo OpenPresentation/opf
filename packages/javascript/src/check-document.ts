@@ -1,10 +1,18 @@
 import {
-	catalogEntries,
+	catalogGroupDeclared,
 	catalogKinds,
-	catalogSchemaNames,
+	catalogRecords,
+	catalogReferenceSites,
+	parseReference,
+	pointerPath,
+	resolveReference,
+	unresolvedReference,
 	type CatalogKind,
-} from './catalogs.js';
+	type CatalogOptions,
+} from './catalog-refs.js';
+import { hostCatalogs } from './host-catalogs.js';
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
+import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
@@ -61,15 +69,16 @@ function at(value: unknown, path: string): unknown {
 export function checkDocumentOptions(options: ValidateOptions) {
 	if (
 		options.catalogs !== undefined &&
-		(!object(options.catalogs) ||
-			Object.entries(options.catalogs).some(
-				([kind, records]) =>
-					!catalogKinds.includes(kind as CatalogKind) ||
-					!Array.isArray(records),
+		(!Array.isArray(options.catalogs) ||
+			options.catalogs.some(
+				(catalog) =>
+					!object(catalog) ||
+					typeof catalog.source !== 'string' ||
+					Object.entries(catalog).some(([kind, records]) => kind !== 'source' && (!catalogKinds.includes(kind as CatalogKind) || !object(records))),
 			))
 	)
 		throw new TypeError(
-			'Validate catalogs must map known catalog kinds to arrays of loaded records.',
+			'Validate catalogs must be an array of registered catalogs: { source, <kind>: { <id>: record } } with known catalog kinds.',
 		);
 	if (options.contracts !== undefined && !Array.isArray(options.contracts))
 		throw new TypeError('Validate contracts must be an array.');
@@ -266,47 +275,6 @@ function active(cursor: Cursor, value: unknown): Cursor {
 	const selected = candidates.sort((a, b) => score(b.schema, value) - score(a.schema, value))[0];
 	return selected ? { ...selected, baseSchemas: [...(selected.baseSchemas ?? []), resolved] } : resolved;
 }
-function catalogIn(schema: JsonSchema): CatalogKind | undefined {
-	const text = String(schema.description ?? '');
-	if (/\bfont-scheme id\b/.test(text)) return 'fontSchemes';
-	return catalogKinds.find(
-		(kind) =>
-			text.includes(`catalogs.${kind}`) ||
-			new RegExp(`\\b${kind}['’]? catalog`).test(text),
-	);
-}
-
-// Recognize the syntactic alternatives in RFC 5646 section 2.1. This only
-// distinguishes possible language tags from catalog IDs; it does not check the
-// IANA registry, canonicalize spelling, or replace OPF's existing en-UK error.
-const languageTagSyntax = new RegExp(
-	'^(?:(?:[a-z]{2,3}(?:-[a-z]{3}){0,3}|[a-z]{4}|[a-z]{5,8})' +
-		'(?:-[a-z]{4})?(?:-(?:[a-z]{2}|[0-9]{3}))?' +
-		'(?:-(?:[a-z0-9]{5,8}|[0-9][a-z0-9]{3}))*' +
-		'(?:-[0-9a-wy-z](?:-[a-z0-9]{2,8})+)*(?:-x(?:-[a-z0-9]{1,8})+)?' +
-		'|x(?:-[a-z0-9]{1,8})+)$',
-	'i',
-);
-const irregularLanguageTags = new Set([
-	'en-gb-oed',
-	'i-ami',
-	'i-bnn',
-	'i-default',
-	'i-enochian',
-	'i-hak',
-	'i-klingon',
-	'i-lux',
-	'i-mingo',
-	'i-navajo',
-	'i-pwn',
-	'i-tao',
-	'i-tay',
-	'i-tsu',
-	'sgn-be-fr',
-	'sgn-be-nl',
-	'sgn-ch-de',
-]);
-
 function childCursor(cursors: Cursor[], key: string): Cursor | undefined {
 	for (const keyword of [
 		'properties',
@@ -344,8 +312,6 @@ interface Field {
 	path: string;
 	value: unknown;
 	cursor: Cursor;
-	kind?: CatalogKind;
-	description: string;
 	assetReference: boolean;
 }
 function fields(document: unknown): Field[] {
@@ -367,8 +333,7 @@ function fields(document: unknown): Field[] {
 		if (!entry) break;
 		if (entry.ancestors.includes(entry.value)) continue;
 		const resolved = resolve(entry.cursor),
-			selected = active(entry.cursor, entry.value),
-			description = String(resolved.schema.description ?? '');
+			selected = active(entry.cursor, entry.value);
 		// A sibling description can override Asset's description without changing
 		// its resource semantics. Follow the resolved schema, including union forms.
 		const assetReference = [resolved, selected].some(
@@ -388,8 +353,6 @@ function fields(document: unknown): Field[] {
 			path: pointer(entry.path),
 			value: entry.value,
 			cursor: resolved,
-			kind: catalogIn(resolved.schema),
-			description,
 			assetReference,
 		});
 		const ancestors = [...entry.ancestors, entry.value];
@@ -425,89 +388,30 @@ function fields(document: unknown): Field[] {
 	}
 	return result;
 }
-type Catalogs = Map<CatalogKind, Map<string, FindingSuggestion>>;
-function catalogContext(
-	document: unknown,
-	options: ValidateOptions,
-	findings: Finding[],
-): Catalogs {
-	const result: Catalogs = new Map();
-	for (const entry of catalogEntries) {
-		const kind = entry.kind,
-			map = new Map<string, FindingSuggestion>();
-		result.set(kind, map);
-		for (const record of entry.records)
-			map.set(record.id, {
-				value: record.id,
-				label: String(
-					(record as unknown as Record<string, unknown>).name ?? record.id,
-				),
-				origin: 'built-in',
-				definition: `spec/${entry.dir}/${entry.index.records.find((item) => item.id === record.id)?.file ?? `${record.id}.json`}`,
-			});
-		const local =
-			object(document) &&
-			object(document.catalogs) &&
-			object(document.catalogs[kind])
-				? (document.catalogs[kind] as Record<string, unknown>)
-				: {};
-		if (local.source !== undefined)
-			findings.push(
-				finding('opf/catalog-source', {
-					path: `/catalogs/${kind}/source`,
-					message: 'External catalog source was not fetched.',
-					help: 'This run checks built-in, supplied and inline records only. Load external catalogs in the host and pass their records explicitly to verify that context.',
-				}),
-			);
-		for (const group of [
-			{
-				records: options.catalogs?.[kind] ?? [],
-				origin: 'loaded' as const,
-				scope: 'context' as const,
-				path: `/catalogs/${kind}`,
-			},
-			{
-				records: Array.isArray(local.records) ? local.records : [],
-				origin: 'document' as const,
-				scope: 'document' as const,
-				path: `/catalogs/${kind}/records`,
-			},
-		]) {
-			const seen = new Set<string>();
-			group.records.forEach((value, index) => {
-				const path = `${group.path}/${index}`,
-					schemaName = catalogSchemaNames[kind],
-					record = object(value)
-						? { $schema: schemas[schemaName].$id, ...value }
-						: value;
-				const validation = validateAgainstSchema(record, kind);
-				for (const issue of validation.errors)
-					findings.push(issueFinding(issue, 'opf/catalog-record', schemaName, path, group.scope));
-				if (!object(value) || typeof value.id !== 'string') return;
-				if (seen.has(value.id))
-					findings.push(
-						finding('opf/catalog-record', {
-							scope: group.scope,
-							path: `${path}/id`,
-							message: `Duplicate ${kind} record id ${JSON.stringify(value.id)} in this catalog.`,
-							help: 'Give distinct records distinct IDs, or combine the intended override explicitly. Preserve their authored content.',
-						}),
-					);
-				seen.add(value.id);
-				if (!validation.valid) {
-					map.delete(value.id);
-					return;
-				}
-				map.set(value.id, {
-					value: value.id,
-					label: typeof value.name === 'string' ? value.name : value.id,
-					origin: group.origin,
-					definition: `${group.scope}#${path}`,
-				});
-			});
-		}
+/** `group/kind/id` of the embedded records that fail their companion schema. */
+type InvalidRecords = Set<string>;
+const recordKey = (group: string, kind: CatalogKind, id: string) => `${group}/${kind}/${id}`;
+/** Validate one record against its companion schema as a published file would be, with the identity it is keyed by. */
+function recordIssues(kind: CatalogKind, id: string, value: unknown) {
+	const schemaName = catalogSchemaNames[kind];
+	return validateAgainstSchema(object(value) ? { $schema: schemas[schemaName].$id, id, ...value } : value, kind);
+}
+/** Every record the document embeds, checked against its companion schema. */
+function embeddedRecordFindings(document: unknown, findings: Finding[]): InvalidRecords {
+	const invalid: InvalidRecords = new Set();
+	if (!object(document) || !object(document.catalogs)) return invalid;
+	for (const [group, value] of Object.entries(document.catalogs)) {
+		if (!object(value)) continue;
+		for (const kind of catalogKinds)
+			for (const [id, record] of Object.entries(object(value[kind]) ? value[kind] : {})) {
+				const path = pointer(['catalogs', group, kind, id]);
+				if (object(record) && (Object.hasOwn(record, '$schema') || Object.hasOwn(record, 'id'))) continue; // the schema reports it
+				const validation = recordIssues(kind, id, record);
+				for (const issue of validation.errors) findings.push(issueFinding(issue, 'opf/catalog-record', catalogSchemaNames[kind], path, 'document'));
+				if (!validation.valid) invalid.add(recordKey(group, kind, id));
+			}
 	}
-	return result;
+	return invalid;
 }
 function distance(a: string, b: string): number {
 	// Bound suggestion scoring, not document validation; IDs still remain exact.
@@ -664,18 +568,60 @@ export function variableFindings(document: unknown, engine: SchemaCheckResult, s
 	return findings;
 }
 
-/** True when the document names an external source for a catalog kind (a URL or package, or an ordered search path of them). */
-function hasExternalSource(document: unknown, kind: CatalogKind): boolean {
-	if (!object(document) || !object(document.catalogs)) return false;
-	const entry = document.catalogs[kind];
-	return object(entry) && (typeof entry.source === 'string' || (Array.isArray(entry.source) && entry.source.length > 0));
+/** The unresolved and undeclared content references, one finding each, with the nearest records as suggestions. */
+function contentReferenceFindings(document: unknown, options: CatalogOptions, findings: Finding[]): void {
+	const invalid = embeddedRecordFindings(document, findings);
+	const registeredChecked = new Set<string>();
+	for (const site of catalogReferenceSites(document)) {
+		const path = pointerPath(site.path);
+		const parsed = parseReference(site.reference);
+		if (parsed?.group !== undefined && !catalogGroupDeclared(document, parsed.group)) {
+			findings.push(
+				finding('opf/undeclared-catalog', {
+					path,
+					message: `Reference ${JSON.stringify(site.reference)} names catalog group ${JSON.stringify(parsed.group)}, which the document does not declare.`,
+					help: `Declare catalogs.${parsed.group} with the catalog's source (and embed the record), or write the reference without the prefix.`,
+					definition: `${schemas.presentation.$id}#/$defs/CatalogReference`,
+					lookup: ['opf', 'schema', 'presentation', '/$defs/CatalogReference'],
+				}),
+			);
+			continue;
+		}
+		const found = resolveReference(document, site.kind, site.reference, { ...options, ...(site.group !== undefined ? { group: site.group } : {}) });
+		if (found?.origin === 'host' && !registeredChecked.has(recordKey(found.group, site.kind, found.id))) {
+			// A registered record the document uses is checked like an embedded one, once.
+			registeredChecked.add(recordKey(found.group, site.kind, found.id));
+			for (const issue of recordIssues(site.kind, found.id, found.record).errors)
+				findings.push(issueFinding(issue, 'opf/catalog-record', catalogSchemaNames[site.kind], pointer(['catalogs', found.group, site.kind, found.id]), 'context'));
+		}
+		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
+		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
+		const suggestions = catalogRecords(document, site.kind, options)
+			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))
+			.sort((a, b) => distance(site.reference, a.value) - distance(site.reference, b.value) || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0))
+			.slice(0, 5);
+		findings.push(
+			finding('opf/unresolved-reference', {
+				path,
+				message: diagnostic.message,
+				help:
+					site.kind === 'layouts'
+						? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
+						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.',
+				definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
+				lookup: ['opf', 'catalog', site.kind],
+				suggestions,
+			}),
+		);
+	}
 }
 
-/** Catalog ids, assets, citations and datasets: everything the document points at, resolved without fetching anything. */
+/** Content references, assets, citations and datasets: everything the document points at, resolved without fetching anything. */
 export function referenceFindings(document: unknown, engine: SchemaCheckResult, options: ValidateOptions): Finding[] {
+	void engine;
 	const findings: Finding[] = [];
-	const catalogs = catalogContext(document, options, findings),
-		seen = new Set<string>();
+	const catalogs = hostCatalogs(options);
+	contentReferenceFindings(document, catalogs, findings);
 	const assetValues =
 		object(document) && object(document.assets) ? document.assets : {};
 	for (const field of fields(document)) {
@@ -709,57 +655,6 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 					}),
 				);
 		}
-		if (!field.path || !field.kind) continue;
-		const { kind } = field;
-		if (
-			kind === 'languages' &&
-			field.path === '/language' &&
-			typeof field.value === 'string' &&
-			(languageTagSyntax.test(field.value) ||
-				irregularLanguageTags.has(field.value.toLowerCase()))
-		)
-			continue;
-		// These schema forms deliberately allow arbitrary human descriptions.
-		if (kind !== 'layouts' && /free-form/i.test(field.description)) continue;
-		const value = object(field.value) ? field.value.id : field.value,
-			path = object(field.value) ? `${field.path}/id` : field.path;
-		if (
-			typeof value !== 'string' ||
-			!value ||
-			/^(?:https?:|pkg:)/i.test(value) ||
-			catalogs.get(kind)?.has(value) ||
-			seen.has(path)
-		)
-			continue;
-		seen.add(path);
-		// A custom source may define ids the bundled catalogs do not know about. Unless the host loaded that source's
-		// records (`catalogs`), the id cannot be judged; `opf/catalog-source` already says it was not fetched.
-		if (!options.catalogs?.[kind]?.length && hasExternalSource(document, kind)) continue;
-		const suggestions = [...(catalogs.get(kind)?.values() ?? [])]
-			.sort(
-				(a, b) =>
-					distance(value, String(a.value)) - distance(value, String(b.value)) ||
-					(String(a.value) < String(b.value)
-						? -1
-						: String(a.value) > String(b.value)
-							? 1
-							: 0),
-			)
-			.slice(0, 5);
-		const definition = String(field.cursor.root.$id) + `#${field.cursor.path}`;
-		findings.push(
-			finding('opf/catalog-reference', {
-				path,
-				message: `Unknown ${kind} catalog id ${JSON.stringify(value)} in the available local context.`,
-				help:
-					kind === 'layouts'
-						? 'Choose an available layout or supply the intended custom record. Engine-defined layouts may be valid; preview with the target renderer before changing content.'
-						: 'Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.',
-				definition,
-				lookup: ['opf', 'catalog', kind],
-				suggestions,
-			}),
-		);
 	}
 	const reportedCycles = new Set<string>();
 	for (const id of Object.keys(assetValues)) {
@@ -791,39 +686,7 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 					: undefined;
 		}
 	}
-	// The engine only knows the bundled catalogs. Keep its warnings that the local context (inline, loaded) does not explain away.
-	for (const issue of engine.warnings) {
-		if (typeof issue.params.code === 'string') continue;
-		const kind = issue.params.kind as CatalogKind | undefined,
-			id = issue.params.id,
-			replacedBy = issue.params.replacedBy;
-		if (kind === undefined) continue;
-		if (typeof replacedBy === 'string' && typeof id === 'string') {
-			const target = catalogs.get(kind)?.get(replacedBy);
-			findings.push({
-				...issueFinding(issue, 'opf/deprecated-catalog-id'),
-				message: `Deprecated ${kind} catalog id ${JSON.stringify(id)}; use ${JSON.stringify(replacedBy)} instead.`,
-				help: 'The deprecated id still resolves to its original record, so nothing breaks. Switch to the replacement when you next edit this reference.',
-				lookup: ['opf', 'catalog', kind],
-				...(target ? { suggestions: [target] } : {}),
-			});
-			continue;
-		}
-		if (
-			seen.has(issue.path) ||
-			(typeof id === 'string' && catalogs.get(kind)?.has(id))
-		)
-			continue;
-		const dir = catalogEntries.find((entry) => entry.kind === kind)?.dir;
-		findings.push({
-			...issueFinding(issue, 'opf/catalog-reference'),
-			message: `Unknown ${kind} catalog id ${JSON.stringify(id)} in the available local context.`,
-			help: 'Inspect the referenced catalog and supply the intended record if this is a custom context.',
-			...(dir ? { definition: `spec/${dir}/index.json` } : {}),
-			lookup: ['opf', 'catalog', kind],
-		});
-	}
-	findings.push(...narrativeFindings(document, options));
+	findings.push(...narrativeFindings(document, catalogs));
 	// RR-34: a reference no run cites is advisory; cite it or remove it.
 	for (const issue of unusedReferenceWarnings(document))
 		findings.push(
@@ -851,10 +714,10 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 }
 
 /** FA-02: the narrative is a pointer; check the slides' beat links and the target duration against the plan. */
-function narrativeFindings(document: unknown, options: ValidateOptions): Finding[] {
+function narrativeFindings(document: unknown, options: CatalogOptions): Finding[] {
 	const findings: Finding[] = [];
 	if (!object(document)) return findings;
-	const narrative = resolveNarrative(document, options.catalogs?.narratives);
+	const narrative = resolveNarrative(document, options);
 	if (narrative) {
 		const id = String(document.narrative);
 		const beatSuggestions = (beat: string): FindingSuggestion[] =>
@@ -862,13 +725,13 @@ function narrativeFindings(document: unknown, options: ValidateOptions): Finding
 				.slice()
 				.sort((a, b) => distance(beat, a) - distance(beat, b) || (a < b ? -1 : a > b ? 1 : 0))
 				.slice(0, 5)
-				.map((value) => ({ value, label: value, origin: narrative.origin === 'built-in' ? 'built-in' : narrative.origin, definition: `narratives/${id}#/beats` }));
+				.map((value) => ({ value, label: value, origin: narrative.origin, definition: `narratives/${id}#/beats` }));
 		for (const reference of unknownBeatReferences(document, narrative))
 			findings.push(
 				finding('opf/unknown-beat', {
 					path: reference.path,
 					message: `Slide ${reference.slide + 1} names beat ${JSON.stringify(reference.beat)}, which narrative ${JSON.stringify(id)} does not define.`,
-					help: `Use one of the narrative's beat ids (${narrative.beats.join(', ')}), add the beat to the narrative record (an inline record in catalogs.narratives.records), or remove the beat link. Nothing is drawn from a beat.`,
+					help: `Use one of the narrative's beat ids (${narrative.beats.join(', ')}), add the beat to the narrative record (a record the document embeds or defines in catalogs.custom.narratives), or remove the beat link. Nothing is drawn from a beat.`,
 					definition: schemas.presentation.$id + '#/$defs/Slide/properties/beat',
 					lookup: ['opf', 'catalog', 'narratives'],
 					suggestions: beatSuggestions(reference.beat),
@@ -886,20 +749,19 @@ function narrativeFindings(document: unknown, options: ValidateOptions): Finding
 				}),
 			);
 	}
-	const inlineNarratives = object(document.catalogs) && object(document.catalogs.narratives) ? document.catalogs.narratives.records : undefined;
-	if (Array.isArray(inlineNarratives))
-		inlineNarratives.forEach((record, index) => {
+	for (const [group, value] of Object.entries(object(document.catalogs) ? document.catalogs : {}))
+		for (const [id, record] of Object.entries(object(value) && object(value.narratives) ? value.narratives : {})) {
 			if (durationRangeInverted(record))
 				findings.push(
 					finding('opf/narrative-duration-range', {
-						path: `/catalogs/narratives/records/${index}/duration`,
+						path: pointer(['catalogs', group, 'narratives', id, 'duration']),
 						message: 'The narrative duration range has min greater than max.',
 						help: 'Swap the bounds so min is the shortest and max the longest talk length, in minutes.',
 						definition: schemas.narrative.$id + '#/properties/duration',
 						lookup: ['opf', 'schema', 'narrative', '/properties/duration'],
 					}),
 				);
-		});
+		}
 	return findings;
 }
 

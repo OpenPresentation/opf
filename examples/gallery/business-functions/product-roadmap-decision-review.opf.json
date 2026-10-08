@@ -3,7 +3,7 @@
   "name": "Product Roadmap Decision Review",
   "description": "Product Roadmap Decision Review is a fictional OPF example for product teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "product-roadmap-decision-review",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
     "marketing",
     {
@@ -502,15 +502,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "product-roadmap-decision-review-arc",
+    "custom": {
+      "narratives": {
+        "product-roadmap-decision-review-arc": {
           "name": "Product Decision Arc",
           "summary": "A custom arc for LatticeLane.",
           "description": "Product Roadmap Decision Review uses a compact evidence-to-decision arc for LatticeLane.",
@@ -535,13 +529,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "latticelane-theme",
+      },
+      "themes": {
+        "latticelane-theme": {
           "name": "LatticeLane Working Theme",
           "colorScheme": "vibes",
           "fontScheme": "lucida-sans",
@@ -554,14 +544,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "latticelane-signal",
+      },
+      "colorSchemes": {
+        "latticelane-signal": {
           "name": "LatticeLane Signal Palette",
           "accent1": "#BE123C",
           "accent2": "#6D28D9",
@@ -576,31 +561,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

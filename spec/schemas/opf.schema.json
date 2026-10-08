@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf/v1",
   "title": "Presentation",
-  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (narrative, language, tone, audience, purpose, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, Chart.type, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. The default catalog is published by pptx.gallery: the index at https://www.pptx.gallery/<kind>/index.json (also GET https://www.pptx.gallery/<kind> with Accept: application/json) and each record at https://www.pptx.gallery/<kind>/<id>.json. Engines resolve it from the pinned snapshot bundled in @openpresentation/opf (spec/catalogs, pinned by spec/catalogs/manifest.json) and never fetch it at run time; fetching a document's catalogs.<kind>.source is an explicit opt-in by the caller. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to engine defaults (see /spec/reference/engine-defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Audience, purpose, tone, design, and language object forms use 'id' as a base catalog reference plus inline overrides. Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
+  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nContent references (Slide.layout, design.theme, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, narrative, audience, purpose and tone, and the colorScheme / fontScheme a theme record names) point at catalog records. Each is a bare 'id' or a 'name:id' whose prefix names a group in 'catalogs'. A bare id resolves in catalogs.custom, then in the records embedded under catalogs.default, then in the catalog the host registered for catalogs.default.source (or the host's default catalog when 'default' is omitted); 'name:id' resolves in catalogs.<name>, then in the catalog the host registered for its source. A reference that resolves nowhere is the warning opf/unresolved-reference, and the slide uses automatic composition or the engine default. Engines never fetch a catalog: a saved document embeds every record it uses, and hosts register any other catalog by its source string. See docs/default-catalog.md.\n\nchart.type, the language tag and the keys of Organization.socials / Speaker.socials are engine vocabularies, validated directly with no catalog lookup. When a document names no theme, colour scheme or font scheme, every engine uses the same small engine defaults (spec/reference/engine-defaults.json). Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
   "type": "object",
   "required": ["slides"],
   "additionalProperties": false,
@@ -76,17 +76,22 @@
           "minItems": 1
         }
       ],
-      "description": "Intended audiences for the presentation. Accepts any of:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference.\n- A single inline Audience object, like purpose and tone, for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n- An array of string shorthands and/or inline Audience objects, for more than one audience.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
+      "description": "Intended audiences for the presentation. Accepts any of:\n- A single string: an audiences reference ('executive', or 'acme:board' for a record of the catalogs.acme group), or free-form text ('Series B investors'). A string that is a bare id or 'name:id' is a reference; any other string is free text and is never looked up.\n- A single inline Audience object, for custom audience metadata or overrides on a referenced record. Object form has the fields of https://openpresentation.org/schema/opf-audience/v1.\n- An array of strings and/or inline Audience objects, for more than one audience.\n\nA reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference. Nothing is drawn from the audience.",
       "examples": [
         "executive",
         "Biology Students and Wildlife Enthusiasts",
         ["executive"],
         ["board", "c-suite"],
         { "id": "executive", "attentionBudgetMinutes": 20 },
-        ["Series B investors", "https://acme.com/decks/audiences/acme-board.json"],
+        ["Series B investors", "acme:board"],
         [
           { "id": "executive", "attentionBudgetMinutes": 20 },
-          { "name": "Regional Sales Leaders", "seniority": "director", "technicalFluency": "medium", "decisionPower": "advisory" }
+          {
+            "name": "Regional Sales Leaders",
+            "seniority": "director",
+            "technicalFluency": "medium",
+            "decisionPower": "advisory"
+          }
         ]
       ]
     },
@@ -95,51 +100,39 @@
         { "type": "string" },
         { "$ref": "#/$defs/Purpose" }
       ],
-      "description": "Primary goal of the presentation. Accepts either:\n- A string shorthand: free-form goal ('Raise a Series B round of $30M'), a purposes catalog id ('decide', 'align'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Purpose object for custom purpose metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-purpose/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.purposes.records[] → catalogs.purposes.source → default catalog at https://www.pptx.gallery/purposes.",
+      "description": "Primary goal of the presentation. Accepts either:\n- A string: a purposes reference ('decide', or 'acme:fundraise' for a record of the catalogs.acme group), or a free-form goal ('Raise a Series B round of $30M'). A string that is a bare id or 'name:id' is a reference; any other string is free text and is never looked up.\n- An inline Purpose object for custom purpose metadata or overrides on a referenced record. Object form has the fields of https://openpresentation.org/schema/opf-purpose/v1.\n\nA reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference. Nothing is drawn from the purpose.",
       "examples": [
         "Raise a Series B round of $30M",
         "align",
         "educate",
-        "https://acme.com/decks/purposes/fundraise.json",
-        "pkg:@acme/decks/purposes/fundraise",
+        "acme:fundraise",
         { "id": "decide", "outcome": "Approve the Q4 hiring plan" },
         { "name": "Secure renewal", "outcome": "Customer signs a 12-month renewal" }
       ]
     },
     "language": {
-      "oneOf": [
-        { "type": "string" },
-        { "$ref": "#/$defs/Language" }
-      ],
-      "description": "Language for the presentation content. Accepts either:\n- A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Language object for custom language metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-language/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.languages.records[] → catalogs.languages.source → default catalog at https://www.pptx.gallery/languages.",
+      "oneOf": [{ "$ref": "#/$defs/LanguageTag" }, { "$ref": "#/$defs/Language" }],
+      "description": "Language of the presentation content, an engine vocabulary: a BCP-47 language tag, validated directly with no catalog lookup. Accepts either:\n- A BCP-47 tag ('en-US', 'en-GB', 'ja', 'zh-Hans', 'ar-SA').\n- An inline Language object: a 'bcp47' tag plus overrides of what engines know about it (name, ooxmlLang, script, direction, the script font schemes).\n\nEngines know the script, base direction, OOXML language tag and default script fonts of the tags in spec/reference/engine-vocabularies.json; any other well-formed tag is accepted and its script is inferred from the tag. Language names and descriptions are catalog display metadata, not part of the document.",
       "examples": [
         "en-US",
         "en-GB",
         "es-MX",
-        "ja-JP",
+        "ja",
         "fr",
-        "english",
-        "japanese",
-        "https://acme.com/decks/languages/en-acme.json",
-        "pkg:@acme/decks/languages/en-acme",
-        { "id": "english", "bcp47": "en-US", "fontScheme": "aptos", "googleFontScheme": "roboto" },
+        { "bcp47": "en-US", "fontScheme": "aptos", "googleFontScheme": "roboto" },
         { "bcp47": "ar-SA", "name": "Arabic (Saudi Arabia)", "direction": "rtl", "script": "Arab" }
       ]
     },
     "tone": {
-      "oneOf": [
-        { "type": "string" },
-        { "$ref": "#/$defs/Tone" }
-      ],
-      "description": "Desired tone for the presentation. Accepts either:\n- A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Tone object for custom tone metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-tone/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.tones.records[] → catalogs.tones.source → default catalog at https://www.pptx.gallery/tones.",
+      "oneOf": [{ "$ref": "#/$defs/CatalogReference" }, { "$ref": "#/$defs/Tone" }],
+      "description": "Desired tone for the presentation. Accepts either:\n- A tones reference: a bare id ('formal') or 'name:id' for a record of a named catalogs group.\n- An inline Tone object for custom tone metadata or overrides on a referenced record. Object form has the fields of https://openpresentation.org/schema/opf-tone/v1.\n\nA reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference. Nothing is drawn from the tone.",
       "examples": [
         "formal",
         "casual",
         "inspirational",
         "technical",
         "persuasive",
-        "https://acme.com/decks/tones/acme-voice.json",
-        "pkg:@acme/decks/tones/acme-voice",
+        "acme:house-voice",
         { "id": "formal", "voiceCues": ["Use precise, concise language."] },
         { "name": "Founder direct", "voiceCues": ["Use first person sparingly.", "Make the ask concrete."] }
       ]
@@ -188,16 +181,9 @@
       "default": false
     },
     "narrative": {
-      "type": "string",
-      "description": "The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the catalog record, which validates against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative is a record in catalogs.narratives.records, referenced here by its id.\n\nSlides link themselves to beats with slides[].beat. Core validate warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
-      "examples": [
-        "classic-story",
-        "problem-solution",
-        "scqa",
-        "pitch-deck",
-        "https://acme.com/decks/narratives/founder-pitch.json",
-        "pkg:@acme/decks/narratives/founder-pitch"
-      ]
+      "$ref": "#/$defs/CatalogReference",
+      "description": "The deck's narrative plan, by reference: a bare narratives id ('classic-story') or 'name:id' for a record of a named catalogs group ('acme:founder-pitch'). The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the record, which has the fields of https://openpresentation.org/schema/opf-narrative/v1. A narrative the document defines itself is a record in catalogs.custom.narratives, referenced here by its key.\n\nSlides link themselves to beats with slides[].beat. Core validate warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nThe reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference, never an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
+      "examples": ["classic-story", "problem-solution", "scqa", "pitch-deck", "acme:founder-pitch"]
     },
     "slides": {
       "type": "array",
@@ -221,7 +207,7 @@
     },
     "catalogs": {
       "$ref": "#/$defs/Catalogs",
-      "description": "Optional per-kind catalog overrides. Each kind may declare a non-default 'source' and/or inline 'records' that override or supplement the default catalog at https://www.pptx.gallery/<kind>. References elsewhere in the document (e.g. design.theme, narrative) resolve through this section before falling back to the default catalog."
+      "description": "The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', referenced as 'acme:<id>'). A saved document embeds every record it references, so it renders the same with no catalog registered. See Catalogs."
     },
     "extensions": {
       "type": "object",
@@ -284,16 +270,15 @@
     },
     "Audience": {
       "type": "object",
-      "description": "Inline audience metadata for the presentation. Use 'id' to reference an audiences catalog record and override selected fields, or use 'name' for a custom inline audience.",
+      "description": "Inline audience metadata for the presentation. Use 'id' to reference an audiences record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline audience.",
       "anyOf": [
         { "required": ["id"] },
         { "required": ["name"] }
       ],
       "properties": {
         "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Optional audiences catalog id to resolve before applying inline overrides.",
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Optional audiences reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["executive", "board", "engineering-team"]
         },
         "name": {
@@ -331,12 +316,12 @@
         "recommendedNarratives": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Soft cross-link: narrative-catalog ids that work well for this audience."
+          "description": "Soft cross-link: narrative ids that work well for this audience, for picker UIs. Never resolved, embedded or validated as references."
         },
         "recommendedTones": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Soft cross-link: tone-catalog ids that work well for this audience."
+          "description": "Soft cross-link: tone ids that work well for this audience, for picker UIs. Never resolved, embedded or validated as references."
         },
         "tags": {
           "type": "array",
@@ -347,16 +332,15 @@
     },
     "Purpose": {
       "type": "object",
-      "description": "Inline purpose metadata for the presentation. Use 'id' to reference a purposes catalog record and override selected fields, or use 'name' for a custom inline purpose.",
+      "description": "Inline purpose metadata for the presentation. Use 'id' to reference a purposes record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline purpose.",
       "anyOf": [
         { "required": ["id"] },
         { "required": ["name"] }
       ],
       "properties": {
         "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Optional purposes catalog id to resolve before applying inline overrides.",
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Optional purposes reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["inform", "decide", "align", "persuade", "educate"]
         },
         "name": {
@@ -383,12 +367,12 @@
         "recommendedNarratives": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Soft cross-link: narrative-catalog ids that work well for this purpose."
+          "description": "Soft cross-link: narrative ids that work well for this purpose, for picker UIs. Never resolved, embedded or validated as references."
         },
         "recommendedTones": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Soft cross-link: tone-catalog ids that work well for this purpose."
+          "description": "Soft cross-link: tone ids that work well for this purpose, for picker UIs. Never resolved, embedded or validated as references."
         },
         "tags": {
           "type": "array",
@@ -399,31 +383,23 @@
     },
     "Language": {
       "type": "object",
-      "description": "Inline language metadata for the presentation. Use 'id' to reference a languages catalog record and override selected fields, or use 'bcp47' for a custom language tag without a catalog record.",
-      "anyOf": [
-        { "required": ["id"] },
-        { "required": ["bcp47"] }
-      ],
+      "description": "Inline language metadata for the presentation: a BCP-47 'bcp47' tag plus overrides of what engines know about it. Languages are an engine vocabulary, not catalog records, so there is no 'id'.",
+      "required": ["bcp47"],
+      "not": { "required": ["id"] },
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Optional languages catalog id to resolve before applying inline overrides.",
-          "examples": ["english", "japanese", "chinese-simplified", "english-uk"]
-        },
         "name": {
           "type": "string",
           "description": "Human-readable language name.",
           "examples": ["English", "English (United Kingdom)", "Arabic (Saudi Arabia)"]
         },
         "bcp47": {
-          "type": "string",
+          "$ref": "#/$defs/LanguageTag",
           "description": "BCP-47 language tag used for locale-aware rendering, proofing, and accessibility metadata. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form.",
           "examples": ["en", "en-US", "en-GB", "ar-SA", "zh-Hans"]
         },
         "ooxmlLang": {
           "type": "string",
-          "description": "Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engines emit it instead of 'bcp47' when the document names the language by catalog id or by a tag without a region; a region-bearing tag written by the author is emitted as written. Curated rather than inferred so output does not depend on the runtime's locale data.",
+          "description": "Culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Without it, engines emit the curated tag of their language vocabulary (spec/reference/engine-vocabularies.json) for a tag without a region, and a region-bearing tag as written. Curated rather than inferred so output does not depend on the runtime's locale data.",
           "examples": ["en-US", "ja-JP", "ar-SA", "ms-MY", "nb-NO", "zh-CN"]
         },
         "code": {
@@ -442,12 +418,12 @@
           "examples": ["Latn", "Cyrl", "Grek", "Arab", "Hebr", "Jpan", "Kore", "Hans", "Hant", "Deva", "Thai"]
         },
         "fontScheme": {
-          "type": "string",
-          "description": "Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script') unless the effective design font scheme sets that slot itself; the latin slot always follows the design font scheme."
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Font-scheme reference (a bare id or 'name:id') for this language's script slot when targeting PowerPoint output. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script') unless the effective design font scheme sets that slot itself; the latin slot always follows the design font scheme. Without it, engines use the default script fonts of their language vocabulary."
         },
         "googleFontScheme": {
-          "type": "string",
-          "description": "Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resolving script fonts for Google Slides output."
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Font-scheme reference (a bare id or 'name:id') used in place of 'fontScheme' when resolving script fonts for Google Slides output."
         },
         "summary": {
           "type": "string",
@@ -466,16 +442,15 @@
     },
     "Tone": {
       "type": "object",
-      "description": "Inline tone metadata for the presentation. Use 'id' to reference a tones catalog record and override selected fields, or use 'name' for a custom inline tone.",
+      "description": "Inline tone metadata for the presentation. Use 'id' to reference a tones record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline tone.",
       "anyOf": [
         { "required": ["id"] },
         { "required": ["name"] }
       ],
       "properties": {
         "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Optional tones catalog id to resolve before applying inline overrides.",
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Optional tones reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["formal", "casual", "technical", "persuasive"]
         },
         "name": {
@@ -508,7 +483,7 @@
         "recommendedNarratives": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Soft cross-link: narrative-catalog ids this tone pairs well with."
+          "description": "Soft cross-link: narrative ids this tone pairs well with, for picker UIs. Never resolved, embedded or validated as references."
         },
         "tags": {
           "type": "array",
@@ -642,7 +617,7 @@
     },
     "Socials": {
       "type": "object",
-      "description": "Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string — either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern and handle prefix that engines use to render and link the profile URL, plus brand color and themed icons as catalog metadata for authoring UIs (engines render the profile URL, not icons or brand colors).\n\nKeys resolve to the 'id' of a 'socialPlatforms' catalog record. Resolution order: inline catalogs.socialPlatforms.records[] → catalogs.socialPlatforms.source → default catalog at https://www.pptx.gallery/social-platforms. Unknown platform keys render with engine fallbacks (the raw value as text). Used both for organization and speaker records.",
+      "description": "Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colours and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colours. Used both for organization and speaker records.",
       "additionalProperties": {
         "type": "string",
         "description": "Handle or URL for the platform identified by the property key."
@@ -660,8 +635,8 @@
         }
       ],
       "propertyNames": {
-        "pattern": "^[a-z][a-z0-9-]*$",
-        "description": "Platform id (lowercase kebab-case). Common ids include 'linkedin', 'x', 'github', 'youtube', 'instagram', 'facebook', 'tiktok', 'threads', 'mastodon', 'bluesky'."
+        "enum": ["linkedin", "x", "github", "youtube", "instagram", "facebook", "tiktok", "threads", "mastodon", "bluesky"],
+        "description": "Platform key, one of the engine's social platforms."
       }
     },
     "Design": {
@@ -669,29 +644,16 @@
       "description": "Visual design system applied to the presentation; individual slides may override fields via Slide.design.",
       "properties": {
         "theme": {
-          "oneOf": [
-            { "type": "string" },
-            { "$ref": "#/$defs/Theme" }
-          ],
-          "description": "Theme for the deck. Accepts two forms:\n- String shorthand: 'design.theme = \"minimal\"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'themes' catalog record.\n- Object form: a Theme with an optional 'id' base reference plus theme-level overrides.\n\nInline overrides on design.colorScheme / design.fontScheme / design.background / design.dimensions take precedence over the resolved theme.\n\nResolution order: inline catalogs.themes.records[] -> catalogs.themes.source -> default catalog at https://www.pptx.gallery/themes.",
-          "examples": [
-            "minimal",
-            "classic",
-            "dark",
-            "bold",
-            "corporate-minimal",
-            "ocean-depth",
-            "https://acme.com/decks/themes/acme-brand.json",
-            "pkg:@acme/decks/themes/acme-brand",
-            { "id": "minimal", "background": "dark1", "dimensions": "widescreen" }
-          ]
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, design.background and design.dimensions override it field by field. A reference that resolves nowhere is the warning opf/unresolved-reference and engines use the engine default theme.",
+          "examples": ["minimal", "classic", "dark", "bold", "acme:brand"]
         },
         "colorScheme": {
           "oneOf": [
             { "type": "string" },
             { "$ref": "#/$defs/ColorScheme" }
           ],
-          "description": "Color scheme for the presentation. Accepts two forms:\n- String shorthand: 'design.colorScheme = \"cool-horizon\"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'colorSchemes' catalog record.\n- Object form: a ColorScheme with an optional 'id' base reference plus slot/role overrides.\n\nResolution order: inline catalogs.colorSchemes.records[] -> catalogs.colorSchemes.source -> default catalog at https://www.pptx.gallery/color-schemes.",
+          "description": "Color scheme for the presentation. Accepts two forms:\n- A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean').\n- Object form: a ColorScheme with an optional 'id' reference as the base plus slot/role overrides. Without 'id', the overrides apply on top of the engine default colour scheme.\n\nWithout either, the theme's colorScheme applies, then the engine default colour scheme.",
           "examples": [
             "cool-horizon",
             "boost",
@@ -704,7 +666,7 @@
             { "type": "string" },
             { "$ref": "#/$defs/FontScheme" }
           ],
-          "description": "Font scheme for heading, body, accent, and code text. Accepts two forms:\n- String shorthand: 'design.fontScheme = \"aptos\"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'fontSchemes' catalog record.\n- Object form: a FontScheme with an optional 'id' base reference plus pair/role overrides.\n\nResolution order: inline catalogs.fontSchemes.records[] -> catalogs.fontSchemes.source -> default catalog at https://www.pptx.gallery/font-schemes.",
+          "description": "Font scheme for heading, body, accent, and code text. Accepts two forms:\n- A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter').\n- Object form: a FontScheme with an optional 'id' reference as the base plus pair/role overrides.\n\nWithout either, the theme's fontScheme applies, then the engine default font scheme.",
           "examples": [
             "aptos",
             "tenorite",
@@ -904,75 +866,14 @@
         }
       }
     },
-    "Theme": {
-      "type": "object",
-      "description": "Theme bundle used by the design system. In design.theme, 'id' resolves a themes catalog record as the base; any sibling fields override the resolved theme. The string shorthand on design.theme is equivalent to setting only 'id'.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Theme reference. Resolves to the 'id' of a 'themes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'minimal'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Field overrides on the surrounding Theme object take precedence over the resolved theme.\n\nResolution order: inline catalogs.themes.records[] -> catalogs.themes.source -> default catalog at https://www.pptx.gallery/themes.",
-          "examples": ["minimal", "classic", "dark", "bold", "https://acme.com/decks/themes/acme-brand.json", "pkg:@acme/decks/themes/acme-brand"]
-        },
-        "name": {
-          "type": "string",
-          "description": "Human-readable theme name shown in pickers.",
-          "examples": ["Minimal", "Classic", "Dark", "Bold"]
-        },
-        "summary": {
-          "type": "string",
-          "description": "One-sentence positioning of the theme - when to reach for it."
-        },
-        "description": {
-          "type": "string",
-          "description": "Longer prose describing what the theme looks and feels like and the kinds of decks it suits."
-        },
-        "colorScheme": {
-          "oneOf": [
-            { "type": "string" },
-            { "$ref": "#/$defs/ColorScheme" }
-          ],
-          "description": "Default color scheme for this theme. A string resolves against catalogs.colorSchemes; an object may provide an 'id' base reference plus overrides.",
-          "examples": ["cool-horizon", { "id": "cool-horizon", "accent1": "#FF6F61" }]
-        },
-        "fontScheme": {
-          "oneOf": [
-            { "type": "string" },
-            { "$ref": "#/$defs/FontScheme" }
-          ],
-          "description": "Default font scheme for this theme. A string resolves against catalogs.fontSchemes; an object may provide an 'id' base reference plus overrides.",
-          "examples": ["aptos", { "id": "aptos", "heading": "Inter" }]
-        },
-        "background": {
-          "oneOf": [
-            { "$ref": "#/$defs/BackgroundShortcut" },
-            { "$ref": "#/$defs/Background" }
-          ],
-          "description": "Default background for this theme. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors.",
-          "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "dark2" }]
-        },
-        "dimensions": {
-          "oneOf": [
-            { "$ref": "#/$defs/DimensionPreset" },
-            { "$ref": "#/$defs/Dimensions" }
-          ],
-          "description": "Default slide size for this theme. A string preset is equivalent to { preset: value }.",
-          "examples": ["widescreen", { "preset": "16:9" }]
-        },
-        "tags": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Free-form labels for filtering and search."
-        }
-      }
-    },
     "ColorScheme": {
       "type": "object",
-      "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes catalog record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.colorScheme is equivalent to setting only 'id'.",
+      "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string form of design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
-          "type": "string",
-          "description": "Color scheme reference. Resolves to the 'id' of a 'colorSchemes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'cool-horizon'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.\n\nResolution order: inline catalogs.colorSchemes.records[] -> catalogs.colorSchemes.source -> default catalog at https://www.pptx.gallery/color-schemes.",
-          "examples": ["cool-horizon", "boost", "burnt-orange", "ocean-depth", "corporate-blue", "https://acme.com/decks/color-schemes/acme.json", "pkg:@acme/decks/color-schemes/acme"]
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",
+          "examples": ["cool-horizon", "boost", "burnt-orange", "ocean-depth", "corporate-blue"]
         },
         "accent1": {
           "$ref": "#/$defs/HexColor",
@@ -1073,12 +974,12 @@
     },
     "FontScheme": {
       "type": "object",
-      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific font family names the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema. A role is a family name only: weight, style and tracking come from the text styles, and PowerPoint has no numeric weight.\n\nIn design.fontScheme, 'id' resolves a fontSchemes catalog record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.fontScheme is equivalent to setting only 'id'.",
+      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific font family names the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema. A role is a family name only: weight, style and tracking come from the text styles, and PowerPoint has no numeric weight.\n\nIn design.fontScheme, 'id' resolves a fontSchemes record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string form of design.fontScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
-          "type": "string",
-          "description": "Font scheme reference. Resolves to the 'id' of a 'fontSchemes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'aptos'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Field overrides on the surrounding FontScheme object take precedence over the resolved scheme.\n\nResolution order: inline catalogs.fontSchemes.records[] -> catalogs.fontSchemes.source -> default catalog at https://www.pptx.gallery/font-schemes.",
-          "examples": ["aptos", "tenorite", "seaford", "noto-sans", "modern-sans", "classic-serif", "https://acme.com/decks/font-schemes/acme.json", "pkg:@acme/decks/font-schemes/acme"]
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Font-scheme reference (a bare id or 'name:id') resolved as the base; field overrides on the surrounding FontScheme object take precedence over the resolved scheme.",
+          "examples": ["aptos", "tenorite", "seaford", "noto-sans", "modern-sans", "classic-serif"]
         },
         "major": {
           "type": "string",
@@ -1155,7 +1056,7 @@
         },
         "code": {
           "type": "string",
-          "description": "Abstract role: monospaced font family name used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
+          "description": "Abstract role: monospaced font family name used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved font-scheme record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
         }
       }
     },
@@ -1987,9 +1888,9 @@
           "description": "Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Core validate warns about a beat id the resolved narrative does not define, and reports a beat that no slide references. Slides without a beat are valid; multiple slides may share a beat."
         },
         "layout": {
-          "type": "string",
-          "description": "Optional. Resolves to the 'id' of a 'layouts' catalog record. When omitted, or when it names an id that no inline record, host catalog or default catalog defines, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply. A layout never changes what a slide contains. An unresolved id is an `unresolved-layout` diagnostic and a `catalog-reference` warning, never an error. Engines must not substitute a different layout for an omitted one. Accepts a bare id (lowercase kebab-case, e.g. 'title-subtitle'), an HTTPS URL pointing at a record file, or a 'pkg:' reference.\n\nResolution order: inline catalogs.layouts.records[] → catalogs.layouts.source → default catalog at https://www.pptx.gallery/layouts.",
-          "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "image-bleed", "blank", "https://acme.com/decks/layouts/cover.json", "pkg:@acme/decks/layouts/cover"]
+          "$ref": "#/$defs/CatalogReference",
+          "description": "Optional layout: a layouts reference, a bare id ('title-subtitle') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply; there is no finding. A reference that resolves nowhere is the warning opf/unresolved-reference (and the 'unresolved-reference' diagnostic of resolveSlideContext), the slide composes automatically, and a strict export fails. A layout never changes what a slide contains, and engines never substitute a different layout.",
+          "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "blank", "acme:hero"]
         },
         "title": {
           "oneOf": [
@@ -3124,11 +3025,9 @@
       "properties": {
         "type": {
           "type": "string",
-          "description": "Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose.Slides officially supports, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis').",
-          "examples": [
-            "column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar",
-            "waterfall", "funnel", "treemap", "stacked-column", "combo"
-          ]
+          "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
+          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types Aspose.Slides officially supports, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
+          "examples": ["column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar", "waterfall", "funnel", "treemap", "stacked-column", "combo"]
         },
         "data": {
           "oneOf": [
@@ -3734,86 +3633,139 @@
     },
     "Catalogs": {
       "type": "object",
-      "description": "Catalog overrides for the in-document references. Every property is optional. The default catalog for a kind lives at https://www.pptx.gallery/<kind> (e.g. https://www.pptx.gallery/narratives, https://www.pptx.gallery/themes). pptx.gallery is its canonical publisher: GET https://www.pptx.gallery/<kind>/index.json (or https://www.pptx.gallery/<kind> with Accept: application/json) returns a catalog index (https://openpresentation.org/schema/opf-catalog-index/v1) and https://www.pptx.gallery/<kind>/<id>.json returns one record that validates against the kind's companion schema; publisher metadata sits in top-level 'x-*' members that consumers ignore. Engines resolve the default catalog from the pinned snapshot bundled in @openpresentation/opf (spec/catalogs, pinned to a publisher commit and content hash by spec/catalogs/manifest.json), so resolution is deterministic offline and in the cloud; they do not fetch pptx.gallery at run time. For each kind, declaring a 'source' replaces the default registry and/or 'records' adds inline records that take precedence over anything fetched from a source.\n\nResolution order for any reference (e.g. narrative, design.theme): inline catalogs.<kind>.records[] → catalogs.<kind>.source → default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. References that are themselves URLs or 'pkg:' references skip the catalog lookup and resolve directly.",
+      "description": "The catalog records a document embeds, grouped by the catalog they came from. Each property is a group; inside a group, records are keyed by kind and then by id.\n- 'default': the catalog bare ids come from. It needs a 'source' when it holds records. Omitted: bare ids fall back to the host's default catalog. false: no catalog fallback, so every bare id must be embedded (under 'custom' or 'default').\n- 'custom': the records the document defines itself. It has no source.\n- any other name ('acme'): an extra catalog, identified by its 'source'. The name is the prefix references use ('acme:hero'). Names are lowercase kebab-case; 'default' and 'custom' are reserved.\n\nResolution, for every kind: a bare id resolves in 'custom', then in the records embedded under 'default', then in the catalog the host registered for default.source (the host's default catalog when 'default' is omitted). 'name:id' resolves in that group's records, then in the catalog the host registered for its source. A reference written inside an embedded record (a theme's colorScheme) resolves in that record's own group first. A prefix that names no group is a validation error; a reference that resolves nowhere is the warning opf/unresolved-reference. Engines never fetch a source: hosts register catalogs by their source string, and authoring tools embed every record a document uses when they save it.",
       "properties": {
-        "narratives": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative goes in 'catalogs.narratives.records' and is referenced by its id from the root 'narrative'. Default source: https://www.pptx.gallery/narratives."
+        "default": {
+          "oneOf": [
+            {
+              "allOf": [
+                { "$ref": "#/$defs/CatalogGroup" },
+                {
+                  "if": {
+                    "anyOf": [
+                      { "required": ["layouts"] },
+                      { "required": ["themes"] },
+                      { "required": ["colorSchemes"] },
+                      { "required": ["fontSchemes"] },
+                      { "required": ["narratives"] },
+                      { "required": ["audiences"] },
+                      { "required": ["purposes"] },
+                      { "required": ["tones"] }
+                    ]
+                  },
+                  "then": { "required": ["source"] }
+                }
+              ]
+            },
+            { "const": false }
+          ],
+          "description": "The catalog bare ids come from: its source and the records of it this document embeds. false turns off the catalog fallback for bare ids.",
+          "examples": [
+            {
+              "source": "https://www.pptx.gallery",
+              "layouts": {
+                "two-column": { "name": "Two column", "placeholders": [{ "type": "title" }, { "type": "text" }, { "type": "text" }] }
+              }
+            },
+            false
+          ]
+        },
+        "custom": {
+          "allOf": [{ "$ref": "#/$defs/CatalogGroup" }, { "not": { "required": ["source"] } }],
+          "description": "Records the document defines itself, referenced by bare id. Checked first for every bare id. Forking a catalog record copies it here under a new id, so the change of ownership is visible."
+        }
+      },
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "description": "Group name: lowercase kebab-case. 'default' and 'custom' are reserved."
+      },
+      "additionalProperties": {
+        "allOf": [{ "$ref": "#/$defs/CatalogGroup" }, { "required": ["source"] }],
+        "description": "A named catalog: its source and the records of it this document embeds. References name it as a prefix ('acme:hero')."
+      },
+      "examples": [
+        {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
+          },
+          "acme": {
+            "source": "pkg:@acme/opf-catalog",
+            "layouts": { "hero": { "name": "Hero", "placeholders": [{ "type": "title" }] } }
+          },
+          "custom": {
+            "layouts": { "q4-special": { "name": "Q4 special", "placeholders": [{ "type": "title" }, { "type": "chart" }] } }
+          }
+        }
+      ]
+    },
+    "CatalogGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One catalog group: the catalog's source and the records of it the document embeds, by kind and then by id.",
+      "properties": {
+        "source": { "$ref": "#/$defs/CatalogSource" },
+        "layouts": {
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v1. Referenced from Slide.layout."
         },
         "themes": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of themes. Records validate against https://openpresentation.org/schema/opf-theme/v1. Default source: https://www.pptx.gallery/themes."
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Theme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-theme/v1. Referenced from design.theme."
         },
         "colorSchemes": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of color schemes. Records validate against https://openpresentation.org/schema/opf-color-scheme/v1. Default source: https://www.pptx.gallery/color-schemes."
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Colour-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme."
         },
         "fontSchemes": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of font schemes. Records validate against https://openpresentation.org/schema/opf-font-scheme/v1. Default source: https://www.pptx.gallery/font-schemes."
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Font-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-font-scheme/v1. Referenced from design.fontScheme, a theme's fontScheme and a language's font schemes."
         },
-        "languages": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of languages. Records validate against https://openpresentation.org/schema/opf-language/v1. Default source: https://www.pptx.gallery/languages."
-        },
-        "layouts": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of slide layouts. Records validate against https://openpresentation.org/schema/opf-layout/v1. Default source: https://www.pptx.gallery/layouts."
-        },
-        "chartTypes": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of chart types. Records validate against https://openpresentation.org/schema/opf-chart-type/v1. Default source: https://www.pptx.gallery/chart-types."
-        },
-        "tones": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of presentation tones. Records validate against https://openpresentation.org/schema/opf-tone/v1. Default source: https://www.pptx.gallery/tones. Referenced from tone."
-        },
-        "purposes": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of presentation purposes. Records validate against https://openpresentation.org/schema/opf-purpose/v1. Default source: https://www.pptx.gallery/purposes. Referenced from purpose."
+        "narratives": {
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Narrative records keyed by id, each with the fields of https://openpresentation.org/schema/opf-narrative/v1. Referenced from narrative."
         },
         "audiences": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of presentation audiences. Records validate against https://openpresentation.org/schema/opf-audience/v1. Default source: https://www.pptx.gallery/audiences. Referenced from audience."
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Audience records keyed by id, each with the fields of https://openpresentation.org/schema/opf-audience/v1. Referenced from audience."
         },
-        "socialPlatforms": {
-          "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of social-media platforms. Records validate against https://openpresentation.org/schema/opf-social-platform/v1. Default source: https://www.pptx.gallery/social-platforms. Referenced via the property keys of any Socials object (Organization.socials, Speaker.socials)."
-        }
-      }
-    },
-    "CatalogEntry": {
-      "type": "object",
-      "description": "A catalog override for one record kind. 'source' replaces the default registry; 'records' adds inline records that take precedence over anything fetched from a source. Either or both may be provided; both omitted means the kind uses its default catalog.",
-      "properties": {
-        "source": {
-          "oneOf": [
-            { "$ref": "#/$defs/CatalogSource" },
-            {
-              "type": "array",
-              "items": { "$ref": "#/$defs/CatalogSource" },
-              "minItems": 1,
-              "description": "Ordered search path of sources. The engine tries each in order; first match wins. The default catalog for the kind is appended implicitly at the end."
-            }
-          ],
-          "description": "Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Engines never fetch a source. The host loads the records itself and passes them to the renderer and exporter as a 'catalogSources' map from the source string to its records; a source with no entry in that map contributes no records, except the default catalog's own URL and the '@openpresentation/opf' package, which resolve from the bundled snapshot."
+        "purposes": {
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Purpose records keyed by id, each with the fields of https://openpresentation.org/schema/opf-purpose/v1. Referenced from purpose."
         },
-        "records": {
-          "type": "array",
-          "items": { "type": "object" },
-          "description": "Inline catalog records embedded in this OPF document. Each record validates against the kind's companion schema (e.g. https://openpresentation.org/schema/opf-narrative/v1 for narratives). Inline records win over anything resolved from 'source' and over the default catalog."
+        "tones": {
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Tone records keyed by id, each with the fields of https://openpresentation.org/schema/opf-tone/v1. Referenced from tone."
         }
       }
     },
     "CatalogSource": {
       "type": "string",
-      "description": "Catalog source location. Accepts:\n- A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'.\n- A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. Index files follow https://openpresentation.org/schema/opf-catalog-index/v1; the default catalog's index is https://www.pptx.gallery/<kind>/index.json.\n- A package reference of the form 'pkg:<package>[/<subpath>]'. 'pkg:@openpresentation/opf/...' resolves from the bundled snapshot; any other package reference needs the host to supply its records in 'catalogSources'.\n\nEngines never fetch or install anything for a source: the host supplies the records of every source other than the bundled default, as a 'catalogSources' map from the source string to its records.",
-      "examples": [
-        "https://www.pptx.gallery/narratives",
-        "https://acme.com/decks/narratives/index.json",
-        "pkg:@acme/decks/narratives",
-        "pkg:pptx-gallery"
-      ]
+      "pattern": "^(?:https://[^\\s]+|pkg:[^\\s]+)$",
+      "description": "Identity of a catalog: an HTTPS URL ('https://www.pptx.gallery') or a package reference ('pkg:@acme/opf-catalog'). It names the catalog; engines never fetch or install it. A host registers the catalog's records under this exact string, and copying slides between documents matches groups by it.",
+      "examples": ["https://www.pptx.gallery", "pkg:@acme/opf-catalog"]
+    },
+    "CatalogRecords": {
+      "type": "object",
+      "description": "Embedded records of one kind, keyed by id. The key is the record's id; an embedded record carries no '$schema', 'id', origin or digest. Catalog display metadata ('x-*' members) is stripped when a record is embedded.",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "not": { "anyOf": [{ "required": ["$schema"] }, { "required": ["id"] }] },
+        "description": "One embedded record: the fields of the kind's companion schema without '$schema' and 'id'."
+      }
+    },
+    "CatalogReference": {
+      "type": "string",
+      "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
+      "description": "A content reference: a bare id ('two-column') or 'name:id' ('acme:hero'), where the prefix names a group of 'catalogs'. URLs and 'pkg:' strings are not references; a named catalog group replaces them. See Catalogs for the resolution order.",
+      "examples": ["two-column", "acme:hero", "default:minimal", "custom:q4-special"]
+    },
+    "LanguageTag": {
+      "type": "string",
+      "pattern": "^(?:[A-Za-z]{2,3}|[iIxX])(?:-[A-Za-z0-9]{1,8})*$",
+      "description": "A BCP-47 language tag ('en-US', 'ja', 'zh-Hans', 'sr-Latn-ME'), an engine vocabulary. Use 'en-GB' for UK English; 'en-UK' is not a valid region.",
+      "examples": ["en-US", "en-GB", "ja", "zh-Hans", "ar-SA"]
     },
     "Composition": {
       "type": "object",

@@ -182,7 +182,7 @@ describe('the report', () => {
 
 	test('validate never mutates its input and is deterministic', () => {
 		const input = freeze(deck([{ text: [{ text: 'faint', color: '#CCCCCC' }], image: 'asset:nope' }], { language: undefined, design: { background: { type: 'solid', color: '#FFFFFF' } } }));
-		const options = freeze({ contracts: [{ path: '/slides/*/title', allowedValues: ['x'] }], catalogs: { layouts: [{ id: 'mine', name: 'Mine', placeholders: [{ type: 'title' }] }] } });
+		const options = freeze({ contracts: [{ path: '/slides/*/title', allowedValues: ['x'] }], catalogs: [{ source: 'pkg:@host/layouts', layouts: { mine: { name: 'Mine', placeholders: [{ type: 'title' }] } } }] });
 		assert.deepEqual(validate(input, options), validate(input, options));
 	});
 
@@ -194,7 +194,7 @@ describe('the report', () => {
 	});
 
 	test('the finding category and rule id agree with the registry for every finding', () => {
-		const sample = deck([{ text: 'x', image: 'asset:gone' }, { title: 'Hello {{who}}' }], { catalogs: { layouts: { source: 'https://example.invalid/l' } } });
+		const sample = deck([{ text: 'x', image: 'asset:gone' }, { title: 'Hello {{who}}' }], { catalogs: { acme: { source: 'https://example.invalid/l' } } });
 		for (const entry of validate(sample).findings) {
 			const info = findValidationRule(entry.ruleId);
 			assert.ok(info, entry.ruleId);

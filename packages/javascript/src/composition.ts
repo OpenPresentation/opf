@@ -7,6 +7,9 @@ import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection} from './script-fonts.js';
+import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
+export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
+export {CATALOG_REFERENCE_PATTERN,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
@@ -57,42 +60,11 @@ export interface TextStyle { fontFamily: string; fontWeight: number; italic?: bo
 export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
 const FALLBACK_CODE_FAMILY = "Roboto Mono";
-/** Shared last-resort font-scheme id when neither the slide, the deck nor the resolved theme names one.
- * One default for every engine, so preview matches export (font-fidelity-everywhere owner decision). */
-export const DEFAULT_FONT_SCHEME = "aptos";
-/** Heading and body families of the DEFAULT_FONT_SCHEME catalog record. They are inlined so this module
- * does not load the catalogs; a core test checks them against the record. */
-const DEFAULT_FONT_FAMILIES = { heading: "Aptos Display", body: "Aptos" } as const;
-/** Reported when a font-scheme id matches no inline or bundled record. Every engine then uses the
- * DEFAULT_FONT_SCHEME record as the base, with any sibling overrides on top. */
-export interface FontSchemeDiagnostic {
-  code: "unresolved-font-scheme";
-  /** Where the unresolved id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the
-   * `design.theme` reference whose record names it. */
-  path: string;
-  message: string;
-  /** The unresolved font-scheme id. */
-  id: string;
-  /** The font scheme used instead (DEFAULT_FONT_SCHEME). */
-  fallback: string;
-}
-export interface ResolvedFontScheme { scheme: Record<string, unknown>; diagnostic?: FontSchemeDiagnostic }
-/** Resolve a font-scheme reference the same way in every engine. A string id, or the `id` of an object
- * reference, resolves through `lookup` (inline records, then bundled or host catalogs). An unresolved id
- * returns a diagnostic, and the DEFAULT_FONT_SCHEME record becomes the base, so preview and export use
- * the same families. An object without `id` is an inline scheme on the same base. Sibling fields on an
- * object reference override the base per key. */
-export function resolveFontSchemeReference(reference: unknown, lookup: (id: string) => unknown, path = "design.fontScheme"): ResolvedFontScheme {
-  const overrides = typeof reference === "object" && reference !== null && !Array.isArray(reference) ? reference as Record<string, unknown> : undefined;
-  const id = typeof reference === "string" ? reference : typeof overrides?.id === "string" ? overrides.id : undefined;
-  const found = id === undefined ? undefined : lookup(id);
-  const base = record(found ?? lookup(DEFAULT_FONT_SCHEME));
-  const scheme = overrides ? { ...base, ...overrides } : { ...base };
-  if (id === undefined || found !== undefined) return { scheme };
-  return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
-}
-/** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
- * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
+/** Heading and body families of ENGINE_DEFAULT_FONT_SCHEME (spec/reference/engine-defaults.json), the one last resort
+ * every engine shares, so preview matches export (font-fidelity-everywhere owner decision). */
+const DEFAULT_FONT_FAMILIES = { heading: String(ENGINE_DEFAULT_FONT_SCHEME.major), body: String(ENGINE_DEFAULT_FONT_SCHEME.minor) } as const;
+/** Resolve role families from an already-merged font scheme (the resolved record plus design overrides).
+ * A scheme that names no heading or body family gets the engine default families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code.
  * `accent` is returned only when the scheme defines an `accent` role (a family name string);
@@ -391,13 +363,6 @@ export interface ComposeSlideOptions {
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
    */
   darkBackground?: boolean;
-  /**
-   * Host-resolved social-platform records for generated `socials` furniture.
-   * Inline `presentation.catalogs.socialPlatforms.records` take precedence. Hosts
-   * normally pass the bundled catalog; without a matching record a handle renders
-   * as its raw value, as the Socials contract specifies.
-   */
-  socialPlatforms?: readonly SocialPlatformRecord[];
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
   /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
@@ -441,8 +406,6 @@ export class OPFCompositionError extends Error {
 }
 const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
 const headings = new Set(["title", "subtitle", "tag"]);
-/** Layout ids whose only content is the heading group; that group is centered when the slide has no body. */
-const COVER_LAYOUT_IDS = new Set(["title", "title-subtitle"]);
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
@@ -635,21 +598,12 @@ export interface FurnitureTextPart extends FurniturePartBase {
 }
 /** Optional generated metadata for one furniture text part (live fields and/or social links). */
 export interface FurnitureTextExtras { fields?: FurnitureField[]; links?: FurnitureSocialLink[] }
-/** Social-platform catalog fields used to format a profile. */
-export interface SocialPlatformRecord {
-  id: string;
-  name?: string;
-  baseUrl?: string;
-  profileUrlPattern?: string;
-  companyUrlPattern?: string;
-  handlePrefix?: string;
-}
 export interface SocialProfile {
   /** Single-line display text: the profile URL without an `https://` scheme, or the raw value. */
   text: string;
   /** Full http(s) URL when the value is one or its platform record formats one. */
   href?: string;
-  /** Whether a socialPlatforms record formatted a handle. */
+  /** Whether the platform's URL pattern formatted a handle. */
   resolved: boolean;
 }
 export interface FurnitureSocialLink extends SocialProfile {
@@ -661,15 +615,15 @@ export interface FurnitureSocialLink extends SocialProfile {
 
 const webUrl = /^https?:\/\/\S+$/i;
 /**
- * Format one Socials value through its platform record, deterministically and
+ * Format one Socials value through the engine's social-platform vocabulary (SOCIAL_PLATFORMS), deterministically and
  * without network access. `owner` selects companyUrlPattern for organizations.
  * URLs pass through; unknown platforms and unformattable values stay raw.
  */
-export function resolveSocialProfile(platform: string, value: string, records: readonly SocialPlatformRecord[] = [], owner: 'organization' | 'speaker' = 'organization'): SocialProfile {
+export function resolveSocialProfile(platform: string, value: string, owner: 'organization' | 'speaker' = 'organization'): SocialProfile {
   const raw = String(value).trim().replace(/\s+/gu, ' ');
   const display = (url: string) => url.replace(/^https:\/\//i, '');
   if (webUrl.test(raw)) return {text: display(raw), href: raw, resolved: false};
-  const platformRecord = records.find(item => item?.id === platform);
+  const platformRecord = Object.hasOwn(SOCIAL_PLATFORMS, platform) ? SOCIAL_PLATFORMS[platform] : undefined;
   const base = typeof platformRecord?.baseUrl === 'string' && webUrl.test(platformRecord.baseUrl) ? `${platformRecord.baseUrl.replace(/\/+$/u, '')}/{handle}` : undefined;
   const pattern = (owner === 'organization' ? platformRecord?.companyUrlPattern : undefined) ?? platformRecord?.profileUrlPattern ?? base;
   const prefix = platformRecord?.handlePrefix ?? '';
@@ -715,7 +669,6 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
   const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
   const speakers=Array.isArray(options.presentation?.speaker)?options.presentation.speaker:[options.presentation?.speaker],speaker=record(speakers[0]),speakerRoot=Array.isArray(options.presentation?.speaker)?'speaker.0':'speaker';
-  const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
   const fontFamily=options.fontFamilies?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
@@ -773,7 +726,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
       if(content.speaker===true){if(typeof speaker.name==='string'&&speaker.name.trim())add('speaker',typeof speaker.title==='string'&&speaker.title.trim()?`${speaker.name}, ${speaker.title}`:speaker.name,true,`${speakerRoot}.name`);else error(`${path}.speaker`,'Generated speaker needs a named speaker in the presentation.','unresolved-content');}
       if(content.socials===true){
-        const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,platformRecords,'organization')}));
+        const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,'organization')}));
         if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');
       }
       if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
@@ -2205,7 +2158,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // Cover detection reads the layout's raw placeholders and the slide payload only, so it is
   // independent of the picture-slot removal applied to the content placeholders below.
   const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
-  const headingOnlyLayout = COVER_LAYOUT_IDS.has(String(layout.id ?? "")) || (layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "")));
+  // The cover rule is a record rule, never a list of ids: a layout whose placeholders are all headings (title,
+  // subtitle, tag) is a heading-only layout, and a slide without a layout record has no placeholders at all.
+  const hasLayoutRecord = options.layout !== undefined && options.layout !== null && typeof options.layout === "object";
+  const headingOnlyLayout = layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? ""));
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   // Empty payloads (`blocks: []`, `text: ""`, empty lists, regions with nothing in them) draw nothing, so they are not body.
   // Whitespace-only text stays body: callers that infer a layout from it (the renderer picks a text layout) must agree with callers that do not (the editor).
@@ -2213,7 +2169,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const emptyHost = (host: Record<string, any>) => emptyPayload(host.blocks) && fields.every(field => emptyPayload(host[field]));
   // A root image counts as body even when it is drawn as the slide image, so image slides keep the content origin.
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(slide.blocks) || fields.some(field => !emptyPayload(slide[field]));
-  const isCover = !hasBodyPayload && (headingOnlyLayout || (!layout.id && !layoutPlaceholders.some(placeholder => !headings.has(placeholder.type ?? ""))));
+  const isCover = !hasBodyPayload && (headingOnlyLayout || !hasLayoutRecord);
   coverGroup = isCover;
   // Cover and section slides draw the lockup logo at the top-left of the free area, below any header
   // furniture; the heading group then centers in the remaining span. Content slides never get one.

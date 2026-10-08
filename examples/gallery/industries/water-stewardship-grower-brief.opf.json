@@ -3,7 +3,7 @@
   "name": "Water Stewardship Grower Brief",
   "description": "Water Stewardship Grower Brief is a fictional OPF example for agriculture teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "water-stewardship-grower-brief",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
     "marketing",
     {
@@ -504,15 +504,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "water-stewardship-grower-brief-arc",
+    "custom": {
+      "narratives": {
+        "water-stewardship-grower-brief-arc": {
           "name": "Agriculture Decision Arc",
           "summary": "A custom arc for Sunfield Cooperative.",
           "description": "Water Stewardship Grower Brief uses a compact evidence-to-decision arc for Sunfield Cooperative.",
@@ -537,13 +531,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "sunfield-cooperative-theme",
+      },
+      "themes": {
+        "sunfield-cooperative-theme": {
           "name": "Sunfield Cooperative Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "calibri",
@@ -556,14 +546,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "sunfield-cooperative-signal",
+      },
+      "colorSchemes": {
+        "sunfield-cooperative-signal": {
           "name": "Sunfield Cooperative Signal Palette",
           "accent1": "#F8FAFC",
           "accent2": "#E2E8F0",
@@ -578,31 +563,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

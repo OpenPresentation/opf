@@ -3,7 +3,7 @@
   "name": "Drive Thru Throughput Playbook",
   "description": "Drive Thru Throughput Playbook is a fictional OPF example for quick service restaurants teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "drive-thru-throughput-playbook",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
     "executive",
     {

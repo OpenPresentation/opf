@@ -3,7 +3,7 @@
   "name": "Developer Conference Talk",
   "description": "Developer Conference Talk is a fictional OPF example for conference talk teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "developer-conference-talk",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
     "customer",
     {

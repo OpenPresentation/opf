@@ -1,16 +1,18 @@
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-import { catalogSchemaNames, themes as bundledThemes, type CatalogKind } from "./catalogs.js";
+import type { Catalog } from "./catalog-refs.js";
+import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
+import { resolveDesignRecords } from "./design-records.js";
+import { hostCatalogs } from "./host-catalogs.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { codeHighlightLines } from "./code-highlight.js";
-import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
+import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
-import { catalogIds, deprecatedCatalogIds } from "./generated/catalog-ids.js";
 import { schemas, type SchemaName } from "./schemas.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
 import type { ValidationIssue } from "./generated/types/finding.js";
@@ -28,16 +30,18 @@ export interface SchemaCheckOptions {
   template?: boolean;
   /** Values to fill variables with before checking, keyed by variable id. */
   values?: VariableValues;
+  /** Registered catalogs, for the checks that read a resolved theme (slide-theme-dimensions). */
+  catalogs?: readonly Catalog[];
 }
 
 export interface SchemaCheckResult {
   /** True when `errors` is empty. A required variable with no value is in `unfilled`, not in `errors`. */
   valid: boolean;
   errors: ValidationIssue[];
-  /** Advisory issues such as unknown catalog ids. Warnings never affect `valid`. */
+  /** Advisory issues such as adapted chart options. Warnings never affect `valid`. */
   warnings: ValidationIssue[];
   schemaName?: SchemaName;
-  catalogKind?: CatalogKind;
+  catalogKind?: CatalogRecordKind;
   /**
    * Presentations only, when the document declares content variables or is a template: whether it was checked as a
    * template, and which required variables have no value.
@@ -48,9 +52,9 @@ export interface SchemaCheckResult {
   unfilled: ValidationIssue[];
 }
 
-export type SchemaOrKind = SchemaName | CatalogKind;
+export type SchemaOrKind = SchemaName | CatalogRecordKind;
 
-const schemaNameByCatalogKind = catalogSchemaNames as Record<CatalogKind, SchemaName>;
+const schemaNameByCatalogKind: Readonly<Record<CatalogRecordKind, SchemaName>> = catalogSchemaNames;
 
 let ajv: Ajv2020 | undefined;
 
@@ -182,14 +186,14 @@ function isSchemaName(value: unknown): value is SchemaName {
   return typeof value === "string" && value in schemas;
 }
 
-function isCatalogKind(value: unknown): value is CatalogKind {
+function isCatalogKind(value: unknown): value is CatalogRecordKind {
   return typeof value === "string" && value in schemaNameByCatalogKind;
 }
 
 function resolveValidator(schemaOrKind: SchemaOrKind): {
   validate: ValidateFunction;
   schemaName: SchemaName;
-  catalogKind?: CatalogKind;
+  catalogKind?: CatalogRecordKind;
 } {
   const instance = getAjv();
 
@@ -540,115 +544,10 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
   return issues;
 }
 
-interface CatalogReferenceContext {
-  document: Record<string, unknown>;
-}
-
-function inlineCatalogEntry(context: CatalogReferenceContext, kind: CatalogKind): Record<string, unknown> | undefined {
-  const catalogsField = context.document.catalogs;
-  if (!isRecord(catalogsField)) {
-    return undefined;
-  }
-  const entry = catalogsField[kind];
-  return isRecord(entry) ? entry : undefined;
-}
-
-function unknownIdWarning(
-  kind: CatalogKind,
-  value: unknown,
-  path: string,
-  context?: CatalogReferenceContext,
-): ValidationIssue | undefined {
-  if (typeof value !== "string" || !bareIdPattern.test(value)) {
-    return undefined;
-  }
-
-  if (context) {
-    const entry = inlineCatalogEntry(context, kind);
-    if (entry) {
-      const inline = Array.isArray(entry.records)
-        ? entry.records.find((record) => isRecord(record) && record.id === value)
-        : undefined;
-      if (isRecord(inline)) {
-        // Inline records may deprecate an id the same way bundled ones do.
-        const replacedBy = isRecord(inline.deprecation) ? inline.deprecation.replacedBy : undefined;
-        return typeof replacedBy === "string" ? deprecatedIdWarning(kind, value, replacedBy, path) : undefined;
-      }
-      // A custom catalog source may define ids the bundled catalogs don't know
-      // about. 'source' is a single source or an ordered search path of them.
-      if (typeof entry.source === "string" || (Array.isArray(entry.source) && entry.source.length > 0)) {
-        return undefined;
-      }
-    }
-  }
-
-  if ((catalogIds[kind] as readonly string[]).includes(value)) {
-    const replacedBy = deprecatedCatalogIds[`${kind}/${value}`];
-    return replacedBy === undefined ? undefined : deprecatedIdWarning(kind, value, replacedBy, path);
-  }
-
-  return semanticIssue(path, `unknown ${kind} catalog id '${value}'`, { kind, id: value });
-}
-
-// A record with `deprecation` stays resolvable: the id keeps resolving to that
-// record, and authors are pointed at `deprecation.replacedBy`.
-function deprecatedIdWarning(kind: CatalogKind, id: string, replacedBy: string, path: string): ValidationIssue {
-  return semanticIssue(path, `deprecated ${kind} catalog id '${id}'; use '${replacedBy}'`, { kind, id, replacedBy });
-}
-
-function referenceObjectWarning(
-  kind: CatalogKind,
-  value: unknown,
-  path: string,
-  context: CatalogReferenceContext,
-): ValidationIssue | undefined {
-  if (typeof value === "string") {
-    return unknownIdWarning(kind, value, path, context);
-  }
-  if (isRecord(value)) {
-    return unknownIdWarning(kind, value.id, pathFor(path, "id"), context);
-  }
-  return undefined;
-}
-
 function pushIfDefined(issues: ValidationIssue[], issue: ValidationIssue | undefined): void {
   if (issue) {
     issues.push(issue);
   }
-}
-
-function designReferenceWarnings(
-  design: unknown,
-  path: string,
-  context: CatalogReferenceContext,
-): ValidationIssue[] {
-  if (!isRecord(design)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-  pushIfDefined(issues, referenceObjectWarning("themes", design.theme, pathFor(path, "theme"), context));
-  pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.colorScheme, pathFor(path, "colorScheme"), context));
-  pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.fontScheme, pathFor(path, "fontScheme"), context));
-
-  if (isRecord(design.theme)) {
-    const themePath = pathFor(path, "theme");
-    pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.theme.colorScheme, pathFor(themePath, "colorScheme"), context));
-    pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.theme.fontScheme, pathFor(themePath, "fontScheme"), context));
-  }
-
-  return issues;
-}
-
-// The theme a design names: a bare id resolves through the inline catalog records, then the bundled themes; the
-// object form lays its own fields over that record. Undefined when the id is not in either (a host catalog).
-function themeOf(reference: unknown, context: CatalogReferenceContext): Record<string, unknown> | undefined {
-  const id = typeof reference === "string" ? reference : isRecord(reference) ? reference.id : undefined;
-  const entry = inlineCatalogEntry(context, "themes");
-  const inline = typeof id === "string" && Array.isArray(entry?.records) ? entry.records.find((record) => isRecord(record) && record.id === id) : undefined;
-  const base = isRecord(inline) ? inline : typeof id === "string" ? (bundledThemes as readonly unknown[]).find((record) => isRecord(record) && record.id === id) as Record<string, unknown> | undefined : undefined;
-  if (isRecord(reference)) return { ...(base ?? {}), ...reference };
-  return base;
 }
 
 function canvasSize(dimensions: unknown): string {
@@ -666,17 +565,19 @@ function canvasSize(dimensions: unknown): string {
 function slideThemeDimensionsWarnings(
   document: Record<string, unknown>,
   slide: Record<string, unknown>,
-  slidePath: string,
-  context: CatalogReferenceContext,
+  index: number,
+  catalogs: readonly Catalog[] | undefined,
 ): ValidationIssue[] {
+  const slidePath = `/slides/${index}`;
   const slideDesign = isRecord(slide.design) ? slide.design : undefined;
-  if (!slideDesign || slideDesign.theme === undefined) return [];
-  const slideTheme = themeOf(slideDesign.theme, context);
-  if (!slideTheme || slideTheme.dimensions === undefined) return [];
+  if (!slideDesign || typeof slideDesign.theme !== "string") return [];
+  const options = hostCatalogs(catalogs ? { catalogs } : {});
+  const slideTheme = resolveDesignRecords(document, index, options);
+  // A slide theme that resolves nowhere has no dimensions of its own: opf/unresolved-reference reports it.
+  if (slideTheme.diagnostics.some((diagnostic) => diagnostic.kind === "themes") || slideTheme.theme.dimensions === undefined) return [];
   const deckDesign = isRecord(document.design) ? document.design : {};
-  const deckTheme = themeOf(deckDesign.theme ?? "minimal", context);
-  const deckDimensions = deckDesign.dimensions ?? deckTheme?.dimensions;
-  const slideSize = canvasSize(slideTheme.dimensions);
+  const deckDimensions = deckDesign.dimensions ?? resolveDesignRecords(document, undefined, options).theme.dimensions;
+  const slideSize = canvasSize(slideTheme.theme.dimensions);
   const deckSize = canvasSize(deckDimensions);
   if (slideSize === deckSize) return [];
   const explicit = deckDesign.dimensions !== undefined;
@@ -692,7 +593,6 @@ function slideThemeDimensionsWarnings(
 function chartTypeWarnings(
   payload: unknown,
   path: string,
-  context: CatalogReferenceContext,
 ): ValidationIssue[] {
   if (!isRecord(payload)) {
     return [];
@@ -700,7 +600,6 @@ function chartTypeWarnings(
 
   const issues: ValidationIssue[] = [];
   if (isRecord(payload.chart)) {
-    pushIfDefined(issues, unknownIdWarning("chartTypes", payload.chart.type, `${pathFor(path, "chart")}/type`, context));
     // RR-35: an axis title, legend or data label option the chart type cannot show is adapted by every engine; say so.
     for (const diagnostic of resolveChartOptions(payload.chart, chartOptionTarget(payload.chart.type)).diagnostics) {
       issues.push(semanticIssue(diagnostic.option.split(".").reduce(pathFor, pathFor(path, "chart")), diagnostic.message, { code: diagnostic.code, option: diagnostic.option, reason: diagnostic.reason }));
@@ -708,7 +607,7 @@ function chartTypeWarnings(
   }
   if (Array.isArray(payload.blocks)) {
     payload.blocks.forEach((block, index) => {
-      issues.push(...chartTypeWarnings(block, `${pathFor(path, "blocks")}/${index}`, context));
+      issues.push(...chartTypeWarnings(block, `${pathFor(path, "blocks")}/${index}`));
     });
   }
   return issues;
@@ -885,35 +784,13 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   return issues;
 }
 
-function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
+function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalog[] | undefined): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
   }
 
-  const context: CatalogReferenceContext = { document: value };
   const issues: ValidationIssue[] = [];
 
-  // A custom narrative is an inline catalogs.narratives.records entry, which
-  // resolves; the beat and duration checks live in lint and the audit.
-  if (typeof value.narrative === "string") {
-    pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
-  }
-
-  // Audience strings are often free-form ('Series B investors'); only a bare
-  // kebab-case id reads as a catalog reference, and unknownIdWarning skips
-  // everything else. An inline Audience object's 'id' is always a catalog
-  // reference (a custom audience uses 'name'), so it is checked too.
-  if (Array.isArray(value.audience)) {
-    value.audience.forEach((entry, index) => {
-      pushIfDefined(issues, referenceObjectWarning("audiences", entry, `/audience/${index}`, context));
-    });
-  } else if (isRecord(value.audience)) {
-    pushIfDefined(issues, referenceObjectWarning("audiences", value.audience, "/audience", context));
-  } else {
-    pushIfDefined(issues, unknownIdWarning("audiences", value.audience, "/audience", context));
-  }
-
-  issues.push(...designReferenceWarnings(value.design, "/design", context));
   issues.push(...variableReferenceWarnings(value));
 
   value.slides.forEach((slide, index) => {
@@ -921,9 +798,8 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
       return;
     }
     const slidePath = `/slides/${index}`;
-    issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
-    issues.push(...slideThemeDimensionsWarnings(value, slide, slidePath, context));
-    issues.push(...chartTypeWarnings(slide, slidePath, context));
+    issues.push(...slideThemeDimensionsWarnings(value, slide, index, catalogs));
+    issues.push(...chartTypeWarnings(slide, slidePath));
     const numberingWarnings = (payload: Record<string, unknown>, path: string): void => {
       for (const finding of numberingFindings(payload).warnings) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, { ...finding.params, code: "numbering-start-ignored" }));
     };
@@ -942,36 +818,11 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     visitContentPayloads(slide, slidePath, highlightWarnings);
     for (const key of Object.keys(slide)) {
       if (promotedRegionKeySet.has(key)) {
-        issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
+        issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key)));
       }
     }
   });
 
-  return issues;
-}
-
-const catalogCrossLinkFields: Partial<Record<SchemaName, Record<string, CatalogKind>>> = {
-  audience: { recommendedNarratives: "narratives", recommendedTones: "tones" },
-  purpose: { recommendedNarratives: "narratives", recommendedTones: "tones" },
-  tone: { recommendedNarratives: "narratives" },
-};
-
-function catalogCrossLinkWarnings(schemaName: SchemaName, value: unknown): ValidationIssue[] {
-  const fields = catalogCrossLinkFields[schemaName];
-  if (!fields || !isRecord(value)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-  for (const [field, kind] of Object.entries(fields)) {
-    const links = value[field];
-    if (!Array.isArray(links)) {
-      continue;
-    }
-    links.forEach((link, index) => {
-      pushIfDefined(issues, unknownIdWarning(kind, link, `${pathFor("/", field)}/${index}`));
-    });
-  }
   return issues;
 }
 
@@ -1143,14 +994,13 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     errors.push(...variableIssues.errors);
     const data = dataIssues(subject);
     errors.push(...data.errors);
-    warnings.push(...presentationReferenceWarnings(subject));
+    warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);
     warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));
   }
 
-  warnings.push(...catalogCrossLinkWarnings(resolved.schemaName, value));
 
   return {
     valid: errors.length === 0,

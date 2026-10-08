@@ -3,7 +3,7 @@
   "name": "Broadband Public Hearing Deck",
   "description": "Broadband Public Hearing Deck is a fictional OPF example for public engagement teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "broadband-public-hearing-deck",
-  "language": "english-au",
+  "language": "en-AU",
   "audience": [
     "sales",
     {
@@ -499,15 +499,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "broadband-public-hearing-deck-arc",
+    "custom": {
+      "narratives": {
+        "broadband-public-hearing-deck-arc": {
           "name": "Public Engagement Decision Arc",
           "summary": "A custom arc for Rural Connectivity Office.",
           "description": "Broadband Public Hearing Deck uses a compact evidence-to-decision arc for Rural Connectivity Office.",
@@ -532,13 +526,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "rural-connectivity-office-theme",
+      },
+      "themes": {
+        "rural-connectivity-office-theme": {
           "name": "Rural Connectivity Office Working Theme",
           "colorScheme": "luxury",
           "fontScheme": "sylfaen",
@@ -551,14 +541,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "rural-connectivity-office-signal",
+      },
+      "colorSchemes": {
+        "rural-connectivity-office-signal": {
           "name": "Rural Connectivity Office Signal Palette",
           "accent1": "#F8FAFC",
           "accent2": "#E2E8F0",
@@ -573,31 +558,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

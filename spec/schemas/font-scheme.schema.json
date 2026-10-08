@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "title": "Font Scheme",
-  "description": "Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) → catalogs.fontSchemes.source → the default catalog at https://www.pptx.gallery/font-schemes. Role overrides on design.fontScheme (heading, body, accent, code), each a font family name, take precedence over the resolved scheme.",
+  "description": "Schema for font-scheme records. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Documents reference a scheme from design.fontScheme (or design.fontScheme.id), from a theme's fontScheme and from a language's fontScheme / googleFontScheme. Role overrides on design.fontScheme (heading, body, accent, code), each a font family name, take precedence over the resolved scheme.\n\nA document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' and 'id'; the copy a document embeds under catalogs.<group>.<kind>.<id> carries neither (the key is the id) and no 'x-*' display metadata.",
   "type": "object",
   "required": [
     "$schema",
@@ -15,12 +15,12 @@
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-font-scheme/v1",
-      "description": "Identifies this record as a font scheme in the openpresentation.org catalog."
+      "description": "Identifies a published record file as a font scheme record. Required in a published file; an embedded copy omits it."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this font scheme. Lowercase kebab-case.",
+      "description": "The font scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "aptos",
         "tenorite",
@@ -39,27 +39,6 @@
         "Noto Sans",
         "Microsoft Yahei"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated font scheme record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "major": {
       "type": "string",
@@ -169,19 +148,9 @@
     },
     "languages": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^[a-z][a-z0-9-]*$"
-      },
-      "description": "Optional list of languages catalog ids (see the languages catalog, https://www.pptx.gallery/languages) this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this list is empty or names the presentation language by id.",
-      "examples": [
-        [
-          "chinese-simplified",
-          "chinese-traditional",
-          "japanese",
-          "korean"
-        ]
-      ]
+      "items": { "type": "string", "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{1,8})*$" },
+      "description": "Optional list of BCP-47 language tags this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this list is empty or names the presentation language: an entry matches a tag with the same language subtag (and the same script, when the entry names one).",
+      "examples": [["zh-Hans", "zh-Hant", "ja", "ko"]]
     },
     "textSample": {
       "type": "string",

@@ -176,15 +176,14 @@ test('a {total} retry reports each unknown font scheme once',()=>{
   const input={design:{fontScheme:'no-such-scheme',footer:{right:{slideNumber:true,slideNumberFormat:'{current} / {total}'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
   const result=paginate(input,{minFontSize:24,onDiagnostic:issue=>issues.push(issue)});
   assert.ok(result.presentation.slides.length>2,'The retry path runs: the page count differs from the source count.');
-  assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-font-scheme','design.fontScheme']]);
+  assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-reference','design.fontScheme']]);
 });
-test('generated socials format the primary organization profiles through platform records',async()=>{
-  const {socialPlatforms}=await import('../dist/catalogs.js');
+test('generated socials format the primary organization profiles through the engine social-platform vocabulary',async()=>{
   const {resolveSocialProfile}=await import('../dist/composition.js');
   const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
   const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{organization:true,socials:true}}}};
   const before=structuredClone(presentation);
-  const layout=layoutFurniture({text:'Body'},{presentation,socialPlatforms});
+  const layout=layoutFurniture({text:'Body'},{presentation});
   assert.deepEqual(presentation,before);assert.deepEqual(layout.diagnostics,[]);
   const part=layout.parts.find(item=>item.field==='socials');
   assert.equal(part.generated,true);assert.equal(part.path,'design.footer.right.socials');assert.equal(part.sourcePath,'organization.1.socials');
@@ -199,17 +198,17 @@ test('generated socials format the primary organization profiles through platfor
     ['custom',undefined,false,'organization.1.socials.custom'],
   ]);
   assert.equal(part.fit.sourceLines.filter(line=>line.boundary!=='soft').length,part.links.length);
-  // Speakers use member profile patterns; inline records win over host records.
-  assert.equal(resolveSocialProfile('linkedin','alice-chen',socialPlatforms,'speaker').text,'linkedin.com/in/alice-chen');
-  const inline=layoutFurniture({},{presentation:{...presentation,catalogs:{socialPlatforms:{records:[{id:'x',profileUrlPattern:'https://example.test/u/{handle}',handlePrefix:'@'}]}}},socialPlatforms});
-  assert.equal(inline.parts[1].links[1].text,'example.test/u/acme');
-  // Without any record a handle stays the raw authored value (Socials engine fallback).
-  const bare=layoutFurniture({},{presentation});
-  assert.deepEqual(bare.parts[1].links.slice(0,2).map(link=>[link.text,link.href]),[['acme',undefined],['@acme',undefined]]);
-  // Every catalog platform formats its own example handle.
-  for(const platformRecord of socialPlatforms){
-    const profile=resolveSocialProfile(platformRecord.id,platformRecord.handleExample,socialPlatforms);
-    assert.equal(profile.resolved,true,platformRecord.id);assert.match(profile.href,/^https:\/\//);assert.equal(`https://${profile.text}`,decodeURI(profile.href));
+  // Speakers use member profile patterns.
+  assert.equal(resolveSocialProfile('linkedin','alice-chen','speaker').text,'linkedin.com/in/alice-chen');
+  // A key outside the vocabulary keeps the raw authored value (Socials engine fallback).
+  assert.deepEqual(resolveSocialProfile('custom','acme'),{text:'acme',resolved:false});
+  // Every platform of the vocabulary formats the example handle of its gallery display record.
+  const {catalogDisplay}=await import('../dist/catalog.js');
+  const {SOCIAL_PLATFORMS}=await import('../dist/composition.js');
+  assert.deepEqual(Object.keys(SOCIAL_PLATFORMS).sort(),Object.keys(catalogDisplay.socialPlatforms).sort());
+  for(const [platform,display] of Object.entries(catalogDisplay.socialPlatforms)){
+    const profile=resolveSocialProfile(platform,display.handleExample);
+    assert.equal(profile.resolved,true,platform);assert.match(profile.href,/^https:\/\//);assert.equal(`https://${profile.text}`,decodeURI(profile.href));
   }
 });
 test('generated socials without organization socials diagnose their controlling path',()=>{

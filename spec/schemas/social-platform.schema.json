@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-social-platform/v1",
   "title": "Social Platform",
-  "description": "Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform — its base URL, profile-URL pattern, handle prefix, and brand color. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color is catalog metadata for authoring UIs: engines (opf-render, opf-pptx) render the profile URL, not brand colors. The engine resolves references against catalogs.socialPlatforms (inline) → catalogs.socialPlatforms.source → the default catalog at https://www.pptx.gallery/social-platforms.",
+  "description": "Schema for social-platform records: display metadata for authoring UIs (name, brand color, handle example) alongside the URL patterns. The keys of a Socials object are an engine vocabulary validated directly; engines link a handle with the patterns in spec/reference/engine-vocabularies.json and never look a social-platform record up. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.socialPlatforms.",
   "type": "object",
   "required": [
     "$schema",
@@ -18,7 +18,7 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this platform — appears as a property key on Socials objects. Lowercase kebab-case.",
+      "description": "The social platform's key, as written in a Socials object. Lowercase kebab-case.",
       "examples": [
         "linkedin",
         "x",
@@ -47,27 +47,6 @@
         "Mastodon",
         "Bluesky"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this social platform is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated social platform record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "summary": {
       "type": "string",

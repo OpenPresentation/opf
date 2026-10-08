@@ -4,7 +4,7 @@
   "description": "Kiosk Orientation Deck is a fictional OPF example for visitor orientation teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "kiosk-orientation-deck",
   "language": {
-    "id": "english-us",
+    "bcp47": "en-US",
     "name": "English (United States)",
     "direction": "ltr",
     "fontScheme": "constantia",
@@ -511,15 +511,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "kiosk-orientation-deck-arc",
+    "custom": {
+      "narratives": {
+        "kiosk-orientation-deck-arc": {
           "name": "Visitor Orientation Decision Arc",
           "summary": "A custom arc for Northgate Museum.",
           "description": "Kiosk Orientation Deck uses a compact evidence-to-decision arc for Northgate Museum.",
@@ -544,13 +538,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "northgate-museum-theme",
+      },
+      "themes": {
+        "northgate-museum-theme": {
           "name": "Northgate Museum Working Theme",
           "colorScheme": "bold-red",
           "fontScheme": "constantia",
@@ -563,14 +553,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "northgate-museum-signal",
+      },
+      "colorSchemes": {
+        "northgate-museum-signal": {
           "name": "Northgate Museum Signal Palette",
           "accent1": "#BE123C",
           "accent2": "#6D28D9",
@@ -585,31 +570,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

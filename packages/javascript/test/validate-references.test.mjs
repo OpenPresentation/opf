@@ -2,12 +2,12 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { validate, validateCatalogRecord } from '../dist/index.js';
+import { defaultCatalog } from '../dist/catalog.js';
 
 // The format, references and policy categories: syntax, schema, catalogs, assets and host contracts.
 const checkAll = (input, options) => validate(input, { only: ['format', 'references', 'policy'], ...options });
 
-const layout = (id, name = id) => ({
-	id,
+const layout = (name) => ({
 	name,
 	placeholders: [{ type: 'title' }, { type: 'text' }],
 });
@@ -23,7 +23,7 @@ test('text input is read, never rewritten, and the report separates what was not
 	const source =
 		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text-1x"}]\n}';
 	const before = Buffer.from(source),
-		result = checkAll(source);
+		result = checkAll(source, { catalogs: [defaultCatalog] });
 	assert.equal(result.valid, true);
 	assert.equal(result.schemaValid, true);
 	assert.deepEqual(result.findings, []);
@@ -83,82 +83,62 @@ test('schema diagnostics retain complete constraints and array source locations'
 	);
 	assert.deepEqual(issue.lookup.slice(0, 3), ['opf', 'schema', 'presentation']);
 });
-test('reference diagnostics use supplied catalogs and exact definition files', () => {
+test('reference diagnostics use registered catalogs and name where each suggestion is defined', () => {
 	const document = freeze({
 		slides: [{ title: 'Keep', layout: 'pratner' }],
-		catalogs: {
-			layouts: {
-				source: 'https://example.invalid/layouts',
-				records: [layout('partner', 'Document label')],
-			},
-		},
+		catalogs: { custom: { layouts: { partner: layout('Document label') } } },
 	});
 	const options = freeze({
-			catalogs: {
-				layouts: [layout('partner', 'Loaded label'), layout('loaded')],
-			},
+			catalogs: [{ source: 'https://example.invalid', layouts: { partner: layout('Loaded label'), loaded: layout('Loaded') } }],
 		}),
 		before = JSON.stringify({ document, options });
 	const result = checkAll(document, options),
 		issue = result.findings.find(
-			(issue) => issue.ruleId === 'opf/catalog-reference',
+			(issue) => issue.ruleId === 'opf/unresolved-reference',
 		);
 	assert.equal(result.valid, true);
 	assert.equal(issue.path, '/slides/0/layout');
 	assert.equal(issue.suggestions[0].value, 'partner');
 	assert.equal(issue.suggestions[0].label, 'Document label');
 	assert.equal(issue.suggestions[0].origin, 'document');
-	assert.ok(
-		result.findings.some((issue) => issue.ruleId === 'opf/catalog-source'),
-	);
+	assert.equal(issue.suggestions[0].definition, 'document#/catalogs/custom/layouts/partner');
+	assert.ok(issue.suggestions.some((suggestion) => suggestion.value === 'loaded' && suggestion.origin === 'registered' && suggestion.definition === 'https://example.invalid#/layouts/loaded'));
+	assert.ok(issue.message.includes('https://example.invalid'), issue.message);
 	assert.equal(JSON.stringify({ document, options }), before);
 	assert.deepEqual(checkAll(document, options), result);
-	for (const suggestion of checkAll({
-		design: { fontScheme: 'robtoo' },
-		slides: [],
-	}).findings.flatMap((issue) => issue.suggestions ?? []))
-		if (suggestion.origin === 'built-in')
-			assert.equal(
-				JSON.parse(
-					readFileSync(
-						new URL('../../../' + suggestion.definition, import.meta.url),
-						'utf8',
-					),
-				).id,
-				suggestion.value,
-			);
-	assert.equal(
-		checkAll({ slides: [{ layout: 'loaded' }] }, options).findings
-			.length,
-		0,
-	);
+	assert.equal(checkAll({ slides: [{ layout: 'loaded' }] }, options).findings.length, 0);
+	// Nothing registered: only what the document embeds resolves.
+	assert.equal(checkAll({ slides: [{ layout: 'loaded' }] }, { catalogs: [] }).findings.length, 1);
 });
-test('unknown engine layouts warn without forbidding custom names or free-form prose', () => {
+test('a layout must be a reference; free-form prose is never one, and extensions are never scanned', () => {
 	const result = checkAll({
 		audience: 'Series B investors',
 		purpose: 'winning',
 		tone: { name: 'Warm' },
-		slides: [{ layout: 'Custom_EngineLayout' }],
+		slides: [{ layout: 'custom-engine-layout' }],
 		extensions: {
 			layout: 'fake',
 			design: { theme: 'fake' },
 			contracts: [{ path: '/slides/*/layout', allowedValues: [] }],
 		},
-	});
+	}, { catalogs: [defaultCatalog] });
 	const references = result.findings.filter(
-		(issue) => issue.ruleId === 'opf/catalog-reference',
+		(issue) => issue.ruleId === 'opf/unresolved-reference',
 	);
 	assert.deepEqual(
 		references.map((issue) => issue.path),
-		['/slides/0/layout'],
+		['/purpose', '/slides/0/layout'],
+		'a purpose written as a bare id is a reference; free text with spaces is not',
 	);
 	assert.equal(result.valid, true);
+	assert.equal(checkAll({ slides: [{ layout: 'Custom_EngineLayout' }] }).valid, false, 'a layout is a bare id or name:id');
 });
-test('schema traversal finds nested chart and design references without scanning arbitrary data', () => {
+test('reference sites cover the designs and slides; chart types are validated by the schema', () => {
 	const result = checkAll({
-		design: { theme: { id: 'missing-theme' }, fontScheme: 'missing-font' },
+		design: { theme: 'missing-theme', fontScheme: 'missing-font' },
 		slides: [
 			{
+				design: { colorScheme: { id: 'missing-scheme' } },
 				blocks: [
 					{
 						type: 'group',
@@ -167,51 +147,34 @@ test('schema traversal finds nested chart and design references without scanning
 				],
 			},
 		],
-	});
+	}, { catalogs: [defaultCatalog] });
 	const paths = result.findings
-		.filter((issue) => issue.ruleId === 'opf/catalog-reference')
+		.filter((issue) => issue.ruleId === 'opf/unresolved-reference')
 		.map((issue) => issue.path)
 		.sort();
-	assert.deepEqual(paths, [
-		'/design/fontScheme',
-		'/design/theme/id',
-		'/slides/0/blocks/0/blocks/0/chart/type',
-	]);
+	assert.deepEqual(paths, ['/design/fontScheme', '/design/theme', '/slides/0/design/colorScheme/id']);
+	assert.ok(result.findings.some((issue) => issue.severity === 'error' && issue.path === '/slides/0/blocks/0/blocks/0/chart/type'));
 });
-test('invalid and duplicate catalog definitions stay visible and cannot silently fall back', () => {
+test('invalid catalog records stay visible and cannot silently fall back', () => {
 	const result = checkAll({
 		slides: [{ layout: 'text-1x' }],
-		catalogs: {
-			layouts: {
-				records: [
-					layout('duplicate'),
-					layout('duplicate'),
-					{ id: 'text-1x', placeholders: 'invalid' },
-				],
-			},
-		},
-	});
+		catalogs: { custom: { layouts: { 'text-1x': { placeholders: 'invalid' } } } },
+	}, { catalogs: [defaultCatalog] });
 	assert.equal(result.valid, false);
 	assert.ok(
 		result.findings.some(
 			(issue) =>
 				issue.ruleId === 'opf/catalog-record' &&
-				issue.message.includes('Duplicate'),
+				issue.path.startsWith('/catalogs/custom/layouts/text-1x'),
 		),
 	);
-	assert.ok(
-		result.findings.some(
-			(issue) =>
-				issue.ruleId === 'opf/catalog-record' &&
-				issue.path.startsWith('/catalogs/layouts/records/2'),
-		),
-	);
+	assert.ok(result.findings.some((issue) => issue.ruleId === 'opf/unresolved-reference' && issue.path === '/slides/0/layout'), 'the reference to an invalid record is reported too');
 	const loaded = checkAll(
-		{ slides: [{ title: 'Valid' }] },
-		{ catalogs: { layouts: [{ id: 'bad', placeholders: 42 }] } },
+		{ slides: [{ layout: 'bad', title: 'Valid' }] },
+		{ catalogs: [{ source: 'https://example.invalid', layouts: { bad: { placeholders: 42 } } }] },
 	);
 	assert.equal(loaded.valid, false);
-	assert.ok(loaded.findings.every((issue) => issue.scope === 'context'));
+	assert.ok(loaded.findings.filter((issue) => issue.ruleId === 'opf/catalog-record').every((issue) => issue.scope === 'context'));
 });
 test('explicit contracts provide policy fixes while metadata never supplies policy', () => {
 	const document = freeze({
@@ -252,6 +215,9 @@ test('invalid options fail clearly instead of ignoring misspelled policies', () 
 		{ rules: {} },
 		{ catalogs: { unknown: [] } },
 		{ catalogs: { layouts: true } },
+		{ catalogs: [{ layouts: {} }] },
+		{ catalogs: [{ source: 'https://example.invalid', languages: {} }] },
+		{ catalogs: [{ source: 'https://example.invalid', layouts: [] }] },
 		{ contracts: [{ path: 'not-pointer', allowedValues: [] }] },
 		{ contracts: [{ path: '/slides', allowedValues: [{}] }] },
 		{ contracts: [{ path: '/slides', allowedValues: [], severity: 'warn' }] },
@@ -317,34 +283,34 @@ test('unknown bare-id audiences warn like narratives; gallery audience ids resol
 	const result = checkAll({
 		audience: ['no-such-audience', 'Series B investors', 'executive'],
 		slides: [{ title: 'Keep' }],
-	});
+	}, { catalogs: [defaultCatalog] });
 	assert.equal(result.valid, true);
 	assert.deepEqual(
 		result.findings
-			.filter((issue) => issue.ruleId === 'opf/catalog-reference')
+			.filter((issue) => issue.ruleId === 'opf/unresolved-reference')
 			.map((issue) => [issue.path, issue.severity]),
 		[['/audience/0', 'warning']],
 	);
 	assert.deepEqual(
-		checkAll({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] })
+		checkAll({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] }, { catalogs: [defaultCatalog] })
 			.findings,
 		[],
 	);
 });
 
-test('a custom narrative is an inline catalog record; the narrative field is a string', () => {
-	const inline = (records) =>
+test('a narrative the document defines is a record in catalogs.custom; the narrative field is a reference', () => {
+	const own = (narratives) =>
 		checkAll({
 			narrative: 'custom-arc',
-			catalogs: { narratives: { records } },
+			catalogs: { custom: { narratives } },
 			slides: [{ title: 'Keep' }],
 		});
-	assert.deepEqual(inline([{ id: 'custom-arc', name: 'Custom', beats: [{ id: 'a', name: 'A' }] }]).findings, []);
+	assert.deepEqual(own({ 'custom-arc': { name: 'Custom', beats: [{ id: 'a', name: 'A' }] } }).findings, []);
 	assert.ok(
 		checkAll({
 			narrative: 'custom-arc',
 			slides: [{ title: 'Keep' }],
-		}).findings.some((issue) => issue.ruleId === 'opf/catalog-reference'),
+		}).findings.some((issue) => issue.ruleId === 'opf/unresolved-reference'),
 	);
 	assert.equal(checkAll({ narrative: { id: 'custom-arc' }, slides: [{ title: 'Keep' }] }).valid, false);
 });
@@ -358,14 +324,15 @@ test('catalog diagnostics locate referenced schema constraints without changing 
 	};
 	const validation = validateCatalogRecord('themes', record);
 	assert.equal(validation.valid, false);
+	const { $schema: _schema, id: _id, ...embedded } = record;
 	const source = JSON.stringify({
-		catalogs: { themes: { records: [record] } },
+		catalogs: { custom: { themes: { custom: embedded } } },
 		slides: [{ title: 'Keep' }],
 	});
 	const diagnostic = checkAll(source).findings.find(
 		(issue) => issue.ruleId === 'opf/catalog-record',
 	);
-	assert.equal(diagnostic.path, '/catalogs/themes/records/0/background');
+	assert.equal(diagnostic.path, '/catalogs/custom/themes/custom/background');
 	assert.equal(
 		diagnostic.definition,
 		'https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type',
@@ -415,54 +382,23 @@ test('language tags preserve regional, extended, private and grandfathered forms
 		checkAll({ language: 'en-UK', slides: [{ title: 'Keep' }] }).valid,
 		false,
 	);
-	const explicitId = checkAll({
-		language: { id: 'custom-language-id', bcp47: 'en-US' },
-		slides: [{ title: 'Keep' }],
-	});
-	assert.ok(
-		explicitId.findings.some(
-			(issue) =>
-				issue.path === '/language/id' &&
-				issue.ruleId === 'opf/catalog-reference',
-		),
+	for (const language of ['english', 'english-gb', 'japanese'])
+		assert.equal(checkAll({ language, slides: [{ title: 'Keep' }] }).valid, false, `${language} is a gallery display id, not a tag`);
+	assert.equal(
+		checkAll({ language: { id: 'arabic', bcp47: 'ar' }, slides: [{ title: 'Keep' }] }).valid,
+		false,
+		'a Language object has no catalog id',
 	);
 	const nested = checkAll({
 		language: { bcp47: 'en-US', fontScheme: 'missing-font' },
 		slides: [{ title: 'Keep' }],
-	});
+	}, { catalogs: [defaultCatalog] });
 	assert.deepEqual(
 		nested.findings.map((issue) => issue.path),
 		['/language/fontScheme'],
 	);
 	assert.equal(
 		nested.findings[0].definition,
-		'https://openpresentation.org/schema/opf/v1#/$defs/Language/properties/fontScheme',
+		'https://openpresentation.org/schema/opf/v1#/$defs/Catalogs',
 	);
-});
-
-test('deprecated catalog aliases are flagged with the canonical id as the suggestion', () => {
-	const result = checkAll({
-		name: 'Deprecated alias',
-		design: { theme: 'legacy-look' },
-		catalogs: {
-			themes: {
-				records: [
-					{
-						$schema: 'https://openpresentation.org/schema/opf-theme/v1',
-						id: 'legacy-look',
-						name: 'Legacy look',
-						deprecation: { replacedBy: 'minimal' },
-					},
-				],
-			},
-		},
-		slides: [{ title: 'Deck' }],
-	});
-	const issue = result.findings.find((entry) => entry.ruleId === 'opf/deprecated-catalog-id');
-	assert.ok(issue, JSON.stringify(result.findings, null, 2));
-	assert.equal(issue.severity, 'warning');
-	assert.equal(issue.path, '/design/theme');
-	assert.equal(issue.suggestions?.[0]?.value, 'minimal');
-	assert.equal(result.findings.filter((entry) => entry.ruleId === 'opf/catalog-reference').length, 0);
-	assert.equal(result.valid, true);
 });

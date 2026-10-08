@@ -3,7 +3,7 @@
   "name": "Boutique Hotel Revenue Recovery",
   "description": "Boutique Hotel Revenue Recovery is a fictional OPF example for hospitality teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "boutique-hotel-revenue-recovery",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "regulatory",
     {
@@ -498,15 +498,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "boutique-hotel-revenue-recovery-arc",
+    "custom": {
+      "narratives": {
+        "boutique-hotel-revenue-recovery-arc": {
           "name": "Hospitality Decision Arc",
           "summary": "A custom arc for Harbor & Loom Hotels.",
           "description": "Boutique Hotel Revenue Recovery uses a compact evidence-to-decision arc for Harbor & Loom Hotels.",
@@ -531,13 +525,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "harbor-and-loom-hotels-theme",
+      },
+      "themes": {
+        "harbor-and-loom-hotels-theme": {
           "name": "Harbor & Loom Hotels Working Theme",
           "colorScheme": "golden-yellow",
           "fontScheme": "century-schoolbook",
@@ -550,14 +540,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "harbor-and-loom-hotels-signal",
+      },
+      "colorSchemes": {
+        "harbor-and-loom-hotels-signal": {
           "name": "Harbor & Loom Hotels Signal Palette",
           "accent1": "#E2E8F0",
           "accent2": "#F59E0B",
@@ -572,31 +557,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

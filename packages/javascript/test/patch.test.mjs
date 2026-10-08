@@ -175,8 +175,8 @@ describe("optional schema validation", () => {
   test("the built-in check is validate: the format rules, plus the references rules in strict mode", () => {
     const unknownTheme = { ...deck, design: { theme: "no-such-theme" } };
     assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.valid, true);
-    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.findings.length, 0, "a catalog warning is not part of the format check");
-    assert.throws(() => applyPatch(unknownTheme, [], { validate: true, strict: true }), error => error instanceof OPFPatchValidationError && error.validation.findings.some(entry => entry.ruleId === "opf/catalog-reference"));
+    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.findings.length, 0, "a reference warning is not part of the format check");
+    assert.throws(() => applyPatch(unknownTheme, [], { validate: true, strict: true }), error => error instanceof OPFPatchValidationError && error.validation.findings.some(entry => entry.ruleId === "opf/unresolved-reference"));
   });
   test("intermediate invalid states are allowed when the result is valid", () => {
     const patch = [{ op: "replace", path: "/slides", value: "bad" }, { op: "replace", path: "/slides", value: [{ id: "z" }] }];

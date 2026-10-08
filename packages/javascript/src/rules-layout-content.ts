@@ -236,7 +236,7 @@ const unusedBeatRule = rule(
 	'The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.',
 	{
 		approximations:
-			'Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in the `catalogs` option, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
+			'Resolved like every content reference: the document\'s catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
 	},
 );
 const PLACEHOLDERS: { pattern: RegExp; label: string }[] = [
@@ -287,7 +287,7 @@ const contentRules: ValidationRule[] = [
 	{
 		info: unusedBeatRule,
 		run(context) {
-			const narrative = resolveNarrative(context.document, context.options.catalogs?.narratives);
+			const narrative = resolveNarrative(context.document, context.options);
 			if (!narrative) return;
 			const id = String(context.document.narrative);
 			for (const { beat, index } of unreferencedBeats(context.document, narrative))

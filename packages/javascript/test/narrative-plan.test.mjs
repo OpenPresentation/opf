@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { narratives } from '../dist/catalogs.js';
+import { defaultCatalog } from '../dist/catalog.js';
 import { validateCatalogRecord } from '../dist/validator.js';
 import { validate, validationRules, findValidationRule } from '../dist/index.js';
 // The narrative checks: unknown beats are references findings, durations and unused beats content findings.
 const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'content'], ...options });
 
-// FA-02: the deck holds a pointer (narrative: string); the plan is a catalog record.
+// FA-02: the deck holds a pointer (narrative: a reference); the plan is a catalog record.
+const narratives = Object.entries(defaultCatalog.narratives).map(([id, entry]) => ({ $schema: 'https://openpresentation.org/schema/opf-narrative/v1', id, ...entry }));
+const host = (narratives) => ({ catalogs: [{ source: 'pkg:@host/narratives', narratives }] });
 const record = (extra = {}) => ({
-	$schema: 'https://openpresentation.org/schema/opf-narrative/v1',
-	id: 'arc',
 	name: 'Arc',
 	duration: { min: 10, max: 20 },
 	beats: [
@@ -23,7 +23,7 @@ const deck = (extra = {}) => ({
 	name: 'D',
 	narrative: 'arc',
 	duration: 15,
-	catalogs: { narratives: { records: [record()] } },
+	catalogs: { custom: { narratives: { arc: record() } } },
 	slides: [
 		{ title: 'One', beat: 'hook' },
 		{ title: 'Two', beat: ['proof', 'ask'] },
@@ -61,15 +61,16 @@ test('validate warns about a slide beat the resolved narrative does not define',
 test('validate resolves a bundled narrative and records the host loaded', () => {
 	const bundled = narratives.find((entry) => entry.id === 'qbr');
 	const document = { narrative: 'qbr', duration: 60, slides: [{ title: 'x', beat: bundled.beats[0].id }, { title: 'y', beat: 'not-a-beat' }] };
-	assert.deepEqual(rule(checkAll(document), 'opf/unknown-beat').map((issue) => issue.path), ['/slides/1/beat']);
+	assert.deepEqual(rule(checkAll(document, { catalogs: [defaultCatalog] }), 'opf/unknown-beat').map((issue) => issue.path), ['/slides/1/beat']);
 	const loaded = { narrative: 'remote-arc', slides: [{ title: 'x', beat: 'zzz' }] };
-	assert.deepEqual(rule(checkAll(loaded), 'opf/unknown-beat'), []);
-	assert.equal(rule(checkAll(loaded, { catalogs: { narratives: [record({ id: 'remote-arc' })] } }), 'opf/unknown-beat').length, 1);
+	assert.deepEqual(rule(checkAll(loaded, { catalogs: [] }), 'opf/unknown-beat'), []);
+	assert.equal(rule(checkAll(loaded, host({ 'remote-arc': record() })), 'opf/unknown-beat').length, 1);
 });
 
-test('a URL, a pkg: reference or an unknown id is not resolved, so nothing is checked', () => {
-	for (const narrative of ['https://example.com/arc.json', 'pkg:@acme/arcs/arc', 'no-such-arc'])
-		assert.deepEqual(rule(checkAll({ narrative, duration: 1, slides: [{ title: 'x', beat: 'zzz' }] }), 'opf/unknown-beat'), []);
+test('a narrative that resolves nowhere is not checked, and a URL or pkg: string is not a reference', () => {
+	assert.deepEqual(rule(checkAll({ narrative: 'no-such-arc', duration: 1, slides: [{ title: 'x', beat: 'zzz' }] }), 'opf/unknown-beat'), []);
+	for (const narrative of ['https://example.com/arc.json', 'pkg:@acme/arcs/arc'])
+		assert.equal(checkAll({ narrative, slides: [{ title: 'x' }] }).valid, false, narrative);
 });
 
 test('validate warns when the root duration is outside the narrative range', () => {
@@ -82,14 +83,14 @@ test('validate warns when the root duration is outside the narrative range', () 
 	}
 	for (const duration of [10, 20]) assert.deepEqual(rule(checkAll(deck({ duration })), 'opf/duration-outside-narrative'), []);
 	assert.deepEqual(rule(checkAll(deck({ duration: undefined })), 'opf/duration-outside-narrative'), []);
-	const open = deck({ duration: 4, catalogs: { narratives: { records: [record({ duration: { min: 6 } })] } } });
+	const open = deck({ duration: 4, catalogs: { custom: { narratives: { arc: record({ duration: { min: 6 } }) } } } });
 	assert.match(rule(checkAll(open), 'opf/duration-outside-narrative')[0].message, /at least 6 minutes/);
 });
 
 test('validate warns about an inline record whose duration range is inverted', () => {
-	const inverted = deck({ catalogs: { narratives: { records: [record({ duration: { min: 30, max: 10 } })] } } });
+	const inverted = deck({ catalogs: { custom: { narratives: { arc: record({ duration: { min: 30, max: 10 } }) } } } });
 	const report = checkAll(inverted);
-	assert.deepEqual(rule(report, 'opf/narrative-duration-range').map((issue) => issue.path), ['/catalogs/narratives/records/0/duration']);
+	assert.deepEqual(rule(report, 'opf/narrative-duration-range').map((issue) => issue.path), ['/catalogs/custom/narratives/arc/duration']);
 	assert.deepEqual(rule(report, 'opf/duration-outside-narrative'), [], 'an inverted range is reported once, not applied');
 });
 
@@ -106,10 +107,10 @@ test('validate reports a beat no slide references as info', () => {
 
 test('validate skips a deck whose slides link no beats', () => {
 	assert.deepEqual(rule(validate(deck({ slides: [{ title: 'One' }, { title: 'Two' }] })), 'opf/unused-beat'), []);
-	assert.deepEqual(rule(validate(deck({ narrative: 'https://example.com/arc.json' })), 'opf/unused-beat'), []);
+	assert.deepEqual(rule(validate(deck({ narrative: 'no-such-arc' })), 'opf/unused-beat'), []);
 });
 
 test('validate uses records the host loaded', () => {
 	const document = { name: 'D', narrative: 'host-arc', slides: [{ title: 'One', beat: 'hook' }] };
-	assert.equal(rule(validate(document, { catalogs: { narratives: [record({ id: 'host-arc' })] } }), 'opf/unused-beat').length, 2);
+	assert.equal(rule(validate(document, host({ 'host-arc': record() })), 'opf/unused-beat').length, 2);
 });

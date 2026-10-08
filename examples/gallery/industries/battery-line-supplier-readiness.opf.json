@@ -3,7 +3,7 @@
   "name": "Battery Line Supplier Readiness",
   "description": "Battery Line Supplier Readiness is a fictional OPF example for automotive supply teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "battery-line-supplier-readiness",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "investor",
     {
@@ -498,15 +498,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "battery-line-supplier-readiness-arc",
+    "custom": {
+      "narratives": {
+        "battery-line-supplier-readiness-arc": {
           "name": "Automotive Supply Decision Arc",
           "summary": "A custom arc for Voltcrest Components.",
           "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
@@ -531,13 +525,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "voltcrest-components-theme",
+      },
+      "themes": {
+        "voltcrest-components-theme": {
           "name": "Voltcrest Components Working Theme",
           "colorScheme": "boost",
           "fontScheme": "garamond",
@@ -550,14 +540,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "voltcrest-components-signal",
+      },
+      "colorSchemes": {
+        "voltcrest-components-signal": {
           "name": "Voltcrest Components Signal Palette",
           "accent1": "#6D28D9",
           "accent2": "#0369A1",
@@ -572,31 +557,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

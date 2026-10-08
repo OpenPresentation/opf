@@ -16,6 +16,7 @@ export default defineConfig({
     index: "src/index.ts",
     schemas: "src/schemas.ts",
     catalogs: "src/catalogs.ts",
+    catalog: "src/catalog.ts",
     validator: "src/validator.ts",
     types: "src/types.ts",
     "spec-files": "src/spec-files.ts",

@@ -1,5 +1,3 @@
-import { catalogs as bundledCatalogs } from './catalogs.js';
-import type { CatalogKind } from './catalogs.js';
 import { defaultSlideBackground, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import type { FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
@@ -104,24 +102,6 @@ export function simulateVision(hex: string, model: VisionModel): string {
 	}
 	const m = CVD_MATRICES[model];
 	return toHex(m.map((row) => delinear(row[0] * (rgb[0] ?? 0) + row[1] * (rgb[1] ?? 0) + row[2] * (rgb[2] ?? 0))));
-}
-
-// ------------------------------------------------------------ catalog lookups
-
-export type Lookup = (kind: CatalogKind, id: string) => Rec | undefined;
-
-export function createLookup(
-	document: Rec,
-	extra?: Partial<Record<CatalogKind, readonly unknown[]>>,
-): Lookup {
-	return (kind, id) => {
-		const inline = rec(rec(document.catalogs)[kind]).records;
-		const found =
-			(Array.isArray(inline) ? inline : []).find((r: Rec) => r?.id === id) ??
-			(extra?.[kind] ?? []).find((r) => rec(r).id === id) ??
-			(bundledCatalogs[kind] as readonly unknown[] | undefined)?.find((r) => rec(r).id === id);
-		return found === undefined ? undefined : rec(found);
-	};
 }
 
 // ------------------------------------------------------------- design resolve
@@ -266,7 +246,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const { options, diagnostics, resolved } = context;
 	const { theme, colorScheme, fontScheme, fontSchemePath } = resolved;
 	const fontPath = `/${fontSchemePath.split('.').join('/')}`;
-	const fontDiagnostic = diagnostics.find((diagnostic) => diagnostic.code === 'unresolved-font-scheme');
+	const fontDiagnostic = diagnostics.find((diagnostic) => diagnostic.kind === 'fontSchemes');
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
@@ -301,7 +281,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 		variables,
 		...(backgroundImage ? { backgroundImage } : {}),
 		fontSchemePath: fontPath,
-		...(fontDiagnostic ? { unresolvedFontScheme: fontDiagnostic.id } : {}),
+		...(fontDiagnostic ? { unresolvedFontScheme: fontDiagnostic.reference } : {}),
 	};
 }
 

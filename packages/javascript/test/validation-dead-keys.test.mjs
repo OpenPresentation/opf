@@ -1,10 +1,15 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { bundle, colorSchemes, fontSchemes, normalizeLanguageFamily, validate, validateCatalogRecord } from '../dist/index.js';
+import { embed, normalizeLanguageFamily, validate, validateCatalogRecord } from '../dist/index.js';
+import { defaultCatalog } from '../dist/catalog.js';
 import { resolveFontFamilies } from '../dist/composition.js';
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 // The format, references and policy findings: the checks that decide whether a deck is correct OPF.
-const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'policy'], ...options });
+const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'policy'], catalogs: [defaultCatalog], ...options });
+// The default catalog's records as published record files: with their $schema and id.
+const published = (kind, schema) => Object.entries(defaultCatalog[kind]).map(([id, record]) => ({ $schema: `https://openpresentation.org/schema/opf-${schema}/v1`, id, ...record }));
+const colorSchemes = published('colorSchemes', 'color-scheme');
+const fontSchemes = published('fontSchemes', 'font-scheme');
 
 // FA-07 (format audit): validation tightening and dead keys. Each newly invalid form is rejected and the valid
 // forms still validate.
@@ -128,7 +133,7 @@ describe("a slide's design cannot set dimensions", () => {
     invalid(deck({}, { design: { dimensions: { widthInches: 10, heightInches: 5 } } }), '/slides/0/design');
   });
   test('a slide-level theme whose dimensions differ from the deck is a references warning', () => {
-    const catalogs = { themes: { records: [{ $schema: 'https://openpresentation.org/schema/opf-theme/v1', id: 'wide-a4', name: 'A4', dimensions: 'a4' }] } };
+    const catalogs = { custom: { themes: { 'wide-a4': { name: 'A4', dimensions: 'a4' } } } };
     const mixed = deck({ design: { theme: 'minimal' }, catalogs }, { design: { theme: 'wide-a4' } });
     const result = checkAll(mixed);
     assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
@@ -140,9 +145,9 @@ describe("a slide's design cannot set dimensions", () => {
     assert.ok(finding, JSON.stringify(lint.findings.map((d) => d.ruleId)));
     assert.equal(finding.severity, 'warning');
     assert.equal(finding.path, '/slides/0/design/theme');
-    // The object form of a slide theme counts too.
-    const objectForm = deck({ design: { theme: 'minimal' } }, { design: { theme: { id: 'minimal', dimensions: '4:3' } } });
-    assert.ok(warningsOf(checkAll(objectForm)).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'));
+    // A theme of a named catalog group counts too.
+    const named = deck({ design: { theme: 'minimal' }, catalogs: { acme: { source: 'pkg:@acme/opf-catalog', themes: { square: { name: 'Square', dimensions: '4:3' } } } } }, { design: { theme: 'acme:square' } });
+    assert.ok(warningsOf(checkAll(named)).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'));
     // Same size: nothing to say. A deck-level dimensions override is reported as ignored.
     assert.equal(warningsOf(checkAll(deck({ design: { theme: 'wide-a4' }, catalogs }, { design: { theme: 'wide-a4' } }))).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'), false);
     assert.equal(warningsOf(checkAll(deck({ design: { theme: 'minimal' } }, { design: { theme: 'classic' } }))).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'), false);
@@ -160,15 +165,15 @@ describe('root audience accepts one inline Audience object', () => {
     invalid(deck({ audience: 7 }), '/audience');
   });
   test('an object id is checked against the audiences catalog like an array entry', () => {
-    const unknown = (audience) => warningsOf(checkAll(deck({ audience }))).filter((w) => w.ruleId === 'opf/catalog-reference' && w.path.startsWith('/audience')).map((w) => w.path);
+    const unknown = (audience) => warningsOf(checkAll(deck({ audience }))).filter((w) => w.ruleId === 'opf/unresolved-reference' && w.path.startsWith('/audience')).map((w) => w.path);
     assert.deepEqual(unknown({ id: 'no-such-audience' }), ['/audience/id']);
     assert.deepEqual(unknown([{ id: 'no-such-audience' }]), ['/audience/0/id']);
     assert.deepEqual(unknown({ id: 'executive' }), []);
     assert.deepEqual(unknown({ name: 'Custom' }), []);
   });
-  test('bundle inlines the catalog record a single audience object names', () => {
-    const bundled = bundle(deck({ audience: { id: 'executive' } }));
-    assert.ok(bundled.presentation.catalogs?.audiences?.records?.some((record) => record.id === 'executive'), JSON.stringify(bundled.report));
+  test('embed embeds the record a single audience object names', () => {
+    const embedded = embed(deck({ audience: { id: 'executive' } }), { catalogs: [defaultCatalog] });
+    assert.ok(embedded.document.catalogs?.default?.audiences?.executive, JSON.stringify(embedded.added));
   });
 });
 
@@ -255,10 +260,9 @@ describe('descriptions state what the engines do', () => {
     assert.match(defs.FontScheme.properties.code.description, /code blocks/);
     assert.match(defs.FontScheme.properties.code.description, /inline code runs/);
     assert.match(schemas.fontScheme.properties.code.description, /inline code runs/);
-    assert.match(defs.CatalogEntry.properties.source.description, /never fetch/);
-    assert.match(defs.CatalogEntry.properties.source.description, /catalogSources/);
-    assert.match(defs.CatalogSource.description, /catalogSources/);
-    assert.doesNotMatch(defs.CatalogSource.description, /locally-installed package/);
+    assert.match(defs.CatalogSource.description, /never fetch/);
+    assert.match(defs.CatalogSource.description, /registers the catalog/);
+    assert.equal(defs.CatalogEntry, undefined, "OPF 0.15 groups records by catalog (CatalogGroup), not by kind");
     assert.match(defs.Slide.properties.video.description, /placeholder/);
     assert.match(defs.Slide.properties.video.description, /Native playback is out of scope/);
     assert.match(defs.ContentPayload.properties.video.description, /placeholder/);

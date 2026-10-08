@@ -5,8 +5,8 @@
   "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "bengali",
-    "chittagonian"
+    "bn",
+    "ctg"
   ],
   "major": "Noto Sans Bengali",
   "minor": "Noto Sans Bengali",

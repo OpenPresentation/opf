@@ -3,7 +3,7 @@
   "name": "Airline Disruption Recovery Review",
   "description": "Airline Disruption Recovery Review is a fictional OPF example for air travel teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "airline-disruption-recovery-review",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
     "regulatory",
     {
@@ -512,15 +512,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "airline-disruption-recovery-review-arc",
+    "custom": {
+      "narratives": {
+        "airline-disruption-recovery-review-arc": {
           "name": "Air Travel Decision Arc",
           "summary": "A custom arc for AeroVista Airlines.",
           "description": "Airline Disruption Recovery Review uses a compact evidence-to-decision arc for AeroVista Airlines.",
@@ -545,13 +539,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "aerovista-airlines-theme",
+      },
+      "themes": {
+        "aerovista-airlines-theme": {
           "name": "AeroVista Airlines Working Theme",
           "colorScheme": "cool-horizon",
           "fontScheme": "georgia",
@@ -564,14 +554,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "aerovista-airlines-signal",
+      },
+      "colorSchemes": {
+        "aerovista-airlines-signal": {
           "name": "AeroVista Airlines Signal Palette",
           "accent1": "#334155",
           "accent2": "#F8FAFC",
@@ -586,31 +571,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

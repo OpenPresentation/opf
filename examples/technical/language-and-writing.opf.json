@@ -9,9 +9,8 @@
     }
   ],
   "language": {
-    "id": "arabic",
-    "name": "Arabic",
     "bcp47": "ar-SA",
+    "name": "Arabic",
     "code": "ara",
     "direction": "rtl",
     "script": "Arab",

@@ -3,7 +3,7 @@
   "name": "Tax Portal Modernization",
   "description": "Tax Portal Modernization is a fictional OPF example for tax administration teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "tax-portal-modernization",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
     "regulatory",
     {
@@ -518,15 +518,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "tax-portal-modernization-arc",
+    "custom": {
+      "narratives": {
+        "tax-portal-modernization-arc": {
           "name": "Tax Administration Decision Arc",
           "summary": "A custom arc for Department of Revenue Services.",
           "description": "Tax Portal Modernization uses a compact evidence-to-decision arc for Department of Revenue Services.",
@@ -551,13 +545,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "department-of-revenue-services-theme",
+      },
+      "themes": {
+        "department-of-revenue-services-theme": {
           "name": "Department of Revenue Services Working Theme",
           "colorScheme": "golden-yellow",
           "fontScheme": "skeena",
@@ -570,14 +560,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "department-of-revenue-services-signal",
+      },
+      "colorSchemes": {
+        "department-of-revenue-services-signal": {
           "name": "Department of Revenue Services Signal Palette",
           "accent1": "#334155",
           "accent2": "#F8FAFC",
@@ -592,31 +577,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

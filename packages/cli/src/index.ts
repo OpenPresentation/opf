@@ -1,7 +1,9 @@
 import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { importData, OPFDataImportError, paginate, bundle, catalogEntries, schemaEntries, validate, type FindingSeverity } from "@openpresentation/opf";
+import { importData, OPFDataImportError, paginate, embed, catalogKinds, catalogDisplayKinds, schemaEntries, validate, type FindingSeverity } from "@openpresentation/opf";
+import { catalogDisplay, defaultCatalog } from "@openpresentation/opf/catalog";
+import { CLI_CATALOGS } from "./catalogs.js";
 import { applyPatch, getAtPointer, parsePointer, OPFPatchError } from "@openpresentation/opf/patch";
 import { diffCommand } from "./diff.js";
 import { mergeCommand } from "./merge.js";
@@ -41,7 +43,7 @@ ${VALIDATE_USAGE}
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
            | --combine --output <file|->] [--partial] [--examples] [--format yaml] [--force] [--fail-on <level>]
   opf paginate <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
-  opf bundle <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
+  opf embed <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
 ${MARKDOWN_USAGE}
 ${YAML_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
@@ -54,7 +56,7 @@ ${YAML_USAGE}
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
-  opf catalog <kind> [id] [--all]
+  opf catalog <kind> [id]
   opf skills <install|update|status> [--agent <universal|codex|claude-code|cursor>]
              [--global | --directory <skills-directory>]
   opf --version
@@ -79,9 +81,12 @@ exits 1 if any file would change.
 Stats reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets,
 citations, variables, assets, fonts, an estimated speaking time) without validating, composing or loading
 fonts; it never rates anything. --per-slide adds a row per slide.
-Bundle inlines the bundled catalog records a document references (kinds with a
-custom source are left untouched) so the file resolves every catalog reference
-offline. Remote media and data assets are not inlined.
+Embed copies every catalog record a document references into the document, once, in
+the group it resolves in (catalogs.default for the default catalog), with the records
+those records reference, so the file renders the same with no catalog registered.
+Records the document already embeds are kept; remote media and data assets are not
+inlined. Every command registers the default catalog (the pinned pptx.gallery
+snapshot); opf catalogs and opf catalog list it.
 Fill resolves a template's variables ({{id}} tokens and var:id references) with one
 record per data row (CSV/TSV/JSON array) or one JSON object: one deck per record
 with --out-dir (names from --name, default deck-{n}; {n} is the index and {column}
@@ -107,7 +112,6 @@ locally modified/unmanaged skill folders and keep previous managed versions.`;
 class CliError extends Error {
   constructor(message: string, readonly code = 2, readonly details?: unknown, readonly key = "validation") { super(message); }
 }
-const isDeprecated = (record: object) => "deprecation" in record && !!(record as { deprecation?: unknown }).deprecation;
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
@@ -354,22 +358,22 @@ async function main(args0: string[]) {
   if (command === "paginate") {
     const { positional, options } = parse(args, ["format", "force", "fail-on"]); arity(positional, 2);
     const source = await readDeck(positional[0], true); checked(source.value, failOnOf(options));
-    const result = paginate(source.value);
+    const result = paginate(source.value, { catalogs: CLI_CATALOGS });
     await emit(result.presentation, positional[1], options, undefined, { pages: result.pages }, source); return;
   }
-  if (command === "bundle") {
+  if (command === "embed") {
     const { positional, options } = parse(args, ["format", "force", "fail-on"]); arity(positional, 2);
     const source = await readDeck(positional[0], true); checked(source.value, failOnOf(options));
-    const result = bundle(source.value);
-    await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }, source); return;
+    const result = embed(source.value, { catalogs: CLI_CATALOGS });
+    await emit(result.document, positional[1], options, undefined, { embed: { added: result.added, unresolved: result.unresolved } }, source); return;
   }
   if (command === "schemas") { arity(args, 0); print(schemaEntries.map(entry => ({ name: entry.name, file: entry.file, id: entry.schema.$id }))); return; }
   if (command === "catalogs") {
     arity(args, 0);
-    print(catalogEntries.map(entry => {
-      const deprecated = entry.records.filter(isDeprecated).length;
-      return { kind: entry.kind, count: entry.records.length - deprecated, ...(deprecated ? { deprecated } : {}) };
-    }));
+    print([
+      ...catalogKinds.map(kind => ({ kind, count: Object.keys(defaultCatalog[kind] ?? {}).length, source: defaultCatalog.source })),
+      ...catalogDisplayKinds.map(kind => ({ kind, count: Object.keys(catalogDisplay[kind]).length, display: true })),
+    ]);
     return;
   }
   if (command === "schema") {
@@ -378,16 +382,17 @@ async function main(args0: string[]) {
     print(getAtPointer(entry.schema, args[1] ?? "")); return;
   }
   if (command === "catalog") {
-    const { positional, options } = parse(args, ["all"]); arity(positional, 1, 2);
-    const entry = catalogEntries.find(entry => entry.kind === positional[0]);
-    if (!entry) throw new CliError("Unknown catalog. Run opf catalogs.");
-    // Deprecated records stay resolvable by exact id but are left out of the
-    // default listing; --all includes them.
-    const records = entry.records;
+    const { positional } = parse(args, []); arity(positional, 1, 2);
+    const kind = positional[0] as string;
+    const records = (catalogKinds as readonly string[]).includes(kind)
+      ? defaultCatalog[kind as (typeof catalogKinds)[number]]
+      : (catalogDisplayKinds as readonly string[]).includes(kind) ? catalogDisplay[kind as (typeof catalogDisplayKinds)[number]] : undefined;
+    if (!records) throw new CliError("Unknown catalog. Run opf catalogs.");
+    // Records are keyed by id, as a document embeds them; a listing gives each one with its id.
     const result = positional[1] === undefined
-      ? (options.all ? records : records.filter(record => !isDeprecated(record)))
-      : records.find(record => record.id === positional[1]);
-    if (!result) throw new CliError(`Unknown ${positional[0]} id: ${positional[1]}`);
+      ? Object.entries(records).map(([id, record]) => ({ id, ...record }))
+      : Object.hasOwn(records, positional[1] as string) ? { id: positional[1], ...records[positional[1] as string] } : undefined;
+    if (!result) throw new CliError(`Unknown ${kind} id: ${positional[1]}`);
     print(result); return;
   }
   throw new CliError(`Unknown command: ${command}. Run opf --help.`);

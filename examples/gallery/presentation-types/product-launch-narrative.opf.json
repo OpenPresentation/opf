@@ -3,7 +3,7 @@
   "name": "Product Launch Narrative",
   "description": "Product Launch Narrative is a fictional OPF example for product launch teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "product-launch-narrative",
-  "language": "english-ca",
+  "language": "en-CA",
   "audience": [
     "investor",
     {
@@ -503,15 +503,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "product-launch-narrative-arc",
+    "custom": {
+      "narratives": {
+        "product-launch-narrative-arc": {
           "name": "Product Launch Decision Arc",
           "summary": "A custom arc for Kiteframe.",
           "description": "Product Launch Narrative uses a compact evidence-to-decision arc for Kiteframe.",
@@ -536,13 +530,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "kiteframe-theme",
+      },
+      "themes": {
+        "kiteframe-theme": {
           "name": "Kiteframe Working Theme",
           "colorScheme": "boost",
           "fontScheme": "verdana",
@@ -555,14 +545,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "kiteframe-signal",
+      },
+      "colorSchemes": {
+        "kiteframe-signal": {
           "name": "Kiteframe Signal Palette",
           "accent1": "#B45309",
           "accent2": "#BE123C",
@@ -577,31 +562,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

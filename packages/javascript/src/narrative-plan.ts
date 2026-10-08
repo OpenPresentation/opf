@@ -1,11 +1,11 @@
-import { catalogs } from "./catalogs.js";
+import { resolveReference, type CatalogOptions } from "./catalog-refs.js";
+import { hostCatalogs } from "./host-catalogs.js";
 
 /**
- * Narrative plan checks (FA-02). A deck holds a pointer (`narrative`, a catalog id, URL or `pkg:` reference) and
- * links its slides to the plan's beats with `slides[].beat`. This module resolves the pointer the way every
- * catalog reference resolves, offline (inline `catalogs.narratives.records`, then loaded records, then the
- * bundled catalog), and reports where the deck and the plan disagree. Lint and the audit both use it. It never
- * fetches: a URL or `pkg:` reference, or an id no local source defines, resolves to nothing and is not checked.
+ * Narrative plan checks (FA-02). A deck holds a pointer (`narrative`, a bare id or `name:id`) and links its slides
+ * to the plan's beats with `slides[].beat`. This module resolves the pointer the way every content reference
+ * resolves (the document's catalogs groups, then the registered catalogs) and reports where the deck and the plan
+ * disagree. Lint and the audit both use it. It never fetches: a reference that resolves nowhere is not checked.
  */
 
 type Rec = Record<string, unknown>;
@@ -13,31 +13,20 @@ const isRec = (value: unknown): value is Rec => typeof value === "object" && val
 
 export interface ResolvedNarrative {
   record: Rec;
-  /** Where the record came from, in resolution order. */
-  origin: "document" | "loaded" | "built-in";
+  /** `document` for an embedded record, `host` for one from a registered catalog. */
+  origin: "document" | "host";
   /** The narrative record's beat ids, in order. */
   beats: string[];
 }
 
-/** The narrative record the document's `narrative` string names, from local sources only, or undefined. */
-export function resolveNarrative(document: unknown, loaded: readonly unknown[] = []): ResolvedNarrative | undefined {
+/** The narrative record the document's `narrative` reference names, or undefined. */
+export function resolveNarrative(document: unknown, options: CatalogOptions = {}): ResolvedNarrative | undefined {
   if (!isRec(document) || typeof document.narrative !== "string") return undefined;
-  const id = document.narrative;
-  if (/^(?:https?:|pkg:)/i.test(id)) return undefined;
-  const entry = isRec(document.catalogs) && isRec(document.catalogs.narratives) ? document.catalogs.narratives : {};
-  const sources: [ResolvedNarrative["origin"], readonly unknown[]][] = [
-    ["document", Array.isArray(entry.records) ? entry.records : []],
-    ["loaded", loaded],
-    ["built-in", catalogs.narratives as readonly unknown[]],
-  ];
-  for (const [origin, records] of sources) {
-    const record = records.find((candidate) => isRec(candidate) && candidate.id === id);
-    if (isRec(record)) {
-      const beats = Array.isArray(record.beats) ? record.beats.flatMap((beat) => (isRec(beat) && typeof beat.id === "string" ? [beat.id] : [])) : [];
-      return { record, origin, beats };
-    }
-  }
-  return undefined;
+  const found = resolveReference(document, "narratives", document.narrative, hostCatalogs(options));
+  if (!found) return undefined;
+  const record = found.record;
+  const beats = Array.isArray(record.beats) ? record.beats.flatMap((beat) => (isRec(beat) && typeof beat.id === "string" ? [beat.id] : [])) : [];
+  return { record, origin: found.origin, beats };
 }
 
 export interface BeatReference {

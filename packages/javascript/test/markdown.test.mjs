@@ -435,7 +435,7 @@ describe("OPF to Markdown", () => {
   });
 
   test("the front matter keeps every deck property, in order, as plain YAML", () => {
-    const deck = { $schema: "https://openpresentation.org/schema/opf/v1", name: "N: with colon", description: "line one\nline two", tags: ["a", "b"], duration: 5, language: { id: "english-us" }, slides: [{ title: "x" }] };
+    const deck = { $schema: "https://openpresentation.org/schema/opf/v1", name: "N: with colon", description: "line one\nline two", tags: ["a", "b"], duration: 5, language: { bcp47: "en-US", name: "English (United States)" }, slides: [{ title: "x" }] };
     const { markdown } = toMarkdown(deck);
     assert.deepEqual(fromMarkdown(markdown).presentation, deck);
     assert.deepEqual(Object.keys(fromMarkdown(markdown).presentation), Object.keys(deck));

@@ -214,10 +214,9 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
-| [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | A supplied or inline catalog record is invalid, or repeats an id. |
-| [`opf/catalog-reference`](#opfcatalog-reference) | References | warning | structure | A catalog id is not in the available context. |
-| [`opf/deprecated-catalog-id`](#opfdeprecated-catalog-id) | References | warning | structure | A catalog id is deprecated. |
-| [`opf/catalog-source`](#opfcatalog-source) | References | info | structure | An external catalog source was not fetched. |
+| [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
+| [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
+| [`opf/undeclared-catalog`](#opfundeclared-catalog) | References | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
 | [`opf/unused-dataset`](#opfunused-dataset) | References | warning | structure | A dataset is never used. |
 | [`opf/unknown-beat`](#opfunknown-beat) | References | warning | structure | A slide names a beat its narrative does not define. |
@@ -441,33 +440,29 @@ Default severity: **error**. Cost: structure. Asset references form a cycle.
 
 ### `opf/catalog-record`
 
-Default severity: **error**. Cost: structure. A supplied or inline catalog record is invalid, or repeats an id.
+Default severity: **error**. Cost: structure. An embedded or registered catalog record is invalid.
 
-**Why.** A record that fails its catalog schema cannot be resolved, and a repeated id makes the override ambiguous. Invalid records are left out of the lookup, so the references to them are reported too.
+**Why.** A record that fails its companion schema cannot be resolved. Invalid records are left out of the lookup, so the references to them are reported too.
 
 **Basis.** spec/schemas/<kind>.schema.json
 
-### `opf/catalog-reference`
+### `opf/unresolved-reference`
 
-Default severity: **warning**. Cost: structure. A catalog id is not in the available context.
+Default severity: **warning**. Cost: structure. A content reference resolves nowhere.
 
-**Why.** A theme, layout, font scheme or other catalog id that no record defines falls back to the engine default. Custom ids are legitimate when the host supplies their records, so this is advisory.
+**Why.** A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.
 
-**Approximations.** Resolved against the document's inline records, the records the host passed in `catalogs`, then the bundled catalogs. External sources and `pkg:` records are never fetched. Free-form audience and purpose text, and BCP 47 language tags, are not catalog references.
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-### `opf/deprecated-catalog-id`
+**Approximations.** Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference.
 
-Default severity: **warning**. Cost: structure. A catalog id is deprecated.
+### `opf/undeclared-catalog`
 
-**Why.** A deprecated record still resolves, so nothing breaks, but the replacement is the one that will be maintained.
+Default severity: **error**. Cost: structure. A reference names a catalog group the document does not declare.
 
-**Basis.** spec/catalogs `deprecation.replacedBy`
+**Why.** The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve.
 
-### `opf/catalog-source`
-
-Default severity: **info**. Cost: structure. An external catalog source was not fetched.
-
-**Why.** A catalog `source` is a URL or package the checker never loads, so ids defined there are not verified.
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
 ### `opf/unused-reference`
 
@@ -493,7 +488,7 @@ Default severity: **warning**. Cost: structure. A slide names a beat its narrati
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** The narrative resolves offline: the inline catalogs.narratives.records, then the `catalogs` option, then the bundled catalog. A narrative no local source defines is not checked.
+**Approximations.** The narrative resolves like every content reference: the document's catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked.
 
 ### `opf/slide-theme-dimensions`
 
@@ -819,7 +814,7 @@ Default severity: **info**. Cost: structure. A beat of the narrative has no slid
 
 **Why.** The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.
 
-**Approximations.** Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in the `catalogs` option, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
+**Approximations.** Resolved like every content reference: the document's catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
 
 ### `opf/empty-slide`
 

@@ -3,7 +3,7 @@
   "name": "Wildfire Evacuation Preparedness",
   "description": "Wildfire Evacuation Preparedness is a fictional OPF example for emergency management teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "wildfire-evacuation-preparedness",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "regulatory",
     {
@@ -504,15 +504,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "wildfire-evacuation-preparedness-arc",
+    "custom": {
+      "narratives": {
+        "wildfire-evacuation-preparedness-arc": {
           "name": "Emergency Management Decision Arc",
           "summary": "A custom arc for Pine County Emergency Management.",
           "description": "Wildfire Evacuation Preparedness uses a compact evidence-to-decision arc for Pine County Emergency Management.",
@@ -537,13 +531,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "pine-county-emergency-management-theme",
+      },
+      "themes": {
+        "pine-county-emergency-management-theme": {
           "name": "Pine County Emergency Management Working Theme",
           "colorScheme": "steel-blue",
           "fontScheme": "raleway",
@@ -556,14 +546,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "pine-county-emergency-management-signal",
+      },
+      "colorSchemes": {
+        "pine-county-emergency-management-signal": {
           "name": "Pine County Emergency Management Signal Palette",
           "accent1": "#E2E8F0",
           "accent2": "#F59E0B",
@@ -578,31 +563,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

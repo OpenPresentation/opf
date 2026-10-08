@@ -460,18 +460,18 @@ function timelinePayload(spec, index) {
 
 function languageFor(spec, index, catalogs, density) {
   const specific = [
-    ["Japan", "japanese"],
-    ["India", "english-in"],
-    ["Brazil", "portuguese"],
-    ["German", "german"],
-    ["Arabic", "arabic"],
+    ["Japan", "ja"],
+    ["India", "en-IN"],
+    ["Brazil", "pt"],
+    ["German", "de"],
+    ["Arabic", "ar"],
   ].find(([needle]) => spec.title.includes(needle));
 
   if (specific) {
     const id = specific[1];
-    if (id === "arabic") {
+    if (id === "ar") {
       return {
-        id,
+        bcp47: id,
         name: "Arabic",
         direction: "rtl",
         script: "Arab",
@@ -482,14 +482,14 @@ function languageFor(spec, index, catalogs, density) {
     return id;
   }
 
-  if (spec.title.includes("Rural Payments")) return "english-in";
-  if (spec.title.includes("Works Council")) return "german";
-  if (spec.title.includes("Climate Adaptation")) return "portuguese";
-  if (spec.title.includes("Market Entry")) return "japanese";
+  if (spec.title.includes("Rural Payments")) return "en-IN";
+  if (spec.title.includes("Works Council")) return "de";
+  if (spec.title.includes("Climate Adaptation")) return "pt";
+  if (spec.title.includes("Market Entry")) return "ja";
 
   if (density === "dense" && index % 11 === 0) {
     return {
-      id: "english-us",
+      bcp47: "en-US",
       name: "English (United States)",
       direction: "ltr",
       fontScheme: pick(catalogs.fontSchemes, index),
@@ -497,7 +497,7 @@ function languageFor(spec, index, catalogs, density) {
     };
   }
 
-  return pick(["english-us", "english-gb", "english-ca", "english-au"], index);
+  return pick(["en-US", "en-GB", "en-CA", "en-AU"], index);
 }
 
 function richText(spec, index) {
@@ -742,18 +742,14 @@ function slidesFor(spec, index, catalogs, density) {
   return slides;
 }
 
+// The deck's own records (OPF 0.15): catalogs.custom, keyed by id. Gallery records are referenced by bare id and
+// resolve in the default catalog; the example embedding script outside the repository embeds them.
 function catalogOverrides(spec, index, catalogs) {
   const customId = `${slug(spec.title)}-arc`;
   return {
-    narratives: {
-      source: [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives",
-      ],
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-narrative/v1",
-          id: customId,
+    custom: {
+      narratives: {
+        [customId]: {
           name: `${titleCase(spec.area)} Decision Arc`,
           summary: `A custom arc for ${spec.org}.`,
           description: `${spec.title} uses a compact evidence-to-decision arc for ${spec.org}.`,
@@ -763,13 +759,9 @@ function catalogOverrides(spec, index, catalogs) {
             { id: "decision", name: "Decision", type: "list", layout: "list-3x" },
           ],
         },
-      ],
-    },
-    themes: {
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-theme/v1",
-          id: `${slug(spec.org)}-theme`,
+      },
+      themes: {
+        [`${slug(spec.org)}-theme`]: {
           name: `${spec.org} Working Theme`,
           colorScheme: pick(catalogs.colorSchemes, index),
           fontScheme: pick(catalogs.fontSchemes, index),
@@ -778,14 +770,9 @@ function catalogOverrides(spec, index, catalogs) {
           background: { type: "theme", slot: pick(["light1", "dark1", "light2"], index) },
           tags: [slug(spec.area), "example"],
         },
-      ],
-    },
-    colorSchemes: {
-      source: "https://www.pptx.gallery/color-schemes",
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-color-scheme/v1",
-          id: `${slug(spec.org)}-signal`,
+      },
+      colorSchemes: {
+        [`${slug(spec.org)}-signal`]: {
           name: `${spec.org} Signal Palette`,
           accent1: color(index, 1),
           accent2: color(index, 2),
@@ -800,31 +787,7 @@ function catalogOverrides(spec, index, catalogs) {
           hyperlink: "#2563EB",
           followedHyperlink: "#7C3AED",
         },
-      ],
-    },
-    fontSchemes: {
-      source: "pkg:@openpresentation/gallery/font-schemes",
-    },
-    layouts: {
-      source: "https://www.pptx.gallery/layouts",
-    },
-    chartTypes: {
-      source: "https://www.pptx.gallery/chart-types",
-    },
-    languages: {
-      source: "https://www.pptx.gallery/languages",
-    },
-    audiences: {
-      source: "https://www.pptx.gallery/audiences",
-    },
-    purposes: {
-      source: "https://www.pptx.gallery/purposes",
-    },
-    tones: {
-      source: "https://www.pptx.gallery/tones",
-    },
-    socialPlatforms: {
-      source: "https://www.pptx.gallery/social-platforms",
+      },
     },
   };
 }
@@ -896,7 +859,7 @@ function deckFor(rawSpec, index, catalogs) {
             "Do not over-explain obvious context.",
           ],
         },
-    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    // A dense deck points at its own record in catalogs.custom.narratives (see catalogOverrides).
     narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
@@ -936,7 +899,7 @@ function deckFor(rawSpec, index, catalogs) {
         "Do not over-explain obvious context.",
       ],
     },
-    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    // A dense deck points at its own record in catalogs.custom.narratives (see catalogOverrides).
     narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),

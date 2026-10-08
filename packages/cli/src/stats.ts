@@ -1,3 +1,4 @@
+import { CLI_CATALOGS } from "./catalogs.js";
 import { stats, type PresentationStats, type ReferenceFact, type StatsSlideRef, type SlideStats } from "@openpresentation/opf";
 import type { CliContext } from "./context.js";
 
@@ -9,7 +10,7 @@ export async function statsCommand(args: string[], cli: CliContext): Promise<voi
   if (!["json", "text"].includes(format)) throw cli.fail("--format must be json or text.");
   const { value } = await cli.readJson(positional[0] as string);
   if (!value || typeof value !== "object" || Array.isArray(value)) throw cli.fail("stats needs a presentation object.", 1);
-  const result = stats(value, { perSlide: !!options["per-slide"] });
+  const result = stats(value, { perSlide: !!options["per-slide"], catalogs: CLI_CATALOGS });
   if (format === "json") cli.print(result);
   else process.stdout.write(formatStats(result));
 }

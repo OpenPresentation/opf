@@ -5,10 +5,10 @@
   "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
-    "chinese-simplified",
-    "chinese-traditional",
-    "japanese",
-    "korean"
+    "zh-Hans",
+    "zh-Hant",
+    "ja",
+    "ko"
   ],
   "major": "Noto Sans SC",
   "minor": "Noto Sans SC",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-layout/v1",
   "title": "Slide Layout",
-  "description": "Schema for slide-layout records in the pptx.gallery library. Each record describes a semantic slide layout — what regions it exposes and what content kinds those regions are intended to hold. Layouts are referenced from OPF documents via Slide.layout; the engine resolves the reference against catalogs.layouts (inline) → catalogs.layouts.source → the default catalog at https://www.pptx.gallery/layouts. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.",
+  "description": "Schema for slide-layout records. Each record describes a semantic slide layout: what regions it exposes, what content kinds those regions are intended to hold, how they are arranged (composition) and its design hints. Documents reference a layout from Slide.layout; a slide without a layout, or whose layout resolves nowhere, composes automatically.\n\nA document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' and 'id'; the copy a document embeds under catalogs.<group>.<kind>.<id> carries neither (the key is the id) and no 'x-*' display metadata.",
   "type": "object",
   "required": [
     "$schema",
@@ -13,12 +13,12 @@
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-layout/v1",
-      "description": "Identifies this record as a slide layout in the openpresentation.org catalog."
+      "description": "Identifies a published record file as a layout record. Required in a published file; an embedded copy omits it."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this layout via Slide.layout. Lowercase kebab-case.",
+      "description": "The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "title",
         "title-subtitle",
@@ -35,27 +35,6 @@
         "Chart 1x",
         "Image Bleed"
       ]
-    },
-    "deprecation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["replacedBy"],
-      "description": "Present when this layout is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
-      "properties": {
-        "replacedBy": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Id of the non-deprecated layout record that documents should reference instead."
-        },
-        "reason": {
-          "type": "string",
-          "description": "Why the record is deprecated."
-        },
-        "removal": {
-          "type": "string",
-          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
-        }
-      }
     },
     "summary": {
       "type": "string",

@@ -3,7 +3,7 @@
   "name": "Workforce Pathway Partnership",
   "description": "Workforce Pathway Partnership is a fictional OPF example for community college teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "workforce-pathway-partnership",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "investor",
     {
@@ -503,15 +503,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "workforce-pathway-partnership-arc",
+    "custom": {
+      "narratives": {
+        "workforce-pathway-partnership-arc": {
           "name": "Community College Decision Arc",
           "summary": "A custom arc for Metro Technical College.",
           "description": "Workforce Pathway Partnership uses a compact evidence-to-decision arc for Metro Technical College.",
@@ -536,13 +530,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "metro-technical-college-theme",
+      },
+      "themes": {
+        "metro-technical-college-theme": {
           "name": "Metro Technical College Working Theme",
           "colorScheme": "black-and-white",
           "fontScheme": "noto-sans-oriya",
@@ -555,14 +545,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "metro-technical-college-signal",
+      },
+      "colorSchemes": {
+        "metro-technical-college-signal": {
           "name": "Metro Technical College Signal Palette",
           "accent1": "#E2E8F0",
           "accent2": "#F59E0B",
@@ -577,31 +562,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

@@ -1,5 +1,7 @@
-import { catalogs } from './catalogs.js';
-import { DEFAULT_FONT_SCHEME, resolveCanvasDimensions, resolveFontFamilies, resolveFontSchemeReference } from './composition.js';
+import { catalogKinds, type CatalogOptions } from './catalog-refs.js';
+import { resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
+import { resolveDesignRecords } from './design-records.js';
+import { hostCatalogs } from './host-catalogs.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
 import { listVariables, type VariableKind } from './variables.js';
 
@@ -203,22 +205,22 @@ export interface PresentationStats {
   fonts: {
     /** Every family named: by a font scheme in effect, an inline scheme, or a run's `fontFamily`. */
     families: string[];
-    /** Font-scheme ids in effect (deck and slide overrides). */
+    /** Font-scheme references in effect (deck and slide overrides). */
     schemeIds: string[];
-    /** Ids that match no inline or bundled record. */
+    /** References that resolve nowhere (opf/unresolved-reference); the engine default font scheme is used for them. */
     unresolvedSchemeIds: string[];
     runOverrides: string[];
   };
   colors: { variables: { id: string; value: string | null; uses: number }[] };
   /** Keys under `extensions` on the deck, slides and payloads. */
   extensions: string[];
-  /** Per-kind inline catalog overrides. */
-  catalogOverrides: Record<string, { records: number; source: string | null }>;
+  /** The catalog groups the document embeds records in: each group's source and its record count per kind. */
+  catalogs: Record<string, { source: string | null; records: Record<string, number> }>;
   /** Present only with `perSlide: true`. */
   perSlide?: SlideStats[];
 }
 
-export interface StatsOptions {
+export interface StatsOptions extends CatalogOptions {
   /** Add the per-slide breakdown as `perSlide`. */
   perSlide?: boolean;
   /** Variable values to count as filled, as for `resolveVariables`. */
@@ -269,22 +271,12 @@ const embeddedBytes = (src: string): number => {
 const srcOf = (asset: unknown): string | undefined =>
   typeof asset === 'string' ? asset : isRecord(asset) && typeof asset.src === 'string' ? asset.src : undefined;
 
-/** Resolve a catalog record by id from the deck's inline catalogs, then the bundled ones. */
-const lookup = (deck: Rec, kind: 'themes' | 'fontSchemes', id: string): Rec | undefined => {
-  const inline = deck.catalogs?.[kind]?.records;
-  const found = (Array.isArray(inline) ? inline : []).find((record: Rec) => record?.id === id) ?? (catalogs[kind] as readonly Rec[]).find((record) => record.id === id);
-  return isRecord(found) ? found : undefined;
-};
-const themeRecord = (deck: Rec, value: unknown): Rec => {
-  if (typeof value === 'string') return lookup(deck, 'themes', value) ?? {};
-  if (isRecord(value)) return { ...(typeof value.id === 'string' ? lookup(deck, 'themes', value.id) : undefined), ...value };
-  return {};
-};
-
-function slideSize(deck: Rec): SlideSizeFact {
+function slideSize(deck: Rec, catalogs: CatalogOptions): SlideSizeFact {
   const design = isRecord(deck.design) ? deck.design : {};
-  const theme = themeRecord(deck, design.theme ?? 'minimal');
-  const source: SlideSizeFact['source'] = design.dimensions !== undefined ? 'design' : theme.dimensions !== undefined ? 'theme' : 'default';
+  const records = resolveDesignRecords(deck, undefined, catalogs);
+  const theme = records.theme;
+  const themed = typeof design.theme === 'string' && !records.diagnostics.some((diagnostic) => diagnostic.kind === 'themes');
+  const source: SlideSizeFact['source'] = design.dimensions !== undefined ? 'design' : themed && theme.dimensions !== undefined ? 'theme' : 'default';
   const dimensions = design.dimensions ?? theme.dimensions;
   let width = 40 / 3, height = 7.5;
   try {
@@ -330,6 +322,7 @@ interface Tally {
 }
 
 export function stats(presentation: unknown, options: StatsOptions = {}): PresentationStats {
+  const catalogs = hostCatalogs(options);
   if (!isRecord(presentation)) throw new TypeError('stats needs a presentation object.');
   const deck = presentation as Rec;
   const wordsPerMinute = options.wordsPerMinute ?? DEFAULT_WORDS_PER_MINUTE;
@@ -433,7 +426,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     filename: str(deck.filename),
     author: list(deck.author).filter((entry): entry is string => typeof entry === 'string'),
     language: reference(deck.language),
-    slideSize: slideSize(deck),
+    slideSize: slideSize(deck, catalogs),
     template: deck.template === true,
     tags: Array.isArray(deck.tags) ? deck.tags.filter((tag): tag is string => typeof tag === 'string') : [],
     takeaways: list(deck.takeaway).filter((entry) => typeof entry === 'string').length,
@@ -461,9 +454,8 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
   const total: Tally = { words: 0, citations: 0, footnotes: 0, links: 0, cited: new Set(), families: new Set() };
   const perSlide: SlideStats[] = [];
   const contentPerSlide: number[] = [];
-  const schemeReferences: unknown[] = [];
-  const deckTheme = themeRecord(deck, design.theme ?? 'minimal');
-  schemeReferences.push(design.fontScheme ?? deckTheme.fontScheme ?? DEFAULT_FONT_SCHEME);
+  // The deck's design, then each slide whose own design names a font scheme or a theme: the font schemes in effect.
+  const schemeDesigns: (number | undefined)[] = [undefined];
 
   slides.forEach((slide, index) => {
     const id = str(slide.id);
@@ -576,8 +568,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
         else if (isRecord(slideDesign[kind])) headerOverrides[kind]++;
       }
       // A slide's own scheme wins; its own theme supplies one only when the deck names no scheme (slide design overrides deck design per field).
-      if (slideDesign.fontScheme !== undefined) schemeReferences.push(slideDesign.fontScheme);
-      else if (slideDesign.theme !== undefined && design.fontScheme === undefined) schemeReferences.push(themeRecord(deck, slideDesign.theme).fontScheme ?? DEFAULT_FONT_SCHEME);
+      if (slideDesign.fontScheme !== undefined || (slideDesign.theme !== undefined && design.fontScheme === undefined)) schemeDesigns.push(index);
     }
 
     if (options.perSlide)
@@ -620,25 +611,27 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
   };
 
   const families = new Set<string>(total.families), schemeIds = new Set<string>(), unresolved = new Set<string>();
-  const addScheme = (value: unknown) => {
-    const resolved = resolveFontSchemeReference(value, (id) => lookup(deck, 'fontSchemes', id));
-    if (resolved.diagnostic) unresolved.add(resolved.diagnostic.id);
-    const id = typeof value === 'string' ? value : isRecord(value) && typeof value.id === 'string' ? value.id : undefined;
-    if (id !== undefined) schemeIds.add(id);
-    const scheme = resolved.scheme;
+  const addScheme = (slideIndex: number | undefined) => {
+    const resolved = resolveDesignRecords(deck, slideIndex, catalogs);
+    for (const diagnostic of resolved.diagnostics) if (diagnostic.kind === 'fontSchemes') unresolved.add(diagnostic.reference);
+    if (resolved.fontSchemeReference !== undefined) schemeIds.add(resolved.fontSchemeReference);
+    const scheme = resolved.fontScheme;
     const named = resolveFontFamilies(scheme);
     families.add(named.heading); families.add(named.body);
     if (scheme.code !== undefined) families.add(named.code);
     if (named.accent) families.add(named.accent);
   };
-  for (const entry of schemeReferences) addScheme(entry);
+  for (const entry of schemeDesigns) addScheme(entry);
 
-  // Inline catalogs are records the deck carries; a deck can also hold unused ones, so only counts are reported.
-  const catalogOverrides: PresentationStats['catalogOverrides'] = {};
+  // Embedded records are records the deck carries; a deck can also hold unused ones, so only counts are reported.
+  const catalogGroups: PresentationStats['catalogs'] = {};
   if (isRecord(deck.catalogs))
-    for (const kind of Object.keys(deck.catalogs).sort()) {
-      const entry = deck.catalogs[kind];
-      if (isRecord(entry)) catalogOverrides[kind] = { records: Array.isArray(entry.records) ? entry.records.length : 0, source: str(entry.source) };
+    for (const group of Object.keys(deck.catalogs).sort()) {
+      const entry = deck.catalogs[group];
+      if (!isRecord(entry)) continue;
+      const records: Record<string, number> = {};
+      for (const kind of catalogKinds) if (isRecord(entry[kind])) records[kind] = Object.keys(entry[kind]).length;
+      catalogGroups[group] = { source: str(entry.source), records };
     }
 
   const colorVariables = variables.filter((variable) => variable.kind === 'color').map((variable) => ({ id: variable.id, value: typeof variable.value === 'string' ? variable.value : null, uses: variable.uses.length }));
@@ -673,7 +666,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     fonts: { families: sorted(families), schemeIds: sorted(schemeIds), unresolvedSchemeIds: sorted(unresolved), runOverrides: sorted(total.families) },
     colors: { variables: colorVariables },
     extensions: sorted(extensions),
-    catalogOverrides,
+    catalogs: catalogGroups,
   };
   if (options.perSlide) result.perSlide = perSlide;
   return result;

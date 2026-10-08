@@ -101,7 +101,7 @@ describe("opf validate", () => {
     const raw = '﻿{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Target","layout":"pratner"}]\n}';
     const file = write("target.opf.json", raw);
     const loaded = write("brand.json", {
-      catalogs: { layouts: [{ id: "partner", name: "Partner", placeholders: [{ type: "title" }] }] },
+      catalogs: [{ source: "pkg:@brand/catalog", layouts: { partner: { name: "Partner", placeholders: [{ type: "title" }] } } }],
       contracts: [{ path: "/slides/*/layout", allowedValues: ["text-1x"], message: "Brand layouts: {{allowed}}." }],
     });
     const report = JSON.parse(run(["validate", file, "--only", "format,references,policy"]).stdout);

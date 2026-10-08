@@ -52,6 +52,6 @@ assert.equal(paginated.presentation.slides.at(-1).id,'source--2');
 assert.equal(new Set(paginated.presentation.slides.map(s=>s.id)).size,paginated.presentation.slides.length);
 assert.equal(paginated.pages.at(-1).sourceSlideIndex,1);
 assert.ok(paginated.pages.at(-1).mappings[0].outputPath.startsWith(`slides.${paginated.presentation.slides.length-1}.`));
-const unresolved=[];assert.equal(paginate({slides:[{layout:'not-local',text:'x'}]},{onDiagnostic:d=>unresolved.push(d.code)}).presentation.slides.length,1);assert.deepEqual(unresolved,['unresolved-layout']);
+const unresolved=[];assert.equal(paginate({slides:[{layout:'not-local',text:'x'}]},{onDiagnostic:d=>unresolved.push(d.code)}).presentation.slides.length,1);assert.deepEqual(unresolved,['unresolved-reference']);
 for(const page of result.slides)assert.ok(composeSlide(page).items.find(item=>item.field==='text').text.fontSize>=24);
 assert.throws(()=>paginateSlide({text:'x'},{minFontSize:0}),RangeError);

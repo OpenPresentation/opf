@@ -10,14 +10,13 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-audience/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field al...
+- Purpose: Schema for audience records. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Documents reference an audience from 'audience', which also accepts free-form text. A document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-audience/v1"` | Identifies this record as an audience in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this audience via audience. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-audience/v1"` | Identifies a published record file as a audience record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The audience's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this f... |
 | `name` | yes | `string` | Human-readable audience name shown in pickers. |
-| `deprecation` | no | `object` | Present when this audience is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default... |
 | `summary` | no | `string` | One-sentence positioning of the audience who they are and what they care about. |
 | `description` | no | `string` | Longer prose describing the audience archetype and how to address them. |
 | `seniority` | no | `enum:ic \| manager \| director \| vp \| c-suite \| mixed` | Typical seniority level of the audience. Engines use this as a hint for default depth and pacing. |
@@ -98,17 +97,16 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition "mixed"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference...
+- Purpose: Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/opf/ca...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-chart-type/v1"` | Identifies this record as a chart type in the open presentation catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
+| `id` | yes | `string` | The chart-type value (`chart.type`) this record describes. Lowercase kebab-case; it may start with a digit (e.g., '100pct-stacked-column') to mirror conventional chart naming. |
 | `name` | yes | `string` | Human-readable name of the chart type, as a chart picker shows it. |
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
 | `mappings` | yes | `ref:ChartTypeMappings` | Canonical and optional renderer-specific mappings used by engines to render this chart type. |
-| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. Th... |
 | `group` | no | `string` | Top-level grouping in the chart picker. |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
 | `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types... |
@@ -117,17 +115,6 @@ OPF documents usually reference these records with string ids such as `design.th
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
 ### Nested Types
-
-#### ChartTypeDeprecation
-
-- Type: `object`
-- Required fields: `replacedBy`
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `replacedBy` | yes | `string` | Id of the non-deprecated chart type that documents should reference instead. |
-| `reason` | no | `string` | Why the record is deprecated. |
-| `removal` | no | `string` | Package version in which the record is scheduled for removal from the bundled catalog. |
 
 #### ChartTypeMappings
 
@@ -163,14 +150,13 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-color-scheme/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for color-scheme records in the pptx.gallery library. Each scheme is a named palette with the twelve PowerPoint color slots (six accents, two darks, two lights, plus hyperlink and followed-hyperlink), suitable for being mapped directly into OOXML theme XML. Color schemes are referenced from OPF documents via design.colorScheme or design.colorScheme.id; the engine resolves the reference against catalogs.colorSchemes (inline) -> catalogs.colorSchemes.source -> the default catalog at http...
+- Purpose: Schema for color-scheme records. Each scheme is a named palette with the twelve PowerPoint color slots (six accents, two darks, two lights, plus hyperlink and followed-hyperlink), suitable for being mapped directly into OOXML theme XML. Documents reference a scheme from design.colorScheme (or design.colorScheme.id) and from a theme's colorScheme; slot overrides on design.colorScheme take precedence over the resolved scheme. The slot fields here mirror the inline-override fields on the in-docu...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-color-scheme/v1"` | Identifies this record as a color scheme in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this color scheme. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-color-scheme/v1"` | Identifies a published record file as a colour scheme record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The colour scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without t... |
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
-| `deprecation` | no | `object` | Present when this color scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and def... |
 | `summary` | no | `string` | One-sentence positioning of the palette what mood it evokes and where to use it. |
 | `description` | no | `string` | Longer prose describing the palette and its intended use. |
 | `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
@@ -204,14 +190,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-font-scheme/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `major`, `minor`
-- Purpose: Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) catalogs.fontSchemes.source the default catalog at...
+- Purpose: Schema for font-scheme records. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Documents reference a scheme from design.fontScheme (or design.fontScheme.id), from a theme's fontScheme and from a language's fontScheme / googleFontScheme. Role overrides on design.fontScheme (heading, body, accent, code), each a font family n...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-font-scheme/v1"` | Identifies this record as a font scheme in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this font scheme. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-font-scheme/v1"` | Identifies a published record file as a font scheme record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The font scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without thi... |
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
-| `deprecation` | no | `object` | Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defa... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
 | `code` | no | `string` | Optional monospaced font family name for code blocks and for inline code runs (TextRun.code). It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchan... |
@@ -220,7 +205,7 @@ _No named properties._
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
 | `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
-| `languages` | no | `array<string>` | Optional list of languages catalog ids (see the languages catalog, https://www.pptx.gallery/languages) this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme... |
+| `languages` | no | `array<string>` | Optional list of BCP-47 language tags this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this lis... |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |
 | `description` | no | `string` | Longer prose describing the font scheme and where it shines. |
@@ -233,21 +218,20 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-language/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `bcp47`
-- Purpose: Schema for language records in the pptx.gallery library. Each record names a presentation language, carries a BCP-47 language tag, and pairs it with sensible default font schemes for PowerPoint and Google Slides output. Languages are referenced from OPF documents via language; the engine resolves the reference against catalogs.languages (inline) catalogs.languages.source the default catalog at https://www.pptx.gallery/languages. The presentation language field also accepts BCP-47 tags directl...
+- Purpose: Schema for language records: display metadata for the language pickers of authoring tools (name, ISO code, the default font schemes a picker suggests). The document's 'language' is an engine vocabulary, a BCP-47 tag validated directly; engines never look a language record up, and their script, direction, OOXML tag and default script fonts come from spec/reference/engine-vocabularies.json. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.langu...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-language/v1"` | Identifies this record as a language in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this language via language. Lowercase kebab-case. |
+| `id` | yes | `string` | The record's id in the gallery's language catalog, lowercase kebab-case. Documents name a language by its BCP-47 tag ('bcp47'), never by this id. |
 | `name` | yes | `string` | Human-readable language name. |
-| `deprecation` | no | `object` | Present when this language is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default... |
 | `code` | no | `string` | ISO 639-3 (or 639-2) three-letter language code. Carried for engines that prefer ISO codes. |
 | `bcp47` | yes | `string` | BCP-47 language tag for this record. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form. |
 | `ooxmlLang` | no | `string` | Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engine... |
 | `direction` | no | `enum:ltr \| rtl` | Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi... |
 | `script` | no | `string` | ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsia... |
-| `fontScheme` | no | `string` | Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language'... |
-| `googleFontScheme` | no | `string` | Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resol... |
+| `fontScheme` | no | `string` | The font-scheme id a picker suggests for this language when targeting PowerPoint output. Display metadata: engines take a language's default script fonts from their own vocabulary. |
+| `googleFontScheme` | no | `string` | The font-scheme id a picker suggests for this language when targeting Google Slides output. Display metadata. |
 | `summary` | no | `string` | One-sentence note about coverage or font defaults. |
 | `description` | no | `string` | Longer prose describing the language record and any font-pairing rationale. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
@@ -288,14 +272,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-layout/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for slide-layout records in the pptx.gallery library. Each record describes a semantic slide layout what regions it exposes and what content kinds those regions are intended to hold. Layouts are referenced from OPF documents via Slide.layout; the engine resolves the reference against catalogs.layouts (inline) catalogs.layouts.source the default catalog at https://www.pptx.gallery/layouts. Free-form custom layout names that don't resolve through any catalog fall through to engine-define...
+- Purpose: Schema for slide-layout records. Each record describes a semantic slide layout: what regions it exposes, what content kinds those regions are intended to hold, how they are arranged (composition) and its design hints. Documents reference a layout from Slide.layout; a slide without a layout, or whose layout resolves nowhere, composes automatically. A document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout/v1"` | Identifies this record as a slide layout in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this layout via Slide.layout. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout/v1"` | Identifies a published record file as a layout record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. |
 | `name` | yes | `string` | Human-readable layout name shown in layout pickers. |
-| `deprecation` | no | `object` | Present when this layout is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default l... |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `design` | no | `ref:DesignHints` | The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Eve... |
@@ -355,14 +338,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-narrative/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `beats`
-- Purpose: Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core validate warns about a 'slides[].beat' id the resolved nar...
+- Purpose: Schema for narrative records. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' and links its slides to beats with 'slides[].beat'; a narrative the document defines itself is a record in catalogs.custom.narratives. Core validate warns about a 'slides[].beat' id the resolved narrative does not define (opf/unknown-beat) and about a root 'duration' outsid...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-narrative/v1"` |  |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this template, e.g. 'problem-solution'. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-narrative/v1"` | Identifies a published record file as a narrative record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The narrative's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this... |
 | `name` | yes | `string` | Human-readable template name, e.g. 'Problem Solution'. |
-| `deprecation` | no | `object` | Present when this narrative is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defaul... |
 | `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
 | `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
 | `audienceFit` | no | `array<string>` | Audiences this narrative works well for, e.g. ['executive', 'investor', 'customer']. |
@@ -395,14 +377,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-purpose/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for purpose records in the pptx.gallery library. Each record names a presentation objective such as informing, aligning, persuading, driving a decision, or selling. Purposes are referenced from OPF documents via purpose; the engine resolves the reference against catalogs.purposes (inline) catalogs.purposes.source the default catalog at https://www.pptx.gallery/purposes. The purpose field also accepts free-form strings and inline Purpose objects.
+- Purpose: Schema for purpose records. Each record names a presentation objective such as informing, aligning, persuading, driving a decision, or selling. Documents reference a purpose from 'purpose', which also accepts free-form text and inline Purpose objects. A document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-purpose/v1"` | Identifies this record as a purpose in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this purpose via purpose. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-purpose/v1"` | Identifies a published record file as a purpose record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The purpose's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this fi... |
 | `name` | yes | `string` | Human-readable purpose name shown in pickers. |
-| `deprecation` | no | `object` | Present when this purpose is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default... |
 | `summary` | no | `string` | One-sentence positioning of the purpose what this deck is trying to accomplish. |
 | `description` | no | `string` | Longer prose describing when to use this purpose and how it should shape a deck. |
 | `outcome` | no | `string` | Desired audience outcome after the presentation. |
@@ -418,14 +399,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-social-platform/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform its base URL, profile-URL pattern, handle prefix, and brand color. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color is catalog metadata for authoring UIs: en...
+- Purpose: Schema for social-platform records: display metadata for authoring UIs (name, brand color, handle example) alongside the URL patterns. The keys of a Socials object are an engine vocabulary validated directly; engines link a handle with the patterns in spec/reference/engine-vocabularies.json and never look a social-platform record up. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.socialPlatforms.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-social-platform/v1"` | Identifies this record as a social-platform entry in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this platform appears as a property key on Socials objects. Lowercase kebab-case. |
+| `id` | yes | `string` | The social platform's key, as written in a Socials object. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable platform name shown in pickers and footers. |
-| `deprecation` | no | `object` | Present when this social platform is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and... |
 | `summary` | no | `string` | One-sentence positioning of the platform what it's used for and who's on it. |
 | `description` | no | `string` | Longer prose describing the platform and any rendering conventions (e.g., handle prefixes, distributed instances). |
 | `baseUrl` | no | `string` | Canonical base URL of the platform used as the prefix when normalizing handles to full URLs. |
@@ -443,18 +423,17 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-theme/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for theme records in the pptx.gallery library. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default theme-controlled background, and a slide size. Themes are referenced from OPF documents via design.theme or design.theme.id; the engine resolves the reference against catalogs.themes (inline) catalogs.themes.source the default catalog at https://www.pptx.gallery/themes. Inline overrides on design.colorScheme / design.fontScheme / design.background / des...
+- Purpose: Schema for theme records. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default theme-controlled background, and a slide size. Documents reference a theme from design.theme; design.colorScheme, design.fontScheme, design.background and design.dimensions take precedence over the resolved theme. The theme's own colorScheme and fontScheme references resolve in the theme's group first, so a catalog's theme finds that catalog's schemes. A document references a reco...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-theme/v1"` | Identifies this record as a theme in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this theme via design.theme. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-theme/v1"` | Identifies a published record file as a theme record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The theme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. |
 | `name` | yes | `string` | Human-readable theme name shown in pickers. |
-| `deprecation` | no | `object` | Present when this theme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default li... |
 | `summary` | no | `string` | One-sentence positioning of the theme when to reach for it. |
 | `description` | no | `string` | Longer prose describing what the theme looks and feels like and the kinds of decks it suits. |
-| `colorScheme` | no | `string` | Catalog reference to the theme's default color scheme resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
-| `fontScheme` | no | `string` | Catalog reference to the theme's default font scheme resolved against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
+| `colorScheme` | no | `string` | The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first. |
+| `fontScheme` | no | `string` | The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first. |
 | `background` | no | `ref:ThemeBackground` |  |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
@@ -487,14 +466,13 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-tone/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for tone records in the pptx.gallery library. Each record names a presentation tone (e.g. 'formal', 'casual', 'inspirational') and carries voice cues, anti-patterns, and sample phrases that AI-driven generation uses to shape output. Tones are referenced from OPF documents via tone; the engine resolves the reference against catalogs.tones (inline) catalogs.tones.source the default catalog at https://www.pptx.gallery/tones.
+- Purpose: Schema for tone records. Each record names a presentation tone (e.g. 'formal', 'casual', 'inspirational') and carries voice cues, anti-patterns, and sample phrases that AI-driven generation uses to shape output. Documents reference a tone from 'tone'. A document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered for the group's source; engines never fetch a catalog. A published record file carries '$schema' a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-tone/v1"` | Identifies this record as a tone in the openpresentation.org catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this tone via tone. Lowercase kebab-case. |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-tone/v1"` | Identifies a published record file as a tone record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The tone's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. |
 | `name` | yes | `string` | Human-readable tone name shown in pickers. |
-| `deprecation` | no | `object` | Present when this tone is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default lis... |
 | `summary` | no | `string` | One-sentence positioning of the tone when to reach for it. |
 | `description` | no | `string` | Longer prose describing the tone and the kinds of decks it suits. |
 | `voiceCues` | no | `array<string>` | Short directives that shape AI generation toward this tone. Phrased as imperatives, e.g. 'use second-person', 'favor short sentences', 'lead with the recommendation'. |

@@ -4,7 +4,7 @@
   "description": "Arabic Digital Services Brief is a fictional OPF example for public services teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "arabic-digital-services-brief",
   "language": {
-    "id": "arabic",
+    "bcp47": "ar",
     "name": "Arabic",
     "direction": "rtl",
     "script": "Arab",

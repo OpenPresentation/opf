@@ -10,7 +10,7 @@ export type { SocialPlatform } from "./generated/types/social-platform.js";
 export type { Language } from "./generated/types/language.js";
 export type { ColorScheme } from "./generated/types/color-scheme.js";
 export type { FontScheme } from "./generated/types/font-scheme.js";
-export type { CatalogKind } from "./generated/catalogs.js";
+export type { CatalogKind } from "./catalog-refs.js";
 export type { SchemaName } from "./generated/schemas.js";
 export type {
   Finding,

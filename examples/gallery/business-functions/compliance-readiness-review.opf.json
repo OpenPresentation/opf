@@ -3,7 +3,7 @@
   "name": "Compliance Readiness Review",
   "description": "Compliance Readiness Review is a fictional OPF example for compliance teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "compliance-readiness-review",
-  "language": "english-us",
+  "language": "en-US",
   "audience": [
     "regulatory",
     {
@@ -513,15 +513,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "compliance-readiness-review-arc",
+    "custom": {
+      "narratives": {
+        "compliance-readiness-review-arc": {
           "name": "Compliance Decision Arc",
           "summary": "A custom arc for Tandem BioSystems.",
           "description": "Compliance Readiness Review uses a compact evidence-to-decision arc for Tandem BioSystems.",
@@ -546,13 +540,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "tandem-biosystems-theme",
+      },
+      "themes": {
+        "tandem-biosystems-theme": {
           "name": "Tandem BioSystems Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "noto-sans-gurmukhi",
@@ -565,14 +555,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "tandem-biosystems-signal",
+      },
+      "colorSchemes": {
+        "tandem-biosystems-signal": {
           "name": "Tandem BioSystems Signal Palette",
           "accent1": "#1D4ED8",
           "accent2": "#047857",
@@ -587,31 +572,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }

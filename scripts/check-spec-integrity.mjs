@@ -2,11 +2,10 @@
 // check on its own: catalog index <-> on-disk record parity, catalog record
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
 // HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
-// reduction (one non-deprecated record per Aspose.Slides ChartType), the
-// default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json),
-// deprecation links in every other kind, layout-record design hints against
-// the deck's Design, font-scheme languages against the languages catalog, and the
-// finding schema (the report format every OPF tool shares).
+// reduction (one record per Aspose.Slides ChartType), the default-catalog
+// snapshot's manifest hashes (spec/catalogs/manifest.json), layout-record design
+// hints against the deck's Design, font-scheme languages against the engine's
+// language vocabulary, and the finding schema (the report format every OPF tool shares).
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -30,28 +29,26 @@ const LAYOUT_PREVIEW_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-
 // per-record $schema URI (https://openpresentation.org/schema/opf-<singular>/v1).
 //
 // defName maps to the matching inline $defs/<Name> entry embedded in
-// spec/schemas/opf.schema.json, when one exists. Four kinds are referenced
-// from OPF documents as bare strings with no inline object mirror, so they
-// have no matching root $def:
-//   - narratives: the root narrative is a bare string catalog reference (FA-02);
-//     a custom narrative is an inline catalogs.narratives.records entry.
-//   - layouts: Slide.layout is a bare string catalog reference.
-//   - chartTypes: Chart.type is a bare string catalog reference.
-//   - socialPlatforms: Socials is a string-valued map keyed by platform id,
-//     not an inline SocialPlatform object.
-// Those four are skipped by the companion-schema parity check (b) below,
-// per the task's own note to skip rather than fail when there's no def.
+// spec/schemas/opf.schema.json, when one exists. The other kinds have no inline
+// object mirror, so they have no matching root $def:
+//   - narratives, layouts and themes: the root narrative, Slide.layout and
+//     design.theme are reference strings; a record the document defines is a
+//     catalogs.custom.<kind> entry.
+//   - chartTypes, languages and socialPlatforms: catalog display metadata. Chart.type,
+//     the language tag and the Socials keys are engine vocabularies, and the
+//     in-document Language object (a bcp47 tag plus overrides) is not a record.
+// Those are skipped by the companion-schema parity check (b) below.
 const CATALOG_KINDS = [
   { dir: "audiences", singular: "audience", defName: "Audience" },
   { dir: "chart-types", singular: "chart-type", defName: null },
   { dir: "color-schemes", singular: "color-scheme", defName: "ColorScheme" },
   { dir: "font-schemes", singular: "font-scheme", defName: "FontScheme" },
-  { dir: "languages", singular: "language", defName: "Language" },
+  { dir: "languages", singular: "language", defName: null },
   { dir: "layouts", singular: "layout", defName: null },
   { dir: "narratives", singular: "narrative", defName: null },
   { dir: "purposes", singular: "purpose", defName: "Purpose" },
   { dir: "social-platforms", singular: "social-platform", defName: null },
-  { dir: "themes", singular: "theme", defName: "Theme" },
+  { dir: "themes", singular: "theme", defName: null },
   { dir: "tones", singular: "tone", defName: "Tone" },
 ];
 
@@ -74,25 +71,20 @@ const CATALOG_KINDS = [
 //     counterpart in the catalog record schema (see each $def's own
 //     description in opf.schema.json). The font `code` role is shared: catalog
 //     records may carry it too (FF-17), so it is not listed here.
-//   - `deprecation` marks a catalog record as deprecated in favour of another
-//     record of the same catalog. It describes the catalog itself, so inline
-//     OPF objects never carry it.
 const KNOWN_DEF_DIFFERENCES = {
-  Audience: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
-  Purpose: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
-  Tone: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
-  Theme: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
+  Audience: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
+  Purpose: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
+  Tone: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
   ColorScheme: {
-    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "deprecation"],
+    schemaOnlyProps: ["name", "summary", "description", "tags", "preview"],
     defOnlyProps: ["primary", "secondary", "accent", "background", "surface", "text", "textSecondary", "custom"],
     schemaOnlyRequired: ["id", "name"],
   },
   FontScheme: {
-    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "languages", "textSample", "deprecation"],
+    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "languages", "textSample"],
     defOnlyProps: ["heading", "body", "accent"],
     schemaOnlyRequired: ["id", "name", "major", "minor"],
   },
-  Language: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name", "bcp47"] },
 };
 
 const failures = [];
@@ -181,7 +173,7 @@ function withoutIgnored(list, ignored) {
 async function checkCompanionSchemaParity(opfSchema) {
   for (const { dir, singular, defName } of CATALOG_KINDS) {
     if (defName === null) {
-      notes.push(`[b] ${dir}: skipped (no matching root $def; ${singular} is referenced as a bare string, not an inline object)`);
+      notes.push(`[b] ${dir}: skipped (no matching root $def: a reference string or engine vocabulary, not an inline ${singular} object)`);
       continue;
     }
 
@@ -330,10 +322,8 @@ async function checkIndexSchemaUris() {
 
 // (f) Chart types are reduced to the chart types Aspose.Slides officially
 // supports (FF-22). Every record names its Aspose.Slides ChartType under
-// mappings.renderers["aspose-slides"].chartType (compositions with no single
-// ChartType may omit it, but only when deprecated); the non-deprecated records
-// hold exactly one record per ChartType; and every deprecated record points
-// at a non-deprecated replacement and is flagged in index.json. A combination
+// mappings.renderers["aspose-slides"].chartType, and the records hold exactly one
+// record per ChartType. A combination
 // record (mappings.openxml.composition "mixed", FA-15 combo) names the ChartType
 // its chart starts from plus the series types it switches to (every
 // "*SeriesType" key), all Aspose.Slides members; it owns no ChartType. Source:
@@ -372,7 +362,6 @@ async function checkChartTypesAsposeSupported() {
   for (const [id, record] of records) {
     const where = `[f] chart-types/${id}.json`;
     const chartType = record.mappings?.renderers?.["aspose-slides"]?.chartType;
-    const deprecation = record.deprecation;
     if (chartType !== undefined && !ASPOSE_SLIDES_CHART_TYPES.has(chartType)) {
       fail(`${where}: '${chartType}' is not an Aspose.Slides ChartType member`);
     }
@@ -383,22 +372,9 @@ async function checkChartTypesAsposeSupported() {
     if (chartType === "SeriesOfMixedTypes") {
       fail(`${where}: SeriesOfMixedTypes is read-only in Aspose.Slides and cannot back a chart type`);
     }
-    const indexRecord = indexById.get(id);
-    if (Boolean(indexRecord?.deprecated) !== Boolean(deprecation)) {
-      fail(`${where}: index.json 'deprecated' flag does not match the record's deprecation`);
-    }
-    if (deprecation) {
-      const replacement = records.get(deprecation.replacedBy);
-      if (!replacement || replacement.deprecation) {
-        fail(`${where}: deprecation.replacedBy '${deprecation.replacedBy}' must name a non-deprecated chart type`);
-      }
-      if (indexRecord?.replacedBy !== deprecation.replacedBy) {
-        fail(`${where}: index.json replacedBy does not match deprecation.replacedBy`);
-      }
-      continue;
-    }
+    if (!indexById.has(id)) fail(`${where}: not listed in index.json`);
     if (chartType === undefined) {
-      fail(`${where}: non-deprecated chart types must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
+      fail(`${where}: every chart type must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
       continue;
     }
     if (record.mappings?.openxml?.composition === "mixed") {
@@ -407,11 +383,11 @@ async function checkChartTypesAsposeSupported() {
       continue;
     }
     if (owners.has(chartType)) {
-      fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; deprecate one of them`);
+      fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; remove one of them`);
     }
     owners.set(chartType, id);
   }
-  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}, ${records.size - owners.size - combinations} deprecated`);
+  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}`);
 }
 
 // (g) spec/catalogs is a pinned snapshot of the default catalog published by
@@ -424,33 +400,16 @@ async function checkSnapshotManifest() {
   }
 }
 
-// (h) Deprecation links outside chart-types (which rule (f) covers with its
-// Aspose.Slides rules): `deprecation.replacedBy` names a bundled record of the
-// same kind that is not itself deprecated, and the index entry repeats the
-// flag and the replacement so pickers can hide the old id.
-async function checkDeprecationLinks() {
+// (h) OPF 0.15 has no deprecated records or aliases: no record carries `deprecation` and no index entry carries
+// `deprecated` or `replacedBy`.
+async function checkNoDeprecation() {
   for (const { dir } of CATALOG_KINDS) {
-    if (dir === "chart-types") continue;
     const catalogDir = path.join(catalogsRoot, dir);
     const index = await readJson(path.join(catalogDir, "index.json"));
-    const records = new Map();
+    for (const entry of index.records ?? []) if ("deprecated" in entry || "replacedBy" in entry) fail(`[h] ${dir}/index.json: entry '${entry.id}' is marked deprecated`);
     for (const file of await listJsonRecordFiles(catalogDir)) {
       const record = await readJson(path.join(catalogDir, file));
-      records.set(record.id, record);
-    }
-    for (const entry of index.records ?? []) {
-      const record = records.get(entry.id);
-      if (!record) continue;
-      const where = `[h] ${dir}/${entry.file}`;
-      const deprecation = record.deprecation;
-      if (Boolean(entry.deprecated) !== Boolean(deprecation) || entry.replacedBy !== deprecation?.replacedBy) {
-        fail(`${where}: index.json 'deprecated'/'replacedBy' do not match the record's deprecation`);
-      }
-      if (!deprecation) continue;
-      const replacement = records.get(deprecation.replacedBy);
-      if (!replacement || replacement.deprecation || replacement.id === record.id) {
-        fail(`${where}: deprecation.replacedBy '${deprecation.replacedBy}' must name a non-deprecated ${dir} record`);
-      }
+      if ("deprecation" in record) fail(`[h] ${dir}/${file}: records carry no deprecation`);
     }
   }
 }
@@ -496,15 +455,16 @@ async function checkLayoutDesignHints(opfSchema) {
   }
 }
 
-// (j) A font scheme's `languages` entries are languages catalog ids (FA-16), so the list joins that catalog: every
-// entry must be the id of a bundled language record.
+// (j) A font scheme's `languages` entries are BCP-47 tags (OPF 0.15), and each must be a tag of the engine's language
+// vocabulary (spec/reference/engine-vocabularies.json), so the list names languages engines know.
 async function checkFontSchemeLanguages() {
-  const languageIds = new Set((await listJsonRecordFiles(path.join(catalogsRoot, "languages"))).map((file) => file.replace(/.json$/, "")));
+  const vocabulary = await readJson(path.join(repoRoot, "spec", "reference", "engine-vocabularies.json"));
+  const languageIds = new Set(vocabulary.languages.map((entry) => entry.tag));
   const dir = path.join(catalogsRoot, "font-schemes");
   for (const file of await listJsonRecordFiles(dir)) {
     const record = await readJson(path.join(dir, file));
     for (const entry of record.languages ?? []) {
-      if (!languageIds.has(entry)) fail(`[j] font-schemes/${file}: languages entry '${entry}' is not a bundled language id`);
+      if (!languageIds.has(entry)) fail(`[j] font-schemes/${file}: languages entry '${entry}' is not a tag of the language vocabulary`);
     }
   }
 }
@@ -556,7 +516,7 @@ async function main() {
   await checkIndexSchemaUris();
   await checkChartTypesAsposeSupported();
   await checkSnapshotManifest();
-  await checkDeprecationLinks();
+  await checkNoDeprecation();
   await checkLayoutDesignHints(opfSchema);
   await checkFontSchemeLanguages();
   await checkFindingSchema();

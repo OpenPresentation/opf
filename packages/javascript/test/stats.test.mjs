@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { stats } from "../dist/index.js";
+import { stats as statsOf } from "../dist/index.js";
+import { defaultCatalog } from "../dist/catalog.js";
 import { examples } from "../dist/examples.js";
+
+// The decks name gallery records; the host registers the default catalog.
+const stats = (input, options = {}) => statsOf(input, { catalogs: [defaultCatalog], ...options });
 
 const PNG = "data:image/png;base64,iVBORw0KGgo=";
 
@@ -49,7 +53,7 @@ const deck = () => ({
     remote: "https://cdn.example.com/x.png",
     pic: { src: "./pic.png", alt: "A picture" },
   },
-  catalogs: { themes: { records: [{ id: "x", name: "X" }] } },
+  catalogs: { custom: { themes: { x: { name: "X" } } } },
   extensions: { vendor: { a: 1 } },
   slides: [
     { id: "s1", title: "Hello there world", layout: "title", section: "Intro", notes: "These are four words" },
@@ -105,7 +109,8 @@ describe("stats: deck facts", () => {
   });
 
   test("slide size comes from the design, the theme or the default, with the preset when named", () => {
-    assert.deepEqual(stats({ slides: [] }).deck.slideSize, { preset: "widescreen", widthInches: 13.3333, heightInches: 7.5, aspectRatio: 1.778, source: "theme" });
+    assert.deepEqual(stats({ slides: [] }).deck.slideSize, { preset: "widescreen", widthInches: 13.3333, heightInches: 7.5, aspectRatio: 1.778, source: "default" });
+    assert.equal(stats({ design: { theme: "minimal" }, slides: [] }).deck.slideSize.source, "theme");
     const a4 = stats({ design: { dimensions: "a4" }, slides: [] }).deck.slideSize;
     assert.equal(a4.preset, "a4");
     assert.equal(a4.source, "design");
@@ -254,9 +259,9 @@ describe("stats: citations, variables, header/footer, fonts, colours", () => {
     assert.deepEqual(stats({ design: { fontScheme: "no-such" }, slides: [] }).fonts.unresolvedSchemeIds, ["no-such"]);
   });
 
-  test("lists extension keys and inline catalog overrides", () => {
+  test("lists extension keys and the catalog groups the deck embeds records in", () => {
     assert.deepEqual(result.extensions, ["vendor"]);
-    assert.deepEqual(result.catalogOverrides, { themes: { records: 1, source: null } });
+    assert.deepEqual(result.catalogs, { custom: { source: null, records: { themes: 1 } } });
   });
 });
 
@@ -275,7 +280,7 @@ describe("stats: contract", () => {
     const first = JSON.stringify(stats(input, { perSlide: true }));
     assert.deepEqual(input, before);
     assert.equal(JSON.stringify(stats(structuredClone(input), { perSlide: true })), first);
-    assert.deepEqual(Object.keys(stats(input)), ["deck", "people", "slides", "payloads", "words", "notes", "speakingTime", "images", "charts", "tables", "datasets", "citations", "variables", "assets", "headerFooter", "fonts", "colors", "extensions", "catalogOverrides"]);
+    assert.deepEqual(Object.keys(stats(input)), ["deck", "people", "slides", "payloads", "words", "notes", "speakingTime", "images", "charts", "tables", "datasets", "citations", "variables", "assets", "headerFooter", "fonts", "colors", "extensions", "catalogs"]);
   });
 
   test("reads what is there: invalid decks and unknown ids neither throw nor need layouts or fonts", () => {

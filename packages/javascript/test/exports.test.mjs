@@ -119,16 +119,11 @@ describe("catalog cross-links resolve", () => {
     );
   });
 
-  test("broken cross-links in a catalog record warn, never error", () => {
+  test("soft cross-links in a catalog record are never checked as references", () => {
     const audienceTemplate = audiences.find((record) => record.id === "executive");
-    const brokenAudienceResult = validateCatalogRecord("audiences", {
-      ...audienceTemplate,
-      recommendedNarratives: ["no-such-narrative", "classic-story"],
-    });
-    assert.equal(brokenAudienceResult.valid, true, "broken cross-links must warn, never error");
-    assert.equal(brokenAudienceResult.counts.warning, 1, JSON.stringify(brokenAudienceResult.findings, null, 2));
-    assert.equal(brokenAudienceResult.findings[0].path, "/recommendedNarratives/0");
-    assert.equal(brokenAudienceResult.findings[0].ruleId, "opf/catalog-reference");
+    const result = validateCatalogRecord("audiences", { ...audienceTemplate, recommendedNarratives: ["no-such-narrative", "classic-story"] });
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.findings, []);
   });
 });
 

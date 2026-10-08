@@ -387,8 +387,26 @@ async function generateFontPolicy() {
   await fs.writeFile(path.join(generatedRoot, "font-policy.ts"), lines.join("\n"));
 }
 
+async function generateEngineData() {
+  // FA-20/21: engine defaults and engine vocabularies are reference data compiled into the engine code. They are not
+  // catalog data: no catalog record is read here, and no catalog module may import them.
+  const defaults = await readJson(path.join(specRoot, "reference", "engine-defaults.json"));
+  const vocabularies = await readJson(path.join(specRoot, "reference", "engine-vocabularies.json"));
+  const { description: _defaultsDescription, ...defaultValues } = defaults;
+  const { description: _vocabulariesDescription, ...vocabularyValues } = vocabularies;
+  const lines = [
+    generatedHeader("spec/reference/engine-defaults.json and spec/reference/engine-vocabularies.json"),
+    `export const engineDefaultsSource = ${asTs(defaultValues)} as const;`,
+    "",
+    `export const engineVocabulariesSource = ${JSON.stringify(vocabularyValues)} as const;`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "engine-data.ts"), lines.join("\n"));
+}
+
 await fs.rm(generatedRoot, { recursive: true, force: true });
 await fs.mkdir(generatedRoot, { recursive: true });
+await generateEngineData();
 await generateFontPolicy();
 await generateSymbolFontEncodings();
 await generateSchemas();

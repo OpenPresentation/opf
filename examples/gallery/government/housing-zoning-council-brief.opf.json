@@ -4,7 +4,7 @@
   "description": "Housing Zoning Council Brief is a fictional OPF example for city government teams. It demonstrates a realistic presentation structure with catalog-backed design and content payloads.",
   "filename": "housing-zoning-council-brief",
   "language": {
-    "id": "english-us",
+    "bcp47": "en-US",
     "name": "English (United States)",
     "direction": "ltr",
     "fontScheme": "pt-serif",
@@ -517,15 +517,9 @@
     }
   },
   "catalogs": {
-    "narratives": {
-      "source": [
-        "pkg:@openpresentation/gallery/narratives",
-        "https://www.pptx.gallery/narratives"
-      ],
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
-          "id": "housing-zoning-council-brief-arc",
+    "custom": {
+      "narratives": {
+        "housing-zoning-council-brief-arc": {
           "name": "City Government Decision Arc",
           "summary": "A custom arc for City of Redwood Falls.",
           "description": "Housing Zoning Council Brief uses a compact evidence-to-decision arc for City of Redwood Falls.",
@@ -550,13 +544,9 @@
             }
           ]
         }
-      ]
-    },
-    "themes": {
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-theme/v1",
-          "id": "city-of-redwood-falls-theme",
+      },
+      "themes": {
+        "city-of-redwood-falls-theme": {
           "name": "City of Redwood Falls Working Theme",
           "colorScheme": "pastel-red",
           "fontScheme": "pt-serif",
@@ -569,14 +559,9 @@
             "example"
           ]
         }
-      ]
-    },
-    "colorSchemes": {
-      "source": "https://www.pptx.gallery/color-schemes",
-      "records": [
-        {
-          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
-          "id": "city-of-redwood-falls-signal",
+      },
+      "colorSchemes": {
+        "city-of-redwood-falls-signal": {
           "name": "City of Redwood Falls Signal Palette",
           "accent1": "#334155",
           "accent2": "#F8FAFC",
@@ -591,31 +576,7 @@
           "hyperlink": "#2563EB",
           "followedHyperlink": "#7C3AED"
         }
-      ]
-    },
-    "fontSchemes": {
-      "source": "pkg:@openpresentation/gallery/font-schemes"
-    },
-    "layouts": {
-      "source": "https://www.pptx.gallery/layouts"
-    },
-    "chartTypes": {
-      "source": "https://www.pptx.gallery/chart-types"
-    },
-    "languages": {
-      "source": "https://www.pptx.gallery/languages"
-    },
-    "audiences": {
-      "source": "https://www.pptx.gallery/audiences"
-    },
-    "purposes": {
-      "source": "https://www.pptx.gallery/purposes"
-    },
-    "tones": {
-      "source": "https://www.pptx.gallery/tones"
-    },
-    "socialPlatforms": {
-      "source": "https://www.pptx.gallery/social-platforms"
+      }
     }
   }
 }
