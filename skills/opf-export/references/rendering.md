@@ -15,7 +15,7 @@ Each prints one JSON report (the `opf validate` shape: `ok`, `findings` with `ru
 ## Prepared font inputs
 
 `loadFonts` in `/fonts-node` returns the fonts handle
-(current coordinated set: core 0.14.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.2):
+(current coordinated set: core 0.15.1, renderer 0.15.0, PPTX 0.15.0, editor 0.15.0):
 
 ```js
 const fonts = await loadFonts({

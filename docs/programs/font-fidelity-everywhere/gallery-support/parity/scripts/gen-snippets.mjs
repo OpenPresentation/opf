@@ -1,5 +1,6 @@
 // Bundle the gallery's snippet builders (snippet-entry.ts) with esbuild, aliasing @/ to the gallery worktree and
 // @openpresentation/opf/* to the core worktree dist, then write out/snippets.json.
+// mainFields prefers the ESM entry: core's root bundles jsonc-parser, whose UMD main does not bundle (as in build-gallery-snapshot.mjs).
 // Env: PARITY_PREFIX (default "parity") selects sources/<prefix>-{opf,opf-render,pptx-gallery}; GALLERY_DIR overrides.
 import path from 'node:path'; import {fileURLToPath, pathToFileURL} from 'node:url'; import {writeFile, mkdir} from 'node:fs/promises'; import {statSync} from 'node:fs';
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -16,7 +17,7 @@ const plugin = {name: 'alias', setup(b) {
 }};
 await mkdir(path.join(here, '../out'), {recursive: true});
 const outfile = path.join(here, '../out/snippet-bundle.mjs');
-await build({entryPoints: [path.join(here, 'snippet-entry.ts')], bundle: true, format: 'esm', platform: 'node', outfile, plugins: [plugin], logLevel: 'error', loader: {'.json': 'json'}});
+await build({entryPoints: [path.join(here, 'snippet-entry.ts')], bundle: true, format: 'esm', platform: 'node', mainFields: ['module', 'main'], outfile, plugins: [plugin], logLevel: 'error', loader: {'.json': 'json'}});
 const {allSnippets} = await import(pathToFileURL(outfile).href + '?' + Date.now());
 const all = allSnippets();
 await writeFile(path.join(here, '../out/snippets.json'), JSON.stringify(all));
