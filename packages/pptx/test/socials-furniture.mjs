@@ -2,13 +2,14 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {attachFurnitureFields} from '../dist/furniture-fields.js';
-import {validate, catalogs, schemas} from '@openpresentation/opf';
+import {validate, schemas} from '@openpresentation/opf';
+import {SOCIAL_PLATFORMS} from '@openpresentation/opf/composition';
 import {resolvePresentation} from '@openpresentation/opf-render';
 
 // Generated socials furniture: every line is native text linked to its profile
 // URL, and re-import rebuilds organization.socials from the current lines.
 const enc = new TextEncoder(), dec = new TextDecoder();
-const organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'acme', x: '@acme', bluesky: 'https://bsky.app/profile/acme.bsky.social', custom: 'Visit us', legacy: 'http://acme.example/profile'}};
+const organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'acme', x: '@acme', bluesky: 'https://bsky.app/profile/acme.bsky.social', threads: 'Visit us', mastodon: 'http://acme.example/profile'}};
 const source = {organization, design: {footer: {left: {organization: true}, right: {socials: true}}}, slides: [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}]};
 const read = async bytes => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validate(deck, {only: ['format']}).valid, true); return {deck, issues}; };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
@@ -29,7 +30,7 @@ assert.equal((xml.match(/<a:rPr [^>]*u="none"[^>]*>(?:(?!<\/a:rPr>).)*<a:hlinkCl
 
 // Without document provenance (FF-32), furniture alone rebuilds the socials as canonical profile URLs.
 const canonicalSocials = {linkedin: 'https://linkedin.com/company/acme', x: 'https://x.com/acme',
-  bluesky: 'https://bsky.app/profile/acme.bsky.social', custom: 'Visit us', legacy: 'http://acme.example/profile'};
+  bluesky: 'https://bsky.app/profile/acme.bsky.social', threads: 'Visit us', mastodon: 'http://acme.example/profile'};
 const plain = await read(await toPptx(source, {provenance: false}));
 assert.deepEqual(plain.deck.organization, {id: 'acme', name: 'Acme', socials: canonicalSocials}, 'Handles re-import as their canonical profile URLs.');
 assert.deepEqual(plain.deck.design.footer, source.design.footer);
@@ -69,68 +70,44 @@ const missing = {...source, organization: {id: 'acme', name: 'Acme'}}, diagnosti
 await toPptx(missing, {onDiagnostic: issue => diagnostics.push(issue)});
 assert.ok(diagnostics.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.right.socials'));
 
-// Every bundled platform exports its own example handle as a linked profile URL.
-for (const platform of catalogs.socialPlatforms) {
-  const platformDeck = {...source, organization: {id: 'acme', name: 'Acme', socials: {[platform.id]: platform.handleExample}}, slides: [{text: 'Body'}]};
-  assert.equal((await read(await toPptx(platformDeck))).deck.organization.socials[platform.id], platform.handleExample, platform.id);
+// OPF 0.15: social platforms are an engine vocabulary (core SOCIAL_PLATFORMS), not a catalog. Every platform with a profile
+// URL exports a handle as a linked profile URL, and re-import restores the authored handle with no host option.
+const platforms = Object.entries(SOCIAL_PLATFORMS).filter(([, platform]) => platform.profileUrlPattern || platform.companyUrlPattern);
+assert.ok(platforms.length > 5, 'core names the platforms it links');
+for (const [id, platform] of platforms) {
+  const handle = `${platform.handlePrefix ?? ''}acme`;
+  const platformDeck = {...source, organization: {id: 'acme', name: 'Acme', socials: {[id]: handle}}, slides: [{text: 'Body'}]};
+  assert.equal((await read(await toPptx(platformDeck))).deck.organization.socials[id], handle, id);
   const one = await toPptx(platformDeck, {provenance: false});
   const {deck: back} = await read(one);
-  assert.match(back.organization.socials[platform.id], /^https:\/\//, platform.id);
-  assert.ok(dec.decode(unzipSync(one)['ppt/slides/_rels/slide1.xml.rels']).includes(`Target="${back.organization.socials[platform.id].replace(/&/g, '&amp;')}"`), platform.id);
+  assert.match(back.organization.socials[id], /^https:\/\//, id);
+  assert.ok(dec.decode(unzipSync(one)['ppt/slides/_rels/slide1.xml.rels']).includes(`Target="${back.organization.socials[id].replace(/&/g, '&amp;')}"`), id);
 }
-// Export resolves socialPlatforms records exactly like the opf-render preview:
-// inline records, then the document source (catalogSources), injected catalogs, bundled.
-const record = (id, url) => ({$schema: 'https://openpresentation.org/schema/opf-social-platform/v1', id, name: id, profileUrlPattern: url, handlePrefix: '@'});
-const sourced = {...source, catalogs: {socialPlatforms: {source: 'https://example.test/socials.json'}}, slides: [{text: 'Body'}]};
-const hosts = [
-  [{}, 'x.com/acme'],
-  [{catalogs: {socialPlatforms: [record('x', 'https://injected.test/{handle}')]}}, 'injected.test/acme'],
-  [{catalogs: {socialPlatforms: [record('x', 'https://injected.test/{handle}')]}, catalogSources: {'https://example.test/socials.json': {records: [record('x', 'https://sourced.test/{handle}')]}}}, 'sourced.test/acme'],
-];
-// CI links opf-render#34 or later, which passes socials records to core.
-const previewText = (deck, host) => resolvePresentation(deck, host).slides[0].geometry.furniture.parts.find(part => part.field === 'socials').text.split('\n')[1];
-for (const [host, expected] of hosts) for (const deck of [sourced, {...sourced, catalogs: {socialPlatforms: {source: sourced.catalogs.socialPlatforms.source, records: [record('x', 'https://inline.test/{handle}')]}}}]) {
-  const want = deck.catalogs.socialPlatforms.records ? 'inline.test/acme' : expected;
-  assert.equal(previewText(deck, host), want, 'preview');
-  const hostBytes = await toPptx(deck, host);
-  assert.ok(slideXml(unzipSync(hostBytes)).includes(`<a:t>${want}</a:t>`), `export ${want}`);
-  // Given the export's host catalogs, re-import recognizes the unedited line and
-  // restores the authored handle; without them the line keeps its visible URL.
-  const back = await fromPptx(hostBytes, host);
-  assert.equal(validate(back, {only: ['format']}).valid, true);
-  assert.deepEqual(back.organization.socials, organization.socials, `authored socials with host catalogs (${want})`);
-  const withoutHost = (await read(hostBytes)).deck.organization.socials;
-  assert.equal(withoutHost.x, want === 'x.com/acme' || want === 'inline.test/acme' ? '@acme' : `https://${want}`, `without host catalogs (${want})`);
-}
-
-// `catalogs.socialPlatforms.source` may be an ordered search path (an array, schema-valid): each source's records are consulted in
-// order (host-supplied catalogSources, or the bundled snapshot for pptx.gallery / pkg:@openpresentation/opf sources), first match
-// wins, an unknown source contributes nothing, and the export does not throw. A single-string source behaves as before.
+// Export formats socials exactly like the opf-render preview: both use core's vocabulary, so no host option is involved.
 {
-  const searchPath = sources => ({...source, catalogs: {socialPlatforms: {source: sources}}, slides: [{text: 'Body'}]});
-  const catalogSources = {'https://first.test/socials.json': {records: [record('x', 'https://first.test/{handle}')]}, 'https://second.test/socials.json': [record('x', 'https://second.test/{handle}'), record('custom-net', 'https://second.test/{handle}')]};
-  const exportedText = async (deck, host = {}) => slideXml(unzipSync(await toPptx(deck, host)));
-  assert.ok((await exportedText(searchPath(['https://first.test/socials.json', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>first.test/acme</a:t>'), 'first source wins');
-  assert.ok((await exportedText(searchPath(['https://missing.test/socials.json', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>second.test/acme</a:t>'), 'an unknown source is skipped, the next one answers');
-  assert.ok((await exportedText(searchPath(['https://missing.test/socials.json']), {catalogSources})).includes('<a:t>x.com/acme</a:t>'), 'no source answers: the bundled catalog');
-  assert.ok((await exportedText(searchPath(['https://www.pptx.gallery/social-platforms', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>x.com/acme</a:t>'), 'a bundled-snapshot source answers before later sources');
-  assert.ok((await exportedText(searchPath(['pkg:@openpresentation/opf/social-platforms']))).includes('<a:t>x.com/acme</a:t>'));
-  const arrayDeck = searchPath(['https://first.test/socials.json']);
-  const reimported = await fromPptx(await toPptx(arrayDeck, {catalogSources}), {catalogSources});
-  assert.equal(validate(reimported, {only: ['format']}).valid, true);
-  assert.deepEqual(reimported.organization.socials, organization.socials, 'authored socials restored with a search path');
+  const deck = {...source, slides: [{text: 'Body'}]};
+  const previewText = resolvePresentation(deck).slides[0].geometry.furniture.parts.find(part => part.field === 'socials').text.split('\n')[1];
+  assert.equal(previewText, 'x.com/acme', 'preview');
+  const exported = await toPptx(deck);
+  assert.ok(slideXml(unzipSync(exported)).includes(`<a:t>${previewText}</a:t>`), 'export matches the preview');
+  const back = await fromPptx(exported);
+  assert.deepEqual(back.organization.socials, organization.socials, 'the unedited line restores the authored handle');
+  // The removed 0.14 host options change nothing (no alias): the export is the same bytes.
+  assert.deepEqual(await toPptx(deck, {catalogSources: {'https://example.test/socials.json': {records: []}}}), exported);
 }
 
 // Every platform key the Socials schema accepts re-imports; the provenance check uses the schema pattern itself.
-const keyPattern = new RegExp(schemas.presentation.$defs.Socials.propertyNames.pattern, 'u');
-assert.equal(keyPattern.test('my_site'), false, 'Underscored keys are not valid Socials keys.');
-const keyed = {...source, organization: {id: 'acme', name: 'Acme', socials: {'my-site2': 'Visit us', x9: '@acme'}}, slides: [{text: 'Body'}]};
-assert.deepEqual((await read(await toPptx(keyed, {provenance: false}))).deck.organization.socials, {'my-site2': 'Visit us', x9: '@acme'});
+// OPF 0.15: the keys are core's vocabulary (a schema enum), not a pattern; a key outside it is invalid, not a custom platform.
+const keys = schemas.presentation.$defs.Socials.propertyNames.enum;
+assert.deepEqual([...keys].sort(), Object.keys(SOCIAL_PLATFORMS).sort(), 'the schema keys are core\'s platforms');
+assert.equal(validate({...source, organization: {id: 'acme', name: 'Acme', socials: {'my-site2': 'Visit us'}}}, {only: ['format']}).valid, false, 'a key outside the vocabulary is invalid');
+const keyed = {...source, organization: {id: 'acme', name: 'Acme', socials: {threads: 'Visit us', x: '@acme'}}, slides: [{text: 'Body'}]};
+assert.deepEqual((await read(await toPptx(keyed, {provenance: false}))).deck.organization.socials, {threads: 'Visit us', x: 'https://x.com/acme'});
 
 // FF-27 + FF-34: one footer with a live slide-number field and linked socials in
 // the same zone exports <a:fld type="slidenum"> and <a:hlinkClick> side by side and
 // re-imports both, with and without FF-32 document provenance.
-const mixed = {organization: {id: 'acme', name: 'Acme', socials: {x: '@acme', custom: 'Visit us'}},
+const mixed = {organization: {id: 'acme', name: 'Acme', socials: {x: '@acme', threads: 'Visit us'}},
   design: {footer: {left: {organization: true, slideNumber: true, slideNumberFormat: 'Slide {current} of {total}'}, right: {socials: true, slideNumber: true}}},
   slides: [{text: 'One'}, {text: 'Two'}]};
 const mixedBytes = await toPptx(mixed), mixedXml = slideXml(unzipSync(mixedBytes), 2);
@@ -141,7 +118,7 @@ assert.ok(mixedXml.includes('<a:t>Visit us</a:t>'));
 for (const provenance of [true, false]) {
   const {deck: back, issues: mixedIssues} = await read(await toPptx(mixed, provenance ? {} : {provenance: false}));
   assert.deepEqual(back.design.footer, mixed.design.footer, `footer, provenance ${provenance}`);
-  assert.deepEqual(back.organization.socials, provenance ? mixed.organization.socials : {x: 'https://x.com/acme', custom: 'Visit us'});
+  assert.deepEqual(back.organization.socials, provenance ? mixed.organization.socials : {x: 'https://x.com/acme', threads: 'Visit us'});
   assert.ok(!mixedIssues.some(issue => issue.code === 'invalid-furniture-provenance'), JSON.stringify(mixedIssues));
 }
 // A single line that is both linked and holds a field keeps the link on every run
@@ -152,4 +129,4 @@ attachFurnitureFields(fieldEntries, new Map([['OPF furniture 0 part 0 line 0', {
 const combined = dec.decode(fieldEntries['ppt/slides/slide1.xml']);
 assert.ok(combined.includes(`<a:r>${linkedRun}<a:t>Page </a:t></a:r>`) && combined.includes(`type="slidenum">${linkedRun}<a:t>3</a:t></a:fld>`), combined);
 
-console.log(`Socials furniture passed: linked profile lines, canonical re-import, edits, disagreement, orphan and ${catalogs.socialPlatforms.length} bundled platforms.`);
+console.log(`Socials furniture passed: linked profile lines, canonical re-import, edits, disagreement, orphan and ${platforms.length} engine platforms.`);

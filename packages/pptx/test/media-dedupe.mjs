@@ -86,15 +86,15 @@ const slides = count => Array.from({ length: count }, (_, index) => ({ title: `S
   checked++;
 }
 {
-  // A slide image and a watermark with the same bytes share one part and keep their own frames.
-  const deck = { design: { watermark: { src: uri(photo), opacity: 0.2 } }, slides: [{ title: 'A', text: 'x', design: { slideImage: { src: uri(photo), position: 'left' } } }] };
+  // A placed image block and a watermark with the same bytes share one part and keep their own frames.
+  const deck = { design: { watermark: { src: uri(photo), opacity: 0.2 } }, slides: [{ title: 'A', blocks: [{ type: 'image', image: uri(photo), placement: { edge: 'left' } }, { type: 'text', text: 'x' }] }] };
   const entries = unzipSync(await toPptx(deck, { imageFormat: 'preserve', strictAssets: true }));
   assert.equal(mediaParts(entries).length, 1);
   const xml = decode(entries['ppt/slides/slide1.xml']);
-  assert.match(xml, /name="OPF slide image slides.0"/); assert.match(xml, /name="OPF watermark"/);
+  assert.match(xml, /name="OPF image 1"/); assert.match(xml, /name="OPF watermark"/);
   packageIsConsistent(entries);
   const imported = await fromPptx(await toPptx(deck, { imageFormat: 'preserve', strictAssets: true }), { onDiagnostic: () => {} });
-  assert.ok(imported.slides[0].design.slideImage && imported.design.watermark.opacity === 0.2);
+  assert.ok(imported.slides[0].blocks[0].placement?.edge === 'left' && imported.design.watermark.opacity === 0.2);
   checked++;
 }
 console.log(`Media dedupe checks passed (${checked}).`);

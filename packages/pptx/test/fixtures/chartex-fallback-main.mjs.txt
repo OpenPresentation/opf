@@ -2,6 +2,7 @@
 import {createHash} from 'node:crypto';
 import {writeFileSync} from 'node:fs';
 import {execSync} from 'node:child_process';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {toPptx} from '../dist/index.js';
 const region = {columns: ['Region', 'Value'], rows: [['North', 42], ['South', 31], ['East', -8], ['West', 19]]};
 const multi = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
@@ -20,7 +21,8 @@ const decks = {
 const entries = {};
 for (const [name, deck] of Object.entries(decks)) {
   const diagnostics = [];
-  const bytes = await toPptx(deck, {chartex: 'fallback', onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
+  // OPF 0.15: the gallery ids the world-category deck names resolve from the registered default catalog.
+  const bytes = await toPptx(deck, {chartex: 'fallback', catalogs: [defaultCatalog], onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
   entries[name] = {sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length, diagnostics};
 }
 const source = execSync('git rev-parse HEAD', {cwd: new URL('..', import.meta.url)}).toString().trim();

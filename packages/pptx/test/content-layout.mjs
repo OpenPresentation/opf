@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx, fromPptx} from '../dist/index.js';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const all = (node, name) => {

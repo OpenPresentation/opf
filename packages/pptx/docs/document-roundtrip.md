@@ -21,10 +21,24 @@ Alternatives considered:
 - **A `customXml` data-store part** needs its own item-properties part, a GUID and a schema namespace, and it is also deck-wide only. It would be a second provenance mechanism next to the tags the package already uses.
 - **Tags** are not shown anywhere in PowerPoint's UI, and PowerPoint preserves them on save. It copies a slide's tags with the slide. Every other OPF provenance record already uses them, so import has one reader and one threat model.
 
-Inline layout records may omit the standalone `$schema` identifier. Reimport
-supplies that known identifier only to the layout validator, preserving the
-authored record. An explicitly wrong identifier or other invalid record content
-still produces the existing per-record diagnostic and fallback.
+## Catalogs in the tags (OPF 0.15, FA-23)
+
+A document's `catalogs` are groups (`catalogs.<group>.<kind>.<id>`): `custom` holds the document's own records, `default`
+the records of the catalog bare ids come from (it may be `false`: no catalog fallback), and any other name a named
+catalog with its `source` (references `name:id`). Embedded records carry no `$schema` or `id`; the key is the id.
+Reimport supplies the layouts schema's `$schema` and the key as `id` only to the layout validator, preserving the
+authored record; a record that carries a wrong `$schema` of its own, or other invalid content, still produces the
+per-record diagnostic and fallback.
+
+- `OPF_DOCUMENT_V1.catalogs` is the document's groups pruned to the records the stored values reference, resolved as
+  core resolves them (a theme's colour and font schemes in the theme's own group first). Every group declaration stays
+  (its `source`, and `"default": false`), because a `name:id` reference is only valid while its group is declared.
+- `OPF_SLIDE_V1.layoutRecord` is `{group, id, source?, record}`: the catalogs group the slide's layout reference resolved
+  in, the record's key, that group's source, and the embedded record. A layout that resolves only in a catalog the host
+  registered (`toPptx(doc, {catalogs})`) is not embedded by the export and stores no record.
+- Clean 0.15 shape, no compatibility: the 0.14 shapes (`catalogs.<kind>.records`, a `layoutRecord` that is the bare
+  record with its own `id`) are not read. A 0.14 slide record therefore fails validation (`invalid-document-provenance`
+  at `slides.N`), and 0.14 catalog records do not restore.
 
 ## What is embedded: `toPptx(document, {provenance})`
 
@@ -33,16 +47,17 @@ Only values the document states are stored; engine defaults are not. A document 
 | field | `'full'` (default) | `'references-only'` | `false` |
 |---|---|---|---|
 | `design.theme`, `colorScheme`, `fontScheme`, `dimensions`, `background` | yes | yes, unless the value names an image, logo, file or URL | no tags at all |
-| deck composition defaults (`titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet`) | yes | yes | |
+| deck composition defaults (`titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet`) | yes | yes | |
 | `design.logo` (deck and slide design; brand assets, spec-gap P1) | yes | no (a logo always names a source) | |
-| `narrative` (a string: catalog id, URL or `pkg:` reference; FA-02), `tone`, `purpose`, `language`, `audience` | yes, any form | only as catalog ids (bundled or inline records) | |
+| `narrative` (a reference, `id` or `name:id`; FA-02), `tone`, `purpose`, `audience` | yes, any form | only as references (a string, or for `audience` an array of strings, that matches the reference pattern; free text is not stored) | |
+| `language` (a BCP-47 tag, or a language object) | yes | only as a tag string | |
 | `organization`, `speaker`, `takeaway`, `duration`, `tags`, `variables`, `filename`, `extensions` | yes | no | |
 | slide `id`, `section`, `extensions` | yes | no | |
 | slide `beat` (links to a beat of the narrative record), `layout`, `type`, `composition`, slide design references and hints | yes | yes (design values without image/file/URL sources) | |
-| slide `layoutRecord`: the inline `catalogs.layouts` record for the slide's `layout` (FF-29) | yes | yes, unless it names an image, file or URL (its own `$schema` excepted) | |
+| slide `layoutRecord`: `{group, id, source?, record}`, the embedded record for the slide's `layout` (FF-29) | yes | yes, unless the record names an image, file or URL | |
 | slide `content`: the content topology (groups, regions, root form, block ids and extensions, group composition, leaf boxes; below) | yes | no | |
 | the whole `assets` registry (referenced or not), one field per asset id | yes | no | |
-| inline `catalogs` records referenced by the document | yes | yes, referenced by stored values | |
+| embedded `catalogs` records referenced by the stored values, in their groups, and every group declaration | yes | yes | |
 | native evidence (hashes and theme values, below) | yes | yes | |
 
 Slide `section` labels are additionally written as PowerPoint's native section list whatever the mode (below).
@@ -84,7 +99,7 @@ Inline data rule (spec-gap P1, vetoable): any other `data:` source, one with no 
 ### Size limits
 
 - Each stored field (design, metadata, asset or slide field) is limited to 256 KiB after media references.
-- Referenced inline catalogs are limited to 1 MiB.
+- Referenced embedded catalogs are limited to 1 MiB.
 - If a tag would still exceed the 16 MiB import limit, export removes catalogs, then assets, then the largest remaining field, until the tag fits.
 
 Every omission is reported at export with `document-provenance-omitted` and recorded by path in the tag's `omitted` list. Import reports those paths again and keeps the observed values instead of treating the fields as unstated. For example, an omitted slide background is not removed as "inherited".
@@ -112,7 +127,7 @@ Authoring metadata (`filename` and `extensions` included), `design.logo`, slide 
 - A metadata property whose `asset:` reference no longer resolves is left out, with `unresolved-asset-reference` at that path (for example `organization.logo`).
 - A design reference that needs an unavailable asset or media part is not restored, with `unresolved-asset-reference`.
 - When a duplicated slide carries a copied tag, its layout is restored and the repeated slide id is reported as `duplicate-slide-id`; a repeated block id as `duplicate-block-id` (the first occurrence keeps it; ids are unique across slides and blocks).
-- The whole stored `assets` registry returns, one restore group per asset id; an id the import already provides (a media asset read from a video placeholder) keeps its observed value. Inline catalog records return only for ids that the restored document references.
+- The whole stored `assets` registry returns, one restore group per asset id; an id the import already provides (a media asset read from a video placeholder) keeps its observed value. Embedded catalog records return only for the references the restored document makes (every stored group declaration returns).
 
 ### Content topology (spec-gap P1)
 
@@ -156,22 +171,22 @@ Tags can be written by anyone who can edit the file. The hash is a change detect
 
 ## Layout intent (FF-29)
 
-Layout intent is part of each slide's `OPF_SLIDE_V1` record, not a separate tag: the slide's `layout` id, `type`, `composition` and composition hints (`design.titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet`), plus `layoutRecord`. `layoutRecord` is the document's inline `catalogs.layouts` record for that id, stored with the slide as well as in the document's `catalogs`. Bundled ids carry no record. Geometry, text and images are never stored; composition re-derives placement from the restored intent, and native shapes supply every word and payload. The hints stored are the authored deck and slide values only. A layout record's own `design` is the lowest-precedence default of the same merge (slide, deck, layout), applied by composition in the preview and the export alike, so export never copies it into the deck or the slide and re-import restores nothing the document did not author. The package writes no per-record slide layouts: PowerPoint's layout and master parts hold the native footer placeholders only, and every paragraph's alignment comes from the composed item.
+Layout intent is part of each slide's `OPF_SLIDE_V1` record, not a separate tag: the slide's `layout` reference, `type`, `composition` and composition hints (`design.titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet`), plus `layoutRecord`. `layoutRecord` is `{group, id, source?, record}`, the record the document embeds for that reference with the group it resolved in, stored with the slide as well as in the document's `catalogs`. A layout that resolves only in a registered host catalog carries no record. Geometry, text and images are never stored; composition re-derives placement from the restored intent, and native shapes supply every word and payload. The hints stored are the authored deck and slide values only. A layout record's own `design` is the lowest-precedence default of the same merge (slide, deck, layout), applied by composition in the preview and the export alike, so export never copies it into the deck or the slide and re-import restores nothing the document did not author. The package writes no per-record slide layouts: PowerPoint's layout and master parts hold the native footer placeholders only, and every paragraph's alignment comes from the composed item.
 
 Neither mode stores the asset registry entries a layout record references; as before FF-29, catalog records never pull assets into the tags.
 
-Import restores the intent while the slide's arrangement is unchanged (see the table above). Each layout id resolves to exactly one record, in this order:
+Import restores the intent while the slide's arrangement is unchanged (see the table above). Each layout reference resolves to exactly one record, in the order core resolves references (embedded records before registered ones); nothing is bundled:
 
-1. the document's inline record (`OPF_DOCUMENT_V1`, FF-32);
-2. a bundled layout. A slide's override of a bundled id is used only when there is no document record, or its record for that id was rejected, and every restored slide with that id carries the same override, so it never changes the layout of another slide;
-3. the first restored slide's `layoutRecord`.
+1. the record the stored document catalogs embed (`OPF_DOCUMENT_V1`, FF-32);
+2. a slide's own `layoutRecord`, embedded under its group (declared with its source when the document lacks the group). When the reference also resolves in a catalog registered with `fromPptx(bytes, {catalogs})`, a slide's record is used only when every restored slide with that reference carries the same one, so it never changes the layout of another slide;
+3. a record of the catalogs registered with `fromPptx` (the imported document then references it without embedding it).
 
-- A slide whose own `layoutRecord` disagrees with the chosen record keeps its content and composition hints without the layout id and reports `layout-reference-changed` at `slides.N.layout`. Examples: a slide pasted from another deck whose `gallery-hero` record differs, or a pasted slide whose inline record overrides a bundled id such as `title-subtitle` that the host's own slides use. The override is never added to the host's catalog.
-- A pasted slide whose inline-only id the host lacks brings its own `layoutRecord`, which is added to `catalogs.layouts`.
-- A layout id that resolves to no record (for example a deck exported before FF-29, whose slides carry no `layoutRecord`, after its document tag was stripped) is not restored, and `unresolved-layout-reference` names the layout at `slides.N.layout`. The imported document therefore always renders.
+- A slide whose own `layoutRecord` disagrees with the chosen record keeps its content and composition hints without the layout reference and reports `layout-reference-changed` at `slides.N.layout`. Examples: a slide pasted from another deck whose `gallery-hero` record differs, or a pasted slide whose record overrides a registered id such as `title-subtitle` that the host's own slides use. The override is never added to the document.
+- A pasted slide whose embedded-only reference the host lacks brings its own `layoutRecord`, which is added under its group (`catalogs.custom.layouts`, or `catalogs.acme` with its `source` for `acme:hero`). A record whose group the document declares with another source (or `"default": false`) is not added (`invalid-document-provenance` at `slides.N.layoutRecord`).
+- A layout reference that resolves to no record (for example a deck exported before FF-29, whose slides carry no `layoutRecord`, after its document tag was stripped, or a registered-catalog layout imported without that catalog) is not restored, and `unresolved-reference` names the layout at `slides.N.layout`. The imported document therefore always renders.
 - Without `OPF_DOCUMENT_V1`, or when it is unreadable (`invalid-document-provenance` at `''`), slide records still restore layout intent under these rules. Deck references, deck composition defaults, metadata, slide ids and beats need the document record and are not restored.
-- A `layoutRecord` whose `id` differs from the slide's `layout` is ignored and reported as `invalid-document-provenance` at `slides.N.layoutRecord`; a malformed one rejects the slide record (`slides.N`).
-- Inline layout records from both document and slide tags must also validate against the core layouts catalog schema after resolving packaged media. Invalid records are omitted with `invalid-document-provenance` at `catalogs.layouts.records.N` or `slides.N.layoutRecord`. A valid other copy can still supply the layout; otherwise an inline-only id is omitted with `unresolved-layout-reference`. Native content and unrelated composition hints remain available.
+- A `layoutRecord` whose `id` or `group` does not match the slide's `layout` reference (its prefix, or `custom`/`default` for a bare id) is ignored and reported as `invalid-document-provenance` at `slides.N.layoutRecord`; a malformed one rejects the slide record (`slides.N`).
+- Embedded layout records from both document and slide tags must also validate against the core layouts catalog schema after resolving packaged media. Invalid records are omitted with `invalid-document-provenance` at `catalogs.<group>.layouts.<id>` or `slides.N.layoutRecord`. A valid other copy can still supply the layout; otherwise an embedded-only reference is omitted with `unresolved-reference`. Native content and unrelated composition hints remain available.
 
 Importers from before FF-29 ignore the `layoutRecord` field, as `OPF_SLIDE_V1` readers ignore unknown top-level fields.
 
@@ -187,11 +202,12 @@ References-only tags carry structural boundaries without authored separator byte
 
 ```js
 slideProvenance[i] = {
-  layout,         // stored layout id (string) or undefined
+  layout,         // stored layout reference (`id` or `name:id`) or undefined
   structure,      // 'match' | 'changed' | 'untagged'
   record,         // validated OPF_SLIDE_V1 value without native evidence:
                   // {v, slide, id?, beat?, layout?, type?, composition?, design?, layoutRecord?, omitted?}
-  catalogRecord   // the inline catalogs.layouts record for `layout`, if any: the document's, else the slide's layoutRecord
+  catalogRecord   // the embedded layout record for `layout`, if any: the document's, else a slide's layoutRecord.record
+                  // (none when the layout resolves only in a registered catalog)
 };
 ```
 
@@ -201,7 +217,7 @@ With `structure: 'match'`, the layout id, composition and slide hints are alread
 
 - Keys that FF-24 theme recovery infers but the source never stated remain in the import. For example, a theme-only deck gains `design.colorScheme`.
 - FF-24's `theme-unverified` diagnostic is suppressed when the stored `design.theme` is restored, because the two would contradict each other.
-- `design.slideImage` is not stored in the document tag; `design.slideImage` and `design.watermark` are recovered from their own tagged native pictures while those are unchanged. `design.logo` and `extensions` are stored since spec-gap P1. The drawn cover logo is a tagged native picture (`OPF_LOGO_V1`): it is consumed on import, `design.logo` returns from this tag, and the picture's own image is the fallback only when nothing restored a logo. Header/footer `logo: true` is listed in the furniture manifest's `logos` key, outside `parts` and `definitions`, which released importers validate strictly (spec-gap P2).
+- An image block's own fields (`fit`, `focus`, treatments, `placement`) are not stored in the document tag; they and `design.watermark` are recovered from their own tagged native pictures (`OPF_IMAGE_V1`, `OPF_IMAGE_OVERLAY_V1`, `OPF_WATERMARK_V1`) while those are unchanged. An image background is a design reference here (`design.background`, gated by the slide's native background); its alt-text picture and its overlay are tagged too, so an export with `provenance: false` still recovers it. `design.logo` and `extensions` are stored since spec-gap P1. The drawn cover logo is a tagged native picture (`OPF_LOGO_V1`): it is consumed on import, `design.logo` returns from this tag, and the picture's own image is the fallback only when nothing restored a logo. Header/footer `logo: true` is listed in the furniture manifest's `logos` key, outside `parts` and `definitions`, which released importers validate strictly (spec-gap P2).
 - A native PowerPoint save/reopen of a tagged deck, and Document Inspector behaviour, are separate Office gates.
 
 ## Scope

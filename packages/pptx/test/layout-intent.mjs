@@ -1,41 +1,50 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {toPptx, fromPptx} from '../dist/index.js';
-import {validate, validateCatalogRecord, catalogs} from '@openpresentation/opf';
+import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
+import {validate, validateCatalogRecord} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {renderSvg} from '@openpresentation/opf-render';
 
-// FF-29: slide layout intent (layout id, type, composition, composition hints
-// and the inline catalogs.layouts record) is part of each OPF_SLIDE_V1 record.
-// Import restores it with the document record (FF-32) and without it, for
-// example after a slide is pasted into another deck.
+// FF-29, OPF 0.15 (FA-23): slide layout intent (layout reference, type, composition, composition hints and the record the
+// document embeds for it, with its catalogs group) is part of each OPF_SLIDE_V1 record. Import restores it with the
+// document record (FF-32) and without it, for example after a slide is pasted into another deck. `title-subtitle` is a
+// gallery layout that resolves in the registered snapshot (the host registers it for export, preview and import) and is
+// therefore not embedded; each deck embeds its own layouts under catalogs.custom.
 const enc = new TextEncoder(), dec = new TextDecoder();
-const base = catalogs.layouts.find(record => record.id === 'title-subtitle');
-const heroA = {...structuredClone(base), id: 'gallery-hero', name: 'Gallery Hero'};
-// Bundled layouts name a preview image (vectorSrc), which is a source; the record this test copies must carry none.
-delete heroA.preview;
+const catalogs = [defaultCatalog];
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs, ...options});
+const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs, ...options});
+const LAYOUT_SCHEMA = 'https://openpresentation.org/schema/opf-layout/v1';
+const base = structuredClone(defaultCatalog.layouts['title-subtitle']);
+// Gallery records name a preview image (vectorSrc), which is a source, and display metadata; the copies carry neither.
+delete base.preview;
+for (const key of Object.keys(base)) if (key.startsWith('x-')) delete base[key];
+const heroA = {...structuredClone(base), name: 'Gallery Hero'};
 const heroB = {...structuredClone(heroA), name: 'Gallery Hero (other deck)'};
-const sideB = {...structuredClone(base), id: 'gallery-side', name: 'Gallery Side'};
+const sideB = {...structuredClone(base), name: 'Gallery Side'};
+const custom = layouts => ({custom: {layouts}});
 const deckA = {
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck A', narrative: 'problem-solution',
-  design: {contentAlignment: 'center'}, catalogs: {layouts: {records: [heroA]}},
+  design: {contentAlignment: 'center'}, catalogs: custom({'gallery-hero': heroA}),
   slides: [
     {layout: 'gallery-hero', title: 'Hello', subtitle: 'World', composition: {mode: 'column'}, design: {titleAlignment: 'center', contentBox: false}},
-    {layout: 'title-subtitle', title: 'Two', subtitle: 'Bundled'}
+    {layout: 'title-subtitle', title: 'Two', subtitle: 'Registered'}
   ]
 };
 const deckB = {
-  $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck B', catalogs: {layouts: {records: [heroB, sideB]}},
+  $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck B', catalogs: custom({'gallery-hero': heroB, 'gallery-side': sideB}),
   slides: [{layout: 'gallery-hero', title: 'From B', subtitle: 'Different record'}, {layout: 'gallery-side', title: 'Side', subtitle: 'Only in B'}]
 };
 for (const deck of [deckA, deckB]) assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings));
 const exportedA = await toPptx(structuredClone(deckA)), exportedB = await toPptx(structuredClone(deckB));
+const storedA = {group: 'custom', id: 'gallery-hero', record: heroA};
 
-const read = async bytes => {
+const read = async (bytes, options = {}) => {
   const issues = [];
-  const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
+  const deck = await fromPptx(bytes, {...options, onDiagnostic: issue => issues.push(issue)});
   assert.equal(validate(deck, {only: ['format']}).valid, true);
-  // Every restored layout id resolves, so the imported document always renders.
-  assert.equal(renderSvg(deck).length, deck.slides.length);
+  // Every restored layout reference resolves, so the imported document always renders.
+  assert.equal(renderSvg(deck, {catalogs}).length, deck.slides.length);
   return {deck, provenance: issues.filter(issue => /provenance|reference|slide-id/.test(issue.code)).map(issue => [issue.code, issue.path])};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
@@ -62,18 +71,18 @@ const paste = (target, source, index) => modify(target, entries => {
 });
 let cases = 0;
 
-// Package shape: the inline record travels with its slide; bundled ids carry none.
+// Package shape: the embedded record travels with its slide, with its group; a layout from a registered catalog carries none.
 {
   const entries = unzipSync(exportedA);
   const [one, two] = [1, 2].map(index => tagValue(entries[`ppt/tags/opfSlide${index}.xml`]));
   assert.deepEqual({layout: one.layout, type: one.type, composition: one.composition, layoutRecord: one.layoutRecord, design: one.design},
-    {layout: 'gallery-hero', type: undefined, composition: {mode: 'column'}, layoutRecord: heroA, design: {titleAlignment: 'center', contentBox: false}});
+    {layout: 'gallery-hero', type: undefined, composition: {mode: 'column'}, layoutRecord: storedA, design: {titleAlignment: 'center', contentBox: false}});
   assert.equal(two.layout, 'title-subtitle');
-  assert.equal(two.layoutRecord, undefined, 'Bundled layouts need no stored record.');
-  assert.deepEqual(tagValue(entries['ppt/tags/opfDocument.xml']).catalogs, {layouts: {records: [heroA]}});
+  assert.equal(two.layoutRecord, undefined, 'A layout from a registered catalog needs no stored record.');
+  assert.deepEqual(tagValue(entries['ppt/tags/opfDocument.xml']).catalogs, deckA.catalogs);
   assert.equal(Object.keys(entries).some(path => /opfLayout/i.test(path)), false, 'No separate layout tag part.');
   const refs = unzipSync(await toPptx(structuredClone(deckA), {provenance: 'references-only'}));
-  assert.deepEqual(tagValue(refs['ppt/tags/opfSlide1.xml']).layoutRecord, heroA, 'A layout record without sources is a reference.');
+  assert.deepEqual(tagValue(refs['ppt/tags/opfSlide1.xml']).layoutRecord, storedA, 'A layout record without sources is a reference.');
   const none = unzipSync(await toPptx(structuredClone(deckA), {provenance: false}));
   assert.equal(Object.keys(none).some(path => /^ppt\/tags\/opf(Document|Slide)/.test(path)), false);
   cases++;
@@ -84,7 +93,7 @@ let cases = 0;
   const {deck, provenance} = await read(exportedA);
   assert.deepEqual(provenance, []);
   assert.deepEqual(deck.slides.map(intent), expectedA);
-  assert.deepEqual(deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(deck.catalogs, deckA.catalogs, 'the embedded record returns exactly: no $schema or id is inserted');
   assert.equal(deck.narrative, 'problem-solution');
   const again = unzipSync(await toPptx(deck)), before = unzipSync(exportedA);
   for (const index of [1, 2]) {
@@ -99,13 +108,13 @@ let cases = 0;
   const stripped = await read(modify(exportedA, stripDocument));
   assert.deepEqual(stripped.provenance, []);
   assert.deepEqual(stripped.deck.slides.map(intent), expectedA);
-  assert.deepEqual(stripped.deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(stripped.deck.catalogs, deckA.catalogs);
   assert.equal(stripped.deck.narrative, undefined, 'Deck metadata needs the document record.');
   assert.equal(stripped.deck.design?.contentAlignment, undefined, 'Deck defaults need the document record.');
   const damaged = await read(modify(exportedA, entries => text(entries, 'ppt/tags/opfDocument.xml', xml => xml.replace(/val="[0-9A-F]{8}/, 'val="ZZZZZZZZ'))));
   assert.deepEqual(damaged.provenance, [['invalid-document-provenance', '']]);
   assert.deepEqual(damaged.deck.slides.map(intent), expectedA);
-  assert.deepEqual(damaged.deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(damaged.deck.catalogs, deckA.catalogs);
   cases++;
 }
 
@@ -113,13 +122,13 @@ let cases = 0;
 {
   const {deck, provenance} = await read(paste(exportedA, exportedB, 2));
   assert.deepEqual(deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', 'gallery-side']);
-  assert.deepEqual(deck.catalogs, {layouts: {records: [heroA, sideB]}});
+  assert.deepEqual(deck.catalogs, custom({'gallery-hero': heroA, 'gallery-side': sideB}));
   // The deck default is not restored once slides were added (FF-32).
   assert.deepEqual(provenance, [['design-reference-changed', 'design.contentAlignment']]);
   const stripped = await read(modify(paste(exportedA, exportedB, 2), stripDocument));
   assert.deepEqual(stripped.provenance, []);
   assert.deepEqual(stripped.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', 'gallery-side']);
-  assert.deepEqual(stripped.deck.catalogs, {layouts: {records: [heroA, sideB]}});
+  assert.deepEqual(stripped.deck.catalogs, custom({'gallery-hero': heroA, 'gallery-side': sideB}));
   cases++;
 }
 
@@ -128,11 +137,11 @@ let cases = 0;
   const {deck, provenance} = await read(paste(exportedA, exportedB, 1));
   assert.deepEqual(deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', undefined]);
   assert.equal(deck.slides[2].title, 'From B');
-  assert.deepEqual(deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(deck.catalogs, deckA.catalogs);
   assert.deepEqual(provenance, [['layout-reference-changed', 'slides.2.layout'], ['design-reference-changed', 'design.contentAlignment']]);
   const stripped = await read(modify(paste(exportedA, exportedB, 1), stripDocument));
   assert.deepEqual(stripped.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', undefined]);
-  assert.deepEqual(stripped.deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(stripped.deck.catalogs, deckA.catalogs);
   assert.deepEqual(stripped.provenance, [['layout-reference-changed', 'slides.2.layout']]);
   cases++;
 }
@@ -144,17 +153,23 @@ let cases = 0;
     mutate(value);
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   });
-  // A tampered record is ignored; with no other record the id cannot resolve, so it is not restored.
-  const mismatched = await read(modify(exportedA, entries => { stripDocument(entries); retag(entries, value => { value.layoutRecord.id = 'other'; }); }));
-  assert.deepEqual(mismatched.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-layout-reference', 'slides.0.layout']]);
-  assert.deepEqual(mismatched.deck.slides.map(slide => slide.layout), [undefined, 'title-subtitle']);
-  assert.equal(mismatched.deck.catalogs, undefined);
-  assert.equal(mismatched.deck.slides[0].composition?.mode, 'column', 'The rest of the intent still returns.');
+  // A tampered record (another id, or a group the reference does not name) is ignored; with no other record the
+  // reference cannot resolve, so it is not restored.
+  for (const tamper of [value => { value.layoutRecord.id = 'other'; }, value => { value.layoutRecord.group = 'acme'; }]) {
+    const mismatched = await read(modify(exportedA, entries => { stripDocument(entries); retag(entries, tamper); }));
+    assert.deepEqual(mismatched.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-reference', 'slides.0.layout']]);
+    assert.deepEqual(mismatched.deck.slides.map(slide => slide.layout), [undefined, 'title-subtitle']);
+    assert.equal(mismatched.deck.catalogs, undefined);
+    assert.equal(mismatched.deck.slides[0].composition?.mode, 'column', 'The rest of the intent still returns.');
+  }
+  // A 0.14 slide record (the bare record with its own id) is not read: the slide record is dropped as invalid.
+  const old = await read(modify(exportedA, entries => { stripDocument(entries); retag(entries, value => { value.layoutRecord = {...heroA, id: 'gallery-hero'}; }); }));
+  assert.deepEqual(old.provenance, [['invalid-document-provenance', 'slides.0']]);
   // With the document record the same tampered slide still resolves through the document.
   const documented = await read(modify(exportedA, entries => retag(entries, value => { value.layoutRecord.id = 'other'; })));
   assert.deepEqual(documented.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord']]);
   assert.equal(documented.deck.slides[0].layout, 'gallery-hero');
-  assert.deepEqual(documented.deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(documented.deck.catalogs, deckA.catalogs);
   const malformed = await read(modify(exportedA, entries => { stripDocument(entries); retag(entries, value => { value.layoutRecord = 'gallery-hero'; }); }));
   assert.deepEqual(malformed.provenance, [['invalid-document-provenance', 'slides.0']]);
   assert.equal(malformed.deck.slides[0].layout, undefined);
@@ -176,18 +191,16 @@ let cases = 0;
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   });
   const malformedRecords = [
-    {id: 'gallery-hero', placeholders: [null]},
+    {name: 'Broken', placeholders: [null]},
     {...structuredClone(heroA), placeholders: [{type: 'not-a-placeholder'}]},
     {...structuredClone(heroA), $schema: 'https://example.com/untrusted-layout'}
   ];
   for (const record of malformedRecords) {
-    assert.equal(validateCatalogRecord('layouts', record).valid, false);
-    // This deliberately passes the presentation schema: it is the regression.
-    assert.equal(validate({...deckA, catalogs: {layouts: {records: [record]}}}, {only: ['format']}).valid, true);
-    const corruptSlide = entries => retag(entries, 'ppt/tags/opfSlide1.xml', value => { value.layoutRecord = record; });
-    const corruptDocument = entries => retag(entries, 'ppt/tags/opfDocument.xml', value => { value.catalogs.layouts.records[0] = record; });
+    assert.equal(validateCatalogRecord('layouts', {$schema: LAYOUT_SCHEMA, id: 'gallery-hero', ...record}).valid, false);
+    const corruptSlide = entries => retag(entries, 'ppt/tags/opfSlide1.xml', value => { value.layoutRecord.record = record; });
+    const corruptDocument = entries => retag(entries, 'ppt/tags/opfDocument.xml', value => { value.catalogs.custom.layouts['gallery-hero'] = record; });
     const standalone = await read(modify(exportedA, entries => { stripDocument(entries); corruptSlide(entries); }));
-    assert.deepEqual(standalone.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-layout-reference', 'slides.0.layout']]);
+    assert.deepEqual(standalone.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-reference', 'slides.0.layout']]);
     assert.equal(standalone.deck.slides[0].layout, undefined);
     assert.equal(standalone.deck.slides[0].title, 'Hello');
     assert.equal(standalone.deck.slides[0].subtitle, 'World');
@@ -197,39 +210,20 @@ let cases = 0;
     const documented = await read(modify(exportedA, corruptSlide));
     assert.deepEqual(documented.provenance, [['invalid-document-provenance', 'slides.0.layoutRecord']]);
     assert.equal(documented.deck.slides[0].layout, 'gallery-hero');
-    assert.deepEqual(documented.deck.catalogs, {layouts: {records: [heroA]}});
+    assert.deepEqual(documented.deck.catalogs, deckA.catalogs);
     // Conversely, a valid slide copy can replace an invalid document copy.
     const recovered = await read(modify(exportedA, corruptDocument));
-    assert.deepEqual(recovered.provenance, [['invalid-document-provenance', 'catalogs.layouts.records.0']]);
+    assert.deepEqual(recovered.provenance, [['invalid-document-provenance', 'catalogs.custom.layouts.gallery-hero']]);
     assert.equal(recovered.deck.slides[0].layout, 'gallery-hero');
-    assert.deepEqual(recovered.deck.catalogs, {layouts: {records: [heroA]}});
+    assert.deepEqual(recovered.deck.catalogs, deckA.catalogs);
     // Neither invalid copy is retained; native content and other slides survive.
     const both = await read(modify(exportedA, entries => { corruptDocument(entries); corruptSlide(entries); }));
-    assert.deepEqual(both.provenance, [['invalid-document-provenance', 'catalogs.layouts.records.0'],
-      ['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-layout-reference', 'slides.0.layout']]);
+    assert.deepEqual(both.provenance, [['invalid-document-provenance', 'catalogs.custom.layouts.gallery-hero'],
+      ['invalid-document-provenance', 'slides.0.layoutRecord'], ['unresolved-reference', 'slides.0.layout']]);
     assert.deepEqual(both.deck.slides.map(slide => slide.layout), [undefined, 'title-subtitle']);
     assert.equal(both.deck.slides[0].title, 'Hello');
     assert.equal(both.deck.slides[0].subtitle, 'World');
     assert.equal(both.deck.catalogs, undefined);
-  }
-  cases++;
-}
-
-// An inline record's catalog kind is known; the standalone schema identifier
-// is optional in valid authored OPF and must not be added or required on import.
-{
-  const record = structuredClone(heroA); delete record.$schema;
-  assert.equal(validateCatalogRecord('layouts', {$schema: heroA.$schema, ...record}).valid, true);
-  const input = {...structuredClone(deckA), catalogs: {layouts: {records: [record]}}};
-  assert.equal(validate(input, {only: ['format']}).valid, true);
-  assert.equal(renderSvg(input).length, input.slides.length);
-  const bytes = await toPptx(input);
-  for (const withoutDocument of [false, true]) {
-    const result = await read(withoutDocument ? modify(bytes, stripDocument) : bytes);
-    assert.deepEqual(result.provenance, [], 'A valid inline record must not be rejected for its omitted standalone $schema.');
-    assert.deepEqual(result.deck.slides.map(intent), expectedA);
-    assert.deepEqual(result.deck.catalogs, {layouts: {records: [record]}}, 'The authored record stays exact; validation must not insert $schema.');
-    if (!withoutDocument) assert.equal(result.deck.narrative, input.narrative);
   }
   cases++;
 }
@@ -244,51 +238,55 @@ let cases = 0;
   const withDocument = await read(modify(exportedA, legacy));
   assert.deepEqual(withDocument.provenance, []);
   assert.deepEqual(withDocument.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle']);
-  assert.deepEqual(withDocument.deck.catalogs, {layouts: {records: [heroA]}});
-  // Without the document tag the inline-only id has no record anywhere: it is reported, not restored; bundled ids still return.
+  assert.deepEqual(withDocument.deck.catalogs, deckA.catalogs);
+  // Without the document tag the embedded-only reference has no record anywhere: it is reported, not restored; a reference
+  // that resolves in a registered catalog still returns, and only where the importer registers that catalog.
   const stripped = await read(modify(exportedA, entries => { legacy(entries); stripDocument(entries); }));
-  assert.deepEqual(stripped.provenance, [['unresolved-layout-reference', 'slides.0.layout']]);
+  assert.deepEqual(stripped.provenance, [['unresolved-reference', 'slides.0.layout']]);
   assert.deepEqual(stripped.deck.slides.map(slide => slide.layout), [undefined, 'title-subtitle']);
   assert.equal(stripped.deck.catalogs, undefined);
   assert.equal(stripped.deck.slides[0].composition?.mode, 'column');
+  const unregistered = await read(modify(exportedA, entries => { legacy(entries); stripDocument(entries); }), {catalogs: []});
+  assert.deepEqual(unregistered.provenance, [['unresolved-reference', 'slides.0.layout'], ['unresolved-reference', 'slides.1.layout']]);
+  assert.deepEqual(unregistered.deck.slides.map(slide => slide.layout), [undefined, undefined]);
   cases++;
 }
 
-// A slide record that overrides a built-in layout id never changes other slides' layouts.
+// A slide record that overrides a registered layout id never changes other slides' layouts.
 {
   const override = {...structuredClone(base), name: 'Overridden title-subtitle', placeholders: [{type: 'title'}]};
-  const deckC = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck C', catalogs: {layouts: {records: [override]}},
+  const deckC = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck C', catalogs: custom({'title-subtitle': override}),
     slides: [{layout: 'title-subtitle', title: 'Override one', subtitle: 'C'}, {layout: 'title-subtitle', title: 'Override two', subtitle: 'C'}]};
   assert.equal(validate(deckC, {only: ['format']}).valid, true);
   const exportedC = await toPptx(structuredClone(deckC));
-  assert.deepEqual(tagValue(unzipSync(exportedC)['ppt/tags/opfSlide1.xml']).layoutRecord, override);
-  // Pasted into deck A, whose slide 2 uses the built-in title-subtitle.
+  assert.deepEqual(tagValue(unzipSync(exportedC)['ppt/tags/opfSlide1.xml']).layoutRecord, {group: 'custom', id: 'title-subtitle', record: override});
+  // Pasted into deck A, whose slide 2 uses the registered title-subtitle.
   const pasted = await read(paste(exportedA, exportedC, 1));
   assert.deepEqual(pasted.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', undefined]);
   assert.equal(pasted.deck.slides[2].title, 'Override one');
-  assert.deepEqual(pasted.deck.catalogs, {layouts: {records: [heroA]}}, 'The override is not added to the host catalog.');
+  assert.deepEqual(pasted.deck.catalogs, deckA.catalogs, 'The override is not added to the document.');
   assert.deepEqual(pasted.provenance, [['layout-reference-changed', 'slides.2.layout'], ['design-reference-changed', 'design.contentAlignment']]);
   const pastedStripped = await read(modify(paste(exportedA, exportedC, 1), stripDocument));
   assert.deepEqual(pastedStripped.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', undefined]);
-  assert.deepEqual(pastedStripped.deck.catalogs, {layouts: {records: [heroA]}});
+  assert.deepEqual(pastedStripped.deck.catalogs, deckA.catalogs);
   assert.deepEqual(pastedStripped.provenance, [['layout-reference-changed', 'slides.2.layout']]);
   // Deck C on its own: with its document the override is the document's record; without it, every slide agrees on it.
   for (const bytes of [exportedC, modify(exportedC, stripDocument)]) {
     const own = await read(bytes);
     assert.deepEqual(own.provenance, []);
     assert.deepEqual(own.deck.slides.map(slide => slide.layout), ['title-subtitle', 'title-subtitle']);
-    assert.deepEqual(own.deck.catalogs, {layouts: {records: [override]}});
+    assert.deepEqual(own.deck.catalogs, deckC.catalogs);
   }
   // If its document copy is invalid, agreeing valid slide copies still restore
   // this deliberate override; they never override a host's valid record.
   const damagedDocument = await read(modify(exportedC, entries => text(entries, 'ppt/tags/opfDocument.xml', xml => {
     const value = tagValue(enc.encode(xml));
-    value.catalogs.layouts.records[0] = {id: 'title-subtitle', placeholders: [null]};
+    value.catalogs.custom.layouts['title-subtitle'] = {name: 'Broken', placeholders: [null]};
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   })));
-  assert.deepEqual(damagedDocument.provenance, [['invalid-document-provenance', 'catalogs.layouts.records.0']]);
+  assert.deepEqual(damagedDocument.provenance, [['invalid-document-provenance', 'catalogs.custom.layouts.title-subtitle']]);
   assert.deepEqual(damagedDocument.deck.slides.map(slide => slide.layout), ['title-subtitle', 'title-subtitle']);
-  assert.deepEqual(damagedDocument.deck.catalogs, {layouts: {records: [override]}});
+  assert.deepEqual(damagedDocument.deck.catalogs, deckC.catalogs);
   cases++;
 }
 
@@ -299,7 +297,7 @@ let cases = 0;
 {
   const privateUrl = 'https://intranet.example.com/private/preview.png';
   const withPreview = {...structuredClone(heroA), preview: {src: 'asset:private-preview'}};
-  const deckP = {...structuredClone(deckA), assets: {'private-preview': privateUrl}, catalogs: {layouts: {records: [withPreview]}}};
+  const deckP = {...structuredClone(deckA), assets: {'private-preview': privateUrl}, catalogs: custom({'gallery-hero': withPreview})};
   assert.equal(validate(deckP, {only: ['format']}).valid, true);
   const parse = xml => [...xml.matchAll(/ val="([0-9A-F]+)"/g)].map(match => JSON.parse(Buffer.from(match[1], 'hex').toString('utf8')));
   const tagsOf = async provenance => { const entries = unzipSync(await toPptx(structuredClone(deckP), {provenance})); return Object.keys(entries).filter(path => /^ppt\/tags\/opf(Document|Slide)/.test(path)).map(path => dec.decode(entries[path])); };
@@ -316,4 +314,17 @@ let cases = 0;
   cases++;
 }
 
-console.log(`Layout intent passed: ${cases} groups; OPF_SLIDE_V1 carries the layout record, and import restores layout, type, composition, hints and records with and without document provenance, for pasted slides, conflicting records, tampering and edits.`);
+// A pasted slide from a named catalog group brings its group and source with it.
+{
+  const deckN = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck N', catalogs: {acme: {source: 'pkg:@acme/opf-catalog', layouts: {hero: heroB}}},
+    slides: [{layout: 'acme:hero', title: 'Named', subtitle: 'Group'}]};
+  assert.equal(validate(deckN, {only: ['format']}).valid, true);
+  const exportedN = await toPptx(structuredClone(deckN));
+  assert.deepEqual(tagValue(unzipSync(exportedN)['ppt/tags/opfSlide1.xml']).layoutRecord, {group: 'acme', id: 'hero', source: 'pkg:@acme/opf-catalog', record: heroB});
+  const pasted = await read(modify(paste(exportedA, exportedN, 1), stripDocument));
+  assert.deepEqual(pasted.deck.slides.map(slide => slide.layout), ['gallery-hero', 'title-subtitle', 'acme:hero']);
+  assert.deepEqual(pasted.deck.catalogs, {...deckA.catalogs, acme: {source: 'pkg:@acme/opf-catalog', layouts: {hero: heroB}}});
+  cases++;
+}
+
+console.log(`Layout intent passed: ${cases} groups; OPF_SLIDE_V1 carries the layout record and its group, and import restores layout, type, composition, hints and records with and without document provenance, for pasted slides, conflicting records, tampering and edits.`);

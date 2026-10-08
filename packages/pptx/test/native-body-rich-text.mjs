@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {unzipSync, zipSync, strFromU8, strToU8} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 const output = path.resolve(process.env.OPF_NATIVE_BODY_ARTIFACTS ?? 'artifacts/native-body-rich-text/source');
 const baseline = process.env.OPF_NATIVE_BODY_BASELINE;

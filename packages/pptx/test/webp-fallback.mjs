@@ -12,9 +12,9 @@ for(const [file,reference] of Object.entries(references)) {
  const path=fileURLToPath(new URL('fixtures/images/'+file,import.meta.url));
  const bytes=new Uint8Array(await readFile(path));
  const original=new Uint8Array(bytes);
- for(const mode of ['fit','crop']) for(const source of ['uri','path','resolver']) {
+ for(const mode of ['contain','cover']) for(const source of ['uri','path','resolver']) {
   const uri='data:image/webp;base64,'+Buffer.from(bytes).toString('base64');
-  const deck={design:{imageFill:mode},slides:[{image:{src:source==='uri'?uri:source==='path'?path:'https://example.invalid/image',alt:file}}]};
+  const deck={design:{imageFit:mode},slides:[{image:{src:source==='uri'?uri:source==='path'?path:'https://example.invalid/image',alt:file}}]};
   let calls=0;
   const options={strictAssets:true,...(source==='resolver'?{imageResolver:()=>{calls++;return bytes;}}:{})};
   const output=await toPptx(deck,options),entries=unzipSync(output);

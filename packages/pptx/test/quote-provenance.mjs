@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx as exportPptx,fromPptx as importPptx} from '../dist/index.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {decodeTextTag} from '../dist/code-provenance.js';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
@@ -26,6 +27,11 @@ const fixtures=[
  {text:'A long quote body that wraps across several native lines because the cell is only so wide, and keeps every word in order. '.repeat(3),attribution:'Long attribution that also wraps '.repeat(2),source:'Recorded'},
 ];
 
+// OPF 0.15: the quote layouts are the gallery snapshot's, registered for export and import (a stored layout reference
+// that resolves only in a registered catalog restores where the importer registers it).
+const catalogs=[defaultCatalog];
+const toPptx=(source,options={})=>exportPptx(source,{catalogs,...options});
+const fromPptx=(bytes,options={})=>importPptx(bytes,{catalogs,...options});
 const exportSource=(source,options=OPTIONS)=>toPptx(source,options);
 const slideXml=entries=>decode(entries['ppt/slides/slide1.xml']);
 const importBytes=async bytes=>{const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});return {imported,diagnostics};};

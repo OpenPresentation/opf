@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const enc=new TextEncoder(),dec=new TextDecoder(),fonts=await loadFonts({pack: 'office'});
 const original={value:42,unit:'ms',label:'Left\tRight  ',description:'Unchanged\r\n\r\ncontext',delta:0,trend:'flat'};

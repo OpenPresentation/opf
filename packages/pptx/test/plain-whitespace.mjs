@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx, resolvePresentation, renderSlideSvg} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation,renderSlideSvg} from '@openpresentation/opf-render/svg';
 const measured = {fonts: await loadFonts()},enc=new TextEncoder(),dec=new TextDecoder();
 const sources=['  A  B\tC\u00a0D\r\n\r\ntrail  \r','\t\t  ','Line one\n\nLine three\r\n','A long string of ordinary words that must retain every separator across soft wrapping. '.repeat(3),''];
 let cases=0;

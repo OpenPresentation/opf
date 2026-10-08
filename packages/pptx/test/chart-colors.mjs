@@ -14,8 +14,8 @@ const cases=[
  {background:'#000000',surface:'#FFFFFF80',text:'#FFFFFF',expected:'FFFFFF'},
 ];
 let checked=0;
-for(const fixture of cases)for(const type of ['column','bar','line','area','pie','donut','stacked-column']){
- const circular=['pie','donut'].includes(type);
+for(const fixture of cases)for(const type of ['column','bar','line','area','pie','doughnut','stacked-column']){
+ const circular=['pie','doughnut'].includes(type);
  const data={columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]};
  const input={design:{background:fixture.background,colorScheme:{id:'cool-horizon',dark1:fixture.text,light1:fixture.text,text:fixture.text,dark2:fixture.surface,light2:fixture.surface}},slides:[{chart:{type,data}}]},original=structuredClone(input);
  const bytes=await toPptx(input),entries=unzipSync(bytes),xml=new TextDecoder().decode(entries['ppt/charts/chart1.xml']),root=parser.parse(xml)['c:chartSpace'];

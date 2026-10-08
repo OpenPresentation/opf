@@ -35,7 +35,7 @@ await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight
 await copyFile(new URL('src/data-provenance.js', root), new URL('data-provenance.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
-await copyFile(new URL('src/slide-image-provenance.js', root), new URL('slide-image-provenance.js', dist));
+await copyFile(new URL('src/image-provenance.js', root), new URL('image-provenance.js', dist));
 await copyFile(new URL('src/media-dedupe.js', root), new URL('media-dedupe.js', dist));
 await copyFile(new URL('src/watermark-provenance.js', root), new URL('watermark-provenance.js', dist));
 await copyFile(new URL('src/logo-provenance.js', root), new URL('logo-provenance.js', dist));

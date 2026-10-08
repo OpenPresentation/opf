@@ -65,19 +65,20 @@ for (const [name, source, reason] of broken) {
 
 // Image background: the slide keeps its background colour, one diagnostic.
 {
-  const deck = {design: {background: {type: 'image', image: {src: broken[0][1]}}}, slides: [{title: 'A'}]};
+  const deck = {design: {background: {type: 'image', src: broken[0][1]}}, slides: [{title: 'A'}]};
   const {diagnostics, slide} = await run(deck);
-  assert.deepEqual(unresolved(diagnostics).map(({path, reason}) => ({path, reason})), [{path: 'design.background.image', reason: 'svg-malformed'}]);
+  assert.deepEqual(unresolved(diagnostics).map(({path, reason}) => ({path, reason})), [{path: 'design.background', reason: 'svg-malformed'}]);
   assert.ok(!slide.includes('<a:blip'));
-  await assert.rejects(run(deck, {strictAssets: true}), error => error.code === 'invalid-svg-image' && error.details?.path === 'design.background.image');
+  await assert.rejects(run(deck, {strictAssets: true}), error => error.code === 'invalid-svg-image' && error.details?.path === 'design.background');
   checked++;
 }
 
-// Slide image: the placeholder fills the slide image frame.
+// Placed image block: the placeholder fills the image frame.
 {
-  const deck = {design: {slideImage: {src: broken[0][1], position: 'right'}}, slides: [{title: 'A', layout: 'image-1x', image: broken[0][1]}]};
+  const deck = {slides: [{title: 'A', blocks: [{type: 'image', image: broken[0][1], placement: {edge: 'right'}}]}]};
   const {diagnostics, slide} = await run(deck);
   assert.ok(unresolved(diagnostics).length >= 1 && unresolved(diagnostics).every(diagnostic => diagnostic.reason === 'svg-malformed'));
+  assert.match(slide, /name="OPF image placeholder 1"/);
   assert.ok(!slide.includes('<p:pic>'));
   await assert.rejects(run(deck, {strictAssets: true}), error => error.code === 'invalid-svg-image');
   checked++;

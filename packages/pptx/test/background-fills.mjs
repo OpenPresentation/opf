@@ -1,5 +1,7 @@
 // FF-25: pattern and picture slide backgrounds export as native p:bg fills
 // (a:pattFill / a:blipFill) and import back as OPF pattern / image backgrounds.
+// FA-23: the 0.15 image background ({type: 'image', src, fit, focus, opacity}) without alt text; test/background-images.mjs
+// covers alt text, overlays and the round trip.
 import assert from 'node:assert/strict';
 import {deflateSync, crc32} from 'node:zlib';
 import {readFile} from 'node:fs/promises';
@@ -133,11 +135,12 @@ for (const preset of ['pct5', 'ltHorz', 'openDmnd', 'wave', 'smGrid', 'zigZag'])
   cases += 4;
 }
 
-// Pictures: cover crops the centered source, contain insets the fill rectangle, tile repeats cells.
+// Pictures (FA-23, core backgroundImage): cover crops around the focus point, contain insets the fill rectangle, stretch
+// fills the slide, tile repeats the picture at its intrinsic size from the top-left corner.
 const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
 {
-  const assets = {cover: {src: square, alt: 'Cover'}};
-  const {bytes, exported, background} = await roundTrip({assets, design: {background: {type: 'image', image: {src: 'asset:cover', fit: 'cover'}}}, slides: [{title: 'Photo'}]});
+  const assets = {cover: {src: square}};
+  const {bytes, exported, background} = await roundTrip({assets, design: {background: {type: 'image', src: 'asset:cover', fit: 'cover'}}, slides: [{title: 'Photo'}]});
   const xml = bg(bytes);
   assert.match(xml, /<a:blipFill\b[^>]*><a:blip r:embed="rId\d+"><\/a:blip><a:srcRect t="21875" b="21875"\/><a:stretch><a:fillRect\/><\/a:stretch><\/a:blipFill>/);
   const id = xml.match(/r:embed="([^"]+)"/)[1];
@@ -145,57 +148,70 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
   const target = rels.match(new RegExp(`Id="${id}"[^>]*Target="\\.\\./media/([^"]+)"`))[1];
   assert.match(target, /\.png$/);
   assert.deepEqual(exported, []);
-  assert.deepEqual(background, {type: 'image', image: {src: square, fit: 'cover'}}, 'Exact image bytes and fit return');
+  assert.deepEqual(background, {type: 'image', src: square}, 'Exact image bytes return; cover is the default fit');
   // Portrait source on a 16:9 slide crops top and bottom; a wide source on a portrait slide crops the sides.
-  const portrait = await roundTrip({slides: [{design: {background: {type: 'image', image: {src: tall}}}}]});
+  const portrait = await roundTrip({slides: [{design: {background: {type: 'image', src: tall}}}]});
   const crop = attrs(bg(portrait.bytes), 'srcRect');
   assert.equal(Number(crop.t), Number(crop.b)); assert.ok(Number(crop.t) > 0 && !crop.l);
-  assert.equal(portrait.background.image.fit, 'cover');
-  const onPortrait = await roundTrip({design: {dimensions: {widthInches: 7.5, heightInches: 13.333}}, slides: [{design: {background: {type: 'image', image: {src: wide, fit: 'cover'}}}}]});
+  assert.equal(portrait.background.fit, undefined);
+  const onPortrait = await roundTrip({design: {dimensions: {widthInches: 7.5, heightInches: 13.333}}, slides: [{design: {background: {type: 'image', src: wide, fit: 'cover'}}}]});
   const sides = attrs(bg(onPortrait.bytes), 'srcRect');
   assert.equal(sides.l, sides.r); assert.ok(Number(sides.l) > 0 && !sides.t);
-  assert.equal(onPortrait.background.image.fit, 'cover');
-  cases += 3;
+  // The string shorthand is a cover image.
+  const shorthand = await roundTrip({slides: [{design: {background: square}}]});
+  assert.equal(bg(shorthand.bytes), xml.replace(/r:embed="[^"]+"/, `r:embed="${bg(shorthand.bytes).match(/r:embed="([^"]+)"/)[1]}"`));
+  cases += 4;
 }
 {
-  const {bytes, background} = await roundTrip({design: {background: {type: 'image', image: {src: square, fit: 'contain'}, opacity: .6}}, slides: [{}]});
+  // Focus: the cover crop keeps the focus point in view, and the crop it leaves imports as that focus.
+  const {bytes, background} = await roundTrip({slides: [{design: {background: {type: 'image', src: square, focus: {x: 0.5, y: 0.25}}}}]});
+  const crop = attrs(bg(bytes), 'srcRect');
+  // A 100 px square on 1280 x 720 keeps 56.25% of its height; centering y = 0.25 would start above the picture, so the crop
+  // is pinned to the top edge and reads back as the edge-most focus with that crop.
+  assert.deepEqual(crop, {b: '43750'});
+  assert.deepEqual(background, {type: 'image', src: square, focus: {x: 0.5, y: 0.2813}});
+  const inside = await roundTrip({slides: [{design: {background: {type: 'image', src: square, focus: {x: 0.5, y: 0.4}}}}]});
+  assert.deepEqual(attrs(bg(inside.bytes), 'srcRect'), {t: '11875', b: '31875'});
+  assert.deepEqual(inside.background, {type: 'image', src: square, focus: {x: 0.5, y: 0.4}});
+  cases += 2;
+}
+{
+  const {bytes, background} = await roundTrip({design: {background: {type: 'image', src: square, fit: 'contain', opacity: .6}}, slides: [{}]});
   const xml = bg(bytes);
   assert.match(xml, /<a:blip r:embed="rId\d+"><a:alphaModFix amt="60000"\/><\/a:blip><a:srcRect\/><a:stretch><a:fillRect l="21875" r="21875"\/><\/a:stretch>/);
-  assert.deepEqual(background, {type: 'image', image: {src: square, fit: 'contain'}, opacity: .6});
-  cases++;
+  assert.deepEqual(background, {type: 'image', src: square, fit: 'contain', opacity: .6});
+  const stretched = await roundTrip({design: {background: {type: 'image', src: square, fit: 'stretch'}}, slides: [{}]});
+  assert.match(bg(stretched.bytes), /<a:blip r:embed="rId\d+"><\/a:blip><a:stretch><a:fillRect\/><\/a:stretch><\/a:blipFill>/);
+  assert.deepEqual(stretched.background, {type: 'image', src: square, fit: 'stretch'});
+  assert.deepEqual(stretched.imported.filter(d => d.path.endsWith('design.background')), []);
+  cases += 2;
 }
 {
-  // Tile cells are min(w,h)/4 = 180px on 1280x720. The deck imageFill decides cover/contain in a cell.
-  const contain = await roundTrip({design: {background: {type: 'image', image: {src: wide, fit: 'tile'}}}, slides: [{}]});
-  assert.deepEqual(attrs(bg(contain.bytes), 'tile'), {tx: '0', ty: '0', sx: '37500', sy: '37500', flip: 'none', algn: 'tl'});
-  assert.deepEqual(attrs(bg(contain.bytes), 'srcRect'), {t: '-38889', b: '-38889'}, 'Transparent padding keeps the contained cell square');
-  assert.equal(contain.background.image.fit, 'tile');
-  assert.deepEqual(contain.imported.filter(d => d.path.endsWith('design.background')), [], 'OPF tile geometry imports without a diagnostic');
-  const cover = await roundTrip({design: {imageFill: 'crop', background: {type: 'image', image: {src: wide, fit: 'tile'}}}, slides: [{}]});
-  assert.deepEqual(attrs(bg(cover.bytes), 'tile'), {tx: '0', ty: '0', sx: '66667', sy: '66667', flip: 'none', algn: 'tl'});
-  assert.deepEqual(attrs(bg(cover.bytes), 'srcRect'), {l: '21875', r: '21875'});
-  assert.equal(cover.background.image.fit, 'tile');
-  // Import carries no imageFill, so covered cells are reported as approximate.
-  assert.deepEqual(cover.imported.filter(d => d.path.endsWith('design.background')).map(d => d.code), ['approximate-background-image']);
+  // Tile: the picture at its intrinsic size, 1 picture px = 1 reference px (1/96 in), from the top-left corner, no crop.
+  const tile = await roundTrip({design: {background: {type: 'image', src: wide, fit: 'tile'}}, slides: [{}]});
+  assert.deepEqual(attrs(bg(tile.bytes), 'tile'), {tx: '0', ty: '0', sx: '100000', sy: '100000', flip: 'none', algn: 'tl'});
+  assert.doesNotMatch(bg(tile.bytes), /<a:srcRect/);
+  assert.equal(tile.background.fit, 'tile');
+  assert.deepEqual(tile.imported.filter(d => d.path.endsWith('design.background')), [], 'OPF tile geometry imports without a diagnostic');
   // Native tile geometry OPF cannot express is reported, not silently dropped.
-  for (const change of [xml => xml.replace('sx="37500"', 'sx="50000"'), xml => xml.replace('sy="37500"', 'sy="30000"'), xml => xml.replace('tx="0"', 'tx="91440"'),
-    xml => xml.replace('ty="0"', 'ty="-45720"'), xml => xml.replace('algn="tl"', 'algn="ctr"'), xml => xml.replace('flip="none"', 'flip="xy"'), xml => xml.replace('t="-38889" b="-38889"', 't="-10000" b="-10000"')]) {
+  for (const change of [xml => xml.replace('sx="100000"', 'sx="50000"'), xml => xml.replace('sy="100000"', 'sy="30000"'), xml => xml.replace('tx="0"', 'tx="91440"'),
+    xml => xml.replace('ty="0"', 'ty="-45720"'), xml => xml.replace('algn="tl"', 'algn="ctr"'), xml => xml.replace('flip="none"', 'flip="xy"'), xml => xml.replace('<a:tile ', '<a:srcRect t="-10000" b="-10000"/><a:tile ')]) {
     const reports = [];
-    const result = await fromPptx(edit(contain.bytes, 'ppt/slides/slide1.xml', change), {onDiagnostic: d => reports.push(d)});
-    assert.equal(result.slides[0].design.background.image.fit, 'tile');
+    const result = await fromPptx(edit(tile.bytes, 'ppt/slides/slide1.xml', change), {onDiagnostic: d => reports.push(d)});
+    assert.equal(result.slides[0].design.background.fit, 'tile');
     assert.deepEqual(reports.filter(d => d.path.endsWith('design.background')).map(d => [d.code, d.path]), [['approximate-background-image', 'slides.0.design.background']]);
   }
-  cases += 9;
+  cases += 8;
 }
 {
   // dpi="0" sizes a tile from the raster's resolution; the scale matches the preview's CSS pixels at 72, 96 and 144 dpi.
   for (const dpi of [72, 96, 144]) {
     // pHYs stores whole pixels per metre, so 72 dpi is 2835 ppm (72.009 dpi).
-    const source = png(480, 270, dpi), expected = 37500 * Math.round(dpi / .0254) * .0254 / 96;
-    const {bytes, background, imported} = await roundTrip({design: {background: {type: 'image', image: {src: source, fit: 'tile'}}}, slides: [{}]});
+    const source = png(480, 270, dpi), expected = 100000 * Math.round(dpi / .0254) * .0254 / 96;
+    const {bytes, background, imported} = await roundTrip({design: {background: {type: 'image', src: source, fit: 'tile'}}, slides: [{}]});
     const tile = attrs(bg(bytes), 'tile');
     assert.ok(Math.abs(Number(tile.sx) - expected) <= 2 && tile.sx === tile.sy, `${dpi} dpi: ${tile.sx}`);
-    assert.deepEqual(background, {type: 'image', image: {src: source, fit: 'tile'}});
+    assert.deepEqual(background, {type: 'image', src: source, fit: 'tile'});
     assert.deepEqual(imported.filter(d => d.path.endsWith('design.background')), [], `${dpi} dpi imports as exact tile`);
   }
   // Resolution metadata: PNG pHYs (metres only), JPEG JFIF (inch/cm, preferred) and EXIF X/YResolution.
@@ -228,7 +244,7 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
 }
 {
   // Slide overrides, deck inheritance and a host imageResolver.
-  const document = {design: {background: {type: 'image', image: {src: 'https://example.invalid/bg.png'}}}, slides: [{}, {design: {background: '#112233'}}]};
+  const document = {design: {background: {type: 'image', src: 'https://example.invalid/bg.png'}}, slides: [{}, {design: {background: '#112233'}}]};
   const reports = [];
   const resolver = src => src.endsWith('bg.png') ? wide : null;
   const bytes = await toPptx(document, {provenance: false, imageResolver: resolver, onDiagnostic: d => reports.push(d)});
@@ -238,29 +254,32 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
   assert.deepEqual(tagged.design.background, document.design.background);
   assert.equal(tagged.slides[0].design, undefined);
   const back = await fromPptx(bytes);
-  assert.deepEqual(back.slides[0].design.background, {type: 'image', image: {src: wide, fit: 'cover'}});
+  assert.deepEqual(back.slides[0].design.background, {type: 'image', src: wide});
   assert.equal(back.slides[1].design.background.color, '#112233');
   // An unresolved picture keeps the background color and is reported at its path.
-  const missing = await roundTrip({slides: [{design: {background: {type: 'image', image: {src: 'asset:missing'}}}}]});
+  const missing = await roundTrip({slides: [{design: {background: {type: 'image', src: 'asset:missing'}}}]});
   assert.match(bg(missing.bytes), /<a:solidFill>/);
-  assert.deepEqual(missing.exported.map(d => [d.code, d.path]), [['unresolved-asset', 'slides.0.design.background.image']]);
-  await assert.rejects(toPptx({slides: [{design: {background: {type: 'image', image: {src: 'asset:missing'}}}}]}, {strictAssets: true}), {code: 'missing-asset'});
+  assert.deepEqual(missing.exported.map(d => [d.code, d.path]), [['unresolved-asset', 'slides.0.design.background']]);
+  await assert.rejects(toPptx({slides: [{design: {background: {type: 'image', src: 'asset:missing'}}}]}, {strictAssets: true}), {code: 'missing-asset'});
   cases += 3;
 }
 {
-  // Import: off-center or distorted stretches and picture effects become the closest cover and are reported.
-  const {bytes} = await roundTrip({design: {background: {type: 'image', image: {src: square}}}, slides: [{}]});
+  // Import: padded or offset fills and picture effects become the closest fit and are reported.
+  const {bytes} = await roundTrip({design: {background: {type: 'image', src: square}}, slides: [{}]});
   const approximate = async change => {
     const reports = [];
     const result = await fromPptx(edit(bytes, 'ppt/slides/slide1.xml', change), {onDiagnostic: d => reports.push(d)});
     return {background: result.slides[0].design?.background, codes: reports.filter(d => d.path.endsWith('design.background')).map(d => d.code)};
   };
-  for (const change of [xml => xml.replace('t="21875" b="21875"', 't="0" b="43750"'), xml => xml.replace('<a:srcRect t="21875" b="21875"/>', '<a:srcRect/>')]) {
+  for (const change of [xml => xml.replace('t="21875" b="21875"', 't="-10000" b="21875"'), xml => xml.replace('<a:fillRect/>', '<a:fillRect l="5000"/>')]) {
     const result = await approximate(change);
-    assert.equal(result.background.image.fit, 'cover');
+    assert.equal(result.background.fit, undefined);
     assert.deepEqual(result.codes, ['approximate-background-image']);
   }
-  const effect = await approximate(xml => xml.replace('</a:blip>', '<a:grayscl/></a:blip>'));
+  // An off-center crop is a focus; an uncropped fill of another aspect is a stretch: both are exact, so nothing is reported.
+  assert.deepEqual(await approximate(xml => xml.replace('t="21875" b="21875"', 't="0" b="43750"')), {background: {type: 'image', src: square, focus: {x: 0.5, y: 0.2813}}, codes: []});
+  assert.deepEqual(await approximate(xml => xml.replace('<a:srcRect t="21875" b="21875"/>', '<a:srcRect/>')), {background: {type: 'image', src: square, fit: 'stretch'}, codes: []});
+  const effect = await approximate(xml => xml.replace('</a:blip>', '<a:biLevel thresh="50000"/></a:blip>'));
   assert.deepEqual(effect.codes, ['approximate-background-image']);
   const linked = await approximate(xml => xml.replace(/r:embed="[^"]+"/, 'r:embed="rIdMissing"'));
   assert.equal(linked.background, undefined);
@@ -273,21 +292,21 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
   parts['ppt/slideLayouts/slideLayout1.xml'] = encode.encode(utf8.decode(parts['ppt/slideLayouts/slideLayout1.xml']).replace(/<p:bg>[\s\S]*?<\/p:bg>/, fill.replace(id, 'rIdLayoutBg')));
   parts['ppt/slideLayouts/_rels/slideLayout1.xml.rels'] = encode.encode(utf8.decode(parts['ppt/slideLayouts/_rels/slideLayout1.xml.rels']).replace('</Relationships>', `<Relationship Id="rIdLayoutBg" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${media}"/></Relationships>`));
   const inherited = await fromPptx(zipSync(parts));
-  assert.deepEqual(inherited.slides[0].design.background, {type: 'image', image: {src: square, fit: 'cover'}});
-  cases += 5;
+  assert.deepEqual(inherited.slides[0].design.background, {type: 'image', src: square});
+  cases += 7;
 }
 {
   // JPEG and WebP sources: WebP becomes a compatible PNG part; EXIF orientation cannot rotate a background fill.
   const fixture = async name => new Uint8Array(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url)));
   const uri = (bytes, type) => `data:${type};base64,${Buffer.from(bytes).toString('base64')}`;
-  const jpeg = await roundTrip({slides: [{design: {background: {type: 'image', image: {src: uri(await fixture('wide.jpg'), 'image/jpeg')}}}}]});
+  const jpeg = await roundTrip({slides: [{design: {background: {type: 'image', src: uri(await fixture('wide.jpg'), 'image/jpeg')}}}]});
   assert.deepEqual(jpeg.exported, []);
-  assert.match(jpeg.background.image.src, /^data:image\/jpeg;base64,/);
-  const webp = await roundTrip({slides: [{design: {background: {type: 'image', image: {src: uri(await fixture('wide.webp'), 'image/webp')}}}}]});
+  assert.match(jpeg.background.src, /^data:image\/jpeg;base64,/);
+  const webp = await roundTrip({slides: [{design: {background: {type: 'image', src: uri(await fixture('wide.webp'), 'image/webp')}}}]});
   assert.ok(Object.keys(unzipSync(webp.bytes)).some(p => /^ppt\/media\/.+\.png$/.test(p)), 'WebP converted to PNG');
-  assert.match(webp.background.image.src, /^data:image\/png;base64,/);
-  const rotated = await roundTrip({slides: [{design: {background: {type: 'image', image: {src: uri(await fixture('orientation-6.jpg'), 'image/jpeg')}}}}]});
-  assert.deepEqual(rotated.exported.map(d => [d.code, d.path]), [['unsupported-background-image-orientation', 'slides.0.design.background.image']]);
+  assert.match(webp.background.src, /^data:image\/png;base64,/);
+  const rotated = await roundTrip({slides: [{design: {background: {type: 'image', src: uri(await fixture('orientation-6.jpg'), 'image/jpeg')}}}]});
+  assert.deepEqual(rotated.exported.map(d => [d.code, d.path]), [['unsupported-background-image-orientation', 'slides.0.design.background']]);
   cases += 3;
 }
 console.log(`Background fills passed: ${cases} native pattern/picture export, import, inheritance and diagnostic cases.`);

@@ -117,7 +117,7 @@ export function checkTypefaces(input, options = {}) {
     }
     const reference = THEME_REFERENCE.exec(entry.typeface);
     if (reference) {
-      if (entry.resolved === null) fail(entry, 'unresolved-theme-reference');
+      if (entry.resolved === null) fail(entry, 'theme-reference-unresolved');
       else if (entry.resolved === '') { if (!allowEmpty || reference[2] === 'lt') fail(entry, 'empty-theme-reference'); }
       else if (!chosen.has(entry.resolved)) fail(entry, 'foreign-theme-reference', {resolved: entry.resolved});
       continue;

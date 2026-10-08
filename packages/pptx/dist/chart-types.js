@@ -2,8 +2,8 @@
 //
 // The core catalog keeps one chart type per Aspose.Slides ChartType
 // (spec/catalogs/chart-types, OpenPresentation/opf#121). The mapping is carried
-// here so the exporter stays self-contained. A catalog id maps to the exact
-// Office construct; any other id keeps the legacy substring heuristic.
+// here so the exporter stays self-contained. Every id maps to the exact Office construct (OPF 0.15: chart.type is a
+// schema enum, so there is no other id).
 
 const category = (pptx, extra = {}) => ({ family: 'category', pptx, ...extra });
 
@@ -76,27 +76,12 @@ export function chartTypeFromChartex(layoutIds) {
   return null;
 }
 
-const ALIASES = Object.freeze({ donut: 'doughnut' });
-
-// Resolve an OPF chart type id to {id, spec}. A catalog id resolves to itself;
-// anything else returns the legacy heuristic with id: null.
+// Resolve an OPF chart type id to {id, spec}. `chart.type` is a schema enum in OPF 0.15 (core CHART_TYPES), so every
+// validated document names one of these; an id outside the table (a caller that skipped validation) resolves to
+// {id: null, spec: undefined}.
 export function resolveChartType(type) {
-  const raw = String(type ?? '').trim().toLowerCase();
-  const id = ALIASES[raw] ?? raw;
-  if (Object.hasOwn(CHART_TYPES, id)) return { id, spec: CHART_TYPES[id] };
-  return { id: null, spec: legacyChartType(raw) };
-}
-
-// The pre-FF-22 heuristic for ids outside the core catalog.
-function legacyChartType(normalized) {
-  if (normalized.includes('pie')) return CHART_TYPES.pie;
-  if (normalized.includes('doughnut') || normalized.includes('donut')) return CHART_TYPES.doughnut;
-  if (normalized.includes('area')) return { ...CHART_TYPES.area, legacy: true };
-  if (normalized.includes('line')) return { ...CHART_TYPES['line-with-markers'], legacy: true };
-  if (normalized.includes('scatter')) return CHART_TYPES.scatter;
-  if (normalized.includes('radar')) return { ...CHART_TYPES.radar, legacy: true };
-  const grouping = normalized.includes('stacked') ? 'stacked' : 'clustered';
-  return category('bar', { barDir: normalized.includes('bar') ? 'bar' : 'col', grouping, legacy: true });
+  const id = String(type ?? '').trim();
+  return Object.hasOwn(CHART_TYPES, id) ? { id, spec: CHART_TYPES[id] } : { id: null, spec: undefined };
 }
 
 // Native construct -> kept OPF id, for import. `node` is the parsed chart-type

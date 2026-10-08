@@ -1,7 +1,12 @@
-import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
-import {renderSvg,resolvePresentation} from '@openpresentation/opf-render/svg';
+import * as pptx from '@openpresentation/opf-pptx';
+import * as svgEngine from '@openpresentation/opf-render/svg';
 import {validate} from '@openpresentation/opf';
 import {unzipSync} from 'fflate';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+// OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
+const host = options => ({catalogs: [defaultCatalog], ...options});
+const toPptx = (deck, options) => pptx.toPptx(deck, host(options)), fromPptx = (bytes, options) => pptx.fromPptx(bytes, host(options));
+const renderSvg = (deck, options) => svgEngine.renderSvg(deck, host(options)), resolvePresentation = (deck, options) => svgEngine.resolvePresentation(deck, host(options));
 
 const output = document.querySelector('pre');
 let checks = 0;

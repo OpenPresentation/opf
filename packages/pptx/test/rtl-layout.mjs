@@ -34,7 +34,7 @@ const shapes = (xml, slide) => [...xml[`ppt/slides/slide${slide}.xml`].matchAll(
 }));
 const attribute = (tag, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(tag)?.[1];
 
-const rtl = await read(deck('arabic')), ltr = await read(deck('english'));
+const rtl = await read(deck('ar')), ltr = await read(deck('en'));
 
 // Title and list: start at the right, markers at the right.
 {
@@ -137,7 +137,7 @@ const rtl = await read(deck('arabic')), ltr = await read(deck('english'));
 // An unchanged right-to-left export re-imports with its structure and logical alignment.
 {
   const round = await fromPptx(rtl.bytes);
-  assert.equal(round.language, 'arabic');
+  assert.equal(round.language, 'ar');
   assert.equal(round.slides.length, 6);
   assert.equal(round.design?.contentAlignment, undefined, 'right-aligned right-to-left text is not imported as an explicit right alignment');
 }
@@ -145,13 +145,13 @@ const rtl = await read(deck('arabic')), ltr = await read(deck('english'));
 // Re-import of a right-to-left export raises no direction or language noise: the table direction is the deck's, and the en-US Latin
 // phrase runs are not a second presentation language. A right-to-left table in a left-to-right deck still reports it.
 {
-  const codes = [], plain = unzipSync(new Uint8Array(await toPptx(deck('arabic'), {provenance: false})));
-  await fromPptx(await toPptx(deck('arabic'), {provenance: false}), {onDiagnostic: diagnostic => codes.push(diagnostic.code)});
+  const codes = [], plain = unzipSync(new Uint8Array(await toPptx(deck('ar'), {provenance: false})));
+  await fromPptx(await toPptx(deck('ar'), {provenance: false}), {onDiagnostic: diagnostic => codes.push(diagnostic.code)});
   assert.ok(Object.keys(plain).length > 0);
   assert.equal(codes.includes('unsupported-table-direction'), false);
   assert.equal(codes.includes('mixed-run-languages'), false);
   assert.equal(codes.includes('rtl-language-mismatch'), false);
-  const entries = unzipSync(new Uint8Array(await toPptx(deck('english'), {provenance: false})));
+  const entries = unzipSync(new Uint8Array(await toPptx(deck('en'), {provenance: false})));
   entries['ppt/slides/slide3.xml'] = strToU8(strFromU8(entries['ppt/slides/slide3.xml']).replace(/<a:tblPr/, '<a:tblPr rtl="1"'));
   const foreign = [];
   await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => foreign.push(diagnostic.code)});

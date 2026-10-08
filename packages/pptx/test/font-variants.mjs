@@ -5,7 +5,8 @@ import path from 'node:path';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx,fromPptx} from '../dist/index.js';
+// OPF 0.15: the roboto font scheme resolves from the registered default catalog.
+import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
 
 const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit');
 const fonts = await loadFonts(),options = {fonts},allowed=new Map();

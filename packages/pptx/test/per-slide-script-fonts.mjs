@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {resolveScriptFonts} from '@openpresentation/opf/composition';
-import {resolvePresentation} from '@openpresentation/opf-render';
-import {checkTypefaces, fromPptx, inventoryTypefaces, toPptx} from '../dist/index.js';
+import {resolvePresentation, resolveScriptFonts, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {checkTypefaces, inventoryTypefaces} from '../dist/index.js';
 
 // opf-pptx#168 (FF-05). A slide may select its own script fonts (slides[].design.fontScheme, a slide theme, or an
 // inline fontScheme with eastAsian/complexScript), and core resolves them per slide. Slide runs name no East Asian /
@@ -127,7 +126,9 @@ const repro = {name: 'Per-slide script font', language: 'th', design: {theme: 'c
 }
 
 // 2. Three profiles: East Asian Meiryo, complex-script Traditional Arabic, complex-script Nirmala UI.
-const threeProfiles = {name: 'Three script profiles', slides: [
+// The deck names its colour scheme: an engine-default one has no catalog id, and the import (with the default catalog
+// registered) recovers the equal gallery record, so the re-export would name the theme's colour scheme differently.
+const threeProfiles = {name: 'Three script profiles', design: {colorScheme: 'cool-horizon'}, slides: [
   {title: '日本語', design: {fontScheme: inline('eastAsian', 'Meiryo')}, text: 'ひらがな'},
   {title: 'مرحبا', design: {fontScheme: inline('complexScript', 'Traditional Arabic')}, text: 'مرحبا بالعالم', notes: 'مرحبا'},
   {title: 'नमस्ते', design: {fontScheme: inline('complexScript', 'Nirmala UI')}, text: 'नमस्ते दुनिया'},
@@ -147,7 +148,7 @@ const threeProfiles = {name: 'Three script profiles', slides: [
 }
 
 // 3. A per-slide override mixed with the deck default: slides 1 and 3 (Japanese, Meiryo through the language) share master 1.
-const mixed = {name: 'Mixed', language: 'japanese', slides: [
+const mixed = {name: 'Mixed', language: 'ja', design: {colorScheme: 'cool-horizon'}, slides: [
   {title: '日本語の見出し', text: 'ひらがなとカタカナ', notes: 'メモ'},
   {title: '日本語の見出し', design: {fontScheme: 'ms-mincho'}, text: 'ひらがなとカタカナ'},
   {title: '日本語の見出し', text: 'ひらがなとカタカナ', notes: 'メモ'},
@@ -166,7 +167,7 @@ for (const [label, presentation] of [
   ['same profile through the language', {name: 'Same', language: 'th', design: {theme: 'classic'}, slides: [{title: thai, design: {fontScheme: 'angsana-new'}}, {title: thai}]}],
   ['Latin-only per-slide schemes', {name: 'Latin', slides: [{title: 'One', design: {fontScheme: 'georgia'}}, {title: 'Two', design: {fontScheme: 'arial'}}]}],
   ['later slide selects nothing', {name: 'Nothing', slides: [{title: '日本語', design: {fontScheme: inline('eastAsian', 'Meiryo')}}, {title: 'Two'}]}],
-  ['one slide', {name: 'One', language: 'japanese', slides: [{title: '日本語', design: {fontScheme: 'ms-mincho'}, notes: 'メモ'}]}],
+  ['one slide', {name: 'One', language: 'ja', slides: [{title: '日本語', design: {fontScheme: 'ms-mincho'}, notes: 'メモ'}]}],
 ]) {
   const result = await exported(presentation);
   const parts = Object.keys(result.xml).filter(name => /^ppt\/(?:slideMasters|slideLayouts|theme)\/[^/]+\.xml$/.test(name)).sort();

@@ -3,19 +3,19 @@ import {unzipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {validate} from '@openpresentation/opf';
 
-// FA-02: the deck holds a pointer, `narrative` (a catalog id, URL or pkg: reference), and `slides[].beat` links a slide
-// to a beat of the plan. A custom narrative is a record in catalogs.narratives.records. Export stores the string and
-// the beat links, and import restores them, in both provenance modes.
+// FA-02, OPF 0.15: the deck holds a reference, `narrative` (`id` or `name:id`), and `slides[].beat` links a slide to a beat
+// of the plan. A custom narrative is a record in catalogs.custom.narratives. Export stores the reference and the beat links,
+// and import restores them, in both provenance modes.
 const dec = new TextDecoder();
 const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
 const record = {
-  $schema: 'https://openpresentation.org/schema/opf-narrative/v1', id: 'proof-arc', name: 'Proof Arc', duration: {min: 8, max: 20},
+  name: 'Proof Arc', duration: {min: 8, max: 20},
   beats: [{id: 'contract', name: 'Contract', type: 'text', layout: 'title-subtitle'}, {id: 'evidence', name: 'Evidence', type: 'chart'}, {id: 'ask', name: 'Ask', type: 'list'}]
 };
-const unrelated = {...structuredClone(record), id: 'unused-arc', name: 'Unused'};
+const unrelated = {...structuredClone(record), name: 'Unused'};
 const deck = narrative => ({
   name: 'Narrative deck', narrative, duration: 12,
-  catalogs: {narratives: {records: [record, unrelated]}},
+  catalogs: {custom: {narratives: {'proof-arc': record, 'unused-arc': unrelated}}},
   slides: [
     {beat: 'contract', title: 'Contract', subtitle: 'What stays stable'},
     {beat: ['evidence', 'ask'], title: 'Proof', subtitle: 'And the ask'},
@@ -41,10 +41,9 @@ for (const id of ['proof-arc', 'classic-story']) {
   assert.equal(imported.narrative, id);
   assert.equal(imported.duration, 12);
   assert.deepEqual(imported.slides.map(slide => slide.beat), ['contract', ['evidence', 'ask'], undefined]);
-  // The custom record travels with the deck that references it, and only that record.
-  const records = imported.catalogs?.narratives?.records ?? [];
-  assert.deepEqual(records.map(entry => entry.id), id === 'proof-arc' ? ['proof-arc'] : [], 'only a referenced inline record is stored');
-  if (id === 'proof-arc') assert.deepEqual(records[0], record);
+  // The custom record travels with the deck that references it, and only that record; a reference to a registered
+  // catalog's record (classic-story) stores none.
+  assert.deepEqual(imported.catalogs, id === 'proof-arc' ? {custom: {narratives: {'proof-arc': record}}} : undefined, 'only a referenced embedded record is stored');
 }
 
 // references-only keeps the pointer, the beat links and the inline record the pointer needs, and nothing personal.
@@ -53,19 +52,18 @@ for (const id of ['proof-arc', 'classic-story']) {
   const entries = unzipSync(bytes);
   const stored = tagValue(dec.decode(entries['ppt/tags/opfDocument.xml']));
   assert.equal(stored.metadata.narrative, 'proof-arc');
-  assert.deepEqual(stored.catalogs.narratives.records.map(entry => entry.id), ['proof-arc']);
+  assert.deepEqual(stored.catalogs, {custom: {narratives: {'proof-arc': record}}});
   assert.deepEqual(tagValue(dec.decode(entries['ppt/tags/opfSlide1.xml'])).beat, 'contract');
   const {imported} = await read(bytes);
   assert.equal(imported.narrative, 'proof-arc');
   assert.deepEqual(imported.slides.map(slide => slide.beat), ['contract', ['evidence', 'ask'], undefined]);
 }
 
-// A URL or pkg: reference is stored in full mode (any string) and not in references-only (it is no catalog id).
-for (const pointer of ['https://example.com/arcs/proof.json', 'pkg:@acme/arcs/proof']) {
-  const full = await read(await toPptx({name: 'Pointer', narrative: pointer, slides: [{title: 'One', beat: 'hook'}]}));
-  assert.equal(full.imported.narrative, pointer);
-  assert.equal(full.imported.slides[0].beat, 'hook');
-  const refs = await read(await toPptx({name: 'Pointer', narrative: pointer, slides: [{title: 'One', beat: 'hook'}]}, {provenance: 'references-only'}));
-  assert.equal(refs.imported.narrative, undefined);
-  assert.equal(refs.imported.slides[0].beat, 'hook');
+// A reference to a named group is stored in both modes, with the group declaration it needs (its source).
+for (const provenance of ['full', 'references-only']) {
+  const source = {name: 'Pointer', narrative: 'acme:proof', catalogs: {acme: {source: 'pkg:@acme/opf-catalog'}}, slides: [{title: 'One', beat: 'hook'}]};
+  const {imported} = await read(await toPptx(source, {provenance}));
+  assert.equal(imported.narrative, 'acme:proof', provenance);
+  assert.deepEqual(imported.catalogs, {acme: {source: 'pkg:@acme/opf-catalog'}}, provenance);
+  assert.equal(imported.slides[0].beat, 'hook');
 }

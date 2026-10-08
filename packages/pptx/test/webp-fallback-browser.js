@@ -14,8 +14,8 @@ try {
  for(const file of ['wide.webp','wide-lossy.webp','wide-alpha.webp','webp-orientation-6.webp','webp-orientation-7.webp','wide-animated.webp']) {
   const source=new Uint8Array(await (await fetch('/test/fixtures/images/'+file)).arrayBuffer());
   const expected=await pixels(source,'image/webp');
-  for(const mode of ['fit','crop']) {
-   const deck={design:{imageFill:mode},slides:[{image:'https://example.invalid/'+file}]};
+  for(const mode of ['contain','cover']) {
+   const deck={design:{imageFit:mode},slides:[{image:'https://example.invalid/'+file}]};
    let calls=0;
    const pptx=await toPptx(deck,{imageResolver:()=>{calls++;return source;}});
    check(calls===1,'Resolver called more than once');

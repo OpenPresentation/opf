@@ -160,12 +160,12 @@ await assert.rejects(() => toPptx({ slides: [{ text: "Crowded. ".repeat(4000), c
 // A slide's own design cannot set dimensions (FA-07); a slide-level theme with another size still stops the export.
 await assert.rejects(() => toPptx({ slides: [{ text: "Custom canvas", design: { dimensions: { widthInches: 4, heightInches: 9 } } }] }), error => error.code === "invalid-opf");
 await assert.rejects(() => toPptx({
-  catalogs: { themes: { records: [{ $schema: "https://openpresentation.org/schema/opf-theme/v1", id: "tall-canvas", name: "Tall canvas", dimensions: { widthInches: 4, heightInches: 9 } }] } },
+  catalogs: { custom: { themes: { "tall-canvas": { name: "Tall canvas", dimensions: { widthInches: 4, heightInches: 9 } } } } },
   slides: [{ text: "Custom canvas", design: { theme: "tall-canvas" } }]
 }), error => error.code === "mixed-slide-dimensions");
 {
-  // An unknown layout id is a hint that matched nothing: the slide is composed automatically and core's diagnostic says so.
+  // A layout reference that resolves nowhere: the slide is composed automatically and core's diagnostic says so.
   const unknown = [];
   assert.ok((await toPptx({ slides: [{ layout: "unknown-layout", text: "Needs a definition" }] }, { onDiagnostic: item => unknown.push(item) })).length > 0);
-  assert.deepEqual(unknown.filter(item => item.code === "unresolved-layout").map(({ path, id }) => ({ path, id })), [{ path: "slides.0.layout", id: "unknown-layout" }]);
+  assert.deepEqual(unknown.filter(item => item.code === "unresolved-reference").map(({ path, reference, fallback }) => ({ path, reference, fallback })), [{ path: "slides.0.layout", reference: "unknown-layout", fallback: "automatic" }]);
 }

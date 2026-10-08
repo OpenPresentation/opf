@@ -2,10 +2,17 @@
 // surface, text, textSecondary) and the hyperlink slot to the same colors, through core resolveColorRoles.
 import assert from "node:assert/strict";
 import { unzipSync } from "fflate";
-import { catalogs } from "@openpresentation/opf";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { resolveColorRoles } from "@openpresentation/opf/composition";
-import { renderSlideSvg } from "@openpresentation/opf-render";
-import { fromPptx, toPptx } from "../dist/index.js";
+import { renderSlideSvg as renderSvg } from "@openpresentation/opf-render";
+import {fromPptx as importPptx, toPptx as exportPptx} from "../dist/index.js";
+
+// OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
+// (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
+const records = Object.fromEntries(Object.entries(defaultCatalog).filter(([, map]) => map && typeof map === 'object').map(([kind, map]) => [kind, Object.entries(map).map(([id, record]) => ({id, ...record}))]));
+const renderSlideSvg = (presentation, index, options = {}) => renderSvg(presentation, index, {catalogs: [defaultCatalog], ...options});
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
+const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultCatalog], ...options});
 
 const ROLES = ["primary", "secondary", "accent", "background", "surface", "text", "textSecondary", "hyperlink"];
 const contentSlot = { tx1: "dk1", bg1: "lt1", tx2: "dk2", bg2: "lt2" };
@@ -78,7 +85,7 @@ for (const { name, design, link: linkSource } of cases) {
 }
 
 // The resolved colors are core's: a role override reaches both engines as core resolves it.
-const cool = catalogs.colorSchemes.find((record) => record.id === "cool-horizon");
+const cool = records.colorSchemes.find((record) => record.id === "cool-horizon");
 const expected = resolveColorRoles({ ...cool, ...cases[0].design.colorScheme }, {});
 assert.equal(expected.text, "#334455", "a text override applies on a light background");
 assert.equal(expected.surface, "#EEEEDD");

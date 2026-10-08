@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
-import {catalogs} from '@openpresentation/opf';
-import {resolveScriptFonts} from '@openpresentation/opf/composition';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {LANGUAGES, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
 import {resolvePresentation} from '@openpresentation/opf-render';
 import {fromPptx, toPptx, inventoryTypefaces} from '../dist/index.js';
@@ -21,24 +21,28 @@ import {fromPptx, toPptx, inventoryTypefaces} from '../dist/index.js';
 const slide = text => ({title: text, text});
 const deck = (fontScheme, language, extra = {}) => ({name: 'Theme slots', ...(language === undefined ? {} : {language}), ...(fontScheme === undefined ? {} : {design: {fontScheme}}), ...extra, slides: [slide('Heading'), {title: 'Second', items: ['One', 'Two']}]});
 
+// OPF 0.15: the font schemes come from the gallery snapshot, which the host registers for every engine (export, preview,
+// import and core's resolver); languages are BCP-47 tags in core's language vocabulary.
+const catalogs = [defaultCatalog];
+const fontSchemeRecords = Object.entries(defaultCatalog.fontSchemes).map(([id, record]) => ({id, ...record}));
 const exported = async (presentation, options = {}) => {
   const diagnostics = [];
-  const bytes = await toPptx(structuredClone(presentation), {...options, onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  const bytes = await toPptx(structuredClone(presentation), {catalogs, ...options, onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   return {bytes, diagnostics, inventory: inventoryTypefaces(bytes)};
 };
 // The presentation package's own theme (prefix ''), slots as {latin, ea, cs}.
 const theme = inventory => ({major: inventory.themes[''].major, minor: inventory.themes[''].minor});
-const previewProfile = presentation => resolvePresentation(structuredClone(presentation)).slides[0].scriptFonts.profile;
+const previewProfile = presentation => resolvePresentation(structuredClone(presentation), {catalogs}).slides[0].scriptFonts.profile;
 const SLOTS = [['ea', 'eastAsian'], ['cs', 'complexScript']];
 // What the resolver says was actually selected for each slot: its family, or '' when nothing was.
 const supplied = (resolved, role, key) => resolved.sources[key] === 'latin' ? '' : resolved[role][key];
 
-const fontSchemeIds = catalogs.fontSchemes.map(record => record.id);
-assert.ok(fontSchemeIds.length >= 89, 'the bundled catalog has the 89 upstream font schemes');
+const fontSchemeIds = fontSchemeRecords.map(record => record.id);
+assert.ok(fontSchemeIds.length >= 89, 'the gallery snapshot has the 89 upstream font schemes');
 
 // 1. Every font scheme in the default language selects no script font: ea and cs stay empty (as Office's themes),
 // latin is the scheme's family, and the preview's ea/cs slots repeat latin.
-for (const record of catalogs.fontSchemes) {
+for (const record of fontSchemeRecords) {
   const {inventory, diagnostics} = await exported(deck(record.id));
   const {major, minor} = theme(inventory);
   assert.deepEqual({major, minor}, {major: {latin: record.major, ea: record.major, cs: ''}, minor: {latin: record.minor, ea: record.minor, cs: ''}}, `${record.id}: theme names latin, and ea repeats it`);
@@ -51,27 +55,26 @@ for (const record of catalogs.fontSchemes) {
 // 2. Schemes x languages: Latin-only, CJK, Arabic, Hebrew, Indic, Thai and the Latin-slot scripts that keep their font in the
 // per-script entry. A slot is written only when supplied; the language never changes latin.
 const languages = [
-  ['english-us', 'latin'], ['french', 'latin'], ['russian', 'latin'], ['greek', 'latin'],
-  ['armenian', 'latin'], ['georgian', 'latin'], ['amharic', 'latin'],
-  ['japanese', 'eastAsian'], ['chinese-simplified', 'eastAsian'], ['chinese-traditional', 'eastAsian'], ['korean', 'eastAsian'],
-  ['arabic', 'complexScript'], ['hebrew', 'complexScript'], ['persian', 'complexScript'], ['urdu', 'complexScript'],
-  ['hindi', 'complexScript'], ['bengali', 'complexScript'], ['tamil', 'complexScript'], ['thai', 'complexScript'], ['khmer', 'complexScript'],
+  ['en-US', 'latin'], ['fr', 'latin'], ['ru', 'latin'], ['el', 'latin'],
+  ['hy', 'latin'], ['ka', 'latin'], ['am', 'latin'],
+  ['ja', 'eastAsian'], ['zh-Hans', 'eastAsian'], ['zh-Hant', 'eastAsian'], ['ko', 'eastAsian'],
+  ['ar', 'complexScript'], ['he', 'complexScript'], ['fa', 'complexScript'], ['ur', 'complexScript'],
+  ['hi', 'complexScript'], ['bn', 'complexScript'], ['ta', 'complexScript'], ['th', 'complexScript'], ['km', 'complexScript'],
 ];
 const schemes = ['aptos', 'calibri', 'georgia', 'meiryo', 'arabic-typesetting', 'mangal'];
 let writtenSlots = 0, emptySlots = 0;
 for (const scheme of schemes) {
-  const record = catalogs.fontSchemes.find(entry => entry.id === scheme);
+  const record = fontSchemeRecords.find(entry => entry.id === scheme);
   for (const [language, role] of languages) {
     const presentation = deck(scheme, language);
     const label = `${scheme} + ${language}`;
-    const resolved = resolveScriptFonts(presentation);
+    const resolved = resolveScriptFonts(presentation, {catalogs});
     assert.equal(resolved.scriptRole, role, `${label}: script role`);
     const {inventory, diagnostics, bytes} = await exported(presentation);
     const {major, minor} = theme(inventory);
     assert.deepEqual([major.latin, minor.latin], [record.major, record.minor], `${label}: latin stays the scheme (Model C)`);
     const profile = previewProfile(presentation);
-    const language_ = catalogs.languages.find(entry => entry.id === language);
-    const languageFont = catalogs.fontSchemes.find(entry => entry.id === language_.fontScheme);
+    const languageFont = LANGUAGES.find(entry => entry.tag === language)?.fonts.powerpoint;
     const selected = new Set([record.major, record.minor, languageFont?.major, languageFont?.minor]);
     for (const [element, key] of SLOTS) {
       for (const [name, slots, roleKey, latinFamily] of [['major', major, 'heading', record.major], ['minor', minor, 'body', record.minor]]) {
@@ -98,32 +101,31 @@ for (const scheme of schemes) {
     assert.equal(profile.rtl, resolved.rtl, `${label}: preview direction`);
     assert.deepEqual((await exported(presentation)).bytes, bytes, `${label}: deterministic`);
     const imported = [];
-    const restored = await fromPptx(bytes, {onDiagnostic: diagnostic => imported.push(diagnostic.code)});
+    const restored = await fromPptx(bytes, {catalogs, onDiagnostic: diagnostic => imported.push(diagnostic.code)});
     assert.equal(restored.language, language, `${label}: language re-imports`);
     assert.equal(restored.design?.fontScheme, scheme, `${label}: font scheme re-imports`);
-    // language-ambiguous is the pre-existing note for records that share one OOXML tag (bengali and chittagonian, bn-BD); the stored id still wins.
-    assert.deepEqual(imported.filter(code => /script-font|language|rtl/.test(code) && code !== 'language-ambiguous'), [], `${label}: import diagnostics`);
+    assert.deepEqual(imported.filter(code => /script-font|language|rtl/.test(code)), [], `${label}: import diagnostics`);
     assert.deepEqual(diagnostics.filter(diagnostic => /script|language/.test(diagnostic.code)), [], `${label}: export diagnostics`);
   }
 }
 assert.ok(writtenSlots > 0 && emptySlots > 0);
 
 // 3. Re-import then export again reproduces the same theme slots (FF-32 provenance restores the scheme and language).
-for (const [scheme, language] of [['meiryo', 'japanese'], ['calibri', 'english-us'], ['aptos', 'arabic'], ['mangal', 'hindi'], ['georgia', 'hebrew']]) {
+for (const [scheme, language] of [['meiryo', 'ja'], ['calibri', 'en-US'], ['aptos', 'ar'], ['mangal', 'hi'], ['georgia', 'he']]) {
   const {bytes, inventory} = await exported(deck(scheme, language));
-  const again = await exported(await fromPptx(bytes));
+  const again = await exported(await fromPptx(bytes, {catalogs}));
   assert.deepEqual(theme(again.inventory), theme(inventory), `${scheme} + ${language}: re-import exports the same theme slots`);
 }
 
-// 4. Inline (gallery legacy) records select nothing; an explicit script slot on the design scheme is written.
+// 4. Embedded (gallery legacy) records select nothing; an explicit script slot on the design scheme is written.
 {
-  const record = {id: 'legacy-face', name: 'Legacy face', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Legacy Head', minor: 'Legacy Body', type: 'sans-serif'};
-  const {inventory} = await exported(deck('legacy-face', undefined, {catalogs: {fontSchemes: {records: [record]}}}));
+  const record = {name: 'Legacy face', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Legacy Head', minor: 'Legacy Body', type: 'sans-serif'};
+  const {inventory} = await exported(deck('legacy-face', undefined, {catalogs: {custom: {fontSchemes: {'legacy-face': record}}}}));
   assert.deepEqual(theme(inventory), {major: {latin: 'Legacy Head', ea: 'Legacy Head', cs: ''}, minor: {latin: 'Legacy Body', ea: 'Legacy Body', cs: ''}});
   const explicit = {id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}, complexScript: {major: 'Noto Naskh Arabic', minor: 'Noto Naskh Arabic'}};
-  const slots = theme((await exported(deck(explicit, 'english-us'))).inventory);
+  const slots = theme((await exported(deck(explicit, 'en-US'))).inventory);
   assert.deepEqual([slots.major.ea, slots.major.cs, slots.minor.ea, slots.minor.cs], ['Noto Sans JP', 'Noto Naskh Arabic', 'Noto Sans JP', 'Noto Naskh Arabic']);
-  const only = theme((await exported(deck({id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}}, 'english-us'))).inventory);
+  const only = theme((await exported(deck({id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}}, 'en-US'))).inventory);
   assert.deepEqual([only.major.cs, only.minor.cs], ['', ''], 'only the selected slot is written');
 }
 
@@ -138,10 +140,10 @@ for (const [scheme, language] of [['meiryo', 'japanese'], ['calibri', 'english-u
 
 // 6. The example corpus: a theme slot is written exactly where the deck selected a script font, and never with an open replacement.
 const image = new Uint8Array(await readFile(new URL('./fixtures/images/wide.png', import.meta.url)));
-const families = new Set(catalogs.fontSchemes.flatMap(record => [record.major, record.minor]));
+const families = new Set(fontSchemeRecords.flatMap(record => [record.major, record.minor]));
 let corpus = 0, corpusWritten = 0;
 for (const {file, deck: example} of examples) {
-  const resolved = resolveScriptFonts(example);
+  const resolved = resolveScriptFonts(example, {catalogs});
   const {major, minor} = theme((await exported(example, {imageResolver: async () => image})).inventory);
   for (const [element, key] of SLOTS) {
     // ea names a font in every deck (FF-05): the selected script font, a font for East Asian text in the deck, else the latin family.

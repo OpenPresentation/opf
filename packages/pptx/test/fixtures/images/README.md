@@ -5,3 +5,5 @@ Generated entirely by generate.py using Pillow 12.3.0: four colored quadrants an
 The JPEG set includes baseline/progressive encoding and EXIF orientations 1–8. WebP includes lossless VP8L, lossy VP8 and extended VP8X/alpha. PNG and GIF cover their standard dimension headers. The generator is optional development tooling; tests use checked-in files and need no Python runtime.
 
 Compatible WebP fixtures additionally cover EXIF 6/7 and two-frame animation. webp-references.json contains independent Pillow-decoded, EXIF-transposed first-frame RGBA SHA-256 values for all six WebP specimens. The Node tests compare decoded exported PNG pixels against these references.
+
+`treatment-hero.png` (160×100) is the project-authored posterized landscape that core's `docs/fixtures/image-treatments.opf.json` embeds as its `hero` asset (core repository, MIT). `test/image-treatments-014.mjs` uses the same bytes so its crops compare with `test/fixtures/image-treatments-0.14.json`.

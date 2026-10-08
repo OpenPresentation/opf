@@ -1,13 +1,21 @@
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs, validate} from '@openpresentation/opf';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {validate} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {toPptx as exportPptx, fromPptx} from '../dist/index.js';
 
 // FF-24 (font-fidelity-everywhere): the exported theme carries the deck color
 // scheme, document slot/role references become a:schemeClr where the deck theme
 // holds exactly that color, and fromPptx recovers design.colorScheme (and a
 // catalog design.theme when the package corroborates it).
+// OPF 0.15 (FA-23): the themes and colour schemes are the gallery snapshot's, which the host registers explicitly for
+// export and import (`catalogs: [defaultCatalog]`). Recovery matches the first registered catalog: an exact match imports
+// as its bare id; with no catalog registered the colour scheme imports as inline slots and no theme id is recovered.
+const catalogs = [defaultCatalog];
+const records = kind => Object.entries(defaultCatalog[kind]).map(([id, record]) => ({id, ...record}));
+const colorSchemes = records('colorSchemes'), themes = records('themes');
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs, ...options});
 
 const THEME = 'ppt/theme/theme1.xml';
 const SLOTS = [['dark1', 'dk1'], ['light1', 'lt1'], ['dark2', 'dk2'], ['light2', 'lt2'], ['accent1', 'accent1'], ['accent2', 'accent2'], ['accent3', 'accent3'], ['accent4', 'accent4'], ['accent5', 'accent5'], ['accent6', 'accent6'], ['hyperlink', 'hlink'], ['followedHyperlink', 'folHlink']];
@@ -36,15 +44,15 @@ const resolve = (fill, colors) => {
   const scheme = fill.match(/schemeClr val="([^"]+)"/)?.[1];
   return scheme ? colors[CONTENT[scheme] ?? scheme] : fill.match(/srgbClr val="([^"]+)"/)[1];
 };
-const importWith = async bytes => {
+const importWith = async (bytes, options = {catalogs}) => {
   const diagnostics = [];
-  const document = await fromPptx(bytes, {onDiagnostic: d => diagnostics.push(d)});
+  const document = await fromPptx(bytes, {...options, onDiagnostic: d => diagnostics.push(d)});
   assert.equal(validate(document, {only: ['format']}).valid, true);
   return {document, diagnostics, theme: diagnostics.filter(d => d.path?.startsWith('design.'))};
 };
 
 // 1. Every catalog color scheme writes all twelve slots and its name, and comes back as its id.
-for (const record of catalogs.colorSchemes) {
+for (const record of colorSchemes) {
   const bytes = await toPptx({name: record.id, design: {colorScheme: record.id}, slides: [{title: 'Scheme'}]});
   const theme = themeOf(parts(bytes));
   for (const [slot, element] of SLOTS) assert.equal(theme.colors[element], hex(record[slot]), `${record.id} ${slot}`);
@@ -54,13 +62,17 @@ for (const record of catalogs.colorSchemes) {
   assert.equal(document.design.colorScheme, record.id);
   assert.equal(document.design.theme, undefined);
   assert.deepEqual(reports, []);
+  // Without a registered catalog the same package imports the colours as inline slots (the stored FF-32 reference still
+  // restores; without provenance nothing names the scheme).
+  const unregistered = await importWith(await toPptx({name: record.id, design: {colorScheme: record.id}, slides: [{title: 'Scheme'}]}, {provenance: false}), {});
+  assert.deepEqual(unregistered.document.design.colorScheme, Object.fromEntries(SLOTS.map(([slot]) => [slot, `#${hex(record[slot])}`])), `${record.id} imports inline without catalogs`);
 }
 
 // 2. Catalog themes: name the theme, write its scheme, recover both ids.
-for (const record of catalogs.themes) {
+for (const record of themes) {
   const bytes = await toPptx({name: record.id, design: {theme: record.id}, slides: [{title: 'Theme'}]});
   const entries = parts(bytes), theme = themeOf(entries);
-  const scheme = catalogs.colorSchemes.find(item => item.id === record.colorScheme);
+  const scheme = colorSchemes.find(item => item.id === record.colorScheme);
   assert.equal(theme.name, record.name);
   assert.equal(theme.family, record.name, 'thm15 theme family follows the theme name');
   assert.equal(theme.schemeName, scheme.name.replace('&', '&amp;'));
@@ -76,11 +88,14 @@ for (const record of catalogs.themes) {
   assert.deepEqual(reports, []);
   // The recovered design exports the same theme part.
   assert.equal(themeOf(parts(await toPptx(document))).xml, theme.xml, `${record.id} theme part round-trips`);
+  // No registered catalog on import: no theme id is recovered from the name alone.
+  const unregistered = await importWith(await toPptx({name: record.id, design: {theme: record.id}, slides: [{title: 'Theme'}]}, {provenance: false}), {});
+  assert.equal(unregistered.document.design.theme, undefined, `${record.id}: no theme id without catalogs`);
 }
 
 // 3. Scheme references only where the document names a slot or role that the deck theme holds.
-const forest = catalogs.colorSchemes.find(record => record.id === 'forest-green');
-const boost = catalogs.colorSchemes.find(record => record.id === 'boost');
+const forest = colorSchemes.find(record => record.id === 'forest-green');
+const boost = colorSchemes.find(record => record.id === 'boost');
 const deck = {
   name: 'References',
   design: {theme: 'classic', colorScheme: 'forest-green'},
@@ -134,7 +149,7 @@ const pairing = async (design, slide = {title: 'Pair', text: 'Body', items: [{te
   const entries = parts(await toPptx({design, slides: [slide]}));
   return {xml: slideXml(entries), colors: themeOf(entries).colors, entries};
 };
-const cool = catalogs.colorSchemes.find(record => record.id === 'cool-horizon');
+const cool = colorSchemes.find(record => record.id === 'cool-horizon');
 const minimal = await pairing({theme: 'minimal'});
 assert.match(minimal.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="tx2"\/>/, 'minimal background is dark2 (tx2)');
 assert.equal(runFill(minimal.xml, 'Pair'), '<a:schemeClr val="bg1"/>', 'light1 text on a dark2 background');
@@ -192,8 +207,8 @@ const override = await importWith(await toPptx({design: {colorScheme: {id: 'boos
 assert.deepEqual(override.document.design.colorScheme, {id: 'boost', accent1: '#123456'});
 assert.deepEqual(override.theme, []);
 
-// 5. Foreign and damaged themes.
-const base = parts(await toPptx({slides: [{title: 'Base'}]}));
+// 5. Foreign and damaged themes (a package with no stored references, whose scheme is named Cool Horizon).
+const base = parts(await toPptx({design: {colorScheme: 'cool-horizon'}, slides: [{title: 'Base'}]}, {provenance: false}));
 const withTheme = change => {
   const entries = {...base};
   entries[THEME] = strToU8(change(strFromU8(base[THEME])));
@@ -216,10 +231,14 @@ const namedBold = await importWith(withTheme(xml => officeScheme(xml).replace(/(
 assert.equal(namedBold.document.design.theme, undefined);
 assert.deepEqual(namedBold.theme.map(d => [d.code, d.path]), [['theme-unverified', 'design.theme']]);
 
-// 6. No design: engine defaults write cool-horizon and keep the vendored theme name.
-const defaults = themeOf(base);
-assert.equal(defaults.schemeName, 'Cool Horizon');
+// 6. No design: core's engine default colour scheme (cool-horizon's slots, no record name) and the vendored theme name.
+// It is recovered as cool-horizon only where that record is registered.
+const bare = parts(await exportPptx({slides: [{title: 'Base'}]}));
+const defaults = themeOf(bare);
+assert.equal(defaults.schemeName, 'OpenPresentation');
 assert.equal(defaults.name, 'Office Theme');
-assert.equal((await importWith(zipSync(base))).document.design.colorScheme, 'cool-horizon');
+for (const [slot, element] of SLOTS) assert.equal(defaults.colors[element], hex(cool[slot]), `engine default ${slot}`);
+assert.equal((await importWith(zipSync(bare))).document.design.colorScheme, 'cool-horizon');
+assert.equal(typeof (await importWith(zipSync(bare), {})).document.design.colorScheme, 'object', 'inline without catalogs');
 
-console.log(JSON.stringify({test: 'theme-colors', passed: true, colorSchemes: catalogs.colorSchemes.length, themes: catalogs.themes.length}));
+console.log(JSON.stringify({test: 'theme-colors', passed: true, colorSchemes: colorSchemes.length, themes: themes.length}));

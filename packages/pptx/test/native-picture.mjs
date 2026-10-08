@@ -55,7 +55,7 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', 
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const imageFile = fileURLToPath(new URL('fixtures/images/wide.png', import.meta.url));
 const image = await readFile(imageFile);
-const source = {design: {dimensions: {widthInches: 40 / 3, heightInches: 7.5}, imageFill: 'fit'}, slides: [{image: {src: 'data:image/png;base64,' + image.toString('base64'), alt: 'Four quadrants and a circle'}}]};
+const source = {design: {dimensions: {widthInches: 40 / 3, heightInches: 7.5}, imageFit: 'contain'}, slides: [{image: {src: 'data:image/png;base64,' + image.toString('base64'), alt: 'Four quadrants and a circle'}}]};
 const before = structuredClone(source);
 assert.equal(validate(source, {only: ['format']}).valid, true);
 const bytes = await toPptx(source, {strictAssets: true});

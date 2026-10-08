@@ -1,0 +1,777 @@
+{
+ "full-bleed": {
+  "order": [
+   "pic:OPF slide image slides.0",
+   "sp:OPF slide image overlay slides.0",
+   "sp:OPF heading slides.0.title line 0",
+   "sp:OPF heading slides.0.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.0",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "5000",
+     "r": "0",
+     "b": "5000"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": {
+   "xfrm": {
+    "a:off": {
+     "x": "0",
+     "y": "0"
+    },
+    "a:ext": {
+     "cx": "12192000",
+     "cy": "6858000"
+    }
+   },
+   "geom": {
+    "a:avLst": "",
+    "prst": "rect"
+   },
+   "fill": {
+    "a:srgbClr": {
+     "a:alpha": {
+      "val": "20000"
+     },
+     "val": "000000"
+    }
+   }
+  },
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "text-overlay": {
+  "order": [
+   "pic:OPF slide image slides.1",
+   "sp:OPF slide image overlay slides.1",
+   "sp:OPF heading slides.1.title line 0",
+   "sp:OPF heading slides.1.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.1",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "5000",
+     "r": "0",
+     "b": "5000"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": {
+   "xfrm": {
+    "a:off": {
+     "x": "0",
+     "y": "0"
+    },
+    "a:ext": {
+     "cx": "12192000",
+     "cy": "6858000"
+    }
+   },
+   "geom": {
+    "a:avLst": "",
+    "prst": "rect"
+   },
+   "fill": {
+    "a:srgbClr": {
+     "a:alpha": {
+      "val": "55000"
+     },
+     "val": "000000"
+    }
+   }
+  },
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "side-by-side": {
+  "order": [
+   "pic:OPF slide image slides.2",
+   "sp:OPF heading slides.2.title line 0",
+   "sp:OPF heading slides.2.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.2",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "5608320",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "24444",
+     "t": "0",
+     "r": "24444",
+     "b": "0"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "caption-overlay": {
+  "order": [
+   "pic:OPF slide image slides.3",
+   "sp:OPF slide image overlay slides.3",
+   "sp:OPF heading slides.3.title line 0",
+   "sp:OPF heading slides.3.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.3",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "548640"
+     },
+     "a:ext": {
+      "cx": "11094720",
+      "cy": "5760720"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "8462",
+     "r": "0",
+     "b": "8462"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": {
+   "xfrm": {
+    "a:off": {
+     "x": "548640",
+     "y": "4869180"
+    },
+    "a:ext": {
+     "cx": "11094720",
+     "cy": "1440180"
+    }
+   },
+   "geom": {
+    "a:avLst": "",
+    "prst": "rect"
+   },
+   "fill": {
+    "a:srgbClr": {
+     "a:alpha": {
+      "val": "75000"
+     },
+     "val": "000000"
+    }
+   }
+  },
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "masked-shape": {
+  "order": [
+   "pic:OPF slide image slides.4",
+   "sp:OPF heading slides.4.title line 0",
+   "sp:OPF heading slides.4.subtitle line 0",
+   "sp:OPF heading slides.4.subtitle line 1"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.4",
+    "xfrm": {
+     "a:off": {
+      "x": "6644640",
+      "y": "1264490"
+     },
+     "a:ext": {
+      "cx": "4998720",
+      "cy": "4329021"
+     }
+    },
+    "geom": {
+     "a:avLst": {
+      "a:gd": [
+       {
+        "name": "adj",
+        "fmla": "val 25000"
+       },
+       {
+        "name": "vf",
+        "fmla": "val 115470"
+       }
+      ]
+     },
+     "prst": "hexagon"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "13916",
+     "t": "0",
+     "r": "13916",
+     "b": "0"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "circular-crop": {
+  "order": [
+   "pic:OPF slide image slides.5",
+   "sp:OPF heading slides.5.title line 0",
+   "sp:OPF heading slides.5.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.5",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "1539240"
+     },
+     "a:ext": {
+      "cx": "3779520",
+      "cy": "3779520"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "ellipse"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "18750",
+     "t": "0",
+     "r": "18750",
+     "b": "0"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "rounded-card": {
+  "order": [
+   "pic:OPF slide image slides.6",
+   "sp:OPF heading slides.6.title line 0",
+   "sp:OPF heading slides.6.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.6",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "548640"
+     },
+     "a:ext": {
+      "cx": "11094720",
+      "cy": "5760720"
+     }
+    },
+    "geom": {
+     "a:avLst": {
+      "a:gd": {
+       "name": "adj",
+       "fmla": "val 5000"
+      }
+     },
+     "prst": "roundRect"
+    },
+    "ln": {
+     "a:solidFill": {
+      "a:srgbClr": {
+       "val": "3AC67A"
+      }
+     },
+     "a:miter": {
+      "lim": "800000"
+     },
+     "w": "9525",
+     "algn": "ctr"
+    },
+    "srcRect": {
+     "l": "0",
+     "t": "8462",
+     "r": "0",
+     "b": "8462"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "duotone": {
+  "order": [
+   "pic:OPF slide image slides.7",
+   "sp:OPF heading slides.7.title line 0",
+   "sp:OPF heading slides.7.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.7",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "5000",
+     "r": "0",
+     "b": "5000"
+    },
+    "blip": {
+     "a:duotone": {
+      "a:srgbClr": [
+       {
+        "val": "2874A6"
+       },
+       {
+        "val": "FFFFFF"
+       }
+      ]
+     }
+    }
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "background-blur": {
+  "order": [
+   "pic:OPF slide image slides.8",
+   "sp:OPF slide image overlay slides.8",
+   "sp:OPF heading slides.8.title line 0",
+   "sp:OPF heading slides.8.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.8",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "5000",
+     "r": "0",
+     "b": "5000"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": {
+   "xfrm": {
+    "a:off": {
+     "x": "0",
+     "y": "0"
+    },
+    "a:ext": {
+     "cx": "12192000",
+     "cy": "6858000"
+    }
+   },
+   "geom": {
+    "a:avLst": "",
+    "prst": "rect"
+   },
+   "fill": {
+    "a:srgbClr": {
+     "a:alpha": {
+      "val": "40000"
+     },
+     "val": "FFFFFF"
+    }
+   }
+  },
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "image-strip": {
+  "order": [
+   "pic:OPF slide image slides.9",
+   "sp:OPF heading slides.9.title line 0",
+   "sp:OPF heading slides.9.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.9",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "4800600"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "2057400"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "36500",
+     "r": "0",
+     "b": "36500"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "collage-grid": {
+  "order": [
+   "sp:OPF heading slides.10.title line 0",
+   "pic:OPF image 1",
+   "pic:OPF image 2",
+   "pic:OPF image 3",
+   "pic:OPF image 4"
+  ],
+  "pictures": [
+   {
+    "name": "OPF image 1",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "1404747"
+     },
+     "a:ext": {
+      "cx": "5433060",
+      "cy": "2338007"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "r": "0",
+     "t": "15574",
+     "b": "15574"
+    },
+    "blip": {}
+   },
+   {
+    "name": "OPF image 2",
+    "xfrm": {
+     "a:off": {
+      "x": "6210300",
+      "y": "1404747"
+     },
+     "a:ext": {
+      "cx": "5433060",
+      "cy": "2338007"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "r": "0",
+     "t": "15574",
+     "b": "15574"
+    },
+    "blip": {}
+   },
+   {
+    "name": "OPF image 3",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "3971353"
+     },
+     "a:ext": {
+      "cx": "5433060",
+      "cy": "2338007"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "r": "0",
+     "t": "15574",
+     "b": "15574"
+    },
+    "blip": {}
+   },
+   {
+    "name": "OPF image 4",
+    "xfrm": {
+     "a:off": {
+      "x": "6210300",
+      "y": "3971353"
+     },
+     "a:ext": {
+      "cx": "5433060",
+      "cy": "2338007"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "r": "0",
+     "t": "15574",
+     "b": "15574"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "device-frame": {
+  "order": [
+   "pic:OPF slide image slides.11",
+   "sp:OPF heading slides.11.title line 0",
+   "sp:OPF heading slides.11.subtitle line 0",
+   "sp:OPF heading slides.11.subtitle line 1"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.11",
+    "xfrm": {
+     "a:off": {
+      "x": "7703820",
+      "y": "548640"
+     },
+     "a:ext": {
+      "cx": "2880360",
+      "cy": "5760720"
+     }
+    },
+    "geom": {
+     "a:avLst": {
+      "a:gd": {
+       "name": "adj",
+       "fmla": "val 12000"
+      }
+     },
+     "prst": "roundRect"
+    },
+    "ln": {
+     "a:solidFill": {
+      "a:srgbClr": {
+       "val": "000000"
+      }
+     },
+     "a:miter": {
+      "lim": "800000"
+     },
+     "w": "114300",
+     "algn": "ctr"
+    },
+    "srcRect": {
+     "l": "34375",
+     "t": "0",
+     "r": "34375",
+     "b": "0"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "cutout-subject": {
+  "order": [
+   "pic:OPF slide image slides.12",
+   "sp:OPF heading slides.12.title line 0",
+   "sp:OPF heading slides.12.subtitle line 0",
+   "sp:OPF heading slides.12.subtitle line 1"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.12",
+    "xfrm": {
+     "a:off": {
+      "x": "6096000",
+      "y": "0"
+     },
+     "a:ext": {
+      "cx": "6096000",
+      "cy": "6858000"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "-40000",
+     "r": "0",
+     "b": "-40000"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "watermark": {
+  "order": [
+   "pic:OPF slide image slides.13",
+   "sp:OPF heading slides.13.title line 0",
+   "sp:OPF heading slides.13.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.13",
+    "xfrm": {
+     "a:off": {
+      "x": "548640",
+      "y": "548640"
+     },
+     "a:ext": {
+      "cx": "11094720",
+      "cy": "5760720"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "-10185",
+     "t": "0",
+     "r": "-10185",
+     "b": "0"
+    },
+    "blip": {
+     "a:grayscl": "",
+     "a:alphaModFix": {
+      "amt": "10000"
+     }
+    }
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ },
+ "cinematic-crop": {
+  "order": [
+   "pic:OPF slide image slides.14",
+   "sp:OPF heading slides.14.title line 0",
+   "sp:OPF heading slides.14.subtitle line 0"
+  ],
+  "pictures": [
+   {
+    "name": "OPF slide image slides.14",
+    "xfrm": {
+     "a:off": {
+      "x": "0",
+      "y": "878372"
+     },
+     "a:ext": {
+      "cx": "12192000",
+      "cy": "5101255"
+     }
+    },
+    "geom": {
+     "a:avLst": "",
+     "prst": "rect"
+    },
+    "ln": null,
+    "srcRect": {
+     "l": "0",
+     "t": "16527",
+     "r": "0",
+     "b": "16527"
+    },
+    "blip": {}
+   }
+  ],
+  "overlay": null,
+  "background": "<p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"
+ }
+}

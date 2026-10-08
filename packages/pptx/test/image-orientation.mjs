@@ -14,10 +14,10 @@ const nativeTransform=({x,y,w,h,rotation,flipH,flipV},u,v)=>{
 // Expected orientation maps are independent of the exporter: normalized
 // source coordinates to display coordinates for the eight EXIF orientations.
 const expected=[null,(u,v)=>[u,v],(u,v)=>[1-u,v],(u,v)=>[1-u,1-v],(u,v)=>[u,1-v],(u,v)=>[v,u],(u,v)=>[1-v,u],(u,v)=>[1-v,1-u],(u,v)=>[v,1-u]];
-for(let orientation=1;orientation<=8;orientation++)for(const mode of ['fit','crop']){
+for(let orientation=1;orientation<=8;orientation++)for(const mode of ['contain','cover']){
  const source=await readFile(new URL(`fixtures/images/orientation-${orientation}.jpg`,import.meta.url));
  const before=Buffer.from(source),meta=rasterMetadata(source);assert.equal(meta.orientation,orientation);
- const deck={design:{imageFill:mode},slides:[{image:'data:image/jpeg;base64,'+source.toString('base64')}]};
+ const deck={design:{imageFit:mode},slides:[{image:'data:image/jpeg;base64,'+source.toString('base64')}]};
  const entries=unzipSync(await toPptx(deck)),xml=parser.parse(new TextDecoder().decode(entries['ppt/slides/slide1.xml']));
  const pic=xml['p:sld']['p:cSld']['p:spTree']['p:pic'],xf=pic['p:spPr']['a:xfrm'];
  const geom={x:Number(xf['a:off']['@_x']),y:Number(xf['a:off']['@_y']),w:Number(xf['a:ext']['@_cx']),h:Number(xf['a:ext']['@_cy']),rotation:Number(xf['@_rot']??0)/60000,flipH:xf['@_flipH']==='1',flipV:xf['@_flipV']==='1'};
@@ -28,7 +28,7 @@ for(let orientation=1;orientation<=8;orientation++)for(const mode of ['fit','cro
   assert.ok(Math.abs((points[i][0]-minX)/width-want[0])<1e-8);
   assert.ok(Math.abs((points[i][1]-minY)/height-want[1])<1e-8);
  }
- if(mode==='fit')assert.ok(Math.abs(width/height-(orientation>=5?.5:2))<1e-6);
+ if(mode==='contain')assert.ok(Math.abs(width/height-(orientation>=5?.5:2))<1e-6);
  const embedded=Object.entries(entries).find(([name])=>name.startsWith('ppt/media/')&&name.endsWith('.jpeg'))?.[1]??Object.entries(entries).find(([name])=>name.startsWith('ppt/media/')&&name.endsWith('.jpg'))?.[1];
  assert.ok(embedded);assert.equal(rasterMetadata(embedded).orientation,1);
  const restored=embedded.slice();new DataView(restored.buffer,restored.byteOffset,restored.byteLength).setUint16(meta.orientationOffset,orientation,meta.littleEndian);
@@ -52,4 +52,4 @@ assert.equal(rasterMetadata(little).orientation,6);assert.equal(rasterMetadata(l
 const littleDeck={slides:[{image:'data:image/jpeg;base64,'+little.toString('base64')}]};
 assert.deepEqual(await toPptx(littleDeck),await toPptx(littleDeck),'Image export remains byte-stable');
 
-console.log('Image orientation passed: all 8 EXIF orientations in fit/crop, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.');
+console.log('Image orientation passed: all 8 EXIF orientations in contain/cover, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.');

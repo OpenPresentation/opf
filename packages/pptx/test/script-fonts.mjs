@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs, validate} from '@openpresentation/opf';
-import {paragraphDirection, resolveScriptFonts} from '@openpresentation/opf/composition';
+import {validate} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {LANGUAGES, paragraphDirection, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 // FF-07 (font-fidelity-everywhere). Run `lang`, paragraph `rtl` and the theme
 // and run East Asian/complex-script fonts follow core's resolveScriptFonts()
-// (FF-18). Expected families come from the resolver and the bundled catalogs;
+// (FF-18). Expected families come from the resolver and core's language
+// vocabulary (OPF 0.15: `language` is a BCP-47 tag, not a catalog id);
 // PowerPoint-target names such as Meiryo are only compared as strings.
 
 // `text` is a native sample for right-to-left cases; its slides still carry
@@ -36,24 +38,24 @@ const themeFonts = (xml, tag) => {
 const langs = xml => new Set(Object.values(xml).flatMap(value => [...value.matchAll(/<a:(?:rPr|endParaRPr|defRPr)\b[^>]*?\slang="([^"]*)"/g)].map(match => match[1])));
 const runFaces = (xml, slot) => new Set([...slides(xml).matchAll(new RegExp(`<a:${slot}\\s+typeface="([^"]*)"`, 'g'))].map(match => match[1]).filter(face => !face.startsWith('+')));
 
-const languageRecord = id => catalogs.languages.find(record => record.id === id);
-const schemeFamilies = id => {const scheme = catalogs.fontSchemes.find(record => record.id === id); return {heading: scheme.major, body: scheme.minor};};
+const languageRecord = tag => LANGUAGES.find(record => record.tag === tag);
+const languageFamilies = record => ({heading: record.fonts.powerpoint.major, body: record.fonts.powerpoint.minor});
 
 // One language per script class named in FF-06/FF-07.
 const cases = [
-  {id: 'english-us', role: 'latin', script: 'Latn'},
-  {id: 'english-gb', role: 'latin', script: 'Latn'},
-  {id: 'french', role: 'latin', script: 'Latn'},
-  {id: 'russian', role: 'latin', script: 'Cyrl'},
-  {id: 'greek', role: 'latin', script: 'Grek'},
-  {id: 'japanese', role: 'eastAsian', script: 'Jpan', supplement: 'Jpan'},
-  {id: 'chinese-simplified', role: 'eastAsian', script: 'Hans', supplement: 'Hans'},
-  {id: 'chinese-traditional', role: 'eastAsian', script: 'Hant', supplement: 'Hant'},
-  {id: 'korean', role: 'eastAsian', script: 'Kore', supplement: 'Hang'},
-  {id: 'arabic', role: 'complexScript', script: 'Arab', supplement: 'Arab', rtl: true, text: 'مرحبا بالعالم'},
-  {id: 'hebrew', role: 'complexScript', script: 'Hebr', supplement: 'Hebr', rtl: true, text: 'שלום עולם'},
-  {id: 'hindi', role: 'complexScript', script: 'Deva', supplement: 'Deva'},
-  {id: 'thai', role: 'complexScript', script: 'Thai', supplement: 'Thai'},
+  {id: 'en-US', role: 'latin', script: 'Latn'},
+  {id: 'en-GB', role: 'latin', script: 'Latn'},
+  {id: 'fr', role: 'latin', script: 'Latn'},
+  {id: 'ru', role: 'latin', script: 'Cyrl'},
+  {id: 'el', role: 'latin', script: 'Grek'},
+  {id: 'ja', role: 'eastAsian', script: 'Jpan', supplement: 'Jpan'},
+  {id: 'zh-Hans', role: 'eastAsian', script: 'Hans', supplement: 'Hans'},
+  {id: 'zh-Hant', role: 'eastAsian', script: 'Hant', supplement: 'Hant'},
+  {id: 'ko', role: 'eastAsian', script: 'Kore', supplement: 'Hang'},
+  {id: 'ar', role: 'complexScript', script: 'Arab', supplement: 'Arab', rtl: true, text: 'مرحبا بالعالم'},
+  {id: 'he', role: 'complexScript', script: 'Hebr', supplement: 'Hebr', rtl: true, text: 'שלום עולם'},
+  {id: 'hi', role: 'complexScript', script: 'Deva', supplement: 'Deva'},
+  {id: 'th', role: 'complexScript', script: 'Thai', supplement: 'Thai'},
 ];
 
 const latin = resolveScriptFonts(deck(undefined));
@@ -77,7 +79,7 @@ for (const expected of cases) {
   // writes ea only, an Arabic deck cs only, and Latin-slot languages neither.
   const major = themeFonts(xml, 'majorFont'), minor = themeFonts(xml, 'minorFont');
   assert.deepEqual([major.latin, minor.latin], [latin.heading.latin, latin.body.latin], `${expected.id} theme latin`);
-  const own = expected.role === 'latin' ? null : schemeFamilies(record.fontScheme);
+  const own = expected.role === 'latin' ? null : languageFamilies(record);
   const slotKeys = {ea: 'eastAsian', cs: 'complexScript'};
   for (const [slot, key] of Object.entries(slotKeys)) {
     const supplied = own && key === expected.role;
@@ -139,7 +141,7 @@ for (const expected of cases) {
   assert.equal(ownParagraphs.length, baseline.length, `${expected.id} paragraph count`);
   assert.deepEqual(ownParagraphs.map(paragraph => paragraph.algn), baseline.map((paragraph, index) => ownParagraphs[index].rtl === '1' ? flip[paragraph.algn] : paragraph.algn), `${expected.id} logical alignment`);
 
-  // Import maps lang back to the catalog language without new diagnostics.
+  // Import restores the stored language tag (the runs still carry its OOXML tag) without new diagnostics.
   const imported = [];
   const restored = await fromPptx((await read(presentation)).bytes, {onDiagnostic: diagnostic => imported.push(diagnostic.code)});
   assert.equal(restored.language, expected.id, `${expected.id} import`);
@@ -153,16 +155,16 @@ for (const expected of cases) {
   assert.deepEqual([...langs(xml)], ['en-US']);
   const major = themeFonts(xml, 'majorFont'), minor = themeFonts(xml, 'minorFont');
   assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], [major.latin, '', minor.latin, '']);
-  assert.equal((await fromPptx((await read(deck(undefined))).bytes)).language, 'english-us');
+  assert.equal((await fromPptx((await read(deck(undefined))).bytes)).language, 'en-US', 'the run tag imports as a BCP-47 tag');
 }
 
 // FF-05: East Asian text in a deck whose language selects no East Asian font. The theme ea slot names a font for that
 // text (kana is Japanese, hangul Korean, Han alone Simplified Chinese; each as core resolves it for that language), so
 // the East Asian text does not read an unresolved +mn-ea; without such text the slot repeats the latin family.
 {
-  const resolvedFor = language => resolveScriptFonts({...deck('english-us'), language}).body.eastAsian;
-  for (const [text, language] of [['日本語のテキスト', 'japanese'], ['한국어 텍스트', 'korean'], ['中文文本', 'chinese-simplified']]) {
-    const presentation = deck('english-us', {}, text);
+  const resolvedFor = language => resolveScriptFonts({...deck('en-US'), language}).body.eastAsian;
+  for (const [text, language] of [['日本語のテキスト', 'ja'], ['한국어 텍스트', 'ko'], ['中文文本', 'zh-Hans']]) {
+    const presentation = deck('en-US', {}, text);
     const {xml} = await read(presentation);
     const expected = resolvedFor(language);
     assert.notEqual(expected, themeFonts(xml, 'minorFont').latin, `${language} resolves to an East Asian family`);
@@ -171,24 +173,24 @@ for (const expected of cases) {
     assert.deepEqual(runFaces(xml, 'ea'), new Set(), `${language} text: runs name no ea`);
     assert.equal(themeFonts(xml, 'minorFont').latin, 'Aptos', 'the content rule changes no latin font');
   }
-  const {xml: latinOnly} = await read(deck('english-us'));
+  const {xml: latinOnly} = await read(deck('en-US'));
   assert.equal(themeFonts(latinOnly, 'minorFont').ea, themeFonts(latinOnly, 'minorFont').latin, 'no East Asian text: ea repeats latin');
   // A deck language with its own East Asian font is not overridden by the text.
-  const korean = await read(deck('korean', {}, '日本語のテキスト'));
-  assert.equal(themeFonts(korean.xml, 'minorFont').ea, resolvedFor('korean'), 'the deck language wins');
+  const korean = await read(deck('ko', {}, '日本語のテキスト'));
+  assert.equal(themeFonts(korean.xml, 'minorFont').ea, resolvedFor('ko'), 'the deck language wins');
 }
 
 // An explicit eastAsian slot on the design font scheme fills ea in a Latin deck
 // (CJK inside a Latin deck). The FF-32 stored font scheme restores that slot;
 // without provenance the importer reports it cannot carry it.
 {
-  const fontScheme = {id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}};
-  const {xml, bytes} = await read(deck('english-us', {design: {fontScheme}}));
+  const fontScheme = {eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}};
+  const {xml, bytes} = await read(deck('en-US', {design: {fontScheme}}));
   const stored = [];
   const restoredScheme = await fromPptx(bytes, {onDiagnostic: diagnostic => stored.push(diagnostic.code)});
   assert.deepEqual(restoredScheme.design.fontScheme, fontScheme);
   assert.ok(!stored.includes('script-font-not-imported'), 'the restored scheme reproduces the theme ea');
-  const observedOnly = (await read(deck('english-us', {design: {fontScheme}}), {provenance: false})).bytes;
+  const observedOnly = (await read(deck('en-US', {design: {fontScheme}}), {provenance: false})).bytes;
   assert.equal(themeFonts(xml, 'minorFont').ea, 'Noto Sans JP');
   assert.equal(themeFonts(xml, 'minorFont').cs, '', 'only the explicit slot fills');
   assert.deepEqual(runFaces(xml, 'ea'), new Set(), 'runs name no ea');
@@ -198,37 +200,34 @@ for (const expected of cases) {
   assert.ok(diagnostics.includes('script-font-not-imported'));
 }
 
-// Authored tags: a region tag is used as written and imports as that tag (it
-// still resolves to the English record); an uncatalogued tag round-trips as a
-// tag with a diagnostic. Without FF-32 provenance, records sharing one
-// curated OOXML tag import as the record of the same primary language, with a
-// diagnostic; with it, the stored id wins and nothing is ambiguous.
+// Authored tags (OPF 0.15): a region tag is used as written and imports as that tag; a tag outside core's language table
+// round-trips as a tag. Without FF-32 provenance the dominant run tag (the curated OOXML tag) imports as the BCP-47 tag;
+// with it, the stored tag wins. No languages catalog is involved, so nothing is ambiguous or uncatalogued.
 {
   const nz = await read(deck('en-NZ'));
   assert.deepEqual([...langs(nz.xml)], ['en-NZ']);
   const nzDiagnostics = [];
   assert.equal((await fromPptx(nz.bytes, {onDiagnostic: diagnostic => nzDiagnostics.push(diagnostic.code)})).language, 'en-NZ');
   assert.deepEqual(nzDiagnostics.filter(code => code.startsWith('language')), []);
-  for (const [id, imported] of [['chittagonian', 'bengali'], ['tagalog', 'filipino'], ['english', 'english-us']]) {
+  for (const [tag, runTag] of [['ja', 'ja-JP'], ['fr', 'fr-FR'], ['en', 'en-US']]) {
     const diagnostics = [];
-    const restored = await fromPptx((await read(deck(id), {provenance: false})).bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});
-    assert.equal(restored.language, imported, `${id} imports as ${imported}`);
-    // en is en-US for OOXML: english-us carries that exact tag, so nothing is ambiguous.
-    assert.equal(diagnostics.includes('language-ambiguous'), id !== 'english', `${id} ambiguity diagnostic`);
+    const restored = await fromPptx((await read(deck(tag), {provenance: false})).bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});
+    assert.equal(restored.language, runTag, `${tag} without provenance imports as the run tag ${runTag}`);
+    assert.deepEqual(diagnostics.filter(code => code.startsWith('language')), [], `${tag}: no language diagnostics`);
     const withStored = [];
-    assert.equal((await fromPptx((await read(deck(id))).bytes, {onDiagnostic: diagnostic => withStored.push(diagnostic.code)})).language, id, `${id} stored reference wins`);
-    assert.deepEqual(withStored.filter(code => /language|metadata-reference/.test(code)), [], `${id} no duplicate language diagnostics`);
+    assert.equal((await fromPptx((await read(deck(tag))).bytes, {onDiagnostic: diagnostic => withStored.push(diagnostic.code)})).language, tag, `${tag} stored tag wins`);
+    assert.deepEqual(withStored.filter(code => /language|metadata-reference/.test(code)), [], `${tag} no duplicate language diagnostics`);
   }
   const {bytes} = await read(deck('haw-US'));
   const diagnostics = [];
   const restored = await fromPptx(bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});
   assert.equal(restored.language, 'haw-US');
-  assert.ok(diagnostics.includes('language-uncatalogued'));
+  assert.deepEqual(diagnostics.filter(code => code === 'language-uncatalogued' || code === 'language-ambiguous'), [], 'no catalog diagnostics');
 }
 
-// Unresolvable references fall back to en-US and say so.
+// A tag whose script core does not know falls back to en-US and says so.
 {
-  const {xml, diagnostics} = await read(deck('https://example.com/languages/custom.json'));
+  const {xml, diagnostics} = await read(deck('zz-ZZ'));
   assert.deepEqual([...langs(xml)], ['en-US']);
   assert.ok(diagnostics.some(diagnostic => diagnostic.code === 'language-unresolved'));
 }
@@ -237,7 +236,7 @@ for (const expected of cases) {
 // runs retagged to another language keep the observed language and name the
 // stored reference once.
 {
-  const {bytes} = await read(deck('japanese'));
+  const {bytes} = await read(deck('ja'));
   const entries = unzipSync(new Uint8Array(bytes));
   for (const [name, value] of Object.entries(entries)) {
     if (/^ppt\/slides\/slide\d+\.xml$/.test(name)) entries[name] = new TextEncoder().encode(strFromU8(value).replace(/(\slang=")ja-JP"/g, '$1fr-FR"'));
@@ -245,7 +244,7 @@ for (const expected of cases) {
   const {zipSync} = await import('fflate');
   const diagnostics = [];
   const restored = await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});
-  assert.equal(restored.language, 'french');
+  assert.equal(restored.language, 'fr-FR');
   assert.deepEqual(diagnostics.filter(code => code === 'metadata-reference-changed'), ['metadata-reference-changed']);
 }
 
@@ -253,7 +252,7 @@ for (const expected of cases) {
 // RTL paragraphs under a left-to-right language are reported. These packages
 // carry no FF-32 provenance, so only the runs decide.
 {
-  const {bytes} = await read(deck('arabic', {}, 'مرحبا'), {provenance: false});
+  const {bytes} = await read(deck('ar', {}, 'مرحبا'), {provenance: false});
   const entries = unzipSync(new Uint8Array(bytes));
   const slide = strFromU8(entries['ppt/slides/slide1.xml']);
   let first = true;
@@ -265,7 +264,7 @@ for (const expected of cases) {
   const {zipSync} = await import('fflate');
   const diagnostics = [];
   const restored = await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});
-  assert.equal(restored.language, 'arabic');
+  assert.equal(restored.language, 'ar-SA');
   assert.ok(diagnostics.includes('mixed-run-languages'));
   // Values that name no language are not counted.
   const noLanguage = Object.fromEntries(Object.entries(entries).map(([name, value]) => [name, /^ppt\/slides\/slide\d+\.xml$/.test(name)
@@ -277,7 +276,7 @@ for (const expected of cases) {
     if (/^ppt\/slides\/slide\d+\.xml$/.test(name)) entries[name] = new TextEncoder().encode(strFromU8(value).replace(/(\slang=")ar-SA"/g, '$1en-US"'));
   }
   const rtl = [];
-  assert.equal((await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => rtl.push(diagnostic.code)})).language, 'english-us');
+  assert.equal((await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => rtl.push(diagnostic.code)})).language, 'en-US');
   assert.ok(rtl.includes('rtl-language-mismatch'));
 }
 
@@ -287,7 +286,7 @@ for (const expected of cases) {
 // other vendored entry is unchanged. Uyghur (`Uigh`) follows the same rule, taking the complex-script family when the deck
 // selects one. Other languages keep the vendored Viet and Uigh entries.
 {
-  const vietnamese = deck('vietnamese-quoc-ngu', {}, 'Tiếng Việt: Quốc Ngữ');
+  const vietnamese = deck('vi-Latn', {}, 'Tiếng Việt: Quốc Ngữ');
   const resolved = resolveScriptFonts(vietnamese);
   assert.equal(resolved.lang, 'vi-VN');
   assert.equal(resolved.supplement, undefined, 'core names no supplement for a Latin-script language');
@@ -306,28 +305,30 @@ for (const expected of cases) {
     assert.ok(!/<a:font script="Viet" typeface="(?:Arial|Times New Roman)"\/>/.test(part), `${name} keeps no Office Viet default`);
   }
   // A Latin deck in another language is unchanged.
-  assert.equal(themeFonts((await read(deck('french'))).xml, 'minorFont').script('Viet'), themeFonts(vendored, 'minorFont').script('Viet'));
-  // Uyghur (no bundled record; an inline language record): Arabic script, so core names the Arab supplement when the deck
+  assert.equal(themeFonts((await read(deck('fr'))).xml, 'minorFont').script('Viet'), themeFonts(vendored, 'minorFont').script('Viet'));
+  // Uyghur (outside core's language table; a language object): Arabic script, so core names the Arab supplement when the deck
   // selects a complex-script font, and the Uigh entry PowerPoint applies to ug-CN runs takes that same family; with no
-  // complex-script font selected, Uigh takes the latin family. Arab follows core's rule as before.
-  const uyghur = fontScheme => ({language: 'uyghur', catalogs: {languages: {records: [{id: 'uyghur', name: 'Uyghur', code: 'UIG', bcp47: 'ug-Arab', ooxmlLang: 'ug-CN', script: 'Arab', direction: 'rtl', ...(fontScheme ? {fontScheme} : {})}]}}, name: 'Uyghur', slides: [{title: 'ئۇيغۇرچە', text: 'Uyghur'}]});
+  // complex-script font selected, Uigh takes the latin family. Arab follows core's rule as before. The font scheme is a
+  // reference to the gallery snapshot, which the host registers.
+  const catalogs = [defaultCatalog];
+  const uyghur = fontScheme => ({language: {bcp47: 'ug-Arab', name: 'Uyghur', ooxmlLang: 'ug-CN', script: 'Arab', direction: 'rtl', ...(fontScheme ? {fontScheme} : {})}, name: 'Uyghur', slides: [{title: 'ئۇيغۇرچە', text: 'Uyghur'}]});
   for (const [fontScheme, expect] of [['arabic-typesetting', {major: 'Arabic Typesetting', minor: 'Arabic Typesetting', arab: true}], [undefined, {major: 'Aptos Display', minor: 'Aptos', arab: false}]]) {
-    const presentation = uyghur(fontScheme), resolved = resolveScriptFonts(presentation);
+    const presentation = uyghur(fontScheme), resolved = resolveScriptFonts(presentation, {catalogs});
     assert.equal(resolved.lang, 'ug-CN');
-    const {xml: ug} = await read(presentation);
+    const {xml: ug} = await read(presentation, {catalogs});
     const [major, minor] = [themeFonts(ug, 'majorFont'), themeFonts(ug, 'minorFont')];
     assert.deepEqual([major.script('Uigh'), minor.script('Uigh')], [expect.major, expect.minor], `uyghur (${fontScheme ?? 'no script font'}) Uigh`);
     if (expect.arab) assert.deepEqual([major.script('Arab'), minor.script('Arab')], [expect.major, expect.minor], 'uyghur keeps core\'s Arab supplement');
     else assert.deepEqual([major.script('Arab'), minor.script('Arab')], [themeFonts(vendored, 'majorFont').script('Arab'), themeFonts(vendored, 'minorFont').script('Arab')], 'uyghur without a script font keeps the vendored Arab entry');
   }
   // Every other language keeps the vendored Viet and Uigh entries (Arabic changes only its own Arab entry).
-  for (const id of ['english-us', 'french', 'arabic', 'japanese']) {
+  for (const id of ['en-US', 'fr', 'ar', 'ja']) {
     const {xml: other} = await read(deck(id));
     for (const tag of ['majorFont', 'minorFont']) for (const script of ['Viet', 'Uigh']) assert.equal(themeFonts(other, tag).script(script), themeFonts(vendored, tag).script(script), `${id} ${tag} ${script} stays vendored`);
   }
 }
 
 // Deterministic: the same document exports the same bytes.
-assert.deepEqual((await read(deck('japanese'))).bytes, (await read(deck('japanese'))).bytes);
+assert.deepEqual((await read(deck('ja'))).bytes, (await read(deck('ja'))).bytes);
 
 console.log(`Script fonts passed: ${cases.length} languages across Latin, Cyrillic, Greek, CJK (ja/zh-Hans/zh-Hant/ko), Arabic/Hebrew RTL, Indic and Thai; lang, rtl, theme and run ea/cs, supplements, import and diagnostics.`);

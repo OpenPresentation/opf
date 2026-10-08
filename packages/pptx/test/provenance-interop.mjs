@@ -5,7 +5,8 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {unzipSync} from 'fflate';
-import {toPptx, fromPptx} from '../dist/index.js';
+// OPF 0.15: the gallery ids these decks name (layouts, font schemes, the narrative) resolve from the registered default catalog.
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 // Spec-gap P1 interop: a PPTX exported by this build must still import with the
 // PUBLISHED importer. Importers up to 0.11.6 reject an OPF_DOCUMENT_V1 whose
@@ -67,7 +68,7 @@ try {
     const {resolveLogo} = await import('@openpresentation/opf/composition');
     const rich = typeof resolveLogo === 'function';
     const square = png;
-    const p2 = {name: 'Interop P2', narrative: 'Why the plan works', audience: 'Executives',
+    const p2 = {name: 'Interop P2', narrative: 'problem-solution', audience: 'Executives',
       organization: {id: 'acme', name: 'Acme', role: 'primary'},
       design: {fontScheme: {id: 'aptos'}, logo: {default: square, icon: square}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
         header: {right: {logo: true}}, footer: {left: {logo: true}, center: {text: 'Confidential'}, right: {slideNumber: true}}},
@@ -83,7 +84,7 @@ try {
     const reports = [];
     const older = await published.fromPptx(exported, {onDiagnostic: issue => reports.push(issue)});
     assert.deepEqual(reports.filter(issue => /^invalid-.*provenance$|^document-provenance/.test(issue.code)), [], `published ${PUBLISHED} accepts a design-fields export: ${JSON.stringify(reports.map(issue => `${issue.code} ${issue.message}`))}`);
-    assert.equal(older.narrative, 'Why the plan works'); assert.equal(older.audience, 'Executives');
+    assert.equal(older.narrative, 'problem-solution'); assert.equal(older.audience, 'Executives');
     assert.deepEqual(older.design.fontScheme, {id: 'aptos'});
     assert.equal(older.design.listBullet, 'image');
     assert.equal(older.design.footer?.center?.text, 'Confidential'); assert.equal(older.design.footer?.right?.slideNumber, true);

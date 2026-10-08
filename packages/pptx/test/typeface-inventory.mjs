@@ -2,11 +2,17 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs} from '@openpresentation/opf';
+import {resolveSlideContext} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {examples} from '@openpresentation/opf/examples';
 import {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {writeWorkbookFonts} from '../src/package-fonts.js';
-import {toPptx, checkTypefaces, inventoryTypefaces, THEME_SCRIPT_SUPPLEMENTS} from '../src/index.js';
+import {toPptx as exportPptx, checkTypefaces, inventoryTypefaces, THEME_SCRIPT_SUPPLEMENTS} from '../src/index.js';
+
+// OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
+// (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
+const records = Object.fromEntries(Object.entries(defaultCatalog).filter(([, map]) => map && typeof map === 'object').map(([kind, map]) => [kind, Object.entries(map).map(([id, record]) => ({id, ...record}))]));
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
 
 // FF-08 (font-fidelity-everywhere): the exported package names only the fonts
 // the document chose. checkTypefaces walks every XML part, including the
@@ -66,8 +72,8 @@ const deck = {name: 'Charts', design: {fontScheme: 'consolas'}, slides: [
   {title: 'Serif override', design: {fontScheme: 'georgia'}, chart: {type: 'bar', data}},
 ]};
 
-const consolas = resolveFontFamilies(catalogs.fontSchemes.find(record => record.id === 'consolas'));
-const georgia = resolveFontFamilies(catalogs.fontSchemes.find(record => record.id === 'georgia'));
+const consolas = resolveFontFamilies(records.fontSchemes.find(record => record.id === 'consolas'));
+const georgia = resolveFontFamilies(records.fontSchemes.find(record => record.id === 'georgia'));
 const chosen = [...new Set([...Object.values(consolas), ...Object.values(georgia)])];
 const monospace = [consolas.heading, consolas.body, consolas.code, georgia.code];
 const bytes = await toPptx(deck, {strictAssets: true});
@@ -150,21 +156,16 @@ assert.ok(control(() => {}, {allowEmptyThemeScripts: false}).includes('empty-typ
 assert.throws(() => checkTypefaces(bytes, {}), TypeError);
 
 // Corpus: every example deck, with the fonts its design and runs choose.
-const records = (presentation, kind) => [...[presentation.catalogs?.[kind]?.records ?? presentation.catalogs?.[kind] ?? []].flat(), ...catalogs[kind]];
-const id = reference => typeof reference === 'string' ? reference : reference?.id;
-const designFonts = (presentation, design) => {
-  const themeRecord = records(presentation, 'themes').find(record => record.id === (id(design.theme) ?? 'minimal'));
-  const reference = design.fontScheme ?? themeRecord?.fontScheme;
-  const schemes = records(presentation, 'fontSchemes');
-  const base = schemes.find(record => record.id === (id(reference) ?? 'aptos')) ?? schemes.find(record => record.id === 'aptos');
-  const scheme = {...base, ...(reference && typeof reference === 'object' ? reference : {})};
+const designFonts = (presentation, index) => {
+  // Core's slide context resolves the slide's font scheme (slide design, deck design, theme, engine default).
+  const scheme = resolveSlideContext(presentation, index, {catalogs: [defaultCatalog]}).resolved.fontScheme;
   return {...resolveFontFamilies(scheme), mono: scheme.type === 'monospace' ? [scheme.major, scheme.minor] : []};
 };
 // FF-07 writes the language's script fonts (theme and run ea/cs and the language's
 // own theme supplement) through core resolveScriptFonts(); those resolved families are chosen fonts too.
 const scriptFonts = presentation => {
   return [undefined, ...presentation.slides.keys()].flatMap(slideIndex => {
-    const resolved = resolveScriptFonts(presentation, slideIndex === undefined ? {} : {slideIndex});
+    const resolved = resolveScriptFonts(presentation, {catalogs: [defaultCatalog], ...(slideIndex === undefined ? {} : {slideIndex})});
     const slots = [resolved.heading, resolved.body].flatMap(slot => [slot.latin, slot.eastAsian, slot.complexScript]);
     return [...slots, ...(resolved.supplement ? [resolved.supplement.heading, resolved.supplement.body] : [])].filter(Boolean);
   });
@@ -172,13 +173,13 @@ const scriptFonts = presentation => {
 const runFamilies = value => !value || typeof value !== 'object' ? [] : Object.entries(value).flatMap(([key, child]) => key === 'fontFamily' && typeof child === 'string' ? [child] : runFamilies(child));
 const corpus = {decks: 0, charts: 0, workbooks: 0, typefaces: 0, failures: []};
 for (const {file, deck: example} of examples) {
-  const roles = [example.design ?? {}, ...example.slides.map(slide => ({...example.design, ...slide.design}))].map(design => designFonts(example, design));
+  const roles = example.slides.map((_, index) => designFonts(example, index));
   const fonts = [...new Set([...roles.flatMap(role => [role.heading, role.body, role.code]), ...runFamilies(example.slides), ...scriptFonts(example)])];
   // A scheme's type describes its major/minor, not inline heading/body overrides.
   const mono = roles.flatMap(role => [...role.mono, role.code]);
   const exported = await toPptx(example, {imageResolver: async () => new Uint8Array(await readFile(new URL('./fixtures/images/wide.png', import.meta.url)))});
   // FF-49: a theme ea/cs is written exactly where the deck selected a script font (scheme slot or language), else empty.
-  const deckSlots = resolveScriptFonts(example);
+  const deckSlots = resolveScriptFonts(example, {catalogs: [defaultCatalog]});
   const supplied = role => Object.fromEntries([['ea', 'eastAsian'], ['cs', 'complexScript']].map(([element, key]) => [element, deckSlots.sources[key] === 'latin' ? '' : deckSlots[role][key]]));
   const checked = checkTypefaces(exported, {families: fonts, monospace: mono, themeScripts: {major: supplied('heading'), minor: supplied('body')}});
   corpus.decks++;
@@ -195,7 +196,7 @@ assert.equal(typeof inventoryTypefaces, 'function');
 // FF-49: themeScripts flags a slot that should be set but is empty or different, and accepts an empty slot when nothing
 // was selected (Office's convention); a Latin deck selects nothing.
 {
-  const japanese = await toPptx({name: 'ja', language: 'japanese', slides: [{title: 'これは日本語です', text: 'Body'}]});
+  const japanese = await toPptx({name: 'ja', language: 'ja', slides: [{title: 'これは日本語です', text: 'Body'}]});
   const latinDeck = await toPptx({name: 'en', slides: [{title: 'Title', text: 'Body'}]});
   const jaFonts = ['Aptos', 'Aptos Display', 'Meiryo'];
   const selected = {major: {ea: 'Meiryo'}, minor: {ea: 'Meiryo'}};

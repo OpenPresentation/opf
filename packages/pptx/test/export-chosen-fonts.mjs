@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx} from '../src/index.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {toPptx as exportPptx} from '../src/index.js';
+
+// OPF 0.15: the named font schemes are the gallery snapshot's, which the host registers explicitly; strict export
+// (strictAssets) fails on a reference that resolves nowhere.
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
 
 // FF-31: a preview font substitute (Carlito for Aptos, Gelasio for Georgia, ...) only
 // changes measurement and drawing. The exported PPTX always names the developer's
@@ -68,7 +73,7 @@ assert.ok(!allTypefaces(roboto).has('Carlito'));
 
 // A caller alias is a preview decision as well: the chosen name still reaches the PPTX.
 const aliased = {fonts: await loadFonts({aliases: {'Brand Sans': 'Roboto'}})};
-const brand = unzipSync(new Uint8Array(await toPptx({name: 'Brand', design: {fontScheme: {id: 'brand', major: 'Brand Sans', minor: 'Brand Sans'}}, slides}, {...aliased, strictAssets: true})));
+const brand = unzipSync(new Uint8Array(await toPptx({name: 'Brand', design: {fontScheme: {major: 'Brand Sans', minor: 'Brand Sans'}}, slides}, {...aliased, strictAssets: true})));
 assert.deepEqual(themePair(brand), {major: 'Brand Sans', minor: 'Brand Sans'});
 assert.ok(allTypefaces(brand).has('Brand Sans') && ![...allTypefaces(brand)].some(face => /^Roboto(?! Mono)/.test(face)), `alias target leaked: ${[...allTypefaces(brand)]}`);
 

@@ -6,7 +6,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {unzipSync, zipSync, strFromU8, strToU8} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 const output = path.resolve(process.env.OPF_NATIVE_TEXT_ARTIFACTS ?? 'artifacts/native-text-whitespace/source');
 const baseline = process.env.OPF_NATIVE_TEXT_BASELINE && path.resolve(process.env.OPF_NATIVE_TEXT_BASELINE);

@@ -6,9 +6,8 @@ import {createHash} from 'node:crypto';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {resolvePresentation} from '@openpresentation/opf-render/svg';
+import {resolvePresentation, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx, fromPptx} from '../dist/index.js';
 import {nativeFurnitureParts, NATIVE_PLACEHOLDERS} from '../dist/native-furniture.js';
 
 const enc = new TextEncoder(), dec = new TextDecoder();

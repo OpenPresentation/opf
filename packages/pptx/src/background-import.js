@@ -97,14 +97,17 @@ export function importBackground(slidePath, dimensions, archive, report) {
   return readNativeBackground(drawingObject([style]), dimensions, report, context);
 }
 
-const imageEffects = new Set(['r:embed', 'r:link', 'cstate', 'a:alphaModFix', 'a:lum', 'a:extLst']);
+const imageEffects = new Set(['r:embed', 'r:link', 'cstate', 'a:alphaModFix', 'a:grayscl', 'a:duotone', 'a:lum', 'a:extLst']);
 const inset = (rect, key) => Number(rect?.[key] ?? 0) / 100000;
 const near = (a, b) => Math.abs(a - b) <= .005;
+const focusValue = value => Math.round(Math.max(0, Math.min(1, value)) * 10000) / 10000;
 
-// Import an embedded raster picture fill as an OPF image background. OPF's
-// cover/contain/tile fits are recovered from the stretch/tile geometry; any
-// other stretch (off-center crop, distortion) or unsupported picture effect is
-// imported as the closest centered cover and reported.
+// Import an embedded raster picture fill as an OPF image background ({type: 'image', src, fit, focus, opacity}), the
+// inverse of nativeImageBackgroundFill (FA-23): an intrinsic-size top-left tile is `tile`; a crop that keeps the slide's
+// aspect is `cover`, with the focus point the crop centers (a crop pinned to an edge cannot say how far past the edge
+// the focus was, so it reads as the edge-most focus that gives the same crop); centered fill-rectangle insets that keep
+// the picture's aspect are `contain`; an uncropped fill of another aspect is `stretch`. Any other geometry or picture
+// effect is imported as the closest fit and reported.
 function readImageBackground(fill, partPath, {relationships, bytes}, dimensions, report) {
   const blip = fill['a:blip'] ?? {};
   const relationship = blip['r:embed'] && relationships(partPath).get(blip['r:embed']);
@@ -116,23 +119,31 @@ function readImageBackground(fill, partPath, {relationships, bytes}, dimensions,
   }
   const approximate = reason => report({code: 'approximate-background-image', message: `The native background picture ${reason}; it was imported as the closest OPF image background.`});
   const lum = blip['a:lum'];
-  if (Object.keys(blip).some(key => !imageEffects.has(key)) || (lum && Object.keys(lum).length)) approximate('uses picture effects outside OPF opacity');
+  if (Object.keys(blip).some(key => !imageEffects.has(key)) || (lum && Object.keys(lum).length)) approximate('uses picture effects outside OPF opacity and recolor');
+  // a:grayscl and an a:duotone of two literal colours are the OPF recolor (FA-22 draft 3).
+  let recolor;
+  if (blip['a:grayscl'] !== undefined) recolor = 'grayscale';
+  const duotone = blip['a:duotone'], literal = node => /^[\da-f]{6}$/i.test(node?.val ?? '') && Object.keys(node).every(key => key === 'val' || typeof key === 'symbol') ? `#${node.val.toUpperCase()}` : undefined;
+  if (duotone) {
+    const colors = Array.isArray(duotone['a:srgbClr']) ? duotone['a:srgbClr'] : [];
+    const [dark, light] = colors.map(literal);
+    if (colors.length === 2 && dark && light && Object.keys(duotone).every(key => key === 'a:srgbClr' || typeof key === 'symbol')) recolor = {dark, light};
+    else approximate('uses a duotone recolor that is not two literal colours');
+  }
+  if (recolor && blip['a:grayscl'] !== undefined && duotone) approximate('uses both a grayscale and a duotone recolor');
   const amount = blip['a:alphaModFix'] ? Number(blip['a:alphaModFix'].amt ?? 100000) / 100000 : 1;
   const opacity = Number.isFinite(amount) ? Math.max(0, Math.min(1, amount)) : 1;
-  let fit = 'cover';
+  let fit = 'cover', focus;
   if (fill['a:tile']) {
     fit = 'tile';
-    // OPF tile has one geometry: top-left min(w,h)/4 cells holding the whole
-    // image (the default contain imageFill), at the raster's own resolution.
     const tile = fill['a:tile'], crop = fill['a:srcRect'];
-    const expected = nativeTileScale(metadata, dimensions);
-    const x = (1 - expected.cell / (metadata.width * expected.scale)) / 2, y = (1 - expected.cell / (metadata.height * expected.scale)) / 2;
+    const expected = nativeTileScale(metadata);
     const value = (raw, fallback) => raw === undefined ? fallback : Number(raw);
     const scaled = (raw, target) => Math.abs(value(raw, 100000) - target) <= Math.max(2, target * .005);
     const matches = scaled(tile.sx, expected.sx) && scaled(tile.sy, expected.sy)
       && Object.entries(nativeTileAlignment).every(([key, native]) => String(tile[key] ?? native) === native)
-      && near(inset(crop, 'l'), x) && near(inset(crop, 'r'), x) && near(inset(crop, 't'), y) && near(inset(crop, 'b'), y);
-    if (!matches) approximate('tiles with a scale, offset, alignment, flip or crop that the OPF tile fit does not express');
+      && ['l', 't', 'r', 'b'].every(key => near(inset(crop, key), 0));
+    if (!matches) approximate('tiles with a scale, offset, alignment, flip or crop that the OPF tile fit (intrinsic size from the top-left corner) does not express');
   } else {
     const crop = fill['a:srcRect'], box = fill['a:stretch']?.['a:fillRect'];
     const [l, t, r, b] = ['l', 't', 'r', 'b'].map(key => inset(crop, key));
@@ -141,10 +152,15 @@ function readImageBackground(fill, partPath, {relationships, bytes}, dimensions,
     const target = dimensions.width * (1 - fl - fr) / (dimensions.height * (1 - ft - fb));
     const aspect = Number.isFinite(source) && Number.isFinite(target) && source > 0 && target > 0 && Math.abs(source / target - 1) <= .005;
     const noCrop = [l, t, r, b].every(value => near(value, 0)), noInset = [fl, ft, fr, fb].every(value => near(value, 0));
-    if (aspect && noInset && near(l, r) && near(t, b) && Math.min(l, t) >= 0) fit = 'cover';
-    else if (aspect && noCrop && near(fl, fr) && near(ft, fb) && Math.min(fl, ft) >= 0) fit = 'contain';
-    else approximate('is cropped off-center, distorted or offset');
+    if (noCrop && noInset && !aspect) fit = 'stretch';
+    else if (aspect && noInset && Math.min(l, t, r, b) >= -.00002) {
+      fit = 'cover';
+      // fitImage centers the focus point: visible share v = 1 - l - r, focus x = l + v / 2.
+      const x = focusValue(l + (1 - l - r) / 2), y = focusValue(t + (1 - t - b) / 2);
+      if (!near(x, .5) || !near(y, .5)) focus = {x, y};
+    } else if (aspect && noCrop && near(fl, fr) && near(ft, fb) && Math.min(fl, ft) >= 0) fit = 'contain';
+    else approximate('is cropped with padding, distorted or offset');
   }
   const binary = typeof Buffer !== 'undefined' ? Buffer.from(data).toString('base64') : btoa(Array.from(data, byte => String.fromCharCode(byte)).join(''));
-  return {type: 'image', image: {src: `data:${metadata.mediaType};base64,${binary}`, fit}, ...(opacity === 1 ? {} : {opacity})};
+  return {type: 'image', src: `data:${metadata.mediaType};base64,${binary}`, ...(fit === 'cover' ? {} : {fit}), ...(focus ? {focus} : {}), ...(opacity === 1 ? {} : {opacity}), ...(recolor ? {recolor} : {})};
 }

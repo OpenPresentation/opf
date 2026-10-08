@@ -213,9 +213,11 @@ function recordColors(record) {
 
 /**
  * Recover design.colorScheme from theme clrScheme colors.
- * An exact twelve-slot match with a catalog record yields its id (the clrScheme
- * name breaks ties). Otherwise the colors are inline: relative to the record
- * whose name the clrScheme carries, or as all readable slots.
+ * `records` are the colour schemes a bare id can name in the imported document
+ * (FA-23: the host default catalog's, each with its key as `id`; none when the
+ * host registers no catalog). An exact twelve-slot match yields that bare id
+ * (the clrScheme name breaks ties). Otherwise the colors are inline: relative
+ * to the record whose name the clrScheme carries, or as all readable slots.
  */
 export function recoverColorScheme({colors, unreadable, name}, records) {
   const complete = unreadable.length === 0;
@@ -245,19 +247,22 @@ export function presentationThemePath(presentationRoot, presentationRels, relati
 }
 
 /**
- * Identify a catalog theme from the native theme name. The name must equal a
- * catalog theme name, and the package must corroborate it with that theme's
- * color scheme or its heading/body font pair, so a foreign deck that happens to
- * use a theme called "Bold" is not bound to the OPF theme.
+ * Identify a catalog theme from the native theme name. `themes` are the theme
+ * records a bare id can name (as for recoverColorScheme, each with its key as
+ * `id`); `colorScheme(theme)` and `fontFamilies(theme)` resolve the theme's own
+ * references (null when they resolve nowhere). The name must equal a theme
+ * name, and the package must corroborate it with that theme's color scheme or
+ * its heading/body font pair, so a foreign deck that happens to use a theme
+ * called "Bold" is not bound to the OPF theme.
  */
-export function recoverTheme({themeName, colors, majorFont, minorFont}, {themes, colorSchemes, fontFamilies}) {
+export function recoverTheme({themeName, colors, majorFont, minorFont}, {themes, colorScheme, fontFamilies}) {
   if (!themeName) return {};
   const theme = themes.find(record => record.name === themeName);
   if (!theme) return {};
-  const scheme = colorSchemes.find(record => record.id === theme.colorScheme);
+  const scheme = colorScheme(theme);
   const schemeColors = scheme ? recordColors(scheme) : null;
   const colorMatch = !!schemeColors && THEME_SLOTS.every(([slot]) => schemeColors[slot] === colors[slot]);
-  const fonts = fontFamilies(theme.fontScheme);
+  const fonts = fontFamilies(theme);
   const fontMatch = !!fonts && fonts.heading === majorFont && fonts.body === minorFont;
   return colorMatch || fontMatch ? {id: theme.id} : {unverified: theme.id};
 }

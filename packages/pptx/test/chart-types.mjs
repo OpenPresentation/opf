@@ -1,11 +1,16 @@
 // FF-22: every classic chart type the core catalog keeps exports the exact
 // native construct for its Aspose.Slides ChartType and imports back to the
-// same id; other ids keep the legacy construct.
+// same id; any other id is rejected (chart.type is a schema enum).
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {catalogs} from '@openpresentation/opf';
+import {CHART_TYPES as CORE_CHART_TYPES} from '@openpresentation/opf/composition';
+import {catalogDisplay} from '@openpresentation/opf/catalog';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {CHART_TYPES, CHARTEX_FALLBACK, resolveChartType} from '../dist/chart-types.js';
+
+// OPF 0.15: chart types are an engine vocabulary (core CHART_TYPES); their catalog records (Open XML and renderer mappings)
+// are gallery display metadata in the opt-in snapshot's catalogDisplay.chartTypes.
+const chartTypeRecords = Array.isArray(catalogDisplay.chartTypes) ? catalogDisplay.chartTypes : Object.entries(catalogDisplay.chartTypes).map(([id, record]) => ({id, ...record}));
 
 const decoder = new TextDecoder();
 const categoryData = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
@@ -87,22 +92,21 @@ for (const [id, want] of Object.entries(expected)) {
   checked++;
 }
 
-// The retired ids (deprecated aliases and the -3x spellings) are outside the catalog now: the legacy heuristic, not an alias.
-for (const id of ['stacked-column-3x', 'clustered-column', 'sparkline', 'dot-plot', 'australia', 'treemap-2x']) assert.equal(resolveChartType(id).id, null, `${id} is not a chart type`);
-
-// Ids outside the core catalog keep the legacy heuristic.
-for (const [id, element, barDir] of [['custom-kpi', 'barChart', 'col'], ['my-bar', 'barChart', 'bar'], ['trend-line', 'lineChart', undefined], ['donut', 'doughnutChart', undefined]]) {
-  const got = construct((await exportChart(id, categoryData)).xml);
-  assert.equal(got.element, element, id);
-  if (barDir) assert.equal(got.barDir, barDir, id);
+// OPF 0.15: chart.type is a schema enum (core CHART_TYPES). The retired ids (deprecated aliases, the -3x spellings) and any
+// other id are no chart type: the table does not resolve them and export rejects the document at validation.
+for (const id of ['stacked-column-3x', 'clustered-column', 'sparkline', 'dot-plot', 'australia', 'treemap-2x', 'custom-kpi', 'donut']) {
+  assert.deepEqual(resolveChartType(id), {id: null, spec: undefined}, `${id} is not a chart type`);
+  await assert.rejects(exportChart(id, categoryData), {code: 'invalid-opf'}, `${id}: export rejects it`);
   checked++;
 }
+assert.deepEqual(Object.keys(CHART_TYPES).sort(), [...CORE_CHART_TYPES].sort(), 'the table covers exactly core CHART_TYPES');
 
-// The table agrees with the core catalog (@openpresentation/opf catalogs.chartTypes): the same ids and the catalog's Open XML construct for every classic kept id, both in the table and in the exported part.
-const records = new Map(catalogs.chartTypes.map((record) => [record.id, record]));
-const keptRecords = catalogs.chartTypes;
-assert.deepEqual(catalogs.chartTypes.filter((record) => record.deprecation), [], 'the bundled catalog holds no deprecated record');
+// The table agrees with the core catalog (@openpresentation/opf chartTypeRecords): the same ids and the catalog's Open XML construct for every classic kept id, both in the table and in the exported part.
+const records = new Map(chartTypeRecords.map((record) => [record.id, record]));
+const keptRecords = chartTypeRecords;
+assert.deepEqual(chartTypeRecords.filter((record) => record.deprecation), [], 'the bundled catalog holds no deprecated record');
 assert.deepEqual(Object.keys(CHART_TYPES).sort(), keptRecords.map((record) => record.id).sort(), 'ids match the catalog');
+assert.deepEqual(Object.keys(CHART_TYPES).sort(), [...CORE_CHART_TYPES].sort(), 'ids match core\'s chart.type vocabulary');
 const nativeElement = {bar: 'barChart', line: 'lineChart', area: 'areaChart', pie: 'pieChart', doughnut: 'doughnutChart', scatter: 'scatterChart', radar: 'radarChart'};
 for (const record of keptRecords) {
   const spec = CHART_TYPES[record.id];
@@ -186,11 +190,11 @@ for (const type of ['treemap', 'waterfall', 'funnel', 'histogram', 'pareto']) {
   const {diagnostics} = await diagnosticsFor(type, categoryData);
   assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['series-dropped', 'slides.0.chart']], type);
 }
-// Classic kept ids and legacy ids report nothing.
-for (const type of [...classic, 'custom-kpi']) {
+// Classic ids report nothing.
+for (const type of classic) {
   if (['pie', 'doughnut'].includes(type)) continue;
   const {diagnostics} = await diagnosticsFor(type, dataFor(type in CHART_TYPES ? type : 'column'));
   assert.deepEqual(diagnostics, [], `${type}: no adaptation`);
 }
 
-console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic Aspose chart types, legacy ids) with exact constructs and same-id reimport.`);
+console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic Aspose chart types, rejected retired ids) with exact constructs and same-id reimport.`);

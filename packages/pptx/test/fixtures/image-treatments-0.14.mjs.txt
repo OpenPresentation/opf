@@ -1,0 +1,28 @@
+// How test/fixtures/image-treatments-0.14.json was made (FA-23, 2026-10-07): opf-pptx 0.14.0 with core 0.14.0 exported
+// core's docs/fixtures/image-treatments.opf.json (its 0.14 slide-level image shape) with provenance off; this records each
+// slide's native object order and picture/overlay geometry. Run from an opf-pptx 0.14.0 checkout next to a core 0.14.0 one:
+//   node capture.mjs test/fixtures/image-treatments-0.14.json
+// History: this records 0.14 output; OPF 0.15 replaced that shape (core docs/programs/format-audit/0.15-design.md).
+// fa-stale-refs: history
+import {readFileSync, writeFileSync} from 'node:fs';
+import {unzipSync} from 'fflate';
+import {XMLParser} from 'fast-xml-parser';
+import {toPptx} from '../opf-pptx/dist/index.js';
+const deck = JSON.parse(readFileSync(new URL('../opf/docs/fixtures/image-treatments.opf.json', import.meta.url)));
+const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, preserveOrder:true});
+const flat = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false});
+const bytes = await toPptx(deck, {imageFormat:'preserve', strictAssets:true, provenance:false});
+const entries = unzipSync(bytes);
+const out = {};
+deck.slides.forEach((slide, index) => {
+  const xml = new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]);
+  const order = [...xml.matchAll(/<p:(sp|pic|graphicFrame)>[\s\S]*?<p:cNvPr\b[^>]*\bname="([^"]*)"/g)].map(m => `${m[1]}:${m[2]}`);
+  const pics = [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(([p]) => flat.parse(p)['p:pic']);
+  const overlay = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([s]) => flat.parse(s)['p:sp']).find(s => /overlay/.test(s['p:nvSpPr']['p:cNvPr'].name));
+  const pic = pics.map(p => ({name: p['p:nvPicPr']['p:cNvPr'].name, xfrm: p['p:spPr']['a:xfrm'], geom: p['p:spPr']['a:prstGeom'], ln: p['p:spPr']['a:ln'] ?? null,
+    srcRect: p['p:blipFill']['a:srcRect'] ?? null, blip: Object.fromEntries(Object.entries(p['p:blipFill']['a:blip']).filter(([k]) => !k.startsWith('r:')))}));
+  out[slide.id] = {order, pictures: pic, overlay: overlay ? {xfrm: overlay['p:spPr']['a:xfrm'], geom: overlay['p:spPr']['a:prstGeom'], fill: overlay['p:spPr']['a:solidFill']} : null,
+    background: /<p:bg>[\s\S]*?<\/p:bg>/.exec(xml)?.[0].replace(/r:embed="[^"]+"/, 'r:embed="*"') ?? null};
+});
+writeFileSync(process.argv[2], JSON.stringify(out, null, 1) + '\n');
+console.log(Object.keys(out).length, 'slides captured');

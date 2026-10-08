@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx,fromPptx} from '../dist/index.js';
-import {resolvePresentation} from '@openpresentation/opf-render';
+import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const fonts=await loadFonts({pack: 'base'}),options={fonts};
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>v===undefined?[]:Array.isArray(v)?v:[v];

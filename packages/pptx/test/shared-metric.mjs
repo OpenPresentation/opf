@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {XMLParser} from 'fast-xml-parser';
 import {unzipSync} from 'fflate';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const fonts=await loadFonts({pack: 'office'}),parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});

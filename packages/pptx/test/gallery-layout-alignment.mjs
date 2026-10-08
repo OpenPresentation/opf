@@ -10,14 +10,18 @@ import {readFileSync} from 'node:fs';
 import {unzipSync} from 'fflate';
 import {renderSvg} from '@openpresentation/opf-render';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/gallery-alignment-layouts.json', import.meta.url), 'utf8'));
+// OPF 0.15: the 7 gallery-only records are embedded in their documents under catalogs.default; the 50 others are default
+// catalog records the host registers (zero built-ins), as the gallery itself does.
+const HOST = {catalogs: [defaultCatalog]};
 assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layouts audit A flagged');
 assert.equal(fixture.layouts.filter(layout => layout.status === 'partial').length, 50);
 
 const decoder = new TextDecoder();
-const EXPORT = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
+const EXPORT = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z', ...HOST};
 const PT_PER_EMU = 1 / 12700, PT_PER_PX = 0.75, GATE_PT = 0.02;
 const nativeAlign = {start: 'l', middle: 'ctr', end: 'r'};
 const unescape = text => text.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
@@ -37,7 +41,11 @@ const geometry = xml => [...xml.matchAll(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ex
 const shapeCounts = xml => ({sp: (xml.match(/<p:sp>/g) ?? []).length, pic: (xml.match(/<p:pic>/g) ?? []).length, frame: (xml.match(/<p:graphicFrame>/g) ?? []).length});
 const withoutLayout = document => {
   const base = structuredClone(document);
+  const id = base.slides[0].layout, record = base.catalogs?.default?.layouts?.[id] ?? defaultCatalog.layouts[id];
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
+  // OPF 0.15's default fit is cover (0.14's was contain): a layout's imageFit is kept on the deck, so the comparison still
+  // isolates the alignment the layout changes.
+  if (record?.design?.imageFit) base.design = {...base.design, imageFit: record.design.imageFit};
   return base;
 };
 // The alignment the gallery design asks for, restated independently of core.
@@ -48,10 +56,10 @@ for (const {id, status, document} of fixture.layouts) {
   const slide = document.slides[0];
   assert.equal(slide.layout, id);
   const base = withoutLayout(document);
-  const [svg, baseSvg] = [renderSvg(document, {})[0], renderSvg(base, {})[0]];
+  const [svg, baseSvg] = [renderSvg(document, HOST)[0], renderSvg(base, HOST)[0]];
   const [xml, baseXml] = [await slideXml(document), await slideXml(base)];
-  const bound = resolvePresentation(document, {}).slides[0];
-  assert.equal(bound.layout?.id, id, `${id}: preview resolves the layout`);
+  const bound = resolvePresentation(document, HOST).slides[0];
+  assert.ok(Array.isArray(bound.layout?.placeholders), `${id}: preview resolves the layout (0.15 records are keyed by id and carry none)`);
 
   // 1. Core resolves one alignment per item from the gallery design, for both engines.
   for (const item of bound.geometry.items) assert.equal(item.alignment, expectedAlignment(slide, item.field), `${id}: ${item.path} item.alignment`);
@@ -110,7 +118,7 @@ for (const {id, status, document} of fixture.layouts) {
   //    the alignment design survive re-import.
   const bytes = await toPptx(document, EXPORT);
   assert.ok(Buffer.from(bytes).equals(Buffer.from(await toPptx(document, EXPORT))), `${id}: deterministic export`);
-  const imported = await fromPptx(bytes);
+  const imported = await fromPptx(bytes, HOST);
   assert.equal(imported.slides[0].layout, id, `${id}: re-import keeps the layout id`);
   for (const field of ['titleAlignment', 'contentAlignment']) if (slide.design[field] !== undefined) assert.equal(imported.slides[0].design?.[field], slide.design[field], `${id}: re-import keeps design.${field}`);
   assert.ok(status === 'partial' || status === 'gallery-only');

@@ -3,10 +3,9 @@
 // marker numbers, and the round trip with and without provenance.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {renderSlideSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {composeSlide} from '@openpresentation/opf/composition';
-import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';

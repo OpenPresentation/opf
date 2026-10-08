@@ -3,11 +3,11 @@
 // says how the data was adapted; data that cannot be plotted keeps its placeholder and reports why.
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import {catalogs} from '@openpresentation/opf';
+import {CHART_TYPES as CORE_CHART_TYPES} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {resolveChartType} from '../dist/chart-types.js';
 
-const deck = (type, data) => ({name: 'single column chart', language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Chart', chart: {type, data}, text: 'Body'}]});
+const deck = (type, data) => ({name: 'single column chart', language: 'en', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Chart', chart: {type, data}, text: 'Body'}]});
 async function exported(type, data) {
   const diagnostics = [];
   const bytes = await toPptx(deck(type, data), {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
@@ -55,7 +55,7 @@ assert.equal(binCount(wide.chartex), 10, 'Scott bins for 0..999: 3.49 * 288.8 / 
 assert.equal(chartexValues(wide.chartex)[0].length, 1000);
 
 // The same silent drop applied to every chart type with one data column.
-const types = new Set([...catalogs.chartTypes.map((record) => record.id), 'column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
+const types = new Set([...CORE_CHART_TYPES, 'column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
 for (const type of types) {
   const result = await exported(type, {columns: ['Value'], rows: [[3], [5], [8]]});
   assert.equal(result.charts.length, 1, `${type}: a chart part is exported`);

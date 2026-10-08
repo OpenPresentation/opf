@@ -3,9 +3,16 @@ import {readFile} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {restoreDocumentProvenance} from '../dist/document-provenance.js';
-import {validate, catalogs} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+
+// OPF 0.15 (FA-23): the gallery records the deck names (theme, schemes, title-subtitle) come from the snapshot, which the
+// host registers for export and import; the deck embeds its own layout under catalogs.custom.
+const catalogs = [defaultCatalog];
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs, ...options});
+const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs, ...options});
 
 // FF-32: catalog references, slide layout ids and authoring metadata survive
 // export -> import while the native evidence they produced is unchanged, and a
@@ -14,19 +21,21 @@ const enc = new TextEncoder(), dec = new TextDecoder();
 const png = await readFile(new URL('fixtures/images/wide.png', import.meta.url));
 const pngUri = `data:image/png;base64,${png.toString('base64')}`;
 const logo = 'https://example.com/acme-logo.png';
-const layoutRecord = {...structuredClone(catalogs.layouts.find(record => record.id === 'title-subtitle')), id: 'hero-title', name: 'Hero Title'};
-const unused = {...structuredClone(layoutRecord), id: 'never-used'};
+const layoutRecord = {...structuredClone(defaultCatalog.layouts['title-subtitle']), name: 'Hero Title'};
+for (const key of Object.keys(layoutRecord)) if (key.startsWith('x-')) delete layoutRecord[key];
+const unused = {...structuredClone(layoutRecord), name: 'Never used'};
+const embedded = {custom: {layouts: {'hero-title': layoutRecord}}};
 const source = {
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Provenance deck',
   organization: [{id: 'acme', name: 'Acme', role: 'primary', logo: 'asset:acme-logo'}, {id: 'beta', name: 'Beta', role: 'partner'}],
   speaker: {id: 'alice', name: 'Alice Chen', title: 'VP', organizationId: 'acme'},
-  audience: ['executives', {id: 'board', name: 'Board of directors'}], purpose: 'decide', language: 'japanese', tone: 'formal',
+  audience: ['executives', {id: 'board', name: 'Board of directors'}], purpose: 'decide', language: 'ja', tone: 'formal',
   narrative: 'problem-solution', takeaway: ['Ship it'], duration: 20, tags: ['gallery:test'],
   variables: {risk: '#C0392B'},
   assets: {'acme-logo': {src: logo, alt: 'Acme logo'}, unrelated: 'https://example.com/unused.png'},
   design: {theme: 'bold', colorScheme: 'boost', fontScheme: 'arial', dimensions: {preset: '16:9'}, background: {type: 'solid', color: '#FAFAFA'},
     contentAlignment: 'center'},
-  catalogs: {layouts: {records: [layoutRecord, unused]}},
+  catalogs: {custom: {layouts: {'hero-title': layoutRecord, 'never-used': unused}}},
   slides: [
     {id: 'intro', beat: 'problem', layout: 'hero-title', title: 'Hello', subtitle: 'World', design: {titleAlignment: 'center', contentBox: false}},
     {id: 'body', layout: 'title-subtitle', title: 'Second', subtitle: 'Slide', design: {background: {type: 'solid', color: '#102030'}}},
@@ -65,7 +74,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(document.design, source.design);
   assert.deepEqual(Object.keys(document.metadata).sort(), ['audience', 'duration', 'language', 'narrative', 'organization', 'purpose', 'speaker', 'tags', 'takeaway', 'tone', 'variables']);
   assert.deepEqual(Object.keys(document.assets), ['acme-logo', 'unrelated'], 'The whole asset registry is stored (spec-gap P1).');
-  assert.deepEqual(document.catalogs.layouts.records.map(record => record.id), ['hero-title'], 'Only referenced inline records are stored.');
+  assert.deepEqual(document.catalogs, embedded, 'Only referenced embedded records are stored, in their group.');
   assert.equal(document.native.size.cx, '12192000');
   assert.deepEqual(Object.keys(document.native.colors), ['dk1', 'lt1', 'dk2', 'lt2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6', 'hlink', 'folHlink']);
   assert.equal(document.native.fonts.major.latin, 'Arial Black');
@@ -85,7 +94,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(deck.design, source.design);
   for (const key of ['organization', 'speaker', 'audience', 'purpose', 'language', 'tone', 'narrative', 'takeaway', 'duration', 'tags', 'variables']) assert.deepEqual(deck[key], source[key], key);
   assert.deepEqual(deck.assets, source.assets, 'Unreferenced assets return as authored.');
-  assert.deepEqual(deck.catalogs, {layouts: {records: [layoutRecord]}});
+  assert.deepEqual(deck.catalogs, embedded);
   assert.deepEqual(deck.slides.map(slide => [slide.id, slide.beat, slide.layout]), [['intro', 'problem', 'hero-title'], ['body', undefined, 'title-subtitle'], [undefined, undefined, 'title-subtitle']]);
   assert.deepEqual(deck.slides.map(slide => slide.design), [{titleAlignment: 'center', contentBox: false}, {background: {type: 'solid', color: '#102030'}}, undefined],
     'Inherited backgrounds are not repeated as slide overrides; local ones return as authored.');
@@ -94,6 +103,18 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(again.provenance, []);
   assert.deepEqual(again.deck.design, source.design);
   assert.deepEqual(again.deck.slides.map(slide => slide.layout), ['hero-title', 'title-subtitle', 'title-subtitle']);
+  // The stored slide record names its group, so a pasted slide keeps its record.
+  const record = tagValue(dec.decode(unzipSync(exported)['ppt/tags/opfSlide1.xml']));
+  assert.deepEqual(record.layoutRecord, {group: 'custom', id: 'hero-title', record: layoutRecord});
+  assert.equal(tagValue(dec.decode(unzipSync(exported)['ppt/tags/opfSlide2.xml'])).layoutRecord, undefined, 'a layout that resolves only in a registered catalog stores no record');
+}
+
+// A layout that resolved only in the export's registered catalog restores only where the importer registers it too.
+{
+  const issues = [];
+  const deck = await importPptx(exported, {onDiagnostic: issue => issues.push(issue)});
+  assert.deepEqual(deck.slides.map(slide => slide.layout), ['hero-title', undefined, undefined]);
+  assert.deepEqual(issues.filter(issue => issue.code === 'unresolved-reference').map(issue => issue.path), ['slides.1.layout', 'slides.2.layout']);
 }
 
 // Benign rewrites an editor performs on save do not count as edits.
@@ -188,7 +209,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.equal(stripped.deck.narrative, undefined);
   assert.deepEqual(stripped.deck.slides.map(slide => [slide.id, slide.layout]), [[undefined, 'hero-title'], [undefined, 'title-subtitle'], [undefined, 'title-subtitle']]);
   assert.deepEqual([stripped.deck.slides[0].design.titleAlignment, stripped.deck.slides[0].design.contentBox], ['center', false]);
-  assert.deepEqual(stripped.deck.catalogs, {layouts: {records: [layoutRecord]}});
+  assert.deepEqual(stripped.deck.catalogs, embedded);
   // With no customer data at all it is an ordinary foreign deck.
   const foreign = await read(modify(exported, entries => {
     for (const path of Object.keys(entries).filter(path => /^ppt\/(presentation|slides\/slide\d+)\.xml$/.test(path))) text(entries, path, xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, ''));
@@ -268,7 +289,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // Asset-backed backgrounds: the tag references the exported media part instead
 // of copying the bytes, and the restored asset re-exports the same picture.
 {
-  const deck = {name: 'Asset background', assets: {bg: {src: pngUri, alt: 'Backdrop'}}, design: {fontScheme: 'arial', background: {type: 'image', image: {src: 'asset:bg'}}},
+  const deck = {name: 'Asset background', assets: {bg: {src: pngUri, alt: 'Backdrop'}}, design: {fontScheme: 'arial', background: {type: 'image', src: 'asset:bg'}},
     slides: [{layout: 'title-subtitle', title: 'One', subtitle: 'Two'}, {layout: 'title-subtitle', title: 'Three', subtitle: 'Four'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
@@ -349,13 +370,14 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const refs = unzipSync(await toPptx({...structuredClone(source), audience: ['executives', 'Series B investors']}, {provenance: 'references-only'}));
   const document = tagValue(dec.decode(refs['ppt/tags/opfDocument.xml']));
   assert.deepEqual(document.design, source.design);
-  assert.deepEqual(document.metadata, {narrative: 'problem-solution', tone: 'formal', purpose: 'decide', language: 'japanese'});
+  // A language tag is stored; an audience with free text ('Series B investors' is no reference) is not.
+  assert.deepEqual(document.metadata, {narrative: 'problem-solution', tone: 'formal', purpose: 'decide', language: 'ja'});
   assert.equal(document.assets, undefined);
-  assert.deepEqual(document.catalogs.layouts.records.map(record => record.id), ['hero-title']);
+  assert.deepEqual(document.catalogs, embedded);
   const slide = tagValue(dec.decode(refs['ppt/tags/opfSlide1.xml']));
   assert.deepEqual({id: slide.id, beat: slide.beat, layout: slide.layout}, {id: undefined, beat: 'problem', layout: 'hero-title'});
   for (const secret of ['Alice', 'Acme', 'Ship it', 'Series B']) assert.ok(!JSON.stringify([document, slide]).includes(secret), secret);
-  const imageOnly = unzipSync(await toPptx({slides: [{title: 'One', layout: 'title', design: {background: {type: 'image', image: {src: pngUri}}}}]}, {provenance: 'references-only'}));
+  const imageOnly = unzipSync(await toPptx({slides: [{title: 'One', layout: 'title', design: {background: {type: 'image', src: pngUri}}}]}, {provenance: 'references-only'}));
   assert.equal(tagValue(dec.decode(imageOnly['ppt/tags/opfSlide1.xml'])).design, undefined, 'references-only stores no image sources');
   await assert.rejects(toPptx(structuredClone(source), {provenance: 'everything'}), {code: 'invalid-provenance-option'});
 }
@@ -377,13 +399,13 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const slides = paths.map(path => ({path, root: xmlParser.parse(dec.decode(entries[path]))['p:sld'], relationships: rels(path)}));
   const imported = {name: 'x', slides: [{}, {}, {}]};
   const before = structuredClone(imported);
-  const result = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels: rels('ppt/presentation.xml'), slides}, () => {});
+  const result = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels: rels('ppt/presentation.xml'), slides, catalogs}, () => {});
   assert.deepEqual(imported, before, 'Reading provenance does not modify the document.');
   assert.deepEqual(result.slides.map(slide => [slide.layout, slide.structure]), [['hero-title', 'match'], ['title-subtitle', 'match'], ['title-subtitle', 'match']]);
   assert.deepEqual(result.slides[0].record.design, {titleAlignment: 'center', contentBox: false});
   assert.equal(result.slides[0].record.native, undefined);
   assert.deepEqual(result.slides[0].catalogRecord, layoutRecord);
-  assert.equal(result.slides[1].catalogRecord, undefined, 'Bundled layouts need no stored record.');
+  assert.equal(result.slides[1].catalogRecord, undefined, 'A layout from a registered catalog needs no stored record.');
 }
 
 console.log('Document provenance passed: package shape, full reference/metadata/layout round trip and re-export, benign rewrites, theme color/font, size, arrangement and background edits with specific diagnostics, duplicated slides, stripped/damaged/invalid tags and per-field fallback, shared furniture tag lists, asset-backed backgrounds via media parts, size limits and omitted-field records, provenance modes and the per-slide layout contract.');

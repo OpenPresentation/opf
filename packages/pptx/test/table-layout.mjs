@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { unzipSync } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
-import { toPptx } from '../dist/index.js';
+// OPF 0.15: the gallery ids these decks name (roboto, classic) resolve from the registered default catalog.
+import { renderSlideSvg, toPptx } from './helpers/default-catalog.mjs';
 
 const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false });
 const fonts = await loadFonts({pack: 'office'});

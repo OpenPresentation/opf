@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import {resolveSlideContext} from '@openpresentation/opf';
-import {toPptx} from '../dist/index.js';
+import {resolveSlideContext as coreResolveSlideContext} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {toPptx as exportPptx} from '../dist/index.js';
+
+// OPF 0.15: the font schemes this deck names come from the gallery snapshot, which a host registers explicitly; the
+// exporter and core's context get the same catalogs.
+const catalogs = [defaultCatalog];
+const resolveSlideContext = (presentation, index) => coreResolveSlideContext(presentation, index, {catalogs});
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs, ...options});
 
 // RR-55: the exporter composes every slide with the options of core's resolveSlideContext, so the deck's resolved font
 // families (slide design, then deck design, then theme, then the engine default) are the ones the layout is measured in.
@@ -53,19 +60,22 @@ assert.ok(!georgia.families.has('Aptos') && !georgia.families.has('Roboto'), 'a 
 const estimated = unzipSync(await toPptx({...deck, slides: [deck.slides[1]]}));
 assert.ok(strFromU8(estimated['ppt/slides/slide1.xml']).includes(`typeface="${resolveSlideContext(deck, 1).options.fontFamilies.body}"`));
 
-// A reference that matches no record is reported once per place it is written, from core's context, and never refuses the export.
+// A reference that resolves nowhere is reported once per place it is written, from core's context, and never refuses the export.
 {
   const diagnostics = [];
   const deck = {name: 'Unknown ids', design: {theme: 'no-such-theme', colorScheme: 'no-such-scheme'}, slides: [{layout: 'no-such-layout', title: 'One', text: 'a'}, {title: 'Two', text: 'b'}]};
   const bytes = await toPptx(deck, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
-  const where = code => diagnostics.filter(diagnostic => diagnostic.code === code).map(({path, id}) => ({path, id}));
-  assert.deepEqual(where('unresolved-theme'), [{path: 'design.theme', id: 'no-such-theme'}]);
-  assert.deepEqual(where('unresolved-color-scheme'), [{path: 'design.colorScheme', id: 'no-such-scheme'}]);
-  assert.deepEqual(where('unresolved-layout'), [{path: 'slides.0.layout', id: 'no-such-layout'}]);
-  // The fallbacks are the default theme and colour scheme: the second slide is the same as in a deck that names them.
+  const unresolved = diagnostics.filter(diagnostic => diagnostic.code === 'unresolved-reference').map(({kind, reference, path, fallback}) => ({kind, reference, path, fallback}));
+  assert.deepEqual(unresolved, [
+    {kind: 'themes', reference: 'no-such-theme', path: 'design.theme', fallback: 'engine-default'},
+    {kind: 'colorSchemes', reference: 'no-such-scheme', path: 'design.colorScheme', fallback: 'engine-default'},
+    {kind: 'layouts', reference: 'no-such-layout', path: 'slides.0.layout', fallback: 'automatic'},
+  ]);
+  // The fallbacks are the engine defaults (minimal's drawing fields, cool-horizon's slots): the second slide is the same as in a
+  // deck that names those records.
   const named = await toPptx({...deck, design: {theme: 'minimal', colorScheme: 'cool-horizon'}});
   const slide = value => strFromU8(unzipSync(value)['ppt/slides/slide2.xml']);
-  assert.equal(slide(bytes), slide(named), 'unknown theme and colour scheme export as the defaults');
+  assert.equal(slide(bytes), slide(named), 'unknown theme and colour scheme export as the engine defaults');
 }
 
 // A layout-less slide is composed with no layout record: its package equals the one core's context describes (automatic composition).

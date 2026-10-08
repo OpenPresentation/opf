@@ -3,7 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {FONT_WEIGHT_WORDS, isFaceStyleSuffix, splitWeightFace} from '../src/font-weights.js';
 
 // The exporter names a chosen family's weight faces by their native style-link

@@ -4,10 +4,9 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 import {decodeTextTag} from '../dist/code-provenance.js';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation} from '@openpresentation/opf-render/svg';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),fontOptions = {fonts: await loadFonts()},results=[];
 const fixtures=[

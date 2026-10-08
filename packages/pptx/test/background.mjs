@@ -68,7 +68,8 @@ assert.equal((await importTagged(shorthandBytes)).slides[0].design.background,'#
 const shorthand=await fromPptx(shorthandBytes);
 close(shorthand.slides[0].design.background.opacity,128/255);
 const themeFill={type:'gradient',gradient:{angle:90,stops:[{position:0,color:'#000000'},{position:1,color:'#FFFFFF'}]}};
-const themed=await fromPptx(await toPptx({design:{theme:{id:'minimal',background:themeFill}},slides:[{}, {design:{background:'#FF0000'}}]}));
+// A theme's background (OPF 0.15: design.theme is a reference; the document defines this theme in its custom group).
+const themed=await fromPptx(await toPptx({design:{theme:'gradient-theme'},catalogs:{custom:{themes:{'gradient-theme':{name:'Gradient',background:themeFill}}}},slides:[{}, {design:{background:'#FF0000'}}]}));
 assert.equal(themed.slides[0].design.background.type,'gradient');assert.equal(themed.slides[1].design.background.color,'#FF0000');
 const rgba={type:'gradient',gradient:{angle:45,stops:[{position:0,color:'#FF000080'},{position:1,color:'#0000FF'}]},opacity:.5};
 const rgbaBytes=await toPptx({slides:[{design:{background:rgba}}]});

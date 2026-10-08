@@ -118,7 +118,7 @@ const attr = (xml, element) => new RegExp(`<c:${element} val="([^"]*)"/>`).exec(
 
 // 4. Right to left: both category axes run from the right, so the secondary axis moves to the left with them.
 {
-  const {xml} = await exportDeck(combo({secondaryAxis: ['Margin']}), {language: 'arabic'});
+  const {xml} = await exportDeck(combo({secondaryAxis: ['Margin']}), {language: 'ar'});
   assert.deepEqual(chartOrderProblems(xml), []);
   assert.deepEqual(groups(xml, 'catAx').map(body => attr(body, 'orientation')), ['maxMin', 'maxMin']);
 }

@@ -7,10 +7,14 @@ import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs} from '@openpresentation/opf';
-import {fromPptx, toPptx} from '../dist/index.js';
+import {catalogDisplay} from '@openpresentation/opf/catalog';
+import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
 import {CHARTEX_CONTENT_TYPES, CHARTEX_RELATIONSHIP_TYPES, chartexPointColors, columnLetters, scottBinCount} from '../dist/chartex.js';
+
+// OPF 0.15: chart types are an engine vocabulary (core CHART_TYPES); their catalog records (Open XML and renderer mappings)
+// are gallery display metadata in the opt-in snapshot's catalogDisplay.chartTypes.
+const chartTypeRecords = Array.isArray(catalogDisplay.chartTypes) ? catalogDisplay.chartTypes : Object.entries(catalogDisplay.chartTypes).map(([id, record]) => ({id, ...record}));
 
 const CX = 'http://schemas.microsoft.com/office/drawing/2014/chartex';
 const categoryData = {columns: ['Region', 'Value'], rows: [['North', 42], ['South', 31], ['East', -8], ['West', 19]]};
@@ -222,7 +226,7 @@ for (const id of chartexIds) {
 // ---------------------------------------------------------------------------
 // Catalog agreement: the layoutIds follow the core catalog's Open XML mapping (element, extension, Aspose ChartType), in the table and in the part.
 const layoutByElement = {treemapChart: 'treemap', histogramChart: 'clusteredColumn', boxWhiskerChart: 'boxWhisker', waterfallChart: 'waterfall', funnelChart: 'funnel', mapChart: 'regionMap'};
-const extensionRecords = catalogs.chartTypes.filter((record) => !record.deprecation && record.mappings?.openxml?.composition === 'extension');
+const extensionRecords = chartTypeRecords.filter((record) => !record.deprecation && record.mappings?.openxml?.composition === 'extension');
 assert.deepEqual(extensionRecords.map((record) => record.id).sort(), [...chartexIds].sort(), 'the chartex family is exactly the catalog extension records');
 for (const record of extensionRecords) {
   const spec = CHART_TYPES[record.id];
@@ -458,4 +462,4 @@ assert.deepEqual(chartexPointColors('waterfall', [1, -2, 0, null], ['UP', 'DOWN'
 assert.deepEqual(chartexPointColors('funnel', [1, 2], ['A']), [null, null]);
 assert.equal(resolveChartType('treemap-3x').id, null, 'a retired alias is outside the catalog');
 
-console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core catalogs.chartTypes, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' stays byte-identical to main).`);
+console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' stays byte-identical to main).`);

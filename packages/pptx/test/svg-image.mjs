@@ -13,8 +13,8 @@ import {fileURLToPath} from 'node:url';
 import {XMLValidator} from 'fast-xml-parser';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import sharp from 'sharp';
-import { renderSlideSvg, resolvePresentation, svgToPng } from '@openpresentation/opf-render';
-import {fromPptx, toPptx} from '../dist/index.js';
+import {svgToPng} from '@openpresentation/opf-render';
+import {renderSlideSvg, resolvePresentation, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {prepareSvg, svgDataUriBytes, svgIntrinsicSize, svgRasterScale} from '../dist/svg-image.js';
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
@@ -82,8 +82,8 @@ async function assertNative(entries, index, picture, svgText, label, ours = true
 
 // ---- 1. A content image: the same frame as the raster path (the preview's box and fit), contain and crop.
 for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', tall, tallPng, .5], ['square', square, squarePng, 1]]) {
-  for (const fill of ['fit', 'crop']) {
-    const deck = {design: {imageFill: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: svg, alt: `${name} drawing`}}]};
+  for (const fill of ['contain', 'cover']) {
+    const deck = {design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: svg, alt: `${name} drawing`}}]};
     const reference = {...deck, slides: [{...deck.slides[0], image: {src: raster, alt: `${name} drawing`}}]};
     const {entries, diagnostics} = await open(deck, {strictAssets: true});
     const {entries: rasterEntries} = await open(reference, {strictAssets: true});
@@ -92,7 +92,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     const [expected] = pictures(slideXml(rasterEntries)).filter(item => item.name === 'OPF image 1');
     assert.equal(picture.xfrm, expected.xfrm, `${name}/${fill}: SVG frame equals the raster frame`);
     assert.equal(picture.srcRect, expected.srcRect, `${name}/${fill}: SVG crop equals the raster crop`);
-    if (fill === 'fit') near(picture.w / picture.h, aspect, `${name} fitted aspect`, .005);
+    if (fill === 'contain') near(picture.w / picture.h, aspect, `${name} fitted aspect`, .005);
     const text = decoder.decode(svgDataUriBytes(svg));
     const {png} = await assertNative(entries, 0, picture, text, `${name}/${fill}`);
     near(png.width / png.height, aspect, `${name} fallback aspect`, .02);
@@ -115,8 +115,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 3. Every place an image appears.
 {
-  const logoDeck = {design: {logo: wide, background: light, watermark: {src: square, opacity: 1}, footer: {left: {logo: true}}},
-    slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', text: 'Copy', image: {src: wide, alt: 'Wide'}, design: {slideImage: {src: tall, position: 'right'}}}]};
+  const logoDeck = {design: {logo: wide, imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {left: {logo: true}}},
+    slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'right'}}]}]};
   const {entries, diagnostics, bytes} = await open(logoDeck);
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   const cover = pictures(slideXml(entries, 0)), body = pictures(slideXml(entries, 1));
@@ -128,13 +128,13 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const geometry = resolvePresentation(logoDeck).slides[0].geometry;
   const scale = Math.min(geometry.logo.box.width / 120, geometry.logo.box.height / 60);
   near(logo.w, 120 * scale, 'logo width'); near(logo.h, 60 * scale, 'logo height'); near(logo.x, geometry.logo.box.x, 'logo left edge');
-  // Opaque watermark (opacity 1): native. Slide image without treatments: native.
+  // Opaque watermark (opacity 1): native. A placed image block without treatments: native.
   const [watermark] = named(cover, 'OPF watermark');
   await assertNative(entries, 0, watermark, squareText, 'watermark');
-  const [slideImage] = named(body, 'OPF slide image');
-  await assertNative(entries, 1, slideImage, tallText, 'slide image');
+  const placed = body.find(item => item.svgEmbed && strFromU8(entries[target(entries, 1, item.svgEmbed).part]) === tallText);
+  await assertNative(entries, 1, placed, tallText, 'placed image block');
   // The footer logo (generated image part) is native too, and a body image.
-  const footerLogos = body.filter(item => item.svgEmbed && item.name?.startsWith('OPF image'));
+  const footerLogos = body.filter(item => item !== placed && item.svgEmbed && item.name?.startsWith('OPF image'));
   assert.ok(footerLogos.length >= 2, 'footer logo and body image are native SVG pictures');
   for (const picture of footerLogos) await assertNative(entries, 1, picture, wideText, `slide 2 ${picture.name}`);
   // One SVG part per distinct source: the wide logo appears on both slides and the footer, as one media part.
@@ -142,12 +142,12 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const wideParts = svgParts.filter(part => strFromU8(entries[part]) === wideText);
   assert.equal(wideParts.length, 1, 'identical SVG media parts are embedded once');
   assert.equal(new Set(svgParts).size, svgParts.length);
-  // The rebuilt package re-imports: the logo, watermark and slide image return as design fields with SVG sources.
+  // The rebuilt package re-imports: the logo and watermark return as design fields, the placed block with its SVG source.
   const reports = [];
   const imported = await fromPptx(bytes, {onDiagnostic: item => reports.push(item)});
   assert.equal(imported.design.logo, wide, 'design.logo returns as the authored SVG');
   assert.equal(imported.design.watermark.src, square);
-  assert.equal(imported.slides[1].design.slideImage.src, tall);
+  assert.equal(imported.slides[1].blocks.find(block => block.placement)?.image.src, tall);
   assert.deepEqual(reports.filter(item => /invalid|unsupported/.test(item.code)), [], 'no provenance complaint for SVG pictures');
   const rerun = await toPptx(imported, {...FIXED});
   assert.equal(pictures(slideXml(unzipSync(rerun), 0)).filter(item => item.svgEmbed).length, 3, 're-export keeps the native SVG logo, watermark and footer logo on the cover');
@@ -158,28 +158,28 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 // (native check 2026-10-01), so those stay native, the effect before the SVG extension; a duotone recolor and a non-rectangular mask
 // are unconfirmed on an SVG picture and keep the PNG (svg-image-rasterized). A picture bullet is a raster (a:buBlip).
 {
-  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', design: {slideImage: {src: square, position: 'left', opacity: .5, recolor: 'grayscale', border: {color: '#c0392b', width: 6}}}}]};
+  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, opacity: .5, recolor: 'grayscale', border: {color: '#c0392b', width: 6}}]}]};
   const {entries, diagnostics, bytes} = await open(deck);
   const xml = slideXml(entries);
   assert.deepEqual(diagnostics.filter(item => item.code === 'svg-image-rasterized'), []);
-  const [image, watermark] = pictures(xml);
+  const watermark = pictures(xml).find(item => item.name === 'OPF watermark'), image = pictures(xml).find(item => /^OPF image \d+$/.test(item.name));
   assert.ok(watermark.svgEmbed && image.svgEmbed, 'both stay native SVG pictures');
   assert.match(watermark.xml, /<a:blip r:embed="rId\d+"><a:alphaModFix amt="30000"\/><a:extLst>/);
   assert.match(image.xml, /<a:blip r:embed="rId\d+"><a:grayscl\/><a:alphaModFix amt="50000"\/><a:extLst>/);
   assert.match(image.xml, /<a:ln w="\d+"[^>]*>/, 'the border');
   await assertNative(entries, 0, watermark, wideText, 'translucent watermark');
-  await assertNative(entries, 0, image, squareText, 'treated slide image');
-  // The effects are still identity: an unchanged export imports as the design fields with their treatments.
+  await assertNative(entries, 0, image, squareText, 'treated image block');
+  // The effects are still identity: an unchanged export imports as the design field and the image block with their treatments.
   const imported = await fromPptx(bytes);
   assert.equal(imported.design.watermark.src, wide);
   assert.equal(imported.design.watermark.opacity, .3);
-  assert.equal(imported.slides[0].design.slideImage.src, square);
-  assert.equal(imported.slides[0].design.slideImage.opacity, .5);
-  assert.equal(imported.slides[0].design.slideImage.recolor, 'grayscale');
+  assert.equal(imported.slides[0].blocks[0].image.src, square);
+  assert.equal(imported.slides[0].blocks[0].opacity, .5);
+  assert.equal(imported.slides[0].blocks[0].recolor, 'grayscale');
   for (const treatment of [{recolor: {dark: '#102030', light: '#f0e0d0'}}, {shape: 'circle'}]) {
-    const result = await open({design: {background: light}, slides: [{title: 'T', design: {slideImage: {src: square, position: 'left', ...treatment}}}]});
+    const result = await open({design: {background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, ...treatment}]}]});
     assert.ok(!/svgBlip/.test(slideXml(result.entries)), `${Object.keys(treatment)}: raster`);
-    assert.deepEqual(result.diagnostics.filter(item => item.code === 'svg-image-rasterized').map(item => item.path), ['slides.0.design.slideImage']);
+    assert.deepEqual(result.diagnostics.filter(item => item.code === 'svg-image-rasterized').map(item => item.path), ['slides.0.blocks.0.image']);
   }
   checked++;
 }
@@ -201,7 +201,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 5. An image background is the PNG raster at the slide's size (a slide background fill carries no SVG).
 {
-  const deck = {design: {background: {type: 'image', image: {src: wide}}}, slides: [{title: 'A'}]};
+  const deck = {design: {background: {type: 'image', src: wide}}, slides: [{title: 'A'}]};
   const {entries, diagnostics} = await open(deck);
   assert.deepEqual(diagnostics, []);
   const xml = slideXml(entries);
@@ -340,8 +340,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const deck = {design: {logo: wide, watermark: {src: square, opacity: 1}, header: {right: {image: {src: tall, alt: 'Icon'}}}, footer: {left: {logo: true}}, background: light},
     slides: [
       {title: 'Cover', layout: 'title'},
-      {title: 'Body', text: 'Copy', image: {src: wide, alt: 'Wide'}, design: {slideImage: {src: tall, position: 'right', fill: 'fit'}}},
-      {title: 'Slide image crop', text: 'Copy', design: {slideImage: {src: wide, position: 'left', fill: 'crop'}}},
+      {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, fit: 'contain', placement: {edge: 'right'}}]},
+      {title: 'Placed image cover', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: wide, fit: 'cover', placement: {edge: 'left'}}]},
       {title: 'Blocks', blocks: [{image: {src: square, alt: 'Square'}}, {text: 'Beside'}]},
     ]};
   const {bytes} = await open(deck);
@@ -356,11 +356,11 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     assert.deepEqual(reports.filter(item => /^invalid-|^unsupported-image-(?!crop)/.test(item.code)), [], `${label}: no provenance complaint`);
     assert.equal(imported.design.logo, wide, `${label}: design.logo`);
     assert.equal(imported.design.watermark?.src, square, `${label}: design.watermark`);
-    assert.equal(imported.slides[1].design?.slideImage?.src, tall, `${label}: slide image (fit)`);
-    assert.equal(imported.slides[2].design?.slideImage?.src, wide, `${label}: slide image (crop)`);
+    assert.equal(imported.slides[1].blocks?.find(block => block.placement)?.image.src, tall, `${label}: placed image (contain)`);
+    assert.equal(imported.slides[2].blocks?.find(block => block.placement)?.image.src, wide, `${label}: placed image (cover)`);
     const text = JSON.stringify(imported);
     assert.ok(!text.includes('PowerPoint image:'), `${label}: no picture was dropped to a text note`);
-    assert.equal(imported.slides[1].image?.src ?? imported.slides[1].blocks?.find(block => block.image)?.image.src, wide, `${label}: content image`);
+    assert.equal(imported.slides[1].image?.src ?? imported.slides[1].blocks?.find(block => block.image && !block.placement)?.image.src, wide, `${label}: content image`);
     assert.equal(imported.slides[3].blocks?.find(block => block.image)?.image.src ?? imported.slides[3].image?.src, square, `${label}: block image`);
     assert.ok(text.includes(tall) && JSON.stringify(imported.design).includes('"header"') || JSON.stringify(imported.slides).includes(tall), `${label}: the header image returns`);
     // Edited after the save (the watermark moved): it is no longer the design field but is not lost: it imports as an ordinary SVG image.
@@ -379,19 +379,19 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 8. Preview parity: the export frame is the rectangle the preview draws for the same picture.
 {
-  // The preview draws an SVG data URI as an image in the content box (preserveAspectRatio meet, or slice for crop) once the
+  // The preview draws an SVG data URI as an image in the content box (preserveAspectRatio meet, or slice for cover) once the
   // renderer supports it; the raster of the same proportions is the control either way.
-  for (const fill of ['fit', 'crop']) {
-    const make = source => ({design: {imageFill: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
+  for (const fill of ['contain', 'cover']) {
+    const make = source => ({design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
     const preview = renderSlideSvg(make(wide), 0, {trace: true}), control = renderSlideSvg(make(widePng), 0, {trace: true});
     const draws = /<image\b/.test(preview);
     const {entries} = await open(make(wide));
     const [picture] = pictures(slideXml(entries));
     const image = (draws ? preview : control).match(/<image\b[^>]*>/)[0];
     const box = Object.fromEntries(['x', 'y', 'width', 'height'].map(name => [name, Number(image.match(new RegExp(`\\s${name}="([^"]+)"`))[1])]));
-    const scale = (fill === 'crop' ? Math.max : Math.min)(box.width / 120, box.height / 60);
+    const scale = (fill === 'cover' ? Math.max : Math.min)(box.width / 120, box.height / 60);
     const drawn = {w: 120 * scale, h: 60 * scale};
-    if (fill === 'fit') {
+    if (fill === 'contain') {
       near(picture.w, drawn.w, 'frame width', 1); near(picture.h, drawn.h, 'frame height', 1);
       near(picture.x, box.x + (box.width - drawn.w) / 2, 'frame x', 1); near(picture.y, box.y + (box.height - drawn.h) / 2, 'frame y', 1);
     } else {

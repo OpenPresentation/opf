@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 const fonts = await loadFonts({pack: 'office'}), decoder = new TextDecoder(), encoder = new TextEncoder();
 const options = {fonts};

@@ -1,4 +1,4 @@
-import type { Finding, FontSchemeDiagnostic, Fonts, LayoutDiagnostic, SlideContextReferenceDiagnostic } from "@openpresentation/opf";
+import type { Catalog, Finding, Fonts, LayoutDiagnostic, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
 export declare const packageName = "@openpresentation/opf-pptx";
 
 export declare const releaseLane: Readonly<{
@@ -50,7 +50,7 @@ export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; pat
 export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" }
 /** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */
 export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; message: string }
-/** An SVG slide image with a duotone recolor or a non-rectangular shape exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */
+/** An SVG image block with a duotone recolor or a non-rectangular shape (or an SVG image background with the tile fit) exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */
 export interface SvgImageRasterizedDiagnostic { code: "svg-image-rasterized"; path: string; message: string }
 /**
  * The chart data was reshaped to export a native chart: a single value column was plotted against row numbers; a one-series construct
@@ -119,8 +119,8 @@ export interface ToPptxOptions {
   fonts?: Fonts;
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
-  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base, and, from core's slide context, `unresolved-theme`, `unresolved-color-scheme` and `unresolved-layout` (once per reference path) when an id matches no record: the default theme (`minimal`) and colour scheme (`cool-horizon`) are used, and a slide whose layout is unknown, like one with no layout, is composed with no layout record. None of them refuses the export. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | SlideContextReferenceDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -134,6 +134,13 @@ export interface ToPptxOptions {
   svgRasterizer?: (svg: string, size: { width: number; height: number; scale: number; text: boolean }) => Uint8Array | Promise<Uint8Array>;
   seed?: number;
   strictAssets?: boolean;
+  /**
+   * Strict reference policy (OPF 0.15). When true, a layout, theme, colour-scheme or font-scheme reference that resolves
+   * nowhere throws `OPFPptxError` with code `unresolved-reference` (its `path` is the first reference's, its `diagnostics`
+   * core's `unresolved-reference` diagnostics) instead of composing automatically or drawing with the engine default.
+   * Default: the value of `strictAssets`.
+   */
+  strictReferences?: boolean;
   timestamp?: string;
   /**
    * ZIP calendar timestamps, including embedded workbooks, use UTC fields at
@@ -150,21 +157,28 @@ export interface ToPptxOptions {
    * PowerPoint updates on open. Without it a current date is reported as unresolved content.
    */
   date?: string;
-  /** Host-supplied catalog records, as in opf-render. Currently consulted for socialPlatforms (generated socials furniture). */
-  catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
-  /** Records for presentation `catalogs.<kind>.source` URLs (a single source or each entry of an ordered search path), as in opf-render. Currently consulted for socialPlatforms. */
-  catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
+  /**
+   * The catalogs the host registered (core `Catalog[]`, as for opf-render and core's `resolveSlideContext`): each is matched
+   * against a document group's `catalogs.<group>.source`, and the first is the host default that bare ids use when the document
+   * omits `catalogs.default`. Never fetched. Every reference (slide layouts, themes, colour and font schemes) resolves in the
+   * document's embedded records first, then here; omitted or `[]`, only embedded records resolve. Register the gallery snapshot
+   * explicitly with `catalogs: [defaultCatalog]` from `@openpresentation/opf/catalog`.
+   */
+  catalogs?: readonly Catalog[];
 }
 
 export interface FromPptxOptions {
-  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a slide layout id that resolves to no inline or bundled record reports `unresolved-layout-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id`, and a footer section text that disagrees with PowerPoint's section list `section-reference-changed` (docs/document-roundtrip.md). */
+  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a stored slide layout reference that resolves neither in the stored document catalogs, nor in the slide's own stored record, nor in `catalogs` reports `unresolved-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id`, and a footer section text that disagrees with PowerPoint's section list `section-reference-changed` (docs/document-roundtrip.md). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
-  /** The export's host catalog records (as in ToPptxOptions). Currently used to recognize unedited socials lines, so authored handles return. */
-  catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
-  /** The export's records for presentation `catalogs.<kind>.source` URLs (as in ToPptxOptions). Currently used for socialPlatforms. */
-  catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
+  /**
+   * The catalogs the host registered (core `Catalog[]`, as in ToPptxOptions; never fetched). Theme and colour-scheme recovery
+   * (FF-24) matches the package's theme against the first one, the host default: an exact colour-scheme match imports as its
+   * bare id and a corroborated theme name as `design.theme`. Without catalogs the colour scheme imports as an inline object and
+   * no theme id is recovered. A stored slide layout reference also resolves here.
+   */
+  catalogs?: readonly Catalog[];
   /**
    * Opt in to raw per-shape signals (see PptxSignals). `true` uses the default limits; an object lowers or raises them.
    * With it, `fromPptx` resolves to `{presentation, signals}`; without it (the default, also `false`/`null`) it resolves
@@ -178,8 +192,8 @@ export declare class OPFPptxError extends Error {
   readonly details: Record<string, unknown>;
   /** The `error` findings of the `format` check that refused the input or the imported presentation (`invalid-opf`, `invalid-import-opf`), or the variable errors (`unfilled-variables`, `invalid-variables`). */
   readonly findings?: Finding[];
-  /** The layout diagnostics behind a `layout-overflow` error. */
-  readonly diagnostics?: LayoutDiagnostic[];
+  /** The layout diagnostics behind a `layout-overflow` error, or core's `unresolved-reference` diagnostics behind a strict-export `unresolved-reference` error. */
+  readonly diagnostics?: LayoutDiagnostic[] | UnresolvedReferenceDiagnostic[];
   readonly path?: string;
   constructor(code: string, message: string, details?: Record<string, unknown>);
 }
@@ -390,7 +404,8 @@ export interface PptxOutlineSignal extends PptxColor {
 export interface PptxOpfLink {
   /**
    * "block" fed a block (`path`, `blockType`); "title", "subtitle" and "tag" fed that slide field. Other roles name a shape the
-   * importer consumed without a block of its own: "furniture" (footer, date, number, section), "slide-image", "watermark", "logo",
+   * importer consumed without a block of its own: "furniture" (footer, date, number, section), "background" (the picture of an image background),
+   * "image-overlay" (the overlay shape of an image background or image block), "watermark", "logo",
    * and the members of an OPF-tagged group ("code", "metric", "quote", "timeline", "media", "card-frame").
    */
   role: string;
@@ -489,7 +504,7 @@ export type ThemeScriptSelection = Partial<Record<"major" | "minor", Partial<Rec
 export type TypefaceViolationReason =
   | "foreign-typeface"
   | "foreign-theme-reference"
-  | "unresolved-theme-reference"
+  | "theme-reference-unresolved"
   | "empty-theme-reference"
   | "empty-typeface"
   | "foreign-script-supplement"

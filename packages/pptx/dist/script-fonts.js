@@ -6,7 +6,12 @@
 //
 // When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
 // rtl) and reports `language-export-unavailable`.
-import {paragraphDirection, physicalAlignment, resolveScriptFonts as resolver} from "@openpresentation/opf/composition";
+import {paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
+
+// OPF 0.15 (FA-23): core resolves the font-scheme references a deck or a language object names against the document's
+// catalogs and the host's registered `catalogs` (Catalog[]), the same option the slide context takes. `catalogs` is passed
+// only when the host gave one, so core's own default applies otherwise.
+const resolver = (input, options = {}, catalogs = undefined) => coreResolveScriptFonts(input, catalogs === undefined ? options : {...options, catalogs});
 
 // RR-05: authored alignment is logical for right-to-left text (`left` is the start edge). Core owns the rule, and the
 // paragraph-direction rule is the one the renderer shares (core FF-07).
@@ -18,12 +23,12 @@ const SCRIPT_SLOTS = [["ea", "eastAsian"], ["cs", "complexScript"]];
  * Resolve the deck (slide 0, which also sets the theme) and every slide.
  * Returns null when the resolver throws for the deck.
  */
-export function planScriptFonts(presentation, report) {
+export function planScriptFonts(presentation, report, {catalogs} = {}) {
   const count = Array.isArray(presentation.slides) ? presentation.slides.length : 0;
   let slides, deck;
   try {
-    slides = Array.from({length: count}, (_, slideIndex) => resolver(presentation, {slideIndex}));
-    deck = slides[0] ?? resolver(presentation);
+    slides = Array.from({length: count}, (_, slideIndex) => resolver(presentation, {slideIndex}, catalogs));
+    deck = slides[0] ?? resolver(presentation, {}, catalogs);
   } catch (error) {
     // Keep exporting as before FF-07 rather than failing on the language model.
     report?.({code: "language-export-unavailable", path: "language",
@@ -32,11 +37,11 @@ export function planScriptFonts(presentation, report) {
   }
   if (presentation.language !== undefined && deck.languageSource === "default") {
     report?.({code: "language-unresolved", path: "language",
-      message: `The presentation language could not be resolved locally (a URL, pkg: reference or unknown id), so the PPTX uses ${deck.lang}.`});
+      message: `The presentation language could not be resolved (a BCP-47 tag whose script core does not know), so the PPTX uses ${deck.lang}.`});
   }
   // opf-pptx#168: which slides have notes (a presentation has one notes master; see reportPerSlideNotesScriptFonts).
   const notes = (presentation.slides ?? []).map(slide => typeof slide?.notes === "string" ? slide.notes.trim() !== "" : Boolean(slide?.notes));
-  return {deck, slides, notes, report, lang: deck.lang, rtl: deck.rtl, presentation, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+  return {deck, slides, notes, report, lang: deck.lang, rtl: deck.rtl, presentation, catalogs, contentEastAsian: contentEastAsianFonts(presentation, deck, report, catalogs)};
 }
 
 /**
@@ -50,7 +55,7 @@ export function runLanguageTag(plan, tag) {
   if (!cache.has(tag)) {
     let lang = tag;
     try {
-      const resolved = resolver(plan.presentation, {language: tag});
+      const resolved = resolver(plan.presentation, {language: tag}, plan.catalogs);
       if (resolved.languageSource !== "default") lang = resolved.lang;
     } catch { /* an unresolvable tag is written as given */ }
     cache.set(tag, lang.toLowerCase() === String(plan.lang).toLowerCase() ? undefined : lang);
@@ -87,7 +92,7 @@ function runScriptPlan(plan, slideIndex, lang) {
   const cache = plan.runScripts ??= new Map(), key = `${slideIndex}|${lang}`;
   if (!cache.has(key)) {
     let resolved;
-    try { resolved = resolver(plan.presentation, {slideIndex, language: lang}); } catch { resolved = undefined; }
+    try { resolved = resolver(plan.presentation, {slideIndex, language: lang}, plan.catalogs); } catch { resolved = undefined; }
     cache.set(key, resolved && resolved.languageSource !== "default" ? resolved : undefined);
   }
   return cache.get(key);
@@ -193,7 +198,7 @@ export function reportPerSlideNotesScriptFonts(plan, {themes, assignment}) {
 // script of the text picks the language core resolves it for: kana is Japanese, hangul Korean, Han alone Simplified
 // Chinese. Returns {heading, body} families, or null when the deck language already selects one or the text has none.
 const KANA = /[\p{Script=Hiragana}\p{Script=Katakana}]/u, HANGUL = /\p{Script=Hangul}/u, HAN = /\p{Script=Han}/u;
-function contentEastAsianFonts(presentation, deck, report) {
+function contentEastAsianFonts(presentation, deck, report, catalogs) {
   if (deck.sources.eastAsian !== "latin") return null;
   let kana = false, hangul = false, han = false;
   const seen = new Set();
@@ -206,10 +211,10 @@ function contentEastAsianFonts(presentation, deck, report) {
     }
   };
   walk(presentation.slides);
-  const language = kana ? "japanese" : hangul ? "korean" : han ? "chinese-simplified" : null;
+  const language = kana ? "ja" : hangul ? "ko" : han ? "zh-Hans" : null;
   if (!language) return null;
   try {
-    const resolved = resolver({...presentation, language}, {slideIndex: 0});
+    const resolved = resolver({...presentation, language}, {slideIndex: 0}, catalogs);
     return resolved.sources.eastAsian === "latin" ? null : {heading: resolved.heading.eastAsian, body: resolved.body.eastAsian};
   } catch (error) {
     report?.({code: "language-export-unavailable", path: "language",
@@ -426,35 +431,13 @@ const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[1];
 
 /**
- * Match an OOXML run language to the OPF language to import. A catalog id is
- * used when that record exports exactly this tag again: an exact BCP-47 tag,
- * then a curated `ooxmlLang` (preferring the same primary language). A tag
- * that core still resolves to a catalog record (for example en-NZ to English)
- * is imported as the tag itself, so it round-trips.
- * Returns {language, record, shared} or null when nothing matches.
- */
-export function matchCatalogLanguage(lang, catalogs) {
-  const records = Array.isArray(catalogs?.languages) ? catalogs.languages : [];
-  const key = lang.toLowerCase(), primary = key.split("-")[0];
-  const lower = value => typeof value === "string" ? value.toLowerCase() : undefined;
-  const shared = records.filter(record => lower(record.bcp47) === key || lower(record.ooxmlLang) === key);
-  const exports = record => resolver({language: record.id}).lang.toLowerCase() === key;
-  const record = shared.find(record => lower(record.bcp47) === key && exports(record))
-    ?? shared.find(record => lower(record.bcp47)?.split("-")[0] === primary && exports(record))
-    ?? shared.find(exports);
-  if (record) return {language: record.id, record, shared};
-  const resolved = resolver({language: lang});
-  // A tag core cannot resolve falls back to its default language; that is no match.
-  const matched = resolved.languageSource !== "default" && resolved.languageId && records.find(candidate => candidate.id === resolved.languageId);
-  return matched ? {language: lang, record: matched, shared: []} : null;
-}
-
-/**
  * Observe the presentation language in run `lang`. `slides` and `theme` are
- * XML strings. `language` is a catalog id, the run's tag when no catalog
- * record matches, or undefined when the runs carry no language; `lang` is the
- * dominant run tag itself. Nothing is reported here: languageDiagnostics()
- * reports against the final imported document, after FF-32 provenance.
+ * XML strings. `language` is the dominant run tag, imported as a BCP-47 tag
+ * string (OPF 0.15: language is an engine vocabulary, not a catalog), or
+ * undefined when the runs carry no language; `lang` is the same tag.
+ * `catalogs` are the host's registered catalogs, for the font schemes core
+ * resolves. Nothing is reported here: languageDiagnostics() reports against
+ * the final imported document, after FF-32 provenance.
  */
 export function observeLanguage({slides, theme, themePath, slideThemes, catalogs}) {
   const counts = new Map();
@@ -469,8 +452,7 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
   }
   const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
   const lang = ranked[0]?.[0];
-  const match = lang === undefined ? null : matchCatalogLanguage(lang, catalogs);
-  return {lang, language: lang === undefined ? undefined : match?.language ?? lang, match, ranked, rtlParagraphs, theme, themePath, slideThemes};
+  return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs};
 }
 
 /**
@@ -485,29 +467,27 @@ export function reconcileLanguage(groups, observed, report) {
   if (index < 0 || observed.lang === undefined) return groups;
   const stored = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === "language")?.value;
   if (stored === undefined) return groups;
-  const resolved = resolver({language: stored});
+  const resolved = resolver({language: stored}, {}, observed.catalogs);
   if (resolved.languageSource === "default" || resolved.lang.toLowerCase() === observed.lang.toLowerCase()) return groups;
   report?.({code: "metadata-reference-changed", path: "language",
     message: `Runs now use ${observed.lang}, not ${resolved.lang} of the stored language, so the stored language was not restored; the imported language follows the runs.`});
   return groups.filter((_, position) => position !== index);
 }
 
-/**
- * Diagnostics for the final imported document: several run languages, a run
- * tag that maps ambiguously or to no catalog record (only when that observed
- * language was kept), right-to-left paragraphs under a left-to-right
- * language, and theme East Asian/complex-script fonts the document does not
- * reproduce.
- */
 /** Whether the language observed in the runs is written right to left. */
 export function observedRtl(observed) {
   if (observed.lang === undefined) return false;
-  try { return resolver({language: observed.language}).rtl === true; } catch { return false; }
+  try { return resolver({language: observed.language}, {}, observed.catalogs).rtl === true; } catch { return false; }
 }
 
+/**
+ * Diagnostics for the final imported document: several run languages,
+ * right-to-left paragraphs under a left-to-right language, and theme East
+ * Asian/complex-script fonts the document does not reproduce.
+ */
 export function languageDiagnostics(imported, observed, report) {
   if (!report) return;
-  const {lang, match, ranked, rtlParagraphs, theme} = observed;
+  const {lang, ranked, rtlParagraphs, theme, catalogs} = observed;
   if (lang === undefined) {
     if (rtlParagraphs) report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) carry no run language, so no presentation language was imported.`});
     return;
@@ -518,19 +498,13 @@ export function languageDiagnostics(imported, observed, report) {
     report({code: "mixed-run-languages", path: "language",
       message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported; a run in another language keeps it as its own lang where the text imports as rich text.`});
   }
-  const kept = imported.language === observed.language;
-  if (kept && !match) report({code: "language-uncatalogued", path: "language", message: `Run language ${lang} matches no languages catalog record; it was imported as a BCP-47 tag.`});
-  else if (kept && match.shared.length > 1 && !match.shared.some(record => record.bcp47?.toLowerCase() === lang.toLowerCase())) {
-    report({code: "language-ambiguous", path: "language",
-      message: `Run language ${lang} is the OOXML tag of ${match.shared.map(record => record.id).join(", ")}; ${match.language} was imported.`});
-  }
-  const resolved = resolver(imported);
+  const resolved = resolver(imported, {}, catalogs);
   if (rtlParagraphs && !resolved.rtl) {
     report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) do not match the left-to-right language ${typeof imported.language === "string" ? imported.language : lang}; paragraph direction is not imported separately.`});
   }
   // The presentation theme carries the first slide's script fonts (planScriptFonts), so it is compared with that slide.
   let themeResolved = resolved;
-  if (imported.slides?.length) { try { themeResolved = resolver(imported, {slideIndex: 0}); } catch { themeResolved = resolved; } }
+  if (imported.slides?.length) { try { themeResolved = resolver(imported, {slideIndex: 0}, catalogs); } catch { themeResolved = resolved; } }
   if (theme && themeResolved) {
     for (const {tag, slot, face} of themeScriptMismatches(theme, themeResolved)) {
       report({code: "script-font-not-imported", path: "design.fontScheme",
@@ -542,7 +516,7 @@ export function languageDiagnostics(imported, observed, report) {
     observed.slideThemes.forEach((slideTheme, index) => {
       if (!slideTheme || slideTheme.path === observed.themePath) return;
       let slideResolved;
-      try { slideResolved = resolver(imported, {slideIndex: index}); } catch { return; }
+      try { slideResolved = resolver(imported, {slideIndex: index}, catalogs); } catch { return; }
       for (const {tag, slot, face} of themeScriptMismatches(slideTheme.xml, slideResolved)) {
         report({code: "script-font-not-imported", path: `slides.${index}.design.fontScheme`,
           message: `Slide ${index + 1}'s master theme ${tag} ${slot} font "${face}" differs from both its latin font and what the imported slide resolves, and is not represented in the imported OPF.`});

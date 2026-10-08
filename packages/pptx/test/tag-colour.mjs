@@ -1,8 +1,14 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs} from '@openpresentation/opf';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
+
+// OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
+// (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
+const records = Object.fromEntries(Object.entries(defaultCatalog).filter(([, map]) => map && typeof map === 'object').map(([kind, map]) => [kind, Object.entries(map).map(([id, record]) => ({id, ...record}))]));
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
+const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultCatalog], ...options});
 
 // FF-59: the slide tag is the eyebrow label. The export writes its run in the deck primary colour, the colour
 // opf-render draws it in (colors.primary: scheme.primary, else accent1). Where the deck theme holds that colour in
@@ -33,9 +39,9 @@ const tagRuns = xml => { const found = runs(xml, 'Pitch Intro'); assert.equal(fo
 // 1. Every catalog color scheme: the tag resolves to the theme accent1 (the renderer's primary, no scheme in the catalog
 // names a separate primary) and is a:schemeClr accent1, except where that is under 4.5:1 against the slide background
 // (FF-61), where it takes the title's text color (see 6).
-assert.ok(catalogs.colorSchemes.length > 10);
+assert.ok(records.colorSchemes.length > 10);
 let lowCount = 0;
-for (const record of catalogs.colorSchemes) {
+for (const record of records.colorSchemes) {
   const entries = parts(await toPptx({design: {colorScheme: record.id}, slides: [slide]}));
   const xml = slideXml(entries);
   const expected = hex(record.primary ?? record.accent1);
@@ -49,8 +55,8 @@ for (const record of catalogs.colorSchemes) {
   assert.notEqual(fillOf(runs(xml, 'New category, clear wedge')[0]), '<a:schemeClr val="accent1"/>', `${record.id}: title is not the tag colour`);
 }
 
-assert.ok(lowCount > 0 && lowCount < catalogs.colorSchemes.length, 'both outcomes are exercised');
-console.log(`default dark2 slide: ${lowCount} of ${catalogs.colorSchemes.length} catalog schemes take the text colour`);
+assert.ok(lowCount > 0 && lowCount < records.colorSchemes.length, 'both outcomes are exercised');
+console.log(`default dark2 slide: ${lowCount} of ${records.colorSchemes.length} catalog schemes take the text colour`);
 
 // 2. A scheme that names a primary other than accent1: the theme does not hold it, so the tag stays the literal primary.
 {
@@ -62,7 +68,7 @@ console.log(`default dark2 slide: ${lowCount} of ${catalogs.colorSchemes.length}
 // 3. A slide with its own scheme is pinned to literals, even when the deck theme holds the same colour. (A scheme whose
 // primary passes on the white slide, so FF-61 keeps it.)
 {
-  const other = catalogs.colorSchemes.find(record => hex(record.primary ?? record.accent1) !== hex(catalogs.colorSchemes.find(r => r.id === 'cool-horizon').accent1) && contrast(hex(record.primary ?? record.accent1), 'FFFFFF') >= 4.5);
+  const other = records.colorSchemes.find(record => hex(record.primary ?? record.accent1) !== hex(records.colorSchemes.find(r => r.id === 'cool-horizon').accent1) && contrast(hex(record.primary ?? record.accent1), 'FFFFFF') >= 4.5);
   const entries = parts(await toPptx({design: {colorScheme: 'cool-horizon'}, slides: [{...slide, design: {colorScheme: other.id, background: {type: 'solid', color: '#FFFFFF'}}}]}));
   assert.notEqual(hex(other.accent1), themeAccent1(entries));
   const [run] = tagRuns(slideXml(entries));

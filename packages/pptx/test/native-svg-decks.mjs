@@ -60,12 +60,12 @@ const slides = [
     check: 'Click the picture: Graphics Format tab appears (not Picture Format). Zoom to 400%: lines and text stay sharp. Right-click > Convert to Shape is offered. Alt text reads "Diagram: crossing curves on a grid".'},
   {id: 'cover-logo-watermark', title: 'Cover with logo and watermark', layout: 'title', design: {watermark: {src: uri(iconSquare), opacity: 1}},
     check: 'The logo (top-left) and the centered opaque watermark behind the title are SVG pictures (Graphics Format; sharp at 400%). Opacity is 1 here on purpose: see svg-effects-probe for translucent.'},
-  {id: 'slide-image-crop', title: 'Slide image, crop', text: 'Body copy beside the image.', design: {slideImage: {src: uri(diagram), position: 'right', fill: 'crop'}},
-    check: 'The right-hand slide image is an SVG picture cropped to its frame (a positive a:srcRect). Crop handles in PowerPoint show the trimmed area; zoom stays sharp.'},
-  {id: 'slide-image-fit', title: 'Slide image, fit', text: 'A tall badge padded in its frame.', design: {slideImage: {src: uri(tallBadge), position: 'left', fill: 'fit'}},
-    check: 'The slide image is an SVG picture padded inside a wider frame by a NEGATIVE a:srcRect. Confirm it draws complete (nothing cut, nothing stretched) and no repair prompt appears. If negative crop misbehaves on SVG pictures, report it: the exporter would then shrink the frame instead.'},
-  {id: 'content-crop', title: 'Content image, cropped fill', layout: 'image-1x', design: {imageFill: 'crop'}, image: {src: uri(logoWide), alt: 'Wide logo cropped to the content box'},
-    check: 'design.imageFill crop: the wide logo fills the content box, trimmed at the sides (a:srcRect). Sharp at zoom.'},
+  {id: 'placed-image-cover', title: 'Placed image, cover', blocks: [{type: 'image', image: uri(diagram), fit: 'cover', placement: {edge: 'right'}}, {type: 'text', text: 'Body copy beside the image.'}],
+    check: 'The right-hand placed image block is an SVG picture cropped to its frame (a positive a:srcRect). Crop handles in PowerPoint show the trimmed area; zoom stays sharp.'},
+  {id: 'placed-image-contain', title: 'Placed image, contain', blocks: [{type: 'image', image: uri(tallBadge), fit: 'contain', placement: {edge: 'left'}}, {type: 'text', text: 'A tall badge padded in its frame.'}],
+    check: 'The placed image block is an SVG picture padded inside a wider frame by a NEGATIVE a:srcRect. Confirm it draws complete (nothing cut, nothing stretched) and no repair prompt appears. If negative crop misbehaves on SVG pictures, report it: the exporter would then shrink the frame instead.'},
+  {id: 'content-crop', title: 'Content image, cover fit', layout: 'image-1x', design: {imageFit: 'cover'}, image: {src: uri(logoWide), alt: 'Wide logo cropped to the content box'},
+    check: 'design.imageFit cover: the wide logo fills the content box, trimmed at the sides (a:srcRect). Sharp at zoom.'},
   {id: 'header-footer-logo', title: 'Header and footer logos', text: 'The header image and the footer logo are generated pictures.',
     design: {header: {right: {image: {src: uri(iconSquare), alt: 'Icon'}}}, footer: {left: {logo: true}}},
     check: 'Both furniture pictures are SVG pictures at their furniture boxes.'},
@@ -73,8 +73,8 @@ const slides = [
     check: 'An SVG with only a viewBox (no width or height) is a 2:1 SVG picture, not stretched.'},
   {id: 'sanitized', title: 'Sanitized SVG', layout: 'image-1x', image: {src: uri(hostile), alt: 'Pink square with a red circle'},
     check: 'The SVG had a script, an onload handler and an external image: all removed at export. PowerPoint opens it silently (no security warning, no network request, no alert) and shows the pink panel with the red circle and the caption only.'},
-  {id: 'effects-native', title: 'Opacity, grayscale and border', text: 'Native SVG pictures with effects.', design: {watermark: {src: uri(iconSquare), opacity: .3}, slideImage: {src: uri(logoWide), position: 'right', recolor: 'grayscale', opacity: .8, border: {color: '#c0392b', width: 6}}},
-    check: 'Confirmed natively on 2026-10-01 and exported as SVG pictures since: the centered watermark is at 30% (a:alphaModFix before the SVG extension), the right-hand slide image is grayscale at 80% with a red 6 pt border. Both stay Graphics Format pictures.'},
+  {id: 'effects-native', title: 'Opacity, grayscale and border', design: {watermark: {src: uri(iconSquare), opacity: .3}}, blocks: [{type: 'image', image: uri(logoWide), placement: {edge: 'right'}, recolor: 'grayscale', opacity: .8, border: {color: '#c0392b', width: 6}}, {type: 'text', text: 'Native SVG pictures with effects.'}],
+    check: 'Confirmed natively on 2026-10-01 (as a 0.14 slide image) and exported as SVG pictures since: the centered watermark is at 30% (a:alphaModFix before the SVG extension), the right-hand placed image is grayscale at 80% with a red 6 pt border. Both stay Graphics Format pictures.'},
 ];
 
 function deckFor(options = {}) {
@@ -132,9 +132,9 @@ async function generate(output) {
   // 3. The effects probe: effects not confirmed on SVG pictures (opacity, grayscale and border are: they are native above). The
   // exporter writes these as PNG only; here the SVG extension is added so PowerPoint shows whether it honours the effect.
   const effectDeck = {name: 'RR-10 SVG effect probe', design: {theme: 'classic', background: light}, slides: [
-    {title: 'Slide image, duotone', text: 'a:duotone on an SVG blip.', design: {slideImage: {src: uri(logoWide), position: 'right', recolor: {dark: '#102030', light: '#f0e0d0'}}}},
-    {title: 'Slide image, circle mask', text: 'prstGeom ellipse on a wide SVG picture.', design: {slideImage: {src: uri(logoWide), position: 'right', shape: 'circle'}}},
-    {title: 'Slide image, rounded mask', text: 'roundRect on a wide SVG picture.', design: {slideImage: {src: uri(diagram), position: 'right', shape: 'rounded', cornerRadius: 0.12}}},
+    {title: 'Image block, duotone', blocks: [{type: 'image', image: uri(logoWide), placement: {edge: 'right'}, recolor: {dark: '#102030', light: '#f0e0d0'}}, {type: 'text', text: 'a:duotone on an SVG blip.'}]},
+    {title: 'Image block, circle mask', blocks: [{type: 'image', image: uri(logoWide), placement: {edge: 'right'}, shape: 'circle'}, {type: 'text', text: 'prstGeom ellipse on a wide SVG picture.'}]},
+    {title: 'Image block, rounded mask', blocks: [{type: 'image', image: uri(diagram), placement: {edge: 'right'}, shape: 'rounded', cornerRadius: 0.12}, {type: 'text', text: 'roundRect on a wide SVG picture.'}]},
   ]};
   const probeDiagnostics = [];
   const probeBytes = await toPptx(effectDeck, {...FIXED, onDiagnostic: item => probeDiagnostics.push(item)});
@@ -142,7 +142,7 @@ async function generate(output) {
   const svgFor = {1: logoWide, 2: logoWide, 3: diagram};
   for (const [slide, text] of Object.entries(svgFor)) {
     const prepared = prepareSvg(new TextEncoder().encode(text));
-    const names = [...strFromU8(probeEntries[`ppt/slides/slide${slide}.xml`]).matchAll(/<p:cNvPr\b[^>]*\bname="([^"]*)"/g)].map(match => match[1]).filter(name => /^OPF slide image slides/.test(name));
+    const names = [...strFromU8(probeEntries[`ppt/slides/slide${slide}.xml`]).matchAll(/<p:cNvPr\b[^>]*\bname="([^"]*)"/g)].map(match => match[1]).filter(name => /^OPF image \d+$/.test(name));
     attachSvgPictures(probeEntries, new Map(names.map(name => [name, {bytes: prepared.bytes, width: prepared.width, height: prepared.height}])));
   }
   const probe = zipSync(Object.fromEntries(Object.entries(probeEntries).filter(([name]) => !name.endsWith('/')).sort(([a], [b]) => a < b ? -1 : 1)), {level: 6, mtime: new Date('2026-10-01T00:00:00Z')});

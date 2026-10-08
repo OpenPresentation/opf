@@ -1,9 +1,16 @@
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs, validate} from '@openpresentation/opf';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {validate} from '@openpresentation/opf';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {themeSlotColors, writeThemeColors} from '../dist/theme-colors.js';
+
+// OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
+// (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
+const records = Object.fromEntries(Object.entries(defaultCatalog).filter(([, map]) => map && typeof map === 'object').map(([kind, map]) => [kind, Object.entries(map).map(([id, record]) => ({id, ...record}))]));
+const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
+const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultCatalog], ...options});
 
 // FF-24c: table cell fills, borders and text that name a theme slot or role, and
 // the engine's own table chrome (header accent, body surface, border, paired text),
@@ -53,7 +60,7 @@ const edgeColors = cell => Object.values(cell.borders);
 // the literal the same slide exports when pinned by a slide-level scheme.
 const authored = name => ({value: name, style: {fill: name, color: name, borders: Object.fromEntries(['top', 'right', 'bottom', 'left'].map(edge => [edge, {color: name, width: 1}]))}});
 let references = 0;
-for (const record of catalogs.colorSchemes) {
+for (const record of records.colorSchemes) {
   for (const slot of [undefined, 'dark1', 'light2', 'dark2']) {
     const design = {colorScheme: record.id, ...(slot ? {background: {type: 'theme', slot}} : {})};
     const table = {columns: ['Name', 'Value'], rows: NAMES.map(name => [name, authored(name)])};
@@ -79,7 +86,7 @@ for (const record of catalogs.colorSchemes) {
 // surface body fill, accent5 borders and text paired with its fill. Nothing in a
 // default table is a literal slot color, for every scheme on light and dark decks.
 let chrome = 0;
-for (const record of catalogs.colorSchemes) {
+for (const record of records.colorSchemes) {
   // The default theme (minimal) is a dark2 deck; light1 and light2 decks use the bg2 surface.
   for (const slot of [undefined, 'dark1', 'light1', 'light2']) {
     const dark = slot === undefined || slot === 'dark1' || slot === 'dark2';
@@ -106,7 +113,7 @@ for (const record of catalogs.colorSchemes) {
 
 // 3. Authored literals stay literal, including a literal that equals a theme slot,
 // document variables, and the default text on a literal fill.
-const forest = catalogs.colorSchemes.find(record => record.id === 'forest-green');
+const forest = records.colorSchemes.find(record => record.id === 'forest-green');
 const literalTable = {columns: ['A', 'B'], rows: [
   ['equal', {value: 'accent1 hex', style: {fill: forest.accent1, color: forest.light1, borders: {top: {color: forest.accent2, width: 1}}}}],
   ['vars', {value: 'variable', style: {fill: 'var:risk', color: 'var:risk', borders: {bottom: {color: 'var:risk', width: 1}}}}],
@@ -161,8 +168,8 @@ for (const reserved of [[], ['#FE01A0'], ['#FE01A1', '#FE02B0'], ['#FE01A0', '#F
 // 5. Re-import and theme switch. The package resolves to the same colors, design.colorScheme
 // returns as the catalog id, and switching the theme in the package recolors exactly the
 // references (named parts and the engine chrome) while authored literals stay put.
-const boost = catalogs.colorSchemes.find(record => record.id === 'boost');
-const switched = catalogs.colorSchemes.find(record => record.id === 'corporate-blue');
+const boost = records.colorSchemes.find(record => record.id === 'boost');
+const switched = records.colorSchemes.find(record => record.id === 'corporate-blue');
 const deck = {
   design: {colorScheme: 'boost', background: {type: 'theme', slot: 'dark1'}},
   slides: [{title: 'Switch', table: {columns: ['Named', 'Literal'], rows: [
@@ -216,4 +223,4 @@ const again = await toPptx(deck);
 assert.deepEqual(new Uint8Array(again), new Uint8Array(source), 'export is deterministic');
 const twice = await toPptx(literalDeck), thrice = await toPptx(literalDeck);
 assert.deepEqual(new Uint8Array(twice), new Uint8Array(thrice));
-console.log(JSON.stringify({test: 'table-theme-colors', passed: true, schemes: catalogs.colorSchemes.length, namedReferences: references, chromeReferences: chrome}));
+console.log(JSON.stringify({test: 'table-theme-colors', passed: true, schemes: records.colorSchemes.length, namedReferences: references, chromeReferences: chrome}));

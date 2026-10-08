@@ -3,8 +3,7 @@ import {strFromU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
 import {colorContrast, resolveCanvasDimensions} from '@openpresentation/opf/composition';
-import {renderSlideSvg} from '@openpresentation/opf-render/svg';
-import {fromPptx, toPptx} from '../dist/index.js';
+import {renderSlideSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.

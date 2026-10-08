@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSvg, toPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx} from '../dist/index.js';
 
 // FF-38: an image that cannot be embedded exports the preview's placeholder,
 // not a second design. The preview draws a dashed panel with a centered bold

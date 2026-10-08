@@ -86,7 +86,7 @@ for (const type of ['column', 'line', 'area', 'scatter', 'radar']) {
   assert.equal(seriesFill(s), ACCENT, 'South is named');
   assert.equal(points(s).length, 0, 'South is accent everywhere already');
   assert.deepEqual(points(n).map(point => [point.idx, point.fill]), [[0, ACCENT]], 'North: only Q1 is named');
-  const stacked = await exportDeck({type: 'stacked-column-3x', data, highlight: {series: ['North']}});
+  const stacked = await exportDeck({type: 'stacked-column', data, highlight: {series: ['North']}});
   assert.equal(seriesFill(seriesOf(stacked.classic)[0]), ACCENT);
   const bar = await exportDeck({type: 'bar', data, highlight: {categories: ['Q3']}});
   assert.deepEqual(points(seriesOf(bar.classic)[0]).map(point => point.idx), [2]);

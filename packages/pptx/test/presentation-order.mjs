@@ -18,7 +18,7 @@ const childOrder = xml => {
 const slide = {id: 'one', title: 'Notes', text: 'Body', notes: 'Speaker notes'};
 const decks = [
   {name: 'Plain', slides: [slide]},
-  {name: 'Georgia', language: 'english', design: {fontScheme: 'georgia'}, slides: [slide, {id: 'two', title: 'Two', items: ['A', 'B']}]},
+  {name: 'Georgia', language: 'en', design: {fontScheme: 'georgia'}, slides: [slide, {id: 'two', title: 'Two', items: ['A', 'B']}]},
   {name: 'Sections', slides: [{...slide, id: 'a', section: 'First'}, {...slide, id: 'b', section: 'Second'}]},
 ];
 for (const deck of decks) {

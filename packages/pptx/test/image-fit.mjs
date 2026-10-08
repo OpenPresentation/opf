@@ -15,12 +15,13 @@ for (const [name,width,height] of fixtures) {
  const bytes=await readFile(new URL(`fixtures/images/${name}`,import.meta.url));
  assert.deepEqual(rasterDimensions(bytes),{width,height},name);
  const mime=name.endsWith('.jpg')?'jpeg':name.split('.').at(-1), uri=`data:image/${mime};base64,${bytes.toString('base64')}`;
- for (const [deckMode,slideMode] of [[undefined,undefined],['fit',undefined],['crop',undefined],['crop','fit'],['fit','crop']]) {
-  const mode=slideMode??deckMode??'fit';
-  const deck={design:{theme:'classic',...(deckMode?{imageFill:deckMode}:{})},slides:[{design:slideMode?{imageFill:slideMode}:{},image:{src:uri,alt:'Four quadrants and a circle'}}]};
+ for (const [deckMode,slideMode] of [[undefined,undefined],['contain',undefined],['cover',undefined],['cover','contain'],['contain','cover']]) {
+  // 0.15: design.imageFit (cover, contain, stretch) is the default fit of image blocks; cover when nothing sets it.
+  const mode=slideMode??deckMode??'cover';
+  const deck={design:{...(deckMode?{imageFit:deckMode}:{})},slides:[{design:slideMode?{imageFit:slideMode}:{},image:{src:uri,alt:'Four quadrants and a circle'}}]};
   const svg=renderSlideSvg(deck, 0,{trace:true});
   const image=find(parser.parse(svg),'image')[0];
-  assert.equal(image['@_preserveAspectRatio'],mode==='crop'?'xMidYMid slice':'xMidYMid meet');
+  assert.equal(image['@_preserveAspectRatio'],mode==='cover'?'xMidYMid slice':'xMidYMid meet');
   const bounds=Object.fromEntries(['x','y','width','height'].map(k=>[k,Number(image[`@_${k}`])]));
   const output=await toPptx(deck,{imageFormat:"preserve",strictAssets:true});
   const entries=unzipSync(output), xml=parser.parse(new TextDecoder().decode(entries['ppt/slides/slide1.xml']));
@@ -28,7 +29,7 @@ for (const [name,width,height] of fixtures) {
   const x=Number(xfrm['a:off']['@_x'])/9525,y=Number(xfrm['a:off']['@_y'])/9525,w=Number(xfrm['a:ext']['@_cx'])/9525,h=Number(xfrm['a:ext']['@_cy'])/9525;
   const near=(a,b,label)=>assert.ok(Math.abs(a-b)<.002,`${name} ${mode} ${label}: ${a} vs ${b}`);
   near(x+w/2,bounds.x+bounds.width/2,'horizontal center');near(y+h/2,bounds.y+bounds.height/2,'vertical center');
-  if (mode==='fit') {
+  if (mode==='contain') {
    near(w/h,width/height,'aspect ratio');assert.ok(w<=bounds.width+.002&&h<=bounds.height+.002);assert.ok(Math.abs(w-bounds.width)<.002||Math.abs(h-bounds.height)<.002);
    assert.equal(find(picture,'a:srcRect').length,0);
   } else {
@@ -47,7 +48,8 @@ for (const [name,width,height] of fixtures) {
 // an image whose aspect ratio differs from the resource's original content.
 const png=await readFile(new URL('fixtures/images/tall.png',import.meta.url));
 let resolved=0;
-const hostDeck={assets:{photo:{src:'https://example.invalid/photo.jpg',mediaType:'image/png'}},slides:[{image:'asset:photo'}]};
+// Contained (0.15's default fit is cover), so the frame takes the aspect of the bytes the host returns.
+const hostDeck={design:{imageFit:'contain'},assets:{photo:{src:'https://example.invalid/photo.jpg',mediaType:'image/png'}},slides:[{image:'asset:photo'}]};
 const hostBytes=await toPptx(hostDeck,{imageFormat:"preserve",strictAssets:true,imageResolver:()=>{resolved++;return png;}});
 assert.equal(resolved,1);
 const hostXml=parser.parse(new TextDecoder().decode(unzipSync(hostBytes)['ppt/slides/slide1.xml']));
@@ -57,7 +59,7 @@ assert.ok(Math.abs(Number(hostFrame['@_cx'])/Number(hostFrame['@_cy'])-.5)<.0000
 for (const source of ['local','host-path','host-data']) {
  const local=fileURLToPath(new URL('fixtures/images/tall.png',import.meta.url));
  let calls=0;
- const result=await toPptx({slides:[{image:source==='local'?local:'https://example.invalid/image'}]},{imageFormat:"preserve",strictAssets:true,...(source==='local'?{}:{imageResolver:()=>{calls++;return source==='host-path'?{path:local}:{data:png,mediaType:'image/png'};}})});
+ const result=await toPptx({design:{imageFit:'contain'},slides:[{image:source==='local'?local:'https://example.invalid/image'}]},{imageFormat:"preserve",strictAssets:true,...(source==='local'?{}:{imageResolver:()=>{calls++;return source==='host-path'?{path:local}:{data:png,mediaType:'image/png'};}})});
  assert.equal(calls,source==='local'?0:1);
  const pic=find(parser.parse(new TextDecoder().decode(unzipSync(result)['ppt/slides/slide1.xml'])),'p:pic')[0];
  const ext=pic['p:spPr']['a:xfrm']['a:ext'];
@@ -68,4 +70,4 @@ for(const data of [[],[0xff,0xd8,0xff,0xe0,0,0],[0xff,0xd8,0xff,0xff],[0xff,0xd8
 for(const [name] of fixtures){const bytes=await readFile(new URL(`fixtures/images/${name}`,import.meta.url));for(let n=0;n<Math.min(bytes.length,32);n++)assert.doesNotThrow(()=>rasterDimensions(bytes.subarray(0,n)));}
 // Bytes that are no readable image: strictAssets keeps the error; otherwise the preview's placeholder and one diagnostic (test/svg-image-degrade.mjs).
 await assert.rejects(()=>toPptx({slides:[{image:'data:image/png;base64,bm90LWEtcG5n'}]},{strictAssets:true}),error=>error.code==='unsupported-image-dimensions'&&error.details?.path==='slides.0.image');
-console.log(`Image fitting passed: ${checked} SVG/native geometry cases, 9 raster fixtures, fit/crop, slide overrides, byte/alt preservation, host resolution and malformed headers.`);
+console.log(`Image fitting passed: ${checked} SVG/native geometry cases, 9 raster fixtures, contain/cover, slide overrides, byte/alt preservation, host resolution and malformed headers.`);

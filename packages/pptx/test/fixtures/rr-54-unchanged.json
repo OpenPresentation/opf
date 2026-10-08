@@ -1,8 +1,8 @@
 {
  "source": {
   "repository": "OpenPresentation/opf-pptx",
-  "commit": "4ca079f57494c0239793c84abd4fe628abe95284",
-  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged."
+  "commit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15."
  },
  "entries": {
   "column": {
@@ -45,7 +45,7 @@
      }
     ]
    },
-   "sha256": "99108a25286ebe3848b51b3b69799892bcf361f8cdb71dd26c999bc90703f733"
+   "sha256": "cda9c4cbec50d19424d93dde3a3523a5eb1c5abba52fc51dc950ff5fcecdd6d9"
   },
   "column-labels": {
    "deck": {
@@ -92,7 +92,7 @@
      }
     ]
    },
-   "sha256": "49586c41e2dc14ff5b9deffcdad9fd579d95269869df670dbff77449574e0045"
+   "sha256": "734e28b7821e729320addf91d9488a1c8ae7a8128b023c8fc6edf78d885b8a63"
   },
   "bar": {
    "deck": {
@@ -135,7 +135,7 @@
      }
     ]
    },
-   "sha256": "3a7056597acd84e170be96391536340ea4a052788893cdf8560165d8bf792784"
+   "sha256": "67a50fa76655041e8ff53a702754db135742e0d366a8dcf555207de200ef8a0f"
   },
   "line": {
    "deck": {
@@ -177,7 +177,7 @@
      }
     ]
    },
-   "sha256": "cdf6ecb35b2fec1b3902e24f7902ad42818b112ad108ef1329796ecb27958b15"
+   "sha256": "d677a42b672192ed94eaeeea88489c09c7d976ff5ad2b8849339cd2a213e403b"
   },
   "area": {
    "deck": {
@@ -219,7 +219,7 @@
      }
     ]
    },
-   "sha256": "b2a0f4e372f024918202a733af8ecacbe48acbdac7bf01f1bbbd01d33a38d9d7"
+   "sha256": "f802af5bca5fbe3a9ba7c787663d9c53eae831466350ddb7515af2e918c6bd4a"
   },
   "stacked-column": {
    "deck": {
@@ -261,7 +261,7 @@
      }
     ]
    },
-   "sha256": "0e4c006230e379a91a7448c33ae1121c0fbe7349768a9f8c72e552ef934bb271"
+   "sha256": "9e2b6ecf16ef39bd52e7abed146edc210b4ba86a5ac100529223f041685dd19b"
   },
   "percent-stacked": {
    "deck": {
@@ -303,7 +303,7 @@
      }
     ]
    },
-   "sha256": "fe3805222bef342fb3db72430a57b304b26d356a2efcdbe0659efef29f6f7568"
+   "sha256": "11246e6b88a7953245c047a34d7dd269baf1584b35094087d00127088db9e198"
   },
   "pie": {
    "deck": {
@@ -351,7 +351,7 @@
      }
     ]
    },
-   "sha256": "bbc0299a2eca885eb716bb92e923869d14183b677759571a5394cc47f8a40fd4"
+   "sha256": "53c619995056cae8232d689e10c6ddcda419fd57772bcabe6eb9406f5d61ecf3"
   },
   "doughnut": {
    "deck": {
@@ -393,7 +393,7 @@
      }
     ]
    },
-   "sha256": "b221fb25ea996fdff479cc5e1bd863157a2a8a9b92ecca1427b806be9f4ed01c"
+   "sha256": "ff0ca46805fe47efd987bc5bc56834947f43c8b88fd8b753d3e423197b3de810"
   },
   "radar": {
    "deck": {
@@ -435,7 +435,7 @@
      }
     ]
    },
-   "sha256": "66e6b009d5aa27b8d0c9345a74836819d6ed970f0c0b16a04fafb926e9cfe962"
+   "sha256": "6794348e13167652f13a2cb228eff7d59779654e47b98aa614a2160e0564772c"
   },
   "scatter": {
    "deck": {
@@ -476,7 +476,7 @@
      }
     ]
    },
-   "sha256": "ad2c3a19359352b05819a41afd38de2a21b5102a0374b13f0690a95180757752"
+   "sha256": "21ef41bd40d3892185b9d69939af6d6ca708260b999c1fb81fa4ea3cc657f5cc"
   },
   "scatter-two-columns": {
    "deck": {
@@ -505,7 +505,7 @@
      }
     ]
    },
-   "sha256": "3f0f7af37ccb034f86f411a5b3a0445cf62c2bc39c01d8e2a3a1b9f60869fcf1"
+   "sha256": "cd1a6eef27d0cc15bce1790744b51633259b22f316229d47067c6d29ef9c640a"
   },
   "single-column": {
    "deck": {
@@ -543,7 +543,7 @@
      }
     ]
    },
-   "sha256": "1c5e9bb84631e51f042cc6a4f3a33ff6afa81c4d702766122a55d995f67eb0fd"
+   "sha256": "3695fe339a07755efec23b5bb20be342c4a6b50a96e7008ccdd85a4fcd82a71c"
   },
   "scatter-labels": {
    "deck": {
@@ -576,7 +576,7 @@
      }
     ]
    },
-   "sha256": "f34e32956e9a4eea9dee022810d3608a7f4524db940b558f36aed9fe5bc41953"
+   "sha256": "01453755997c413d88f879c4b13ea750fb7aedc9103b7633c45424f5d4841407"
   },
   "chartex-native-map": {
    "deck": {
@@ -584,7 +584,7 @@
      {
       "title": "map chart",
       "chart": {
-       "type": "map",
+       "type": "world",
        "data": {
         "columns": [
          "Region",
@@ -605,7 +605,7 @@
      }
     ]
    },
-   "sha256": "ed9c664d8cc5f28952c33e31782ab351beabebd44266c4eb6d8ce99df0b4e799"
+   "sha256": "a91c7f616dd530c849d19b6abc492d844b5d5f313e5b796abda5fd146b4169a0"
   },
   "histogram": {
    "deck": {
@@ -649,7 +649,7 @@
      }
     ]
    },
-   "sha256": "6c2fb5d576f7780a6932640e975c006d4b35025440a0763f457373c4b9c6b35c"
+   "sha256": "67e10cfe9188b4707ff589a7eef6bcacbbffa773612b56811eaef05ad553f883"
   },
   "treemap": {
    "deck": {
@@ -682,7 +682,7 @@
      }
     ]
    },
-   "sha256": "11d74d3141bd13ab6843e92c7005cc12a36e401da21fb1536e7d1a8269b4abed"
+   "sha256": "52719ccdd65ae2f65c8b0044ad0dd8318f6960394b895c41d4bf01ef69b51137"
   },
   "waterfall": {
    "deck": {
@@ -716,7 +716,7 @@
      }
     ]
    },
-   "sha256": "43d52325c4051f9fba17362f461dc8c316d17985038029dfe4edbe9e1fecf926"
+   "sha256": "d04d9c6b3176d3b9c394401c2f3efdd93a4330b90246bef0b60568e145011854"
   },
   "table": {
    "deck": {
@@ -750,7 +750,7 @@
      }
     ]
    },
-   "sha256": "4f8d1db365ce8be78ff51e2f755afc636f02e96aaa1475700fecc28d6ebb52a4"
+   "sha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25"
   },
   "styled-table": {
    "deck": {
@@ -792,7 +792,7 @@
      }
     ]
    },
-   "sha256": "206054b9ab7321afd16293dcbbbd6811bd6c1f77acc5d1b2a047e37d870cee62"
+   "sha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4"
   },
   "mixed-blocks": {
    "deck": {
@@ -839,7 +839,7 @@
      }
     ]
    },
-   "sha256": "0f336ece26c48505e537f59b4dc8d9a2b2840353c7429ab31c57ebb6151a6b4a"
+   "sha256": "c5617168f7ff0601b401c939e0d174f70586d02ea0f7268bd36e491398f2eb75"
   }
  }
 }

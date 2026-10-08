@@ -2,9 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 import {validate} from '@openpresentation/opf';
-import {resolvePresentation} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const enc = new TextEncoder(), dec = new TextDecoder();

@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 const fonts=await loadFonts({pack: 'office'}),enc=new TextEncoder(),dec=new TextDecoder();
 const deck={design:{fontScheme:'roboto',dimensions:{widthInches:5.625,heightInches:10}},slides:[{tag:'Source',title:'A complete heading with enough words to wrap across lines',subtitle:'Supporting text',text:'Body remains present'}]};

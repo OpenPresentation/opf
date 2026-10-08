@@ -71,39 +71,42 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
 }
 
 const rectXml = (name, rect = {}) => `<a:${name}${['l', 't', 'r', 'b'].filter(key => rect[key]).map(key => ` ${key}="${rect[key]}"`).join('')}/>`;
-const percent = value => Math.round(value * 100000);
+const percent = value => Math.round(value * 100000) || 0;
 
-// Picture fill for an OPF image background, following the SVG preview:
-// cover crops the centered source to the slide aspect, contain letterboxes it
-// with fill-rectangle insets, and tile repeats square cells of min(w,h)/4
-// from the top-left corner. Each cell holds the image by the deck imageFill
-// (crop = cover, otherwise contain; negative source insets are transparent
-// padding). With dpi="0", DrawingML sizes a tile from the raster's own
-// resolution (PNG pHYs, JPEG JFIF or EXIF; 96 dpi when absent), while the
-// preview draws CSS pixels, so the tile scale compensates on each axis.
+// FA-23: the picture fill of an OPF image background (core SlideComposition.backgroundImage), drawn like the SVG
+// preview. `fitImage` is core's shared fit math (composition `fitImage`), so every engine crops, letterboxes and
+// focuses the same way:
+// - stretch fills the slide (no crop);
+// - cover crops the picture to the slide with the focus point kept in view (a:srcRect, positive insets);
+// - contain centers the whole picture; the fill rectangle insets leave the rest of the slide unfilled;
+// - tile repeats the picture at its intrinsic size (1 picture px = 1 reference px, 1/96 in) from the top-left corner.
+//   With dpi="0", DrawingML sizes a tile from the raster's own resolution (PNG pHYs, JPEG JFIF or EXIF; 96 dpi when
+//   absent), so the tile scale is the raster's dpi / 96 on each axis.
+// A recolor (core backgroundImage.recolor, resolved: {type: 'grayscale'} or {type: 'duotone', dark: {hex}, light: {hex}})
+// is a:grayscl or a:duotone on the blip, then opacity is a:alphaModFix (picture pixels only), as for image blocks.
 export const nativeTileAlignment = {tx: '0', ty: '0', flip: 'none', algn: 'tl'};
-export function nativeTileScale(image, {width, height, imageFill = 'fit'}) {
-  const cell = Math.min(width, height) / 4;
-  const scale = (imageFill === 'crop' ? Math.max : Math.min)(cell / image.width, cell / image.height);
-  return {cell, scale, sx: percent(scale * (image.dpiX ?? 96) / 96), sy: percent(scale * (image.dpiY ?? 96) / 96)};
+export function nativeTileScale(image) {
+  return {sx: percent((image.dpiX ?? 96) / 96), sy: percent((image.dpiY ?? 96) / 96)};
 }
-export function nativeImageBackgroundFill(relationshipId, image, {fit = 'cover', opacity = 1, width, height, imageFill = 'fit'}) {
+export function nativeImageBackgroundFill(relationshipId, image, {fit = 'cover', focus, opacity = 1, recolor, width, height, fitImage}) {
   const alpha = clamp(opacity);
-  const blip = `<a:blip r:embed="${relationshipId}">${alpha === 1 ? '' : `<a:alphaModFix amt="${percent(alpha)}"/>`}</a:blip>`;
+  const recolorXml = recolor?.type === 'grayscale' ? '<a:grayscl/>'
+    : recolor?.type === 'duotone' ? `<a:duotone><a:srgbClr val="${recolor.dark.hex}"></a:srgbClr><a:srgbClr val="${recolor.light.hex}"></a:srgbClr></a:duotone>` : '';
+  const blip = `<a:blip r:embed="${relationshipId}">${recolorXml}${alpha === 1 ? '' : `<a:alphaModFix amt="${percent(alpha)}"/>`}</a:blip>`;
   if (fit === 'tile') {
-    const {cell, scale, sx, sy} = nativeTileScale(image, {width, height, imageFill});
-    const x = percent((1 - cell / (image.width * scale)) / 2), y = percent((1 - cell / (image.height * scale)) / 2);
-    const {tx, ty, flip, algn} = nativeTileAlignment;
-    return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: x, t: y, r: x, b: y})}<a:tile tx="${tx}" ty="${ty}" sx="${sx}" sy="${sy}" flip="${flip}" algn="${algn}"/></a:blipFill>`;
+    const {sx, sy} = nativeTileScale(image), {tx, ty, flip, algn} = nativeTileAlignment;
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:tile tx="${tx}" ty="${ty}" sx="${sx}" sy="${sy}" flip="${flip}" algn="${algn}"/></a:blipFill>`;
   }
+  if (fit === 'stretch') return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
+  const frame = {x: 0, y: 0, width, height};
+  const placed = fitImage(frame, fit, image.width / image.height, focus);
   if (fit === 'contain') {
-    const scale = Math.min(width / image.width, height / image.height);
-    const x = percent((1 - image.width * scale / width) / 2), y = percent((1 - image.height * scale / height) / 2);
-    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:srcRect/><a:stretch>${rectXml('fillRect', {l: x, t: y, r: x, b: y})}</a:stretch></a:blipFill>`;
+    const box = placed.image;
+    const inset = {l: percent(box.x / width), t: percent(box.y / height), r: percent((width - box.x - box.width) / width), b: percent((height - box.y - box.height) / height)};
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:srcRect/><a:stretch>${rectXml('fillRect', inset)}</a:stretch></a:blipFill>`;
   }
-  const scale = Math.max(width / image.width, height / image.height);
-  const x = percent((1 - width / (image.width * scale)) / 2), y = percent((1 - height / (image.height * scale)) / 2);
-  return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: x, t: y, r: x, b: y})}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
+  const {left, top, right, bottom} = placed.crop;
+  return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: percent(left), t: percent(top), r: percent(right), b: percent(bottom)})}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
 }
 
 // Internal metadata supplied by the ordered XML reader. A Symbol cannot collide

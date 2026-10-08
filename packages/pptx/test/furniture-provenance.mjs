@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {validate} from '@openpresentation/opf';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';

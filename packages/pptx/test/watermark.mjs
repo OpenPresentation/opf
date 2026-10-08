@@ -105,23 +105,26 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
   checked++;
 }
 
-// 3. Paint order against a slide image is the traced preview's order, not an assumption:
-// the preview paints the slide image, its overlay, then the watermark, then content.
+// 3. Paint order against an image background and a placed image block (0.14's slide image) is the traced preview's order,
+// not an assumption: the preview paints the background picture and its overlay, then the watermark, then the items in
+// core's order (the headings, the placed blocks, the body).
 {
-  for (const position of ['background', 'left', 'right', 'top', 'bottom']) for (const overlay of [false, true]) {
-    const slideImage = { src: square, position, ...(overlay ? { overlay: { color: '#000000', opacity: 0.3 } } : {}) };
-    const deck = { design: { watermark: { src: wide, opacity: 0.2 } }, slides: [{ title: 'Layered', text: 'Body', design: { slideImage } }] };
+  const cases = [['background', 'OPF background slides.0', 'slides.0.design.background', overlay => ({ design: { background: { type: 'image', src: square, alt: 'Square', ...overlay } } })],
+    ...['left', 'right', 'top', 'bottom'].map(edge => [edge, 'OPF image 1', 'slides.0.blocks.0.image', overlay => ({ blocks: [{ type: 'image', image: square, placement: { edge }, ...overlay }, { type: 'text', text: 'Body' }] })])];
+  for (const [position, pictureName, picturePath, slideOf] of cases) for (const overlay of [false, true]) {
+    const deck = { design: { watermark: { src: wide, opacity: 0.2 } }, slides: [{ title: 'Layered', ...slideOf(overlay ? { overlay: { color: '#000000', opacity: 0.3 } } : {}) }] };
     const svg = renderSvg(deck, { trace: true })[0];
     const at = path => svg.indexOf(`data-opf-path="${path}"`);
-    const previewOrder = [['OPF slide image slides.0', 'slides.0.design.slideImage'], ['OPF watermark', 'design.watermark'], ['OPF heading slides.0.title line 0', 'slides.0.title']]
+    const previewOrder = [[pictureName, picturePath], ['OPF watermark', 'design.watermark'], ['OPF heading slides.0.title line 0', 'slides.0.title']]
       .map(([name, path]) => ({ name, at: at(path) })).sort((x, y) => x.at - y.at).map(entry => entry.name);
-    assert.ok(previewOrder.indexOf('OPF slide image slides.0') < previewOrder.indexOf('OPF watermark') && previewOrder.indexOf('OPF watermark') < previewOrder.indexOf('OPF heading slides.0.title line 0'), 'The traced preview paints slide image, watermark, then content');
+    const watermarkFirst = previewOrder.indexOf('OPF watermark') < previewOrder.indexOf('OPF heading slides.0.title line 0');
+    assert.ok(watermarkFirst && (position === 'background') === (previewOrder.indexOf(pictureName) < previewOrder.indexOf('OPF watermark')), `${position}: the traced preview paints a background beneath the watermark and a placed block above it`);
     const { xml } = await exported(deck);
     const names = shapeNames(xml[0]).filter(name => previewOrder.includes(name));
     assert.deepEqual(names, previewOrder, `${position}${overlay ? ' with overlay' : ''}: native order equals the preview's`);
     if (overlay) {
       const all = shapeNames(xml[0]);
-      assert.ok(all.indexOf('OPF slide image overlay slides.0') < all.indexOf('OPF watermark'), 'The watermark also lies above the slide image overlay');
+      assert.equal(all.indexOf(`${pictureName} overlay`), all.indexOf(pictureName) + 1, 'The overlay lies directly above its picture');
     }
     checked++;
   }

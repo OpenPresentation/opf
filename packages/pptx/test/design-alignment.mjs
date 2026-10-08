@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {toPptx} from '../dist/index.js';
+import {toPptx, renderSvg} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {renderSvg} from '@openpresentation/opf-render/svg';
 
 // design.titleAlignment/contentAlignment are Design properties: the slide design
 // overrides the deck and titles use titleAlignment while subtitle, tag and body

@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import {XMLParser} from 'fast-xml-parser';
 import {unzipSync} from 'fflate';
-import {resolvePresentation} from '@openpresentation/opf-render/svg';
+import {resolvePresentation, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {toPptx,fromPptx} from '../dist/index.js';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const all=(node,name)=>!node||typeof node!=='object'?[]:Object.entries(node).flatMap(([key,value])=>[...(key===name?[value].flat():[]),...all(value,name)]);
 const text=value=>typeof value==='string'?value:value?.['#text']??'';

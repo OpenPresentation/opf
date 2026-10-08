@@ -6,7 +6,7 @@ import {readFileSync} from 'node:fs';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {observeLanguage} from '../dist/script-fonts.js';
 import {examples} from '@openpresentation/opf/examples';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const image = name => new Uint8Array(readFileSync(new URL(`./fixtures/images/${name}`, import.meta.url)));

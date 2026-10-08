@@ -3,7 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
 import {XMLParser} from 'fast-xml-parser';
 import {mediaFrameRecord} from '../dist/media-provenance.js';
-import {toPptx, fromPptx} from '../dist/index.js';
+import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 
 // FF-29: video payloads export the preview's placeholder. The frame links to a
 // web source and every placeholder shape carries OPF_MEDIA_V1, so import
