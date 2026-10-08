@@ -1,8 +1,9 @@
 // RR-55: the one rule for a check that runs through a package that is not on npm yet. A coordinated breaking change (a
 // core line and its sibling pull requests, Depends-On) declares what it needs before it is published; while what is
 // installed from npm does not satisfy that, the checks that can only run through the published package skip with a
-// ::notice:: on a pull request or merge-queue run, and every other check still runs. On push, the nightly run, a manual
-// run, a release or a local run an unmet requirement is an error, never a skip, so main and releases keep the hard gate.
+// ::notice:: on a pull request, merge-queue or roller-candidate run, and every other check still runs. On push, the nightly
+// run, any other manual run, a release or a local run an unmet requirement is an error, never a skip, so main and releases
+// keep the hard gate.
 //
 // Users: scripts/registry-sibling-gate.mjs (a Depends-On sibling's harness against the published core) and the CLI's
 // render/export/import tests (packages/cli/test/files.mjs, packed-files.mjs) against the published opf-render and opf-pptx.
@@ -13,6 +14,17 @@ import { compareVersions, floorOf, isVersion } from './release-train.mjs';
 
 /** Events on which a coordinated change may still wait for a publish (ecosystem-refs honours Depends-On on them). */
 export const SKIP_EVENTS = new Set(['pull_request', 'merge_group']);
+/**
+ * The roller's candidate branch. The ecosystem lock roller dispatches OPF CI and Coordinated public packages on it with
+ * workflow_dispatch to check a candidate lock before it proposes the roll pull request, so those runs are pre-merge like
+ * a pull request: a roll that adopts a coordinated breaking change waits for its publish exactly as its pull requests did.
+ */
+export const ROLLER_CANDIDATE_REF = 'refs/heads/ecosystem-roll/main';
+
+/** Whether a run may skip an unmet requirement: a pull request, the merge queue, or a dispatch on the roller's candidate. */
+export function mayWait(event, ref) {
+  return SKIP_EVENTS.has(event) || (event === 'workflow_dispatch' && ref === ROLLER_CANDIDATE_REF);
+}
 
 /** Whether `version` satisfies `range` (`^X.Y.Z`, `~X.Y.Z`, `>=X.Y.Z`, `=X.Y.Z` or `X.Y.Z`; npm caret rules for 0.x). */
 export function satisfies(version, range) {
@@ -35,10 +47,10 @@ export function satisfies(version, range) {
  * Whether a check that runs through `subject` runs. `met` says whether the installed `installed` satisfies `required`.
  * Returns { run: true } or { run: false, message } on a pull request or merge-queue run; throws on any other event.
  */
-export function gate({ subject, required, installed, met, event = process.env.GITHUB_EVENT_NAME ?? '', what = 'the checks that run through it' }) {
+export function gate({ subject, required, installed, met, event = process.env.GITHUB_EVENT_NAME ?? '', ref = process.env.GITHUB_REF ?? '', what = 'the checks that run through it' }) {
   if (met) return { run: true };
   const unmet = `${subject} needs ${required}, and the installed published version is ${installed ?? 'missing'}`;
-  if (!SKIP_EVENTS.has(event)) throw new Error(`${unmet}, on a ${event || 'local'} run: only a pull request or merge-queue run may skip ${what} (RR-55); publish ${required} first`);
+  if (!mayWait(event, ref)) throw new Error(`${unmet}, on a ${event || 'local'} run: only a pull request, merge-queue or roller-candidate run may skip ${what} (RR-55); publish ${required} first`);
   return { run: false, message: `RR-55: ${unmet}, so ${what} skip on this ${event} run. Every other check still runs; push to main and releases run them.` };
 }
 

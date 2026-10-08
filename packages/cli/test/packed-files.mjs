@@ -15,7 +15,7 @@ const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cl
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
 const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map(name => `${name}@${manifest.devDependencies[name]}`);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
-// ranges (a coordinated release not on npm yet), a pull request or merge-queue run skips it with a notice (scripts/unreleased-gate.mjs).
+// ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
 assert.equal(manifest.dependencies, undefined, 'the CLI keeps no runtime dependencies');

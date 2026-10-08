@@ -18,7 +18,7 @@ test('a Depends-On sibling that needs an unreleased core skips its harness on a 
   assert.match(decide().message, /requiresUnreleasedCore\).*needs @openpresentation\/opf 0\.15\.0, and the installed published version is 0\.14\.0/);
   assert.equal(decide({ event: 'merge_group' }).run, false);
   // Main and releases keep the hard gate: an unreleased requirement there is an error, never a skip.
-  for (const event of ['push', 'schedule', 'workflow_dispatch', '']) assert.throws(() => decide({ event }), /only a pull request or merge-queue run/, event);
+  for (const event of ['push', 'schedule', 'workflow_dispatch', '']) assert.throws(() => decide({ event }), /only a pull request, merge-queue or roller-candidate run/, event);
   // Once the core is published, the harness runs again.
   assert.equal(decide({ installed: '0.15.0' }).run, true);
   assert.equal(decide({ installed: '0.15.1' }).run, true);
