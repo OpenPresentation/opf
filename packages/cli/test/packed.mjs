@@ -67,22 +67,27 @@ try {
  const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);
- assert.deepEqual(Object.keys(manifest.dependencies??{}),['@openpresentation/opf'],'core is the only runtime dependency of the CLI');
- assert.equal(manifest.exports['./api'].import,'./dist/api.js');assert.equal(manifest.exports['./api'].types,'./dist/api.d.ts');
- for(const file of ['dist/api.js','dist/api.d.ts','dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
- // One core: the installation holds a single @openpresentation/opf, which the command and @openpresentation/cli/api both use.
- const one=await assertOneCore(path.dirname(path.dirname(installed)));
+ // The manifest this installation is checked against: the source of this checkout, or (registry mode) of the release commit. A release
+ // before RR-62 bundles core (no dependencies, no /api); from RR-62 core is the only runtime dependency, shared with @openpresentation/cli/api.
+ const registryRef=registry?(verificationRef??plan.verificationRefs.cli):undefined;
+ if(registryRef)assert.match(registryRef,/^[a-f0-9]{40}$/);
+ const sourceManifest=registry?JSON.parse(run('git',['show',`${registryRef}:packages/cli/package.json`],root)):JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
+ if(registry)assert.equal(sourceManifest.version,expected.version,'Command tests must belong to the selected CLI version');
+ assert.deepEqual(Object.keys(manifest.dependencies??{}),Object.keys(sourceManifest.dependencies??{}),'The installed CLI declares the dependencies of its source');
  const bin=path.join(installed,manifest.bin.opf);
  const versions=JSON.parse(run(process.execPath,[bin,'--version'],temp));
  assert.equal(versions.cli,expected.version);
- assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
- if(registry){
-  const ref=verificationRef??plan.verificationRefs.cli;
-  assert.match(ref,/^[a-f0-9]{40}$/);
-  const cliManifest=JSON.parse(run('git',['show',`${ref}:packages/cli/package.json`],root));
-  assert.equal(cliManifest.version,expected.version,'Command tests must belong to the selected CLI version');
-   const sourceManifest=JSON.parse(run('git',['show',`${ref}:packages/cli/package.json`],root));
-  assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
+ if(sourceManifest.dependencies?.['@openpresentation/opf']){
+  assert.deepEqual(Object.keys(manifest.dependencies),['@openpresentation/opf'],'core is the only runtime dependency of the CLI');
+  assert.equal(manifest.exports['./api'].import,'./dist/api.js');assert.equal(manifest.exports['./api'].types,'./dist/api.d.ts');
+  for(const file of ['dist/api.js','dist/api.d.ts','dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
+  // One core: the installation holds a single @openpresentation/opf, which the command and @openpresentation/cli/api both use.
+  const one=await assertOneCore(path.dirname(path.dirname(installed)));
+  assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
+  if(registry)assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
+ } else {
+  const coreManifest=JSON.parse(run('git',['show',`${registryRef}:packages/javascript/package.json`],root));
+  assert.equal(versions.opf,coreManifest.version,'Bundled core must match the immutable CLI source');
  }
  assert.ok(JSON.parse(run(process.execPath,[bin,'create','-','--title','Installed binary'],temp)).slides.length);
  const richDeck={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
