@@ -5,7 +5,7 @@
 // request, and a sibling that declares `"opf": { "requiresUnreleasedCore": "X.Y.Z" }` has rewritten its harness for a core
 // that is not on npm yet. This gate skips exactly that sibling harness, with a ::notice::, while the published core the
 // registry consumer installed is lower than X.Y.Z. The rule is scripts/unreleased-gate.mjs (shared with the CLI's peer
-// tests): never a skip on push, the nightly run, a manual run or a release, so main and releases keep the hard gate.
+// tests): never a skip on push, the nightly run, a manual run (other than the roller's candidate) or a release, so main and releases keep the hard gate.
 //
 //   node scripts/registry-sibling-gate.mjs <sibling checkout> <registry consumer>   prints `run` or `skip`
 import { existsSync, readFileSync } from 'node:fs';

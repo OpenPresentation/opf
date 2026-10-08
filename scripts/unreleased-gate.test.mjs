@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { SKIP_EVENTS, cliPeerGate, gate, satisfies } from './unreleased-gate.mjs';
+import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF } from './unreleased-gate.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -31,8 +31,17 @@ test('an unmet requirement skips only on a pull request or merge-queue run, and 
     assert.equal(result.run, false, event);
     assert.match(result.message, /x needs y@\^0\.15\.0, and the installed published version is 0\.14\.0, so its tests skip/);
   }
-  for (const event of ['push', 'schedule', 'workflow_dispatch', 'release', '']) assert.throws(() => unmet(event), /only a pull request or merge-queue run may skip its tests/, event);
+  for (const event of ['push', 'schedule', 'workflow_dispatch', 'release', '']) assert.throws(() => unmet(event), /only a pull request, merge-queue or roller-candidate run may skip its tests/, event);
   for (const event of ['push', 'pull_request', '']) assert.deepEqual(gate({ subject: 'x', required: 'y', installed: '1', met: true, event }), { run: true });
+});
+
+test("the roller's candidate dispatch waits like a pull request; any other dispatch or push does not", () => {
+  const unmet = (event, ref) => gate({ subject: 'x', required: 'y@^0.15.0', installed: '0.14.0', met: false, event, ref, what: 'its tests' });
+  assert.equal(mayWait('workflow_dispatch', ROLLER_CANDIDATE_REF), true);
+  assert.equal(unmet('workflow_dispatch', 'refs/heads/ecosystem-roll/main').run, false);
+  for (const [event, ref] of [['workflow_dispatch', 'refs/heads/main'], ['workflow_dispatch', 'refs/heads/ecosystem-roll/other'], ['push', ROLLER_CANDIDATE_REF], ['schedule', ROLLER_CANDIDATE_REF]]) {
+    assert.throws(() => unmet(event, ref), /roller-candidate run may skip/, `${event} ${ref}`);
+  }
 });
 
 test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves', () => {
@@ -52,7 +61,7 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
   const skipped = cliPeerGate({ cliRoot: cli, executable, names, event: 'pull_request' });
   assert.equal(skipped.run, false);
   assert.match(skipped.message, /opf-render@\^0\.15\.0 and @openpresentation\/opf-pptx@\^0\.15\.0/);
-  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }), /only a pull request or merge-queue run/);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }), /only a pull request, merge-queue or roller-candidate run/);
   install('@openpresentation/opf-render', '0.15.0');
   install('@openpresentation/opf-pptx', '0.15.1');
   assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'push' }).run, true);

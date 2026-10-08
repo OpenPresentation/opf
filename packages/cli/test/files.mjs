@@ -11,7 +11,7 @@ import {inflateRawSync} from 'node:zlib';
 import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
 // RR-55: every check here runs through the installed published opf-render and opf-pptx. While they do not satisfy the CLI's
-// peer ranges (a coordinated release not on npm yet), a pull request or merge-queue run skips this file with a notice; any
+// peer ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips this file with a notice; any
 // other run fails (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: fileURLToPath(new URL('..', import.meta.url)), executable, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const goldenFile = fileURLToPath(new URL('./fixtures/render-hashes.json', import.meta.url));
