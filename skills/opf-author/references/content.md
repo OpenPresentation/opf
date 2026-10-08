@@ -14,7 +14,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Numbered list | `{"items":["First step","Second step"],"numbering":"arabic"}` (also `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`; `{"style":"alpha-lower","start":3,"suffix":"paren"}`; an array is one entry per level; works on `bullets` too) |
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
-| Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}` |
+| Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}`; an optional `alt` says what a large table shows (`""` marks it decorative) |
 | Metric | `{"metric":{"value":98,"unit":"%","label":"Retention"}}`; `trend` (`up`, `down`, `flat`) draws an arrow, and `sentiment` (`positive`, `negative`, `neutral`) says whether the change is good news, so a falling churn is `"trend":"down","sentiment":"positive"` (absent: up green, down red, flat neutral) |
 | Chart | `{"chart":{"type":"column","alt":"Revenue rose from $12M in Q1 to $18M in Q2.","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
 | Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}`; a testimonial adds `"role":"VP Operations, Acme"` (title and organization, drawn on its own line under the attribution) and `"photo":{"src":"asset:speaker","alt":"Name"}` (a circular headshot beside them; give it alt text) |

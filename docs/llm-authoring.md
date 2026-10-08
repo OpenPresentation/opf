@@ -32,7 +32,7 @@ Pick `bullets` for plain talking points and `items` for a list whose entries hav
 
 A headline or quote may carry inline formatting: `title`, `subtitle`, `tag` and `quote.text` accept a string or `TextRun[]`, for example `"title": ["Revenue grew ", { "text": "28%", "color": "accent1" }]` to color the word that carries the claim, or a `cite` marker on the claim. Use a plain string unless a run needs its own style.
 
-Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`, plus an `alt` sentence that says what the data shows. For an amount beside a rate, a `combo` chart draws columns with line series (`line`, default the last series) and can put a line on a secondary axis (`secondaryAxis`); see [chart-options.md](chart-options.md#combo-charts). Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
+Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`, with an optional `alt` sentence for the takeaway of a large table (`""` marks it decorative). Charts put a `type` and the same tabular structure inside `chart.data`, plus an `alt` sentence that says what the data shows. For an amount beside a rate, a `combo` chart draws columns with line series (`line`, default the last series) and can put a line on a secondary axis (`secondaryAxis`); see [chart-options.md](chart-options.md#combo-charts). Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
 
 ## Deck facts: built-in variables
 
