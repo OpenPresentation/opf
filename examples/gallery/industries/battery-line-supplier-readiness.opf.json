@@ -950,6 +950,9 @@
           ],
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/image-1x.svg"
+          },
+          "design": {
+            "imageFit": "contain"
           }
         },
         "code-1x": {

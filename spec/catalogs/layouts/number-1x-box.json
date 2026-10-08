@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-1x-box",
+  "name": "Number_1x_Box",
+  "summary": "Canonical OPF number 1x boxed layout.",
+  "description": "Number 1x Box OPF layout with a numeric/data callout.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "1 zone",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x-box.svg"
+  }
+}

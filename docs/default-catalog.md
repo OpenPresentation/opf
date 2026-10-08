@@ -128,12 +128,12 @@ budget.
 - **`moveToCustom(document, { kind, reference }, { catalogs })`** moves a record embedded under `default` or a named
   group into `custom`: the fix `opf/catalog-record-not-in-source` suggests. Every reference that named it is rewritten
   to name it in `custom`, and its own references keep naming what they named. It keeps its id unless `custom` holds a
-  different record under it (then `<id>-2` and up; an identical one is reused). It returns
-  `{ document, from, to, references, patch }`, where `patch` is RFC 6902 for review and undo, and throws
-  `OPFMoveToCustomError` (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`, `id-taken`). Fork:
-  `moveToCustom(document, ref, { id })` copies the record into `custom` under the new id and rewrites every reference to
-  the copy, so the original is removed from its group; an editor calls it on the first edit of a catalog record and
-  applies the edit to the copy.
+  different record under it (then `<id>-2` and up, reported in `renamed`; an identical one is reused). It returns
+  `{ document, from, to, references, patch, renamed? }`, where `patch` is RFC 6902 for review and undo, and throws
+  `OPFMoveToCustomError` (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`). Fork:
+  `moveToCustom(document, ref, { id })` copies the record into `custom` under the new id (`<id>-2` on conflict) and
+  rewrites every reference to the copy, qualified references inside other records included, so the original is dropped
+  from its group; an editor calls it on the first edit of a catalog record and applies the edit to the copy.
 - **`updateFromCatalog(document, catalogs, refs?)`** compares the records embedded under `default` and the named groups
   with the registered catalogs' current ones and returns `{ changes, patch }`. Nothing changes until the author applies
   `patch` (`applyPatch`); `custom` records are never compared.
@@ -187,15 +187,15 @@ are not OPF records and link their catalog index with `Link: <…/<kind>/index.j
 
 | `<kind>` (URL and snapshot directory) | Key | Record schema | Role | Snapshot mode |
 | --- | --- | --- | --- | --- |
-| `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | subset |
+| `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | mirror |
 | `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | content, `design.colorScheme` | mirror |
 | `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | content, `design.fontScheme` | mirror |
-| `layouts` | `layouts` | `opf-layout/v1` | content, `Slide.layout` | subset |
-| `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | subset |
+| `layouts` | `layouts` | `opf-layout/v1` | content, `Slide.layout` | mirror |
+| `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | mirror |
 | `purposes` | `purposes` | `opf-purpose/v1` | content, `purpose` | mirror |
 | `themes` | `themes` | `opf-theme/v1` | content, `design.theme` | mirror |
 | `tones` | `tones` | `opf-tone/v1` | content, `tone` | mirror |
-| `chart-types` | `chartTypes` | `opf-chart-type/v1` | display metadata for `chart.type` | subset |
+| `chart-types` | `chartTypes` | `opf-chart-type/v1` | display metadata for `chart.type` | mirror |
 | `languages` | `languages` | `opf-language/v1` | display metadata for `language` | mirror |
 | `social-platforms` | `socialPlatforms` | `opf-social-platform/v1` | display metadata for `socials` keys | mirror |
 
@@ -244,11 +244,9 @@ names a retired id gets `opf/unresolved-reference`.
 }
 ```
 
-- **mirror**: the snapshot holds every published record of the kind.
-- **subset**: the snapshot keeps the ids it already holds, while the publisher also serves others (for example most of
-  the gallery's layouts). With zero built-in records a subset costs nothing in the engine bundles: only
-  `@openpresentation/opf/catalog` carries the snapshot, and a host that wants every published layout registers the
-  gallery's own catalog.
+Every kind is `mirror`: the snapshot holds every record the gallery publishes (all 278 layouts, for example), so
+`@openpresentation/opf/catalog` is the full gallery catalog and a host registers it as is. It costs nothing in the
+engine bundles: only `/catalog` carries the snapshot, and `pnpm check:catalog-free` budgets it on its own.
 
 The snapshot never loses an id by accident: the sync refuses a publisher that stopped serving a held id. The one waiver
 is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) drops exactly those ids and deletes their
@@ -263,21 +261,21 @@ git commit                        # the snapshot pins a commit
 
 # in this repository
 node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery          # writes spec/catalogs + manifest
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts and gallery-only ids
+node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts
 ```
 
 The sync validates every published index and record against the schemas in `spec/schemas/`, checks the published
 `contentSha256`, drops `x-*` members, and rewrites only the files whose content changed. Writes require a clean gallery
 checkout so the manifest commit identifies the actual catalog bytes. `--url https://www.pptx.gallery` reads the live
-site for inspection and requires `--check` or `--report`. `--include <kind>:<id>[,<id>...]` adds published ids to a
-subset kind once.
+site for inspection and requires `--check` or `--report`. Every kind takes every published record; there is no
+per-id selection.
 
 A record rewrite the spec itself requires (the 0.15 font-scheme `languages` tags, for example) is edited under
 `spec/catalogs/<kind>/` and rehashed, and the gallery publishes the same records in the same train:
 
 ```sh
 node scripts/sync-gallery-catalog.mjs --rehash                  # index contentSha256, manifest records and contentSha256
-node scripts/sync-gallery-catalog.mjs --rehash --match-gallery  # also the gallery block of a mirrored kind
+node scripts/sync-gallery-catalog.mjs --rehash --match-gallery  # also each kind's gallery block
 ```
 
 ### Checks

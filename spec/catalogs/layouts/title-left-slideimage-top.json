@@ -1,0 +1,34 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "title-left-slideimage-top",
+  "name": "Title_Left_Image_Top",
+  "summary": "A left-aligned title and subtitle with an image that bleeds to the top edge.",
+  "description": "A title slide with one image that bleeds to the top edge across half the slide; the left-aligned title and subtitle compose in the other half. The layout's image placeholder places the slide's image (Slide.image) at the top edge.",
+  "design": {
+    "titleAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    },
+    {
+      "type": "image",
+      "placement": {
+        "edge": "top"
+      }
+    }
+  ],
+  "tags": [
+    "Title",
+    "Titled",
+    "Image"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-left-slideimage-top.svg"
+  }
+}

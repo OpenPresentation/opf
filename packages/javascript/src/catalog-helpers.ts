@@ -374,7 +374,7 @@ export interface MovedRecord {
   reference: string;
 }
 /** Error codes of OPFMoveToCustomError. */
-export type MoveToCustomErrorCode = 'invalid-reference' | 'already-custom' | 'not-embedded' | 'invalid-id' | 'id-taken';
+export type MoveToCustomErrorCode = 'invalid-reference' | 'already-custom' | 'not-embedded' | 'invalid-id';
 export class OPFMoveToCustomError extends Error {
   readonly code: MoveToCustomErrorCode;
   constructor(code: MoveToCustomErrorCode, message: string) {
@@ -397,6 +397,8 @@ export interface MoveToCustomResult {
   references: string[];
   /** RFC 6902 operations that turn the input into `document` (apply with core `applyPatch`, for undo and review). */
   patch: MoveToCustomPatchOperation[];
+  /** Present when `custom` already held a different record under the wanted id, so the record took `<id>-2` (and up). */
+  renamed?: { from: string; to: string };
 }
 
 const pointerOf = (path: readonly (string | number)[]) => `/${path.map((part) => pointerPart(String(part))).join('/')}`;
@@ -410,10 +412,10 @@ const pointerOf = (path: readonly (string | number)[]) => `/${path.map((part) =>
  *
  * Fork: with `id`, the record is copied into `custom` under that id instead (an editor calls this on the first edit of a
  * record under `default` or a named group, then applies the edit to the copy). Every reference is rewritten to the copy,
- * so nothing references the original any more and it is removed from its group. An identical custom record under
- * `id` is reused; a different one is `id-taken`.
+ * so nothing references the original any more and it is dropped from its group. A different custom record under the
+ * wanted id (the record's own, or `id`) makes it `<id>-2` and up, reported in `renamed`; an identical one is reused.
  *
- * Throws OPFMoveToCustomError (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`, `id-taken`).
+ * Throws OPFMoveToCustomError (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`).
  * Registered catalogs only matter for how the surrounding references resolve, so pass the host's `catalogs` as for
  * validate.
  */
@@ -443,12 +445,10 @@ export function moveToCustom(document: unknown, ref: CatalogRef, options: Catalo
   // The moved record with its own references kept: each written so it names, from custom, what it named before.
   const moved = structuredClone(record);
   const ownSites = sites.map((site, index) => ({ site, found: targets[index] })).filter(({ site }) => inMoved(site));
-  let toId = fromId;
-  if (options.id !== undefined) {
-    if (typeof options.id !== 'string' || !CATALOG_GROUP_PATTERN.test(options.id)) throw new OPFMoveToCustomError('invalid-id', `moveToCustom: the new id ${JSON.stringify(options.id)} is not a lowercase kebab-case id.`);
-    toId = options.id;
-    if (Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved)) throw new OPFMoveToCustomError('id-taken', `moveToCustom: catalogs.custom.${kind} already holds a different record under ${JSON.stringify(toId)}.`);
-  } else for (let n = 2; Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved); n++) toId = `${fromId}-${n}`;
+  if (options.id !== undefined && (typeof options.id !== 'string' || !CATALOG_GROUP_PATTERN.test(options.id))) throw new OPFMoveToCustomError('invalid-id', `moveToCustom: the new id ${JSON.stringify(options.id)} is not a lowercase kebab-case id.`);
+  const wanted = options.id ?? fromId;
+  let toId = wanted;
+  for (let n = 2; Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved); n++) toId = `${wanted}-${n}`;
   const reused = Object.hasOwn(existing, toId);
 
   // Remove the record, then add it to custom (creating the containers the patch needs).
@@ -499,5 +499,6 @@ export function moveToCustom(document: unknown, ref: CatalogRef, options: Catalo
     to: { kind, group: 'custom', id: toId, reference: toId },
     references,
     patch,
+    ...(toId !== wanted ? { renamed: { from: wanted, to: toId } } : {}),
   };
 }

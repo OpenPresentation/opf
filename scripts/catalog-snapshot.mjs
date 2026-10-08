@@ -120,10 +120,10 @@ export async function verifySnapshot(catalogsRoot) {
     if (entry.records !== records.length) {
       problems.push(`manifest.json kinds.${kind}.records is ${entry.records}, snapshot has ${records.length}`);
     }
-    if (!["mirror", "subset"].includes(entry.mode)) {
-      problems.push(`manifest.json kinds.${kind}.mode must be 'mirror' or 'subset'`);
+    if (entry.mode !== "mirror") {
+      problems.push(`manifest.json kinds.${kind}.mode must be 'mirror' (every kind mirrors the gallery)`);
     }
-    if (entry.mode === "mirror" && entry.gallery && entry.gallery.contentSha256 !== hash) {
+    if (entry.gallery && entry.gallery.contentSha256 !== hash) {
       problems.push(`manifest.json kinds.${kind}: a mirrored kind must match the gallery hash`);
     }
     for (const key of Object.keys(index).filter((name) => name.startsWith("x-"))) {

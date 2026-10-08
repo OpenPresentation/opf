@@ -6,7 +6,7 @@ import {layouts} from './support/catalog.mjs';
 // points at the SVG the gallery publishes for it.
 describe('bundled layout records are described', () => {
   test('every record has a summary, a description, tags and a vector preview', () => {
-    assert.ok(layouts.length >= 99);
+    assert.ok(layouts.length > 100, 'the full gallery catalog');
     for (const record of layouts) {
       assert.ok(record.summary?.trim(), `${record.id}: summary`);
       assert.ok(record.description?.trim(), `${record.id}: description`);
@@ -17,11 +17,13 @@ describe('bundled layout records are described', () => {
 
   test('a design is stated only where the gallery layout data states one', () => {
     const designed = new Set(['chart-1x', 'chart-2x', 'chart-3x', 'list-1x', 'list-2x', 'list-3x', 'list-4x', 'list-5x', 'list-6x', 'number-1x', 'number-2x', 'number-3x', 'number-4x', 'number-5x', 'number-6x']);
-    const was = new Set(['blank', 'title', 'title-subtitle', 'text-1x', 'text-2x', 'text-3x', 'code-1x', 'image-1x', 'image-2x', 'image-3x', 'media-1x', 'quote-1x', 'table-1x', 'timeline-1x']);
+    const was = new Set(['blank', 'title', 'title-subtitle', 'text-1x', 'text-2x', 'text-3x', 'code-1x', 'media-1x', 'quote-1x', 'table-1x', 'timeline-1x']);
     for (const record of layouts) {
       if (designed.has(record.id)) assert.equal(record.design?.contentAlignment, 'center', record.id);
       if (was.has(record.id)) assert.equal(record.design, undefined, record.id);
     }
+    // Owner decision (FA-24): the image grid layouts show the whole picture.
+    for (const id of ['image-1x', 'image-2x', 'image-3x']) assert.deepEqual(layouts.find(record => record.id === id).design, {imageFit: 'contain'}, id);
     // FA-22: a full-bleed photo is a background, not a layout; no record reserves a slide image any more.
     assert.equal(layouts.find(record => record.id === 'image-bleed'), undefined);
     assert.ok(layouts.every(record => record.design?.slideImage === undefined && record.design?.imageFill === undefined));

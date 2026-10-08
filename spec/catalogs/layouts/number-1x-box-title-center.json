@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-1x-box-title-center",
+  "name": "Number_1x_Box_Title_Center",
+  "summary": "Canonical OPF number 1x title boxed layout.",
+  "description": "Number 1x Box Title Center OPF layout with a numeric/data callout and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "1 zone",
+    "Center aligned",
+    "Titled",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x-box-title-center.svg"
+  }
+}

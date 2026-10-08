@@ -12,7 +12,7 @@ import {
   readJson,
   verifySnapshot,
 } from "./catalog-snapshot.mjs";
-import { applySnapshot, diffSnapshot, loadValidators, main, parseIncludes, planSnapshot, readCurrentSnapshot, rehashSnapshot } from "./sync-gallery-catalog.mjs";
+import { applySnapshot, diffSnapshot, loadValidators, main, parseKindIds, planSnapshot, readCurrentSnapshot, rehashSnapshot } from "./sync-gallery-catalog.mjs";
 
 const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "spec", "catalogs");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
@@ -71,54 +71,43 @@ describe("planSnapshot", () => {
     assert.deepEqual(changes, []);
   });
 
-  test("mirror kinds take new gallery records; subset kinds keep their ids", () => {
+  test("every kind mirrors the gallery: new gallery records join the snapshot, and the manifest names mode mirror", () => {
     const gallery = publishedFromSnapshot();
     const tone = { $schema: "https://openpresentation.org/schema/opf-tone/v1", id: "playful", name: "Playful", "x-gallery": {} };
     addRecord(gallery, "tones", tone, { id: "playful", name: "Playful", file: "playful.json" });
-    const audience = { $schema: "https://openpresentation.org/schema/opf-audience/v1", id: "students", name: "Students" };
-    addRecord(gallery, "audiences", audience, { id: "students", name: "Students", file: "students.json" });
-
-    const manifest = structuredClone(snapshot.manifest);
-    manifest.kinds.tones.mode = "mirror";
-    manifest.kinds.audiences.mode = "subset";
-    const plan = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source });
+    const layout = { $schema: "https://openpresentation.org/schema/opf-layout/v1", id: "gallery-only-layout", name: "Gallery only", placeholders: [{ type: "title" }], "x-gallery": {} };
+    addRecord(gallery, "layouts", layout, { id: "gallery-only-layout", name: "Gallery only", file: "gallery-only-layout.json" });
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source });
     assert.deepEqual(plan.problems, []);
     assert.deepEqual(plan.kinds.tones.records.at(-1), { $schema: tone.$schema, id: "playful", name: "Playful" });
-    assert.equal(plan.kinds.audiences.records.length, snapshot.current.audiences.records.length);
-    assert.deepEqual(plan.kinds.audiences.galleryOnly, ["students"]);
-    assert.equal(plan.manifest.kinds.audiences.gallery.records, snapshot.current.audiences.records.length + 1);
-    assert.equal(plan.kinds.tones.index.contentSha256, catalogContentSha256(plan.kinds.tones.records));
-  });
-
-  test("--include adds published ids to a subset kind once, and only ids the gallery publishes", () => {
-    const gallery = publishedFromSnapshot();
-    const layout = { $schema: "https://openpresentation.org/schema/opf-layout/v1", id: "included-layout", name: "Included", placeholders: [{ type: "title" }], "x-gallery": {} };
-    const other = { $schema: "https://openpresentation.org/schema/opf-layout/v1", id: "excluded-layout", name: "Excluded", placeholders: [{ type: "title" }] };
-    addRecord(gallery, "layouts", layout, { id: "included-layout", name: "Included", file: "included-layout.json" });
-    addRecord(gallery, "layouts", other, { id: "excluded-layout", name: "Excluded", file: "excluded-layout.json" });
-    const manifest = structuredClone(snapshot.manifest);
-    manifest.kinds.layouts.mode = "subset";
-
-    const plan = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source, include: { layouts: ["included-layout"] } });
-    assert.deepEqual(plan.problems, []);
     assert.equal(plan.kinds.layouts.records.length, snapshot.current.layouts.records.length + 1);
-    assert.ok(plan.kinds.layouts.records.some((record) => record.id === "included-layout" && !("x-gallery" in record)));
-    assert.deepEqual(plan.kinds.layouts.galleryOnly, ["excluded-layout"]);
-
-    // The included id is in the snapshot afterwards, so the next plan keeps it without the flag.
-    const after = { ...snapshot.current, layouts: { index: plan.kinds.layouts.index, records: plan.kinds.layouts.records } };
-    const again = planSnapshot({ gallery, current: after, manifest, validators, source });
-    assert.equal(again.kinds.layouts.records.length, plan.kinds.layouts.records.length);
-
-    const missing = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source, include: { layouts: ["not-published"] } });
-    assert.ok(missing.problems.some((problem) => /layouts: --include 'not-published' is not published/.test(problem)), missing.problems.join("\n"));
+    assert.ok(plan.kinds.layouts.records.some((record) => record.id === "gallery-only-layout" && !("x-gallery" in record)));
+    for (const { kind } of SNAPSHOT_KINDS) {
+      assert.deepEqual(plan.kinds[kind].galleryOnly, [], kind);
+      assert.equal(plan.manifest.kinds[kind].mode, "mirror", kind);
+      assert.equal(plan.manifest.kinds[kind].gallery.contentSha256, plan.kinds[kind].index.contentSha256, kind);
+    }
   });
 
-  test("parseIncludes reads repeatable kind:ids pairs and rejects malformed ones", () => {
-    assert.deepEqual(parseIncludes(["--gallery", "g", "--include", "layouts:a,b", "--include", "layouts:c", "--include", "tones:d"]), { layouts: ["a", "b", "c"], tones: ["d"] });
-    assert.deepEqual(parseIncludes(["--gallery", "g"]), {});
-    for (const bad of ["layouts", "layouts:", ":a", "unknown-kind:a"]) assert.throws(() => parseIncludes(["--include", bad]), /--include needs/, bad);
-    assert.throws(() => parseIncludes(["--include"]), /--include needs/);
+  test("a gallery record that changed is taken as published (the gallery owns every record)", () => {
+    const gallery = publishedFromSnapshot();
+    const at = gallery.layouts.records.findIndex((record) => record.id === "chart-1x");
+    gallery.layouts.records[at] = { ...gallery.layouts.records[at], name: "Chart one" };
+    gallery.layouts.index.contentSha256 = catalogContentSha256(gallery.layouts.records);
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source });
+    assert.deepEqual(plan.problems, []);
+    assert.equal(plan.kinds.layouts.records.find((record) => record.id === "chart-1x").name, "Chart one");
+  });
+
+  test("parseKindIds reads repeatable kind:ids pairs and rejects malformed ones", () => {
+    assert.deepEqual(parseKindIds(["--gallery", "g", "--allow-removed", "layouts:a,b", "--allow-removed", "layouts:c", "--allow-removed", "tones:d"], "--allow-removed"), { layouts: ["a", "b", "c"], tones: ["d"] });
+    assert.deepEqual(parseKindIds(["--gallery", "g"], "--allow-removed"), {});
+    for (const bad of ["layouts", "layouts:", ":a", "unknown-kind:a"]) assert.throws(() => parseKindIds(["--allow-removed", bad], "--allow-removed"), /--allow-removed needs/, bad);
+    assert.throws(() => parseKindIds(["--allow-removed"], "--allow-removed"), /--allow-removed needs/);
+  });
+
+  test("--include is gone: every kind already mirrors the gallery", async () => {
+    await assert.rejects(main(["--gallery", "g", "--include", "layouts:a"]), /--include was removed/);
   });
 
   test("refuses a gallery that dropped a bundled id, forged a hash, or published an invalid record", () => {
@@ -136,24 +125,6 @@ describe("planSnapshot", () => {
     assert.ok(problems.some((problem) => /purposes\/.*\.json: \/name must be string/.test(problem)), problems.join("\n"));
   });
 
-  test("refuses a gallery copy of a bundled subset record that differs in any field, name included (RR-58)", () => {
-    const gallery = publishedFromSnapshot();
-    const at = gallery.layouts.records.findIndex((record) => record.id === "chart-1x");
-    gallery.layouts.records[at] = { ...gallery.layouts.records[at], name: "Chart_1x" };
-    const focus = gallery.layouts.records.findIndex((record) => record.id === "image-focus");
-    const { design, ...withoutDesign } = gallery.layouts.records[focus];
-    assert.ok(design, "image-focus carries its own design");
-    gallery.layouts.records[focus] = withoutDesign;
-    gallery.layouts.index.contentSha256 = catalogContentSha256(gallery.layouts.records);
-    const manifest = structuredClone(snapshot.manifest);
-    manifest.kinds.layouts.mode = "subset";
-
-    const { problems } = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source });
-    const owned = problems.filter((problem) => /core owns this bundled record/.test(problem));
-    assert.equal(owned.length, 2, problems.join("\n"));
-    assert.ok(owned.some((problem) => problem.startsWith("layouts/chart-1x.json:") && /\(name\)/.test(problem)), owned.join("\n"));
-    assert.ok(owned.some((problem) => problem.startsWith("layouts/image-focus.json:") && /\(design\)/.test(problem)), owned.join("\n"));
-  });
 });
 
 describe("--allow-removed waiver", () => {
@@ -187,9 +158,9 @@ describe("--allow-removed waiver", () => {
     assert.equal(plan.kinds["chart-types"].records.some((record) => record.id === "pie"), false);
   });
 
-  test("parseIncludes reads the same shape for --allow-removed", () => {
-    assert.deepEqual(parseIncludes(["--allow-removed", "chart-types:a,b", "--include", "layouts:c"], "--allow-removed"), { "chart-types": ["a", "b"] });
-    assert.throws(() => parseIncludes(["--allow-removed", "chart-types"], "--allow-removed"), /--allow-removed needs/);
+  test("parseKindIds reads only the flag it is given", () => {
+    assert.deepEqual(parseKindIds(["--allow-removed", "chart-types:a,b", "--other", "layouts:c"], "--allow-removed"), { "chart-types": ["a", "b"] });
+    assert.throws(() => parseKindIds(["--allow-removed", "chart-types"], "--allow-removed"), /--allow-removed needs/);
   });
 });
 
@@ -238,7 +209,7 @@ describe("rehashSnapshot (core-first edits)", () => {
     await rm(workdir, { recursive: true, force: true });
   });
 
-  test("a core-first record edit is rehashed, leaving the gallery pin untouched", async () => {
+  test("a record edit is rehashed, leaving the gallery pin untouched (and failing verify until the gallery publishes it)", async () => {
     assert.deepEqual(await rehashSnapshot(workdir), []);
     const before = await readJson(path.join(workdir, "manifest.json"));
     const file = path.join(workdir, "audiences", "board.json");
@@ -246,7 +217,8 @@ describe("rehashSnapshot (core-first edits)", () => {
     await writeFile(file, `${JSON.stringify({ ...record, summary: "Edited in core first." }, null, 2)}\n`);
     assert.notDeepEqual(await verifySnapshot(workdir), []);
     assert.deepEqual((await rehashSnapshot(workdir)).sort(), ["audiences/index.json", "manifest.json (audiences)"]);
-    assert.deepEqual(await verifySnapshot(workdir), []);
+    // Every kind mirrors the gallery, so the edit stays inconsistent with the pin until --match-gallery (or a sync).
+    assert.deepEqual(await verifySnapshot(workdir), ["manifest.json kinds.audiences: a mirrored kind must match the gallery hash"]);
     const after = await readJson(path.join(workdir, "manifest.json"));
     assert.notEqual(after.kinds.audiences.contentSha256, before.kinds.audiences.contentSha256);
     assert.deepEqual(after.kinds.audiences.gallery, before.kinds.audiences.gallery);

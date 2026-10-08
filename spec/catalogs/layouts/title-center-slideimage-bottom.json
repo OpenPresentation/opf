@@ -1,0 +1,34 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "title-center-slideimage-bottom",
+  "name": "Title_Center_Image_Bottom",
+  "summary": "A center-aligned title and subtitle with an image that bleeds to the bottom edge.",
+  "description": "A title slide with one image that bleeds to the bottom edge across half the slide; the centered title and subtitle compose in the other half. The layout's image placeholder places the slide's image (Slide.image) at the bottom edge.",
+  "design": {
+    "titleAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    },
+    {
+      "type": "image",
+      "placement": {
+        "edge": "bottom"
+      }
+    }
+  ],
+  "tags": [
+    "Title",
+    "Titled",
+    "Image"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-center-slideimage-bottom.svg"
+  }
+}

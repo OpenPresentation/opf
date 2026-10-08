@@ -54,8 +54,8 @@
       "properties": {
         "mode": {
           "type": "string",
-          "description": "'mirror': the snapshot holds every published record. 'subset': the snapshot keeps its existing ids (their content comes from the publisher) while the publisher also serves records that are not reconciled for bundling yet.",
-          "enum": ["mirror", "subset"]
+          "description": "Always 'mirror': the snapshot holds every record the publisher serves for the kind (OPF 0.15).",
+          "enum": ["mirror"]
         },
         "records": {
           "type": "integer",

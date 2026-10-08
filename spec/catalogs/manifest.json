@@ -1,15 +1,15 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
-  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync. `layouts` is a subset by design (RR-41, opf#292), not by omission: it bundles 100 of the gallery's 485 layouts, and the other 385 resolve through the default catalog or an inline record, because bundling them adds about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter for records none of them read.",
+  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. Only @openpresentation/opf/catalog carries it; no other entry of core imports catalog data (pnpm check:catalog-free).",
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
-    "commit": "8edf34c8db8b96152ce5350a742fc26d69550d78",
+    "commit": "0c51ea8c8e99ea0cbbf65aa7e0a3c6307dd14197",
     "path": "public"
   },
   "kinds": {
     "audiences": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 16,
       "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314",
       "gallery": {
@@ -18,7 +18,7 @@
       }
     },
     "chart-types": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 27,
       "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
       "gallery": {
@@ -54,16 +54,16 @@
       }
     },
     "layouts": {
-      "mode": "subset",
-      "records": 99,
-      "contentSha256": "74f4dc6dfa1f5d1047aca31f58f27088fa8edffd5dc02ed0b96313dd06bb45a7",
+      "mode": "mirror",
+      "records": 278,
+      "contentSha256": "c313c8348ba295a3a9bd2bb93fd66542090558c6bc17cf396706a5ddd5aa5b39",
       "gallery": {
         "records": 278,
-        "contentSha256": "c0e25d0ff70be377decb2bfc432cb18aef29c0c4c173887e05129bf98ce1f726"
+        "contentSha256": "c313c8348ba295a3a9bd2bb93fd66542090558c6bc17cf396706a5ddd5aa5b39"
       }
     },
     "narratives": {
-      "mode": "subset",
+      "mode": "mirror",
       "records": 48,
       "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220",
       "gallery": {

@@ -70,6 +70,10 @@ export function problems(results, budget) {
   for (const [name, entry] of Object.entries(results)) {
     if (name === CATALOG_ENTRY) {
       if (entry.catalogBytes === 0) found.push(`${name}: the /catalog entry carries no catalog data`);
+      // The full gallery catalog (OPF 0.15): opt-in, so it has a budget of its own, which a sync that adds records raises with --update.
+      const limit = budget?.entries?.[name];
+      if (limit === undefined) found.push(`${name}: no recorded budget; run node scripts/check-catalog-free.mjs --update`);
+      else if (entry.gzip > limit) found.push(`${name}: ${entry.gzip} bytes gzipped, over the budget of ${limit}; a catalog sync that adds records raises it with --update`);
       continue;
     }
     if (entry.catalogBytes > 0) found.push(`${name}: ${entry.catalogBytes} bytes from catalog modules (${entry.catalogModules.join(', ')}); only @openpresentation/opf/catalog may import catalog data`);
@@ -87,9 +91,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (args.includes('--report')) {
     console.log(JSON.stringify(results, (key, value) => (key === 'catalogModules' ? undefined : value), 2));
   } else if (args.includes('--update')) {
-    const entries = Object.fromEntries(Object.entries(results).filter(([name]) => name !== CATALOG_ENTRY && !CONTENT_ENTRIES.has(name)).map(([name, entry]) => [name, Math.ceil(entry.gzip * (1 + HEADROOM))]));
+    const entries = Object.fromEntries(Object.entries(results).filter(([name]) => !CONTENT_ENTRIES.has(name)).map(([name, entry]) => [name, Math.ceil(entry.gzip * (1 + HEADROOM))]));
     const measured = Object.fromEntries(Object.entries(results).map(([name, entry]) => [name, { minified: entry.minified, gzip: entry.gzip }]));
-    writeFileSync(budgetFile, `${JSON.stringify({ description: 'FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. `measured` is the size when it was last updated.', entries, measured }, null, 2)}\n`);
+    writeFileSync(budgetFile, `${JSON.stringify({ description: 'FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. The catalog entry (@openpresentation/opf/catalog, the full pptx.gallery catalog) is the only one that carries catalog data. `measured` is the size when it was last updated.', entries, measured }, null, 2)}\n`);
     console.log(`Wrote ${path.relative(root, budgetFile)}`);
   } else {
     const budget = JSON.parse(readFileSync(budgetFile, 'utf8'));

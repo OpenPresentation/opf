@@ -86,7 +86,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `mode` | yes | `enum:mirror \| subset` | 'mirror': the snapshot holds every published record. 'subset': the snapshot keeps its existing ids (their content comes from the publisher) while the publisher also serves records that are not reconciled for bundling... |
+| `mode` | yes | `enum:mirror` | Always 'mirror': the snapshot holds every record the publisher serves for the kind (OPF 0.15). |
 | `records` | yes | `integer` | Number of records bundled for this kind. |
 | `contentSha256` | yes | `string` | contentSha256 of the bundled records, as defined by the catalog index schema. |
 | `gallery` | yes | `object` | The published catalog for this kind at the pinned commit. |

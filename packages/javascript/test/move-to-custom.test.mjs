@@ -36,6 +36,7 @@ test('moveToCustom from a named group rewrites name:id references, keeps the rec
   );
   const result = moveToCustom(document, { kind: 'themes', reference: 'acme:hero' });
   assert.deepEqual(result.to, { kind: 'themes', group: 'custom', id: 'hero-2', reference: 'hero-2' });
+  assert.deepEqual(result.renamed, { from: 'hero', to: 'hero-2' });
   // The moved theme's colour scheme still names acme's record, now from custom.
   assert.deepEqual(result.document.catalogs.custom.themes['hero-2'], { name: 'Hero', colorScheme: 'acme:brand' });
   assert.deepEqual(result.document.catalogs.acme, { source: ACME, colorSchemes: { brand: scheme('#123456') } });
@@ -51,6 +52,7 @@ test('moveToCustom reuses an identical custom record and refuses what it cannot 
   const document = base({ acme: { source: ACME, layouts: { same: layout('Same') } }, custom: { layouts: { same: layout('Same') } } }, [{ layout: 'acme:same', title: 'A' }]);
   const result = moveToCustom(document, { kind: 'layouts', reference: 'acme:same' });
   assert.equal(result.to.id, 'same');
+  assert.equal(result.renamed, undefined);
   assert.deepEqual(result.document.catalogs, { acme: { source: ACME }, custom: { layouts: { same: layout('Same') } } });
   assert.equal(result.document.slides[0].layout, 'same');
   assert.deepEqual(applyPatch(document, result.patch), result.document);
@@ -88,6 +90,27 @@ test('fork: moveToCustom with an id copies the record into custom under that id 
   assert.deepEqual(applyPatch(document, result.patch), result.document);
   const code = (call) => { try { call(); } catch (error) { return error instanceof OPFMoveToCustomError ? error.code : String(error); } return 'no error'; };
   const taken = { ...document, catalogs: { ...document.catalogs, custom: { layouts: { mine: layout('Other') } } } };
-  assert.equal(code(() => moveToCustom(taken, { kind: 'layouts', reference: 'two-column' }, { id: 'mine' })), 'id-taken');
+  // A different custom record under the fork id: the copy takes <id>-2, reported in renamed.
+  const forked = moveToCustom(taken, { kind: 'layouts', reference: 'two-column' }, { id: 'mine' });
+  assert.deepEqual(forked.renamed, { from: 'mine', to: 'mine-2' });
+  assert.equal(forked.document.slides[0].layout, 'mine-2');
+  assert.deepEqual(applyPatch(taken, forked.patch), forked.document);
   assert.equal(code(() => moveToCustom(document, { kind: 'layouts', reference: 'two-column' }, { id: 'Not An Id' })), 'invalid-id');
+});
+
+test('moveToCustom rewrites qualified references inside other embedded records', () => {
+  const document = base(
+    {
+      acme: { source: ACME, colorSchemes: { brand: scheme('#123456') }, themes: { hero: { name: 'Hero', colorScheme: 'brand' } } },
+      custom: { themes: { ours: { name: 'Ours', colorScheme: 'acme:brand' } } },
+    },
+    [{ title: 'A', design: { theme: 'acme:hero' } }, { title: 'B', design: { theme: 'ours' } }],
+  );
+  const result = moveToCustom(document, { kind: 'colorSchemes', reference: 'acme:brand' }, { id: 'our-brand' });
+  assert.equal(result.document.catalogs.custom.themes.ours.colorScheme, 'our-brand');
+  // acme's own theme named it bare (its group first); it is rewritten to the copy's id, which resolves in custom.
+  assert.equal(resolveReference(result.document, 'colorSchemes', result.document.catalogs.acme.themes.hero.colorScheme, { group: 'acme' }).group, 'custom');
+  assert.equal(result.document.catalogs.acme.colorSchemes, undefined, 'the original is dropped once unreferenced');
+  assert.deepEqual(result.references.sort(), ['/catalogs/acme/themes/hero/colorScheme', '/catalogs/custom/themes/ours/colorScheme']);
+  assert.deepEqual(applyPatch(document, result.patch), result.document);
 });

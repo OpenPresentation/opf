@@ -1,35 +1,36 @@
 {
-  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. `measured` is the size when it was last updated.",
+  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. The catalog entry (@openpresentation/opf/catalog, the full pptx.gallery catalog) is the only one that carries catalog data. `measured` is the size when it was last updated.",
   "entries": {
-    "composition": 64352,
-    "convert": 225591,
+    "catalog": 104506,
+    "composition": 64765,
+    "convert": 226064,
     "data": 8684,
     "diff": 6223,
     "font-policy": 15052,
     "format": 45577,
-    "index": 306128,
-    "markdown": 258707,
-    "pagination": 212250,
-    "patch": 209617,
+    "index": 310098,
+    "markdown": 259131,
+    "pagination": 212712,
+    "patch": 210016,
     "schemas": 62092,
-    "spec-files": 8821,
+    "spec-files": 11314,
     "symbol-font-encodings": 36084,
     "types": 21,
-    "validator": 207749,
-    "yaml": 243294
+    "validator": 208157,
+    "yaml": 243752
   },
   "measured": {
     "catalog": {
-      "minified": 464794,
-      "gzip": 93091
+      "minified": 596384,
+      "gzip": 101462
     },
     "composition": {
-      "minified": 185488,
-      "gzip": 62477
+      "minified": 186717,
+      "gzip": 62878
     },
     "convert": {
-      "minified": 724769,
-      "gzip": 219020
+      "minified": 726047,
+      "gzip": 219479
     },
     "data": {
       "minified": 22716,
@@ -40,12 +41,12 @@
       "gzip": 6041
     },
     "docs": {
-      "minified": 1193640,
-      "gzip": 394417
+      "minified": 1195953,
+      "gzip": 395115
     },
     "examples": {
-      "minified": 4055278,
-      "gzip": 2110301
+      "minified": 4038861,
+      "gzip": 2104352
     },
     "font-policy": {
       "minified": 115511,
@@ -56,20 +57,20 @@
       "gzip": 44249
     },
     "index": {
-      "minified": 1111766,
-      "gzip": 297211
+      "minified": 1159964,
+      "gzip": 301066
     },
     "markdown": {
-      "minified": 827644,
-      "gzip": 251171
+      "minified": 828926,
+      "gzip": 251583
     },
     "pagination": {
-      "minified": 684822,
-      "gzip": 206067
+      "minified": 686100,
+      "gzip": 206516
     },
     "patch": {
-      "minified": 682243,
-      "gzip": 203511
+      "minified": 683495,
+      "gzip": 203899
     },
     "repo-readme": {
       "minified": 13576,
@@ -80,8 +81,8 @@
       "gzip": 60283
     },
     "spec-files": {
-      "minified": 109585,
-      "gzip": 8564
+      "minified": 153634,
+      "gzip": 10984
     },
     "symbol-font-encodings": {
       "minified": 170679,
@@ -92,12 +93,12 @@
       "gzip": 20
     },
     "validator": {
-      "minified": 676215,
-      "gzip": 201698
+      "minified": 677467,
+      "gzip": 202094
     },
     "yaml": {
-      "minified": 784670,
-      "gzip": 236207
+      "minified": 785948,
+      "gzip": 236652
     }
   }
 }

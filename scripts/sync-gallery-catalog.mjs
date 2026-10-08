@@ -9,24 +9,22 @@
 //   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
 //   node scripts/sync-gallery-catalog.mjs --rehash                     after a core-first edit of spec/catalogs: rewrite
 //                                                                       the index and manifest hashes and counts
-//   node scripts/sync-gallery-catalog.mjs --rehash --match-gallery     the same, and set the gallery block of mirrored kinds to the new
-//                                                                       hash (for a core-first edit that the gallery PR publishes identically)
+//   node scripts/sync-gallery-catalog.mjs --rehash --match-gallery     the same, and set every kind's gallery block to the new hash (for a
+//                                                                       spec-required edit that the gallery PR publishes identically)
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
-//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --include layouts:<id>[,<id>...]
-//                                                                       add published ids to a subset kind (repeatable)
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --allow-removed chart-types:<id>[,<id>...]
 //                                                                       drop snapshot ids on purpose (repeatable)
 //
 // Every gallery record is validated against the companion schemas in
 // spec/schemas/ before anything is written. Publisher `x-*` members are
-// dropped. A mirrored kind takes every gallery record; a subset kind keeps the
-// ids already in the snapshot (the gallery may publish more). The snapshot
+// dropped. Every kind mirrors the gallery (OPF 0.15): the snapshot holds every
+// record the gallery publishes, which `@openpresentation/opf/catalog` exports
+// as the default catalog. The snapshot
 // never loses an id: removing a record is a breaking change, so a gallery that
 // stopped publishing a bundled id is refused. The one waiver is explicit and per
 // id: `--allow-removed <kind>:<id>` drops that id from the snapshot (and deletes
 // its file), for a removal or rename decided on purpose, such as the FA-03 pre-v1
-// cleanup of chart-type aliases. `--include` adds published ids to a subset kind
-// once; the snapshot keeps them from then on.
+// cleanup of chart-type aliases.
 
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -55,22 +53,8 @@ const schemasRoot = path.join(repoRoot, "spec", "schemas");
 export const GALLERY_REPOSITORY = "https://github.com/Data-Advantage/pptx-gallery";
 export const GALLERY_PUBLISHED_PATH = "public";
 
-// Initial modes, used only when the manifest does not exist yet. Afterwards the
-// manifest's `mode` is authoritative: flip a kind to "mirror" once its gallery
-// data is reconciled with the snapshot (docs/default-catalog.md).
-export const INITIAL_MODES = {
-  audiences: "subset",
-  "chart-types": "subset",
-  "color-schemes": "mirror",
-  "font-schemes": "mirror",
-  languages: "mirror",
-  layouts: "subset",
-  narratives: "subset",
-  purposes: "mirror",
-  "social-platforms": "mirror",
-  themes: "mirror",
-  tones: "mirror",
-};
+// Every kind mirrors the gallery. The manifest still names the mode, which the gallery's check:core-catalog reads.
+export const SNAPSHOT_MODE = "mirror";
 
 // ---------------------------------------------------------------------------
 // Loading the published gallery catalog
@@ -173,18 +157,16 @@ export function checkGalleryKind(kind, galleryKind, validators) {
  * @param {object | undefined} input.manifest Current manifest, if any.
  * @param {object} input.validators Compiled validators.
  * @param {object} input.source Manifest `source` block.
- * @param {Record<string, string[]>} [input.include] Published ids to add to a subset kind (`--include`). A mirror kind
- *   already takes every published record, and an id the gallery does not publish is a problem.
  * @param {Record<string, string[]>} [input.allowRemoved] Snapshot ids to drop on purpose (`--allow-removed`). The waiver
  *   of the never-lose-an-id rule: only the listed ids may disappear, and an id the snapshot does not hold is a problem.
  */
-export function planSnapshot({ gallery, current, manifest, validators, source, include = {}, allowRemoved = {} }) {
+export function planSnapshot({ gallery, current, manifest: _manifest, validators, source, allowRemoved = {} }) {
   const problems = [];
   const kinds = {};
   for (const { kind } of SNAPSHOT_KINDS) {
     const published = gallery[kind];
     problems.push(...checkGalleryKind(kind, published, validators));
-    const mode = manifest?.kinds?.[kind]?.mode ?? INITIAL_MODES[kind];
+    const mode = SNAPSHOT_MODE;
     const currentIds = new Set((current[kind]?.index.records ?? []).map((entry) => entry.id));
     const galleryIds = published.index.records.map((entry) => entry.id);
     const galleryIdSet = new Set(galleryIds);
@@ -199,24 +181,8 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
       }
     }
 
-    for (const id of include[kind] ?? []) {
-      if (!galleryIdSet.has(id)) problems.push(`${kind}: --include '${id}' is not published by the gallery`);
-    }
-    // RR-58: each id has one owner. Core owns a record a subset kind already bundles, so the gallery must publish
-    // exactly that record (every schema field, `name` included); a different copy is an older or independent
-    // source, never an update to take.
-    if (mode === "subset") {
-      const currentById = new Map((current[kind]?.records ?? []).map((record) => [record.id, record]));
-      published.records.forEach((record) => {
-        const bundled = currentById.get(record.id);
-        if (!bundled || waived.has(record.id)) return;
-        const next = stripExtensions(record);
-        if (sameJson(bundled, next)) return;
-        const fields = [...new Set([...Object.keys(bundled), ...Object.keys(next)])].filter((key) => !sameJson(bundled[key] ?? null, next[key] ?? null)).sort();
-        problems.push(`${kind}/${record.id}.json: core owns this bundled record and the gallery publishes a different copy (${fields.join(", ")}); change it in spec/catalogs and let the gallery adopt the core release (build-opf-catalog.mjs --refresh-pending)`);
-      });
-    }
-    const keep = mode === "mirror" ? new Set(galleryIdSet) : new Set([...currentIds, ...(include[kind] ?? [])]);
+    // The gallery owns every record: the snapshot takes each published record as published.
+    const keep = new Set(galleryIdSet);
     for (const id of waived) keep.delete(id);
     const selected = [];
     published.index.records.forEach((entry, position) => {
@@ -252,7 +218,7 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
   const nextManifest = {
     $schema: CATALOG_MANIFEST_SCHEMA_ID,
     description:
-      "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync. `layouts` is a subset by design (RR-41, opf#292), not by omission: it bundles 100 of the gallery's 485 layouts, and the other 385 resolve through the default catalog or an inline record, because bundling them adds about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter for records none of them read.",
+      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. Only @openpresentation/opf/catalog carries it; no other entry of core imports catalog data (pnpm check:catalog-free).",
     publisher: DEFAULT_CATALOG_PUBLISHER,
     source,
     kinds: Object.fromEntries(SNAPSHOT_KINDS.map(({ kind }) => [kind, kinds[kind].manifestEntry])),
@@ -360,8 +326,8 @@ function option(argv, name) {
   return at === -1 ? undefined : argv[at + 1];
 }
 
-/** Parses every `--include <kind>:<id>[,<id>...]` into { kind: [ids] }. */
-export function parseIncludes(argv, flag = "--include") {
+/** Parses every `<flag> <kind>:<id>[,<id>...]` (`--allow-removed`) into { kind: [ids] }. */
+export function parseKindIds(argv, flag) {
   const include = {};
   argv.forEach((arg, at) => {
     if (arg !== flag) return;
@@ -383,9 +349,9 @@ export function parseIncludes(argv, flag = "--include") {
  * a record can change here before the gallery publishes it). The manifest `source` and each `gallery` block
  * keep describing the pinned gallery commit, so they are never touched. Returns the files it changed.
  *
- * With `matchGallery`, a mirrored kind's `gallery` block is set to the new records too. Use it only when the
- * gallery change that publishes the same records is in review (FA-16): a mirrored kind must match the gallery
- * hash, and the pin then names the commit before that change.
+ * With `matchGallery`, each kind's `gallery` block is set to the new records too. Use it only when the gallery
+ * change that publishes the same records is in review (FA-16): every kind must match the gallery hash, and the pin
+ * then names the commit before that change.
  */
 export async function rehashSnapshot(catalogsRoot, { matchGallery = false } = {}) {
   const manifestFile = path.join(catalogsRoot, "manifest.json");
@@ -405,7 +371,7 @@ export async function rehashSnapshot(catalogsRoot, { matchGallery = false } = {}
       entry.records = records.length;
       changed.push(`manifest.json (${kind})`);
     }
-    if (matchGallery && entry.mode === "mirror" && (entry.gallery?.contentSha256 !== contentSha256 || entry.gallery?.records !== records.length)) {
+    if (matchGallery && (entry.gallery?.contentSha256 !== contentSha256 || entry.gallery?.records !== records.length)) {
       entry.gallery = { records: records.length, contentSha256 };
       if (!changed.includes(`manifest.json (${kind})`)) changed.push(`manifest.json (${kind})`);
     }
@@ -435,6 +401,7 @@ export async function main(argv = process.argv.slice(2)) {
   const galleryDir = option(argv, "--gallery");
   const url = option(argv, "--url");
   if (!galleryDir && !url) throw new Error("Pass --gallery <pptx-gallery checkout> or --url <base URL> (or --verify or --rehash).");
+  if (argv.includes("--include")) throw new Error("--include was removed in OPF 0.15: every kind mirrors the gallery, so the snapshot already holds every published record.");
   const readOnly = argv.includes("--check") || argv.includes("--report");
   if (argv.includes("--allow-dirty") && !readOnly) {
     throw new Error("--allow-dirty requires --check or --report; snapshot writes must pin committed catalog bytes.");
@@ -457,7 +424,7 @@ export async function main(argv = process.argv.slice(2)) {
     source = manifest?.source ?? { repository: GALLERY_REPOSITORY, commit: "unpinned", path: GALLERY_PUBLISHED_PATH };
   }
 
-  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, include: parseIncludes(argv), allowRemoved: parseIncludes(argv, "--allow-removed") });
+  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, allowRemoved: parseKindIds(argv, "--allow-removed") });
   if (plan.problems.length > 0) throw new Error(`Gallery catalog cannot be snapshotted:\n${plan.problems.join("\n")}`);
 
   if (argv.includes("--report")) {
