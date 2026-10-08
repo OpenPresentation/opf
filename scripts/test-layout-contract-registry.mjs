@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import {registryToolchain} from './registry-toolchain.mjs';
 const registry=await registryToolchain();
-const {layouts}=await registry.import('@openpresentation/opf/catalogs');
+// OPF 0.15: the published default catalog is the opt-in /catalog subpath, registered by the host (here, the JSON options).
+const {defaultCatalog}=await registry.import('@openpresentation/opf/catalog');
+const layouts=Object.entries(defaultCatalog.layouts).map(([id,record])=>({id,...record}));
 const {validate}=await registry.import('@openpresentation/opf/validator');
 const {getJsonFieldContext,replaceFieldOption,fieldOptionEdit}=await registry.import('@openpresentation/opf-editor/json-options');
 const original=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
-const context=getJsonFieldContext(original,original.indexOf('"layout"')+1);
+const context=getJsonFieldContext(original,original.indexOf('"layout"')+1,[defaultCatalog]);
 for(const layout of layouts){
  const result=replaceFieldOption(context,layout.id),edit=fieldOptionEdit(context,layout.id);
  assert.equal(original.slice(0,edit.from)+edit.insert+original.slice(edit.to),result);

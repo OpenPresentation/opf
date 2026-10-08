@@ -81,8 +81,21 @@ try {
  if(registry){
   const ref=verificationRef??plan.verificationRefs.cli;
   assert.match(ref,/^[a-f0-9]{40}$/);
-  commandTests=path.join(temp,'published-command-tests.mjs');
-  await writeFile(commandTests,run('git',['show',`${ref}:packages/cli/test/cli.mjs`],root));
+  // The published harness keeps its place in its release's tree: it is written at packages/cli/test/ under a scratch root,
+  // with every repository file it reads by a relative URL (the catalog snapshot it counts layouts against, fixtures) taken
+  // from the same release commit, so it checks the published CLI against what that release shipped.
+  const tree=path.join(temp,'published-tree');
+  commandTests=path.join(tree,'packages/cli/test/published-command-tests.mjs');
+  const source=run('git',['show',`${ref}:packages/cli/test/cli.mjs`],root);
+  await mkdir(path.dirname(commandTests),{recursive:true});
+  await writeFile(commandTests,source);
+  for(const [,relative] of source.matchAll(/new URL\(\s*['"](\.\.?\/[^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g)){
+   const file=path.posix.normalize(path.posix.join('packages/cli/test',relative));
+   if(file.startsWith('..')||file.endsWith('/'))continue;
+   const target=path.join(tree,...file.split('/'));
+   await mkdir(path.dirname(target),{recursive:true});
+   await writeFile(target,spawnSync('git',['show',`${ref}:${file}`],{cwd:root,maxBuffer:256*1024*1024}).stdout);
+  }
  }
  const output=run(process.execPath,[commandTests],temp,{OPF_TEST_BIN:bin});
  console.log(output.trim());console.log(`Standalone global and npx-style installation passed (${registry?'npm registry':'local pack'}). Integrity: ${packed.integrity}. Tarball: ${tarball}`);

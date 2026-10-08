@@ -15,13 +15,13 @@ if (process.env.OPF_BUNDLED_GALLERY === '1' || !existsSync(path.join(gallery, 'l
  console.log(`Gallery snapshot: ${examples.length} bundled OPF examples (no sibling gallery).`);
 } else {
 const bundle=path.join(out,'gallery-builder.cjs');
-await build({entryPoints:[path.join(gallery,'lib/opf-snippets.ts')],outfile:bundle,bundle:true,platform:'node',format:'cjs',tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
+await build({entryPoints:[path.join(gallery,'lib/opf-snippets.ts')],outfile:bundle,bundle:true,platform:'node',format:'cjs',mainFields:['module','main'],tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
 const snippets=require(bundle),items=[];
 await rm(bundle);
 // Newer galleries build image-treatment snippets in a server-only module (lib/image-treatment-snippets.ts) so the sample image stays out of client chunks.
 if (!snippets.buildImageTreatmentOpfSnippet && existsSync(path.join(gallery,'lib/image-treatment-snippets.ts'))) {
  const treatmentBundle=path.join(out,'gallery-image-treatments.cjs');
- await build({entryPoints:[path.join(gallery,'lib/image-treatment-snippets.ts')],outfile:treatmentBundle,bundle:true,platform:'node',format:'cjs',tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
+ await build({entryPoints:[path.join(gallery,'lib/image-treatment-snippets.ts')],outfile:treatmentBundle,bundle:true,platform:'node',format:'cjs',mainFields:['module','main'],tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
  snippets.buildImageTreatmentOpfSnippet=require(treatmentBundle).buildImageTreatmentOpfSnippet;
  await rm(treatmentBundle);
 }

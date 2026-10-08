@@ -6,7 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the published 0.13 set recorded in `release-plan.json` (RR-20, 6 October 2026). Immutable tag commits pin
+dated handoff as current. The pin set below matches the published 0.15 set recorded in `release-plan.json` (RR-20, 8 October 2026). Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
 accepted fixes and release prerequisites. Those source changes have not updated
@@ -25,16 +25,25 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.13.0 | — |
-| `@openpresentation/cli` | 0.11.0 | Bundles core 0.13.0; registry metadata has no runtime `dependencies`; optional peers `@openpresentation/opf-render@^0.13.1` and `@openpresentation/opf-pptx@^0.13.2` |
-| `@openpresentation/opf-render` | 0.13.1 | `@openpresentation/opf@^0.13.0` |
-| `@openpresentation/opf-editor` | 0.12.1 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
-| `@openpresentation/opf-pptx` | 0.13.2 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
+| `@openpresentation/opf` | 0.15.1 | — (0.15.0 was tagged but never published: its publish run failed before `npm publish`) |
+| `@openpresentation/cli` | 0.15.0 | Bundles core 0.15.1; registry metadata has no runtime `dependencies`; optional peers `@openpresentation/opf-render@^0.15.0` and `@openpresentation/opf-pptx@^0.15.0` |
+| `@openpresentation/opf-render` | 0.15.0 | `@openpresentation/opf@^0.15.1` |
+| `@openpresentation/opf-editor` | 0.15.0 | `@openpresentation/opf@^0.15.1`; optional peer `@openpresentation/opf-render@^0.15.0` |
+| `@openpresentation/opf-pptx` | 0.15.0 | `@openpresentation/opf@^0.15.1`; optional peer `@openpresentation/opf-render@^0.15.0` |
+
+OPF 0.15 is a breaking spec line (format audit wave C): catalogs group the records a document embeds by the catalog they
+came from (`catalogs.default`, `catalogs.custom`, named groups, `name:id` references), core ships no built-in records
+(the default catalog is the opt-in `@openpresentation/opf/catalog`, which a host registers with `{ catalogs }`), a
+full-bleed photo is `design.background` and every content picture is an image block, and `language` is a BCP-47 tag.
+The 0.15 set reads and writes only 0.15 documents; see the 0.15.0 and 0.15.1 entries of the [changelog](../CHANGELOG.md).
+Core starts at **0.15.1**: `opf-v0.15.0` was tagged, but its publish run failed before `npm publish` (the CLI tests
+through the published renderer and PPTX ran in the core publish workflow before those 0.15 siblings existed), so 0.15.1
+is the first published 0.15 core and the floor of every 0.15 sibling.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.13.0 with renderer 0.13.1, PPTX 0.13.2 and editor 0.12.1), so
+core in lockstep (core 0.15.1 with renderer 0.15.0, PPTX 0.15.0 and editor 0.15.0), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -343,6 +352,8 @@ APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-re
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.14.0, CLI 0.11.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.2 | Previous coordinated set (format audit waves A and B, RR-55 and RR-56; CLI 0.11.0 bundles core 0.13.0). The 0.15 set is breaking: a 0.14 document's catalog shape (`catalogs.<kind>.records`), catalog-id languages and `design.slideImage` are invalid in 0.15, and the 0.15 engines need the host to register the default catalog. |
+| core 0.13.0, CLI 0.11.0, renderer 0.13.1, PPTX 0.13.2, editor 0.12.1 | Previous coordinated set (chart and table data, RR-54). |
 | core 0.12.2, CLI 0.10.1, renderer 0.12.2, PPTX 0.12.4, editor 0.11.3 | Previous coordinated set (the first set whose `engines.node` is the open-ended `>=22`). The 0.13 set adds chart and table data (RR-54, [contract](chart-table-data.md)): strict chart numbers (a value is a finite number or a strict decimal string; `"12%"`, `"$5"` and `"Q1"` are a gap with a `chart-value-not-numeric` warning, never a guessed number), number formats (`DataColumn` `{ name, format }`), top-level `datasets` with `{ "dataset", "fields" }` references and `chart.mapping`, in core 0.13.0, previewed by renderer 0.13.0, exported and re-imported by PPTX 0.13.0 (`OPF_DATASETS_V1` and `OPF_DATA_V1` provenance), edited in the editor 0.12.x data grid and imported by CLI 0.11.0 (`opf import-data --dataset`). PPTX 0.13.0 also vendors pptxgenjs-plus 4.3.4 (was PptxGenJS 4.0.1) and PPTX 0.13.1 bundles for browsers again. Renderer 0.13.1 and PPTX 0.13.2 pin Sharp 0.35.5 (GHSA-wq5f-xc86-pv6w; output unchanged); editor 0.12.1 replaces 0.12.0, which was never published. Renderer, PPTX and editor raise their core floor to `^0.13.0` and the renderer peer to `^0.13.1` together. |
 | core 0.12.1, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. PPTX 0.12.3 corrects the table range of a chart's embedded workbook (apostrophe-quoted sheet references and bubble-series references), which made Keynote drop category charts on import (opf-pptx#162, opf-pptx#163; every other part of the package is byte-identical). Core, renderer and editor are unchanged and keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
 | core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. Core 0.12.1 deprecates the six plural audience ids (`executives`, `investors`, `customers`, `sales-team`, `marketing-team`, `regulators`) in favour of the singular ids: additive catalog data, validation warns and never errors, and no geometry moves, so renderer, PPTX and editor keep the core floor `^0.12.0`. |
