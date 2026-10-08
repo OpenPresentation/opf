@@ -162,6 +162,7 @@ export interface CatalogSelectOptions extends CatalogOptionsInput {
   path: string;
   catalogKind: string;
   label?: string;
+  onError?: (error: Error) => void;
   document?: { createElement(tagName: string): any };
 }
 

@@ -14,6 +14,7 @@ export interface OPFCatalogSelectProps {
   path: string;
   catalogKind: string;
   label?: string;
+  onError?: (error: Error) => void;
   catalogOptions?: CatalogOption[];
   selectProps?: Record<string, unknown>;
   [key: string]: unknown;

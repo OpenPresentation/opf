@@ -1,3 +1,4 @@
+import { commitCatalogControl } from "./catalog-control.js";
 import {
   createSvgTraceBinding,
   getCatalogOptions,
@@ -59,11 +60,11 @@ export function opfCatalogSelect(node, params) {
       const value = editor.get(path);
       node.value = value && typeof value === "object" ? value.id : value ?? "";
     };
-    const onChange = () => setCatalogId(editor, path, catalogKind, node.value, {
+    const onChange = () => commitCatalogControl(node, nextParams.onError, sync, () => setCatalogId(editor, path, catalogKind, node.value, {
       catalogs: nextParams.catalogs,
       presentation: nextParams.presentation,
       source: "svelte-catalog-select"
-    });
+    }));
     const unsubscribe = editor.subscribe(sync);
 
     node.addEventListener?.("change", onChange);

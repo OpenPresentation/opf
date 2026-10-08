@@ -1,3 +1,4 @@
+import { commitCatalogControl } from "./catalog-control.js";
 import {
   getCatalogOptions,
   getValueAtPath,
@@ -56,6 +57,7 @@ export function createOPFReactComponents(React) {
     catalogKind,
     label,
     catalogOptions,
+    onError,
     selectProps = {},
     ...props
   }) {
@@ -78,7 +80,9 @@ export function createOPFReactComponents(React) {
           selectProps.onChange?.(event);
           props.onChange?.(event);
           if (!event.defaultPrevented) {
-            setCatalogId(editor, path, catalogKind, event.currentTarget.value, { source: "react-catalog-select" });
+            const node = event.currentTarget;
+            commitCatalogControl(node, onError, () => { node.value = currentId ?? ""; }, () =>
+              setCatalogId(editor, path, catalogKind, node.value, { source: "react-catalog-select" }));
           }
         }
       },

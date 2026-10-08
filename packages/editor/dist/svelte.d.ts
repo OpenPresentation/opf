@@ -11,6 +11,7 @@ export interface OPFCatalogSelectActionParams extends CatalogOptionsInput {
   path: string;
   catalogKind: string;
   label?: string;
+  onError?: (error: Error) => void;
 }
 
 export interface OPFTraceActionParams extends SvgTraceBindingOptions {

@@ -1,3 +1,4 @@
+import { commitCatalogControl } from "./catalog-control.js";
 import { paginateSlide } from "@openpresentation/opf/pagination";
 import { OPFPatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
 import { collectReservedPresentationIds } from "./presentation-ids.js";
@@ -523,8 +524,19 @@ export function setCatalogId(editor, path, catalogKind, id, meta = {}) {
   const current = editor.get(path);
   const value = catalogReferenceValue(current, catalogId);
   const { catalogs: _catalogs, presentation: _presentation, ...commitMeta } = meta;
-  return editor.set(path, value, {
+  // Only documented design references may initialize their optional design parent.
+  // Ordinary set/applyPatch retain RFC 6902's existing-parent requirement.
+  const segments = splitOpfPath(path);
+  const designField = { themes: "theme", colorSchemes: "colorScheme", fontSchemes: "fontScheme" }[catalogKind];
+  const deckDesign = segments.length === 2 && segments[0] === "design";
+  const slideDesign = segments.length === 4 && segments[0] === "slides" && /^(0|[1-9][0-9]*)$/.test(segments[1]) && segments[2] === "design" && editor.get(segments.slice(0, 2));
+  const parent = segments.slice(0, -1);
+  const patches = designField === segments.at(-1) && (deckDesign || slideDesign) && !hasValueAtPath(editor.presentation, parent)
+    ? [{ op: "add", path: opfPathToJsonPointer(parent), value: { [designField]: value } }]
+    : createValuePatch(editor.presentation, path, value);
+  return editor.applyPatch(patches, {
     ...commitMeta,
+    rejectInvalid: true,
     catalogKind,
     catalogId,
     source: commitMeta.source ?? "catalog-control"
@@ -589,13 +601,13 @@ export function createCatalogSelect(editor, options) {
     const current = editor.get(path);
     select.value = typeof current === "object" && current ? current.id : current ?? "";
   };
-  const onChange = () => {
-    setCatalogId(editor, path, catalogKind, select.value, {
+  const onChange = () => commitCatalogControl(select, options?.onError, updateValue, () => {
+    return setCatalogId(editor, path, catalogKind, select.value, {
       catalogs: options?.catalogs,
       presentation: options?.presentation,
       source: "catalog-select"
     });
-  };
+  });
   const unsubscribe = editor.subscribe(updateValue);
 
   select.addEventListener?.("change", onChange);
