@@ -901,11 +901,13 @@ function reportDiagnostic(diagnostic, options) {
   options.onDiagnostic?.(diagnostic);
 }
 
-// FA-09: Chart.alt is the chart's accessible name: a role="img" group with aria-label, which also makes the drawn marks and labels
-// inside presentational. An empty alt marks the chart decorative (aria-hidden). Without alt the SVG is unchanged.
-function chartText(chart, alt) {
-  if (typeof alt !== "string" || !chart) return chart;
-  return alt === "" ? tag("g", { "aria-hidden": "true" }, chart) : tag("g", { role: "img", "aria-label": alt }, chart);
+// FA-09, FA-27: Chart.alt and Table.alt name the drawn payload with an aria-label on a wrapping group. A chart is a picture: role="img",
+// which also makes its marks and labels presentational. A table's alt is a summary (the cells are real text and stay readable, as in
+// PowerPoint, where descr on a table frame hides nothing): role="group" names it without hiding its children. An empty alt marks the payload
+// decorative (aria-hidden) for both. Without alt the SVG is unchanged.
+function altText(drawn, alt, role) {
+  if (typeof alt !== "string" || !drawn) return drawn;
+  return alt === "" ? tag("g", { "aria-hidden": "true" }, drawn) : tag("g", { role, "aria-label": alt }, drawn);
 }
 
 function renderPayload(item, box, bound, options) {
@@ -913,9 +915,9 @@ function renderPayload(item, box, bound, options) {
   if (item.field === "items" || item.field === "bullets") return renderList(item, box, bound, options);
   switch (item.type) {
     case "chart":
-      return chartText(renderChart(item, box, bound, options), item.value?.alt);
+      return altText(renderChart(item, box, bound, options), item.value?.alt, "img");
     case "table":
-      return renderTable(item, box, bound, options);
+      return altText(renderTable(item, box, bound, options), item.value?.alt, "group");
     case "image":
       return renderImageBlock(item, bound, options);
     case "video":
