@@ -179,6 +179,12 @@ try{
   await page.getByRole('button',{name:'Format text',exact:true}).click();await paint();
   assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.subtitle')),['A plain subtitle']);
   await passed('A plain subtitle offers Format text and converts to runs');
+  // FA-18: metric.label stays a plain string in the schema, so editing it opens the plain input and never offers Format text.
+  const metricDeck={name:'Metric',design:headings.design,slides:[{id:'m',title:'Latency',metric:{value:42,unit:'ms',label:'Median latency'}}]};
+  await mount(metricDeck);await page.locator('[data-canvas-target][data-opf-path="slides.0.metric.label"]').focus();await page.keyboard.press('Enter');await paint();
+  assert.equal(await page.getByRole('textbox',{name:'Edit label inline',exact:true}).inputValue(),'Median latency');assert.equal(await input().count(),0);
+  assert.equal(await page.getByRole('button',{name:'Format text',exact:true}).count(),0);
+  await passed('A string-only field (metric label) opens a plain input and offers no Format text');
   await page.evaluate(()=>{canvas.destroy();fonts.dispose();});assert.equal(await page.locator('#host > *').count(),0);
   assert.equal(await page.evaluate(()=>document.fonts.size),0);assert.deepEqual(report.errors,[]);assert.deepEqual(report.externalRequests,[]);
   for(const [file,digest] of Object.entries(inputs))assert.equal(hash(await readFile(file)),digest,'Browser verification must not rebuild runtime files');

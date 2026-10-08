@@ -70,7 +70,7 @@ try{
  const richReport=path.join(temporary,'rich-input-browser.json');
  process.stdout.write(execFileSync(process.execPath,[path.join(fixture,'test/rich-input-browser.mjs'),richReport,'measured',consumer],{cwd:consumer,encoding:'utf8',maxBuffer:8*1024*1024}));
  const richBrowser=JSON.parse(await readFile(richReport,'utf8'));
- assert.equal(richBrowser.status,'passed');assert.equal(richBrowser.runtime,'installed');assert.equal(richBrowser.checks.length,13);
+ assert.equal(richBrowser.status,'passed');assert.equal(richBrowser.runtime,'installed');assert.equal(richBrowser.checks.length,14);
  assert.deepEqual(richBrowser.errors,[]);assert.deepEqual(richBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'Browser verification must not rebuild the installed editor');
  const audit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(audit.metadata.vulnerabilities.total,0);
