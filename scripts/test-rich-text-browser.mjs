@@ -6,7 +6,7 @@ const out=document.querySelector('#results'),host=document.querySelector('#canva
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 const text=[{text:'Select these words to format them. ',fontSize:30}, {text:'Keep this link',bold:true,link:'https://example.org',fontSize:30},' and the final sentence.'];
-const original={design:{fontScheme:'roboto'},slides:[{title:'Rich text, on the slide',text,notes:'Keep these notes'}]};
+const original={design:{fontScheme:'roboto'},slides:[{title:'Rich text, on the slide',text,notes:'Keep these notes'},{title:'A plain field',metric:{value:42,unit:'ms',label:'Median latency'}}]};
 const fonts=await loadFonts({faces:(await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))}))});
 const estimated=new URLSearchParams(location.search).has('estimated')||location.pathname.includes('rich-text-estimated');
 const canvasFonts=estimated?{}:{fonts};
@@ -53,6 +53,10 @@ try {
  check(editor.get('slides.0.text').some(r=>r.text==='Plain text'&&r.bold),'plain text can become formatted runs on the canvas');
  // FA-10: titles accept string | TextRun[], so a plain title offers the rich conversion the schema allows.
  canvas.beginEdit('slides.0.title');check([...host.querySelectorAll('button')].some(b=>b.textContent==='Format text'),'a plain title offers the rich conversion its schema allows');canvas.cancel();
+ // FA-18: metric.label stays a plain string in the schema, so editing it on the canvas never offers the rich conversion.
+ canvas.setSlide(1);await paint();canvas.beginEdit('slides.1.metric.label');check(canvas.slideIndex===1,'the metric slide is showing');
+ check(!!host.querySelector('.opf-inline-input'),'a string-only field (metric label) opens a plain input');
+ check(![...host.querySelectorAll('button')].some(b=>b.textContent==='Format text'),'a string-only field (metric label) offers no rich conversion');canvas.cancel();canvas.setSlide(0);await paint();
  editor.set('slides.0.text',[{text:'Hello ',bold:true},{text:'world',italic:true}]);
  canvas.beginEdit('slides.0.text');
  let native=host.querySelector('.opf-rich-input');
