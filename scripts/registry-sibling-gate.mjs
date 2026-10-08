@@ -18,7 +18,7 @@ import { SKIP_EVENTS, gate } from './unreleased-gate.mjs';
 export const DEPENDS_ON_EVENTS = SKIP_EVENTS;
 
 /** { run, message }: whether the sibling's harness runs against the registry consumer. */
-export function decideSiblingHarness({ sibling, declared, installed, event }) {
+export function decideSiblingHarness({ sibling, declared, installed, event, ref }) {
   if (declared === null) return { run: true };
   if (!isVersion(declared)) throw new Error(`${sibling} declares opf.requiresUnreleasedCore ${JSON.stringify(declared)}, which is not a version`);
   if (!isVersion(installed ?? '')) throw new Error(`cannot read the published @openpresentation/opf the registry consumer installed (${JSON.stringify(installed)})`);
@@ -28,15 +28,16 @@ export function decideSiblingHarness({ sibling, declared, installed, event }) {
     installed,
     met: compareVersions(installed, declared) >= 0,
     event,
+    ref,
     what: 'its harness against the published packages',
   });
 }
 
-export function siblingGate(siblingDir, consumerDir, event = process.env.GITHUB_EVENT_NAME ?? '') {
+export function siblingGate(siblingDir, consumerDir, event = process.env.GITHUB_EVENT_NAME ?? '', ref = process.env.GITHUB_REF ?? '') {
   const manifest = JSON.parse(readFileSync(path.join(siblingDir, 'package.json'), 'utf8'));
   const core = path.join(consumerDir, 'node_modules', '@openpresentation', 'opf', 'package.json');
   const installed = existsSync(core) ? JSON.parse(readFileSync(core, 'utf8')).version : null;
-  return decideSiblingHarness({ sibling: manifest.name ?? path.basename(siblingDir), declared: unreleasedCoreOf(manifest), installed, event });
+  return decideSiblingHarness({ sibling: manifest.name ?? path.basename(siblingDir), declared: unreleasedCoreOf(manifest), installed, event, ref });
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

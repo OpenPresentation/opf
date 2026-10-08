@@ -65,7 +65,7 @@ export function report(result) {
  * peer ranges: { run, message?, peers: [{ name, range, installed }] }. `installedVersions` overrides the resolution (the
  * packed-install test installs exact versions it names itself).
  */
-export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event }) {
+export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event, ref }) {
   const manifest = JSON.parse(readFileSync(path.join(cliRoot, 'package.json'), 'utf8'));
   const require = createRequire(executable);
   const peers = names.map((name) => {
@@ -85,6 +85,7 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
     installed: unmet.map((peer) => `${peer.name} ${peer.installed ?? 'missing'}`).join(', '),
     met: false,
     event,
+    ref,
     what: 'its render, export and import tests (they run through the published peers)',
   });
   return { ...result, peers };
