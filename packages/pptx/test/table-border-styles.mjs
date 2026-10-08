@@ -1,3 +1,4 @@
+import {nativeTableEntries} from './table-values.js';
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
@@ -13,7 +14,7 @@ const all=table=>[...(table.columns?[table.columns]:[]),...table.rows];
 const bases=new Map();
 async function fixture({definition='',properties='',rows=3,columns=3,direct=()=>'',theme,modify=xml=>xml}={}){
  const key=rows+':'+columns;
- if(!bases.has(key))bases.set(key,unzipSync(await toPptx({design:{dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[{table:{rows:Array.from({length:rows},(_,r)=>Array.from({length:columns},(_,c)=>`${r},${c}`))}}]})));
+ if(!bases.has(key))bases.set(key,nativeTableEntries(await toPptx({design:{dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[{table:{rows:Array.from({length:rows},(_,r)=>Array.from({length:columns},(_,c)=>`${r},${c}`))}}]})));
  const entries={...bases.get(key)},path='ppt/slides/slide1.xml';
  let index=0;
  let xml=decoder.decode(entries[path]).replace(/<a:tcPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:tcPr>)/g,()=>`<a:tcPr>${direct(Math.floor(index/columns),index++%columns)}</a:tcPr>`);

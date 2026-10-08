@@ -2,7 +2,7 @@
  "source": {
   "repository": "OpenPresentation/opf-pptx",
   "commit": "438ce8801701f2fa2531ac56537234d274e36aa7",
-  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15."
+  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59: the three entries with a table (table, styled-table, mixed-blocks) are repinned because full provenance now records every inline table as authored (the OPF_DATA_V1 tag); previousSha256 keeps the FA-23 hash and nativeSlideSha256 locks the slide XML without its customer-data tags, which is unchanged."
  },
  "entries": {
   "column": {
@@ -750,7 +750,10 @@
      }
     ]
    },
-   "sha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25"
+   "sha256": "0b2695b9b66d00d1e26d3dd2de2827fb9a972b66c5350547cf837510f0f7b316",
+   "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
+   "nativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
   },
   "styled-table": {
    "deck": {
@@ -792,7 +795,10 @@
      }
     ]
    },
-   "sha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4"
+   "sha256": "51c79dad29c71bca6cd7a003ff5360c0d520597e2e6b3dd826fd3ee0be9270db",
+   "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
+   "nativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
   },
   "mixed-blocks": {
    "deck": {
@@ -839,7 +845,10 @@
      }
     ]
    },
-   "sha256": "c5617168f7ff0601b401c939e0d174f70586d02ea0f7268bd36e491398f2eb75"
+   "sha256": "d9d10445d956816e7058b36459d40699b5a813d4b083668dd419323b41b76cef",
+   "previousSha256": "c5617168f7ff0601b401c939e0d174f70586d02ea0f7268bd36e491398f2eb75",
+   "nativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
   }
  }
 }

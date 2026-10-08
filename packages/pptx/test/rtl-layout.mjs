@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {fromPptx, toPptx} from '../dist/index.js';
+import {nativeTableEntries} from './table-values.js';
 import {latinPhrases} from '../src/script-fonts.js';
 
 // RR-05: right-to-left layout in the PPTX export. Authored alignment is logical (`left` is the start edge), so a right-to-left
@@ -79,7 +80,9 @@ const rtl = await read(deck('ar')), ltr = await read(deck('en'));
   const round = await fromPptx(rtl.bytes);
   const value = cell => typeof cell === 'string' ? cell : Array.isArray(cell) ? cell.map(value).join('') : value(cell?.value ?? cell?.text ?? '');
   assert.deepEqual(round.slides[2].table.columns.map(value), ['المؤشر', 'القيمة', 'الحالة'], 're-import keeps the column order');
-  const alignments = [...round.slides[2].table.columns, ...round.slides[2].table.rows[0]].map(cell => cell?.style?.align).filter(Boolean);
+  assert.deepEqual(round.slides[2].table, deck('arabic').slides[2].table, 'unchanged RTL tables preserve authored style absence');
+  const native = await fromPptx(zipSync(nativeTableEntries(rtl.bytes)));
+  const alignments = [...native.slides[2].table.columns, ...native.slides[2].table.rows[0]].map(cell => cell?.style?.align).filter(Boolean);
   assert.ok(alignments.length > 0 && alignments.every(align => align === 'left'), 're-import reads right alignment of rtl cells as the logical start');
 }
 

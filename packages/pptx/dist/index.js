@@ -7,7 +7,7 @@ import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-theme
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
 import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
-import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord} from './data-provenance.js';
+import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
 import {applyFrameAlt,readFrameAlt} from './frame-alt.js';
@@ -48,7 +48,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, chartPaletteForFill, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  resolveReference, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
+  resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -241,6 +241,12 @@ export async function toPptx(input, options = {}) {
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
+  // The renderer remains optional for custom measurement providers. Its public script planner supplies the same
+  // shaping/measurement segmentation as preview when installed; the selected native family wrapper stays outside it.
+  if (options.textMeasurement) {
+    try { options.createScriptFonts = (await import("@openpresentation/opf-render/fonts")).createScriptFonts; }
+    catch (error) { if (error?.code !== "ERR_MODULE_NOT_FOUND") throw error; }
+  }
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
@@ -968,7 +974,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   };
   if (table) {
     const stored = importedTable && record('table');
-    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
+    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), environment: tableEnvironmentEvidence(entries), datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
     const alt = restoredTable && typeof restoredTable === 'object' ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
     return {
@@ -977,7 +983,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
       name,
       payload: {
         type: "table",
-        table: alt === undefined ? restoredTable : {...restoredTable, alt}
+        // RR-59: an authored table restored from provenance takes its alt from the frame too, so an alt removed in PowerPoint stays removed.
+        table: restoredTable && typeof restoredTable === 'object' ? (({alt: _recorded, ...rest}) => alt === undefined ? rest : {...rest, alt})(restoredTable) : restoredTable
       }
     };
   }
@@ -1895,6 +1902,7 @@ function configurePresentation(pptx, presentation, context) {
 }
 
 async function addSlide(pptx, presentation, opfSlide, slideIndex, context, options) {
+  options = {...options, textMeasurement: slideTextMeasurement(presentation, slideIndex, options)};
   const slide = pptx.addSlide();
   const slideContext = exportSlideContext(presentation, slideIndex, context, options);
   const { widthInches, heightInches } = slideContext.dimensions;
@@ -2218,7 +2226,11 @@ async function addImagePayload(slide, presentation, asset, region, path, context
 async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName} = {}) {
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
-  if (!resolved) return undefined;
+  if (!resolved) {
+    // RR-59 (AUTO-26): a content picture never vanishes silently. A background reports its own fallback (the slide colour).
+    if (role !== 'background' && !outcome.reported) options.onDiagnostic?.({code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
+    return undefined;
+  }
   const name = objectName ?? imageName(1 + [...context.images.keys()].filter(key => /^OPF image \d+$/.test(key)).length);
   // PowerPoint applies opacity (a:alphaModFix), grayscale (a:grayscl) and the border (a:ln) to an SVG picture (native check
   // 2026-10-01). A duotone recolor and a non-rectangular mask are not confirmed on an SVG picture, and a tiled picture fill
@@ -3126,6 +3138,35 @@ function sameTypeface(requested, resolved) {
   // A legacy four-style family such as "Roboto Medium" is the chosen typeface.
   return got === want || got.startsWith(`${want} `) && isFaceStyleSuffix(got.slice(want.length + 1));
 }
+// Use each slide's core script profile, including a rich run's own language, for every fitting path.
+// Latin roles follow that slide's scheme; explicit run families remain under the planner's strict glyph policy.
+function slideTextMeasurement(presentation, index, options) {
+  const measurement = options.fonts?.textMeasurement;
+  if (!measurement || !options.createScriptFonts) return options.textMeasurement;
+  const core = coreContext(presentation, index, {...options, textMeasurement: undefined});
+  const languages = new Map();
+  const planner = language => {
+    const key = language ?? '';
+    if (!languages.has(key)) {
+      const resolved = resolveScriptFonts(presentation, {slideIndex: index, ...(options.catalogs !== undefined ? {catalogs: options.catalogs} : {}), ...(language ? {language} : {})});
+      const slots = role => {
+        const latin = core.options.fontFamilies[role];
+        const slot = name => ['latin', 'schemeFamily'].includes(resolved.sources?.[name]) ? latin : resolved[role]?.[name] ?? latin;
+        return {latin, eastAsian: slot('eastAsian'), complexScript: slot('complexScript')};
+      };
+      languages.set(key, options.createScriptFonts({...resolved, heading: slots('heading'), body: slots('body'), serif: core.resolved.fontScheme.type === 'serif'}, measurement).textMeasurement);
+    }
+    return languages.get(key);
+  };
+  const base = planner(), pick = style => planner(style?.lang) ?? base;
+  const adapted = {...base, measure: (text, size, style) => pick(style).measure(text, size, style)};
+  // The planner's measurement object spreads its provider; inherited class methods must keep their receiver.
+  if (typeof measurement.resolveStyle === 'function') adapted.resolveStyle = style => measurement.resolveStyle(style);
+  if (typeof measurement.resolveFont === 'function') adapted.resolveFont = style => measurement.resolveFont(style);
+  if (typeof base.outlineBounds === 'function') adapted.outlineBounds = (text, size, style) => pick(style).outlineBounds(text, size, style);
+  return chosenFamilyMeasurement(adapted);
+}
+
 function chosenFamilyMeasurement(measurement) {
   if (!measurement || typeof measurement.resolveStyle !== 'function') return measurement;
   const resolveFont = typeof measurement.resolveFont === 'function' ? style => measurement.resolveFont(style) : undefined;

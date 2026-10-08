@@ -3,7 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
 import {renderSlideSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
-import {tableValues} from './table-values.js';
+import {tableValues, nativeTableEntries} from './table-values.js';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder();
 const id='{12345678-1234-1234-1234-123456789ABC}';
@@ -20,7 +20,7 @@ const text=cell=>Array.isArray(cell)?cell.map(r=>typeof r==='string'?r:r.text).j
 const bases=new Map();
 async function fixture({rows=5,columns=5,properties=flags,definition=style,inline=false,reference=id,modify=()=>{}}={}){
  const key=rows+':'+columns;
- if(!bases.has(key))bases.set(key,unzipSync(await toPptx({slides:[{table:{rows:Array.from({length:rows},(_,r)=>Array.from({length:columns},(_,c)=>`${r},${c}`))}}]})));
+ if(!bases.has(key))bases.set(key,nativeTableEntries(await toPptx({slides:[{table:{rows:Array.from({length:rows},(_,r)=>Array.from({length:columns},(_,c)=>`${r},${c}`))}}]})));
  const entries={...bases.get(key)};
  let slide=decoder.decode(entries['ppt/slides/slide1.xml']);
  let cell=0;

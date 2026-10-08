@@ -3,6 +3,7 @@ import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
 import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {nativeTableBytes} from './table-values.js';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {themeSlotColors, writeThemeColors} from '../dist/theme-colors.js';
 
@@ -177,7 +178,10 @@ const deck = {
     ['default', 'default too'],
   ]}}],
 };
-const source = await toPptx(deck);
+const authoredSource = await toPptx(deck);
+assert.deepEqual((await fromPptx(authoredSource)).slides[0].table, deck.slides[0].table, 'unchanged provenance retains authored theme references');
+// The theme recoloring checks below observe raw native cells independently of authored restoration.
+const source = nativeTableBytes(authoredSource);
 const importTable = async bytes => {
   const diagnostics = [];
   const document = await fromPptx(bytes, {onDiagnostic: d => diagnostics.push(d)});
@@ -220,7 +224,7 @@ assert.equal(surface(after.table), `#${hex(switched.dark2)}`, 'default body fill
 
 // 6. Determinism: repeated exports are byte-identical.
 const again = await toPptx(deck);
-assert.deepEqual(new Uint8Array(again), new Uint8Array(source), 'export is deterministic');
+assert.deepEqual(new Uint8Array(again), new Uint8Array(authoredSource), 'export is deterministic');
 const twice = await toPptx(literalDeck), thrice = await toPptx(literalDeck);
 assert.deepEqual(new Uint8Array(twice), new Uint8Array(thrice));
 console.log(JSON.stringify({test: 'table-theme-colors', passed: true, schemes: records.colorSchemes.length, namedReferences: references, chromeReferences: chrome}));

@@ -1,3 +1,4 @@
+import {nativeTableBytes, nativeTableEntries} from './table-values.js';
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
@@ -14,7 +15,7 @@ const table={columns:[{value:'Heading',colSpan:2},null,'C'],rows:[
 ]};
 for(const scale of [1,.5]){
  const source={design:{dimensions:{widthInches:1280*scale/96,heightInches:720*scale/96}},slides:[{table}]};
- const bytes=await toPptx(source),before=bytes.slice(),diagnostics=[];
+ const bytes=nativeTableBytes(await toPptx(source)),before=bytes.slice(),diagnostics=[];
  const imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)}),actual=tableOf(imported);
  assert.deepEqual(diagnostics,[]);
  assert.deepEqual(bytes,before);
@@ -37,7 +38,7 @@ for(const scale of [1,.5]){
  assert.deepEqual(again,actual,'Native styles and dense merges survive repeated conversion');
 }
 
-const base=unzipSync(await toPptx({slides:[{table:{rows:[[{value:'Anchor',rowSpan:2,colSpan:2},null,'C'],[null,null,'D']]}}]}));
+const base=nativeTableEntries(await toPptx({slides:[{table:{rows:[[{value:'Anchor',rowSpan:2,colSpan:2},null,'C'],[null,null,'D']]}}]}));
 async function native(modify){
  const entries={...base};entries['ppt/slides/slide1.xml']=encoder.encode(modify(decoder.decode(entries['ppt/slides/slide1.xml'])));
  const diagnostics=[],deck=await fromPptx(zipSync(entries),{onDiagnostic:d=>diagnostics.push(d)});

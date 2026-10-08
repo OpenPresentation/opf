@@ -40,6 +40,7 @@ export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
 /**
  * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
+ * `reason: "unresolved-source"`: no embedded bytes, declared asset or host resolution was available (remote URLs are never fetched).
  * `reason: "unsupported-format"`: the embedded bytes are no readable PNG, JPEG, GIF, WebP or SVG. For an SVG (a native SVG picture over a PNG fallback):
  * `"svg-malformed"` (not well-formed XML, or no `xmlns` SVG root), `"svg-no-size"` (no width and height and no viewBox), `"svg-too-large"` (over 8 MiB),
  * `"svg-unsafe"` (a DOCTYPE with external or markup entities), `"svg-rasterizer-unavailable"` (no `options.svgRasterizer` and `@openpresentation/opf-render`
@@ -47,7 +48,7 @@ export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; pat
  * `strictAssets` throws `unsupported-image-dimensions` for an unreadable raster, `invalid-svg-image` for the SVG content reasons above (and `svg-unreadable`), `svg-rasterizer-unavailable` for a
  * missing rasterizer and `svg-render-failed` for a failed one instead.
  */
-export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" }
+export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unresolved-source" | "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" }
 /** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */
 export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; message: string }
 /** An SVG image block with a duotone recolor or a non-rectangular shape (or an SVG image background with the tile fit) exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */
@@ -114,7 +115,8 @@ export interface ToPptxOptions {
    * The fonts handle: what the renderer's `loadFonts()` returns (`@openpresentation/opf-render/fonts-node`), or any object with a
    * `textMeasurement` (core's `Fonts`). The exporter lays text out with `fonts.textMeasurement` and always names the chosen
    * families, never a substitute face. Without it, layout uses core's portable estimate. This is the only way to pass a measurement:
-   * a top-level `textMeasurement` option is not read.
+   * a top-level `textMeasurement` option is not read. When the optional renderer is installed, resolved slide/run script
+   * slots use its shared script-aware measurement planner; custom providers remain usable without the renderer.
    */
   fonts?: Fonts;
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */

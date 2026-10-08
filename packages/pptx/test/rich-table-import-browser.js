@@ -1,7 +1,7 @@
 import {fromPptx,toPptx} from '@openpresentation/opf-pptx';
 import {renderSlideSvg} from '@openpresentation/opf-render';
 import {unzipSync,zipSync} from 'fflate';
-import {cellValue,tableValues} from './table-values.js';
+import {cellValue,tableValues,nativeTableBytes} from './table-values.js';
 const out=document.querySelector('pre');
 let cases=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);cases++;};
@@ -13,7 +13,7 @@ try {
  ]}}]};
  // The root table payload returns as the slide's own field (content topology).
  const tableOf=deck=>deck.slides[0].table??deck.slides[0].blocks?.find(block=>block.table)?.table;
- const bytes=await toPptx(source),deck=await fromPptx(bytes),table=tableValues(tableOf(deck));
+ const bytes=nativeTableBytes(await toPptx(source)),deck=await fromPptx(bytes),table=tableValues(tableOf(deck));
  check(table.columns[0][0].bold===false,'Normal native header');
  check(table.columns[0][1].bold===true,'Bold native header');
  const run=table.rows[0][0][0];

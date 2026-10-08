@@ -89,8 +89,11 @@ assert.deepEqual((imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.it
 ]);
 assert.equal(imported.slides[0].notes, "Smoke notes");
 assert.equal((imported.slides[1].chart ?? imported.slides[1].blocks?.[0]?.chart).data.columns[1], "Revenue");
-assert.deepEqual((imported.slides[2].table ?? imported.slides[2].blocks?.[0]?.table).columns.map(cell => cell.value.map(run => run.text).join('')), ["Field", "Value"]);
-assert.ok((imported.slides[2].table ?? imported.slides[2].blocks?.[0]?.table).columns.every(cell => cell.value[0].bold === true && cell.value[0].color === '#FFFFFF'), 'Native header formatting is imported');
+assert.deepEqual((imported.slides[2].table ?? imported.slides[2].blocks?.[0]?.table), deck.slides[2].table, 'Unchanged full-provenance tables retain their authored cells and style absence');
+const observed = await fromPptx(await toPptx(deck, {provenance: false}));
+const observedTable = observed.slides[2].table ?? observed.slides[2].blocks?.[0]?.table;
+assert.deepEqual(observedTable.columns.map(cell => cell.value.map(run => run.text).join('')), ["Field", "Value"]);
+assert.ok(observedTable.columns.every(cell => cell.value[0].bold === true && cell.value[0].color === 'light1'), 'Native header formatting and theme references are imported without authored provenance');
 
 const roundTrip = await toPptx(imported);
 const roundTripEntries = unzipSync(roundTrip);

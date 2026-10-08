@@ -3,7 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
 import {renderSlideSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
-import {tableValues} from './table-values.js';
+import {tableValues, nativeTableEntries} from './table-values.js';
 
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 const plain = cell => Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;
@@ -27,7 +27,7 @@ assert.deepEqual(a,{text:' A ',bold:true,italic:true,underline:true,strikethroug
 assert.equal(table.rows[0][1].find(run=>run.text==='2').subscript,true);
 assert.equal(table.rows[1][1].find(run=>run.text==='2').superscript,true);
 assert.equal(plain(table.rows[1][0]),'\nStart\n\nEnd\n');
-assert.deepEqual(table.rows[2],['','']);
+assert.deepEqual(table, source, 'Full provenance preserves authored cells, rich values and empty representations');
 assert.match(renderSlideSvg(imported, 0),/A/);
 assert.match(renderSlideSvg(imported, 0),/https:\/\/example.com/);
 const again=tableOf(await fromPptx(await toPptx(imported)));
@@ -36,7 +36,7 @@ assert.deepEqual(again.rows[0][0],table.rows[0][0],'Representable styles survive
 
 // Replace the actual cell XML in a native PPTX. No OPF source metadata is read.
 // Runs/fields/breaks are deliberately interleaved, with significant whitespace.
-const base=unzipSync(await toPptx({slides:[{table:{rows:[['placeholder']]}}]}));
+const base=nativeTableEntries(await toPptx({slides:[{table:{rows:[['placeholder']]}}]}));
 const body=`<a:txBody><a:bodyPr/><a:lstStyle><a:lvl1pPr><a:defRPr b="1" sz="2100"><a:latin typeface="+mn-lt"/><a:solidFill><a:schemeClr val="accent1"/></a:solidFill></a:defRPr></a:lvl1pPr></a:lstStyle>
 <a:p><a:pPr><a:defRPr i="1"/></a:pPr><a:r><a:t> A </a:t></a:r><a:fld id="field" type="slidenum"><a:rPr b="0" i="false" u="none" strike="noStrike" baseline="0"><a:solidFill><a:srgbClr val="AABBCC"/></a:solidFill></a:rPr><a:t>7</a:t></a:fld><a:br/><a:r><a:rPr sz="900" b="true"><a:hlinkClick r:id="customLink"/></a:rPr><a:t> B  </a:t></a:r></a:p><a:p/><a:p><a:r><a:t> End </a:t></a:r></a:p><a:p/>
 </a:txBody>`;

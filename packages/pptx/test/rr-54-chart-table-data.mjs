@@ -174,7 +174,7 @@ const roundTripDeck = {
   assert.deepEqual(datasetTable, roundTripDeck.slides[3].table, 'a dataset table returns as its reference');
   assert.deepEqual(inlineTable.columns[1], {name: 'Revenue', format: '$#,##0.0'}, 'a DataColumn header returns');
   assert.equal(inlineTable.columns[2].format, '0%', 'a formatted header cell regains its format');
-  assert.deepEqual(inlineTable.rows.map(row => row.slice(1).map(cell => typeof cell === 'object' && cell !== null && 'value' in cell ? [cell.value, cell.format] : [cell])), [[[8.2, undefined], [0.4, undefined]], [[6.1, undefined], [0.52, '0.0%']]], 'formatted number cells return as numbers, with their own formats');
+  assert.deepEqual(inlineTable.rows.map(row => row.slice(1).map(cell => typeof cell === 'object' && cell !== null && 'value' in cell ? [cell.value, cell.format] : [cell])), [[[8.2], [0.4]], [[6.1], [0.52, '0.0%']]], 'formatted number cells return as numbers, with their own formats');
   assert.deepEqual(treemap.data, roundTripDeck.slides[5].chart.data, 'a chartex chart restores too');
   assert.deepEqual(diagnostics.filter(entry => /data-provenance|dataset-unavailable|number-format-adapted|not-numeric/.test(entry.code)), [], 'nothing is reported for an untouched deck');
   // The restored document exports the same charts again.
@@ -195,8 +195,8 @@ const roundTripDeck = {
   assert.deepEqual(chart.data, {columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}], rows: [['Q1', 13], ['Q2', 18]]}, 'the edited chart imports inline, with the format its code maps back');
   assert.ok(diagnostics.some(entry => entry.code === 'chart-data-provenance-changed' && entry.path === 'slides.0.charts.0'));
   assert.equal(JSON.stringify(table.rows[0][1]).includes('$9.0'), true, 'the edited cell keeps the text it shows');
-  assert.deepEqual([table.rows[0][2].value, table.rows[1][2].value], [0.4, 0.52], 'the untouched cells still restore');
-  assert.ok(diagnostics.some(entry => entry.code === 'table-data-provenance-changed' && /^1 recorded table cell/.test(entry.message)));
+  assert.deepEqual([table.rows[0][2], table.rows[1][2].value], [0.4, 0.52], 'the untouched cells still restore');
+  assert.ok(diagnostics.some(entry => entry.code === 'table-data-provenance-changed' && /^1 authored table cell/.test(entry.message)));
   const noDatasets = repack(bytes, (name, xml) => name === 'ppt/presentation.xml' ? xml : /^ppt\/tags\//.test(name) ? xml.replace(/<p:tag name="OPF_DATASETS_V1"[^>]*\/>/, '') : xml);
   const orphan = await imported(noDatasets);
   assert.equal(orphan.deck.datasets, undefined);
@@ -254,9 +254,13 @@ const roundTripDeck = {
 // 9. Documents without the new fields keep main's exact bytes.
 {
   const fixture = JSON.parse(readFileSync(new URL('./fixtures/rr-54-unchanged.json', import.meta.url), 'utf8'));
-  for (const [name, {deck, sha256}] of Object.entries(fixture.entries)) {
+  for (const [name, {deck, sha256, nativeSlideSha256}] of Object.entries(fixture.entries)) {
     const bytes = await toPptx(structuredClone(deck));
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: bytes identical to main ${fixture.source.commit.slice(0, 7)}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (RR-59 repins only full-provenance plain tables)`);
+    if (nativeSlideSha256) {
+      const native = Object.entries(unzipSync(bytes)).filter(([path]) => /^ppt\/slides\/slide\d+\.xml$/.test(path)).map(([path, data]) => [path, strFromU8(data).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '')]);
+      assert.equal(createHash('sha256').update(JSON.stringify(native)).digest('hex'), nativeSlideSha256, `${name}: pre-RR-59 native slide content remains unchanged`);
+    }
   }
   checks += Object.keys(fixture.entries).length;
 }

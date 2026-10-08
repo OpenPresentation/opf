@@ -1,7 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {checkFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue, tableUsesDataFields} from './chart-data.js';
+import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
 
 // RR-54: chart and table data survive a PPTX round trip (core docs/chart-table-data.md).
 //
@@ -27,7 +27,9 @@ import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableDa
 //
 // Import restores a record only while its native evidence is unchanged: a chart while its caches hash the same (an edit in
 // PowerPoint's Edit Data changes them), a dataset table while every native cell still shows the dataset's display text,
-// and an inline table cell by cell while the native cell shows the recorded text. Otherwise the native values stay (with
+// and an inline table cell by cell while its native text, formatting and grid evidence is unchanged (RR-59).
+// RR-59 adds `authored`, per-cell `evidence` and an `environment` hash of theme/table style parts; the legacy headers/cells
+// fields remain readable by older importers. Exact authored style absence is restored only with all of this evidence. Otherwise the native values stay (with
 // the format codes core maps back, src/chart-data.js) and a diagnostic names what was not restored. Tags are untrusted
 // input: they are size-limited (16 MiB, the limit of the document tag), depth- and shape-checked, validated as OPF, and
 // never executed; a record that fails a check, or that a restore cannot use, is reported and the native values stay.
@@ -113,6 +115,32 @@ export function chartEvidence(xml) {
   return hash(parts.join('\u0000'));
 }
 
+/** Native cell text, formatting and table geometry, canonicalized independently of XML attribute order. */
+export function tableCellEvidence(table, relationships = new Map()) {
+  const related = value => {
+    const ids = new Set(), stack = [value];
+    while (stack.length) {
+      const item = stack.pop();
+      if (!item || typeof item !== 'object') continue;
+      for (const [key, child] of Object.entries(item)) {
+        if (/^r:(id|embed|link)$/.test(key) && typeof child === 'string') ids.add(child);
+        else if (child && typeof child === 'object') stack.push(child);
+      }
+    }
+    return ids.size ? {relationships: Object.fromEntries([...ids].sort().map(id => {
+      const link = relationships.get(id);
+      return [id, link ? {type: link.type, target: link.target, targetMode: link.targetMode} : null];
+    }))} : {};
+  };
+  const properties = {properties: table?.['a:tblPr'], grid: table?.['a:tblGrid']};
+  return array(table?.['a:tr']).map(row => array(row?.['a:tc']).map(cell => hash(canonical({properties, row: Object.fromEntries(Object.entries(row).filter(([key]) => key !== 'a:tc')), cell, ...related({properties, cell})}))));
+}
+
+/** Theme and table-style edits can change effective cell formatting without changing the cell XML. */
+export function tableEnvironmentEvidence(entries) {
+  return hash(canonical(Object.fromEntries(Object.keys(entries).filter(path => /^ppt\/theme\/[^/]+\.xml$/.test(path) || path === 'ppt/tableStyles.xml').sort().map(path => [path, parser.parse(dec.decode(entries[path]))]))));
+}
+
 // ---------------------------------------------------------------------------
 // Export
 
@@ -126,19 +154,16 @@ export function chartDataRecord(chart, datasets) {
   return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
 }
 
-/** The record of a table that is dataset-backed or formats numbers, or undefined. `layout` is the exported table layout. */
+/** Full table provenance: authored inline cells (with legacy numeric recovery fields), or a dataset reference. */
 export function tableDataRecord(table, layout) {
-  if (!tableUsesDataFields(table)) return undefined;
   if (isDatasetRef(table)) return {v: 1, kind: 'table', table: clone(table)};
   const hasHeaders = Array.isArray(table.columns) && table.columns.length > 0;
   const shown = (row, column) => cellText(layout?.rows?.[row]?.cells?.find(cell => cell.column === column)?.value);
   // A header's format: a DataColumn's or a header StyledTableCell's (both are the column format).
   const formatOf = value => object(value) && typeof value.format === 'string' ? value.format : undefined;
   const headers = [], cells = [];
-  const columnFormats = [];
   (hasHeaders ? table.columns : []).forEach((header, column) => {
     const format = formatOf(header);
-    columnFormats[column] = format;
     const dataColumn = object(header) && typeof header.name === 'string' && !own(header, 'value');
     if (dataColumn || format !== undefined) headers.push([column, clone(header), shown(0, column)]);
   });
@@ -147,11 +172,11 @@ export function tableDataRecord(table, layout) {
     row.forEach((cell, column) => {
       const value = own(cell, 'value') ? cell.value : cell;
       const format = own(cell, 'value') && typeof cell.format === 'string' ? cell.format : undefined;
-      if (typeof value !== 'number' || (format === undefined && columnFormats[column] === undefined)) return;
+      if (typeof value !== 'number') return;
       cells.push([rowIndex, column, value, format ?? null, shown(rowIndex + (hasHeaders ? 1 : 0), column)]);
     });
   });
-  return {v: 1, kind: 'table', headers, cells};
+  return {v: 1, kind: 'table', headers, cells, authored: clone(table)};
 }
 
 function relationshipsXml(entries, path) {
@@ -205,7 +230,9 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
       if (seen.has(name)) throw Error(`Duplicate generated frame name ${name}.`);
       seen.add(name);
       const record = records.get(name);
-      const value = record.kind === 'chart' ? {...record, evidence: evidence.get(name) ?? []} : record;
+      const native = record.kind === 'table' ? parser.parse(frames.find(frame => frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] === name))?.['p:graphicFrame']?.['a:graphic']?.['a:graphicData']?.['a:tbl'] : undefined;
+      const value = record.kind === 'chart' ? {...record, evidence: evidence.get(name) ?? []} : {...record, evidence: tableCellEvidence(native, relationships), environment: tableEnvironmentEvidence(entries)};
+      if (!fits(value, paths.get(name) ?? name)) {records.delete(name); seen.delete(name); continue;}
       const part = `ppt/tags/opfData${++count}.xml`;
       if (entries[part]) throw Error('Colliding data tag part.');
       entries[part] = tagPart(DATA_TAG, value);
@@ -310,6 +337,9 @@ export function readDataTag(entries, frame, relationships) {
       && (entry[3] === null || typeof entry[3] === 'string') && typeof entry[4] === 'string';
     if (!record.headers.every(header) || !record.cells.every(cell)) throw Error('Invalid table data record.');
   }
+  if (record.kind === 'table' && record.authored !== undefined && !object(record.authored)) throw Error('Invalid authored table record.');
+  if (record.kind === 'table' && record.evidence !== undefined && (!Array.isArray(record.evidence) || !record.evidence.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string')) || typeof record.environment !== 'string')) throw Error('Invalid table evidence record.');
+  if (record.kind === 'table' && record.authored !== undefined && record.evidence === undefined) throw Error('Authored table record has no native evidence.');
   return record;
 }
 
@@ -341,12 +371,17 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
   return restored;
 }
 
-/** The authored table data where the native cells still show the recorded text; the imported table otherwise. */
-export function restoreTableData(table, record, {datasets, report}) {
+/** The authored table data where the native evidence is unchanged; edited native cells otherwise. */
+export function restoreTableData(table, record, {datasets, report, evidence, environment}) {
   if (!object(table)) return table;
   const columns = Array.isArray(table.columns) ? table.columns : undefined;
   const rows = Array.isArray(table.rows) ? table.rows : [];
+  const sameCell = (row, column) => record.environment === environment && record.evidence?.[row]?.[column] === evidence?.[row]?.[column];
   if (record.table) {
+    if (record.evidence && (record.environment !== environment || canonical(record.evidence) !== canonical(evidence))) {
+      report({code: 'table-data-provenance-changed', message: 'The table text, formatting or geometry changed after export; the dataset reference was not restored and native cells are retained.'});
+      return table;
+    }
     const id = record.table.dataset;
     if (!own(datasets, id)) {
       report({code: 'table-dataset-unavailable', message: `The table referenced dataset '${id}', which this package's datasets record does not hold; the table imports its cells inline.`});
@@ -362,6 +397,28 @@ export function restoreTableData(table, record, {datasets, report}) {
       return table;
     }
     return clone(record.table);
+  }
+  if (record.authored) {
+    if (!validWith({table: record.authored})) {
+      report({code: 'invalid-data-provenance', message: 'The authored table recorded at export is invalid; native cells are retained.'});
+      return table;
+    }
+    const authored = record.authored, headerOffset = authored.columns?.length ? 1 : 0;
+    const expected = [...(headerOffset ? [authored.columns] : []), ...authored.rows];
+    if (record.environment === environment && canonical(record.evidence) === canonical(evidence)) return clone(authored);
+    const next = {...table, ...(columns ? {columns: [...columns]} : {}), rows: rows.map(row => [...row])};
+    let changed = 0;
+    expected.forEach((row, r) => row.forEach((cell, c) => {
+      const target = r < headerOffset ? next.columns : next.rows[r - headerOffset];
+      if (target && c < target.length && sameCell(r, c)) target[c] = clone(cell);
+      else changed++;
+    }));
+    if (!validWith({table: next})) {
+      report({code: 'table-data-provenance-changed', message: 'The authored cells no longer form a valid table with the native grid; native cells are retained.'});
+      return table;
+    }
+    if (changed) report({code: 'table-data-provenance-changed', message: `${changed} authored table ${changed === 1 ? 'cell was' : 'cells were'} not restored because ${changed === 1 ? 'its' : 'their'} native text, formatting or geometry changed; native edits are retained.`});
+    return next;
   }
   const next = {...table, ...(columns ? {columns: [...columns]} : {}), rows: rows.map(row => Array.isArray(row) ? [...row] : row)};
   let changed = 0;
