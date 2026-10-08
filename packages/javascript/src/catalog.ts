@@ -38,3 +38,7 @@ export const catalogDisplay: Readonly<Record<CatalogDisplayKind, Readonly<Record
 /** Each kind's `index.json` in the snapshot: the record summaries and their content hash. */
 export const catalogIndexes: Readonly<Record<string, CatalogIndex>> = snapshotIndexes;
 export type { CatalogIndex, CatalogIndexRecord } from './generated/catalogs.js';
+
+// The static HTML layout previews (spec/previews/layouts) are catalog display data too.
+export { getLayoutPreview, hasLayoutPreview, layoutPreviewIndex, layoutPreviewSlugs, layoutPreviews } from './previews.js';
+export type { LayoutPreviewIndex, LayoutPreviewRecord } from './previews.js';

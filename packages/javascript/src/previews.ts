@@ -52,7 +52,7 @@ export function hasLayoutPreview(slug: string): boolean {
 /**
  * Look up the HTML preview for a layout slug. Returns `undefined` for slugs
  * with no shipped preview — callers should fall back to a generic renderer in
- * that case (see `@openpresentation/opf/previews` README).
+ * that case. Exported from `@openpresentation/opf/catalog`.
  */
 export function getLayoutPreview(slug: string): string | undefined {
   return layoutPreviewsRaw[slug];

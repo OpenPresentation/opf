@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import { composeSlide, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, colorContrast, layoutMetric, metricTrendColor, metricTrendMark } from '../dist/composition.js';
 import {convertContent as convert} from '../dist/convert.js';
-import { colorSchemes } from '../dist/index.js';
+import { colorSchemes } from './support/catalog.mjs';
 import {fromMarkdown,toMarkdown} from '../dist/markdown.js';
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 

@@ -341,5 +341,495 @@
       "scenario": "identity-incident-executive-brief",
       "generatedBy": "scripts/generate-example-suite.mjs"
     }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "survival-story": {
+          "name": "Survival Story",
+          "summary": "Narrative arc of overcoming adversity through determination: catastrophe, backstory, plan, danger, effort, struggle, pivot, breakthrough, legacy, takeaway. For brand stories, founder histories, and leadership talks where the lesson lives in the comeback.",
+          "audienceFit": [
+            "general-audience",
+            "internal-teams",
+            "press"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 30
+          },
+          "tags": [
+            "storytelling",
+            "inspirational",
+            "founder",
+            "comeback"
+          ],
+          "beats": [
+            {
+              "id": "catastrophe",
+              "name": "Catastrophe",
+              "description": "Open in the middle of the disaster. Specific moment, specific stakes, specific damage. Drop the audience into the worst point of the story before walking them back.",
+              "instructions": "Present initial disaster",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "backstory",
+              "name": "Backstory",
+              "description": "Detail the events that led up to the catastrophe. Just enough for the audience to understand how the disaster could have happened. Avoid moralizing — the story does the work.",
+              "instructions": "Detail past events",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "blueprint",
+              "name": "Blueprint",
+              "description": "Illustrate the recovery plan. Specific moves, specific bets, specific people. The audience should see the strategy as more than 'try hard.'",
+              "instructions": "Illustrate recovery plans",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "danger",
+              "name": "Danger",
+              "description": "Highlight the emerging threats to the recovery plan. New risks, returning ones. Tension here makes the eventual triumph credible.",
+              "instructions": "Highlight emerging threats",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "endeavor",
+              "name": "Endeavor",
+              "description": "Show the determined effort underway. The hours, the trade-offs, the discipline. The audience must feel the work, not just hear about it.",
+              "instructions": "Show determination effort",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Showcase challenging moments along the way: the setbacks, the false starts, the hard calls. Honest setbacks make eventual success feel earned.",
+              "instructions": "Showcase challenging encounters",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "pivot",
+              "name": "Pivot",
+              "description": "Highlight the strategic shift that changed the trajectory. What got reconsidered, what got dropped, what got doubled down on. The pivot is the moment the protagonist became something new.",
+              "instructions": "Highlight strategy shift",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Emphasize the moment adversity finally broke. Concrete result, concrete date. Let the slide land — the audience came for this turn.",
+              "instructions": "Emphasize overcoming adversity",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Discuss the enduring impact. What survival made possible afterward, who benefited, what was built on top. Survival stories are most powerful when they create more than they restore.",
+              "instructions": "Discuss enduring impact",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "takeaway",
+              "name": "Takeaway",
+              "description": "Share the lesson the audience can carry away. One transferable insight, framed for their own challenges — not a general moral.",
+              "layout": "title",
+              "instructions": "Share important lessons",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "customer": {
+          "name": "Customer",
+          "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+          "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "mixed",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "heros-journey",
+            "problem-solution"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "conversational"
+          ],
+          "tags": [
+            "external",
+            "customer",
+            "product"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing",
+          "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+          "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "low",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "data-story",
+            "what-so-what-now-what"
+          ],
+          "recommendedTones": [
+            "casual",
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "marketing",
+            "brand",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "plan": {
+          "name": "Plan",
+          "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+          "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+          "outcome": "The audience understands the plan and accepts the next actions.",
+          "successCriteria": [
+            "Milestones and owners are clear",
+            "Dependencies and risks are visible",
+            "Next steps can be executed"
+          ],
+          "recommendedNarratives": [
+            "project-proposal",
+            "capacity-planning",
+            "strategic-advisory"
+          ],
+          "recommendedTones": [
+            "authoritative",
+            "technical"
+          ],
+          "tags": [
+            "roadmap",
+            "execution",
+            "planning"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "mingliu": {
+          "name": "MingLiU",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "zh-Hant"
+          ],
+          "major": "MingLiU",
+          "minor": "MingLiU",
+          "textSample": "這是以明體字型撰寫的",
+          "type": "serif",
+          "description": "MingLiU is a serif OPF font scheme for East Asian presentations, using MingLiU for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-6x": {
+          "name": "List 6x",
+          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
+          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "List",
+            "Grid",
+            "Collection"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+          }
+        }
+      }
+    }
   }
 }

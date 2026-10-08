@@ -54,7 +54,7 @@ export { promotedRegionKeys } from './schema-check.js';
  * returns one list of findings, each with a stable `opf/<rule>` id, a severity and one of six categories:
  *
  * - `format`: is it well-formed OPF (JSON syntax, duplicate keys, schema and semantic rules);
- * - `references`: does everything it points at resolve (catalog ids, assets, citations, datasets);
+ * - `references`: does everything it points at resolve (content references, assets, citations, datasets);
  * - `policy`: does it follow the host's `contracts`;
  * - `accessibility`: WCAG 2.2 and PowerPoint accessibility checker rules;
  * - `layout`: will it present as authored (fit, minimum size, image resolution, fonts);

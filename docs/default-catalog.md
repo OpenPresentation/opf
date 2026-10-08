@@ -58,13 +58,22 @@ One rule for every kind; nothing is ever fetched:
    source it was looked for in, a slide composes automatically, and a design uses the engine default. A strict export
    fails with the same reference.
 
+A record embedded under `catalogs.default` or a named group whose registered catalog has no record of that kind and id is the warning `opf/catalog-record-not-in-source`: it is the document's own record and belongs in `catalogs.custom`. The check is silent when no catalog is registered for the group's source, for a record the catalog has with other content (an update difference) and for `custom`; rendering is unchanged.
+
 A slide with no `layout` is automatic composition, not a missing reference, and has no finding. Engines never
 substitute a different layout for one that does not resolve.
 
 ## Registering catalogs
 
 Every entry point that resolves references takes the same option, `catalogs`: the catalogs the host registered,
-matched by `source`. The first one is the host default.
+matched by `source`.
+
+> **The host-default rule.** The first registered catalog is the default for documents that omit `catalogs.default`:
+> their bare ids resolve in `custom`, then in that catalog. A document whose `default` names a `source` uses the
+> registered catalog with that source, and nothing when the host did not register it, even if it registered others.
+> `"default": false` uses no catalog for bare ids. Without the `catalogs` option nothing is registered: core has no
+> fallback of its own, so only what the document embeds resolves. Hosts (the CLI, the editor app, the sites) register
+> `@openpresentation/opf/catalog`; libraries and engines pass the option through.
 
 ```js
 import { validate, resolveSlideContext, paginate, embed } from '@openpresentation/opf';
@@ -105,7 +114,10 @@ budget.
   export; `opf embed` does it on the command line.
 - **`copySlides(from, to, indexes, { catalogs, at })`** copies slides with their records. Groups match by `source`, not
   by name: references are rewritten to the target's name for that source, and a missing group is added (renamed
-  `<name>-2` when its name is taken). A record the target already has with the same content is reused. A `custom` id
+  `<name>-2` when its name is taken). A source document without `catalogs.default` inherits the host default's
+  source; when the target's default has another source, or is `false`, that catalog is added to the target as a named
+  group and the copied bare references get its prefix, so copied slides never change catalog. A record the target
+  already has with the same content is reused. A `custom` id
   the target uses for different content is renamed `<id>-2`. A catalog record whose revision differs from the one the
   target resolves moves into `custom` as `<id>-2`, so the copied slides look the same, and is listed in `renamed`.
 - **`updateFromCatalog(document, catalogs, refs?)`** compares the records embedded under `default` and the named groups

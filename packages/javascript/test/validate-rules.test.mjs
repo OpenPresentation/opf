@@ -29,7 +29,7 @@ const png = (width, height) => {
 
 test('every rule has a stable id, a category, a cost, a rationale and an entry in docs/validate.md', () => {
 	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8');
-	assert.equal(validationRules.length, 63);
+	assert.equal(validationRules.length, 64);
 	const seen = new Set();
 	for (const info of validationRules) {
 		assert.match(info.id, /^opf\/[a-z][a-z0-9-]*$/);

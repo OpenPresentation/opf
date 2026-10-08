@@ -29,12 +29,13 @@ For raw geometry, `composeSlide(slide, options)` expects validated input. `resol
 
 ```js
 import { resolveSlideContext } from '@openpresentation/opf';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { composeSlide } from '@openpresentation/opf/composition';
-const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement } });
+const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement }, catalogs: [defaultCatalog] });
 const geometry = composeSlide(document.slides[slideIndex], options);
 // geometry.items: leaf paths and boxes; geometry.groups: nested group bounds.
-// diagnostics reports unresolved-font-scheme, unresolved-layout, unresolved-theme and unresolved-color-scheme references;
-// each falls back (no layout record, minimal, cool-horizon, the default font scheme) and none throws.
+// diagnostics holds one unresolved-reference per layout, theme, colour or font scheme reference that resolves nowhere;
+// each falls back (automatic composition, or the engine default) and none throws unless strictReferences is set.
 console.log(geometry.diagnostics);
 ```
 

@@ -16,13 +16,13 @@
     "always": ["check:changes"],
     "rules": [
       {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-docs", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
-      {"match": ["spec/catalogs/"], "run": ["check:spec", "check:catalog", "check:core-golden", "check:registry-golden", "check:text"]},
+      {"match": ["spec/catalogs/"], "run": ["check:spec", "check:catalog", "check:catalog-free", "check:core-golden", "check:registry-golden", "check:text"]},
       {"match": ["spec/"], "run": ["check:spec"]},
       {"match": ["examples/"], "run": ["check:examples", "check:text"]},
       {"match": ["docs/", "README.md", "PRODUCT.md", "AGENTS.md", "skills/", "llms.txt"], "run": ["check:text"]},
       {"match": ["docs/programs/release-readiness/"], "run": ["check:release-report", "check:gallery-tracker"]},
       {"match": ["docs/programs/font-fidelity-everywhere/"], "run": ["check:font-tracker", "check:works-percent"]},
-      {"match": ["packages/javascript/"], "run": ["check:font-hotlinks", "check:text"]},
+      {"match": ["packages/javascript/"], "run": ["check:font-hotlinks", "check:catalog-free", "check:text"]},
       {"match": ["scripts/checks.json", "scripts/run-checks.mjs", "scripts/run-tests.mjs"], "run": ["check:runners"]},
       {"match": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "packages/javascript/package.json", "packages/cli/package.json"], "run": ["check:engines-range", "check:runners"]},
       {"match": ["scripts/agent-slot.mjs", "scripts/agent-format.mjs", "scripts/check-changed.mjs", ".claude/settings.json"], "run": ["check:agent-tools"]}

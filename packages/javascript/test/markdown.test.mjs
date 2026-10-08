@@ -1,3 +1,4 @@
+import { defaultCatalog } from './support/catalog.mjs';
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
@@ -13,7 +14,8 @@ import { check } from './support/validation.mjs';
 
 const markdownExamples = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../examples/markdown");
 
-const convert = (source, options) => fromMarkdown(source, options);
+// The dialect examples name gallery records; the host registers the default catalog for the references check.
+const convert = (source, options) => fromMarkdown(source, { catalogs: [defaultCatalog], ...options });
 const slides = (source, options) => {
   const result = convert(source, options);
   assert.deepEqual(

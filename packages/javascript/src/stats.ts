@@ -1,7 +1,6 @@
 import { catalogKinds, type CatalogOptions } from './catalog-refs.js';
 import { resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
-import { hostCatalogs } from './host-catalogs.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
 import { listVariables, type VariableKind } from './variables.js';
 
@@ -15,7 +14,7 @@ import { listVariables, type VariableKind } from './variables.js';
 // biome-ignore lint/suspicious/noExplicitAny: authored JSON is walked untyped; every read is guarded.
 type Rec = Record<string, any>;
 
-/** A reference as authored: the string (a catalog id, URL, `pkg:` reference, tag or free text) or the inline record's id. */
+/** A reference as authored: the string (a bare id, `name:id`, a tag or free text) or the inline object's id. */
 export interface ReferenceFact {
   id: string | null;
   inline: boolean;
@@ -322,7 +321,7 @@ interface Tally {
 }
 
 export function stats(presentation: unknown, options: StatsOptions = {}): PresentationStats {
-  const catalogs = hostCatalogs(options);
+  const catalogs = { catalogs: options.catalogs ?? [] };
   if (!isRecord(presentation)) throw new TypeError('stats needs a presentation object.');
   const deck = presentation as Rec;
   const wordsPerMinute = options.wordsPerMinute ?? DEFAULT_WORDS_PER_MINUTE;

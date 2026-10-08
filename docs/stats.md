@@ -50,7 +50,7 @@ opf stats - --per-slide < deck.opf.json      # adds a row per slide
 | `headerFooter` | `header` and `footer` at deck level (`configured`, `suppressed`, `zones`, `fields`) and `slides` (`headerOverrides`, `headerSuppressed`, `footerOverrides`, `footerSuppressed`). |
 | `fonts` | `families` (every family named), `schemeIds` (font schemes in effect), `unresolvedSchemeIds`, `runOverrides` (families set on text runs). |
 | `colors` | `variables`: each colour variable with its `value` and number of `uses`. |
-| `extensions`, `catalogOverrides` | The keys under `extensions` anywhere; per-kind inline catalog `records` and `source`. |
+| `extensions`, `catalogs` | The keys under `extensions` anywhere; each catalog group the deck embeds records in, with its `source` and its record count per kind. |
 | `perSlide` | With `perSlide: true`: per slide `index`, `id`, `title`, `layout`, `section`, `hidden`, `payloads` (kinds present), `words` (`content`, `notes`), `hasNotes`, `speakingSeconds`, `images`, `charts`, `tables`, `citations`. |
 
 ## Definitions

@@ -355,5 +355,480 @@
       "scenario": "arabic-digital-services-brief",
       "generatedBy": "scripts/generate-example-suite.mjs"
     }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "marketing-strategy": {
+          "name": "Marketing Strategy",
+          "summary": "Comprehensive go-to-market strategy arc structured around the 4Ps. Use for category launches, annual marketing plans, and any deck where the audience needs to see customer, market, competition, and tactics in one coherent picture.",
+          "audienceFit": [
+            "marketing-leaders",
+            "executives",
+            "cross-functional-partners"
+          ],
+          "duration": {
+            "min": 30,
+            "max": 60
+          },
+          "tags": [
+            "go-to-market",
+            "marketing",
+            "strategy",
+            "planning"
+          ],
+          "beats": [
+            {
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open by establishing the product or service this strategy is for, and what window of time it covers. One slide that tells the audience exactly which world they're being asked to weigh in on.",
+              "instructions": "Establish product/service specifics",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "objective",
+              "name": "Objective",
+              "description": "State the marketing goals in measurable terms: revenue, pipeline, awareness, share. Two or three goals, ranked. Goals without ranking get equal energy and equal mediocrity.",
+              "instructions": "Share marketing goals",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "customer",
+              "name": "Customer",
+              "description": "Detail the target audience. Segments, jobs-to-be-done, decision criteria, where they live in the buying cycle. Specificity here is the foundation everything else stands on.",
+              "instructions": "Detail target audience",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "market",
+              "name": "Market",
+              "description": "Describe the market landscape: size, growth, segments, behavioral trends. Use external data for credibility and your own research for nuance. Show how the market is changing, not just how big it is.",
+              "instructions": "Discuss market landscape",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "competition",
+              "name": "Competition",
+              "description": "Map the competitive set honestly. Direct, indirect, and substitutes. A 2x2 or feature-comparison framework helps; what matters is that the audience trusts your read of the field.",
+              "instructions": "Analyze competitive environment",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "strategy",
+              "name": "Strategy",
+              "description": "Articulate the marketing approach in one sentence and a single supporting frame. Positioning, primary motion, where you choose to play and not play. Clarity here is what makes the tactics that follow coherent.",
+              "instructions": "Elaborate marketing approach",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "product",
+              "name": "Product",
+              "description": "Highlight the unique value the product brings to the strategy. Lead with the customer outcome; tie it directly back to the customer beat. Avoid feature soup.",
+              "instructions": "Highlight unique value",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "price",
+              "name": "Price",
+              "description": "Justify pricing and packaging. Show the logic — cost-plus, value-based, competitor-anchored — and the levers you'll use over the period. Price decisions are strategy decisions.",
+              "instructions": "Justify pricing strategy",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "place",
+              "name": "Place",
+              "description": "Describe distribution channels and the role each plays. Direct, partner, marketplace, retail. Channel mix is often where strategies quietly succeed or fail.",
+              "instructions": "Discuss distribution channels",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "promotion",
+              "name": "Promotion",
+              "description": "Reveal the campaign and content tactics that bring the strategy to market. Pair each tactic with the audience and metric it serves. Avoid listing channels for their own sake.",
+              "instructions": "Reveal promotional tactics",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "summary",
+              "name": "Summary",
+              "description": "Recap the strategy in a single page: customer, position, motion, expected outcome. End with the decision or commitment you need from the audience.",
+              "layout": "title",
+              "instructions": "Recap key points",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        },
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
+          ]
+        }
+      },
+      "purposes": {
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+          "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+          "outcome": "The audience accepts the argument or supports the recommendation.",
+          "successCriteria": [
+            "Main thesis is memorable",
+            "Evidence supports the argument",
+            "Likely objections are handled"
+          ],
+          "recommendedNarratives": [
+            "problem-solution",
+            "persuasive-sales",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative"
+          ],
+          "tags": [
+            "argument",
+            "support",
+            "belief-change"
+          ]
+        }
+      },
+      "tones": {
+        "formal": {
+          "name": "Formal",
+          "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+          "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+          "voiceCues": [
+            "Use third person and the corporate 'we' sparingly.",
+            "Lead with the recommendation, then evidence.",
+            "Quote concrete numbers; avoid round-tripping ranges.",
+            "Prefer full sentences to bullet fragments on key claims."
+          ],
+          "avoid": [
+            "Slang, idioms, or in-jokes.",
+            "Hedging language ('maybe', 'sort of', 'I think').",
+            "Marketing superlatives ('world-class', 'best-in-class').",
+            "Excessive emoji or exclamation points."
+          ],
+          "samplePhrases": [
+            "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+            "We recommend approving the Series B raise at $30M.",
+            "Net retention was 124%; gross retention was 96%."
+          ],
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-narrative"
+          ],
+          "tags": [
+            "business",
+            "executive",
+            "formal"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-arabic": {
+          "name": "Noto Sans Arabic",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "ar",
+            "ps",
+            "pa-Arab"
+          ],
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic",
+          "textSample": "نص عربي أنيق",
+          "type": "sans-serif",
+          "description": "Noto Sans Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+        },
+        "batang": {
+          "name": "Batang",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "ko"
+          ],
+          "major": "BatangChe",
+          "minor": "Batang",
+          "textSample": "이것은 바탕 폰트로 쓰여졌습니다",
+          "type": "serif",
+          "description": "Batang is a serif OPF font scheme for East Asian presentations, using BatangChe for headings with Batang for body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "pastel-red": {
+          "name": "Pastel Red",
+          "accent1": "#FE938C",
+          "accent2": "#E6B89C",
+          "accent3": "#EAD2AC",
+          "accent4": "#9CAFB7",
+          "accent5": "#4281A4",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#0C6268",
+          "followedHyperlink": "#E6B89C",
+          "hyperlink": "#FE938C",
+          "light1": "#FFFFFF",
+          "light2": "#FFEFEE",
+          "summary": "Soft red and blue accents for approachable consumer stories.",
+          "description": "A pastel red scheme with warm neutrals and blue support, suited to friendly, human-centered decks.",
+          "tags": [
+            "warm",
+            "friendly",
+            "soft",
+            "approachable",
+            "human"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "chart-2x": {
+          "name": "Chart 2x",
+          "summary": "Reach for it when two charts are read together, each with its own note.",
+          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 2
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Comparison"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-1x": {
+          "name": "List 1x",
+          "summary": "Reach for it when one set of related points belongs together under a title.",
+          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "tags": [
+            "List",
+            "Scannable",
+            "Structure"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          }
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,103 @@
+{
+  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. `measured` is the size when it was last updated.",
+  "entries": {
+    "composition": 63085,
+    "convert": 221534,
+    "data": 8684,
+    "diff": 6223,
+    "font-policy": 15052,
+    "format": 44166,
+    "index": 302200,
+    "markdown": 254687,
+    "pagination": 208338,
+    "patch": 205672,
+    "schemas": 60447,
+    "spec-files": 8835,
+    "symbol-font-encodings": 36084,
+    "types": 21,
+    "validator": 203822,
+    "yaml": 239318
+  },
+  "measured": {
+    "catalog": {
+      "minified": 474811,
+      "gzip": 95354
+    },
+    "composition": {
+      "minified": 181943,
+      "gzip": 61247
+    },
+    "convert": {
+      "minified": 712176,
+      "gzip": 215081
+    },
+    "data": {
+      "minified": 22716,
+      "gzip": 8431
+    },
+    "diff": {
+      "minified": 15709,
+      "gzip": 6041
+    },
+    "docs": {
+      "minified": 1177310,
+      "gzip": 389940
+    },
+    "examples": {
+      "minified": 4063278,
+      "gzip": 2112320
+    },
+    "font-policy": {
+      "minified": 115511,
+      "gzip": 14613
+    },
+    "format": {
+      "minified": 157594,
+      "gzip": 42879
+    },
+    "index": {
+      "minified": 1099346,
+      "gzip": 293398
+    },
+    "markdown": {
+      "minified": 815197,
+      "gzip": 247268
+    },
+    "pagination": {
+      "minified": 672379,
+      "gzip": 202269
+    },
+    "patch": {
+      "minified": 669793,
+      "gzip": 199681
+    },
+    "repo-readme": {
+      "minified": 13166,
+      "gzip": 4999
+    },
+    "schemas": {
+      "minified": 227187,
+      "gzip": 58686
+    },
+    "spec-files": {
+      "minified": 109789,
+      "gzip": 8577
+    },
+    "symbol-font-encodings": {
+      "minified": 170679,
+      "gzip": 35033
+    },
+    "types": {
+      "minified": 0,
+      "gzip": 20
+    },
+    "validator": {
+      "minified": 663765,
+      "gzip": 197885
+    },
+    "yaml": {
+      "minified": 772223,
+      "gzip": 232347
+    }
+  }
+}

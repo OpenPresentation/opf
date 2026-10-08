@@ -6,7 +6,7 @@ Thanks for your interest in contributing to OpenPresentation (OPF). This project
 
 Before making changes, it helps to understand how the pieces fit together:
 
-- [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`) and bundled catalog records (`spec/catalogs/<kind>/`, one JSON file per record plus an `index.json` per kind). If you are proposing a change to the format itself, this is where it lives.
+- [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`), the engine reference data (`spec/reference/`) and the pinned snapshot of the default catalog pptx.gallery publishes (`spec/catalogs/<kind>/`, one JSON file per record plus an `index.json` per kind; it ships only as `@openpresentation/opf/catalog`). If you are proposing a change to the format itself, this is where it lives.
 - [`packages/javascript`](./packages/javascript) publishes `@openpresentation/opf` to npm. Its TypeScript types, generated content, and layout previews are **generated from `spec/` at build time** by `packages/javascript/scripts/generate*.mjs`. Generated output (e.g. `src/generated/`) is never edited by hand — it is produced fresh on every build and would simply be overwritten.
 - [`packages/cli`](./packages/cli) is the local-only `@openpresentation/cli` package, published separately with the matching core bundled inside.
 - [`examples/`](./examples) contains `*.opf.json` decks that are validated against the schema in CI and, for the top-level `examples/` tree, bundled into the npm package.

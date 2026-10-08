@@ -3,7 +3,7 @@ import { describe, test } from "node:test";
 
 import { chartLabelText, chartOptionSupport, chartOptionTarget, formatChartLabelNumber, formatChartLabelPercent, resolveChartOptions } from "../dist/composition.js";
 import { resolveChartOptions as fromComposition } from "../dist/composition.js";
-import { chartTypes } from "../dist/catalogs.js";
+import { chartTypes } from "./support/catalog.mjs";
 import { check, errorsOf } from './support/validation.mjs';
 
 const adapted = (document) => check(document, { only: ['opf/chart-option-adapted'] });

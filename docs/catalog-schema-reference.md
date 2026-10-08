@@ -23,8 +23,8 @@ OPF documents usually reference these records with string ids such as `design.th
 | `technicalFluency` | no | `enum:low \| medium \| high \| mixed` | Typical technical fluency of the audience. AI generation uses this to decide whether to expand or assume technical terminology. |
 | `decisionPower` | no | `enum:informational \| advisory \| decision-maker` | Whether the audience is expected to be informed, to advise, or to actually decide. Shapes the strength of the closing ask. |
 | `attentionBudgetMinutes` | no | `number` | Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's duration range. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Validators warn on unknown ids; never error. |
-| `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this audience. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: ids of narratives in the same catalog that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Never resolved, embedded or validated as references. |
+| `recommendedTones` | no | `array<string>` | Soft cross-link: ids of tones in the same catalog that work well for this audience. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional. |
 
@@ -67,7 +67,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-catalog-manifest/v1`
 - Type: `object`
 - Required fields: `$schema`, `description`, `publisher`, `source`, `kinds`
-- Purpose: Shape of `spec/catalogs/manifest.json`, which pins the bundled catalogs to the default OPF catalog published by pptx.gallery. It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a repo-internal file, not an OPF document or a catalog record; it...
+- Purpose: Shape of `spec/catalogs/manifest.json`, which pins the snapshot of the default OPF catalog published by pptx.gallery (shipped as @openpresentation/opf/catalog). It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a repo-internal file, not an O...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -388,8 +388,8 @@ _No named properties._
 | `description` | no | `string` | Longer prose describing when to use this purpose and how it should shape a deck. |
 | `outcome` | no | `string` | Desired audience outcome after the presentation. |
 | `successCriteria` | no | `array<string>` | Observable signals that the deck accomplished this purpose. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this purpose. |
-| `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this purpose. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: ids of narratives in the same catalog that work well for this purpose. Never resolved, embedded or validated as references. |
+| `recommendedTones` | no | `array<string>` | Soft cross-link: ids of tones in the same catalog that work well for this purpose. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional. |
 
@@ -478,6 +478,6 @@ _No named properties._
 | `voiceCues` | no | `array<string>` | Short directives that shape AI generation toward this tone. Phrased as imperatives, e.g. 'use second-person', 'favor short sentences', 'lead with the recommendation'. |
 | `avoid` | no | `array<string>` | Anti-patterns that AI generation should not produce when this tone is active. |
 | `samplePhrases` | no | `array<string>` | Short example phrases that exemplify this tone. Used by picker UIs and as few-shot examples for AI generation. |
-| `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids this tone pairs well with. Used by picker UIs to suggest narratives once a tone is chosen. Validators warn on unknown ids; never error. |
+| `recommendedNarratives` | no | `array<string>` | Soft cross-link: ids of narratives in the same catalog this tone pairs well with. Used by picker UIs to suggest narratives once a tone is chosen. Never resolved, embedded or validated as references. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional. |

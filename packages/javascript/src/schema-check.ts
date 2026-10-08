@@ -4,7 +4,6 @@ import addFormats from "ajv-formats";
 import type { Catalog } from "./catalog-refs.js";
 import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
 import { resolveDesignRecords } from "./design-records.js";
-import { hostCatalogs } from "./host-catalogs.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
@@ -571,7 +570,7 @@ function slideThemeDimensionsWarnings(
   const slidePath = `/slides/${index}`;
   const slideDesign = isRecord(slide.design) ? slide.design : undefined;
   if (!slideDesign || typeof slideDesign.theme !== "string") return [];
-  const options = hostCatalogs(catalogs ? { catalogs } : {});
+  const options = { catalogs: catalogs ?? [] };
   const slideTheme = resolveDesignRecords(document, index, options);
   // A slide theme that resolves nowhere has no dimensions of its own: opf/unresolved-reference reports it.
   if (slideTheme.diagnostics.some((diagnostic) => diagnostic.kind === "themes") || slideTheme.theme.dimensions === undefined) return [];

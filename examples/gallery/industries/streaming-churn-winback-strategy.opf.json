@@ -347,5 +347,479 @@
       "scenario": "streaming-churn-winback-strategy",
       "generatedBy": "scripts/generate-example-suite.mjs"
     }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "classic-story": {
+          "name": "Classic Story",
+          "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, and close with hope. A versatile go-to when you need to make information feel like a story.",
+          "audienceFit": [
+            "general-audience",
+            "customers",
+            "internal-teams"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 30
+          },
+          "tags": [
+            "storytelling",
+            "general",
+            "engagement"
+          ],
+          "beats": [
+            {
+              "id": "opening",
+              "name": "Opening",
+              "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble.",
+              "instructions": "Capture audience attention",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "context",
+              "name": "Context",
+              "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine.",
+              "instructions": "Give background & importance",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "villain",
+              "name": "Villain",
+              "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out.",
+              "instructions": "Introduce problem",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "despair",
+              "name": "Despair",
+              "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land.",
+              "instructions": "Emphasize negative impact",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "hero",
+              "name": "Hero",
+              "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé.",
+              "instructions": "Present solution",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "plan",
+              "name": "Plan",
+              "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable.",
+              "instructions": "Detail implementation",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
+              "layout": "title",
+              "instructions": "Inspire & conclude",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "executive": {
+          "name": "Executive",
+          "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+          "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "leadership",
+            "decision-making"
+          ]
+        },
+        "sales": {
+          "name": "Sales",
+          "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+          "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 30,
+          "recommendedNarratives": [
+            "problem-solution",
+            "heros-journey"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "conversational",
+            "casual"
+          ],
+          "tags": [
+            "sales",
+            "customer",
+            "go-to-market"
+          ]
+        }
+      },
+      "purposes": {
+        "pitch": {
+          "name": "Pitch",
+          "summary": "Present an opportunity and ask for investment, approval, partnership, or sponsorship.",
+          "description": "Use when the deck needs to create interest and move a high-stakes audience toward backing the opportunity. Lead with the opportunity, prove credibility, and make the ask concrete.",
+          "outcome": "The audience agrees to invest, sponsor, approve, or continue the conversation.",
+          "successCriteria": [
+            "Opportunity is clear",
+            "Evidence builds confidence",
+            "Ask and next step are explicit"
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "golden-circle"
+          ],
+          "recommendedTones": [
+            "persuasive",
+            "authoritative",
+            "inspirational"
+          ],
+          "tags": [
+            "fundraising",
+            "opportunity",
+            "ask"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "corporate-blue": {
+          "name": "Corporate Blue",
+          "accent1": "#015DFE",
+          "accent2": "#0100A6",
+          "accent3": "#02ACFF",
+          "accent4": "#94A1B2",
+          "accent5": "#E3ECF3",
+          "accent6": "#5A82FC",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#954F72",
+          "hyperlink": "#0563C1",
+          "light1": "#FFFFFF",
+          "light2": "#F3F7FF",
+          "summary": "Legacy corporate blue palette for conservative business contexts.",
+          "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+          "tags": [
+            "corporate",
+            "stable",
+            "trustworthy",
+            "conservative",
+            "professional"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "batang": {
+          "name": "Batang",
+          "app": "powerpoint",
+          "languageFamily": "ea",
+          "languages": [
+            "ko"
+          ],
+          "major": "BatangChe",
+          "minor": "Batang",
+          "textSample": "이것은 바탕 폰트로 쓰여졌습니다",
+          "type": "serif",
+          "description": "Batang is a serif OPF font scheme for East Asian presentations, using BatangChe for headings with Batang for body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "title": {
+          "name": "Title",
+          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+          "placeholders": [
+            {
+              "type": "title"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Minimal"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+          }
+        },
+        "text-3x": {
+          "name": "Text 3x",
+          "summary": "Reach for it when three parallel points each need a short passage of their own.",
+          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Triads",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          }
+        },
+        "chart-3x": {
+          "name": "Chart 3x",
+          "summary": "Reach for it when three charts tell one story, each with its own note.",
+          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "grid",
+            "columns": 3
+          },
+          "tags": [
+            "Charts",
+            "Multi-chart",
+            "Triads"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        },
+        "list-2x": {
+          "name": "List 2x",
+          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          }
+        }
+      }
+    }
   }
 }

@@ -1,22 +1,116 @@
 {
   "name": "Decision brief — example",
   "description": "Illustrative starter; replace example statements with the user's supported content.",
-  "design": {"theme": "classic", "fontScheme": "roboto"},
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto"
+  },
   "slides": [
     {
       "id": "recommendation",
       "title": "Start with a small pilot",
-      "composition": {"mode": "row", "weights": [2, 1]},
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          1
+        ]
+      },
       "blocks": [
-        {"items": ["State the decision to make.", "Show the supporting evidence.", "Name the next checkpoint."]},
-        {"text": "Define the pilot's success criteria before expanding."}
+        {
+          "items": [
+            "State the decision to make.",
+            "Show the supporting evidence.",
+            "Name the next checkpoint."
+          ]
+        },
+        {
+          "text": "Define the pilot's success criteria before expanding."
+        }
       ],
       "notes": "Replace this example with sourced facts and the actual decision owner."
     },
     {
       "id": "next-steps",
       "title": "Make the next step explicit",
-      "timeline": [{"when": "First", "what": "Agree on scope"}, {"when": "Then", "what": "Run and review the pilot"}]
+      "timeline": [
+        {
+          "when": "First",
+          "what": "Agree on scope"
+        },
+        {
+          "when": "Then",
+          "what": "Run and review the pilot"
+        }
+      ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      }
+    }
+  }
 }

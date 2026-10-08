@@ -1,7 +1,10 @@
 {
   "name": "Roadmap with progress — example",
   "description": "Illustrative starter for a roadmap whose events show progress: done, current and planned. Replace the example events with the user's supported content.",
-  "design": {"theme": "classic", "fontScheme": "roboto"},
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto"
+  },
   "slides": [
     {
       "id": "roadmap",
@@ -9,14 +12,107 @@
       "timeline": {
         "name": "Regional rollout",
         "events": [
-          {"when": "Q1", "what": "Discovery", "description": "Interviews and requirements.", "status": "done"},
-          {"when": "Q2", "what": "Pilot", "description": "One operations team.", "status": "done"},
-          {"when": "Q3", "what": "Rollout", "description": "All regions, in waves.", "status": "current"},
-          {"when": "Q4", "what": "Scale", "description": "Automate exception reporting.", "status": "planned"},
-          {"when": "Q1 next year", "what": "Review", "description": "Measure the results.", "status": "planned"}
+          {
+            "when": "Q1",
+            "what": "Discovery",
+            "description": "Interviews and requirements.",
+            "status": "done"
+          },
+          {
+            "when": "Q2",
+            "what": "Pilot",
+            "description": "One operations team.",
+            "status": "done"
+          },
+          {
+            "when": "Q3",
+            "what": "Rollout",
+            "description": "All regions, in waves.",
+            "status": "current"
+          },
+          {
+            "when": "Q4",
+            "what": "Scale",
+            "description": "Automate exception reporting.",
+            "status": "planned"
+          },
+          {
+            "when": "Q1 next year",
+            "what": "Review",
+            "description": "Measure the results.",
+            "status": "planned"
+          }
         ]
       },
       "notes": "Use done for finished work, current for the one event in progress, planned for what comes next. Status is progress only; write at-risk or blocked in the event text."
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      }
+    }
+  }
 }

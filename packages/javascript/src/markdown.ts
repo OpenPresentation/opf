@@ -7,6 +7,7 @@
  *
  * No renderer, fonts, DOM, network or model calls. The same input always gives the same output.
  */
+import type { Catalog } from "./catalog-refs.js";
 import { type Obj, same } from "./convert/shared.js";
 import type { Presentation } from "./types.js";
 import type { Finding, FindingLocation, FindingReport } from "./generated/types/finding.js";
@@ -26,6 +27,8 @@ export interface FromMarkdownOptions extends ParseOptions {
    * `format` and `references`; options pick other rules or categories; `false` skips the check.
    */
   validate?: boolean | ValidateOptions;
+  /** Catalogs the host registered, for the references check of `validate: true` (the default). Nothing is fetched. */
+  catalogs?: readonly Catalog[];
 }
 
 export interface FromMarkdownResult {
@@ -82,7 +85,7 @@ export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}
 
   if (!slides.length) ctx.error("no-slides", "The Markdown has no slides.", "Write at least one slide: a # title or any content, with --- between slides.", { start: 0, end: Math.min(1, source.length) }, "/slides");
   else if (options.validate !== false) {
-    const checked = validate(document, options.validate === true || options.validate === undefined ? { only: ["format", "references"] } : options.validate);
+    const checked = validate(document, options.validate === true || options.validate === undefined ? { only: ["format", "references"], ...(options.catalogs ? { catalogs: options.catalogs } : {}) } : options.validate);
     for (const found of checked.findings) {
       const range = ctx.rangeOf(found.path) ?? ctx.rangeOf("") ?? { start: 0, end: 0 };
       ctx.findings.push({ ...found, location: ctx.location(range) });

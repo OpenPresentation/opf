@@ -161,10 +161,10 @@ opf paginate decision.opf.json paginated.opf.json
 Pagination emits ordinary OPF slides and a page mapping. Preview the result with the renderer to assess wrapping and visual fidelity.
 
 ```sh
-opf bundle decision.opf.json bundled.opf.json
+opf embed decision.opf.json embedded.opf.json
 ```
 
-Bundle inlines every bundled catalog record the document references — including transitive references such as a theme's color and font schemes — into `catalogs.<kind>.records`, so the file resolves every catalog reference offline. Kinds that declare a custom `source` are left untouched, and the report lists added, already-inline, and unresolved ids. Remote media and data assets (`https:` images, chart `data.src` URLs) are not inlined. Bundling twice is a no-op.
+Embed copies every catalog record the document references — including transitive references such as a theme's color and font schemes — into the document, once, in the group it resolves in (`catalogs.default` for the default catalog, with its `source`), so the file renders the same with no catalog registered. Records already embedded are kept, and the report lists the added records and the references that resolve nowhere. Remote media and data assets (`https:` images, chart `data.src` URLs) are not inlined. Embedding twice is a no-op. Every CLI command registers the default catalog (the pinned pptx.gallery snapshot); a validate configuration's `catalogs` registers more, first.
 
 ## Agent output contract
 

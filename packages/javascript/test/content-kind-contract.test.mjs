@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide} from '../dist/composition.js';
 import { validateCatalogRecord } from '../dist/validator.js';
-import {layouts} from '../dist/catalogs.js';
+import {layouts} from './support/catalog.mjs';
 import { check, errorsOf } from './support/validation.mjs';
 
 test('composition preserves schema-valid leaf payload kinds, including text bullets',()=>{

@@ -10,7 +10,8 @@ const usage = `OPF local inspection (Node 24)
   catalog <kind> [query]
   record <kind> <id>
   validate <file.opf.json> [catalogKind]
-Resolve @openpresentation/opf from the current project or OPF_ROOT checkout.
+Resolve @openpresentation/opf (0.15 or later) from the current project or OPF_ROOT checkout.
+Catalog records come from @openpresentation/opf/catalog, which validate registers.
 Exit codes: 0 success (warnings may exist), 1 invalid data, 2 usage/runtime error.`;
 const print = value => process.stdout.write(JSON.stringify(value, null, 2) + '\n');
 async function loadPackage() {
@@ -28,7 +29,14 @@ async function loadPackage() {
     const entry = path.resolve(path.dirname(manifestPath), target);
     // Once a package resolves, surface a broken installation instead of silently switching versions.
     const api = await import(pathToFileURL(entry));
-    return { api, version: manifest.version, entry };
+    // OPF 0.15: the root carries no catalog records; the pinned default catalog is the opt-in /catalog subpath.
+    const catalogExport = manifest.exports?.['./catalog'];
+    const catalogTarget = typeof catalogExport === 'string' ? catalogExport : catalogExport?.import ?? catalogExport?.default;
+    if (typeof catalogTarget !== 'string') throw new Error(`@openpresentation/opf ${manifest.version} has no /catalog subpath; this helper needs 0.15 or later.`);
+    const catalog = await import(pathToFileURL(path.resolve(path.dirname(manifestPath), catalogTarget)));
+    // Records by kind, each with its id: the content kinds of the default catalog and the display kinds.
+    const catalogs = Object.fromEntries([...Object.entries(catalog.defaultCatalog).filter(([kind]) => kind !== 'source'), ...Object.entries(catalog.catalogDisplay)].map(([kind, records]) => [kind, Object.entries(records).map(([id, record]) => ({ id, ...record }))]));
+    return { api, catalog, catalogs, version: manifest.version, entry };
   }
   throw new Error(`Cannot resolve @openpresentation/opf. Install it in your project, or build the OPF checkout and set OPF_ROOT. Searched: ${attempts.join(', ')}`);
 }
@@ -59,8 +67,8 @@ async function main(args) {
   if(!command || ['help','--help','-h'].includes(command)){console.log(usage);return;}
   const arities={version:[0,0],schema:[0,2],'find-schema':[1,1],catalog:[1,2],record:[2,2],validate:[1,2]};
   if(!arities[command] || rest.length<arities[command][0] || rest.length>arities[command][1])throw new Error(usage);
-  const {api,version,entry}=await loadPackage();
-  if(command==='version'){print({package:'@openpresentation/opf',version,entry,schemas:Object.keys(api.schemas),catalogKinds:Object.keys(api.catalogs)});return;}
+  const {api,catalog,catalogs,version,entry}=await loadPackage();
+  if(command==='version'){print({package:'@openpresentation/opf',version,entry,schemas:Object.keys(api.schemas),catalogKinds:Object.keys(catalogs),defaultCatalog:catalog.defaultCatalog.source});return;}
   if(command==='schema'){
     const name=rest[0]??'presentation';
     if(!Object.prototype.hasOwnProperty.call(api.schemas,name))throw new Error(`Unknown schema: ${name}. Choose ${Object.keys(api.schemas).join(', ')}.`);
@@ -68,8 +76,8 @@ async function main(args) {
   }
   if(command==='find-schema'){if(!rest[0].trim())throw new Error('Enter a nonempty schema search.');print({version,...searchSchemas(api.schemas,rest[0].toLowerCase())});return;}
   if(command==='catalog'||command==='record'){
-    const kind=rest[0];if(!Object.prototype.hasOwnProperty.call(api.catalogs,kind))throw new Error(`Unknown catalog kind: ${kind}. Choose ${Object.keys(api.catalogs).join(', ')}.`);
-    const records=api.catalogs[kind];
+    const kind=rest[0];if(!Object.prototype.hasOwnProperty.call(catalogs,kind))throw new Error(`Unknown catalog kind: ${kind}. Choose ${Object.keys(catalogs).join(', ')}.`);
+    const records=catalogs[kind];
     if(command==='record'){const record=records.find(record=>record.id===rest[1]);if(!record)throw new Error(`No ${kind} record with id ${rest[1]}.`);print({version,kind,record});return;}
     const query=(rest[1]??'').toLowerCase(),matches=records.filter(record=>JSON.stringify(record).toLowerCase().includes(query));
     print({version,kind,total:matches.length,truncated:matches.length>50,records:matches.slice(0,50).map(({id,name,summary,description})=>({id,name,summary:summary??description??''}))});return;
@@ -77,10 +85,11 @@ async function main(args) {
   const file=path.resolve(rest[0]);if((await stat(file)).size>20*1024*1024)throw new Error('Input exceeds the 20 MB inspection limit.');
   const raw=await readFile(file,'utf8');
   const kind=rest[1];
-  if(kind && !Object.prototype.hasOwnProperty.call(api.catalogs,kind))throw new Error(`Unknown catalog kind: ${kind}.`);
+  if(kind && !Object.prototype.hasOwnProperty.call(catalogs,kind))throw new Error(`Unknown catalog kind: ${kind}.`);
   if(typeof api.validationRules==='undefined')throw new Error(`validate needs @openpresentation/opf 0.14 or later (validate, one checker with findings); the resolved version is ${version}.`);
   // A presentation file is read as strict JSON text, so findings carry line and column and invalid JSON is an invalid document (exit 1).
-  const result=kind?api.validateCatalogRecord(kind,JSON.parse(raw.replace(/^\uFEFF/,''))):api.validate(raw);
+  // References resolve in the records the deck embeds, then in the default catalog this helper registers.
+  const result=kind?api.validateCatalogRecord(kind,JSON.parse(raw.replace(/^\uFEFF/,''))):api.validate(raw,{catalogs:[catalog.defaultCatalog]});
   print({version,file,...result});if(!result.valid)process.exitCode=1;
 }
 main(process.argv.slice(2)).catch(error=>{process.stderr.write(`OPF inspection failed: ${error.message}\n`);process.exitCode=2;});

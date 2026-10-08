@@ -2,7 +2,7 @@
 // and then run, so it proves the packages install, resolve, type-check and execute as a downstream project would use them.
 import {createHash} from 'node:crypto';
 import {validate} from '@openpresentation/opf';
-import {catalogs} from '@openpresentation/opf/catalogs';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import type {Presentation} from '@openpresentation/opf/types';
 import {createEditorSession} from '@openpresentation/opf-editor';
@@ -27,7 +27,7 @@ const broken: Presentation = {slides: 42};
 void broken;
 
 if (!validate(deck, {only: ['format']}).valid) throw new Error('the consumer deck is not valid OPF');
-if (catalogs.fontSchemes.length === 0) throw new Error('the published catalogs are empty');
+if (Object.keys(defaultCatalog.fontSchemes ?? {}).length === 0) throw new Error('the published default catalog is empty');
 
 // The registry holds only the renderer's bundled faces: no host font is read.
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});

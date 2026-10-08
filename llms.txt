@@ -22,10 +22,10 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 ## Spec
 
 - [Presentation JSON Schema](https://github.com/OpenPresentation/opf/blob/main/spec/schemas/opf.schema.json): draft 2020-12, $id https://openpresentation.org/schema/opf/v1
-- [Catalog records](https://github.com/OpenPresentation/opf/tree/main/spec/catalogs): audiences, narratives, layouts, chart types, themes, color schemes, font schemes, tones, purposes, languages, social platforms
+- [Catalog records](https://github.com/OpenPresentation/opf/tree/main/spec/catalogs): the pinned snapshot of the default catalog (`@openpresentation/opf/catalog`): audiences, narratives, layouts, themes, color schemes, font schemes, tones, purposes, and display metadata for chart types, languages and social platforms
 - [Full-feature example deck](https://github.com/OpenPresentation/opf/blob/main/examples/technical/full-feature-tour.opf.json): one file exercising every major schema surface
 
 ## Optional
 
 - [pptx.gallery](https://pptx.gallery): human-browsable catalog presets
-- [npm package](https://www.npmjs.com/package/@openpresentation/opf): schemas, catalogs, TypeScript types, and local validation; docs and examples are bundled in the package
+- [npm package](https://www.npmjs.com/package/@openpresentation/opf): schemas, catalog resolution, TypeScript types, and local validation (the default catalog is the opt-in `/catalog` subpath); docs and examples are bundled in the package

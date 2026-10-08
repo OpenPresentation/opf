@@ -1,3 +1,4 @@
+import { CLI_CATALOGS } from "./catalogs.js";
 // `opf from-yaml` and `opf to-yaml`: OPF as YAML (RR-56) to and from the canonical JSON form. They follow the conventions of
 // `opf from-md` and `opf to-md`: the output defaults to stdout, a JSON report goes on stderr when stdout carries the document
 // and on stdout otherwise, exit 1 is invalid content, a conflict or a finding at or above --fail-on, exit 2 is usage, a read error or I/O.
@@ -31,7 +32,7 @@ async function runFromYaml(cli: CliContext, args: string[]): Promise<void> {
   const [input, output = "-"] = positional as [string, string?];
   if (output !== "-" && isYamlName(output)) throw cli.fail("from-yaml writes JSON. To write YAML use opf to-yaml, or opf format for a canonical YAML file.");
   const source = await readText(cli, input);
-  const result = fromYaml(source, { aliases: !!options.aliases });
+  const result = fromYaml(source, { aliases: !!options.aliases, catalogs: CLI_CATALOGS });
   const failOn = parseFailOn(options["fail-on"]);
   if (!failOn) throw cli.fail(FAIL_ON_MESSAGE);
   if (reaches(result.findings, failOn)) throw cli.fail("YAML conversion failed.", 1, { sha256: cli.hash(source), counts: result.counts, findings: result.findings }, "yaml");

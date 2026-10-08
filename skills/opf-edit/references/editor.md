@@ -53,7 +53,7 @@ editor.applyPatch([{op: 'replace', path: '', value: proposed.presentation}], {so
 
 Copy scopes are presentation, slide, and selection; formats are pretty, compact, and markdown. Selection needs `path`. Import modes are insert, replace, and selection; selection also needs `path`.
 
-Slide copies retain design/catalog/asset context. Insertion namespaces inline catalog IDs and conflicting slide/asset IDs while preserving primary source design defaults. It does not merge root speaker/organization/narrative metadata. Use replace to retain the complete imported document. Conflicting external catalog sources require resolution or a separate presentation. Recompute the proposed import against the latest document before applying if the host can change during review.
+Slide copies retain design/catalog/asset context. Insertion copies the slides' records with core `copySlides` (groups match by source; an identical record is reused; a differing custom record becomes `<id>-2`; a differing catalog revision moves into `custom` as `<id>-2` and is listed) and renames conflicting slide/asset IDs while preserving primary source design defaults. It does not merge root speaker/organization/narrative metadata. Use replace to retain the complete imported document. Recompute the proposed import against the latest document before applying if the host can change during review.
 
 
 ## Fill template panel

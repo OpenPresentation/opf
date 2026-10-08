@@ -650,7 +650,7 @@ const languageRules: ValidationRule[] = [
 			context.report(languageRule, {
 				path: '',
 				message: 'The presentation has no language set.',
-				help: 'Set `language` to a language id from the languages catalog or a BCP 47 tag, for example "en-US".',
+				help: 'Set `language` to a BCP 47 tag, for example "en-US".',
 				fixes: [{ id: 'focus-language', title: 'Set the language', kind: 'focus', safe: true, focus: { path: '/language', field: 'language' } }],
 			});
 		},

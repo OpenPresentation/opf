@@ -91,7 +91,7 @@ test('CLI bundles all six complete skills and advertises the actual npx command'
   const installed=run(['skills','install','--directory',destination]);
   assert.equal(installed.status,0,installed.stderr);
   assert.equal(JSON.parse(installed.stdout).changed.length,6);
-  assert.match(await readFile(path.join(destination,'opf-inspect/scripts/opf-inspect.mjs'),'utf8'),/api\.validate\(raw\)/);
+  assert.match(await readFile(path.join(destination,'opf-inspect/scripts/opf-inspect.mjs'),'utf8'),/api\.validate\(raw,\{catalogs:\[catalog\.defaultCatalog\]\}\)/);
   assert.ok(JSON.parse(await readFile(path.join(destination,'opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length>0);
   assert.equal(JSON.parse(run(['skills','status','--directory',destination]).stdout).skills.length,6);
   assert.equal(run(['skills','unknown']).status,2);

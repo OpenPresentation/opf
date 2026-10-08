@@ -104,7 +104,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Soft cross-link: narrative-catalog ids this tone pairs well with. Used by picker UIs to suggest narratives once a tone is chosen. Validators warn on unknown ids; never error.",
+      "description": "Soft cross-link: ids of narratives in the same catalog this tone pairs well with. Used by picker UIs to suggest narratives once a tone is chosen. Never resolved, embedded or validated as references.",
       "examples": [
         ["board-meeting", "qbr", "scqa"]
       ]

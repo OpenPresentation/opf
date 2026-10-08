@@ -1,7 +1,7 @@
 {
   "name": "@openpresentation/opf",
   "version": "0.14.0",
-  "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
+  "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; the pinned default catalog ships as the opt-in @openpresentation/opf/catalog.",
   "license": "MIT",
   "author": "Open Presentation",
   "homepage": "https://openpresentation.org",
@@ -38,10 +38,6 @@
       "types": "./dist/schemas.d.ts",
       "import": "./dist/schemas.js"
     },
-    "./catalogs": {
-      "types": "./dist/catalogs.d.ts",
-      "import": "./dist/catalogs.js"
-    },
     "./catalog": {
       "types": "./dist/catalog.d.ts",
       "import": "./dist/catalog.js"
@@ -57,10 +53,6 @@
     "./spec-files": {
       "types": "./dist/spec-files.d.ts",
       "import": "./dist/spec-files.js"
-    },
-    "./previews": {
-      "types": "./dist/previews.d.ts",
-      "import": "./dist/previews.js"
     },
     "./examples": {
       "types": "./dist/examples.d.ts",

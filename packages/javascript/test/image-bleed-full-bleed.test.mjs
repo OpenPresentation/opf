@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide} from '../dist/composition.js';
 import {resolveSlideContext} from '../dist/index.js';
-import {layouts} from '../dist/catalogs.js';
+import {catalogs, layouts} from './support/catalog.mjs';
 
 // RR-58: image-bleed draws its picture full-bleed behind the slide, and the title keeps the normal slide padding. The record
 // reserves a background slide image (design.slideImage.position); a slide names its picture as its slide image (the same
@@ -12,7 +12,7 @@ const image = {src, alt: 'Full-bleed photograph'};
 const full = {x: 0, y: 0, width: 1280, height: 720};
 const deck = slide => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Bleed', slides: [slide]});
 const compose = presentation => {
-  const context = resolveSlideContext(presentation, 0);
+  const context = resolveSlideContext(presentation, 0, {catalogs});
   assert.deepEqual(context.diagnostics, []);
   return composeSlide(presentation.slides[0], {...context.options, width: 1280, height: 720});
 };

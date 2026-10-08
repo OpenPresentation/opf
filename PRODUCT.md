@@ -64,7 +64,7 @@ Hosted-service clients, managed workflows, and product-specific client libraries
 2. **Canonical OPF packages** — JavaScript first, then Python and Go local-only packages for schemas, catalogs, types/models, and validation.
 3. **Local OPF CLI** — validate, format, and inspect OPF without calling a hosted service.
 4. **Render/edit/convert toolkit** — ship MIT local libraries for SVG/PNG/PDF rendering, embeddable editing, and PPTX import/export.
-5. **Gallery integration** — OPF documents reference catalog items by slug; packages expose the canonical bundled catalogs while pptx.gallery remains the browsable reference.
+5. **Gallery integration** — OPF documents reference catalog records by id (or `name:id` for a named catalog) and embed the records they use; pptx.gallery publishes the default catalog, and core ships its pinned snapshot as the opt-in `@openpresentation/opf/catalog` for hosts to register.
 6. **Ecosystem adoption** — make OPF the default deck format for agents, editors, self-hosters, and downstream applications.
 
 ## Key Decisions

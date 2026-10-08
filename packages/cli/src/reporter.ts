@@ -30,7 +30,7 @@ const HELP: Record<string, string> = {
 	"asset-blocked": "Move the file under the deck folder or pass --asset-dir <directory> that contains it.",
 	"script-font-not-installed": "Install the Noto script package named in the message next to the CLI, then run the command again.",
 	"font-glyph-fallback": "The chosen font lacks these characters; a bundled font draws them. Supply a font with --font-dir to change that.",
-	"unresolved-font-scheme": "Use a font-scheme id from opf catalog fontSchemes, or define the record inline.",
+	"unresolved-reference": "Use an id from opf catalog <kind>, define the record in catalogs.custom, or run opf embed to embed what the deck references.",
 	"unresolved-content": "Check the content at this path; it could not be drawn.",
 	"chart-data-adapted": "The chart data was reshaped to export a native chart; see the message.",
 	"chart-data-unplottable": "Provide inline chart data with at least one numeric column.",

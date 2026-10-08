@@ -72,11 +72,10 @@ try {
     "package/package.json",
     "package/dist/index.js",
     "package/dist/schemas.js",
-    "package/dist/catalogs.js",
+    "package/dist/catalog.js",
     "package/dist/validator.js",
     "package/dist/types.js",
     "package/dist/spec-files.js",
-    "package/dist/previews.js",
     "package/dist/examples.js",
     "package/dist/docs.js",
     "package/dist/repo-readme.js",
@@ -127,16 +126,14 @@ assert.equal(editor.presentation.slides[0].title, 'Compiler compatibility');
     path.join(projectDir, "smoke.mjs"),
     `import assert from "node:assert/strict";
 import {
-  catalogs,
   presentation,
   validate,
 } from "@openpresentation/opf";
 import { presentation as focusedPresentation } from "@openpresentation/opf/schemas";
-import { tones } from "@openpresentation/opf/catalogs";
+import { defaultCatalog, layoutPreviews, getLayoutPreview } from "@openpresentation/opf/catalog";
 import { assertValid, validate as focusedValidate } from "@openpresentation/opf/validator";
 import * as typesRuntime from "@openpresentation/opf/types";
 import { specFileEntries, specFilePaths } from "@openpresentation/opf/spec-files";
-import { layoutPreviews, getLayoutPreview } from "@openpresentation/opf/previews";
 import { examples, getExample } from "@openpresentation/opf/examples";
 import { docs, getDoc } from "@openpresentation/opf/docs";
 import { repoReadme } from "@openpresentation/opf/repo-readme";
@@ -150,14 +147,14 @@ assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(focusedPresentation.$id, presentation.$id);
 assert.equal(rawPresentation.$id, presentation.$id);
 assert.equal(rawBoardAudience.id, "board");
-assert.ok(catalogs.audiences.some((audience) => audience.id === "executive"));
-assert.ok(tones.length > 0);
+assert.ok(defaultCatalog.audiences.executive);
+assert.ok(Object.keys(defaultCatalog.tones).length > 0);
 assert.deepEqual(Object.keys(typesRuntime), []);
 
 assert.ok(specFileEntries.length > 0, "spec-files subpath should ship entries");
 assert.ok(specFilePaths.includes("openapi.yaml"));
 const firstPreviewSlug = Object.keys(layoutPreviews)[0];
-assert.ok(firstPreviewSlug, "previews subpath should ship layout previews");
+assert.ok(firstPreviewSlug, "the catalog subpath should ship layout previews");
 assert.ok(getLayoutPreview(firstPreviewSlug)?.length > 0);
 assert.ok(examples.length > 0, "examples subpath should ship example decks");
 assert.equal(getExample(examples[0].slug)?.slug, examples[0].slug);
@@ -204,9 +201,9 @@ globalThis.fetch=()=>{throw new Error('Offline validate must not fetch');};
 assert.equal(rootValidate,validate);assert.equal(rootRules,validationRules);
 for(const gone of ['@openpresentation/opf/lint','@openpresentation/opf/audit'])await assert.rejects(import(gone));
 const source='{\\r\\n"slides":[{"layout":"partner","title":"Keep  spaces"}]\\n}';
-const options={catalogs:{layouts:[{id:'partner',name:'Partner',placeholders:[{type:'title'}]}]}};
+const options={catalogs:[{source:'pkg:@host/layouts',layouts:{partner:{name:'Partner',placeholders:[{type:'title'}]}}}]};
 assert.equal(validate(source,options).valid,true);
-assert.equal(validate(source,{only:['format','references']}).findings.find(issue=>issue.ruleId==='opf/catalog-reference').location.offset,source.indexOf('"partner"'));
+assert.equal(validate(source,{only:['format','references']}).findings.find(issue=>issue.ruleId==='opf/unresolved-reference').location.offset,source.indexOf('"partner"'));
 assert.equal(validate('{"slides":[{"title":"First","title":"Second"}]}').valid,false);
 const policy=validate(JSON.parse(source),{...options,contracts:[{path:'/slides/*/layout',allowedValues:['text-1x']}]});
 assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok(policy.findings.some(issue=>issue.ruleId==='opf/contract'&&issue.category==='policy'));

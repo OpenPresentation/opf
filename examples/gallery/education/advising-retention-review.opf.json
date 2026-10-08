@@ -364,5 +364,490 @@
       "scenario": "advising-retention-review",
       "generatedBy": "scripts/generate-example-suite.mjs"
     }
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "justice": {
+          "name": "Justice",
+          "summary": "Advocacy arc inspired by the rhetorical structure of Martin Luther King Jr.'s 'I Have a Dream' speech: name the inequality, share the dream, build urgency, layer further visions, emphasize unity, call to action, and close on hope. For movement-building keynotes and mission-driven speeches.",
+          "audienceFit": [
+            "general-audience",
+            "advocates",
+            "policymakers",
+            "community"
+          ],
+          "duration": {
+            "min": 10,
+            "max": 30
+          },
+          "tags": [
+            "inspirational",
+            "advocacy",
+            "movement",
+            "keynote"
+          ],
+          "beats": [
+            {
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Set the stage with a moment that earns the audience's full attention. Speak in the moral register the rest of the talk will require. Avoid throat-clearing — open as if the speech were already underway.",
+              "instructions": "Set the stage",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "give-context",
+              "name": "Give Context",
+              "description": "Place the issue in its historical and current context. What promises were made, what has and hasn't been kept. Context turns the speech from opinion into accountability.",
+              "instructions": "Put in historical and current context",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "highlight-inequality",
+              "name": "Highlight Inequality",
+              "description": "Show specific, undeniable examples of the inequality at issue. Concrete moments and people, not abstractions. The audience should feel the gap between what is and what was promised.",
+              "instructions": "Show examples of inequality",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "share-dream",
+              "name": "Share the Dream",
+              "description": "Describe the future you envision in vivid, specific detail. The dream must be both ambitious and recognizable — a world the audience can picture themselves living in.",
+              "instructions": "Describe your vision",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "create-urgency",
+              "name": "Create Urgency",
+              "description": "Explain why the time for change is now. The cost of waiting, the moment that won't return. Urgency converts shared vision into shared movement.",
+              "instructions": "Explain the need for immediate change",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "another-dream",
+              "name": "Continue the Vision",
+              "description": "Layer additional visions of the future in parallel structure. Repetition and rhythm build momentum the way a single image cannot.",
+              "instructions": "Continue to elaborate on your vision",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "emphasize-unity",
+              "name": "Emphasize Unity",
+              "description": "Speak to the collective power of the audience together. Name common ground that crosses lines the issue normally divides. Unity is the engine that turns dream into march.",
+              "instructions": "Talk about collective power",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "last-dream",
+              "name": "Final Vision",
+              "description": "Deliver one more, fully realized vision of the world you're calling for. Specific enough to be remembered, expansive enough to inspire.",
+              "instructions": "Further share dreams of ideal in-depth",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Ask the audience to participate in the change. Be specific about what 'doing something' looks like — show, march, give, vote, organize. Vague CTAs produce vague action.",
+              "instructions": "Ask audience to participate in change",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "show-determination",
+              "name": "Show Determination",
+              "description": "Encourage persistence in the face of resistance. Acknowledge what will be hard. Determination, named honestly, is more durable than easy optimism.",
+              "instructions": "Encourage persistence",
+              "type": "text",
+              "layout": "text-1x"
+            },
+            {
+              "id": "create-hope",
+              "name": "Create Hope",
+              "description": "Close on hope grounded in evidence: progress already made, victories already won, ground already moved. Hope as a conclusion lands strongest when it sounds like it has been earned.",
+              "layout": "title",
+              "instructions": "Inspire hope for future",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "engineering-team": {
+          "name": "Engineering Team",
+          "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+          "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+          "seniority": "ic",
+          "technicalFluency": "high",
+          "decisionPower": "advisory",
+          "attentionBudgetMinutes": 45,
+          "recommendedNarratives": [
+            "status-update",
+            "challenge-resolution",
+            "innovation",
+            "weekly-progress"
+          ],
+          "recommendedTones": [
+            "technical",
+            "casual",
+            "conversational"
+          ],
+          "tags": [
+            "internal",
+            "engineering",
+            "practitioner"
+          ]
+        },
+        "regulatory": {
+          "name": "Regulatory / Compliance",
+          "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+          "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+          "seniority": "mixed",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 60,
+          "recommendedNarratives": [
+            "situation-complication-resolution",
+            "pyramid-principle"
+          ],
+          "recommendedTones": [
+            "formal",
+            "technical",
+            "authoritative"
+          ],
+          "tags": [
+            "external",
+            "compliance",
+            "policy"
+          ]
+        }
+      },
+      "purposes": {
+        "align": {
+          "name": "Align",
+          "summary": "Create shared understanding and commitment across people who need to move together.",
+          "description": "Use when stakeholders need a common view of goals, constraints, priorities, or responsibilities. Emphasize shared language, explicit tradeoffs, and next steps.",
+          "outcome": "Stakeholders leave with the same priorities and operating assumptions.",
+          "successCriteria": [
+            "Teams agree on priorities",
+            "Open disagreements are surfaced",
+            "Owners and next steps are clear"
+          ],
+          "recommendedNarratives": [
+            "strategic-narrative",
+            "transformation-arc",
+            "business-review"
+          ],
+          "recommendedTones": [
+            "conversational",
+            "authoritative"
+          ],
+          "tags": [
+            "alignment",
+            "strategy",
+            "coordination"
+          ]
+        }
+      },
+      "tones": {
+        "persuasive": {
+          "name": "Persuasive",
+          "summary": "Argument-led voice for sales, fundraising, and recommendation-driven decks.",
+          "description": "Frame every section as an argument that builds toward an ask. Surface objections, answer them, and pair claims with the strongest available proof. Read more like a memo than a report.",
+          "voiceCues": [
+            "Lead each section with the claim it's making.",
+            "Surface the strongest counter-argument and address it.",
+            "Pair every claim with proof — customer, benchmark, or analyst.",
+            "End on a clear ask with named owner and date."
+          ],
+          "avoid": [
+            "Buried leads.",
+            "Symmetrical 'on one hand / on the other' framing without a verdict.",
+            "Information for its own sake — every chart should advance the argument.",
+            "Passive endings without a clear ask."
+          ],
+          "samplePhrases": [
+            "Adopting our runtime cuts inference latency 8× while preserving accuracy.",
+            "The most common objection — 'we'll be locked in' — is addressed by our open OPF spec.",
+            "We're asking for a $30M Series B to ship into the enterprise tier."
+          ],
+          "recommendedNarratives": [
+            "pitch-deck",
+            "venture-pitch",
+            "early-startup-pitch",
+            "persuasive-sales",
+            "project-proposal"
+          ],
+          "tags": [
+            "sales",
+            "pitch",
+            "argumentative"
+          ]
+        }
+      },
+      "themes": {
+        "dark": {
+          "name": "Dark",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
+          "colorScheme": "boost",
+          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
+          "fontScheme": "seaford",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "steel-blue": {
+          "name": "Steel Blue",
+          "accent1": "#4A66AC",
+          "accent2": "#629DD1",
+          "accent3": "#297FD5",
+          "accent4": "#7F8FA9",
+          "accent5": "#5AA2AE",
+          "accent6": "#9D90A0",
+          "dark1": "#000000",
+          "dark2": "#182238",
+          "followedHyperlink": "#3EBBF0",
+          "hyperlink": "#9454C3",
+          "light1": "#FFFFFF",
+          "light2": "#EAEDF6",
+          "summary": "Cool steel blues for credible, data-forward presentations.",
+          "description": "A steel-blue palette that combines credibility, precision, and calm. Useful for analysis-heavy decks.",
+          "tags": [
+            "calm",
+            "precise",
+            "measured",
+            "professional",
+            "analytical"
+          ]
+        },
+        "boost": {
+          "name": "Boost",
+          "accent1": "#FD3223",
+          "accent2": "#0308DB",
+          "accent3": "#4F4955",
+          "accent4": "#A1DB30",
+          "accent5": "#0682FE",
+          "accent6": "#FC03BE",
+          "dark1": "#000000",
+          "dark2": "#2C2C2C",
+          "followedHyperlink": "#CC00CC",
+          "hyperlink": "#0066CC",
+          "light1": "#FFFFFF",
+          "light2": "#EFEFEF",
+          "summary": "High-energy digital accents for demos and launch moments.",
+          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "tags": [
+            "digital",
+            "bold",
+            "high-energy",
+            "modern",
+            "technical"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "noto-sans-malayalam": {
+          "name": "Noto Sans Malayalam",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "ml"
+          ],
+          "major": "Noto Sans Malayalam",
+          "minor": "Noto Sans Malayalam",
+          "textSample": "ഇത് മനോഹരമാണ്",
+          "type": "sans-serif",
+          "description": "Noto Sans Malayalam is a sans serif OPF font scheme for complex script presentations, using Noto Sans Malayalam for both headings and body text."
+        },
+        "seaford": {
+          "name": "Seaford",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Seaford Display",
+          "minor": "Seaford",
+          "textSample": "Humanist gentle tone",
+          "type": "sans-serif",
+          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+        }
+      },
+      "layouts": {
+        "title-subtitle": {
+          "name": "Title Subtitle",
+          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "subtitle"
+            }
+          ],
+          "tags": [
+            "Opening",
+            "Headline",
+            "Message"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+          }
+        },
+        "text-1x": {
+          "name": "Text 1x",
+          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "tags": [
+            "Text",
+            "Body Copy",
+            "Narrative"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+          }
+        },
+        "chart-1x": {
+          "name": "Chart 1x",
+          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
+          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "chart"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Charts",
+            "Data",
+            "Analytics"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+          }
+        },
+        "table-1x": {
+          "name": "Table 1x",
+          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "table"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Table",
+            "Reference",
+            "Data"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          }
+        },
+        "text-2x": {
+          "name": "Text 2x",
+          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
+          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "Text",
+            "Comparison",
+            "Balance"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+          }
+        },
+        "list-3x": {
+          "name": "List 3x",
+          "summary": "Reach for it when three groups of points need their own lists.",
+          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+          "design": {
+            "contentAlignment": "center",
+            "contentBox": false,
+            "contentDirection": "horizontal",
+            "listBullet": "character"
+          },
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            },
+            {
+              "type": "list"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          },
+          "tags": [
+            "List",
+            "Triads",
+            "Scannable"
+          ],
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          }
+        }
+      }
+    }
   }
 }

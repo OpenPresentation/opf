@@ -1,5 +1,4 @@
 import { resolveReference, type CatalogOptions } from "./catalog-refs.js";
-import { hostCatalogs } from "./host-catalogs.js";
 
 /**
  * Narrative plan checks (FA-02). A deck holds a pointer (`narrative`, a bare id or `name:id`) and links its slides
@@ -22,7 +21,7 @@ export interface ResolvedNarrative {
 /** The narrative record the document's `narrative` reference names, or undefined. */
 export function resolveNarrative(document: unknown, options: CatalogOptions = {}): ResolvedNarrative | undefined {
   if (!isRec(document) || typeof document.narrative !== "string") return undefined;
-  const found = resolveReference(document, "narratives", document.narrative, hostCatalogs(options));
+  const found = resolveReference(document, "narratives", document.narrative, { catalogs: options.catalogs ?? [] });
   if (!found) return undefined;
   const record = found.record;
   const beats = Array.isArray(record.beats) ? record.beats.flatMap((beat) => (isRec(beat) && typeof beat.id === "string" ? [beat.id] : [])) : [];

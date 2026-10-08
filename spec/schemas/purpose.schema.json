@@ -51,14 +51,14 @@
       "items": {
         "type": "string"
       },
-      "description": "Soft cross-link: narrative-catalog ids that work well for this purpose."
+      "description": "Soft cross-link: ids of narratives in the same catalog that work well for this purpose. Never resolved, embedded or validated as references."
     },
     "recommendedTones": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Soft cross-link: tone-catalog ids that work well for this purpose."
+      "description": "Soft cross-link: ids of tones in the same catalog that work well for this purpose. Never resolved, embedded or validated as references."
     },
     "tags": {
       "type": "array",

@@ -3,13 +3,16 @@
 Direct local lookup:
 
 ```js
-import { catalogs, validateCatalogRecord } from '@openpresentation/opf';
-const options = catalogs.layouts.filter(record => record.id.includes('text-2x'));
-const font = catalogs.fontSchemes.find(record => record.id === 'roboto');
-const validation = validateCatalogRecord('layouts', customLayoutRecord);
+import { embed, validate, validateCatalogRecord } from '@openpresentation/opf';
+import { defaultCatalog } from '@openpresentation/opf/catalog';
+const options = Object.keys(defaultCatalog.layouts).filter(id => id.includes('text-2x'));
+const font = defaultCatalog.fontSchemes.roboto;
+const validation = validateCatalogRecord('layouts', publishedLayoutFile); // a record file with $schema and id
+const report = validate(document, { catalogs: [defaultCatalog] });
+const saved = embed(document, { catalogs: [defaultCatalog] }).document; // every record the deck uses, embedded
 ```
 
-Check the record before copying its ID. The resolution contract is inline records, declared catalog sources, then engine/default catalogs. Core validation never fetches the declared sources. Some renderer integrations accept already loaded records; an unresolved URL is not a loaded record.
+Check the record before copying its ID. A bare id resolves in `catalogs.custom`, then in the records embedded under `catalogs.default`, then in the catalog the host registered for its source (the first registered catalog when the document omits `default`); `name:id` resolves in that group, then in the catalog registered for its source. Nothing is fetched: a host registers catalogs with `{ catalogs }`, and a saved deck embeds what it uses.
 
 Design example:
 
@@ -30,9 +33,9 @@ Design example:
 
 A header/footer zone stacks its fields top to bottom as `logo`, `image`, `text`, `organization` (the primary organization name), `speaker` (the first speaker name and title), `socials`, `section`, `slideNumber`, `date`; `text` accepts built-in variables such as `{{organization.tagline}}`.
 
-Theme defaults sit below explicit deck and slide design. Inline `id` plus overrides resolve the base record before overriding fields. Header/footer/watermark `false` differs from omission; set `"design": {"header": false, "footer": false}` on a title slide to hide inherited furniture there. Header/footer zones accept `slideNumberFormat` (`"{current} / {total}"`, `"A-{current}"`) and `dateFormat` (`"MMM d, yyyy"`, `"yyyy-MM-dd"`). Use a fixed ISO date (`"date": "2026-04-23"` plus `dateFormat`) for packets and archives; `"date": true` is the live current date and needs the host's `date` option. Put a date and a slide number in different zones; fields in one zone stack. Dimensions accept presets or explicit inches; don't encode pixels as inches. Backgrounds can be theme slots, hex strings, or typed theme/solid/gradient/image/pattern objects. Background image objects use `{src, fit}`, not a bare source string.
+Theme defaults sit below explicit deck and slide design. A colour- or font-scheme object's `id` resolves the base record before its other fields override it; `design.theme` is a reference string. Header/footer/watermark `false` differs from omission; set `"design": {"header": false, "footer": false}` on a title slide to hide inherited furniture there. Header/footer zones accept `slideNumberFormat` (`"{current} / {total}"`, `"A-{current}"`) and `dateFormat` (`"MMM d, yyyy"`, `"yyyy-MM-dd"`). Use a fixed ISO date (`"date": "2026-04-23"` plus `dateFormat`) for packets and archives; `"date": true` is the live current date and needs the host's `date` option. Put a date and a slide number in different zones; fields in one zone stack. Dimensions accept presets or explicit inches; don't encode pixels as inches. Backgrounds can be theme slots, hex strings, or typed theme/solid/gradient/image/pattern objects. Background image objects use `{src, fit}`, not a bare source string.
 
-That background flexibility applies to deck/slide design overrides. Catalog theme records use a theme-controlled object such as `{"type":"theme","slot":"light2"}`; the slot must be `light1`, `light2`, `dark1`, or `dark2`. Keep a fixed hex background in an explicit `design.background` override. Validate catalog records against their companion schemas, including required names, rather than relying only on presentation validation.
+That background flexibility applies to deck/slide design overrides. Catalog theme records use a theme-controlled object such as `{"type":"theme","slot":"light2"}`; the slot must be `light1`, `light2`, `dark1`, or `dark2`. Keep a fixed hex background in an explicit `design.background` override. `validate` checks each embedded record against its companion schema; check a published record file with `validateCatalogRecord`.
 
 `design.dimensions` takes a preset (`16:9`, `4:3`, `16:10`, the social-feed ratios `1:1`, `4:5` and `9:16`, `letter`, `a4`, and the aliases `widescreen` and `standard`) or custom inches. `design.watermark` is an image (`{"src":"asset:mark","opacity":0.08}`) or a text stamp (`{"text":"DRAFT","opacity":0.1}`): exactly one of `src` and `text`; the stamp is drawn centered and rotated 30 degrees counterclockwise in the heading font and the theme text color.
 
@@ -50,6 +53,6 @@ if (!chosen) throw new Error('Requested example is absent from this registry');
 const document = await loadOpfGalleryItem(chosen, {gallery: gallery.url, signal});
 ```
 
-`registryUrl`, `signal`, and `desiredId` are host-provided. Custom registries can contain `items` with inline `opf` documents or `opfUrl` links. The helper supports PPTX.gallery descriptors, enforces size/origin boundaries, and requires browser CORS for remote requests. It does not scrape arbitrary HTML or fetch all external fonts/catalog sources. Generic galleries should supply self-contained OPF.
+`registryUrl`, `signal`, and `desiredId` are host-provided. Custom registries can contain `items` with inline `opf` documents or `opfUrl` links. The helper supports PPTX.gallery descriptors, enforces size/origin boundaries, and requires browser CORS for remote requests. It does not scrape arbitrary HTML or fetch fonts or catalogs. Generic galleries should supply self-contained OPF, with every record embedded.
 
-A local workspace snapshot and the public registry can differ. Preserve the selected source and its included records. Validate copied data against the installed OPF version before merging. Use transfer APIs or a deliberate ID-remapping merge so imported assets, catalog IDs, and slide IDs cannot alter existing slide references.
+A local workspace snapshot and the public registry can differ. Preserve the selected source and its included records. Validate copied data against the installed OPF version before merging. Use transfer APIs (core `copySlides` carries the records, matching catalog groups by source) or a deliberate ID-remapping merge so imported assets, records and slide IDs cannot alter existing slide references.

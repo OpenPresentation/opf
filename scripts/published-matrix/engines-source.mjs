@@ -9,7 +9,7 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {renderSvg, svgToPng} from '../../../opf-render/dist/index.js';
 export {checkTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
 export {createEditorSession} from '../../../opf-editor/dist/index.js';
-export {catalogs} from '@openpresentation/opf/catalogs';
+export {defaultCatalog} from '@openpresentation/opf/catalog';
 export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {validate} from '@openpresentation/opf';
 

@@ -15,7 +15,7 @@ Optional top-level fields, grouped:
 - Identity: `name`, `description`, `filename`, `author`, `organization`, `speaker`, `tags`.
 - Intent (used by AI generation): `audience`, `purpose`, `tone`, `language`, `narrative`, `takeaway`, `duration`.
 - Appearance: `design` (`theme`, `colorScheme`, `fontScheme`, `dimensions`, `background`, `logo`, `watermark`, `header`, `footer`, alignment hints), `variables`.
-- Resources: `assets` (registry referenced as `asset:<id>`), `catalogs` (inline records and/or custom sources per kind).
+- Resources: `assets` (registry referenced as `asset:<id>`), `catalogs` (the records the document embeds, grouped by catalog: `default`, `custom` and named groups with a `source`).
 - Machine state: `extensions` (preserved, never rendered).
 
 ## Slides and content
@@ -48,7 +48,7 @@ Prefer names and variables over hex — they survive re-theming. Unknown `var:` 
 
 ## Catalog references
 
-Reusable vocabulary lives in catalogs; references are kebab-case ids: `narrative`, `tone`, `purpose`, `audience`, `language`, `design.theme`, `design.colorScheme`, `design.fontScheme`, `Slide.layout`, `Chart.type`, socials keys. Resolution: inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → bundled default catalog (browsable at https://pptx.gallery). Object form overrides a record per key: `{ "id": "cool-horizon", "accent1": "#0F4C81" }`. Unknown ids warn, never error. `opf bundle <in> <out>` inlines every record a document uses so it needs no catalog lookups beyond itself (remote media and data assets are separate).
+Reusable records live in catalogs; a reference is a bare id or `name:id`: `narrative`, `tone`, `purpose`, `audience`, `design.theme`, `design.colorScheme`, `design.fontScheme`, `Slide.layout`. `catalogs` holds the records a document embeds, grouped by catalog: `default` (with its `source`), `custom` (the document's own) and named groups (`"acme": { "source": "pkg:@acme/opf-catalog", ... }`, referenced as `acme:hero`). Resolution: `custom` → embedded `default` → the catalog the host registered for its source; nothing is fetched. Object form overrides a record per key: `{ "id": "cool-horizon", "accent1": "#0F4C81" }`. A reference that resolves nowhere warns (`opf/unresolved-reference`), never errors. `opf embed <in> <out>` embeds every record a document uses so it renders with no catalog registered. `language` (a BCP-47 tag), `Chart.type` and the socials keys are engine vocabularies, not references.
 
 ## Design in three lines
 
@@ -56,7 +56,7 @@ Reusable vocabulary lives in catalogs; references are kebab-case ids: `narrative
 
 ## Prefer / never
 
-Prefer: string shorthands; bare catalog ids; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists (`bullets` only for plain text-style bullets).
+Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists (`bullets` only for plain text-style bullets).
 
 Never: loose chart or table fields directly on a slide; region keys mixed with a root payload; overlapping region keys; `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry (it does not exist in OPF).
 

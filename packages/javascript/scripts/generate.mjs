@@ -185,7 +185,7 @@ async function generateCatalogs() {
   // interface used for the schema's own type) instead of being inferred via
   // `as const`. `as const` turned every record's every field into a literal
   // type, and — because the records were referenced again from `catalogs`
-  // and `catalogEntries` below — that literal structure was duplicated three
+  // below — that literal structure was duplicated three
   // times over in dist/catalogs.d.ts (~1.5 MB). Typing the source of truth
   // once, structurally, means every later reference reuses that same (tiny)
   // declared type instead of re-inferring the literal shape.
@@ -194,7 +194,7 @@ async function generateCatalogs() {
     const { typeName, typeFile } = typeInfoByKind.get(kind);
     lines.push(`import type { ${typeName} } from "./types/${typeFile}.js";`);
   }
-  lines.push('import type { SchemaName } from "./schemas.js";', "");
+  lines.push("");
 
   // Deliberately no index signature: some catalog record interfaces (e.g.
   // ChartType) come from schemas with `additionalProperties: false` and so
@@ -241,66 +241,7 @@ async function generateCatalogs() {
     lines.push(`  ${kind}: ${asTs(index)},`);
   }
   lines.push("};", "");
-  lines.push("export const catalogSchemaNames: Record<CatalogKind, SchemaName> = {");
-  for (const { kind, schemaName } of catalogs) {
-    lines.push(`  ${kind}: ${JSON.stringify(schemaName)},`);
-  }
-  lines.push("};", "");
-  lines.push(`export const catalogKinds = ${asTs(catalogs.map(({ kind }) => kind))} as const;`, "");
-
-  lines.push("/** One entry per bundled catalog kind, with its records and index resolved. */");
-  lines.push("export interface CatalogEntry {");
-  lines.push("  readonly kind: CatalogKind;");
-  lines.push("  readonly schemaName: SchemaName;");
-  lines.push("  readonly dir: string;");
-  lines.push("  readonly files: readonly string[];");
-  lines.push("  readonly records: readonly CatalogRecord[];");
-  lines.push("  readonly index: CatalogIndex;");
-  lines.push("}", "");
-  lines.push("export const catalogEntries: readonly CatalogEntry[] = [");
-  for (const { kind, schemaName, dir, files } of catalogs) {
-    const specDir = path.posix.join("catalogs", dir);
-    lines.push(
-      `  { kind: ${JSON.stringify(kind)}, schemaName: ${JSON.stringify(schemaName)}, dir: ${JSON.stringify(specDir)}, files: ${asTs(files)}, records: ${kind}, index: catalogIndexes.${kind} },`,
-    );
-  }
-  lines.push("];", "");
-
   await fs.writeFile(path.join(generatedRoot, "catalogs.ts"), lines.join("\n"));
-}
-
-async function generateCatalogIds() {
-  // Lightweight id-only view of the bundled catalogs so the validator can
-  // check references without pulling full catalog records into its bundle.
-  const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
-  const deprecated = [];
-  lines.push("export const catalogIds = {");
-  for (const definition of catalogDefinitions) {
-    const catalogDir = path.join(catalogRoot, definition.dir);
-    const index = await readJson(path.join(catalogDir, "index.json"));
-    const files = await orderedCatalogFiles(definition, catalogDir, index);
-    const ids = [];
-    for (const file of files) {
-      const record = await readJson(path.join(catalogDir, file));
-      if (typeof record.id === "string") {
-        ids.push(record.id);
-        if (typeof record.deprecation?.replacedBy === "string") {
-          deprecated.push([definition.kind, record.id, record.deprecation.replacedBy]);
-        }
-      }
-    }
-    lines.push(`  ${definition.kind}: ${asTs(ids)},`);
-  }
-  lines.push("} as const;", "");
-  // Deprecated bundled records stay resolvable; the validator warns and names
-  // the replacement. Keyed "<kind>/<id>" -> replacement id.
-  lines.push("export const deprecatedCatalogIds: Readonly<Record<string, string>> = {");
-  for (const [kind, id, replacedBy] of deprecated) {
-    lines.push(`  ${JSON.stringify(`${kind}/${id}`)}: ${JSON.stringify(replacedBy)},`);
-  }
-  lines.push("};", "");
-
-  await fs.writeFile(path.join(generatedRoot, "catalog-ids.ts"), lines.join("\n"));
 }
 
 function asUnion(values) {
@@ -411,6 +352,5 @@ await generateFontPolicy();
 await generateSymbolFontEncodings();
 await generateSchemas();
 await generateCatalogs();
-await generateCatalogIds();
 await generateSpecFiles();
 await generateTypes();

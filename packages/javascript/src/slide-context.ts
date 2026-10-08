@@ -2,7 +2,6 @@ import { OPFUnresolvedReferenceError, resolveReference, unresolvedReference, typ
 import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
 import { resolveColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
-import { hostCatalogs } from './host-catalogs.js';
 import { decisionColor } from './rule-design.js';
 
 /**
@@ -59,7 +58,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   const slides = Array.isArray(deck.slides) ? deck.slides : [];
   if (!Number.isInteger(index) || index < 0 || index >= slides.length) throw new RangeError(`Slide index ${String(index)} is outside the presentation's ${slides.length} slides.`);
   const slide = rec(slides[index]);
-  const catalogs = hostCatalogs(options);
+  const catalogs = { catalogs: options.catalogs ?? [] };
   const records = resolveDesignRecords(presentation, index, catalogs);
   const diagnostics: SlideContextDiagnostic[] = [...records.diagnostics];
   const { theme, colorScheme, fontScheme } = records;

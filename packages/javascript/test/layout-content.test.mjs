@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import { layouts, validateCatalogRecord } from '../dist/index.js';
+import { validateCatalogRecord } from '../dist/index.js';
+import { layouts } from './support/catalog.mjs';
 import { layoutContent } from '../dist/composition.js';
 
 const HEAD = ['title', 'subtitle', 'tag'];

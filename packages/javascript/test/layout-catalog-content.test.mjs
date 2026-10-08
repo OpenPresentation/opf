@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
-import {layouts} from '../dist/catalogs.js';
+import {layouts} from './support/catalog.mjs';
 
 // FA-16: no bundled layout record is bare. Each states when to reach for it, what it holds and how it is tagged, and
 // points at the SVG the gallery publishes for it.

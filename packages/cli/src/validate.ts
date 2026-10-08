@@ -18,7 +18,7 @@ export const VALIDATE_USAGE = `  opf validate <file|-> [--config <local-json-fil
 
 const usage = `${VALIDATE_USAGE}
 
-The one checker for an OPF presentation: format (JSON syntax, duplicate keys, schema), references (catalog ids,
+The one checker for an OPF presentation: format (JSON syntax, duplicate keys, schema), references (catalog references,
 assets, citations, datasets), policy (host contracts), accessibility, layout and content. Findings have stable rule ids
 (opf/text-contrast), a severity, a category and a JSON Pointer path; with a file they carry line and column. Only format,
 references and policy produce errors by default, so "valid"

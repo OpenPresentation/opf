@@ -366,3 +366,95 @@ describe('updateFromCatalog', () => {
     assert.deepEqual(updateFromCatalog(own, [published]).changes, []);
   });
 });
+
+describe('inheritance when catalogs or catalogs.default is missing', () => {
+  const OTHER = 'https://other.example';
+  const other = { source: OTHER, layouts: { 'two-column': layout('Other two column', 'title') } };
+
+  test('with no catalogs option nothing is registered: bare ids resolve only from embedded records', () => {
+    const document = deck({ slides: [{ layout: 'two-column', title: 'x' }] });
+    assert.equal(resolveReference(document, 'layouts', 'two-column'), undefined);
+    assert.deepEqual(resolveSlideContext(document, 0).diagnostics.map((entry) => entry.reference), ['two-column']);
+  });
+
+  test('a declaration-only group is valid and resolves from the host catalog for its source', () => {
+    const document = deck({ catalogs: { acme: { source: ACME } }, slides: [{ layout: 'acme:hero', title: 'x' }] });
+    assert.equal(validate(document, { only: ['format'] }).valid, true);
+    assert.equal(resolveReference(document, 'layouts', 'acme:hero', { catalogs: [gallery, acme] })?.origin, 'host');
+  });
+
+  test('catalogs.default with a source the host has not registered leaves bare ids unresolved, even with another catalog registered first', () => {
+    const document = deck({ catalogs: { default: { source: 'https://unregistered.example' } }, slides: [{ layout: 'two-column', title: 'x' }] });
+    assert.equal(resolveReference(document, 'layouts', 'two-column', { catalogs: [gallery, acme] }), undefined);
+    const [diagnostic] = resolveSlideContext(document, 0, { catalogs: [gallery, acme] }).diagnostics;
+    assert.equal(diagnostic.source, 'https://unregistered.example');
+  });
+
+  test('embed on a document with no catalogs creates default with the host default source', () => {
+    const { document } = embed(deck({ slides: [{ layout: 'two-column', title: 'x' }] }), { catalogs: [gallery, acme] });
+    assert.equal(document.catalogs.default.source, GALLERY);
+    assert.ok(document.catalogs.default.layouts['two-column']);
+  });
+
+  test('copySlides, same source: an inherited default stays the default and references stay bare', () => {
+    const from = deck({ slides: [{ layout: 'two-column', title: 'from' }] });
+    const result = copySlides(from, deck(), [0], { catalogs: [gallery] });
+    assert.equal(result.document.slides[1].layout, 'two-column');
+    assert.deepEqual(result.addedGroups, []);
+    assert.equal(result.document.catalogs.default.source, GALLERY);
+    assert.ok(result.document.catalogs.default.layouts['two-column']);
+  });
+
+  test('copySlides, different source: the inherited catalog becomes a named group and references are prefixed', () => {
+    const from = deck({ slides: [{ layout: 'two-column', title: 'from' }] });
+    const to = deck({ catalogs: { default: { source: OTHER } }, slides: [{ layout: 'two-column', title: 'to' }] });
+    const result = copySlides(from, to, [0], { catalogs: [gallery, other] });
+    assert.equal(result.addedGroups.length, 1);
+    const [{ name, source }] = result.addedGroups;
+    assert.equal(source, GALLERY);
+    assert.equal(result.document.slides[1].layout, `${name}:two-column`);
+    assert.equal(result.document.slides[0].layout, 'two-column', 'the target slides keep their catalog');
+    assert.equal(resolveSlideContext(result.document, 1, { catalogs: [] }).options.layout.name, 'Two column');
+    assert.equal(resolveSlideContext(result.document, 0, { catalogs: [gallery, other] }).options.layout.name, 'Other two column');
+  });
+
+  test('copySlides, target default false: the inherited catalog becomes a named group and references are prefixed', () => {
+    const from = deck({ slides: [{ layout: 'two-column', title: 'from' }] });
+    const result = copySlides(from, deck({ catalogs: { default: false } }), [0], { catalogs: [gallery] });
+    assert.equal(result.addedGroups.length, 1);
+    assert.equal(result.document.slides[1].layout, `${result.addedGroups[0].name}:two-column`);
+    assert.equal(result.document.catalogs.default, false);
+    assert.deepEqual(resolveSlideContext(result.document, 1, { catalogs: [] }).diagnostics, []);
+  });
+});
+
+describe('opf/catalog-record-not-in-source', () => {
+  const notInSource = (document, catalogs) => validate(document, { only: ['references'], catalogs }).findings.filter((finding) => finding.ruleId === 'opf/catalog-record-not-in-source');
+
+  test('fires when a record under a catalog group is missing from the catalog registered for its source', () => {
+    const document = deck({ catalogs: { default: { source: GALLERY, layouts: { 'my-special': layout('Mine', 'title') } } }, slides: [{ layout: 'my-special', title: 'x' }] });
+    const found = notInSource(document, [gallery]);
+    assert.deepEqual(found.map(({ path, severity, category }) => ({ path, severity, category })), [{ path: '/catalogs/default/layouts/my-special', severity: 'warning', category: 'references' }]);
+    assert.match(found[0].message, /'?"my-special"'?/);
+    assert.ok(found[0].message.includes(GALLERY) && found[0].message.includes('catalogs.custom'), found[0].message);
+    // Rendering is unchanged: the embedded record still wins.
+    assert.equal(resolveSlideContext(document, 0, { catalogs: [gallery] }).options.layout.name, 'Mine');
+    const named = deck({ catalogs: { acme: { source: ACME, themes: { unknown: { name: 'Unknown' } } } } });
+    assert.deepEqual(notInSource(named, [gallery, acme]).map((finding) => finding.path), ['/catalogs/acme/themes/unknown']);
+  });
+
+  test('silent when the record exists in the registered catalog, even with different content', () => {
+    const document = deck({ catalogs: { default: { source: GALLERY, layouts: { 'two-column': layout('Older revision', 'title') } } } });
+    assert.deepEqual(notInSource(document, [gallery]), []);
+  });
+
+  test('silent when no catalog is registered for the source', () => {
+    const document = deck({ catalogs: { default: { source: GALLERY, layouts: { 'my-special': layout('Mine', 'title') } } } });
+    assert.deepEqual(notInSource(document, []), []);
+    assert.deepEqual(notInSource(document, [acme]), []);
+  });
+
+  test('silent for custom', () => {
+    assert.deepEqual(notInSource(deck({ catalogs: { custom: { layouts: { 'my-special': layout('Mine', 'title') } } } }), [gallery]), []);
+  });
+});

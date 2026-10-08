@@ -191,6 +191,7 @@ test('explicit contracts provide policy fixes while metadata never supplies poli
 				},
 				{ path: '/extensions/a~1b~0', allowedValues: [2], severity: 'warning' },
 			],
+			catalogs: [defaultCatalog],
 		});
 	const result = checkAll(document, options);
 	assert.equal(result.valid, false);
@@ -207,7 +208,7 @@ test('explicit contracts provide policy fixes while metadata never supplies poli
 	assert.equal(layoutFinding.category, 'policy');
 	assert.equal(layoutFinding.severity, 'error');
 	assert.equal(result.findings.find((entry) => entry.path === '/extensions/a~1b~0').severity, 'warning');
-	assert.equal(checkAll(document).valid, true);
+	assert.equal(checkAll(document, { catalogs: [defaultCatalog] }).valid, true);
 });
 test('invalid options fail clearly instead of ignoring misspelled policies', () => {
 	for (const options of [

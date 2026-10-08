@@ -1,5 +1,7 @@
 # OPF Toolkit — open-source render, edit, and PPTX conversion
 
+> Superseded for catalogs by [the 0.15 design](../programs/format-audit/0.15-design.md): catalog groups, `name:id` references, zero built-in records. Kept as history. fa-stale-refs: history
+
 Plan for the open-source toolkit that turns OPF documents into pixels and PowerPoint files, and PowerPoint files back into OPF. Everything here is free and MIT, runs in Node and the browser, and has **no hosted service in the critical path**. OpenPresentation ships code and documentation only; downstream applications can wrap these primitives in their own products, services, agents, and workflows.
 
 This repo ([`openpresentation/opf`](https://github.com/openpresentation/opf)) stays **format-only**: schemas, catalogs, examples, types, local validation. The toolkit lives in **separate MIT repos** that depend on [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). This document is the cross-cutting plan; it lives here because the format and the toolkit move together conceptually, and because the build leans hard on the spec assets in [`spec/`](../../spec).

@@ -3,7 +3,6 @@ import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { resolveDesignRecords } from "./design-records.js";
 import { LANGUAGES, type LanguageVocabulary } from "./engine-vocabularies.js";
-import { hostCatalogs } from "./host-catalogs.js";
 
 /**
  * Language/script font model (font-fidelity-everywhere FF-18).
@@ -326,7 +325,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
       throw new RangeError(`slideIndex must be an integer between 0 and ${slides.length - 1}.`);
     }
   }
-  const catalogs = hostCatalogs(options);
+  const catalogs = { catalogs: options.catalogs ?? [] };
   const scheme = resolveDesignRecords(document, options.slideIndex, catalogs).fontScheme;
   const latin = resolveFontFamilies(scheme);
 

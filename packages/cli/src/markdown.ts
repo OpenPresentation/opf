@@ -1,3 +1,4 @@
+import { CLI_CATALOGS } from "./catalogs.js";
 // `opf from-md` and `opf to-md`: Markdown in the OPF dialect to and from an OPF document (RR-30). Own file so the
 // commands stay independent of the other CLI commands; the dialect itself lives in core, `@openpresentation/opf/markdown`.
 import { readFile, writeFile, lstat, link, rename, unlink } from "node:fs/promises";
@@ -116,7 +117,7 @@ async function fromMarkdownCommand(positional: string[], options: Record<string,
   const split = options.split ?? "rules";
   if (split !== "rules" && split !== "headings") throw new MarkdownCommandError("--split takes rules or headings.");
   const source = await readText(input);
-  const result = fromMarkdown(source, { split, ...(options.title !== undefined ? { defaults: { name: String(options.title) } } : {}) });
+  const result = fromMarkdown(source, { split, catalogs: CLI_CATALOGS, ...(options.title !== undefined ? { defaults: { name: String(options.title) } } : {}) });
   const failOn = parseFailOn(options["fail-on"]);
   if (!failOn) throw new MarkdownCommandError(FAIL_ON_MESSAGE);
   if (reaches(result.findings, failOn)) throw new MarkdownCommandError("Markdown conversion failed.", 1, { markdown: { sha256: hash(source), counts: result.counts, findings: result.findings } });

@@ -107,7 +107,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
-| Offline catalog bundle | `bundle` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |
+| Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
 | Offline fonts | `loadFonts` (`/fonts-node`) | Bundled Roboto pack (`pack: 'base'`) or the office pack; hashed files; the handle is passed as `{ fonts }` to every deck-level call |
 | Composition | `composeSlide` | Includes shared headers/footers |
 | Pagination | `paginate` / `opf paginate` | Returns mappings; preserves source |

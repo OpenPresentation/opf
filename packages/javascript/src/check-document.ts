@@ -1,5 +1,7 @@
 import {
 	catalogGroupDeclared,
+	catalogGroupSource,
+	registeredCatalog,
 	catalogKinds,
 	catalogRecords,
 	catalogReferenceSites,
@@ -10,7 +12,6 @@ import {
 	type CatalogKind,
 	type CatalogOptions,
 } from './catalog-refs.js';
-import { hostCatalogs } from './host-catalogs.js';
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
 import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
@@ -26,7 +27,7 @@ import type { Contract, ValidateOptions } from './validation-types.js';
 
 /**
  * The format, references and policy checks of `validate`: the schema and semantic issues of the engine as findings,
- * and the checks that need the document's schema walked (catalog ids, assets, datasets, citations) or a host's
+ * and the checks that need the document's schema walked (content references, assets, datasets, citations) or a host's
  * contracts. Internal module; `validator.ts` decides which of them run.
  */
 
@@ -397,7 +398,7 @@ function recordIssues(kind: CatalogKind, id: string, value: unknown) {
 	return validateAgainstSchema(object(value) ? { $schema: schemas[schemaName].$id, id, ...value } : value, kind);
 }
 /** Every record the document embeds, checked against its companion schema. */
-function embeddedRecordFindings(document: unknown, findings: Finding[]): InvalidRecords {
+function embeddedRecordFindings(document: unknown, options: CatalogOptions, findings: Finding[]): InvalidRecords {
 	const invalid: InvalidRecords = new Set();
 	if (!object(document) || !object(document.catalogs)) return invalid;
 	for (const [group, value] of Object.entries(document.catalogs)) {
@@ -409,6 +410,20 @@ function embeddedRecordFindings(document: unknown, findings: Finding[]): Invalid
 				const validation = recordIssues(kind, id, record);
 				for (const issue of validation.errors) findings.push(issueFinding(issue, 'opf/catalog-record', catalogSchemaNames[kind], path, 'document'));
 				if (!validation.valid) invalid.add(recordKey(group, kind, id));
+				// A catalog group claims its records come from its source; a registered copy of that source that lacks one says otherwise.
+				if (group === 'custom') continue;
+				const source = catalogGroupSource(document, group, options);
+				const registered = registeredCatalog(source, options);
+				if (!registered || Object.hasOwn(registered[kind] ?? {}, id)) continue;
+				findings.push(
+					finding('opf/catalog-record-not-in-source', {
+						path,
+						message: `Record ${JSON.stringify(id)} is embedded under catalogs.${group}.${kind}, but the catalog registered for ${source} has no ${kind} record ${JSON.stringify(id)}; move it to catalogs.custom.`,
+						help: `Move the record to catalogs.custom (and drop the ${group === 'default' ? '' : `${group}:`}prefix from its references), or use the id the catalog publishes. The embedded record still renders.`,
+						definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
+						lookup: ['opf', 'catalog', kind],
+					}),
+				);
 			}
 	}
 	return invalid;
@@ -570,7 +585,7 @@ export function variableFindings(document: unknown, engine: SchemaCheckResult, s
 
 /** The unresolved and undeclared content references, one finding each, with the nearest records as suggestions. */
 function contentReferenceFindings(document: unknown, options: CatalogOptions, findings: Finding[]): void {
-	const invalid = embeddedRecordFindings(document, findings);
+	const invalid = embeddedRecordFindings(document, options, findings);
 	const registeredChecked = new Set<string>();
 	for (const site of catalogReferenceSites(document)) {
 		const path = pointerPath(site.path);
@@ -620,7 +635,7 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 export function referenceFindings(document: unknown, engine: SchemaCheckResult, options: ValidateOptions): Finding[] {
 	void engine;
 	const findings: Finding[] = [];
-	const catalogs = hostCatalogs(options);
+	const catalogs = { catalogs: options.catalogs ?? [] };
 	contentReferenceFindings(document, catalogs, findings);
 	const assetValues =
 		object(document) && object(document.assets) ? document.assets : {};

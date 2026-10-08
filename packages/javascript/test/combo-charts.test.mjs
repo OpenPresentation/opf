@@ -4,7 +4,7 @@ import { describe, test } from "node:test";
 
 import { resolveChartData } from "../dist/index.js";
 import { resolveChartData as fromComposition, chartOptionSupport, chartOptionTarget, resolveChartOptions } from "../dist/composition.js";
-import { chartTypes } from "../dist/catalogs.js";
+import { chartTypes } from "./support/catalog.mjs";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const columns = ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Cost", { name: "Margin", format: "0%" }];

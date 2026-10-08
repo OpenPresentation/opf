@@ -29,7 +29,7 @@ Every finding has one of six categories. They say what kind of question the find
 | Category | Asks | Errors by default | Examples |
 | --- | --- | --- | --- |
 | `format` | Is it well-formed OPF? | yes | JSON syntax, duplicate keys, schema, a citation of an unknown reference, an unknown dataset, a required variable with no value (a warning in a template) |
-| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record; unknown or deprecated catalog id and unused dataset are warnings | `asset:` references, catalog ids, citations and datasets nobody uses |
+| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record, undeclared catalog prefix; a reference that resolves nowhere and an unused dataset are warnings | `asset:` references, catalog references, citations and datasets nobody uses |
 | `policy` | Does it follow the host's house rules? | the host sets it (default `error`) | "only these layouts", brand fonts: the `contracts` option |
 | `accessibility` | Can everyone read it? | no: warning and info | contrast, alt text, slide titles, reading order, link text, language |
 | `layout` | Will it present as authored? | no: warning | overflow, minimum type size, image resolution, fonts outside the scheme |
@@ -70,7 +70,7 @@ validate(presentation, {
   ignore: ['layout'],                             // do not run these
   severity: { 'opf/text-contrast': 'error', content: 'off' }, // per rule or category: error, warning, info or off
   ignorePaths: [{ rule: 'opf/text-contrast', path: '/slides/3' }], // an accepted exception, by JSON Pointer prefix
-  catalogs: loadedCatalogRecords,                 // records the host already loaded; nothing is fetched
+  catalogs: [defaultCatalog, acmeCatalog],        // the catalogs the host registered (the first is the default); nothing is fetched
   contracts,                                      // host policy (below)
   thresholds: { contrastNormal: 7 },              // see DEFAULT_VALIDATION_THRESHOLDS
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
@@ -116,11 +116,11 @@ A fix is a suggestion that core never applies. A host such as the editor's Revie
 
 ## Catalog context and contracts
 
-Catalog ids are resolved against the document's own `catalogs` records, then the records the host passed in `catalogs`, then the bundled catalogs. An unknown id is a warning (`opf/catalog-reference`), never an error, and engine-defined layouts may be valid; a `source` that names an external catalog is reported as not fetched (`opf/catalog-source`) and, unless the host loaded that source's records, the ids it may define are not judged. Free-form audience and purpose descriptions, arbitrary `extensions` data, and language strings in [BCP-47 syntax](https://www.rfc-editor.org/rfc/rfc5646.html#section-2.1) (regional, extended, private-use and grandfathered forms) do not become catalog references because of their spelling; an explicit `language.id` is still a catalog reference. Supplied and inline catalog records are validated, and a repeated id or an invalid override is an error (`opf/catalog-record`). Suggestions name records actually present in the checked context.
+Content references resolve the way every engine resolves them ([catalogs](default-catalog.md)): `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host registered (the `catalogs` option) for its source; `name:id` in `catalogs.<name>`, then the catalog registered for its source. A reference that resolves nowhere is a warning (`opf/unresolved-reference`), never an error; a prefix that names no group is an error (`opf/undeclared-catalog`). Nothing is fetched, and without the `catalogs` option only the records the document embeds resolve. Free-form audience and purpose descriptions (any string that is not a bare id or `name:id`) and arbitrary `extensions` data are never references; the `language` tag, `chart.type` and the `socials` keys are engine vocabularies the schema checks. Embedded records, and registered records the document uses, are validated against their companion schema (`opf/catalog-record`). A record under `catalogs.default` or a named group that the catalog registered for the group's source does not publish is `opf/catalog-record-not-in-source` (move it to `catalogs.custom`); with no catalog registered for that source the check is silent. Suggestions name records actually present in the checked context (`origin` `document` or `registered`).
 
 An `asset:` reference that names no entry of the document's `assets` registry is an error (`opf/asset-reference`), and so is a cycle of `asset:` sources (`opf/asset-cycle`); resource bytes are never fetched. Chart and table data findings keep their code as the rule id (`opf/dataset-unknown`, `opf/chart-value-not-numeric`, ...), and a `opf/chart-value-not-numeric` cell whose column is written in one display style (`"12%"`, `"$1,234"`) carries `fixes` ([chart and table data](chart-table-data.md#migration-help)). Citation and caption errors keep theirs too (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`).
 
-A custom narrative is an inline `catalogs.narratives.records` entry, and `narrative` is always a string. When the narrative resolves locally, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an inline record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background colour warns like any other colour reference (`opf/variable-reference-unknown`).
+A narrative the document defines is a record in `catalogs.custom.narratives`, and `narrative` is always a reference string. When the narrative resolves, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an embedded record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background colour warns like any other colour reference (`opf/variable-reference-unknown`).
 
 Host policy comes from explicit options, never from the document: fields under `extensions` are data and cannot install policy. `contracts` and `catalogs` may live in a local JSON file for the CLI (`--config`).
 
@@ -216,6 +216,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
 | [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
 | [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
+| [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/undeclared-catalog`](#opfundeclared-catalog) | References | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
 | [`opf/unused-dataset`](#opfunused-dataset) | References | warning | structure | A dataset is never used. |
@@ -455,6 +456,16 @@ Default severity: **warning**. Cost: structure. A content reference resolves now
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
 **Approximations.** Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference.
+
+### `opf/catalog-record-not-in-source`
+
+Default severity: **warning**. Cost: structure. A record embedded under a catalog group is not in that catalog.
+
+**Why.** A record under catalogs.default or a named group says it came from the catalog its source names. When the catalog the host registered for that source has no record of that kind and id, the record is the document's own and belongs in catalogs.custom, where an update from the catalog never looks for it. Rendering is unchanged: the embedded record still wins.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Checked only against a catalog the host registered for the group's source (the first registered catalog for an omitted default.source); with none registered for it the check is silent. A record the catalog has with different content is an update difference (updateFromCatalog), not this finding. catalogs.custom is never checked.
 
 ### `opf/undeclared-catalog`
 

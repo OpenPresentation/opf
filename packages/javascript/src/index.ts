@@ -17,28 +17,7 @@ export {
 } from "./schemas.js";
 export type { SchemaEntry } from "./schemas.js";
 
-export {
-  audiences,
-  purposes,
-  tones,
-  themes,
-  layouts,
-  chartTypes,
-  narratives,
-  socialPlatforms,
-  languages,
-  colorSchemes,
-  fontSchemes,
-  catalogs,
-  catalogEntries,
-  catalogIndexes,
-} from "./catalogs.js";
-export type {
-  CatalogEntry,
-  CatalogIndex,
-  CatalogIndexRecord,
-  CatalogRecord,
-} from "./catalogs.js";
+// OPF 0.15 (FA-21): the root imports no catalog data. The pinned default catalog is `@openpresentation/opf/catalog`.
 
 export {
   DEFAULT_CHART_PALETTE,
@@ -97,18 +76,6 @@ export {
   specFilePaths,
   specFileKinds,
 } from "./spec-files.js";
-
-export {
-  layoutPreviews,
-  layoutPreviewIndex,
-  layoutPreviewSlugs,
-  hasLayoutPreview,
-  getLayoutPreview,
-} from "./previews.js";
-export type {
-  LayoutPreviewRecord,
-  LayoutPreviewIndex,
-} from "./previews.js";
 
 export type * from "./types.js";
 export type {

@@ -29,14 +29,8 @@ Requires Node 22 or later (`engines.node` `>=22`) from the release after 0.12.1.
 Use the common root API for most application code:
 
 ```ts
-import {
-  presentation,
-  audiences,
-  tones,
-  catalogs,
-  validate,
-  validateCatalogRecord,
-} from "@openpresentation/opf";
+import { presentation, validate, embed } from "@openpresentation/opf";
+import { defaultCatalog } from "@openpresentation/opf/catalog";
 
 import type { Presentation } from "@openpresentation/opf";
 
@@ -46,34 +40,32 @@ const deck: Presentation = {
 };
 
 console.log(presentation.$id);
-console.log(validate(deck).valid);
-console.log(validateCatalogRecord("tones", tones[0]).valid);
-console.log(audiences.map((audience) => audience.id));
-console.log(Object.keys(catalogs));
+// Register the catalogs your host trusts; core itself ships no records in its main entry.
+const catalogs = [defaultCatalog];
+console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs }).valid);
+// Save with every record the deck uses embedded, so it renders the same with no catalog registered.
+const saved = embed({ ...deck, design: { theme: "classic" } }, { catalogs }).document;
+console.log(Object.keys(saved.catalogs.default.themes)); // ["classic"]
+console.log(Object.keys(defaultCatalog.tones));
 ```
 
 Use focused imports when you only need one surface:
 
 ```ts
 import { presentation, audience } from "@openpresentation/opf/schemas";
-import { audiences, tones } from "@openpresentation/opf/catalogs";
+import { defaultCatalog, catalogDisplay, layoutPreviews, getLayoutPreview, hasLayoutPreview } from "@openpresentation/opf/catalog";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate, assertValid, validationRules } from "@openpresentation/opf/validator";
-import {
-  layoutPreviews,
-  getLayoutPreview,
-  hasLayoutPreview,
-} from "@openpresentation/opf/previews";
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
-The root entry holds the application-level API: schemas, catalogs, validation, variables, pagination, data helpers, font policy, `stats` and `resolveSlideContext`. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+The root entry holds the application-level API: schemas, catalog references and their resolution (`resolveReference`, `embed`, `copySlides`, `updateFromCatalog`), validation, variables, pagination, data helpers, font policy, `stats` and `resolveSlideContext`. It carries no catalog records: the pinned pptx.gallery snapshot is the opt-in `@openpresentation/opf/catalog` (`defaultCatalog`, display metadata and layout previews), and every entry point that resolves references takes `{ catalogs }`, the catalogs the host registered; the first one is the default for documents that omit `catalogs.default`. See [catalogs and the default catalog](../../docs/default-catalog.md).
 
 The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, colour contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
 
 ### Facts, slide context and the fonts handle
 
-`stats(presentation, options?)` reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets, citations, variables, assets, fonts) without composing, measuring or validating; see [the stats guide](../../docs/stats.md). `resolveSlideContext(presentation, index, { fonts })` resolves one slide's canvas, layout, theme and font families (slide design, then deck design, then theme, then the default font scheme) into the `ComposeSlideOptions` that `composeSlide` takes, with `unresolved-font-scheme`, `unresolved-layout` and `unresolved-theme` diagnostics. Deck-level verbs take `{ fonts }`, a handle whose `textMeasurement` is how wide the host's real fonts draw text (`paginate(deck, { fonts })`); the renderer's font loader returns a richer handle that extends it. `composeSlide` itself is engine-level and takes `textMeasurement` and `fontFamilies` (`{ heading, body, code, accent? }`) directly.
+`stats(presentation, options?)` reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets, citations, variables, assets, fonts) without composing, measuring or validating; see [the stats guide](../../docs/stats.md). `resolveSlideContext(presentation, index, { fonts, catalogs })` resolves one slide's canvas, layout, theme and font families (slide design, then deck design, then theme, then the engine defaults) into the `ComposeSlideOptions` that `composeSlide` takes, with one `unresolved-reference` diagnostic per reference that resolves nowhere (`strictReferences: true` throws `OPFUnresolvedReferenceError` instead). Deck-level verbs take `{ fonts }`, a handle whose `textMeasurement` is how wide the host's real fonts draw text (`paginate(deck, { fonts })`); the renderer's font loader returns a richer handle that extends it. `composeSlide` itself is engine-level and takes `textMeasurement` and `fontFamilies` (`{ heading, body, code, accent? }`) directly.
 
 ### Content conversions
 
@@ -89,7 +81,7 @@ The layout engine's names are not on the root. `composeSlide`, `fitText`, `layou
 
 ### Validate (0.14.0)
 
-`validate(input, options?)` is the one checker, from the root and from `@openpresentation/opf/validator`. `input` is a parsed presentation or strict JSON text; the result is a `ValidationReport` whose `findings` (the shared `Finding` format, `spec/schemas/finding.schema.json`) each have a stable `opf/<rule>` id, a severity and one of six categories: `format` (JSON syntax, duplicate keys, schema), `references` (catalog ids, assets, citations, datasets), `policy` (host `contracts`), `accessibility` (contrast, alt text, reading order, links), `layout` (overflow, type size, image resolution, fonts) and `content` (placeholders, empty slides, non-numeric chart cells). `valid` means no finding has severity `error`, which by default only `format`, `references` and `policy` findings can have. Text input adds line and column; `only`, `ignore` and `severity` pick and promote rules or categories; composition is lazy, so `validate(deck, { only: ["format"] })` costs what a schema check costs. Read-only and deterministic: no remote resources are fetched. See [the validate guide](../../docs/validate.md). A clean report does not certify layout, fonts, or native export fidelity.
+`validate(input, options?)` is the one checker, from the root and from `@openpresentation/opf/validator`. `input` is a parsed presentation or strict JSON text; the result is a `ValidationReport` whose `findings` (the shared `Finding` format, `spec/schemas/finding.schema.json`) each have a stable `opf/<rule>` id, a severity and one of six categories: `format` (JSON syntax, duplicate keys, schema), `references` (catalog references, assets, citations, datasets), `policy` (host `contracts`), `accessibility` (contrast, alt text, reading order, links), `layout` (overflow, type size, image resolution, fonts) and `content` (placeholders, empty slides, non-numeric chart cells). `valid` means no finding has severity `error`, which by default only `format`, `references` and `policy` findings can have. Text input adds line and column; `only`, `ignore` and `severity` pick and promote rules or categories; composition is lazy, so `validate(deck, { only: ["format"] })` costs what a schema check costs. Read-only and deterministic: no remote resources are fetched. See [the validate guide](../../docs/validate.md). A clean report does not certify layout, fonts, or native export fidelity.
 
 ### Patch, diff, merge and format (0.12.0)
 
@@ -97,14 +89,14 @@ Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the
 
 ### Layout previews
 
-`@openpresentation/opf/previews` ships pre-rendered HTML thumbnails for the
+`@openpresentation/opf/catalog` ships pre-rendered HTML thumbnails for the
 slide layouts catalogued at pptx.gallery. Each preview is a Tailwind-styled
 fragment sized to fill a 16:9 container and only depends on the standard
 `--background`, `--foreground`, `--card`, `--muted`, `--muted-foreground`,
 `--accent`, and `--border` CSS variables.
 
 ```tsx
-import { getLayoutPreview } from "@openpresentation/opf/previews";
+import { getLayoutPreview } from "@openpresentation/opf/catalog";
 
 export function LayoutThumbnail({ slug }: { slug: string }) {
   const html = getLayoutPreview(slug);
@@ -179,14 +171,13 @@ console.log(repoReadme.split("\n").slice(0, 3).join("\n"));
 
 Validation reports carry `findings`. A finding with severity `error` is a
 structural problem that makes `valid` false; `warning` and `info` findings are
-advisory, such as an unknown catalog id in `narrative`, `design`, or a chart
-`type` reference (`opf/catalog-reference`) or a missing alt text. An id that a
-matching inline `catalogs.<kind>.records[]` entry defines is known, and a custom
-`catalogs.<kind>.source` exempts that kind's ids from unknown-id warnings
-unless the host loads the source's records and passes them as `catalogs`.
+advisory, such as a `narrative`, `design` or `layout` reference that resolves
+nowhere (`opf/unresolved-reference`) or a missing alt text. A reference resolves
+in the records the document embeds (`catalogs.custom`, `catalogs.default`, named
+groups), then in the catalogs the host registered with `{ catalogs }`.
 
 ```ts
-const report = validate(deck);
+const report = validate(deck, { catalogs: [defaultCatalog] });
 if (!report.valid) console.error(report.findings.filter((finding) => finding.severity === "error"));
 for (const finding of report.findings) console.warn(finding.ruleId, finding.path, finding.message);
 ```
@@ -221,16 +212,11 @@ const openApi = specFileEntries.find((entry) => entry.path === "openapi.yaml");
 console.log(openApi?.packagePath);
 ```
 
-Package-addressable catalog paths can be used by OPF catalog resolvers:
+The snapshot's raw record files stay package-addressable (`@openpresentation/opf/spec/catalogs/<kind>/<id>.json`) for tools that read published records; documents never point at them. A host registers the catalog instead:
 
-```json
-{
-  "catalogs": {
-    "narratives": {
-      "source": "pkg:@openpresentation/opf/spec/catalogs/narratives"
-    }
-  }
-}
+```js
+import { defaultCatalog } from "@openpresentation/opf/catalog";
+validate(deck, { catalogs: [defaultCatalog] });
 ```
 
 ## Development

@@ -225,10 +225,9 @@ test('whole-deck pagination accepts generated socials and rejects missing ones a
   assert.throws(()=>paginate({...input,organization:{id:'acme',name:'Acme'}}),OPFPaginationError);
 });
 test('one footer carries FF-27 live slide-number fields and FF-34 social links without mixing them',async()=>{
-  const {socialPlatforms}=await import('../dist/catalogs.js');
   const presentation={organization:{id:'acme',name:'Acme',socials:{x:'@acme',custom:'Visit us'}},slides:[{},{},{}],
     design:{footer:{left:{slideNumber:true,slideNumberFormat:'Slide {current} of {total}'},right:{slideNumber:true,socials:true}}}};
-  const layout=layoutFurniture({},{presentation,socialPlatforms,slideIndex:1});
+  const layout=layoutFurniture({},{presentation,slideIndex:1});
   assert.deepEqual(layout.diagnostics,[]);
   assert.deepEqual(layout.parts.map(part=>[part.zone,part.field]),[['left','slideNumber'],['right','socials'],['right','slideNumber']]);
   const [numbered,socials,bare]=layout.parts;

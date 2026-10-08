@@ -16,7 +16,6 @@ import {
   type CatalogReferenceSite,
   type UnresolvedReferenceDiagnostic,
 } from './catalog-refs.js';
-import { hostCatalogs } from './host-catalogs.js';
 import type { Presentation } from './types.js';
 
 /**
@@ -80,7 +79,7 @@ export interface EmbedResult {
  */
 export function embed(document: unknown, options: CatalogOptions = {}): EmbedResult {
   const out = structuredClone(rec(document)) as Rec;
-  const catalogs = hostCatalogs(options);
+  const catalogs = { catalogs: options.catalogs ?? [] };
   const added: EmbeddedRecord[] = [];
   const unresolved: UnresolvedReferenceDiagnostic[] = [];
   const queue: CatalogReferenceSite[] = catalogReferenceSites(out);
@@ -173,7 +172,7 @@ function groupNameFor(source: string): string {
 export function copySlides(from: unknown, to: unknown, indexes: readonly number[], options: CatalogOptions & { at?: number } = {}): CopySlidesResult {
   const source = rec(from);
   const target = structuredClone(rec(to)) as Rec;
-  const catalogs = hostCatalogs(options);
+  const catalogs = { catalogs: options.catalogs ?? [] };
   const sourceSlides = Array.isArray(source.slides) ? source.slides : [];
   const targetSlides = Array.isArray(target.slides) ? (target.slides as unknown[]) : [];
   for (const index of indexes)
@@ -255,7 +254,15 @@ export function copySlides(from: unknown, to: unknown, indexes: readonly number[
       const current = Object.hasOwn(embedded, found.id) ? embedded[found.id] : registeredCatalog(catalogGroupSource(target, group, catalogs), catalogs)?.[kind]?.[found.id];
       if (current === undefined || sameRecord(current, record)) {
         if (!Object.hasOwn(embedded, found.id)) {
-          kindsOf(groups()[group] as Rec, kind)[found.id] = record;
+          // An inherited default (the source document or the target omits catalogs.default) is written down with its source.
+          if (!isRec(groups()[group])) groups()[group] = {};
+          const holder = groups()[group] as Rec;
+          if (typeof holder.source !== 'string' && catalogSource !== undefined) {
+            const rest = { ...holder };
+            for (const key of Object.keys(holder)) delete holder[key];
+            Object.assign(holder, { source: catalogSource }, rest);
+          }
+          kindsOf(holder, kind)[found.id] = record;
           added.push({ group, kind, id: found.id, ...(catalogSource !== undefined ? { source: catalogSource } : {}) });
         }
         placed = { group, id: found.id };
