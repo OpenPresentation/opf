@@ -103,3 +103,28 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
   });
   return { ...result, peers };
 }
+
+/**
+ * The published siblings the CLI test installed next to the candidate core, checked against that core: each sibling's own
+ * `@openpresentation/opf` range must accept it, or npm nests another core under the sibling and the one-core check cannot
+ * hold. That is the expected state while a new core minor is released before its siblings (the core release prep, its
+ * merge-queue run and the core release tag), so it waits with the same rule as `cliPeerGate`; the CLI's own release, push
+ * and every other run keep the hard gate. `modules` is the node_modules directory holding the installed packages.
+ * Returns { run, message?, peers: [{ name, version, range }] }.
+ */
+export function peerCoreGate({ modules, names, coreVersion, event, ref = process.env.GITHUB_REF ?? '' }) {
+  const peers = names.map((name) => {
+    const manifest = JSON.parse(readFileSync(path.join(modules, ...name.split('/'), 'package.json'), 'utf8'));
+    const range = manifest.dependencies?.['@openpresentation/opf'] ?? manifest.peerDependencies?.['@openpresentation/opf'];
+    return { name, version: manifest.version, range, met: !range || satisfies(coreVersion, range) };
+  });
+  const unmet = peers.filter((peer) => !peer.met);
+  if (!unmet.length) return { run: true, peers };
+  const required = unmet.map((peer) => `${peer.name}@${peer.version} accepting @openpresentation/opf ${coreVersion} (it declares ${peer.range})`).join(' and ');
+  if (isCoreReleaseRef(ref)) {
+    return { run: false, peers, message: `RR-55: ${ref.replace('refs/tags/', '')} publishes @openpresentation/opf only, before its siblings; needs ${required}, so the one-core CLI checks skip here and run with the hard gate in the CLI's own release.` };
+  }
+  const result = gate({ subject: '@openpresentation/cli (one core)', required, installed: unmet.map((peer) => `${peer.name} ${peer.version}`).join(', '), met: false, event, ref, what: 'its one-core and peer-backed checks' });
+  return { ...result, peers };
+}
+

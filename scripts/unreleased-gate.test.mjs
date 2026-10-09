@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF, isCoreReleaseRef } from './unreleased-gate.mjs';
+import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF, isCoreReleaseRef, peerCoreGate } from './unreleased-gate.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -90,4 +90,27 @@ test('a core release tag skips only the CLI peer tests; the CLI release and othe
   for (const ref of ['refs/tags/cli-v0.15.0', 'refs/tags/opf-render-v0.15.0', 'refs/heads/main', '']) assert.equal(isCoreReleaseRef(ref), false, ref);
   // A core release still fails the generic gate (only the CLI peer gate knows the core run does not ship the CLI).
   assert.throws(() => gate({ subject: 'x', required: 'y', installed: '0.14.0', met: false, event: 'push', ref: 'refs/tags/opf-v0.15.1' }), /roller-candidate run may skip/);
+});
+
+test('peerCoreGate waits while a published sibling does not accept the candidate core, and only on the pre-publish runs', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'peer-core-gate-'));
+  const put = (name, version, coreRange) => {
+    mkdirSync(path.join(dir, name), { recursive: true });
+    writeFileSync(path.join(dir, name, 'package.json'), JSON.stringify({ name, version, dependencies: coreRange ? { '@openpresentation/opf': coreRange } : {} }));
+  };
+  const names = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'];
+  put('@openpresentation/opf-render', '0.15.0', '^0.15.0');
+  put('@openpresentation/opf-pptx', '0.15.0', '^0.15.0');
+  const at = (event, ref) => peerCoreGate({ modules: dir, names, coreVersion: '0.16.0', event, ref });
+  assert.equal(at('pull_request', 'refs/heads/main').run, false);
+  assert.match(at('merge_group', 'refs/heads/gh-readonly-queue/main/pr-1-abc').message, /opf-render@0\.15\.0 accepting @openpresentation\/opf 0\.16\.0/);
+  assert.equal(at('push', 'refs/tags/opf-v0.16.0').run, false);
+  for (const [event, ref] of [['push', 'refs/heads/main'], ['push', 'refs/tags/cli-v0.16.0'], ['schedule', 'refs/heads/main'], ['', '']]) {
+    assert.throws(() => at(event, ref), /roller-candidate run may skip/, `${event} ${ref}`);
+  }
+  // The siblings at the candidate's minor accept it: the checks run everywhere.
+  put('@openpresentation/opf-render', '0.16.0', '^0.16.0');
+  put('@openpresentation/opf-pptx', '0.16.0', '^0.16.0');
+  assert.equal(at('push', 'refs/tags/cli-v0.16.0').run, true);
+  assert.equal(at('', '').run, true);
 });
