@@ -320,6 +320,15 @@ in the queue and on schedule. No gate or tolerance is relaxed by any of them.
 CLI command that renders, exports or imports is a thin wrapper over the API, with unchanged output. The change is
 additive and ships as CLI 0.16.0 in the lockstep 0.16.0. The package count stays at five.
 
+RR-62 continues in the 0.17.0 lockstep (owner decisions 2026-10-09; one breaking 0.x minor, no 0.16.x patch): the file API
+moves into core as the Node-only `@openpresentation/opf/node` (`convert(input, output?, options?)`, `open(pathOrBytes)` returning
+the presentation, `save(deck, path, { validate })`), with the export and import engine, the lazy peer loading and a fonts handle
+prepared once per process behind it; the root and every other core subpath stay browser-safe (`check:browser-safe`). Core's
+`readDeck`/`writeDeck` become `parse` (returns the presentation, throws `OPFValidationError` with located findings) and
+`stringify`. `@openpresentation/cli/api` is removed; the CLI is the command, with `opf convert <input> <output>` and `render`,
+`export` and `import` running core's engine with unchanged flags, reports and exit codes (`render`/`export` take the format
+from `--out`'s extension). render and pptx are optional peers of core and of the CLI.
+
 **RR-63 Lighter renderer install.** pdf-lib, resvg and sharp are optional dependencies of opf-render, loaded only by the
 converters that need them, and a missing one is a typed `converter-missing` error. The `@expo-google-fonts/*` packages
 are optional, so a browser host installs none of them. New `@openpresentation/opf-render/png`, `/pdf` and `/html`
@@ -446,3 +455,4 @@ Append-only. One dated line per state change.
 - 2026-10-08: RR-59 native follow-up ([opf#477](https://github.com/OpenPresentation/opf/issues/477)): the supervisor ran the read-only Windows PowerPoint pass on Arabic and mixed-script decks and an unresolved-image deck, exported with the published 0.16.0 set. 5 decks, 0 failing gates (fonts, theme `cs`, direction, alignment, line count, no clipping, placeholder); evidence in [rr-59-native-20261008](../../evidence/rr-59-native-20261008/README.md). Defects filed: [opf-pptx#214](https://github.com/OpenPresentation/opf-pptx/issues/214), [opf#485](https://github.com/OpenPresentation/opf/issues/485), [opf-render#175](https://github.com/OpenPresentation/opf-render/issues/175).
 - 2026-10-09: the lockstep 0.16.0 is published and verified (core, opf-render, opf-pptx, opf-editor and CLI 0.16.0). RR-59 (all five pull requests), RR-60, RR-61, RR-62 and RR-63 are done and released in it; their Now rows are closed. The RR-20 Now row moves to the 0.16 set and the lock roll to its release commits.
 - 2026-10-09: RR-64 added (review): [opf-render#178](https://github.com/OpenPresentation/opf-render/pull/178) draws SVG text as glyph outlines (`textAsPaths: true`, phase 1 of [opf-render#164](https://github.com/OpenPresentation/opf-render/issues/164)); the supervisor takes it into 0.17.0 if it is green before the cut, otherwise 0.17.x.
+- 2026-10-09: RR-62 0.17.0 work on branch `codex/rr-62-convert`: core `@openpresentation/opf/node` (`convert`, `open`, `save`; the engine moved from the CLI into core behind it, browser safety checked by `check:browser-safe`), `parse`/`stringify` replace `readDeck`/`writeDeck`, `@openpresentation/cli/api` removed, `opf convert` added and `render`/`export` infer the format from `--out`. The optional peer ranges stay `^0.16.0` until the siblings publish 0.17.0: `^0.17.0` makes npm fail (ETARGET) on any install of the candidate core beside the published 0.16.0 renderer.

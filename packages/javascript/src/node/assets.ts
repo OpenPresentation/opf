@@ -1,5 +1,5 @@
 // Local images for render and export. A deck's relative image paths resolve against the deck's folder (or
-// --asset-dir; the assetDir option of exportDeck, which has no folder by default). Nothing outside that folder is read, nothing is fetched, and only image files are accepted, so a deck
+// --asset-dir; the assetDir option of convert, which defaults to the input file's folder and has none for a deck object). Nothing outside that folder is read, nothing is fetched, and only image files are accepted, so a deck
 // cannot pull another file on the machine into an output. Data URIs need no resolver and are used as they are.
 import { readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";

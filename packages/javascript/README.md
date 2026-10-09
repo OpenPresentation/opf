@@ -49,6 +49,20 @@ console.log(Object.keys(saved.catalogs.default.themes)); // ["classic"]
 console.log(Object.keys(defaultCatalog.tones));
 ```
 
+In Node, `@openpresentation/opf/node` adds files: `convert` turns one file into another (a deck to PDF, PNG, SVG or PPTX, a PowerPoint file to a deck, one deck form to another, or bytes with no output path), `open` reads a deck file or imports a `.pptx`, and `save` writes one. It re-exports the rest of core, so one namespace import covers an application:
+
+```ts
+import * as opf from "@openpresentation/opf/node";
+
+await opf.convert("deck.opf.md", "deck.pdf");
+const deck = await opf.open("deck.opf.md");
+deck.slides.push({ title: "Q4" });
+await opf.save(deck, "deck.opf.md");
+const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing written
+```
+
+Drawing and PowerPoint go through the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx`, which `/node` loads the first time a call needs them; npm does not install them for you. `/node` is the only Node-only entry: the root and every other subpath run in a browser. See [OPF files in Node](../../docs/node.md).
+
 Use focused imports when you only need one surface:
 
 ```ts
@@ -77,7 +91,7 @@ The layout engine's names are not on the root. `composeSlide`, `fitText`, `layou
 
 ### Reading and writing a deck in any form
 
-`readDeck(text, { format, filename, catalogs, validate })` and `writeDeck(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write a deck as JSON (canonical), YAML or Markdown. The format is the `format` option, else the file name (`.opf.md` is Markdown, `.yaml` and `.yml` are YAML, anything else JSON; a plain `.md` is not a deck), and never the content. `readDeck` returns `{ presentation, format, valid, findings, counts, schemaValid, checks }`: the `validate` report of the deck, with every finding located in the text that was read (`opf/json-syntax`, `yaml/<rule>` or `markdown/<rule>` for syntax errors) and no exception for malformed content. It runs in a browser.
+`parse(text, { format, filename, catalogs })` and `stringify(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write a deck as JSON (canonical), YAML or Markdown. The format is the `format` option, else the file name (`.opf.md` is Markdown, `.yaml` and `.yml` are YAML, anything else JSON; a plain `.md` is not a deck), and never the content. `parse` returns the presentation and throws `OPFValidationError` for a syntax, schema or reference error; the error's `report.findings` are located by line and column in the text (`opf/json-syntax`, `yaml/<rule>` or `markdown/<rule>` for syntax errors). Warnings do not throw: `validate(text)` returns the full report. Both run in a browser; files are `/node`'s job (below).
 
 ### OPF as YAML
 

@@ -1,18 +1,18 @@
 // The one export engine: a checked OPF presentation to per-slide SVG and PNG, a PDF or a PPTX through the optional peers
-// opf-render and opf-pptx (see peers.ts). `exportDeck` of `@openpresentation/cli/api` (api.ts) and the commands
-// `opf render` and `opf export` (render.ts) both run `runExport`: the command adds what is about files and flags (reading
+// opf-render and opf-pptx (see peers.ts). `convert` of `@openpresentation/opf/node` (conversion.ts) and the CLI commands
+// `opf render`, `opf export` and `opf convert` all run `runExport`: the command adds what is about files and flags (reading
 // the document, the located check, --out, atomic writes, the JSON report, exit codes), the function adds nothing but a check.
 //
 // Output is deterministic: no network, no system fonts, no clock unless `date` is given, bundled fonts plus the files the
 // caller names, so the same presentation gives the same bytes on every machine.
 import { statSync } from "node:fs";
 import path from "node:path";
-import { type Catalog, type Fonts, paginate } from "@openpresentation/opf";
+import { type Catalog, type Fonts, paginate } from "../index.js";
 import { createImageResolver } from "./assets.js";
-import { CLI_CATALOGS } from "./catalogs.js";
+import { DEFAULT_CATALOGS } from "./catalogs.js";
 import { OPFApiError } from "./errors.js";
-import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
-import { deckStem, parseSlideSelection } from "./io.js";
+import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
+import { deckStem, parseSlideSelection } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./peers.js";
 import { Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
@@ -135,9 +135,9 @@ export function checkScale(value: unknown, label = "scale"): number {
 
 /** The options of a call, checked against each other. Throws `invalid-option` (an OPFApiError) for a value out of range or an option that does not apply to the format. */
 export function resolveExportOptions(options: ExportOptions): Required<Pick<ExportOptions, "format" | "svgFonts" | "scale">> & ExportOptions {
-	if (!options || typeof options !== "object") throw invalid("exportDeck needs options with a format: svg, png, pdf or pptx.");
+	if (!options || typeof options !== "object") throw invalid("An export needs options with a format: svg, png, pdf or pptx.");
 	const format = oneOf("format", options.format, EXPORT_FORMATS);
-	if (!format) throw invalid("exportDeck needs options.format: svg, png, pdf or pptx.");
+	if (!format) throw invalid("An export needs options.format: svg, png, pdf or pptx.");
 	const pdfMode = oneOf("pdfMode", options.pdfMode, ["vector", "raster"] as const);
 	const chartex = oneOf("chartex", options.chartex, ["auto", "native", "fallback"] as const);
 	const provenance = oneOf("provenance", options.provenance, ["full", "references-only", "none"] as const);
@@ -187,17 +187,40 @@ const MEDIA = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", 
 export async function runExport(presentation: unknown, options: ReturnType<typeof resolveExportOptions>, ctx: ExportContext): Promise<ExportRun> {
 	const { format, scale } = options;
 	const reporter = ctx.reporter;
-	const catalogs = options.catalogs ?? CLI_CATALOGS;
+	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
 	const date = checkDate(options.date);
 	const renderer = ctx.renderer ?? (await loadRenderer());
 	const pptx = format === "pptx" ? (ctx.pptx ?? (await loadPptx())) : undefined;
 	const userFonts = options.fonts ? [] : (ctx.userFonts ?? (await listFontDirectories([...(options.fontDirs ?? [])], ctx.flags ? "--font-dir" : "fontDirs")));
 
-	let deck: unknown = presentation;
 	const resolver = createImageResolver(assetRoot(options.assetDir, ctx.flags), reporter, ctx.flags ? "pass --asset-dir" : "pass assetDir");
 	// RR-59: a standalone SVG (svgFonts "used") carries the installed script faces its text draws; raster, PDF and PPTX read
-	// them from the font files, so they skip the script data URLs.
-	const handle: FontsHandle = options.fonts ?? (await prepareFonts(renderer, deck, userFonts, reporter, format === "svg" && options.svgFonts === "used")).handle;
+	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
+	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.
+	const embedScripts = format === "svg" && options.svgFonts === "used";
+	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts);
+	try {
+		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts)).handle;
+		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
+	} finally {
+		lease?.release();
+	}
+}
+
+interface DrawEnvironment {
+	reporter: Reporter;
+	catalogs: readonly Catalog[];
+	date: string | undefined;
+	renderer: Renderer;
+	pptx?: Peer<PptxModule>;
+	userFonts: string[];
+	resolver: ReturnType<typeof createImageResolver>;
+}
+
+async function drawWith(presentation: unknown, handle: FontsHandle, options: ReturnType<typeof resolveExportOptions>, ctx: ExportContext, environment: DrawEnvironment): Promise<ExportRun> {
+	const { format, scale } = options;
+	const { reporter, catalogs, date, renderer, pptx, userFonts, resolver } = environment;
+	let deck: unknown = presentation;
 	const fontSummary = (): ExportFontSummary => ({
 		pack: "office",
 		substitutionPolicy: "visual",

@@ -2,9 +2,10 @@
 // (`.opf.yaml`, RR-56) and Markdown (`.opf.md`, RR-60), the authoring forms of the same data. Every command that reads or
 // writes a deck goes through here, so a file ending `.yaml`, `.yml` or `.opf.md` works everywhere and `--input-format` /
 // `--format` pick the form for stdin, stdout and other names. The dialects live in core, which also has the one reader and
-// the one writer used here (`readDeck`, `writeDeck`, `@openpresentation/opf/deck`); this file adds what a command needs on top:
+// the one writer used here (`parse`'s reader that reports instead of throwing, `stringify`); this file adds what a command needs on top:
 // the CLI's catalogs, the error messages with their positions, the YAML modeline and comment count, and the rewrite warnings.
-import { type DeckFormat, type Finding, type ValidateOptions, type ValidationReport, deckFormatOf, readDeck, writeDeck } from "@openpresentation/opf";
+import { type DeckFormat, type Finding, type ValidateOptions, type ValidationReport, deckFormatOf, stringify } from "@openpresentation/opf";
+import { readDeckReport } from "@openpresentation/opf/node/engine";
 import { CLI_CATALOGS } from "./catalogs.js";
 import { parseYamlData, scanYamlComments } from "@openpresentation/opf/yaml";
 
@@ -74,7 +75,7 @@ function failure(name: string, format: DeckFormat, findings: readonly Finding[])
 
 /**
  * Decode a deck (`kind: "deck"`: one mapping) or a patch (any JSON-compatible root, JSON or YAML) from text in `format`,
- * through core's `readDeck`. The syntax is checked here and nothing else: the commands check the OPF. Throws `DeckReadError`.
+ * through core's deck reader. The syntax is checked here and nothing else: the commands check the OPF. Throws `DeckReadError`.
  */
 export function decode(raw: string, file: string, format: DeckFormat, kind: "deck" | "patch" = "deck"): DeckSource {
   const name = nameOf(file);
@@ -91,7 +92,7 @@ export function decode(raw: string, file: string, format: DeckFormat, kind: "dec
     if (parsed.findings.length) throw failure(name, "yaml", parsed.findings);
     return { raw, value: parsed.value, format, yaml: yamlFacts(raw) };
   }
-  const read = readDeck(raw, { format, validate: false, catalogs: CLI_CATALOGS });
+  const read = readDeckReport(raw, { format, validate: false, catalogs: CLI_CATALOGS });
   const errors = read.findings.filter((found) => found.severity === "error");
   if (errors.length) throw failure(name, format, errors);
   return { raw, value: read.presentation, format, ...(format === "yaml" ? { yaml: yamlFacts(raw) } : {}) };
@@ -146,19 +147,19 @@ export interface SerializeOptions {
   modeline?: string;
 }
 
-/** The text of a deck in `format`, through core's `writeDeck`: JSON as the other commands write it, YAML and Markdown in canonical form. */
+/** The text of a deck in `format`, through core's `stringify`: JSON as the other commands write it, YAML and Markdown in canonical form. */
 export function serialize(document: unknown, format: DeckFormat, options: SerializeOptions = {}): string {
-  if (format === "yaml" && options.modeline !== undefined) return `${options.modeline}\n${writeDeck(document, { format })}`;
-  return writeDeck(document, { format, schemaComment: !!options.schemaComment });
+  if (format === "yaml" && options.modeline !== undefined) return `${options.modeline}\n${stringify(document, { format })}`;
+  return stringify(document, { format, schemaComment: !!options.schemaComment });
 }
 
 /**
- * Check deck text as `opf validate` does, through core's `readDeck`: JSON text through `validate` (syntax errors and duplicate keys
+ * Check deck text as `opf validate` does, through core's deck reader: JSON text through `validate` (syntax errors and duplicate keys
  * located), YAML and Markdown through their readers (every finding located in the text). `deck` is the decoded deck, undefined
  * when the text does not parse.
  */
 export function checkText(raw: string, format: DeckFormat, options: ValidateOptions = {}): { report: ValidationReport; deck: Record<string, unknown> | undefined } {
-  const { presentation, format: _format, ...report } = readDeck(raw, { format, validate: options });
+  const { presentation, format: _format, ...report } = readDeckReport(raw, { format, validate: options });
   const broken = format === "json" ? report.schemaValid === null : report.findings.some((found) => found.ruleId.startsWith(format === "yaml" ? "yaml/" : "markdown/") && found.severity === "error");
   return { report, deck: broken ? undefined : (presentation as unknown as Record<string, unknown>) };
 }

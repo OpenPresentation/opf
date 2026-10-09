@@ -1,17 +1,18 @@
 # The `opf` CLI: producing and reading files
 
 The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, edits, paginates and bundles documents (see
-[its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Three commands
-produce and read files: `opf render`, `opf export` and `opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
-and ship in CLI 0.10.0, the first CLI release after 0.9.2. The same code is a library: [`@openpresentation/cli/api`](#library-api) (`exportDeck`, `importDeck`, `readDeck`).
+[its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Four commands
+produce and read files: `opf render`, `opf export`, `opf convert` and `opf import`. They run core's file engine, the one
+applications call as [`@openpresentation/opf/node`](node.md) (`convert`, `open`, `save`); the commands add the flags, the
+JSON report and the exit codes.
 
-All three are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
+All four are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
 and installed package versions give the same bytes on every operating system.
 
 ## Install
 
-`render` and `export` need `@openpresentation/opf-render`; `export --format pptx` and `import` also need
-`@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI (decision RR-27, below), loaded the
+`render`, `export` and `convert` to PDF, PNG or SVG need `@openpresentation/opf-render`; PPTX output and `.pptx` input (`export
+--format pptx`, `import`, `convert` from or to `.pptx`) also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision RR-27, below; RR-62 moved the engine into core's `/node`), loaded the
 first time a command needs them. Install them next to the CLI:
 
 ```sh
@@ -28,7 +29,7 @@ commands check the functions they call and name the version to install when an o
 
 From opf-render 0.16 the renderer's own dependencies are optional peers too: the converters (`pdf-lib`, `@resvg/resvg-js`,
 `sharp`) and every `@expo-google-fonts/*` package, so a host installs only what its outputs use. The CLI and
-`exportDeck` always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
+`@openpresentation/opf/node` always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
 
 | Output | Also install |
 | --- | --- |
@@ -40,54 +41,26 @@ From opf-render 0.16 the renderer's own dependencies are optional peers too: the
 
 A converter or font package that is missing is reported as the same missing-peer error as a missing renderer: the command
 exits 2 with `code: "peer-not-installed"` and the renderer's own install command in `error`, with `package` (or `packages`),
-`range`, `install` and `purpose` beside it; `exportDeck` throws `OPFExportError` with the same `code` and `details`.
+`range`, `install` and `purpose` beside it; `convert` of `@openpresentation/opf/node` throws `OPFExportError` with the same `code` and `details`.
 
-## Library API
+## From code
 
-`@openpresentation/cli/api` gives an application the engines of these commands without spawning a process. Core reads and
-writes the text formats (`readDeck`, `writeDeck`, `validate`); this entry reads and writes files (`exportDeck`,
-`importDeck`). `opf render`, `opf export` and `opf import` are thin wrappers over `exportDeck` and `importDeck`: they add
-reading the document, `--out`, atomic writes, the JSON report and the exit codes, and nothing else.
+The commands are the CLI; the engine they run is core's `@openpresentation/opf/node`, which an application imports instead
+of spawning `opf`:
 
 ```ts
-import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+import * as opf from "@openpresentation/opf/node";
 
-const { presentation, findings } = readDeck(text, { filename: "deck.opf.md" });  // JSON, YAML or .opf.md (core)
-const out = await exportDeck(presentation, { format: "pdf" });                    // { files: [{ name, type, bytes }], findings, ... }
-const { presentation: back } = await importDeck(pptxBytes, { catalogs });         // PPTX to OPF
+await opf.convert("deck.opf.md", "deck.pdf");                         // opf convert deck.opf.md deck.pdf
+const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
+const deck = await opf.open("deck.pptx");                             // import
 ```
 
-| Command option | `exportDeck` option |
-| --- | --- |
-| `--format svg\|png\|pdf\|pptx` | `format` (required) |
-| `--slides 1,3-5`, `--include-hidden`, `--paginate` | `slides` (`"1,3-5"` or `[1, 3]`), `includeHidden`, `paginate` |
-| `--scale`, `--pdf-mode`, `--svg-fonts` | `scale`, `pdfMode`, `svgFonts` |
-| `--chartex`, `--provenance`, `--image-format` | `chartex`, `provenance`, `imageFormat` |
-| `--date YYYY-MM-DD` | `date` |
-| `--font-dir <dir>` (repeatable) | `fontDirs` (or `fonts`: a prepared `loadFonts()` handle, reused across calls) |
-| `--asset-dir <dir>` | `assetDir` (without it no local image file is read) |
-| `--out x.zip` | `zip: true` |
-| the input file name | `filename` (names the files when the presentation has no `filename` or `name`) |
-| the default catalog | `catalogs` (core's `defaultCatalog` when omitted) |
-
-What `exportDeck` returns, per format: `png` and `svg` one file per slide (`<name>-001.png`, with `slide`, `id`, `width`
-and `height`), or one `<name>.zip` with `zip: true` (`entries` lists the names); `pdf` one file with `pages` and `slides`;
-`pptx` one file. Also `findings` (the format and references check's warnings and notes, and the diagnostics of the fonts,
-layout, SVG, PDF and PPTX writers, each with a `render/`, `pptx/`, `pdf/`, `fonts/` or `cli/` rule prefix), `fonts` (the pack,
-the font files and the substitutions made), `skippedHidden` and the engines' packages and versions. `importDeck` returns
-`{ presentation, findings, pptx, signals? }`.
-
-The function does what the command does for a document it has already read: it checks format and references (an invalid
-presentation throws `invalid-presentation` with the error findings; the command prints the same findings as its report),
-draws with the bundled fonts, and returns bytes. It never writes a file, reads a clock or fetches anything. Errors are
-`OPFExportError` and `OPFImportError` (both extend `OPFApiError`) with `code`, `details` and `findings`. The codes are the
-command's: `peer-not-installed`, `peer-too-old` and `peer-load-failed` (command exit 2), `invalid-option` (2),
-`invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed` and `import-failed` (1).
-
-`@openpresentation/opf-render` and `@openpresentation/opf-pptx` are the same optional peers as for the command, loaded the
-first time a function needs them. Core (`@openpresentation/opf`) is a regular dependency of the CLI package, not a bundled
-copy, so the command, `/api` and an application that imports core directly run one core: the classes core throws
-(`OPFValidationError`) are the ones the application catches.
+The options are the flags in camel case (`--pdf-mode` is `pdfMode`, `--font-dir` is `fontDirs`, `--asset-dir` is
+`assetDir`, `--include-hidden` is `includeHidden`). The commands refuse an existing output without `--force`; `convert` replaces it unless
+`overwrite: false`. The error codes are the commands': `peer-not-installed`,
+`peer-too-old`, `peer-load-failed`, `invalid-option` and `input-not-found` (command exit 2), `invalid-presentation`,
+`no-slides`, `all-slides-hidden`, `export-failed`, `import-failed` and `output-exists` (1). See [OPF files in Node](node.md).
 
 ## `opf render`
 
@@ -95,7 +68,9 @@ copy, so the command, `/api` and an application that imports core directly run o
 opf render deck.opf.json [--slides 1,3-5] [--include-hidden] [--format svg|png] [--scale N] [--out dir|file|-]
 ```
 
-One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). See [Output names](#output-names) for `<name>`.
+One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). `--format` defaults to `svg`, or to the
+format `--out` names: `--out slide.png` is PNG. An `--out` with another file extension (`deck.pdf`, `deck.txt`) is a usage
+error (exit 2), so it never becomes a folder of that name. See [Output names](#output-names) for `<name>`.
 Slides marked `hidden: true` are skipped, as in the presenter, unless `--include-hidden`; the numbers in file names stay the
 slide numbers of the document, so skipping slide 2 writes `-001` and `-003`. `--slides` takes one-based
 numbers and ranges (`1,3-5`, `2-` to the end, `-3` from the start). `--format` defaults to `svg`. `--scale` (0.1 to 8,
@@ -119,7 +94,9 @@ opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--sl
 | `pdf` | `<name>.pdf` | One page per selected slide. `--pdf-mode` picks `vector` (selectable text, the default) or `raster` (one image per page). The report states the mode used (`pdf.mode`). |
 | `png`, `svg` | a directory, one file (`--out x.png`, one slide), or a zip (`--out x.zip`) | As `render`. Zip entries are stored (not deflated) with a fixed timestamp, so the archive is byte-identical everywhere. |
 
-The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`).
+The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`), with the rule
+`opf convert` uses. A `--format` that disagrees with that extension, and an `--out` with another file extension, are usage
+errors (exit 2).
 
 The PDF and the `png` and `svg` outputs skip hidden slides unless `--include-hidden`. The `pptx` output always carries them, as hidden slides (`--include-hidden` is refused for it).
 
@@ -134,6 +111,38 @@ Import is a conversion, not a lossless round trip for arbitrary decks: what it c
 diagnostics. `--signals` also writes the raw per-shape layout and style signals (`fromPptx` with `signals: true`, which returns
 `{ presentation, signals }`). The signals are deterministic data; they never leave the machine.
 AI reconstruction of third-party decks is not part of the CLI (it lives in pptx.dev).
+
+## `opf convert`
+
+```sh
+opf convert deck.opf.md deck.pdf
+opf convert deck.opf.md slides/deck.png --slides 1-3 --scale 2   # slides/deck-001.png, -002, -003
+opf convert deck.opf.md slides.zip --format svg
+opf convert deck.pptx deck.opf.yaml
+opf convert deck.opf.json deck.opf.md
+```
+
+One file to another, the formats named by the extensions. The input is `.pptx` (imported), `.opf.md`, `.yaml`/`.yml` or
+`.json`; the output is `.pdf`, `.pptx`, `.png`, `.svg`, `.zip`, `.opf.md`, `.yaml`/`.yml` or `.json`. Any other extension,
+and stdin or stdout (`-`), is a usage error (exit 2) that names the supported ones.
+
+| Output | Written as |
+| --- | --- |
+| `.pdf`, `.pptx` | one file |
+| `.png`, `.svg` | one file per slide beside the output, named after it: `slides/deck.png` writes `slides/deck-001.png`, `-002`, ... (the numbers are the deck's slide numbers, padded as `render` pads them). One selected slide, or a one-slide deck, is written to the output name itself, as `opf render --out slide.png` does. |
+| `.zip` | one archive of the slides, named as above inside it: PNG, or SVG with `--format svg` |
+| `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
+
+The flags are those of `opf export` (`--slides`, `--scale`, `--pdf-mode`, `--svg-fonts`, `--chartex`, `--provenance`,
+`--image-format`, `--paginate`, `--include-hidden`, `--date`, `--font-dir`, `--asset-dir`, `--force`, `--fail-on`, `--json`);
+`--format` is needed only for a `.zip`. A flag that does not apply to the pair (`--scale` for a deck output, `--slides` for a
+PPTX) is a usage error. Relative images resolve next to the input file unless `--asset-dir`. Parent folders are created; every
+file is produced before any is written, each through a temporary sibling and a rename; an existing output needs `--force`.
+
+The report is `opf export`'s (`command: "convert"`, `format`, `ok`, `valid`, `written`, `input`, `outputs` with SHA-256
+digests, `findings`, `counts`, `checks`, the engines' versions and, for drawn output, `fonts`). A `.pptx` input is imported,
+checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer). The exit codes are
+`export`'s.
 
 ## Options shared by `render` and `export`
 
@@ -233,7 +242,7 @@ same codes; text that is not valid JSON is an invalid document, exit `1`, with a
 - **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
   native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
   turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
-  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, shared with `@openpresentation/cli/api`).
+  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, whose `/node` engine the commands run).
 - **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
   human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.

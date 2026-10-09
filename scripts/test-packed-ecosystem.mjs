@@ -158,6 +158,13 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
+// RR-62: the consumer installs core, the renderer, the converter and the editor; they must share the one installed core.
+{
+  const {assertSingleCore} = await import('./check-one-core.mjs');
+  const installedCore = path.join(consumer, 'node_modules', '@openpresentation', 'opf');
+  const installedPeers = ['opf-render', 'opf-pptx', 'opf-editor', 'cli'].map((name) => path.join(consumer, 'node_modules', '@openpresentation', name, 'package.json')).filter((file) => existsSync(file));
+  await assertSingleCore({ expected: installedCore, roots: [consumer], resolvers: [path.join(consumer, 'package.json'), ...installedPeers], label: 'packed consumer' });
+}
 if (verifyColorRefs) {
   await mkdir(path.join(consumer, 'fixtures'), {recursive: true});
   await writeFile(path.join(consumer, 'fixtures/color-references.opf.json'),

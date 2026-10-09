@@ -1,8 +1,9 @@
-// The typed errors of `@openpresentation/cli/api`. A caller branches on `code`, never on the message; `findings` holds the
+// The typed errors of `@openpresentation/opf/node`. A caller branches on `code`, never on the message; `findings` holds the
 // located findings a failed run produced (the same shape `validate` reports), `details` the code's own facts (a package name,
-// a range). The CLI commands turn these into their JSON error report and exit code (render.ts, import.ts).
-import type { Finding } from "@openpresentation/opf";
+// a range, a path). The opf CLI turns these into its JSON error report and exit code.
+import type { Finding } from "../index.js";
 
+/** The base class: thrown for the request and the files (`invalid-option`, `input-not-found`, `input-unreadable`, `invalid-presentation`, `output-exists`, `output-not-file`, `output-unwritable`). */
 export class OPFApiError extends Error {
 	readonly code: string;
 	readonly details: Record<string, unknown>;
@@ -17,10 +18,10 @@ export class OPFApiError extends Error {
 	}
 }
 
-/** Thrown by `exportDeck`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `font-failed`, `export-failed`. */
+/** Thrown by the export step of `convert`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `font-failed`, `export-failed`. */
 export class OPFExportError extends OPFApiError {}
 
-/** Thrown by `importDeck`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `import-failed`. */
+/** Thrown by the import step of `convert` and by `open` for a PowerPoint file: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `import-failed`. */
 export class OPFImportError extends OPFApiError {}
 
 /** The error as `Class`, whatever was thrown below: an error of that class is returned as it is, another API error keeps its code, details and findings. */

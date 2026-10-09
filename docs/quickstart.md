@@ -42,6 +42,21 @@ current source contract. `opf embed` embeds the catalog records a deck uses for
 portable offline authoring; it does not download remote assets. Keep the
 ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
+## The short path
+
+With core 0.17.0 and later, three calls of `@openpresentation/opf/node` cover files in an application:
+
+```js
+import * as opf from '@openpresentation/opf/node';
+
+await opf.convert('deck.opf.md', 'deck.pdf');            // also .pptx, .png (one per slide), .svg, .zip and the deck forms
+const deck = await opf.open('deck.opf.md');              // .opf.md, .opf.yaml, .opf.json, or a .pptx to import
+deck.slides.push({ title: 'Q4' });
+await opf.save(deck, 'deck.opf.md');
+```
+
+The CLI does the same from a shell: `opf convert deck.opf.md deck.pdf`. The sections below take the pieces one at a time.
+
 ## Author and validate
 
 ```sh
@@ -127,28 +142,27 @@ history. Use the editor session or version control for undo.
 
 ## Preview and export
 
-The simple path is the CLI package's library API (CLI 0.16.0 and later), which reads and writes files with the bundled
-fonts and loads the render and PPTX engines you installed:
+`@openpresentation/opf/node` (core 0.17.0 and later) reads and writes files with the bundled fonts and loads the render and
+PPTX engines you installed:
 
 ```js
-import { readDeck, exportDeck, importDeck } from '@openpresentation/cli/api';
+import * as opf from '@openpresentation/opf/node';
 
-const { presentation } = readDeck(source, { filename: 'deck.opf.json' });   // JSON, YAML or .opf.md
-const pdf = await exportDeck(presentation, { format: 'pdf' });              // { files: [{ name, type, bytes }], findings }
-const png = await exportDeck(presentation, { format: 'png', scale: 2 });    // one file per slide
-const svg = await exportDeck(presentation, { format: 'svg' });
-const pptx = await exportDeck(presentation, { format: 'pptx' });
-const { presentation: back } = await importDeck(pptx.files[0].bytes);       // PowerPoint to OPF
+await opf.convert('deck.opf.json', 'deck.pdf');
+await opf.convert('deck.opf.json', 'slides/deck.png', { scale: 2 });   // slides/deck-001.png, -002, ...
+await opf.convert('deck.opf.json', 'deck.pptx');
+const back = await opf.open('deck.pptx');                              // PowerPoint to OPF
+const { files } = await opf.convert(back, { format: 'svg' });          // bytes, nothing written
 ```
 
-`exportDeck` checks the presentation (format and references), draws with the renderer's bundled open fonts and no
-system fonts, never reads a clock (pass `date: 'YYYY-MM-DD'` for a date field) and returns the bytes; write them where
-you like. A missing engine throws `OPFExportError` with code `peer-not-installed` and the install command. The
-options and errors are in the [CLI reference](cli.md#library-api).
+`convert` checks the deck (format and references), draws with the renderer's bundled open fonts and no system fonts,
+reads images next to the input file, never reads a clock (pass `date: 'YYYY-MM-DD'` for a date field) and writes each file
+atomically. A missing engine throws `OPFExportError` with code `peer-not-installed` and the install command. The options and
+errors are in [OPF files in Node](node.md).
 
 ### Advanced: the engines directly
 
-`exportDeck` calls these. Use them when you need the pieces: your own fonts handle, one SVG per slide in a browser,
+`convert` calls these. Use them when you need the pieces: your own fonts handle, one SVG per slide in a browser,
 or options the function does not expose.
 
 ```js

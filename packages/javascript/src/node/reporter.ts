@@ -4,10 +4,14 @@
 // Renderer, exporter and importer findings are appended with a `render/`, `pptx/`, `pdf/`, `fonts/` or `import/`
 // rule prefix and the same word as their category. Exit status follows --fail-on: an error always fails, a warning
 // fails under --fail-on warning.
-import type { Finding, FindingSeverity, ValidationReport } from "@openpresentation/opf";
-import { reaches } from "./check.js";
-import { pointerOf } from "./io.js";
+import type { Finding, FindingSeverity, ValidationReport } from "../index.js";
+import { pointerOf } from "./files.js";
 import type { Diagnostic } from "./peers.js";
+
+const rank: Record<FindingSeverity, number> = { error: 3, warning: 2, info: 1 };
+
+/** True when any finding is at or above the level (the `--fail-on` rule). */
+export const reaches = (findings: readonly { severity: FindingSeverity }[], level: FindingSeverity): boolean => findings.some((finding) => rank[finding.severity] >= rank[level]);
 
 export type Source = "render" | "pptx" | "pdf" | "fonts" | "import" | "cli";
 

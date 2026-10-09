@@ -43,7 +43,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 ## Start in three steps
 
 1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.16.0, renderer 0.16.0, editor 0.16.0, PPTX 0.16.1 and CLI 0.16.0.
-2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `exportDeck(presentation, { format: "pdf" })` of `@openpresentation/cli/api` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
+2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `convert("deck.opf.md", "deck.pdf")` of `@openpresentation/opf/node` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
 Your deck can live in git from the first commit. After installing dependencies and supplying referenced assets, these commands run locally without a model provider, account or hosted OPF API.
@@ -58,15 +58,15 @@ The canonical JavaScript/TypeScript package is published at [`packages/javascrip
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
 
-It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Render/edit/convert packages live in separate MIT repos that depend on `@openpresentation/opf`. The format package also exposes pure composition geometry so those packages share layout behavior.
+Its Node-only `@openpresentation/opf/node` entry reads and writes files (`convert`, `open`, `save`) and draws them through the optional engines below; the root and every other entry run in a browser. It does not generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Render/edit/convert packages live in separate MIT repos that depend on `@openpresentation/opf`. The format package also exposes pure composition geometry so those packages share layout behavior.
 
 ## Toolkit libraries
 
-OPF is five packages. **Core** (`@openpresentation/opf`) reads and writes the text formats (JSON, YAML, Markdown) and validates. **The CLI package** (`@openpresentation/cli`) is the `opf` command and the library API `@openpresentation/cli/api`, which reads and writes files (`exportDeck`, `importDeck`). **Render** (`opf-render`) and **PPTX** (`opf-pptx`) are the engines behind them, installed as needed. **The editor** (`opf-editor`) is the headless editing layer. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is five packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and `@openpresentation/opf/node` reads and writes files. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
 | Repo | Role | Boundary |
 |---|---|---|
-| `cli` (`@openpresentation/cli`, this repository) | `opf` command; `cli/api`: `exportDeck`, `importDeck`, `readDeck` | Reads and writes files; calls the engines below as optional peers |
+| `cli` (`@openpresentation/cli`, this repository) | `opf` command | Runs core's `/node` engine: reads and writes files and calls the engines below as optional peers |
 | `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
 | `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
 | `opf-pptx` | OPF to PPTX and PPTX to OPF | Pure local import/export library for browser and server use where supported |
@@ -110,14 +110,16 @@ console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs: [def
 console.log(Object.keys(defaultCatalog.audiences).length);
 ```
 
-Export and import files from code with the CLI package's library API (the engines `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed):
+Convert, open and save files in Node with `@openpresentation/opf/node` (the engines `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; see [OPF files in Node](docs/node.md)):
 
 ```ts
-import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+import * as opf from "@openpresentation/opf/node";
 
-const { presentation } = readDeck(text, { filename: "deck.opf.md" }); // JSON, YAML or Markdown
-const { files } = await exportDeck(presentation, { format: "pdf" });    // [{ name, type, bytes }]
-const imported = await importDeck(pptxBytes);                          // PPTX to OPF
+await opf.convert("deck.opf.md", "deck.pdf");
+const deck = await opf.open("deck.opf.md");
+deck.slides.push({ title: "Q4" });
+await opf.save(deck, "deck.opf.md");
+const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing written
 ```
 
 Use focused imports when you only need one surface:
@@ -149,7 +151,7 @@ node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-pla
 
 See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API, and [content conversions](./docs/conversions.md) for the pure converters (`@openpresentation/opf/convert`) that change a block's kind, nest list items, restructure a slide and split or merge slides, and [Markdown and outlines](./docs/markdown.md) for the deterministic Markdown dialect (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`) that reads and writes a whole deck as text.
 
-[OPF as YAML](./docs/yaml.md) describes the strict YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` files in every command, editor autocomplete); JSON stays the canonical form. A deck can equally be a Markdown file, `deck.opf.md`: every command reads and writes it (see [Markdown decks in every command](./docs/markdown.md#markdown-decks-in-every-command)), and `readDeck` / `writeDeck` read and write a deck in JSON, YAML or Markdown with one call.
+[OPF as YAML](./docs/yaml.md) describes the strict YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` files in every command, editor autocomplete); JSON stays the canonical form. A deck can equally be a Markdown file, `deck.opf.md`: every command reads and writes it (see [Markdown decks in every command](./docs/markdown.md#markdown-decks-in-every-command)), and `parse` / `stringify` read and write a deck in JSON, YAML or Markdown with one call.
 
 See [Templates and variables](./docs/templates-and-variables.md) for fillable OPF templates: typed variables, `{{id}}` tokens, `opf fill` and `resolveVariables`.
 

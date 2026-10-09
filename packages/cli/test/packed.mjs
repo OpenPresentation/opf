@@ -38,7 +38,7 @@ try {
  await mkdir(out,{recursive:true});
  if(!registry)run('pnpm',['build'],pkg);
  const cache=path.join(temp,'npm-cache');
- // RR-62: the CLI depends on core (one core for the command and for @openpresentation/cli/api). A local run packs the candidate core
+ // RR-62: the CLI depends on core (one core: the command runs its /node engine). A local run packs the candidate core
  // with it and installs both; a registry run installs the published CLI, which pulls the published core.
  let packed,tarball,candidateCore=[];
  if(registry){
@@ -68,7 +68,7 @@ try {
  assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);
  // The manifest this installation is checked against: the source of this checkout, or (registry mode) of the release commit. A release
- // before RR-62 bundles core (no dependencies, no /api); from RR-62 core is the only runtime dependency, shared with @openpresentation/cli/api.
+ // before RR-62 bundles core (no dependencies, no /api); from RR-62 core is the only runtime dependency.
  const registryRef=registry?(verificationRef??plan.verificationRefs.cli):undefined;
  if(registryRef)assert.match(registryRef,/^[a-f0-9]{40}$/);
  const sourceManifest=registry?JSON.parse(run('git',['show',`${registryRef}:packages/cli/package.json`],root)):JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
@@ -79,14 +79,19 @@ try {
  assert.equal(versions.cli,expected.version);
  if(sourceManifest.dependencies?.['@openpresentation/opf']){
   assert.deepEqual(Object.keys(manifest.dependencies),['@openpresentation/opf'],'core is the only runtime dependency of the CLI');
-  assert.equal(manifest.exports['./api'].import,'./dist/api.js');assert.equal(manifest.exports['./api'].types,'./dist/api.d.ts');
-  for(const file of ['dist/api.js','dist/api.d.ts','dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
-  // One core: the installation holds a single @openpresentation/opf, which the command and @openpresentation/cli/api both use.
+  // RR-62: from 0.17 the CLI is the command only (applications use @openpresentation/opf/node); 0.16 shipped @openpresentation/cli/api.
+  const library=sourceManifest.exports?.['./api'];
+  assert.deepEqual(manifest.exports,sourceManifest.exports,'The installed CLI exports what its source exports');
+  for(const file of library?['dist/api.js','dist/api.d.ts','dist/index.js']:['dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
+  if(!library)assert.ok(!existsSync(path.join(installed,'dist/api.js')),'no library entry ships');
+  // One core: the installation holds a single @openpresentation/opf, whose /node engine the command runs.
   // A global install has no application beside the CLI: core is the CLI's own dependency (nested, or hoisted when a candidate
   // core tarball is installed with it), and the CLI must resolve the one copy.
   const one=await assertOneCore(path.dirname(path.dirname(installed)),{application:false});
   assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
   if(registry)assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
+  // The engines are optional peers of the CLI and of core: npm installs neither for you.
+  for(const peer of ['@openpresentation/opf-render','@openpresentation/opf-pptx'])assert.ok(!existsSync(path.join(path.dirname(path.dirname(installed)),...peer.split('/')))&&!existsSync(path.join(one.copy,'node_modules',...peer.split('/'))),`${peer} must not be installed without being asked for`);
  } else {
   const coreManifest=JSON.parse(run('git',['show',`${registryRef}:packages/javascript/package.json`],root));
   assert.equal(versions.opf,coreManifest.version,'Bundled core must match the immutable CLI source');

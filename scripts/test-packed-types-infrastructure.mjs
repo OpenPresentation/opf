@@ -26,8 +26,10 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const positive = JSON.parse(await readFile(path.join(consumer, 'artifacts/packed-types/report.json'), 'utf8'));
 assert.equal(positive.consumer, consumer);
 assert.equal(positive.downstream, true);
-assert.equal(positive.results.length, 4);
-assert.equal(new Set(positive.results.map(result => `${result.mode}/${result.compiler}`)).size, 4);
+// NodeNext and Bundler with TypeScript 5.9 and 7, plus the browser consumer (RR-62: every non-Node entry, no Node types).
+assert.equal(positive.results.length, 6);
+assert.equal(new Set(positive.results.map(result => `${result.mode}/${result.compiler}`)).size, 6);
+assert.equal(positive.results.filter(result => result.mode === 'Browser').length, 2);
 for (const result of positive.results) {
   assert.equal(result.status, 0);
   assert.equal(result.error, undefined);
@@ -49,8 +51,10 @@ const after = before.replace(signature, signature.replace(': string;', ': number
 await writeFile(declaration, after);
 await assert.rejects(checkPackedTypes(poisoned, {downstream: true}), /failed in 4 compiler\/mode combinations/);
 const negative = JSON.parse(await readFile(path.join(poisoned, 'artifacts/packed-types/report.json'), 'utf8'));
-assert.equal(negative.results.length, 4);
-for (const result of negative.results) {
+assert.equal(negative.results.length, 6);
+// The browser consumer imports no renderer, so the poisoned downstream signature breaks exactly the four Node combinations.
+for (const result of negative.results.filter(result => result.mode === 'Browser')) assert.equal(result.status, 0);
+for (const result of negative.results.filter(result => result.mode !== 'Browser')) {
   assert.notEqual(result.status, 0);
   const stdout = await readFile(path.join(poisoned, 'artifacts/packed-types', `${result.mode}-${result.compiler}.stdout.txt`), 'utf8');
   assert.match(stdout, /Type 'number' is not assignable to type 'string'/);
@@ -73,8 +77,8 @@ for (const result of positive.results) {
 }
 await writeFile(path.join(output, 'report.json'), `${JSON.stringify({
   environmentControls: {allowed: allowedEnvironments.length, refused: refusedEnvironments.length},
-  consumer, positiveCombinations: 4, rejectedDownstreamCombinations: 4,
+  consumer, positiveCombinations: 6, rejectedDownstreamCombinations: 4,
   ancestorNodeTypesRejected: true, originalInputsUnchanged: true,
   mutation: {path: declaration, before: hash(before), after: hash(after), signature},
 }, null, 2)}\n`);
-console.log('Packed type infrastructure passed: four positive combinations, four real downstream errors, ancestor Node types refused; original inputs unchanged.');
+console.log('Packed type infrastructure passed: six positive combinations (four Node, two browser), four real downstream errors, ancestor Node types refused; original inputs unchanged.');

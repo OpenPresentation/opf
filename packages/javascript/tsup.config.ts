@@ -23,6 +23,9 @@ export default defineConfig({
     examples: "src/examples.ts",
     docs: "src/docs.ts",
     "repo-readme": "src/repo-readme.ts",
+    // Node-only (RR-62): the file API and the engine the CLI runs. No other entry imports them.
+    node: "src/node.ts",
+    "node-engine": "src/node-engine.ts",
   },
   format: ["esm"],
   dts: true,
@@ -32,6 +35,8 @@ export default defineConfig({
   treeshake: true,
   target: "es2022",
   platform: "neutral",
+  // Only the Node-only entries import node: builtins; scripts/check-browser-safe.mjs proves the others never do.
+  external: [/^node:/],
   outExtension() {
     return { js: ".js" };
   },

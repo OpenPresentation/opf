@@ -66,18 +66,19 @@ try {
   // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
   // the core tag; the CLI release keeps the hard gate).
   if (!report(peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version}))) process.exit(0);
-  // One core for the command, @openpresentation/cli/api and both peers.
+  // One core for the command, @openpresentation/opf/node and both peers.
   await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);
+  assert.equal(installed.exports['./api'], undefined, 'the CLI is the command; applications use @openpresentation/opf/node');
   const bin = path.join(modules, '@openpresentation/cli', installed.bin.opf);
-  // RR-62: the library entry of the installed CLI draws and imports through the installed peers.
-  const apiProbe = path.join(temp, 'api-probe.mjs');
-  await writeFile(apiProbe, `import {exportDeck, importDeck, readDeck} from ${JSON.stringify(pathToFileURL(path.join(modules, '@openpresentation/cli/dist/api.js')).href)};
-    const {presentation} = readDeck('{"slides":[{"title":"Installed","text":"From the packed CLI"}]}');
-    const pdf = await exportDeck(presentation, {format: 'pdf'}), pptx = await exportDeck(presentation, {format: 'pptx'}), png = await exportDeck(presentation, {format: 'png'});
-    const back = await importDeck(pptx.files[0].bytes);
-    process.stdout.write(JSON.stringify({pdf: new TextDecoder().decode(pdf.files[0].bytes.subarray(0, 5)), png: png.files.length, slides: back.presentation.slides.length}));`);
-  assert.deepEqual(JSON.parse(run(process.execPath, [apiProbe], temp)), {pdf: '%PDF-', png: 1, slides: 1});
+  // RR-62: core's /node entry, installed beside the CLI, draws and imports through the installed peers.
+  const nodeProbe = path.join(temp, 'node-probe.mjs');
+  await writeFile(nodeProbe, `import * as opf from ${JSON.stringify(pathToFileURL(path.join(modules, '@openpresentation/opf/dist/node.js')).href)};
+    const deck = opf.parse('{"slides":[{"title":"Installed","text":"From the packed core"}]}');
+    const pdf = await opf.convert(deck, {format: 'pdf'}), pptx = await opf.convert(deck, {format: 'pptx'}), png = await opf.convert(deck, {format: 'png'});
+    const back = await opf.open(pptx.files[0].bytes);
+    process.stdout.write(JSON.stringify({pdf: new TextDecoder().decode(pdf.files[0].bytes.subarray(0, 5)), png: png.files.length, slides: back.slides.length}));`);
+  assert.deepEqual(JSON.parse(run(process.execPath, [nodeProbe], temp)), {pdf: '%PDF-', png: 1, slides: 1});
   const output = run(process.execPath, [path.join(pkg, 'test/files.mjs')], temp, {OPF_TEST_BIN: bin});
   console.log(output.trim());
   // RR-59 (opf#476): script-font SVG, the unresolved-image gate and zero fetches through the installed binary (the candidate CLI and core, the peers and Noto packages beside them).

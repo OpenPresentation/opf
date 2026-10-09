@@ -10,6 +10,7 @@ try {
  const root=path.join(temp,'opf'),core=path.join(root,'packages/javascript'),script=path.join(root,'scripts/link-ecosystem.mjs');
  await mkdir(path.dirname(script),{recursive:true});await copyFile(new URL('./link-ecosystem.mjs',import.meta.url),script);
  await copyFile(new URL('./package-manager.mjs',import.meta.url),path.join(root,'scripts/package-manager.mjs'));
+ await copyFile(new URL('./check-one-core.mjs',import.meta.url),path.join(root,'scripts/check-one-core.mjs'));
  await mkdir(path.join(core,'dist'),{recursive:true});await writeFile(path.join(core,'dist/composition.js'),'');
  await json(path.join(core,'package.json'),{name:'@openpresentation/opf'});
  for(const name of ['opf-render','opf-pptx','opf-editor','pptx-gallery']) {

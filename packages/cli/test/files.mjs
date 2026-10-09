@@ -10,6 +10,7 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {inflateRawSync} from 'node:zlib';
 import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
+import {installIsolatedCore} from '../../../scripts/isolated-core.mjs';
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
 // RR-55: every check here runs through the installed published opf-render and opf-pptx. While they do not satisfy the CLI's
 // peer ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips this file with a notice; any
@@ -273,8 +274,8 @@ try {
     // The CLI's own files and the one core it depends on, in a tree that has neither opf-render nor opf-pptx anywhere above it.
     const lone = path.join(isolated, 'dist', path.basename(executable));
     await cp(path.dirname(executable), path.join(isolated, 'dist'), {recursive: true});
-    await mkdir(path.join(isolated, 'node_modules/@openpresentation'), {recursive: true});
-    await symlink(path.dirname(createRequire(executable).resolve('@openpresentation/opf/package.json')), path.join(isolated, 'node_modules/@openpresentation/opf'), 'junction');
+    // A copy of core, not a link: the workspace core has the peers as devDependencies, and core loads them from its own location.
+    await installIsolatedCore(path.join(isolated, 'node_modules'));
     for (const args of [['render', path.join(temp, 'deck.opf.json')], ['export', path.join(temp, 'deck.opf.json'), '--format', 'pdf'], ['import', path.join(temp, 'deck.pptx')]]) {
       const missing = run(args, {status: 2, cwd: isolated, bin: lone});
       assert.equal(missing.stderrJson.code, 'peer-not-installed'); assert.match(missing.stderrJson.error, /npm install -g @openpresentation\/opf-(render|pptx)@/);

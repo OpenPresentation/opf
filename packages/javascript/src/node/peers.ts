@@ -1,8 +1,8 @@
-// opf-render and opf-pptx are optional peer dependencies: the CLI stays small (no native image or PDF engines, no
-// font packs) and a deck that is only validated, linted or edited never needs them. They are loaded the first time a
-// command needs them, from the CLI's own install location first (a global install, an npx run with several --package
-// flags, a project dependency) and from the working directory second (a project that has them installed while the CLI
-// is global). Nothing is ever fetched.
+// opf-render and opf-pptx are optional peer dependencies of core: core stays small (no native image or PDF engines, no
+// font packs), and an application that only reads, validates or edits a deck never needs them. `@openpresentation/opf/node`
+// (and the opf CLI, through it) loads them the first time a call needs them, from core's own install location first (a
+// project dependency, a global CLI install, an npx run with several --package flags) and from the working directory
+// second (a project that has them installed while the CLI is global). Nothing is ever fetched.
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -71,7 +71,7 @@ export interface Peer<T> {
  * installs only the ones its outputs use. The versions are the ones the renderer is tested with (its `peerDependencies`).
  */
 export const RENDER_EXTRAS = {
-	/** The faces of the office pack, which the CLI and `exportDeck` always load (every format). */
+	/** The faces of the office pack, which the CLI and `convert` always load (every format). */
 	fonts: ["@expo-google-fonts/roboto@0.4.3", "@expo-google-fonts/roboto-mono@0.4.2", "@expo-google-fonts/caladea@0.4.2", "@expo-google-fonts/arimo@0.4.3", "@expo-google-fonts/tinos@0.4.2", "@expo-google-fonts/cousine@0.4.3", "@expo-google-fonts/gelasio@0.4.1", "@expo-google-fonts/noto-sans@0.4.2"],
 	/** PNG output (and raster fallbacks): the SVG rasterizer, and sharp for WebP and rotated JPEG pictures. */
 	png: ["@resvg/resvg-js@^2.6.2", "sharp@^0.35.5"],
@@ -88,14 +88,14 @@ const renderHint = () =>
 	`    svg:                   fonts only`;
 
 const hint = (name: string) =>
-	`${name} is not installed. It is an optional peer of @openpresentation/cli, loaded only by the commands (and by exportDeck and importDeck of @openpresentation/cli/api) that need it. Install it next to the CLI:\n` +
+	`${name} is not installed. It is an optional peer of @openpresentation/opf, loaded only by @openpresentation/opf/node and the opf commands that need it. Install it next to the CLI or in your project:\n` +
 	`  npm install -g ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (global CLI)\n` +
-	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that depends on the CLI or imports @openpresentation/cli/api)\n` +
+	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that imports @openpresentation/opf/node or depends on the CLI)\n` +
 	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)` +
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
 function bases(): string[] {
-	// Resolution starts at the CLI's own file, then at the working directory.
+	// Resolution starts at core's own file, then at the working directory.
 	return [import.meta.url, pathToFileURL(path.join(process.cwd(), "noop.js")).href];
 }
 

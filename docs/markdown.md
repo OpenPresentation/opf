@@ -1,6 +1,6 @@
 # Markdown and outlines
 
-`@openpresentation/opf/markdown` (RR-30) converts between OPF and a small, documented Markdown dialect, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-md` and `opf to-md`, and every command that reads or writes a deck understands a file ending `.opf.md` ([Markdown decks in every command](#markdown-decks-in-every-command)); `readDeck` and `writeDeck` read and write a deck in JSON, YAML or Markdown with one call.
+`@openpresentation/opf/markdown` (RR-30) converts between OPF and a small, documented Markdown dialect, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-md` and `opf to-md`, and every command that reads or writes a deck understands a file ending `.opf.md` ([Markdown decks in every command](#markdown-decks-in-every-command)); `parse` and `stringify` read and write a deck in JSON, YAML or Markdown with one call, and `open`, `save` and `convert` of `@openpresentation/opf/node` do it for files.
 
 - **JSON stays canonical.** The schema, the interchange form and every package describe the JSON. A `.opf.md` file is an authoring serialization of the same data, as a `.opf.yaml` file is ([OPF as YAML](yaml.md)).
 - **Write a deck as text.** YAML front matter holds the deck, `---` separates slides, `#` is the title, `##` the subtitle, and lists, quotes, tables, images, code, charts, metrics, timelines and speaker notes have their own syntax.
@@ -188,7 +188,7 @@ opf validate - --input-format markdown < deck.txt
 
 `opf format` rewrites a Markdown deck to the canonical form the writer produces, so the layout the dialect treats as equivalent (`*` and `-` bullets, extra blank lines, spacing in front matter) is normalized. Anything the dialect has no syntax for is carried in an `opf-slide` or `opf-block` fence, so a command that rewrites a deck can move content into a fence that was not there: for example an `edit` that adds `design` to a slide. The CLI prints `warning: <file> has N more opf-slide/opf-block fences than before: ...` on stderr when that happens (it does not fail, nothing is lost, and a deck that already had its fences does not warn). The `<!-- -->` comments of the source are not preserved beyond the slide and block options the dialect reads.
 
-In code, `readDeck(text, { format, filename, catalogs, validate })` and `writeDeck(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write the three forms: see [Reading and writing a deck in any form](validate.md#reading-a-deck-in-any-form).
+In code, `parse(text, { format, filename, catalogs })` and `stringify(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write the three forms, and `@openpresentation/opf/node` reads and writes the files (`open`, `save`, `convert("deck.opf.json", "deck.opf.md")`): see [Reading and writing a deck in any form](validate.md#reading-a-deck-in-any-form).
 
 ## Decisions and limits
 

@@ -8,35 +8,35 @@ opf render deck.opf.json --slides 1,3-5 --format svg|png [--scale 2] [--include-
 opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|x.zip] [--pdf-mode vector|raster]
            [--chartex auto|native|fallback] [--provenance full|references-only|none] [--paginate] [--include-hidden] [--date YYYY-MM-DD]
 opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
+opf convert <input> <output> [the export flags]   # formats from the names: .pptx .opf.md .yaml .json -> .pdf .pptx .png .svg .zip .opf.md .yaml .json
 ```
 
-From opf-render 0.16 the converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and the font packages are optional peers: a missing one exits 2 with `code: "peer-not-installed"`, the package and the install command, and `exportDeck` throws the same code.
+From opf-render 0.16 the converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and the font packages are optional peers: a missing one exits 2 with `code: "peer-not-installed"`, the package and the install command, and `convert` of `@openpresentation/opf/node` throws the same code.
 
 The commands each print one JSON report (the `opf validate` shape: `ok`, `findings` with `ruleId`/`severity`/`category`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on findings at or above `--fail-on` (nothing is written then). The CLI uses the same `loadFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). PDF is vector by default (`--pdf-mode raster` for one image per page). Per-slide images and PDF skip slides marked `hidden: true` unless `--include-hidden`, and output files are named by the deck's `filename`, else its slugified `name`, else the input file's name. Full reference: `docs/cli.md` in the core repository.
 
-## Library API
+## Files in Node
 
-`@openpresentation/cli/api` is the library form of the commands above (Node only). Core reads and writes text; this entry reads and writes files.
+`@openpresentation/opf/node` is core's file API (Node only; the root and every other core entry stay browser-safe). The commands above run it.
 
 ```js
-import { readDeck, writeDeck, validate, exportDeck, importDeck, OPFExportError } from '@openpresentation/cli/api';
+import * as opf from '@openpresentation/opf/node';
 
-const { presentation, findings: readFindings } = readDeck(text, { filename: 'deck.opf.md' }); // JSON, YAML or .opf.md
-const pdf = await exportDeck(presentation, { format: 'pdf', pdfMode: 'vector' });
-const slides = await exportDeck(presentation, { format: 'png', slides: '1,3-5', scale: 2 });
-const zip = await exportDeck(presentation, { format: 'svg', zip: true });
-const pptx = await exportDeck(presentation, { format: 'pptx', date: '2026-10-08' });
-const { presentation: imported, findings } = await importDeck(pptx.files[0].bytes);
-try { await exportDeck(presentation, { format: 'pdf' }); } catch (error) {
-  if (error instanceof OPFExportError && error.code === 'peer-not-installed') console.error(error.message); // the install command
+await opf.convert('deck.opf.md', 'deck.pdf', { pdfMode: 'vector' });
+await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1,3-5', scale: 2 }); // slides/deck-001.png, -003, -004, -005
+await opf.convert('deck.opf.md', 'slides.zip', { format: 'svg' });
+await opf.convert('deck.opf.md', 'deck.pptx', { date: '2026-10-08' });
+const { files, findings } = await opf.convert(deck, { format: 'png' });  // [{ name, type, bytes, slide, width, height }], nothing written
+const imported = await opf.open('deck.pptx');                           // or opf.open(pptxBytes)
+try { await opf.convert('deck.opf.md', 'deck.pdf'); } catch (error) {
+  if (error instanceof opf.OPFExportError && error.code === 'peer-not-installed') console.error(error.message); // the install command
 }
 ```
 
-- Returns `{ files: [{ name, type, bytes }], findings, fonts, skippedHidden, renderer, pptx? }`. Files are named by the deck's `filename`, else its slugified `name`, else the `filename` option; per-slide files end `-001.png`. Nothing is written for you.
-- `findings` are the `opf validate` shape (rule ids `render/`, `pptx/`, `pdf/`, `fonts/`, `cli/` for the engines' diagnostics). The format and references check runs first: an invalid presentation throws `invalid-presentation` and `error.findings` hold its errors.
-- Errors: `OPFExportError` / `OPFImportError` (both extend `OPFApiError`) with `code`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed`.
-- Fonts are the renderer's office pack plus `fontDirs`; pass `fonts` (the handle `loadFonts()` returns) to reuse one across calls. Local images are read only from `assetDir`; URLs are never fetched.
-- Core is a regular dependency of the CLI package, so `@openpresentation/cli/api` and `@openpresentation/opf` in the same application are one core (`error instanceof OPFValidationError` holds across both).
+- `convert(input, output, options?)` writes; `convert(input, { format })` returns the files. Names without an output follow the deck's `filename`, else its slugified `name`, else the input file's stem; per-slide files end `-001.png`.
+- `findings` are the `opf validate` shape (rule ids `import/`, `render/`, `pptx/`, `pdf/`, `fonts/`, `cli/` for the engines' diagnostics). The format and references check runs first: an invalid deck throws `invalid-presentation` and `error.findings` hold its errors, located in the file.
+- Errors: `OPFApiError` (`invalid-option`, `input-not-found`, `output-exists`, ...), `OPFExportError` and `OPFImportError` (both extend it) with `code`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed`; `open` and `save` of an invalid deck throw `OPFValidationError`.
+- Fonts are the renderer's office pack (prepared once per process) plus `fontDirs`; pass `fonts` (the handle `loadFonts()` returns) to use your own. Local images resolve next to the input file (`assetDir` overrides); URLs are never fetched.
 
 ## Prepared font inputs
 
@@ -58,7 +58,7 @@ Import the named functions from the same public modules shown below. The loader 
 
 ## Node export (the engines directly)
 
-Use the engines directly when you need the pieces; `exportDeck` calls these.
+Use the engines directly when you need the pieces; `convert` calls these.
 
 ```js
 import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
