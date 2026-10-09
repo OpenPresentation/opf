@@ -171,7 +171,7 @@
     "typescript": "~5.9.3"
   },
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.17.0",
+    "@openpresentation/opf-pptx": "^0.18.0",
     "@openpresentation/opf-render": "^0.18.0"
   },
   "peerDependenciesMeta": {

@@ -47,7 +47,7 @@
 // covered when any slot holds the value. Deck-wide factors take one value.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads';
@@ -81,6 +81,8 @@ const OUTPUT = process.env.OPF_MATRIX_OUT ? path.resolve(process.env.OPF_MATRIX_
 const WITH_PNG = !process.argv.includes('--no-png');
 // Host font directories handed to the rasterizer (resvg), to prove a host face named like a bundled one does not shadow it.
 const HOST_FONT_DIRS = (process.env.OPF_MATRIX_FONT_DIRS ?? '').split(path.delimiter).filter(Boolean);
+// RR-74: the rasterizer takes font files in the fonts handle (folders add the bundled faces too), so the host folders are listed here.
+const HOST_FONT_FILES = (await Promise.all(HOST_FONT_DIRS.map(async (directory) => (await readdir(directory)).filter((name) => /.(ttf|otf)$/i.test(name)).sort().map((name) => path.join(directory, name))))).flat();
 const LOAD_SYSTEM_FONTS = process.env.OPF_MATRIX_SYSTEM_FONTS === '1';
 // --determinism: the bounded subset the FF-11 grid re-runs under every locale, time zone, clock and font environment:
 // every fourth pairwise deck plus the decks that add the remaining languages, the language and theme chains, CJK in a
@@ -715,7 +717,7 @@ async function verifyState(label, presentation, {png = false} = {}) {
   assert.equal(digests[label], undefined, `${label}: state labels are unique`);
   digests[label] = {pptx: sha256(bytes), svg: sha256(svgs.join('\0')), slides: svgs.map((svg) => sha256(svg).slice(0, 16))};
   // The pairwise decks also record a PNG of the first and last slide (resvg with the registry's own font files only unless asked for host fonts).
-  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await toPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}, fontDirs: HOST_FONT_DIRS}))));
+  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await toPng(svg, {fonts: {fontFiles: [...registry.fontFiles, ...HOST_FONT_FILES], useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}}))));
   return {bytes: new Uint8Array(bytes), svgs, drawn, fonts, faces: [...chosenFaces].sort(compareNames).join('|')};
 }
 
@@ -1180,7 +1182,7 @@ if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is
 if (HOST_FONT_DIRS.length) {
   const deck = {name: 'decoy', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
   const [svg] = toSvg(deck, engineOptions(deck));
-  const decoyOnly = sha256(await toPng(svg, {useBundledFonts: false, fontDirs: HOST_FONT_DIRS}));
+  const decoyOnly = sha256(await toPng(svg, {fonts: {fontFiles: HOST_FONT_FILES, useBundledFonts: false}}));
   const bundledOnly = sha256(await toPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}}));
   assert.notEqual(decoyOnly, bundledOnly, 'the decoy host faces draw differently when they are the only faces');
 }
