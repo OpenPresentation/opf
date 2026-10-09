@@ -16,7 +16,7 @@
 // publish workflow runs) and by scripts/test-packed-ecosystem.mjs --registry (the published set). It is not part of `pnpm test:cli`
 // (test/suites.json): the workspace has no Noto script package.
 import assert from 'node:assert/strict';
-import {spawn} from 'node:child_process';
+import {spawn, spawnSync} from 'node:child_process';
 import {existsSync, readFileSync, realpathSync} from 'node:fs';
 import {mkdtemp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises';
 import http from 'node:http';
@@ -37,6 +37,9 @@ const bin = realpathSync(executable);
 // request, merge-queue or roller-candidate run skips with a notice; every other run fails.
 if (!gateReport(cliPeerGate({cliRoot: path.dirname(path.dirname(bin)), executable: bin, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const require = createRequire(bin);
+// RR-74: the registry run drives the plan's published CLI, whose flag for "no embedded fonts" is --svg-fonts none before 0.18 and --text system from it
+// (the candidate CLI keeps its 0.17 version until release prep, so its usage says which).
+const noFonts = spawnSync(process.execPath, [bin, '--help'], {encoding: 'utf8'}).stdout.includes('[--text <fonts|system|paths>]') ? ['--text', 'system'] : ['--svg-fonts', 'none'];
 for (const name of ['@expo-google-fonts/noto-sans-jp', '@expo-google-fonts/noto-sans-sc', '@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
   try { require.resolve(`${name}/package.json`); } catch { assert.fail(`${name} must be installed beside the CLI (${bin}) for this test`); }
 }
@@ -173,12 +176,12 @@ try {
   assert.match(jaSvg, /font-family="Noto Sans JP, sans-serif"/, 'the text draws with the embedded family');
   checks++;
 
-  const none = await run(['render', 'ja.opf.json', '--format', 'svg', '--text', 'system', '--out', 'ja-none']);
+  const none = await run(['render', 'ja.opf.json', '--format', 'svg', ...noFonts, '--out', 'ja-none']);
   assert.equal(none.ok, true);
   const noneSvg = await readFile(path.join(temp, 'ja-none/Japanese-001.svg'), 'utf8');
   assert.deepEqual(embeddedFaces(noneSvg), []);
-  assert.ok(!noneSvg.includes('@font-face') && !/data:(font|application\/(x-)?font)/.test(noneSvg), '--text system embeds no font bytes');
-  assert.ok(noneSvg.length < 20_000, `--text system leaves a small SVG (${noneSvg.length} bytes)`);
+  assert.ok(!noneSvg.includes('@font-face') && !/data:(font|application\/(x-)?font)/.test(noneSvg), `${noFonts.join(' ')} embeds no font bytes`);
+  assert.ok(noneSvg.length < 20_000, `${noFonts.join(' ')} leaves a small SVG (${noneSvg.length} bytes)`);
   checks++;
 
   const zh = await run(['render', 'zh.opf.json', '--format', 'svg', '--out', 'zh-svg']);
