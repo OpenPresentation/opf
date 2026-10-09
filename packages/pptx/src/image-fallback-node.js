@@ -10,7 +10,8 @@ export async function webpToPng(bytes) {
 // The default rasterizer for the PNG fallback of an SVG picture: opf-render's resvg renderer (an optional peer), which
 // is deterministic (no system fonts, no network or file access for the SVG's own references). `text` selects the
 // bundled fonts; an SVG with no text needs none. Rejects with code `svg-rasterizer-unavailable` when opf-render is
-// not installed.
+// not installed, and also when it is installed but its PNG converter (`@resvg/resvg-js`, an optional peer of opf-render
+// 0.16) is not: opf-render's `converter-missing` error maps to the same code, with its install command on `install`.
 //
 // This is the one place the exporter calls the renderer. opf-render's svgToPng(svg, {fonts, scale, background}) takes the
 // fonts handle for the faces it may draw with: here only the bundled ones, never the system's.
@@ -23,7 +24,18 @@ export async function svgToPng(svg, {scale, text}) {
     unavailable.code = 'svg-rasterizer-unavailable';
     throw unavailable;
   }
-  return new Uint8Array(await render(svg, {fonts: {useBundledFonts: text === true, loadSystemFonts: false}, scale, background: 'rgba(0, 0, 0, 0)'}));
+  try {
+    return new Uint8Array(await render(svg, {fonts: {useBundledFonts: text === true, loadSystemFonts: false}, scale, background: 'rgba(0, 0, 0, 0)'}));
+  } catch (error) {
+    if (error?.code !== 'converter-missing') throw error;
+    // opf-render 0.16: @resvg/resvg-js (the PNG converter) is an optional peer. Same path as a missing opf-render, keeping
+    // opf-render's own message and install command.
+    const install = typeof error.details?.install === 'string' ? error.details.install : undefined;
+    const unavailable = new Error(`SVG pictures need the PNG converter of @openpresentation/opf-render (or an options.svgRasterizer): ${error.message}`, {cause: error});
+    unavailable.code = 'svg-rasterizer-unavailable';
+    if (install) unavailable.install = install;
+    throw unavailable;
+  }
 }
 
 // A local SVG file (a path source), read as bytes; PptxGenJS reads raster paths itself.

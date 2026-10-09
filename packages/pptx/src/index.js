@@ -3515,7 +3515,7 @@ async function resolveSvgImage(source, options, path, outcome) {
     } catch (error) {
       const reason = error?.code === "svg-rasterizer-unavailable" ? "svg-rasterizer-unavailable" : "svg-render-failed";
       return unresolved(reason, reason, reason === "svg-rasterizer-unavailable"
-        ? "An SVG image needs a rasterizer for its PNG fallback: install the optional peer @openpresentation/opf-render, or pass options.svgRasterizer (or an imageResolver that returns a raster)."
+        ? `An SVG image needs a rasterizer for its PNG fallback: install the optional peer @openpresentation/opf-render${typeof error.install === "string" ? ` and its PNG converter (\`${error.install}\`)` : ""}, or pass options.svgRasterizer (or an imageResolver that returns a raster).`
         : `The SVG image could not be rasterized for its PNG fallback (${errorMessage(error)}).`);
     }
     options.svgRasters.set(cacheKey, png);

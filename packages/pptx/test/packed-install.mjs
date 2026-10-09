@@ -72,6 +72,12 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
   // Add its exact published fixture version for accepted-layout and native checks.
   const manifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
   npm(['install','--ignore-scripts','--no-fund','--no-audit',`@openpresentation/opf-render@${manifest.devDependencies['@openpresentation/opf-render']}`],consumer);
+  // RR-63: from opf-render 0.16 its PNG converter and the font packages of the base and office packs are optional peers, which npm
+  // does not install. The copied tests load fonts and rasterize through render, so add them at the versions this package tests with
+  // (render 0.15 lists the same versions as dependencies, so this adds nothing there).
+  const renderPeers=['@resvg/resvg-js','@expo-google-fonts/arimo','@expo-google-fonts/caladea','@expo-google-fonts/cousine','@expo-google-fonts/gelasio','@expo-google-fonts/noto-sans','@expo-google-fonts/roboto','@expo-google-fonts/roboto-mono','@expo-google-fonts/tinos'];
+  for(const name of renderPeers)assert.ok(manifest.devDependencies[name],`package.json devDependencies must pin ${name} for the packed consumer`);
+  npm(['install','--ignore-scripts','--no-fund','--no-audit',...renderPeers.map(name=>`${name}@${manifest.devDependencies[name]}`)],consumer);
   const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8')),dependencies={};
   for(const name of ['@openpresentation/opf','@openpresentation/opf-render']){
     const entry=lock.packages['node_modules/'+name];

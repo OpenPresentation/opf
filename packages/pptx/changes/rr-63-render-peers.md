@@ -1,0 +1,4 @@
+---
+type: changed
+---
+RR-63 (no API change; for opf-render 0.16, whose `@resvg/resvg-js`, `sharp`, `pdf-lib` and `@expo-google-fonts/*` are optional peers): an SVG picture whose PNG fallback cannot be drawn because opf-render's PNG converter is not installed (`OPFRenderError` `converter-missing`) is reported as `svg-rasterizer-unavailable`, like a missing opf-render: the placeholder and an `unresolved-asset` diagnostic, or a `strictAssets` throw, with opf-render's install command (`npm install @resvg/resvg-js@^2.6.2`) in the message. Any other renderer failure stays `svg-render-failed`. The tests and the packed-install check list the converter and the font packages they load through opf-render as devDependencies (`@resvg/resvg-js`, the `base` and `office` packs' `@expo-google-fonts/*`), so they run against opf-render 0.15 and 0.16. The `@openpresentation/opf-render` peer range and every version are unchanged.
