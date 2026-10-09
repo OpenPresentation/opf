@@ -23,7 +23,7 @@
         "text": "Background fixture"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     }
   },

@@ -22,7 +22,7 @@ Design example:
     "theme": "classic",
     "fontScheme": "roboto",
     "colorScheme": {"id": "cool-horizon", "accent1": "#0F4C81"},
-    "footer": {"left": {"text": "Working draft"}, "right": {"slideNumber": true}}
+    "footer": {"left": {"text": "Working draft"}, "right": {"text": "{{slide.number}}"}}
   },
   "slides": [
     {"title": "Inherits shared design", "text": "The deck sets the base."},

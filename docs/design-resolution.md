@@ -82,7 +82,7 @@ There is no ambiguity between "override" and "reference": every scheme value *is
     "background": "light1",
     "footer": {
       "left": { "text": "Acme Corp" },
-      "right": { "slideNumber": true }
+      "right": { "text": "{{slide.number}}" }
     }
   },
   "slides": [

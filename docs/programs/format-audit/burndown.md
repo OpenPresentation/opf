@@ -46,7 +46,7 @@ Waves: A runs first and in parallel; B starts once the A schema PRs it touches a
 
 ## Progress log
 
-- 2026-10-09: FA-31 opened. Owner: header and footer values move onto the `{{ }}` variable syntax, and `{{slide.number}}` works in body text too ("it's much better"). Design in [fa-31-slide-variables.md](fa-31-slide-variables.md). The release supervisor slots it in the lockstep 0.17.0; it merges after the 0.16.1 core and render patches have released, core first with `Depends-On` lines, then render, pptx and editor, then the gallery, then the site after publication.
+- 2026-10-09: FA-31 opened. Owner: header and footer values move onto the `{{ }}` variable syntax, and `{{slide.number}}` works in body text too ("it's much better"). Design in [fa-31-slide-variables.md](fa-31-slide-variables.md). The release supervisor slots it in the lockstep 0.17.0; the merge slot opened the same day, after the owner dropped further 0.16.x patches; it merges core first with `Depends-On` lines, then render, pptx and editor, then the gallery, then the site after publication.
 
 - 2026-10-08: FA-26 implemented on `codex/fa-26-nested-groups` in all five repositories for 0.16.0: placeholder groups in the layout schema (three levels, schema plus `opf/layout-placeholder-group`), flat slide content filling the leaves in reading order, `geometry.slots`, `chartPrimary` as the group it stands for, and 17 gallery records rewritten with reviewed preview diffs (the six chart-3x primaries, chart/image 2x and 3x, dashboard, kpi-scorecard, market-size, org-chart, business-model-canvas, logic-tree, capability-map). Example decks embed the new records with identical geometry, so no golden moves.
 

@@ -75,13 +75,13 @@
     "contentAlignment": "left",
     "footer": {
       "left": {
-        "organization": true
+        "text": "{{organization.name}}"
       },
       "center": {
-        "section": true
+        "text": "{{slide.section}}"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     }
   },
