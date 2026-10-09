@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf]
+---
+RR-59 (opf#485): `validate(deck, { fonts })` no longer reports `opf/layout-failed` ("Font 'Intos Display' cannot display U+645") for Arabic and other script text that the same fonts handle renders and exports. The layout rules handed composition the host measurement as is, which measures a string in the one face its style names, while the renderer and the exporter plan each script run in its script slot's face (the slide's `resolveScriptFonts` profile, and a run language's own profile for a `TextRun.lang` run). `TextMeasurement` gains an optional `forScripts(profile)` hook (new type `ScriptMeasurementProfile`): when the host measurement provides it, `validate` builds each slide's profile the way the renderer does and measures with the planned measurement, so its geometry matches preview and export. A character no loaded face has is still reported. A measurement without `forScripts` measures as before; the renderer's `loadFonts()` measurement needs to provide the hook for its handle to benefit.

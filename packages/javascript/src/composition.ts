@@ -9,7 +9,7 @@ export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 /** The pixel size and aspect (width / height) of an embedded picture (a data URI, or an `asset:<id>` that names one), the reading composeSlide uses, for engines that place host-resolved pictures. */
 export {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
-import {resolveSlideDirection} from './script-fonts.js';
+import {resolveSlideDirection,type ScriptMeasurementProfile} from './script-fonts.js';
 import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
@@ -22,7 +22,7 @@ export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type T
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
 export type {ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
-export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptRole} from './script-fonts.js';
+export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
 export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints} from './metric-trend.js';
@@ -89,6 +89,13 @@ export interface TextMeasurement {
   /** Shaped vector ink relative to the left baseline origin (positive y down).
    * Null means no outline. These are not hinted/antialiased raster bounds. */
   outlineBounds?: (text: string, fontSize: number, style: TextStyle) => LayoutBox | null;
+  /**
+   * Script planning: a measurement that measures each script run of a string with the face of its script slot in
+   * `profile` (and the host's glyph fallback), as the host's engines draw it. The renderer's `loadFonts()` measurement
+   * provides it with its script planner. `validate` calls it with each slide's profile, and with a run language's own
+   * profile for a run that names one, so its layout checks measure script text the way preview and export do.
+   */
+  forScripts?: (profile: ScriptMeasurementProfile) => TextMeasurement;
 }
 /**
  * The fonts handle every deck-level verb takes as `{ fonts }`. Core reads only `textMeasurement`: how wide the
