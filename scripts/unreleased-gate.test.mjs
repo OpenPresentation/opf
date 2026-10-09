@@ -74,15 +74,21 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
   assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names: ['@openpresentation/opf-editor'], event: 'push', ref: 'refs/heads/main' }), /no peer range/);
 });
 
-test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES and the peer ranges of core', () => {
+test('the CLI peer tests use the gate; the peer ranges of core equal PEER_RANGES, and the CLI ranges equal or lag them', () => {
   for (const file of ['packages/cli/test/files.mjs', 'packages/cli/test/packed-files.mjs']) assert.match(readFileSync(path.join(root, file), 'utf8'), /cliPeerGate\(/, file);
   const manifest = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8'));
   const peers = readFileSync(path.join(root, 'packages/javascript/src/node/peers.ts'), 'utf8');
-  // RR-62: core's /node engine loads the peers, so core declares them (optional) with the same ranges.
-  assert.deepEqual(JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8')).peerDependencies, manifest.peerDependencies);
-  for (const [name, range] of Object.entries(manifest.peerDependencies)) {
+  // RR-62: core's /node engine loads the peers, so core declares them (optional) and PEER_RANGES (its install hints)
+  // with the same ranges. Core ships first in a train, so it raises them to the train's sibling minor before its release;
+  // until the CLI's release prep raises the CLI's, the CLI's ranges may only lag core's.
+  const floor = (r) => r.replace(/^\^/, '').split('.').reduce((n, part) => n * 1000 + Number(part), 0);
+  const core = JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8')).peerDependencies;
+  assert.deepEqual(Object.keys(core).sort(), Object.keys(manifest.peerDependencies).sort());
+  for (const [name, range] of Object.entries(core)) {
     const constant = name.endsWith('opf-render') ? 'RENDER_PACKAGE' : 'PPTX_PACKAGE';
     assert.match(peers, new RegExp(`\\[${constant}\\]: "${range.replace(/[.^]/g, '\\$&')}"`), name);
+    const cli = manifest.peerDependencies[name];
+    assert.ok(cli === range || floor(cli) < floor(range), `${name}: the CLI's ${cli} is ahead of core's ${range}`);
   }
 });
 
