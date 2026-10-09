@@ -183,12 +183,12 @@ const invalid: Presentation = {slides: 42};
 ingest([], {as: 'unsupported'});
 void valid; void invalid;
 ${downstream ? `
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx} from '@openpresentation/opf-pptx';
 const editor = createEditorSession(deck);
 const edited = editor.presentation;
-const svg: string = renderSlideSvg(edited, 0);
+const svg: string = toSvg(edited, 1);
 toPptx(edited); void svg;
 ` : ''}
 `);

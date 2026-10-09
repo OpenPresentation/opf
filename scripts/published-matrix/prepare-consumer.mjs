@@ -85,10 +85,15 @@ for (const name of PACKAGES) {
 }
 await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
 
-// The same entry points as engines-source.mjs, resolved from this consumer's node_modules.
+// The same entry points as engines-source.mjs, resolved from this consumer's node_modules. The matrix uses the 0.18 names of the
+// renderer (RR-74: toSvg of a whole deck, toPng of one SVG); a published renderer older than 0.18 has them as renderSvg and svgToPng.
+const renderer = planned['@openpresentation/opf-render'].split('.').map(Number);
+const rendererEngines = renderer[0] > 0 || renderer[1] >= 18
+  ? "export {toSvg, toPng} from '@openpresentation/opf-render';"
+  : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');
 await writeFile(path.join(target, 'engines-installed.mjs'), `export {BUNDLED_FONT_MANIFEST, loadFonts} from '@openpresentation/opf-render/fonts-node';
 export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '@openpresentation/opf-render/fonts';
-export {renderSvg, svgToPng} from '@openpresentation/opf-render';
+${rendererEngines}
 export {checkTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
 export {createEditorSession} from '@openpresentation/opf-editor';
 // The harness of the plan core's release tag (published-matrix.yml runs opf-v<core> as released) reads the deck of an editor session through

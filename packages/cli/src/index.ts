@@ -46,12 +46,12 @@ ${INGEST_USAGE}
   opf embed <input|-> <output|-> [--format <json|yaml|markdown>] [--force] [--fail-on <level>]
 ${MARKDOWN_USAGE}
 ${YAML_USAGE}
-  opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
-           [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
+  opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--text <fonts|system|paths>] [--out <directory|file|->]
+           [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--fonts <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
-           [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
-           [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
-           [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
+           [--raster] [--charts <auto|native|picture>] [--provenance <full|references-only|none>]
+           [--images <compatible|preserve>] [--scale <0.1-8>] [--text <fonts|system|paths>] [--paginate]
+           [--include-hidden] [--date <YYYY-MM-DD>] [--fonts <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
   opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml|markdown>] [--force] [--fail-on <level>] [--json]
 ${CONVERT_USAGE}
   opf schemas
@@ -103,6 +103,8 @@ at or above --fail-on write nothing. Existing outputs require --force. Per-slide
 hidden slides unless --include-hidden (slides named with --slides are always written); files are named by
 the deck's filename, else its name (slugified), else the input file name. Render and export take the format
 from --out's extension (--out deck.png is PNG) and refuse an --out with another file extension.
+--text sets how an SVG carries its text: fonts (the default) embeds the faces the slide uses, system embeds none,
+paths draws glyph outlines so the file needs no font. --fonts adds a folder of .ttf and .otf files (repeatable).
 Convert turns <input> (.pptx, .opf.md, .yaml, .yml, .json) into <output> (.pdf, .pptx, .png, .svg, .zip,
 .opf.md, .yaml, .yml, .json), the formats named by the extensions, with the report and exit codes of export:
 one PNG or SVG per slide beside <output> (slides/deck.png gives slides/deck-001.png; one selected slide is

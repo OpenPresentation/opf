@@ -31,6 +31,11 @@ const verifySharedCode = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >
 // Font preparation ships in renderer 0.8; keep prior registry plans testable.
 const rendererVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number);
 const verifyFontPreparation = !registry || rendererVersion?.[0] > 0 || rendererVersion?.[1] >= 8;
+// RR-74: opf-render 0.18 names its engines toSvg, toPng and toPdf (slides count from 1). The candidate packages are the 0.18 ones; a
+// registry plan whose renderer is older keeps the names it was published with, so each consumer below is written once with these.
+const newRenderer = !registry || rendererVersion?.[0] > 0 || rendererVersion?.[1] >= 18;
+const R = newRenderer ? {svg: 'toSvg', png: 'toPng', slide: 'toSvg'} : {svg: 'renderSvg', png: 'svgToPng', slide: 'renderSlideSvg'};
+const slideSvg = (deck, options) => (newRenderer ? `toSvg(${deck},1,${options})` : `renderSlideSvg(${deck},0,${options})`);
 const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 10;
 // Furniture shipped in the coordinated core 0.10.1 train; older plans stay testable.
 const verifyFurniture = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] > 10 || (coreVersion?.[1] === 10 && coreVersion?.[2] >= 1);
@@ -241,7 +246,7 @@ if (verifyFontPreparation) {
 import assert from 'node:assert/strict';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
-import {renderSvg,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
+import {${R.svg},resolvePresentation,${R.png}} from '@openpresentation/opf-render';
 import {paginate} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
@@ -258,8 +263,8 @@ const editor=createEditorSession(presentation);
 assert.deepEqual(editor.composeSlide(0,{fonts}),resolvePresentation(presentation,{fonts}).slides[0].geometry);
 editor.set('slides.0.title','Editable prepared fonts');editor.undo();
 assert.equal(editor.presentation.slides[0].title,source.slides[0].title);
-const svgs=renderSvg(editor.presentation,{fonts});
-assert.ok((await svgToPng(svgs[0],{fonts})).length>1000);
+const svgs=${R.svg}(editor.presentation,{fonts});
+assert.ok((await ${R.png}(svgs[0],{fonts})).length>1000);
 const imported=await fromPptx(await toPptx(editor.presentation,{fonts}));
 assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
@@ -312,7 +317,7 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
   }
   await writeFile(path.join(consumer,'font-preparation-types.mts'), `
 import {loadFonts,type NodeFontsHandle,type BundledFontManifest} from '@openpresentation/opf-render/fonts-node';
-import {renderSvg,svgToPng} from '@openpresentation/opf-render';
+import {${R.svg},${R.png}} from '@openpresentation/opf-render';
 import {paginate} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx} from '@openpresentation/opf-pptx';
@@ -328,7 +333,7 @@ const invalid:FontFaceSelection={family:'Roboto SemiBold',bold:600,italic:false}
 const {presentation}=paginate({slides:[{title:'Prepared type consumer'}]},{fonts});
 const editor=createEditorSession(presentation);
 editor.composeSlide(0,{fonts});
-await svgToPng(renderSvg(presentation,{fonts})[0],{fonts});
+await ${R.png}(${R.svg}(presentation,{fonts})[0],{fonts});
 await toPptx(presentation,{fonts});
 // @ts-expect-error The provenance catalog is immutable.
 manifest.packages[0].faces[0].sha256='changed';
@@ -352,7 +357,7 @@ import {listSchemaFields} from '@openpresentation/opf-editor/schema';
 import {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspector';
 import {loadFonts as loadBrowserFonts} from '@openpresentation/opf-render/fonts-browser';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {${R.slide}} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
 assert.equal(ingest('Q,R\\nQ1,12',{as:'chart'}).chart.data.rows[0][1],12);
 assert.equal(parseTabularData([{q:'Q1',r:12}]).rows[0][1],12);
@@ -375,13 +380,13 @@ editor.applyPatch(prepareBlockInsert(editor.presentation,'slides.0',createConten
 editor.applyPatch(prepareBlockDuplicate(editor.presentation,'slides.0.blocks.2').patches);
 editor.applyPatch(prepareBlockRemove(editor.presentation,'slides.0.blocks.2').patches);
 assert.equal(editor.get('slides.0.blocks.2.text'),'Add your text');
-const svg=renderSlideSvg(editor.presentation,0,{...host,fonts});
+const svg=${slideSvg('editor.presentation','{...host,fonts}')};
 assert.match(svg,/Installed consumer/);
 assert.equal(typeof createCanvasEditor,'function');assert.equal(typeof loadBrowserFonts,'function');
 const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]},host);
 richEditor.set('slides.0.table.rows.0.0',formatRichTextRange('Cell',0,4,{bold:true,color:'#008800'}));
 assert.deepEqual(richEditor.get('slides.0.table.rows.0.0'),[{text:'Cell',bold:true,color:'#008800'}]);
-assert.match(renderSlideSvg(richEditor.presentation,0,{...host,trace:true,fonts}),/data-opf-rich-text="true"/);
+assert.match(${slideSvg('richEditor.presentation','{...host,trace:true,fonts}')},/data-opf-rich-text="true"/);
 assert.ok((await toPptx(richEditor.presentation,{...host,fonts})).length>1000);
 richEditor.undo();assert.equal(richEditor.get('slides.0.table.rows.0.0'),'Cell');
 const copied=parseOpfTransfer(serializeOpfTransfer(editor.presentation,{scope:'slide',format:'markdown'}));
@@ -519,7 +524,11 @@ console.log(
   await writeFile(path.join(consumer, 'host-editor.mjs'), "import * as editor from '@openpresentation/opf-editor';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor';\nexport const createEditorSession = (input, options) => editor.createEditorSession(input, withCatalogs(options));\n");
   await writeFile(path.join(consumer, 'host-editor-canvas.mjs'), "import * as canvas from '@openpresentation/opf-editor/canvas';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor/canvas';\nexport const createCanvasEditor = (host, options) => canvas.createCanvasEditor(host, withCatalogs(options));\n");
   for (const [file, entry] of [['host-render.mjs', '@openpresentation/opf-render'], ['host-render-svg.mjs', '@openpresentation/opf-render/svg']]) {
-    await writeFile(path.join(consumer, file), `import * as render from '${entry}';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '${entry}';\nexport const renderSvg = (input, options) => render.renderSvg(input, withCatalogs(options));\nexport const renderSlideSvg = (input, index, options) => render.renderSlideSvg(input, index, withCatalogs(options));\nexport const resolvePresentation = (input, options) => render.resolvePresentation(input, withCatalogs(options));\n`);
+    // The renderer's engines take a slide selection or the options second (0.18); the host adds its catalog to whichever is the options.
+    const engines = newRenderer
+      ? "export const toSvg = (input, slides, options) => (slides !== null && typeof slides === 'object' && !Array.isArray(slides) ? render.toSvg(input, withCatalogs(slides)) : render.toSvg(input, slides, withCatalogs(options)));\n"
+      : 'export const renderSvg = (input, options) => render.renderSvg(input, withCatalogs(options));\nexport const renderSlideSvg = (input, index, options) => render.renderSlideSvg(input, index, withCatalogs(options));\n';
+    await writeFile(path.join(consumer, file), `import * as render from '${entry}';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '${entry}';\n${engines}export const resolvePresentation = (input, options) => render.resolvePresentation(input, withCatalogs(options));\n`);
   }
 }
 /** A browser harness that imports the installed editor or renderer entry imports it through the host modules instead. */

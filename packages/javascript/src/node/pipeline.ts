@@ -4,7 +4,7 @@ import { type Catalog, type Finding, type Presentation, type ValidateOptions, ty
 import { DEFAULT_CATALOGS } from "./catalogs.js";
 import { runImport } from "./pptx-import.js";
 import { OPFApiError } from "../api-errors.js";
-import { type ExportFile, type ExportFontSummary, type ExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
+import { type ExportFile, type ExportFontSummary, type ExportOptions, type ResolvedExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
 import { listFontDirectories } from "./fonts.js";
 import { PPTX_PACKAGE, type Peer, type PptxModule, type Renderer, loadPptx, loadRenderer } from "./peers.js";
 import { Reporter } from "./reporter.js";
@@ -55,11 +55,11 @@ export interface ImportResult {
 
 /** An export whose options are checked and whose engines and font files are loaded, before any document is read. */
 export interface PreparedExport {
-	options: ReturnType<typeof resolveExportOptions>;
+	options: ResolvedExportOptions;
 	renderer: Renderer;
 	pptx?: Peer<PptxModule>;
 	userFonts: string[];
-	/** Name options as the command's flags (`--slides`, `--font-dir`, `--asset-dir`) in messages. */
+	/** Name options as the command's flags (`--slides`, `--fonts`, `--asset-dir`) in messages. */
 	flags: boolean;
 }
 
@@ -68,7 +68,7 @@ export async function prepareExport(options: ExportOptions, flags = false): Prom
 	const resolved = resolveExportOptions(options);
 	const renderer = await loadRenderer();
 	const pptx = resolved.format === "pptx" ? await loadPptx() : undefined;
-	const userFonts = resolved.fonts ? [] : await listFontDirectories([...(resolved.fontDirs ?? [])], flags ? "--font-dir" : "fontDirs");
+	const userFonts = resolved.fonts ? [] : await listFontDirectories(resolved.fontFolders, flags ? "--fonts" : "fonts");
 	return { options: resolved, renderer, ...(pptx ? { pptx } : {}), userFonts, flags };
 }
 

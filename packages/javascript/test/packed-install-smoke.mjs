@@ -171,13 +171,13 @@ process.stdout.write(JSON.stringify({
     await writeFile(path.join(projectDir, 'downstream.mjs'), `
 import assert from 'node:assert/strict';
 import {createEditorSession} from '@openpresentation/opf-editor';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
 import {validate} from '@openpresentation/opf';
 const editor = createEditorSession({slides: [{title: 'Compiler compatibility'}]});
 editor.set('slides.0.title', 'Packed downstream');
 assert.equal(validate(editor.presentation, {only: ['format']}).valid, true);
-assert.match(renderSvg(editor.presentation).join(""), /Packed downstream/);
+assert.match(toSvg(editor.presentation).join(""), /Packed downstream/);
 assert.ok((await toPptx(editor.presentation)).length > 1000);
 editor.undo();
 assert.equal(editor.presentation.slides[0].title, 'Compiler compatibility');

@@ -27,8 +27,9 @@ test('SVG font preparation requests script bytes and used/none policies retain t
     assert.equal(calls[0].presentation,deck);
     assert.equal(calls[0].scripts,'auto');
     assert.equal(calls[0].embedScriptFonts,true);
-    assert.deepEqual(embeddedFor(portable.handle,'used'),[{...latin,embed:'used'},{...script,embed:'used'}]);
-    assert.deepEqual(embeddedFor(portable.handle,'none'),[]);
+    assert.deepEqual(embeddedFor(portable.handle,'fonts'),[{...latin,embed:'used'},{...script,embed:'used'}]);
+    assert.deepEqual(embeddedFor(portable.handle,'system'),[]);
+    assert.deepEqual(embeddedFor(portable.handle,'paths'),[],'outlines list no faces');
     const raster=await prepareFonts(renderer,deck,[],reporter);
     assert.equal(calls[1].embedScriptFonts,false,'non-SVG exports need no script data URLs');
     assert.deepEqual(raster.handle.embeddedFonts,[latin]);

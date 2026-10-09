@@ -35,7 +35,7 @@ From opf-render 0.16 the renderer's own dependencies are optional peers too: the
 | --- | --- |
 | every format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
 | `png` | `@resvg/resvg-js@^2.6.2 sharp@^0.35.5` |
-| `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--pdf-mode raster`; `sharp@^0.35.5` when the deck has pictures |
+| `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--raster`; `sharp@^0.35.5` when the deck has pictures |
 | `svg` | the fonts only |
 | `pptx`, `import` | `@openpresentation/opf-pptx` (an SVG picture in a PPTX is rasterized by the renderer, so `@resvg/resvg-js`) |
 
@@ -56,8 +56,9 @@ const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes
 const deck = await opf.open("deck.pptx");                             // import
 ```
 
-The options are the flags in camel case (`--pdf-mode` is `pdfMode`, `--font-dir` is `fontDirs`, `--asset-dir` is
-`assetDir`, `--include-hidden` is `includeHidden`). The commands refuse an existing output without `--force`; `convert` replaces it unless
+The options are the flags in camel case (`--raster` is `raster: true`, `--fonts` is `fonts` (a folder or a list of folders), `--asset-dir` is
+`assetDir`, `--include-hidden` is `includeHidden`; `--text`, `--charts` and `--images` keep their names). The 0.17 names (`pdfMode`, `svgFonts`, `chartex`,
+`imageFormat`, `fontDirs`, `filename`) are refused with the new name. The commands refuse an existing output without `--force`; `convert` replaces it unless
 `overwrite: false`. The error codes are the commands': `peer-not-installed`,
 `peer-too-old`, `peer-load-failed`, `invalid-option` and `input-not-found` (command exit 2), `invalid-presentation`,
 `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed` and `output-exists` (1). See [OPF files in Node](node.md).
@@ -65,7 +66,7 @@ The options are the flags in camel case (`--pdf-mode` is `pdfMode`, `--font-dir`
 ## `opf render`
 
 ```sh
-opf render deck.opf.json [--slides 1,3-5] [--include-hidden] [--format svg|png] [--scale N] [--out dir|file|-]
+opf render deck.opf.json [--slides 1,3-5] [--include-hidden] [--format svg|png] [--scale N] [--text fonts|system|paths] [--out dir|file|-]
 ```
 
 One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). `--format` defaults to `svg`, or to the
@@ -77,21 +78,22 @@ numbers and ranges (`1,3-5`, `2-` to the end, `-3` from the start). `--format` d
 default 1) sets the PNG pixel density against the 1280 x 720 reference slide. `--out -` writes one slide to stdout.
 
 An SVG is standalone: it embeds the faces its text names (a Latin slide carries about 2 MB of font data), never the
-whole pack. `--svg-fonts none` leaves the fonts out for a smaller file that depends on the viewer's fonts. PNG and PDF
+whole pack. `--text system` leaves the fonts out for a smaller file that depends on the viewer's fonts, and `--text paths` draws every
+glyph as an outline, so the file needs no font at all (see [Fonts](#fonts)). `--text fonts` is the default. PNG and PDF
 output reads the same font files and embeds nothing.
 
 ## `opf export`
 
 ```sh
 opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--slides 1,3-5] [--include-hidden]
-           [--pdf-mode vector|raster] [--chartex auto|native|fallback]
-           [--provenance full|references-only|none] [--image-format compatible|preserve]
+           [--raster] [--charts auto|native|picture] [--text fonts|system|paths]
+           [--provenance full|references-only|none] [--images compatible|preserve]
 ```
 
 | Format | Output | Notes |
 | --- | --- | --- |
-| `pptx` | `<name>.pptx` | opf-pptx `toPptx`. The whole deck (`--slides` is refused). `--chartex`, `--provenance` and `--image-format` are the `toPptx` options of the same names (`none` writes no provenance tags). |
-| `pdf` | `<name>.pdf` | One page per selected slide. `--pdf-mode` picks `vector` (selectable text, the default) or `raster` (one image per page). The report states the mode used (`pdf.mode`). |
+| `pptx` | `<name>.pptx` | opf-pptx `toPptx`. The whole deck (`--slides` is refused). `--charts` (`picture` draws the charts as pictures), `--provenance` (`none` writes no provenance tags) and `--images` set the `toPptx` options. |
+| `pdf` | `<name>.pdf` | One page per selected slide. `--raster` draws each page as one image; the default is vector with selectable text. The report states the mode used (`pdf.mode`). |
 | `png`, `svg` | a directory, one file (`--out x.png`, one slide), or a zip (`--out x.zip`) | As `render`. Zip entries are stored (not deflated) with a fixed timestamp, so the archive is byte-identical everywhere. |
 
 The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`), with the rule
@@ -133,8 +135,8 @@ and stdin or stdout (`-`), is a usage error (exit 2) that names the supported on
 | `.zip` | one archive of the slides, named as above inside it: PNG, or SVG with `--format svg` |
 | `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
 
-The flags are those of `opf export` (`--slides`, `--scale`, `--pdf-mode`, `--svg-fonts`, `--chartex`, `--provenance`,
-`--image-format`, `--paginate`, `--include-hidden`, `--date`, `--font-dir`, `--asset-dir`, `--force`, `--fail-on`, `--json`);
+The flags are those of `opf export` (`--slides`, `--scale`, `--raster`, `--text`, `--charts`, `--provenance`,
+`--images`, `--paginate`, `--include-hidden`, `--date`, `--fonts`, `--asset-dir`, `--force`, `--fail-on`, `--json`);
 `--format` is needed only for a `.zip`. A flag that does not apply to the pair (`--scale` for a deck output, `--slides` for a
 PPTX) is a usage error. Relative images resolve next to the input file unless `--asset-dir`. Parent folders are created; every
 file is produced before any is written, each through a temporary sibling and a rename; an existing output needs `--force`.
@@ -164,7 +166,7 @@ not. The report lists the slide numbers left out in `skippedHidden`. A deck whos
 | `--include-hidden` | Write hidden slides too (per-slide images, zips and PDF). See [Hidden slides](#hidden-slides). |
 | `--paginate` | Paginate with the same fonts first (as `opf paginate` does, but measured), so overflowing slides split instead of reporting `text-overflow`. `--slides` then counts the paginated slides. |
 | `--date YYYY-MM-DD` | The date for `date: true` header and footer fields. The CLI never reads a clock; without it a current date is reported as unresolved. |
-| `--font-dir <directory>` (repeatable) | Your own `.ttf`/`.otf` files, loaded in addition to the bundled pack, directly inside the directory, sorted by name. A face that repeats a bundled family, weight and style is refused. |
+| `--fonts <directory>` (repeatable) | Your own `.ttf`/`.otf` files, loaded in addition to the bundled pack, directly inside the directory, sorted by name. A face that repeats a bundled family, weight and style is refused. |
 | `--asset-dir <directory>` | The folder relative image paths resolve against and the only folder read. Default: the document's folder (the working directory for stdin). |
 | `--fail-on <error\|warning\|info>` | Findings at or above this severity fail, and nothing is written (default `error`). `--fail-on warning` fails on warnings; every command that checks a document takes it. |
 | `--force` | Replace existing outputs. Without it any existing destination exits 1 before anything is written. |
@@ -174,15 +176,17 @@ not. The report lists the slide numbers left out in `skippedHidden`. A deck whos
 
 The renderer's bundled open font pack (the office pack: Carlito, Intos for Aptos, the open families font schemes
 select and the open replacements the font policy routes proprietary families to, with lazy faces) with the visual
-substitution policy, plus the files from `--font-dir`. **System fonts are never loaded**, and nothing is downloaded.
+substitution policy, plus the files from `--fonts`. **System fonts are never loaded**, and nothing is downloaded.
 Font substitutions are listed under `fonts.substitutions` in the report with their `compatibility` (`metric` or
 `visual`). The PPTX keeps the font names the document chose.
 
 Scripts beyond Latin, Greek and Cyrillic need the optional Noto script packages of the renderer
 (`@expo-google-fonts/noto-sans-jp` and so on). Install the ones named in the `fonts/script-font-not-installed`
 diagnostic next to the CLI; without them, text the loaded faces cannot draw is the error `render/missing-glyph`.
-Standalone SVG (`--svg-fonts used`, the default) embeds the installed script faces its text uses, just like Latin faces.
-`--svg-fonts none` omits all font bytes and requires the viewer to provide the matching families.
+Standalone SVG (`--text fonts`, the default) embeds the installed script faces its text uses, just like Latin faces.
+`--text system` omits all font bytes and requires the viewer to provide the matching families. `--text paths` draws the text as
+glyph outlines (shaped, with the real text kept invisible beside it for selection and search), so the SVG needs no font and
+looks the same in every viewer; it is for previews and portable files, not for editing the text in place. `--text` applies to SVG output.
 
 ## Images and assets
 
@@ -246,7 +250,7 @@ same codes; text that is not valid JSON is an invalid document, exit `1`, with a
 - **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
   human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.
-- **Fonts are the bundled pack plus `--font-dir`.** Never system fonts (owner font policy).
+- **Fonts are the bundled pack plus `--fonts`.** Never system fonts (owner font policy).
 - **Stored zip entries.** Deflate output differs between zlib builds, which would make archive hashes host-dependent.
 
 ## Catalog names

@@ -5,7 +5,7 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const {svgToPng}=await import(pathToFileURL(path.resolve(root,'../opf-render/dist/index.js')));
+const {toPng}=await import(pathToFileURL(path.resolve(root,'../opf-render/dist/index.js')));
 const [beforeDirectory,afterDirectory,output]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(beforeDirectory&&afterDirectory&&output,'Supply before, after, and output directories.');
 const before=JSON.parse(await readFile(path.join(beforeDirectory,'candidate.json'),'utf8'));
@@ -28,7 +28,7 @@ for(let offset=0;offset<changes.length;offset+=8){
     const x=(i%2)*640,y=Math.floor(i/2)*220;
     return `<text x="${x+6}" y="${y+15}" font-family="Roboto" font-size="11">${item.index} ${escapeXml(item.key).slice(-89)}</text><text x="${x+6}" y="${y+30}" font-family="Roboto" font-size="11">Before</text><text x="${x+326}" y="${y+30}" font-family="Roboto" font-size="11">After</text><image x="${x}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.oldPng.toString('base64')}"/><image x="${x+320}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.newPng.toString('base64')}"/>`;
   }).join('')}</svg>`;
-  await writeFile(path.join(output,`sheet-${offset/8}.png`),await svgToPng(svg));
+  await writeFile(path.join(output,`sheet-${offset/8}.png`),await toPng(svg));
 }
 const report={source:after.source,verifiedImages:Object.keys(after.entries).length*2,changedSlides:changes.length,unchangedSlides:Object.keys(after.entries).length-changes.length,sheets:Math.ceil(changes.length/8),changes:changes.map(({oldPng,newPng,...item})=>item)};
 await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');

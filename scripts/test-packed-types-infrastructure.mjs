@@ -43,11 +43,11 @@ await cp(path.join(consumer, 'package.json'), path.join(poisoned, 'package.json'
 await cp(path.join(consumer, 'node_modules'), path.join(poisoned, 'node_modules'), {recursive: true, dereference: true});
 const declaration = path.join(poisoned, 'node_modules/@openpresentation/opf-render/dist/index.d.ts');
 const before = await readFile(declaration, 'utf8');
-// The candidate consumer (check-packed-types.mjs) types `renderSlideSvg(edited, 0)` as a string, so this is the downstream
-// signature it depends on (opf-render 0.14: renderSlideSvg draws one slide, renderSvg a whole deck as string[]).
-const signature = 'export declare function renderSlideSvg(input: unknown, index: number, options?: RenderSvgOptions): string;';
-assert.equal(before.split(signature).length, 2, 'Negative control must change exactly one public downstream signature');
-const after = before.replace(signature, signature.replace(': string;', ': number;'));
+// The candidate consumer (check-packed-types.mjs) types `toSvg(edited, 1)` as a string, so this is the downstream signature it
+// depends on (opf-render 0.18: toSvg draws one slide when it is given a slide number, a whole deck as string[] otherwise).
+const oneSlide = /^export declare function toSvg\([^)]*\b(?:slide|index)\??: number\b[^)]*\): string;$/gm;
+assert.equal(before.match(oneSlide)?.length, 1, 'Negative control must change exactly one public downstream signature');
+const after = before.replace(oneSlide, (signature) => signature.replace(/\): string;$/, '): number;'));
 await writeFile(declaration, after);
 await assert.rejects(checkPackedTypes(poisoned, {downstream: true}), /failed in 4 compiler\/mode combinations/);
 const negative = JSON.parse(await readFile(path.join(poisoned, 'artifacts/packed-types/report.json'), 'utf8'));

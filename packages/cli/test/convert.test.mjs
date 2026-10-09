@@ -8,9 +8,10 @@ import { existsSync } from "node:fs";
 import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { after, describe, test } from "node:test";
+import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
+import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
 import { cliPeerGate, report } from "../../../scripts/unreleased-gate.mjs";
 
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -129,6 +130,110 @@ describe("a missing peer", () => {
   });
 });
 
+// RR-74 (core part): the flags of 0.18 reach the engine, and the 0.17 flags are gone. A copy of the CLI and of core in a tree with
+// stand-in opf-render and opf-pptx packages records what the engine asks of the renderer (scripts/stub-peers.mjs), so this runs
+// whatever renderer is installed in the workspace.
+describe("the 0.18 flags, through stub peers", () => {
+  let stubbed;
+  const callsOf = async (call) => parseStubLog(await readFile(path.join(stubbed.dir, STUB_LOG), "utf8").catch(() => "")).filter((item) => item.call === call);
+
+  before(async () => {
+    const dir = await mkdtemp(path.join(temp, "stub-"));
+    await cp(path.dirname(executable), path.join(dir, "dist"), { recursive: true });
+    await installIsolatedCore(path.join(dir, "node_modules"));
+    await installStubPeers(path.join(dir, "node_modules"));
+    await mkdir(path.join(dir, "fonts"));
+    await writeFile(path.join(dir, "fonts", "a.ttf"), "not a font; the stub never reads it");
+    await writeFile(path.join(dir, "deck.opf.json"), JSON.stringify({ name: "Stub deck", slides: [{ title: "One" }, { title: "Two" }] }));
+    stubbed = { dir, bin: path.join(dir, "dist", path.basename(executable)) };
+  });
+  const stub = async (args, status = 0) => {
+    await writeFile(path.join(stubbed.dir, STUB_LOG), "");
+    return run(args, { cwd: stubbed.dir, bin: stubbed.bin, status });
+  };
+
+  test("--text paths reaches the renderer's toSvg, with the whole fonts handle; --text system embeds no face", async () => {
+    for (const args of [
+      ["render", "deck.opf.json", "--format", "svg", "--text", "paths", "--out", "paths", "--force"],
+      ["export", "deck.opf.json", "--format", "svg", "--text", "paths", "--out", "export-paths", "--force"],
+      ["convert", "deck.opf.json", "convert-paths.svg", "--text", "paths", "--slides", "1", "--force"],
+    ]) {
+      const out = await stub(args);
+      assert.equal(out.report.ok, true, args.join(" "));
+      const svgs = await callsOf("toSvg");
+      assert.ok(svgs.length >= 1, args.join(" "));
+      for (const call of svgs) {
+        assert.equal(call.args[1].text, "paths", `${args[0]}: text paths reaches toSvg`);
+        assert.equal(call.args[1].fonts.stub, true, "the renderer draws outlines from the fonts handle");
+      }
+      assert.equal((await callsOf("loadFonts"))[0].args[0].embedScriptFonts, false);
+    }
+    const slides = await callsOf("toSvg");
+    assert.deepEqual(slides.map((call) => call.args[0]), [1], "convert --slides 1 draws slide 1, counted from 1");
+
+    const system = await stub(["render", "deck.opf.json", "--text", "system", "--out", "system", "--force"]);
+    assert.equal(system.report.ok, true);
+    for (const call of await callsOf("toSvg")) {
+      assert.equal(call.args[1].text, "system");
+      assert.deepEqual(call.args[1].fonts.embeddedFonts, []);
+    }
+    await stub(["render", "deck.opf.json", "--out", "default", "--force"]);
+    for (const call of await callsOf("toSvg")) {
+      assert.equal(call.args[1].text, undefined, "the default is the renderer's: the faces the slide uses");
+      assert.deepEqual(call.args[1].fonts.embeddedFonts.map((face) => face.embed), ["used"]);
+    }
+  });
+
+  test("--raster, --charts, --images and --fonts reach the engines", async () => {
+    await stub(["export", "deck.opf.json", "--format", "pdf", "--raster", "--out", "raster.pdf", "--force"]);
+    assert.equal((await callsOf("toPdf"))[0].args[1].raster, true);
+    await stub(["convert", "deck.opf.json", "plain.pdf", "--force"]);
+    assert.equal("raster" in (await callsOf("toPdf"))[0].args[1], false);
+    await stub(["export", "deck.opf.json", "--format", "pptx", "--charts", "picture", "--images", "preserve", "--out", "charts.pptx", "--force"]);
+    const pptx = (await callsOf("toPptx"))[0].args[0];
+    assert.equal(pptx.chartex, "fallback", "opf-pptx still names it chartex, and its picture choice fallback");
+    assert.equal(pptx.imageFormat, "preserve");
+    const fonts = await stub(["render", "deck.opf.json", "--fonts", "fonts", "--out", "fonts-out", "--force"]);
+    assert.match((await callsOf("loadFonts"))[0].args[0].faces[0].path, /fonts[\\/]a\.ttf$/);
+    assert.equal(fonts.report.fonts.userFonts.length, 1);
+  });
+
+  test("the 0.17 flags are usage errors (exit 2): --svg-fonts, --pdf-mode, --chartex, --image-format and --font-dir", async () => {
+    for (const args of [
+      ["render", "deck.opf.json", "--svg-fonts", "none"],
+      ["export", "deck.opf.json", "--format", "svg", "--svg-fonts", "used"],
+      ["convert", "deck.opf.json", "x.svg", "--svg-fonts", "none"],
+      ["export", "deck.opf.json", "--format", "pdf", "--pdf-mode", "raster"],
+      ["convert", "deck.opf.json", "x.pdf", "--pdf-mode", "raster"],
+      ["export", "deck.opf.json", "--format", "pptx", "--chartex", "native"],
+      ["convert", "deck.opf.json", "x.pptx", "--chartex", "native"],
+      ["export", "deck.opf.json", "--format", "pptx", "--image-format", "preserve"],
+      ["convert", "deck.opf.json", "x.pptx", "--image-format", "preserve"],
+      ["render", "deck.opf.json", "--font-dir", "fonts"],
+      ["convert", "deck.opf.json", "x.svg", "--font-dir", "fonts"],
+    ]) {
+      const failed = await stub(args, 2);
+      assert.match(failed.error.error, new RegExp(`Unknown or duplicate option: ${args.find((arg) => /^--(svg-fonts|pdf-mode|chartex|image-format|font-dir)$/.test(arg))}`), args.join(" "));
+      assert.deepEqual(await callsOf("toSvg"), [], "nothing was drawn");
+    }
+  });
+
+  test("--text, --raster, --charts and --images name the format they apply to; --text takes fonts, system or paths", async () => {
+    const messages = [
+      [["render", "deck.opf.json", "--format", "png", "--text", "paths"], /--text applies to --format svg/],
+      [["export", "deck.opf.json", "--format", "pdf", "--text", "paths"], /--text applies to --format svg/],
+      [["convert", "deck.opf.json", "x.pdf", "--text", "paths"], /--text applies to svg output/],
+      [["export", "deck.opf.json", "--format", "svg", "--raster"], /--raster applies to --format pdf/],
+      [["export", "deck.opf.json", "--format", "svg", "--charts", "native"], /--charts, --provenance and --images apply to --format pptx/],
+      [["export", "deck.opf.json", "--format", "pptx", "--images", "jpeg"], /--images must be one of: compatible, preserve/],
+      [["export", "deck.opf.json", "--format", "pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],
+      [["render", "deck.opf.json", "--text", "outline"], /--text must be one of: fonts, system, paths/],
+      [["convert", "deck.opf.json", "x.svg", "--text", "outline"], /text must be one of: fonts, system, paths/],
+    ];
+    for (const [args, pattern] of messages) assert.match((await stub(args, 2)).error.error, pattern, args.join(" "));
+  });
+});
+
 describe("drawing through the peers", { skip }, () => {
   test("opf convert writes one PNG per slide beside the output, a PDF, a PPTX and a zip", async () => {
     const dir = await folder();
@@ -151,7 +256,7 @@ describe("drawing through the peers", { skip }, () => {
     assert.equal(back.pptx.package, "@openpresentation/opf-pptx");
     const zip = run(["convert", "deck.opf.json", "slides.zip", "--format", "svg"], { cwd: dir }).report;
     assert.deepEqual(zip.outputs[0].entries, ["slides-001.svg", "slides-002.svg", "slides-003.svg"]);
-    assert.match(run(["convert", "deck.opf.json", "deck.svg", "--pdf-mode", "raster"], { cwd: dir, status: 2 }).error.error, /--pdf-mode applies to pdf output/);
+    assert.match(run(["convert", "deck.opf.json", "deck.svg", "--raster"], { cwd: dir, status: 2 }).error.error, /--raster applies to pdf output/);
   });
 
   test("opf render and opf export take the format from --out: --out deck.png writes a PNG file, not a folder", async () => {

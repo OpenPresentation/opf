@@ -30,7 +30,7 @@ import {paginate} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {createCanvasEditor} from '@openpresentation/opf-editor/canvas';
 import {loadFonts} from '@openpresentation/opf-render/fonts-browser';
-import {resolvePresentation, renderSvg} from '@openpresentation/opf-render/svg';
+import {resolvePresentation, toSvg} from '@openpresentation/opf-render/svg';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
 window.mount = async ({deck, faces, date, paginate: withPagination}) => {
   window.canvasEditor?.destroy(); window.fonts?.dispose(); window.unsubscribe?.();
@@ -87,8 +87,8 @@ window.snapshot = async () => {
 window.refusalControls = () => {
   const deck = {design: {footer: {left: {date: true}}}, slides: [{text: 'Body', composition: {overflow: 'error'}}]};
   const before = JSON.stringify(deck), capture = fn => {try { fn(); return null; } catch (error) {return {name: error.name, code: error.code, diagnostics: error.diagnostics};}};
-  const missing = capture(() => renderSvg(deck));
-  const invalid = capture(() => renderSvg(deck, {date: '22/09/2026'}));
+  const missing = capture(() => toSvg(deck));
+  const invalid = capture(() => toSvg(deck, {date: '22/09/2026'}));
   return {missing, invalid, unchanged: JSON.stringify(deck) === before};
 };
 `;

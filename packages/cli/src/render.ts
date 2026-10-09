@@ -6,7 +6,7 @@
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
 import { checkText, inputFormatOf } from "./deck.js";
-import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, OPFApiError, Reporter, VERSIONS, checkDate, checkScale, exportFormatOf, finishReport, listFontDirectories, loadPptx, loadRenderer, resolveExportOptions, runExport } from "@openpresentation/opf/internal/engine";
+import { EXPORT_FORMATS, EXPORT_TEXT, type ExportFile, type ExportFormat, type ExportOptions, OPFApiError, Reporter, VERSIONS, checkDate, checkScale, exportFormatOf, finishReport, listFontDirectories, loadPptx, loadRenderer, resolveExportOptions, runExport } from "@openpresentation/opf/internal/engine";
 import { FileCommandError, type PlannedFile, arity, commandError, deckStem, json, parseOptions, readBytes, sha256, writeFiles } from "./io.js";
 
 export interface Host {
@@ -17,11 +17,11 @@ export interface Host {
 type Format = ExportFormat;
 const RASTER_FORMATS = ["svg", "png"] as const;
 const SPEC = {
-	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts", "fail-on"],
-	repeated: ["font-dir"],
+	values: ["slides", "format", "scale", "out", "date", "asset-dir", "text", "fail-on"],
+	repeated: ["fonts"],
 	flags: ["force", "json", "paginate", "include-hidden"],
 };
-const EXPORT_SPEC = { ...SPEC, values: [...SPEC.values, "pdf-mode", "chartex", "provenance", "image-format"] };
+const EXPORT_SPEC = { ...SPEC, values: [...SPEC.values, "charts", "provenance", "images"], flags: [...SPEC.flags, "raster"] };
 
 const oneOf = <T extends string>(name: string, value: string | boolean | undefined, allowed: readonly T[], fallback?: T): T | undefined => {
 	if (value === undefined) return fallback;
@@ -70,18 +70,16 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	}
 	if (!format && command === "render") format = "svg";
 	if (!format) throw new FileCommandError("opf export needs --format pptx|pdf|png|svg (or an --out file ending in .pptx, .pdf, .png or .svg).");
-	if (options["pdf-mode"] !== undefined && format !== "pdf") throw new FileCommandError("--pdf-mode applies to --format pdf.");
-	if ((options.chartex !== undefined || options.provenance !== undefined || options["image-format"] !== undefined) && format !== "pptx")
-		throw new FileCommandError("--chartex, --provenance and --image-format apply to --format pptx.");
+	if (options.raster !== undefined && format !== "pdf") throw new FileCommandError("--raster applies to --format pdf.");
+	if ((options.charts !== undefined || options.provenance !== undefined || options.images !== undefined) && format !== "pptx") throw new FileCommandError("--charts, --provenance and --images apply to --format pptx.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw new FileCommandError("--scale applies to --format png (and raster PDF).");
 	if (options["include-hidden"] && format === "pptx") throw new FileCommandError("--include-hidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw new FileCommandError("--slides is not available for pptx: the whole presentation is exported.");
-	if (options["svg-fonts"] !== undefined && format !== "svg") throw new FileCommandError("--svg-fonts applies to --format svg.");
-	const pdfMode = oneOf("--pdf-mode", options["pdf-mode"], ["vector", "raster"] as const);
-	const chartex = oneOf("--chartex", options.chartex, ["auto", "native", "fallback"] as const);
+	if (options.text !== undefined && format !== "svg") throw new FileCommandError("--text applies to --format svg.");
+	const charts = oneOf("--charts", options.charts, ["auto", "native", "picture"] as const);
 	const provenance = oneOf("--provenance", options.provenance, ["full", "references-only", "none"] as const);
-	const imageFormat = oneOf("--image-format", options["image-format"], ["compatible", "preserve"] as const);
-	const svgFonts = oneOf("--svg-fonts", options["svg-fonts"], ["used", "none"] as const);
+	const images = oneOf("--images", options.images, ["compatible", "preserve"] as const);
+	const text = oneOf("--text", options.text, EXPORT_TEXT);
 	const scale = flagged(() => checkScale(options.scale, "--scale"));
 	const date = flagged(() => checkDate(options.date, "--date"));
 	const failOn = parseFailOn(options["fail-on"]);
@@ -90,7 +88,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	// Peers load before the document is read, so a missing install is reported at once.
 	const renderer = await loadRenderer();
 	const pptx = format === "pptx" ? await loadPptx() : undefined;
-	const userFonts = await listFontDirectories(repeated["font-dir"] ?? []);
+	const userFonts = await listFontDirectories(repeated.fonts ?? []);
 
 	const { bytes } = await readBytes(input);
 	const raw = Buffer.from(bytes).toString("utf8"); // keeps a BOM, like opf validate, so hashes and offsets agree
@@ -125,16 +123,17 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const exportOptions: ExportOptions = {
 		format,
 		assetDir: assetRoot,
-		filename: input,
+		// The files are named by the deck, else by the input file (`-` gives `deck`).
+		name: deckStem(checkedDeck, input),
 		...(options.scale !== undefined ? { scale } : {}),
-		...(svgFonts ? { svgFonts } : {}),
+		...(text ? { text } : {}),
 		...(options.slides !== undefined ? { slides: String(options.slides) } : {}),
 		...(options["include-hidden"] ? { includeHidden: true } : {}),
 		...(options.paginate ? { paginate: true } : {}),
-		...(pdfMode ? { pdfMode } : {}),
-		...(chartex ? { chartex } : {}),
+		...(options.raster ? { raster: true } : {}),
+		...(charts ? { charts } : {}),
 		...(provenance ? { provenance } : {}),
-		...(imageFormat ? { imageFormat } : {}),
+		...(images ? { images } : {}),
 		...(date ? { date } : {}),
 		...(toZip ? { zip: true } : {}),
 	};

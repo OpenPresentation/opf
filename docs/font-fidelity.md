@@ -11,7 +11,7 @@ For an authored Roboto deck, `pack: 'base'` avoids loading Office replacements. 
 In browsers, serve the renderer's pinned font files from your own origin and await the font handle's `ensure(presentation)`
 before measuring or editing. The renderer README documents font copying and the player integration. Standalone SVG must
 carry the used font bytes; script faces require `embedScriptFonts: true` in the Node loader. The CLI's default SVG mode
-requests this automatically; `--svg-fonts none` needs matching viewer fonts. PPTX normally names the authored families
+requests this automatically (`--text fonts`); `--text system` needs matching viewer fonts, and `--text paths` draws the glyphs as outlines so the SVG needs none. PPTX normally names the authored families
 and requires them on the recipient's machine; it does not automatically embed the preview fonts.
 
 The policy below is current. Version-specific measurements and implementation history are evidence for their named
@@ -71,7 +71,7 @@ The [Windows reference-font advance study](evidence/shared-metric-native-anchor/
 
 The composition API accepts a `textMeasurement` provider. A provider resolves font faces and returns actual text widths; callers pass the same provider to pagination (as `{ fonts: { textMeasurement } }`), editor geometry, SVG rendering, and PPTX export. Without one, the existing deterministic character-width estimate remains available. A provider with `forScripts(profile)` (the renderer's registry measurement) is a script planner: `validate` and `paginate` ask it for each slide's script-aware measurement, built from the slide's `resolveScriptFonts` profile and a run language's own profile, so they measure Arabic or Japanese runs in the script faces preview and export draw.
 
-`loadFonts(options)` from `/fonts-node` returns the fonts handle: the same registry measurement (`textMeasurement`), the faces to embed in SVG (`embeddedFonts`) and the explicit raster files (`fontFiles`), with system and bundled fallback disabled for raster calls (`useBundledFonts: false`, `loadSystemFonts: false`). Pass it as `{ fonts }` to every deck-level call: `paginate`, editor geometry, `renderSvg`, `renderSlideSvg`, `toPptx`, `svgToPng` and `svgToPdf`. `pack: 'base'` is the default for authored Roboto decks; `pack: 'office'` adds the six Office substitute families and retains metric policy unless visual substitution is explicitly requested. `fonts.substitutions` records actual substitutions; the loader does not rewrite the authored document or add native embedding.
+`loadFonts(options)` from `/fonts-node` returns the fonts handle: the same registry measurement (`textMeasurement`), the faces to embed in SVG (`embeddedFonts`) and the explicit raster files (`fontFiles`), with system and bundled fallback disabled for raster calls (`useBundledFonts: false`, `loadSystemFonts: false`). Pass it as `{ fonts }` to every deck-level call: `paginate`, editor geometry, `toSvg`, `toPng`, `toPdf` and `toPptx`. `pack: 'base'` is the default for authored Roboto decks; `pack: 'office'` adds the six Office substitute families and retains metric policy unless visual substitution is explicitly requested. `fonts.substitutions` records actual substitutions; the loader does not rewrite the authored document or add native embedding.
 
 Renderer 0.8.0 groups static files by their OpenType preferred family while retaining legacy family names and explicit custom namespaces. `Roboto` requests at 500/600/800 now select the actual Medium/SemiBold/ExtraBold files instead of nearby 400/700 faces. Optional `TextStyle.fontFace` carries the physical legacy family and native bold/italic flags independently of CSS numeric weight: SemiBold/ExtraBold are regular within their legacy families. The converter consumes this metadata; providers without it retain their prior behavior. Nine actual base faces pass metadata/measurement/outline checks and offline Chromium advances on Node 20/24. Seven payload slides cover serialized native selectors, deterministic output and source/reimport. These checks do not establish native Office paint, embedding or broader script coverage; see the [Mac candidate evidence](evidence/mac-font-variants/README.md).
 
@@ -83,15 +83,15 @@ The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/
 
 ```js
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
-import { renderSlideSvg, svgToPng } from '@openpresentation/opf-render';
+import { toSvg, toPng } from '@openpresentation/opf-render';
 import { paginate } from '@openpresentation/opf/pagination';
 import { toPptx } from '@openpresentation/opf-pptx';
 
 const fonts = await loadFonts(); // pack: 'base', the bundled Roboto faces
 // Use design.fontScheme: 'roboto', or supply the document's actual font files.
 const { presentation } = paginate(deck, { fonts });
-const svg = renderSlideSvg(presentation, 0, { fonts }); // embeds the faces it draws
-const png = await svgToPng(svg, { fonts }); // draws with fonts.fontFiles only
+const svg = toSvg(presentation, 1, { fonts }); // slide 1; embeds the faces it draws (text: 'paths' draws outlines instead)
+const png = await toPng(svg, { fonts }); // draws with fonts.fontFiles only
 const pptx = await toPptx(presentation, { fonts });
 ```
 
@@ -113,7 +113,7 @@ An available exact family takes precedence over aliases. The registry resolves a
 
 SVG embeds supplied fonts using data URIs and includes supplied license notices as metadata. The bundled loader carries the fonts' SIL Open Font License notices. For PNG/PDF, pass the same font files to the rasterizer; its native font loader does not depend on browser CSS font loading. In a browser, wait for `document.fonts.ready` before measuring or taking a screenshot. The editor playground loads and embeds bundled fonts and displays substitutions.
 
-`svgToPdf` in renderers up to 0.11.9 was image-only: each slide was rasterized and embedded as a PNG on a PDF page. From opf-render 0.12.0 (opf-render#90, [roadmap](plans/pdf-export.md)) the default `mode: "vector"` writes PDF text objects in embedded TrueType subsets of the fonts you supply or the bundled open pack (the same files the PNG preview uses; system fonts are rejected, a face whose OS/2 `fsType` forbids embedding is never embedded, the report names requested and resolved faces), with `ToUnicode` maps and `/ActualText` where the glyph map cannot give the text, vector shapes, gradients and images, and no second layout pass. `mode: "raster"` keeps the image-per-slide output as an explicit compatibility mode. Extraction was checked in pdf.js, PDFium and poppler on Latin, CJK, right-to-left and Indic samples and all 805 example slides; PDFium misreads some Thai and Burmese marks, as it does in Chrome's own PDFs. No PDF/UA or PDF/A claim.
+`toPdf` (`svgToPdf` before 0.18) in renderers up to 0.11.9 was image-only: each slide was rasterized and embedded as a PNG on a PDF page. From opf-render 0.12.0 (opf-render#90, [roadmap](plans/pdf-export.md)) the default vector mode writes PDF text objects in embedded TrueType subsets of the fonts you supply or the bundled open pack (the same files the PNG preview uses; system fonts are rejected, a face whose OS/2 `fsType` forbids embedding is never embedded, the report names requested and resolved faces), with `ToUnicode` maps and `/ActualText` where the glyph map cannot give the text, vector shapes, gradients and images, and no second layout pass. `raster: true` (`mode: "raster"` before 0.18) keeps the image-per-slide output as an explicit compatibility mode. Extraction was checked in pdf.js, PDFium and poppler on Latin, CJK, right-to-left and Indic samples and all 805 example slides; PDFium misreads some Thai and Burmese marks, as it does in Chrome's own PDFs. No PDF/UA or PDF/A claim.
 
 ## Office compatibility pack
 

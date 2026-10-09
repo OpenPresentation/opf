@@ -15,8 +15,8 @@ import type { Finding, Presentation, ValidationReport } from "../core.js";
 import { OPFValidationError, validate } from "../validator.js";
 import { DEFAULT_CATALOGS } from "./catalogs.js";
 import { OPFApiError, OPFExportError, OPFImportError, asApiError } from "../api-errors.js";
-import { type ExportFile, type ExportFormat, type ExportOptions, checkDate, checkScale } from "./export.js";
-import { writeFiles } from "./files.js";
+import { type ExportFile, type ExportFormat, type ExportOptions, checkDate, checkRenamedOptions, checkScale } from "./export.js";
+import { deckStem, writeFiles } from "./files.js";
 import { type Peer, type PptxModule, loadPptx } from "./peers.js";
 import { type ExportResult, type ImportResult, type PreparedExport, checkOptions, firstError, importPresentation, prepareExport, runPreparedExport } from "./pipeline.js";
 import { createZip } from "./zip.js";
@@ -27,15 +27,17 @@ export type ConvertFormat = ExportFormat | DeckFormat;
 /** What `convert` reads: a file path (`.pptx`, `.opf.md`, `.yaml`/`.yml`, `.json`), a deck, or the bytes of a `.pptx` file. */
 export type ConvertInput = string | Presentation | Uint8Array | ArrayBuffer;
 
-export interface ConvertOptions extends Omit<ExportOptions, "format" | "filename"> {
+export interface ConvertOptions extends Omit<ExportOptions, "format"> {
 	/**
 	 * What to make. With an output path the path's extension names it, and `format` is needed only for a `.zip` (the slides in
 	 * it: `png`, the default, or `svg`); a `format` that disagrees with the extension is refused. Without an output path it is
 	 * required: `pdf`, `pptx`, `png`, `svg`, `json`, `yaml` or `markdown`.
 	 */
 	format?: ConvertFormat;
-	/** One archive of the slides instead of one file per slide (`png`, `svg`). With an output path, the path must end `.zip`, and a `.zip` path implies it. */
+	/** Without an output path: one archive of the slides (`png`, `svg`) instead of one file per slide. With an output path, a `.zip` path makes the archive and this option is refused. */
 	zip?: boolean;
+	/** Without an output path: the base name of the returned files (`name-001.png`, `name.pdf`). Omitted: the deck's `filename`, else its `name`, else the input file's stem. With an output path, the path names the file and this option is refused. */
+	name?: string;
 	/** A `.pptx` input: also return the raw per-shape layout and style signals of the file (`signals` in the result). */
 	signals?: boolean;
 	/**
@@ -166,11 +168,12 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 		return format === "json" || format === "yaml" || format === "markdown" ? { kind: "deck", format } : { kind: "export", format, zip: options.zip === true };
 	}
 	if (typeof output !== "string" || !output) throw invalid(`${flags ? "opf convert" : "convert"} needs an output file path ending ${OUTPUTS}.`);
+	if (options.zip) throw invalid(`${flags ? "--zip" : "zip"} is for output without a path; a .zip output path makes the archive.`);
+	if (options.name !== undefined) throw invalid(`${flags ? "--name" : "name"} is for output without a path; the output path names the file.`);
 	if (path.extname(output).toLowerCase() === ".zip") {
 		if (format !== undefined && format !== "png" && format !== "svg") throw invalid(`A .zip output holds png or svg slides; ${formatLabel} ${format} is neither.`);
 		return { kind: "export", format: format ?? "png", zip: true };
 	}
-	if (options.zip) throw invalid(`${flags ? "--zip" : "zip"} writes one archive: give an output ending .zip.`);
 	const exported = exportFormatOf(output);
 	const deck = exported ? undefined : deckFileFormat(output);
 	const named: ConvertFormat | undefined = exported ?? deck;
@@ -180,12 +183,12 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 }
 
 /** The options of an export output. A deck output takes none of them. */
-const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "pdfMode", "svgFonts", "chartex", "provenance", "imageFormat", "date", "fonts", "fontDirs", "assetDir"] as const;
+const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "date", "fonts", "assetDir"] as const;
 const given = (value: unknown) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0);
 
 /** The rules of `opf export`, with each option named as the command's flag when `flags` is set. */
 function checkApplicable(source: Source, target: Target, options: ConvertOptions, flags: boolean) {
-	const name = (key: string) => (flags ? `--${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`).replace(/^font-dirs$/, "font-dir")}` : key);
+	const name = (key: string) => (flags ? `--${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}` : key);
 	const names = (...keys: string[]) =>
 		keys
 			.map(name)
@@ -198,12 +201,12 @@ function checkApplicable(source: Source, target: Target, options: ConvertOptions
 		return;
 	}
 	const format = target.format;
-	if (options.pdfMode !== undefined && format !== "pdf") throw invalid(`${name("pdfMode")} applies to pdf output.`);
-	if ((options.chartex !== undefined || options.provenance !== undefined || options.imageFormat !== undefined) && format !== "pptx") throw invalid(`${names("chartex", "provenance", "imageFormat")} apply to pptx output.`);
+	if (given(options.raster) && format !== "pdf") throw invalid(`${name("raster")} applies to pdf output.`);
+	if ((options.charts !== undefined || options.provenance !== undefined || options.images !== undefined) && format !== "pptx") throw invalid(`${names("charts", "provenance", "images")} apply to pptx output.`);
 	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw invalid(`${name("scale")} applies to png output (and raster pdf).`);
 	if (given(options.includeHidden) && format === "pptx") throw invalid(`${name("includeHidden")} applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.`);
 	if (options.slides !== undefined && format === "pptx") throw invalid(`${name("slides")} is not available for pptx output: the whole presentation is exported.`);
-	if (options.svgFonts !== undefined && format !== "svg") throw invalid(`${name("svgFonts")} applies to svg output.`);
+	if (options.text !== undefined && format !== "svg") throw invalid(`${name("text")} applies to svg output.`);
 	checkScale(options.scale, name("scale"));
 	checkDate(options.date, name("date"));
 }
@@ -258,6 +261,7 @@ function stemOfDeck(presentation: Presentation): string {
  */
 export async function planConversion(input: ConvertInput, output: string | undefined, options: ConvertOptions = {}, flags = false): Promise<ConversionPlan> {
 	if (!options || typeof options !== "object") throw invalid("convert takes options as an object.");
+	checkRenamedOptions(options);
 	const source = sourceOf(input, flags);
 	const target = targetOf(output, options, flags);
 	checkApplicable(source, target, options, flags);
@@ -268,14 +272,12 @@ export async function planConversion(input: ConvertInput, output: string | undef
 	// Engines first, so a missing install is reported before any file is read (as the commands do).
 	let prepared: PreparedExport | undefined;
 	if (target.kind === "export") {
-		const { format: _format, zip: _zip, signals: _signals, overwrite: _overwrite, ...rest } = options;
+		const { format: _format, zip: _zip, name: _name, signals: _signals, overwrite: _overwrite, ...rest } = options;
 		const assetDir = options.assetDir ?? (inputFile === undefined ? undefined : path.dirname(path.resolve(inputFile)));
 		const exportOptions: ExportOptions = {
 			...rest,
 			format: target.format,
 			...(assetDir === undefined ? {} : { assetDir }),
-			// Without an output path the files are named as the commands name them: by the deck, else by the input file.
-			...(output === undefined && inputFile !== undefined ? { filename: fileStem(inputFile) } : {}),
 			...(output === undefined && target.zip ? { zip: true } : {}),
 		};
 		prepared = await inStep(OPFExportError, "export-failed", () => prepareExport(exportOptions, flags));
@@ -309,10 +311,12 @@ export async function planConversion(input: ConvertInput, output: string | undef
 	if (target.kind === "deck") {
 		const bytes = new TextEncoder().encode(deckText(presentation, target.format));
 		const extension = `opf.${target.format === "markdown" ? "md" : target.format}`;
-		const name = output === undefined ? `${inputFile === undefined ? stemOfDeck(presentation) : fileStem(inputFile)}.${extension}` : path.basename(output);
+		const name = output === undefined ? `${options.name ?? (inputFile === undefined ? stemOfDeck(presentation) : fileStem(inputFile))}.${extension}` : path.basename(output);
 		return { ...base, files: [{ name, ...(output === undefined ? {} : { path: output }), type: DECK_MEDIA[target.format], bytes }], findings };
 	}
 
+	// Without an output path the files are named as the commands name them: by `name`, else the deck, else the input file.
+	if (output === undefined && prepared) prepared.options = { ...prepared.options, name: options.name ?? deckStem(presentation, inputFile === undefined ? "-" : fileStem(inputFile)) };
 	const exported = await inStep(OPFExportError, "export-failed", () => runPreparedExport(prepared as PreparedExport, presentation, findings));
 	const drawn = exported.files;
 	const facts = (file: ExportFile) => ({

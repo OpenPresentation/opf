@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSlideSvg,svgToPng} from '../../opf-render/dist/index.js';
+import {toSvg, toPng} from '../../opf-render/dist/index.js';
 const [beforeDir,currentDir,secondRuntimeDir,outputDir]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(beforeDir&&currentDir&&secondRuntimeDir&&outputDir,'Pass previous, current, second-runtime golden directories and output.');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -23,7 +23,7 @@ for(const [index,key]of keys.entries()){
 await mkdir(outputDir,{recursive:true});
 const selected=[];
 for(const index of [0,32,344,552,703,796]){
- const [file,slide]=keys[index].split('#'),diagnostics=[],svg=renderSlideSvg(corpus.get(file),Number(slide),{trace:true,onDiagnostic:issue=>diagnostics.push(issue)}),png=await svgToPng(svg,{loadSystemFonts:false}),name=`full-${String(index).padStart(4,'0')}.png`;
+ const [file,slide]=keys[index].split('#'),diagnostics=[],svg=toSvg(corpus.get(file),(Number(slide))+1,{trace:true,onDiagnostic:issue=>diagnostics.push(issue)}),png=await toPng(svg,{loadSystemFonts:false}),name=`full-${String(index).padStart(4,'0')}.png`;
  await writeFile(path.join(outputDir,name),png);selected.push({index,key:keys[index],file:name,pngSha256:hash(png),svgSha256:hash(svg),diagnostics});
 }
 await writeFile(path.join(outputDir,'review.json'),JSON.stringify({beforeSource:before.source,afterSource:current.source,beforeManifestSha256:hash(await readFile(path.join(beforeDir,'candidate.json'))),currentManifestSha256:hash(await readFile(path.join(currentDir,'candidate.json'))),verifierSha256:hash(await readFile(new URL(import.meta.url))),verifiedImagesPerPhase:keys.length,secondRuntimeVerifiedImages:keys.length,changed,selected,scope:'All 805 historical, current Node24 and current Node20 image hashes verified; both current manifests agree. Changed documents contain image-bearing fields. Exact asset-only authoring preservation is checked separately by test-gallery-artwork.mjs. Overview and selected full-size images support visual review; these checks do not approve a baseline or establish native/browser raster equivalence.'},null,2)+'\n');

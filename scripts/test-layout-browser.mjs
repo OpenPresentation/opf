@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {renderSlideSvg} from '../../opf-render/src/svg.js';
+import {toSvg} from '../../opf-render/src/svg.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(truth,message)=>{if(!truth)throw new Error(message);checks++;out.textContent+=`PASS ${message}\n`;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
@@ -17,7 +17,7 @@ try{
  check(editor.get('slides.0.composition.weights.0')>2,'arrow key widens the leading track');
  check(editor.get('slides.0.title')===title&&JSON.stringify(editor.get('slides.0.blocks'))===JSON.stringify(original.slides[0].blocks),'resizing preserves all content');
  check(drafts.length===1&&commits===1,'keyboard resize previews and commits once');
- const reference=document.createElement('div');reference.innerHTML=renderSlideSvg(editor.presentation,0,{trace:true});
+ const reference=document.createElement('div');reference.innerHTML=toSvg(editor.presentation,1,{trace:true});
  const glyphs=container=>[...container.querySelectorAll('text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y'),n.getAttribute('font-size')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(reference)),'resized canvas uses standalone renderer geometry');
  editor.undo();check(JSON.stringify(editor.presentation)===JSON.stringify(original)&&!editor.canUndo,'one undo restores the resize');

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {renderSlideSvg} from '../../opf-render/dist/index.js';
+import {toSvg} from '../../opf-render/dist/index.js';
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 import { colorContrast } from '../packages/javascript/dist/composition.js';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
@@ -13,7 +13,7 @@ const auditPath=new URL('../artifacts/gallery-contrast-current.json',import.meta
 const audit=JSON.parse(await readFile(auditPath,'utf8'));
 const file='examples/gallery/business-functions/compliance-readiness-review.opf.json',slide=5;
 const record=audit.failures.find(row=>row.file===file&&row.slide===slide&&row.role==='value');assert.ok(record);
-const deck=JSON.parse(await readFile(new URL('../'+file,import.meta.url),'utf8')),svg=renderSlideSvg(deck,slide,{trace:true});
+const deck=JSON.parse(await readFile(new URL('../'+file,import.meta.url),'utf8')),svg=toSvg(deck,slide+1,{trace:true});
 assert.equal(hash(svg),audit.decks.find(row=>row.file===file).slides[slide].svgSha256);
 const browser=await chromium.launch({channel:'msedge'}),errors=[],requests=[];
 try{

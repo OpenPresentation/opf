@@ -9,7 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSvg} from '../../opf-render/dist/index.js';
+import {toSvg} from '../../opf-render/dist/index.js';
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
@@ -33,7 +33,7 @@ try{
  await page.setContent('<style>body{margin:0;background:white}</style><main></main>');
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
  for(const {file,deck}of examples.filter(item=>item.file.startsWith(filter))){
-  const svgs=renderSvg(deck,{trace:true}),results=[];
+  const svgs=toSvg(deck,{trace:true}),results=[];
   for(const [slide,svg]of svgs.entries()){
    const result=await page.evaluate(async svg=>{
     document.querySelector('main').innerHTML=svg;

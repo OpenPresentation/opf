@@ -82,14 +82,14 @@ canvas.editor.undo();
 
 `loadFonts` accepts explicit font-file URLs or `Uint8Array` data (`faces`). It uses the same bytes for Fontkit measurement and browser `FontFace` registration, awaits loading, reports failures, and exposes `dispose()` for its owned font faces; the handle's `pending` and `ensure` load the script and vendored faces a document needs, and the canvas waits for them before it renders. Cross-origin font URLs need CORS access. Load fonts once and share the handle between canvases. The canvas does not fetch fonts or catalog sources itself.
 
-For standalone SVG export, pass the handle as `{ fonts }` to `renderSlideSvg` (one slide) or `renderSvg` (every slide); the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
+For standalone SVG export, pass the handle as `{ fonts }` to `toSvg` (`toSvg(deck, n, ...)` is slide n, `toSvg(deck, ...)` every slide); the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
 
 ```js
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
-const svg = renderSlideSvg(canvas.editor.presentation, 0, { fonts });
+import { toSvg } from '@openpresentation/opf-render/svg';
+const svg = toSvg(canvas.editor.presentation, 1, { fonts }); // slide 1: slides count from 1
 ```
 
-The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `svgToPng` and `svgToPdf`; those functions are not browser APIs.
+The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `toPng` and `toPdf`; those functions are not browser APIs.
 
 ## Editing behavior
 

@@ -2,7 +2,7 @@
 // installed `opf` binary, its published opf-render and opf-pptx peers and the Noto script packages. Nothing else locks it: the
 // font-policy test uses a stub renderer, and files.mjs does not render a script deck or export an unresolved remote image.
 //
-//   AUTO-25  `opf render --format svg` is standalone: a ja-JP (zh-CN) deck embeds Noto Sans JP (SC) 400 and 700, `--svg-fonts none`
+//   AUTO-25  `opf render --format svg` is standalone: a ja-JP (zh-CN) deck embeds Noto Sans JP (SC) 400 and 700, `--text system`
 //            embeds no font bytes, and a Latin-only deck embeds no CJK face.
 //   AUTO-26  `opf export --format pptx` never fetches an image URL: the placeholder is written with an `unresolved-asset` warning
 //            finding at the slide path (image blocks, and the quote photo of opf-pptx#210), `--fail-on warning` exits 1 and writes
@@ -173,12 +173,12 @@ try {
   assert.match(jaSvg, /font-family="Noto Sans JP, sans-serif"/, 'the text draws with the embedded family');
   checks++;
 
-  const none = await run(['render', 'ja.opf.json', '--format', 'svg', '--svg-fonts', 'none', '--out', 'ja-none']);
+  const none = await run(['render', 'ja.opf.json', '--format', 'svg', '--text', 'system', '--out', 'ja-none']);
   assert.equal(none.ok, true);
   const noneSvg = await readFile(path.join(temp, 'ja-none/Japanese-001.svg'), 'utf8');
   assert.deepEqual(embeddedFaces(noneSvg), []);
-  assert.ok(!noneSvg.includes('@font-face') && !/data:(font|application\/(x-)?font)/.test(noneSvg), '--svg-fonts none embeds no font bytes');
-  assert.ok(noneSvg.length < 20_000, `--svg-fonts none leaves a small SVG (${noneSvg.length} bytes)`);
+  assert.ok(!noneSvg.includes('@font-face') && !/data:(font|application\/(x-)?font)/.test(noneSvg), '--text system embeds no font bytes');
+  assert.ok(noneSvg.length < 20_000, `--text system leaves a small SVG (${noneSvg.length} bytes)`);
   checks++;
 
   const zh = await run(['render', 'zh.opf.json', '--format', 'svg', '--out', 'zh-svg']);
