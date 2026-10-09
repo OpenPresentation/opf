@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.16.1 (2026-10-09)
+
+- RR-59 (#214): `toPptx` no longer fails `font-unavailable` under the default (metric) font policy, office pack loaded, on engine-generated text whose weight has no metric face. That text is the "Image unavailable" placeholder label and the video caption (600), core's metric value (800) and its labels and timeline event text (500). The office pack's Intos stands in for Aptos at 400 and 700 only, so 0.16.0 refused any default-theme deck with an unresolved image (image block, quote photo, logo), a video, a metric or a timeline. DrawingML has only a bold flag, so such a run is now measured at the face PowerPoint draws it with: 700 for 600 and above, 400 below. A missing image again gives the `unresolved-asset` warning and the placeholder. The export equals the visual-policy export, and decks that exported before produce identical bytes. A `font-unavailable` for a family that is loaded, only not at the requested weight and style, now names that family, weight and style and the ones that are loaded (`details.fontWeight`, `details.italic`, `details.loadedStyles`). It no longer says that none of the replacements is loaded.
+
 ## 0.16.0 (2026-10-09)
 
 - FA-26 (needs core 0.16.0): the export places every leaf of a layout record with nested placeholder groups (`{ "type": "group", "composition", "placeholders" }`, up to three levels) in the box core composition gives it, the same box the preview draws, and a document's own records, groups included, survive an unchanged round trip. `design.chartPrimary` exports the placeholder group it stands for, with unchanged geometry. `test/placeholder-groups.mjs` exports core's cross-engine fixture (`test/fixtures/placeholder-groups.opf.json`) and checks every native frame within 0.5 pt.
