@@ -1,8 +1,9 @@
 {
   "schema": 1,
-  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46): *.test.mjs files always run in one node --test batch; every other test/*.mjs runs as a script unless it is listed here. A new test needs no entry; add a file only when it is a helper, fixture or a check that CI runs in its own step (the packed tests run as test:packed and test:packed:peers).",
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46): *.test.mjs files always run in one node --test batch; every other test/*.mjs runs as a script unless it is listed here. A new test needs no entry; add a file only when it is a helper, fixture or a check that CI runs in its own step (the packed tests run as test:packed and test:packed:peers; installed-regression.mjs runs inside test:packed:peers and the registry consumer, with the Noto script packages beside the installed binary).",
   "include": [],
   "exclude": [
+    "installed-regression.mjs",
     "packed-files.mjs",
     "packed.mjs"
   ]
