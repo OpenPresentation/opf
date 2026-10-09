@@ -2166,7 +2166,7 @@
         },
         "hidden": {
           "type": "boolean",
-          "description": "Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (opf CLI: --include-hidden; the deck-level renderSvg: the opt-in skipHidden). A slide named explicitly (opf render --slides, renderSvg slideIndex) is still rendered."
+          "description": "Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (opf CLI: --include-hidden; the deck-level toSvg: the opt-in skipHidden). A slide named explicitly (opf render --slides, toSvg with a slide number) is still rendered."
         },
         "composition": {
           "$ref": "#/$defs/Composition"

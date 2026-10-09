@@ -1,6 +1,6 @@
 // RR-60, RR-62: one reader and one writer for a deck in JSON, YAML or Markdown (`parse`, `stringify`), chosen by option or file name.
 // `parse` returns the deck and throws on errors; the reader behind it, which reports instead (`readDeckReport`, exported only for
-// the CLI from `@openpresentation/opf/node/engine`), is tested here for the located findings.
+// the CLI from `@openpresentation/opf/internal/engine`), is tested here for the located findings.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";

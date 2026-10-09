@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.17.1 (2026-10-09)
+
+- CLI 0.17.1 is the first published CLI of the 0.17 line. The `cli-v0.17.0` tag exists, but its publish run stopped before `npm publish`: the release commit carried a stale generated gallery tracker, which release runs check strictly. 0.17.1 ships the same CLI as the 0.17.0 changelog section describes, with the tracker regenerated.
+
 ## 0.17.0 (2026-10-09)
 
 - RR-62: `@openpresentation/opf/node`, core's Node-only file API, and `opf convert`.

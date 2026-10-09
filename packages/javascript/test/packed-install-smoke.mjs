@@ -3,7 +3,7 @@ import { execFile as execFileCallback, spawnSync } from "node:child_process";
 import { mkdir, mkdtemp, rm, stat, writeFile, readFile, realpath } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
@@ -171,13 +171,13 @@ process.stdout.write(JSON.stringify({
     await writeFile(path.join(projectDir, 'downstream.mjs'), `
 import assert from 'node:assert/strict';
 import {createEditorSession} from '@openpresentation/opf-editor';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
 import {validate} from '@openpresentation/opf';
 const editor = createEditorSession({slides: [{title: 'Compiler compatibility'}]});
 editor.set('slides.0.title', 'Packed downstream');
 assert.equal(validate(editor.presentation, {only: ['format']}).valid, true);
-assert.match(renderSvg(editor.presentation).join(""), /Packed downstream/);
+assert.match(toSvg(editor.presentation).join(""), /Packed downstream/);
 assert.ok((await toPptx(editor.presentation)).length > 1000);
 editor.undo();
 assert.equal(editor.presentation.slides[0].title, 'Compiler compatibility');
@@ -366,6 +366,52 @@ assert.throws(()=>parse('---',{filename:'x.opf.md'}),error=>error instanceof OPF
 console.log('Installed parse/stringify: JSON, YAML and Markdown decks read and write offline.');
 `);
     const deckRun=await run(process.execPath,['deck.mjs'],{cwd:projectDir});process.stdout.write(deckRun.stdout);
+    // RR-70: one import for every runtime. Under Node the root is the full build: `convert`, `open` and `save` work on files
+    // (deck forms need no optional peer), with core's own classes. A browser bundle of the same import reaches the browser build.
+    assertTarIncludes(files,'package/dist/browser.js');assertTarIncludes(files,'package/dist/index.d.ts');assertTarIncludes(files,'package/dist/node-engine.js');
+    for(const gone of ['package/dist/node.js','package/dist/node.d.ts','package/dist/browser.d.ts'])assert.ok(!files.includes(gone),`${gone} must not ship`);
+    await writeFile(path.join(projectDir,'in.opf.json'),JSON.stringify({name:'Runtime',slides:[{title:'One'},{title:'Two'}]}));
+    await writeFile(path.join(projectDir,'runtime.mjs'),`
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import * as opf from '@openpresentation/opf';
+import {OPFValidationError} from '@openpresentation/opf/validator';
+import {parse} from '@openpresentation/opf/deck';
+globalThis.fetch=()=>{throw new Error('Offline conversions must not fetch');};
+assert.equal(opf.OPFValidationError,OPFValidationError,'one core: the root and the subpaths share their classes');
+assert.equal(opf.parse,parse);
+const written=await opf.convert('in.opf.json','out.opf.yaml');
+assert.equal(written.files[0].type,'application/yaml');
+assert.equal(parse(await readFile('out.opf.yaml','utf8'),{format:'yaml'}).slides.length,2);
+const returned=await opf.convert(await opf.open('out.opf.yaml'),{format:'markdown'});
+assert.match(new TextDecoder().decode(returned.files[0].bytes),/# Two/);
+const saved=await opf.save({slides:[{title:'Saved'}]},'saved.opf.md');
+assert.equal(saved.format,'markdown');
+assert.deepEqual(opf.parseSlideSelection('2-',3),[2,3]);
+await assert.rejects(opf.open('missing.opf.md'),error=>error instanceof opf.OPFApiError&&error.code==='input-not-found');
+const engine=await import('@openpresentation/opf/internal/engine');
+assert.equal(engine.OPFApiError,opf.OPFApiError,'the CLI engine shares the root build\\'s classes');
+await assert.rejects(import('@openpresentation/opf/node'),{code:'ERR_PACKAGE_PATH_NOT_EXPORTED'});
+console.log('Installed root under Node: convert, open and save on files and in memory, one set of classes; /node is gone.');
+`);
+    const runtimeRun=await run(process.execPath,['runtime.mjs'],{cwd:projectDir});process.stdout.write(runtimeRun.stdout);
+    {
+      const esbuild = createRequire(createRequire(path.join(packageRoot, 'package.json')).resolve('tsup'))('esbuild');
+      await writeFile(path.join(projectDir,'browser-probe.mjs'),`import * as opf from '@openpresentation/opf';
+export const names = Object.keys(opf).sort();
+export const code = await opf.convert('deck.opf.md','deck.pdf').then(() => 'resolved', error => error.code);
+`);
+      for (const [label, options] of [['browser', {platform: 'browser'}], ['worker', {platform: 'neutral', mainFields: ['module', 'main'], conditions: ['worker', 'workerd']}]]) {
+        const bundled = await esbuild.build({entryPoints: [path.join(projectDir, 'browser-probe.mjs')], absWorkingDir: projectDir, bundle: true, write: false, format: 'esm', metafile: true, logLevel: 'silent', ...options});
+        const inputs = Object.keys(bundled.metafile.inputs).map(input => input.split('\\').join('/'));
+        assert.ok(inputs.includes('node_modules/@openpresentation/opf/dist/browser.js') && !inputs.includes('node_modules/@openpresentation/opf/dist/index.js'), `${label}: the installed root resolves to the browser build`);
+        await writeFile(path.join(projectDir, `browser-probe.${label}.mjs`), bundled.outputFiles[0].contents);
+        const probe = await import(pathToFileURL(path.join(projectDir, `browser-probe.${label}.mjs`)).href);
+        assert.equal(probe.code, 'node-only', `${label}: convert rejects with node-only`);
+        assert.ok(probe.names.includes('open') && probe.names.includes('parseSlideSelection'), `${label}: the browser build has the same names`);
+      }
+      console.log('Installed root in a browser and a worker bundle: the browser build, whose convert rejects with node-only.');
+    }
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))

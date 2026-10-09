@@ -32,7 +32,7 @@ const load=async name=>{
  const parts=name.split('/'),pkg=parts.slice(0,2).join('/');
  const file=require.resolve(pkg+'/package.json'),manifest=JSON.parse(await readFile(file,'utf8'));
  const entry=manifest.exports[parts.length===2?'.':'./'+parts.slice(2).join('/')];
- return import(pathToFileURL(path.resolve(path.dirname(file),typeof entry==='string'?entry:entry.import??entry.default)).href);
+ return import(pathToFileURL(path.resolve(path.dirname(file),typeof entry==='string'?entry:entry.node??entry.import??entry.default)).href);
 };
 const {validatePresentation}=await load('@openpresentation/opf');
 const {composeSlide}=await load('@openpresentation/opf/composition');

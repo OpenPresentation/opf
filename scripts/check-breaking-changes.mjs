@@ -2,7 +2,7 @@
 // git tag, and fails the build unless the pending version bump in
 // packages/javascript/package.json acknowledges them.
 //
-// "Breaking" is scoped narrowly to four kinds of removal — additions are
+// "Breaking" is scoped narrowly to five kinds of removal — additions are
 // never breaking:
 //   1. a catalog record file (spec/catalogs/<kind>/<id>.json) that existed at
 //      the tag no longer exists (a removed record id).
@@ -17,6 +17,17 @@
 //      `enum` keyword removed while other schema keywords are also present,
 //      is treated the same way: the loss of the constraint's old values is
 //      what's breaking.
+//   5. a package export (an `exports` subpath of packages/javascript/package.json,
+//      such as `./node`) that existed at the tag no longer exists (RR-70). Its
+//      import specifier stops resolving for every caller.
+//
+// A removal is acknowledged by the version bump (below). A removed package
+// export can also be acknowledged before the release-prep bump by a pending
+// changelog fragment (changes/*.md, `type: changed`, naming the opf package or
+// no package) that names the removed specifier, such as
+// `@openpresentation/opf/node`: the breaking minor's release note. The
+// release-prep pull request bumps the version, which acknowledges it again,
+// and assembles the fragment into the changelog.
 //
 // The working tree (not HEAD) is compared against the tag, so uncommitted
 // changes are covered too. Zero external dependencies by design; uses `git`
@@ -24,7 +35,7 @@
 //
 // Run via `pnpm check:breaking` (root) or `node scripts/check-breaking-changes.mjs`.
 
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -35,6 +46,7 @@ const specRoot = path.join(repoRoot, "spec");
 const catalogsRoot = path.join(specRoot, "catalogs");
 const schemasRoot = path.join(specRoot, "schemas");
 const javascriptPackageJsonPath = path.join(repoRoot, "packages", "javascript", "package.json");
+const changesRoot = path.join(repoRoot, "changes");
 
 function git(args) {
   return execFileSync("git", args, { cwd: repoRoot, encoding: "utf8" });
@@ -134,6 +146,8 @@ function topLevelKeys(schema, key) {
 
 const breaking = [];
 const notes = [];
+// Removed package exports: { specifier, message }. Acknowledged by the version bump or a changelog fragment (kind 5).
+const removedExports = [];
 
 function flagBreaking(message) {
   breaking.push(message);
@@ -153,6 +167,44 @@ async function checkRemovedCatalogRecords(tag) {
       flagBreaking(`[record removed] ${kind}/${id} (${relPath} existed at ${tag}, no longer exists)`);
     }
   }
+}
+
+// Kind 5 (RR-70): an `exports` subpath of the core package that existed at the tag and is gone.
+async function checkPackageExports(tag) {
+  const relPath = displayPath(javascriptPackageJsonPath);
+  let oldManifest;
+  try {
+    oldManifest = await readJsonAtTag(tag, relPath);
+  } catch {
+    return;
+  }
+  const current = await readJsonFromWorkingTree(javascriptPackageJsonPath);
+  const keys = (manifest) => (manifest?.exports && typeof manifest.exports === "object" && !Array.isArray(manifest.exports) ? Object.keys(manifest.exports) : []);
+  const now = new Set(keys(current));
+  for (const subpath of keys(oldManifest)) {
+    if (now.has(subpath)) continue;
+    const specifier = subpath === "." ? oldManifest.name : `${oldManifest.name}${subpath.slice(1)}`;
+    removedExports.push({ specifier, message: `[export removed] ${specifier} (the ${JSON.stringify(subpath)} export of ${relPath} existed at ${tag}, no longer exists)` });
+  }
+}
+
+// The pending changelog fragments (changes/*.md) of type `changed` for the opf package (or no package): their text.
+function acknowledgingFragments(root = changesRoot) {
+  if (!existsSync(root)) return [];
+  return readdirSync(root)
+    .filter((name) => name.endsWith(".md") && name.toLowerCase() !== "readme.md")
+    .map((name) => ({ name, text: readFileSync(path.join(root, name), "utf8") }))
+    .filter(({ text }) => {
+      const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text)?.[1] ?? "";
+      const packages = /^packages:\s*\[(.*)\]\s*$/m.exec(front)?.[1];
+      return /^type:\s*changed\s*$/m.test(front) && (packages === undefined || packages.trim() === "" || packages.split(",").map((item) => item.trim()).includes("opf"));
+    });
+}
+
+// A fragment acknowledges a removed specifier when it names it exactly (not as the prefix of a longer specifier).
+function fragmentNames(text, specifier) {
+  const escaped = specifier.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+  return new RegExp(`${escaped}(?![\\w/-])`).test(text);
 }
 
 async function checkSchemas(tag) {
@@ -228,8 +280,9 @@ async function main() {
 
   await checkRemovedCatalogRecords(tag);
   await checkSchemas(tag);
+  await checkPackageExports(tag);
 
-  if (breaking.length === 0) {
+  if (breaking.length === 0 && removedExports.length === 0) {
     process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: 0 }, null, 2)}\n`);
     return;
   }
@@ -237,7 +290,23 @@ async function main() {
   const oldVersion = tagVersion(tag);
   const currentPackageJson = await readJsonFromWorkingTree(javascriptPackageJsonPath);
   const currentVersion = currentPackageJson.version;
-  const acknowledged = oldVersion ? versionAcknowledgesBreaking(oldVersion, currentVersion) : false;
+  const versionAcknowledged = oldVersion ? versionAcknowledgesBreaking(oldVersion, currentVersion) : false;
+  // Kind 5: before the bump, a pending `changed` fragment that names the removed specifier acknowledges it.
+  const fragments = acknowledgingFragments();
+  const fragmentAcknowledged = [];
+  for (const removal of removedExports) {
+    const by = fragments.find((fragment) => fragmentNames(fragment.text, removal.specifier));
+    if (by && !versionAcknowledged) fragmentAcknowledged.push(`${removal.specifier} (changes/${by.name})`);
+    else breaking.push(removal.message);
+  }
+  if (breaking.length === 0) {
+    process.stderr.write(`breaking-change check found ${removedExports.length} removed package export(s) since ${tag}, each named by a pending changelog fragment:\n\n${fragmentAcknowledged.map((item) => `  - [export removed] ${item}\n`).join("")}\n`);
+    process.stdout.write(`The release that ships them must be a breaking release: for a 0.x line, a minor or major bump of packages/javascript/package.json (now ${currentVersion}, ${oldVersion} at ${tag}). Passing.\n`);
+    process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: removedExports.length, acknowledgedBy: "changelog-fragment", removedExports: removedExports.map((item) => item.specifier), oldVersion, currentVersion }, null, 2)}\n`);
+    return;
+  }
+  if (fragmentAcknowledged.length) notes.push(`Named by a pending changelog fragment: ${fragmentAcknowledged.join(", ")}.`);
+  const acknowledged = versionAcknowledged;
 
   process.stderr.write(`breaking-change check found ${breaking.length} breaking change(s) since ${tag}:\n\n`);
   for (const item of breaking) {
@@ -255,7 +324,8 @@ async function main() {
 
   process.stderr.write(
     `packages/javascript/package.json is still at ${currentVersion} (compared against ${oldVersion} at ${tag}).\n` +
-      `Required: bump the version (for a 0.x line, any minor or major bump; for 1.x+, a major bump) to acknowledge these breaking changes, or revert them.\n`,
+      `Required: bump the version (for a 0.x line, any minor or major bump; for 1.x+, a major bump) to acknowledge these breaking changes, or revert them.\n` +
+      (removedExports.length ? `A removed package export can instead be named, as its import specifier, by a pending changes/*.md fragment of type changed.\n` : ""),
   );
   process.exitCode = 1;
 }

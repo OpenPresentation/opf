@@ -11,7 +11,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {chromium}=require('playwright'),sharp=require('sharp');
 const {loadFonts}=await import(new URL('../../opf-render/dist/fonts-node.js',import.meta.url));
-const {renderSlideSvg,resolvePresentation}=await import(new URL('../../opf-render/dist/svg.js',import.meta.url));
+const {toSvg, resolvePresentation}=await import(new URL('../../opf-render/dist/svg.js',import.meta.url));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const out=path.resolve(process.argv[2]??'artifacts/metric-outline-browser'),widthOnly=process.argv.includes('--width-only');
 await mkdir(out,{recursive:true});
@@ -27,7 +27,7 @@ const cases=[];
 for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['left','center','right'])for(const [index,metric]of metrics.entries()){
   const id=`${family}-${width}-${align}-${index+1}`;
   const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24},metric}]};
-  const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document,0,options),item=bound.geometry.items[0];
+  const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,options),item=bound.geometry.items[0];
   assert.equal(JSON.stringify(document),before);assert.equal(item.metricLayout.overflow,false);
   cases.push({id,width,height,document,cell:item.box,layout:item.metricLayout,svg,sourceSha256:hash(before),svgSha256:hash(svg)});
 }

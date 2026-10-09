@@ -10,10 +10,10 @@ Start with a validated OPF document and the output formats the user requested. P
 
 ## Files: `convert`, from code or the shell
 
-One call turns a file into another, the formats named by the file names. In an application or script use core's `@openpresentation/opf/node`; from a shell, `opf convert` runs the same code:
+One call turns a file into another, the formats named by the file names. In a Node application or script use core's `@openpresentation/opf` (in a browser or worker the file functions reject with `node-only`); from a shell, `opf convert` runs the same code:
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf');
 await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1-3', scale: 2 }); // slides/deck-001.png, -002, -003
@@ -28,7 +28,7 @@ opf convert deck.opf.md deck.pdf
 opf convert deck.pptx deck.opf.yaml
 ```
 
-Inputs: `.pptx` (or its bytes), `.opf.md`, `.yaml`/`.yml`, `.json`, or a deck object. Outputs: `.pdf`, `.pptx`, `.png` and `.svg` (one file per slide beside the output; one selected slide is written to the output itself), `.zip` (the slides; `format: 'svg'` for SVG), and the deck forms. Options are the flags of `opf export` in camel case: `slides`, `includeHidden`, `paginate`, `scale`, `pdfMode`, `svgFonts`, `chartex`, `provenance`, `imageFormat`, `date`, `catalogs`, `fonts` or `fontDirs`, `assetDir`, `signals`, `overwrite`. It is deterministic: bundled open fonts (prepared once per process), no system fonts, no network, no clock (pass `date` for a date field); local images resolve next to the input file. Every file is produced before any is written, atomically; `convert` replaces an existing output (`overwrite: false` refuses), while the commands refuse one without `--force`. `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; a missing one throws `OPFExportError` or `OPFImportError` with `code` `peer-not-installed` and the install command (the command exits 2). Read `findings` (`import/`, `render/`, `pptx/`, `pdf/`, `fonts/` rules) as the evidence; an invalid deck throws `invalid-presentation` with located findings. Reference: [files in Node](references/rendering.md#files-in-node).
+Inputs: `.pptx` (or its bytes), `.opf.md`, `.yaml`/`.yml`, `.json`, or a deck object. Outputs: `.pdf`, `.pptx`, `.png` and `.svg` (one file per slide beside the output; one selected slide is written to the output itself), `.zip` (the slides; `format: 'svg'` for SVG), and the deck forms. Options are the flags of `opf export` in camel case: `slides`, `includeHidden`, `paginate`, `scale`, `raster`, `text` (`fonts`, `system` or `paths`), `charts` (`auto`, `native` or `picture`), `provenance`, `images`, `date`, `catalogs`, `fonts` (a handle, or a folder or list of folders), `assetDir`, `signals`, `overwrite`, and for output without a path `zip` and `name`. It is deterministic: bundled open fonts (prepared once per process), no system fonts, no network, no clock (pass `date` for a date field); local images resolve next to the input file. Every file is produced before any is written, atomically; `convert` replaces an existing output (`overwrite: false` refuses), while the commands refuse one without `--force`. `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; a missing one throws `OPFExportError` or `OPFImportError` with `code` `peer-not-installed` and the install command (the command exits 2). Read `findings` (`import/`, `render/`, `pptx/`, `pdf/`, `fonts/` rules) as the evidence; an invalid deck throws `invalid-presentation` with located findings. Reference: [files in Node](references/rendering.md#files-in-node).
 
 `opf render`, `opf export` and `opf import` remain for stdin and stdout and per-command control; they print the `opf validate` report shape with `outputs`, and `--fail-on warning` fails on warnings. Use the engine APIs below when you need your own fonts handle, a browser preview or an option `convert` does not expose.
 

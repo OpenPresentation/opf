@@ -15,6 +15,9 @@ const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'ut
 // While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
 const cliNotice = await cliSkipNotice(plan);
 const installed = await installablePackages(plan);
+// RR-74: opf-render 0.18 names its engines toSvg, toPng and toPdf; the plan's renderer may still be a 0.17 release (renderSvg, svgToPng, svgToPdf).
+const renderer = plan.packages.find((item) => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number) ?? [0, 0, 0];
+const names = renderer[0] > 0 || renderer[1] >= 18 ? {svg: 'toSvg', png: 'toPng', pdf: 'toPdf'} : {svg: 'renderSvg', png: 'svgToPng', pdf: 'svgToPdf'};
 const deckSource = path.join(root, 'docs/quickstart/developer-quickstart.opf.json');
 assert.ok(
   !path.relative(root, deckSource).split(path.sep).includes('examples'),
@@ -74,7 +77,7 @@ import {readFile, writeFile} from 'node:fs/promises';
 import { validate, paginate, resolveSlideContext } from '@openpresentation/opf'; import { defaultCatalog } from '@openpresentation/opf/catalog'; import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {renderSvg, svgToPng, svgToPdf} from '@openpresentation/opf-render';
+import {${names.svg}, ${names.png}, ${names.pdf}} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
 
 const source = await readFile('deck.opf.json', 'utf8');
@@ -114,13 +117,13 @@ assert.equal(editor.canUndo, true);
 editor.undo();
 assert.equal(editor.presentation.slides[3].title, originalTitle);
 
-const svgs = renderSvg(presentation, {fonts, catalogs});
+const svgs = ${names.svg}(presentation, {fonts, catalogs});
 assert.ok(svgs.length >= 2);
 assert.match(svgs[0], /Install published OPF packages/);
 assert.match(svgs[0], /Developer  quickstart/);
-const png = await svgToPng(svgs[0], {fonts});
+const png = await ${names.png}(svgs[0], {fonts});
 assert.ok(png.length > 1000);
-const pdf = await svgToPdf(svgs, {fonts});
+const pdf = await ${names.pdf}(svgs, {fonts});
 assert.ok(pdf.length > 1000);
 const pptx = await toPptx(presentation, {fonts, catalogs});
 assert.ok(pptx.length > 1000);

@@ -29,7 +29,7 @@ async function packageManifest(name) {
 async function load(name,entrypoint) {
   const {directory,manifest}=await packageManifest(name);
   const entry=manifest.exports[entrypoint];
-  return import(pathToFileURL(path.resolve(directory,typeof entry==='string'?entry:entry.import??entry.default)).href);
+  return import(pathToFileURL(path.resolve(directory,typeof entry==='string'?entry:entry.node??entry.import??entry.default)).href);
 }
 for (const name of ['@openpresentation/opf','@openpresentation/opf-render']) {
   assert.equal((await packageManifest(name)).manifest.version,plan.packages.find(item=>item.name===name)?.version);

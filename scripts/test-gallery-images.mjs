@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSvg} from '../../opf-render/dist/svg.js';
+import {toSvg} from '../../opf-render/dist/svg.js';
 import {toPptx,fromPptx} from '../../opf-pptx/dist/index.js';
 const requireRender=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {chromium}=requireRender('playwright');
@@ -19,7 +19,7 @@ try{
  for(const {file,deck:source}of examples.filter(({file,deck})=>file.startsWith('examples/gallery/')&&deck.assets)){
   const assets=Object.fromEntries(names.map(name=>[name,source.assets[name]])),deck={assets,design:{imageFit:'contain'},slides:names.map(name=>({image:`asset:${name}`}))},before=structuredClone(deck),diagnostics=[];
   const expected=names.map(name=>hash(Buffer.from(assets[name].src.split(',')[1],'base64')));
-  const svgs=renderSvg(deck,{strictAssets:true,onDiagnostic:issue=>diagnostics.push(issue)});assert.equal(svgs.length,5);assert.deepEqual(diagnostics,[]);
+  const svgs=toSvg(deck,{strictAssets:true,onDiagnostic:issue=>diagnostics.push(issue)});assert.equal(svgs.length,5);assert.deepEqual(diagnostics,[]);
   const decoded=[];
   for(const [index,svg]of svgs.entries()){
    const images=await page.evaluate(async svg=>{document.querySelector('main').innerHTML=svg;return Promise.all([...document.querySelectorAll('image')].map(async node=>{const image=new Image();image.src=node.getAttribute('href');await image.decode();return {src:image.src,width:image.naturalWidth,height:image.naturalHeight,description:node.getAttribute('aria-label')};}));},svg);

@@ -15,7 +15,7 @@ const skillRoot=fileURLToPath(new URL('../../skills/',import.meta.url));
 const skills=Object.fromEntries(['opf-author','opf-layout','opf-presets','opf-edit','opf-export','opf-inspect'].map(name=>[name,skillFiles(path.join(skillRoot,name))]));
 
 // One entry: `index` is the `opf` command. Core (`@openpresentation/opf`) is a regular dependency and stays external, so the
-// command runs core's own engine (`@openpresentation/opf/node`) and an application beside it runs the same single copy. The
+// command runs core's own engine (`@openpresentation/opf/internal/engine`, behind the `node` condition) and an application beside it runs the same single copy. The
 // `#!` line is in src/index.ts.
 export default defineConfig({
   entry: { index: "src/index.ts" },

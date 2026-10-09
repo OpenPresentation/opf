@@ -5,7 +5,7 @@ import {readFile,writeFile,mkdir,realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import path from 'node:path';
-import {renderSvg,svgToPng} from '../../opf-render/dist/index.js';
+import {toSvg, toPng} from '../../opf-render/dist/index.js';
 import {examples} from '../packages/javascript/dist/examples.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.ok(process.argv[2],'Provide the preserved actual registry consumer');
@@ -46,11 +46,11 @@ for(const [i,key]of changed.entries()){
     for(const field of Object.keys(before))compareSources(before[field],after[field],at+'.'+field);
   };
   compareSources(oldDeck.slides[slideIndex],deck.slides[slideIndex]);
-  const oldSvg=prior.renderSvg(oldDeck,{slideIndex,trace:true}),newSvg=renderSvg(deck,{slideIndex,trace:true});
-  const before=await prior.svgToPng(oldSvg,{scale:baseline.scale,loadSystemFonts:false}),after=await svgToPng(newSvg,{scale:current.scale,loadSystemFonts:false});
+  const oldSvg=prior.renderSvg(oldDeck,{slideIndex,trace:true}),newSvg=toSvg(deck,slideIndex+1,{trace:true});
+  const before=await prior.svgToPng(oldSvg,{scale:baseline.scale,loadSystemFonts:false}),after=await toPng(newSvg,{scale:current.scale,loadSystemFonts:false});
   assert.equal(hash(before),baseline.entries[key].sha256,key+' previous registry raster');assert.equal(hash(after),current.entries[key].sha256,key+' current source raster');
   const prefix=String(i).padStart(3,'0');await writeFile(path.join(output,prefix+'-before.png'),before);await writeFile(path.join(output,prefix+'-after.png'),after);
-  if(filename.startsWith('technical/')){await writeFile(path.join(output,prefix+'-before-full.png'),await prior.svgToPng(oldSvg));await writeFile(path.join(output,prefix+'-after-full.png'),await svgToPng(newSvg));}
+  if(filename.startsWith('technical/')){await writeFile(path.join(output,prefix+'-before-full.png'),await prior.svgToPng(oldSvg));await writeFile(path.join(output,prefix+'-after-full.png'),await toPng(newSvg));}
   results.push({key,metricCount:count,prefix,beforeSha256:hash(before),afterSha256:hash(after),authoredChanges});
 }
 const sheets=[];
@@ -65,7 +65,7 @@ for(let offset=0;offset<results.length;offset+=10){
     parts.push(`<text x="${x+4}" y="${y+15}" font-family="Roboto" font-size="13">${row.prefix}: before / after; ${row.metricCount} metrics</text>`);
   }
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="1100"><rect width="100%" height="100%" fill="#ddd"/>${parts.join('')}</svg>`;
-  const file=`sheet-${offset/10}.png`,bytes=await svgToPng(svg);await writeFile(path.join(output,file),bytes);sheets.push({file,sha256:hash(bytes)});
+  const file=`sheet-${offset/10}.png`,bytes=await toPng(svg);await writeFile(path.join(output,file),bytes);sheets.push({file,sha256:hash(bytes)});
 }
 await writeFile(path.join(output,'review.json'),JSON.stringify({verifiedPriorRegistryFiles:verifiedFiles,priorSource:baseline.source,currentSource:current.source,changedSlides:changed.length,authoredMetricChanges:results.reduce((n,item)=>n+item.authoredChanges.length,0),allChangesContainMetrics:true,baselinePromoted:false,results,sheets,scope:'All prior and current changed rasters reproduce their respective manifests using their respective source corpora. Each changed slide contains metric content; any authored changes to those slides are confined to recorded metric payloads. Visual review must still evaluate arrangement and readability. No baseline is promoted by this helper.'},null,2)+'\n');
 console.log(`Prepared ${changed.length} before/after pairs in ${sheets.length} sheets; verified ${verifiedFiles} prior registry files; baseline unchanged.`);

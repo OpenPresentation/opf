@@ -1,178 +1,96 @@
-export {
-  presentation,
-  audience,
-  purpose,
-  tone,
-  theme,
-  layout,
-  chartType,
-  narrative,
-  socialPlatform,
-  language,
-  colorScheme,
-  fontScheme,
-  schemas,
-  schemaEntries,
-  schemaNames,
-} from "./schemas.js";
-export type { SchemaEntry } from "./schemas.js";
+// `@openpresentation/opf` in Node, Bun and Deno (RR-70): core, plus the file API. `convert` turns one file into another, the formats
+// named by the file names (a deck to PDF, PNG, SVG or PPTX, a PowerPoint file to a deck, one deck form to another), or returns the
+// bytes; `open` reads a deck file (or imports a PowerPoint file) and `save` writes one. One namespace import covers an application,
+// in every runtime:
+//
+//   import * as opf from "@openpresentation/opf";
+//   await opf.convert("deck.opf.md", "deck.pdf");
+//   const deck = await opf.open("deck.opf.md");
+//   deck.slides.push({ title: "Q4" });
+//   await opf.save(deck, "deck.opf.md");
+//
+// The package's conditional exports give this build to the `node`, `bun` and `deno` conditions and the browser-safe build
+// (./browser.ts, the same names, where `open`, `save` and `convert` reject with `node-only`) to `browser`, `worker`, `workerd`
+// and `default`. This file's declarations are the one type surface of both.
+//
+// Drawing and PowerPoint go through the optional peers @openpresentation/opf-render and @openpresentation/opf-pptx, loaded the
+// first time a call needs them; a missing one throws `peer-not-installed` with the install command. The Node engine itself
+// (./node/, which reads files and registers the default catalog) is loaded on the first call too, so importing the root costs no
+// more than core. Output is deterministic: no network, no system fonts, no clock unless `date` is passed.
+import type { Presentation } from "./core.js";
+import { OPFApiError, asApiError } from "./api-errors.js";
+import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
+import { OPFValidationError } from "./validator.js";
 
-// OPF 0.15 (FA-21): the root imports no catalog data. The pinned default catalog is `@openpresentation/opf/catalog`.
+export * from "./core.js";
+export type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, ConvertedFile, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
+export type { ExportFormat } from "./node/export.js";
+export type { FontsHandle } from "./node/peers.js";
 
-export {
-  DEFAULT_CHART_PALETTE,
-  DEFAULT_VALIDATION_THRESHOLDS,
-  OPFValidationError,
-  assertValid,
-  assertValidCatalogRecord,
-  findValidationRule,
-  validate,
-  validateCatalogRecord,
-  validationCategories,
-  validationRules,
-} from "./validator.js";
-export type {
-  Contract,
-  ValidateFonts,
-  ValidateOptions,
-  ValidationCategory,
-  ValidationChecks,
-  ValidationReport,
-  ValidationRuleCost,
-  ValidationRuleInfo,
-  ValidationThresholds,
-} from "./validator.js";
+/** The Node engine, loaded on the first file call. */
+const engine = () => import("./node/conversion.js");
 
-export {
-  VARIABLE_KINDS,
-  DEFAULT_VARIABLE_DATE_FORMAT,
-  OPFVariableError,
-  coerceVariableValue,
-  formatVariableNumber,
-  hasContentVariables,
-  isTemplate,
-  listBuiltinVariables,
-  listVariables,
-  resolveVariables,
-  variableDeclarations,
-} from "./variables.js";
-export type {
-  ResolveVariablesOptions,
-  ResolveVariablesResult,
-  VariableDeclaration,
-  VariableDiagnostic,
-  VariableDiagnosticCode,
-  VariableDiagnosticSeverity,
-  BuiltinVariableInfo,
-  VariableInfo,
-  VariableKind,
-  VariableUse,
-  VariableUseForm,
-  VariableValues,
-} from "./variables.js";
-export { SLIDE_SCOPED_BUILTINS, resolveSlideVariables } from "./slide-variables.js";
-export type { SlideScopedBuiltin } from "./slide-variables.js";
-// RR-71: logos live on the organization (resolveLogo, the one resolution, is on /composition with the layout engine).
-export { LOGO_SHAPES } from "./logos.js";
-export type { LogoShape, LogoVariant, ResolvedLogo, ResolveLogoOptions } from "./logos.js";
+const rethrow = (error: unknown, fallback: string): never => {
+	if (error instanceof OPFValidationError) throw error;
+	throw asApiError(OPFApiError, error, fallback);
+};
 
-export {
-  specFileEntries,
-  specFilePaths,
-  specFileKinds,
-} from "./spec-files.js";
+/**
+ * Convert a file, a deck or the bytes of a `.pptx` file. With an `output` path the format comes from its extension and the
+ * files are written: `.pdf`, `.pptx`, `.png` and `.svg` are exported (one PNG or SVG per slide, `slides/deck.png` giving
+ * `slides/deck-001.png`, ...; one selected slide is written to `output` itself), `.zip` is one archive of the slides (`format`
+ * `png`, the default, or `svg`), and `.opf.md`, `.yaml`/`.yml` or `.json` writes the deck in that form. Without an output path,
+ * pass `{ format }`: nothing is written and the files come back with their names and bytes.
+ *
+ * A `.pptx` input is imported first. Local images resolve next to the input file unless `assetDir` says otherwise; URLs are
+ * never fetched. Everything is produced before anything is written, and each file is written atomically, replacing an existing
+ * output (`overwrite: false` refuses one with `output-exists`, as the commands do without `--force`). Throws `OPFApiError` for the request and the files (`invalid-option`, `input-not-found`,
+ * `input-unreadable`, `invalid-presentation`, `output-exists`, `output-not-file`, `output-unwritable`), `OPFImportError` for the
+ * import step and `OPFExportError` for the export step (`peer-not-installed`, `peer-too-old`, `peer-load-failed`,
+ * `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed`).
+ *
+ * Node only (also Bun and Deno): the browser build of the root rejects with `OPFApiError` `node-only`.
+ */
+export async function convert(input: ConvertInput, output: string, options?: ConvertOptions): Promise<ConvertResult>;
+export async function convert(input: ConvertInput, options: ConvertOptions & { format: ConvertFormat }): Promise<ConvertResult>;
+export async function convert(input: ConvertInput, output: string | (ConvertOptions & { format: ConvertFormat }), options: ConvertOptions = {}): Promise<ConvertResult> {
+	try {
+		if (output !== null && typeof output === "object") return await (await engine()).convertFiles(input, undefined, output);
+		if (typeof output !== "string") throw new OPFApiError("convert takes an output file path, or options with a format.", "invalid-option");
+		return await (await engine()).convertFiles(input, output, options);
+	} catch (error) {
+		return rethrow(error, "convert-failed");
+	}
+}
 
-export type * from "./types.js";
-export type {
-  SpecFileEntry,
-  SpecFilePath,
-  SpecFileKind,
-} from "./spec-files.js";
+/**
+ * Open a deck: a `.opf.md`, `.yaml`/`.yml` or `.json` file (the form named by the extension), or a PowerPoint file (a `.pptx`
+ * path or its bytes), imported. Returns the presentation. A deck file that fails the format and references check throws
+ * `OPFValidationError` (its findings located by line and column in the file); a PowerPoint file that cannot be imported throws
+ * `OPFImportError`; a missing file throws `OPFApiError` `input-not-found`. Warnings are not returned: `validate` reports them,
+ * and `convert("deck.pptx", "deck.opf.yaml")` returns what an import could not keep.
+ *
+ * Node only (also Bun and Deno): the browser build of the root rejects with `OPFApiError` `node-only`.
+ */
+export async function open(input: string | Uint8Array | ArrayBuffer, options: OpenOptions = {}): Promise<Presentation> {
+	try {
+		return await (await engine()).openDeck(input, options);
+	} catch (error) {
+		return rethrow(error, "input-unreadable");
+	}
+}
 
-export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, ComposeSlideOptions } from "./composition.js";
-
-// OPF 0.15 catalogs: references, the one resolution rule, and the authoring helpers (FA-20).
-export {
-  CATALOG_GROUP_PATTERN,
-  CATALOG_REFERENCE_PATTERN,
-  OPFCatalogsOptionError,
-  OPFUnresolvedReferenceError,
-  catalogGroupSource,
-  catalogKinds,
-  catalogRecords,
-  catalogReferenceSites,
-  parseReference,
-  resolveReference,
-  unresolvedReference,
-} from "./catalog-refs.js";
-export type {
-  Catalog,
-  CatalogKind,
-  CatalogOptions,
-  CatalogRecordMap,
-  CatalogRecords,
-  CatalogReferenceSite,
-  RecordProvenance,
-  ResolvedReference,
-  UnresolvedReferenceDiagnostic,
-} from "./catalog-refs.js";
-export { catalogDisplayKinds, catalogSchemaNames } from "./catalog-schemas.js";
-export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
-export { copySlides, embed, moveToCustom, OPFMoveToCustomError, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
-export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord, MovedRecord, MoveToCustomErrorCode, MoveToCustomPatchOperation, MoveToCustomResult } from "./catalog-helpers.js";
-export { resolveDesignRecords, resolveFontScheme } from "./design-records.js";
-export type { ResolvedDesignRecords } from "./design-records.js";
-export {
-  CHART_TYPES,
-  ENGINE_DEFAULT_CHART_TYPES,
-  ENGINE_DEFAULT_COLOR_SCHEME,
-  ENGINE_DEFAULT_FONT_SCHEME,
-  ENGINE_DEFAULT_THEME,
-  LANGUAGES,
-  SOCIAL_PLATFORMS,
-} from "./engine-vocabularies.js";
-export type { LanguageVocabulary, SocialPlatformVocabulary } from "./engine-vocabularies.js";
-export { resolveSlideContext } from './slide-context.js';
-export type { SlideContext, SlideContextDiagnostic, SlideContextOptions } from './slide-context.js';
-export { stats } from './stats.js';
-export type { PresentationStats, StatsOptions, SlideStats, StatsSlideRef, ReferenceFact, SlideSizeFact, HeaderFooterFact, TableFact, DatasetFact } from './stats.js';
-
-export { paginate, paginateSlide, OPFPaginationError } from './pagination.js';
-export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';
-
-// The verbs of the CLI, at the root so `import * as opf` shows them: each also has its own subpath.
-export { applyPatch, OPFPatchError, OPFPatchValidationError } from './patch.js';
-export type { ApplyPatchOptions, PatchResult } from './patch.js';
-export { diff, merge } from './diff.js';
-export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
-export { format, OPFFormatError } from './format.js';
-export type { FormatOptions } from './format.js';
-export { fromMarkdown, toMarkdown, OPFMarkdownError } from './markdown.js';
-export type { FromMarkdownOptions, FromMarkdownResult, ToMarkdownOptions, ToMarkdownResult } from './markdown.js';
-// RR-60: one reader and one writer for a deck in JSON, YAML or Markdown, chosen by option or file name.
-export { parse, stringify, deckFormatOf, DECK_FORMATS } from './deck.js';
-export type { DeckFormat, ParseOptions, StringifyOptions } from './deck.js';
-
-
-export { parseTabularData, importData, OPFDataImportError } from './data.js';
-export type { DataCell, TabularData, ImportedChartData, ImportedChartType, ImportedTable, ImportedChart, DataImportOptions, ImportDataOptions } from './data.js';
-// RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
-export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
-export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
-
-export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
-export type {
-  FontAvailability,
-  FontAvailabilityCode,
-  FontAvailabilityDiagnostic,
-  FontLicenseClass,
-  FontPolicyDecision,
-  FontPolicyEntry,
-  FontPolicyTable,
-  FontReplacement,
-  FontReplacementCompatibility,
-  FontReplacementMeasurement,
-} from './font-policy.js';
-// A font scheme's `languageFamily` catalog value, read as one of the three OOXML script slots.
-export { normalizeLanguageFamily } from './script-fonts.js';
-export type { LanguageFamilyName } from './script-fonts.js';
+/**
+ * Save a deck in the form its file name names (`.opf.md`, `.yaml`/`.yml` or `.json`), atomically, creating folders, replacing
+ * the file. It is checked for format and references first and an invalid deck is refused with `OPFValidationError`;
+ * `validate: false` writes work in progress, as an editor's autosave does. Returns `{ path, format }`.
+ *
+ * Node only (also Bun and Deno): the browser build of the root rejects with `OPFApiError` `node-only`.
+ */
+export async function save(deck: Presentation, path: string, options: SaveOptions = {}): Promise<SaveResult> {
+	try {
+		return await (await engine()).saveDeck(deck, path, options);
+	} catch (error) {
+		return rethrow(error, "output-unwritable");
+	}
+}

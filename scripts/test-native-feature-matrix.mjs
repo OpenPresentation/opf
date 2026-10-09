@@ -29,12 +29,13 @@ for (const name of ['opf', 'opf-render', 'opf-pptx']) {
 const load = async (name, subpath = '.') => {
   const manifestPath = require.resolve('@openpresentation/' + name + '/package.json');
   const manifest = await json(manifestPath), entry = manifest.exports[subpath];
-  return import(pathToFileURL(path.resolve(path.dirname(manifestPath), typeof entry === 'string' ? entry : entry.import ?? entry.default)).href);
+  return import(pathToFileURL(path.resolve(path.dirname(manifestPath), typeof entry === 'string' ? entry : entry.node ?? entry.import ?? entry.default)).href);
 };
 const { validate } = await load('opf');
 const valid = value => validate(value, {only: ['format']}).valid;
 const { examples } = await load('opf', './examples');
-const { renderSvg, svgToPng } = await load('opf-render');
+// RR-74: the consumer's installed renderer is any release: 0.18 names it toSvg and toPng, older ones renderSvg and svgToPng.
+const render = await load('opf-render'), toSvg = render.toSvg ?? render.renderSvg, toPng = render.toPng ?? render.svgToPng;
 const { loadFonts } = await load('opf-render', './fonts-node');
 const candidateEntry = process.argv[5] ? await realpath(path.resolve(process.argv[5])) : null;
 let candidate = null;
@@ -110,10 +111,10 @@ if (mode === 'generate') {
     document.design = {...document.design, fontScheme: {id: 'calibri', code: 'Calibri'}, dimensions: {widthInches: 1280 / 96, heightInches: 720 / 96}};
     assert.equal(valid(document), true, id);
     const diagnostics = [], options = {fonts, strictAssets: true, onDiagnostic: issue => diagnostics.push(issue)};
-    const svgs = renderSvg(document, options), hashes = {};
+    const svgs = toSvg(document, options), hashes = {};
     const save = async (file, bytes) => {await writeFile(path.join(output, file), bytes); hashes[file] = hash(bytes);};
     for (const [index, svg] of svgs.entries()) {
-      await save(`${id}-renderer-${index + 1}.png`, await svgToPng(svg, {fonts: {fontFiles, useBundledFonts: false, loadSystemFonts: false}}));
+      await save(`${id}-renderer-${index + 1}.png`, await toPng(svg, {fonts: {fontFiles, useBundledFonts: false, loadSystemFonts: false}}));
     }
     await save(id + '.pptx', await toPptx(document, options));
     await save(id + '.opf.json', JSON.stringify(document, null, 2) + '\n');

@@ -1,6 +1,7 @@
 {
   "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. The catalog entry (@openpresentation/opf/catalog, the full pptx.gallery catalog) is the only one that carries catalog data. `measured` is the size when it was last updated.",
   "entries": {
+    "browser": 320884,
     "catalog": 105276,
     "composition": 66103,
     "convert": 233041,
@@ -9,7 +10,6 @@
     "diff": 6223,
     "font-policy": 15052,
     "format": 46296,
-    "index": 320884,
     "markdown": 265664,
     "pagination": 219462,
     "patch": 216493,
@@ -21,6 +21,10 @@
     "yaml": 250084
   },
   "measured": {
+    "browser": {
+      "minified": 1193952,
+      "gzip": 312549
+    },
     "catalog": {
       "minified": 599515,
       "gzip": 102209
@@ -60,10 +64,6 @@
     "format": {
       "minified": 164812,
       "gzip": 44947
-    },
-    "index": {
-      "minified": 1191651,
-      "gzip": 311537
     },
     "markdown": {
       "minified": 848871,

@@ -158,7 +158,7 @@ Core composition, table layout and pagination accept dataset-backed tables and c
 - `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.presentation` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and `source`. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
 - Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `mapping`, `source` and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The chart rules of `validate` read resolved chart data (DataColumn names, dataset charts).
 - Variables: `resolveVariables` walks `datasets` like any other content, so `{{id}}` tokens and whole `var:<id>` cells in dataset rows are filled before engines inline the reference.
-- `opf import-data --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it. Re-importing into an existing dataset keeps its title, description and the format of each column whose name is unchanged; `source.src` names the imported file relative to the deck file's folder with `/` separators (stdin: no source), and `source.retrieved` is set only by `--date YYYY-MM-DD`; the command never reads the clock.
+- `opf ingest --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it. Re-importing into an existing dataset keeps its title, description and the format of each column whose name is unchanged; `source.src` names the imported file relative to the deck file's folder with `/` separators (stdin: no source), and `source.retrieved` is set only by `--date YYYY-MM-DD`; the command never reads the clock.
 - The generated `Table` type now has `rows?` (a dataset table has none) and `dataset?`/`fields?`; TypeScript callers that read `table.rows` handle the dataset form (or call `resolveTableData`).
 
 ## Engines
@@ -212,7 +212,7 @@ All three engines read core's functions when they exist and fall back to their p
 - **Format and mapping:**
   - A per-column format field (`setGridColumnFormat`) is checked with `numberFormatError`.
   - A "Chart columns" panel (`setChartMapping`) sets the category, the X column (XY charts only) and the series, and writes only what differs from the default.
-- **Import:** "Store as a shared dataset" (`prepareDatasetImport`) imports into `datasets.<id>`, as `opf import-data --dataset` does.
+- **Import:** "Store as a shared dataset" (`prepareDatasetImport`) imports into `datasets.<id>`, as `opf ingest --dataset` does.
 - **Other panels:** the table style panel and `table-options` refuse a dataset table with `table-dataset-backed`. Find and replace also searches dataset text.
 - **Undo:** each edit is one undoable patch.
 

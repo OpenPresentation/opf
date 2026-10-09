@@ -43,7 +43,7 @@ export const PACKAGES = [
   { key: "render", name: "@openpresentation/opf-render", repo: "opf-render", manifest: "package.json", tagPrefix: "opf-render-v", workflow: "npm-publish.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 1, upstream: ["core"] },
   { key: "pptx", name: "@openpresentation/opf-pptx", repo: "opf-pptx", manifest: "package.json", tagPrefix: "opf-pptx-v", workflow: "release.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 2, upstream: ["core", "render"] },
   { key: "editor", name: "@openpresentation/opf-editor", repo: "opf-editor", manifest: "package.json", tagPrefix: "opf-editor-v", workflow: "release.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 3, upstream: ["core", "render", "pptx"] },
-  // The CLI depends on core (RR-62: a regular dependency whose `/node` engine the commands run; the pnpm workspace links it
+  // The CLI depends on core (RR-62: a regular dependency whose Node engine the commands run; the pnpm workspace links it
   // through an override), so core is upstream and its floor is a `dependencies` range that `prep` raises like the others. The
   // other floors name the renderer and PPTX (devDependencies pinned exactly, optional peers as ranges, and PEER_RANGES in core's
   // src/node/peers.ts, which core's own peerDependencies equal; core raises its peers before its own release prep and the CLI's
@@ -551,7 +551,7 @@ async function missingUpstream(deps, pkg, train) {
 /**
  * Every floor in a manifest that names a version npm does not have (it would publish an uninstallable package). An
  * optional peer on a later package of the same train, at the train's version, is not one: npm never installs an optional
- * peer, and the train publishes it next (core's `/node` peers on the renderer and PPTX, opf#498).
+ * peer, and the train publishes it next (core's Node build peers on the renderer and PPTX, opf#498).
  */
 export async function unpublishedFloors(deps, manifest, pkg, train = {}) {
   const out = [];

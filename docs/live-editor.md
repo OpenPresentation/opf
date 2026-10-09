@@ -1,18 +1,18 @@
 # Browser preview and live editing
 
-Published editor 0.16.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.17.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.16.0, renderer 0.16.0, editor 0.16.0 and PPTX 0.16.1:
+Use Node 24 with core 0.17.0, renderer 0.17.1, editor 0.17.0 and PPTX 0.17.0:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.16.0 @openpresentation/opf-render@0.16.0 @openpresentation/opf-editor@0.16.0 @openpresentation/opf-pptx@0.16.1
+npm install --save-exact @openpresentation/opf@0.17.0 @openpresentation/opf-render@0.17.1 @openpresentation/opf-editor@0.17.0 @openpresentation/opf-pptx@0.17.0
 ```
 
-No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.16.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
+No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.17.1 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 For library development, separately regenerate unpublished local preview tarballs from sibling checkouts:
 
@@ -27,7 +27,7 @@ The packed consumer installs actual tarballs without workspace aliases, exercise
 
 The gallery host example also offers local PPTX file import with preview/diagnostics and editable PowerPoint download. It commits active canvas text before export, shares preview text measurements and applies imports as a single undoable change. Save OPF to preserve the original source; native PowerPoint positions, fonts and unsupported features can change during conversion. The browser E2E checks run offline after loading and inspect the downloaded native merged table, then reimport and undo/redo. Native edit/save/reopen is a separate targeted check, not a pixel-equivalence claim.
 
-The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, call `convert("deck.opf.json", "deck.pdf")` (or `convert(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` for the bytes) from `@openpresentation/opf/node`, which draws with the same engines and the bundled fonts; `open("deck.pptx")` reads a PowerPoint file back into a presentation for the editor ([OPF files in Node](node.md)).
+The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, call `convert("deck.opf.json", "deck.pdf")` (or `convert(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` for the bytes) from `@openpresentation/opf` in Node, which draws with the same engines and the bundled fonts; `open("deck.pptx")` reads a PowerPoint file back into a presentation for the editor ([OPF files in Node](node.md)).
 
 `pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
 
@@ -82,14 +82,14 @@ canvas.editor.undo();
 
 `loadFonts` accepts explicit font-file URLs or `Uint8Array` data (`faces`). It uses the same bytes for Fontkit measurement and browser `FontFace` registration, awaits loading, reports failures, and exposes `dispose()` for its owned font faces; the handle's `pending` and `ensure` load the script and vendored faces a document needs, and the canvas waits for them before it renders. Cross-origin font URLs need CORS access. Load fonts once and share the handle between canvases. The canvas does not fetch fonts or catalog sources itself.
 
-For standalone SVG export, pass the handle as `{ fonts }` to `renderSlideSvg` (one slide) or `renderSvg` (every slide); the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
+For standalone SVG export, pass the handle as `{ fonts }` to `toSvg` (`toSvg(deck, n, ...)` is slide n, `toSvg(deck, ...)` every slide); the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
 
 ```js
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
-const svg = renderSlideSvg(canvas.editor.presentation, 0, { fonts });
+import { toSvg } from '@openpresentation/opf-render/svg';
+const svg = toSvg(canvas.editor.presentation, 1, { fonts }); // slide 1: slides count from 1
 ```
 
-The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `svgToPng` and `svgToPdf`; those functions are not browser APIs.
+The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `toPng` and `toPdf`; those functions are not browser APIs.
 
 ## Editing behavior
 

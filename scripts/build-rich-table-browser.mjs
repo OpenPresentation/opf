@@ -9,7 +9,7 @@ const renderer = path.resolve(process.env.OPF_RENDER_ROOT ?? path.join(root, '..
 const core=path.join(root,'packages/javascript');
 const pkg=JSON.parse(await readFile(path.join(core,'package.json'),'utf8'));
 const coreAliases={};
-for(const [key,value] of Object.entries(pkg.exports)){if(key.includes('*'))continue;const target=typeof value==='string'?value:value.import;if(target)coreAliases['@openpresentation/opf'+(key==='.'?'':key.slice(1))]=path.join(core,target);}
+for(const [key,value] of Object.entries(pkg.exports)){if(key.includes('*'))continue;const target=typeof value==='string'?value:value.import??value.browser;if(target)coreAliases['@openpresentation/opf'+(key==='.'?'':key.slice(1))]=path.join(core,target);}
 const require = createRequire(new URL('../packages/javascript/package.json', import.meta.url));
 const {build} = createRequire(require.resolve('tsup'))('esbuild');
 const {loadFonts} = await import(pathToFileURL(path.join(renderer, 'dist/fonts-node.js')));

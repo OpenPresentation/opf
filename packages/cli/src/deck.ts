@@ -5,7 +5,7 @@
 // the one writer used here (`parse`'s reader that reports instead of throwing, `stringify`); this file adds what a command needs on top:
 // the CLI's catalogs, the error messages with their positions, the YAML modeline and comment count, and the rewrite warnings.
 import { type DeckFormat, type Finding, type ValidateOptions, type ValidationReport, deckFormatOf, stringify } from "@openpresentation/opf";
-import { readDeckReport } from "@openpresentation/opf/node/engine";
+import { readDeckReport } from "@openpresentation/opf/internal/engine";
 import { CLI_CATALOGS } from "./catalogs.js";
 import { parseYamlData, scanYamlComments } from "@openpresentation/opf/yaml";
 
@@ -36,7 +36,7 @@ export function formatNamed(value: unknown): DeckFormat | undefined {
   return value === "json" || value === "yaml" ? value : value === "markdown" || value === "md" ? "markdown" : undefined;
 }
 
-/** True when `--format` names an output deck format that is not JSON (`fill` and `import-data` use `--format csv|tsv|json` for their data). */
+/** True when `--format` names an output deck format that is not JSON (`fill` and `ingest` use `--format csv|tsv|json` for their data). */
 export const isDeckFormatFlag = (value: unknown): boolean => value === "yaml" || value === "markdown" || value === "md";
 
 const FORMAT_MESSAGE = "takes json, yaml or markdown (md).";

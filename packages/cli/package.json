@@ -1,7 +1,7 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.17.0",
-  "description": "The opf command for agents and scripts: create, validate, edit, paginate, render, export to PPTX/PDF, convert, import PPTX, and inspect presentation files. Applications use @openpresentation/opf/node.",
+  "version": "0.17.1",
+  "description": "The opf command for agents and scripts: create, validate, edit, paginate, render, export to PPTX/PDF, convert, import PPTX, and inspect presentation files. Applications use @openpresentation/opf.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -46,8 +46,8 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.17.0",
-    "@openpresentation/opf-render": "^0.17.0"
+    "@openpresentation/opf-pptx": "^0.18.0",
+    "@openpresentation/opf-render": "^0.18.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {

@@ -1,5 +1,5 @@
 // opf-render and opf-pptx are optional peer dependencies of core: core stays small (no native image or PDF engines, no
-// font packs), and an application that only reads, validates or edits a deck never needs them. `@openpresentation/opf/node`
+// font packs), and an application that only reads, validates or edits a deck never needs them. Core's Node build
 // (and the opf CLI, through it) loads them the first time a call needs them, from core's own install location first (a
 // project dependency, a global CLI install, an npx run with several --package flags) and from the working directory
 // second (a project that has them installed while the CLI is global). Nothing is ever fetched.
@@ -7,12 +7,12 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError } from "../api-errors.js";
 
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.17.0", [PPTX_PACKAGE]: "^0.17.0" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.18.0", [PPTX_PACKAGE]: "^0.18.0" } as const;
 
 export interface Diagnostic {
 	code: string;
@@ -47,10 +47,14 @@ export interface FontsHandle extends RenderFonts {
 	registry: FontRegistry;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
 }
+/** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
-	renderSlideSvg(presentation: unknown, index: number, options?: Record<string, unknown>): string;
-	svgToPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
-	svgToPdf(svgs: string | string[], options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** One slide of the deck as SVG; slides count from 1. */
+	toSvg(presentation: unknown, slide: number, options?: Record<string, unknown>): string;
+	/** One SVG slide as PNG. */
+	toPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** SVG slides as one PDF, a page each. */
+	toPdf(svgs: string[], options?: Record<string, unknown>): Promise<Uint8Array>;
 }
 export interface FontsNodeModule {
 	loadFonts(options?: Record<string, unknown>): Promise<FontsHandle>;
@@ -88,9 +92,9 @@ const renderHint = () =>
 	`    svg:                   fonts only`;
 
 const hint = (name: string) =>
-	`${name} is not installed. It is an optional peer of @openpresentation/opf, loaded only by @openpresentation/opf/node and the opf commands that need it. Install it next to the CLI or in your project:\n` +
+	`${name} is not installed. It is an optional peer of @openpresentation/opf, loaded only by the file API of @openpresentation/opf in Node (convert, open) and the opf commands that need it. Install it next to the CLI or in your project:\n` +
 	`  npm install -g ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (global CLI)\n` +
-	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that imports @openpresentation/opf/node or depends on the CLI)\n` +
+	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that calls convert or open of @openpresentation/opf, or depends on the CLI)\n` +
 	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)` +
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
@@ -164,7 +168,7 @@ export interface Renderer {
 
 export async function loadRenderer(): Promise<Renderer> {
 	const render = await loadPeer<RenderModule>(RENDER_PACKAGE);
-	requireFeature(render, ["renderSlideSvg", "svgToPng", "svgToPdf"]);
+	requireFeature(render, ["toSvg", "toPng", "toPdf"]);
 	const fonts = await loadPeer<FontsNodeModule>(RENDER_PACKAGE, "/fonts-node");
 	requireFeature(fonts, ["loadFonts"]);
 	return { render, fonts: fonts.module };

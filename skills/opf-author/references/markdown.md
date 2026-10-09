@@ -25,7 +25,7 @@ opf validate - --input-format markdown < deck.txt         # stdin and other name
 - Only `.opf.md` counts. A plain `.md` outline or README is not a deck; read it with `opf from-md` (`--split headings` for an outline).
 - A command writes Markdown for an output ending `.opf.md` or `--format markdown`, else the format it read. `opf format` rewrites to the canonical form, so hand layout the dialect treats as equivalent is normalized.
 - A Markdown syntax error exits 2 with `line:column` (`opf validate` reports a `markdown/<rule>` finding and exits 1). When a rewrite has to put content into an `opf-slide` or `opf-block` fence that was not there, the CLI warns on stderr; nothing is lost.
-- In code: `parse(text, { filename })` and `stringify(deck, { filename })` from `@openpresentation/opf` read and write JSON, YAML or Markdown by file name (`parse` throws `OPFValidationError` with located findings); `open` and `save` of `@openpresentation/opf/node` do it for files.
+- In code: `parse(text, { filename })` and `stringify(deck, { filename })` from `@openpresentation/opf` read and write JSON, YAML or Markdown by file name (`parse` throws `OPFValidationError` with located findings); `open` and `save` of `@openpresentation/opf` do it for files in Node.
 
 ## The dialect in one screen
 

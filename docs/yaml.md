@@ -1,6 +1,6 @@
 # OPF as YAML
 
-`@openpresentation/opf/yaml` (RR-56) reads and writes an OPF deck as YAML, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-yaml` and `opf to-yaml`, and every command that reads or writes a deck understands `.opf.yaml` files (and, the same way, [`.opf.md` Markdown decks](markdown.md#markdown-decks-in-every-command)); `parse` and `stringify` read and write a deck in JSON, YAML or Markdown with one call, and `open` and `save` of `@openpresentation/opf/node` read and write the files.
+`@openpresentation/opf/yaml` (RR-56) reads and writes an OPF deck as YAML, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-yaml` and `opf to-yaml`, and every command that reads or writes a deck understands `.opf.yaml` files (and, the same way, [`.opf.md` Markdown decks](markdown.md#markdown-decks-in-every-command)); `parse` and `stringify` read and write a deck in JSON, YAML or Markdown with one call, and `open` and `save` of `@openpresentation/opf` read and write the files in Node.
 
 - **JSON stays canonical.** The schema, the interchange form and every package describe the JSON. A `.opf.yaml` file is an authoring serialization of the same data: the parsed YAML is exactly the JSON document, and the [schema](../spec/schemas/opf.schema.json) validates that parsed data.
 - **Write a deck by hand.** YAML has no braces, no quotes around keys and no trailing-comma errors, and a block scalar (`text: |`) keeps a paragraph readable. Comments are allowed in the file (they are not data).
@@ -146,9 +146,9 @@ Every command that reads a deck or a JSON Patch reads YAML too, through one read
 
 A deck is written as YAML when the output name ends `.yaml`/`.yml` or `--format yaml` is given (`--format json` forces JSON, `--format markdown` writes a Markdown deck). When the output is stdout or has another name, the format of the deck that was read is used (a YAML deck is edited, merged, formatted, filled, paginated and bundled back to YAML); commands with no deck input (`create`, `from-md`, `import`) default to JSON. `opf format` canonicalizes a YAML file and converts with `--format`; `--check` works for both.
 
-Left JSON-only on purpose: `validate --config` (a settings file), the `--data` values file of `fill` (CSV, TSV or JSON data, not a deck), the `import-data` source file, and `--signals` output. In `fill` and `import-data`, `--format csv|tsv|json` still names the data format; only `--format yaml` selects the output.
+Left JSON-only on purpose: `validate --config` (a settings file), the `--data` values file of `fill` (CSV, TSV or JSON data, not a deck), the `ingest` source file, and `--signals` output. In `fill` and `ingest`, `--format csv|tsv|json` still names the data format; only `--format yaml` selects the output.
 
-**Comments are not preserved.** A command that rewrites a YAML file (`edit`, `format`, `merge`, `paginate`, `bundle`, `fill`, `import-data --into`, `to-yaml`) writes the canonical text of the data, so comments and the original quoting and layout are lost. The CLI prints `warning: <file> has N comments; comments are not preserved when OPF rewrites a YAML file.` on stderr, and does not fail. The `# yaml-language-server:` line is kept.
+**Comments are not preserved.** A command that rewrites a YAML file (`edit`, `format`, `merge`, `paginate`, `bundle`, `fill`, `ingest --into`, `to-yaml`) writes the canonical text of the data, so comments and the original quoting and layout are lost. The CLI prints `warning: <file> has N comments; comments are not preserved when OPF rewrites a YAML file.` on stderr, and does not fail. The `# yaml-language-server:` line is kept.
 
 ## Decisions and limits
 

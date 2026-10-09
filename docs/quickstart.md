@@ -11,18 +11,18 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.16.0**,
-CLI **0.16.0**, renderer **0.16.0**, PPTX **0.16.0**, editor **0.16.0**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.17.0**,
+CLI **0.17.1**, renderer **0.17.1**, PPTX **0.17.0**, editor **0.17.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.16.0 \
-  @openpresentation/opf-render@0.16.0 \
-  @openpresentation/opf-editor@0.16.0 \
-  @openpresentation/opf-pptx@0.16.1 \
-  @openpresentation/cli@0.16.0
-# opf-render 0.16 keeps its converters and font packages as optional peers: install the ones you use
+npm install @openpresentation/opf@0.17.0 \
+  @openpresentation/opf-render@0.17.1 \
+  @openpresentation/opf-editor@0.17.0 \
+  @openpresentation/opf-pptx@0.17.0 \
+  @openpresentation/cli@0.17.1
+# opf-render 0.17 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5
@@ -44,10 +44,10 @@ ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
 ## The short path
 
-With core 0.17.0 and later, three calls of `@openpresentation/opf/node` cover files in an application:
+With core 0.18.0 and later, three calls of `@openpresentation/opf` cover files in a Node application (core 0.17 had them at `@openpresentation/opf/node`):
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf');            // also .pptx, .png (one per slide), .svg, .zip and the deck forms
 const deck = await opf.open('deck.opf.md');              // .opf.md, .opf.yaml, .opf.json, or a .pptx to import
@@ -98,7 +98,7 @@ const { presentation, pages } = paginate(document, { fonts });
 
 `loadFonts({ pack: 'base' })` loads the bundled Roboto faces for
 `design.fontScheme: 'roboto'`. It returns the fonts handle: every deck-level
-verb (`paginate`, `renderSvg`, `svgToPng`, `svgToPdf`, `toPptx`) takes it as
+verb (`paginate`, `toSvg`, `toPng`, `toPdf`, `toPptx`) takes it as
 `{ fonts }` and reads what it needs from it (the `textMeasurement`, the faces
 to embed, the font files). `resolveSlideContext(document, index, { fonts, catalogs })` resolves
 one slide's layout, canvas, theme and font families (slide design, then deck
@@ -142,11 +142,11 @@ history. Use the editor session or version control for undo.
 
 ## Preview and export
 
-`@openpresentation/opf/node` (core 0.17.0 and later) reads and writes files with the bundled fonts and loads the render and
+`@openpresentation/opf` in Node (core 0.18.0 and later) reads and writes files with the bundled fonts and loads the render and
 PPTX engines you installed:
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.json', 'deck.pdf');
 await opf.convert('deck.opf.json', 'slides/deck.png', { scale: 2 });   // slides/deck-001.png, -002, ...
@@ -166,19 +166,19 @@ errors are in [OPF files in Node](node.md).
 or options the function does not expose.
 
 ```js
-import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
+import { toSvg, toPng, toPdf } from '@openpresentation/opf-render';
 import { toPptx } from '@openpresentation/opf-pptx';
 
-const svgs = renderSvg(presentation, { fonts });   // one SVG per slide
-const png = await svgToPng(svgs[0], { fonts });
-const pdf = await svgToPdf(svgs, { fonts });
+const svgs = toSvg(presentation, { fonts });   // one SVG per slide
+const png = await toPng(svgs[0], { fonts });
+const pdf = await toPdf(svgs, { fonts });
 const pptx = await toPptx(presentation, { fonts });
 ```
 
-`renderSvg` is the local preview of every slide (`renderSlideSvg` draws one). PNG rasterizes that SVG.
+`toSvg` is the local preview of every slide (`toSvg(presentation, 3, { fonts })` draws slide 3 as one string). PNG rasterizes that SVG.
 PDF (opf-render 0.12.0 and later) converts the same SVG to **vector paths with
 selectable, searchable text** in embedded font subsets, with no second layout pass;
-pass `{ mode: 'raster' }` for the image-per-slide output that renderers up to 0.11.9
+pass `{ raster: true }` for the image-per-slide output that renderers up to 0.11.9
 always wrote. Pass the same fonts handle as for PNG; vector PDF never uses system
 fonts.
 `toPptx` is the supported editable PowerPoint export from OPF. Shared

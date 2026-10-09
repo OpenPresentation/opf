@@ -25,9 +25,9 @@ const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.s
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
-// The candidate core declares the same peers (optional, for /node; opf#498 raises them to the next train's line before
+// The candidate core declares the same peers (optional, for its Node build's file API; opf#498 raises them to the next train's line before
 // core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
-if (!report(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (/node optional peers)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
+if (!report(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
 assert.deepEqual(Object.keys(manifest.dependencies ?? {}), ['@openpresentation/opf'], 'core is the only runtime dependency of the CLI');
 const temp = await mkdtemp(path.join(tmpdir(), 'opf-cli-peers-'));
@@ -72,14 +72,16 @@ try {
   // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
   // the core tag; the CLI release keeps the hard gate).
   if (!report(peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version}))) process.exit(0);
-  // One core for the command, @openpresentation/opf/node and both peers.
+  // One core for the command, the application's @openpresentation/opf and both peers.
   await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);
-  assert.equal(installed.exports['./api'], undefined, 'the CLI is the command; applications use @openpresentation/opf/node');
+  assert.equal(installed.exports['./api'], undefined, 'the CLI is the command; applications use @openpresentation/opf');
   const bin = path.join(modules, '@openpresentation/cli', installed.bin.opf);
-  // RR-62: core's /node entry, installed beside the CLI, draws and imports through the installed peers.
+  // RR-62, RR-70: core's root under the `node` condition, installed beside the CLI, draws and imports through the installed peers.
+  const coreManifest = JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8'));
+  const nodeBuild = coreManifest.exports['.'].node ?? coreManifest.exports['.'].import;
   const nodeProbe = path.join(temp, 'node-probe.mjs');
-  await writeFile(nodeProbe, `import * as opf from ${JSON.stringify(pathToFileURL(path.join(modules, '@openpresentation/opf/dist/node.js')).href)};
+  await writeFile(nodeProbe, `import * as opf from ${JSON.stringify(pathToFileURL(path.join(modules, '@openpresentation/opf', nodeBuild)).href)};
     const deck = opf.parse('{"slides":[{"title":"Installed","text":"From the packed core"}]}');
     const pdf = await opf.convert(deck, {format: 'pdf'}), pptx = await opf.convert(deck, {format: 'pptx'}), png = await opf.convert(deck, {format: 'png'});
     const back = await opf.open(pptx.files[0].bytes);

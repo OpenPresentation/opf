@@ -1,26 +1,26 @@
 // `opf convert <input> <output>`: one file to another, the formats named by the file names, through `convert` of
-// `@openpresentation/opf/node` (its plan, conversion.ts in core). The command adds the flags, --fail-on, the JSON report of
+// `@openpresentation/opf` (its plan, conversion.ts in core). The command adds the flags, --fail-on, the JSON report of
 // `opf export` and its exit codes: nothing is written when the document is invalid, a step failed or a finding reaches
 // --fail-on, and an existing output needs --force.
 import path from "node:path";
-import { type ConversionPlan, OPFApiError, Reporter, finishReport, planConversion, writePlanned } from "@openpresentation/opf/node/engine";
-import type { ConvertOptions } from "@openpresentation/opf/node";
+import { type ConversionPlan, OPFApiError, Reporter, finishReport, planConversion, writePlanned } from "@openpresentation/opf/internal/engine";
+import type { ConvertOptions } from "@openpresentation/opf";
 import { FAIL_ON_MESSAGE, parseFailOn } from "./check.js";
 import { FileCommandError, arity, commandError, json, parseOptions, sha256 } from "./io.js";
 import type { Host } from "./render.js";
 
 const SPEC = {
-	values: ["slides", "format", "scale", "date", "asset-dir", "svg-fonts", "fail-on", "pdf-mode", "chartex", "provenance", "image-format"],
-	repeated: ["font-dir"],
-	flags: ["force", "json", "paginate", "include-hidden"],
+	values: ["slides", "format", "scale", "date", "asset-dir", "text", "fail-on", "charts", "provenance", "images"],
+	repeated: ["fonts"],
+	flags: ["force", "json", "paginate", "include-hidden", "raster"],
 };
 
 /** Codes whose findings describe the document: the command prints its report (exit 1) instead of an error. */
 const REPORTED = new Set(["invalid-presentation", "export-failed", "import-failed"]);
 
-export const CONVERT_USAGE = `  opf convert <input> <output> [--slides <1,3-5>] [--format <png|svg>] [--scale <0.1-8>] [--pdf-mode <vector|raster>]
-           [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>] [--image-format <compatible|preserve>]
-           [--svg-fonts <used|none>] [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]...
+export const CONVERT_USAGE = `  opf convert <input> <output> [--slides <1,3-5>] [--format <png|svg>] [--scale <0.1-8>] [--raster]
+           [--charts <auto|native|picture>] [--provenance <full|references-only|none>] [--images <compatible|preserve>]
+           [--text <fonts|system|paths>] [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--fonts <directory>]...
            [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]`;
 
 export async function runConvertCommand(args: string[], host: Host) {
@@ -48,12 +48,12 @@ async function run(args: string[], host: Host) {
 			scale: text("scale") === undefined ? undefined : Number(text("scale")),
 			date: text("date"),
 			assetDir: text("asset-dir"),
-			svgFonts: text("svg-fonts"),
-			pdfMode: text("pdf-mode"),
-			chartex: text("chartex"),
+			text: text("text"),
+			raster: options.raster === true ? true : undefined,
+			charts: text("charts"),
 			provenance: text("provenance"),
-			imageFormat: text("image-format"),
-			fontDirs: repeated["font-dir"],
+			images: text("images"),
+			fonts: repeated.fonts,
 			paginate: options.paginate === true ? true : undefined,
 			includeHidden: options["include-hidden"] === true ? true : undefined,
 		}).filter(([, value]) => value !== undefined),
@@ -124,7 +124,7 @@ async function run(args: string[], host: Host) {
 		report(false);
 		return;
 	}
-	// The commands refuse an existing output unless --force, while `convert` of /node replaces by default: pass it explicitly.
+	// The commands refuse an existing output unless --force, while core's `convert` replaces by default: pass it explicitly.
 	const overwrite = options.force === true;
 	await writePlanned(plan.files, overwrite, true);
 	report(true);

@@ -4,7 +4,7 @@
 // Renderer, exporter and importer findings are appended with a `render/`, `pptx/`, `pdf/`, `fonts/` or `import/`
 // rule prefix and the same word as their category. Exit status follows --fail-on: an error always fails, a warning
 // fails under --fail-on warning.
-import type { Finding, FindingSeverity, ValidationReport } from "../index.js";
+import type { Finding, FindingSeverity, ValidationReport } from "../core.js";
 import { pointerOf } from "./files.js";
 import type { Diagnostic } from "./peers.js";
 
@@ -33,7 +33,7 @@ const HELP: Record<string, string> = {
 	"unresolved-asset": "Embed the image as a data URI, or keep the file inside the deck folder (see --asset-dir). URLs are never fetched.",
 	"asset-blocked": "Move the file under the deck folder or pass --asset-dir <directory> that contains it.",
 	"script-font-not-installed": "Install the Noto script package named in the message next to the CLI, then run the command again.",
-	"font-glyph-fallback": "The chosen font lacks these characters; a bundled font draws them. Supply a font with --font-dir to change that.",
+	"font-glyph-fallback": "The chosen font lacks these characters; a bundled font draws them. Supply a font with --fonts to change that.",
 	"unresolved-reference": "Use an id from opf catalog <kind>, define the record in catalogs.custom, or run opf embed to embed what the deck references.",
 	"unresolved-content": "Check the content at this path; it could not be drawn.",
 	"chart-data-adapted": "The chart data was reshaped to export a native chart; see the message.",
@@ -41,9 +41,9 @@ const HELP: Record<string, string> = {
 	"content-placeholder": "This content has no PowerPoint form; a placeholder frame stands in for it.",
 	"unsupported-image-treatment": "Remove or change the image treatment at this path.",
 	"date-needs-value": "Pass --date YYYY-MM-DD. The CLI never reads a clock, so output stays reproducible.",
-	"font-unavailable": "Pass --font-dir with the font files, or choose a font the bundled pack covers (opf catalog fontSchemes).",
-	"missing-glyph": "Install the script font package named by script-font-not-installed, or supply a covering font with --font-dir.",
-	"duplicate-font-face": "A --font-dir face repeats a bundled family, weight and style; remove it or rename the family.",
+	"font-unavailable": "Pass --fonts with the font files, or choose a font the bundled pack covers (opf catalog fontSchemes).",
+	"missing-glyph": "Install the script font package named by script-font-not-installed, or supply a covering font with --fonts.",
+	"duplicate-font-face": "A --fonts face repeats a bundled family, weight and style; remove it or rename the family.",
 };
 
 /** A finding of the shared format, with the library's details (font family, package, ...) alongside. */

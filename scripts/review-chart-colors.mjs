@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {svgToPng} from '../../opf-render/dist/index.js';
+import {toPng} from '../../opf-render/dist/index.js';
 const [previousDirectory,currentDirectory,outputDirectory]=process.argv.slice(2);
 assert.ok(previousDirectory&&currentDirectory&&outputDirectory,'Pass previous and current golden directories and a new review directory.');
 const previous=path.resolve(previousDirectory),current=path.resolve(currentDirectory),output=path.resolve(outputDirectory);
@@ -27,7 +27,7 @@ for(const [index,key]of keys.entries()){
 const escapeXml=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;');
 for(let start=0;start<images.length;start+=12){
  const rows=images.slice(start,start+12),svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="${rows.length*240}"><rect width="100%" height="100%" fill="#e2e8f0"/>${rows.map(({old,next,index},i)=>`<text x="12" y="${i*240+20}" font-family="Roboto" font-size="16">${escapeXml(keys[index])} — before / after</text><image x="10" y="${i*240+27}" width="700" height="205" href="data:image/png;base64,${old.toString('base64')}"/><image x="730" y="${i*240+27}" width="700" height="205" href="data:image/png;base64,${next.toString('base64')}"/>`).join('')}</svg>`;
- await writeFile(path.join(output,`sheet-${start/12}.png`),await svgToPng(svg));
+ await writeFile(path.join(output,`sheet-${start/12}.png`),await toPng(svg));
 }
 await writeFile(path.join(output,'review.json'),JSON.stringify({source:after.source,beforeManifestSha256:hash(await readFile(path.join(previous,'candidate.json'))),afterManifestSha256:hash(await readFile(path.join(current,'candidate.json'))),verifiedImagesPerPhase:keys.length,changed,scope:'Source content unchanged; only slides containing charts changed. Exact before/after bytes verified. Review sheets are raster-regression aids, not browser/native equivalence or baseline approval.'},null,2)+'\n');
 console.log(JSON.stringify({verifiedImagesPerPhase:keys.length,changed:changed.length,sheets:Math.ceil(changed.length/12),output}));

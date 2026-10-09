@@ -152,11 +152,11 @@ describe("reading a deck.opf.md", () => {
 
   test("render and export read a Markdown deck and locate validation errors in it", () => {
     write("render.opf.md", "---\nname: Render\n---\n\n<!-- slide: id=s1 -->\n# Hello\n\nWorld\n");
-    const rendered = run(["render", "render.opf.md", "--slides", "1", "--out", "-", "--format", "svg", "--svg-fonts", "none"]);
+    const rendered = run(["render", "render.opf.md", "--slides", "1", "--out", "-", "--format", "svg", "--text", "system"]);
     if (rendered.status === 2 && /opf-render/.test(rendered.stderr)) return; // the optional renderer is not installed
     assert.equal(rendered.status, 0, rendered.stderr.slice(0, 500));
     assert.match(rendered.stdout, /<svg/);
-    const exported = run(["export", "render.opf.md", "--format", "svg", "--out", "exported", "--svg-fonts", "none"]);
+    const exported = run(["export", "render.opf.md", "--format", "svg", "--out", "exported", "--text", "system"]);
     assert.equal(exported.status, 0, exported.stderr.slice(0, 500));
     assert.ok(readdirSync(path.join(temp, "exported")).some((name) => name.endsWith(".svg")));
     write("render-bad.opf.md", "---\nname: Render\nlanguage: 5\n---\n\n# Hello\n");
@@ -278,17 +278,17 @@ describe("writing a deck.opf.md", () => {
     assert.equal(run(["validate", "fresh.opf.md"]).status, 0);
   });
 
-  test("import-data and fill read Markdown decks and write them by --format markdown or the output name", () => {
+  test("ingest and fill read Markdown decks and write them by --format markdown or the output name", () => {
     write("data.csv", "Quarter,Revenue\nQ1,12\nQ2,18\n");
     write("data.opf.md", deckMd);
-    const into = run(["import-data", "data.csv", "--as", "chart", "--into", "data.opf.md", "--in-place"]);
+    const into = run(["ingest", "data.csv", "--as", "chart", "--into", "data.opf.md", "--in-place"]);
     assert.equal(into.status, 0, into.stderr);
     assert.match(read("data.opf.md"), /```chart/);
     assert.equal(run(["validate", "data.opf.md"]).status, 0);
-    const fresh = run(["import-data", "data.csv", "--as", "table", "--format", "markdown"]);
+    const fresh = run(["ingest", "data.csv", "--as", "table", "--format", "markdown"]);
     assert.equal(fresh.status, 0, fresh.stderr);
     assert.match(fresh.stdout, /\| Quarter \| Revenue \|/);
-    assert.equal(run(["import-data", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
+    assert.equal(run(["ingest", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
 
     const template = run(["edit", TEMPLATE, "--patch", patch("noop3.json", []), "--output", "template.opf.md"]);
     assert.equal(template.status, 0, template.stderr);

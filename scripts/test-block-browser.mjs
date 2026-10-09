@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {renderSlideSvg} from '../../opf-render/src/svg.js';
+import {toSvg} from '../../opf-render/src/svg.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let count=0;
 const check=(value,message)=>{if(!value)throw new Error(message);count++;out.textContent+=`PASS ${message}\n`;};
 const original={name:'Block moves',slides:[{title:'Arrange complete content blocks',notes:'Keep notes',composition:{mode:'row',weights:[2,1,1]},blocks:[{text:[{text:'A: Keep all formatting.',bold:true}]},{composition:{mode:'column'},blocks:[{text:'B: A nested point.'},{text:'C: Another point.'}]},{text:'D: Supporting context.'}]}]};
@@ -19,7 +19,7 @@ try{
  handle('/slides/0/blocks/0').click();change('Move destination','/slides/0/blocks/1');change('Move position','1');button('Move').click();
  check(editor.get('slides.0.blocks.0.blocks.1.text.0.bold')===true,'move menu inserts into a group after index shifts');
  check(editor.get('slides.0.composition.weights.0')===2,'track weights stay with positions');
- const expected=document.createElement('div');expected.innerHTML=renderSlideSvg(editor.presentation,0);
+ const expected=document.createElement('div');expected.innerHTML=toSvg(editor.presentation,1);
  const glyphs=node=>[...node.querySelectorAll('text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y'),n.getAttribute('font-size')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(expected)),'moved slide matches standalone renderer geometry');editor.undo();
  handle('/slides/0/blocks/1').click();check(![...host.querySelector('[aria-label="Move destination"]').options].some(o=>o.value==='/slides/0/blocks/1'),'group cannot be selected as its own destination');button('Cancel').click();

@@ -145,12 +145,14 @@ const result = spawnSync(process.execPath, ['scripts/build-gallery-snapshot.mjs'
 if (result.status !== 0) throw new Error('Gallery snapshot build failed');
 await copyFile(path.join(root, 'artifacts/editor/gallery.json'), path.join(out, 'gallery.json'));
 const { validate } = await registry.import('@openpresentation/opf');
-const { renderSvg } = await registry.import('@openpresentation/opf-render');
+// RR-74: opf-render 0.18 names the deck-level engine toSvg; the release plan's renderer may still be older (renderSvg).
+const render = await registry.import('@openpresentation/opf-render');
+const toSvg = render.toSvg ?? render.renderSvg;
 const gallery = JSON.parse(await readFile(path.join(out, 'gallery.json'), 'utf8'));
 for (const { id, opf } of gallery.items) {
   const result = validate(opf, { only: ['format'] });
   if (!result.valid) throw new Error(`Invalid gallery document ${id}: ${JSON.stringify(result.findings)}`);
-  renderSvg(opf);
+  toSvg(opf);
 }
 const { opfSchemas, listSchemaFields } = await registry.import('@openpresentation/opf-editor/schema');
 const fields = listSchemaFields();

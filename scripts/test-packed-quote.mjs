@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation,renderSlideSvg} from '@openpresentation/opf-render/svg';
+import {resolvePresentation, toSvg} from '@openpresentation/opf-render/svg';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const fonts=await loadFonts();
 // OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme); a 0.14 core has no /catalog.
@@ -19,7 +19,7 @@ assert.deepEqual(accepted.slides[0].quote,before.slides[0].quote);
 const item=resolvePresentation(accepted,options).slides[0].geometry.items.find(item=>item.field==='quote');
 assert.ok(item.quoteLayout.parts.every(part=>part.fit.fontSize>=24));
 assert.equal(item.text,item.quoteLayout.parts[0].fit);
-assert.match(renderSlideSvg(accepted,0,options),/Reviewer - Recorded interview/);
+assert.match(toSvg(accepted,1,options),/Reviewer - Recorded interview/);
 assert.equal(editor.paginateSlide(0,options).change,null);
 editor.undo();assert.deepEqual(editor.presentation,before);
 editor.redo();assert.deepEqual(editor.presentation,accepted);
