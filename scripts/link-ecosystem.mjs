@@ -4,6 +4,7 @@ import { existsSync, lstatSync, readFileSync, realpathSync, rmSync, symlinkSync,
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
+import {assertSingleCore} from './check-one-core.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const opfPackage = path.join(root, 'packages/javascript');
 if (!existsSync(path.join(opfPackage, 'dist/composition.js'))) throw new Error('Build OPF first: pnpm build');
@@ -40,6 +41,17 @@ for (const name of names) {
     const result = spawnSync(command, args, { cwd: directory, stdio: 'inherit' });
     if (result.error) throw result.error;
     if (result.status !== 0) process.exit(result.status ?? 1);
+  }
+  // RR-62: the linked checkout is the only core. Core now declares opf-render and opf-pptx as optional peers (and has them as
+  // devDependencies), so check that no sibling, and no sibling's linked renderer or converter, reaches another copy.
+  if (name !== 'pptx-gallery') {
+    const linked = ['opf-render', 'opf-pptx'].filter((peer) => existsSync(path.join(directory, 'node_modules', '@openpresentation', peer, 'package.json')));
+    await assertSingleCore({
+      expected: opfPackage,
+      roots: [directory],
+      resolvers: [path.join(directory, 'package.json'), ...linked.map((peer) => path.join(directory, 'node_modules', '@openpresentation', peer, 'package.json'))],
+      label: `${name} (linked ecosystem)`,
+    });
   }
   console.log(`${name}: linked current OPF${name === 'opf-pptx' || name === 'opf-editor' ? ', renderer' : ''}${name === 'opf-editor' ? ', converter' : ''} checkout`);
 }

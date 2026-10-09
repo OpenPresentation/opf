@@ -5,7 +5,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, describe, test } from "node:test";
@@ -17,7 +17,9 @@ const cliRoot = fileURLToPath(new URL("..", import.meta.url));
 const executable = process.env.OPF_TEST_BIN ?? path.join(cliRoot, "dist", "index.js");
 const peers = cliPeerGate({ cliRoot, executable, names: ["@openpresentation/opf-render", "@openpresentation/opf-pptx"] });
 const skip = report(peers) ? false : "the optional peers are not on npm at the versions the CLI asks for";
-const temp = await mkdtemp(path.join(tmpdir(), "opf-convert-command-"));
+// The commands report paths resolved against the working directory, which the OS gives as a real path (macOS /var is
+// /private/var): the expected paths start from the real path of the temporary folder too, as files.mjs does.
+const temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-convert-command-")));
 after(() => rm(temp, { recursive: true, force: true }));
 
 const deck = { name: "Convert deck", slides: [{ title: "One" }, { title: "Two", items: ["a", "b"] }, { title: "Three" }] };

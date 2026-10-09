@@ -67,6 +67,7 @@
     "check:catalog": "node --test scripts/sync-gallery-catalog.test.mjs && node scripts/sync-gallery-catalog.mjs --verify",
     "check:catalog-free": "node scripts/check-catalog-free.mjs",
     "check:browser-safe": "node --test scripts/check-browser-safe.test.mjs && node scripts/check-browser-safe.mjs",
+    "check:one-core": "node --test scripts/check-one-core.test.mjs",
     "sync:catalog": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
     "check:examples": "node scripts/validate-examples.mjs && node scripts/inspect-example-findings.mjs && node scripts/check-generated-examples.mjs && node scripts/generate-example-suite.mjs --check",
     "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",

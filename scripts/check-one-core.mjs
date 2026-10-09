@@ -36,6 +36,34 @@ async function coreCopies(directory, found = new Set(), depth = 0) {
 }
 
 /**
+ * RR-62: fail loudly when a tree resolves more than one core. `roots` are directories whose `node_modules` trees are scanned
+ * (a sibling checkout, a consumer project); `resolvers` are files to resolve `@openpresentation/opf` from (a sibling's package
+ * root or its built entry). Every copy found and every resolution must be `expected` (a core package directory). The message
+ * names each path and its version.
+ */
+export async function assertSingleCore({ expected, roots = [], resolvers = [], label = 'tree' }) {
+  const want = await realpath(expected);
+  const version = async (directory) => JSON.parse(await readFile(path.join(directory, 'package.json'), 'utf8')).version;
+  const problems = [];
+  for (const root of roots) {
+    for (const copy of await coreCopies(path.join(root, 'node_modules'))) {
+      if (copy !== want) problems.push(`${root} holds another @openpresentation/opf at ${copy} (${await version(copy)})`);
+    }
+  }
+  for (const from of resolvers) {
+    let resolved;
+    try {
+      resolved = path.dirname(await realpath(createRequire(from).resolve('@openpresentation/opf/package.json')));
+    } catch (error) {
+      problems.push(`${from} resolves no @openpresentation/opf (${error.message})`);
+      continue;
+    }
+    if (resolved !== want) problems.push(`${from} resolves @openpresentation/opf at ${resolved} (${await version(resolved)})`);
+  }
+  assert.deepEqual(problems, [], `${label}: one core expected at ${want} (${await version(want)}), found more:\n  ${problems.join('\n  ')}`);
+}
+
+/**
  * @param {string} nodeModules a node_modules directory with @openpresentation/cli and @openpresentation/opf installed
  * @param {{application?: boolean}} [options] application: false for a global install (`npm install --global`), where no
  *   application sits beside the CLI and core is the CLI's own dependency: the CLI must then resolve the one copy.

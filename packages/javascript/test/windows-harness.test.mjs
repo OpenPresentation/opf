@@ -42,7 +42,9 @@ test('local package links build through real npm and can replace existing juncti
   await mkdir(path.join(root,'scripts'),{recursive:true});
   await mkdir(path.join(root,'packages/javascript/dist'),{recursive:true});
   await writeFile(path.join(root,'packages/javascript/dist/composition.js'),'export {};');
-  for (const file of ['link-ecosystem.mjs','package-manager.mjs']) {
+  // The link step checks that each sibling resolves this one core (RR-62), so the stand-in core has a manifest.
+  await writeFile(path.join(root,'packages/javascript/package.json'),JSON.stringify({name:'@openpresentation/opf',version:'0.0.0'}));
+  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs']) {
     await cp(new URL(`../../../scripts/${file}`,import.meta.url),path.join(root,'scripts',file));
   }
   const names=['opf-render','opf-pptx','opf-editor'];
@@ -76,7 +78,7 @@ test('local linking refuses a node_modules parent that resolves outside its chec
   await mkdir(path.join(root,'scripts'),{recursive:true});
   await mkdir(path.join(root,'packages/javascript/dist'),{recursive:true});
   await writeFile(path.join(root,'packages/javascript/dist/composition.js'),'export {};');
-  for (const file of ['link-ecosystem.mjs','package-manager.mjs']) {
+  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs']) {
     await cp(new URL(`../../../scripts/${file}`,import.meta.url),path.join(root,'scripts',file));
   }
   await mkdir(repo,{recursive:true});
