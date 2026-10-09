@@ -74,12 +74,12 @@ export function isCoreReleaseRef(ref = '') {
   return /^refs\/tags\/(opf-v|@openpresentation\/opf@v)\d/.test(ref);
 }
 
-export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event, ref = process.env.GITHUB_REF ?? '' }) {
+export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}, event, ref = process.env.GITHUB_REF ?? '', subject = '@openpresentation/cli' }) {
   const manifest = JSON.parse(readFileSync(path.join(cliRoot, 'package.json'), 'utf8'));
   const require = createRequire(executable);
   const peers = names.map((name) => {
     const range = manifest.peerDependencies?.[name];
-    if (!range) throw new Error(`@openpresentation/cli declares no peer range for ${name}`);
+    if (!range) throw new Error(`${subject} declares no peer range for ${name}`);
     let installed = installedVersions[name];
     if (installed === undefined) {
       try { installed = JSON.parse(readFileSync(require.resolve(`${name}/package.json`), 'utf8')).version; } catch { installed = null; }
@@ -93,7 +93,7 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
     return { run: false, peers, message: `RR-55: ${ref.replace('refs/tags/', '')} publishes @openpresentation/opf only, before its siblings; the CLI tests through the published peers (${required}) skip here and run with the hard gate in the CLI's own release (cli-publish.yml).` };
   }
   const result = gate({
-    subject: '@openpresentation/cli',
+    subject,
     required: unmet.map((peer) => `${peer.name}@${peer.range}`).join(' and '),
     installed: unmet.map((peer) => `${peer.name} ${peer.installed ?? 'missing'}`).join(', '),
     met: false,
