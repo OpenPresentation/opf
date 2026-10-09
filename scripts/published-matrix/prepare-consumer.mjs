@@ -86,11 +86,11 @@ for (const name of PACKAGES) {
 await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
 
 // The same entry points as engines-source.mjs, resolved from this consumer's node_modules. The matrix uses the 0.18 names of the
-// renderer (RR-74: toSvg of a whole deck, toPng of one SVG); a published renderer older than 0.18 has them as renderSvg and svgToPng.
+// renderer (RR-74: toSvg of a whole deck, toPng of one SVG); a published renderer older than 0.18 has them as renderSvg and svgToPng, which the harness of the plan core's release tag still calls, so both names are exported then.
 const renderer = planned['@openpresentation/opf-render'].split('.').map(Number);
 const rendererEngines = renderer[0] > 0 || renderer[1] >= 18
   ? "export {toSvg, toPng} from '@openpresentation/opf-render';"
-  : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');
+  : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export {renderSvg, svgToPng};', 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');
 await writeFile(path.join(target, 'engines-installed.mjs'), `export {BUNDLED_FONT_MANIFEST, loadFonts} from '@openpresentation/opf-render/fonts-node';
 export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '@openpresentation/opf-render/fonts';
 ${rendererEngines}
