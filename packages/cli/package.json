@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "The opf command for agents and scripts: create, validate, edit, paginate, render, export to PPTX/PDF, convert, import PPTX, and inspect presentation files. Applications use @openpresentation/opf/node.",
   "license": "MIT",
   "type": "module",
