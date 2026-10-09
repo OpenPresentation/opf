@@ -63,7 +63,7 @@ exposes `@openpresentation/cli/api`; the renderer and PPTX stay optional peers. 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.16.0 with renderer 0.16.0, PPTX 0.16.0 and editor 0.16.0), so
+core in lockstep (core 0.16.0 with renderer 0.16.0, PPTX 0.16.1 and editor 0.16.0), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
