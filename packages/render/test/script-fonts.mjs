@@ -171,7 +171,11 @@ assert.deepEqual(scriptRuns(renderSlideSvg(deck('zh-Hant','roboto','Report 季�
 const arabicMixed=renderSlideSvg(deck('ar','roboto','العربية PowerPoint 365.','English only line.'), 0, {fonts: fonts});
 const title=arabicMixed.match(/<text [^>]*font-size="54"[^>]*>(.*?)<\/text>/s)[1];
 const positions=[...title.matchAll(/<tspan [^>]*x="([\d.]+)"[^>]*>\u2067([^<]*)\u2069<\/tspan>/g)].map(match=>[match[2],Number(match[1])]);
-assert.deepEqual(positions.map(([text])=>text),['العربية ','PowerPoint 365.']);
+// RR-59 (#175): the Arabic run draws without its trailing space (bidi L1 would put it at the run's right edge), after the space's advance.
+assert.deepEqual(positions.map(([text])=>text),['العربية','PowerPoint 365.']);
+const latinTspan=/<tspan [^>]*>⁧PowerPoint 365\.⁩<\/tspan>/.exec(title)[0];
+const latinEnd=Number(/ x="([\d.]+)"/.exec(latinTspan)[1])+Number(/textLength="([\d.]+)"/.exec(latinTspan)[1]);
+assert.ok(positions[0][1]-latinEnd>5,`the space between the runs stays in x (${positions[0][1]-latinEnd})`);
 assert.ok(positions[0][1]>positions[1][1],'The first logical run is placed to the right');
 assert.match(arabicMixed,/>English only line\.</);
 

@@ -1732,12 +1732,30 @@ function nestedReset(style, run) {
   return parent && !disabledFeaturesStyle([run.stack ?? run.family].flat()[0]) ? RESET_POLICY_FEATURES : undefined;
 }
 
-function scriptLine(text, style, bound, type, { rtl = false, placement, trace, fontSize } = {}) {
+// RR-59 (#175): bidi rule L1 resets white space at the end of a line (with the isolate marks around it) to the paragraph level. A run
+// drawn as its own text chunk (a <text>, or a tspan with its own x) is such a line, and its paragraph is left to right, so the trailing
+// space of a right-to-left isolate drew at the run's right edge instead of its left, where it separates the run from the next one: at an
+// Arabic/Latin boundary the gap closed up (PowerPoint keeps it). A positioned run of a right-to-left line therefore draws without its
+// trailing white space, its glyphs starting after that white space's measured advance. Returns the white space ("" when there is none,
+// or when the text is all white space).
+function rtlTrailingSpace(text) {
+  const found = /\S(\s+)$/u.exec(text);
+  return found ? found[1] : "";
+}
+
+/**
+ * `runPlacement` ({x, width, fontSize}) positions the runs like `placement`, but only when the text plans into more than one run
+ * (RR-59, #175): a list entry's line has no placed origin from core, and drawn as one chunk of nested tspans resvg shapes the whole
+ * chunk with the outer face first and, when a fallback face covers every character, replaces every glyph with that face's (the Latin
+ * phrase of an Arabic item took a wider fallback face and ran into the bullet).
+ */
+function scriptLine(text, style, bound, type, { rtl = false, placement, runPlacement, trace, fontSize } = {}) {
   const value = String(text ?? "");
   const scripts = (style?.lang && bound.scriptFontsFor?.(style.lang)) || bound.scriptFonts;
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
+  if (!placement && runPlacement && runs.length > 1) placement = runPlacement;
   // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
   const shiftOf = list => { const shift = baselineShift(list); return shift ? { baselineShift: shift } : {}; };
   // FF-45: symbol runs (Wingdings, Symbol, Webdings codes drawn as their Unicode equivalents) are always positioned when the
@@ -1763,16 +1781,20 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace, f
     advance += width;
     const start = offset;
     offset += run.symbol ? run.symbol.source.length : run.text.length;
+    // RR-59: a right-to-left run's trailing white space sits at its left edge (see rtlTrailingSpace); the glyphs draw after it.
+    const trail = rtl && !run.symbol ? rtlTrailingSpace(run.text) : "";
+    const drawn = trail ? run.text.slice(0, -trail.length) : run.text;
+    const gap = trail ? Math.min(width, Math.max(0, width - scripts.runWidths([{ ...run, text: drawn }], placement.fontSize, style)[0] * factor)) : 0;
     // A symbol glyph keeps the open face's shape: it is compressed to its code's advance only when wider, never stretched.
-    const pinned = run.symbol ? natural[index] > width + 1e-6 : width > 0;
+    const pinned = run.symbol ? natural[index] > width + 1e-6 : width - gap > 0;
     return tag("tspan", {
-      x: stableNumber(placement.x + left),
-      textLength: pinned ? stableNumber(width) : undefined, lengthAdjust: pinned ? "spacingAndGlyphs" : undefined,
+      x: stableNumber(placement.x + left + gap),
+      textLength: pinned ? stableNumber(width - gap) : undefined, lengthAdjust: pinned ? "spacingAndGlyphs" : undefined,
       "font-family": run.own ? undefined : fontStack(run.family, type),
       "font-size": adjusted(run),
       style: run.own ? undefined : nestedReset(style, run),
-      ...(trace ? trace(start, offset) : {})
-    }, isolate(escapeText(run.text)));
+      ...(trace ? trace(start, offset - trail.length) : {})
+    }, isolate(escapeText(drawn)));
   }).join("");
   return { content, positioned: true, ...shiftOf(runs) };
 }
@@ -1959,16 +1981,29 @@ function renderRichLines(value,fit,box,bound,config) {
       ? (linked ? bound.design.colors.hyperlink : config.fill)
       : resolveColorRef(run.color, bound, config.fill);
     let fixedAdvance=(fragment.kind==='tab'||placed)&&fragment.width>0;
+    // RR-59 (#175): measured fragments of a line core did not place (a list entry) keep their measured origin; a mixed-script one
+    // positions its runs (scriptLine runPlacement) as a placed line does.
+    const measuredLine=!asFlow&&!naturalFlow&&fragment.kind!=='tab'&&fragment.width>0;
+    // A right-to-left fragment draws without its trailing white space, after that white space's measured advance (rtlTrailingSpace).
+    const trail=rtl&&measuredLine&&fragment.kind!=='marker'?rtlTrailingSpace(fragment.text):'';
+    let gap=0;
+    if(trail){
+      const measure=textWidthMeasurer(fragment.style,config.options.textMeasurement),full=measure(fragment.text,fragment.fontSize);
+      gap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-trail.length),fragment.fontSize)/full))):0;
+      if(!asFlow)position.x=stableNumber(originX+fragmentX+gap);
+    }
+    const drawnText=trail?fragment.text.slice(0,-trail.length):fragment.text,drawnWidth=fragment.width-gap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
-    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(fragment.text,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
-      placement:fixedAdvance&&!asFlow?{x:originX+fragmentX,width:fragment.width,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
+    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
+      placement:fixedAdvance&&!asFlow?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,
+      runPlacement:measuredLine&&!fixedAdvance?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
     if(scripted.positioned)fixedAdvance=false;
     const content=`${edges.first?RIGHT_TO_LEFT_ISOLATE:''}${scripted.content}${edges.last?POP_DIRECTIONAL_ISOLATE:''}`;
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
     if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
