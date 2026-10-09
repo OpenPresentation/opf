@@ -24,8 +24,12 @@ try {
   for (const name of ['index-min.js', 'LICENSE.md', 'UPSTREAM.json']) assert.ok(shipped.has(`vendor/jszip/${name}`), `Missing shipped vendor file: jszip/${name}`);
   const consumer = path.join(temporary, 'consumer');
   await mkdir(consumer);
-  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
-  npm(['install', '--ignore-scripts', '--no-fund', '--no-audit', path.join(temporary, packed.filename)], consumer);
+  // Core 0.17 declares this package as an optional peer of its /node entry. `npm audit signatures` follows that registry edge
+  // to the tarball and asks npm for a version it does not have yet (ETARGET); the override resolves the edge to the tarball too.
+  // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
+  const self = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8')), coreName = '@openpresentation/opf';
+  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', dependencies: { [self.name]: `file:${path.join(temporary, packed.filename)}`, [coreName]: self.dependencies[coreName] }, overrides: { [self.name]: `$${self.name}` } }));
+  npm(['install', '--ignore-scripts', '--no-fund', '--no-audit'], consumer);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-pptx'),files={};
   for(const {path:file} of packed.files){
     assert.ok(!path.isAbsolute(file)&&!file.split(/[/\\]/).includes('..'));
