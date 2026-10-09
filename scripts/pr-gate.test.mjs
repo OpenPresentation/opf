@@ -19,7 +19,7 @@ const NO_QUEUE_RULES = [RULES[0]];
 const notFound = Object.assign(new Error('HTTP 404'), { status: 404 });
 
 let nextId = 1;
-function run(name, conclusion = 'SUCCESS', { status = 'COMPLETED', oid = HEAD, app = 15368, runId = 900, at = '2026-10-07T11:00:00Z', id = nextId++ } = {}) {
+function run(name, conclusion = 'SUCCESS', { status = 'COMPLETED', oid = HEAD, app = 15368, runId = 900, at = '2026-10-07T11:00:00Z', id = nextId++, workflow = 'CI', attempt = 1 } = {}) {
   return {
     __typename: 'CheckRun',
     databaseId: id,
@@ -28,7 +28,7 @@ function run(name, conclusion = 'SUCCESS', { status = 'COMPLETED', oid = HEAD, a
     conclusion: status === 'COMPLETED' ? conclusion : null,
     detailsUrl: `https://github.com/o/r/actions/runs/${runId}/job/${id}`,
     startedAt: at,
-    checkSuite: { commit: { oid }, app: { slug: 'github-actions', databaseId: app }, workflowRun: { databaseId: runId, event: 'pull_request' } },
+    checkSuite: { commit: { oid }, app: { slug: 'github-actions', databaseId: app }, workflowRun: { databaseId: runId, event: 'pull_request', runAttempt: attempt, workflow: { name: workflow } } },
   };
 }
 const pending = (name, options = {}) => run(name, null, { status: 'IN_PROGRESS', ...options });
@@ -37,7 +37,7 @@ function status(context, state, { oid = HEAD } = {}) {
 }
 const GREEN = () => [run('packages'), run('Verify OPF packages')];
 
-function pr({ head = HEAD, contexts = [], mergeable = 'MERGEABLE', mss = 'CLEAN', state = 'OPEN', merged = false, inQueue = false, removedAt = null, draft = false, suites = [], commitOid = head, mergeCommit = null, more = null }) {
+function pr({ head = HEAD, contexts = [], mergeable = 'MERGEABLE', mss = 'CLEAN', state = 'OPEN', merged = false, inQueue = false, removedAt = null, removalReason = 'MERGE_GROUP_FAILED', draft = false, suites = [], commitOid = head, mergeCommit = null, more = null }) {
   return {
     id: 'PR_1',
     number: 7,
@@ -51,7 +51,7 @@ function pr({ head = HEAD, contexts = [], mergeable = 'MERGEABLE', mss = 'CLEAN'
     mergeStateStatus: mss,
     isInMergeQueue: inQueue,
     mergeQueueEntry: inQueue ? { state: 'AWAITING_CHECKS', position: 1 } : null,
-    timelineItems: { nodes: removedAt ? [{ reason: 'MERGE_GROUP_FAILED', createdAt: new Date(removedAt).toISOString() }] : [] },
+    timelineItems: { nodes: removedAt ? [{ reason: removalReason, createdAt: new Date(removedAt).toISOString() }] : [] },
     commits: { nodes: [{ commit: { oid: commitOid, statusCheckRollup: { state: 'X', contexts: { totalCount: contexts.length, pageInfo: { hasNextPage: Boolean(more), endCursor: more ? 'c1' : null }, nodes: contexts } }, checkSuites: { nodes: suites } } }] },
   };
 }
@@ -234,7 +234,7 @@ test('--merge enqueues with the expected head and retries while mergeability has
   assert.equal(state.mutations.length, 3);
   assert.ok(state.mutations.every((call) => call.query.includes('enqueuePullRequest') && call.variables.head === HEAD && call.variables.id === 'PR_1'));
   assert.deepEqual(state.sleeps.slice(0, 2), [60000, 60000]);
-  assert.ok(has(state.lines, /^.{8} MERGED o\/r#7 d{40}$/));
+  assert.ok(has(state.lines, /^.{8} MERGED o\/r#7 d{40} \(merged by the merge queue\)$/));
   assert.equal(state.rest.length, 1, 'REST only for the ruleset, once');
 });
 
@@ -298,6 +298,138 @@ test('a draft is green without --merge but is not merged', async () => {
   const merging = fake({ polls: [poll(pr({ contexts: GREEN(), draft: true, mss: 'DRAFT' }))] });
   assert.equal((await gate(['o/r#7', '--merge', '--timeout-minutes', '5'], merging.deps)).code, EXIT.timeout);
   assert.equal(merging.state.mutations.length, 0);
+});
+
+// -- RR-67: queue merges, superseded runs, head lag -----------------------------------------------------------------
+
+const MERGE_SHA = 'd'.repeat(40);
+const enqueued = { data: { enqueuePullRequest: { mergeQueueEntry: { state: 'QUEUED', position: 1 } } } };
+
+test('RR-67: a PR the merge queue merged is MERGED (exit 0), also while its removal shows before the merged state', async () => {
+  const { deps, state } = fake({
+    polls: [
+      poll(pr({ contexts: GREEN(), inQueue: true })),
+      // The queue records a removal with the reason "merged" in the same second as the merge; the PR still reads as open.
+      (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: 'merged' })),
+      poll(pr({ state: 'MERGED', merged: true, mergeCommit: MERGE_SHA })),
+    ],
+  });
+  const result = await gate(['o/r#7', '--merge'], deps);
+  assert.equal(result.code, EXIT.ok);
+  assert.equal(result.results[0].outcome, 'merged');
+  assert.equal(result.results[0].via, 'merge-queue');
+  assert.equal(state.queries.length, 3);
+  assert.equal(state.mutations.length, 0);
+  assert.ok(has(state.lines, /the merge queue merged it/));
+  assert.ok(has(state.lines, /MERGED o\/r#7 d{40} \(merged by the merge queue\)/));
+  assert.ok(!has(state.lines, /EJECTED|ejected/));
+
+  // Merged state visible on the very first poll after the removal: no waiting at all.
+  const direct = fake({ polls: [poll(pr({ contexts: GREEN(), inQueue: true })), poll(pr({ state: 'MERGED', merged: true, mergeCommit: MERGE_SHA }))] });
+  assert.equal((await gate(['o/r#7', '--merge'], direct.deps)).code, EXIT.ok);
+});
+
+test('RR-67: a "merged" removal on a PR that never reads as merged is handled as an ejection after a bounded wait', async () => {
+  const { deps, state } = fake({
+    polls: [poll(pr({ contexts: GREEN(), inQueue: true })), (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: 'merged' }))],
+    mutations: [enqueued],
+  });
+  const result = await gate(['o/r#7', '--merge', '--timeout-minutes', '60'], deps);
+  assert.equal(result.code, EXIT.ejected);
+  assert.equal(state.mutations.length, 1, 'one re-enqueue only');
+  assert.ok(has(state.lines, /ejected from the merge queue \(the queue reported "merged" but the PR never read as merged\)/));
+  assert.equal(state.lines.filter((line) => /waiting for the merged state/.test(line)).length >= 2, true, 'it waited before giving up');
+});
+
+test('RR-67: a queue ejection for failed checks or by hand is still EJECTED', async () => {
+  for (const reason of ['failed_checks', 'manual']) {
+    const { deps, state } = fake({
+      polls: [
+        poll(pr({ contexts: GREEN(), inQueue: true })),
+        (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: reason })),
+        poll(pr({ contexts: GREEN(), inQueue: true })),
+        (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: reason })),
+      ],
+      mutations: [enqueued],
+    });
+    const result = await gate(['o/r#7', '--merge'], deps);
+    assert.equal(result.code, EXIT.ejected, reason);
+    assert.equal(result.results[0].outcome, 'ejected');
+    assert.equal(state.mutations.length, 1, 'one re-enqueue only');
+    assert.ok(has(state.lines, new RegExp(`EJECTED o/r#7: removed from the merge queue twice \\(${reason}\\)`)));
+    assert.ok(!has(state.lines, /merged by the merge queue/));
+  }
+});
+
+test('RR-67: a superseded failed run of the same job is ignored once a newer run of it went green', async () => {
+  const required = summarizeRules(RULES).required;
+  // A re-run (same workflow run, attempt 2: a new check run with a higher id) and a newer workflow run.
+  const rerun = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10, attempt: 1 }), run('packages', 'SUCCESS', { runId: 900, id: 11, attempt: 2, at: '2026-10-07T11:05:00Z' }), run('Verify OPF packages', 'SUCCESS', { id: 12 })], HEAD);
+  assert.equal(evaluateChecks({ checks: rerun, required }).state, 'green');
+  const newer = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10 }), run('packages', 'SUCCESS', { runId: 905, id: 20, at: '2026-10-07T11:30:00Z' }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
+  assert.equal(evaluateChecks({ checks: newer, required }).state, 'green');
+  // A run cancelled before it started has no start time; it must not read as the newest report.
+  const cancelled = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10, at: null }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
+  assert.equal(evaluateChecks({ checks: cancelled, required }).state, 'green');
+  // The same without a ruleset ("all checks" mode) and through the gate.
+  assert.equal(evaluateChecks({ checks: newer, required: null }).state, 'green');
+  const contexts = [run('packages', 'FAILURE', { runId: 900, id: 10 }), run('Verify OPF packages', 'FAILURE', { runId: 900, id: 11 }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })];
+  const { deps, state } = fake({ polls: [poll(pr({ contexts }))] });
+  const result = await gate(['o/r#7'], deps);
+  assert.equal(result.code, EXIT.ok);
+  assert.ok(has(state.lines, /GREEN o\/r#7/));
+  assert.ok(!has(state.lines, /RED/));
+});
+
+test('RR-67: a newer failed run after an older green run of the same job is RED', async () => {
+  const required = summarizeRules(RULES).required;
+  const checks = normalizeContexts([run('packages', 'SUCCESS', { runId: 900, id: 10 }), run('packages', 'FAILURE', { runId: 905, id: 20, at: '2026-10-07T11:30:00Z' }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
+  const verdict = evaluateChecks({ checks, required });
+  assert.equal(verdict.state, 'red');
+  assert.deepEqual(verdict.failing.map((check) => check.name), ['packages']);
+  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages', 'SUCCESS', { runId: 900, id: 10 }), run('packages', 'FAILURE', { runId: 905, id: 20 }), run('Verify OPF packages')] }))] });
+  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.red);
+  assert.ok(has(state.lines, /RED o\/r#7/));
+});
+
+test('RR-67: jobs with the same name in different workflows do not hide each other', () => {
+  const required = summarizeRules(RULES).required;
+  const checks = normalizeContexts([run('packages', 'FAILURE', { workflow: 'Other', runId: 910, id: 30 }), run('packages', 'SUCCESS', { workflow: 'CI', runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { id: 21 })], HEAD);
+  assert.equal(evaluateChecks({ checks, required }).state, 'red');
+  assert.equal(evaluateChecks({ checks, required: null }).state, 'red');
+});
+
+test('RR-67: a lagging head with --expect-head is re-read and proceeds once GitHub serves the new head', async () => {
+  const fresh = (oid) => [run('packages', 'SUCCESS', { oid }), run('Verify OPF packages', 'SUCCESS', { oid })];
+  const { deps, state } = fake({ polls: [poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: NEW, contexts: fresh(NEW) }))] });
+  const result = await gate(['o/r#7', '--expect-head', NEW], deps);
+  assert.equal(result.code, EXIT.ok);
+  assert.equal(result.results[0].head, NEW);
+  assert.equal(state.queries.length, 3, 'the poll and two single-PR re-reads');
+  assert.deepEqual(state.sleeps, [15000, 15000]);
+  assert.ok(has(state.lines, /head is bbbbbbbbbbbb, expected cccccccccccc; re-reading in 15 s \(1\/3\)/));
+  assert.ok(!has(state.lines, /HEAD-MOVED/));
+  assert.match(state.queries[1], /^query\{rateLimit.*t0: pullRequest\(number:7\)/);
+});
+
+test('RR-67: an expected head that never shows up exits 4 after three re-reads; a head that moves later exits 4 at once', async () => {
+  const lagging = fake({ polls: [poll(pr({ head: OLD, contexts: GREEN() }))] });
+  const result = await gate(['o/r#7', '--expect-head', NEW], lagging.deps);
+  assert.equal(result.code, EXIT.headMoved);
+  assert.equal(lagging.state.queries.length, 4, 'the poll and three re-reads, no more');
+  assert.deepEqual(lagging.state.sleeps, [15000, 15000, 15000]);
+  assert.ok(has(lagging.state.lines, /HEAD-MOVED o\/r#7: expected cccccccccccc, the head is now bbbbbbbbbbbb/));
+
+  // Once the expected head was seen, a different head is a real move: no retries.
+  const moved = fake({ polls: [poll(pr({ head: NEW, contexts: [run('packages', 'SUCCESS', { oid: NEW }), pending('Verify OPF packages', { oid: NEW })] })), poll(pr({ head: OLD, contexts: GREEN() }))] });
+  assert.equal((await gate(['o/r#7', '--expect-head', NEW], moved.deps)).code, EXIT.headMoved);
+  assert.equal(moved.state.queries.length, 2);
+  assert.ok(!moved.state.sleeps.includes(15000));
+
+  // A merged PR is reported as merged, not as a moved head, even if the head differs.
+  const merged = fake({ polls: [poll(pr({ head: OLD, state: 'MERGED', merged: true, mergeCommit: MERGE_SHA }))] });
+  assert.equal((await gate(['o/r#7', '--expect-head', NEW], merged.deps)).code, EXIT.ok);
+  assert.equal(merged.state.queries.length, 1);
 });
 
 // -- loop behaviour -----------------------------------------------------------------------------------------------

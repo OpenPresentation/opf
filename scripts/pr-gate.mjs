@@ -8,17 +8,23 @@
 //
 // Green: every REQUIRED check (the base branch's ruleset, read once per repository through REST) exists for the current
 // head and completed with success (skipped/neutral pass unless --no-skipped), and the PR's mergeability is computed and
-// not conflicting. Check runs and commit statuses both count; checks for older heads are ignored. Zero checks or a
-// required check that has not registered yet is pending, never green. Without a ruleset (or --required all) every check
+// not conflicting. Check runs and commit statuses both count; checks for older heads are ignored, and so are superseded
+// runs on the same head: only the newest report of each check counts (per workflow and job name; a re-run or a newer run
+// of the same job replaces the failed one, a newer failure replaces an older success). Zero checks or a required check
+// that has not registered yet is pending, never green. Without a ruleset (or --required all) every check
 // counts except neutral bots (Cursor Bugbot), every GitHub Actions suite must be complete, and green must hold on two
 // consecutive polls. Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops
 // at once and prints the failing checks with their URLs; --rerun-once re-runs the failed or cancelled workflow runs one
 // time first. --merge enqueues into the merge queue (GraphQL, with the expected head; retried for up to 6 minutes while
 // GitHub is still computing mergeability) and follows the queue, re-enqueueing once after an ejection; a repository
-// without a queue is squash-merged. Re-running resumes: a merged PR exits 0 and a queued PR is followed.
+// without a queue is squash-merged. Re-running resumes: a merged PR exits 0 and a queued PR is followed. A PR the queue
+// merges prints "MERGED <label> <sha> (merged by the merge queue)" and exits 0: the queue also records a removal with the
+// reason "merged" for it, which is not an ejection (failed_checks, manual and other reasons are).
 //
-// Exit codes: 0 green (or merged with --merge), 1 red, 2 merge conflict (DIRTY), 3 closed without merging, 4 head moved
-// (--expect-head), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage, failed gh auth or a target
+// Exit codes: 0 green, or MERGED (by the queue, by the squash merge, or already merged when the gate started), 1 red,
+// 2 merge conflict (DIRTY), 3 closed without merging, 4 head moved (--expect-head; right after a push GitHub can still
+// serve the previous head, so a different head is re-read up to 3 times, 15 s apart, before it exits 4; once the expected
+// head has been seen, a later change exits 4 at once), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage, failed gh auth or a target
 // that does not exist, 75 timeout (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins,
 // then 75 if any target is unfinished. GitHub API: gh's auth; GraphQL only in the poll loop (rateLimit is read on every
 // poll and the gate backs off below 200 points); REST only for the rulesets (once per repository) and --rerun-once.
@@ -32,7 +38,10 @@ export const NEUTRAL_BOTS = new Set(['Cursor Bugbot']);
 export const RED_CONCLUSIONS = new Set(['FAILURE', 'CANCELLED', 'TIMED_OUT', 'STARTUP_FAILURE', 'ACTION_REQUIRED', 'STALE']);
 /** Enqueue/merge refusals that clear on their own once GitHub has computed mergeability or the checks registered. */
 export const TRANSIENT_REFUSAL = /mergeability check has not yet completed|required status checks are expected|has not been computed|try again/i;
-export const DEFAULTS = { interval: 180, minInterval: 60, timeoutMinutes: 100, heartbeatMinutes: 15, retryWindowMinutes: 6, retrySeconds: 60, rateFloor: 200 };
+export const DEFAULTS = { interval: 180, minInterval: 60, timeoutMinutes: 100, heartbeatMinutes: 15, retryWindowMinutes: 6, retrySeconds: 60, rateFloor: 200, headLagRetries: 3, headLagSeconds: 15, mergedSettlePolls: 3 };
+
+/** RemovedFromMergeQueueEvent.reason of a successful queue merge (others seen: failed_checks, manual). */
+export const MERGED_REMOVAL = /^merged$/i;
 
 export class UsageError extends Error {}
 
@@ -106,7 +115,7 @@ export function parseArgs(argv) {
 // GraphQL
 
 const CONTEXT_NODES =
-  'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
+  'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
 const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event}}}`;
 const PR_FIELDS = `id number url state merged isDraft mergeCommit{oid} headRefOid baseRefName mergeable mergeStateStatus isInMergeQueue mergeQueueEntry{state position} timelineItems(last:1,itemTypes:[REMOVED_FROM_MERGE_QUEUE_EVENT]){nodes{... on RemovedFromMergeQueueEvent{reason createdAt}}} commits(last:1){nodes{commit{oid ${CHECKS}}}}`;
 const COMMIT_FIELDS = `... on Commit{oid ${CHECKS}}`;
@@ -159,7 +168,11 @@ export function summarizeRules(rules) {
   return { required, hasQueue: Array.isArray(rules) && rules.some((rule) => rule.type === 'merge_queue') };
 }
 
-/** Rollup contexts → [{kind, name, result: success|skipped|pending|failure, conclusion, url, at, id, runId, appId}]. */
+/**
+ * Rollup contexts → [{kind, name, result: success|skipped|pending|failure, conclusion, url, at, id, runId, attempt,
+ * workflow, appId}]. workflow is the workflow's name for a GitHub Actions job (null for other apps and statuses): with
+ * name it identifies "the same check", of which only the newest report counts (pickLatest).
+ */
 export function normalizeContexts(nodes, headOid) {
   const out = [];
   for (const node of nodes ?? []) {
@@ -180,31 +193,56 @@ export function normalizeContexts(nodes, headOid) {
         at: node.startedAt ?? null,
         id: node.databaseId ?? null,
         runId: node.checkSuite?.workflowRun?.databaseId ?? null,
+        attempt: node.checkSuite?.workflowRun?.runAttempt ?? null,
+        workflow: node.checkSuite?.workflowRun?.workflow?.name ?? null,
         appId: node.checkSuite?.app?.databaseId ?? null,
       });
     } else if (node.__typename === 'StatusContext') {
       const oid = node.commit?.oid;
       if (headOid && oid && oid !== headOid) continue;
       const result = node.state === 'SUCCESS' ? 'success' : node.state === 'PENDING' || node.state === 'EXPECTED' ? 'pending' : 'failure';
-      out.push({ kind: 'status', name: node.context, result, conclusion: node.state, url: node.targetUrl ?? null, at: node.createdAt ?? null, id: null, runId: null, appId: null });
+      out.push({ kind: 'status', name: node.context, result, conclusion: node.state, url: node.targetUrl ?? null, at: node.createdAt ?? null, id: null, runId: null, attempt: null, workflow: null, appId: null });
     }
   }
   return out;
 }
 
-/** The newest of several reports of one check: a queued run (no start time yet) is newest; on a tie a pending one wins. */
+/**
+ * True when report `item` of a check supersedes report `best` of the same check. Creation order decides when both carry
+ * ids: a newer workflow run beats an older one, and within one run a re-run attempt (a new check run, so a higher id) beats
+ * the attempt it replaces. Start times are only the fallback (commit statuses have no ids), because a run cancelled or
+ * failed before it started has no start time and must not look "newest". Fallback: a queued run (no start time yet) is
+ * newest; on a tie a pending one wins.
+ */
+function supersedes(item, best) {
+  if (item.runId != null && best.runId != null && item.runId !== best.runId) return item.runId > best.runId;
+  if (item.id != null && best.id != null && item.id !== best.id) return item.id > best.id;
+  const a = item.at ?? '￿';
+  const b = best.at ?? '￿';
+  return a > b || (a === b && item.result === 'pending' && best.result !== 'pending');
+}
+
+/** The newest of several reports of one check. */
 export function pickLatest(list) {
   let best = null;
-  for (const item of list) {
-    if (!best) {
-      best = item;
-      continue;
-    }
-    const a = item.at ?? '￿';
-    const b = best.at ?? '￿';
-    if (a > b || (a === b && item.result === 'pending' && best.result !== 'pending')) best = item;
-  }
+  for (const item of list) if (!best || supersedes(item, best)) best = item;
   return best;
+}
+
+/**
+ * Only the newest report of each check counts: one per (workflow, job name) for GitHub Actions jobs, one per name for
+ * other check runs and commit statuses. An earlier failed or cancelled attempt, a cancelled-in-progress run or a run of
+ * an older workflow run on the same head is ignored once a newer report of that check exists. Jobs of different
+ * workflows that share a name stay separate, so neither can hide the other.
+ */
+export function latestPerCheck(checks) {
+  const groups = new Map();
+  for (const check of checks) {
+    const key = `${check.kind}\u0000${check.workflow ?? ''}\u0000${check.name}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(check);
+  }
+  return [...groups.values()].map(pickLatest);
 }
 
 /**
@@ -223,27 +261,21 @@ export function evaluateChecks({ checks, required, suites = [], allowSkipped = t
     for (const req of required) {
       const candidates = checks.filter((check) => check.name === req.context && (check.kind === 'status' || req.integrationId == null || check.appId == null || check.appId === req.integrationId));
       counted.add(req.context);
-      const latest = pickLatest(candidates);
-      if (latest) verdicts.push(latest);
+      const latest = latestPerCheck(candidates);
+      if (latest.length) verdicts.push(...latest);
       else missing.push(req.context);
     }
   } else {
-    const byName = new Map();
-    for (const check of checks) {
-      if (neutral.has(check.name)) continue;
-      if (!byName.has(check.name)) byName.set(check.name, []);
-      byName.get(check.name).push(check);
-    }
-    for (const [name, list] of byName) {
-      counted.add(name);
-      verdicts.push(pickLatest(list));
+    for (const check of latestPerCheck(checks.filter((entry) => !neutral.has(entry.name)))) {
+      counted.add(check.name);
+      verdicts.push(check);
     }
   }
   const passes = (check) => check.result === 'success' || (check.result === 'skipped' && allowSkipped);
   const failing = verdicts.filter((check) => check.result === 'failure' || (check.result === 'skipped' && !allowSkipped));
   const pending = verdicts.filter((check) => check.result === 'pending').map((check) => check.name);
   const passed = verdicts.filter(passes).map((check) => check.name);
-  const advisoryFailing = [...new Set(checks.filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
+  const advisoryFailing = [...new Set(latestPerCheck(checks).filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
   const suitesRunning = mode === 'all' ? suites.filter((suite) => suite?.app?.slug === 'github-actions' && suite.workflowRun && suite.status !== 'COMPLETED').length : 0;
   let state = 'green';
   if (failing.length) state = 'red';
@@ -448,9 +480,36 @@ export async function runGate(options, deps) {
     report(target, `${line}${checks.state === 'green' ? '; confirming at the next poll' : ''}`);
   }
 
-  async function handlePr(target, repo, pr) {
+  const matchesExpected = (target, pr) => !target.expectHead || String(pr.headRefOid).startsWith(target.expectHead);
+
+  // Right after a push GitHub can still serve the previous head. Until the expected head has been seen once, a different
+  // head is re-read a few times (one single-PR query each, headLagSeconds apart) before it counts as moved.
+  async function settleExpectedHead(target, repo, pr) {
+    if (!target.expectHead || target.expectSeen || pr.merged || pr.state !== 'OPEN') return pr;
+    let current = pr;
+    for (let attempt = 1; attempt <= DEFAULTS.headLagRetries && !matchesExpected(target, current); attempt += 1) {
+      say(`${target.label}: head is ${String(current.headRefOid).slice(0, 12)}, expected ${target.expectHead.slice(0, 12)}; re-reading in ${DEFAULTS.headLagSeconds} s (${attempt}/${DEFAULTS.headLagRetries})`);
+      await deps.sleep(DEFAULTS.headLagSeconds * 1000);
+      let response = null;
+      try {
+        response = await graphql(buildPollQuery([{ ...repo, targets: [target] }]));
+      } catch (error) {
+        say(`${target.label}: re-reading the head failed: ${String(error?.message ?? error).slice(0, 200)}`);
+      }
+      const next = response?.data?.[repo.alias]?.[target.alias];
+      if (!next) continue;
+      current = next;
+      if (current.merged || current.state !== 'OPEN') break;
+    }
+    return current;
+  }
+
+  async function handlePr(target, repo, polled) {
+    const pr = await settleExpectedHead(target, repo, polled);
     if (pr.merged || pr.state === 'MERGED') {
-      finish(target, EXIT.ok, 'merged', `MERGED ${target.label} ${pr.mergeCommit?.oid ?? ''}`.trimEnd(), { head: pr.headRefOid, mergeCommit: pr.mergeCommit?.oid ?? null });
+      // Followed through the queue: the queue's own merge (it also shows as a removal with the reason "merged") is a success.
+      const queue = target.fresh.queued;
+      finish(target, EXIT.ok, 'merged', ['MERGED', target.label, pr.mergeCommit?.oid, queue ? '(merged by the merge queue)' : null].filter(Boolean).join(' '), { head: pr.headRefOid, mergeCommit: pr.mergeCommit?.oid ?? null, via: queue ? 'merge-queue' : undefined });
       return;
     }
     if (pr.state === 'CLOSED') {
@@ -458,10 +517,11 @@ export async function runGate(options, deps) {
       return;
     }
     const head = pr.headRefOid;
-    if (target.expectHead && !head.startsWith(target.expectHead)) {
+    if (!matchesExpected(target, pr)) {
       finish(target, EXIT.headMoved, 'head-moved', `HEAD-MOVED ${target.label}: expected ${target.expectHead.slice(0, 12)}, the head is now ${head.slice(0, 12)}`, { head });
       return;
     }
+    if (target.expectHead) target.expectSeen = true;
     if (target.head && head !== target.head) {
       say(`${target.label}: head moved ${target.head.slice(0, 8)} -> ${head.slice(0, 8)}; evaluating the new head`);
       target.fresh = freshHeadState();
@@ -492,16 +552,23 @@ export async function runGate(options, deps) {
         return;
       }
       if (fresh.queued) {
-        // Not merged and not queued: ejected, unless GitHub is between "dequeued" and "merged" (confirm on a second poll).
+        // Not merged and not queued. A successful queue merge also records a removal (reason "merged", the same second as
+        // the merge), and GitHub can show it before the PR reads as merged: wait for the merged state instead of calling it
+        // an ejection. Any other reason (failed_checks, manual, ...) is an ejection at once; with no removal event yet,
+        // confirm on a second poll.
         const removal = pr.timelineItems?.nodes?.find((node) => node?.createdAt && Date.parse(node.createdAt) >= fresh.queuedAt - 60000);
         fresh.outPolls += 1;
+        if (removal && MERGED_REMOVAL.test(removal.reason ?? '') && fresh.outPolls < DEFAULTS.mergedSettlePolls) {
+          report(target, `${state.join('; ')}; the merge queue merged it (removal reason "${removal.reason}"); waiting for the merged state`);
+          return;
+        }
         if (!removal && fresh.outPolls < 2) {
           report(target, `${state.join('; ')}; not in the merge queue any more (confirming at the next poll)`);
           return;
         }
         fresh.queued = false;
         fresh.ejections += 1;
-        fresh.ejectReason = removal?.reason ?? 'no reason reported';
+        fresh.ejectReason = MERGED_REMOVAL.test(removal?.reason ?? '') ? 'the queue reported "merged" but the PR never read as merged' : (removal?.reason ?? 'no reason reported');
         if (fresh.ejections >= 2) {
           finish(target, EXIT.ejected, 'ejected', `EJECTED ${target.label}: removed from the merge queue twice (${fresh.ejectReason}); look at its merge_group run`, { head, reason: fresh.ejectReason });
           return;
@@ -700,7 +767,7 @@ export function ghDeps({ json = false } = {}) {
 const USAGE = `Usage: node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required auto|all|<a,b>]
                               [--interval 180] [--timeout-minutes 100] [--rerun-once] [--no-skipped] [--json]
        node scripts/pr-gate.mjs --commit <owner/repo@sha> [--required …] [--interval …] [--timeout-minutes …] [--json]
-Exit: 0 green/merged, 1 red, 2 conflict, 3 closed, 4 head moved, 5 ejected/refused, 64 usage, 75 timeout (re-run the RESUME line).`;
+Exit: 0 green/merged (also merged by the queue), 1 red, 2 conflict, 3 closed, 4 head moved (after 3 re-reads), 5 ejected/refused, 64 usage, 75 timeout (re-run the RESUME line).`;
 
 export async function main(argv, depsFactory = ghDeps) {
   let options;
