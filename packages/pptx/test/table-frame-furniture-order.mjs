@@ -59,7 +59,7 @@ assert.ok(packed > 0, 'The suite covers tables whose rows fill the composed box.
 const names = xml => [...xml.matchAll(/<p:cNvPr id="\d+" name="([^"]*)"/g)].map(match => match[1]).filter(Boolean);
 const furniture = name => name.startsWith('OPF furniture');
 const decks = [
-  {design: {header: {left: {text: 'Confidential'}, right: {date: true, dateFormat: 'yyyy-MM-dd'}}, footer: {left: {text: 'Acme'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}}},
+  {design: {header: {left: {text: 'Confidential'}, right: {date: true, dateFormat: 'yyyy-MM-dd'}}, footer: {left: {text: 'Acme'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
     slides: [{title: 'First', text: 'Body', table: short}, {title: 'Second', bullets: ['One', 'Two']}]},
   {design: {footer: {center: {text: 'Only a footer'}}}, slides: [{title: 'Solo', text: 'Body', table: short}]},
 ];

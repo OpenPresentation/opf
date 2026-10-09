@@ -66,8 +66,8 @@ const results = [];
 const full = {
   organization: {id: 'primary', name: 'Northstar Health'},
   design: {fontScheme: 'roboto',
-    header: {left: {text: 'Quarterly review'}, center: {organization: true}, right: {text: 'Internal'}},
-    footer: {left: {date: true}, center: {text: 'Confidential'}, right: {slideNumber: true}}},
+    header: {left: {text: 'Quarterly review'}, center: {text: '{{organization.name}}'}, right: {text: 'Internal'}},
+    footer: {left: {date: true}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
   slides: [{title: 'Cover', design: {footer: false}}, {title: 'Two', text: 'Body'}, {title: 'Three', text: 'Body'}],
 };
 for (const measured of [false, true]) {
@@ -142,21 +142,23 @@ for (const measured of [false, true]) {
 // 2. What stays a tagged shape, and the flags for partial decks.
 // ---------------------------------------------------------------------------
 {
-  // A second text part, a second slide number, organization, section and multi-line text are not native.
+  // FA-31: a second footer text, a second slide number, header text and multi-line text are not native. A zone's text with a
+  // slide number is the Slide Number placeholder (its words fixed runs around the field); other text is the Footer placeholder.
   const source = {organization: {id: 'primary', name: 'Org'}, design: {fontScheme: 'roboto',
-    footer: {left: {text: 'First', organization: true, section: true}, center: {text: 'Second', slideNumber: true}, right: {slideNumber: true, date: DATE}}},
+    header: {left: {text: '{{organization.name}}\n{{slide.section}}'}, right: {text: '{{slide.number}}'}},
+    footer: {left: {text: 'First'}, center: {text: 'Second'}, right: {text: 'No. {{slide.number}}', date: DATE}}},
     slides: [{title: 'A', section: 'S', text: 'Body'}]};
   const {entries} = await exportDeck(source);
   const xml = text(entries, slidePath(1));
   const placeholders = placeholderShapes(xml);
   assert.deepEqual(placeholders.map(phType).sort(), ['dt', 'ftr', 'sldNum']);
-  assert.deepEqual(placeholders.map(runsOf).sort(), ['9/10/2026'.replace(/.*/, '2026-09-10'), 'First', '[slidenum:1]'].sort(), 'The first text, the first number and the (fixed) date.');
+  assert.deepEqual(placeholders.map(runsOf).sort(), ['2026-09-10', 'First', 'No. [slidenum:1]'].sort(), 'The first text, the first text with a number and the (fixed) date.');
   const rest = furnitureShapes(xml).filter(shape => !phOf(shape));
-  assert.deepEqual(rest.map(runsOf).sort(), ['Org', 'S', 'Second', '[slidenum:1]'].sort(), 'Everything else is an ordinary tagged shape; the second number stays a live field.');
+  assert.deepEqual(rest.map(runsOf).sort(), ['Org', 'S', 'Second', '[slidenum:1]'].sort(), 'Everything else is an ordinary tagged shape; the header number stays a live field.');
   assert.match(text(entries, 'ppt/slideMasters/slideMaster1.xml'), /<p:hf sldNum="1" hdr="0" ftr="1" dt="1"\/>/);
 }
 {
-  const source = {design: {fontScheme: 'roboto', footer: {left: {text: 'Line one\nLine two'}, right: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}]};
+  const source = {design: {fontScheme: 'roboto', footer: {left: {text: 'Line one\nLine two'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}]};
   const {entries} = await exportDeck(source);
   const xml = text(entries, slidePath(1));
   assert.deepEqual(placeholderShapes(xml).map(phType), ['sldNum'], 'Multi-line footer text is not one native placeholder.');
@@ -167,16 +169,16 @@ for (const measured of [false, true]) {
 }
 {
   // Linked socials come first in the slide: their hyperlink never leaks into the master's default text style.
-  const source = {organization: {id: 'acme', name: 'Acme', socials: {linkedin: 'acme'}}, design: {fontScheme: 'roboto', header: {right: {socials: true}}, footer: {left: {organization: true}, center: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}]};
+  const source = {organization: {id: 'acme', name: 'Acme', socials: {linkedin: 'acme'}}, design: {fontScheme: 'roboto', header: {right: {socials: true}}, footer: {left: {text: '{{organization.name}}'}, center: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}]};
   const {entries} = await exportDeck(source);
   assert.match(text(entries, slidePath(1)), /<a:hlinkClick\b/, 'The header socials are linked.');
   assert.doesNotMatch(text(entries, 'ppt/slideMasters/slideMaster1.xml'), /hlinkClick|r:id="rId[3-9]/);
-  assert.deepEqual(placeholderShapes(text(entries, slidePath(1))).map(phType), ['sldNum']);
+  assert.deepEqual(placeholderShapes(text(entries, slidePath(1))).map(phType), ['ftr', 'sldNum']);
 }
 {
   // Every deck carries the master and layout placeholders (flags off when no slide uses one), so Insert > Header & Footer
   // works on a header-only deck and on a deck with no furniture at all; no slide gets a placeholder.
-  const defaults = {design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {slideNumber: true}}}, slides: [{title: 'A'}]};
+  const defaults = {design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}]};
   for (const dimensions of [undefined, {widthInches: 10, heightInches: 7.5}, {widthInches: 7.5, heightInches: 13.333333333333334}])
   for (const design of [{fontScheme: 'roboto', header: {left: {text: 'Header only'}}}, {fontScheme: 'roboto'}]) {
     const sized = dimensions ? {...design, dimensions} : design;
@@ -199,7 +201,7 @@ for (const measured of [false, true]) {
     assert.equal(hash((await exportDeck({design: sized, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]})).bytes), hash((await exportDeck({design: sized, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]})).bytes));
   }
   // The placeholders carry the deck's language like every other part: no stray en-US in the master or layout.
-  for (const language of ['en-GB', 'ja-JP']) for (const footer of [undefined, {left: {date: true}, right: {slideNumber: true}}]) {
+  for (const language of ['en-GB', 'ja-JP']) for (const footer of [undefined, {left: {date: true}, right: {text: '{{slide.number}}'}}]) {
     const {entries} = await exportDeck({language, design: {fontScheme: 'roboto', ...(footer ? {footer} : {})}, slides: [{title: 'A', text: 'Body'}]});
     const tags = new Set(['ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/slides/slide1.xml'].flatMap(path => [...text(entries, path).matchAll(/\blang="([^"]+)"/g)].map(match => match[1])));
     assert.deepEqual([...tags], [language === 'ja-JP' ? 'ja-JP' : language], `${language} ${footer ? 'with' : 'without'} a footer`);
@@ -211,11 +213,11 @@ for (const measured of [false, true]) {
     ph('dt', 10, 'half', '<a:fld id="{00000000-0000-4000-8000-000000000001}" type="datetime1"><a:rPr lang="en-US"/><a:t>9/10/2026</a:t></a:fld>') +
     ph('ftr', 11, 'quarter', '<a:r><a:rPr lang="en-US"/><a:t>Dialog footer</a:t></a:r>') +
     ph('sldNum', 12, 'quarter', '<a:fld id="{00000000-0000-4000-8000-000000000002}" type="slidenum"><a:rPr lang="en-US"/><a:t>' + index + '</a:t></a:fld>') + '</p:spTree>')])));
-  assert.deepEqual((await read(added)).imported.design.footer, {left: {date: true}, center: {text: 'Dialog footer'}, right: {slideNumber: true}});
+  assert.deepEqual((await read(added)).imported.design.footer, {left: {date: true}, center: {text: 'Dialog footer'}, right: {text: '{{slide.number}}'}});
 }
 {
   // Footer parts that wrap in a narrow portrait deck are several lines each: shapes, never a native placeholder.
-  const source = {design: {fontScheme: 'roboto', dimensions: {widthInches: 4, heightInches: 7}, footer: {left: {text: 'A footer sentence that is long enough to wrap in a zone'}, right: {slideNumber: true}}}, slides: [{title: 'A'}]};
+  const source = {design: {fontScheme: 'roboto', dimensions: {widthInches: 4, heightInches: 7}, footer: {left: {text: 'A footer sentence that is long enough to wrap in a zone'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}]};
   const {entries} = await exportDeck(source);
   const xml = text(entries, slidePath(1));
   assert.ok(!placeholderShapes(xml).some(shape => phType(shape) === 'ftr'));
@@ -228,17 +230,17 @@ for (const measured of [false, true]) {
     {kind: 'footer', type: 'text', field: 'text', text: 'a', fit: {sourceLines: [1], lines: ['a']}},
     {kind: 'footer', type: 'text', field: 'text', text: 'b', fit: {sourceLines: [1], lines: ['b']}},
     {kind: 'footer', type: 'text', field: 'date', text: 'd', fit: {sourceLines: [1, 2], lines: ['d']}},
-    {kind: 'footer', type: 'text', field: 'slideNumber', text: '1', fit: {sourceLines: [1], lines: ['1']}},
+    {kind: 'footer', type: 'text', field: 'text', text: '1', fields: [{type: 'slideNumber', start: 0, end: 1}], fit: {sourceLines: [1], lines: ['1']}},
     {kind: 'footer', type: 'text', field: 'socials', text: 'x', fit: {sourceLines: [1], lines: ['x']}},
     {kind: 'footer', type: 'image', field: 'image'}]}).entries()], [[2, 'ftr'], [5, 'sldNum']]);
   assert.deepEqual(Object.keys(NATIVE_PLACEHOLDERS), ['dt', 'ftr', 'sldNum']);
 }
 {
   // Unused placeholder types default to core's footer band (date left, text center, number right).
-  const source = {design: {fontScheme: 'roboto', footer: {right: {slideNumber: true}}}, slides: [{title: 'A'}]};
+  const source = {design: {fontScheme: 'roboto', footer: {right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}]};
   const {entries} = await exportDeck(source);
   const master = shapesOf(text(entries, 'ppt/slideMasters/slideMaster1.xml'));
-  const reference = resolvePresentation({design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {slideNumber: true}}}, slides: [{title: 'A'}]}).slides[0].geometry.furniture.parts;
+  const reference = resolvePresentation({design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}]}).slides[0].geometry.furniture.parts;
   for (const [at, part] of reference.entries()) {
     const box = xfrmOf(master[at]);
     assert.equal(box.x, Math.round(part.box.x * 9525));
@@ -251,7 +253,7 @@ for (const measured of [false, true]) {
 // 3. Slide-level overrides and per-slide differences.
 // ---------------------------------------------------------------------------
 {
-  const source = {design: {fontScheme: 'roboto', footer: {left: {text: 'Deck footer'}, right: {slideNumber: true}}}, slides: [
+  const source = {design: {fontScheme: 'roboto', footer: {left: {text: 'Deck footer'}, right: {text: '{{slide.number}}'}}}, slides: [
     {title: 'A', text: 'Body'}, {title: 'B', text: 'Body', design: {footer: {center: {text: 'Only here'}}}}, {title: 'C', text: 'Body', design: {footer: false}}]};
   const {bytes, entries} = await exportDeck(source);
   assert.deepEqual(['1', '2', '3'].map(index => placeholderShapes(text(entries, slidePath(index))).map(phType)), [['ftr', 'sldNum'], ['ftr'], []]);
@@ -265,7 +267,7 @@ for (const measured of [false, true]) {
 // ---------------------------------------------------------------------------
 // 4. Round trip, with provenance and without it.
 // ---------------------------------------------------------------------------
-const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {text: 'Confidential'}, right: {slideNumber: true, slideNumberFormat: 'Page {current}'}}},
+const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {text: 'Confidential'}, right: {text: 'Page {{slide.number}}'}}},
   slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}, {title: 'C', text: 'Body'}]};
 {
   const {bytes, entries} = await exportDeck(footerOnly);
@@ -325,7 +327,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, d
 {
   // A deck without footers, then a Header & Footer dialog "Apply to All": placeholders appear on every slide,
   // without their own geometry, pointing at the layout (idx 10-12), which names the footer band.
-  const base = await exportDeck({design: {fontScheme: 'roboto', footer: {left: {date: true}, center: {text: 'Seed'}, right: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
+  const base = await exportDeck({design: {fontScheme: 'roboto', footer: {left: {date: true}, center: {text: 'Seed'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
   const bare = (type, idx, sz, body, align) => `<p:sp><p:nvSpPr><p:cNvPr id="90" name="${type} Placeholder"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="${type}" sz="${sz}" idx="${idx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p>${body}<a:endParaRPr lang="en-US"/></a:p></p:txBody></p:sp>`;
   const field = (type, value) => `<a:fld id="{00000000-0000-4000-8000-000000000001}" type="${type}"><a:rPr lang="en-US"/><a:t>${value}</a:t></a:fld>`;
   const run = value => `<a:r><a:rPr lang="en-US"/><a:t>${value}</a:t></a:r>`;
@@ -339,7 +341,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, d
   assert.equal(placeholderShapes(text(unzipSync(noPlaceholders), slidePath(1))).length, 0);
   const applied = inject(unzipSync(noPlaceholders), index => bare('dt', 10, 'half', field('datetime1', '9/10/2026'), 'l') + bare('ftr', 11, 'quarter', run('Applied to all'), 'ctr') + bare('sldNum', 12, 'quarter', field('slidenum', String(index)), 'r'));
   const {imported} = await read(applied);
-  assert.deepEqual(imported.design.footer, {left: {date: true}, center: {text: 'Applied to all'}, right: {slideNumber: true}},
+  assert.deepEqual(imported.design.footer, {left: {date: true}, center: {text: 'Applied to all'}, right: {text: '{{slide.number}}'}},
     'Inherited positions resolve through the layout and master: date left, footer center, number right.');
   assert.ok(imported.slides.every(slide => slide.design?.footer === undefined && !JSON.stringify(slide.blocks ?? '').includes('Applied')));
   // Every datetime field type maps to its OPF pattern; a time field and fixed text keep their words.
@@ -354,7 +356,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, d
   assert.deepEqual(fixed.imported.design.footer, {left: {date: 'Q3 2026'}});
   // The slide number's surrounding words become its format.
   const numbered = await read(inject(unzipSync(noPlaceholders), index => bare('sldNum', 12, 'quarter', run('Slide ') + field('slidenum', String(index)), 'r')));
-  assert.deepEqual(numbered.imported.design.footer, {right: {slideNumber: true, slideNumberFormat: 'Slide {current}'}});
+  assert.deepEqual(numbered.imported.design.footer, {right: {text: 'Slide {{slide.number}}'}});
   // Placeholders that PowerPoint left empty are not furniture (and are not slide content either).
   const empty = await read(inject(unzipSync(noPlaceholders), () => bare('ftr', 11, 'quarter', '', 'ctr')));
   assert.equal(empty.imported.design?.footer, undefined);
@@ -379,13 +381,13 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, d
   }
   // A tagged deck with a date and a slide number only; PowerPoint's dialog adds a footer text to every slide (no xfrm: it inherits
   // the layout's, which is the default footer band's centre).
-  const source = {design: {fontScheme: 'roboto', footer: {left: {date: true}, right: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
+  const source = {design: {fontScheme: 'roboto', footer: {left: {date: true}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
   const {entries} = await exportDeck(source);
   const added = mutate(entries, Object.fromEntries([1, 2].map(index => [slidePath(index), xml => xml.replace('</p:spTree>',
     '<p:sp><p:nvSpPr><p:cNvPr id="90" name="Footer Placeholder 89"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="ftr" sz="quarter" idx="11"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Added in PowerPoint</a:t></a:r></a:p></p:txBody></p:sp></p:spTree>')])));
   const {imported, invalid} = await read(added);
   assert.deepEqual(invalid, []);
-  assert.deepEqual(imported.design.footer, {left: {date: true}, center: {text: 'Added in PowerPoint'}, right: {slideNumber: true}});
+  assert.deepEqual(imported.design.footer, {left: {date: true}, center: {text: 'Added in PowerPoint'}, right: {text: '{{slide.number}}'}});
   assert.ok(imported.slides.every(slide => !JSON.stringify(slide).includes('Added in PowerPoint')));
   // A duplicate of a part the tags already describe is not merged into it: it stays ordinary text.
   const twice = mutate(entries, {[slidePath(1)]: xml => xml.replace('</p:spTree>',

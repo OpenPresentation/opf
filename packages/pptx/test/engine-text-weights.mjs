@@ -47,7 +47,7 @@ const remote = name => `https://example.invalid/${name}.png`;
   assert.ok(shapes(xml).some(shape => shape.name === 'OPF image placeholder 1'), 'the quote photo exports as the placeholder');
 }
 {
-  const {xml, diagnostics} = await exportDeck({text: 'Body', design: {logo: remote('logo'), footer: {left: {logo: true}, right: {slideNumber: true}}}});
+  const {xml, diagnostics} = await exportDeck({text: 'Body', design: {logo: remote('logo'), footer: {left: {logo: true}, right: {text: '{{slide.number}}'}}}});
   assert.deepEqual(unresolved(diagnostics), ['slides.0.design.footer.left.logo']);
   assert.ok(shapes(xml).some(shape => shape.name === 'OPF image placeholder 1'), 'the logo exports as the placeholder');
 }

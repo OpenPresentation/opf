@@ -10,17 +10,20 @@ The geometry is core's and does not move: preview, export and the parity harness
 ## Mapping
 
 OPF furniture has two bands (`design.header`, `design.footer`), three zones each (left, center, right) and parts
-stacked in a zone: logo, image, text, organization, socials, section, slide number, date.
+stacked in a zone: logo, image, text, socials, date. Generated values (slide number, slide count, section, organization name,
+speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no per-value flags. `{{slide.number}}`,
+`{{slide.section}}` and `{{deck.slideCount}}` are filled in for each slide as it is laid out; core marks each substituted
+`{{slide.number}}` as a slide-number field (`part.fields`), which is what this exporter writes as a native field.
 
 | OPF part | PowerPoint object | Notes |
 | --- | --- | --- |
-| `footer.<zone>.text` (the first one, one accepted line) | **Footer placeholder** (`ftr`, layout idx 11) | The dialog's Footer text. |
+| `footer.<zone>.text` without a `{{slide.number}}` (the first one, one accepted line) | **Footer placeholder** (`ftr`, layout idx 11) | The dialog's Footer text. |
 | `footer.<zone>.date` (the first one, one line) | **Date placeholder** (`dt`, idx 10) | `date: true` with an en-US pattern is a live `datetime1`-`datetime7` field ("Update automatically"); a fixed or literal date, or a pattern with no field type, is fixed text ("Fixed"). |
-| `footer.<zone>.slideNumber` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | The number is a live `slidenum` field; `slideNumberFormat` text and `{total}` are fixed runs around it. |
-| every header part (text, organization, section, slide number, date, socials, image, logo) | ordinary tagged shapes | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). |
-| footer organization, section, socials, image, `logo: true` | ordinary tagged shapes | No native object. |
-| a second footer text, date or slide number in another zone | ordinary tagged shapes | One placeholder per type per slide; the second keeps its live fields. |
-| footer text, date or slide number that breaks or wraps over several lines | ordinary tagged shapes (one per line) | A placeholder is one shape; core's accepted lines are never re-wrapped by PowerPoint. |
+| `footer.<zone>.text` with a `{{slide.number}}` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | Each substituted number is a live `slidenum` field; the words around it (`Page `, ` of 12`) and a `{{deck.slideCount}}` or `{{slide.section}}` value are fixed runs. |
+| every header part (text, socials, date, image, logo) | ordinary tagged shapes | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape. |
+| footer socials, image, `logo: true` | ordinary tagged shapes | No native object. |
+| a second footer text, date or text with a slide number in another zone | ordinary tagged shapes | One placeholder per type per slide; the second keeps its live fields. |
+| footer text, date or number text that breaks or wraps over several lines | ordinary tagged shapes (one per line) | A placeholder is one shape; core's accepted lines are never re-wrapped by PowerPoint. A `{{slide.number}}` that fits one of the lines is still a live field. |
 | empty footer text | ordinary tagged shape | |
 
 Each native shape is the same shape the exporter wrote before (same name `OPF furniture N part K line 0`, same explicit
@@ -66,11 +69,13 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
   `ftr` or `sldNum` placeholder with content is footer furniture and never slide content:
   * the zone is the horizontal third of the placeholder's centre, resolved through the slide, its layout (same idx) and
     the master when the slide gives no `a:xfrm`; no geometry means date left, footer center, number right;
-  * `sldNum` needs a `slidenum` field and imports as `slideNumber: true`, with the words around the field as
-    `slideNumberFormat` (`Page {current}`); `{total}` is never inferred from a digit;
+  * `sldNum` needs a `slidenum` field and imports as the zone's `text`, with each native slide-number field as
+    `{{slide.number}}` and the words around it kept (`Page {{slide.number}}`); a count or a section is never inferred
+    from a digit or a name;
   * `dt` with a `datetime1`-`datetime7` field imports as `date: true` (+ `dateFormat` unless M/d/yyyy); fixed text, a time
     field and `datetimeFigureOut` keep their current words as a literal date string;
-  * `ftr` imports its text (paragraphs joined by a newline); an empty placeholder is ignored.
+  * `ftr` imports its text (paragraphs joined by a newline; a native slide-number field in it is `{{slide.number}}`); an empty
+    placeholder is ignored. A footer text and a slide number in the same zone are one `text`: the footer words, then the number's line.
   * The footer most slides share becomes `design.footer` (two or more slides, or a one-slide deck), a slide with no such
     placeholders becomes `design.footer: false` and a slide that differs keeps its own footer.
 * **A tagged deck edited in PowerPoint.** An untagged placeholder on a tagged slide (Apply to All on a deck whose footer was
@@ -79,8 +84,8 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
 
 | In PowerPoint | Imports as |
 | --- | --- |
-| Slide number unchecked on slide 3 (Apply) | `slides[2].design.footer` without `slideNumber`; the other slides keep `design.footer` |
-| Slide number unchecked with Apply to All | `design.footer` loses `slideNumber` (no per-slide copies) |
+| Slide number unchecked on slide 3 (Apply) | `slides[2].design.footer` without the slide-number text; the other slides keep `design.footer` |
+| Slide number unchecked with Apply to All | `design.footer` loses the slide-number text (no per-slide copies) |
 | Everything unchecked on slide 3 | `slides[2].design.footer: false` |
 | Footer text retyped, Apply to All | `design.footer.<zone>.text` is the new text |
 | Date changed to "Fixed" and typed | `date` is that text (literal) |
@@ -104,7 +109,27 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
    for new slides.
 7. The notes master gets flags only; `showSpecialPlsOnTitleSld` is not written (one untyped layout).
 8. Import maps a `datetime` field with no OPF pattern to literal text rather than a wrong `dateFormat`, and never infers
-   `{total}`.
+   `{{deck.slideCount}}` or `{{slide.section}}` from a digit or a name.
+9. (FA-31) A footer `text` with a slide number is the whole `sldNum` placeholder, words included (`Page 3 of 12`): the dialog's
+   Slide number checkbox then adds or removes the whole text, and the dialog never rewrites its words. A zone `text` with two
+   numbers is still one `sldNum` placeholder with two fields.
+10. (FA-31) Furniture provenance stores the authored `text` of a zone whose `{{ }}` tokens are all built-in variables
+    (`deck.*`, `speaker.*`, `speakers`, `organization.*`, `slide.*`, `deck.slideCount`), taken from the document as given to
+    `toPptx`, before the deck-wide pass resolves them (`templates` in the slide manifest, beside `formats`; older importers
+    ignore the key). Import restores it only while that text, drawn for this slide, equals the words now on the slide: the
+    deck-wide built-ins are resolved with core's `resolveVariables` from the stored organization and speakers and the observed
+    name, description and author, then the slide's number, the deck's slide count and its section in PowerPoint's section list. If
+    the words were edited, the metadata changed or the slide moved, the current words import with each native slide-number
+    field as `{{slide.number}}` (typed words that spell a token are escaped), so a moved slide keeps a live number and an edit is
+    never overwritten. Without the stored document record (`provenance: false`, another tool) there is no metadata to draw from,
+    so a `{{organization.name}}` zone imports as its words.
+11. (FA-31) Social profiles belong to the organization the manifest names by id, and no furniture text shows an organization's
+    name any more, so only the stored document record can supply it; without the record the profile lines import as ordinary
+    text with `invalid-furniture-provenance`.
+12. (FA-31) The authoring flags (`organization`, `speaker`, `section`, `slideNumber`, `slideNumberFormat`) are gone with no alias:
+    `{{organization.name}}`, `{{speaker.name}}` and `{{customer}}` resolve before export like any string. A text that also uses
+    a user variable (`{{customer}}`) is not stored: the filled deck is what round-trips, so its words import (a slide-scoped token in
+    it still returns as a token, from the filled text).
 
 ## Not covered
 
@@ -116,4 +141,6 @@ something the unit tests establish. Moving a layout placeholder in PowerPoint do
 
 `npm run test:furniture` includes `test/native-furniture.mjs`: every OOXML part (slide, layout, master, notes master,
 presentation), geometry parity with core (measured and estimated fonts), the parts that stay shapes, the dialog edits above,
-inherited placeholders written the way PowerPoint writes them, older tagged exports, and determinism.
+inherited placeholders written the way PowerPoint writes them, older tagged exports, and determinism. `test/slide-variables.mjs`
+covers the `{{slide.number}}`, `{{deck.slideCount}}` and `{{slide.section}}` forms: native field plus fixed words, body tokens as
+fixed text, consecutive numbers on a paginated deck, the tokens through a round trip and third-party footers.

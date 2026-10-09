@@ -71,7 +71,7 @@ try {
     const p2 = {name: 'Interop P2', narrative: 'problem-solution', audience: 'Executives',
       organization: {id: 'acme', name: 'Acme', role: 'primary'},
       design: {fontScheme: {id: 'aptos'}, logo: {default: square, icon: square}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
-        header: {right: {logo: true}}, footer: {left: {logo: true}, center: {text: 'Confidential'}, right: {slideNumber: true}}},
+        header: {right: {logo: true}}, footer: {left: {logo: true}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
       slides: [{tag: 'Eyebrow', title: 'Cover', subtitle: 'Subtitle', layout: 'title-subtitle'},
         {title: 'Section', layout: 'section-divider', section: 'Part one'},
         {title: 'Items', items: ['Alpha', 'Beta', 'Gamma']},
@@ -87,7 +87,10 @@ try {
     assert.equal(older.narrative, 'problem-solution'); assert.equal(older.audience, 'Executives');
     assert.deepEqual(older.design.fontScheme, {id: 'aptos'});
     assert.equal(older.design.listBullet, 'image');
-    assert.equal(older.design.footer?.center?.text, 'Confidential'); assert.equal(older.design.footer?.right?.slideNumber, true);
+    // FA-31: the footer's slide number is a zone `text` with a native field. The published importer reads each slide's current
+    // words (the field's cached number) as that slide's own footer text; it does not know the token.
+    assert.equal(older.slides[0].design.footer.center.text, 'Confidential'); assert.equal(older.slides[0].design.footer.right.text, '1');
+    assert.equal(older.slides[3].design.footer.right.text, '4');
     assert.equal(older.slides[0].tag, 'Eyebrow'); assert.equal(older.slides[0].title, 'Cover');
     // The published importer does not know a:buBlip bullets or the logo pictures: the entries import as text lines, the logos as ordinary pictures.
     for (const entry of ['Alpha', 'Beta', 'Gamma']) assert.ok(JSON.stringify(older.slides[2]).includes(entry), `${entry} is kept`);
@@ -95,6 +98,7 @@ try {
     assert.deepEqual(newer.design.fontScheme, {id: 'aptos'});
     assert.equal(newer.design.listBullet, 'image');
     assert.deepEqual(newer.design.logo, {default: square, icon: square});
+    assert.deepEqual(newer.design.footer?.right, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
     if (rich) {
       assert.deepEqual(newer.design.footer?.left, {logo: true}); assert.deepEqual(newer.design.header?.right, {logo: true});
       assert.ok(!newer.slides[0].image && !newer.slides[0].blocks, 'the cover logo is not content');
@@ -104,14 +108,16 @@ try {
   // RR-11: footer text, date and slide number are native placeholders that keep their furniture tags and the manifest's
   // part list, so the published importer reads the same footer and no placeholder text becomes slide content.
   {
-    const nativeFooter = {design: {fontScheme: 'arial', footer: {left: {date: true}, center: {text: 'Native footer'}, right: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
+    const nativeFooter = {design: {fontScheme: 'arial', footer: {left: {date: true}, center: {text: 'Native footer'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
     const exported = await toPptx(nativeFooter, {timestamp: '2026-01-01T00:00:00Z', seed: 1, date: '2026-09-10'});
     assert.ok(/<p:ph type="ftr"/.test(dec.decode(unzipSync(exported)['ppt/slides/slide1.xml'])), 'the footer text is a native placeholder');
     const reports = [];
     const older = await published.fromPptx(exported, {onDiagnostic: issue => reports.push(issue)});
     assert.deepEqual(reports.filter(issue => /^invalid-.*provenance$/.test(issue.code)), [], `published ${PUBLISHED} accepts native footer placeholders`);
-    assert.deepEqual(older.design.footer, nativeFooter.design.footer);
-    assert.ok(older.slides.every(slide => !JSON.stringify(slide).includes('Native footer')), 'placeholder text is not slide content');
+    // The published importer sees the slide number's cached words, which differ per slide, so each slide has its own footer.
+    assert.deepEqual(older.slides.map(slide => slide.design.footer.right.text), ['1', '2']);
+    assert.deepEqual(older.slides.map(slide => slide.design.footer.center.text), ['Native footer', 'Native footer']);
+    assert.ok(older.slides.every(slide => !JSON.stringify({...slide, design: undefined}).includes('Native footer')), 'placeholder text is not slide content');
     assert.deepEqual((await fromPptx(exported)).design.footer, nativeFooter.design.footer);
   }
   console.log(`Provenance interop passed: an export of this build imports with published opf-pptx ${PUBLISHED} (design references, metadata, layout intent kept; supplement ignored; design-fields export keeps its provenance) and fully with this build.`);

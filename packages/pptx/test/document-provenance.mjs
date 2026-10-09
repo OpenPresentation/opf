@@ -255,7 +255,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 
 // Furniture already owns a slide tag list; both records share it.
 {
-  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {left: {organization: true}, right: {slideNumber: true}}},
+  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {left: {text: '{{organization.name}}'}, right: {text: '{{slide.number}}'}}},
     slides: [{layout: 'title-subtitle', title: 'One', subtitle: 'Two'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
@@ -265,12 +265,14 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.match(dec.decode(entries['ppt/slides/slide1.xml']), /<\/p:spTree><p:custDataLst><p:tags r:id="rIdOpfFurnitureSlide"\/><\/p:custDataLst><\/p:cSld>/, 'One slide-level tag list.');
   const {deck: imported, issues} = await read(bytes);
   assert.equal(issues.some(issue => issue.code === 'invalid-furniture-provenance'), false);
+  // FA-31: the footer drew the organization's name; the stored footer text and record return {{organization.name}} and the organization.
   assert.deepEqual(imported.design.footer, deck.design.footer);
   assert.deepEqual(imported.organization, deck.organization);
   assert.equal(imported.slides[0].layout, 'title-subtitle');
-  // The current organization name shown in the footer wins over the stored one.
+  // The footer is only words: a retyped name changes the footer text and leaves the stored organization.
   const renamed = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('>Acme<', '>Acme Corp<'))));
-  assert.deepEqual(renamed.deck.organization, {id: 'acme', name: 'Acme Corp'});
+  assert.deepEqual(renamed.deck.organization, deck.organization);
+  assert.equal(renamed.deck.design.footer.left.text, 'Acme Corp');
 }
 
 // In 'references-only' mode documents that state nothing keep their package unchanged ('full' records the defaults they

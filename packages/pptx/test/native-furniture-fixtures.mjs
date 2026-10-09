@@ -56,13 +56,13 @@ const localHeader='  Local image label  ';
 const inherited={
   organization:{id:'registry_org',name:'  Registry Organization  '},
   design:{fontScheme:'roboto',dimensions,
-    header:{left:{text:inheritedHeader},center:{organization:true},right:{section:true}},
-    footer:{left:{text:inheritedFooter},right:{slideNumber:true}}},
+    header:{left:{text:inheritedHeader},center:{text:'Registry Organization'},right:{text:'{{slide.section}}'}},
+    footer:{left:{text:inheritedFooter},right:{text:'{{slide.number}}'}}},
   slides:[
     {title:'Inherited furniture',section:'  Alpha section  ',text:'Scalar body inherited — exact.'},
     {title:'Local furniture',section:'  Beta section  ',text:'Scalar body local — exact.',design:{
-      header:{left:{image,text:localHeader},center:{organization:true},right:{section:true}},
-      footer:{left:{text:'  Local footer  '},right:{slideNumber:true}}}},
+      header:{left:{image,text:localHeader},center:{text:'Registry Organization'},right:{text:'{{slide.section}}'}},
+      footer:{left:{text:'  Local footer  '},right:{text:'{{slide.number}}'}}}},
     {title:'Inherited again',section:'  Gamma section  ',text:'Scalar body inherited again — exact.'},
   ],
 };
@@ -72,8 +72,8 @@ const flags={
     {title:'False and empty',text:'Scalar body false and empty.',design:{header:false,footer:{}}},
     {title:'Empty and false',text:'Scalar body empty and false.',design:{header:{},footer:false}},
     {title:'Inactive fields',text:'Scalar body inactive fields.',design:{
-      header:{left:{text:''},center:{organization:false,section:false,slideNumber:false,date:false}},
-      footer:{right:{text:'',slideNumber:false}}}},
+      header:{left:{text:''},center:{date:false}},
+      footer:{right:{text:''}}}},
   ],
 };
 const sources={
@@ -206,10 +206,6 @@ function mutationSet(base){
       const target=firstFurnitureShapeTag(entries,0), content=decode(entries[target.part]), changed={...target.tag.decoded,group:'999'};
       entries[target.part]=encode(replaceExactlyOnce(content,`val="${target.tag.value}"`,`val="${encodeTag(changed)}"`,'changed shape tag'));
     })},
-    'variant-metadata-disagreement':{description:'Change one current visible organization value on slide 1; provenance tags and metadata identities remain untouched.',bytes:mutated(base,entries=>{
-      const file='ppt/slides/slide1.xml';
-      entries[file]=encode(replaceExactlyOnce(decode(entries[file]),'Registry Organization','Disagreed Organization','organization disagreement'));
-    })},
   };
 }
 
@@ -248,19 +244,12 @@ for(const [id,variant] of Object.entries(variants)){
   const diagnostics=[], imported=await fromPptx(variant.bytes,{onDiagnostic:item=>diagnostics.push(item)});
   assert.equal(validate(imported, {only: ['format']}).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,inherited);
   const wholeSlideInvalid=['variant-duplicate-shape-tag','variant-changed-shape-tag'].includes(id);
-  const expected=id==='variant-metadata-disagreement'
-    ?{organization:undefined,headers:[undefined,undefined,undefined],footers:inherited.slides.map((_,index)=>normalize(inherited.slides[index].design?.footer??inherited.design.footer)),retainedCurrentText:['Disagreed Organization','Registry Organization'],diagnostic:'invalid-furniture-provenance'}
-    :{invalidFurnitureRoles:{'1':wholeSlideInvalid?['header','footer']:['header']},validHeaderSlides:[2,3],validFooterSlides:wholeSlideInvalid?[2,3]:[1,2,3],retainedCurrentText:wholeSlideInvalid?['Inherited header','Inherited footer']:['Inherited header'],diagnostic:'invalid-furniture-provenance'};
-  if(id==='variant-metadata-disagreement'){
-    assert.equal(imported.organization,undefined); for(let index=0;index<3;index++){assert.equal(effective(imported,index,'header'),undefined); assert.deepEqual(normalize(effective(imported,index,'footer')),expected.footers[index]);}
-    const serialized=JSON.stringify(imported); for(const text of expected.retainedCurrentText) assert.ok(serialized.includes(text),`${id}: current ${text} missing.`);
-  }else{
-    assert.equal(effective(imported,0,'header'),undefined);
-    if(wholeSlideInvalid) assert.equal(effective(imported,0,'footer'),undefined);
-    for(const index of wholeSlideInvalid?[1,2]:[0,1,2]) assert.deepEqual(normalize(effective(imported,index,'footer')),normalize(inherited.slides[index].design?.footer??inherited.design.footer),`${id}: footer ${index+1}`);
-    for(const index of [1,2]) assert.deepEqual(normalize(effective(imported,index,'header')),normalize(inherited.slides[index].design?.header??inherited.design.header),`${id}: header ${index+1}`);
-    const serialized=JSON.stringify(imported.slides[0]); for(const text of expected.retainedCurrentText) assert.ok(serialized.includes(text),`${id}: current ${text} missing.`);
-  }
+  const expected={invalidFurnitureRoles:{'1':wholeSlideInvalid?['header','footer']:['header']},validHeaderSlides:[2,3],validFooterSlides:wholeSlideInvalid?[2,3]:[1,2,3],retainedCurrentText:wholeSlideInvalid?['Inherited header','Inherited footer']:['Inherited header'],diagnostic:'invalid-furniture-provenance'};
+  assert.equal(effective(imported,0,'header'),undefined);
+  if(wholeSlideInvalid) assert.equal(effective(imported,0,'footer'),undefined);
+  for(const index of wholeSlideInvalid?[1,2]:[0,1,2]) assert.deepEqual(normalize(effective(imported,index,'footer')),normalize(inherited.slides[index].design?.footer??inherited.design.footer),`${id}: footer ${index+1}`);
+  for(const index of [1,2]) assert.deepEqual(normalize(effective(imported,index,'header')),normalize(inherited.slides[index].design?.header??inherited.design.header),`${id}: header ${index+1}`);
+  const serialized=JSON.stringify(imported.slides[0]); for(const text of expected.retainedCurrentText) assert.ok(serialized.includes(text),`${id}: current ${text} missing.`);
   assert.ok(diagnostics.some(item=>item.code==='invalid-furniture-provenance'),`${id}: missing invalid provenance diagnostic.`);
   const file=path.join(output,'decks',`${id}.pptx`); await writeFile(file,variant.bytes);
   fixtures.push({id,kind:'controlled-generation-variant',baseId:'baseline-inherited-local',mutation:variant.description,file,sha256:sha(variant.bytes),

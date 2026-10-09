@@ -35,6 +35,9 @@
   },
   "types": "./dist/index.d.ts",
   "sideEffects": false,
+  "opf": {
+    "requiresUnreleasedCore": "0.17.0"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
@@ -54,7 +57,7 @@
     "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs",
     "test:font-variants": "node test/font-variants.mjs",
     "test:timeline": "node test/shared-timeline.mjs",
-    "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/furniture-fields.mjs && node test/furniture-wrapped-date.mjs && node test/socials-furniture.mjs && node test/native-furniture.mjs",
+    "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/slide-variables.mjs && node test/furniture-fields.mjs && node test/furniture-wrapped-date.mjs && node test/socials-furniture.mjs && node test/native-furniture.mjs",
     "test:native-picture-edit-controls": "node test/compare-native-picture-edit-controls.mjs",
     "test:native-font-embed-controls": "node test/native-font-embed-controls.mjs",
     "test:native-mixed-edit-controls": "node test/native-mixed-edit-controls.mjs",

@@ -9,7 +9,7 @@ import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const enc = new TextEncoder(), dec = new TextDecoder();
 const source = {name: 'Wrapped generated date boundary', design: {fontScheme: 'roboto',
   dimensions: {widthInches: 7.5, heightInches: 13.3333333333},
-  footer: {center: {date: true, dateFormat: 'MMMM d, yyyy'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}}},
+  footer: {center: {date: true, dateFormat: 'MMMM d, yyyy'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
 slides: [{title: 'Title', design: {footer: false}},
   {title: 'Content', text: 'Keep body content.', composition: {minFontSize: 32, overflow: 'error'}},
   {title: 'Third', text: 'Still current.', composition: {minFontSize: 32, overflow: 'error'}}]};

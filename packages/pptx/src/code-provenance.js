@@ -91,7 +91,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
     };
     for (const child of paragraph) {
       if (child['a:br'] !== undefined) text += '\n';
-      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join('')});
+      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join(''), start: text.length});
       text += readRuns(child);
       if (child['mc:AlternateContent'] !== undefined) {
         // FF-45: an a14:m math zone (an OMML equation, m:oMathPara) has no OPF model. Its mc:Fallback runs (the text PowerPoint

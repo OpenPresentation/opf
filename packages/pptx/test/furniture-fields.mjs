@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType, formatSlideNumber} from '../dist/furniture-fields.js';
+import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType, slideNumberTemplate, escapeSlideTokens, mentionsSlideToken} from '../dist/furniture-fields.js';
 import {validate} from '@openpresentation/opf';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
@@ -29,9 +29,9 @@ const edit = (entries, index, mutate) => {
   return zipSync(copy);
 };
 
-// Slide numbers are native fields inside the tagged furniture shapes; {total} stays fixed.
+// FA-31: {{slide.number}} is a native field inside the tagged furniture shapes; {{deck.slideCount}} stays fixed text.
 {
-  const footer = {left: {text: 'Prepared for Northstar Health'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}};
+  const footer = {left: {text: 'Prepared for Northstar Health'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer));
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 1)), [], 'The title slide override hides the footer.');
@@ -42,28 +42,30 @@ const edit = (entries, index, mutate) => {
   assert.deepEqual(invalid, []);
   assert.deepEqual(imported.design.footer, footer);
   assert.deepEqual(imported.slides.map(slide => slide.design?.footer), [false, undefined, undefined]);
-  // A cached number that disagrees with the slide position (as after a move PowerPoint has not yet
-  // refreshed) fails provenance: the visible words are kept as ordinary text, not restored as a field.
+  // A cached number that disagrees with the slide position (as after a move PowerPoint has not yet refreshed) is still a
+  // live field: it imports as {{slide.number}}, and the fixed count beside it is now the words as they stand.
   const moved = await read(edit(entries, 2, xml => xml.replace(/(<a:fld\b[^>]*type="slidenum">[\s\S]*?<a:t>)2</, '$18<')));
-  assert.equal(moved.invalid.length, 1, 'A visible number that disagrees with its position is ordinary text.');
-  // Fixed text around the field that no longer matches the recorded format is not restored.
+  assert.deepEqual(moved.invalid, []);
+  assert.deepEqual(moved.imported.slides[1].design.footer.right, {text: '{{slide.number}} / 3'});
+  // Fixed text around the field that no longer matches the authored text is the current words; the field stays a token.
   const edited = await read(edit(entries, 3, xml => xml.replace('<a:t> / 3</a:t>', '<a:t> of 3</a:t>')));
-  assert.equal(edited.invalid.length, 1);
-  assert.ok(JSON.stringify(edited.imported).includes('3 of 3'), 'Current native words are retained.');
+  assert.deepEqual(edited.invalid, []);
+  assert.deepEqual(edited.imported.slides[2].design.footer.right, {text: '{{slide.number}} of 3'}, 'Current native words are retained.');
+  assert.deepEqual(edited.imported.slides[1].design.footer, footer, 'The slide that still agrees keeps the authored footer, as its own override once the slides disagree.');
 }
 {
-  const footer = {right: {slideNumber: true, slideNumberFormat: 'A-{current}'}};
+  const footer = {right: {text: 'A-{{slide.number}}'}};
   const {bytes, entries} = await exportDeck(deck(footer));
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 3)).map(runs), ['A-[slidenum:3]']);
   assert.deepEqual((await read(bytes)).imported.design.footer, footer);
-  const plain = await exportDeck(deck({right: {slideNumber: true}}));
+  const plain = await exportDeck(deck({right: {text: '{{slide.number}}'}}));
   assert.deepEqual(furnitureParagraphs(slideXml(plain.entries, 2)).map(runs), ['[slidenum:2]']);
-  assert.deepEqual((await read(plain.bytes)).imported.design.footer, {right: {slideNumber: true}});
+  assert.deepEqual((await read(plain.bytes)).imported.design.footer, {right: {text: '{{slide.number}}'}});
 }
 
 // Fixed dates are formatted text; their ISO value and pattern return while the text round-trips.
 {
-  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: 'v0.8'}, right: {slideNumber: true}};
+  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: 'v0.8'}, right: {text: '{{slide.number}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer));
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 2)).map(runs), ['Apr 23, 2026', 'v0.8', '[slidenum:2]']);
@@ -82,7 +84,7 @@ const edit = (entries, index, mutate) => {
 
 // Current dates are live PowerPoint date fields whose cached text is the host-supplied date.
 {
-  const footer = {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {date: true}, right: {slideNumber: true}};
+  const footer = {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {date: true}, right: {text: '{{slide.number}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer), {date: '2026-09-22'});
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 2)).map(runs), ['[datetime4:September 22, 2026]', '[datetime1:9/22/2026]', '[slidenum:2]']);
@@ -109,12 +111,21 @@ const edit = (entries, index, mutate) => {
 assert.equal(formatDate('2026-04-23', "EEEE', 'MMMM d', 'yyyy"), 'Thursday, April 23, 2026');
 for (const pattern of ['MMM d, yyyy', 'yyyy-MM-dd', 'EEEE, MMMM d, yyyy', 'd-MMM-yyyy', "dd/MM/yyyy 'x'"]) assert.equal(parseDate(formatDate('2024-02-29', pattern), pattern), '2024-02-29');
 for (const [text, pattern] of [['Apr 2026', 'MMM yyyy'], ['23-Apr-26', 'd-MMM-yy'], ['Friday, April 23, 2026', 'EEEE, MMMM d, yyyy'], ['Feb 30, 2026', 'MMM d, yyyy'], ['x', 'hh']]) assert.equal(parseDate(text, pattern), null);
-assert.deepEqual(furniturePartFields({field: 'slideNumber', text: '12'}), [{type: 'slideNumber', start: 0, end: 2}], 'Earlier cores still get a live number.');
+assert.deepEqual(furniturePartFields({field: 'text', text: '12', fields: [{type: 'slideNumber', start: 0, end: 2}]}), [{type: 'slideNumber', start: 0, end: 2}]);
+assert.deepEqual(furniturePartFields({field: 'text', text: '12'}), [], 'Text with no field is fixed.');
 assert.deepEqual(furniturePartFields({field: 'date', text: '2026'}), []);
+// The zone text a native line stands for: each slide-number field is {{slide.number}}; typed words that spell a token stay literal.
+assert.equal(slideNumberTemplate('2024 Report - 2', [{type: 'slidenum', text: '2', start: 14}]), '2024 Report - {{slide.number}}', 'The field is found by its offset, not by its digits.');
+assert.equal(slideNumberTemplate('Page 3 of 9', [{type: 'slidenum', text: '3', start: 5}]), 'Page {{slide.number}} of 9');
+assert.equal(slideNumberTemplate('3', [{type: 'datetime1', text: '3', start: 0}]), '3', 'Only a slide-number field becomes a token.');
+assert.equal(slideNumberTemplate('Use {{slide.number}} here', []), 'Use \\{{slide.number}} here', 'Typed token words are escaped so they stay literal.');
+assert.equal(slideNumberTemplate('{{slide.number}}', [{type: 'slidenum', text: '{{slide.number}}', start: 0}]), '{{slide.number}}');
+assert.equal(escapeSlideTokens('{{customer}} {{ deck.slideCount }}'), '{{customer}} \\{{ deck.slideCount }}');
+assert.equal(mentionsSlideToken('a {{slide.section}}'), true);
+assert.equal(mentionsSlideToken('a {{organization.name}}'), false);
 assert.equal(nativeFieldType({type: 'date', format: 'MMM-yy'}), 'datetime7');
 assert.equal(nativeFieldType({type: 'date', format: 'MMM d, yyyy'}), null);
-assert.equal(formatSlideNumber('{current} of {total}', 4, 9), '4 of 9');
 assert.deepEqual(lineFields('Page 12', [{type: 'slideNumber', start: 5, end: 7}], [{start: 0, end: 4}, {start: 5, end: 7}], ['Page', '12']), [[], [{type: 'slideNumber', start: 0, end: 2}]]);
 assert.deepEqual(lineFields('1234', [{type: 'slideNumber', start: 0, end: 4}], [{start: 0, end: 2}, {start: 2, end: 4}], ['12', '34']), [[], []], 'A wrapped number stays fixed text.');
 
-console.log('Furniture fields: live slide numbers, fixed {total}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.');
+console.log('Furniture fields: live slide numbers, fixed {{deck.slideCount}}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.');

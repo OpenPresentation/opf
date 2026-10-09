@@ -27,10 +27,10 @@ import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './
 import {attachFurnitureTags, furnitureManifest, importFurniture, manifestPartIndex, staticDateFallback} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListBreaks, DEFAULT_AUTHOR} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListBreaks, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
-import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, writeNativeMasters} from './native-furniture.js';
+import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeImages, importImages, imageName, imageOverlayName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS} from './image-provenance.js';
@@ -59,6 +59,7 @@ import {
   isTemplate,
   OPFCatalogsOptionError,
   resolveSlideContext as resolveCoreSlideContext,
+  resolveSlideVariables,
   resolveVariables,
   validate
 } from "@openpresentation/opf";
@@ -236,7 +237,9 @@ export async function toPptx(input, options = {}) {
   // resolves nowhere instead of composing automatically or drawing with the engine default.
   checkCatalogs('toPptx', options.catalogs);
   options = {...options, strictReferences: options.strictReferences ?? options.strictAssets === true};
-  const presentation = resolveTemplateInput(parseInput(input), options);
+  // The document as given, before the deck-wide variable pass: the furniture manifest records the authored header and footer text.
+  const authored = parseInput(input);
+  const presentation = resolveTemplateInput(authored, options);
   assertValidBoundary(presentation);
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
@@ -280,6 +283,7 @@ export async function toPptx(input, options = {}) {
   context.furnitureManifests = new Map();
   context.nativeFurniture = new Map();
   context.hostDate = options.date;
+  context.authored = authored;
   context.codeTags = new Map();
   context.captionTags = new Map();
   context.footnoteTags = new Map();
@@ -415,10 +419,23 @@ export async function fromPptx(input, options = {}) {
       readPicture: picture => importPicture(entries, picture, slidePath, relationships,
         diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`}))};
   });
-  const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic);
+  // Native sections (PowerPoint's own section list, `Default Section` = none) name each slide's `{{slide.section}}` for the footer text check
+  // and, after the slides, are reconciled with the stored value in restoreDocumentProvenance.
+  const slideSections = nativeSections(presentationRoot, slideIdsInOrder(presentationRoot, presentationRels, entries, slidePaths));
+  const stored = storedMetadata(entries, presentationRoot, presentationRels);
+  // A stored zone text with built-in variables is drawn from the document's own metadata, as toPptx resolved it: the stored record
+  // (organization, speaker ...) and the observed name, description and author (a default the exporter writes is no value).
+  const importedMetadata = {
+    ...(imported.name && imported.name !== DEFAULT_TITLE ? {name: imported.name} : {}),
+    ...(imported.description ? {description: imported.description} : {}),
+    ...(imported.author && joinAuthors(imported.author) !== DEFAULT_AUTHOR ? {author: imported.author} : {}),
+    ...(stored.organization !== undefined ? {organization: stored.organization} : {}),
+    ...(stored.speaker !== undefined ? {speaker: stored.speaker} : {}),
+  };
+  const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic, {sections: slideSections ?? [], organizations: asArray(stored.organization).filter(item => isPlainObject(item) && typeof item.id === 'string' && typeof item.name === 'string').map(item => ({id: item.id, name: item.name})),
+    draw: (template, {index, count, section}) => drawFurnitureText(template, {index, count, section}, importedMetadata)});
   if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
   if (furniture.organization) imported.organization = furniture.organization;
-  if (furniture.speaker) imported.speaker = furniture.speaker;
 
   // RR-54: the datasets recorded at export (OPF_DATASETS_V1). Chart and table frames restore their dataset references against
   // them, so the document carries them before document provenance validates the restored document.
@@ -429,9 +446,6 @@ export async function fromPptx(input, options = {}) {
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
   }
   if (datasets) imported.datasets = datasets;
-  // Native sections (PowerPoint's own section list, `Default Section` = none)
-  // are reconciled with the footer text and the stored value in restoreDocumentProvenance.
-  const slideSections = nativeSections(presentationRoot, slideIdsInOrder(presentationRoot, presentationRels, entries, slidePaths));
   // A watermark carried identically by every slide is the deck's design.watermark.
   const carried = imported.slides.map(slide => slide.design?.watermark);
   if (carried.length && carried[0] && carried.every(value => JSON.stringify(value) === JSON.stringify(carried[0]))) {
@@ -456,7 +470,7 @@ export async function fromPptx(input, options = {}) {
   let slideProvenance = slidePaths.map(() => ({structure: "untagged"}));
   let restoredGroups = [];
   try {
-    const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true, speakerConflict: furniture.speakerConflict === true,
+    const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels,
       // Stored layout ids also resolve in the host's registered catalogs (FA-23).
       catalogs: options.catalogs,
       nativeSections: slideSections,
@@ -614,6 +628,17 @@ function resolveRelationshipTarget(sourcePartPath, target) {
   return parts.join("/");
 }
 
+// A header or footer text as the exporter drew it for one slide: deck-wide built-ins resolved from `metadata` (core
+// resolveVariables), then the slide-scoped tokens for the slide's position, count and section. undefined when core refuses.
+function drawFurnitureText(template, {index, count, section}, metadata) {
+  try {
+    const slide = resolveVariables({...metadata, slides: [{...(section !== undefined ? {section} : {}), text: template}]}).presentation.slides[0];
+    return resolveSlideVariables(slide, {slideNumber: index + 1, slideCount: count}).text;
+  } catch {
+    return undefined;
+  }
+}
+
 function resolveSlidePaths(entries, presentationRoot, relationships) {
   const slideIds = asArray(presentationRoot["p:sldIdLst"]?.["p:sldId"]);
   const paths = [];
@@ -709,7 +734,6 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   }
   if (imageBackground) slide.design = {background: imageBackground};
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
-  if (furniture.section !== undefined) slide.section = furniture.section;
   nativeContext.imageBlocks = images.blocks;
   nativeContext.imagePictures = images.consumed;
   // An overlay of a background that was not recovered stays an ordinary shape.
@@ -1903,10 +1927,15 @@ function configurePresentation(pptx, presentation, context) {
   };
 }
 
-async function addSlide(pptx, presentation, opfSlide, slideIndex, context, options) {
+async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, options) {
   options = {...options, textMeasurement: slideTextMeasurement(presentation, slideIndex, options)};
   const slide = pptx.addSlide();
   const slideContext = exportSlideContext(presentation, slideIndex, context, options);
+  // FA-31: the slide is composed and drawn with its slide-scoped variables substituted ({{slide.number}}, {{slide.section}},
+  // {{deck.slideCount}} for this position in the exported deck, in body text as fixed text). The authored slide still holds the
+  // tokens: header and footer text is substituted by core's furniture layout (a slide number stays a native field), and the
+  // furniture manifest records the authored text.
+  const opfSlide = slideContext.core.slide;
   const { widthInches, heightInches } = slideContext.dimensions;
   // A slide with no layout, or one whose layout resolves nowhere, is composed with no layout record (automatic composition),
   // as in the preview; core reports the reference as unresolved-reference.
@@ -2009,7 +2038,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   // Core composes furniture above all content and opf-render paints it last, so
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
-  await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
+  await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -2772,7 +2801,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
 // The default footer band core composes for a deck with no footer of its own: where a footer added natively lands.
 function defaultFooterParts(composeOptions) {
   try {
-    const slide = {design: {footer: {left: {date: '2026-01-01'}, center: {text: 'Footer'}, right: {slideNumber: true}}}};
+    const slide = {design: {footer: {left: {date: '2026-01-01'}, center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}};
     // Only the zone boxes and line height are used, and they do not depend on text widths: estimated measurement keeps the host's measurer (and its call count) out of this.
     return (composeSlide(slide, {...composeOptions, textMeasurement: undefined}).furniture?.parts ?? []).filter(part => part.kind === 'footer' && part.type === 'text');
   } catch {
@@ -2780,10 +2809,13 @@ function defaultFooterParts(composeOptions) {
   }
 }
 
+// The slide and deck as given to toPptx (variables not yet resolved), for the furniture manifest's authored header and footer text.
+const authoredFurniture = (context, slideIndex) => ({presentation: context.authored, slide: context.authored?.slides?.[slideIndex]});
+
 async function addFurniture(slide,presentation,source,layout,context,options,slideIndex) {
   if(!layout){
     if(['header','footer'].some(kind=>(source.design?.[kind]??presentation.design?.[kind])))throw new OPFPptxError('missing-furniture-layout','Header/footer export requires coordinated core furniture geometry.',{path:`slides.${slideIndex}.design`});
-    const manifest = furnitureManifest(presentation, source, {parts: []}, slideIndex);
+    const manifest = furnitureManifest(presentation, source, {parts: []}, slideIndex, undefined, undefined, authoredFurniture(context, slideIndex));
     if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
     return;
   }
@@ -2799,8 +2831,8 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       else if (objectName) context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:manifestPartIndex(layout.parts, index)});
     }else{
       if(!part.fit?.sourceLines)throw new OPFPptxError('missing-furniture-layout','Repeated text requires accepted source lines from core.',{path:part.path});
-      // Slide numbers and current dates become native PowerPoint fields; {total}
-      // and fixed dates stay fixed text. A current date whose pattern has no
+      // Slide numbers ({{slide.number}}) and current dates become native PowerPoint fields; {{deck.slideCount}},
+      // {{slide.section}} and fixed dates stay fixed text. A current date whose pattern has no
       // en-US field type is written as its laid-out text.
       const fields=[];
       for(const field of furniturePartFields(part)){
@@ -2820,7 +2852,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       if(natives.has(index))context.nativeFurniture.set(`OPF furniture ${slideIndex} part ${index} line 0`,natives.get(index));
     }
   }
-  const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates, natives);
+  const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates, natives, authoredFurniture(context, slideIndex));
   if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
 }
 
@@ -3730,7 +3762,7 @@ function normalizeHex(value, fallback = "000000") {
 function writeNativeFurnitureMasters(output, context) {
   const size = /<p:sldSz\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"/.exec(decodeText(output['ppt/presentation.xml'][0]));
   const defaults = new Map((context.defaultFooterOptions ? defaultFooterParts(context.defaultFooterOptions) ?? [] : []).flatMap(part => {
-    const ph = {date: 'dt', text: 'ftr', slideNumber: 'sldNum'}[part.field];
+    const ph = nativePlaceholderForPart(part);
     const geometry = ph && defaultPlaceholderGeometry(part);
     return geometry ? [[ph, geometry]] : [];
   }));

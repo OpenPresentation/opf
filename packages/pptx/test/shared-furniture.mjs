@@ -11,7 +11,7 @@ const hash=value=>createHash('sha256').update(value).digest('hex'),fontOptions =
 const imageBytes=await readFile(new URL('fixtures/images/wide.png',import.meta.url));
 const image={src:`data:image/png;base64,${imageBytes.toString('base64')}`,alt:'Header image with text'};
 for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
- const source={organization:{id:'primary',name:'Organization'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{text:' Authored\twords \r\n\r\nlast  \r'},center:{organization:true},right:{section:true}},footer:{left:{date:' 2026-09-10 '},right:{slideNumber:true}}},slides:[{title:'Furniture',section:'Section',text:'Keep body words.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header:{left:{image,text:''},right:{text:'Local'}}}}:{})}]};
+ const source={organization:{id:'primary',name:'Organization'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{text:' Authored\twords \r\n\r\nlast  \r'},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer:{left:{date:' 2026-09-10 '},right:{text:'{{slide.number}}'}}},slides:[{title:'Furniture',section:'Section',text:'Keep body words.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header:{left:{image,text:''},right:{text:'Local'}}}}:{})}]};
  const before=structuredClone(source),options=measured?fontOptions:{},layout=resolvePresentation(source,options).slides[0].geometry.furniture;
  const bytes=await toPptx(source,{...options,strictAssets:true}),entries=unzipSync(bytes),tree=parser.parse(decode(entries['ppt/slides/slide1.xml']))['p:sld']['p:cSld']['p:spTree'];
  const shapes=array(tree['p:sp']).filter(shape=>shape['p:nvSpPr']?.['p:cNvPr']?.name.startsWith('OPF furniture '));
@@ -23,7 +23,7 @@ for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1
    // Each fixture paragraph holds one run or one native field, so keyed order is safe here.
    const text=array(shape['p:txBody']['a:p']).map(p=>[...array(p['a:r']),...array(p['a:fld'])].map(run=>run['a:t']??'').join('')).join('\n');assert.equal(text,part.text.slice(line.start,line.end));
    const fields=array(shape['p:txBody']['a:p']).flatMap(p=>array(p['a:fld']));
-   assert.deepEqual(fields.map(field=>field.type),part.field==='slideNumber'?['slidenum']:[],'Slide numbers are live fields; other furniture is fixed text.');
+   assert.deepEqual(fields.map(field=>field.type),(part.fields??[]).filter(field=>field.type==='slideNumber'&&field.start>=line.start&&field.end<=line.end).map(()=>'slidenum'),'Slide numbers are live fields; other furniture is fixed text.');
    const fit=part.fit,placed=fit.placement?.lines[index],factor=part.alignment==='right'?1:part.alignment==='center'?.5:0;
    const area=placed?{x:placed.x+placed.width*factor-part.box.width*factor,y:placed.baseline-fit.fontSize,width:part.box.width,height:placed.height}:{x:part.box.x,y:part.box.y+index*fit.lineHeight,width:part.box.width,height:fit.lineHeight};
    const transform=shape['p:spPr']['a:xfrm'];for(const [actual,expected]of [[transform['a:off'].x,area.x],[transform['a:off'].y,area.y],[transform['a:ext'].cx,area.width],[transform['a:ext'].cy,area.height]])assert.equal(Number(actual),Math.round(expected*9525));

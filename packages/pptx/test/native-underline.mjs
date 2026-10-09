@@ -74,7 +74,7 @@ for (const [name, slide] of shapes) {
   });
 }
 test('linked furniture retains explicit native underline none', {skip:registryLane ? 'Published core 0.11 does not emit linked social furniture; current candidate/source lane is mandatory.' : false}, async () => {
-  const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{left:{organization:true}, right:{socials:true}}}, slides:[{text:'Body'}]};
+  const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{left:{text:'{{organization.name}}'}, right:{socials:true}}}, slides:[{text:'Body'}]};
   const {native} = await exportAndRetain('furniture-links', source);
   const links = all(native, 'a:r').filter(run => run['a:rPr']?.['a:hlinkClick']);
   assert.ok(links.length > 0, 'Reach the linked furniture converter');

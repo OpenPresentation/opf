@@ -929,6 +929,20 @@ export function slideListBreaks(entries, path, root, rels) {
 }
 
 /**
+ * The authoring metadata the stored document record (OPF_DOCUMENT_V1) holds (organization, speaker, ...), or {} when it is missing
+ * or unreadable. Furniture import reads it before the slides: a socials part belongs to an organization by id, and a stored
+ * header or footer text with built-in variables ({{organization.name}}) is drawn from it. Read only; nothing is restored here.
+ */
+export function storedMetadata(entries, presentationRoot, presentationRels) {
+  try {
+    const found = readTag(entries, presentationRoot?.['p:custDataLst'], presentationRels, DOCUMENT_TAG);
+    if (found.missing) return {};
+    const metadata = validateDocument(found.value).metadata;
+    return object(metadata) ? metadata : {};
+  } catch { return {}; }
+}
+
+/**
  * Read OPF_DOCUMENT_V1 / OPF_SLIDE_V1 and decide what still matches the
  * package. Nothing is modified here: the result lists restore groups (one per
  * OPF field; background deduplication belongs to design.background) for
@@ -949,7 +963,7 @@ export function slideListBreaks(entries, path, root, rels) {
  * `nativeSections` is the package's native section list as one name (or
  * undefined) per slide, or null when the package has no list.
  */
-export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, speakerConflict = false, catalogs: hostCatalogs, nativeSections = null, schemaOption = false}, report) {
+export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, catalogs: hostCatalogs, nativeSections = null, schemaOption = false}, report) {
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
   try {
@@ -1018,27 +1032,24 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     return true;
   };
 
-  // Sections: three sources can name a slide's section. The native section
-  // list (PowerPoint's sections pane), the section text a footer shows, and the
-  // stored OPF_SLIDE_V1 value. The list is native data and wins, except when
-  // the list still equals the stored value and the footer text differs: then
-  // the footer was edited and its text is kept, as before. Without a list the
-  // stored value is the fallback for a slide whose footer shows none.
-  // Labels compare the way the native list stores them: tab, LF and CR are
-  // spaces in an XML attribute, and a blank label is no section.
-  const blank = value => typeof value !== 'string' || value.trim() === '';
-  const normalized = value => blank(value) ? '' : value.replace(/[\t\n\r]/g, ' ');
-  const sameSection = (a, b) => normalized(a) === normalized(b);
+  // Sections: two sources name a slide's section, the native section list (PowerPoint's sections pane) and the stored
+  // OPF_SLIDE_V1 value. The list is native data and wins, except that the stored label stands while the list still names it:
+  // a label is an XML attribute, so tab, LF and CR come back from the list as spaces (src/sections.js) and compare as such.
+  // Without a list the stored value is the fallback. (A footer's `{{slide.section}}` is only the token, FA-31: no footer
+  // shows the section text any more.)
+  const spaced = value => (typeof value !== 'string' || value.trim() === '') ? '' : value.replace(/[\t\n\r]/g, ' ');
   const reconcileSection = (index, stored) => {
-    const shown = imported.slides[index]?.section;
     if (!nativeSections) {
-      if (stored !== undefined && shown === undefined) group(`slides.${index}.section`, [set(['slides', index, 'section'], clone(stored))]);
+      if (stored !== undefined) group(`slides.${index}.section`, [set(['slides', index, 'section'], clone(stored))]);
       return;
     }
     const listed = nativeSections[index];
-    if (sameSection(shown, listed) || (stored !== undefined && sameSection(listed, stored) && shown !== undefined)) return;
-    if (shown !== undefined) report({code: 'section-reference-changed', path: `slides.${index}.section`, message: `The footer of slides.${index} shows section '${shown}' but PowerPoint's section list ${listed === undefined ? 'has the slide in no named section' : `names '${listed}'`}; the section list wins and the footer keeps its current text.`});
-    group(`slides.${index}.section`, [listed === undefined ? remove(['slides', index, 'section']) : set(['slides', index, 'section'], listed)]);
+    // A slide in no named section: the list cannot say a blank label, so the stored blank one (if authored) returns.
+    if (listed === undefined) {
+      if (stored !== undefined && spaced(stored) === '') group(`slides.${index}.section`, [set(['slides', index, 'section'], clone(stored))]);
+      return;
+    }
+    group(`slides.${index}.section`, [set(['slides', index, 'section'], stored !== undefined && spaced(stored) === spaced(listed) ? clone(stored) : listed)]);
   };
 
   // Without document provenance (a slide pasted into another deck, or a
@@ -1189,21 +1200,13 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   }
 
   // Authoring metadata has no native counterpart. Fields read from native
-  // content (the furniture organization name, linked socials) win over their
-  // stored values; stored-only fields (logo, role ...) return.
+  // content (linked socials) win over their stored values; stored-only fields
+  // (name, logo, role ...) return.
   const metadata = document.metadata ?? {};
   // The exporter writes the default creator when no author was authored: with the document record present, that default is not the author.
   if (metadata.author === undefined && imported.author === DEFAULT_AUTHOR) group('author', [remove(['author'])]);
   for (const key of METADATA) {
     if (metadata[key] === undefined) continue;
-    if (key === 'organization' && organizationConflict) {
-      report({code: 'metadata-reference-changed', path: 'organization', message: 'Slides now show different organization names in their furniture, so the stored organization was not restored; each slide keeps its visible text.'});
-      continue;
-    }
-    if (key === 'speaker' && speakerConflict) {
-      report({code: 'metadata-reference-changed', path: 'speaker', message: 'Slides now show different speaker names in their furniture, so the stored speaker was not restored; each slide keeps its visible text.'});
-      continue;
-    }
     if (key === 'author') {
       // Native evidence: the stored authored form only stands for the creator it was joined into.
       if (joinAuthors(imported.author) === joinAuthors(metadata.author)) group('author', [set(['author'], clone(metadata.author))]);
@@ -1221,14 +1224,6 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       if (index < 0) value = clone(observed);
       else if (Array.isArray(value)) value[index] = {...list[index], ...merge(list[index], clone(observed))};
       else value = {...value, ...merge(value, clone(observed))};
-    }
-    if (key === 'speaker' && object(imported.speaker)) {
-      // The furniture speaker line (name and title) is native content and wins over the stored speaker with the same id.
-      const observed = imported.speaker, list = array(value), index = list.findIndex(item => object(item) && item.id === observed.id);
-      const merged = stored => { const {title: _title, ...rest} = stored; return {...rest, ...clone(observed)}; };
-      if (index < 0) value = clone(observed);
-      else if (Array.isArray(value)) value[index] = merged(list[index]);
-      else value = merged(value);
     }
     group(key, [set([key], value)]);
   }

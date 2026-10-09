@@ -45,8 +45,11 @@ let matrix = 0;
 for (const measured of [undefined, fonts])
 for (const dimensions of [{widthInches: 13.333333, heightInches: 7.5}, {widthInches: 5.625, heightInches: 10}])
 for (const local of [false, true]) {
-  const definitions = {header: {left: {image, text: literal}, center: {organization: true}, right: {section: true}},
-    footer: {left: {date: ' 2026-09-14 '}, center: {text: '', section: false, organization: false}, right: {slideNumber: true}}};
+  // FA-31: header and footer values are variables in `text`. The built-ins ({{organization.name}}, {{slide.section}}) resolve per
+  // slide and the slide number is a field; the authored text is stored and returns as written while the words still match.
+  const definitions = {header: {left: {image, text: literal}, center: {text: '{{organization.name}}'}, right: {text: '{{slide.section}}'}},
+    footer: {left: {date: ' 2026-09-14 '}, center: {text: ''}, right: {text: '{{slide.number}}'}}};
+  const expectedDefinitions = definitions;
   const source = {organization: {id: 'native_org', name: '  Current Org  '}, design: {fontScheme: 'roboto', dimensions, ...(!local ? definitions : {})},
     slides: ['Overview', ''].map((section, index) => ({title: `Title ${index}`, text: `Body ${index}`, section, ...(local ? {design: definitions} : {})}))};
   const bytes = await exportDeck(source, {fonts: measured});
@@ -54,14 +57,14 @@ for (const local of [false, true]) {
   const {deck, issues} = await read(bytes);
   assert.deepEqual(deck.organization, source.organization);
   for (let index = 0; index < 2; index++) {
-    for (const kind of ['header', 'footer']) assert.deepEqual(effective(deck, index, kind), definitions[kind]);
+    for (const kind of ['header', 'footer']) assert.deepEqual(effective(deck, index, kind), expectedDefinitions[kind]);
     assert.equal(deck.slides[index].section, source.slides[index].section);
     assert.equal(deck.slides[index].text, `Body ${index}`, 'The root text payload returns as authored (content topology).');
     assert.equal(deck.slides[index].blocks, undefined);
   }
   assert.ok(!issues.some(issue => issue.code === 'invalid-furniture-provenance'));
   if (local) assert.equal(deck.design.header, undefined);
-  else assert.deepEqual(deck.design.header, definitions.header);
+  else assert.deepEqual(deck.design.header, expectedDefinitions.header);
   const entries = unzipSync(bytes);
   for (const path of [...tagFiles(entries), ...Object.keys(entries).filter(path => /opfFurnitureSlide/.test(path))]) {
     const data = JSON.stringify(tagData(entries[path]));
@@ -74,7 +77,7 @@ const flags = {design: {fontScheme: 'roboto', header: {left: {text: 'Inherited'}
   {title: 'Disabled', text: 'Body', design: {header: false}},
   {title: 'Empty', text: 'Body', design: {header: {}}},
   {title: 'Inherited', text: 'Body'},
-  {title: 'Inactive flags', text: 'Body', design: {header: {left: {}, center: {slideNumber: false, section: false, organization: false, date: false}}}},
+  {title: 'Inactive flags', text: 'Body', design: {header: {left: {}, center: {date: false}}}},
 ]};
 const flagBytes = await exportDeck(flags), flagResult = (await read(flagBytes)).deck;
 assert.deepEqual(flagResult.design.header, flags.design.header);
@@ -85,7 +88,7 @@ assert.equal(missingDisabled.design.header, undefined, 'Missing false marker can
 assert.equal(effective(missingDisabled, 0, 'header'), undefined);
 assert.equal(effective(missingDisabled, 2, 'header').left.text, 'Inherited');
 
-const fixture = {design: {fontScheme: 'roboto', header: {left: {text: literal}}, footer: {right: {slideNumber: true}}}, slides: [
+const fixture = {design: {fontScheme: 'roboto', header: {left: {text: literal}}, footer: {right: {text: '{{slide.number}}'}}}, slides: [
   {title: 'First', text: 'First body'}, {title: 'Second', text: 'Second body'},
 ]};
 const bytes = await exportDeck(fixture);
@@ -111,11 +114,13 @@ const slidesReordered = await read(modify(bytes, entries => {
 }));
 assert.equal(slidesReordered.deck.slides[0].title, 'Second');
 assert.equal(slidesReordered.deck.design.header.left.text, literal);
+// A moved slide keeps its live slide-number field: the cached number is stale until PowerPoint refreshes it, and the field still
+// imports as {{slide.number}} (it renumbers in PowerPoint), so reordering neither invalidates the footer nor leaks a number into the body.
 for (const index of [0, 1]) {
-  assert.equal(effective(slidesReordered.deck, index, 'footer'), undefined);
-  assert.ok(slidesReordered.deck.slides[index].blocks.some(block => block.text === String(2 - index)), 'Reordering cannot silently renumber current visible text.');
+  assert.deepEqual(effective(slidesReordered.deck, index, 'footer'), fixture.design.footer);
+  assert.ok(!(slidesReordered.deck.slides[index].blocks ?? []).some(block => block.text === String(2 - index)), 'The cached number is not body content.');
 }
-assert.ok(slidesReordered.issues.some(issue => issue.code === 'invalid-furniture-provenance'));
+assert.ok(!slidesReordered.issues.some(issue => issue.code === 'invalid-furniture-provenance'));
 
 const corruptions = {
   missingManifest: entries => { delete entries[manifestFile]; },
@@ -140,11 +145,13 @@ for (const [name, mutate] of Object.entries(corruptions)) {
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'), name);
 }
 
+// Deleting the field (the user cleared the number): the words as they stand are empty text, never a synthesized description.
 const clearedNumber = (await read(modify(bytes, entries => xml(entries, content => furnitureShapes(content,
-  shape => shape.includes('part 1 line') ? shape.replace(/<a:t>[\s\S]*?<\/a:t>/g, '<a:t></a:t>') : shape))))).deck;
-assert.equal(effective(clearedNumber, 0, 'footer'), undefined);
+  shape => shape.includes('part 1 line') ? shape.replace(/<a:fld\b[\s\S]*?<\/a:fld>/, '') : shape))))).deck;
+assert.deepEqual(effective(clearedNumber, 0, 'footer'), {right: {text: ''}});
 assert.ok(!JSON.stringify(clearedNumber.slides[0]).includes('PowerPoint shape:'), 'Clearing generated text must not synthesize a shape description.');
-assert.ok(clearedNumber.slides[0].blocks.some(block => block.text === ''), 'The cleared native text remains empty.');
+// The slide that still agrees keeps the token.
+assert.deepEqual(effective(clearedNumber, 1, 'footer'), fixture.design.footer);
 
 const imageSource = {design: {fontScheme: 'roboto', header: {left: {image, text: 'Image label'}}}, slides: [{title: 'Picture', text: 'Body'}]};
 const imageBytes = await exportDeck(imageSource), replacement = await readFile(new URL('fixtures/images/tall.png', import.meta.url));
@@ -168,28 +175,36 @@ for (const damage of ['tag', 'media', 'picture']) {
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'), damage);
 }
 
+// FA-31: the organization name and the section are no longer furniture fields. The name resolves before export and the stored
+// document record returns the organization; `{{slide.section}}` returns while its words still match the section list.
 const metadata = {organization: {id: 'current_org', name: 'Original organization'}, design: {fontScheme: 'roboto',
-  header: {left: {organization: true}, right: {section: true}}, footer: {right: {section: true}}},
+  header: {left: {text: '{{organization.name}}'}, right: {text: '{{slide.section}}'}}, footer: {right: {text: '{{slide.section}}'}}},
   slides: [{title: 'One', text: 'Body one', section: 'First section'}, {title: 'Two', text: 'Body two', section: 'Second section'}]};
 const metadataBytes = await exportDeck(metadata);
+const unchanged = (await read(metadataBytes)).deck;
+assert.deepEqual(unchanged.organization, metadata.organization);
+assert.deepEqual(unchanged.design.header, metadata.design.header, 'The organization token returns while the stored organization draws the same words.');
+assert.deepEqual(unchanged.design.footer, metadata.design.footer);
+assert.deepEqual(unchanged.slides.map(slide => slide.section), ['First section', 'Second section']);
 const organizationChanged = (await read(modify(metadataBytes, entries => {for (const i of [1, 2]) xml(entries, content => content.replace('Original organization', 'Current organization'), i);}))).deck;
-assert.deepEqual(organizationChanged.organization, {id: 'current_org', name: 'Current organization'});
-assert.ok(!JSON.stringify(organizationChanged).includes('Original organization'));
+assert.deepEqual(organizationChanged.organization, metadata.organization, 'The footer words do not edit the stored organization.');
+assert.equal(organizationChanged.design.header.left.text, 'Current organization');
+assert.ok(!JSON.stringify(organizationChanged.design).includes('Original organization') && !JSON.stringify(organizationChanged.design.header.left).includes('{{'));
 const disagreed = await read(modify(metadataBytes, entries => xml(entries, content => content.replace('Original organization', 'Different organization'))));
-assert.equal(disagreed.deck.organization, undefined);
-for (const index of [0, 1]) assert.equal(effective(disagreed.deck, index, 'header'), undefined);
-assert.ok(JSON.stringify(disagreed.deck.slides[0]).includes('Different organization'));
-assert.ok(JSON.stringify(disagreed.deck.slides[1]).includes('Original organization'));
+assert.deepEqual(disagreed.deck.organization, metadata.organization);
+assert.equal(effective(disagreed.deck, 0, 'header').left.text, 'Different organization');
+assert.equal(effective(disagreed.deck, 1, 'header').left.text, '{{organization.name}}');
+assert.equal(disagreed.deck.design.header, undefined, 'Disagreeing words stay local.');
+// Retyped section words are the words as they stand, and the section itself comes from the native list, which wins.
 const sectionChanged = (await read(modify(metadataBytes, entries => xml(entries, content => content.replaceAll('First section', 'Current section'))))).deck;
-assert.equal(sectionChanged.slides[0].section, 'Current section');
+assert.equal(sectionChanged.slides[0].section, 'First section');
+for (const kind of ['header', 'footer']) assert.equal(effective(sectionChanged, 0, kind).right.text, 'Current section');
+assert.equal(effective(sectionChanged, 1, 'footer').right.text, '{{slide.section}}');
 const sectionConflict = (await read(modify(metadataBytes, entries => xml(entries, content => content.replace('First section', 'Different section'))))).deck;
-// Disagreeing furniture lines restore no section themselves; PowerPoint's
-// native section list (src/sections.js), or without one the stored
-// OPF_SLIDE_V1 value, still names it, and the lines keep their text.
 assert.equal(sectionConflict.slides[0].section, 'First section');
 assert.equal((await read(modify(metadataBytes, entries => { xml(entries, content => content.replace('First section', 'Different section')); entries['ppt/presentation.xml'] = enc.encode(dec.decode(entries['ppt/presentation.xml']).replace(/<p:extLst>[\s\S]*<\/p:extLst>/, '')); }))).deck.slides[0].section, 'First section', 'Without the list, the stored value is the fallback.');
-for (const kind of ['header', 'footer']) assert.equal(effective(sectionConflict, 0, kind), undefined);
-for (const text of ['Different section', 'First section']) assert.ok(JSON.stringify(sectionConflict.slides[0]).includes(text));
+assert.equal(effective(sectionConflict, 0, 'header').right.text, 'Different section');
+assert.equal(effective(sectionConflict, 0, 'footer').right.text, '{{slide.section}}');
 
 const native = new PptxGenJS(), nativeSlide = native.addSlide();
 nativeSlide.addText('Ordinary title', {x: .4, y: .3, w: 8, h: .4, fontSize: 28});

@@ -16,7 +16,7 @@
 // or where core would draw a default footer when no slide has one.
 
 import {XMLParser} from 'fast-xml-parser';
-import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatDate} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatDate, hasSlideNumberField, slideNumberTemplate} from './furniture-fields.js';
 
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -28,25 +28,33 @@ const EMU = 9525;
 export const NATIVE_PLACEHOLDERS = Object.freeze({
   dt: {field: 'date', name: 'Date Placeholder', sz: 'half', idx: 10, masterIdx: 2, zone: 'left', align: 'l'},
   ftr: {field: 'text', name: 'Footer Placeholder', sz: 'quarter', idx: 11, masterIdx: 3, zone: 'center', align: 'ctr'},
-  sldNum: {field: 'slideNumber', name: 'Slide Number Placeholder', sz: 'quarter', idx: 12, masterIdx: 4, zone: 'right', align: 'r'},
+  sldNum: {field: 'text', name: 'Slide Number Placeholder', sz: 'quarter', idx: 12, masterIdx: 4, zone: 'right', align: 'r'},
 });
 const ORDER = ['dt', 'ftr', 'sldNum'];
-const phByField = {date: 'dt', text: 'ftr', slideNumber: 'sldNum'};
 export const isNativePlaceholderType = value => Object.hasOwn(NATIVE_PLACEHOLDERS, value);
-export const nativePlaceholderForField = field => phByField[field];
+/**
+ * The placeholder type a core footer part maps to: a date is `dt`; a zone `text` with a slide-number field
+ * (`{{slide.number}}`) is `sldNum`, its words around the field fixed runs; any other zone `text` is `ftr`.
+ */
+export function nativePlaceholderForPart(part) {
+  if (part.type !== 'text') return undefined;
+  if (part.field === 'date') return 'dt';
+  if (part.field !== 'text') return undefined;
+  return hasSlideNumberField(part) ? 'sldNum' : 'ftr';
+}
 const ZONES = ['left', 'center', 'right'];
 const ALIGN = {left: 'l', center: 'ctr', right: 'r'};
 
 /**
  * Which accepted core parts of one slide become native placeholders: the first
- * footer text, the first footer date and the first footer slide number whose
- * text fits one accepted line. Returns Map<partIndex, 'dt'|'ftr'|'sldNum'>.
+ * footer text, the first footer date and the first footer text with a slide-number
+ * field whose text fits one accepted line. Returns Map<partIndex, 'dt'|'ftr'|'sldNum'>.
  */
 export function nativeFurnitureParts(layout) {
   const chosen = new Map(), taken = new Set();
   for (const [index, part] of (layout?.parts ?? []).entries()) {
-    const ph = phByField[part.field];
-    if (part.kind !== 'footer' || part.type !== 'text' || !ph || taken.has(ph)) continue;
+    const ph = nativePlaceholderForPart(part);
+    if (part.kind !== 'footer' || !ph || taken.has(ph)) continue;
     // One native shape holds one line; a part that wraps or breaks stays tagged shapes.
     if (part.fit?.sourceLines?.length !== 1 || part.fit.lines?.length !== 1 || !part.text || part.links?.length) continue;
     taken.add(ph);
@@ -252,8 +260,9 @@ function zoneOf(bounds, slideWidth, fallback) {
 /**
  * The footer one slide's native placeholders describe. `claimed` is the set of
  * shape indexes OPF provenance already consumed or reserved. Returns
- * {fields: [{zone, field, value, settings, index}], skipped: [index]} where `value`
- * is the OPF field value and `settings` the zone's `dateFormat`/`slideNumberFormat`.
+ * [{zone, field, value, settings, index, ph}] where `value` is the OPF field value (a zone
+ * `text` carries `{{slide.number}}` where the placeholder holds a native slide-number field)
+ * and `settings` the zone's `dateFormat`.
  */
 export function readNativePlaceholders(context, claimed, relationships, readPart) {
   const fields = [];
@@ -262,36 +271,44 @@ export function readNativePlaceholders(context, claimed, relationships, readPart
     if (!isNativePlaceholderType(ph) || claimed.has(index)) continue;
     const paragraphs = context.paragraphs[index] ?? [];
     const text = paragraphs.map(paragraph => paragraph.text).join('\n');
-    const nativeFields = paragraphs.flatMap(paragraph => paragraph.fields ?? []);
+    // The native fields with their offsets into `text` (the paragraphs are joined by a newline).
+    const nativeFields = [];
+    let base = 0;
+    for (const paragraph of paragraphs) {
+      for (const field of paragraph.fields ?? []) nativeFields.push({...field, start: base + (field.start ?? text.indexOf(field.text, base) - base)});
+      base += paragraph.text.length + 1;
+    }
     const zone = zoneOf(inheritedBounds(shape, ph, context.path, relationships, readPart), context.slideWidth, NATIVE_PLACEHOLDERS[ph].zone);
     const properties = NATIVE_PLACEHOLDERS[ph];
     if (ph === 'sldNum') {
-      const live = nativeFields.filter(field => field.type === 'slidenum');
-      if (live.length !== 1) continue;
-      const at = text.indexOf(live[0].text);
-      const format = at < 0 ? undefined : text.slice(0, at) + '{current}' + text.slice(at + live[0].text.length);
-      fields.push({index, zone, field: properties.field, value: true, settings: format && format !== '{current}' ? {slideNumberFormat: format} : {}});
+      // The words around a native slide-number field are the zone text and the field is `{{slide.number}}`.
+      if (!nativeFields.some(field => field.type === 'slidenum')) continue;
+      fields.push({index, zone, ph, field: properties.field, value: slideNumberTemplate(text, nativeFields), settings: {}});
     } else if (ph === 'dt') {
       if (!text.trim()) continue;
       const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatForField[nativeFields[0].type] : undefined;
-      if (pattern) fields.push({index, zone, field: properties.field, value: true, settings: pattern === DEFAULT_DATE_FORMAT ? {} : {dateFormat: pattern}});
+      if (pattern) fields.push({index, zone, ph, field: properties.field, value: true, settings: pattern === DEFAULT_DATE_FORMAT ? {} : {dateFormat: pattern}});
       // A fixed date, or a field with no OPF pattern (a time, the master's datetimeFigureOut), keeps its current words.
-      else fields.push({index, zone, field: properties.field, value: text, settings: {}});
+      else fields.push({index, zone, ph, field: properties.field, value: text, settings: {}});
     } else {
       if (!text.trim()) continue;
-      fields.push({index, zone, field: properties.field, value: text, settings: {}});
+      fields.push({index, zone, ph, field: properties.field, value: slideNumberTemplate(text, nativeFields), settings: {}});
     }
   }
   return fields;
 }
 
-/** The OPF footer value for native placeholder fields: zones keyed left/center/right. */
+/**
+ * The OPF footer value for native placeholder fields: zones keyed left/center/right. A footer text and a slide
+ * number in one zone are one `text`: the footer words, then the number's line (the zone stack's order).
+ */
 export function footerValue(fields) {
   const value = {};
-  for (const item of fields) {
+  for (const item of [...fields].sort((a, b) => ORDER.indexOf(a.ph) - ORDER.indexOf(b.ph))) {
     value[item.zone] ??= {};
-    value[item.zone][item.field] = item.value;
-    Object.assign(value[item.zone], item.settings);
+    const zone = value[item.zone];
+    zone[item.field] = item.field === 'text' && typeof zone.text === 'string' ? `${zone.text}\n${item.value}` : item.value;
+    Object.assign(zone, item.settings);
   }
   return Object.fromEntries(ZONES.filter(zone => value[zone]).map(zone => [zone, value[zone]]));
 }

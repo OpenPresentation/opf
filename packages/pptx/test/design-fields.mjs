@@ -357,7 +357,7 @@ const powerpointSave = bytes => {
   return zipSync(result);
 };
 {
-  const deck = {design: {logo: {default: wide, light: tall, dark: square, icon: jpg}, listBullet: 'image', background: light, footer: {left: {logo: true}, right: {slideNumber: true}}},
+  const deck = {design: {logo: {default: wide, light: tall, dark: square, icon: jpg}, listBullet: 'image', background: light, footer: {left: {logo: true}, right: {text: '{{slide.number}}'}}},
     organization: {id: 'acme', name: 'Acme', logo: tall},
     slides: [
       {title: 'Cover', subtitle: 'On light', layout: 'title-subtitle'},
