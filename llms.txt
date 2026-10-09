@@ -15,9 +15,10 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 - [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
 - [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
 - [Stats](https://github.com/OpenPresentation/opf/blob/main/docs/stats.md): neutral facts about a deck (`stats()`, `opf stats`): slides, words, notes, images, charts, tables, assets, fonts, an estimated speaking time
-- [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`, `.opf.md` decks in every command, `readDeck`/`writeDeck` in `@openpresentation/opf/deck`); JSON stays canonical
+- [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`, `.opf.md` decks in every command, `parse`/`stringify` in `@openpresentation/opf/deck`); JSON stays canonical
 - [OPF as YAML](https://github.com/OpenPresentation/opf/blob/main/docs/yaml.md): the strict JSON-compatible YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` in every command); JSON stays canonical
-- [CLI and library API](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md): the `opf` command and `@openpresentation/cli/api`, which reads and writes files: `exportDeck(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` returns `{ files: [{ name, type, bytes }], findings }`, `importDeck(pptxBytes)` returns a presentation, `readDeck`/`writeDeck` are core's; `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are the engines, installed as needed
+- [OPF files in Node](https://github.com/OpenPresentation/opf/blob/main/docs/node.md): `import * as opf from "@openpresentation/opf/node"`; `opf.convert("deck.opf.md", "deck.pdf")` (also `.pptx`, `.png` one per slide, `.svg`, `.zip`, and `.pptx` or deck-form inputs), `opf.convert(deck, { format })` returns `{ files: [{ name, type, bytes }], findings }` without writing, `opf.open(path or pptx bytes)` returns the presentation, `opf.save(deck, path)` writes it; `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are the engines, installed as needed
+- [CLI reference](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md): `opf convert <input> <output>`, `opf render`, `opf export` and `opf import`, their flags, JSON reports and exit codes
 - [Release process](https://github.com/OpenPresentation/opf/blob/main/docs/release-process.md): maintainer runbook for npm releases, trusted publishing, verification, and GitHub release notes
 
 ## Spec
@@ -29,5 +30,5 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 ## Optional
 
 - [pptx.gallery](https://pptx.gallery): human-browsable catalog presets
-- [CLI npm package](https://www.npmjs.com/package/@openpresentation/cli): `opf` and `@openpresentation/cli/api` (depends on `@openpresentation/opf`; render and PPTX engines are optional peers)
+- [CLI npm package](https://www.npmjs.com/package/@openpresentation/cli): the `opf` command (depends on `@openpresentation/opf`; render and PPTX engines are optional peers)
 - [npm package](https://www.npmjs.com/package/@openpresentation/opf): schemas, catalog resolution, TypeScript types, and local validation (the default catalog is the opt-in `/catalog` subpath); docs and examples are bundled in the package

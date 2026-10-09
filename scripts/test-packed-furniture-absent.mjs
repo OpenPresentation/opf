@@ -66,7 +66,10 @@ try {
   await writeFile(path.join(consumer, 'probe.mjs'), fixture);
   receipt.fixtureSha256 = hash(fixture);
   receipt.stage = 'install';
-  const npm = packageManagerInvocation('npm', ['install', '--ignore-scripts', '--no-fund', '--no-audit', '--cache', path.join(isolated, 'npm-cache')]);
+  // RR-62: core declares opf-render as an optional peer. The candidate opf-pptx lists the renderer as an optional dependency at a
+  // preview version no registry has, and npm checks core's peer against that unresolvable placeholder (ERESOLVE). The renderer is
+  // absent on purpose here, so peers are not resolved; the probe below still proves no renderer is installed.
+  const npm =packageManagerInvocation('npm', ['install', '--ignore-scripts', '--no-fund', '--no-audit', '--legacy-peer-deps', '--cache', path.join(isolated, 'npm-cache')]);
   await run(npm.command, npm.args, 'install.log');
   receipt.stage = 'bind-installed-files';
   const lockBytes = await readFile(path.join(consumer, 'package-lock.json'));

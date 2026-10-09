@@ -1,16 +1,13 @@
-// `opf import deck.pptx`: a PowerPoint file to an OPF document through the import engine (convert.ts, the one behind
-// `importDeck` of `@openpresentation/cli/api`, which calls opf-pptx `fromPptx`). Import is a conversion,
+// `opf import deck.pptx`: a PowerPoint file to an OPF document through core's import engine (the one behind `convert` and
+// `open` of `@openpresentation/opf/node`, which calls opf-pptx `fromPptx`). Import is a conversion,
 // not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics. With --signals it also
 // writes the raw per-shape layout and style signals of the deck (`fromPptx(bytes, { signals: true })`), deterministic and local.
 import { type FindingSeverity, type ValidationReport, validate } from "@openpresentation/opf";
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
 import { DeckReadError, checkText, deckExtension, fenceWarning, formatNamed, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
-import { runImport } from "./convert.js";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError, PPTX_PACKAGE, Reporter, finishReport, loadPptx, runImport } from "@openpresentation/opf/node/engine";
 import { FileCommandError, arity, commandError, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
-import { PPTX_PACKAGE, loadPptx } from "./peers.js";
-import { Reporter, finishReport } from "./reporter.js";
 import type { Host } from "./render.js";
 
 export async function runImportCommand(args: string[], host: Host) {

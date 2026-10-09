@@ -12,7 +12,7 @@ test('SVG font preparation requests script bytes and used/none policies retain t
   const directory=await mkdtemp(path.join(tmpdir(),'opf-font-policy-'));
   try {
     const file=path.join(directory,'fonts.mjs');
-    await build({entryPoints:[fileURLToPath(new URL('../src/fonts.ts',import.meta.url))],outfile:file,bundle:true,platform:'node',format:'esm',target:'node22'});
+    await build({entryPoints:[fileURLToPath(new URL('../src/node/fonts.ts',import.meta.url))],outfile:file,bundle:true,platform:'node',format:'esm',target:'node22'});
     const {prepareFonts,embeddedFor}=await import(pathToFileURL(file).href);
     const latin={family:'Roboto',weight:400,dataUrl:'data:font/ttf;base64,AA=='};
     const script={family:'Noto Sans JP',weight:400,dataUrl:'data:font/ttf;base64,AQ=='};

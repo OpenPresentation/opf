@@ -59,7 +59,7 @@ test('buildPlan: a docs-only change runs the text checks only; a .ts change adds
   assert.equal(docs.at(-1).skip, true);
 
   const code = buildPlan(['packages/javascript/src/index.ts'], env);
-  assert.deepEqual(code.map((step) => step.name), ['biome', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
+  assert.deepEqual(code.map((step) => step.name), ['biome', 'pnpm run check:browser-safe', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
   const typecheck = code.find((step) => step.name === 'typecheck');
   assert.ok(typecheck.heavy && typecheck.commands[0].argv.some((part) => part.endsWith('agent-slot.mjs')));
   assert.equal(code.find((step) => step.name === 'biome').biome[0], 'packages/javascript/src/index.ts');

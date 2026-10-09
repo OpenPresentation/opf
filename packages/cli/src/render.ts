@@ -1,17 +1,13 @@
 // `opf render` and `opf export`: per-slide SVG and PNG, PDF and PPTX from an OPF document, through the optional
-// peers opf-render and opf-pptx (see peers.ts). The command reads the document, checks its format and references with
-// `validate` (the check of `opf validate`), runs the one export engine (export.ts, the engine behind `exportDeck` of
-// `@openpresentation/cli/api`), and prints one JSON report. Nothing is written when the document is invalid, a render
+// peers opf-render and opf-pptx. The command reads the document, checks its format and references with `validate` (the
+// check of `opf validate`), runs core's one export engine (`@openpresentation/opf/node/engine`, the engine behind `convert`
+// of `@openpresentation/opf/node`), and prints one JSON report. Nothing is written when the document is invalid, a render
 // error occurred or a finding reaches --fail-on.
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
 import { checkText, inputFormatOf } from "./deck.js";
-import { OPFApiError } from "./errors.js";
-import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, VERSIONS, checkDate, checkScale, resolveExportOptions, runExport } from "./export.js";
-import { listFontDirectories } from "./fonts.js";
+import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, OPFApiError, Reporter, VERSIONS, checkDate, checkScale, exportFormatOf, finishReport, listFontDirectories, loadPptx, loadRenderer, resolveExportOptions, runExport } from "@openpresentation/opf/node/engine";
 import { FileCommandError, type PlannedFile, arity, commandError, deckStem, json, parseOptions, readBytes, sha256, writeFiles } from "./io.js";
-import { loadPptx, loadRenderer } from "./peers.js";
-import { Reporter, finishReport } from "./reporter.js";
 
 export interface Host {
 	cliVersion: string;
@@ -61,11 +57,18 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	// Format. `render` is svg or png; `export` also pdf and pptx, and infers the format from --out when it can.
 	const allowed: readonly Format[] = command === "render" ? RASTER_FORMATS : EXPORT_FORMATS;
 	let format = oneOf<Format>("--format", options.format, allowed);
-	if (!format && command === "render") format = "svg";
-	if (!format && out) {
-		const extension = path.extname(out).slice(1).toLowerCase();
-		if ((allowed as readonly string[]).includes(extension)) format = extension as Format;
+	// --out names the format by its extension, with the rule `convert` uses (`exportFormatOf`): `--out deck.png` is PNG. A name
+	// with another file extension is refused rather than becoming a directory of that name.
+	if (out !== undefined && out !== "-") {
+		const extension = path.extname(out).toLowerCase();
+		const named = exportFormatOf(out);
+		if (named && !(allowed as readonly string[]).includes(named)) throw new FileCommandError(`opf render writes svg or png; --out ${out} names a ${named} file. Use opf export (or opf convert) for ${named}.`);
+		if (!named && extension !== ".zip" && /^\.[a-z][a-z0-9]{0,4}$/.test(extension))
+			throw new FileCommandError(`--out ${out} has an extension opf ${command} does not write. Give a directory, a file ending ${allowed.map((item) => `.${item}`).join(", ")} or .zip, or -.`);
+		if (format && named && format !== named) throw new FileCommandError(`--format ${format} does not match --out ${out}, which names a ${named} file.`);
+		if (!format && named) format = named;
 	}
+	if (!format && command === "render") format = "svg";
 	if (!format) throw new FileCommandError("opf export needs --format pptx|pdf|png|svg (or an --out file ending in .pptx, .pdf, .png or .svg).");
 	if (options["pdf-mode"] !== undefined && format !== "pdf") throw new FileCommandError("--pdf-mode applies to --format pdf.");
 	if ((options.chartex !== undefined || options.provenance !== undefined || options["image-format"] !== undefined) && format !== "pptx")

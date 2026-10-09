@@ -74,10 +74,12 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
   assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names: ['@openpresentation/opf-editor'], event: 'push', ref: 'refs/heads/main' }), /no peer range/);
 });
 
-test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES', () => {
+test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES and the peer ranges of core', () => {
   for (const file of ['packages/cli/test/files.mjs', 'packages/cli/test/packed-files.mjs']) assert.match(readFileSync(path.join(root, file), 'utf8'), /cliPeerGate\(/, file);
   const manifest = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8'));
-  const peers = readFileSync(path.join(root, 'packages/cli/src/peers.ts'), 'utf8');
+  const peers = readFileSync(path.join(root, 'packages/javascript/src/node/peers.ts'), 'utf8');
+  // RR-62: core's /node engine loads the peers, so core declares them (optional) with the same ranges.
+  assert.deepEqual(JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8')).peerDependencies, manifest.peerDependencies);
   for (const [name, range] of Object.entries(manifest.peerDependencies)) {
     const constant = name.endsWith('opf-render') ? 'RENDER_PACKAGE' : 'PPTX_PACKAGE';
     assert.match(peers, new RegExp(`\\[${constant}\\]: "${range.replace(/[.^]/g, '\\$&')}"`), name);

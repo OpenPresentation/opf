@@ -1,11 +1,11 @@
-// RR-62: an installed `@openpresentation/cli` next to `@openpresentation/opf` runs ONE core. `@openpresentation/cli/api`
-// imports core as a regular dependency (it does not bundle a copy), so an application that also imports core directly shares
-// core's error classes, catalogs and functions with it. This checks an installation (a `node_modules` directory holding
-// both packages) three ways:
+// RR-62: an installation runs ONE core. The opf CLI imports core as a regular dependency and runs its `/node` engine, and the
+// optional peers (@openpresentation/opf-render, @openpresentation/opf-pptx) depend on core too, so an application that imports
+// core next to them shares one set of error classes, catalogs and functions. This checks an installation (a `node_modules`
+// directory) three ways:
 //   1. the tree holds exactly one copy of core (by real path);
-//   2. the CLI resolves the very file the application resolves;
-//   3. across the boundary: the error `assertValid` throws through the API is an `instanceof OPFValidationError` of the core
-//      the application imported, and the API's re-exports are core's own functions.
+//   2. the CLI, and each installed peer, resolves the very file the application resolves;
+//   3. across the boundary: `/node` re-exports core's own functions and classes, and an error core throws is an
+//      `instanceof OPFValidationError` of the core the application imported.
 import assert from 'node:assert/strict';
 import { readdir, readFile, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -51,11 +51,23 @@ export async function assertOneCore(nodeModules, { application: withApplication 
   const coreRoot = path.dirname(await realpath(fromCli.resolve('@openpresentation/opf/package.json')));
   const coreManifest = JSON.parse(await readFile(path.join(coreRoot, 'package.json'), 'utf8'));
   const core = await import(pathToFileURL(path.join(coreRoot, coreManifest.exports['.'].import)).href);
-  const cliRoot = path.dirname(await realpath(cliManifest));
-  const api = await import(pathToFileURL(path.join(cliRoot, 'dist/api.js')).href);
-  assert.equal(api.OPFValidationError, core.OPFValidationError);
-  assert.equal(api.validate, core.validate);
-  assert.equal(api.readDeck, core.readDeck);
-  assert.throws(() => api.assertValid({ slides: 42 }, { only: ['format'] }), (error) => error instanceof core.OPFValidationError);
+  // Every installed peer resolves the same core.
+  for (const peer of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
+    let peerManifest;
+    try {
+      peerManifest = application.resolve(`${peer}/package.json`);
+    } catch {
+      continue;
+    }
+    assert.equal(await realpath(createRequire(peerManifest).resolve('@openpresentation/opf/package.json')), path.join(coreRoot, 'package.json'), `${peer} resolves another core`);
+  }
+  const nodeEntry = coreManifest.exports['./node']?.import;
+  if (nodeEntry) {
+    const node = await import(pathToFileURL(path.join(coreRoot, nodeEntry)).href);
+    assert.equal(node.OPFValidationError, core.OPFValidationError);
+    assert.equal(node.validate, core.validate);
+    assert.equal(node.parse, core.parse);
+    assert.throws(() => node.assertValid({ slides: 42 }, { only: ['format'] }), (error) => error instanceof core.OPFValidationError);
+  }
   return { copy: copies[0], version: coreManifest.version };
 }

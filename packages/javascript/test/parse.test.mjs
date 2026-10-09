@@ -1,11 +1,14 @@
-// RR-60: one reader and one writer for a deck in JSON, YAML or Markdown (`readDeck`, `writeDeck`), chosen by option or file name.
+// RR-60, RR-62: one reader and one writer for a deck in JSON, YAML or Markdown (`parse`, `stringify`), chosen by option or file name.
+// `parse` returns the deck and throws on errors; the reader behind it, which reports instead (`readDeckReport`, exported only for
+// the CLI from `@openpresentation/opf/node/engine`), is tested here for the located findings.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { DECK_FORMATS, OPFMarkdownError, deckFormatOf, readDeck, writeDeck } from "../dist/index.js";
+import { DECK_FORMATS, OPFMarkdownError, OPFValidationError, deckFormatOf, parse, stringify as writeDeck } from "../dist/index.js";
+import { readDeckReport as readDeck } from "../dist/node-engine.js";
 import * as deckModule from "../dist/deck.js";
 import { defaultCatalog } from "../dist/catalog.js";
 import { OPFYamlError } from "../dist/yaml.js";
@@ -27,7 +30,8 @@ const deck = {
 
 describe("the exports", () => {
   test("the root and ./deck export the same bindings", () => {
-    for (const name of ["readDeck", "writeDeck", "deckFormatOf", "DECK_FORMATS"]) assert.equal(deckModule[name], { readDeck, writeDeck, deckFormatOf, DECK_FORMATS }[name], name);
+    for (const name of ["parse", "stringify", "deckFormatOf", "DECK_FORMATS"]) assert.equal(deckModule[name], { parse, stringify: writeDeck, deckFormatOf, DECK_FORMATS }[name], name);
+    for (const name of ["readDeck", "writeDeck", "readDeckReport"]) assert.equal(deckModule[name], undefined, `${name} is not exported`);
     assert.deepEqual([...DECK_FORMATS], ["json", "yaml", "markdown"]);
   });
 
@@ -206,7 +210,7 @@ describe("located findings", () => {
   });
 });
 
-describe("writeDeck", () => {
+describe("stringify", () => {
   test("writes each format from the format option or the file name", () => {
     assert.equal(writeDeck(deck), `${JSON.stringify(deck, null, 2)}\n`);
     assert.equal(writeDeck(deck, { filename: "deck.opf.json" }), writeDeck(deck, { format: "json" }));
@@ -233,5 +237,48 @@ describe("writeDeck", () => {
     const back = readDeck(text, { format: "markdown" });
     assert.equal(back.valid, true, JSON.stringify(back.findings));
     assert.deepEqual(back.presentation, styled);
+  });
+});
+
+describe("parse", () => {
+  test("returns the deck, the same from every format, by format option or file name", () => {
+    for (const format of DECK_FORMATS) {
+      assert.deepEqual(parse(writeDeck(deck, { format }), { format }), deck, format);
+      assert.deepEqual(parse(writeDeck(deck, { format }), { filename: `deck.opf.${format === "markdown" ? "md" : format}` }), deck, format);
+    }
+    assert.equal(parse(quarterly, { filename: "quarterly-review.opf.md", catalogs: [defaultCatalog] }).name, readDeck(quarterly, { format: "markdown" }).presentation.name);
+  });
+
+  test("throws OPFValidationError for syntax, schema and reference errors, with findings located by line and column", () => {
+    const cases = [
+      ['{\n  "name": "X",\n  "slides": [\n', "deck.json", "opf/json-syntax"],
+      ["name: X\nname: Y\nslides: []\n", "deck.opf.yaml", "yaml/duplicate-key"],
+      ["---\nname: X\n\n# Title\n", "deck.opf.md", "markdown/front-matter-unterminated"],
+      ["name: X\nlanguage: 5\nslides:\n  - title: A\n", "deck.yaml", undefined],
+    ];
+    for (const [text, filename, ruleId] of cases) {
+      assert.throws(
+        () => parse(text, { filename }),
+        (error) => {
+          assert.ok(error instanceof OPFValidationError, filename);
+          assert.equal(error.report.valid, false, filename);
+          const first = error.findings[0];
+          if (ruleId) assert.equal(first.ruleId, ruleId, filename);
+          assert.ok(first.location.line >= 1 && first.location.column >= 1, filename);
+          return true;
+        },
+      );
+    }
+    // A reference to a catalog group the deck does not declare is an error.
+    assert.throws(() => parse('{"slides":[{"title":"A","layout":"nowhere:two-column"}]}'), OPFValidationError);
+  });
+
+  test("warnings do not throw: validate reports them", () => {
+    assert.equal(parse("# One\n\n---\n\n---\n\n# Two\n", { format: "markdown" }).slides.length, 2);
+  });
+
+  test("text that is not a string and an unknown format are TypeErrors", () => {
+    assert.throws(() => parse(deck), TypeError);
+    assert.throws(() => parse("{}", { format: "toml" }), (error) => error instanceof TypeError && /^parse: unknown format/.test(error.message));
   });
 });

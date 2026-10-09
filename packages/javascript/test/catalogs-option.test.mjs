@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { intrinsicImageAspect, intrinsicImageSize, resolveScriptFonts } from '../dist/composition.js';
 import {
-  OPFCatalogsOptionError, catalogRecords, copySlides, embed, fromMarkdown, paginate, readDeck, resolveDesignRecords, resolveFontScheme,
+  OPFCatalogsOptionError, catalogRecords, copySlides, embed, fromMarkdown, paginate, parse, resolveDesignRecords, resolveFontScheme,
   resolveReference, resolveSlideContext, stats, updateFromCatalog, validate,
 } from '../dist/index.js';
 import { fromYaml } from '../dist/yaml.js';
@@ -26,7 +26,7 @@ const entryPoints = {
   copySlides: (catalogs) => copySlides(deck, deck, [0], { catalogs }),
   updateFromCatalog: (catalogs) => updateFromCatalog(deck, catalogs),
   fromMarkdown: (catalogs) => fromMarkdown('# One\n', { catalogs }),
-  readDeck: (catalogs) => readDeck('{"name":"One","slides":[{"title":"One"}]}', { catalogs }),
+  parse: (catalogs) => parse('{"name":"One","slides":[{"title":"One"}]}', { catalogs }),
   fromYaml: (catalogs) => fromYaml('name: One\nslides:\n  - title: One\n', { catalogs }),
 };
 

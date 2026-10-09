@@ -8,23 +8,29 @@ license: MIT
 
 Start with a validated OPF document and the output formats the user requested. Preserve OPF as the editable source. Read [rendering and conversion](references/rendering.md) for the concrete local APIs and environment boundaries.
 
-## Use the CLI first for files
+## Files: `convert`, from code or the shell
 
-When the `opf` CLI is available, `opf render`, `opf export` and `opf import` produce and read files with the pinned, deterministic pipeline and the `opf validate` report shape, with no code to write: `opf render deck.opf.json --format png`, `opf export deck.opf.json --format pptx|pdf|png|svg`, `opf import deck.pptx`. They need the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` installed beside the CLI (a missing peer exits 2 with the install command), never load system fonts or fetch URLs, and read images only from the deck's folder. Read the report: `findings` and `counts` are the evidence, and `--fail-on warning` fails on warnings. Reference: [CLI render, export and import](references/rendering.md#cli). From code, call the same engine as a library (next section). Use the engine APIs below when you need your own fonts handle, a browser preview or an option the library function does not expose.
-
-## From code: `@openpresentation/cli/api`
-
-In an application or script, `exportDeck` and `importDeck` of `@openpresentation/cli/api` do what the commands do and return bytes instead of writing files; `readDeck` and `writeDeck` (core's, re-exported) read and write the JSON, YAML or Markdown text. `opf render`, `opf export` and `opf import` are wrappers over them, so the output is the same.
+One call turns a file into another, the formats named by the file names. In an application or script use core's `@openpresentation/opf/node`; from a shell, `opf convert` runs the same code:
 
 ```js
-import { readDeck, exportDeck, importDeck } from '@openpresentation/cli/api';
+import * as opf from '@openpresentation/opf/node';
 
-const { presentation } = readDeck(text, { filename: 'deck.opf.md' });
-const { files, findings } = await exportDeck(presentation, { format: 'pdf' }); // files: [{ name, type, bytes }]
-const { presentation: back } = await importDeck(pptxBytes);
+await opf.convert('deck.opf.md', 'deck.pdf');
+await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1-3', scale: 2 }); // slides/deck-001.png, -002, -003
+await opf.convert('deck.pptx', 'deck.opf.yaml');      // import; the result's findings say what the import could not keep
+const deck = await opf.open('deck.opf.md');            // the presentation (a .pptx path or bytes is imported)
+await opf.save(deck, 'deck.opf.yaml');
+const { files, findings } = await opf.convert(deck, { format: 'pptx' }); // bytes, nothing written
 ```
 
-`format` is `pdf`, `png`, `svg` or `pptx`; `png` and `svg` give one file per slide (or one zip with `zip: true`). Options: `slides`, `includeHidden`, `paginate`, `scale`, `pdfMode`, `svgFonts`, `chartex`, `provenance`, `imageFormat`, `date`, `catalogs` (core's default catalog when omitted), `fonts` (a prepared handle) or `fontDirs`, `assetDir` and `filename`. It is deterministic: bundled open fonts, no system fonts, no network, no clock (pass `date` for a date field), and local images only from `assetDir`. `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; a missing one throws `OPFExportError` or `OPFImportError` with `code` `peer-not-installed` and the install command. Read `findings` as you read the command's report. An invalid presentation throws `invalid-presentation` with its error findings. Reference: [library API](references/rendering.md#library-api).
+```sh
+opf convert deck.opf.md deck.pdf
+opf convert deck.pptx deck.opf.yaml
+```
+
+Inputs: `.pptx` (or its bytes), `.opf.md`, `.yaml`/`.yml`, `.json`, or a deck object. Outputs: `.pdf`, `.pptx`, `.png` and `.svg` (one file per slide beside the output; one selected slide is written to the output itself), `.zip` (the slides; `format: 'svg'` for SVG), and the deck forms. Options are the flags of `opf export` in camel case: `slides`, `includeHidden`, `paginate`, `scale`, `pdfMode`, `svgFonts`, `chartex`, `provenance`, `imageFormat`, `date`, `catalogs`, `fonts` or `fontDirs`, `assetDir`, `signals`, `force`. It is deterministic: bundled open fonts (prepared once per process), no system fonts, no network, no clock (pass `date` for a date field); local images resolve next to the input file. Every file is produced before any is written, atomically, and an existing output needs `force: true` (`--force`). `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; a missing one throws `OPFExportError` or `OPFImportError` with `code` `peer-not-installed` and the install command (the command exits 2). Read `findings` (`import/`, `render/`, `pptx/`, `pdf/`, `fonts/` rules) as the evidence; an invalid deck throws `invalid-presentation` with located findings. Reference: [files in Node](references/rendering.md#files-in-node).
+
+`opf render`, `opf export` and `opf import` remain for stdin and stdout and per-command control; they print the `opf validate` report shape with `outputs`, and `--fail-on warning` fails on warnings. Use the engine APIs below when you need your own fonts handle, a browser preview or an option `convert` does not expose.
 
 ## Establish the rendering inputs
 

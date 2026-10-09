@@ -23,6 +23,9 @@ const budgetFile = path.join(root, 'scripts', 'catalog-free-budget.json');
 const CATALOG_ENTRY = 'catalog';
 /** Content entries (the example decks, the docs, the README) change with every example edit: they carry no catalog modules, but no size budget either. */
 const CONTENT_ENTRIES = new Set(['examples', 'docs', 'repo-readme']);
+/** RR-62: the Node-only entries (`/node`, `/node/engine`) read files and register the default catalog, as a Node host does; they are
+ * not browser bundles, so they have neither a catalog rule nor a budget. scripts/check-browser-safe.mjs proves no other entry reaches them. */
+export const NODE_ENTRIES = new Set(['node', 'node-engine']);
 /** Headroom over the measured gzip size when the budget is rewritten. */
 const HEADROOM = 0.03;
 
@@ -45,6 +48,7 @@ async function measure() {
   const entries = tsupEntries(readFileSync(path.join(packageRoot, 'tsup.config.ts'), 'utf8'));
   const results = {};
   for (const [name, source] of Object.entries(entries).sort(([a], [b]) => a.localeCompare(b))) {
+    if (NODE_ENTRIES.has(name)) continue;
     const result = await build({
       entryPoints: [path.join(packageRoot, source)],
       bundle: true,

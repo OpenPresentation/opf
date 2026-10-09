@@ -18,6 +18,7 @@ import {yamlCommand, YAML_USAGE, YAML_HELP} from './yaml.js';
 import {DeckReadError, commentWarning, decode, deckExtension, fenceWarning, inputFormatOf, isDeckFormatFlag, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
+import {CONVERT_USAGE, runConvertCommand} from './convert-command.js';
 import {runValidate, VALIDATE_USAGE} from './validate.js';
 import {FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches} from './check.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
@@ -51,6 +52,7 @@ ${YAML_USAGE}
            [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
            [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
   opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml|markdown>] [--force] [--fail-on <level>] [--json]
+${CONVERT_USAGE}
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -98,7 +100,13 @@ They check the document's format and references first, print the finding report 
 plus the written files with SHA-256 digests, never load system fonts and never fetch URLs; findings
 at or above --fail-on write nothing. Existing outputs require --force. Per-slide images and PDF skip
 hidden slides unless --include-hidden (slides named with --slides are always written); files are named by
-the deck's filename, else its name (slugified), else the input file name.
+the deck's filename, else its name (slugified), else the input file name. Render and export take the format
+from --out's extension (--out deck.png is PNG) and refuse an --out with another file extension.
+Convert turns <input> (.pptx, .opf.md, .yaml, .yml, .json) into <output> (.pdf, .pptx, .png, .svg, .zip,
+.opf.md, .yaml, .yml, .json), the formats named by the extensions, with the report and exit codes of export:
+one PNG or SVG per slide beside <output> (slides/deck.png gives slides/deck-001.png; one selected slide is
+written to <output> itself), a .zip of the slides (--format png, the default, or svg), or the deck in that form.
+Images resolve next to <input> unless --asset-dir. The same code is the convert function of @openpresentation/opf/node.
 
 ${MARKDOWN_HELP}
 
@@ -238,6 +246,7 @@ async function main(args0: string[]) {
   }
   if (command === 'render' || command === 'export') { await runRenderCommand(command, args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === 'import') { await runImportCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
+  if (command === 'convert') { await runConvertCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === "create") {
     const { positional, options } = parse(args, ["title", "from", "format", "schema-comment", "force", "fail-on"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");

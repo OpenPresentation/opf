@@ -43,11 +43,11 @@ export const PACKAGES = [
   { key: "render", name: "@openpresentation/opf-render", repo: "opf-render", manifest: "package.json", tagPrefix: "opf-render-v", workflow: "npm-publish.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 1, upstream: ["core"] },
   { key: "pptx", name: "@openpresentation/opf-pptx", repo: "opf-pptx", manifest: "package.json", tagPrefix: "opf-pptx-v", workflow: "release.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 2, upstream: ["core", "render"] },
   { key: "editor", name: "@openpresentation/opf-editor", repo: "opf-editor", manifest: "package.json", tagPrefix: "opf-editor-v", workflow: "release.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 3, upstream: ["core", "render", "pptx"] },
-  // The CLI depends on core (RR-62: a regular dependency, shared with the application by `@openpresentation/cli/api`; the
-  // pnpm workspace links it through an override), so core is upstream and its floor is a `dependencies` range that `prep` raises
-  // like the others. The other floors name the renderer and PPTX (devDependencies pinned exactly, optional peers as ranges, and
-  // PEER_RANGES in peers.ts).
-  { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: false, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"], peersFile: "packages/cli/src/peers.ts" },
+  // The CLI depends on core (RR-62: a regular dependency whose `/node` engine the commands run; the pnpm workspace links it
+  // through an override), so core is upstream and its floor is a `dependencies` range that `prep` raises like the others. The
+  // other floors name the renderer and PPTX (devDependencies pinned exactly, optional peers as ranges, and PEER_RANGES in core's
+  // src/node/peers.ts, which core's own peerDependencies equal: scripts/unreleased-gate.test.mjs checks the three agree).
+  { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: false, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"], peersFile: "packages/javascript/src/node/peers.ts" },
 ];
 export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
 const SLSA = "https://slsa.dev/provenance/v1";

@@ -91,7 +91,7 @@ try {
 
   assert.equal(files.some((file) => file.endsWith(".map")), false, "npm package should not ship source maps");
 
-  // RR-62: the packed CLI joins the same installation, so `@openpresentation/cli/api` is compiled and run next to the core
+  // RR-62: the packed CLI joins the same installation, so it must resolve (and the one-core check finds) the very core
   // under test (one core: the override below points the CLI's dependency at the candidate core tarball).
   let cliTarball;
   if (!registry) {
@@ -349,15 +349,15 @@ console.log('Installed YAML: strict dialect, canonical writer and located errors
     assertTarIncludes(files,'package/dist/deck.js');assertTarIncludes(files,'package/dist/deck.d.ts');
     await writeFile(path.join(projectDir,'deck.mjs'),`
 import assert from 'node:assert/strict';
-import {readDeck as rootReadDeck} from '@openpresentation/opf';
-import {readDeck,writeDeck,deckFormatOf} from '@openpresentation/opf/deck';
+import {parse as rootParse,OPFValidationError} from '@openpresentation/opf';
+import {parse,stringify,deckFormatOf} from '@openpresentation/opf/deck';
 globalThis.fetch=()=>{throw new Error('Offline deck reading must not fetch');};
-assert.equal(rootReadDeck,readDeck);
+assert.equal(rootParse,parse);
 const deck={name:'Installed',slides:[{id:'a',title:'One'}]};
-for(const format of ['json','yaml','markdown']){const back=readDeck(writeDeck(deck,{format}),{format});assert.equal(back.valid,true);assert.deepEqual(back.presentation,deck);}
+for(const format of ['json','yaml','markdown'])assert.deepEqual(parse(stringify(deck,{format}),{format}),deck);
 assert.equal(deckFormatOf('deck.opf.md'),'markdown');assert.equal(deckFormatOf('deck.md'),'json');
-assert.equal(readDeck('---',{filename:'x.opf.md'}).findings[0].ruleId.startsWith('markdown/'),true);
-console.log('Installed readDeck/writeDeck: JSON, YAML and Markdown decks read and write offline.');
+assert.throws(()=>parse('---',{filename:'x.opf.md'}),error=>error instanceof OPFValidationError&&error.findings[0].ruleId.startsWith('markdown/')&&error.findings[0].location.line===1);
+console.log('Installed parse/stringify: JSON, YAML and Markdown decks read and write offline.');
 `);
     const deckRun=await run(process.execPath,['deck.mjs'],{cwd:projectDir});process.stdout.write(deckRun.stdout);
   }

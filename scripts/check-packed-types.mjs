@@ -24,8 +24,10 @@ export function assertPackedTypeEnvironment({nodeOptions = process.env.NODE_OPTI
 }
 
 // Compile only the isolated installation, with no source aliases or skipLibCheck.
-// With `cli`, the isolated installation also holds @openpresentation/cli, and its `/api` entry is compiled in the same
-// consumer (RR-62): one core, so a Presentation read by the API is the Presentation core declares.
+// With `cli`, the isolated installation also holds @openpresentation/cli, which must resolve the same core and export no library
+// entry (RR-62: applications use core's `/node`, which the consumer below compiles with every other entry). A second consumer
+// imports the root and every subpath except `/node` and `/node/engine` with no Node types at all, so a browser build of core
+// never needs them.
 export async function checkPackedTypes(directory, {downstream = false, cli = false} = {}) {
   assertPackedTypeEnvironment();
   directory = await realpath(directory);
@@ -52,9 +54,8 @@ export async function checkPackedTypes(directory, {downstream = false, cli = fal
   if (cli) {
     const cliManifestPath = await installedFile(installed.resolve('@openpresentation/cli/package.json'));
     const cliManifest = JSON.parse(await readFile(cliManifestPath, 'utf8'));
-    assert.ok(cliManifest.exports['./api']?.types && cliManifest.exports['./api'].import, '@openpresentation/cli/api needs runtime and declaration targets');
-    await installedFile(path.resolve(path.dirname(cliManifestPath), cliManifest.exports['./api'].types));
-    await installedFile(path.resolve(path.dirname(cliManifestPath), cliManifest.exports['./api'].import));
+    // RR-62: the CLI is the command; the file API is core's /node, compiled with every other core entry below.
+    assert.equal(cliManifest.exports['./api'], undefined, '@openpresentation/cli exports no library entry');
     assert.equal(await realpath(createRequire(cliManifestPath).resolve('@openpresentation/opf/package.json')), await realpath(manifestPath), '@openpresentation/cli must resolve the candidate core tarball');
   }
   const entries = Object.entries(manifest.exports).filter(([, target]) => typeof target === 'object');
@@ -77,7 +78,10 @@ import {importData} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
 import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
-import {readDeck, writeDeck, type DeckFormat, type ReadDeckResult} from '@openpresentation/opf/deck';
+import {parse, stringify, type DeckFormat, type ParseOptions} from '@openpresentation/opf/deck';
+import {convert, open, save, OPFApiError, OPFExportError, OPFImportError, OPFValidationError as NodeValidationError, type ConvertOptions, type ConvertResult, type ConvertedFile, type SaveResult} from '@openpresentation/opf/node';
+import * as opfNode from '@openpresentation/opf/node';
+import {OPFValidationError as CoreValidationError} from '@openpresentation/opf';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -116,12 +120,45 @@ const markdown: string = toMarkdown(deck).markdown;
 toMarkdown(deck, {unsupported: 'maybe'});
 void slides; void firstMarkdownFinding; void firstFinding; void markdown;
 const deckFormat: DeckFormat = 'markdown';
-const readResult: ReadDeckResult = readDeck('# Typed', {format: deckFormat, filename: 'deck.opf.md', validate: {only: ['format']}});
-const readFormat: DeckFormat = readResult.format;
-const deckText: string = writeDeck(readResult.presentation, {filename: 'deck.opf.md'});
+const parseOptions: ParseOptions = {format: deckFormat, filename: 'deck.opf.md'};
+const parsedDeck: Presentation = parse('# Typed', parseOptions);
+const deckText: string = stringify(parsedDeck, {filename: 'deck.opf.md'});
 // @ts-expect-error unknown deck format must be rejected
-readDeck('{}', {format: 'toml'});
-void readFormat; void deckText;
+parse('{}', {format: 'toml'});
+// @ts-expect-error parse reads text, not a deck
+parse(deck);
+void deckText;
+// RR-62: the Node file API. One core: its classes and Presentation are core's own.
+async function typedNode() {
+  const written: ConvertResult = await convert('deck.opf.md', 'deck.pdf');
+  const returned: ConvertResult = await convert(deck, {format: 'pptx'});
+  const file: ConvertedFile | undefined = returned.files[0];
+  const bytes: Uint8Array | undefined = file?.bytes;
+  const name: string | undefined = file?.name;
+  const options: ConvertOptions = {slides: '1-3', scale: 2, fontDirs: ['fonts'], assetDir: '.', force: true, date: '2026-01-01'};
+  await convert('deck.opf.md', 'slides/deck.png', options);
+  await convert(bytes ?? new Uint8Array(), 'deck.opf.yaml', {signals: true});
+  const opened: Presentation = await open('deck.opf.md');
+  const imported: Presentation = await open(bytes ?? new Uint8Array());
+  const saved: SaveResult = await save(opened, 'deck.opf.yaml', {validate: false});
+  const savedFormat: DeckFormat = saved.format;
+  const sameClass: typeof CoreValidationError = NodeValidationError;
+  const viaNamespace: ValidationReport = opfNode.validate(opened);
+  // @ts-expect-error the output is a path, or options with a format
+  await convert('deck.opf.md', 42);
+  // @ts-expect-error without an output path a format is required
+  await convert('deck.opf.md', {scale: 2});
+  // @ts-expect-error pdfMode is vector or raster
+  await convert('deck.opf.md', 'deck.pdf', {pdfMode: 'fast'});
+  // @ts-expect-error save takes no format: the file name names it
+  await save(opened, 'deck.opf.yaml', {format: 'yaml'});
+  try { await convert('deck.pptx', 'deck.pdf'); } catch (error) {
+    if (error instanceof OPFExportError || error instanceof OPFImportError) { const code: string = error.code; const found: Finding[] = error.findings; void code; void found; }
+    if (error instanceof OPFApiError) void error.details;
+  }
+  void written; void name; void imported; void savedFormat; void sameClass; void viaNamespace;
+}
+void typedNode;
 const parsedYaml = fromYaml('slides:\\n  - title: Typed\\n', {aliases: false});
 const yamlSlides: Presentation['slides'] = parsedYaml.presentation.slides;
 const yamlFinding: YamlFinding | undefined = parsedYaml.findings[0];
@@ -136,36 +173,6 @@ const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected
 importData([], {as: 'unsupported'});
 void valid; void invalid;
-${cli ? `
-import {readDeck as apiReadDeck, writeDeck as apiWriteDeck, validate as apiValidate, assertValid as apiAssertValid, exportDeck, importDeck, defaultCatalog, OPFApiError, OPFExportError, OPFImportError, OPFValidationError as ApiValidationError, type ExportOptions, type ExportResult, type ExportFile, type ImportResult, type Presentation as ApiPresentation, type Finding as ApiFinding} from '@openpresentation/cli/api';
-import {OPFValidationError} from '@openpresentation/opf';
-import type {Presentation as CorePresentation} from '@openpresentation/opf';
-const apiRead = apiReadDeck('# Typed', {filename: 'deck.opf.md'});
-const apiDeck: ApiPresentation = apiRead.presentation;
-const sameDeck: CorePresentation = apiDeck; // one core: the API's Presentation is core's
-const apiText: string = apiWriteDeck(apiDeck, {format: 'yaml'});
-const apiReport = apiValidate(apiDeck, {catalogs: [defaultCatalog]});
-const sameClass: typeof OPFValidationError = ApiValidationError;
-async function typedApi() {
-  const options: ExportOptions = {format: 'pdf', pdfMode: 'vector', catalogs: [defaultCatalog], slides: '1-2', date: '2026-01-01', fontDirs: ['fonts']};
-  const result: ExportResult = await exportDeck(apiDeck, options);
-  const file: ExportFile | undefined = result.files[0];
-  const bytes: Uint8Array | undefined = file?.bytes;
-  const findings: ApiFinding[] = result.findings;
-  const imported: ImportResult = await importDeck(bytes ?? new Uint8Array(), {signals: true});
-  const back: CorePresentation = imported.presentation;
-  // @ts-expect-error an unknown format must be rejected
-  await exportDeck(apiDeck, {format: 'gif'});
-  // @ts-expect-error pdfMode is vector or raster
-  await exportDeck(apiDeck, {format: 'pdf', pdfMode: 'fast'});
-  try { await exportDeck(apiDeck, {format: 'svg'}); } catch (error) {
-    if (error instanceof OPFExportError) { const code: string = error.code; const found: ApiFinding[] = error.findings; void code; void found; }
-    if (error instanceof OPFApiError || error instanceof OPFImportError) void error.details;
-  }
-  void findings; void back;
-}
-void typedApi; void sameDeck; void apiText; void apiReport; void sameClass; void apiAssertValid;
-` : ''}
 ${downstream ? `
 import {renderSlideSvg} from '@openpresentation/opf-render';
 import {createEditorSession} from '@openpresentation/opf-editor';
@@ -176,6 +183,9 @@ const svg: string = renderSlideSvg(edited, 0);
 toPptx(edited); void svg;
 ` : ''}
 `);
+  // RR-62: every entry a browser may import, compiled with no Node types (`types: []`): `/node` and `/node/engine` are Node-only.
+  const browserImports = entries.filter(([entry]) => entry !== './node' && entry !== './node/engine').map(([entry], index) => `import * as browser${index} from ${JSON.stringify(manifest.name + (entry === '.' ? '' : entry.slice(1)))}; void browser${index};`).join('\n');
+  await writeFile(path.join(directory, 'types-browser.ts'), `${browserImports}\nexport {};\n`);
   const reportDirectory = path.join(directory, 'artifacts/packed-types');
   await mkdir(reportDirectory, {recursive: true});
   const compilers = [];
@@ -199,11 +209,12 @@ toPptx(edited); void svg;
   }
   const report = {node: process.version, platform: process.platform, consumer: directory, downstream, nodeTypesVersion: nodeTypes.version, packageFiles, compilers, results: []};
   const errors = [];
-  for (const mode of ['NodeNext', 'Bundler']) {
+  for (const mode of ['NodeNext', 'Bundler', 'Browser']) {
+    const input = mode === 'Browser' ? 'types-browser.ts' : 'types-smoke.ts';
     const configuration = `packed-types-${mode}.json`;
     await writeFile(path.join(directory, configuration), JSON.stringify({
-      compilerOptions: {target: 'ES2022', module: mode === 'Bundler' ? 'ESNext' : 'NodeNext', moduleResolution: mode, strict: true, skipLibCheck: false, noEmit: true, types: ['node'], lib: ['ES2022', 'DOM']},
-      files: ['types-smoke.ts'],
+      compilerOptions: {target: 'ES2022', module: mode === 'NodeNext' ? 'NodeNext' : 'ESNext', moduleResolution: mode === 'NodeNext' ? 'NodeNext' : 'Bundler', strict: true, skipLibCheck: false, noEmit: true, types: mode === 'Browser' ? [] : ['node'], lib: ['ES2022', 'DOM']},
+      files: [input],
     }));
     for (const compiler of compilers) {
       const label = `${mode}-${compiler.version}`;
@@ -222,7 +233,8 @@ toPptx(edited); void svg;
           assert.ok(contained(directory, identity.path) || standardLibrary, `Compiler resolved an application declaration outside consumer: ${identity.path}`);
           resolvedFiles.push({...identity, role: standardLibrary ? 'compiler-standard-library' : 'consumer'});
         }
-        assert.ok(resolvedFiles.some(file => file.path === path.join(directory, 'types-smoke.ts')), 'Compiler must report the actual consumer input');
+        assert.ok(resolvedFiles.some(file => file.path === path.join(directory, input)), 'Compiler must report the actual consumer input');
+        if (mode === 'Browser') assert.deepEqual(resolvedFiles.filter(file => /[\\/]@types[\\/]node[\\/]/.test(file.path)).map(file => file.path), [], 'A browser consumer of core must not pull in Node types');
         assert.equal(result.status, 0, `${label}: compiler exited ${result.status}; see retained diagnostics`);
       } catch (error) {
         failure = error.message;
@@ -233,6 +245,6 @@ toPptx(edited); void svg;
   }
   await writeFile(path.join(reportDirectory, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
   if (errors.length) throw new AggregateError(errors, `Packed type checks failed in ${errors.length} compiler/mode combinations; see ${reportDirectory}`);
-  console.log(`Packed TypeScript 5.9/7 consumers passed: ${entries.length} exports, NodeNext/Bundler${downstream ? ', installed renderer/editor/PPTX' : ''}${cli ? ', @openpresentation/cli/api' : ''}.`);
+  console.log(`Packed TypeScript 5.9/7 consumers passed: ${entries.length} exports, NodeNext/Bundler${downstream ? ', installed renderer/editor/PPTX' : ''}${cli ? ', @openpresentation/cli resolving it' : ''}, browser entries without Node types.`);
   return report;
 }
