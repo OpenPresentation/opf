@@ -27,7 +27,7 @@ the versions below or established complete native compatibility.
 | --- | --- | --- |
 | `@openpresentation/opf` | 0.17.0 | optional peers `@openpresentation/opf-render@^0.17.0` and `@openpresentation/opf-pptx@^0.17.0`, which `@openpresentation/opf/node` loads for `convert`, `open` and `save` |
 | `@openpresentation/cli` | 0.17.1 | `@openpresentation/opf@^0.17.0` (a regular dependency, no bundled copy); optional peers `@openpresentation/opf-render@^0.17.0` and `@openpresentation/opf-pptx@^0.17.0` |
-| `@openpresentation/opf-render` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
+| `@openpresentation/opf-render` | 0.17.1 | `@openpresentation/opf@^0.17.0`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
 | `@openpresentation/opf-editor` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peer `@openpresentation/opf-render@^0.17.0` |
 | `@openpresentation/opf-pptx` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peer `@openpresentation/opf-render@^0.17.0` |
 
@@ -45,6 +45,8 @@ The 0.17 set is the lockstep minor after 0.16. It is a breaking release:
 
 See the 0.17.0 entries of the [changelog](../CHANGELOG.md) and the 0.17.1 entry of the
 [CLI changelog](../packages/cli/CHANGELOG.md).
+
+Renderer 0.17.1 is a patch on the 0.17 line: SVG never embeds a face whose OS/2 `fsType` forbids it (RR-76), embedded faces are cut to the glyphs a slide draws (RR-65, mean example slide 2.4 MB to 59 KB), and `textAsPaths` shapes with HarfBuzz and keeps an invisible text layer (RR-64 phases 2 and 3).
 
 The CLI starts at **0.17.1**. `cli-v0.17.0` was tagged, but its publish run failed before `npm publish`, because the
 release commit carried a stale generated gallery tracker. So 0.17.1 is the first published 0.17 CLI.
