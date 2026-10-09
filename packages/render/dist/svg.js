@@ -23,6 +23,7 @@ import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
 import { drawnFaces } from "./drawn-faces.js";
+import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -726,7 +727,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     content = outlined.content;
     glyphs = outlined.defs;
   }
-  const children = [glyphs, renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content, options.subsets)), ...content].filter(Boolean);
+  const children = [glyphs, renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content, options.subsets, diagnostic => reportDiagnostic(diagnostic, options))), ...content].filter(Boolean);
   // FF-44: Chromium (123+) trims adjacent fullwidth punctuation by default (CSS text-spacing-trim: normal; a sequence such as
   // 「」。 is up to 10 percent narrower), but measurement and PowerPoint advance every such character by its full width, so the browser
   // would stretch the glyphs back to the pinned textLength. space-all keeps the drawn advances equal to the measured ones. Only slides
@@ -1865,7 +1866,7 @@ function codeSyntax(item, layout, bound, options) {
 // the SVG names is one the browser can never select, so leaving it out changes no pixel. Only a face flagged embed:"always" is
 // embedded in every SVG. RR-59: each drawn style is checked on its own, so a family keeps an exactly matched face and, for
 // a drawn style none of its faces matches (a weight the family lacks), every face the browser could choose from.
-function embeddedFontsFor(fonts = [], content, subsets) {
+function embeddedFontsFor(fonts = [], content, subsets, report = () => {}) {
   if (!fonts.length) return fonts;
   fonts.forEach(assertEmbeddableFont);
   const characters = subsets ? new Map() : undefined;
@@ -1879,7 +1880,11 @@ function embeddedFontsFor(fonts = [], content, subsets) {
       return matching.length ? matching.includes(font) : true;
     });
   };
-  const used = fonts.filter(font => font?.embed === "always" || wanted(font));
+  const drawnOrAlways = fonts.filter(font => font?.embed === "always" || wanted(font));
+  const used = drawnOrAlways.filter(embeddable);
+  const refused = drawnOrAlways.filter(font => !embeddable(font));
+  if (refused.length) report({ code: "font-embedding-restricted", faces: refused.map(font => ({ fontFamily: font.family, weight: font.weight, italic: Boolean(font.italic), fsType: embeddingChecked.get(font).fsType })),
+    message: `${[...new Set(refused.map(font => `'${font.family}'`))].join(", ")} forbid${refused.length === 1 ? "s" : ""} embedding (OS/2 fsType), so the SVG names ${refused.length === 1 ? "it" : "them"} without the font data; a viewer without the font draws the generic family.` });
   // RR-65: each face cut to the characters the slide draws in its family (the handle's subset engine decides whether the face
   // may be subset at all). A face no text draws (embed: "always") stays whole.
   if (!subsets) return used;
@@ -1887,6 +1892,16 @@ function embeddedFontsFor(fonts = [], content, subsets) {
     const points = characters.get(String(font.family).toLowerCase());
     return points?.size ? { ...font, dataUrl: subsets.subsetDataUrl(font, points) } : font;
   });
+}
+
+// RR-76: a face whose OS/2 fsType forbids embedding (restricted, or bitmap-only: an SVG carries outlines) is never written as
+// @font-face data. The SVG still names its family, so a viewer without the font draws the generic family; a diagnostic says
+// why. The check reads only the font's table directory and its fsType bytes, once per face object and data URL.
+const embeddingChecked = new WeakMap();
+function embeddable(font) {
+  let checked = embeddingChecked.get(font);
+  if (!checked || checked.dataUrl !== font.dataUrl) { const fsType = dataUrlFsType(font.dataUrl); checked = { dataUrl: font.dataUrl, fsType, allowed: embeddingAllowed(fsType) }; embeddingChecked.set(font, checked); }
+  return checked.allowed;
 }
 
 // Every supplied face is checked, drawn or not, so a bad entry fails on any slide. The data URI check is remembered per face
