@@ -1,12 +1,12 @@
 // `opf render` and `opf export`: per-slide SVG and PNG, PDF and PPTX from an OPF document, through the optional
 // peers opf-render and opf-pptx. The command reads the document, checks its format and references with `validate` (the
-// check of `opf validate`), runs core's one export engine (`@openpresentation/opf/node/engine`, the engine behind `convert`
-// of `@openpresentation/opf/node`), and prints one JSON report. Nothing is written when the document is invalid, a render
+// check of `opf validate`), runs core's one export engine (`@openpresentation/opf/internal/engine`, the engine behind `convert`
+// of `@openpresentation/opf`), and prints one JSON report. Nothing is written when the document is invalid, a render
 // error occurred or a finding reaches --fail-on.
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
 import { checkText, inputFormatOf } from "./deck.js";
-import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, OPFApiError, Reporter, VERSIONS, checkDate, checkScale, exportFormatOf, finishReport, listFontDirectories, loadPptx, loadRenderer, resolveExportOptions, runExport } from "@openpresentation/opf/node/engine";
+import { EXPORT_FORMATS, type ExportFile, type ExportFormat, type ExportOptions, OPFApiError, Reporter, VERSIONS, checkDate, checkScale, exportFormatOf, finishReport, listFontDirectories, loadPptx, loadRenderer, resolveExportOptions, runExport } from "@openpresentation/opf/internal/engine";
 import { FileCommandError, type PlannedFile, arity, commandError, deckStem, json, parseOptions, readBytes, sha256, writeFiles } from "./io.js";
 
 export interface Host {

@@ -55,7 +55,7 @@ The inspection helper requires Node 24 and `@openpresentation/opf` in the curren
 
 ## Local CLI
 
-The [installable CLI](../packages/cli/README.md) complements these skills with `opf create`, `opf validate`, `opf edit`, and schema/catalog lookup. It runs on the core it depends on; the inspection skill helper instead resolves the host project's core package. Check versions when moving between them. From code, core's `@openpresentation/opf/node` offers `convert`, `open` and `save` (see the opf-export skill).
+The [installable CLI](../packages/cli/README.md) complements these skills with `opf create`, `opf validate`, `opf edit`, and schema/catalog lookup. It runs on the core it depends on; the inspection skill helper instead resolves the host project's core package. Check versions when moving between them. From code, core's `@openpresentation/opf` offers `convert`, `open` and `save` in Node (see the opf-export skill).
 
 ## Examples of requests
 

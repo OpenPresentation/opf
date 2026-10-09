@@ -4,9 +4,9 @@ import { createHash } from "node:crypto";
 import { statSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { OPFApiError } from "@openpresentation/opf/node/engine";
+import type { OPFApiError } from "@openpresentation/opf/internal/engine";
 
-export { type PlannedFile, checkDestinations, deckStem, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/node/engine";
+export { type PlannedFile, checkDestinations, deckStem, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
 
 /** Exit 2 is a usage, I/O or environment problem; exit 1 is a document, diagnostic or conflict problem. */
 export class FileCommandError extends Error {

@@ -1,4 +1,4 @@
-// `@openpresentation/opf/node` (RR-62): `convert`, `open` and `save` through the workspace's opf-render and opf-pptx (devDependencies),
+// The file API of `@openpresentation/opf` under the `node` condition (RR-62, RR-70): `convert`, `open` and `save` through the workspace's opf-render and opf-pptx (devDependencies),
 // the file naming, atomic writes, the typed errors, the fonts prepared once per process, and a missing peer (a copy of core in a
 // tree with no peer above it). Nothing in this file may touch the network: every socket connection and fetch is refused and
 // recorded, and the last test asserts that none happened.
@@ -30,8 +30,10 @@ globalThis.fetch = async (input) => {
   throw new Error("The test refuses network access");
 };
 
-const opf = await import("../dist/node.js");
-const core = await import("../dist/index.js");
+// RR-70: the Node build is the root itself; `core` is the browser build, which shares every class and function but the file API.
+const opf = await import("../dist/index.js");
+const core = await import("../dist/browser.js");
+const { defaultCatalog } = await import("../dist/catalog.js");
 const here = path.dirname(fileURLToPath(import.meta.url));
 const temp = await mkdtemp(path.join(tmpdir(), "opf-node-test-"));
 after(() => rm(temp, { recursive: true, force: true }));
@@ -39,7 +41,7 @@ after(() => rm(temp, { recursive: true, force: true }));
 const deck = {
   name: "Node deck",
   slides: [
-    { title: "Hello", subtitle: "From opf/node" },
+    { title: "Hello", subtitle: "From the Node build" },
     { title: "Points", items: ["One", "Two", "Three"] },
     { title: "Third", text: "Body" },
     { title: "Hidden", text: "Not shown by default", hidden: true },
@@ -73,12 +75,12 @@ const fails = async (promise, ErrorClass, code) => {
 
 describe("the entry", () => {
   test("exports convert, open and save beside the rest of core, with one set of classes", () => {
-    for (const name of ["convert", "open", "save", "validate", "parse", "stringify", "defaultCatalog", "OPFValidationError", "OPFApiError", "OPFExportError", "OPFImportError"]) assert.ok(name in opf, name);
+    for (const name of ["convert", "open", "save", "validate", "parse", "stringify", "parseSlideSelection", "OPFValidationError", "OPFApiError", "OPFExportError", "OPFImportError"]) assert.ok(name in opf, name);
     assert.equal(opf.validate, core.validate);
     assert.equal(opf.parse, core.parse);
     assert.equal(opf.OPFValidationError, core.OPFValidationError);
     assert.ok(new opf.OPFExportError("x", "y") instanceof opf.OPFApiError);
-    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck"]) assert.equal(opf[gone], undefined, gone);
+    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck", "defaultCatalog"]) assert.equal(opf[gone], undefined, gone);
   });
 });
 
@@ -104,7 +106,7 @@ describe("convert with an output path", () => {
 
     const imported = await opf.convert(path.join(dir, "deck.pptx"), path.join(dir, "back.opf.yaml"));
     assert.equal(imported.files[0].type, "application/yaml");
-    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [core.defaultCatalog ?? opf.defaultCatalog] });
+    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [defaultCatalog] });
     assert.equal(back.slides.length, 4);
     assert.equal(back.slides[0].title, "Hello");
 
@@ -394,7 +396,7 @@ describe("a missing peer", () => {
     await writeFile(path.join(isolated, "deck.opf.json"), JSON.stringify({ slides: [{ title: "x" }] }));
     await writeFile(
       path.join(isolated, "run.mjs"),
-      `import * as opf from "@openpresentation/opf/node";
+      `import * as opf from "@openpresentation/opf";
 const out = {};
 for (const [name, call] of [["export", () => opf.convert("deck.opf.json", "deck.pdf")], ["import", () => opf.open(new Uint8Array(4))], ["deck", () => opf.convert("deck.opf.json", "deck.opf.md")]]) {
   try { await call(); out[name] = "no error"; } catch (error) { out[name] = { name: error.name, code: error.code, package: error.details?.package, range: error.details?.range, message: error.message }; }

@@ -29,7 +29,7 @@ for (const name of ['opf', 'opf-render', 'opf-pptx']) {
 const load = async (name, subpath = '.') => {
   const manifestPath = require.resolve('@openpresentation/' + name + '/package.json');
   const manifest = await json(manifestPath), entry = manifest.exports[subpath];
-  return import(pathToFileURL(path.resolve(path.dirname(manifestPath), typeof entry === 'string' ? entry : entry.import ?? entry.default)).href);
+  return import(pathToFileURL(path.resolve(path.dirname(manifestPath), typeof entry === 'string' ? entry : entry.node ?? entry.import ?? entry.default)).href);
 };
 const { validate } = await load('opf');
 const valid = value => validate(value, {only: ['format']}).valid;

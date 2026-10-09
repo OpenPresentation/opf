@@ -1,27 +1,9 @@
-// File helpers of the Node engine (`@openpresentation/opf/node`): slide selections, output names, and atomic writes (a
-// temporary sibling, then a rename). The opf CLI uses the same functions through `@openpresentation/opf/node/engine`.
+// File helpers of the Node engine: output names and atomic writes (a temporary sibling, then a rename). The opf CLI uses the
+// same functions through `@openpresentation/opf/internal/engine`. Slide selections are browser-safe, in ../slide-selection.ts.
 import { randomUUID } from "node:crypto";
 import { lstat, mkdir, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { OPFApiError } from "./errors.js";
-
-/** `1,3-5`, `2-` (to the end) and `-3` (from the start), one-based, in ascending order without repeats. */
-export function parseSlideSelection(spec: string, total: number, label = "--slides"): number[] {
-	if (total < 1) throw new OPFApiError("The presentation has no slides.", "no-slides");
-	const chosen = new Set<number>();
-	for (const part of spec.split(",")) {
-		const text = part.trim();
-		const match = /^(\d*)(-?)(\d*)$/.exec(text);
-		if (!text || !match || (!match[1] && !match[3])) throw new OPFApiError(`${label} needs numbers like 1,3-5 (got "${spec}").`, "invalid-option");
-		const [, from, dash, to] = match as unknown as [string, string, string, string];
-		const first = from ? Number(from) : 1;
-		const last = dash ? (to ? Number(to) : total) : first;
-		if (first < 1 || last < first) throw new OPFApiError(`${label} range "${text}" is not valid (slides count from 1).`, "invalid-option");
-		if (last > total) throw new OPFApiError(`${label} ${text} is outside the presentation, which has ${total} slide${total === 1 ? "" : "s"}.`, "invalid-option");
-		for (let n = first; n <= last; n++) chosen.add(n);
-	}
-	return [...chosen].sort((a, b) => a - b);
-}
+import { OPFApiError } from "../api-errors.js";
 
 /** `deck.opf.json` and `deck.pptx` both give `deck`; stdin gives `deck`. */
 export function stemOf(input: string) {

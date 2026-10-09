@@ -4,7 +4,7 @@
 // Renderer, exporter and importer findings are appended with a `render/`, `pptx/`, `pdf/`, `fonts/` or `import/`
 // rule prefix and the same word as their category. Exit status follows --fail-on: an error always fails, a warning
 // fails under --fail-on warning.
-import type { Finding, FindingSeverity, ValidationReport } from "../index.js";
+import type { Finding, FindingSeverity, ValidationReport } from "../core.js";
 import { pointerOf } from "./files.js";
 import type { Diagnostic } from "./peers.js";
 

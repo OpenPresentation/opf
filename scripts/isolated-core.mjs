@@ -1,5 +1,5 @@
 // RR-62: a copy of the workspace core (`packages/javascript`: its dist and manifest) in a tree with no optional peer above it.
-// Core's /node entry loads @openpresentation/opf-render and @openpresentation/opf-pptx from core's own location; the workspace
+// Core's Node build loads @openpresentation/opf-render and @openpresentation/opf-pptx from core's own location; the workspace
 // core has them as devDependencies, so a test of a missing peer needs a core outside the workspace. Its runtime dependencies are
 // linked from the workspace install (a pnpm layout resolves their own dependencies from their real paths).
 import { cp, mkdir, readFile, realpath, symlink } from 'node:fs/promises';

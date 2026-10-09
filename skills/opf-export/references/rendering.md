@@ -11,16 +11,16 @@ opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
 opf convert <input> <output> [the export flags]   # formats from the names: .pptx .opf.md .yaml .json -> .pdf .pptx .png .svg .zip .opf.md .yaml .json
 ```
 
-From opf-render 0.16 the converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and the font packages are optional peers: a missing one exits 2 with `code: "peer-not-installed"`, the package and the install command, and `convert` of `@openpresentation/opf/node` throws the same code.
+From opf-render 0.16 the converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and the font packages are optional peers: a missing one exits 2 with `code: "peer-not-installed"`, the package and the install command, and `convert` of `@openpresentation/opf` throws the same code.
 
 The commands each print one JSON report (the `opf validate` shape: `ok`, `findings` with `ruleId`/`severity`/`category`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on findings at or above `--fail-on` (nothing is written then). The CLI uses the same `loadFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). PDF is vector by default (`--pdf-mode raster` for one image per page). Per-slide images and PDF skip slides marked `hidden: true` unless `--include-hidden`, and output files are named by the deck's `filename`, else its slugified `name`, else the input file's name. Full reference: `docs/cli.md` in the core repository.
 
 ## Files in Node
 
-`@openpresentation/opf/node` is core's file API (Node only; the root and every other core entry stay browser-safe). The commands above run it.
+`@openpresentation/opf` in Node is core's file API. The same import in a browser or worker is a browser-safe build with the same names, where `open`, `save` and `convert` reject with `node-only`; `@openpresentation/opf/node` of 0.17 is gone. The commands above run it.
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf', { pdfMode: 'vector' });
 await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1,3-5', scale: 2 }); // slides/deck-001.png, -003, -004, -005

@@ -10,10 +10,10 @@ Start with a validated OPF document and the output formats the user requested. P
 
 ## Files: `convert`, from code or the shell
 
-One call turns a file into another, the formats named by the file names. In an application or script use core's `@openpresentation/opf/node`; from a shell, `opf convert` runs the same code:
+One call turns a file into another, the formats named by the file names. In a Node application or script use core's `@openpresentation/opf` (in a browser or worker the file functions reject with `node-only`); from a shell, `opf convert` runs the same code:
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf');
 await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1-3', scale: 2 }); // slides/deck-001.png, -002, -003

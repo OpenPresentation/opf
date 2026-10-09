@@ -1,11 +1,11 @@
-# OPF files in Node: `@openpresentation/opf/node`
+# OPF files in Node: `@openpresentation/opf`
 
-`@openpresentation/opf/node` is core's file API: it converts, opens and saves OPF files, and draws them as PDF, PNG, SVG and
-PPTX through the optional engines. It is Node-only. The root `@openpresentation/opf` and every other subpath stay free of the
-file system and run in a browser.
+`@openpresentation/opf` is one import for every runtime. In Node (and Bun and Deno) it is core plus the file API: it converts,
+opens and saves OPF files, and draws them as PDF, PNG, SVG and PPTX through the optional engines. In a browser or a worker the
+same import gives the browser-safe build, with the same names, where only the file functions refuse.
 
 ```ts
-import * as opf from "@openpresentation/opf/node";
+import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");
 const deck = await opf.open("deck.opf.md");
@@ -14,15 +14,44 @@ await opf.save(deck, "deck.opf.md");
 const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing written
 ```
 
-The namespace also re-exports the rest of core (`validate`, `parse`, `stringify`, `paginate`, the types and the error classes)
-and `defaultCatalog`, so one import covers an application.
+The namespace is all of core (`validate`, `parse`, `stringify`, `paginate`, `parseSlideSelection`, the types and the error
+classes), so one import covers an application. The default catalog stays opt-in, at `@openpresentation/opf/catalog`; `open`,
+`save` and `convert` use it when no `catalogs` are passed.
+
+A shorter name is available as an npm alias, if you want one: `npm i opf@npm:@openpresentation/opf` installs the same package
+as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name.
+
+## One import for every runtime
+
+OPF 0.18 removed the `@openpresentation/opf/node` subpath of 0.17: import `@openpresentation/opf` instead, with the same names
+(but `defaultCatalog`, which stays at `@openpresentation/opf/catalog`).
+The package's conditional exports pick the build:
+
+| Condition | Build | `open`, `save`, `convert` |
+| --- | --- | --- |
+| `bun`, `deno`, `node` | the full build (`dist/index.js`) | work on files, and `convert` also returns bytes |
+| `workerd` (Cloudflare), `worker`, `browser`, `default` | the browser-safe build (`dist/browser.js`) | reject with `OPFApiError` code `node-only` |
+
+- **One type surface.** Both builds share `dist/index.d.ts` (the `types` condition, first in the map), so TypeScript sees the
+  same declarations under `NodeNext` and `Bundler` resolution; the file functions are documented there as Node only. The
+  declarations need no Node types.
+- **The browser-safe build** imports no Node builtin, no file system and neither engine (`scripts/check-browser-safe.mjs`
+  bundles it for the browser and worker conditions). Its `node-only` messages name the alternative: `parse(text, { filename })`
+  for `open`, `stringify(deck, { filename })` for `save`, and for `convert` the deck forms through `parse` and `stringify` and
+  drawing through opf-render's `/export-browser` entry. The in-memory `convert(deck, { format })` is Node only in 0.18 too; a
+  later release adds a browser implementation through `/export-browser`.
+- **The Node build** loads its file engine on the first file call, so importing the root costs no more than core.
+- **Bundlers** pick the browser build for a browser target and the full build for a Node target. A bundler that sets neither
+  condition gets `default`, the browser-safe build: for a Node bundle, add the `node` condition (Rollup's node-resolve
+  `exportConditions: ["node"]`, esbuild's `platform: "node"`).
 
 ## The stack
 
 OPF is five packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
-`stringify`, composition and pagination, with `/node` for files. **The CLI** (`@openpresentation/cli`) is the `opf` command; its
-`convert`, `render`, `export` and `import` commands run the `/node` engine. **opf-render**, **opf-pptx** and **opf-editor** are the
-engines: drawing (SVG, PNG, PDF), PowerPoint (export and import) and the editor.
+`stringify`, composition and pagination, and in Node the files. **The CLI** (`@openpresentation/cli`) is the `opf` command;
+its `convert`, `render`, `export` and `import` commands run core's Node engine (through `@openpresentation/opf/internal/engine`,
+which the package exports under the `node` condition for the CLI only; it is not an application API). **opf-render**,
+**opf-pptx** and **opf-editor** are the engines: drawing (SVG, PNG, PDF), PowerPoint (export and import) and the editor.
 
 ## Install
 
@@ -35,7 +64,7 @@ npm install @openpresentation/opf @openpresentation/opf-render @openpresentation
 ```
 
 `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peer dependencies of core: npm does not install them
-for you, and an application that only reads, validates or converts between deck forms needs neither. `/node` loads them the
+for you, and an application that only reads, validates or converts between deck forms needs neither. Core loads them the
 first time a call needs them, from core's own install location and then from the working directory; a missing one throws
 `peer-not-installed` with the install command. What each output needs is listed in [the CLI reference](cli.md#install): PNG
 needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sharp`, every format the office font pack, and
@@ -76,7 +105,7 @@ that disagrees with the output's extension is refused too; it is only needed for
 with their names and bytes. The names follow the deck: its `filename`, else its slugified `name`, else the input file's stem
 (`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`).
 
-**Options** are those of `opf export` in camel case: `slides` (`"1,3-5"` or `[1, 3]`), `includeHidden`, `paginate`, `scale`
+**Options** are those of `opf export` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
 (0.1 to 8, PNG and raster PDF), `pdfMode` (`vector`, the default, or `raster`), `svgFonts` (`used` or `none`), `chartex`,
 `provenance` and `imageFormat` (PPTX), `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
 catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`), `fontDirs`
@@ -119,7 +148,7 @@ Every error has a `code`; branch on it, never on the message.
 
 | Class | Codes |
 | --- | --- |
-| `OPFApiError` (the base class) | `invalid-option`, `input-not-found`, `input-unreadable`, `invalid-presentation` (a deck written as a deck), `output-exists`, `output-not-file`, `output-unwritable` |
+| `OPFApiError` (the base class) | `node-only` (the browser-safe build), `invalid-option`, `input-not-found`, `input-unreadable`, `invalid-presentation` (a deck written as a deck), `output-exists`, `output-not-file`, `output-unwritable` |
 | `OPFExportError` | the export step: `peer-not-installed` (the message carries the install command; `details` the package and range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, a font code |
 | `OPFImportError` | the import step and `open` of a PowerPoint file: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `import-failed`, `invalid-presentation` |
 | `OPFValidationError` | `open` and `save` of an invalid deck; also thrown by core's `parse` and `assertValid` |
@@ -137,6 +166,13 @@ bytes on every machine.
 
 ## Reading and writing text without files
 
-Core's root (browser-safe) reads and writes deck text: `parse(text, { filename?, format?, catalogs? })` returns the
+Core reads and writes deck text in every runtime: `parse(text, { filename?, format?, catalogs? })` returns the
 presentation and throws `OPFValidationError` on syntax, schema or reference errors (findings located by line and column);
 `stringify(deck, { format? | filename? })` returns text; `validate(text)` returns the full report, warnings included.
+
+## Slide selections
+
+`parseSlideSelection(selection, total, label?)` (both builds) turns a selection into slide numbers, one-based, ascending and
+without repeats: `3`, `[1, 3]`, `"1,3-5"`, `"2-"` (to the end) and `"-3"` (from the start). It throws `OPFApiError`
+`invalid-option` for a malformed selection, a number that is not a whole number from 1, a reversed range or a slide past the
+end, and `no-slides` when `total` is 0. `convert` and the opf CLI's `--slides` read selections with it, and an engine can share it.

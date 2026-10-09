@@ -1,11 +1,11 @@
-// RR-62: an installation runs ONE core. The opf CLI imports core as a regular dependency and runs its `/node` engine, and the
+// RR-62: an installation runs ONE core. The opf CLI imports core as a regular dependency and runs its Node engine, and the
 // optional peers (@openpresentation/opf-render, @openpresentation/opf-pptx) depend on core too, so an application that imports
 // core next to them shares one set of error classes, catalogs and functions. This checks an installation (a `node_modules`
 // directory) three ways:
 //   1. the tree holds exactly one copy of core (by real path);
 //   2. the CLI, and each installed peer, resolves the very file the application resolves;
-//   3. across the boundary: `/node` re-exports core's own functions and classes, and an error core throws is an
-//      `instanceof OPFValidationError` of the core the application imported.
+//   3. across the boundary: the CLI engine (`./internal/engine` from 0.18, RR-70; `/node` before) re-exports core's own
+//      functions and classes, and an error core throws is an `instanceof OPFValidationError` of the core the application imported.
 import assert from 'node:assert/strict';
 import { readdir, readFile, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -78,7 +78,9 @@ export async function assertOneCore(nodeModules, { application: withApplication 
   else assert.equal(await realpath(fromCli.resolve('@openpresentation/opf/package.json')), path.join(copies[0], 'package.json'), 'the CLI resolves the one installed core');
   const coreRoot = path.dirname(await realpath(fromCli.resolve('@openpresentation/opf/package.json')));
   const coreManifest = JSON.parse(await readFile(path.join(coreRoot, 'package.json'), 'utf8'));
-  const core = await import(pathToFileURL(path.join(coreRoot, coreManifest.exports['.'].import)).href);
+  // RR-70: the root's Node build is the `node` condition (0.17 and earlier: `import`).
+  const root = coreManifest.exports['.'];
+  const core = await import(pathToFileURL(path.join(coreRoot, root.node ?? root.import)).href);
   // Every installed peer resolves the same core.
   for (const peer of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
     let peerManifest;
@@ -88,6 +90,14 @@ export async function assertOneCore(nodeModules, { application: withApplication 
       continue;
     }
     assert.equal(await realpath(createRequire(peerManifest).resolve('@openpresentation/opf/package.json')), path.join(coreRoot, 'package.json'), `${peer} resolves another core`);
+  }
+  const engineEntry = coreManifest.exports['./internal/engine']?.node;
+  if (engineEntry) {
+    const engine = await import(pathToFileURL(path.join(coreRoot, engineEntry)).href);
+    assert.equal(engine.OPFApiError, core.OPFApiError, 'the CLI engine throws the OPFApiError of the application core');
+    assert.equal(engine.parseSlideSelection, core.parseSlideSelection);
+    assert.throws(() => engine.parseSlideSelection('x', 1), (error) => error instanceof core.OPFApiError);
+    assert.equal(typeof core.convert, 'function', 'the Node build of the root has convert');
   }
   const nodeEntry = coreManifest.exports['./node']?.import;
   if (nodeEntry) {

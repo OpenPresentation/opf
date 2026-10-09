@@ -23,9 +23,11 @@ const budgetFile = path.join(root, 'scripts', 'catalog-free-budget.json');
 const CATALOG_ENTRY = 'catalog';
 /** Content entries (the example decks, the docs, the README) change with every example edit: they carry no catalog modules, but no size budget either. */
 const CONTENT_ENTRIES = new Set(['examples', 'docs', 'repo-readme']);
-/** RR-62: the Node-only entries (`/node`, `/node/engine`) read files and register the default catalog, as a Node host does; they are
- * not browser bundles, so they have neither a catalog rule nor a budget. scripts/check-browser-safe.mjs proves no other entry reaches them. */
-export const NODE_ENTRIES = new Set(['node', 'node-engine']);
+/** RR-62, RR-70: the Node entries, the Node build of the root (`index`, the `node` condition) and the CLI engine (`node-engine`,
+ * `./internal/engine`), read files and register the default catalog, as a Node host does; they are not browser bundles, so they
+ * have neither a catalog rule nor a budget. The browser build of the root (`browser`) has both. scripts/check-browser-safe.mjs
+ * proves no other entry reaches them. */
+export const NODE_ENTRIES = new Set(['index', 'node-engine']);
 /** Headroom over the measured gzip size when the budget is rewritten. */
 const HEADROOM = 0.03;
 
@@ -33,7 +35,7 @@ export const isCatalogModule = (input) => /(^|\/)src\/generated\/(catalogs|previ
 
 /** The tsup entries of the core package, as { name: source }. */
 export function tsupEntries(text) {
-  const block = /entry:\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
+  const block = /entry\s*[:=]\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
   return Object.fromEntries([...block.matchAll(/["']?([\w-]+)["']?\s*:\s*["']([^"']+)["']/g)].map((match) => [match[1], match[2]]));
 }
 

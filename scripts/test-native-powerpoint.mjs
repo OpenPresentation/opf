@@ -15,7 +15,7 @@ const load = async name => {
   const manifestPath=require.resolve(packageName+'/package.json');
   const manifest=JSON.parse(await readFile(manifestPath,'utf8'));
   const entry=manifest.exports[parts.length===2?'.':'./'+parts.slice(2).join('/')];
-  const target=typeof entry==='string'?entry:entry.import??entry.default;
+  const target=typeof entry==='string'?entry:entry.node??entry.import??entry.default;
   assert.equal(typeof target,'string','Expected a Node ESM package export');
   return import(pathToFileURL(path.resolve(path.dirname(manifestPath),target)).href);
 };

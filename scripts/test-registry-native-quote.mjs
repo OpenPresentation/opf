@@ -25,7 +25,7 @@ const load=async name=>{
  const parts=name.split('/'),packageName=parts.slice(0,2).join('/');
  const file=require.resolve(packageName+'/package.json'),manifest=await json(file);
  const entry=manifest.exports[parts.length===2?'.':'./'+parts.slice(2).join('/')];
- return import(pathToFileURL(path.resolve(path.dirname(file),typeof entry==='string'?entry:entry.import??entry.default)).href);
+ return import(pathToFileURL(path.resolve(path.dirname(file),typeof entry==='string'?entry:entry.node??entry.import??entry.default)).href);
 };
 const {toPptx,fromPptx}=await load('@openpresentation/opf-pptx');
 const {loadFonts}=await load('@openpresentation/opf-render/fonts-node');

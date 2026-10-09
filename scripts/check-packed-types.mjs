@@ -25,9 +25,9 @@ export function assertPackedTypeEnvironment({nodeOptions = process.env.NODE_OPTI
 
 // Compile only the isolated installation, with no source aliases or skipLibCheck.
 // With `cli`, the isolated installation also holds @openpresentation/cli, which must resolve the same core and export no library
-// entry (RR-62: applications use core's `/node`, which the consumer below compiles with every other entry). A second consumer
-// imports the root and every subpath except `/node` and `/node/engine` with no Node types at all, so a browser build of core
-// never needs them.
+// entry (RR-62, RR-70: applications use core's root, whose one type surface declares `open`, `save` and `convert` for both builds).
+// A second consumer imports the root and every subpath except the CLI's `/internal/engine` with no Node types at all, so the one
+// type surface and every browser entry compile without them.
 export async function checkPackedTypes(directory, {downstream = false, cli = false} = {}) {
   assertPackedTypeEnvironment();
   directory = await realpath(directory);
@@ -54,13 +54,17 @@ export async function checkPackedTypes(directory, {downstream = false, cli = fal
   if (cli) {
     const cliManifestPath = await installedFile(installed.resolve('@openpresentation/cli/package.json'));
     const cliManifest = JSON.parse(await readFile(cliManifestPath, 'utf8'));
-    // RR-62: the CLI is the command; the file API is core's /node, compiled with every other core entry below.
+    // RR-62, RR-70: the CLI is the command; the file API is core's root, compiled with every other core entry below.
     assert.equal(cliManifest.exports['./api'], undefined, '@openpresentation/cli exports no library entry');
     assert.equal(await realpath(createRequire(cliManifestPath).resolve('@openpresentation/opf/package.json')), await realpath(manifestPath), '@openpresentation/cli must resolve the candidate core tarball');
   }
   const entries = Object.entries(manifest.exports).filter(([, target]) => typeof target === 'object');
+  // RR-70: the root's builds are the `node` and `default` conditions, the CLI engine `node` only; `types` comes first in each.
+  assert.equal(manifest.exports['./node'], undefined, '/node is removed (RR-70)');
+  assert.equal(manifest.exports['./node/engine'], undefined, '/node/engine is removed (RR-70)');
   for (const [entry, target] of entries) {
-    assert.ok(target.types && target.import, `${entry} needs runtime and declaration targets`);
+    assert.ok(target.types && (target.import || target.node || target.default), `${entry} needs runtime and declaration targets`);
+    assert.equal(Object.keys(target)[0], 'types', `${entry}: types must be the first condition`);
     await installedFile(path.resolve(path.dirname(manifestPath), target.types));
   }
   const imports = entries.map(([entry], index) => {
@@ -79,9 +83,9 @@ import {convertContent, type ConvertedContent} from '@openpresentation/opf/conve
 import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
 import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
 import {parse, stringify, type DeckFormat, type ParseOptions} from '@openpresentation/opf/deck';
-import {convert, open, save, OPFApiError, OPFExportError, OPFImportError, OPFValidationError as NodeValidationError, type ConvertOptions, type ConvertResult, type ConvertedFile, type SaveResult} from '@openpresentation/opf/node';
-import * as opfNode from '@openpresentation/opf/node';
-import {OPFValidationError as CoreValidationError} from '@openpresentation/opf';
+import {convert, open, save, parseSlideSelection, OPFApiError, OPFExportError, OPFImportError, OPFValidationError as NodeValidationError, type ConvertOptions, type ConvertResult, type ConvertedFile, type SaveResult, type SlideSelection} from '@openpresentation/opf';
+import * as opfNode from '@openpresentation/opf';
+import {OPFValidationError as CoreValidationError} from '@openpresentation/opf/validator';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -128,7 +132,7 @@ parse('{}', {format: 'toml'});
 // @ts-expect-error parse reads text, not a deck
 parse(deck);
 void deckText;
-// RR-62: the Node file API. One core: its classes and Presentation are core's own.
+// RR-62, RR-70: the file API at the root. One core: its classes and Presentation are core's own.
 async function typedNode() {
   const written: ConvertResult = await convert('deck.opf.md', 'deck.pdf');
   const returned: ConvertResult = await convert(deck, {format: 'pptx'});
@@ -156,7 +160,12 @@ async function typedNode() {
     if (error instanceof OPFExportError || error instanceof OPFImportError) { const code: string = error.code; const found: Finding[] = error.findings; void code; void found; }
     if (error instanceof OPFApiError) void error.details;
   }
-  void written; void name; void imported; void savedFormat; void sameClass; void viaNamespace;
+  const selection: SlideSelection = '1-3';
+  const chosen: number[] = parseSlideSelection(selection, 5).concat(parseSlideSelection(3, 5), parseSlideSelection([1, 2], 5));
+  await convert(deck, {format: 'svg', slides: 2});
+  // @ts-expect-error a slide selection is a number, numbers or text
+  parseSlideSelection({from: 1}, 5);
+  void written; void name; void imported; void savedFormat; void sameClass; void viaNamespace; void chosen;
 }
 void typedNode;
 const parsedYaml = fromYaml('slides:\\n  - title: Typed\\n', {aliases: false});
@@ -183,9 +192,20 @@ const svg: string = renderSlideSvg(edited, 0);
 toPptx(edited); void svg;
 ` : ''}
 `);
-  // RR-62: every entry a browser may import, compiled with no Node types (`types: []`): `/node` and `/node/engine` are Node-only.
-  const browserImports = entries.filter(([entry]) => entry !== './node' && entry !== './node/engine').map(([entry], index) => `import * as browser${index} from ${JSON.stringify(manifest.name + (entry === '.' ? '' : entry.slice(1)))}; void browser${index};`).join('\n');
-  await writeFile(path.join(directory, 'types-browser.ts'), `${browserImports}\nexport {};\n`);
+  // RR-62, RR-70: every entry a browser may import, compiled with no Node types (`types: []`); the CLI's `/internal/engine` is
+  // Node-only (as were `/node` and `/node/engine` up to 0.17). The root's one type surface, file API included, needs no Node types.
+  const browserImports = entries.filter(([entry]) => !['./node', './node/engine', './internal/engine'].includes(entry)).map(([entry], index) => `import * as browser${index} from ${JSON.stringify(manifest.name + (entry === '.' ? '' : entry.slice(1)))}; void browser${index};`).join('\n');
+  const browserSurface = `
+import {open, save, convert, parseSlideSelection, OPFApiError} from '@openpresentation/opf';
+async function browserSurface() {
+  try { await open('deck.opf.md'); } catch (error) { if (error instanceof OPFApiError && error.code === 'node-only') void error.details; }
+  const saved: {path: string} = await save({slides: [{title: 'Browser'}]}, 'deck.opf.md');
+  const converted = await convert({slides: [{title: 'Browser'}]}, {format: 'svg'});
+  const slides: number[] = parseSlideSelection('1-2', 2);
+  void saved; void converted; void slides;
+}
+void browserSurface;`;
+  await writeFile(path.join(directory, 'types-browser.ts'), `${browserImports}${browserSurface}\nexport {};\n`);
   const reportDirectory = path.join(directory, 'artifacts/packed-types');
   await mkdir(reportDirectory, {recursive: true});
   const compilers = [];

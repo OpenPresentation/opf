@@ -1,5 +1,5 @@
 // The one import engine: a PowerPoint file to an OPF presentation through opf-pptx `fromPptx` (the optional peer, see
-// peers.ts). `convert` and `open` of `@openpresentation/opf/node` and `opf import` all run `runImport`.
+// peers.ts). `convert` and `open` of `@openpresentation/opf` and `opf import` all run `runImport`.
 // Import is a conversion, not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics.
 // The same file gives the same presentation: nothing is fetched and no clock is read.
 import type { Diagnostic, Peer, PptxModule } from "./peers.js";

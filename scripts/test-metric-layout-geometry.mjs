@@ -41,7 +41,7 @@ async function load(name,entrypoint) {
     packages.push({name,version:manifest.version,integrity:entry.integrity,verifiedFiles:Object.keys(expected.files).length});
   }
   const entry=manifest.exports[entrypoint];
-  return import(pathToFileURL(path.resolve(dir,typeof entry==='string'?entry:entry.import??entry.default)).href);
+  return import(pathToFileURL(path.resolve(dir,typeof entry==='string'?entry:entry.node??entry.import??entry.default)).href);
 }
 const {resolvePresentation}=await load('@openpresentation/opf-render','./svg');
 const {validate}=await load('@openpresentation/opf','.');
