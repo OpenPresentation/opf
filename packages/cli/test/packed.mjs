@@ -8,6 +8,7 @@ import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {satisfies} from '../../../scripts/unreleased-gate.mjs';
+import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const registry=process.argv.includes('--registry');
@@ -62,8 +63,11 @@ try {
   console.log(run('npm',['audit','signatures','--cache',cache],consumer).trim());
  }
  // Install globally into an isolated prefix with no workspace links: the CLI, the core it depends on and core's own dependencies come from tarballs and the registry.
- run('npm',['install','--global','--prefix',temp,'--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball,...candidateCore],temp);
- const installed=path.join(temp,process.platform==='win32'?'node_modules':'lib/node_modules','@openpresentation/cli');
+ // RR-66 (opf#466): the prefix is a folder of its own, not the folder the npm exec step below runs in (scripts/global-prefix.mjs).
+ const global=globalPrefixLayout(path.join(temp,'global'));
+ assertExecOutsideGlobal(temp,global);
+ run('npm',['install','--global','--prefix',global.prefix,'--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball,...candidateCore],temp);
+ const installed=path.join(global.modules,'@openpresentation/cli');
  const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);

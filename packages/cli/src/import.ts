@@ -7,7 +7,7 @@ import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
 import { DeckReadError, checkText, deckExtension, fenceWarning, formatNamed, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
 import { OPFApiError, PPTX_PACKAGE, Reporter, finishReport, loadPptx, runImport } from "@openpresentation/opf/node/engine";
-import { FileCommandError, arity, commandError, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
+import { FileCommandError, arity, commandError, json, parseOptions, readBytes, samePath, sha256, stemOf, writeFiles } from "./io.js";
 import type { Host } from "./render.js";
 
 export async function runImportCommand(args: string[], host: Host) {
@@ -36,7 +36,7 @@ async function run(args: string[], host: Host) {
 	const failOn = parseFailOn(options["fail-on"]);
 	if (!failOn) throw new FileCommandError(FAIL_ON_MESSAGE);
 	if (signalsFile === "-" || (signalsFile !== undefined && out === "-")) throw new FileCommandError("--signals needs a file path and cannot be combined with --out - (stdout carries only the document).");
-	if (signalsFile !== undefined && path.resolve(signalsFile) === path.resolve(out)) throw new FileCommandError("--signals and --out name the same file.");
+	if (signalsFile !== undefined && samePath(signalsFile, out)) throw new FileCommandError("--signals and --out name the same file.");
 
 	const pptx = await loadPptx();
 

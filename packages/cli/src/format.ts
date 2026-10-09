@@ -4,6 +4,7 @@ import { OPFMarkdownError } from "@openpresentation/opf/markdown";
 import { OPFYamlError } from "@openpresentation/opf/yaml";
 import type { CliContext } from "./context.js";
 import { type DeckFormat, fenceWarning, formatNamed, outputFormatOf, serialize } from "./deck.js";
+import { samePath } from "./io.js";
 
 /**
  * `opf format <file|->...`: canonical key order and layout. JSON gets the formatter's layout; YAML gets the canonical YAML
@@ -62,7 +63,7 @@ export async function formatCommand(args: string[], cli: CliContext): Promise<vo
   const only = results[0]!;
   const output = String(options.output ?? "-");
   if (output === "-") { process.stdout.write(only.text); return; }
-  const sameFile = only.file !== "-" && path.resolve(only.file) === path.resolve(output);
+  const sameFile = only.file !== "-" && samePath(only.file, output);
   await cli.saveText(output, only.text, !!options.force || sameFile, sameFile ? { file: only.file, raw: only.raw } : undefined);
   cli.print({ output: path.resolve(output), changed: only.changed, sha256: cli.hash(only.text) });
 }
