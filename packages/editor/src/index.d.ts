@@ -72,6 +72,7 @@ export interface EditorHistory { undo: EditorHistoryEntry[]; redo: EditorHistory
 
 export interface EditorSession {
   paginateSlide(slideIndex: number, options?: PaginationOptions & EditorDiagnosticOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
+  /** Composes the slide with `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` substituted for `options.slideNumber` and `options.slideCount` (default: its place in the open deck and the deck's slide count); the document keeps the tokens. */
   composeSlide(slideIndex: number, options?: ComposeSlideOptions & EditorDiagnosticOptions): SlideComposition;
   setComposition(slideIndex: number, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   readonly presentation: unknown;

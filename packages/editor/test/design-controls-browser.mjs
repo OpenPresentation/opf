@@ -219,7 +219,7 @@ try {
   assert.equal(await design.getByLabel('Hide it').isVisible(), false, 'hiding is not offered at the deck while the footer shows');
   await field(design, 'Applies to').selectOption('slide');
   await field(design, 'Zone').selectOption('right');
-  await step('slide-scope footer keeps the deck zones', () => design.getByLabel('Show the slide number').check(), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.right?.slideNumber === true && current.design.footer.right === undefined);
+  await step('slide-scope footer keeps the deck zones', () => field(design, 'Insert value').selectOption('slide.number'), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.right?.text === '{{slide.number}}' && current.design.footer.right === undefined);
   await step('hide the footer on one slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.footer === false && current.design.footer.center.text === 'Confidential');
   await field(design, 'Applies to').selectOption('deck');
   await button('Undo').click();
@@ -282,7 +282,7 @@ try {
   await step('header logo zone', () => design.getByLabel('Show the logo').check(), current => current.design.header?.left?.logo === true);
   await field(design, 'Edit').selectOption('footer');
   await field(design, 'Zone').selectOption('right');
-  await step('footer slide number', () => design.getByLabel('Show the slide number').check(), current => current.design.footer?.right?.slideNumber === true);
+  await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.right?.text === '{{slide.number}}');
 
   // FA-23: the catalog section checks for catalog updates on request (nothing embedded here, so nothing to update).
   await design.getByRole('button', { name: 'Check for catalog updates', exact: true }).click();

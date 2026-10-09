@@ -21,6 +21,11 @@ const REGION_KEY = /^(?:top|middle|bottom|left|center|right)(?:[+:]|$)/;
 const WORD_BEFORE = "(?<![\\p{L}\\p{N}_])";
 const WORD_AFTER = "(?![\\p{L}\\p{N}_])";
 
+// A variable token (`{{customer}}`, `{{slide.number}}`, `{{ deck.slideCount }}`, `{{revenue|0.0}}`). It is an instruction, not text: a match inside it is
+// never offered, because replacing part of a name would either break the variable or silently change which value it shows (FA-31). An
+// escaped `\{{` is literal text and is searched like the rest.
+const VARIABLE_TOKEN = /(?<!\\)\{\{\s*[A-Za-z][A-Za-z0-9_.-]*\s*(?:\|[^{}]*)?\}\}/g;
+
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 const runText = (run) => (typeof run === "string" ? run : isObject(run) && typeof run.text === "string" ? run.text : "");
 const isRuns = (value) => Array.isArray(value) && value.length > 0 && value.every((run) => typeof run === "string" || (isObject(run) && typeof run.text === "string"));
@@ -205,7 +210,8 @@ function snippet(text, start, end) {
  * Search a document. Returns `{ matches, fieldCount, slideCount, truncated, error }`. A match is `{ id, pointer, path,
  * slideIndex, label, runs, start, end, text, groups, named, context: { before, match, after } }` where `start` and `end`
  * are offsets into the field's text. Options: those of `compileSearch`, plus `notes` and `slideIndex` of
- * `collectSearchFields`. Matches that are empty (a regular expression that matches nothing) are skipped.
+ * `collectSearchFields`. Matches that are empty (a regular expression that matches nothing) are skipped, and so is a match that
+ * touches a variable token (`{{slide.number}}`): the token is not text, and replacing part of it would break or change the variable.
  */
 export function findMatches(presentation, query, options = {}) {
   const compiled = compileSearch(query, options);
@@ -217,11 +223,13 @@ export function findMatches(presentation, query, options = {}) {
     compiled.regex.lastIndex = 0;
     let found;
     let hit = false;
+    const tokens = item.text.includes("{{") ? [...item.text.matchAll(VARIABLE_TOKEN)].map((token) => [token.index, token.index + token[0].length]) : [];
     while ((found = compiled.regex.exec(item.text))) {
       if (found[0] === "") {
         compiled.regex.lastIndex += 1;
         continue;
       }
+      if (tokens.some(([from, to]) => found.index < to && found.index + found[0].length > from)) continue;
       if (result.matches.length >= MAX_MATCHES) {
         result.truncated = true;
         break outer;

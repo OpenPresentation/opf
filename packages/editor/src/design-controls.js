@@ -21,9 +21,11 @@ import {
   DATE_FORMAT_TOKENS,
   HEADER_FOOTER_ZONES,
   LOGO_VARIANTS,
+  ZONE_VALUES,
   designWarnings,
   getDesignOption,
   headerFooterState,
+  insertZoneValue,
   prepareHeaderFooterZone,
   prepareLogoVariant,
   prepareDesignOption,
@@ -228,9 +230,12 @@ export function createDesignControls(container, options = {}) {
     return api;
   }
 
-  function textField(name, label, { help, placeholder, list, onCommit, type = "text" } = {}) {
+  // `multiline` makes it a two-line box: Enter commits (like a one-line field), Shift+Enter starts a new line.
+  function textField(name, label, { help, placeholder, list, onCommit, type = "text", multiline = false } = {}) {
     const id = nextId(name);
-    const input = h("input", { id, type, placeholder, list: list ? `${id}-list` : undefined, autocomplete: "off", spellcheck: "false" });
+    const input = multiline
+      ? h("textarea", { id, rows: 2, placeholder, autocomplete: "off", spellcheck: "false" })
+      : h("input", { id, type, placeholder, list: list ? `${id}-list` : undefined, autocomplete: "off", spellcheck: "false" });
     const datalist = list ? h("datalist", { id: `${id}-list` }) : undefined;
     const { wrap, note } = wrapField(id, label, input, { help, extra: datalist });
     const api = {
@@ -246,6 +251,13 @@ export function createDesignControls(container, options = {}) {
       },
     };
     if (onCommit) input.addEventListener("change", () => onCommit(input.value));
+    if (onCommit && multiline) {
+      input.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+        event.preventDefault();
+        onCommit(input.value);
+      });
+    }
     return api;
   }
 
@@ -655,7 +667,7 @@ export function createDesignControls(container, options = {}) {
       { value: "footer", label: "Footer" },
     ]);
     furniture.set(pick.which);
-    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, organization, speaker, socials, section, slide number, date." });
+    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, social profiles, date." });
     zoneSelect.setOptions(HEADER_FOOTER_ZONES.map((value) => ({ value, label: titleCase(value) })));
     zoneSelect.set(pick.zone);
     furniture.select.addEventListener("change", () => {
@@ -673,18 +685,46 @@ export function createDesignControls(container, options = {}) {
     });
     const edit = (fields, done) => run(() => setHeaderFooterZone(editor, which(), zone(), fields, scoped()), done);
     const where = () => `${titleCase(which())} ${zone()}`;
-    const text = textField("hf-text", "Text", { help: "Literal text. Clear it to remove.", onCommit: (value) => edit({ text: value }, `${where()} text changed.`) });
+    const currentText = () => {
+      const value = readHeaderFooterZone(editor.presentation, which(), zone(), scoped()).text;
+      return typeof value === "string" ? value : "";
+    };
+    const text = textField("hf-text", "Text", {
+      multiline: true,
+      help: "Literal text, with values added by Insert value ({{slide.number}}, {{deck.slideCount}}, {{slide.section}}, {{organization.name}}, {{speaker.name}}, {{deck.name}}). Shift+Enter starts a new line. Clear it to remove.",
+      onCommit: (value) => {
+        if (value === currentText()) return;
+        edit({ text: value }, `${where()} text changed.`);
+      },
+    });
+    // The menu inserts a variable token at the caret (or over the selection) as one edit, together with any text typed but not yet committed.
+    const insertValue = selectField("hf-insert-value", "Insert value", {
+      empty: "Choose a value…",
+      help: "Adds a value to the text at the cursor. It is a {{ }} variable: slide number, slide count and section change on every slide.",
+    });
+    insertValue.setOptions(ZONE_VALUES.map((value) => ({ value: value.name, label: value.label, title: value.token })));
+    insertValue.select.addEventListener("change", () => {
+      const name = insertValue.select.value;
+      insertValue.select.value = "";
+      if (!name) return;
+      const box = text.input;
+      const base = box.value;
+      const start = Math.min(box.selectionStart ?? base.length, base.length);
+      const end = Math.min(box.selectionEnd ?? start, base.length);
+      const { token, label } = ZONE_VALUES.find((value) => value.name === name);
+      run(() => insertZoneValue(editor, which(), zone(), name, { ...scoped(), text: base, start, end }), `${where()} text now includes ${label.toLowerCase()} (${token}).`);
+      // Back in the text box after the token, ready to carry on typing. The box shows the document's text again first: a sync leaves a
+      // focused box alone, and a stale value would be committed over the insert when the box loses focus.
+      box.value = currentText();
+      const caret = start + token.length;
+      box.focus();
+      box.setSelectionRange?.(caret, caret);
+    });
     const logo = checkField("hf-logo", "Show the logo", { onChange: (checked) => edit({ logo: checked }, `${where()} logo ${checked ? "shown" : "removed"}.`) });
     const image = imageCluster("hf-image", "Image", {
       apply: (ref) => setHeaderFooterZone(editor, which(), zone(), { image: ref }, scoped()),
       build: (ref, doc) => prepareHeaderFooterZone(doc, which(), zone(), { image: ref }, scoped()),
       help: "A picture in this zone, such as a partner mark or badge. An asset reference, a web address or a data address. Press Enter to apply; clear the field to remove it.",
-    });
-    const number = checkField("hf-number", "Show the slide number", { onChange: (checked) => edit({ slideNumber: checked }, `${where()} slide number ${checked ? "shown" : "removed"}.`) });
-    const numberFormat = textField("hf-number-format", "Slide number format", {
-      placeholder: "Page {current} of {total}",
-      help: "Must contain {current}; {total} is the number of slides. Clear it for the plain number.",
-      onCommit: (value) => edit({ slideNumberFormat: value.trim() }, `${where()} slide number format changed.`),
     });
     const dateNow = checkField("hf-date-now", "Show the current date", {
       help: "Needs the host to supply today's date when it renders or exports; otherwise the part is reported as unresolved.",
@@ -700,13 +740,11 @@ export function createDesignControls(container, options = {}) {
       help: `Tokens: ${DATE_FORMAT_TOKENS.join(", ")}. Text in single quotes is literal. Clear it for the default (M/d/yyyy).`,
       onCommit: (value) => edit({ dateFormat: value.trim() }, `${where()} date format changed.`),
     });
-    const organization = checkField("hf-organization", "Show the organization name", { onChange: (checked) => edit({ organization: checked }, `${where()} organization ${checked ? "shown" : "removed"}.`) });
-    const speaker = checkField("hf-speaker", "Show the speaker name and title", { onChange: (checked) => edit({ speaker: checked }, `${where()} speaker ${checked ? "shown" : "removed"}.`) });
     const socials = checkField("hf-socials", "Show the organization's social profiles", { onChange: (checked) => edit({ socials: checked }, `${where()} social profiles ${checked ? "shown" : "removed"}.`) });
-    const section = checkField("hf-section", "Show the section label", { onChange: (checked) => edit({ section: checked }, `${where()} section label ${checked ? "shown" : "removed"}.`) });
+    let shownContext;
     const summary = h("ul", { class: "opf-dc-summary", "aria-label": "Zones in use" });
     const warnings = h("ul", { class: "opf-dc-warnings", "aria-label": "Header and footer warnings" });
-    const controls = [text, logo, image, number, numberFormat, dateNow, dateFixed, dateFormat, organization, speaker, socials, section];
+    const controls = [text, insertValue, logo, image, dateNow, dateFixed, dateFormat, socials];
     body.append(furniture.wrap, hide.wrap, zoneSelect.wrap, summary, ...controls.map((control) => control.wrap), warnings);
     const describe = (fields) =>
       Object.entries(fields)
@@ -718,19 +756,22 @@ export function createDesignControls(container, options = {}) {
       hide.wrap.hidden = scopeIndex() === undefined ? !state.hidden : state.own && !state.hidden;
       hide.set(state.hidden, state.inherited && !state.hidden ? "from the presentation" : "");
       const fields = readHeaderFooterZone(editor.presentation, which(), zone(), scoped());
-      text.set(typeof fields.text === "string" ? fields.text : "");
+      // A box that has the focus keeps what is being typed, except when it now belongs to another header or footer, zone or scope.
+      const textValue = typeof fields.text === "string" ? fields.text : "";
+      const textContext = `${target()}:${which()}:${zone()}`;
+      if (textContext !== shownContext) {
+        shownContext = textContext;
+        text.input.value = textValue;
+      }
+      text.set(textValue);
       logo.set(fields.logo === true);
       image.set(stringOf(fields.image), "", `${target()}:${which()}:${zone()}`);
-      number.set(fields.slideNumber === true);
-      numberFormat.set(typeof fields.slideNumberFormat === "string" ? fields.slideNumberFormat : "");
       dateNow.set(fields.date === true);
       dateFixed.set(typeof fields.date === "string" ? fields.date : "");
       dateFormat.set(typeof fields.dateFormat === "string" ? fields.dateFormat : "");
-      organization.set(fields.organization === true);
-      speaker.set(fields.speaker === true);
       socials.set(fields.socials === true);
-      section.set(fields.section === true);
-      for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,button")) input.disabled = state.hidden;
+      insertValue.set("");
+      for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,textarea,button")) input.disabled = state.hidden;
       summary.replaceChildren(
         ...HEADER_FOOTER_ZONES.map((name) => {
           const zoneFields = readHeaderFooterZone(editor.presentation, which(), name, scoped());

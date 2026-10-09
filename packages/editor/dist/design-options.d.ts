@@ -25,7 +25,15 @@ export declare const DESIGN_OPTIONS: readonly DesignOptionDescriptor[];
 export declare const LOGO_VARIANTS: readonly ["default", "light", "dark", "stacked", "stackedLight", "stackedDark", "icon", "iconLight", "iconDark", "wordmark", "wordmarkLight", "wordmarkDark"];
 export type LogoVariant = (typeof LOGO_VARIANTS)[number];
 /** Every field a header or footer zone can hold. */
-export declare const ZONE_FIELDS: readonly ["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "speaker", "socials", "section"];
+export declare const ZONE_FIELDS: readonly ["logo", "text", "image", "date", "dateFormat", "socials"];
+/** One entry of a zone's "Insert value" menu: the built-in variable `name`, its menu `label` and the `token` (`{{name}}`) that lands in the zone's `text`. */
+export interface ZoneValue {
+  readonly name: "slide.number" | "deck.slideCount" | "slide.section" | "organization.name" | "speaker.name" | "deck.name";
+  readonly label: string;
+  readonly token: string;
+}
+/** The values a zone's "Insert value" menu offers, in menu order: slide number, slide count, section, organization, speaker, deck name. */
+export declare const ZONE_VALUES: readonly ZoneValue[];
 /** Date format tokens (English names). */
 export declare const DATE_FORMAT_TOKENS: readonly string[];
 export declare const HEADER_FOOTER_ZONES: readonly ["left", "center", "right"];
@@ -87,24 +95,29 @@ export interface HeaderFooterZoneFields {
   logo?: boolean | null;
   text?: string | null;
   image?: string | Record<string, unknown> | null;
-  slideNumber?: boolean | null;
-  slideNumberFormat?: string | null;
   date?: boolean | string | null;
   dateFormat?: string | null;
-  organization?: boolean | null;
-  /** The first speaker's name and title ("Ada Lovelace, CTO"). */
-  speaker?: boolean | null;
   socials?: boolean | null;
-  section?: boolean | null;
 }
 export declare function prepareHeaderFooterZone(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, fields: HeaderFooterZoneFields, options?: DesignOptionOptions): PreparedDesignOption;
-/** Merge fields into one header or footer zone; null, false (flags) or "" remove a field, an empty zone and header are removed. A slide's own header replaces the deck's whole one, so the first edit on a slide starts from a copy of the deck's and keeps its other zones. */
+/** Merge fields into one header or footer zone; null, false (flags) or "" remove a field, an empty zone and header are removed. Generated values are `{{ }}` variables in `text` (`ZONE_VALUES`). A slide's own header replaces the deck's whole one, so the first edit on a slide starts from a copy of the deck's and keeps its other zones. */
 export declare function setHeaderFooterZone(editor: EditorSession, which: "header" | "footer", zone: HeaderFooterZone, fields: HeaderFooterZoneFields, options?: DesignOptionOptions): DesignOptionChange;
+export interface ZoneValueOptions extends DesignOptionOptions {
+  /** UTF-16 offsets into the zone's text; a selection is replaced. Default: the end. */
+  start?: number;
+  end?: number;
+  /** The text the offsets refer to, when it is not the document's yet (a text box with uncommitted typing). Default: the zone's text at the scope. */
+  text?: string;
+}
+/** The patch that inserts a value's token (`ZONE_VALUES` name, for example `slide.number`) into a zone's `text`, at `start` and `end` (default: the end). */
+export declare function prepareZoneValue(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, name: ZoneValue["name"], options?: ZoneValueOptions): PreparedDesignOption;
+/** Insert a value's token into one zone's `text` as a single undoable transaction. */
+export declare function insertZoneValue(editor: EditorSession, which: "header" | "footer", zone: HeaderFooterZone, name: ZoneValue["name"], options?: ZoneValueOptions): DesignOptionChange;
 /** One zone's fields as they apply at a scope: the slide's own header or footer when it has one, else the deck's. */
 export declare function readHeaderFooterZone(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, options?: Pick<DesignOptionOptions, "slideIndex">): HeaderFooterZoneFields;
 /** Whether the scope sets the header or footer itself (`own`), shows the deck's (`inherited`) or hides it with `false` (`hidden`). */
 export declare function headerFooterState(presentation: unknown, which: "header" | "footer", options?: Pick<DesignOptionOptions, "slideIndex">): { own: boolean; inherited: boolean; hidden: boolean };
 /** Whether a logo resolves for the slide: slide design, deck design, then the primary organization. */
 export declare function hasResolvableLogo(presentation: unknown, slideIndex: number): boolean;
-/** Settings that need content the document does not have: a logo (zones with `logo: true`, picture bullets), an organization or its social profiles, or a named speaker, for zones that show them. */
+/** Settings that need content the document does not have: a logo (zones with `logo: true`, picture bullets), the organization's social profiles, or a value a zone's `text` asks for (`{{organization.name}}` without an organization, `{{slide.section}}` on a slide without a section). */
 export declare function designWarnings(presentation: unknown, slideIndex?: number): DesignWarning[];

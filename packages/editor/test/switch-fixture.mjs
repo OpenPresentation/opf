@@ -67,7 +67,7 @@ export const baseDeck = () => ({
   ],
 });
 
-const header = { left: { text: "Brand" }, right: { slideNumber: true } };
+const header = { left: { text: "Brand" }, right: { text: "{{slide.number}}" } };
 const footer = { center: { text: "Confidential" } };
 
 // `patches` is the exact patch for the fixture; `slide` is the slide whose preview must react.

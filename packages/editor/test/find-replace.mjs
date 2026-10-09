@@ -245,4 +245,50 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(editor.presentation.name, "Acme review");
 }
 
+// FA-31: a variable token is not text. Searching never offers a match inside `{{slide.number}}` (or any other token), so a replace cannot
+// turn it into literal text such as "{{slide.no.}}" that no check would flag; the text around a token is searched and replaced as usual.
+{
+  const tokens = () => ({
+    name: "Acme",
+    design: { footer: { right: { text: "Page {{slide.number}} of {{ deck.slideCount }} · Acme" }, left: { text: "{{organization.name}} number" } } },
+    organization: { id: "acme", name: "Acme" },
+    slides: [{ id: "one", title: "Slide {{slide.number}}: Acme", section: "Acme part", text: [{ text: "see {{slide.section}} and ", bold: true }, "slide.number written \\{{customer}}"] }],
+  });
+  const editor = createEditorSession(tokens(), { rejectInvalid: true });
+  const slidePaths = (query) => findMatches(editor.presentation, query).matches.map((match) => `${match.path}@${match.start}`);
+  // "number" appears in the token and in plain text: only the plain text is found.
+  assert.deepEqual(slidePaths("number"), ["design.footer.left.text@22", "slides.0.text@32"], "matches inside tokens are not offered");
+  // Words of the token's name, a match that starts before a token and runs into it, and the token's braces are not matches either.
+  assert.deepEqual(slidePaths("deck.slideCount"), []);
+  assert.deepEqual(slidePaths("of {{ deck"), []);
+  assert.deepEqual(slidePaths("{{slide.number}}"), []);
+  assert.deepEqual(slidePaths("Page {{"), []);
+  assert.deepEqual(findMatches(editor.presentation, "{{", { regex: false }).matches.length, 1, "an escaped \\{{ is literal text and is found");
+  // Replacing "number" changes the plain text only; every token is intact, the document stays valid, and one undo restores it.
+  const before = editor.presentation;
+  const depth = editor.snapshot().undoDepth;
+  const result = replaceAll(editor, "number", "no.");
+  assert.equal(result.count, 2);
+  assert.equal(editor.presentation.design.footer.left.text, "{{organization.name}} no.");
+  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
+  assert.equal(editor.presentation.slides[0].title, "Slide {{slide.number}}: Acme");
+  assert.deepEqual(editor.presentation.slides[0].text, [{ text: "see {{slide.section}} and ", bold: true }, "slide.no. written \\{{customer}}"]);
+  assert.equal(editor.validation.valid, true);
+  assert.equal(editor.snapshot().undoDepth, depth + 1);
+  editor.undo();
+  assert.deepEqual(editor.presentation, before);
+  // "slide" and "Acme" are found around the tokens, never in them; replacing them leaves every token as written.
+  replaceAll(editor, "slide", "page");
+  assert.equal(editor.presentation.slides[0].title, "page {{slide.number}}: Acme", "only the word outside the token changes");
+  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
+  assert.equal(replaceAll(editor, "Acme", "Globex").count, 4);
+  assert.equal(editor.presentation.design.footer.left.text, "{{organization.name}} number");
+  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Globex");
+  assert.equal(editor.presentation.slides[0].section, "Globex part");
+  // A regular expression is held to the same rule: a pattern that would cut through a token skips it.
+  assert.deepEqual(findMatches(editor.presentation, "slide\\.\\w+", { regex: true }).matches, [], "every slide.* left in the document is inside a token");
+  const regex = findMatches(editor.presentation, "page\\.\\w+", { regex: true });
+  assert.deepEqual(regex.matches.map((match) => [match.path, match.text]), [["slides.0.text", "page.number"]], "the plain text is still found");
+}
+
 console.log("find-replace: ok");

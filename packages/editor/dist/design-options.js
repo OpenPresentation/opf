@@ -5,6 +5,7 @@
 // session form that commits it with `meta.source: "design-option"`.
 import { getValueAtPath, opfPathToJsonPointer } from "./index.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
+import { listBuiltinVariables } from "@openpresentation/opf";
 import { checkFormat } from "./checks.js";
 
 /** The `design.logo` variant slots of a LogoSet, in schema order. */
@@ -24,8 +25,30 @@ export const LOGO_VARIANTS = Object.freeze([
 ]);
 export const HEADER_FOOTER_ZONES = Object.freeze(["left", "center", "right"]);
 // Flag fields of a header/footer zone: false is stored as "absent" (so is a `date` of false).
-const ZONE_FLAGS = ["logo", "slideNumber", "organization", "speaker", "socials", "section"];
-export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "speaker", "socials", "section"]);
+const ZONE_FLAGS = ["logo", "socials"];
+export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "date", "dateFormat", "socials"]);
+// FA-31: generated values are `{{ }}` variables inside a zone's `text`. The keys 0.16 had for them are gone; say what to write instead.
+const REMOVED_ZONE_FIELDS = Object.freeze({
+  organization: "Write {{organization.name}} in the text.",
+  speaker: "Write {{speaker.name}} in the text.",
+  section: "Write {{slide.section}} in the text.",
+  slideNumber: "Write {{slide.number}} in the text.",
+  slideNumberFormat: "Write {{slide.number}} and {{deck.slideCount}} in the text.",
+});
+/**
+ * The values the "Insert value" menu of a header or footer zone offers, in menu order. `token` is what lands in the zone's `text`.
+ * `{{slide.number}}`, `{{deck.slideCount}}` and `{{slide.section}}` vary per slide; the others come from the deck's own fields.
+ */
+export const ZONE_VALUES = Object.freeze(
+  [
+    { name: "slide.number", label: "Slide number" },
+    { name: "deck.slideCount", label: "Slide count" },
+    { name: "slide.section", label: "Section" },
+    { name: "organization.name", label: "Organization" },
+    { name: "speaker.name", label: "Speaker" },
+    { name: "deck.name", label: "Deck name" },
+  ].map((entry) => Object.freeze({ ...entry, token: `{{${entry.name}}}` })),
+);
 /** Date tokens a `dateFormat` understands (English names, independent of the host locale). */
 export const DATE_FORMAT_TOKENS = Object.freeze(["yyyy", "yy", "MMMM", "MMM", "MM", "M", "dd", "d", "EEEE", "EEE"]);
 const ISO_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
@@ -36,7 +59,6 @@ function checkZoneField(key, value) {
   if (ZONE_FLAGS.includes(key) && typeof value !== "boolean") throw bad(`${key} is true or false.`);
   if (key === "text" && typeof value !== "string") throw bad("Text is a string.");
   if (key === "image" && typeof value !== "string" && !isObject(value)) throw bad("An image is a source, an asset reference or an asset object.");
-  if (key === "slideNumberFormat" && (typeof value !== "string" || !value.includes("{current}"))) throw bad("The slide number format must contain {current}, for example Page {current} of {total}.");
   if (key === "date" && typeof value !== "boolean" && typeof value !== "string") throw bad("A date is true (the current date) or a fixed date.");
   if (key === "dateFormat" && (typeof value !== "string" || !value.trim())) throw bad(`A date format uses tokens such as ${DATE_FORMAT_TOKENS.join(", ")}.`);
 }
@@ -90,20 +112,23 @@ function primaryOrganization(presentation) {
   return list.find((entry) => entry?.role === "primary") ?? list[0];
 }
 
-function firstSpeaker(presentation) {
-  const list = Array.isArray(presentation.speaker) ? presentation.speaker : presentation.speaker ? [presentation.speaker] : [];
-  return list[0];
-}
-
 /** Whether a logo resolves for the slide: slide design, then deck design, then the primary organization. */
 export function hasResolvableLogo(presentation, slideIndex) {
   return Boolean(presentation.slides?.[slideIndex]?.design?.logo ?? presentation.design?.logo ?? primaryOrganization(presentation)?.logo);
 }
 
+/** The variable names a zone's `text` uses (`{{name}}` and `{{name|format}}`); a token with a backslash before it is literal text. */
+function zoneTextVariables(text) {
+  const names = [];
+  for (const match of text.matchAll(/(\\?)\{\{\s*([A-Za-z0-9_.-]+)\s*(?:\|[^{}]*)?\}\}/g)) if (!match[1]) names.push(match[2]);
+  return names;
+}
+
 /**
- * Plain-language warnings for settings that need a logo the document does not have: a header or
- * footer zone with `logo: true`, or picture bullets. The renderers fall back to a glyph or report
- * unresolved content; the editor surfaces it before export.
+ * Plain-language warnings for settings that need content the document does not have: a logo (a header or footer
+ * zone with `logo: true`, picture bullets), the organization's social profiles, or a value a zone's `text` asks for
+ * with a variable (`{{organization.name}}` without an organization, `{{slide.section}}` on a slide without a section).
+ * The renderers fall back to a glyph or report unresolved content; the editor surfaces it before export.
  */
 export function designWarnings(presentation, slideIndex = 0) {
   const slide = presentation.slides?.[slideIndex];
@@ -115,15 +140,25 @@ export function designWarnings(presentation, slideIndex = 0) {
       if (!hasLogo && isObject(design[which]) && design[which][zone]?.logo === true)
         warnings.push({ code: "unresolved-logo", path: `design.${which}.${zone}.logo`, message: `The ${which} ${zone} zone shows the logo, but no logo is set. Add a logo or an organization logo.` });
   const organization = primaryOrganization(presentation);
+  let builtins;
   for (const which of ["header", "footer"])
     for (const zone of HEADER_FOOTER_ZONES) {
       const item = isObject(design[which]) ? design[which][zone] : undefined;
-      if (item?.organization === true && !organization)
-        warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.organization`, message: `The ${which} ${zone} zone shows the organization, but the presentation has none.` });
-      if (item?.speaker === true && !firstSpeaker(presentation)?.name)
-        warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.speaker`, message: `The ${which} ${zone} zone shows the speaker, but the presentation has no named speaker.` });
       if (item?.socials === true && !organization?.socials)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.socials`, message: `The ${which} ${zone} zone shows social profiles, but the organization has none.` });
+      // FA-31: a value the zone's text asks for and the document cannot give (the core validator reports the same as variable-builtin-missing).
+      const path = `design.${which}.${zone}.text`;
+      for (const name of new Set(typeof item?.text === "string" ? zoneTextVariables(item.text) : [])) {
+        if (name === "slide.section") {
+          if (!(typeof slide?.section === "string" && slide.section !== ""))
+            warnings.push({ code: "unresolved-content", path, message: `The ${which} ${zone} zone shows {{slide.section}}, but this slide has no section.` });
+          continue;
+        }
+        builtins ??= listBuiltinVariables(presentation);
+        const entry = builtins.find((candidate) => candidate.name === name);
+        if (entry?.scope === "deck" && !entry.available)
+          warnings.push({ code: "unresolved-content", path, message: `The ${which} ${zone} zone shows {{${name}}}, but the presentation has no value for it.` });
+      }
     }
   if (!hasLogo && design.listBullet === "image")
     warnings.push({ code: "unresolved-logo", path: "design.listBullet", message: "Picture bullets use the logo, but no logo is set, so lists draw the character bullet. Add a logo or an organization logo." });
@@ -343,8 +378,9 @@ export function readLogoVariants(presentation, options = {}) {
 
 /**
  * Compute the patch that edits one header or footer zone. `fields` merges into the zone (logo, text,
- * image, slideNumber, slideNumberFormat, date, dateFormat, organization, speaker, socials, section); `null`,
- * `false` for a flag, or an empty string removes a field. A zone left empty is removed, then an empty
+ * image, date, dateFormat, socials); `null`, `false` for a flag, or an empty string removes a field.
+ * Generated values (slide number, slide count, section, organization, speaker, deck name) are `{{ }}`
+ * variables in `text` (`ZONE_VALUES`, `insertZoneValue`). A zone left empty is removed, then an empty
  * header or footer, so a slide never carries `{}`. A slide's own header or footer replaces the deck's
  * whole one, so the first edit on a slide that has none of its own starts from a copy of the deck's
  * (the other zones stay); a slide emptied that way hides the furniture (`false`) instead of
@@ -356,7 +392,7 @@ export function prepareHeaderFooterZone(presentation, which, zone, fields, optio
   if (!HEADER_FOOTER_ZONES.includes(zone)) throw fail("invalid-design-value", `Zone is one of ${HEADER_FOOTER_ZONES.join(", ")}.`, { zone });
   if (!isObject(fields)) throw fail("invalid-design-value", "Pass the zone fields to change.", { fields });
   const unknown = Object.keys(fields).filter((key) => !ZONE_FIELDS.includes(key));
-  if (unknown.length) throw fail("invalid-design-value", `Unknown header/footer field: ${unknown[0]}.`, { fields });
+  if (unknown.length) throw fail("invalid-design-value", `Unknown header/footer field: ${unknown[0]}.${Object.hasOwn(REMOVED_ZONE_FIELDS, unknown[0]) ? ` ${REMOVED_ZONE_FIELDS[unknown[0]]}` : ""}`, { fields });
   const { scope, base, slideIndex } = scopeOf(presentation, "logo", options);
   const own = ownDesign(presentation, base)[which];
   const inherited = base.length ? presentation.design?.[which] : undefined;
@@ -386,6 +422,29 @@ export function setHeaderFooterZone(editor, which, zone, fields, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
   return apply(editor, prepareHeaderFooterZone(editor.presentation, which, zone, fields, rest), meta);
+}
+/**
+ * Compute the patch that inserts a value's token (`ZONE_VALUES`, for example `slide.number` for `{{slide.number}}`) into a zone's
+ * `text` at UTF-16 offsets `start` and `end` (a selection is replaced; default: the end of the text). The text is the one the scope
+ * shows (the slide's own zone, else the deck's), or `options.text` when a panel holds edits it has not committed yet.
+ */
+export function prepareZoneValue(presentation, which, zone, name, options = {}) {
+  const value = ZONE_VALUES.find((entry) => entry.name === name);
+  if (!value) throw fail("invalid-design-value", `Insert one of ${ZONE_VALUES.map((entry) => entry.name).join(", ")}.`, { value: name });
+  const { start, end, text: typed, ...rest } = options;
+  if (typed !== undefined && typeof typed !== "string") throw fail("invalid-design-value", "Text is a string.", { text: typed });
+  const current = typed ?? readHeaderFooterZone(presentation, which, zone, rest).text;
+  const text = typeof current === "string" ? current : "";
+  const from = start === undefined ? text.length : start;
+  const to = end === undefined ? from : end;
+  if (!Number.isInteger(from) || !Number.isInteger(to) || from < 0 || to < from || to > text.length) throw fail("invalid-selection", "The selection is outside the text.", { start: from, end: to });
+  return prepareHeaderFooterZone(presentation, which, zone, { text: `${text.slice(0, from)}${value.token}${text.slice(to)}` }, rest);
+}
+/** Insert a value's token into one zone's `text` as a single undoable transaction. */
+export function insertZoneValue(editor, which, zone, name, options = {}) {
+  checkEditor(editor);
+  const { meta, ...rest } = options;
+  return apply(editor, prepareZoneValue(editor.presentation, which, zone, name, rest), meta);
 }
 /**
  * One header or footer zone's fields as they apply at a scope: the slide's own header (or footer) when it

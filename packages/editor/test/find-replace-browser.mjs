@@ -7,7 +7,7 @@ import { startPlayground } from './support/playground-harness.mjs';
 // formatting kept, an invalid pattern reported without breaking the page, and the accessible names the panel exposes.
 const source = {
   name: 'Acme review',
-  design: { theme: 'classic', fontScheme: 'roboto' },
+  design: { theme: 'classic', fontScheme: 'roboto', footer: { right: { text: 'Page {{slide.number}} of {{deck.slideCount}}' } } },
   slides: [
     { id: 'one', title: 'Acme grows', subtitle: 'The Acme story', notes: 'Mention Acme first.', text: [{ text: 'Acme ', bold: true }, { text: 'is the best', italic: true }, ' place to work'] },
     { id: 'two', title: 'Numbers', items: ['Acme revenue', 'Cost of acme', 'Profit'] },
@@ -85,6 +85,19 @@ try {
   assert.equal(await find.getAttribute('aria-invalid'), 'false');
   await panel.getByLabel('Regex').uncheck();
   mark('match case, whole word and regex options; an invalid pattern is reported and disables replacing');
+
+  // FA-31: a variable token is not text. The footer's {{slide.number}} and {{deck.slideCount}} are never offered as matches.
+  await find.fill('slide');
+  assert.equal(await results.count(), 0, 'a word of a variable name finds nothing');
+  await find.fill('deck');
+  assert.equal(await results.count(), 0);
+  await find.fill('Page');
+  assert.equal(await results.count(), 1, 'the text around the tokens is still searched');
+  assert.equal(await page.locator('.opf-find-result mark').first().textContent(), 'Page');
+  await find.fill('number');
+  assert.deepEqual(await page.locator('.opf-find-where').allTextContents(), ['Slide 2 · Title'], 'only the word in the title, not the token');
+  mark('variable tokens are not offered as matches');
+
 
   // Go to: a result on another slide selects that slide and the canvas target (a list item selects its list).
   await find.fill('acme');

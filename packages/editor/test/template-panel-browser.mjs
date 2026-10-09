@@ -93,6 +93,17 @@ try {
   await builtins.locator('summary').click();
   assert.equal(await builtins.locator('li[data-builtin="speaker.name"]').textContent().then(text => text.includes('{{speaker.name}}') && text.includes('Ada Lovelace')), true);
   assert.equal(await builtins.locator('li[data-builtin="speaker.photo"]').getAttribute('data-available'), 'false');
+  // FA-31: the three slide-scoped built-ins are listed read-only as "varies per slide".
+  for (const name of ['slide.number', 'slide.section', 'deck.slideCount']) {
+    const row = builtins.locator(`li[data-builtin="${name}"]`);
+    assert.equal(await row.getAttribute('data-scope'), 'slide', `${name} is slide-scoped`);
+    const rowText = await row.textContent();
+    assert.ok(rowText.includes(`{{${name}}}`) && rowText.includes('varies per slide'), `${name} varies per slide: ${rowText}`);
+    assert.ok(!rowText.includes('not set'), `${name} is not shown as unset`);
+  }
+  assert.equal(await builtins.locator('li[data-builtin="speaker.name"]').getAttribute('data-scope'), 'deck');
+  assert.match(await builtins.locator('li[data-builtin="slide.section"]').textContent(), /no slide has one yet/);
+  assert.deepEqual(await builtins.locator('li').evaluateAll(nodes => nodes.slice(-3).map(node => node.getAttribute('data-builtin'))), ['slide.number', 'slide.section', 'deck.slideCount'], 'they come last');
   assert.equal(await builtins.locator('input,textarea').count(), 0);
   mark('built-in variables listed read-only');
 

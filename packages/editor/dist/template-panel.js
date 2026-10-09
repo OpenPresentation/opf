@@ -67,7 +67,7 @@ export function createTemplatePanel(container, options) {
   const builtinList = h(doc, "ul", { class: "opf-template-builtin-list" });
   const builtinSection = h(doc, "details", { class: "opf-template-builtins", "data-opf-component": "template-builtins" },
     h(doc, "summary", { text: "Built-in variables" }),
-    h(doc, "p", { class: "opf-template-help", text: "Read from the presentation's own speaker, organization and deck fields; edit those fields to change them. Use them like any variable: {{speaker.name}} inside text, or var:speaker.photo as a whole image field." }),
+    h(doc, "p", { class: "opf-template-help", text: "Read from the presentation's own speaker, organization and deck fields; edit those fields to change them. Use them like any variable: {{speaker.name}} inside text, or var:speaker.photo as a whole image field. Slide number, section and slide count vary per slide: write them as {{slide.number}}, {{slide.section}} and {{deck.slideCount}} inside any text, not as a whole var: field." }),
     builtinList);
   const live = h(doc, "p", { class: "opf-template-live", role: "status", "aria-live": "polite" });
   const applyButton = h(doc, "button", { type: "button", class: "opf-template-apply primary", text: "Fill the presentation" });
@@ -234,10 +234,12 @@ export function createTemplatePanel(container, options) {
     );
     builtinSection.hidden = !builtins.length;
     builtinList.replaceChildren(...builtins.map((entry) => {
-      const shown = builtinValueText(entry);
       const uses = entry.uses.length;
-      return h(doc, "li", { "data-builtin": entry.name, "data-kind": entry.kind, "data-available": entry.available ? "true" : "false" },
-        h(doc, "code", { text: `{{${entry.name}}}` }), ` ${entry.label}: `, entry.available ? shown : h(doc, "em", { text: "not set" }), uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
+      // A slide-scoped built-in has no single value: each slide gets its own when it is drawn or exported (FA-31).
+      const slideScoped = entry.scope === "slide";
+      const shown = slideScoped ? h(doc, "em", { text: "varies per slide" }) : entry.available ? builtinValueText(entry) : h(doc, "em", { text: "not set" });
+      return h(doc, "li", { "data-builtin": entry.name, "data-kind": entry.kind, "data-scope": entry.scope, "data-available": entry.available ? "true" : "false" },
+        h(doc, "code", { text: `{{${entry.name}}}` }), ` ${entry.label}: `, shown, slideScoped && !entry.available ? " (no slide has one yet)" : "", uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
     }));
     slideSelect.replaceChildren(...(editor.presentation.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${slideTitle(slide) || "Untitled"}` })));
     previewSlide = Math.min(previewSlide, Math.max(0, (editor.presentation.slides?.length ?? 1) - 1));

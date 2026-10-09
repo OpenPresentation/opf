@@ -294,36 +294,82 @@ try {
   {
     const toggle = (name, predicate, labelText) => step(`footer: ${name}`, () => design.getByLabel(labelText).check(), predicate);
     const write = (name, predicate, labelText, value) => step(`footer: ${name}`, () => typeInto(design, labelText, value), predicate);
+    const text = field(design, 'Text');
+    const caret = (start, end = start) => text.evaluate((node, [from, to]) => { node.focus(); node.setSelectionRange(from, to); }, [start, end]);
+    const insert = value => field(design, 'Insert value').selectOption(value);
+    // A step starts from the document it finds and puts it back, so a text it builds on is written first and undone afterwards.
+    const withText = async (value, body) => {
+      await typeInto(design, 'Text', value);
+      await waitDoc(current => current.design.footer?.[zoneNow]?.text === value, `text ${JSON.stringify(value)}`);
+      await settle();
+      await body();
+      await button('Undo').click();
+      await waitDoc(current => current.design.footer === undefined, `text ${JSON.stringify(value)} undone`);
+      await settle();
+    };
+    let zoneNow = 'left';
+    const zone = async name => { zoneNow = name; await field(design, 'Zone').selectOption(name); };
+    const warnings = () => page.locator('#design-controls .opf-dc-warnings').evaluateAll(nodes => nodes.map(node => node.textContent).join(' '));
     await field(design, 'Edit').selectOption('footer');
-    await field(design, 'Zone').selectOption('left');
+    await zone('left');
     await write('text', current => current.design.footer?.left?.text === 'Acme Corp', 'Text', 'Acme Corp');
     await toggle('logo', current => current.design.footer?.left?.logo === true, 'Show the logo');
-    await toggle('organization', current => current.design.footer?.left?.organization === true, 'Show the organization name');
-    await toggle('speaker', current => current.design.footer?.left?.speaker === true, 'Show the speaker name and title');
-    await toggle('section', current => current.design.footer?.left?.section === true, 'Show the section label');
     await write('image by address', current => current.design.footer?.left?.image === 'https://example.com/badge.png', 'Image source', 'https://example.com/badge.png');
-    await field(design, 'Zone').selectOption('right');
-    await toggle('slide number', current => current.design.footer?.right?.slideNumber === true, 'Show the slide number');
-    await write('slide number format', current => current.design.footer?.right?.slideNumberFormat === 'Page {current} of {total}', 'Slide number format', 'Page {current} of {total}');
+    // FA-31: the generated values are variables in the text, put there by the Insert value menu.
+    assert.deepEqual(await field(design, 'Insert value').locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [
+      ['', 'Choose a value…'], ['slide.number', 'Slide number'], ['deck.slideCount', 'Slide count'], ['slide.section', 'Section'],
+      ['organization.name', 'Organization'], ['speaker.name', 'Speaker'], ['deck.name', 'Deck name'],
+    ], 'the menu offers the six values');
+    for (const old of ['Show the organization name', 'Show the speaker name and title', 'Show the section label', 'Show the slide number', 'Slide number format'])
+      assert.equal(await design.getByLabel(old).count(), 0, `${old} is gone: it is a variable in the text now`);
+    await step('footer: a value into an empty zone', () => insert('speaker.name'), current => current.design.footer?.left?.text === '{{speaker.name}}');
+    await withText('Acme Corp', () => step('footer: a value after the text', () => insert('organization.name'), current => current.design.footer?.left?.text === 'Acme Corp{{organization.name}}'));
+    await zone('right');
+    // The caret decides where the token lands, and it ends up after the token with the text box focused again.
+    await withText('Page  of ', () => step('footer: a value at the caret', async () => {
+      await caret(5);
+      await insert('slide.number');
+      assert.deepEqual(await text.evaluate(node => [document.activeElement === node, node.selectionStart, node.selectionEnd, node.value]), [true, 21, 21, 'Page {{slide.number}} of '], 'the caret follows the token');
+    }, current => current.design.footer?.right?.text === 'Page {{slide.number}} of '));
+    await withText('Page {{slide.number}} of N', () => step('footer: a value over a selection', async () => {
+      await caret('Page {{slide.number}} of '.length, 'Page {{slide.number}} of N'.length);
+      await insert('deck.slideCount');
+    }, current => current.design.footer?.right?.text === 'Page {{slide.number}} of {{deck.slideCount}}'));
+    // Typing that has not been committed yet is part of the same edit.
+    await step('footer: uncommitted typing commits with the value', async () => {
+      await text.fill('Deck: ');
+      await insert('deck.name');
+    }, current => current.design.footer?.right?.text === 'Deck: {{deck.name}}');
+    await withText('{{slide.section}}', async () => {
+      assert.match(await warnings(), /shows \{\{slide\.section\}\}, but this slide has no section/, 'a section value on a slide without one is explained');
+    });
     await toggle('current date', current => current.design.footer?.right?.date === true, 'Show the current date');
     await write('fixed date', current => current.design.footer?.right?.date === '2026-10-01', 'Fixed date', '2026-10-01');
     await write('date format', current => current.design.footer?.right?.dateFormat === 'MMMM d, yyyy', 'Date format', 'MMMM d, yyyy');
-    mark('every header and footer part (text, logo, image, organization, speaker, section, slide number and format, date and format) in its zone');
-    // Parts that need something say so, and bad values are refused.
-    await design.getByLabel('Show the slide number').check();
-    await waitDoc(current => current.design.footer?.right?.slideNumber === true, 'slide number for the format check');
-    const format = field(design, 'Slide number format');
-    await format.fill('Page');
-    await format.press('Enter');
-    await page.waitForFunction(() => /must contain \{current\}/.test(document.querySelector('#design-controls .opf-dc-error').textContent));
-    assert.equal(await format.inputValue(), '', 'the field returns to the document value');
-    await button('Undo').click();
-    await waitDoc(current => current.design.footer === undefined, 'format check reset');
-    await settle();
-    await field(design, 'Zone').selectOption('left');
+    mark('every header and footer part (text with the six inserted values, logo, image, date and format) in its zone');
+    // A new line is Shift+Enter; Enter commits.
+    await zone('center');
+    await step('footer: a two-line text', async () => {
+      await text.fill('Confidential');
+      await text.press('Shift+Enter');
+      await text.pressSequentially('{{deck.name}}');
+      await text.press('Enter');
+    }, current => current.design.footer?.center?.text === 'Confidential\n{{deck.name}}');
+    mark('a zone text takes several lines');
+    // A value the document cannot resolve is refused, and the box goes back to the document's text.
+    await withText('Confidential', async () => {
+      await text.fill('{{slide.title}}');
+      await text.press('Enter');
+      await page.waitForFunction(() => document.querySelector('#design-controls .opf-dc-error').textContent.trim() !== '');
+      assert.equal(await text.inputValue(), 'Confidential', 'the box returns to the document text');
+      assert.equal((await doc()).design.footer.center.text, 'Confidential');
+    });
+    mark('an unknown slide variable is refused and changes nothing');
+    // Parts that need something say so.
+    await zone('left');
     await design.getByLabel("Show the organization's social profiles").check();
     await waitDoc(current => current.design.footer?.left?.socials === true, 'socials without any');
-    assert.match(await page.locator('#design-controls .opf-dc-warnings').evaluateAll(nodes => nodes.map(node => node.textContent).join(' ')), /social profiles, but the organization has none/);
+    assert.match(await warnings(), /social profiles, but the organization has none/);
     await button('Undo').click();
     await waitDoc(current => current.design.footer === undefined, 'socials reset');
     await settle();
@@ -359,7 +405,7 @@ try {
   }
 
   // --- accessibility ------------------------------------------------------------------------------------
-  const unlabeled = await page.evaluate(() => [...document.querySelectorAll('#design-controls select, #design-controls input')].filter(node => !node.labels?.length).map(node => node.id || node.outerHTML.slice(0, 80)));
+  const unlabeled = await page.evaluate(() => [...document.querySelectorAll('#design-controls select, #design-controls input, #design-controls textarea')].filter(node => !node.labels?.length).map(node => node.id || node.outerHTML.slice(0, 80)));
   assert.deepEqual(unlabeled, [], 'every control, including every file input, is labelled');
   assert.ok(await page.locator('#design-controls input[type=file]').count() >= 5, 'file inputs exist for logo, organization logo, watermark, background and zone image');
   await page.locator('#design-controls input[type=file]:visible').first().focus();

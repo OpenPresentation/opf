@@ -109,7 +109,9 @@ export interface BuiltinInfo {
   name: string;
   kind: "text" | "image" | "list";
   label: string;
-  /** The source value, when the document has one. */
+  /** `deck` for a value read once from the document; `slide` for `slide.number`, `slide.section` and `deck.slideCount`, which vary per slide. */
+  scope: "deck" | "slide";
+  /** The source value, when the document has one. Never set for a slide-scoped built-in. */
   value?: unknown;
   available: boolean;
   uses: { id: string; path: string; form: "token" | "reference" }[];

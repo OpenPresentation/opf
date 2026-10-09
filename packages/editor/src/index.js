@@ -32,12 +32,14 @@ export {
 // theme, engine default), with the session's registered catalogs, so the editor measures and composes what the renderer draws
 // and the exporter writes. `options.fonts` is the renderer's fonts handle (its `textMeasurement` measures); `options.catalogs`
 // adds catalogs for this call; `options.onDiagnostic` hears each diagnostic (`unresolved-reference`);
-// any other option overrides the resolved one (`layout`, ...).
+// any other option overrides the resolved one (`layout`, ...). FA-31: `slide` is the slide to compose and draw, with `{{slide.number}}`,
+// `{{slide.section}}` and `{{deck.slideCount}}` substituted for `slideNumber` and `slideCount` (default: its place in the open deck and the
+// deck's length), the same numbers the options carry. Pagination takes the source slide instead and substitutes while it measures.
 function slideContext(presentation, slideIndex, catalogs, { fonts, catalogs: _extra, onDiagnostic, ...overrides } = {}) {
   if (!Number.isInteger(slideIndex) || !presentation.slides?.[slideIndex]) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
-  const { options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs });
+  const { slide, options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs, slideNumber: overrides.slideNumber, slideCount: overrides.slideCount });
   for (const diagnostic of diagnostics) onDiagnostic?.(diagnostic);
-  return { ...options, ...overrides };
+  return { slide, options: { ...options, ...overrides } };
 }
 
 export const packageName = "@openpresentation/opf-editor";
@@ -276,12 +278,13 @@ export function createEditorSession(input, options = {}) {
       });
     },
     composeSlide(slideIndex, options = {}) {
-      return composeSlide(presentation.slides?.[slideIndex], slideContext(presentation, slideIndex, mergeCatalogs(catalogs, options.catalogs), options));
+      const { slide, options: resolved } = slideContext(presentation, slideIndex, mergeCatalogs(catalogs, options.catalogs), options);
+      return composeSlide(slide, resolved);
     },
     paginateSlide(slideIndex, options = {}, meta = {}) {
       const list = mergeCatalogs(catalogs, options.catalogs);
       // Core pagination reads the measurement from `fonts`, so the resolved context hands it over that way.
-      const { textMeasurement, ...resolved } = slideContext(presentation, slideIndex, list, options);
+      const { textMeasurement, ...resolved } = slideContext(presentation, slideIndex, list, options).options;
       const pagination = paginateSlide(presentation.slides[slideIndex], {
         ...resolved,
         catalogs: list,
