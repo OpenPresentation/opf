@@ -31,7 +31,8 @@ const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'ut
 const planned = Object.fromEntries(PACKAGES.map((name) => [name, plan.packages.find((entry) => entry.name === name)?.version]));
 for (const [name, version] of Object.entries(planned)) assert.match(version ?? '', /^\d+\.\d+\.\d+$/, `release-plan.json lists ${name}`);
 
-// The renderer's optional peers are its offline script-font packs: the matrix draws every script, so the consumer installs them all.
+// The renderer's optional peers are its offline font packs and, from opf-render 0.16.0 (RR-63), its converters (sharp,
+// @resvg/resvg-js, pdf-lib): the matrix draws every script and rasterizes, so the consumer installs them all.
 const npmView = (spec) => {
   const result = spawnSync(npm, ['view', spec, 'peerDependencies', '--json'], {encoding: 'utf8', shell: true});
   assert.equal(result.status, 0, `npm view ${spec} failed: ${result.stderr}`);

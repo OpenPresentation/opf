@@ -51,7 +51,13 @@ try {
   const originalDeck = await readFile(path.join(projectDir, 'deck.opf.json'));
   const originalSlides = JSON.parse(originalDeck.toString('utf8')).slides.length;
 
-  const specs = installed.map((item) => `${item.name}@${item.version}`);
+  // RR-63: from opf-render 0.16.0 its converters and font packages are optional peers, so the quickstart project installs the
+  // ones this workflow uses (the base font pack, PNG and PDF), at the renderer's declared ranges, as docs/quickstart.md says.
+  const render = installed.find((item) => item.name === '@openpresentation/opf-render');
+  const renderPeers = render ? JSON.parse((await run('npm', ['view', `${render.name}@${render.version}`, 'peerDependencies', 'peerDependenciesMeta', '--json'], {cwd: projectDir})).stdout || '{}') : {};
+  const QUICKSTART_PEERS = ['@expo-google-fonts/roboto', '@expo-google-fonts/roboto-mono', '@resvg/resvg-js', 'pdf-lib', 'sharp'];
+  const peerSpecs = QUICKSTART_PEERS.filter((name) => renderPeers.peerDependenciesMeta?.[name]?.optional && renderPeers.peerDependencies?.[name]).map((name) => `${name}@${renderPeers.peerDependencies[name]}`);
+  const specs = [...installed.map((item) => `${item.name}@${item.version}`), ...peerSpecs];
   await run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', ...specs], {cwd: projectDir});
 
   const lock = JSON.parse(await readFile(path.join(projectDir, 'package-lock.json'), 'utf8'));
@@ -144,7 +150,8 @@ console.log(JSON.stringify({
     const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
     const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
     assert.equal(versionReport.cli, cliVersion);
-    // The CLI bundles its own core: an unreleased CLI keeps the core it shipped with (release-plan bundledCore).
+    // CLI 0.16.0 and later depend on core (RR-62), so --version reports the installed plan core. A plan whose CLI still
+    // bundled its own core (0.15 and earlier) recorded that version as release-plan bundledCore.
     assert.equal(versionReport.opf, plan.bundledCore?.['@openpresentation/cli'] ?? opfVersion);
     const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
     assert.equal(JSON.parse(validated.stdout).valid, true);
