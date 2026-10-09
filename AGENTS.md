@@ -27,7 +27,7 @@ After each change run `pnpm check:changed`: it checks only what the branch chang
 
 GitHub API: every agent on the account shares one REST quota (5000 an hour), and it ran out three times on 2026-10-06. Watch CI with at most one batched GraphQL `statusCheckRollup` query every 3 to 5 minutes; never loop per-run or per-job REST calls (`gh pr checks`, `gh run view`). Give any data-collection job an explicit call budget.
 
-Watch or merge pull requests (and wait for a release commit's checks) only with `node scripts/pr-gate.mjs` (`--merge`, `--commit`; usage and exit codes in its header); never write a new watcher or polling loop.
+Watch or merge pull requests (and wait for a release commit's checks) only with `node scripts/pr-gate.mjs` (`--merge`, `--commit`; usage and exit codes in its header: a PR merged by the merge queue exits 0 as MERGED, only `failed_checks`/`manual` removals are EJECTED, only the newest run of each workflow job counts, and a lagging `--expect-head` is re-read before exit 4); never write a new watcher or polling loop.
 Run it as ONE background task per batch of PRs (it polls them all with one GraphQL query per interval and stops before the 2-hour task cap with exit 75 and a RESUME line), not one task per PR.
 Let it block and wait for its exit instead of polling CI from the conversation.
 
