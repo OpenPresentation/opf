@@ -112,12 +112,15 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
     $('#download-progress-label').textContent = 'Preparing…';
     $('#download-cancel').focus();
     try {
+      // RR-63: the renderer's export-browser entry imports no pdf-lib. The page imports it, only for a raster PDF.
+      const pdfMode = format === 'pdf' ? value('download-pdf-mode') : undefined;
+      const pdfLib = pdfMode === 'raster' && !convert ? await import('pdf-lib') : undefined;
       const made = await exportDeck(deck, {
         format,
         slides: value('download-slides'),
         slideIndex: Math.min(getSlideIndex(), deck.slides.length - 1),
         includeHidden: $('#download-hidden').checked,
-        pdfMode: format === 'pdf' ? value('download-pdf-mode') : undefined,
+        pdfMode, pdfLib,
         scale: Number($('#download-scale').value),
         fonts, convert,
         catalogs: editor.catalogs,

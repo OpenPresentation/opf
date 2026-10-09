@@ -2,6 +2,25 @@
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
+## Using the editor with opf-render 0.16: what to install (RR-63, unreleased)
+
+`@openpresentation/opf-render` is an optional peer of the editor, and from render 0.16 its heavy pieces are optional peers too, so install only what you use. The editor itself draws with `@openpresentation/opf-render/svg` and loads fonts with `/fonts-browser`, which need nothing else. Add:
+
+| You use | Also install |
+| --- | --- |
+| The canvas, the preview, SVG downloads in a browser (the host serves its own font files) | nothing |
+| `loadFonts` from `/fonts-node` (a server, a test, a build script such as `npm run build:playground`) | the font packages of the pack: `@expo-google-fonts/roboto` and `roboto-mono` for `base`; also `arimo`, `caladea`, `cousine`, `gelasio`, `tinos` and `noto-sans` for `office`; a script face (`scripts: 'auto'`) needs its `@expo-google-fonts/noto-*` package. A missing one fails with `font-resource-unavailable` and names it |
+| `svgToPng` / `svgToPdf` from the Node entries (`/png`, `/pdf`) | `@resvg/resvg-js` (and `sharp`, `pdf-lib` as the renderer's README says); a missing one fails with `converter-missing` |
+| `exportDeck` PDF (vector), PNG, SVG | nothing: the browser entry `@openpresentation/opf-render/export-browser` imports no converter |
+| `exportDeck` raster PDF (`pdfMode: "raster"`) | `pdf-lib`, imported by the page and passed as the `pdfLib` option (`import * as pdfLib from "pdf-lib"`); without it the export rejects with `converter-missing` |
+
+```js
+const pdfLib = await import("pdf-lib");
+await exportDeck(editor.presentation, { format: "pdf", pdfMode: "raster", pdfLib, fonts });
+```
+
+The playground imports `pdf-lib` for you when its raster PDF choice is used.
+
 ## OPF 0.15: catalogs from the host, backgrounds and image blocks (FA-23)
 
 The release after 0.14.2 moves the editor onto core 0.15 (a breaking, clean spec: no migration). See `changes/fa-23-opf-0-15.md`.
@@ -597,7 +616,7 @@ import { exportDeck } from "@openpresentation/opf-editor/export";
 const result = await exportDeck(editor.presentation, {
   format: "pdf",              // "pdf" | "png" | "svg"
   slides: "all",              // or "current" with slideIndex, or [slide numbers]; hidden slides only with includeHidden
-  pdfMode: "vector",          // or "raster" (an image per slide); PNG and raster density: scale 1 to 4
+  pdfMode: "vector",          // or "raster" (an image per slide; also pass pdfLib: import * as pdfLib from "pdf-lib"); PNG and raster density: scale 1 to 4
   fonts,                      // the renderer's fonts handle (loadFonts): measures, loads the faces the deck needs, supplies the faces to embed
   renderOptions,              // catalogs, date, ...
   signal, onProgress, onDiagnostic,
@@ -611,7 +630,7 @@ const result = await exportDeck(editor.presentation, {
 - **Names.** `exportFileName(deck, ext, suffix)` uses the deck's `filename` (a trailing .pptx/.pdf/.png/.svg dropped), else the slugified `name`, else `presentation`; slides are `name-01.png`, archives `name-png.zip`.
 - **Progress and cancel.** `onProgress({ stage, done, total, message })` reports fonts, drawing, per-page conversion and packing; an aborted `signal` rejects with `export-aborted` between pages and slides.
 - **Diagnostics.** `describeDiagnostic` normalises renderer and converter notes into `{ code, severity, message, slide? }`: `pdf-font-substituted`, `pdf-glyph-missing`, `pdf-raster-fallback` and the renderer's own are `warning`; `pdf-font-embedded` is `info`.
-- PDF and PNG need `@openpresentation/opf-render` with its `export-browser` entry (RR-23, opf-render#105); without it they reject with `export-unavailable` and SVG still works. Verified in Chromium; Safari and Firefox are not exercised in CI. The playground bundle grows by the PDF writer, fontkit shaping and the bidi algorithm.
+- PDF and PNG need `@openpresentation/opf-render` with its `export-browser` entry (RR-23, opf-render#105); without it they reject with `export-unavailable` and SVG still works. The entry imports no PDF library (opf-render 0.16): the vector PDF, PNG and SVG need nothing else, and `pdfMode: "raster"` needs the `pdfLib` option. Verified in Chromium; Safari and Firefox are not exercised in CI. The playground bundle grows by the PDF writer, fontkit shaping and the bidi algorithm.
 
 Catalog controls initialize an absent deck or slide `design` for known theme, color-scheme and font-scheme fields as one validated transaction. Undo removes a newly created parent; existing design fields are retained. DOM, React and Svelte catalog controls accept `onError(error)` and emit a bubbling `opferror` event on rejected edits, restore the committed selection and expose native validity feedback. General `editor.set` and JSON Patch require existing parents.
 

@@ -270,6 +270,12 @@
     }
   },
   "devDependencies": {
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/noto-color-emoji": "0.4.6",
+    "@expo-google-fonts/noto-emoji": "0.4.7",
     "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
     "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
     "@expo-google-fonts/noto-sans": "0.4.2",
@@ -304,16 +310,18 @@
     "@expo-google-fonts/noto-sans-thai": "0.4.2",
     "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/stix-two-math": "0.4.0",
+    "@expo-google-fonts/tinos": "0.4.2",
     "@openpresentation/opf-pptx": "^0.15.0",
     "@openpresentation/opf-render": "^0.15.0",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
     "jszip": "3.10.2",
+    "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.3.289",
-    "playwright": "1.63.0",
-    "@expo-google-fonts/noto-color-emoji": "0.4.6",
-    "@expo-google-fonts/noto-emoji": "0.4.7",
-    "@expo-google-fonts/stix-two-math": "0.4.0"
+    "playwright": "1.63.0"
   },
   "opf": {
     "requiresUnreleasedCore": "0.16.0"

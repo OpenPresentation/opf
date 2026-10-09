@@ -105,6 +105,7 @@ assert.equal(crc32(new TextEncoder().encode('123456789')), 0xcbf43926, 'CRC-32 c
   assert.equal(pdf.download.type, EXPORT_FORMATS.pdf.type);
   assert.equal(seen.pdf.svgs.length, 2);
   assert.equal(seen.pdf.options.mode, 'raster');
+  assert.ok(!('pdfLib' in seen.pdf.options), 'no pdfLib option is invented when the host passes none');
   assert.equal(seen.pdf.options.fonts, undefined, 'the fonts handle itself is never given to the converter: it would embed faces whatever their license');
   assert.ok(seen.pdf.options.fontData.length > 0 && seen.pdf.options.fontData.every(face => face.family && face.data instanceof Uint8Array && face.data.length > 0), 'the PDF gets the registry faces as bytes, so script faces can be embedded');
   assert.equal(seen.pdf.options.scale, 4, 'the scale is capped');
@@ -112,6 +113,14 @@ assert.equal(crc32(new TextEncoder().encode('123456789')), 0xcbf43926, 'CRC-32 c
   assert.match(seen.pdf.svgs[0], /data-opf-path/, 'the PDF is drawn with trace paths for its diagnostics');
   assert.deepEqual(pdf.diagnostics.map(item => [item.code, item.severity, item.slide]), [['pdf-font-embedded', 'info', undefined], ['pdf-font-substituted', 'warning', 2]], 'diagnostics are described, and one for a slide that is not exported is dropped');
   assert.equal(describeDiagnostic({ code: 'pdf-font-embedded', family: 'roboto', weight: 700, italic: true, embedding: 'subset', glyphs: 3 }, 'pdf').message, 'Embedded roboto 700 italic (subset, 3 glyphs).');
+
+  // RR-63: the renderer's export-browser entry imports no pdf-lib; the raster PDF gets the module the host passes, the vector PDF never does.
+  const pdfLib = { PDFDocument: { create: async () => ({}) } };
+  await exportDeck(deck, { format: 'pdf', slides: 'current', slideIndex: 0, pdfMode: 'raster', pdfLib, renderOptions, fonts, convert });
+  assert.equal(seen.pdf.options.pdfLib, pdfLib, 'a raster PDF is given the pdf-lib module the host passes');
+  await exportDeck(deck, { format: 'pdf', slides: 'current', slideIndex: 0, pdfLib, renderOptions, fonts, convert });
+  assert.equal(seen.pdf.options.mode, 'vector');
+  assert.ok(!('pdfLib' in seen.pdf.options), 'a vector PDF needs no pdf-lib');
 
   const png = await exportDeck(deck, { format: 'png', slides: 'all', scale: 3, renderOptions, fonts, convert });
   assert.equal(seen.png.length, 2);

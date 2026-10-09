@@ -124,6 +124,9 @@ async function loadConverters(options) {
  * - `format`: "pdf", "png" or "svg" (required).
  * - `slides`: "current" (with `slideIndex`), "all" (default; hidden slides only with `includeHidden`) or an array of slide numbers.
  * - `pdfMode`: "vector" (default: selectable text, vector shapes) or "raster" (each slide an image).
+ * - `pdfLib`: for `pdfMode: "raster"` only, the pdf-lib module (`import * as pdfLib from "pdf-lib"`). The renderer's `export-browser` entry imports no PDF library (RR-63, opf-render 0.16),
+ *   so a host that offers the raster PDF imports pdf-lib itself; without it a raster PDF rejects with the renderer's `converter-missing` (its `details.install` names the package).
+ *   Vector PDF, PNG and SVG need no option.
  * - `scale`: PNG pixel density, 1 to 4 (default 2); also the raster PDF's density.
  * - `renderOptions`: the render options the host draws with (`catalogs`, `date`, ...), the same as its preview.
  * - `catalogs`: the host's registered catalogs (`Catalog[]`, merged with `renderOptions.catalogs`). The deck is embedded first (core's
@@ -137,7 +140,7 @@ async function loadConverters(options) {
  *   `export-fonts-unlicensed` (the converter's error is its `cause`).
  * - `signal`, `onProgress({ stage, done, total, message })`, `onDiagnostic(diagnostic)`.
  * Resolves `{ download, files, diagnostics, slides }`. Rejects with an error whose `code` is `export-aborted`,
- * `export-fonts-unlicensed`, `export-no-slides`, `export-unavailable`, `fonts-unavailable` or a renderer code.
+ * `export-fonts-unlicensed`, `export-no-slides`, `export-unavailable`, `fonts-unavailable` or a renderer code (`converter-missing` for a raster PDF without `pdfLib`).
  */
 export async function exportDeck(input, options = {}) {
   const format = EXPORT_FORMATS[options.format];
@@ -213,6 +216,8 @@ export async function exportDeck(input, options = {}) {
         metadata,
         signal,
         fontData: pdfFontData(embeddedFonts),
+        // RR-63: the renderer's browser entry imports no pdf-lib; raster mode takes the module the host imported.
+        ...(options.pdfMode === "raster" && options.pdfLib ? { pdfLib: options.pdfLib } : {}),
         ...(options.fallbackFamily ? { defaultFontFamily: options.fallbackFamily } : {}),
         onDiagnostic: (diagnostic) => { const described = describeDiagnostic(diagnostic, "pdf"); if (keep(described)) note(described); },
         onProgress: ({ page, pages }) => progress("convert", page, pages, `Page ${page} of ${pages}`),

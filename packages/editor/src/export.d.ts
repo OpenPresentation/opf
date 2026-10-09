@@ -42,6 +42,11 @@ export interface ExportOptions {
   includeHidden?: boolean;
   /** "vector" (default): selectable text and vector shapes; "raster": an image per slide. */
   pdfMode?: "vector" | "raster";
+  /**
+   * Raster PDF only: the pdf-lib module (`import * as pdfLib from "pdf-lib"`). The renderer's `export-browser` entry imports no PDF library (opf-render 0.16), so the host passes it;
+   * without it a `pdfMode: "raster"` PDF rejects with the renderer's `converter-missing`. Vector PDF, PNG and SVG need no option.
+   */
+  pdfLib?: { PDFDocument: { create(options?: { updateMetadata?: boolean }): Promise<any> } };
   /** PNG pixel density (and the raster PDF's), 1 to 4; default 2. */
   scale?: number;
   /** The options the host draws its preview with (`catalogs`, `date`, ...); the fonts go in `fonts`. */
@@ -72,6 +77,6 @@ export interface ExportResult {
 }
 /**
  * Draw the deck with the renderer the preview uses and convert it. Rejects with an error whose `code` is `export-aborted`, `export-fonts-unlicensed` (the license rule left the PDF converter no face for some text), `export-no-slides`,
- * `export-format`, `export-unavailable` (PDF and PNG need the renderer's `export-browser` entry), `fonts-unavailable` or a renderer code.
+ * `export-format`, `export-unavailable` (PDF and PNG need the renderer's `export-browser` entry), `fonts-unavailable` or a renderer code (`converter-missing` for a raster PDF without `pdfLib`).
  */
 export declare function exportDeck(deck: unknown, options: ExportOptions): Promise<ExportResult>;
