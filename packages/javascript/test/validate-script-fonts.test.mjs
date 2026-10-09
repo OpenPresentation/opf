@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { validate } from '../dist/index.js';
+import { paginate, paginateSlide, validate } from '../dist/index.js';
 import { defaultCatalog } from '../dist/catalog.js';
 
 // opf#485: validate measured script text in the one face a style names (Arabic in the Latin title face) and reported
@@ -105,5 +105,24 @@ describe('validate measures script text with the fonts handle\'s script faces (o
 		assert.match(layoutFailures(report)[0].message, /cannot display U\+6/);
 		// Core's portable estimate needs no faces.
 		assert.deepEqual(layoutFailures(validate(arabicDeck, { catalogs })), []);
+	});
+});
+
+describe("paginate measures script text with the fonts handle's script faces (opf#485)", () => {
+	const longArabic = { name: 'Long Arabic deck', language: 'ar-SA', slides: [{ title: arabicTitle, items: Array.from({ length: 30 }, () => arabicBody) }] };
+
+	test('an ar-SA deck and an ar-SA run in an en-US deck paginate with the Arabic script face', () => {
+		for (const document of [arabicDeck, runInEnglish]) assert.equal(paginate(document, { catalogs, fonts: registry().fonts }).presentation.slides.length, 1);
+		// A list too long for one slide splits, every page measured in the script face.
+		const { fonts, profiles } = registry();
+		const result = paginate(longArabic, { catalogs, fonts });
+		assert.ok(result.presentation.slides.length > 1);
+		assert.equal(profiles[0].body.complexScript, 'Arabic Typesetting');
+		// paginateSlide given the presentation plans scripts the same way.
+		assert.ok(paginateSlide(longArabic.slides[0], { presentation: longArabic, slideIndex: 0, fonts: registry().fonts }).slides.length > 1);
+	});
+
+	test('without the Arabic face, or with a measurement that cannot plan, the missing glyph still fails pagination', () => {
+		for (const options of [{ naskh: false }, { planner: false }]) assert.throws(() => paginate(arabicDeck, { catalogs, fonts: registry(options).fonts }), /cannot display U\+6/);
 	});
 });

@@ -92,8 +92,8 @@ export interface TextMeasurement {
   /**
    * Script planning: a measurement that measures each script run of a string with the face of its script slot in
    * `profile` (and the host's glyph fallback), as the host's engines draw it. The renderer's `loadFonts()` measurement
-   * provides it with its script planner. `validate` calls it with each slide's profile, and with a run language's own
-   * profile for a run that names one, so its layout checks measure script text the way preview and export do.
+   * provides it with its script planner. `validate` and `paginate` call it with each slide's profile, and with a run language's own
+   * profile for a run that names one, so they measure script text the way preview and export do.
    */
   forScripts?: (profile: ScriptMeasurementProfile) => TextMeasurement;
 }

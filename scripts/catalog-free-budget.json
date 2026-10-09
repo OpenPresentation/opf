@@ -9,7 +9,7 @@
     "diff": 6223,
     "font-policy": 15052,
     "format": 45577,
-    "index": 310098,
+    "index": 319561,
     "markdown": 259131,
     "pagination": 212712,
     "patch": 210016,
@@ -62,8 +62,8 @@
       "gzip": 44249
     },
     "index": {
-      "minified": 1159964,
-      "gzip": 301066
+      "minified": 1188128,
+      "gzip": 310253
     },
     "markdown": {
       "minified": 828926,

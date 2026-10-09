@@ -1,5 +1,6 @@
 import type { Catalog } from './catalog-refs.js';
-import type { FontFamilies, TextMeasurement, TextStyle } from './composition.js';
+import { resolveFontFamilies, type FontFamilies, type TextMeasurement, type TextStyle } from './composition.js';
+import { resolveDesignRecords } from './design-records.js';
 import { resolveScriptFonts, type ResolvedScriptFonts, type ScriptFontSlots, type ScriptMeasurementProfile } from './script-fonts.js';
 
 /**
@@ -77,4 +78,16 @@ export function slideScriptMeasurement(presentation: unknown, slideIndex: number
 			return typeof own.outlineBounds === 'function' ? own.outlineBounds(text, size, style) : (deck.outlineBounds as NonNullable<TextMeasurement['outlineBounds']>).call(deck, text, size, style);
 		};
 	return scripted;
+}
+
+/**
+ * `slideScriptMeasurement` for a host that has not resolved the slide's font scheme: the role families (unless the host
+ * resolved its own) and the serif flag come from the slide's design records, as `resolveSlideContext` resolves them.
+ */
+export function resolveSlideScriptMeasurement(presentation: unknown, slideIndex: number, measurement: TextMeasurement, options: { catalogs?: readonly Catalog[]; fontFamilies?: Partial<FontFamilies> } = {}): TextMeasurement {
+	if (typeof measurement.forScripts !== 'function') return measurement;
+	const { fontScheme } = resolveDesignRecords(presentation, slideIndex, options.catalogs !== undefined ? { catalogs: options.catalogs } : {});
+	const resolved = resolveFontFamilies(fontScheme);
+	const fontFamilies = { heading: options.fontFamilies?.heading ?? resolved.heading, body: options.fontFamilies?.body ?? resolved.body };
+	return slideScriptMeasurement(presentation, slideIndex, measurement, { ...(options.catalogs !== undefined ? { catalogs: options.catalogs } : {}), fontFamilies, serif: fontScheme.type === 'serif' });
 }
