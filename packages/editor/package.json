@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -258,11 +258,11 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.13",
     "@lezer/highlight": "1.2.4",
-    "@openpresentation/opf": "^0.15.1",
+    "@openpresentation/opf": "^0.16.0",
     "jsonc-parser": "3.3.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.15.0"
+    "@openpresentation/opf-render": "^0.16.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -314,16 +314,13 @@
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/stix-two-math": "0.4.0",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.15.0",
-    "@openpresentation/opf-render": "^0.15.0",
+    "@openpresentation/opf-pptx": "^0.16.0",
+    "@openpresentation/opf-render": "^0.16.0",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
     "jszip": "3.10.2",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.3.289",
     "playwright": "1.63.0"
-  },
-  "opf": {
-    "requiresUnreleasedCore": "0.16.0"
   }
 }
