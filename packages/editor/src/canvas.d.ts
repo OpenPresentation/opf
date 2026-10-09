@@ -1,5 +1,5 @@
 import type { EditorSession } from "./index.js";
-import type { RenderSvgOptions } from "@openpresentation/opf-render";
+import type { ToSvgOptions } from "@openpresentation/opf-render";
 import type { BrowserFontsHandle } from "@openpresentation/opf-render/fonts-browser";
 import type { SlideComposition } from "@openpresentation/opf/composition";
 import type { Catalog } from "@openpresentation/opf";
@@ -15,7 +15,7 @@ export interface FontsReadyHandlers {
   ready?: () => void;
   failed?: (error: Error) => void;
   /** The options the host renders with (`catalogs`, ...), passed to the fonts handle. */
-  renderOptions?: RenderSvgOptions;
+  renderOptions?: ToSvgOptions;
 }
 export declare const FONTS_PENDING: "fonts-pending";
 export declare const FONTS_UNAVAILABLE: "fonts-unavailable";
@@ -41,7 +41,7 @@ export interface CanvasEditorOptions {
   /** Show keyboard-accessible dividers for resizing composition tracks. */
   layoutEditing?: boolean;
   /** Render options. The canvas draws the document as authored (`variables: false`: a template's `{{tokens}}` stay visible, so inline edits never overwrite them); pass `variables` to draw resolved values instead. */
-  renderOptions?: RenderSvgOptions;
+  renderOptions?: ToSvgOptions;
   /**
    * The renderer's fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`). Its `textMeasurement` lays the slide out and
    * its faces draw it. With its `pending` and `ensure` the canvas never renders a document whose faces are still loading: it shows
@@ -117,7 +117,7 @@ export interface CanvasEditor {
    * notes, deck fields) or the slide is not drawn yet (fonts loading). Moves keyboard focus only with `focus: true`.
    */
   reveal(path: string, options?: { focus?: boolean }): string | null;
-  setRenderOptions(options: RenderSvgOptions): boolean;
+  setRenderOptions(options: ToSvgOptions): boolean;
   destroy(): void;
 }
 export declare function allocatedSelectionBox(

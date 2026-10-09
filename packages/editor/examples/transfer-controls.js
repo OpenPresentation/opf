@@ -11,7 +11,7 @@ import {
   galleryItemUrl,
   normalizeGalleryUrl,
 } from "../src/galleries.js";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
@@ -119,7 +119,7 @@ export function installTransferControls({
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          const svg = renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts, embedFonts: false });
+          const svg = toSvg(result.presentation, result.slideIndex + 1, { catalogs: editor.catalogs, fonts, text: "system" });
           $("import-preview").innerHTML = svg;
           prepared = result;
           error("");
@@ -493,7 +493,7 @@ export function installTransferControls({
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts, embedFonts: false });
+          toSvg(result.presentation, result.slideIndex + 1, { catalogs: editor.catalogs, fonts, text: "system" });
           setSlideIndex(result.slideIndex);
           editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",

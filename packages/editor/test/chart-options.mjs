@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
 import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import { parseChartPath, prepareChartOptions, readChartOptions, setChartOptions } from "../dist/chart-options.js";
@@ -17,7 +17,7 @@ const deck = (type = "column") => ({
   slides: [{ id: "chart", title: "Chart", blocks: [{ chart: { type, data } }, { text: "Notes" }] }],
 });
 const session = (type) => createEditorSession(deck(type), { rejectInvalid: true });
-const svg = (presentation) => renderSlideSvg(presentation, 0, { trace: true });
+const svg = (presentation) => toSvg(presentation, 1, { trace: true });
 
 // Selection paths.
 assert.equal(parseChartPath(C), C);

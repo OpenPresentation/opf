@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import { prepareChartOptions, readChartOptions, setChartOptions } from "../dist/chart-options.js";
@@ -34,7 +34,7 @@ assert.deepEqual([readChartOptions({ type: "column", data, alt: "" }).state.alt,
   assert.equal(editor.get(`${C}.alt`), "Revenue doubled from 10 in Q1 to 20 in Q2.");
   assert.equal(editor.snapshot().undoDepth, 1);
   assert.equal(setChartOptions(editor, C, { alt: "Revenue doubled from 10 in Q1 to 20 in Q2." }).changed, false);
-  assert.match(renderSlideSvg(editor.presentation, 0), /role="img"/, "the preview names the chart");
+  assert.match(toSvg(editor.presentation, 1), /role="img"/, "the preview names the chart");
   const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs: [defaultCatalog] });
   const back = await pptx.fromPptx(bytes);
   assert.equal((back.slides[0].chart ?? back.slides[0].blocks.find((block) => block.chart).chart).alt, "Revenue doubled from 10 in Q1 to 20 in Q2.", "alt survives the PPTX round trip");
@@ -50,7 +50,7 @@ assert.deepEqual([readChartOptions({ type: "column", data, alt: "" }).state.alt,
   const editor = session();
   setChartOptions(editor, C, { decorative: true });
   assert.equal(editor.get(`${C}.alt`), "");
-  assert.match(renderSlideSvg(editor.presentation, 0), /aria-hidden="true"/);
+  assert.match(toSvg(editor.presentation, 1), /aria-hidden="true"/);
   setChartOptions(editor, C, { decorative: false });
   assert.equal(Object.hasOwn(editor.get(C), "alt"), false);
   const text = session({ alt: "Kept" });

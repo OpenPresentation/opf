@@ -2,7 +2,7 @@
 // numbering the engines draw; the preview draws the result and the PPTX export carries it.
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import {
@@ -57,7 +57,7 @@ const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.
   setCaption(editor, "slides.3", { text: "Figure 2", position: "below", align: "left" });
   assert.equal(editor.presentation.slides[3].caption, "Figure 2", "default position and alignment store the short form");
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
-  ok(renderSlideSvg(editor.presentation, 1, { trace: true }).includes('data-opf-caption="above"'), "the preview draws the caption band");
+  ok(toSvg(editor.presentation, 2, { trace: true }).includes('data-opf-caption="above"'), "the preview draws the caption band");
   throws(() => prepareCaption(editor.presentation, "slides.1.blocks.2", "no"), "caption-unsupported");
   throws(() => prepareCaption(editor.presentation, "slides.1", "no"), "caption-unsupported");
   throws(() => prepareCaption(editor.presentation, "slides.1.blocks.0", { text: "x", position: "left" }), "invalid-caption");
@@ -115,7 +115,7 @@ const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.
   assert.deepEqual(citations.slides.map((slide) => [slide.slideIndex, slide.markers.map((marker) => marker.text), slide.notes]), [[0, ["1", "2,1"], [1, 2]], [2, ["1", "3"], [1, 3]]]);
   assert.deepEqual(citations.unused, []);
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
-  const svg = renderSlideSvg(editor.presentation, 0, { trace: true });
+  const svg = toSvg(editor.presentation, 1, { trace: true });
   assert.deepEqual([...svg.matchAll(/data-opf-marker="([^"]*)"/g)].map((match) => match[1]), ["1", "2,1"]);
   ok(svg.includes('data-opf-footnotes="slides.0"'), "the preview draws the footnote area");
   const bytes = await pptx.toPptx(editor.presentation, { seed: 1 });

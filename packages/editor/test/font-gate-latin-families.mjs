@@ -20,7 +20,7 @@ import { fontGate } from "../dist/font-gate.js";
 import { BUNDLED_FONT_MANIFEST, loadFonts } from "@openpresentation/opf-render/fonts-node";
 import { FONT_POLICY, fontPolicyFor } from "@openpresentation/opf-render/fonts";
 import * as browserFonts from "@openpresentation/opf-render/fonts-browser";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 
 const packageRoot = path.dirname(fileURLToPath(import.meta.resolve("@openpresentation/opf-render/package.json")));
 const outDirectory = path.resolve(process.argv[2] ?? "artifacts/latin-family-hosts");
@@ -101,7 +101,7 @@ for (const entry of families) {
     assert.ok(held.has(key(face)), `${entry.family}: ${face.family} ${face.weight}${face.italic ? "i" : ""} is loaded`);
   }
   // Strict render with the registry's measurement: a style gap never refuses the deck.
-  const svg = renderSlideSvg(deck, 0, { fonts });
+  const svg = toSvg(deck, 1, { fonts });
   assert.ok(svg.includes("Regular") && svg.includes("BoldItalic"), `${entry.family}: the deck renders`);
   // What a deck of this family needs (face level), independent of what earlier families already loaded in this session.
   const needed = [...new Set(drawn.map((face) => fileOfKey.get(key(face))).filter(Boolean))].sort();

@@ -15,7 +15,7 @@ import { catalogDisplay, defaultCatalog } from '@openpresentation/opf/catalog';
 import {createCanvasEditor} from '../src/canvas.js';
 import { whenFontsReady } from '../src/font-gate.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { toSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf/composition';
 import { installPptxExport } from './pptx-controls.js';
@@ -50,7 +50,7 @@ const fontRegistry = fonts.registry;
 const catalogs = [defaultCatalog];
 const renderOptions = () => ({ catalogs: editor.catalogs });
 const pendingFonts = deck => { try { return fonts.pending(deck, renderOptions()); } catch { return []; } };
-// renderSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
+// toSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
 // Intos Display has no glyph), but the session's composeSlide and paginateSlide take the handle's plain measurement, and that one is strict:
 // it throws "Font 'Intos Display' cannot display U+65E5" even with every face loaded. Give them the same per-document, script-aware
 // measurement (opf-render README: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(presentation))).
@@ -150,7 +150,7 @@ const thumbnailKey = (deck, index) => JSON.stringify([index, deck.slides.length,
 function thumbnailHtml(deck, index) {
   const key = thumbnailKey(deck, index);
   if (!thumbnailCache.has(key)) {
-    try { thumbnailCache.set(key, renderSlideSvg(deck, index, {...renderOptions(), fonts, embedFonts: false, trace: false})); }
+    try { thumbnailCache.set(key, toSvg(deck, index + 1, {...renderOptions(), fonts, text: 'system', trace: false})); }
     catch { thumbnailCache.set(key, 'Preview unavailable'); }
   }
   return thumbnailCache.get(key);
@@ -371,7 +371,7 @@ function previewSource() {
     // clicks it the moment the page is ready (the gallery handoff) must not hit a disabled button because the starting deck's faces are still loading.
     loading:()=>{element('json-error').textContent='Loading fonts for this document…';},
     ready:()=>{
-      const svg=renderSlideSvg(deck,Math.min(slideIndex,(deck.slides?.length ?? 1)-1),{...renderOptions(),fonts,embedFonts:false});
+      const svg=toSvg(deck,Math.min(slideIndex+1,deck.slides?.length ?? 1),{...renderOptions(),fonts,text:'system'});
       element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
     },
     failed:fail,
@@ -436,7 +436,7 @@ element('open-properties').onclick=()=>{
  propertiesDialog.showModal();
  propertiesInspector?.destroy();
  propertiesInspector=createSchemaInspector(element('schema-properties'),{editor,path:`/slides/${slideIndex}`,
-  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{renderOptions:renderOptions(),isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSlideSvg(deck,Math.min(slideIndex,deck.slides.length-1),{...renderOptions(),fonts,embedFonts:false,trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
+  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{renderOptions:renderOptions(),isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=toSvg(deck,Math.min(slideIndex+1,deck.slides.length),{...renderOptions(),fonts,text:'system',trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
   onCommit:()=>status('Presentation properties updated'),onError:error=>status(error.message)
  });
 };

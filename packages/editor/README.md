@@ -10,13 +10,13 @@ Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs
 | --- | --- |
 | The canvas, the preview, SVG downloads in a browser (the host serves its own font files) | nothing |
 | `loadFonts` from `/fonts-node` (a server, a test, a build script such as `npm run build:playground`) | the font packages of the pack: `@expo-google-fonts/roboto` and `roboto-mono` for `base`; also `arimo`, `caladea`, `cousine`, `gelasio`, `tinos` and `noto-sans` for `office`; a script face (`scripts: 'auto'`) needs its `@expo-google-fonts/noto-*` package. A missing one fails with `font-resource-unavailable` and names it |
-| `svgToPng` / `svgToPdf` from the Node entries (`/png`, `/pdf`) | `@resvg/resvg-js` (and `sharp`, `pdf-lib` as the renderer's README says); a missing one fails with `converter-missing` |
-| `exportDeck` PDF (vector), PNG, SVG | nothing: the browser entry `@openpresentation/opf-render/export-browser` imports no converter |
-| `exportDeck` raster PDF (`pdfMode: "raster"`) | `pdf-lib`, imported by the page and passed as the `pdfLib` option (`import * as pdfLib from "pdf-lib"`); without it the export rejects with `converter-missing` |
+| `toPng` / `toPdf` from the Node entries (`/png`, `/pdf`) | `@resvg/resvg-js` (and `sharp`, `pdf-lib` as the renderer's README says); a missing one fails with `converter-missing` |
+| `convert` PDF (vector), PNG, SVG | nothing: the browser entry `@openpresentation/opf-render/export-browser` imports no converter |
+| `convert` raster PDF (`raster: true`) | `pdf-lib`, imported by the page and passed as the `pdfLib` option (`import * as pdfLib from "pdf-lib"`); without it the conversion rejects with `converter-missing` |
 
 ```js
 const pdfLib = await import("pdf-lib");
-await exportDeck(editor.presentation, { format: "pdf", pdfMode: "raster", pdfLib, fonts });
+await convert(editor.presentation, { format: "pdf", raster: true, pdfLib, fonts });
 ```
 
 The playground imports `pdf-lib` for you when its raster PDF choice is used.
@@ -37,7 +37,7 @@ The release after 0.14.2 moves the editor onto core 0.15 (a breaking, clean spec
   ```
 
   `mergeCatalogs(...lists)` is the one merge (the session's list first, the first catalog per `source` wins); `catalogsFor(editor, options)` is the list for one call. Pickers list core's `catalogRecords` and write the reference it gives, `id` or `name:id`.
-- **Save and export embed.** `prepareSave`/`saveDocument`, `serializeOpfTransfer` (presentation and slide scope) and `exportDeck` call core's `embed`; the playground's OPF download and PPTX export do too.
+- **Save and export embed.** `prepareSave`/`saveDocument`, `serializeOpfTransfer` (presentation and slide scope) and `convert` (`/export`) call core's `embed`; the playground's OPF download and PPTX export do too.
 - **Paste** (`prepareOpfImport`, insert mode) uses core's `copySlides`: groups match by `source`, identical records are reused, and the result's `renamed` (`custom-conflict`, `catalog-revision`, `group-name`) and `addedGroups` tell the user what changed.
 - **Update from catalog** is an explicit action: `checkCatalogUpdates(presentation, { catalogs })` lists the embedded records whose catalog record differs, and `applyCatalogUpdate(editor, { refs })` applies only the approved ones as one undoable step. The design panel's `catalog` section runs both and lists the `opf/unresolved-reference` and `opf/undeclared-catalog` findings (`referenceFindings(editor.validation)`).
 - **Editing a catalog's record forks it.** An edit of a layout, theme, colour scheme or font scheme embedded under `catalogs.default` or a named group (from a panel, Properties, Source or any `applyPatch`) moves it into `catalogs.custom` as `<id>-custom` (or the id in `meta.forkIds["<group>:<kind>:<id>"]`), rewrites every reference to it and drops the original, in the same undo step. The change and the session event carry `forked` and a `notice` ("… is now this presentation's own; it no longer receives catalog updates"); approved catalog updates and `moveToCustom` change records in place (`meta.catalogRecordEdit: "in-place"`). `moveToCustom(editor, { group, kind, id }, { id })` is the explicit form, offered for `opf/catalog-record-not-in-source`.
@@ -122,7 +122,7 @@ await canvas.ready;
 // canvas.destroy() when unmounting.
 ```
 
-Load the same font bytes into the browser with `loadFonts` from `@openpresentation/opf-render/fonts-browser` before mounting; the handle it returns is the one `fonts` option of the canvas, `exportDeck`, `editor.composeSlide` and `editor.paginateSlide`. The host owns font URLs, storage and collaboration. For non-Latin documents, pass the pinned script pack's location as `scriptBaseUrl` and the canvas calls `fonts.ensure(presentation)` after edits (`scripts: 'auto'`, FF-19): only the faces for the scripts a document draws are fetched, once, hash-verified, for example Noto Sans JP for Japanese; a Latin-only document fetches none. The playground does this from `./script-fonts/`, which `npm run build:playground` fills with the pinned faces. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
+Load the same font bytes into the browser with `loadFonts` from `@openpresentation/opf-render/fonts-browser` before mounting; the handle it returns is the one `fonts` option of the canvas, `convert` (`/export`), `editor.composeSlide` and `editor.paginateSlide`. The host owns font URLs, storage and collaboration. For non-Latin documents, pass the pinned script pack's location as `scriptBaseUrl` and the canvas calls `fonts.ensure(presentation)` after edits (`scripts: 'auto'`, FF-19): only the faces for the scripts a document draws are fetched, once, hash-verified, for example Noto Sans JP for Japanese; a Latin-only document fetches none. The playground does this from `./script-fonts/`, which `npm run build:playground` fills with the pinned faces. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
 Fonts load before pixels (FF-41). A document can need faces the browser has not loaded yet: script faces for the languages it draws and vendored preview faces for the font families it resolves (Intos for Aptos, Open Sans, Barlow). The handle knows what is missing (`fonts.pending(presentation)`) and loads it (`await fonts.ensure(presentation)`), so the canvas needs no separate gate: with the handle as `fonts` it never renders such a document early: on every path (editor changes, undo and redo, imports, dimension switches, slide changes, in-progress edits) it shows "Loading fonts…", loads the faces and then renders. A load that fails is reported through `onFonts`/`onError` and offers a retry button; nothing retries by itself, and the failed document is not drawn.
 
@@ -137,7 +137,7 @@ const canvas = createCanvasEditor(container, { editor, fonts });
 // Other renders of your own: whenFontsReady(fonts, presentation, { ready: draw, failed: showError, loading: showSpinner })
 ```
 
-`session.composeSlide(index, { fonts })` and `session.paginateSlide(index, { fonts })` take the same handle and resolve the slide's canvas, layout, theme, colour scheme and font families with core's `resolveSlideContext` (slide design, then deck design, then theme, then the engine default: the order the renderer and the PowerPoint export use) and the session's registered catalogs, so the editor composes what is drawn and exported. A reference that resolves nowhere never throws: the slide composes automatically or with core's `ENGINE_DEFAULT_*`, and `onDiagnostic` hears each `unresolved-reference` diagnostic. The handle's `textMeasurement` is strict: for a document with a script the design font lacks (Japanese under Aptos) pass `{ fonts: { textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(presentation, { slideIndex })) } }` (`createScriptTextMeasurement` is from `@openpresentation/opf-render/fonts`, `resolveScriptFonts` from `@openpresentation/opf/composition`), as `renderSvg` does internally.
+`session.composeSlide(index, { fonts })` and `session.paginateSlide(index, { fonts })` take the same handle and resolve the slide's canvas, layout, theme, colour scheme and font families with core's `resolveSlideContext` (slide design, then deck design, then theme, then the engine default: the order the renderer and the PowerPoint export use) and the session's registered catalogs, so the editor composes what is drawn and exported. A reference that resolves nowhere never throws: the slide composes automatically or with core's `ENGINE_DEFAULT_*`, and `onDiagnostic` hears each `unresolved-reference` diagnostic. The handle's `textMeasurement` is strict: for a document with a script the design font lacks (Japanese under Aptos) pass `{ fonts: { textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(presentation, { slideIndex })) } }` (`createScriptTextMeasurement` is from `@openpresentation/opf-render/fonts`, `resolveScriptFonts` from `@openpresentation/opf/composition`), as `toSvg` does internally.
 
 These APIs were introduced in 0.1.0. Version 0.7.0 requires core 0.10.0 and renderer 0.8.0 for the canvas, including shared accepted geometry, styled/merged cells, rich table values, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
@@ -189,10 +189,10 @@ import {
   createEditorSession,
   createSvgTraceBinding
 } from "@openpresentation/opf-editor";
-import { renderSlideSvg } from "@openpresentation/opf-render";
+import { toSvg } from "@openpresentation/opf-render";
 
 const editor = createEditorSession(opfDocument, { rejectInvalid: true });
-const svg = renderSlideSvg(editor.presentation, 0, { trace: true, fonts });
+const svg = toSvg(editor.presentation, 1, { trace: true, fonts });
 
 preview.innerHTML = svg;
 const binding = createSvgTraceBinding(preview.querySelector("svg"), editor, {
@@ -444,7 +444,7 @@ Sections are OPF's `section` label on each slide: consecutive slides with the sa
 import { createSlideManager } from "@openpresentation/opf-editor/slide-manager";
 const manager = createSlideManager(document.querySelector("#slide-list"), {
   editor, getSlideIndex: () => current, setSlideIndex: (index) => { current = index; redraw(); },
-  renderThumbnail: (deck, index) => renderSlideSvg(deck, index, { fonts, trace: false }), toolbar: document.querySelector("#slide-toolbar"),
+  renderThumbnail: (deck, index) => toSvg(deck, index + 1, { fonts, trace: false }), toolbar: document.querySelector("#slide-toolbar"),
   contentActions, // optional: { splitSlideByBlocks, mergeSlides } from "@openpresentation/opf-editor/content-actions"
 });
 editor.subscribe(() => manager.render());
@@ -551,12 +551,12 @@ A template is an OPF file with variables (`{{id}}` tokens and `var:id` reference
 
 ```js
 import { createTemplatePanel } from '@openpresentation/opf-editor/template-panel';
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { toSvg } from '@openpresentation/opf-render/svg';
 
 const panel = createTemplatePanel(container, {
   editor,
   // The live preview: the template drawn with the values typed so far (unfilled variables show their example).
-  renderPreview: ({ presentation, variables, slideIndex }) => renderSlideSvg(presentation, slideIndex, { fonts, variables }),
+  renderPreview: ({ presentation, variables, slideIndex }) => toSvg(presentation, slideIndex + 1, { fonts, variables }),
   getTarget: () => ({ path: selectedPath, start, end }), // the text field a token is inserted into; omit to hide that section
   onApply: () => redraw(),
 });
@@ -610,28 +610,33 @@ Findings show a severity word, the slide, the rule id and, for a hosted reviewer
 
 ## PDF, PNG and SVG downloads (RR-23)
 
-`@openpresentation/opf-editor/export` turns the deck into a download in the page, next to the PowerPoint export; the playground's "PDF · PNG · SVG" button is a thin dialog over it.
+`convert(deck, { format })` from `@openpresentation/opf-editor/export` turns the deck into files in the page, next to the PowerPoint export; the playground's "PDF · PNG · SVG" button is a thin dialog over it. It has the name and the result of core's in-memory `convert` (OPF 0.18, RR-73): `{ files, findings }`, core's `ConvertResult`.
 
 ```js
-import { exportDeck } from "@openpresentation/opf-editor/export";
-const result = await exportDeck(editor.presentation, {
+import { convert } from "@openpresentation/opf-editor/export";
+const { files, findings } = await convert(editor.presentation, {
   format: "pdf",              // "pdf" | "png" | "svg"
-  slides: "all",              // or "current" with slideIndex, or [slide numbers]; hidden slides only with includeHidden
-  pdfMode: "vector",          // or "raster" (an image per slide; also pass pdfLib: import * as pdfLib from "pdf-lib"); PNG and raster density: scale 1 to 4
+  slides: "1,3-5",            // core's slide selection, counted from 1 (3, "1-3", [1, 3]); omitted: every slide that is not hidden (includeHidden: all)
+  raster: false,              // PDF only: true draws each page as an image (also pass pdfLib: import * as pdfLib from "pdf-lib"); PNG and raster density: scale 1 to 4
+  zip: false,                 // PNG and SVG only: true packs the slides into one archive instead of one file per slide
+  name: "q3-review",          // the files' base name; default the deck's filename, else its name
   fonts,                      // the renderer's fonts handle (loadFonts): measures, loads the faces the deck needs, supplies the faces to embed
-  renderOptions,              // catalogs, date, ...
-  signal, onProgress, onDiagnostic,
+  renderOptions,              // catalogs, date, ... (the renderer's ToSvgOptions)
+  signal, onProgress, onFinding,
 });
-// result.download = { name, type, bytes }: one file, or a ZIP of the slides; result.diagnostics lists what to review.
+// files: [{ name, type, bytes, slide?, id?, width?, height?, pages?, slides?, entries? }]; findings: core's Finding[] to review.
 ```
 
-- **Same drawing as the preview.** The slides are drawn by `renderSvg` with the same fonts handle as the preview (its `textMeasurement`), so a PNG or SVG is the preview, and the PDF is converted from those SVGs rather than laid out again.
-- **Fonts.** The fonts handle loads the faces the deck needs before anything is drawn (a failure rejects with `fonts-unavailable`). Only faces the handle's registry holds are embedded (bundled or hash-pinned, never a system font), only where a slide draws them, as `@font-face` data in each SVG and as subsets in the PDF. A face whose own license text is not OFL, Apache, MIT or UFL is left out and reported (`export-font-license`).
-- **PDF** is the renderer's vector PDF (selectable text, vector shapes, embedded subsets, tagged structure), `mode: "raster"` is the image-only form. **PNG** is drawn on a canvas from the same SVG (within anti-aliasing of the renderer's resvg PNG) and is limited to 40 megapixels. **SVG** files are standalone (XML header, fonts embedded, no external references). Several files are packed in a ZIP (`createZip`, no dependency).
-- **Names.** `exportFileName(deck, ext, suffix)` uses the deck's `filename` (a trailing .pptx/.pdf/.png/.svg dropped), else the slugified `name`, else `presentation`; slides are `name-01.png`, archives `name-png.zip`.
+- **Same drawing as the preview.** The slides are drawn by `toSvg` with the same fonts handle as the preview (its `textMeasurement`), so a PNG or SVG is the preview, and the PDF is converted from those SVGs rather than laid out again.
+- **Fonts.** The fonts handle loads the faces the deck needs before anything is drawn (a failure rejects with `fonts-unavailable`). Only faces the handle's registry holds are embedded (bundled or hash-pinned, never a system font), only where a slide draws them, as `@font-face` data in each SVG and as subsets in the PDF. A face whose own license text is not OFL, Apache, MIT or UFL is left out and reported (`fonts/export-font-license`).
+- **PDF** is the renderer's vector PDF (selectable text, vector shapes, embedded subsets, tagged structure), `raster: true` is the image-only form. **PNG** is drawn on a canvas from the same SVG (within anti-aliasing of the renderer's resvg PNG) and is limited to 40 megapixels. **SVG** files are standalone (XML header, fonts embedded, no external references).
+- **Files.** A PDF is one file (`pages`, and the one-based `slides` it shows). PNG and SVG give one file per slide, in slide order, each with its one-based `slide`, its `id` and its `width` and `height` in pixels, as core's `convert` does; with `zip: true` they are one archive (`createZip`, no dependency; `entries` names the files in it), even for one slide. `zip` with a PDF, or `raster` with PNG or SVG, rejects with `invalid-option`.
+- **Names.** `exportFileName(deck, ext, suffix)` uses the deck's `filename` (a trailing .pptx/.pdf/.png/.svg dropped), else the slugified `name`, else `presentation`; the `name` option replaces both. Slides are numbered as core numbers them (`name-001.png`, more digits for a deck of 1000 slides or more), archives are `name.zip`.
+- **Slides.** `slidesToConvert(deck, { slides, includeHidden })` gives the one-based slide numbers a conversion covers. A selection names exactly its slides, hidden or not; a malformed one, or a slide past the end, rejects with core's `invalid-option` (`OPFApiError`, from `parseSlideSelection`). A deck with no slide to convert rejects with `export-no-slides`.
 - **Progress and cancel.** `onProgress({ stage, done, total, message })` reports fonts, drawing, per-page conversion and packing; an aborted `signal` rejects with `export-aborted` between pages and slides.
-- **Diagnostics.** `describeDiagnostic` normalises renderer and converter notes into `{ code, severity, message, slide? }`: `pdf-font-substituted`, `pdf-glyph-missing`, `pdf-raster-fallback` and the renderer's own are `warning`; `pdf-font-embedded` is `info`.
-- PDF and PNG need `@openpresentation/opf-render` with its `export-browser` entry (RR-23, opf-render#105); without it they reject with `export-unavailable` and SVG still works. The entry imports no PDF library (opf-render 0.16): the vector PDF, PNG and SVG need nothing else, and `pdfMode: "raster"` needs the `pdfLib` option. Verified in Chromium; Safari and Firefox are not exercised in CI. The playground bundle grows by the PDF writer, fontkit shaping and the bidi algorithm.
+- **Findings.** Renderer and converter notes are core's `Finding` (finding.schema.json), as core's conversion reports them: `ruleId` `render/<code>` (the renderer), `pdf/<code>` (the PDF converter) or `fonts/export-font-license`, `category` the same word, `path` a JSON Pointer, `slide` (zero-based, as the Finding schema defines it) and `slideId`, and the note's facts (font family, weight, glyph count) in `measured`. `pdf/pdf-font-substituted`, `pdf/pdf-glyph-missing`, `pdf/pdf-raster-fallback` and the renderer's own are `warning`; `pdf/pdf-font-embedded` is `info`. A finding about a slide that is not converted is left out, and repeats are kept once.
+- **Errors.** A rejection's `code` is `export-format` (no such format), `export-no-slides`, `export-aborted`, `export-unavailable`, `export-fonts-unlicensed`, `fonts-unavailable`, `invalid-option` or a renderer code (`converter-missing` for a raster PDF without `pdfLib`).
+- PDF and PNG need `@openpresentation/opf-render` with its `export-browser` entry (RR-23, opf-render#105); without it they reject with `export-unavailable` and SVG still works. The entry imports no PDF library (opf-render 0.16): the vector PDF, PNG and SVG need nothing else, and `raster: true` needs the `pdfLib` option. Verified in Chromium; Safari and Firefox are not exercised in CI. The playground bundle grows by the PDF writer, fontkit shaping and the bidi algorithm.
 
 Catalog controls initialize an absent deck or slide `design` for known theme, color-scheme and font-scheme fields as one validated transaction. Undo removes a newly created parent; existing design fields are retained. DOM, React and Svelte catalog controls accept `onError(error)` and emit a bubbling `opferror` event on rejected edits, restore the committed selection and expose native validity feedback. General `editor.set` and JSON Patch require existing parents.
 

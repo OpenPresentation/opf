@@ -3,7 +3,7 @@
 // follow the document.
 import assert from "node:assert/strict";
 import { schemas, validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { resolveSlideContext } from "@openpresentation/opf";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
@@ -42,7 +42,7 @@ const deck = () => ({
 });
 const catalogs = [defaultCatalog];
 const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs });
-const svg = (presentation, slideIndex = 0) => renderSlideSvg(presentation, slideIndex, { catalogs });
+const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1, { catalogs });
 
 // The descriptor list is the documented set, and every enum matches the installed schema.
 {

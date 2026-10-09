@@ -85,7 +85,7 @@ try {
   await tab.goto(`${base}/index.html`);
   await tab.locator('#canvas svg').waitFor();
   const run = (fn, arg) => tab.evaluate(fn, arg);
-  // RR-61: the canvas draws with the handle and `embedFonts: false`: the page holds the faces, so the SVG carries none.
+  // RR-61: the canvas draws with the handle and `text: "system"`: the page holds the faces, so the SVG carries none.
   const embedsNoFace = async (name) => assert.equal(await run(() => /@font-face/.test(document.querySelector('#canvas svg').outerHTML)), false, `${name}: the canvas SVG embeds no face`);
   await embedsNoFace('first draw');
   const settle = () => tab.waitForFunction(() => document.querySelector('#canvas svg') && !document.querySelector('.opf-canvas-fonts') && window.harness.pending(window.harness.editor.presentation).length === 0, undefined, { timeout: 60000 });

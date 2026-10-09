@@ -21,7 +21,7 @@ import { fontGate } from "../dist/font-gate.js";
 import { BUNDLED_FONT_MANIFEST, loadFonts } from "@openpresentation/opf-render/fonts-node";
 import { createScriptTextMeasurement } from "@openpresentation/opf-render/fonts";
 import * as browserFonts from "@openpresentation/opf-render/fonts-browser";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const packageRoot = path.dirname(fileURLToPath(import.meta.resolve("@openpresentation/opf-render/package.json")));
@@ -123,7 +123,7 @@ for (const entry of families) {
     // Strict render with the registry's measurement: every run is drawn in the family.
     const notes = [];
     const strict = createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(deck), { glyphFallback: "none", onFallback: (note) => notes.push(note) });
-    const svg = renderSlideSvg(deck, 0, { fonts: { textMeasurement: strict }, glyphFallback: "none", onDiagnostic: (value) => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); } });
+    const svg = toSvg(deck, 1, { fonts: { textMeasurement: strict }, glyphFallback: "none", onDiagnostic: (value) => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); } });
     assert.deepEqual(notes, [], `${where} ${sample.id}: no glyph fallback`);
     const runs = drawnRuns(svg);
     assert.ok(runs.length >= 3, `${where} ${sample.id}: the deck draws its title and two body runs (${runs.length})`);

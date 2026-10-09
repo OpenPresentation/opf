@@ -1,7 +1,7 @@
 // RR-32: the playground's "Fill template" dialog. It mounts the Fill template panel from the package
 // (src/template-panel.js) over the playground's editor session, draws the live preview through the
 // playground's fonts handle, and fills the deck as one undoable edit.
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { toSvg } from '@openpresentation/opf-render/svg';
 import { whenFontsReady } from '../src/font-gate.js';
 import { createTemplatePanel } from '../src/template-panel.js';
 import { hasTemplateVariables, previewTemplate } from '../src/templates.js';
@@ -27,7 +27,7 @@ export function installTemplateControls({ editor, getCanvas, getSlideIndex, getS
     const run = ++previewRun;
     return new Promise((resolve, reject) => {
       const filled = previewTemplate(source, variables).presentation;
-      const draw = () => resolve(renderSlideSvg(source, slideIndex, { catalogs: editor.catalogs, fonts, embedFonts: false, variables, trace: false }));
+      const draw = () => resolve(toSvg(source, slideIndex + 1, { catalogs: editor.catalogs, fonts, text: 'system', variables, trace: false }));
       whenFontsReady(fonts, filled, { renderOptions: { catalogs: editor.catalogs }, isCurrent: () => run === previewRun, loading() {}, ready: draw, failed: reject });
     });
   }

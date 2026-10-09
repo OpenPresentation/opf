@@ -1,7 +1,7 @@
 import { createCanvasEditor } from "../src/canvas.js";
 import { createEditorSession } from "../src/index.js";
 import { loadFonts } from "@openpresentation/opf-render/fonts-browser";
-import { renderSlideSvg } from "@openpresentation/opf-render";
+import { toSvg } from "@openpresentation/opf-render";
 // OPF 0.15: the host registers its catalogs (the deck names the gallery's roboto scheme).
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 const output = document.querySelector("#results"),
@@ -117,7 +117,7 @@ try {
       node.getAttribute("font-size"),
     ]);
   const reference = document.createElement("div");
-  reference.innerHTML = renderSlideSvg(draft, 0, options);
+  reference.innerHTML = toSvg(draft, 1, options);
   check(
     JSON.stringify(textShapes(host.querySelector("svg"))) ===
       JSON.stringify(textShapes(reference)),

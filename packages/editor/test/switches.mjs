@@ -3,7 +3,7 @@
 // recomposes to the new fonts and content. Exports after a switch: switches-export.mjs.
 import assert from "node:assert/strict";
 import { resolveSlideContext, validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { OPFEditorError, createEditorSession } from "../dist/index.js";
 const fontFamiliesOf = (presentation, index) => resolveSlideContext(presentation, index, { catalogs }).options.fontFamilies;
 import { prepareBlockReplace } from "../dist/layout.js";
@@ -16,7 +16,7 @@ assert.deepEqual([...SWITCH_DIMENSIONS], ALL_DIMENSIONS);
 assert.deepEqual(cases.map((entry) => entry.dimension), ALL_DIMENSIONS);
 
 const session = (presentation = baseDeck()) => createEditorSession(presentation, { rejectInvalid: true, catalogs });
-const svg = (presentation, slideIndex) => renderSlideSvg(presentation, slideIndex, { catalogs });
+const svg = (presentation, slideIndex) => toSvg(presentation, slideIndex + 1, { catalogs });
 function measuredFamilies(presentation, slideIndex) {
   const families = new Set();
   createEditorSession(presentation, { catalogs }).composeSlide(slideIndex, {

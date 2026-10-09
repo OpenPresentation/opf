@@ -2,7 +2,7 @@
 // reports what it cannot carry, refuses pairs with no meaning, and is one undoable patch.
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
 import { BLOCK_CONVERSIONS, BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, convertBlock, metricGroupForSelection, prepareBlockConversion, readBlockContent } from "../dist/block-convert.js";
 import { switchDimension } from "../dist/switches.js";
@@ -248,9 +248,9 @@ function readValue(presentation, path) {
 // The preview follows: the converted list renders its items.
 {
   const editor = session();
-  const before = renderSlideSvg(editor.presentation, 0);
+  const before = toSvg(editor.presentation, 1);
   convertBlock(editor, at(0), "list");
-  const after = renderSlideSvg(editor.presentation, 0);
+  const after = toSvg(editor.presentation, 1);
   assert.notEqual(after, before, "the preview redraws the converted block");
   for (const word of ["One", "Two", "Three"]) assert.ok(after.includes(word), `${word} survives in the preview`);
 }

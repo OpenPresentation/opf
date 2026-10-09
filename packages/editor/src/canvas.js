@@ -7,7 +7,7 @@ import {
   splitOpfPath,
 } from "./index.js";
 import {
-  renderSlideSvg,
+  toSvg,
   resolvePresentation,
 } from "@openpresentation/opf-render/svg";
 import {
@@ -77,7 +77,7 @@ export function createCanvasEditor(container, options = {}) {
   const resolveOptions = () => ({ ...renderOptions, catalogs: mergeCatalogs(editor.catalogs, renderOptions.catalogs) });
   // RR-61: the handle measures, and the canvas embeds no face: the browser handle already added its faces to the page, so
   // `@font-face` data would repeat megabytes of base64 in every redraw. Exports keep the default and carry the faces they draw.
-  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: handle, embedFonts: false, ...extra });
+  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: handle, text: "system", ...extra });
   let slideIndex = options.slideIndex ?? 0,
     // RR-32: the canvas edits the document as authored, so a template's {{tokens}} stay visible and an inline edit never
     // overwrites one with its resolved text. The Fill template panel previews the resolved deck. Pass `variables` to override.
@@ -197,7 +197,7 @@ export function createCanvasEditor(container, options = {}) {
   }
   function validateRender(presentation) {
     requireFonts(presentation);
-    return renderSlideSvg(presentation, slideIndex, drawOptions());
+    return toSvg(presentation, slideIndex + 1, drawOptions());
   }
   function fontsState(kind, detail) {
     fontsShown = true;
@@ -253,7 +253,7 @@ export function createCanvasEditor(container, options = {}) {
     showToken++;
     const slides = presentation.slides ?? [];
     slideIndex = Math.max(0, Math.min(slideIndex, slides.length - 1));
-    const svgText = renderSlideSvg(presentation, slideIndex, drawOptions({ trace: true }));
+    const svgText = toSvg(presentation, slideIndex + 1, drawOptions({ trace: true }));
     preview.innerHTML = svgText;
     const svg = preview.querySelector("svg");
     svg.setAttribute("role", "group");

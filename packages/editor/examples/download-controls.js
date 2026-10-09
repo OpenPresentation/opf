@@ -1,7 +1,7 @@
 // RR-23: the playground's "PDF / PNG / SVG" download dialog, next to the PowerPoint export. The dialog is a thin view over
-// src/export.js: it collects the options, runs `exportDeck` with progress and a Cancel, shows what the converter noted
+// src/export.js: it collects the options, runs `convert` with progress and a Cancel, shows what the converter noted
 // (substituted fonts, missing glyphs, elements drawn as images) and offers the finished file for download.
-import { EXPORT_FORMATS, MAX_PNG_SCALE, exportDeck, exportFileName, slidesToExport } from '../src/export.js';
+import { EXPORT_FORMATS, MAX_PNG_SCALE, convert, exportFileName, slidesToConvert } from '../src/export.js';
 
 const FORMAT_HELP = {
   pdf: 'Pages the size of the slides. Text stays selectable and searchable; fonts are embedded from the editor’s open font files.',
@@ -9,7 +9,7 @@ const FORMAT_HELP = {
   svg: 'Scalable slides with their fonts embedded, one file per slide. All slides arrive as a ZIP.',
 };
 
-export function installDownloadControls({ editor, getCanvas, getSlideIndex, status, fonts, convert }) {
+export function installDownloadControls({ editor, getCanvas, getSlideIndex, status, fonts, converters }) {
   const header = document.querySelector('.header-actions');
   if (!header) return;
   const button = document.createElement('button');
@@ -58,7 +58,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
   function labelOptions() {
     const deck = editor.presentation, current = getSlideIndex();
     $('#download-current-label').textContent = `Current slide (${current + 1} of ${deck.slides.length})`;
-    const all = slidesToExport(deck, { slides: 'all', includeHidden: $('#download-hidden').checked }).length;
+    const all = slidesToConvert(deck, { includeHidden: $('#download-hidden').checked }).length;
     $('#download-all-label').textContent = `All slides (${all})`;
     $('#download-hidden-row').hidden = !deck.slides.some(slide => slide.hidden === true);
     const format = value('download-format');
@@ -87,11 +87,12 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
     $('#download-create').disabled = on;
     for (const input of dialog.querySelectorAll('input,select')) input.disabled = on;
   }
-  function showDiagnostics(diagnostics) {
-    const notes = diagnostics.filter(item => item.severity !== 'info'), info = diagnostics.filter(item => item.severity === 'info');
+  // Findings (core's shape): `slide` is zero-based there, so the dialog adds one.
+  function showFindings(findings) {
+    const notes = findings.filter(item => item.severity !== 'info'), info = findings.filter(item => item.severity === 'info');
     $('#download-diagnostics').replaceChildren(...notes.map(item => {
       const li = document.createElement('li');
-      li.dataset.code = item.code;
+      li.dataset.rule = item.ruleId;
       li.textContent = `${item.slide === undefined ? '' : `Slide ${item.slide + 1}: `}${item.message}`;
       return li;
     }));
@@ -113,16 +114,22 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
     $('#download-cancel').focus();
     try {
       // RR-63: the renderer's export-browser entry imports no pdf-lib. The page imports it, only for a raster PDF.
-      const pdfMode = format === 'pdf' ? value('download-pdf-mode') : undefined;
-      const pdfLib = pdfMode === 'raster' && !convert ? await import('pdf-lib') : undefined;
-      const made = await exportDeck(deck, {
+      const raster = format === 'pdf' && value('download-pdf-mode') === 'raster';
+      const pdfLib = raster && !converters ? await import('pdf-lib') : undefined;
+      // The dialog's current slide is the canvas's zero-based index; a selection counts from 1.
+      const current = Math.min(getSlideIndex(), deck.slides.length - 1) + 1;
+      const slides = value('download-slides') === 'current' ? current : undefined;
+      const includeHidden = $('#download-hidden').checked;
+      // Several PNG or SVG slides arrive as one ZIP; one slide, or the PDF, as itself.
+      const zip = format !== 'pdf' && slidesToConvert(deck, { slides, includeHidden }).length > 1;
+      const made = await convert(deck, {
         format,
-        slides: value('download-slides'),
-        slideIndex: Math.min(getSlideIndex(), deck.slides.length - 1),
-        includeHidden: $('#download-hidden').checked,
-        pdfMode, pdfLib,
+        ...(slides === undefined ? {} : { slides }),
+        includeHidden,
+        ...(raster ? { raster, pdfLib } : {}),
+        ...(zip ? { zip } : {}),
         scale: Number($('#download-scale').value),
-        fonts, convert,
+        fonts, converters,
         catalogs: editor.catalogs,
         signal: controller.signal,
         onProgress: ({ stage, done, total, message }) => {
@@ -134,12 +141,13 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
       });
       if (id !== token || !dialog.open) return;
       result = made;
-      const warnings = made.diagnostics.filter(item => item.severity === 'warning').length;
-      const size = made.download.bytes.length;
-      $('#download-summary').textContent = `${made.download.name} · ${made.slides.length} ${made.slides.length === 1 ? 'slide' : 'slides'} · ${size < 1048576 ? `${Math.max(1, Math.round(size / 1024))} KB` : `${(size / 1048576).toFixed(1)} MB`} · ${warnings} ${warnings === 1 ? 'note' : 'notes'} to review`;
-      showDiagnostics(made.diagnostics);
+      const [file] = made.files, count = file.slides?.length ?? file.entries?.length ?? 1;
+      const warnings = made.findings.filter(item => item.severity === 'warning').length;
+      const size = file.bytes.length;
+      $('#download-summary').textContent = `${file.name} · ${count} ${count === 1 ? 'slide' : 'slides'} · ${size < 1048576 ? `${Math.max(1, Math.round(size / 1024))} KB` : `${(size / 1048576).toFixed(1)} MB`} · ${warnings} ${warnings === 1 ? 'note' : 'notes'} to review`;
+      showFindings(made.findings);
       $('#download-save').disabled = false;
-      $('#download-save').textContent = `Download ${EXPORT_FORMATS[format].label}${made.files.length > 1 ? ' (ZIP)' : ''}`;
+      $('#download-save').textContent = `Download ${EXPORT_FORMATS[format].label}${file.entries ? ' (ZIP)' : ''}`;
       status(`${EXPORT_FORMATS[format].label} ready`);
     } catch (error) {
       if (id !== token || !dialog.open) return;
@@ -151,7 +159,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, stat
   }
   function save() {
     if (!result) return;
-    const { name, type, bytes } = result.download;
+    const { name, type, bytes } = result.files[0];
     const url = URL.createObjectURL(new Blob([bytes], { type }));
     const link = document.createElement('a');
     link.href = url;

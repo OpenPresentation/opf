@@ -126,7 +126,7 @@ try {
   const size = await page.evaluate(() => ({ width: Number(document.querySelector('#preview svg').getAttribute('width')), height: Number(document.querySelector('#preview svg').getAttribute('height')) }));
   await create();
   const png = await save();
-  assert.equal(png.name, 'q3-review-01.png');
+  assert.equal(png.name, 'q3-review-001.png');
   assert.deepEqual(pngSize(png.bytes), { width: size.width * 2, height: size.height * 2 }, 'the PNG has the size the dialog promised');
   await writeFile(path.join(outputDirectory, 'slide-1.png'), png.bytes);
   await page.locator('#download-scale').selectOption('1');
@@ -134,9 +134,9 @@ try {
   await page.locator('#download-hidden').uncheck();
   await create();
   const pngZip = await save();
-  assert.equal(pngZip.name, 'q3-review-png.zip');
+  assert.equal(pngZip.name, 'q3-review.zip');
   const pngFiles = await JSZip.loadAsync(pngZip.bytes);
-  assert.deepEqual(Object.keys(pngFiles.files).sort(), ['q3-review-01.png', 'q3-review-03.png']);
+  assert.deepEqual(Object.keys(pngFiles.files).sort(), ['q3-review-001.png', 'q3-review-003.png']);
   for (const file of Object.values(pngFiles.files)) assert.deepEqual(pngSize(await file.async('uint8array')), size);
   await button('Close download dialog').click();
 
@@ -146,7 +146,7 @@ try {
   await choose('download-slides', 'current');
   await create();
   const svg = await save();
-  assert.equal(svg.name, 'q3-review-01.svg');
+  assert.equal(svg.name, 'q3-review-001.svg');
   const svgText = svg.bytes.toString('utf8');
   assert.equal(await wellFormed(svgText), 'svg', 'the SVG is well-formed XML');
   assert.match(svgText, /Revenue grew in every region/);

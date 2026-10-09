@@ -8,7 +8,7 @@ import { validate } from "@openpresentation/opf";
 
 // `chart-option-adapted` (layout) and `chart-mapping-adapted` (content) are what core says when a combo option or mapping is dropped; `only: ["format"]` never reports them.
 const adapted = (presentation) => validate(presentation, { only: ["opf/chart-option-adapted", "opf/chart-mapping-adapted"] });
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import { prepareChartOptions, readChartOptions, setChartOptions } from "../dist/chart-options.js";
@@ -46,7 +46,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
 // 3. Editing lines and the secondary axis: one undoable patch each; `line` only when it differs from the default.
 {
   const editor = session();
-  const svgBefore = renderSlideSvg(editor.presentation, 0, { trace: true });
+  const svgBefore = toSvg(editor.presentation, 1, { trace: true });
   setChartOptions(editor, C, { secondaryAxis: ["Margin"] });
   assert.deepEqual(editor.get(C).secondaryAxis, ["Margin"]);
   assert.equal(editor.get(C).line, undefined, "the default line is not written");
@@ -67,7 +67,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
   assert.deepEqual(editor.get(C).axisTitles, { secondary: "Margin" });
   editor.undo(); editor.undo(); editor.undo();
   assert.deepEqual(editor.get(C), deck({}).slides[0].blocks[0].chart);
-  assert.equal(renderSlideSvg(editor.presentation, 0, { trace: true }), svgBefore, "undo restores the preview");
+  assert.equal(toSvg(editor.presentation, 1, { trace: true }), svgBefore, "undo restores the preview");
 }
 
 // 4. Refusals: at least one line and at least one column series; unknown names.

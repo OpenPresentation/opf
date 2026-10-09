@@ -4,7 +4,7 @@
 // fails with "Intos Display cannot display U+65E5"), so nothing may render or measure a new document before `ensure`
 // resolves. The renderer's fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`) is the source of
 // truth: its `pending(presentation, renderOptions)` and `ensure(presentation, options)` know what is missing and load it. The
-// canvas and `exportDeck` take that handle as `fonts` and gate every document-replacing path through this module.
+// canvas and `convert` (`/export`) take that handle as `fonts` and gate every document-replacing path through this module.
 
 /** Error code of a document whose required faces are still loading. */
 export const FONTS_PENDING = "fonts-pending";

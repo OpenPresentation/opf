@@ -8,7 +8,7 @@ import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/com
 
 // The rules that report an option or highlight the chart type cannot show (content and layout warnings, so `only: ["format"]` never sees them).
 const ADAPTED_RULES = ["opf/chart-option-adapted", "opf/chart-highlight-adapted", "opf/chart-mapping-adapted"];
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import { prepareChartOptions, readChartOptions, setChartOptions } from "../dist/chart-options.js";
@@ -21,7 +21,7 @@ const deck = (type = "column", chart = {}) => ({
   slides: [{ id: "chart", title: "Chart", blocks: [{ chart: { type, data, ...chart } }, { text: "Notes" }] }],
 });
 const session = (type, chart) => createEditorSession(deck(type, chart), { rejectInvalid: true });
-const svg = (document) => renderSlideSvg(document, 0, { trace: true });
+const svg = (document) => toSvg(document, 1, { trace: true });
 
 // What each chart type offers follows core's support table.
 for (const type of ["column", "bar", "stacked-column", "line", "area", "pie", "doughnut", "scatter", "radar", "histogram", "waterfall", "funnel", "treemap", "box-and-whisker", "world"]) {

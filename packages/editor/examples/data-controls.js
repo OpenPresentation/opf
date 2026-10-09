@@ -1,6 +1,6 @@
 import {ingest,parseTabularData} from '@openpresentation/opf/data';
 import {prepareDatasetImport} from '../src/data.js';
-import {renderSlideSvg} from '@openpresentation/opf-render/svg';
+import {toSvg} from '@openpresentation/opf-render/svg';
 import {whenFontsReady} from '../src/font-gate.js';
 
 export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,fonts}) {
@@ -66,7 +66,7 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
    const deck=editor.presentation, preview={...deck,slides:[{title:$('data-slide-title').value,...content}]};
    // FF-41: the preview draws only once the faces the data needs (a CSV in Japanese or Arabic, an Aptos deck) are loaded.
    const show=()=>{
-    $('data-preview').innerHTML=renderSlideSvg(preview,0,{catalogs:editor.catalogs,fonts,embedFonts:false,trace:false});
+    $('data-preview').innerHTML=toSvg(preview,1,{catalogs:editor.catalogs,fonts,text:'system',trace:false});
     const table=document.createElement('table');
     for(const [i,row]of [data.columns,...data.rows.slice(0,8)].entries()){const tr=document.createElement('tr');for(const value of row){const td=document.createElement(i?'td':'th');td.textContent=value===null?'—':String(value);tr.append(td);}table.append(tr);}
     $('data-grid').append(table);$('data-summary').textContent=`${data.rows.length} rows · ${data.columns.length} columns${data.rows.length>8?' · first 8 rows shown below':''}`;

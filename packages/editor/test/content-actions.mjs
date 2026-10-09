@@ -2,7 +2,7 @@
 // transactions. Each is one guarded, validated, undoable step that reports what it cannot carry.
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
 import {
   groupBlocks,
@@ -74,9 +74,9 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.throws(() => editor.applyPatch(stale.patches), (error) => error.code === "patch-test-failed");
   undoAll(editor, original);
   // The preview follows: the nested item draws.
-  const before = renderSlideSvg(editor.presentation, 0);
+  const before = toSvg(editor.presentation, 1);
   shiftListItems(editor, "slides.0.blocks.0", [1, 2], 1);
-  assert.notEqual(renderSlideSvg(editor.presentation, 0), before);
+  assert.notEqual(toSvg(editor.presentation, 1), before);
 }
 
 // --- group and ungroup -------------------------------------------------------------------------
@@ -165,9 +165,9 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.deepEqual(merged.loss, ['slide id "blocks--2"']);
   assert.equal(editor.presentation.slides.length, original.slides.length);
   undoAll(editor, original);
-  const preview = renderSlideSvg(editor.presentation, 1);
+  const preview = toSvg(editor.presentation, 2);
   splitSlideByBlocks(editor, 1, { each: true });
-  assert.notEqual(renderSlideSvg(editor.presentation, 1), preview, "the preview follows the split");
+  assert.notEqual(toSvg(editor.presentation, 2), preview, "the preview follows the split");
   undoAll(editor, original);
   refused(() => splitSlideByBlocks(editor, 6, { each: true }), /one block/);
   refused(() => mergeSlides(editor, 6, 2), /exist/);

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { toPptx } from '@openpresentation/opf-pptx';
-import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { toSvg } from '@openpresentation/opf-render/svg';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { startPlayground } from './support/playground-harness.mjs';
 
@@ -244,7 +244,7 @@ try {
     for (const fill of [undefined, 'cover']) {
       const variant = structuredClone(deck);
       if (fill) variant.design.imageFit = fill;
-      const svg = renderSlideSvg(variant, slideIndex, { trace: true, catalogs: [defaultCatalog] });
+      const svg = toSvg(variant, slideIndex + 1, { trace: true, catalogs: [defaultCatalog] });
       const tag = svg.match(/<image\b[^>]*data-opf-path="slides\.\d+\.(?:blocks\.0\.)?image"[^>]*>/)[0];
       const attr = (name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))[1];
       const frame = { x: +attr('x'), y: +attr('y'), width: +attr('width'), height: +attr('height') };

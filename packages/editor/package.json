@@ -212,6 +212,9 @@
   },
   "types": "./dist/index.d.ts",
   "sideEffects": false,
+  "opf": {
+    "requiresUnreleasedCore": "0.18.0"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/check-syntax.mjs src test scripts examples",

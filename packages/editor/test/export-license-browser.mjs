@@ -2,7 +2,7 @@
 // export-browser PDF converter. A deck drawn in Roboto is exported to PDF twice: with the registry as it is (Roboto is OFL, so it is
 // embedded), and with Roboto's license text replaced by a proprietary one (so it must not be embedded in the PDF). In the second case the
 // export cannot write the PDF and says why (`export-fonts-unlicensed`); and with only Roboto Bold dropped the PDF is still written, with
-// the regular face standing in for the bold text, reported by the converter and by `export-font-license`. A face whose license failed is
+// the regular face standing in for the bold text, reported by the converter and by `fonts/export-font-license`. A face whose license failed is
 // never embedded.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -24,7 +24,7 @@ await build({
   stdin: {
     resolveDir: repo, loader: 'js',
     contents: `
-import { exportDeck } from ${JSON.stringify(path.join(repo, 'src/export.js').replace(/\\/g, '/'))};
+import { convert } from ${JSON.stringify(path.join(repo, 'src/export.js').replace(/\\/g, '/'))};
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
 window.run = async ({ faces, licenses = {} }) => {
@@ -32,10 +32,10 @@ window.run = async ({ faces, licenses = {} }) => {
   const deck = { name: 'License', design: { fontScheme: 'roboto' }, slides: [{ id: 'a', title: 'Quarterly review', text: 'Revenue grew in every region.' }] };
   const seen = { fontData: undefined };
   const real = await import('@openpresentation/opf-render/export-browser');
-  const convert = { svgToPng: real.svgToPng, svgToPdf: (svgs, options) => { seen.fontData = (options.fontData ?? []).map((item) => item.family); seen.handle = 'fonts' in options; return real.svgToPdf(svgs, options); } };
+  const converters = { toPng: real.toPng, toPdf: (svgs, options) => { seen.fontData = (options.fontData ?? []).map((item) => item.family); seen.handle = 'fonts' in options; return real.toPdf(svgs, options); } };
   try {
-    const result = await exportDeck(deck, { format: 'pdf', fonts, convert, catalogs: [defaultCatalog] });
-    return { bytes: Array.from(result.download.bytes), diagnostics: result.diagnostics, fontData: seen.fontData, handlePassed: seen.handle };
+    const result = await convert(deck, { format: 'pdf', fonts, converters, catalogs: [defaultCatalog] });
+    return { bytes: Array.from(result.files[0].bytes), findings: result.findings, fontData: seen.fontData, handlePassed: seen.handle };
   } catch (error) {
     return { error: { code: error.code, message: error.message, cause: error.cause?.message }, fontData: seen.fontData };
   } finally {
@@ -77,8 +77,8 @@ try {
   const open = await tab.evaluate((faces) => window.run({ faces }), faces);
   assert.equal(open.handlePassed, false, 'the handle is not handed to the PDF converter');
   assert.ok(open.fontData.includes('Roboto'), 'Roboto (OFL) is given to the PDF converter');
-  assert.equal(open.diagnostics.filter((item) => item.code === 'export-font-license').length, 0);
-  assert.ok(open.diagnostics.some((item) => item.code === 'pdf-font-embedded' && /Roboto/i.test(item.message)), 'the converter embedded Roboto: ' + JSON.stringify(open.diagnostics.map((item) => item.code)));
+  assert.equal(open.findings.filter((item) => item.ruleId === 'fonts/export-font-license').length, 0);
+  assert.ok(open.findings.some((item) => item.ruleId === 'pdf/pdf-font-embedded' && /Roboto/i.test(item.message)), 'the converter embedded Roboto: ' + JSON.stringify(open.findings.map((item) => item.ruleId)));
   const openPdf = await pdfInfo(open.bytes);
   assert.match(openPdf.text, /Quarterly review/);
 
@@ -93,13 +93,13 @@ try {
   // 3. Only the bold face fails: the PDF is written, the bold face is not in it, the regular face stands in and both say so.
   const some = await tab.evaluate((args) => window.run(args), { faces, licenses: { 700: bad } });
   assert.deepEqual(some.fontData, ['Roboto'], 'only the permissive face reaches the PDF converter');
-  const notes = some.diagnostics.filter((item) => item.code === 'export-font-license');
+  const notes = some.findings.filter((item) => item.ruleId === 'fonts/export-font-license');
   assert.deepEqual(notes.map((item) => item.message), ['Roboto 700 is not embedded: its license is not one of OFL-1.1, Apache-2.0, MIT or UFL-1.0.']);
-  const embeddedNames = some.diagnostics.filter((item) => item.code === 'pdf-font-embedded').map((item) => `${item.family} ${item.weight}`);
+  const embeddedNames = some.findings.filter((item) => item.ruleId === 'pdf/pdf-font-embedded').map((item) => `${item.measured?.family} ${item.measured?.weight}`);
   assert.ok(!embeddedNames.some((text) => /\b700\b/.test(text)), 'no 700 face is embedded: ' + JSON.stringify(embeddedNames));
   const somePdf = await pdfInfo(some.bytes);
   assert.match(somePdf.text, /Quarterly review/, 'the bold title text is still in the PDF');
-  console.log('PDF license rule (browser): permissive faces embedded (' + openPdf.fontNames.join(', ') + '); all dropped -> export-fonts-unlicensed; bold dropped -> PDF written, regular standing in; converter notes: ' + JSON.stringify([...new Set(some.diagnostics.map((item) => `${item.code}:${item.severity}`))]));
+  console.log('PDF license rule (browser): permissive faces embedded (' + openPdf.fontNames.join(', ') + '); all dropped -> export-fonts-unlicensed; bold dropped -> PDF written, regular standing in; converter notes: ' + JSON.stringify([...new Set(some.findings.map((item) => `${item.ruleId}:${item.severity}`))]));
   assert.deepEqual(problems, []);
 } finally {
   await browser?.close();

@@ -2,7 +2,7 @@
 // unique ids, and the right section; a dry run (prepare*) never touches a session.
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import { collectReservedPresentationIds } from "../dist/presentation-ids.js";
@@ -114,7 +114,7 @@ function oneStep(editor, run) {
   assert.ok(Array.isArray(last.blocks) || last.items, "list placeholders exist");
   assert.throws(() => addSlide(editor, { layout: "no-such-layout" }), { code: "unknown-catalog-id" });
   // The preview draws the new slide.
-  assert.ok(renderSlideSvg(editor.presentation, 1).includes("<svg"));
+  assert.ok(toSvg(editor.presentation, 2).includes("<svg"));
 }
 
 // --- duplicate -------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ function oneStep(editor, run) {
   assert.equal(setHidden(stored, [0], true).patches[0].op, "replace");
   assert.equal(setHidden(stored, [0], false).patches[0].op, "remove");
   // Hidden slides still render for the editor (they are only skipped when presenting).
-  assert.ok(renderSlideSvg(editor.presentation, 3).includes("<svg"));
+  assert.ok(toSvg(editor.presentation, 4).includes("<svg"));
 }
 
 // --- sections --------------------------------------------------------------------------------------

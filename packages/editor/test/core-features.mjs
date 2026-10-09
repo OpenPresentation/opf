@@ -69,14 +69,14 @@ const pptx = await import("@openpresentation/opf-pptx");
 const required = [
   [core, ["validate", "validateCatalogRecord", "resolveSlideContext", "listBuiltinVariables", "paginate", "stats", "ingest", "resolveVariables", "listVariables", "hasContentVariables", "variableDeclarations", "coerceVariableValue", "resolveChartData", "inlineChartData", "inlineTableData", "isXYChartType", "chartNumber", "numberFormatError", "formatDataNumber"]],
   [composition, ["composeSlide", "resolveScriptFonts", "listNumbers", "chartOptionSupport", "chartOptionTarget", "resolveChartOptions", "collectCitations", "walkCitationRuns", "referencesSlide", "captionSettings"]],
-  [render, ["renderSvg", "renderSlideSvg", "resolvePresentation"]],
+  [render, ["toSvg", "resolvePresentation"]],
   [browserFonts, ["loadFonts"]],
   [pptx, ["toPptx", "fromPptx", "checkTypefaces", "inventoryTypefaces"]],
 ];
 for (const [module, names] of required) for (const name of names) assert.equal(typeof module[name], "function", `${name} is exported as a function`);
 // The old names are gone, not aliased: nothing the editor calls can resolve to a leftover.
 for (const name of ["validatePresentation", "auditPresentation", "lintSource", "paginatePresentation", "createDataContent", "excelNumberFormat"]) assert.equal(name in core, false, `core no longer exports ${name}`);
-for (const name of ["renderSvgDeck", "loadBrowserFontRegistry"]) assert.equal(name in render || name in browserFonts, false, `the renderer no longer exports ${name}`);
+for (const name of ["renderSvgDeck", "renderSvg", "renderSlideSvg", "loadBrowserFontRegistry"]) assert.equal(name in render || name in browserFonts, false, `the renderer no longer exports ${name}`);
 assert.equal("checkPptxTypefaces" in pptx, false, "opf-pptx no longer exports checkPptxTypefaces");
 
 console.log(`Core features: ${checked} named imports from ${wanted.size} sibling modules exist; no run-time feature detection remains.`);

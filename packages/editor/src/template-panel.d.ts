@@ -5,7 +5,7 @@ export interface TemplatePanelOptions {
   editor: EditorSession;
   /**
    * Draw the live preview: return the SVG of one slide of `presentation` with `variables` (the values typed so far)
-   * as an SVG string, or a promise of one. Typically `renderSlideSvg(presentation, slideIndex, { variables, ... })` from
+   * as an SVG string, or a promise of one. Typically `toSvg(presentation, slideIndex + 1, { variables, ... })` from
    * `@openpresentation/opf-render` with the host's fonts. Omit for no preview.
    */
   renderPreview?: (input: { presentation: unknown; variables: Record<string, unknown>; slideIndex: number }) => string | Promise<string>;

@@ -2,7 +2,7 @@
 // one undo step, scope, removal, and export. The 54 pattern presets all survive a PPTX round trip.
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
@@ -30,7 +30,7 @@ const deck = () => ({
 });
 const catalogs = [defaultCatalog];
 const session = () => createEditorSession(deck(), { rejectInvalid: true, catalogs });
-const svg = (presentation, index = 0) => renderSlideSvg(presentation, index, { catalogs });
+const svg = (presentation, index = 0) => toSvg(presentation, index + 1, { catalogs });
 
 // The pattern list is the 54 DrawingML presets, once each, in five families.
 assert.equal(PATTERN_PRESETS.length, 54);

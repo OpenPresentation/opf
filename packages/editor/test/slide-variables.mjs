@@ -1,7 +1,7 @@
 // FA-31: the editor composes the slide with the slide-scoped built-ins ({{slide.number}}, {{slide.section}}, {{deck.slideCount}})
 // substituted, the way the renderer draws it and the exporter writes it, and keeps the tokens in the document it edits.
 import assert from "node:assert/strict";
-import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { toSvg } from "@openpresentation/opf-render/svg";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { createEditorSession } from "../dist/index.js";
 import { replaceAll } from "../dist/find-replace.js";
@@ -40,7 +40,7 @@ const furniture = (composed) => JSON.stringify(composed.furniture);
 // The document keeps the tokens, and the preview draws the same numbers as composeSlide.
 {
   assert.equal(editor.presentation.slides[1].text, "Slide {{slide.number}} of {{deck.slideCount}}");
-  const svg = renderSlideSvg(editor.presentation, 1, { catalogs });
+  const svg = toSvg(editor.presentation, 2, { catalogs });
   assert.ok(svg.includes("Slide 2 of 3") && svg.includes("2 / 3"), "the preview draws the substituted slide");
 }
 
@@ -53,7 +53,7 @@ const furniture = (composed) => JSON.stringify(composed.furniture);
   const { change, pagination } = long.paginateSlide(0);
   assert.ok(change && pagination.slides.length > 1, "the long list splits");
   for (const slide of long.presentation.slides) assert.ok(slide.title.includes("{{slide.number}}"), "each page keeps the token");
-  const svg = renderSlideSvg(long.presentation, 1, { catalogs });
+  const svg = toSvg(long.presentation, 2, { catalogs });
   assert.ok(svg.includes(`Page 2 of ${long.presentation.slides.length}`), "and draws its own number and the new count");
   long.undo();
   assert.equal(long.presentation.slides.length, 1, "one undo puts the slide back");
