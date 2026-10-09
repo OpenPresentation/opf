@@ -1,4 +1,0 @@
----
-type: fixed
----
-RR-61 (output-changing for SVG rendered with a fonts handle; raster goldens unchanged): an SVG embeds as `@font-face` data only the faces its own text draws (family, weight and style), not every face of `fonts.embeddedFonts`. With `loadFonts({ pack: 'office' })` every slide carried all 33 eager npm faces (a 2 KB editor preview grew to 12.7 MB); over the 127 core example decks the mean office-pack slide drops from 15.1 MB to 2.4 MB (largest 16.8 MB to 4.1 MB) and the mean base-pack slide from 1.76 MB to 0.53 MB. A face the SVG names in no `font-family` could never be selected, so drawing is unchanged, and the vector PDF still embeds every face its pages draw from that `@font-face` data. Any `embeddedFonts` list is filtered the same way; a face flagged `embed: "always"` is still written into every SVG. Faces are embedded whole, not as glyph subsets.

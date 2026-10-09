@@ -1,4 +1,0 @@
----
-type: fixed
----
-RR-59: `renderDeckHtml` takes `fontMode: 'standalone' | 'shared' | 'external'` (shared writes each drawn `@font-face` rule once in the returned tag; external writes none, through `embedFonts: false`, for a page that serves the same pinned faces itself; all three measure with the same handle). An SVG whose text draws a family at a style none of its faces matches keeps every face of that family alongside an exactly matched one, so the browser can still choose. `element.present()` returns focus to the invoking element (or an explicit `returnFocus`), falling back to the viewport only when that element was removed. A fetched deck that fails names its URL, HTTP status and content type, and an HTML response suggests the host's SPA fallback route; valid JSON served with another content type is still accepted. The README adds the bundler prerequisite of the `<opf-deck>` recipe and a measured deferred-upgrade recipe.
