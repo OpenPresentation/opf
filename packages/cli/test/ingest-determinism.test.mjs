@@ -1,4 +1,4 @@
-// RR-62: `opf import-data --into` is a pure function of its inputs. No clock, no randomness, no dependence on the working directory.
+// RR-62: `opf ingest --into` is a pure function of its inputs. No clock, no randomness, no dependence on the working directory.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -39,17 +39,17 @@ const run = (args, { cwd = work, input, status = 0, noClock = false } = {}) => {
 };
 const read = file => readFile(path.join(work, file), "utf8");
 const fresh = async name => { await writeFile(path.join(work, name), await read("deck.opf.json")); return name; };
-const base = ["import-data", "data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue"];
+const base = ["ingest", "data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue"];
 
-describe("opf import-data is deterministic", () => {
+describe("opf ingest is deterministic", () => {
 	test("the same inputs write identical bytes from any working directory, and src is relative to the deck", async () => {
 		run([...base, "--into", "deck.opf.json", "--output", "one.json", "--force"]);
 		run([...base, "--into", "deck.opf.json", "--output", "one.json", "--force"], { noClock: true });
 		const first = await read("one.json");
 		// Another working directory: every path is spelled differently, absolute and relative to the parent.
 		const parent = temp;
-		run(["import-data", "work/data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", "work/deck.opf.json", "--output", "work/two.json"], { cwd: parent, noClock: true });
-		run(["import-data", path.join(work, "data", "revenue.csv"), "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", path.join(work, "deck.opf.json"), "--output", path.join(work, "three.json")], { cwd: parent, noClock: true });
+		run(["ingest", "work/data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", "work/deck.opf.json", "--output", "work/two.json"], { cwd: parent, noClock: true });
+		run(["ingest", path.join(work, "data", "revenue.csv"), "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", path.join(work, "deck.opf.json"), "--output", path.join(work, "three.json")], { cwd: parent, noClock: true });
 		assert.equal(await read("two.json"), first);
 		assert.equal(await read("three.json"), first);
 		const deck = JSON.parse(first);
@@ -70,8 +70,8 @@ describe("opf import-data is deterministic", () => {
 
 	test("a second import of different data into the same deck gets a different id", async () => {
 		const deck = await fresh("different.json");
-		run(["import-data", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place"]);
-		run(["import-data", "data/costs.csv", "--as", "table", "--into", deck, "--in-place"]);
+		run(["ingest", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place"]);
+		run(["ingest", "data/costs.csv", "--as", "table", "--into", deck, "--in-place"]);
 		const ids = JSON.parse(await read(deck)).slides.map(slide => slide.id);
 		assert.equal(ids.length, 3);
 		assert.equal(new Set(ids).size, 3);
@@ -82,7 +82,7 @@ describe("opf import-data is deterministic", () => {
 
 	test("the import options and line endings: options change the id, CRLF does not", async () => {
 		const deck = await fresh("options.json");
-		const idOf = args => JSON.parse(run(["import-data", ...args, "--into", deck]).stdout).slides[1].id;
+		const idOf = args => JSON.parse(run(["ingest", ...args, "--into", deck]).stdout).slides[1].id;
 		const table = idOf(["data/revenue.csv", "--as", "table"]);
 		assert.notEqual(table, idOf(["data/revenue.csv", "--as", "chart"]));
 		await writeFile(path.join(work, "data", "revenue-crlf.csv"), "Quarter,Revenue\r\nQ1,12\r\nQ2,18\r\n");
@@ -91,7 +91,7 @@ describe("opf import-data is deterministic", () => {
 
 	test("an id collision gets a numeric suffix", async () => {
 		const deck = await fresh("collide.json");
-		const args = ["import-data", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place"];
+		const args = ["ingest", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place"];
 		run(args); run(args); run(args);
 		const ids = JSON.parse(await read(deck)).slides.map(slide => slide.id);
 		assert.equal(ids[0], "intro");
@@ -102,15 +102,15 @@ describe("opf import-data is deterministic", () => {
 
 	test("--id names the slide, and a duplicate --id fails without writing", async () => {
 		const deck = await fresh("named.json");
-		run(["import-data", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place", "--id", "revenue-table"]);
+		run(["ingest", "data/revenue.csv", "--as", "table", "--into", deck, "--in-place", "--id", "revenue-table"]);
 		assert.deepEqual(JSON.parse(await read(deck)).slides.map(slide => slide.id), ["intro", "revenue-table"]);
 		const before = await read(deck);
-		const failed = run(["import-data", "data/costs.csv", "--as", "table", "--into", deck, "--in-place", "--id", "revenue-table"], { status: 1 });
+		const failed = run(["ingest", "data/costs.csv", "--as", "table", "--into", deck, "--in-place", "--id", "revenue-table"], { status: 1 });
 		assert.match(JSON.parse(failed.stderr).error, /already has a slide with id "revenue-table"/);
-		run(["import-data", "data/costs.csv", "--as", "table", "--into", deck, "--in-place", "--id", "intro"], { status: 1 });
+		run(["ingest", "data/costs.csv", "--as", "table", "--into", deck, "--in-place", "--id", "intro"], { status: 1 });
 		assert.equal(await read(deck), before);
-		run(["import-data", "data/costs.csv", "--as", "table", "--into", deck, "--path", "/slides/1/table", "--in-place", "--id", "x"], { status: 2 });
-		assert.equal(JSON.parse(run(["import-data", "data/costs.csv", "--as", "table", "--id", "solo"]).stdout).slides[0].id, "solo");
+		run(["ingest", "data/costs.csv", "--as", "table", "--into", deck, "--path", "/slides/1/table", "--in-place", "--id", "x"], { status: 2 });
+		assert.equal(JSON.parse(run(["ingest", "data/costs.csv", "--as", "table", "--id", "solo"]).stdout).slides[0].id, "solo");
 	});
 
 	test("--date sets retrieved; without it there is no retrieved field and a re-import drops an old one", async () => {
@@ -123,14 +123,14 @@ describe("opf import-data is deterministic", () => {
 		const kept = JSON.parse(run([...base, "--into", "stale.json"], { noClock: true }).stdout);
 		assert.deepEqual(kept.datasets.revenue.source, { src: "data/revenue.csv", sheet: "S" });
 		// no --dataset: there is no source record to date
-		assert.equal(JSON.parse(run(["import-data", "data/revenue.csv", "--as", "table", "--into", deck], { noClock: true }).stdout).datasets, undefined);
+		assert.equal(JSON.parse(run(["ingest", "data/revenue.csv", "--as", "table", "--into", deck], { noClock: true }).stdout).datasets, undefined);
 	});
 
 	test("--date must be a real calendar date and goes with --dataset", () => {
 		run([...base, "--date", "2026-02-30"], { status: 2 });
 		run([...base, "--date", "yesterday"], { status: 2 });
 		run([...base, "--date"], { status: 2 });
-		run(["import-data", "data/revenue.csv", "--as", "table", "--date", "2026-10-05"], { status: 2 });
+		run(["ingest", "data/revenue.csv", "--as", "table", "--date", "2026-10-05"], { status: 2 });
 	});
 
 	test("the clock guard really trips on a clock read", () => {
@@ -139,5 +139,16 @@ describe("opf import-data is deterministic", () => {
 		assert.match(probe.stderr, /clock or randomness read/);
 		const withArgs = spawnSync(process.execPath, ["--import", pathToFileURL(guard).href, "-e", "console.log(new Date('2026-10-05T00:00:00Z').toISOString())"], { encoding: "utf8" });
 		assert.equal(withArgs.status, 0);
+	});
+});
+
+describe("opf import-data was removed in 0.18", () => {
+	test("import-data is an unknown command (usage error, no alias) and the help names ingest", () => {
+		const result = run(["import-data", "data/revenue.csv", "--as", "table"], { status: 2 });
+		assert.match(result.stderr, /Unknown command: import-data/);
+		assert.equal(result.stdout, "");
+		const usage = run(["--help"]).stdout;
+		assert.match(usage, /opf ingest </);
+		assert.doesNotMatch(usage, /import-data/);
 	});
 });

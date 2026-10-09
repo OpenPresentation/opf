@@ -2,7 +2,7 @@
 // - Two names for one file: commands compared resolved path strings, so on a case-insensitive file system (Windows, macOS by
 //   default) `out.opf.json` and `OUT.opf.json` were "different" files, and so were two hard links to one file. merge --report
 //   then overwrote the merged deck, and format --output <the input in another case> refused to write without --force.
-// - Data formats by extension: import-data and fill read `.json`/`.tsv` case-sensitively, so a `DATA.TSV` was parsed as CSV.
+// - Data formats by extension: ingest and fill read `.json`/`.tsv` case-sensitively, so a `DATA.TSV` was parsed as CSV.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -57,7 +57,7 @@ test("format --output naming its input in another case rewrites it as the same f
 
 test("a data file's extension names its format in any case", async () => {
 	await writeFile(path.join(work, "DATA.TSV"), "Quarter\tRevenue\nQ1\t12\nQ2\t18\n");
-	const imported = opf("import-data", "DATA.TSV", "--as", "table");
+	const imported = opf("ingest", "DATA.TSV", "--as", "table");
 	assert.equal(imported.status, 0, imported.stderr);
 	const table = JSON.parse(imported.stdout).slides.at(-1).table;
 	assert.deepEqual(table.columns, ["Quarter", "Revenue"]);

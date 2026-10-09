@@ -157,8 +157,8 @@ export { parse, stringify, deckFormatOf, DECK_FORMATS } from './deck.js';
 export type { DeckFormat, ParseOptions, StringifyOptions } from './deck.js';
 
 
-export { parseTabularData, importData, OPFDataImportError } from './data.js';
-export type { DataCell, TabularData, ImportedChartData, ImportedChartType, ImportedTable, ImportedChart, DataImportOptions, ImportDataOptions } from './data.js';
+export { parseTabularData, ingest, OPFDataImportError } from './data.js';
+export type { DataCell, TabularData, ImportedChartData, ImportedChartType, ImportedTable, ImportedChart, DataImportOptions, IngestOptions } from './data.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';

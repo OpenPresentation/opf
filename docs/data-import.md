@@ -26,17 +26,17 @@ The browser preview supports imported column, bar, line, area, pie, and donut ch
 
 ## CLI
 
-Use the published [CLI 0.17.1](../packages/cli/README.md) on Node 24:
+Use the [CLI](../packages/cli/README.md) on Node 24. The command was `opf import-data` before OPF 0.18; it is now `opf ingest`, with the same flags, report and exit codes, and `import-data` is an unknown command:
 
 ```sh
-opf import-data revenue.csv --as table --output table.opf.json
-opf import-data revenue.json --as chart --chart-type line --output chart.opf.json
-opf import-data revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into deck.opf.json --in-place
-opf import-data revised.csv --as table --into deck.opf.json --path /slides/0/blocks/0/table --output reviewed.opf.json
-opf import-data revenue.csv --as chart --dataset revenue --into deck.opf.json --in-place
+opf ingest revenue.csv --as table --output table.opf.json
+opf ingest revenue.json --as chart --chart-type line --output chart.opf.json
+opf ingest revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into deck.opf.json --in-place
+opf ingest revised.csv --as table --into deck.opf.json --path /slides/0/blocks/0/table --output reviewed.opf.json
+opf ingest revenue.csv --as chart --dataset revenue --into deck.opf.json --in-place
 ```
 
-Import is deterministic: the same data, options and deck always give the same bytes, from any working directory and on any OS. A new slide gets the id `data-` plus eight hex digits of a SHA-256 over the data text (line endings and a BOM normalised) and the options that shape the import; a deck that already has that id gets `data-xxxxxxxx-2`, `-3`, and so on. `--id <slideId>` names the slide yourself and fails (exit 1, nothing written) if the deck already has it. With `--dataset`, `source.src` is the data file's path relative to the deck's folder with `/` separators (relative to the working directory when the result goes to stdout), and `source.retrieved` is recorded only when you pass `--date YYYY-MM-DD`. The command never reads the clock, and a re-import drops an older `retrieved` because it described the old data.
+`ingest` is deterministic: the same data, options and deck always give the same bytes, from any working directory and on any OS. A new slide gets the id `data-` plus eight hex digits of a SHA-256 over the data text (line endings and a BOM normalised) and the options that shape the import; a deck that already has that id gets `data-xxxxxxxx-2`, `-3`, and so on. `--id <slideId>` names the slide yourself and fails (exit 1, nothing written) if the deck already has it. With `--dataset`, `source.src` is the data file's path relative to the deck's folder with `/` separators (relative to the working directory when the result goes to stdout), and `source.retrieved` is recorded only when you pass `--date YYYY-MM-DD`. The command never reads the clock, and a re-import drops an older `retrieved` because it described the old data.
 
 `--into` appends a new data slide unless `--path` names an existing content container's `/table` or `/chart` field. The parent must already exist. The complete resulting document must validate. Unrelated fields remain intact. Without `--output` or `--in-place`, the document goes to stdout for review or piping. Existing output files require `--force`.
 
@@ -45,11 +45,11 @@ Use `--format csv|tsv|json` to override format detection, `--delimiter ';'` for 
 ## Package API
 
 ```js
-import {parseTabularData, importData} from '@openpresentation/opf/data';
+import {parseTabularData, ingest} from '@openpresentation/opf/data';
 
 const csv = 'Quarter,Revenue,Costs\nQ1,12,8\nQ2,18,10';
-const table = importData(csv, {as: 'table', format: 'csv'});
-const chart = importData(csv, {
+const table = ingest(csv, {as: 'table', format: 'csv'});
+const chart = ingest(csv, {
   as: 'chart', format: 'csv', chartType: 'line',
   category: 'Quarter', series: ['Revenue', 'Costs'],
 });
@@ -61,9 +61,9 @@ The functions also accept already-parsed JSON and are re-exported by `@openprese
 
 This is an embedded data snapshot, not a live file link. Record the origin with `source` (see above). OPF has no chart data source by file or asset (`"data": { "src": ... }`); it was removed because no engine loaded it ([opf#240](https://github.com/OpenPresentation/opf/issues/240) is descoped), and the validator rejects it. Tables use inline `columns`/`rows` or a dataset; there is no `table.src` field. Re-import after a source changes.
 
-`parseTabularData` and `importData` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `toExcelNumberFormat`, `fromExcelNumberFormat`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
+`parseTabularData` and `ingest` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `toExcelNumberFormat`, `fromExcelNumberFormat`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
 
-These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 and later include `import-data`. Use the coordinated Node 24 train with core 0.17.0, renderer 0.17.0, editor 0.17.0 and PPTX 0.17.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 to 0.17 ship the same command as `import-data` and core ships the function as `importData`; OPF 0.18 renames them to `ingest` and `opf ingest` without aliases. Use the coordinated Node 24 train with core 0.17.0, renderer 0.17.0, editor 0.17.0 and PPTX 0.17.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 
 ## Verification
 

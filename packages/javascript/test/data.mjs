@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
-import {parseTabularData,importData} from '../dist/data.js';
+import {parseTabularData,ingest} from '../dist/data.js';
 import { check } from './support/validation.mjs';
 
 let checks=0;
 const equal=(a,b)=>{assert.deepEqual(a,b);checks++;};
-const bad=(input,options,pattern)=>{assert.throws(()=>importData(input,{as:'table',...options}),pattern);checks++;};
+const bad=(input,options,pattern)=>{assert.throws(()=>ingest(input,{as:'table',...options}),pattern);checks++;};
 equal(parseTabularData('\uFEFFQuarter,Revenue\r\nQ1,12\r\nQ2,18\r\n'),{columns:['Quarter','Revenue'],rows:[['Q1','12'],['Q2','18']]});
 equal(parseTabularData('Name,Note\n"Smith, A","He said ""hello""\nnext line"'),{columns:['Name','Note'],rows:[['Smith, A','He said "hello"\nnext line']]});
 equal(parseTabularData('a\tb\n1\t2',{format:'tsv'}).rows,[['1','2']]);
@@ -16,7 +16,7 @@ equal(parseTabularData({columns:['b','a'],rows:[[true,null]]}),{columns:['b','a'
 equal(parseTabularData('id,value\n001,9007199254740993').rows,[['001','9007199254740993']]);
 equal(parseTabularData('A,B,C\n1,2,3',{columns:['C','A']}),{columns:['C','A'],rows:[['3','1']]});
 equal(parseTabularData(JSON.parse('[{"__proto__":"safe","constructor":"own"}]')).rows,[['safe','own']]);
-const chart=importData('Quarter,Revenue,Cost\nQ1,12,4\nQ2,18,7',{as:'chart',category:'Quarter',series:['Cost','Revenue'],chartType:'line'});
+const chart=ingest('Quarter,Revenue,Cost\nQ1,12,4\nQ2,18,7',{as:'chart',category:'Quarter',series:['Cost','Revenue'],chartType:'line'});
 equal(chart.chart.data,{columns:['Quarter','Cost','Revenue'],rows:[['Q1',4,12],['Q2',7,18]]});
 assert.ok(check({slides:[chart]}).valid);checks++;
 for(const input of ['a,b\n1','a,a\n1,2','a,b\n"broken,2','a,b\n"ok"junk,2','a,b\nq"x,2','a,b\n1,2,3','', 'a,\n1,2'])bad(input,{},/./);
@@ -27,5 +27,5 @@ bad('x,y\nQ1,2',{columns:['missing']},/Unknown column/);
 bad('x,y\nQ1,2',{as:'chart',series:['x']},/Duplicate column/);
 bad('x,y\nQ1,2',{as:'chart',series:[]},/Charts need/);
 bad('x,y\nQ1,2',{as:'chart',category:'missing'},/Unknown column/);
-equal(importData('x,y\nQ1,-2.5e2',{as:'chart'}).chart.data.rows,[['Q1',-250]]);
+equal(ingest('x,y\nQ1,-2.5e2',{as:'chart'}).chart.data.rows,[['Q1',-250]]);
 console.log(`Data import passed ${checks} parsing, preservation, mapping, and error checks.`);

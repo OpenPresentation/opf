@@ -22,7 +22,7 @@ export interface DataImportOptions {
   header?: boolean;
   columns?: string[];
 }
-export interface ImportDataOptions extends DataImportOptions {
+export interface IngestOptions extends DataImportOptions {
   as: 'table' | 'chart';
   /** Default `column`. Values outside `CHART_TYPES` make an invalid chart; the CLI checks `--chart-type` first. */
   chartType?: ImportedChartType;
@@ -110,10 +110,10 @@ function measure(value: DataCell, location: string): number {
   if (number !== null) return number;
   return fail(`${location}: expected a numeric chart value; found ${JSON.stringify(value)}. Clean the value or select another series.`);
 }
-export function importData(input: unknown, options: ImportDataOptions & { as: 'table' }): ImportedTable;
-export function importData(input: unknown, options: ImportDataOptions & { as: 'chart' }): ImportedChart;
-export function importData(input: unknown, options: ImportDataOptions): ImportedTable | ImportedChart;
-export function importData(input: unknown, options: ImportDataOptions): ImportedTable | ImportedChart {
+export function ingest(input: unknown, options: IngestOptions & { as: 'table' }): ImportedTable;
+export function ingest(input: unknown, options: IngestOptions & { as: 'chart' }): ImportedChart;
+export function ingest(input: unknown, options: IngestOptions): ImportedTable | ImportedChart;
+export function ingest(input: unknown, options: IngestOptions): ImportedTable | ImportedChart {
   const data = parseTabularData(input, options);
   if (options.as === 'table') return { table: data };
   if (options.as !== 'chart') return fail('Choose table or chart.');

@@ -33,16 +33,16 @@ test('filling an already marked template suggests values or partial output',asyn
   }finally{await rm(directory,{recursive:true,force:true});}
 });
 
-test('import-data rejects a chart type outside the OPF 0.15 vocabulary before writing anything', async () => {
+test('ingest rejects a chart type outside the OPF 0.15 vocabulary before writing anything', async () => {
   const directory = await mkdtemp(path.join(tmpdir(), 'opf-chart-type-'));
   try {
     const file = path.join(directory, 'data.csv');
     await writeFile(file, 'Quarter,Revenue\nQ1,12\n');
-    const rejected = run(['import-data', file, '--as', 'chart', '--chart-type', 'donut']);
+    const rejected = run(['ingest', file, '--as', 'chart', '--chart-type', 'donut']);
     assert.notEqual(rejected.status, 0);
     assert.match(rejected.stderr, /Unknown chart type: donut/);
     assert.equal(rejected.stdout, '');
-    const accepted = run(['import-data', file, '--as', 'chart', '--chart-type', 'doughnut']);
+    const accepted = run(['ingest', file, '--as', 'chart', '--chart-type', 'doughnut']);
     assert.equal(accepted.status, 0, accepted.stderr);
     assert.equal(JSON.parse(accepted.stdout).slides[0].chart.type, 'doughnut');
   } finally { await rm(directory, { recursive: true, force: true }); }

@@ -50,7 +50,7 @@ describe("package root", () => {
   });
 
   test("the app-level verbs, data helpers and font policy stay at the root", () => {
-    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "embed", "copySlides", "updateFromCatalog", "importData", "parseTabularData", "resolveVariables", "resolveSlideVariables", "listVariables", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
+    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "embed", "copySlides", "updateFromCatalog", "ingest", "parseTabularData", "resolveVariables", "resolveSlideVariables", "listVariables", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
     for (const name of dataNames) { assert.equal(typeof root[name], "function", name); assert.equal(root[name], data[name], name); }
     for (const name of ["FONT_POLICY", "fontPolicyFor", "applyFontPolicyDecisions", "fontAvailabilityDiagnostics"]) { assert.notEqual(root[name], undefined, name); assert.equal(root[name], fontPolicy[name], name); }
   });
@@ -74,7 +74,7 @@ describe("package root", () => {
 const verbs = {
   validate: validator, assertValid: validator, paginate: pagination, paginateSlide: pagination, embed: root, copySlides: root, updateFromCatalog: root,
   diff: diffModule, merge: diffModule, format: formatModule, fromMarkdown: markdown, toMarkdown: markdown,
-  applyPatch: patch, importData: data, resolveVariables: root, toExcelNumberFormat: data, fromExcelNumberFormat: data,
+  applyPatch: patch, ingest: data, resolveVariables: root, toExcelNumberFormat: data, fromExcelNumberFormat: data,
 };
 const errorClasses = { OPFPatchError: patch, OPFPatchValidationError: patch, OPFFormatError: formatModule, OPFMarkdownError: markdown, OPFValidationError: validator, OPFPaginationError: pagination };
 const removed = [

@@ -17,7 +17,7 @@ for(const page of ['/agents','/docs/cli','/docs/agent-skills','/docs/dynamic-com
  const body=await (await get(page)).text();assert.match(body,/<h1/);assert.doesNotMatch(body,/This page could not be found/);
 }
 const index=await (await get('/llms.txt')).text();assert.ok(index.includes(manifest.sourceDigest));assert.ok(index.includes('/skills.json'));
-const full=await (await get('/llms-full.txt')).text();assert.ok(full.includes('opf import-data'));assert.ok(full.includes('name: opf-author'));
+const full=await (await get('/llms-full.txt')).text();assert.ok(full.includes('opf ingest'));assert.ok(full.includes('name: opf-author'));
 const schema=await (await get('/schema/opf/v1')).json();assert.ok(schema.$defs.Composition);
 const directory=await mkdtemp(path.join(tmpdir(),'opf-agent-download-'));
 try{

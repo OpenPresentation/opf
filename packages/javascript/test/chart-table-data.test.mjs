@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, test } from "node:test";
 
-import { chartNumber, importData, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
+import { chartNumber, ingest, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
 import * as dataEntry from "../dist/data.js";
 import { composeSlide, layoutTable } from "../dist/composition.js";
 import { convertContent } from "../dist/convert.js";
@@ -56,10 +56,10 @@ describe("chartNumber: one strict rule", () => {
   }
 
   test("data import measures with the same rule", () => {
-    const chart = importData("Quarter,Revenue\nQ1,1e6\nQ2, 12 ", { as: "chart", format: "csv" });
+    const chart = ingest("Quarter,Revenue\nQ1,1e6\nQ2, 12 ", { as: "chart", format: "csv" });
     assert.deepEqual(chart.chart.data.rows, [["Q1", 1e6], ["Q2", 12]]);
     for (const bad of ["12%", "(5)", "1.234,5", "$5", ""]) {
-      assert.throws(() => importData({ columns: ["Quarter", "Revenue"], rows: [["Q1", bad]] }, { as: "chart" }), /expected a numeric chart value/);
+      assert.throws(() => ingest({ columns: ["Quarter", "Revenue"], rows: [["Q1", bad]] }, { as: "chart" }), /expected a numeric chart value/);
     }
   });
 

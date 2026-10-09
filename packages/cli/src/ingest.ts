@@ -1,15 +1,15 @@
-// `opf import-data`: turn CSV, TSV or JSON rows into a table or chart. The output is a pure function of the inputs:
+// `opf ingest`: turn CSV, TSV or JSON rows into a table or chart. The output is a pure function of the inputs:
 // no clock, no randomness, and no dependence on the working directory (RR-62).
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { importData, CHART_TYPES, type ImportedChartType } from "@openpresentation/opf";
+import { ingest, CHART_TYPES, type ImportedChartType } from "@openpresentation/opf";
 import { applyPatch, parsePointer } from "@openpresentation/opf/patch";
 import type { CliContext } from "./context.js";
 import { isDeckFormatFlag } from "./deck.js";
 import { dataFormatOf, samePath } from "./io.js";
 
-export const IMPORT_DATA_USAGE = `  opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
+export const INGEST_USAGE = `  opf ingest <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
@@ -54,10 +54,10 @@ function checkDate(cli: CliContext, value: unknown): string | undefined {
   return text;
 }
 
-export async function importDataCommand(args: string[], cli: CliContext): Promise<void> {
+export async function ingestCommand(args: string[], cli: CliContext): Promise<void> {
   const { positional, options } = cli.parse(args, FLAGS); cli.arity(positional, 1);
   const input = positional[0] as string;
-  if (options.as !== "table" && options.as !== "chart") throw cli.fail("import-data requires --as table or --as chart.");
+  if (options.as !== "table" && options.as !== "chart") throw cli.fail("ingest requires --as table or --as chart.");
   if (options.path && !options.into) throw cli.fail("--path requires --into <deck>.");
   if (options["in-place"] && (!options.into || options.into === "-" || options.output !== undefined || options.force)) throw cli.fail("--in-place requires a file --into and cannot combine with --output or --force.");
   if (options.into === "-" && input === "-") throw cli.fail("stdin can supply only one input.");
@@ -81,7 +81,7 @@ export async function importDataCommand(args: string[], cli: CliContext): Promis
   if (chartType !== undefined && !CHART_TYPES.includes(chartType)) throw cli.fail(`Unknown chart type: ${chartType}. Run opf catalog chart-types for the ids.`);
   const raw = input === "-" ? await cli.stdin() : await readFile(input, "utf8");
   const columns = list("columns"), series = list("series");
-  const imported = importData(raw, { as: options.as, format: format as "csv" | "tsv" | "json" | undefined, header: !options["no-header"], delimiter: options.delimiter as string | undefined, columns, category: options.category as string | undefined, series, chartType: chartType as ImportedChartType | undefined });
+  const imported = ingest(raw, { as: options.as, format: format as "csv" | "tsv" | "json" | undefined, header: !options["no-header"], delimiter: options.delimiter as string | undefined, columns, category: options.category as string | undefined, series, chartType: chartType as ImportedChartType | undefined });
   // RR-54: --dataset <id> writes the data into the top-level datasets map (replacing that dataset's columns and rows,
   // keeping its title, description and source) and references it from the table or chart.
   const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
