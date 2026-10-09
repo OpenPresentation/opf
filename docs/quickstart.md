@@ -20,7 +20,7 @@ node -v   # 24.x (verified); 22 and later are declared
 npm install @openpresentation/opf@0.16.0 \
   @openpresentation/opf-render@0.16.0 \
   @openpresentation/opf-editor@0.16.0 \
-  @openpresentation/opf-pptx@0.16.0 \
+  @openpresentation/opf-pptx@0.16.1 \
   @openpresentation/cli@0.16.0
 # opf-render 0.16 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)

@@ -35,7 +35,7 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "0.16.0",
+    "@openpresentation/opf-pptx": "0.16.1",
     "@openpresentation/opf-render": "0.16.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/node": "^24.13.4",

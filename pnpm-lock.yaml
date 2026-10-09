@@ -52,8 +52,8 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@openpresentation/opf-pptx':
-        specifier: 0.16.0
-        version: 0.16.0(@openpresentation/opf-render@0.16.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6)))(@types/node@24.13.6)
+        specifier: 0.16.1
+        version: 0.16.1(@openpresentation/opf-render@0.16.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6)))(@types/node@24.13.6)
       '@openpresentation/opf-render':
         specifier: 0.16.0
         version: 0.16.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
@@ -534,8 +534,8 @@ packages:
   '@node-projects/jszip@4.3.0':
     resolution: {integrity: sha512-0rO404bil+Y6h3dNY/d0hMJjVd5sR22Gt8AkqDk8c6h/n0qic4wFzIRYrlNyQ+bduCpyfOKY9NpRYkNLSPJSiA==}
 
-  '@openpresentation/opf-pptx@0.16.0':
-    resolution: {integrity: sha512-Aosh0HWV0+JwtT75WcM5saOEMIy+fOxkTNz2xWlIQlF6KpRvsjm+mLdYhtljFasgIKp9ypvLm/7ARksTpg5gCg==}
+  '@openpresentation/opf-pptx@0.16.1':
+    resolution: {integrity: sha512-LlQHYZ/1nZoxcwpoF8oNoUwh2fiadaw87/SIksKX6eAJBpbtJSRmAWoSrjgiviWk7SyzjTDDMrP+blr3JT0tCA==}
     engines: {node: '>=22'}
     peerDependencies:
       '@openpresentation/opf-render': ^0.16.0
@@ -1700,7 +1700,7 @@ snapshots:
       '@types/node': 26.6.4
       pako: 3.0.2
 
-  '@openpresentation/opf-pptx@0.16.0(@openpresentation/opf-render@0.16.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6)))(@types/node@24.13.6)':
+  '@openpresentation/opf-pptx@0.16.1(@openpresentation/opf-render@0.16.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6)))(@types/node@24.13.6)':
     dependencies:
       '@node-projects/jszip': 4.3.0
       '@openpresentation/opf': 0.16.0
