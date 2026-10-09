@@ -35,14 +35,19 @@ async function coreCopies(directory, found = new Set(), depth = 0) {
   return found;
 }
 
-/** @param {string} nodeModules a node_modules directory with @openpresentation/cli and @openpresentation/opf installed */
-export async function assertOneCore(nodeModules) {
+/**
+ * @param {string} nodeModules a node_modules directory with @openpresentation/cli and @openpresentation/opf installed
+ * @param {{application?: boolean}} [options] application: false for a global install (`npm install --global`), where no
+ *   application sits beside the CLI and core is the CLI's own dependency: the CLI must then resolve the one copy.
+ */
+export async function assertOneCore(nodeModules, { application: withApplication = true } = {}) {
   const copies = [...(await coreCopies(nodeModules))];
   assert.equal(copies.length, 1, `the installation holds ${copies.length} copies of @openpresentation/opf: ${copies.join(', ')}`);
   const application = createRequire(path.join(path.dirname(nodeModules), 'application.cjs'));
   const cliManifest = application.resolve('@openpresentation/cli/package.json');
   const fromCli = createRequire(cliManifest);
-  assert.equal(await realpath(fromCli.resolve('@openpresentation/opf/package.json')), await realpath(application.resolve('@openpresentation/opf/package.json')), 'the CLI and the application resolve different cores');
+  if (withApplication) assert.equal(await realpath(fromCli.resolve('@openpresentation/opf/package.json')), await realpath(application.resolve('@openpresentation/opf/package.json')), 'the CLI and the application resolve different cores');
+  else assert.equal(await realpath(fromCli.resolve('@openpresentation/opf/package.json')), path.join(copies[0], 'package.json'), 'the CLI resolves the one installed core');
   const coreRoot = path.dirname(await realpath(fromCli.resolve('@openpresentation/opf/package.json')));
   const coreManifest = JSON.parse(await readFile(path.join(coreRoot, 'package.json'), 'utf8'));
   const core = await import(pathToFileURL(path.join(coreRoot, coreManifest.exports['.'].import)).href);

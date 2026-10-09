@@ -82,7 +82,9 @@ try {
   assert.equal(manifest.exports['./api'].import,'./dist/api.js');assert.equal(manifest.exports['./api'].types,'./dist/api.d.ts');
   for(const file of ['dist/api.js','dist/api.d.ts','dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
   // One core: the installation holds a single @openpresentation/opf, which the command and @openpresentation/cli/api both use.
-  const one=await assertOneCore(path.dirname(path.dirname(installed)));
+  // A global install has no application beside the CLI: core is the CLI's own dependency (nested, or hoisted when a candidate
+  // core tarball is installed with it), and the CLI must resolve the one copy.
+  const one=await assertOneCore(path.dirname(path.dirname(installed)),{application:false});
   assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
   if(registry)assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
  } else {

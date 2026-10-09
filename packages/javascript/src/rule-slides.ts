@@ -1,8 +1,9 @@
-import { OPFCompositionError, composeSlide, type LayoutDiagnostic, type SlideComposition, type TextMeasurement } from './composition.js';
+import { OPFCompositionError, composeSlide, resolveFontFamilies, type LayoutDiagnostic, type SlideComposition, type TextMeasurement } from './composition.js';
 import type { RuleSlide } from './rule-context.js';
 import { pointer, slidePayloads, textValues } from './rule-content.js';
 import { type Rec, resolveDesign } from './rule-design.js';
 import { resolveScriptFonts } from './script-fonts.js';
+import { slideScriptMeasurement } from './script-measurement.js';
 import { resolveSlideContext } from './slide-context.js';
 import type { ValidateOptions } from './validation-types.js';
 
@@ -55,11 +56,19 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 	const slides = (Array.isArray(document.slides) ? document.slides : []) as Rec[];
 	return slides.map((slide, index) => {
 		const path = pointer('slides', index);
-		const measurement = lazy(() => measurementFor(options, index));
 		// Core never consults a clock; a fixed date only lets `date: true` furniture be measured.
+		const baseContext = lazy(() => resolveSlideContext(document, index, { catalogs: options.catalogs, date: '2000-01-01' }));
+		// The host's measurement, planned per script run with the slide's script fonts as the engines measure it (opf#485).
+		const measurement = lazy(() => {
+			const host = measurementFor(options, index);
+			if (!host) return undefined;
+			const { resolved } = baseContext();
+			return slideScriptMeasurement(document, index, host, { catalogs: options.catalogs, fontFamilies: resolveFontFamilies(resolved.fontScheme), serif: resolved.fontScheme.type === 'serif' });
+		});
 		const resolved = lazy(() => {
 			const textMeasurement = measurement();
-			return resolveSlideContext(document, index, { catalogs: options.catalogs, ...(textMeasurement ? { fonts: { textMeasurement } } : {}), date: '2000-01-01' });
+			const slideContext = baseContext();
+			return textMeasurement ? { ...slideContext, options: { ...slideContext.options, textMeasurement } } : slideContext;
 		});
 		const design = lazy(() => resolveDesign(document, index, resolved()));
 		const layout = lazy(() => resolved().options.layout as Rec | undefined);

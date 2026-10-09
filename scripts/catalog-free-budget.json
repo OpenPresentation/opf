@@ -3,22 +3,22 @@
   "entries": {
     "catalog": 105276,
     "composition": 66103,
-    "convert": 232360,
+    "convert": 233041,
     "data": 8688,
-    "deck": 269362,
+    "deck": 269932,
     "diff": 6223,
     "font-policy": 15052,
     "format": 46296,
-    "index": 320197,
-    "markdown": 265120,
-    "pagination": 218775,
-    "patch": 215916,
+    "index": 320884,
+    "markdown": 265664,
+    "pagination": 219462,
+    "patch": 216493,
     "schemas": 63841,
     "spec-files": 11305,
     "symbol-font-encodings": 36084,
     "types": 21,
-    "validator": 214057,
-    "yaml": 249506
+    "validator": 214632,
+    "yaml": 250084
   },
   "measured": {
     "catalog": {
@@ -30,24 +30,24 @@
       "gzip": 64177
     },
     "convert": {
-      "minified": 745066,
-      "gzip": 225592
+      "minified": 747056,
+      "gzip": 226253
     },
     "data": {
       "minified": 22722,
       "gzip": 8434
     },
     "deck": {
-      "minified": 858665,
-      "gzip": 261516
+      "minified": 860090,
+      "gzip": 262069
     },
     "diff": {
       "minified": 15709,
       "gzip": 6041
     },
     "docs": {
-      "minified": 1231476,
-      "gzip": 405844
+      "minified": 1240329,
+      "gzip": 408608
     },
     "examples": {
       "minified": 4055566,
@@ -62,24 +62,24 @@
       "gzip": 44947
     },
     "index": {
-      "minified": 1189661,
-      "gzip": 310870
+      "minified": 1191651,
+      "gzip": 311537
     },
     "markdown": {
-      "minified": 847446,
-      "gzip": 257398
+      "minified": 848871,
+      "gzip": 257926
     },
     "pagination": {
-      "minified": 705111,
-      "gzip": 212402
+      "minified": 707101,
+      "gzip": 213069
     },
     "patch": {
-      "minified": 701561,
-      "gzip": 209627
+      "minified": 702986,
+      "gzip": 210187
     },
     "repo-readme": {
       "minified": 15238,
-      "gzip": 5644
+      "gzip": 5640
     },
     "schemas": {
       "minified": 240105,
@@ -98,12 +98,12 @@
       "gzip": 20
     },
     "validator": {
-      "minified": 695533,
-      "gzip": 207822
+      "minified": 696958,
+      "gzip": 208380
     },
     "yaml": {
-      "minified": 804023,
-      "gzip": 242238
+      "minified": 805448,
+      "gzip": 242800
     }
   }
 }
