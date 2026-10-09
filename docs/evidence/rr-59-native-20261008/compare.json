@@ -1,0 +1,3360 @@
+{
+ "manifest": "manifest.json",
+ "nativeDir": "native-run1",
+ "packages": {
+  "@openpresentation/opf": "0.16.0",
+  "@openpresentation/opf-pptx": "0.16.0",
+  "@openpresentation/opf-render": "0.16.0"
+ },
+ "bands": {
+  "closeInkIoU": 0.65,
+  "reviewInkIoU": 0.4,
+  "closeContentSsim": 0.75,
+  "reviewContentSsim": 0.5
+ },
+ "generated": "2026-10-09T06:13:26.785Z",
+ "decks": [
+  {
+   "id": "ar-title-body",
+   "language": "ar-SA",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 2,
+   "slidesRead": 2,
+   "elapsedMs": 4237,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Arabic Typesetting"
+     ],
+     "extras": [],
+     "missingFromNative": [
+      "Arabic Typesetting"
+     ],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "total": 3,
+     "ok": 3
+    },
+    "themeCs": {
+     "total": 3,
+     "ok": 3
+    },
+    "fonts": {
+     "total": 6,
+     "ok": 6
+    },
+    "direction": {
+     "total": 6,
+     "ok": 6
+    },
+    "alignment": {
+     "total": 6,
+     "ok": 6
+    },
+    "bullets": {
+     "total": 6,
+     "ok": 6
+    },
+    "language": {
+     "total": 6,
+     "ok": 6
+    },
+    "lineCount": {
+     "total": 6,
+     "ok": 6
+    },
+    "itemLines": {
+     "total": 4,
+     "ok": 4
+    },
+    "clipping": {
+     "total": 6,
+     "ok": 6
+    },
+    "placeholder": {
+     "total": 0,
+     "ok": 0
+    },
+    "geometry": {
+     "shapes": 6,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "lineGeometry": {
+     "lines": 6,
+     "rtlLines": 6,
+     "all": {
+      "dLeft": {
+       "n": 6,
+       "maxAbs": 56.46,
+       "meanAbs": 34.77,
+       "meanSigned": 34.77
+      },
+      "dTop": {
+       "n": 6,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 6,
+       "maxAbs": 56.56,
+       "meanAbs": 34.87,
+       "meanSigned": -34.87
+      },
+      "dHeight": {
+       "n": 6,
+       "maxAbs": 0.81,
+       "meanAbs": 0.52,
+       "meanSigned": -0.52
+      },
+      "dRight": {
+       "n": 6,
+       "maxAbs": 0.11,
+       "meanAbs": 0.1,
+       "meanSigned": -0.1
+      }
+     },
+     "rtl": {
+      "dLeft": {
+       "n": 6,
+       "maxAbs": 56.46,
+       "meanAbs": 34.77,
+       "meanSigned": 34.77
+      },
+      "dTop": {
+       "n": 6,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 6,
+       "maxAbs": 56.56,
+       "meanAbs": 34.87,
+       "meanSigned": -34.87
+      },
+      "dHeight": {
+       "n": 6,
+       "maxAbs": 0.81,
+       "meanAbs": 0.52,
+       "meanSigned": -0.52
+      },
+      "dRight": {
+       "n": 6,
+       "maxAbs": 0.11,
+       "meanAbs": 0.1,
+       "meanSigned": -0.1
+      }
+     },
+     "ltr": {
+      "dLeft": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dTop": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dWidth": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dHeight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dRight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      }
+     },
+     "perSlide": [
+      {
+       "slide": 1,
+       "lines": 4,
+       "dLeft": {
+        "n": 4,
+        "maxAbs": 56.46,
+        "meanAbs": 42.32,
+        "meanSigned": 42.32
+       },
+       "dTop": {
+        "n": 4,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 4,
+        "maxAbs": 56.56,
+        "meanAbs": 42.42,
+        "meanSigned": -42.42
+       },
+       "dHeight": {
+        "n": 4,
+        "maxAbs": 0.81,
+        "meanAbs": 0.49,
+        "meanSigned": -0.49
+       },
+       "dRight": {
+        "n": 4,
+        "maxAbs": 0.11,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      },
+      {
+       "slide": 2,
+       "lines": 2,
+       "dLeft": {
+        "n": 2,
+        "maxAbs": 21.77,
+        "meanAbs": 19.67,
+        "meanSigned": 19.67
+       },
+       "dTop": {
+        "n": 2,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 2,
+        "maxAbs": 21.87,
+        "meanAbs": 19.77,
+        "meanSigned": -19.77
+       },
+       "dHeight": {
+        "n": 2,
+        "maxAbs": 0.81,
+        "meanAbs": 0.6,
+        "meanSigned": -0.59
+       },
+       "dRight": {
+        "n": 2,
+        "maxAbs": 0.1,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      }
+     ],
+     "worstTop": [
+      {
+       "slide": 1,
+       "shape": "OPF heading slides.0.title line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "OPF text slides.0.text line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "OPF text slides.0.text line 1",
+       "dTop": 0
+      }
+     ],
+     "note": "native BoundLeft/Top/Width/Height of each line minus the shared composition line box (px x 0.75), in pt. A right-aligned line should match on dRight even when the font makes dWidth differ."
+    },
+    "overflowX": 0,
+    "shapesMissing": 0,
+    "themeSlotsDetail": [
+     {
+      "scope": "deck",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     }
+    ]
+   },
+   "mismatches": [],
+   "lineDeltas": [
+    {
+     "slide": 1,
+     "shape": "OPF heading slides.0.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "مراجعة ربع سنوية للمنتج",
+     "dLeft": 22.49,
+     "dTop": 0,
+     "dWidth": -22.59,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 682.71,
+      "y": 43.2,
+      "w": 234.09,
+      "h": 49.41
+     },
+     "native": {
+      "left": 705.2,
+      "top": 43.2,
+      "width": 211.5,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "OPF text slides.0.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "بدأ العمل على المنصة الج",
+     "dLeft": 56.46,
+     "dTop": 0,
+     "dWidth": -56.56,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 60.59,
+      "y": 110.61,
+      "w": 856.06,
+      "h": 22.88
+     },
+     "native": {
+      "left": 117.05,
+      "top": 110.61,
+      "width": 799.5,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "OPF text slides.0.text line 1",
+     "line": 1,
+     "rtl": true,
+     "text": "جهود الفريق تم تسليم الن",
+     "dLeft": 49.56,
+     "dTop": 0,
+     "dWidth": -49.67,
+     "dHeight": -0.38,
+     "dRight": -0.11,
+     "expected": {
+      "x": 69.04,
+      "y": 133.48,
+      "w": 847.42,
+      "h": 22.88
+     },
+     "native": {
+      "left": 118.6,
+      "top": 133.48,
+      "width": 797.75,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "OPF text slides.0.text line 2",
+     "line": 1,
+     "rtl": true,
+     "text": "المكتوبة من اليمين إلى ا",
+     "dLeft": 40.77,
+     "dTop": 0,
+     "dWidth": -40.87,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 215.9,
+      "y": 156.36,
+      "w": 700.87,
+      "h": 22.88
+     },
+     "native": {
+      "left": 256.67,
+      "top": 156.36,
+      "width": 660,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF heading slides.1.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "الخطوات التالية",
+     "dLeft": 21.77,
+     "dTop": 0,
+     "dWidth": -21.87,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 765.3,
+      "y": 43.2,
+      "w": 151.5,
+      "h": 49.41
+     },
+     "native": {
+      "left": 787.07,
+      "top": 43.2,
+      "width": 129.63,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF text slides.1.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "إطلاق النسخة الثانية في ",
+     "dLeft": 17.58,
+     "dTop": 0,
+     "dWidth": -17.68,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 655.79,
+      "y": 110.61,
+      "w": 260.68,
+      "h": 22.88
+     },
+     "native": {
+      "left": 673.37,
+      "top": 110.61,
+      "width": 243,
+      "height": 22.5
+     }
+    }
+   ],
+   "images": [
+    {
+     "slide": 1,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0103,
+     "diffPixelRatio": 0.0331,
+     "ssim": 0.9041,
+     "contentSsim": 0.4088,
+     "inkIoU": 0.8841,
+     "inkRatioNativeToPreview": 0.958,
+     "band": "far",
+     "diffImage": "ar-title-body-slide-1.diff.png"
+    },
+    {
+     "slide": 2,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0026,
+     "diffPixelRatio": 0.0068,
+     "ssim": 0.977,
+     "contentSsim": 0.373,
+     "inkIoU": 0.8824,
+     "inkRatioNativeToPreview": 1,
+     "band": "far",
+     "diffImage": "ar-title-body-slide-2.diff.png"
+    }
+   ],
+   "notes": [],
+   "verdict": {
+    "opened": true,
+    "complete": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "themeCs": true,
+    "fonts": true,
+    "direction": true,
+    "alignment": true,
+    "lineCount": true,
+    "itemLines": true,
+    "clipping": true,
+    "placeholder": null,
+    "bulletsReported": "6/6",
+    "languageIdsReported": "6/6",
+    "lineDeltaReported": {
+     "lines": 6,
+     "topMaxAbsPt": 0,
+     "topMeanAbsPt": 0,
+     "leftMaxAbsPt": 56.46,
+     "rightMaxAbsPt": 0.11,
+     "widthMeanSignedPt": -34.87
+    },
+    "images": {
+     "close": 0,
+     "review": 0,
+     "far": 2,
+     "size-mismatch": 0
+    }
+   }
+  },
+  {
+   "id": "ar-mixed",
+   "language": "ar-SA",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 3,
+   "slidesRead": 3,
+   "elapsedMs": 5788,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Arabic Typesetting"
+     ],
+     "extras": [],
+     "missingFromNative": [
+      "Arabic Typesetting"
+     ],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "total": 4,
+     "ok": 4
+    },
+    "themeCs": {
+     "total": 4,
+     "ok": 4
+    },
+    "fonts": {
+     "total": 10,
+     "ok": 10
+    },
+    "direction": {
+     "total": 10,
+     "ok": 10
+    },
+    "alignment": {
+     "total": 10,
+     "ok": 10
+    },
+    "bullets": {
+     "total": 10,
+     "ok": 10
+    },
+    "language": {
+     "total": 10,
+     "ok": 10
+    },
+    "lineCount": {
+     "total": 10,
+     "ok": 10
+    },
+    "itemLines": {
+     "total": 6,
+     "ok": 6
+    },
+    "clipping": {
+     "total": 10,
+     "ok": 10
+    },
+    "placeholder": {
+     "total": 0,
+     "ok": 0
+    },
+    "geometry": {
+     "shapes": 10,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "lineGeometry": {
+     "lines": 10,
+     "rtlLines": 9,
+     "all": {
+      "dLeft": {
+       "n": 10,
+       "maxAbs": 28.34,
+       "meanAbs": 8.54,
+       "meanSigned": 8.48
+      },
+      "dTop": {
+       "n": 10,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 10,
+       "maxAbs": 54.7,
+       "meanAbs": 14.08,
+       "meanSigned": -14.05
+      },
+      "dHeight": {
+       "n": 10,
+       "maxAbs": 0.81,
+       "meanAbs": 0.51,
+       "meanSigned": -0.51
+      },
+      "dRight": {
+       "n": 10,
+       "maxAbs": 54.7,
+       "meanAbs": 5.57,
+       "meanSigned": -5.57
+      }
+     },
+     "rtl": {
+      "dLeft": {
+       "n": 9,
+       "maxAbs": 28.34,
+       "meanAbs": 9.49,
+       "meanSigned": 9.42
+      },
+      "dTop": {
+       "n": 9,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 9,
+       "maxAbs": 28.44,
+       "meanAbs": 9.57,
+       "meanSigned": -9.53
+      },
+      "dHeight": {
+       "n": 9,
+       "maxAbs": 0.81,
+       "meanAbs": 0.48,
+       "meanSigned": -0.48
+      },
+      "dRight": {
+       "n": 9,
+       "maxAbs": 0.13,
+       "meanAbs": 0.11,
+       "meanSigned": -0.11
+      }
+     },
+     "ltr": {
+      "dLeft": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dTop": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 1,
+       "maxAbs": 54.7,
+       "meanAbs": 54.7,
+       "meanSigned": -54.7
+      },
+      "dHeight": {
+       "n": 1,
+       "maxAbs": 0.81,
+       "meanAbs": 0.81,
+       "meanSigned": -0.81
+      },
+      "dRight": {
+       "n": 1,
+       "maxAbs": 54.7,
+       "meanAbs": 54.7,
+       "meanSigned": -54.7
+      }
+     },
+     "perSlide": [
+      {
+       "slide": 1,
+       "lines": 3,
+       "dLeft": {
+        "n": 3,
+        "maxAbs": 11.65,
+        "meanAbs": 8.22,
+        "meanSigned": 8.22
+       },
+       "dTop": {
+        "n": 3,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 3,
+        "maxAbs": 11.75,
+        "meanAbs": 8.32,
+        "meanSigned": -8.32
+       },
+       "dHeight": {
+        "n": 3,
+        "maxAbs": 0.81,
+        "meanAbs": 0.52,
+        "meanSigned": -0.52
+       },
+       "dRight": {
+        "n": 3,
+        "maxAbs": 0.1,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      },
+      {
+       "slide": 2,
+       "lines": 5,
+       "dLeft": {
+        "n": 5,
+        "maxAbs": 28.34,
+        "meanAbs": 11.09,
+        "meanSigned": 10.97
+       },
+       "dTop": {
+        "n": 5,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 5,
+        "maxAbs": 28.44,
+        "meanAbs": 11.16,
+        "meanSigned": -11.09
+       },
+       "dHeight": {
+        "n": 5,
+        "maxAbs": 0.81,
+        "meanAbs": 0.47,
+        "meanSigned": -0.47
+       },
+       "dRight": {
+        "n": 5,
+        "maxAbs": 0.13,
+        "meanAbs": 0.12,
+        "meanSigned": -0.12
+       }
+      },
+      {
+       "slide": 3,
+       "lines": 2,
+       "dLeft": {
+        "n": 2,
+        "maxAbs": 5.27,
+        "meanAbs": 2.64,
+        "meanSigned": 2.64
+       },
+       "dTop": {
+        "n": 2,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 2,
+        "maxAbs": 54.7,
+        "meanAbs": 30.04,
+        "meanSigned": -30.03
+       },
+       "dHeight": {
+        "n": 2,
+        "maxAbs": 0.81,
+        "meanAbs": 0.6,
+        "meanSigned": -0.59
+       },
+       "dRight": {
+        "n": 2,
+        "maxAbs": 54.7,
+        "meanAbs": 27.4,
+        "meanSigned": -27.4
+       }
+      }
+     ],
+     "worstTop": [
+      {
+       "slide": 1,
+       "shape": "OPF heading slides.0.title line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "Text 1",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "Text 2",
+       "dTop": 0
+      }
+     ],
+     "note": "native BoundLeft/Top/Width/Height of each line minus the shared composition line box (px x 0.75), in pt. A right-aligned line should match on dRight even when the font makes dWidth differ."
+    },
+    "overflowX": 0,
+    "shapesMissing": 0,
+    "themeSlotsDetail": [
+     {
+      "scope": "deck",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     }
+    ]
+   },
+   "mismatches": [],
+   "lineDeltas": [
+    {
+     "slide": 1,
+     "shape": "OPF heading slides.0.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "ملخص الإصدار PowerPoint ",
+     "dLeft": 4.67,
+     "dTop": 0,
+     "dWidth": -4.77,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 497.22,
+      "y": 43.2,
+      "w": 419.58,
+      "h": 49.41
+     },
+     "native": {
+      "left": 501.89,
+      "top": 43.2,
+      "width": 414.81,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "Text 1",
+     "line": 1,
+     "rtl": true,
+     "text": "تم تصدير هذا العرض إلى P",
+     "dLeft": 11.65,
+     "dTop": 0,
+     "dWidth": -11.75,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 63.42,
+      "y": 110.61,
+      "w": 853.38,
+      "h": 22.88
+     },
+     "native": {
+      "left": 75.07,
+      "top": 110.61,
+      "width": 841.63,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "Text 2",
+     "line": 1,
+     "rtl": true,
+     "text": "وراجع الملف report-2026.",
+     "dLeft": 8.35,
+     "dTop": 0,
+     "dWidth": -8.45,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 433.49,
+      "y": 133.48,
+      "w": 483.31,
+      "h": 22.88
+     },
+     "native": {
+      "left": 441.84,
+      "top": 133.48,
+      "width": 474.86,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF heading slides.1.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "قائمة المهام",
+     "dLeft": 28.34,
+     "dTop": 0,
+     "dWidth": -28.44,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 808.36,
+      "y": 43.2,
+      "w": 108.44,
+      "h": 49.41
+     },
+     "native": {
+      "left": 836.7,
+      "top": 43.2,
+      "width": 80,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "فتح الملف في PowerPoint ",
+     "dLeft": 10.98,
+     "dTop": 0,
+     "dWidth": -11.11,
+     "dHeight": -0.38,
+     "dRight": -0.13,
+     "expected": {
+      "x": 616.47,
+      "y": 110.94,
+      "w": 279.71,
+      "h": 22.88
+     },
+     "native": {
+      "left": 627.45,
+      "top": 110.94,
+      "width": 268.6,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 1",
+     "line": 1,
+     "rtl": true,
+     "text": "إطلاق الإصدار v2.0 في ال",
+     "dLeft": 1.98,
+     "dTop": 0,
+     "dWidth": -2.1,
+     "dHeight": -0.38,
+     "dRight": -0.12,
+     "expected": {
+      "x": 732.69,
+      "y": 139.06,
+      "w": 163.48,
+      "h": 22.88
+     },
+     "native": {
+      "left": 734.67,
+      "top": 139.06,
+      "width": 161.38,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 2",
+     "line": 1,
+     "rtl": true,
+     "text": "نشر الدليل على https://o",
+     "dLeft": -0.3,
+     "dTop": 0,
+     "dWidth": 0.17,
+     "dHeight": -0.38,
+     "dRight": -0.13,
+     "expected": {
+      "x": 597.12,
+      "y": 167.19,
+      "w": 299.06,
+      "h": 22.88
+     },
+     "native": {
+      "left": 596.82,
+      "top": 167.19,
+      "width": 299.23,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 3",
+     "line": 1,
+     "rtl": true,
+     "text": "التحقق من اتجاه النص (RT",
+     "dLeft": 13.86,
+     "dTop": 0,
+     "dWidth": -13.98,
+     "dHeight": -0.38,
+     "dRight": -0.12,
+     "expected": {
+      "x": 694.29,
+      "y": 195.31,
+      "w": 201.88,
+      "h": 22.88
+     },
+     "native": {
+      "left": 708.15,
+      "top": 195.31,
+      "width": 187.9,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 3,
+     "shape": "OPF heading slides.2.title line 0",
+     "line": 1,
+     "rtl": false,
+     "text": "Revenue 2026: نظرة عامة",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": -54.7,
+     "dHeight": -0.81,
+     "dRight": -54.7,
+     "expected": {
+      "x": 43.2,
+      "y": 43.2,
+      "w": 360.3,
+      "h": 49.41
+     },
+     "native": {
+      "left": 43.2,
+      "top": 43.2,
+      "width": 305.6,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 3,
+     "shape": "OPF text slides.2.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "ارتفعت الإيرادات بنسبة 1",
+     "dLeft": 5.27,
+     "dTop": 0,
+     "dWidth": -5.37,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 711.02,
+      "y": 110.61,
+      "w": 205.75,
+      "h": 22.88
+     },
+     "native": {
+      "left": 716.29,
+      "top": 110.61,
+      "width": 200.38,
+      "height": 22.5
+     }
+    }
+   ],
+   "images": [
+    {
+     "slide": 1,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0134,
+     "diffPixelRatio": 0.0323,
+     "ssim": 0.926,
+     "contentSsim": 0.4286,
+     "inkIoU": 0.9543,
+     "inkRatioNativeToPreview": 1.023,
+     "band": "far",
+     "diffImage": "ar-mixed-slide-1.diff.png"
+    },
+    {
+     "slide": 2,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0063,
+     "diffPixelRatio": 0.0178,
+     "ssim": 0.9494,
+     "contentSsim": 0.3892,
+     "inkIoU": 0.9288,
+     "inkRatioNativeToPreview": 0.923,
+     "band": "far",
+     "diffImage": "ar-mixed-slide-2.diff.png"
+    },
+    {
+     "slide": 3,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0042,
+     "diffPixelRatio": 0.0098,
+     "ssim": 0.9771,
+     "contentSsim": 0.5698,
+     "inkIoU": 0.8837,
+     "inkRatioNativeToPreview": 0.824,
+     "band": "review",
+     "diffImage": "ar-mixed-slide-3.diff.png"
+    }
+   ],
+   "notes": [],
+   "verdict": {
+    "opened": true,
+    "complete": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "themeCs": true,
+    "fonts": true,
+    "direction": true,
+    "alignment": true,
+    "lineCount": true,
+    "itemLines": true,
+    "clipping": true,
+    "placeholder": null,
+    "bulletsReported": "10/10",
+    "languageIdsReported": "10/10",
+    "lineDeltaReported": {
+     "lines": 10,
+     "topMaxAbsPt": 0,
+     "topMeanAbsPt": 0,
+     "leftMaxAbsPt": 28.34,
+     "rightMaxAbsPt": 54.7,
+     "widthMeanSignedPt": -14.05
+    },
+    "images": {
+     "close": 0,
+     "review": 1,
+     "far": 2,
+     "size-mismatch": 0
+    }
+   }
+  },
+  {
+   "id": "ar-run-in-en",
+   "language": "en-US",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 2,
+   "slidesRead": 2,
+   "elapsedMs": 4553,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Arabic Typesetting"
+     ],
+     "extras": [],
+     "missingFromNative": [
+      "Arabic Typesetting"
+     ],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "total": 3,
+     "ok": 3
+    },
+    "themeCs": {
+     "total": 3,
+     "ok": 3
+    },
+    "fonts": {
+     "total": 8,
+     "ok": 8
+    },
+    "direction": {
+     "total": 8,
+     "ok": 8
+    },
+    "alignment": {
+     "total": 8,
+     "ok": 8
+    },
+    "bullets": {
+     "total": 8,
+     "ok": 8
+    },
+    "language": {
+     "total": 8,
+     "ok": 8
+    },
+    "lineCount": {
+     "total": 8,
+     "ok": 8
+    },
+    "itemLines": {
+     "total": 4,
+     "ok": 4
+    },
+    "clipping": {
+     "total": 8,
+     "ok": 8
+    },
+    "placeholder": {
+     "total": 0,
+     "ok": 0
+    },
+    "geometry": {
+     "shapes": 8,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "lineGeometry": {
+     "lines": 8,
+     "rtlLines": 0,
+     "all": {
+      "dLeft": {
+       "n": 8,
+       "maxAbs": 0.02,
+       "meanAbs": 0.01,
+       "meanSigned": 0.01
+      },
+      "dTop": {
+       "n": 8,
+       "maxAbs": 0.01,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 8,
+       "maxAbs": 18.43,
+       "meanAbs": 5,
+       "meanSigned": -3.28
+      },
+      "dHeight": {
+       "n": 8,
+       "maxAbs": 0.81,
+       "meanAbs": 0.49,
+       "meanSigned": -0.49
+      },
+      "dRight": {
+       "n": 8,
+       "maxAbs": 18.43,
+       "meanAbs": 5,
+       "meanSigned": -3.27
+      }
+     },
+     "rtl": {
+      "dLeft": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dTop": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dWidth": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dHeight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dRight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      }
+     },
+     "ltr": {
+      "dLeft": {
+       "n": 8,
+       "maxAbs": 0.02,
+       "meanAbs": 0.01,
+       "meanSigned": 0.01
+      },
+      "dTop": {
+       "n": 8,
+       "maxAbs": 0.01,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 8,
+       "maxAbs": 18.43,
+       "meanAbs": 5,
+       "meanSigned": -3.28
+      },
+      "dHeight": {
+       "n": 8,
+       "maxAbs": 0.81,
+       "meanAbs": 0.49,
+       "meanSigned": -0.49
+      },
+      "dRight": {
+       "n": 8,
+       "maxAbs": 18.43,
+       "meanAbs": 5,
+       "meanSigned": -3.27
+      }
+     },
+     "perSlide": [
+      {
+       "slide": 1,
+       "lines": 4,
+       "dLeft": {
+        "n": 4,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dTop": {
+        "n": 4,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 4,
+        "maxAbs": 18.43,
+        "meanAbs": 8.46,
+        "meanSigned": -5.86
+       },
+       "dHeight": {
+        "n": 4,
+        "maxAbs": 0.81,
+        "meanAbs": 0.49,
+        "meanSigned": -0.49
+       },
+       "dRight": {
+        "n": 4,
+        "maxAbs": 18.43,
+        "meanAbs": 8.46,
+        "meanSigned": -5.86
+       }
+      },
+      {
+       "slide": 2,
+       "lines": 4,
+       "dLeft": {
+        "n": 4,
+        "maxAbs": 0.02,
+        "meanAbs": 0.02,
+        "meanSigned": 0.02
+       },
+       "dTop": {
+        "n": 4,
+        "maxAbs": 0.01,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 4,
+        "maxAbs": 4.2,
+        "meanAbs": 1.55,
+        "meanSigned": -0.69
+       },
+       "dHeight": {
+        "n": 4,
+        "maxAbs": 0.81,
+        "meanAbs": 0.49,
+        "meanSigned": -0.49
+       },
+       "dRight": {
+        "n": 4,
+        "maxAbs": 4.18,
+        "meanAbs": 1.54,
+        "meanSigned": -0.68
+       }
+      }
+     ],
+     "worstTop": [
+      {
+       "slide": 2,
+       "shape": "OPF list slides.1.items line 1",
+       "dTop": 0.01
+      },
+      {
+       "slide": 1,
+       "shape": "OPF heading slides.0.title line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "Text 1",
+       "dTop": 0
+      }
+     ],
+     "note": "native BoundLeft/Top/Width/Height of each line minus the shared composition line box (px x 0.75), in pt. A right-aligned line should match on dRight even when the font makes dWidth differ."
+    },
+    "overflowX": 1,
+    "shapesMissing": 0,
+    "themeSlotsDetail": [
+     {
+      "scope": "deck",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     }
+    ]
+   },
+   "mismatches": [
+    {
+     "kind": "line-wider-than-shape",
+     "slide": 1,
+     "shape": "Text 2",
+     "overhangPt": 3.78
+    }
+   ],
+   "lineDeltas": [
+    {
+     "slide": 1,
+     "shape": "OPF heading slides.0.title line 0",
+     "line": 1,
+     "rtl": false,
+     "text": "Quarterly review: مراجعة",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": -18.43,
+     "dHeight": -0.81,
+     "dRight": -18.43,
+     "expected": {
+      "x": 43.2,
+      "y": 43.2,
+      "w": 473.52,
+      "h": 49.41
+     },
+     "native": {
+      "left": 43.2,
+      "top": 43.2,
+      "width": 455.09,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "Text 1",
+     "line": 1,
+     "rtl": false,
+     "text": "The Arabic phrase مراجعة",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": -10.21,
+     "dHeight": -0.38,
+     "dRight": -10.21,
+     "expected": {
+      "x": 43.79,
+      "y": 110.61,
+      "w": 822.79,
+      "h": 22.88
+     },
+     "native": {
+      "left": 43.79,
+      "top": 110.61,
+      "width": 812.58,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "Text 2",
+     "line": 1,
+     "rtl": false,
+     "text": "second and third line so",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": 5.05,
+     "dHeight": -0.38,
+     "dRight": 5.05,
+     "expected": {
+      "x": 43.2,
+      "y": 133.48,
+      "w": 872.33,
+      "h": 22.88
+     },
+     "native": {
+      "left": 43.2,
+      "top": 133.48,
+      "width": 877.38,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "Text 3",
+     "line": 1,
+     "rtl": false,
+     "text": "release.",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": 0.15,
+     "dHeight": -0.38,
+     "dRight": 0.15,
+     "expected": {
+      "x": 43.2,
+      "y": 156.36,
+      "w": 64.28,
+      "h": 22.88
+     },
+     "native": {
+      "left": 43.2,
+      "top": 156.36,
+      "width": 64.43,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF heading slides.1.title line 0",
+     "line": 1,
+     "rtl": false,
+     "text": "Phrases",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": 1.1,
+     "dHeight": -0.81,
+     "dRight": 1.1,
+     "expected": {
+      "x": 43.2,
+      "y": 43.2,
+      "w": 137.91,
+      "h": 49.41
+     },
+     "native": {
+      "left": 43.2,
+      "top": 43.2,
+      "width": 139.01,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 0",
+     "line": 1,
+     "rtl": false,
+     "text": "English first, then Arab",
+     "dLeft": 0.02,
+     "dTop": 0,
+     "dWidth": -0.28,
+     "dHeight": -0.38,
+     "dRight": -0.26,
+     "expected": {
+      "x": 63.83,
+      "y": 110.61,
+      "w": 195.06,
+      "h": 22.88
+     },
+     "native": {
+      "left": 63.85,
+      "top": 110.61,
+      "width": 194.78,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 1",
+     "line": 1,
+     "rtl": false,
+     "text": "مرحبا",
+     "dLeft": 0.02,
+     "dTop": 0.01,
+     "dWidth": -4.2,
+     "dHeight": -0.38,
+     "dRight": -4.18,
+     "expected": {
+      "x": 63.83,
+      "y": 138.73,
+      "w": 39.45,
+      "h": 22.88
+     },
+     "native": {
+      "left": 63.85,
+      "top": 138.74,
+      "width": 35.25,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF list slides.1.items line 2",
+     "line": 1,
+     "rtl": false,
+     "text": "Plain English item",
+     "dLeft": 0.02,
+     "dTop": 0,
+     "dWidth": 0.61,
+     "dHeight": -0.38,
+     "dRight": 0.63,
+     "expected": {
+      "x": 63.83,
+      "y": 166.86,
+      "w": 142.56,
+      "h": 22.88
+     },
+     "native": {
+      "left": 63.85,
+      "top": 166.86,
+      "width": 143.17,
+      "height": 22.5
+     }
+    }
+   ],
+   "images": [
+    {
+     "slide": 1,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0192,
+     "diffPixelRatio": 0.0464,
+     "ssim": 0.8895,
+     "contentSsim": 0.2982,
+     "inkIoU": 0.8996,
+     "inkRatioNativeToPreview": 1.016,
+     "band": "far",
+     "diffImage": "ar-run-in-en-slide-1.diff.png"
+    },
+    {
+     "slide": 2,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0033,
+     "diffPixelRatio": 0.0079,
+     "ssim": 0.9869,
+     "contentSsim": 0.7279,
+     "inkIoU": 0.9948,
+     "inkRatioNativeToPreview": 1.027,
+     "band": "review",
+     "diffImage": "ar-run-in-en-slide-2.diff.png"
+    }
+   ],
+   "notes": [],
+   "verdict": {
+    "opened": true,
+    "complete": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "themeCs": true,
+    "fonts": true,
+    "direction": true,
+    "alignment": true,
+    "lineCount": true,
+    "itemLines": true,
+    "clipping": true,
+    "placeholder": null,
+    "bulletsReported": "8/8",
+    "languageIdsReported": "8/8",
+    "lineDeltaReported": {
+     "lines": 8,
+     "topMaxAbsPt": 0.01,
+     "topMeanAbsPt": 0,
+     "leftMaxAbsPt": 0.02,
+     "rightMaxAbsPt": 18.43,
+     "widthMeanSignedPt": -3.28
+    },
+    "images": {
+     "close": 0,
+     "review": 1,
+     "far": 1,
+     "size-mismatch": 0
+    }
+   }
+  },
+  {
+   "id": "ar-scheme-override",
+   "language": "ar-SA",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 3,
+   "slidesRead": 3,
+   "elapsedMs": 4295,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Arabic Typesetting",
+      "Traditional Arabic"
+     ],
+     "expected": [
+      "Arabic Typesetting",
+      "Traditional Arabic"
+     ],
+     "extras": [],
+     "missingFromNative": [],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "total": 4,
+     "ok": 4
+    },
+    "themeCs": {
+     "total": 4,
+     "ok": 4
+    },
+    "fonts": {
+     "total": 7,
+     "ok": 7
+    },
+    "direction": {
+     "total": 7,
+     "ok": 7
+    },
+    "alignment": {
+     "total": 7,
+     "ok": 7
+    },
+    "bullets": {
+     "total": 7,
+     "ok": 7
+    },
+    "language": {
+     "total": 7,
+     "ok": 7
+    },
+    "lineCount": {
+     "total": 7,
+     "ok": 7
+    },
+    "itemLines": {
+     "total": 6,
+     "ok": 6
+    },
+    "clipping": {
+     "total": 7,
+     "ok": 7
+    },
+    "placeholder": {
+     "total": 0,
+     "ok": 0
+    },
+    "geometry": {
+     "shapes": 7,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "lineGeometry": {
+     "lines": 7,
+     "rtlLines": 7,
+     "all": {
+      "dLeft": {
+       "n": 7,
+       "maxAbs": 223.47,
+       "meanAbs": 56.75,
+       "meanSigned": 56.75
+      },
+      "dTop": {
+       "n": 7,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 7,
+       "maxAbs": 223.57,
+       "meanAbs": 56.85,
+       "meanSigned": -56.85
+      },
+      "dHeight": {
+       "n": 7,
+       "maxAbs": 0.81,
+       "meanAbs": 0.56,
+       "meanSigned": -0.56
+      },
+      "dRight": {
+       "n": 7,
+       "maxAbs": 0.1,
+       "meanAbs": 0.1,
+       "meanSigned": -0.1
+      }
+     },
+     "rtl": {
+      "dLeft": {
+       "n": 7,
+       "maxAbs": 223.47,
+       "meanAbs": 56.75,
+       "meanSigned": 56.75
+      },
+      "dTop": {
+       "n": 7,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 7,
+       "maxAbs": 223.57,
+       "meanAbs": 56.85,
+       "meanSigned": -56.85
+      },
+      "dHeight": {
+       "n": 7,
+       "maxAbs": 0.81,
+       "meanAbs": 0.56,
+       "meanSigned": -0.56
+      },
+      "dRight": {
+       "n": 7,
+       "maxAbs": 0.1,
+       "meanAbs": 0.1,
+       "meanSigned": -0.1
+      }
+     },
+     "ltr": {
+      "dLeft": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dTop": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dWidth": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dHeight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dRight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      }
+     },
+     "perSlide": [
+      {
+       "slide": 1,
+       "lines": 2,
+       "dLeft": {
+        "n": 2,
+        "maxAbs": 29.64,
+        "meanAbs": 24.02,
+        "meanSigned": 24.02
+       },
+       "dTop": {
+        "n": 2,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 2,
+        "maxAbs": 29.74,
+        "meanAbs": 24.12,
+        "meanSigned": -24.12
+       },
+       "dHeight": {
+        "n": 2,
+        "maxAbs": 0.81,
+        "meanAbs": 0.6,
+        "meanSigned": -0.59
+       },
+       "dRight": {
+        "n": 2,
+        "maxAbs": 0.1,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      },
+      {
+       "slide": 2,
+       "lines": 3,
+       "dLeft": {
+        "n": 3,
+        "maxAbs": 223.47,
+        "meanAbs": 99.51,
+        "meanSigned": 99.51
+       },
+       "dTop": {
+        "n": 3,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 3,
+        "maxAbs": 223.57,
+        "meanAbs": 99.61,
+        "meanSigned": -99.61
+       },
+       "dHeight": {
+        "n": 3,
+        "maxAbs": 0.81,
+        "meanAbs": 0.52,
+        "meanSigned": -0.52
+       },
+       "dRight": {
+        "n": 3,
+        "maxAbs": 0.1,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      },
+      {
+       "slide": 3,
+       "lines": 2,
+       "dLeft": {
+        "n": 2,
+        "maxAbs": 31.98,
+        "meanAbs": 25.35,
+        "meanSigned": 25.35
+       },
+       "dTop": {
+        "n": 2,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 2,
+        "maxAbs": 32.08,
+        "meanAbs": 25.45,
+        "meanSigned": -25.45
+       },
+       "dHeight": {
+        "n": 2,
+        "maxAbs": 0.81,
+        "meanAbs": 0.6,
+        "meanSigned": -0.59
+       },
+       "dRight": {
+        "n": 2,
+        "maxAbs": 0.1,
+        "meanAbs": 0.1,
+        "meanSigned": -0.1
+       }
+      }
+     ],
+     "worstTop": [
+      {
+       "slide": 1,
+       "shape": "OPF heading slides.0.title line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 1,
+       "shape": "OPF text slides.0.text line 0",
+       "dTop": 0
+      },
+      {
+       "slide": 2,
+       "shape": "OPF heading slides.1.title line 0",
+       "dTop": 0
+      }
+     ],
+     "note": "native BoundLeft/Top/Width/Height of each line minus the shared composition line box (px x 0.75), in pt. A right-aligned line should match on dRight even when the font makes dWidth differ."
+    },
+    "overflowX": 0,
+    "shapesMissing": 0,
+    "themeSlotsDetail": [
+     {
+      "scope": "deck",
+      "slot": "major.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "major.cs",
+      "expected": "Traditional Arabic",
+      "native": "Traditional Arabic",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 2",
+      "slot": "minor.cs",
+      "expected": "Traditional Arabic",
+      "native": "Traditional Arabic",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "major.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.latin",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.ea",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 3",
+      "slot": "minor.cs",
+      "expected": "Arabic Typesetting",
+      "native": "Arabic Typesetting",
+      "wildcard": false,
+      "ok": true
+     }
+    ]
+   },
+   "mismatches": [],
+   "lineDeltas": [
+    {
+     "slide": 1,
+     "shape": "OPF heading slides.0.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "مراجعة ربع سنوية",
+     "dLeft": 18.4,
+     "dTop": 0,
+     "dWidth": -18.5,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 746.67,
+      "y": 43.2,
+      "w": 170.13,
+      "h": 49.41
+     },
+     "native": {
+      "left": 765.07,
+      "top": 43.2,
+      "width": 151.63,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 1,
+     "shape": "OPF text slides.0.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "هذه الشريحة تستخدم نظام ",
+     "dLeft": 29.64,
+     "dTop": 0,
+     "dWidth": -29.74,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 385.54,
+      "y": 110.61,
+      "w": 531.12,
+      "h": 22.88
+     },
+     "native": {
+      "left": 415.18,
+      "top": 110.61,
+      "width": 501.38,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF heading slides.1.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "مراجعة مالية",
+     "dLeft": 60.99,
+     "dTop": 0,
+     "dWidth": -61.09,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 724.83,
+      "y": 43.2,
+      "w": 191.97,
+      "h": 49.41
+     },
+     "native": {
+      "left": 785.82,
+      "top": 43.2,
+      "width": 130.88,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF text slides.1.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "هذه الشريحة تستخدم الخط ",
+     "dLeft": 223.47,
+     "dTop": 0,
+     "dWidth": -223.57,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 74.85,
+      "y": 110.83,
+      "w": 841.95,
+      "h": 22.88
+     },
+     "native": {
+      "left": 298.32,
+      "top": 110.83,
+      "width": 618.38,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 2,
+     "shape": "OPF text slides.1.text line 1",
+     "line": 1,
+     "rtl": true,
+     "text": "الصندوق.",
+     "dLeft": 14.06,
+     "dTop": 0,
+     "dWidth": -14.16,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 854.64,
+      "y": 133.71,
+      "w": 62.16,
+      "h": 22.88
+     },
+     "native": {
+      "left": 868.7,
+      "top": 133.71,
+      "width": 48,
+      "height": 22.5
+     }
+    },
+    {
+     "slide": 3,
+     "shape": "OPF heading slides.2.title line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "العودة إلى الخط الافتراض",
+     "dLeft": 31.98,
+     "dTop": 0,
+     "dWidth": -32.08,
+     "dHeight": -0.81,
+     "dRight": -0.1,
+     "expected": {
+      "x": 659.84,
+      "y": 43.2,
+      "w": 256.96,
+      "h": 49.41
+     },
+     "native": {
+      "left": 691.82,
+      "top": 43.2,
+      "width": 224.88,
+      "height": 48.6
+     }
+    },
+    {
+     "slide": 3,
+     "shape": "OPF text slides.2.text line 0",
+     "line": 1,
+     "rtl": true,
+     "text": "الشريحة الأخيرة تعود إلى",
+     "dLeft": 18.72,
+     "dTop": 0,
+     "dWidth": -18.82,
+     "dHeight": -0.38,
+     "dRight": -0.1,
+     "expected": {
+      "x": 678.95,
+      "y": 113.45,
+      "w": 237.82,
+      "h": 22.88
+     },
+     "native": {
+      "left": 697.67,
+      "top": 113.45,
+      "width": 219,
+      "height": 22.5
+     }
+    }
+   ],
+   "images": [
+    {
+     "slide": 1,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0036,
+     "diffPixelRatio": 0.01,
+     "ssim": 0.965,
+     "contentSsim": 0.3857,
+     "inkIoU": 0.8725,
+     "inkRatioNativeToPreview": 0.902,
+     "band": "far",
+     "diffImage": "ar-scheme-override-slide-1.diff.png"
+    },
+    {
+     "slide": 2,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0081,
+     "diffPixelRatio": 0.0208,
+     "ssim": 0.9183,
+     "contentSsim": 0.1842,
+     "inkIoU": 0.5985,
+     "inkRatioNativeToPreview": 0.568,
+     "band": "far",
+     "diffImage": "ar-scheme-override-slide-2.diff.png"
+    },
+    {
+     "slide": 3,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0039,
+     "diffPixelRatio": 0.0095,
+     "ssim": 0.969,
+     "contentSsim": 0.2924,
+     "inkIoU": 0.8367,
+     "inkRatioNativeToPreview": 1.008,
+     "band": "far",
+     "diffImage": "ar-scheme-override-slide-3.diff.png"
+    }
+   ],
+   "notes": [],
+   "verdict": {
+    "opened": true,
+    "complete": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "themeCs": true,
+    "fonts": true,
+    "direction": true,
+    "alignment": true,
+    "lineCount": true,
+    "itemLines": true,
+    "clipping": true,
+    "placeholder": null,
+    "bulletsReported": "7/7",
+    "languageIdsReported": "7/7",
+    "lineDeltaReported": {
+     "lines": 7,
+     "topMaxAbsPt": 0,
+     "topMeanAbsPt": 0,
+     "leftMaxAbsPt": 223.47,
+     "rightMaxAbsPt": 0.1,
+     "widthMeanSignedPt": -56.85
+    },
+    "images": {
+     "close": 0,
+     "review": 0,
+     "far": 3,
+     "size-mismatch": 0
+    }
+   }
+  },
+  {
+   "id": "unresolved-image",
+   "language": "en-US",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 1,
+   "slidesRead": 1,
+   "elapsedMs": 2887,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "extras": [],
+     "missingFromNative": [],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "total": 2,
+     "ok": 2
+    },
+    "themeCs": {
+     "total": 2,
+     "ok": 2
+    },
+    "fonts": {
+     "total": 3,
+     "ok": 3
+    },
+    "direction": {
+     "total": 3,
+     "ok": 3
+    },
+    "alignment": {
+     "total": 3,
+     "ok": 3
+    },
+    "bullets": {
+     "total": 3,
+     "ok": 3
+    },
+    "language": {
+     "total": 3,
+     "ok": 3
+    },
+    "lineCount": {
+     "total": 1,
+     "ok": 1
+    },
+    "itemLines": {
+     "total": 1,
+     "ok": 1
+    },
+    "clipping": {
+     "total": 1,
+     "ok": 1
+    },
+    "placeholder": {
+     "total": 1,
+     "ok": 1
+    },
+    "geometry": {
+     "shapes": 3,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "lineGeometry": {
+     "lines": 1,
+     "rtlLines": 0,
+     "all": {
+      "dLeft": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dTop": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 1,
+       "maxAbs": 0.13,
+       "meanAbs": 0.13,
+       "meanSigned": 0.13
+      },
+      "dHeight": {
+       "n": 1,
+       "maxAbs": 0.81,
+       "meanAbs": 0.81,
+       "meanSigned": -0.81
+      },
+      "dRight": {
+       "n": 1,
+       "maxAbs": 0.13,
+       "meanAbs": 0.13,
+       "meanSigned": 0.13
+      }
+     },
+     "rtl": {
+      "dLeft": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dTop": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dWidth": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dHeight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      },
+      "dRight": {
+       "n": 0,
+       "maxAbs": null,
+       "meanAbs": null,
+       "meanSigned": null
+      }
+     },
+     "ltr": {
+      "dLeft": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dTop": {
+       "n": 1,
+       "maxAbs": 0,
+       "meanAbs": 0,
+       "meanSigned": 0
+      },
+      "dWidth": {
+       "n": 1,
+       "maxAbs": 0.13,
+       "meanAbs": 0.13,
+       "meanSigned": 0.13
+      },
+      "dHeight": {
+       "n": 1,
+       "maxAbs": 0.81,
+       "meanAbs": 0.81,
+       "meanSigned": -0.81
+      },
+      "dRight": {
+       "n": 1,
+       "maxAbs": 0.13,
+       "meanAbs": 0.13,
+       "meanSigned": 0.13
+      }
+     },
+     "perSlide": [
+      {
+       "slide": 1,
+       "lines": 1,
+       "dLeft": {
+        "n": 1,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dTop": {
+        "n": 1,
+        "maxAbs": 0,
+        "meanAbs": 0,
+        "meanSigned": 0
+       },
+       "dWidth": {
+        "n": 1,
+        "maxAbs": 0.13,
+        "meanAbs": 0.13,
+        "meanSigned": 0.13
+       },
+       "dHeight": {
+        "n": 1,
+        "maxAbs": 0.81,
+        "meanAbs": 0.81,
+        "meanSigned": -0.81
+       },
+       "dRight": {
+        "n": 1,
+        "maxAbs": 0.13,
+        "meanAbs": 0.13,
+        "meanSigned": 0.13
+       }
+      }
+     ],
+     "worstTop": [
+      {
+       "slide": 1,
+       "shape": "OPF heading slides.0.title line 0",
+       "dTop": 0
+      }
+     ],
+     "note": "native BoundLeft/Top/Width/Height of each line minus the shared composition line box (px x 0.75), in pt. A right-aligned line should match on dRight even when the font makes dWidth differ."
+    },
+    "overflowX": 0,
+    "shapesMissing": 0,
+    "themeSlotsDetail": [
+     {
+      "scope": "deck",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "major.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "deck",
+      "slot": "minor.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.latin",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.ea",
+      "expected": "Aptos Display",
+      "native": "Aptos Display",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "major.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.latin",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.ea",
+      "expected": "Aptos",
+      "native": "Aptos",
+      "wildcard": false,
+      "ok": true
+     },
+     {
+      "scope": "slide 1",
+      "slot": "minor.cs",
+      "expected": "",
+      "native": "",
+      "wildcard": true,
+      "ok": true
+     }
+    ]
+   },
+   "mismatches": [],
+   "lineDeltas": [
+    {
+     "slide": 1,
+     "shape": "OPF heading slides.0.title line 0",
+     "line": 1,
+     "rtl": false,
+     "text": "Quarterly revenue chart",
+     "dLeft": 0,
+     "dTop": 0,
+     "dWidth": 0.13,
+     "dHeight": -0.81,
+     "dRight": 0.13,
+     "expected": {
+      "x": 43.2,
+      "y": 43.2,
+      "w": 406.7,
+      "h": 49.41
+     },
+     "native": {
+      "left": 43.2,
+      "top": 43.2,
+      "width": 406.83,
+      "height": 48.6
+     }
+    }
+   ],
+   "images": [
+    {
+     "slide": 1,
+     "previewSize": [
+      1280,
+      720
+     ],
+     "nativeSize": [
+      1280,
+      720
+     ],
+     "sizeMismatch": false,
+     "meanAbsDiff": 0.0072,
+     "diffPixelRatio": 0.0163,
+     "ssim": 0.9572,
+     "contentSsim": 0.7765,
+     "inkIoU": 1,
+     "inkRatioNativeToPreview": 1.071,
+     "band": "close",
+     "diffImage": "unresolved-image-slide-1.diff.png"
+    }
+   ],
+   "notes": [
+    "slide 1: the placeholder is not a group natively as well (panel and text boxes are separate editable shapes)"
+   ],
+   "placeholder": {
+    "ok": true,
+    "panelExists": true,
+    "panelAltText": true,
+    "labelShape": true,
+    "altShape": true,
+    "editable": true,
+    "grouped": false,
+    "panelName": "OPF image placeholder 1",
+    "panelAlternativeText": "Image unavailable: Bar chart of quarterly revenue growing from 12 to 21 million",
+    "labelText": "Image unavailable",
+    "altText": "Bar chart of quarterly revenue growing from 12 to 21 million",
+    "expectedAlt": "Bar chart of quarterly revenue growing from 12 to 21 million",
+    "nativeShapeTypes": {
+     "panel": 1,
+     "label": 1,
+     "alt": 1
+    }
+   },
+   "verdict": {
+    "opened": true,
+    "complete": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "themeCs": true,
+    "fonts": true,
+    "direction": true,
+    "alignment": true,
+    "lineCount": true,
+    "itemLines": true,
+    "clipping": true,
+    "placeholder": true,
+    "bulletsReported": "3/3",
+    "languageIdsReported": "3/3",
+    "lineDeltaReported": {
+     "lines": 1,
+     "topMaxAbsPt": 0,
+     "topMeanAbsPt": 0,
+     "leftMaxAbsPt": 0,
+     "rightMaxAbsPt": 0.13,
+     "widthMeanSignedPt": 0.13
+    },
+    "images": {
+     "close": 1,
+     "review": 0,
+     "far": 0,
+     "size-mismatch": 0
+    }
+   }
+  }
+ ]
+}
