@@ -1,6 +1,6 @@
 import { create } from "fontkit";
 import { FONT_COMPATIBILITY, disabledFeaturesFor } from "./font-compatibility.js";
-import { adjustedFontSize, openTypeLanguage, scriptFontAliases, sizeAdjustFor } from "./script-fonts.js";
+import { adjustedFontSize, createScriptFonts, openTypeLanguage, scriptFontAliases, sizeAdjustFor } from "./script-fonts.js";
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily, symbolEncodingFamily, symbolPreviewFaces } from "./symbol-fonts.js";
@@ -289,9 +289,12 @@ export function createFontRegistry(entries, options = {}) {
     const {value,scale}=metrics(text,size,style,true),bounds=value.outline,drawn=adjustedFontSize(size,scale===1?undefined:scale);
     return bounds===null?null:{x:bounds.x*drawn,y:bounds.y*drawn,width:bounds.width*drawn,height:bounds.height*drawn};
   };
+  // resolveFont lets exporters tell a substitute from the chosen family (FF-31). forScripts (opf#485) is the script planner core
+  // validate asks for each slide's measurement, so its layout checks measure script runs in the faces this renderer draws.
+  const textMeasurement={measure,resolveStyle,outlineBounds,resolveFont:style=>resolve(style).resolution};
+  textMeasurement.forScripts=profile=>createScriptFonts(profile,textMeasurement).textMeasurement;
   return {
-    // resolveFont lets exporters tell a substitute from the chosen family (FF-31).
-    textMeasurement: {measure,resolveStyle,outlineBounds,resolveFont:style=>resolve(style).resolution},
+    textMeasurement,
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },
