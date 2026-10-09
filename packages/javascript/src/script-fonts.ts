@@ -108,6 +108,27 @@ export interface ResolvedScriptFonts extends ScriptFontSlots {
   sources: { eastAsian: ScriptFontSource; complexScript: ScriptFontSource };
 }
 
+/**
+ * One slide's script profile, as a host's script planner reads it (`TextMeasurement.forScripts`): the heading and
+ * body families per script slot, where a slot whose `resolveScriptFonts` source is `latin` or `schemeFamily` names
+ * the slide's latin role family, and the language fields of `resolveScriptFonts`. Without a resolvable language
+ * only the slots (all latin), `script: "Zzzz"`, `rtl` and `serif` are present.
+ */
+export interface ScriptMeasurementProfile {
+  heading: ScriptFontSlots;
+  body: ScriptFontSlots;
+  supplement?: ScriptFontSupplement;
+  script: string;
+  scriptRole?: ScriptRole;
+  bcp47?: string;
+  lang?: string;
+  languageSource?: ResolvedScriptFonts["languageSource"];
+  direction?: "ltr" | "rtl";
+  rtl: boolean;
+  /** The slide's font scheme is a serif scheme (`type: "serif"`): script runs prefer serif replacements. */
+  serif: boolean;
+}
+
 const eastAsianScripts = new Set(["Hani", "Hans", "Hant", "Hanb", "Jpan", "Kore", "Hang", "Jamo", "Hira", "Kana", "Hrkt", "Bopo", "Yiii"]);
 
 const complexScripts = new Set([

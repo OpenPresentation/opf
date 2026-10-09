@@ -72,7 +72,8 @@ export interface Contract {
 /**
  * What the layout rules read from a fonts handle (the object `loadFonts()` of the renderer returns): the host's
  * measured text widths. Without one, composition uses core's portable estimate. A function receives the zero-based
- * slide index, so a host can supply a script-aware measurement per slide.
+ * slide index, so a host can supply a script-aware measurement per slide. A measurement with `forScripts` (a script
+ * planner, such as the renderer's) is asked for each slide's script-aware measurement, the one the engines measure with.
  */
 export interface ValidateFonts {
 	textMeasurement?: TextMeasurement | ((slideIndex: number) => TextMeasurement | undefined);

@@ -1,15 +1,22 @@
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
-import { checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
+import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
+import { resolveSlideScriptMeasurement } from './script-measurement.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
 
 export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasurement'> {
-  /** The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. */
+  /**
+   * The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. With
+   * `presentation`, a measurement that plans scripts (`forScripts`) measures each script run in the slide's script fonts,
+   * as the engines do.
+   */
   fonts?: Fonts;
+  /** Registered catalogs, for resolving the slide's script fonts when `presentation` is given. `paginate` passes its own. */
+  catalogs?: readonly Catalog[];
   /** Readability floor used while choosing page breaks. Default 24 reference pixels. */
   minFontSize?: number;
   /** All-or-nothing resource limit. Defaults to 100 output slides. */
@@ -133,8 +140,10 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // footer measured at 24px during pagination would render at its old 17px nominal size.
   source = withReadability(source);
   let evaluations = 0;
-  const {fonts,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
-  const composeOptions: ComposeSlideOptions = {...engineOptions,...(fonts?.textMeasurement?{textMeasurement:fonts.textMeasurement}:{})};
+  const {fonts,catalogs,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
+  // opf#485: measure script runs in the slide's script fonts, as the renderer and the exporter do.
+  const textMeasurement = fonts?.textMeasurement && options.presentation !== undefined ? resolveSlideScriptMeasurement(options.presentation, sourceIndex, fonts.textMeasurement, {...(catalogs!==undefined?{catalogs}:{}),...(options.fontFamilies?{fontFamilies:options.fontFamilies}:{})}) : fonts?.textMeasurement;
+  const composeOptions: ComposeSlideOptions = {...engineOptions,...(textMeasurement?{textMeasurement}:{})};
   // FA-26: a layout record's placeholder groups carry compositions of their own, which the slide cannot reach. Evaluate
   // them under the same readability policy as content groups: no group reads below the pagination floor, and no group's
   // overflow: 'error' aborts the measurement that decides where to split.
@@ -327,7 +336,7 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
         if (!reported.has(key)) { reported.add(key); options.onDiagnostic?.(diagnostic); }
       }
       if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-      const result = paginateSlide(slide,{...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions);
+      const result = paginateSlide(slide,{...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,...(options.catalogs?{catalogs:options.catalogs}:{}),presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions);
       const outputStart = output.length;
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
