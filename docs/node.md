@@ -81,13 +81,14 @@ with their names and bytes. The names follow the deck: its `filename`, else its 
 `provenance` and `imageFormat` (PPTX), `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
 catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`), `fontDirs`
 (directories of `.ttf`/`.otf` files), `assetDir`, plus `signals` (a `.pptx` input: also return the importer's per-shape
-signals), `zip` and `force`. An option that does not apply to the pair rejects with `invalid-option`: `scale` for a deck
+signals), `zip` and `overwrite`. An option that does not apply to the pair rejects with `invalid-option`: `scale` for a deck
 output, `slides` for a PPTX, `pdfMode` for anything but a PDF.
 
 **Writing.** Everything is checked, read and produced before anything is written; on any error nothing is written. Parent
-folders are created. Each file is written to a temporary sibling and renamed, so no partial file ever has the final name. An
-output that exists rejects with `output-exists` unless `force: true`, as `--force` does for the commands; a symlink or a
-non-regular file is never replaced. The result is `{ files: [{ name, path, type, bytes, ... }], findings }`, with the slide
+folders are created. Each file is written to a temporary sibling and renamed, so no partial file ever has the final name, and
+an output that exists is replaced, as `save` and `fs.writeFile` do: running the same `convert` again rebuilds the file.
+`overwrite: false` refuses an existing output with `output-exists` before anything is written, the rule the `opf` commands
+apply without `--force`. A symlink, a directory or another non-regular file is never replaced (`output-not-file`). The result is `{ files: [{ name, path, type, bytes, ... }], findings }`, with the slide
 number, id and size of each picture and the pages of a PDF.
 
 **Images.** When `input` is a path, a deck's relative image paths resolve against the input file's folder, from any working

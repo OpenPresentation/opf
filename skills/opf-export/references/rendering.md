@@ -25,7 +25,7 @@ import * as opf from '@openpresentation/opf/node';
 await opf.convert('deck.opf.md', 'deck.pdf', { pdfMode: 'vector' });
 await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1,3-5', scale: 2 }); // slides/deck-001.png, -003, -004, -005
 await opf.convert('deck.opf.md', 'slides.zip', { format: 'svg' });
-await opf.convert('deck.opf.md', 'deck.pptx', { date: '2026-10-08', force: true });
+await opf.convert('deck.opf.md', 'deck.pptx', { date: '2026-10-08' });
 const { files, findings } = await opf.convert(deck, { format: 'png' });  // [{ name, type, bytes, slide, width, height }], nothing written
 const imported = await opf.open('deck.pptx');                           // or opf.open(pptxBytes)
 try { await opf.convert('deck.opf.md', 'deck.pdf'); } catch (error) {

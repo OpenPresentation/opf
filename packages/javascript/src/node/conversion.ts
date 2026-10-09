@@ -38,8 +38,12 @@ export interface ConvertOptions extends Omit<ExportOptions, "format" | "filename
 	zip?: boolean;
 	/** A `.pptx` input: also return the raw per-shape layout and style signals of the file (`signals` in the result). */
 	signals?: boolean;
-	/** Replace outputs that exist. Without it an existing output rejects with `output-exists` before anything is written, as `--force` does for the commands. A symlink or a non-regular file is never replaced. */
-	force?: boolean;
+	/**
+	 * Replace outputs that exist (the default, as `save` and `fs.writeFile` do), atomically. `false` refuses: an existing output
+	 * rejects with `output-exists` before anything is written, the rule the opf commands apply without `--force`. A symlink, a
+	 * directory or another non-regular file is never replaced (`output-not-file`).
+	 */
+	overwrite?: boolean;
 }
 
 export interface ConvertedFile {
@@ -264,7 +268,7 @@ export async function planConversion(input: ConvertInput, output: string | undef
 	// Engines first, so a missing install is reported before any file is read (as the commands do).
 	let prepared: PreparedExport | undefined;
 	if (target.kind === "export") {
-		const { format: _format, zip: _zip, signals: _signals, force: _force, ...rest } = options;
+		const { format: _format, zip: _zip, signals: _signals, overwrite: _overwrite, ...rest } = options;
 		const assetDir = options.assetDir ?? (inputFile === undefined ? undefined : path.dirname(path.resolve(inputFile)));
 		const exportOptions: ExportOptions = {
 			...rest,
@@ -337,12 +341,15 @@ export async function planConversion(input: ConvertInput, output: string | undef
 	return done(drawn.map((file) => ({ name: numbered(file), path: path.join(folder, numbered(file)), type: file.type, bytes: file.bytes, ...facts(file) })));
 }
 
-/** Write planned files atomically (temporary sibling, then rename), creating folders. Existing outputs need `force`. */
-export async function writePlanned(files: readonly ConvertedFile[], force: boolean, flags = false): Promise<void> {
+/**
+ * Write planned files atomically (temporary sibling, then rename), creating folders. `overwrite` false refuses an existing output
+ * (`output-exists`): the opf commands pass it unless `--force`; `convert` passes its `overwrite` option, true by default.
+ */
+export async function writePlanned(files: readonly ConvertedFile[], overwrite: boolean, flags = false): Promise<void> {
 	try {
 		await writeFiles(
 			files.map((file) => ({ file: file.path as string, bytes: file.bytes })),
-			force,
+			overwrite,
 			flags,
 		);
 	} catch (error) {
@@ -355,7 +362,7 @@ export async function writePlanned(files: readonly ConvertedFile[], force: boole
 /** `convert`: plan, then write (with an output path) or return the bytes (without one). */
 export async function convertFiles(input: ConvertInput, output: string | undefined, options: ConvertOptions = {}): Promise<ConvertResult> {
 	const plan = await planConversion(input, output, options);
-	if (output !== undefined) await writePlanned(plan.files, options.force === true);
+	if (output !== undefined) await writePlanned(plan.files, options.overwrite !== false);
 	return { files: plan.files, findings: plan.findings, ...(plan.imported?.signals ? { signals: plan.imported.signals } : {}) };
 }
 

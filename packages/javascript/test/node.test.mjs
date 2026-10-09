@@ -179,23 +179,31 @@ describe("convert with an output path", () => {
     }
   });
 
-  test("an existing output needs force; the replacement is atomic and leaves no temporary file", async () => {
+  test("an existing output is replaced atomically by default; the same convert runs twice; overwrite: false refuses", async () => {
     const dir = await folder();
     const target = path.join(dir, "deck.opf.md");
-    const error = await fails(opf.convert(path.join(dir, "deck.opf.json"), target), opf.OPFApiError, "output-exists");
-    assert.equal(error.details.path, path.resolve(target));
     const changed = { ...deck, name: "Changed" };
     await writeFile(path.join(dir, "changed.opf.json"), JSON.stringify(changed));
-    await opf.convert(path.join(dir, "changed.opf.json"), target, { force: true });
+    await opf.convert(path.join(dir, "changed.opf.json"), target);
     assert.equal(core.parse(await readFile(target, "utf8"), { format: "markdown" }).name, "Changed");
+    await opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "deck.pdf"));
+    const again = await opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "deck.pdf"));
+    assert.ok(isPdf(await readFile(path.join(dir, "deck.pdf"))));
+    assert.equal(again.files[0].path, path.join(dir, "deck.pdf"));
     assert.deepEqual((await readdir(dir)).filter((name) => name.endsWith(".tmp")), []);
+    const error = await fails(opf.convert(path.join(dir, "deck.opf.json"), target, { overwrite: false }), opf.OPFApiError, "output-exists");
+    assert.equal(error.details.path, path.resolve(target));
+    assert.equal(core.parse(await readFile(target, "utf8"), { format: "markdown" }).name, "Changed", "a refused output is left as it was");
+    // A directory where a file is expected is never replaced, whatever overwrite says.
+    await mkdir(path.join(dir, "folder.pdf"));
+    await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "folder.pdf")), opf.OPFApiError, "output-not-file");
   });
 
   test("nothing is written when any output fails: one existing slide file stops all of them", async () => {
     const dir = await folder();
     await mkdir(path.join(dir, "slides"));
     await writeFile(path.join(dir, "slides", "deck-002.png"), "keep");
-    await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "slides", "deck.png")), opf.OPFApiError, "output-exists");
+    await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "slides", "deck.png"), { overwrite: false }), opf.OPFApiError, "output-exists");
     assert.deepEqual(await readdir(path.join(dir, "slides")), ["deck-002.png"]);
     assert.equal(await readFile(path.join(dir, "slides", "deck-002.png"), "utf8"), "keep");
     // An invalid deck writes nothing either.

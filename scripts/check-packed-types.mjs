@@ -135,7 +135,7 @@ async function typedNode() {
   const file: ConvertedFile | undefined = returned.files[0];
   const bytes: Uint8Array | undefined = file?.bytes;
   const name: string | undefined = file?.name;
-  const options: ConvertOptions = {slides: '1-3', scale: 2, fontDirs: ['fonts'], assetDir: '.', force: true, date: '2026-01-01'};
+  const options: ConvertOptions = {slides: '1-3', scale: 2, fontDirs: ['fonts'], assetDir: '.', overwrite: false, date: '2026-01-01'};
   await convert('deck.opf.md', 'slides/deck.png', options);
   await convert(bytes ?? new Uint8Array(), 'deck.opf.yaml', {signals: true});
   const opened: Presentation = await open('deck.opf.md');

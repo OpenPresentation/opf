@@ -38,8 +38,8 @@ const rethrow = (error: unknown, fallback: string): never => {
  * pass `{ format }`: nothing is written and the files come back with their names and bytes.
  *
  * A `.pptx` input is imported first. Local images resolve next to the input file unless `assetDir` says otherwise; URLs are
- * never fetched. Everything is produced before anything is written, and each file is written atomically; an existing output
- * needs `force: true`. Throws `OPFApiError` for the request and the files (`invalid-option`, `input-not-found`,
+ * never fetched. Everything is produced before anything is written, and each file is written atomically, replacing an existing
+ * output (`overwrite: false` refuses one with `output-exists`, as the commands do without `--force`). Throws `OPFApiError` for the request and the files (`invalid-option`, `input-not-found`,
  * `input-unreadable`, `invalid-presentation`, `output-exists`, `output-not-file`, `output-unwritable`), `OPFImportError` for the
  * import step and `OPFExportError` for the export step (`peer-not-installed`, `peer-too-old`, `peer-load-failed`,
  * `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed`).

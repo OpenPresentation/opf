@@ -124,7 +124,9 @@ async function run(args: string[], host: Host) {
 		report(false);
 		return;
 	}
-	await writePlanned(plan.files, options.force === true, true);
+	// The commands refuse an existing output unless --force, while `convert` of /node replaces by default: pass it explicitly.
+	const overwrite = options.force === true;
+	await writePlanned(plan.files, overwrite, true);
 	report(true);
 }
 

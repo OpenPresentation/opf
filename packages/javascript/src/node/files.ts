@@ -53,7 +53,7 @@ export interface PlannedFile {
 }
 
 /**
- * Fail before writing anything when a destination exists (without --force, the `force` option of the API), is a symlink or is
+ * Fail before writing anything when a destination exists (the commands without --force; `convert` with `overwrite: false`), is a symlink or is
  * not a regular file: `output-exists` and `output-not-file`, which the commands report at exit 1. `flags` false words the
  * message for the library API.
  */
@@ -61,7 +61,7 @@ export async function checkDestinations(files: string[], overwrite: boolean, fla
 	for (const file of files) {
 		try {
 			const stat = await lstat(file);
-			if (!overwrite) throw new OPFApiError(`Output already exists: ${file}. ${flags ? "Use --force." : "Pass force: true to replace it."}`, "output-exists", { details: { path: file } });
+			if (!overwrite) throw new OPFApiError(`Output already exists: ${file}. ${flags ? "Use --force." : "Pass overwrite: true (the default) to replace it."}`, "output-exists", { details: { path: file } });
 			if (!stat.isFile()) throw new OPFApiError(`Refusing to replace a symlink or non-regular file${flags ? "" : `: ${file}`}.`, "output-not-file", { details: { path: file } });
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;

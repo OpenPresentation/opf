@@ -57,7 +57,8 @@ const deck = await opf.open("deck.pptx");                             // import
 ```
 
 The options are the flags in camel case (`--pdf-mode` is `pdfMode`, `--font-dir` is `fontDirs`, `--asset-dir` is
-`assetDir`, `--include-hidden` is `includeHidden`, `--force` is `force`). The error codes are the commands': `peer-not-installed`,
+`assetDir`, `--include-hidden` is `includeHidden`). The commands refuse an existing output without `--force`; `convert` replaces it unless
+`overwrite: false`. The error codes are the commands': `peer-not-installed`,
 `peer-too-old`, `peer-load-failed`, `invalid-option` and `input-not-found` (command exit 2), `invalid-presentation`,
 `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed` and `output-exists` (1). See [OPF files in Node](node.md).
 
