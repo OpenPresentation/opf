@@ -194,7 +194,7 @@ test('a slide-count retry reports each unknown font scheme once',()=>{
 test('generated socials format the primary organization profiles through the engine social-platform vocabulary',async()=>{
   const {resolveSocialProfile}=await import('../dist/composition.js');
   const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
-  const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{text:'Acme',socials:true}}}};
+  const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{left:{text:'Acme'},right:{socials:true}}}};
   const before=structuredClone(presentation);
   const layout=layoutFurniture({text:'Body'},{presentation});
   assert.deepEqual(presentation,before);assert.deepEqual(layout.diagnostics,[]);

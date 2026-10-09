@@ -775,6 +775,19 @@ export interface FurnitureLayout {
 
 /** Gap between the parts of one header/footer zone row, in reference pixels (scaled with the canvas's short edge). */
 export const FURNITURE_GAP = 12;
+/** In a zone with other parts, an image is at most this share of the zone's width, so a wide logo cannot starve the text. */
+export const FURNITURE_IMAGE_SHARE = .4;
+/** Letters and digits of scripts written with spaces between words: a soft line break between two of them splits a word. */
+const SPACED_WORD_CHARACTER = /^[\p{L}\p{N}\p{M}]$/u;
+const UNSPACED_SCRIPT = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}\p{Script=Tibetan}]/u;
+/** True when a soft line break of the fit falls inside a word of a space-separated script (the grapheme fallback of a word wider than the line). */
+function breaksInsideWord(text: string, fit: SourceTextFit): boolean {
+  return fit.sourceLines.some(line => {
+    if (line.boundary !== 'soft' || line.nextStart <= 0 || line.nextStart >= text.length) return false;
+    const before = [...text.slice(0, line.nextStart)].at(-1) ?? '', after = [...text.slice(line.nextStart, line.nextStart + 2)][0] ?? '';
+    return SPACED_WORD_CHARACTER.test(before) && SPACED_WORD_CHARACTER.test(after) && !UNSPACED_SCRIPT.test(before) && !UNSPACED_SCRIPT.test(after);
+  });
+}
 
 /** Resolve and measure repeated fields without mutating metadata or consulting a clock. */
 export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {}): FurnitureLayout {
@@ -880,7 +893,8 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       // parts each text part is as wide as its longest line, and when the row is wider than the zone the text parts
       // share what the images and gaps leave (narrow parts keep their width, the rest wrap at an equal share).
       const gap=FURNITURE_GAP*scale,gaps=gap*Math.max(0,pending.length-1);
-      const widths=pending.map(part=>part.type==='image'?part.width:pending.length===1?zoneWidth:Math.max(scale,...fitPart(part,1e7).ink.map(line=>Math.max(line.width+(outlines?2*padding:0),line.outline?line.outline.width+2*padding:0))));
+      // With other parts an image is at most FURNITURE_IMAGE_SHARE of the zone (consumers fit it inside its box); alone it keeps its width.
+      const widths=pending.map(part=>part.type==='image'?(pending.length>1?Math.min(part.width,zoneWidth*FURNITURE_IMAGE_SHARE):part.width):pending.length===1?zoneWidth:Math.max(scale,...fitPart(part,1e7).ink.map(line=>Math.max(line.width+(outlines?2*padding:0),line.outline?line.outline.width+2*padding:0))));
       if(pending.length>1&&widths.reduce((sum,entry)=>sum+entry,0)+gaps>zoneWidth+.01){
         const texts=pending.map((_,index)=>index).filter(index=>pending[index]!.type==='text').sort((a,b)=>widths[a]!-widths[b]!);
         let remaining=zoneWidth-gaps-pending.reduce((sum,part,index)=>sum+(part.type==='image'?widths[index]!:0),0),count=texts.length;
@@ -904,6 +918,8 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         const placement=outlines?placeTextLines(ink,box,side,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
         if(accepted.overflow)error(part.partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
+        // Beside other parts a word wider than its share would be split mid-word: that is overflow too, never a silent break.
+        else if(pending.length>1&&breaksInsideWord(part.text,fit))error(part.partPath,'A word of this repeated text is wider than its share of the zone row at the selected readability floor and would break inside the word; shorten the text, move a part to another zone, or widen the canvas.');
         return {type:'text',kind,zone,field:part.field,path:part.partPath,...(part.sourcePath!==undefined?{sourcePath:part.sourcePath}:{}),generated:part.generated,text:part.text,style:part.style,requestedFontSize:size,minFontSize:minimum,box,alignment:side,fit:accepted,...(part.extras.fields?.length?{fields:part.extras.fields}:{}),...(part.extras.links?.length?{links:part.extras.links}:{})};
       });
       zones.push(zoneParts);

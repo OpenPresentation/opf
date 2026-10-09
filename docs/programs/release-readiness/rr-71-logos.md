@@ -54,7 +54,16 @@ decision below is an agent decision, vetoable; each says what changing it would 
       single-part zones do not move.
     - When the row is too wide, text parts share what remains: narrow parts keep their width and the rest wrap at an
       equal share. Wrapping, not an error, keeps 0.17 decks that stacked long text exportable.
-    - A row that cannot fit (images wider than the zone, or no room for text) is `text-overflow` at the zone's path.
+    - Beside other parts an image is at most `FURNITURE_IMAGE_SHARE` (40%) of the zone's width: the smaller of its
+      aspect width at the band height and that share, at the same height (consumers fit the image inside its box). A
+      wide logo therefore cannot starve the text. A lone image keeps its own width, so single-part zones do not move.
+      Found by the renderer on a 720 px portrait canvas, where a 4:1 logo left a 47 px text box.
+    - Text never breaks inside a word silently. Beside other parts, a soft line break between two letters or digits of
+      a space-separated script (a word wider than its share at the readability floor) is `text-overflow` at the
+      part's text path, like any repeated text that does not fit. Scripts written without spaces (Han, kana, Thai,
+      Lao, Khmer, Myanmar, Tibetan) break between characters as before. Single-part zones keep their 0.17 behavior.
+    - A row that cannot fit (no room left for text) is `text-overflow` at the zone's path; with the image cap this
+      is a guard only.
 11. **Zone image parts from a logo reference.** `field: 'image'`, `generated: false`, `image` = the resolved asset,
     `sourcePath` = the organization path (`organization.0.logo.icon.onDark`), `reference` = the reference as written.
     An unresolvable reference is `unresolved-content` at `<zone>.image`.

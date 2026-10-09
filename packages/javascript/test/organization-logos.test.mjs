@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {LOGO_SHAPES, fromMarkdown, listBuiltinVariables, resolveSlideContext, resolveSlideVariables, resolveVariables, toMarkdown, validate} from '../dist/index.js';
-import {FURNITURE_GAP, composeSlide, layoutFurniture, resolveLogo} from '../dist/composition.js';
+import {FURNITURE_GAP, FURNITURE_IMAGE_SHARE, composeSlide, layoutFurniture, resolveLogo} from '../dist/composition.js';
 import {fromYaml, toYaml} from '../dist/yaml.js';
 
 // RR-71 (OPF 0.18): logos live on the organization, are placed through slide-scoped variable references, and a
@@ -254,12 +254,14 @@ test('a row wider than its zone wraps its text, and reports overflow when it can
   assert.ok(text.fit.lines.length > 1, 'the long text wraps');
   assert.equal(date.fit.lines.length, 1, 'the short date keeps its width');
   near(date.box.x + date.box.width - image.box.x, 1280 * 0.26, 'the row fills the zone exactly');
-  // Images alone wider than the zone cannot be repaired by wrapping.
+  // A very wide logo is capped beside text, so the text keeps room; a word that still cannot fit its share is overflow.
   const wide = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"/>').toString('base64')}`;
-  const overflow = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: {left: {image: 'var:organization.logo', text: 'Acme'}}}})});
+  const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: {left: {image: 'var:organization.logo', text: 'Acme'}}}})});
+  assert.deepEqual(capped.diagnostics, []);
+  near(capped.parts[0].box.width, 1280 * 0.26 * 0.4, 'the logo takes at most 40% of the zone');
+  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: {left: {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'}}}})});
   assert.equal(overflow.overflow, true);
-  assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]).slice(0, 1), [['text-overflow', 'design.footer.left']]);
-  assert.match(overflow.diagnostics[0].message, /wider side by side than the zone/);
+  assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.footer.left.text']]);
 });
 
 test('a deck with organization logos round-trips through YAML and Markdown', () => {
@@ -270,4 +272,49 @@ test('a deck with organization logos round-trips through YAML and Markdown', () 
   assert.ok(validate(presentation, {only: ['format']}).valid);
   assert.deepEqual(fromYaml(toYaml(presentation).yaml).presentation, presentation);
   assert.deepEqual(fromMarkdown(toMarkdown(presentation).markdown).presentation, presentation);
+});
+
+const png = (width, height) => {
+  const bytes = new Uint8Array(33);
+  bytes.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52]);
+  new DataView(bytes.buffer).setUint32(16, width);
+  new DataView(bytes.buffer).setUint32(20, height);
+  return `data:image/png;base64,${Buffer.from(bytes).toString('base64')}`;
+};
+
+test('beside other parts an image is capped at FURNITURE_IMAGE_SHARE of the zone; alone it keeps its width', () => {
+  assert.equal(FURNITURE_IMAGE_SHARE, 0.4);
+  const zoneWidth = 1280 * 0.26;
+  const zone = content => layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(400, 100)}, {design: {header: {left: content}}})}).parts;
+  const [alone] = zone({image: 'var:organization.logo'});
+  near(alone.box.width, alone.box.height * 4, 'a lone 4:1 logo keeps its proportions');
+  const [image, text] = zone({image: 'var:organization.logo', text: 'Acme'});
+  near(image.box.width, zoneWidth * FURNITURE_IMAGE_SHARE, 'the wide logo is capped beside text');
+  near(image.box.height, alone.box.height, 'at the same height (consumers fit the image inside the box)');
+  near(text.box.x, image.box.x + image.box.width + FURNITURE_GAP, 'the text follows');
+  // An image narrower than the share keeps its own width.
+  const [square] = layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(100, 100)}, {design: {header: {left: {image: 'var:organization.logo', text: 'Acme'}}}})}).parts;
+  near(square.box.width, square.box.height, 'a square logo is not stretched');
+});
+
+test('portrait: a logo beside text never breaks a word silently at the readability floor', () => {
+  // The renderer's case: a 720 px wide portrait canvas, a header-left logo beside text, a 32 px floor.
+  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: {left: {image: 'var:organization.logo', text}}}})});
+  for (const logo of [png(400, 100), png(100, 100), './assets/acme.svg']) {
+    const result = layout(logo, 'Keep both');
+    assert.deepEqual(result.diagnostics, [], 'the words fit their share whole');
+    const text = result.parts.find(part => part.type === 'text');
+    assert.equal(text.fit.fontSize, 32);
+    assert.deepEqual(text.fit.lines.map(line => line.trim()), ['Keep', 'both'], 'it wraps between the words, never inside one');
+  }
+  // A word wider than its share would break inside the word: that is text-overflow at the part, never silent.
+  const long = layout(png(400, 100), 'Confidentiality');
+  assert.deepEqual(long.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.header.left.text']]);
+  assert.match(long.diagnostics[0].message, /break inside the word/);
+  assert.equal(long.overflow, true);
+  // Scripts written without spaces break between characters as usual.
+  assert.deepEqual(layout(png(100, 100), '東京都の会議資料です').diagnostics, []);
+  // A lone text part keeps its 0.17 behavior: no new diagnostic for a long word in a single-part zone.
+  const single = layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck(undefined, {design: {header: {left: {text: 'Confidentiality-assessment'}}}})});
+  assert.ok(single.diagnostics.every(entry => !/break inside the word/.test(entry.message)));
 });
