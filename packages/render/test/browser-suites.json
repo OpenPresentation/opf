@@ -29,6 +29,10 @@
           "command": "npm run test:code-browser"
         },
         {
+          "id": "browser:font-subsets-browser",
+          "command": "node test/font-subsets-browser.mjs"
+        },
+        {
           "id": "browser:font-preparation-browser",
           "command": "npm run test:font-preparation-browser"
         },

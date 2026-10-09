@@ -7,6 +7,7 @@ import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
 import { textOutlines } from "./text-paths.js";
+import { createSubsetter, fontSubsets } from "./font-subset.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -247,6 +248,15 @@ async function ensureFonts(registry, loaded, presentation, {onDiagnostic, render
   return {scripts: loaded.packages.slice(before), lazy: [], uncovered: selection.uncovered ? [...selection.uncovered] : []};
 }
 
+// RR-65: hb-subset from the pinned harfbuzzjs package (MIT), compiled once per process. The module has no imports, so it is
+// instantiated synchronously and renderSvg stays synchronous. A copy that cannot be loaded leaves the handle without `subsets`
+// (whole faces, as before RR-65): a byte saving never stops fonts from loading.
+let subsetterPromise;
+function nodeSubsetter() {
+  subsetterPromise ??= readFile(require.resolve("harfbuzzjs/dist/harfbuzz-subset.wasm")).then(createSubsetter, () => null).catch(() => null);
+  return subsetterPromise;
+}
+
 /**
  * The fonts handle: one set of verified font inputs for layout, SVG, editor, PPTX and Node raster export. Pass it as `{ fonts }` to
  * `renderSvg`, `renderSlideSvg`, `svgToPng`, `svgToPdf`, core `paginate` and `validate`, and `toPptx`.
@@ -266,6 +276,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
+  const subsetter = await nodeSubsetter();
   return {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { return (embeddedFonts ??= selectEmbedded()); },
@@ -275,6 +286,8 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     registry,
     // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
     outlines: textOutlines({ registry }),
+    // RR-65: the subset engine that cuts each face an SVG embeds to the characters the slide draws.
+    ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /** Load the script faces the presentation's text needs (see `ensureFonts`); `embeddedFonts` and `fontFiles` then include them. */

@@ -32,7 +32,8 @@ assert.equal(new Set(ids).size, ids.length, 'each outline is defined once');
 for (const [, id] of paths.matchAll(/<use href="#([^"]+)"/g)) assert.ok(ids.includes(id), `${id} is defined`);
 assert.equal(renderSlideSvg(rich, 0, { fonts, textAsPaths: true }), paths, 'byte-stable');
 assert.equal(renderSvg(rich, { fonts, textAsPaths: true })[0], paths, 'renderSvg draws the same slide');
-assert.ok(paths.length < 40_000 && paths.length * 10 < text.length, `outlined ${paths.length} bytes against ${text.length} with embedded faces`);
+const whole = renderSlideSvg(rich, 0, { fonts, subsetFonts: false });
+assert.ok(paths.length < 40_000 && paths.length * 10 < whole.length && paths.length < text.length, `outlined ${paths.length} bytes against ${whole.length} with whole embedded faces and ${text.length} with RR-65 subsets`);
 // Everything outside the <text> elements is the renderer's own markup, byte for byte; ancestors' attributes style the text.
 {
   const rect = '<rect x="0" y="0" width="10" height="10" fill="#123456"/>';

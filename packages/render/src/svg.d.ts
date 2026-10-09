@@ -70,6 +70,15 @@ export interface RenderSvgOptions {
    * vector PDF (which keeps real text from `<text>` SVG). Default false.
    */
   textAsPaths?: boolean;
+  /**
+   * `false` embeds whole faces (RR-65). By default, with a fonts handle that carries `subsets` (the Node `loadFonts` handle, a browser
+   * handle given `subsetWasm`), each face an SVG embeds is cut to the characters the slide draws, keeping every layout feature, so the
+   * browser draws it exactly like the whole face (over the core example decks a slide's SVG falls from 2.4 MB to 59 KB on average).
+   * Faces whose license does not allow a modified version under their own name (Carlito, Raleway, Lora, Playfair Display, PT Serif,
+   * Merriweather Sans, Source Sans 3), whose fsType forbids subsetting, or that a host supplied, are always embedded whole. Set it to
+   * false for an SVG whose text will be edited outside the renderer.
+   */
+  subsetFonts?: boolean;
   /** `"chain"` (default): a character the resolved face lacks is drawn with the first bundled face that has it, and reported as `font-glyph-fallback`. `"none"`: exact faces, a missing glyph raises `missing-glyph`. */
   glyphFallback?: "chain" | "none";
   /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */

@@ -22,6 +22,7 @@ import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
+import { drawnFaces } from "./drawn-faces.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -641,11 +642,14 @@ function bindSlide(presentation, index, context) {
 // `embeddedFonts` list). The renderer reads the two as plain options from here on. `embedFonts: false` (RR-61) keeps the
 // measurement and drops the faces, for a host whose page already holds them.
 // `textAsPaths: true` (RR-64) draws text as glyph outlines with the handle's `outlines` engine (a `loadFonts` handle carries one).
+// `subsetFonts: false` (RR-65) embeds whole faces; by default a handle with a subset engine (`fonts.subsets`) cuts each embedded
+// face to the characters the slide draws.
 function normalizeOptions(options) {
-  const { fonts, embedFonts, textAsPaths, ...rest } = options ?? {};
+  const { fonts, embedFonts, textAsPaths, subsetFonts, ...rest } = options ?? {};
+  if (subsetFonts !== undefined && typeof subsetFonts !== "boolean") throw new OPFRenderError("invalid-render-options", "subsetFonts must be true or false.", { option: "subsetFonts" });
   if (textAsPaths !== undefined && typeof textAsPaths !== "boolean") throw new OPFRenderError("invalid-render-options", "textAsPaths must be true or false.", { option: "textAsPaths" });
   if (textAsPaths && typeof fonts?.outlines?.outlineSlideText !== "function") throw new OPFRenderError("text-as-paths-needs-fonts", "textAsPaths needs the fonts handle loadFonts() returns (from /fonts-node or /fonts-browser), passed as `fonts`.", { option: "textAsPaths" });
-  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: embedFonts === false ? undefined : fonts?.embeddedFonts, ...(textAsPaths ? { outlines: fonts.outlines } : {}) };
+  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: embedFonts === false ? undefined : fonts?.embeddedFonts, ...(textAsPaths ? { outlines: fonts.outlines } : {}), ...(subsetFonts !== false && fonts?.subsets ? { subsets: fonts.subsets } : {}) };
 }
 
 /**
@@ -722,7 +726,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     content = outlined.content;
     glyphs = outlined.defs;
   }
-  const children = [glyphs, renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content)), ...content].filter(Boolean);
+  const children = [glyphs, renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content, options.subsets)), ...content].filter(Boolean);
   // FF-44: Chromium (123+) trims adjacent fullwidth punctuation by default (CSS text-spacing-trim: normal; a sequence such as
   // 「」。 is up to 10 percent narrower), but measurement and PowerPoint advance every such character by its full width, so the browser
   // would stretch the glyphs back to the pinned textLength. space-all keeps the drawn advances equal to the measured ones. Only slides
@@ -1861,10 +1865,11 @@ function codeSyntax(item, layout, bound, options) {
 // the SVG names is one the browser can never select, so leaving it out changes no pixel. Only a face flagged embed:"always" is
 // embedded in every SVG. RR-59: each drawn style is checked on its own, so a family keeps an exactly matched face and, for
 // a drawn style none of its faces matches (a weight the family lacks), every face the browser could choose from.
-function embeddedFontsFor(fonts = [], content) {
+function embeddedFontsFor(fonts = [], content, subsets) {
   if (!fonts.length) return fonts;
   fonts.forEach(assertEmbeddableFont);
-  const drawn = drawnFaces(content.join("\n"));
+  const characters = subsets ? new Map() : undefined;
+  const drawn = drawnFaces(content.join("\n"), characters);
   const wanted = font => {
     const triples = drawn.get(String(font.family).toLowerCase());
     if (!triples) return false;
@@ -1874,33 +1879,14 @@ function embeddedFontsFor(fonts = [], content) {
       return matching.length ? matching.includes(font) : true;
     });
   };
-  return fonts.filter(font => font?.embed === "always" || wanted(font));
-}
-
-const FONT_WEIGHT_KEYWORDS = { normal: "400", bold: "700" };
-/** family (lowercase) to the set of "weight|style" pairs the markup draws text in. */
-function drawnFaces(markup) {
-  const drawn = new Map();
-  const tokens = /<(\/?)([A-Za-z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|[^<]+/g;
-  const stack = [{ families: [], weight: "400", style: "normal", text: false }];
-  const attribute = (attributes, name) => { const found = new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`).exec(attributes); return found ? found[1] ?? found[2] : undefined; };
-  for (const [token, close, name, attributes, selfClose] of markup.matchAll(tokens)) {
-    const top = stack.at(-1);
-    if (name === undefined) {
-      if (top.text && /\S/.test(token)) for (const family of top.families) { const set = drawn.get(family) ?? new Set(); set.add(`${top.weight}|${top.style}`); drawn.set(family, set); }
-      continue;
-    }
-    if (close) { if (stack.length > 1) stack.pop(); continue; }
-    const family = attribute(attributes, "font-family"), weight = attribute(attributes, "font-weight"), style = attribute(attributes, "font-style");
-    const next = {
-      families: family === undefined ? top.families : family.split(",").map(item => item.trim().replace(/^&quot;|&quot;$|^["']|["']$/g, "").toLowerCase()).filter(Boolean),
-      weight: weight === undefined ? top.weight : FONT_WEIGHT_KEYWORDS[weight.trim()] ?? weight.trim(),
-      style: style === undefined ? top.style : /italic|oblique/.test(style) ? "italic" : "normal",
-      text: top.text || name === "text",
-    };
-    if (!selfClose) stack.push(next);
-  }
-  return drawn;
+  const used = fonts.filter(font => font?.embed === "always" || wanted(font));
+  // RR-65: each face cut to the characters the slide draws in its family (the handle's subset engine decides whether the face
+  // may be subset at all). A face no text draws (embed: "always") stays whole.
+  if (!subsets) return used;
+  return used.map(font => {
+    const points = characters.get(String(font.family).toLowerCase());
+    return points?.size ? { ...font, dataUrl: subsets.subsetDataUrl(font, points) } : font;
+  });
 }
 
 // Every supplied face is checked, drawn or not, so a bad entry fails on any slide. The data URI check is remembered per face

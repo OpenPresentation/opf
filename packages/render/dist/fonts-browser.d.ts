@@ -81,6 +81,12 @@ export declare function loadFonts(
     document?: Document;
     fetch?: typeof fetch;
     signal?: AbortSignal;
+    /**
+     * RR-65: harfbuzzjs's `harfbuzz-subset.wasm` (the URL the host serves it from, its bytes or a compiled WebAssembly.Module). With
+     * it the handle carries `subsets`, and every SVG `renderSvg` draws with this handle embeds each face cut to the characters the
+     * slide draws. Without it a browser handle embeds whole faces (the Node handle always subsets).
+     */
+    subsetWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
     crypto?: { subtle: SubtleCrypto };
     /** Script faces to load once the registry exists: "auto" (with `presentation`), "all" or ISO 15924 codes. Needs `scriptBaseUrl`. */
     scripts?: ScriptSelection | "auto";

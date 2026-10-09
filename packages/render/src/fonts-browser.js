@@ -3,6 +3,7 @@ import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-f
 import { lazyFacesNeeded } from "./lazy-fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { textOutlines } from "./text-paths.js";
+import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
 export { lazyFontEntries, lazyFontList, splitStartupFaces } from "./lazy-font-list.js";
@@ -280,8 +281,19 @@ const MAX_ENSURE_ROUNDS = 4;
  * (`substitutionPolicy`, `aliases`, `fallbackFamily`, `themeFonts`, `strictGlyphs`) are as for the registry (see `fonts-browser.d.ts`).
  * `dispose()` removes every face from the document.
  */
-export async function loadFonts({ faces = [], ...options } = {}) {
-  const registry = await loadRegistry(faces, options);
+// RR-65: the host's copy of harfbuzzjs's `harfbuzz-subset.wasm` (a URL it serves, the bytes or a compiled module), instantiated
+// asynchronously here (a browser may refuse to compile a large module synchronously on the main thread).
+async function browserSubsetter(source, fetchImpl, signal) {
+  if (source instanceof WebAssembly.Module) return createSubsetter(await WebAssembly.instantiate(source, {}));
+  if (source instanceof ArrayBuffer || ArrayBuffer.isView(source)) return createSubsetter((await WebAssembly.instantiate(source, {})).instance);
+  if (typeof source !== "string" && !(source instanceof URL)) throw new OPFFontError("invalid-font-source", "subsetWasm must be the URL of harfbuzz-subset.wasm, its bytes or a compiled WebAssembly.Module.");
+  const response = await (fetchImpl ?? globalThis.fetch)(String(source), { signal });
+  if (!response.ok) throw new OPFFontError("font-resource-unavailable", `harfbuzz-subset.wasm could not be fetched (${response.status}).`, { url: String(source) });
+  return createSubsetter((await WebAssembly.instantiate(await response.arrayBuffer(), {})).instance);
+}
+
+export async function loadFonts({ faces = [], subsetWasm, ...options } = {}) {
+  const [registry, subsetter] = await Promise.all([loadRegistry(faces, options), subsetWasm === undefined ? null : browserSubsetter(subsetWasm, options.fetch, options.signal)]);
   // The embedded list is base64 of every eager face: compute it once, and again only when faces were added.
   let embedded, stale = true;
   const addFaces = registry.addFaces;
@@ -296,6 +308,8 @@ export async function loadFonts({ faces = [], ...options } = {}) {
     registry,
     // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
     outlines: textOutlines({ registry }),
+    // RR-65: with `subsetWasm`, the subset engine that cuts each face an SVG embeds to the characters the slide draws.
+    ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /**

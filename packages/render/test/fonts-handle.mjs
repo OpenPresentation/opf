@@ -10,7 +10,7 @@ const deck = { name: 'Handle', design: { fontScheme: 'roboto' }, slides: [{ titl
 const fonts = await loadFonts();
 
 // The handle.
-assert.deepEqual(Object.keys(fonts).sort(), ['embeddedFonts', 'ensure', 'fontFiles', 'loadSystemFonts', 'manifest', 'outlines', 'pending', 'registry', 'substitutions', 'textMeasurement', 'useBundledFonts']);
+assert.deepEqual(Object.keys(fonts).sort(), ['embeddedFonts', 'ensure', 'fontFiles', 'loadSystemFonts', 'manifest', 'outlines', 'pending', 'registry', 'subsets', 'substitutions', 'textMeasurement', 'useBundledFonts']);
 assert.equal(fonts.textMeasurement, fonts.registry.textMeasurement);
 assert.equal(fonts.embeddedFonts.length, 9);
 assert.equal(fonts.fontFiles.length, 9);

@@ -130,7 +130,7 @@ if (existsSync(new URL('../dist/fonts-node.js', import.meta.url))) {
     await cp(path.join(root, 'dist'), path.join(temporary, 'dist'), {recursive: true});
     await cp(path.join(root, 'fonts'), path.join(temporary, 'fonts'), {recursive: true});
     await mkdir(path.join(temporary, 'node_modules'), {recursive: true});
-    for (const name of ['fontkit', 'bidi-js', 'pako', '@openpresentation', '@resvg', '@expo-google-fonts']) await symlink(path.join(root, 'node_modules', name), path.join(temporary, 'node_modules', name), process.platform === 'win32' ? 'junction' : 'dir');
+    for (const name of ['fontkit', 'bidi-js', 'pako', 'harfbuzzjs', '@openpresentation', '@resvg', '@expo-google-fonts']) await symlink(path.join(root, 'node_modules', name), path.join(temporary, 'node_modules', name), process.platform === 'win32' ? 'junction' : 'dir');
     const isolated = await import(pathToFileURL(path.join(temporary, 'dist/fonts-node.js')));
     await isolated.loadFonts({pack: 'office'});
     const file = path.join(temporary, 'fonts/intos', pkg.faces[0].file), original = await readFile(file);

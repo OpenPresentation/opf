@@ -142,6 +142,7 @@
     "@openpresentation/opf": "^0.17.0",
     "bidi-js": "1.1.0",
     "fontkit": "^2.0.4",
+    "harfbuzzjs": "1.6.2",
     "pako": "1.0.11"
   },
   "peerDependencies": {
@@ -387,7 +388,6 @@
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
-    "harfbuzzjs": "1.6.2",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.3.289",
     "playwright": "1.63.0",

@@ -60,8 +60,8 @@ try{
   await writeFile(path.join(temporary,'package.json'),JSON.stringify({type:'module'}));
   await cp(path.join(root,'dist'),path.join(temporary,'dist'),{recursive:true});
   await mkdir(path.join(temporary,'node_modules/@expo-google-fonts'),{recursive:true});
-  // fontkit, bidi-js and pako: the required dependencies of fonts-node (bidi-js and pako through the RR-64 outline engine).
-  for(const name of ['fontkit','bidi-js','pako'])await symlink(path.join(root,'node_modules',name),path.join(temporary,'node_modules',name),process.platform==='win32'?'junction':'dir');
+  // fontkit, bidi-js, pako and harfbuzzjs: the required dependencies of fonts-node (bidi-js and pako through the RR-64 outline engine, harfbuzzjs for RR-65 subsets).
+  for(const name of ['fontkit','bidi-js','pako','harfbuzzjs'])await symlink(path.join(root,'node_modules',name),path.join(temporary,'node_modules',name),process.platform==='win32'?'junction':'dir');
   for(const namespace of ['@openpresentation','@resvg'])await symlink(path.join(root,'node_modules',namespace),path.join(temporary,'node_modules',namespace),process.platform==='win32'?'junction':'dir');
   for(const pkg of BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack==='base')){
     await cp(path.dirname(require.resolve(`${pkg.name}/package.json`)),path.join(temporary,'node_modules',pkg.name),{recursive:true});

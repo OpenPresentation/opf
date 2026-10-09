@@ -18,7 +18,7 @@ for (const name of ['pdf-lib', '@resvg/resvg-js', 'sharp']) {
   assert.equal(pkg.peerDependenciesMeta[name]?.optional, true, `${name} is an optional peer`);
   assert.ok(pkg.devDependencies[name], `${name} is installed for tests`);
 }
-assert.deepEqual(Object.keys(pkg.dependencies).sort(), ['@openpresentation/opf', 'bidi-js', 'fontkit', 'pako']);
+assert.deepEqual(Object.keys(pkg.dependencies).sort(), ['@openpresentation/opf', 'bidi-js', 'fontkit', 'harfbuzzjs', 'pako']);
 
 // The subpaths resolve from the package itself and are the same functions as the root's.
 const rootApi = await import('@openpresentation/opf-render');
@@ -31,7 +31,7 @@ try {
   await writeFile(path.join(temporary, 'package.json'), JSON.stringify({type: 'module'}));
   await cp(path.join(root, 'dist'), path.join(temporary, 'dist'), {recursive: true});
   await mkdir(path.join(temporary, 'node_modules/@expo-google-fonts'), {recursive: true});
-  for (const name of ['fontkit', 'bidi-js', 'pako', '@openpresentation']) await link(name, temporary);
+  for (const name of ['fontkit', 'bidi-js', 'pako', 'harfbuzzjs', '@openpresentation']) await link(name, temporary);
   const load = name => import(pathToFileURL(path.join(temporary, 'dist', name)));
   const index = await load('index.js'), fontsNode = await load('fonts-node.js');
   const text = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 200 100"><rect width="200" height="100" fill="#ffffff"/><text x="10" y="50" font-family="Roboto" font-size="20">Hello</text></svg>';

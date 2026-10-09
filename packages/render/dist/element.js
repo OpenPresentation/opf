@@ -7,6 +7,7 @@ import {
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
 import { renderSlideSvg } from "./svg.js";
+import { drawnFaces } from "./drawn-faces.js";
 
 export { DeckError } from "./deck-runtime.js";
 export { loadPreviewFonts, previewBaseFaces, previewFontLayout } from "./preview-fonts.js";
@@ -528,19 +529,24 @@ export function renderDeckHtml(input, options = {}) {
   if (!["standalone", "shared", "external"].includes(fontMode)) throw new DeckError("invalid-font-mode", "Choose standalone, shared or external SSR fonts.");
   // Every mode measures with the same handle; external writes no @font-face data (RR-61 `embedFonts: false`).
   const renderFonts = handle ?? options.renderOptions?.fonts;
-  const sharedRules = new Set();
+  const sharedRules = new Set(), sharedCharacters = new Map();
   const attributes = { src: options.src, slide: options.slide, fonts: handle ? undefined : options.fonts, label: options.label, ...options.attributes };
   const attributeText = Object.entries(attributes).filter(([, value]) => value !== undefined && value !== false).map(([name, value]) => (value === true ? ` ${name}` : ` ${name}="${escapeHtml(value)}"`)).join("")
     + (options.thumbnails ? " thumbnails" : "") + (options.present ? " present" : "") + (options.includeHidden ? " include-hidden" : "");
   const date = options.renderOptions?.date ?? options.date;
   const figures = shown.map((position) => {
     const index = sequence[position];
-    let svg = renderSlideSvg(deck, index, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { embedFonts: false } : {}), ...(date ? { date } : {}) });
-    if (fontMode === "shared") svg = svg.replace(/<style>(@font-face[\s\S]*?)<\/style>/g, (_, css) => {
-      // These rules are produced by renderSlideSvg after its used-face selection and validation.
-      for (const rule of css.split("\n")) sharedRules.add(rule);
-      return "";
-    });
+    // Shared rules are deduplicated across slides, so the slides embed whole faces and the shared set is cut below to what
+    // every slide draws (RR-65); per-slide subsets would differ and repeat each face once per slide.
+    let svg = renderSlideSvg(deck, index, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { embedFonts: false } : {}), ...(fontMode === "shared" ? { subsetFonts: false } : {}), ...(date ? { date } : {}) });
+    if (fontMode === "shared") {
+      drawnFaces(svg, sharedCharacters);
+      svg = svg.replace(/<style>(@font-face[\s\S]*?)<\/style>/g, (_, css) => {
+        // These rules are produced by renderSlideSvg after its used-face selection and validation.
+        for (const rule of css.split("\n")) sharedRules.add(rule);
+        return "";
+      });
+    }
     const { width, height } = svgDimensions(svg);
     const prepared = prepareSlideSvg(svg).replace(/^<svg\b/, `<svg style="display:block;width:100%;height:auto;aspect-ratio:${width} / ${height}"`);
     const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length);
@@ -549,6 +555,13 @@ export function renderDeckHtml(input, options = {}) {
   const titles = wanted === "first" && sequence.length > 1
     ? `<nav aria-label="Slides"><ol>${sequence.map((index) => `<li>${escapeHtml(slideInfo(deck, index).title)}</li>`).join("")}</ol></nav>` : "";
   const embedded = options.embed ? `<script type="application/opf+json">${JSON.stringify(deck).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029")}</script>` : "";
-  const shared = sharedRules.size ? `<style>${[...sharedRules].join("\n")}</style>` : "";
+  const subsets = options.renderOptions?.subsetFonts === false ? undefined : renderFonts?.subsets;
+  const sharedRule = (rule) => {
+    const face = /^@font-face\{font-family:"([^"]+)";font-weight:(\d+);font-style:(\w+);src:url\("([^"]+)"\)\}$/.exec(rule);
+    const points = face && sharedCharacters.get(face[1].toLowerCase());
+    if (!subsets || !points?.size) return rule;
+    return rule.replace(face[4], subsets.subsetDataUrl({ family: face[1], weight: Number(face[2]), italic: face[3] === "italic", dataUrl: face[4] }, points));
+  };
+  const shared = sharedRules.size ? `<style>${[...sharedRules].map(sharedRule).join("\n")}</style>` : "";
   return `<${tag}${attributeText}>${shared}${figures.join("")}${titles}${embedded}</${tag}>`;
 }

@@ -51,7 +51,11 @@ export interface RenderFonts {
   loadSystemFonts?: boolean;
   /** The outline engine `textAsPaths: true` draws text with (RR-64); a `loadFonts` handle carries one over its registry's faces. */
   outlines?: TextOutlines;
+  /** The subset engine (RR-65): each face an SVG embeds is cut to the characters the slide draws. The Node `loadFonts` handle carries one; a browser handle with `subsetWasm`. */
+  subsets?: FontSubsets;
 }
+/** Cuts an embedded face to code points (RR-65), with hb-subset; a face whose license, Reserved Font Name or fsType does not allow it keeps its own data URL. */
+export interface FontSubsets { subsetDataUrl(font: EmbeddedFont, codePoints: Iterable<number>): string }
 /** Draws a slide's text as glyph outlines (RR-64). Read by `renderSvg`; hosts pass the handle and `textAsPaths: true`. */
 export interface TextOutlines { outlineSlideText(content: string[], options: object): { content: string[]; defs: string } }
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
