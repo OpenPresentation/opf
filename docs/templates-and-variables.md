@@ -97,7 +97,7 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 
 **Untouched content.** `extensions`, inline `catalogs`, `$schema`, and the declarations themselves are never searched.
 
-**Compatibility.** A deck that declares no content variable and is not a template is resolved by identity: nothing is searched, `{{` and `\{{` in its text keep their meaning (a Handlebars snippet in a code block is safe), and its color variables behave as before. Escapes are only processed in a deck that uses content variables.
+**Compatibility.** A deck that declares no content variable, uses no built-in variable (the slide-scoped ones included) and is not a template is resolved by identity: nothing is searched, `{{` and `\{{` in its text keep their meaning (a Handlebars snippet in a code block is safe), and its color variables behave as before. Escapes are only processed in a deck that uses content or built-in variables.
 
 ## Built-in variables
 
@@ -114,8 +114,11 @@ Built-ins are read-only variables that come from the deck's own metadata, so a c
 | `organization.name`, `.legalName`, `.tagline`, `.domain`, `.email`, `.phone` | text | the primary organization |
 | `organization.logo` | image | the primary organization |
 | `organization.<id>.<field>` | as above | the organization with that id |
+| `slide.number` | text, slide-scoped | the displayed number of this slide in the rendered or exported deck, after pagination (a slide split in two shows two numbers) |
+| `slide.section` | text, slide-scoped | this slide's `section`; a slide without one resolves to empty text |
+| `deck.slideCount` | text, slide-scoped | the number of slides in the rendered or exported deck, after pagination |
 
-The primary organization is the one with `role: 'primary'`, else the first (the rule the deck logo and the `organization` furniture field use). The speaker and organization fields may be an object or an array. A two-segment name (`speaker.name`) always means the first speaker or the primary organization; a three-segment name (`speaker.ada.name`) addresses an entry by its `id`.
+The primary organization is the one with `role: 'primary'`, else the first (the rule the deck logo and the `socials` furniture field use). The speaker and organization fields may be an object or an array. A two-segment name (`speaker.name`) always means the first speaker or the primary organization; a three-segment name (`speaker.ada.name`) addresses an entry by its `id`.
 
 They use the two forms above and work wherever the same kind of user variable works: `{{speaker.name}}` inside any string (`{{speakers|; }}` takes a separator, like any list), and `var:speaker.photo` or `var:organization.logo` as a whole field. `var:speakers` splices every name into an array.
 
@@ -129,15 +132,27 @@ They use the two forms above and work wherever the same kind of user variable wo
 }
 ```
 
-- **Unknown path.** `{{speaker.nickname}}`, `var:organization.nobody.name` or `{{deck.owner}}` is a validation error (`variable-unknown-builtin`) and stays as written in a resolved deck. A `speaker.<id>` or `organization.<id>` path whose id does not exist is the same error.
+- **Unknown path.** `{{speaker.nickname}}`, `var:organization.nobody.name`, `{{deck.owner}}` or `{{slide.title}}` is a validation error (`variable-unknown-builtin`) and stays as written in a resolved deck. A `speaker.<id>` or `organization.<id>` path whose id does not exist is the same error.
 - **Known path, no source value.** The built-in resolves to an empty string (a whole-field reference is omitted) and validation warns (`variable-builtin-missing`), as for an unfilled optional variable.
 - **Templates.** A template preview (`examples: true`) uses the document's real metadata for built-ins. When the document has none, the token or reference stays visible, the way an unfilled variable with no example does. Filling the template for real resolves a missing built-in to nothing.
 - **Nested tokens.** A built-in text that itself carries a token (`"name": "Review for {{client}}"`) is resolved once; a built-in that refers back to itself stays as written.
 - **Not overridable.** `values` cannot set a built-in; change the document field instead.
-- **Resolved before composition,** like user variables, so every engine draws the same text. `listBuiltinVariables(presentation)` returns each built-in with its kind, label, current value, whether the document has a source value, and where it is used (pickers and agents; the editor's Fill template panel lists them read-only).
-- The speaker and organization fields that are *not* built-ins are never drawn automatically: a speaker appears only through these variables and the `speaker` header/footer field, and `Organization.tagline`, `legalName`, `domain`, `email` and `phone` appear only through their built-ins. Per-slide values (slide number, total, section, date) stay header/footer fields: they need composition-time resolution and native PPTX fields.
+- **Resolved before composition,** like user variables, so every engine draws the same text (the slide-scoped three are the exception, below). `listBuiltinVariables(presentation)` returns each built-in with its kind, label, `scope` (`deck` or `slide`), current value, whether the document has a source value, and where it is used (pickers and agents; the editor's Fill template panel lists them read-only, the slide-scoped ones as "varies per slide").
+- The speaker and organization fields that are *not* built-ins are never drawn automatically: a speaker appears only through these variables, and `Organization.tagline`, `legalName`, `domain`, `email` and `phone` appear only through their built-ins.
 
-The `speaker: true` header/footer field draws the first speaker's name and title ("Ada Lovelace, CTO") as generated text in that zone, after `organization` in the stack order. See [dynamic composition](dynamic-composition.md).
+### Slide-scoped built-ins
+
+`{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` (FA-31) depend on the slide being drawn and on the deck after pagination, so they resolve per output slide, at composition time, instead of in the deck-wide pass:
+
+- They work in any string of a slide (title, body text, runs, table cells, chart data, notes) and in header and footer `text`. They are inline tokens only: `var:slide.number`, any `var:slide.*` and `var:deck.slideCount` are `variable-unknown-builtin`, because every field that would take them is a string. `slide.` is a reserved prefix, so `{{slide.anything-else}}` is `variable-unknown-builtin`.
+- `resolveVariables` leaves them as written, also on a complete pass, and never reports them (`variable-unfilled` and `variable-unknown` do not apply). An escaped `\{{slide.number}}` keeps its escape through that pass and draws as the literal text `{{slide.number}}`.
+- `resolveSlideVariables(slide, { slideNumber, slideCount })` returns a copy of one slide with the three substituted in every string, with the same walk and exclusions as `resolveVariables` (`extensions` is never searched; code follows the same rule as user tokens). `slide.section` reads the slide's own `section`. The slide's own `design.header` and `design.footer` are left to `layoutFurniture`.
+- Engines (renderer, PPTX exporter, editor preview) compose and draw `context.slide` from `resolveSlideContext(deck, index, { slideNumber, slideCount })`, which is that substituted slide for the same numbers `context.options` carries; an engine that builds its own options calls `resolveSlideVariables` per output slide with the `slideNumber` and `slideCount` it gives `composeSlide`. Text is therefore measured with the real value.
+- `layoutFurniture` substitutes them in each zone's `text` for the slide it lays out, and every `{{slide.number}}` adds a `slideNumber` entry to `FurnitureTextPart.fields`, so the PPTX exporter writes it as a native slide-number field. `{{deck.slideCount}}` and `{{slide.section}}` are fixed text (PowerPoint has no slide-count field). In body text every slide token is fixed text.
+- `paginate` measures with the substituted values but returns slides with the tokens kept, so its output stays a source document, and runs its slide-count fixed point whenever `{{deck.slideCount}}` appears in the deck.
+- Validation warns `variable-builtin-missing` at each slide that has no `section` but uses `{{slide.section}}`, in its own strings or in the header or footer it inherits from `design`.
+
+Header and footer zones carry generated values only as variables in `text`, in the order the author writes them, with `\n` between lines: `"{{organization.name}}"`, `"{{speaker.name}}, {{speaker.title}}"`, `"{{slide.section}}"`, `"{{slide.number}} / {{deck.slideCount}}"`. See [dynamic composition](dynamic-composition.md).
 
 ## Templates
 
@@ -187,7 +202,7 @@ The result of a complete pass:
 
 Values are coerced per kind, so data files work as they are: number accepts a finite number or a strict decimal string (`"1250000"`, not `"1,250,000"`); date accepts `YYYY-MM-DD` or an ISO date-time (the date part is kept, no zone conversion); list accepts an array, or a string split on newlines; text accepts a string, a number, a boolean or runs; image accepts a string or `{src}`; url accepts http, https, mailto and tel; color accepts hex. `null`, `undefined` and, for every kind but text, a blank string mean "not provided". A rejected value is an `error` diagnostic (`variable-invalid-value`) and falls back to the declaration. A value for an undeclared variable is a `variable-unknown-value` warning.
 
-Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`.
+Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-builtin`, `variable-builtin-missing`, `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`.
 
 `listVariables(presentation, values?)` returns each declaration with `filled` and every place it is used (`uses: [{ path, form: 'token' | 'reference' }]`). Fill forms, agents and the editor read it.
 
@@ -241,7 +256,7 @@ Each is vetoable; the alternative says what changing it would cost.
 13. **English number and date formats only.** Separators and names are fixed so output never depends on host locale; a `locale` field is a follow-up.
 14. **Optional unfilled variables vanish; required ones never do.** The resolver does not guess a replacement for a missing value.
 
-15. **Built-ins are dotted and read from the document, not declared.** A dot can never appear in a user id, so there is no collision rule to learn. The cost is one non-dotted name, `speakers`, which is reserved. Per-slide values are not built-ins because they need composition-time resolution and native PPTX fields.
+15. **Built-ins are dotted and read from the document, not declared, and per-slide values are slide-scoped built-ins (FA-31, owner decision 2026-10-09).** A dot can never appear in a user id, so there is no collision rule to learn. The cost is one non-dotted name, `speakers`, which is reserved. `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` resolve per output slide at composition time (`resolveSlideVariables`, `layoutFurniture`), and a furniture `{{slide.number}}` keeps the native PPTX field, so headers and footers need no flags and no second template syntax (the 0.16 `organization`, `speaker`, `section`, `slideNumber` and `slideNumberFormat` keys and `{current}`/`{total}` are removed). Alternative: keep per-field booleans, which fix the order of values in a zone and duplicate the built-ins.
 16. **A missing built-in source resolves to nothing with a warning (previews of a template keep the token).** An unknown path is an error because it is a typo, not missing data.
 
 ## Limits

@@ -223,7 +223,7 @@ try {
   await page.route(/^https?:/, route => {requests.push(route.request().url()); return route.abort();});
   await page.setContent('<button id="previous">Previous</button><button id="next">Next</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="date">Next host date</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');
   await page.addScriptTag({content: bundle});
-  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {date: true, dateFormat: 'MMMM d, yyyy'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}};
+  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {date: true, dateFormat: 'MMMM d, yyyy'}, right:{text:'{{slide.number}} / {{deck.slideCount}}'}};
   for (const [name, width, height, paginate, wrapped] of [['wide', 1280, 720, false, false], ['portrait', 720, 1280, false, false],
     ['paginated', 1280, 720, true, false], ['portrait-wrapped', 720, 1280, false, true]]) {
     activeCase = name;

@@ -52,7 +52,7 @@ Reusable records live in catalogs; a reference is a bare id or `name:id`: `narra
 
 ## Design in three lines
 
-`design.theme` bundles scheme + fonts + background + dimensions; `design.colorScheme` / `fontScheme` override it; `slides[].design` overrides per slide; resolution is per field, most specific wins. Backgrounds accept slot names (`"light1"`) or hex. `false` suppresses inherited `watermark` / `header` / `footer`.
+`design.theme` bundles scheme + fonts + background + dimensions; `design.colorScheme` / `fontScheme` override it; `slides[].design` overrides per slide; resolution is per field, most specific wins. Backgrounds accept slot names (`"light1"`) or hex. `false` suppresses inherited `watermark` / `header` / `footer`. A header or footer zone (`left` / `center` / `right`) takes `text`, `image`, `logo`, `socials`, `date`; generated values are variables in `text`: `"{{slide.number}} / {{deck.slideCount}}"`, `"{{slide.section}}"`, `"{{organization.name}}"` (the slide-scoped `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` also work in body text).
 
 ## Prefer / never
 

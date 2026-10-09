@@ -53,7 +53,7 @@ try{
  },registry.embeddedFonts);
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
   const original=local?'':'  A  B\tC\u00a0D\r\n\r\ntrail  \r';
-  const header={left:{text:original},center:{organization:true},right:{section:true}},footer={left:{date:' 2026-09-10 '},right:{slideNumber:true}};
+  const header={left:{text:original},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer={left:{date:' 2026-09-10 '},right:{text:'{{slide.number}}'}};
   const deck = withRecords({organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header}}:{})}]});
   const fieldPath=local?'slides.0.design.header.left.text':'design.header.left.text';activeCase={measured,width,height,floor,local,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
@@ -115,9 +115,9 @@ try{
   const exported=await page.evaluate(()=>({bytes:Array.from(lastExport),imported:lastImport,source:editor.presentation}));
   assert.deepEqual(exported.source,accepted);
   const imported=exported.imported,importedHeader=imported.slides[0].design?.header??imported.design?.header,importedFooter=imported.slides[0].design?.footer??imported.design?.footer;
-  assert.equal(importedHeader.left.text,edit);assert.equal(importedHeader.center.organization,true);assert.equal(importedHeader.right.section,true);
+  assert.equal(importedHeader.left.text,edit);assert.equal(importedHeader.center.text,'{{organization.name}}');assert.equal(importedHeader.right.text,'{{slide.section}}');
   assert.deepEqual(imported.organization,deck.organization);assert.equal(imported.slides[0].section,'Review');
-  assert.equal(importedFooter.left.date,deck.design.footer.left.date);assert.equal(importedFooter.right.slideNumber,true);
+  assert.equal(importedFooter.left.date,deck.design.footer.left.date);assert.equal(importedFooter.right.text,'{{slide.number}}');
   assert.deepEqual(await page.evaluate(()=>failures),[]);if(measured&&floor===32)await page.screenshot({path:path.join(output,`furniture-${width}-${local?'local':'inherited'}.png`),fullPage:true});
   results.push({measured,width,height,floor,local,path:fieldPath,original,accepted:edit,geometry,paint,imported,pptxSha256:hash(new Uint8Array(exported.bytes))});
  }

@@ -31,8 +31,9 @@ For raw geometry, `composeSlide(slide, options)` expects validated input. `resol
 import { resolveSlideContext } from '@openpresentation/opf';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { composeSlide } from '@openpresentation/opf/composition';
-const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement }, catalogs: [defaultCatalog] });
-const geometry = composeSlide(document.slides[slideIndex], options);
+const { slide, options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement }, catalogs: [defaultCatalog] });
+// slide: document.slides[slideIndex] with {{slide.number}}, {{slide.section}} and {{deck.slideCount}} substituted.
+const geometry = composeSlide(slide, options);
 // geometry.items: leaf paths and boxes; geometry.groups: nested group bounds.
 // diagnostics holds one unresolved-reference per layout, theme, colour or font scheme reference that resolves nowhere;
 // each falls back (automatic composition, or the engine default) and none throws unless strictReferences is set.

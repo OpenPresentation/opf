@@ -140,6 +140,11 @@ Per-slide values (slide number, total, section, date) stay header/footer fields.
 They need composition-time resolution and native PPTX fields, and built-ins are
 resolved before composition.
 
+Superseded by FA-31 (2026-10-09, [fa-31-slide-variables.md](fa-31-slide-variables.md)):
+the furniture flags are removed, header and footer values are variables in
+`text`, and `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` are
+slide-scoped built-ins resolved per output slide.
+
 ## Narrative (FA-02 recommendation, adopted)
 
 A narrative is a **plan**: arc, beats and what each beat must do. Planners such

@@ -266,7 +266,7 @@ assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'm
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
-  number: () => ({footer: {right: {slideNumber: true}}}),
+  number: () => ({footer: {right:{text:'{{slide.number}}'}}}),
   date: () => ({footer: {left: {date: '2026-09-29', dateFormat: 'yyyy-MM-dd'}}}),
   text: () => ({footer: {center: {text: 'Confidential'}}})
 };

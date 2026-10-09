@@ -77,15 +77,24 @@ records (one script, kept outside the repositories, shared by both PRs):
 1. `resolveVariables` (the deck-wide pass) resolves user variables and the
    deck-wide built-ins and **leaves the three slide-scoped tokens as written**,
    including after a complete pass (they are not "unknown"). An escaped
-   `\{{slide.number}}` still draws as the literal text `{{slide.number}}`.
+   `\{{slide.number}}` still draws as the literal text `{{slide.number}}`: the
+   deck-wide pass keeps the escape in front of a slide-scoped token, and the
+   per-slide pass turns it into the literal token.
 2. Core exports `resolveSlideVariables(slide, { slideNumber, slideCount })`. It
    returns a copy of the slide with the three tokens substituted in every string,
    with the same walk and exclusions as `resolveVariables` (code blocks follow
    the same rule as user tokens). `slide.section` reads the slide's own `section`.
-3. Engines (opf-render, opf-pptx, the editor preview) call it on each output
-   slide after pagination, with the same `slideNumber` and `slideCount` they pass
-   to `composeSlide`, and both compose and draw the substituted slide. Text is
-   therefore measured with the real value.
+   The slide's own `design.header` and `design.footer` are left to
+   `layoutFurniture` (item 5), so a slide-local footer keeps its native field.
+3. Engines (opf-render, opf-pptx, the editor preview) compose and draw the
+   substituted slide of each output slide after pagination. Implementation
+   decision (vetoable): `resolveSlideContext(deck, index, { slideNumber, slideCount })`
+   returns it as `context.slide`, substituted for the same `slideNumber` and
+   `slideCount` it puts in `context.options`, so an engine writes
+   `composeSlide(context.slide, context.options)` and draws `context.slide`. An
+   engine that builds its own options calls `resolveSlideVariables` per output
+   slide with the numbers it gives `composeSlide`. Text is therefore measured
+   with the real value.
 4. `paginate` measures with substituted values but returns slides with the
    tokens kept, so `opf paginate` output stays a source document. Its slide-count
    fixed point (today triggered by `{total}`) runs when `{{deck.slideCount}}`
