@@ -19,6 +19,8 @@ if (cliNotice) console.log(`SKIP the CLI part of the registry consumer: ${cliNot
 // layoutTable first shipped in core 0.6.0. Keep historical registry plans
 // testable, while requiring the API and its pinned regression suite thereafter.
 const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
+// RR-73: core 0.18 renamed importData to ingest; a registry plan before 0.18 still has the old name.
+const dataImportName = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 18 ? 'ingest' : 'importData';
 const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
 // Styled-cell rollout targets core 0.7; published 0.6 fixtures remain separate.
 const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
@@ -337,7 +339,7 @@ await loadFonts({pack:'unknown'});
 await writeFile(
   path.join(consumer, "check.mjs"),
   `import assert from 'node:assert/strict';
-import {importData} from '@openpresentation/opf/data';
+import {${dataImportName} as ingest} from '@openpresentation/opf/data';
 import {fitRichText,fitList} from '@openpresentation/opf/composition';
 import {parseTabularData} from '@openpresentation/opf-editor/data';
 import {formatRichTextRange, replaceRichTextRange, richTextContent} from '@openpresentation/opf-editor/rich-text';
@@ -352,7 +354,7 @@ import {loadFonts as loadBrowserFonts} from '@openpresentation/opf-render/fonts-
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {renderSlideSvg} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
-assert.equal(importData('Q,R\\nQ1,12',{as:'chart'}).chart.data.rows[0][1],12);
+assert.equal(ingest('Q,R\\nQ1,12',{as:'chart'}).chart.data.rows[0][1],12);
 assert.equal(parseTabularData([{q:'Q1',r:12}]).rows[0][1],12);
 assert.equal(fitList([{text:'Packed list',level:2}],{x:0,y:0,width:300,height:100}).listEntries[0].level,2);
 assert.ok(fitRichText([{text:'Packed rich text',bold:true}],{x:0,y:0,width:300,height:100}).richLines.length);

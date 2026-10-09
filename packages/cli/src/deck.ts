@@ -36,7 +36,7 @@ export function formatNamed(value: unknown): DeckFormat | undefined {
   return value === "json" || value === "yaml" ? value : value === "markdown" || value === "md" ? "markdown" : undefined;
 }
 
-/** True when `--format` names an output deck format that is not JSON (`fill` and `import-data` use `--format csv|tsv|json` for their data). */
+/** True when `--format` names an output deck format that is not JSON (`fill` and `ingest` use `--format csv|tsv|json` for their data). */
 export const isDeckFormatFlag = (value: unknown): boolean => value === "yaml" || value === "markdown" || value === "md";
 
 const FORMAT_MESSAGE = "takes json, yaml or markdown (md).";

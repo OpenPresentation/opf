@@ -278,17 +278,17 @@ describe("writing a deck.opf.md", () => {
     assert.equal(run(["validate", "fresh.opf.md"]).status, 0);
   });
 
-  test("import-data and fill read Markdown decks and write them by --format markdown or the output name", () => {
+  test("ingest and fill read Markdown decks and write them by --format markdown or the output name", () => {
     write("data.csv", "Quarter,Revenue\nQ1,12\nQ2,18\n");
     write("data.opf.md", deckMd);
-    const into = run(["import-data", "data.csv", "--as", "chart", "--into", "data.opf.md", "--in-place"]);
+    const into = run(["ingest", "data.csv", "--as", "chart", "--into", "data.opf.md", "--in-place"]);
     assert.equal(into.status, 0, into.stderr);
     assert.match(read("data.opf.md"), /```chart/);
     assert.equal(run(["validate", "data.opf.md"]).status, 0);
-    const fresh = run(["import-data", "data.csv", "--as", "table", "--format", "markdown"]);
+    const fresh = run(["ingest", "data.csv", "--as", "table", "--format", "markdown"]);
     assert.equal(fresh.status, 0, fresh.stderr);
     assert.match(fresh.stdout, /\| Quarter \| Revenue \|/);
-    assert.equal(run(["import-data", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
+    assert.equal(run(["ingest", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
 
     const template = run(["edit", TEMPLATE, "--patch", patch("noop3.json", []), "--output", "template.opf.md"]);
     assert.equal(template.status, 0, template.stderr);

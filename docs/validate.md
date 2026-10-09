@@ -165,7 +165,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--input-format yaml`) is read as
 | 1 | At least one finding at or above `--fail-on`, or a document that is not valid JSON (or YAML) |
 | 2 | Usage, configuration or I/O error |
 
-`--fail-on` is the one way to say "fail on warnings" on every command that checks a document: `--fail-on warning`. Other commands (`create`, `edit`, `fill`, `paginate`, `bundle`, `import-data`, `render`, `export`, `import`, `from-md`, `from-yaml`) check only `format` and `references` of what they write and take `--fail-on` the same way.
+`--fail-on` is the one way to say "fail on warnings" on every command that checks a document: `--fail-on warning`. Other commands (`create`, `edit`, `fill`, `paginate`, `bundle`, `ingest`, `render`, `export`, `import`, `from-md`, `from-yaml`) check only `format` and `references` of what they write and take `--fail-on` the same way.
 
 ## How contrast is computed
 

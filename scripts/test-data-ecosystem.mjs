@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import {importData,parseTabularData} from '../packages/javascript/dist/data.js';
+import {ingest,parseTabularData} from '../packages/javascript/dist/data.js';
 import {renderSlideSvg} from '../../opf-render/src/svg.js';
 import {toPptx,fromPptx} from '../../opf-pptx/src/index.js';
 const csv='Quarter,Revenue,Cost\nQ1,12,-4\nQ2,18,7';
-const chart=importData(csv,{as:'chart'}),table=importData(csv,{as:'table'});
+const chart=ingest(csv,{as:'chart'}),table=ingest(csv,{as:'table'});
 for(const type of ['column','bar','line','area']){
  const doc={slides:[{...chart,chart:{...chart.chart,type}}]},svg=renderSlideSvg(doc,0,{trace:true});
  // Renderer 0.11.3+ traces every data cell of a column or bar chart and the category labels of a line or area chart (its marks are polylines).
@@ -13,11 +13,11 @@ for(const type of ['column','bar','line','area']){
  if(type==='area')assert.equal((svg.match(/<path/g)??[]).length,2);
 }
 for(const type of ['pie','doughnut']){
- const content=importData('Q,V\nA,2\nB,3',{as:'chart',chartType:type});
+ const content=ingest('Q,V\nA,2\nB,3',{as:'chart',chartType:type});
  const svg=renderSlideSvg({slides:[content]},0,{trace:true});assert.match(svg,/<path/);// Renderer 0.11.3+ draws a doughnut as ring paths: an outer and an inner arc per slice (a pie slice has one arc).
  if(type==='doughnut')assert.equal((svg.match(/ A /g)??[]).length,4);else assert.equal((svg.match(/ A /g)??[]).length,2);
 }
-const numericCategory=importData([{year:2025,sales:2},{year:2026,sales:-1}],{as:'chart'});
+const numericCategory=ingest([{year:2025,sales:2},{year:2026,sales:-1}],{as:'chart'});
 assert.match(renderSlideSvg({slides:[numericCategory]},0),/2025/);
 const bytes=await toPptx({slides:[{title:'Data import',blocks:[table,chart]}]});assert.ok(bytes.length>1000);
 const roundtrip=await fromPptx(bytes);const serialized=JSON.stringify(roundtrip);

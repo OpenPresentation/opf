@@ -78,7 +78,7 @@ import type {Finding} from '@openpresentation/opf/types';
 import {composeSlide} from '@openpresentation/opf/composition';
 import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/composition';
 import {paginate} from '@openpresentation/opf/pagination';
-import {importData} from '@openpresentation/opf/data';
+import {ingest} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
 import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
@@ -97,14 +97,14 @@ const valid: boolean = report.valid;
 const firstFinding: Finding | undefined = report.findings[0];
 const pages = paginate(deck).presentation;
 composeSlide(pages.slides[0]);
-const importedTable = importData('Name,Value\\nA,1', {as: 'table'});
-const importedChart = importData('Name,Value\\nA,1', {as: 'chart'});
+const importedTable = ingest('Name,Value\\nA,1', {as: 'table'});
+const importedChart = ingest('Name,Value\\nA,1', {as: 'chart'});
 const importedDeck: Presentation = {slides: [importedTable, importedChart]};
 const columns: [string, ...string[]] = importedChart.chart.data.columns;
 const rows: [unknown[], ...unknown[][]] = importedChart.chart.data.rows;
 const tableRows: unknown[][] = importedTable.table.rows;
 const dynamicMode: 'chart' | 'table' = Math.random() > 0.5 ? 'chart' : 'table';
-const dynamicImport = importData('Name,Value\\nA,1', {as: dynamicMode});
+const dynamicImport = ingest('Name,Value\\nA,1', {as: dynamicMode});
 const dynamicDeck: Presentation = {slides: [dynamicImport]};
 // @ts-expect-error A literal table request exposes only its table payload.
 importedTable.chart;
@@ -180,7 +180,7 @@ void yamlSlides; void yamlFinding; void yamlSchemaValid; void yamlText; void yam
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected
-importData([], {as: 'unsupported'});
+ingest([], {as: 'unsupported'});
 void valid; void invalid;
 ${downstream ? `
 import {renderSlideSvg} from '@openpresentation/opf-render';

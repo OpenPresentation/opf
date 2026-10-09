@@ -10,7 +10,7 @@ import { diffCommand } from "./diff.js";
 import { mergeCommand } from "./merge.js";
 import { formatCommand } from "./format.js";
 import { statsCommand } from "./stats.js";
-import { importDataCommand, IMPORT_DATA_USAGE } from "./import-data.js";
+import { ingestCommand, INGEST_USAGE } from "./ingest.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
@@ -38,7 +38,7 @@ ${VALIDATE_USAGE}
   opf format <file|->... [--check | --in-place | --output <file|->]
            [--indent <0-8>] [--eol <lf|crlf|preserve>] [--format <json|yaml|markdown>]
   opf stats <file|-> [--format <json|text>] [--per-slide]
-${IMPORT_DATA_USAGE}
+${INGEST_USAGE}
   opf fill <template.opf.json|-> [--data <values.json|data.csv|data.tsv|->] [--format <csv|tsv|json>]
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
            | --combine --output <file|->] [--partial] [--examples] [--format yaml|markdown] [--force] [--fail-on <level>]
@@ -278,7 +278,7 @@ async function main(args0: string[]) {
   if (command === "merge") { await mergeCommand(args, cli); return; }
   if (command === "format") { await formatCommand(args, cli); return; }
   if (command === "stats") { await statsCommand(args, cli); return; }
-  if (command === "import-data") { await importDataCommand(args, cli); return; }
+  if (command === "ingest") { await ingestCommand(args, cli); return; }
   if (command === "fill") {
     const { positional, options } = parse(args, ["data", "format", "delimiter", "no-header", "output", "out-dir", "name", "combine", "partial", "examples", "force", "fail-on"]); arity(positional, 1);
     if (options["out-dir"] !== undefined && (options.output !== undefined || options.combine)) throw new CliError("--out-dir cannot be combined with --output or --combine.");

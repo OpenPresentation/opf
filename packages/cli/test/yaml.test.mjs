@@ -344,19 +344,19 @@ describe("decks read from YAML by every command", () => {
     assert.equal(JSON.parse(read("merged.opf.json")).slides[1].text, "Theirs");
   });
 
-  test("import-data, paginate and embed read and write YAML", () => {
+  test("ingest, paginate and embed read and write YAML", () => {
     write("data.csv", "Quarter,Revenue\nQ1,12\nQ2,18\n");
     write("data-deck.opf.yaml", deckYaml);
-    const into = run(["import-data", "data.csv", "--as", "chart", "--into", "data-deck.opf.yaml", "--in-place"]);
+    const into = run(["ingest", "data.csv", "--as", "chart", "--into", "data-deck.opf.yaml", "--in-place"]);
     assert.equal(into.status, 0, into.stderr);
     const after = read("data-deck.opf.yaml");
     assert.match(after, /^# yaml-language-server: /);
     assert.match(after, /chart:/);
     assert.equal(formatValid(JSON.parse(run(["from-yaml", "data-deck.opf.yaml"]).stdout)), true);
-    const toYaml = run(["import-data", "data.csv", "--as", "table", "--format", "yaml"]);
+    const toYaml = run(["ingest", "data.csv", "--as", "table", "--format", "yaml"]);
     assert.equal(toYaml.status, 0, toYaml.stderr);
     assert.match(toYaml.stdout, /^slides:\n {2}- id: data-1\n/);
-    assert.equal(run(["import-data", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
+    assert.equal(run(["ingest", "data.csv", "--as", "table", "--format", "csv"]).stdout.trimStart()[0], "{", "csv still names the data");
     const paginated = run(["paginate", "data-deck.opf.yaml", "paginated.opf.yaml"]);
     assert.equal(paginated.status, 0, paginated.stderr);
     assert.match(read("paginated.opf.yaml"), /^# yaml-language-server: /);

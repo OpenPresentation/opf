@@ -3,15 +3,15 @@ import {test} from 'node:test';
 import ts from 'typescript';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {importData, parseTabularData} from '../dist/data.js';
+import {ingest, parseTabularData} from '../dist/data.js';
 import {validate} from '../dist/index.js';
 
 test('chart imports compose into public Presentation declarations without casts', () => {
   const fixture=fileURLToPath(new URL('./data-consumer.ts',import.meta.url));
-  const source=`import {importData,type Presentation} from '../dist/index.js';
-import {importData as focused,type ImportedChart,type ImportedChartType,type ImportedTable} from '../dist/data.js';
+  const source=`import {ingest,type Presentation} from '../dist/index.js';
+import {ingest as focused,type ImportedChart,type ImportedChartType,type ImportedTable} from '../dist/data.js';
 const csv='Quarter,Revenue\\nQ1,12';
-const chart:ImportedChart=importData(csv,{as:'chart'});
+const chart:ImportedChart=ingest(csv,{as:'chart'});
 const table:ImportedTable=focused(csv,{as:'table'});
 const deck:Presentation={slides:[{blocks:[chart,table]},chart,table]};
 const firstColumn:string=chart.chart.data.columns[0];
@@ -36,11 +36,11 @@ void [deck,dynamicDeck,firstColumn,kind,firstRow,tableRows];`;
 });
 
 test('nonempty chart guarantees retain runtime rejection and header-only tables', () => {
-  assert.throws(()=>importData('Quarter,Revenue',{as:'chart'}),/data row/);
-  assert.throws(()=>importData('Quarter\nQ1',{as:'chart'}),/numeric series/);
+  assert.throws(()=>ingest('Quarter,Revenue',{as:'chart'}),/data row/);
+  assert.throws(()=>ingest('Quarter\nQ1',{as:'chart'}),/numeric series/);
   assert.deepEqual(parseTabularData('Quarter,Revenue'),{columns:['Quarter','Revenue'],rows:[]});
-  assert.deepEqual(importData('Quarter,Revenue',{as:'table'}).table.rows,[]);
-  const chart=importData('Quarter,Revenue\nQ1,12',{as:'chart'});
-  const table=importData('Quarter,Revenue\nQ1,12',{as:'table'});
+  assert.deepEqual(ingest('Quarter,Revenue',{as:'table'}).table.rows,[]);
+  const chart=ingest('Quarter,Revenue\nQ1,12',{as:'chart'});
+  const table=ingest('Quarter,Revenue\nQ1,12',{as:'table'});
   assert.equal(validate({slides:[chart,table]},{only:['format']}).valid,true);
 });
