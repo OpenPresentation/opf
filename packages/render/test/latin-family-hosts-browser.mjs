@@ -22,7 +22,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/latin-family-hosts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {toSvg} from './dist/svg.js';window.opf={loadBrowserFonts,toSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
@@ -72,10 +72,10 @@ try {
     assert.deepEqual(fontRequests.slice(before).sort(), expectedPending, `${where}: exactly those files are fetched`);
     for (const file of ensured) loaded.add(file);
     const observed = await page.evaluate(async ({deck, styles, family}) => {
-      const registry = window.registry, {renderSlideSvg} = window.opf;
+      const registry = window.registry, {toSvg} = window.opf;
       const resolved = styles.map(style => { const r = registry.resolveFont({fontFamily: family, fontWeight: style.weight, italic: style.italic}); return {label: style.label, family: r.resolvedFamily, weight: r.resolvedWeight, italic: r.italic, compatibility: r.compatibility}; });
       const host = document.querySelector('main');
-      host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
+      host.innerHTML = toSvg(deck, 1, { fonts: {textMeasurement: registry.textMeasurement}});
       await document.fonts.ready;
       const clean = value => value.split(',')[0].trim().replace(/^["']|["']$/g, '');
       const faces = [...document.fonts].map(face => ({family: clean(face.family), weight: Number(face.weight), style: face.style, status: face.status}));

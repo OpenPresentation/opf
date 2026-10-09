@@ -1,4 +1,4 @@
-// RR-28: <opf-deck>, a framework-free web component that embeds an OPF deck. It draws the renderer's own SVG (renderSvg), so
+// RR-28: <opf-deck>, a framework-free web component that embeds an OPF deck. It draws the renderer's own SVG (toSvg), so
 // the slide a page shows is the slide the preview, the editor and the PDF show. Importing this module touches no DOM, so it
 // is safe on a server (Next.js); `defineOpfDeck()` registers the tag in a browser.
 import {
@@ -6,8 +6,9 @@ import {
   prepareSlideSvg, sanitizeSvgTree, slideInfo, slideLabel, svgDimensions, plainText,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
-import { renderSlideSvg } from "./svg.js";
+import { toSvg } from "./svg.js";
 import { drawnFaces } from "./drawn-faces.js";
+import { selectSlides, slideArguments } from "./slide-sources.js";
 
 export { DeckError } from "./deck-runtime.js";
 export { loadPreviewFonts, previewBaseFaces, previewFontLayout } from "./preview-fonts.js";
@@ -140,7 +141,7 @@ function createElementClass() {
       if (had && before === this.getAttribute("fonts") && this.isConnected && this.#built) this.#start();
     }
 
-    /** Extra `renderSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
+    /** Extra `toSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
     get renderOptions() { return this.#renderOptions; }
     set renderOptions(value) { this.#renderOptions = value && typeof value === "object" ? value : {}; }
 
@@ -513,21 +514,22 @@ const escapeHtml = (value) => String(value).replace(/&/g, "&amp;").replace(/</g,
  * `/fonts-browser`, or one with a `textMeasurement` and `embeddedFonts`). A `fonts` string is the font root URL written to the
  * element's `fonts` attribute.
  *
- * `slides`: `"first"` (default: the first slide plus a list of titles), `"all"` or a list of 1-based slide numbers.
- * `embed` puts the document in an `application/opf+json` script child, so the element upgrades without a request.
+ * `toHtml(deck)` draws the first slide plus a list of titles; `toHtml(deck, 3)`, `toHtml(deck, "1-3")` (`"1-"` for every slide) or
+ * `toHtml(deck, [1, 3])` draw the selected slides of the presented sequence (counting from 1); the second argument may be the
+ * options instead, told apart by type (RR-73). `embed` puts the document in an `application/opf+json` script child, so the element upgrades without a request.
  * `fontMode`: `"standalone"` (default, embeds per slide), `"shared"` (one set of font rules in the returned tag), or
  * `"external"` (no font rules; the host must supply CSS with the exact pinned faces the handle measures).
  */
-export function renderDeckHtml(input, options = {}) {
+export function toHtml(input, slides, options) {
+  ({ slides, options } = slideArguments(slides, options));
   const deck = parseDeckDocument(input);
   const tag = options.tagName ?? OPF_DECK_TAG;
   const sequence = presentableIndexes(deck, { includeHidden: options.includeHidden });
-  const wanted = options.slides ?? "first";
-  const shown = wanted === "all" ? sequence.map((_, position) => position) : wanted === "first" ? [0] : wanted.map((number) => number - 1).filter((position) => position >= 0 && position < sequence.length);
+  const shown = slides === undefined ? [0] : selectSlides(slides, sequence.length).map((number) => number - 1);
   const handle = options.fonts !== null && typeof options.fonts === "object" ? options.fonts : undefined;
   const fontMode = options.fontMode ?? "standalone";
   if (!["standalone", "shared", "external"].includes(fontMode)) throw new DeckError("invalid-font-mode", "Choose standalone, shared or external SSR fonts.");
-  // Every mode measures with the same handle; external writes no @font-face data (RR-61 `embedFonts: false`).
+  // Every mode measures with the same handle; external writes no @font-face data (`text: "system"`).
   const renderFonts = handle ?? options.renderOptions?.fonts;
   const sharedRules = new Set(), sharedCharacters = new Map();
   const attributes = { src: options.src, slide: options.slide, fonts: handle ? undefined : options.fonts, label: options.label, ...options.attributes };
@@ -538,11 +540,11 @@ export function renderDeckHtml(input, options = {}) {
     const index = sequence[position];
     // Shared rules are deduplicated across slides, so the slides embed whole faces and the shared set is cut below to what
     // every slide draws (RR-65); per-slide subsets would differ and repeat each face once per slide.
-    let svg = renderSlideSvg(deck, index, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { embedFonts: false } : {}), ...(fontMode === "shared" ? { subsetFonts: false } : {}), ...(date ? { date } : {}) });
+    let svg = toSvg(deck, index + 1, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { text: "system" } : {}), ...(fontMode === "shared" ? { subsetFonts: false } : {}), ...(date ? { date } : {}) });
     if (fontMode === "shared") {
       drawnFaces(svg, sharedCharacters);
       svg = svg.replace(/<style>(@font-face[\s\S]*?)<\/style>/g, (_, css) => {
-        // These rules are produced by renderSlideSvg after its used-face selection and validation.
+        // These rules are produced by toSvg after its used-face selection and validation.
         for (const rule of css.split("\n")) sharedRules.add(rule);
         return "";
       });
@@ -552,7 +554,7 @@ export function renderDeckHtml(input, options = {}) {
     const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length);
     return `<figure role="group" aria-roledescription="slide" aria-label="${escapeHtml(label)}" style="margin:0 0 8px">${prepared}</figure>`;
   });
-  const titles = wanted === "first" && sequence.length > 1
+  const titles = slides === undefined && sequence.length > 1
     ? `<nav aria-label="Slides"><ol>${sequence.map((index) => `<li>${escapeHtml(slideInfo(deck, index).title)}</li>`).join("")}</ol></nav>` : "";
   const embedded = options.embed ? `<script type="application/opf+json">${JSON.stringify(deck).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029")}</script>` : "";
   const subsets = options.renderOptions?.subsetFonts === false ? undefined : renderFonts?.subsets;

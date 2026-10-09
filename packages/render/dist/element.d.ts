@@ -1,6 +1,6 @@
 import type { BrowserFontsHandle } from "./fonts-browser.js";
 import type { RenderFonts } from "./fonts.js";
-import type { RenderSvgOptions } from "./svg.js";
+import type { SlideSelection, ToSvgOptions } from "./svg.js";
 import type { PlayerSession, PresentOptions, PlayerSlideChange } from "./player.js";
 export { DeckError } from "./player.js";
 export { loadPreviewFonts, previewBaseFaces, previewFontLayout } from "./preview-fonts.js";
@@ -43,8 +43,8 @@ export interface OpfDeckElement extends HTMLElement {
    * attribute's URL (an empty string without either).
    */
   fonts: string | BrowserFontsHandle;
-  /** Extra `renderSlideSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
-  renderOptions: Partial<RenderSvgOptions>;
+  /** Extra `toSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
+  renderOptions: Partial<ToSvgOptions>;
   includeHidden: boolean;
   thumbnails: boolean;
   readonly ready: Promise<void>;
@@ -66,10 +66,8 @@ export declare function getOpfDeckElement(): { new (): OpfDeckElement; readonly 
 /** Register `<opf-deck>` (or another tag name). Safe to call twice and on a server, where it does nothing. */
 export declare function defineOpfDeck(tagName?: string): CustomElementConstructor | undefined;
 
-export interface RenderDeckHtmlOptions {
+export interface ToHtmlOptions {
   tagName?: string;
-  /** `"first"` (default: the first slide and a list of titles), `"all"`, or 1-based slide numbers. */
-  slides?: "first" | "all" | readonly number[];
   includeHidden?: boolean;
   src?: string;
   slide?: number;
@@ -86,11 +84,16 @@ export interface RenderDeckHtmlOptions {
   embed?: boolean;
   /** Today's date (ISO) for `date: true` furniture. */
   date?: string;
-  renderOptions?: Partial<RenderSvgOptions>;
+  renderOptions?: Partial<ToSvgOptions>;
 }
 
-/** Server-side markup: the deck's slides as inline SVG inside the tag, shown as is without JavaScript and replaced when the element upgrades. */
-export declare function renderDeckHtml(document: unknown, options?: RenderDeckHtmlOptions): string;
+/**
+ * Server-side markup (RR-73): the deck's slides as inline SVG inside the tag, shown as is without JavaScript and replaced when the
+ * element upgrades. `toHtml(deck)` draws the first slide and a list of titles; `toHtml(deck, 3)`, `toHtml(deck, "1-3")` (`"1-"` for
+ * every slide) or `toHtml(deck, [1, 3])` draw those slides of the presented sequence, counting from 1.
+ */
+export declare function toHtml(document: unknown, options?: ToHtmlOptions): string;
+export declare function toHtml(document: unknown, slides: SlideSelection, options?: ToHtmlOptions): string;
 
 declare global {
   interface HTMLElementTagNameMap { "opf-deck": OpfDeckElement }

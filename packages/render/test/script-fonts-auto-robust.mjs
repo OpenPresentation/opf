@@ -9,7 +9,7 @@ import * as core from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
 // The example corpus and some decks name gallery records (themes, layouts, the roboto font scheme): they render, resolve and
 // detect scripts with the host catalog registered.
-import {catalogs, renderSvg, renderSlideSvg} from './catalog-harness.mjs';
+import {catalogs, toSvg} from './catalog-harness.mjs';
 import {loadFonts,detectPresentationScripts,scriptFontPackages} from '../dist/fonts-node.js';
 import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
 import {scriptsOfText} from '../dist/script-fonts.js';
@@ -65,13 +65,13 @@ const drawnScripts=(presentation,svgs)=>{
 const mixed={$schema:'https://openpresentation.org/schema/opf/v1',name:'Parity',language:'ja',design:{footer:{center:{text:'フッターです “x”'}}},
   slides:[{title:'四半期レビューです',subtitle:'مرحبا',blocks:[{quote:{text:'引用です — x',attribution:'שלום'}},{metric:{value:98,label:'指標です',unit:'%'}},{table:{columns:['名前です','Owner'],rows:[['はい','B']]}},{timeline:[{when:'今です',what:'試作です'}]}]},
     {title:'Chart',chart:{type:'column',data:{columns:['四半期です','値です'],rows:[['Q1',1],['Q2',2]]}}},{title:'Items',items:['項目です','한국어','ไทย']},{title:'Code',code:{source:'// コメントです',language:'javascript'}}]};
-const rendered=renderSvg(mixed);
+const rendered=toSvg(mixed);
 const found=drawnScripts(mixed,rendered);
 assert.ok(found.length>=4,`the parity deck draws several scripts: ${found}`);
 for(const script of found)assert.ok(detectPresentationScripts(mixed,{catalogs}).includes(script),`drawn script ${script} is detected`);
 let corpus=0;
 for(const {deck:example} of examples){
-  const drawnHere=drawnScripts(example,renderSvg(example));
+  const drawnHere=drawnScripts(example,toSvg(example));
   for(const script of drawnHere)assert.ok(detectPresentationScripts(example,{catalogs}).includes(script),`${script} drawn in an example deck is detected`);
   corpus++;
 }
@@ -182,9 +182,9 @@ const fresh=(options={})=>{const document=makeDocument();return loadBrowserFonts
   const scriptFaces=registry.selectEmbeddedFonts(face=>face.scripts);
   assert.ok(scriptFaces.length>=4&&scriptFaces.every(face=>face.embed==='used'),'script faces are flagged used');
   const options={fonts:{textMeasurement:registry.textMeasurement,embeddedFonts:[...registry.embeddedFonts,...scriptFaces]}};
-  const latin=renderSlideSvg({slides:[{title:'Plain title',text:'Body'}],design:{fontScheme:'roboto'}}, 0,options);
+  const latin=toSvg({slides:[{title:'Plain title',text:'Body'}],design:{fontScheme:'roboto'}}, 1,options);
   assert.equal(/font-family:"Noto/.test(latin),false,'a Latin slide embeds no script face');
-  const japaneseSvg=renderSlideSvg({language:'ja',design:{fontScheme:'roboto'},slides:[{title:'四半期レビュー',text:'Body'}]}, 0,options);
+  const japaneseSvg=toSvg({language:'ja',design:{fontScheme:'roboto'},slides:[{title:'四半期レビュー',text:'Body'}]}, 1,options);
   assert.ok(japaneseSvg.includes('font-family:"Noto Sans JP"'),'a Japanese slide embeds Noto Sans JP');
   assert.equal(japaneseSvg.includes('font-family:"Noto Naskh Arabic"'),false,'and not the unused Arabic faces');
   assert.ok(latin.length<japaneseSvg.length/3,'the Latin slide is much smaller');
@@ -228,7 +228,7 @@ const cappedDiagnostics=[];
   const ensured=await browser.ensureScripts(japaneseText);
   assert.deepEqual(ensured.loaded.map(short),['noto-sans-jp','noto-sans-sc']);
   assert.deepEqual(browser.pendingScripts(japaneseText),[]);
-  const drawnText=renderSlideSvg({...japaneseText,design:{fontScheme:'roboto'}}, 0,{fonts:{textMeasurement:browser.textMeasurement}});
+  const drawnText=toSvg({...japaneseText,design:{fontScheme:'roboto'}}, 1,{fonts:{textMeasurement:browser.textMeasurement}});
   assert.ok(drawnText.includes('啰'));
 
 console.log(`Auto script fonts robustness: drawn-text detection, ${corpus}-deck parity corpus, all-or-nothing browser loads, dispose and abort, stale substitutions, used-only embedding, glyph fallback faces.`);

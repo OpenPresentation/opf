@@ -9,12 +9,12 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {createCursor, createDeckStore, createSync, createTimer, stateWins, deckChannelName, formatDuration, parseDeckDocument, parseSlideNumber, plainText, presentableIndexes, prepareSlideSvg, slideInfo, slideLabel, svgDimensions, DeckError} from '../dist/deck-runtime.js';
-import {defineOpfDeck, getOpfDeckElement, renderDeckHtml} from '../dist/element.js';
+import {defineOpfDeck, getOpfDeckElement, toHtml} from '../dist/element.js';
 import {present} from '../dist/player.js';
 import {copyPreviewFonts} from '../dist/preview-fonts-node.js';
 import {previewBaseFaces, previewFontLayout} from '../dist/preview-fonts.js';
 import {BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
-import {renderSlideSvg} from '../dist/svg.js';
+import {toSvg} from '../dist/svg.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const deck = JSON.parse(await readFile(path.join(root, 'test/fixtures/player-deck.opf.json'), 'utf8'));
@@ -90,7 +90,7 @@ assert.equal(formatDuration(-5000), '-0:05');
 
 // --- svg preparation ---------------------------------------------------------------------------------------------
 {
-  const svg = renderSlideSvg(deck, 0);
+  const svg = toSvg(deck, 1);
   assert.match(svg, /^<svg aria-label="Quarterly review" aria-roledescription="slide" height="720" [^>]*role="group"/); // FA-30: a labelled container, not an image
   const prepared = prepareSlideSvg(svg);
   const rootTag = /^<svg\b[^>]*>/.exec(prepared)[0];
@@ -156,26 +156,26 @@ assert.equal(formatDuration(-5000), '-0:05');
 
 // --- the static markup --------------------------------------------------------------------------------------------
 {
-  const html = renderDeckHtml(deck, {src: '/d.json', fonts: '/opf-fonts/', embed: true});
+  const html = toHtml(deck, {src: '/d.json', fonts: '/opf-fonts/', embed: true});
   assert.match(html, /^<opf-deck src="\/d\.json" fonts="\/opf-fonts\/">/);
   assert.equal((html.match(/<figure /g) ?? []).length, 1, 'by default the first slide');
   assert.match(html, /aria-label="Slide 1 of 5: Quarterly review"/);
   assert.match(html, /<nav aria-label="Slides"><ol><li>Quarterly review<\/li><li>Agenda<\/li><li>Revenue grew 18 percent<\/li><li>What customers say<\/li><li>Decisions needed<\/li><\/ol><\/nav>/, 'the titles of the slides that play (not the hidden one)');
-  assert.ok(!renderDeckHtml(deck, {slides: 'all'}).includes('Internal numbers'), 'a hidden slide is never drawn into the markup (an embedded document is the whole document, as the src file is)');
+  assert.ok(!toHtml(deck, '1-').includes('Internal numbers'), 'a hidden slide is never drawn into the markup (an embedded document is the whole document, as the src file is)');
   assert.match(html, /<script type="application\/opf\+json">/);
   assert.ok(!/<\/script>[^]*<script/.test(html));
-  const all = renderDeckHtml(deck, {slides: 'all'});
+  const all = toHtml(deck, '1-');
   assert.equal((all.match(/<figure /g) ?? []).length, 5);
-  assert.equal((renderDeckHtml(deck, {slides: [2, 4]}).match(/<figure /g) ?? []).length, 2);
-  assert.match(renderDeckHtml(deck, {slides: [2]}), /Slide 2 of 5: Agenda/);
-  const hostile = renderDeckHtml({name: '</script><script>alert(1)</script>', slides: [{title: '</script><b onmouseover=1>x'}]}, {embed: true, label: 'a"b', src: '/x"y.json'});
+  assert.equal((toHtml(deck, [2, 4]).match(/<figure /g) ?? []).length, 2);
+  assert.match(toHtml(deck, [2]), /Slide 2 of 5: Agenda/);
+  const hostile = toHtml({name: '</script><script>alert(1)</script>', slides: [{title: '</script><b onmouseover=1>x'}]}, {embed: true, label: 'a"b', src: '/x"y.json'});
   assert.ok(!hostile.includes('</script><script>'), 'a deck cannot close the embedded script');
   assert.ok(!hostile.includes('<b onmouseover'), 'text is escaped');
   assert.match(hostile, /label="a&quot;b"/);
   assert.match(hostile, /src="\/x&quot;y\.json"/);
-  assert.match(renderDeckHtml(deck, {tagName: 'my-deck', thumbnails: true, present: true, includeHidden: true, slides: 'all'}).slice(0, 80), /^<my-deck thumbnails present include-hidden>/);
-  assert.equal((renderDeckHtml(deck, {includeHidden: true, slides: 'all'}).match(/<figure /g) ?? []).length, 6);
-  assert.throws(() => renderDeckHtml({}), (error) => error.code === 'invalid-document');
+  assert.match(toHtml(deck, '1-', {tagName: 'my-deck', thumbnails: true, present: true, includeHidden: true}).slice(0, 80), /^<my-deck thumbnails present include-hidden>/);
+  assert.equal((toHtml(deck, '1-', {includeHidden: true}).match(/<figure /g) ?? []).length, 6);
+  assert.throws(() => toHtml({}), (error) => error.code === 'invalid-document');
 }
 
 // --- entry points on a server ---------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ assert.ok((await readFile(path.join(root, 'dist/preview-fonts-cli.js'), 'utf8'))
 {
   const store = createDeckStore({document: deck});
   assert.equal(store.svg(0), store.svg(0), 'a slide is drawn once and kept');
-  assert.equal(store.svg(0), renderSlideSvg(deck, 0, {date: undefined}), 'the store draws exactly what renderSvg draws');
+  assert.equal(store.svg(0), toSvg(deck, 1, {date: undefined}), 'the store draws exactly what toSvg draws');
   assert.equal(store.info(3).title, 'Revenue grew 18 percent');
   await store.ready();
   const broken = createDeckStore({document: {slides: [{id: 'a', title: 'x'}, {id: 'a', title: 'y'}]}});

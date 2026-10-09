@@ -1,6 +1,6 @@
 // RR-28: a real browser drives <opf-deck> and the slideshow player, offline. A local server hands the page the bundled
 // element, the deck and a self-hosted font root filled by copyPreviewFonts; every request is recorded. Checks:
-//   - the slide the element draws is the slide renderSvg draws (same markup, and the same pixels),
+//   - the slide the element draws is the slide toSvg draws (same markup, and the same pixels),
 //   - face-level lazy fonts, and no request beyond the deck and those font files,
 //   - navigation (buttons, keyboard, swipe, thumbnails, the `slide` attribute), `slidechange` events, hidden slides skipped,
 //   - accessibility: axe, the accessible name and text of every slide, focus management, reduced motion,
@@ -19,7 +19,7 @@ import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
 import {copyPreviewFonts} from '../dist/preview-fonts-node.js';
-import {renderDeckHtml} from '../dist/element.js';
+import {toHtml} from '../dist/element.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/player');
@@ -36,7 +36,7 @@ const hiddenFirst = {name: 'Hidden first', slides: [{id: 'h', title: 'Hidden', h
 const arabicDeck = {name: 'عرض تجريبي', language: 'ar', slides: [{id: 'one', title: 'مرحبا بالعالم', text: 'هذا اختبار للعرض'}, {id: 'two', title: 'الشريحة الثانية', items: ['الأول', 'الثاني']}]};
 
 // --- the bundle: the element (registered), the player, and the renderer, as a page would import them ---------------
-const entry = "import '../dist/element-define.js'; import {present} from '../dist/player.js'; import {renderSlideSvg} from '../dist/svg.js'; import {loadPreviewFonts} from '../dist/preview-fonts.js'; import {prepareSlideSvg} from '../dist/deck-runtime.js'; import {defineOpfDeck} from '../dist/element.js'; window.opf = {present, renderSlideSvg, loadPreviewFonts, prepareSlideSvg, defineOpfDeck};";
+const entry = "import '../dist/element-define.js'; import {present} from '../dist/player.js'; import {toSvg} from '../dist/svg.js'; import {loadPreviewFonts} from '../dist/preview-fonts.js'; import {prepareSlideSvg} from '../dist/deck-runtime.js'; import {defineOpfDeck} from '../dist/element.js'; window.opf = {present, toSvg, loadPreviewFonts, prepareSlideSvg, defineOpfDeck};";
 const bundle = await build({stdin: {contents: entry, resolveDir: path.join(root, 'test'), sourcefile: 'page-entry.js', loader: 'js'}, bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true});
 const script = bundle.outputFiles[0].text;
 assert.ok(!Object.keys(bundle.metafile.inputs).some(input => /sharp|resvg|raster|fonts-node|preview-fonts-node/.test(input)), 'the browser bundle must not pull in native raster or Node modules');
@@ -48,7 +48,7 @@ assert.ok(chunks.length >= 2, `the player is a separate chunk loaded on demand (
 const mainChunk = chunks.find(chunk => /opf-deck/.test(chunk.text) && /attachShadow/.test(chunk.text));
 assert.ok(mainChunk && !/PlayerSession|Speaker view/.test(mainChunk.text), 'the element chunk carries no slideshow code');
 assert.ok(chunks.some(chunk => /Speaker view/.test(chunk.text)), 'the player chunk exists');
-const serverOnly = await build({stdin: {contents: "import {renderDeckHtml} from '../dist/element.js'; console.log(renderDeckHtml);", resolveDir: path.join(root, 'test'), loader: 'js'}, bundle: true, platform: 'node', format: 'esm', write: false, minify: true});
+const serverOnly = await build({stdin: {contents: "import {toHtml} from '../dist/element.js'; console.log(toHtml);", resolveDir: path.join(root, 'test'), loader: 'js'}, bundle: true, platform: 'node', format: 'esm', write: false, minify: true});
 assert.ok(!/attachShadow|PlayerSession/.test(serverOnly.outputFiles[0].text), 'server-side markup does not pull in the element class or the player (tree shaking)');
 
 const axeSource = await readFile(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
@@ -68,7 +68,7 @@ const pages = {
   '/nofonts.html': shell('<opf-deck id="d" src="/deck.opf.json" fonts="/no-such-fonts/"></opf-deck>'),
   '/empty.html': shell('<div id="host"></div>'),
   '/arabic.html': shell('<opf-deck id="d" src="/arabic.opf.json" fonts="/opf-fonts/"></opf-deck>'),
-  '/ssr.html': shell(renderDeckHtml(deck, {embed: true, fonts: '/opf-fonts/', slides: 'all', attributes: {id: 'd'}}).replace('<opf-deck', '<opf-deck').replace(/^/, '')).replace('<script src="/bundle.js"></script>', ''),
+  '/ssr.html': shell(toHtml(deck, '1-', {embed: true, fonts: '/opf-fonts/', attributes: {id: 'd'}}).replace('<opf-deck', '<opf-deck').replace(/^/, '')).replace('<script src="/bundle.js"></script>', ''),
 };
 const requests = [];
 const server = http.createServer(async (request, response) => {
@@ -130,7 +130,7 @@ try {
   assert.deepEqual(fontRequests.sort(), ['/opf-fonts/base/roboto/400Regular/Roboto_400Regular.ttf', '/opf-fonts/lazy/fonts/intos/Intos-Regular.ttf', '/opf-fonts/lazy/fonts/intos/IntosDisplay-Bold.ttf'], 'Roboto Regular starts the registry, then only the two Intos faces the deck draws: face level, from the self-hosted root');
   for (const pathname of requests) assert.ok(['/basic.html', '/bundle.js', '/deck.opf.json', '/favicon.ico'].includes(pathname) || pathname.startsWith('/opf-fonts/'), `unexpected request ${pathname}`);
 
-  // The same markup and the same pixels as renderSvg.
+  // The same markup and the same pixels as toSvg.
   const exact = await page.evaluate(async () => {
     const registry = await window.opf.loadPreviewFonts('/opf-fonts/');
     const element = document.getElementById('d');
@@ -139,7 +139,7 @@ try {
     for (let slide = 1; slide <= element.total; slide++) {
       element.goto(slide);
       const index = element.currentSlide.index;
-      const reference = window.opf.renderSlideSvg(deck, index, {fonts: {textMeasurement: registry.textMeasurement}, date: new Date().toISOString().slice(0, 10)});
+      const reference = window.opf.toSvg(deck, index + 1, {fonts: {textMeasurement: registry.textMeasurement}, date: new Date().toISOString().slice(0, 10)});
       const prepared = window.opf.prepareSlideSvg(reference);
       const shownSvg = element.shadowRoot.querySelector('.slide svg');
       const template = document.createElement('template'); template.innerHTML = prepared;
@@ -149,7 +149,7 @@ try {
     return out;
   });
   assert.equal(exact.length, 5);
-  for (const item of exact) assert.ok(item.same, `slide ${item.index}: the element's markup is renderSvg's markup (root size and role aside)`);
+  for (const item of exact) assert.ok(item.same, `slide ${item.index}: the element's markup is toSvg's markup (root size and role aside)`);
   const compare = async (slide) => {
     await page.evaluate(slide => { document.getElementById('d').goto(slide); }, slide);
     const element = await page.screenshot({clip: {x: 16, y: 120, width: 960, height: 540}});
@@ -166,7 +166,7 @@ try {
     for (let i = 0; i < a.data.length; i += a.info.channels) if (Math.abs(a.data[i] - b.data[i]) + Math.abs(a.data[i + 1] - b.data[i + 1]) + Math.abs(a.data[i + 2] - b.data[i + 2]) > 6) differing++;
     return differing / (a.info.width * a.info.height);
   };
-  for (let slide = 1; slide <= 5; slide++) { const fraction = await compare(slide); assert.ok(fraction < 0.0005, `slide ${slide}: the element's pixels are renderSvg's pixels (${(fraction * 100).toFixed(4)}% differ)`); }
+  for (let slide = 1; slide <= 5; slide++) { const fraction = await compare(slide); assert.ok(fraction < 0.0005, `slide ${slide}: the element's pixels are toSvg's pixels (${(fraction * 100).toFixed(4)}% differ)`); }
   await page.evaluate(() => document.getElementById('d').goto(1));
   await events(page);
 

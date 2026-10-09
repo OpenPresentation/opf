@@ -7,7 +7,7 @@ import { create } from 'fontkit';
 import { examples } from '@openpresentation/opf/examples';
 import { loadFonts } from '../dist/fonts-node.js';
 import { fsTypeAllowsSubset, subsetPermitted } from '../dist/font-subset.js';
-import { renderSlideSvg, renderSvg, svgToPdf } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
+import { toSvg, toPdf } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
 
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'all', embedScriptFonts: true });
 const embedded = (svg) => [...svg.matchAll(/@font-face\{font-family:"([^"]+)";font-weight:(\d+);font-style:(\w+);src:url\("data:font\/\w+;base64,([^"]+)"\)\}/g)]
@@ -17,16 +17,16 @@ const whole = (face) => fonts.registry.exportFaces()[fonts.registry.describeFace
 // The Node handle carries the engine; the option is a boolean.
 assert.equal(typeof fonts.subsets?.subsetDataUrl, 'function', 'the Node handle carries the subset engine');
 const deck = { name: 'Subsets', design: { fontScheme: 'roboto' }, slides: [{ title: 'Quarterly review', text: [{ text: 'Revenue grew 12% — office affine, ' }, { text: 'bold', bold: true }, { text: ' & ' }, { text: 'italic', italic: true }] }] };
-assert.throws(() => renderSlideSvg(deck, 0, { fonts, subsetFonts: 'no' }), { code: 'invalid-render-options' });
+assert.throws(() => toSvg(deck, 1, { fonts, subsetFonts: 'no' }), { code: 'invalid-render-options' });
 
 // Smaller faces with the same family, weight and style; byte-stable; the same from both entry points.
-const cut = renderSlideSvg(deck, 0, { fonts }), full = renderSlideSvg(deck, 0, { fonts, subsetFonts: false });
+const cut = toSvg(deck, 1, { fonts }), full = toSvg(deck, 1, { fonts, subsetFonts: false });
 const cutFaces = embedded(cut), fullFaces = embedded(full);
 assert.deepEqual(cutFaces.map(({ family, weight, italic }) => [family, weight, italic]), fullFaces.map(({ family, weight, italic }) => [family, weight, italic]), 'the same faces are embedded');
 for (const face of cutFaces) assert.ok(face.data.length * 4 < whole(face).length, `${face.family} ${face.weight}${face.italic ? ' italic' : ''}: ${face.data.length} bytes against ${whole(face).length}`);
 for (const face of fullFaces) assert.deepEqual(face.data, whole(face), 'subsetFonts: false embeds the whole face');
-assert.equal(renderSlideSvg(deck, 0, { fonts }), cut, 'byte-stable');
-assert.equal(renderSvg(deck, { fonts })[0], cut, 'renderSvg embeds the same subsets');
+assert.equal(toSvg(deck, 1, { fonts }), cut, 'byte-stable');
+assert.equal(toSvg(deck, { fonts })[0], cut, 'toSvg embeds the same subsets');
 assert.ok(cut.length * 5 < full.length, `${cut.length} bytes against ${full.length}`);
 
 // The same shaping: every glyph position of the drawn text is the whole face's.
@@ -38,7 +38,7 @@ const samples = [
 for (const [family, text] of samples) {
   const language = /[؀-ۿ]/.test(text) ? 'ar' : /[　-鿿]/.test(text) ? 'ja' : undefined;
   // The default (Aptos) scheme draws the title in Intos Display and the body in Intos; script text in its designated face.
-  const svg = renderSlideSvg({ name: family, ...(language ? { language } : {}), slides: [family === 'Intos' ? { title: 'Review', text } : { title: text }] }, 0, { fonts });
+  const svg = toSvg({ name: family, ...(language ? { language } : {}), slides: [family === 'Intos' ? { title: 'Review', text } : { title: text }] }, 1, { fonts });
   const face = embedded(svg).find((item) => item.family === family);
   assert.ok(face, `${family} is embedded`);
   assert.ok(face.data.length < whole(face).length / 4, `${family}: ${face.data.length} bytes against ${whole(face).length}`);
@@ -47,7 +47,7 @@ for (const [family, text] of samples) {
 
 // Only a face whose license allows it is cut: a Reserved Font Name in the face's name (Carlito), a host's own face, or an
 // fsType that forbids subsetting keeps the whole face.
-const carlito = renderSlideSvg({ name: 'Carlito', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Carlito', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Carlito', minor: 'Carlito', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review' }] }, 0, { fonts });
+const carlito = toSvg({ name: 'Carlito', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Carlito', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Carlito', minor: 'Carlito', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review' }] }, 1, { fonts });
 const carlitoFaces = embedded(carlito).filter((face) => face.family === 'Carlito');
 assert.ok(carlitoFaces.length > 0 && carlitoFaces.every((face) => Buffer.compare(Buffer.from(face.data), Buffer.from(whole(face))) === 0), 'Carlito reserves its name: embedded whole');
 const roboto = fonts.registry.exportFaces().find((face) => face.family === 'Roboto').data;
@@ -62,16 +62,16 @@ assert.equal(fsTypeAllowsSubset(withFsType(0x0200)), false, 'bitmap embedding on
 
 // The vector PDF made from the subset SVGs alone (no font files, no bundled pack) still embeds every face the pages draw.
 const faces = [];
-const pdf = await svgToPdf([cut], { fonts: { fontFiles: [], useBundledFonts: false }, onDiagnostic: (diagnostic) => { if (diagnostic.code === 'pdf-font-embedded') faces.push(diagnostic.family); } });
+const pdf = await toPdf([cut], { fonts: { fontFiles: [], useBundledFonts: false }, onDiagnostic: (diagnostic) => { if (diagnostic.code === 'pdf-font-embedded') faces.push(diagnostic.family); } });
 assert.equal(Buffer.from(pdf.subarray(0, 4)).toString(), '%PDF');
 assert.equal(faces.length, cutFaces.length, `the PDF embeds the ${cutFaces.length} subset faces: ${faces}`);
 
-// SSR shared fonts (renderDeckHtml fontMode "shared"): one rule per face for the page, cut to the characters every slide draws.
+// SSR shared fonts (toHtml fontMode "shared"): one rule per face for the page, cut to the characters every slide draws.
 {
-  const { renderDeckHtml } = await import('../dist/element.js');
+  const { toHtml } = await import('../dist/element.js');
   const titles = ['One', 'Two', 'Three'], bodies = ['Measured body', 'Other words here', 'Zebra quiz 42%'];
   const page = { name: 'Shared', design: { fontScheme: 'roboto' }, slides: titles.map((title, index) => ({ title, text: bodies[index] })) };
-  const shared = renderDeckHtml(page, { slides: 'all', fonts, fontMode: 'shared' }), whole = renderDeckHtml(page, { slides: 'all', fonts, fontMode: 'shared', renderOptions: { subsetFonts: false } });
+  const shared = toHtml(page, '1-', {fonts, fontMode: 'shared'}), whole = toHtml(page, '1-', {fonts, fontMode: 'shared', renderOptions: { subsetFonts: false }});
   const sharedFaces = embedded(shared);
   assert.deepEqual(sharedFaces.map((face) => face.weight).sort(), [400, 700], 'Roboto regular and bold, once for the page');
   assert.ok(shared.length * 4 < whole.length, `shared subsets ${shared.length} bytes against ${whole.length} with whole faces`);
@@ -84,7 +84,7 @@ assert.equal(faces.length, cutFaces.length, `the PDF embeds the ${cutFaces.lengt
 // Size over a set of core example decks.
 let before = 0, after = 0, slides = 0;
 for (const { deck: example } of examples.filter((_, index) => index % 10 === 0)) {
-  const a = renderSvg(example, { fonts, subsetFonts: false }), b = renderSvg(example, { fonts });
+  const a = toSvg(example, { fonts, subsetFonts: false }), b = toSvg(example, { fonts });
   for (const [index, svg] of b.entries()) { before += a[index].length; after += svg.length; slides++; }
 }
 assert.ok(after * 10 < before, `${slides} example slides: ${after} bytes against ${before}`);

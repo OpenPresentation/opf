@@ -5,13 +5,13 @@
 //   - with the renderer's accepted (fontkit) advance, which must agree within 0.1 px except the recorded fontkit limits in the fixture
 //     (Myanmar, one Syriac word, Nastaliq vowel marks), whose deviation is bounded.
 // The span carries `text-rendering: geometricPrecision` (the renderer's SVG sets it; without it Chromium on Linux rounds advances to whole pixels) and `text-spacing-trim: space-all`, as the renderer's SVG does for slides that draw fullwidth punctuation (src/svg.js); the
-// SVG block at the end proves that on real renderSvg output. Right-to-left samples must display right to left (the first character is painted right of the last). Nothing else may load.
+// SVG block at the end proves that on real toSvg output. Right-to-left samples must display right to left (the first character is painted right of the last). Nothing else may load.
 // Usage: node test/script-corpora-browser.mjs [report.json]
 import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
 
@@ -89,7 +89,7 @@ try {
   // The renderer's own SVG: a slide whose title is fullwidth punctuation carries text-spacing-trim: space-all, so the browser's natural
   // advance of the title equals the accepted (pinned) textLength instead of being up to 10 percent narrower.
   const punctuation = [['ja', 'jpan-punctuation'], ['zh-Hans', 'hans-punctuation'], ['zh-Hant', 'hant-punctuation']].map(([language, id]) => ({language, id, text: corpora.groups.flatMap(group => group.samples).find(sample => sample.id === id).text}));
-  const slides = punctuation.map(({language, text}) => renderSlideSvg({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]}, 0, {fonts: prepared}));
+  const slides = punctuation.map(({language, text}) => toSvg({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]}, 1, {fonts: prepared}));
   const trimmed = await page.evaluate(markup => markup.map(svg => {
     const host = document.querySelector('main');
     host.innerHTML = svg;

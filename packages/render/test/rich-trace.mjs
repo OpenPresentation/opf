@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from '../dist/svg.js';
+import {toSvg} from '../dist/svg.js';
 const text='\nFirst line\r\n\nLast line\n\n';
 const deck={slides:[{text:[{text:text.slice(0,8),bold:true},text.slice(8)]}]};
-const traced=renderSlideSvg(deck, 0,{trace:true});
+const traced=toSvg(deck, 1,{trace:true});
 const match=traced.match(/data-opf-rich-lines="([^"]+)"/);
 assert.ok(match,'Rich trace exposes layout lines');
 const lines=JSON.parse(match[1].replaceAll('&quot;','"'));
@@ -13,9 +13,9 @@ for(let i=0;i<lines.length;i++) {
   assert.ok(lines[i].height>0);
   if(i)assert.equal(lines[i].y,lines[i-1].y+lines[i-1].height);
 }
-assert.ok(!renderSlideSvg(deck, 0).includes('data-opf-rich-lines'),'Caret metadata is opt-in tracing only');
+assert.ok(!toSvg(deck, 1).includes('data-opf-rich-lines'),'Caret metadata is opt-in tracing only');
 console.log('Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.');
 
-const widthOnly=renderSlideSvg({slides:[{text:['Plain ',{text:'bold',bold:true}]}]}, 0,{ fonts: {textMeasurement:{measure:(value,size)=>value.length*size/2}}});
+const widthOnly=toSvg({slides:[{text:['Plain ',{text:'bold',bold:true}]}]}, 1,{ fonts: {textMeasurement:{measure:(value,size)=>value.length*size/2}}});
 assert.match(widthOnly,/text-rendering="geometricPrecision"/);
 assert.doesNotMatch(widthOnly,/textLength|lengthAdjust/,'A width-only provider does not authorize glyph scaling');

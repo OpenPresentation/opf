@@ -9,13 +9,13 @@ assert.ok(!Object.keys(result.metafile.inputs).some(path=>path.includes('sharp')
 // FF-19: the browser preview must call core's paragraphDirection (the export's RTL rule), not compile it away.
 assert.equal(typeof (await import('@openpresentation/opf/composition')).paragraphDirection,'function','Core must export paragraphDirection from /composition');
 // The renderer must keep the rule in a browser bundle that draws a slide (a bundle that never draws one tree-shakes it away).
-const drawing=await build({stdin:{contents:"import {renderSlideSvg} from './dist/svg.js';globalThis.draw=renderSlideSvg;",resolveDir:fileURLToPath(new URL('../',import.meta.url)),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,logLevel:'error'});
+const drawing=await build({stdin:{contents:"import {toSvg} from './dist/svg.js';globalThis.draw=toSvg;",resolveDir:fileURLToPath(new URL('../',import.meta.url)),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,logLevel:'error'});
 assert.ok(drawing.outputFiles[0].text.includes('function paragraphDirection('),'The browser bundle must include core paragraphDirection');
 await writeFile(new URL('index.html',output),'<!doctype html><meta charset="utf-8"><title>JPEG browser orientation</title><h1>JPEG browser orientation</h1><pre>Running…</pre><script type="module" src="bundle.js"></script>');
 console.log('Browser bundle passed: no native raster modules. Serve /artifacts/jpeg/browser/index.html to run the JPEG orientation comparisons.');
 
 const {loadFonts}=await import('../dist/fonts-node.js');
-const {renderSlideSvg,resolvePresentation}=await import('../dist/svg.js');
+const {toSvg,resolvePresentation}=await import('../dist/svg.js');
 // FA-23: the deck names the gallery font scheme 'roboto'; register the gallery snapshot as a host does.
 const {defaultCatalog}=await import('@openpresentation/opf/catalog');
 const catalogs=[defaultCatalog];
@@ -34,7 +34,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const expanded=repeats==='expanded-footer';
   const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:expanded?'Keep the complete source visible.':'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:expanded?'Long attribution '.repeat(60):'A reviewer',source:'Recorded interview'}}]};
   const diagnostics=[];
-  const svg=renderSlideSvg(deck,0,{trace:true,catalogs,fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:value=>diagnostics.push(value)});
+  const svg=toSvg(deck,1,{trace:true,catalogs,fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:value=>diagnostics.push(value)});
   assert.equal(diagnostics.length,0);
   const id=`${dimensions.width}-${repeats}`,filename=id+'.svg';
   await writeFile(new URL(filename,quoteDirectory),svg);

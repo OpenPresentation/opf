@@ -11,7 +11,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
-import {svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toPng, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const pkg = BUNDLED_FONT_MANIFEST.packages.find(item => item.name === 'intos');
@@ -101,7 +101,7 @@ for (const family of ['Aptos Display', 'Aptos Narrow', 'Aptos Serif']) assert.eq
 // six styles of those families and not the unused Narrow and Serif families. RR-61: nor any eager npm face the text does not draw.
 const deck = {name: 'Aptos preview', slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]};
 const source = JSON.stringify(deck);
-const svg = renderSlideSvg(deck, 0, options);
+const svg = toSvg(deck, 1, options);
 assert.equal(JSON.stringify(deck), source);
 const drawn = [...new Set([...svg.matchAll(/font-family="([^"]+)"/g)].map(match => match[1]))].sort();
 assert.deepEqual(drawn, ['Intos Display, sans-serif', 'Intos, sans-serif']);
@@ -110,17 +110,17 @@ const embedded = faces.map(face => face.replace(/ \d+ \w+$/, ''));
 assert.deepEqual(faces.filter(face => /^Intos/.test(face)).sort(), ['Intos 400 normal', 'Intos Display 700 normal']);
 assert.ok(!embedded.includes('Intos Narrow') && !embedded.includes('Intos Serif'), 'unused Intos families stay out of the SVG');
 assert.deepEqual([...new Set(embedded)].sort(), ['Intos', 'Intos Display'], 'RR-61: no eager npm face (Roboto, Carlito, ...) the text does not draw');
-const baseSvg = renderSlideSvg({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'r', title: 'Title', text: 'Body'}]}, 0, {fonts: (await loadFonts())});
+const baseSvg = toSvg({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'r', title: 'Title', text: 'Body'}]}, 1, {fonts: (await loadFonts())});
 assert.ok(!/font-family:"Intos/.test(baseSvg), 'the base pack has no Intos');
-assert.equal(renderSlideSvg(deck, 0, {fonts: (await loadFonts({pack: 'office'}))}), svg, 'same bytes and input replay identically');
+assert.equal(toSvg(deck, 1, {fonts: (await loadFonts({pack: 'office'}))}), svg, 'same bytes and input replay identically');
 // A slide that names none of the Intos families embeds none of them.
-const roboto = renderSlideSvg({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'r', title: 'Title', text: 'Body'}]}, 0, options);
+const roboto = toSvg({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'r', title: 'Title', text: 'Body'}]}, 1, options);
 assert.ok(!/font-family:"Intos/.test(roboto) && /font-family:"Roboto"/.test(roboto));
 // Node raster output draws from the same files.
-const png = await svgToPng(svg, {...options, scale: 0.5});
+const png = await toPng(svg, {...options, scale: 0.5});
 assert.ok(png.byteLength > 1000);
 const robotoDeck = {...deck, design: {fontScheme: 'roboto'}};
-assert.notDeepEqual(png, await svgToPng(renderSlideSvg(robotoDeck, 0, options), {...options, scale: 0.5}));
+assert.notDeepEqual(png, await toPng(toSvg(robotoDeck, 1, options), {...options, scale: 0.5}));
 
 // Integrity: a changed or missing vendored file is refused, like every pinned package.
 if (existsSync(new URL('../dist/fonts-node.js', import.meta.url))) {

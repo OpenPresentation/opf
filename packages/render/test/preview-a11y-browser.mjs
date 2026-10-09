@@ -1,13 +1,13 @@
-// FA-30: the browser's accessibility tree for the standalone slide SVG (the way a host page embeds renderSlideSvg output). The slide
+// FA-30: the browser's accessibility tree for the standalone slide SVG (the way a host page embeds toSvg output). The slide
 // is one group named by the title with the roledescription "slide"; the text of the slide is not below a picture (role=img) node
 // except the chart's own marks; the pictures and the chart are named images; the picture with alt "" and the decorative shapes
 // are not in the tree. Run offline: the page loads nothing.
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
-import { renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { previewA11yDeck } from './preview-a11y-fixture.mjs';
 
-const svg = renderSlideSvg(previewA11yDeck(), 0);
+const svg = toSvg(previewA11yDeck(), 1);
 const requests = [], errors = [];
 const browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
 try {

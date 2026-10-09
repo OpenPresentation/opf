@@ -11,11 +11,11 @@ async function render(document) {
     let timer;
     const worker = new Worker(`
       const {parentPort, workerData} = require("node:worker_threads");
-      import(workerData.renderer).then(({renderSlideSvg}) => {
+      import(workerData.renderer).then(({toSvg}) => {
         const before = JSON.stringify(workerData.document);
         parentPort.postMessage({ready:true});
         try {
-          const svg = renderSlideSvg(workerData.document, 0, {trace:true});
+          const svg = toSvg(workerData.document, 1, {trace:true});
           parentPort.postMessage({svg, unchanged:before === JSON.stringify(workerData.document)});
         } catch (error) {
           parentPort.postMessage({error:{name:error.name, message:error.message}, unchanged:before === JSON.stringify(workerData.document)});
@@ -27,7 +27,7 @@ async function render(document) {
       if (message.ready) {
         timer = setTimeout(() => {
           void worker.terminate();
-          reject(new Error("renderSlideSvg did not complete within 2 seconds after import"));
+          reject(new Error("toSvg did not complete within 2 seconds after import"));
         }, 2000);
       } else {
         clearTimeout(timer);

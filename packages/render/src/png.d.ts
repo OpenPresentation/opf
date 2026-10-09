@@ -1,2 +1,2 @@
-export { svgToPng } from "./index.js";
-export type { SvgToPngOptions } from "./index.js";
+export { toPng } from "./index.js";
+export type { ToPngOptions } from "./index.js";

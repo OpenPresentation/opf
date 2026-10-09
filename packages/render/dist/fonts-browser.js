@@ -97,7 +97,7 @@ async function loadRegistry(entries, options = {}) {
   // Script faces (FF-19) are loaded lazily, once a document needs them, and only for the scripts it uses.
   const scriptPackages = new Set();
   let queue = Promise.resolve(), disposed = false;
-  // FF-41: the `renderSvg` options a document resolves with (`catalogs`, ...). `options.renderOptions` are the defaults; a call's own
+  // FF-41: the `toSvg` options a document resolves with (`catalogs`, ...). `options.renderOptions` are the defaults; a call's own
   // options (everything but `signal`) are added over them, so a host that passes its canvas options gets the same resolution here.
   const renderOptionsFor = (callOptions) => { const { signal: _signal, ...own } = callOptions ?? {}; return { ...options.renderOptions, ...own }; };
   const gone = () => new OPFFontError("font-registry-disposed", "The font registry was disposed.");
@@ -151,7 +151,7 @@ async function loadRegistry(entries, options = {}) {
      * fallback needs for characters the loaded faces lack. Cheap when nothing new is needed; call it after edits and
      * render again afterwards. Resolves with the detected scripts, the packages loaded by this call, the scripts no
      * pinned font serves and `uncovered`, drawn CJK characters no loaded face covers (the renderer reports
-     * `missing-glyph` for them). Besides `signal`, the call takes the `renderSvg` options the document resolves with
+     * `missing-glyph` for them). Besides `signal`, the call takes the `toSvg` options the document resolves with
      * (`catalogs`, ...) over the loader's `renderOptions`. Each package loads all or nothing. If some package fails, the others still load: the
      * call then rejects with an OPFFontError (the first failure's code) whose `details` hold `loaded` (packages this
      * call did load) and `failed` (`{package, code, message}` per failed package); nothing is lost and a later call
@@ -176,7 +176,7 @@ async function loadRegistry(entries, options = {}) {
       }
       return { ...selection, loaded: loadedNow, uncovered: uncoveredCjkCharacters(analysis, { covers }) };
     },
-    /** Synchronous: script-pack packages the presentation needs that are not loaded yet. Empty means `ensureScripts` would fetch nothing. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...). */
+    /** Synchronous: script-pack packages the presentation needs that are not loaded yet. Empty means `ensureScripts` would fetch nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...). */
     pendingScripts(presentation, renderOptions) {
       const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(renderOptions));
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map((item) => item.name).filter((name) => !scriptPackages.has(name));
@@ -194,7 +194,7 @@ async function loadRegistry(entries, options = {}) {
   const policy = options.substitutionPolicy ?? "none";
   const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
   // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
-  // A document that does not resolve throws what `renderSvg` throws for it.
+  // A document that does not resolve throws what `toSvg` throws for it.
   const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily });
   const lazyBaseUrl = () => {
     if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
@@ -210,8 +210,8 @@ async function loadRegistry(entries, options = {}) {
      * policy (nothing is downloaded for a family the policy would not resolve), once each. All or nothing: on any failure
      * (fetch, hash, FontFace.load, registry) the document and registry are unchanged and the call can be retried. Cheap when
      * nothing is needed. Call it before measuring a document, and again after edits that change fonts. Resolves with the faces
-     * added. Besides `signal`, the call takes the `renderSvg` options the document resolves with (`catalogs`, ...) over the
-     * loader's `renderOptions`; a document that does not resolve rejects with what `renderSvg` throws for it.
+     * added. Besides `signal`, the call takes the `toSvg` options the document resolves with (`catalogs`, ...) over the
+     * loader's `renderOptions`; a document that does not resolve rejects with what `toSvg` throws for it.
      */
     ensureLazyFonts(presentation, callOptions = {}) {
       const result = queue.then(async () => {
@@ -247,7 +247,7 @@ async function loadRegistry(entries, options = {}) {
       queue = result.catch(() => {});
       return result;
     },
-    /** Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means `ensureLazyFonts` fetches nothing. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...). */
+    /** Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means `ensureLazyFonts` fetches nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...). */
     pendingLazyFonts: (presentation, renderOptions) => neededLazy(presentation, renderOptions),
   });
   /** Names of the script-pack packages loaded so far. */
@@ -277,7 +277,7 @@ const MAX_ENSURE_ROUNDS = 4;
 /**
  * The fonts handle for a browser: the faces you list (`faces`, each `{ url | data, family, weight, italic, sha256 }`, fetched and
  * hash-verified, then registered with the document) and, on demand, the script and vendored faces a deck draws. Pass it as `{ fonts }` to
- * `renderSvg`, `renderSlideSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor. `scripts`, `scriptBaseUrl`,
+ * `toSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor. `scripts`, `scriptBaseUrl`,
  * `lazyFontsBaseUrl`, `extraLazyFonts`, `renderOptions`, `signal`, `document`, `fetch`, `crypto` and the registry options
  * (`substitutionPolicy`, `aliases`, `fallbackFamily`, `themeFonts`, `strictGlyphs`) are as for the registry (see `fonts-browser.d.ts`).
  * `dispose()` removes every face from the document.
@@ -320,7 +320,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { if (stale) { embedded = registry.embeddedFonts; stale = false; } return embedded; },
     registry,
-    // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
+    // RR-64: the outline engine `toSvg(deck, { fonts, text: "paths" })` draws text with, over this registry's faces.
     outlines: textOutlines({ registry, shaper }),
     // RR-65: with `subsetWasm`, the subset engine that cuts each face an SVG embeds to the characters the slide draws.
     ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
@@ -329,8 +329,8 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     /**
      * Load the vendored and script faces the presentation draws, each hash-verified, all or nothing, and repeat while loading
      * changes what is needed (a script face can need a vendored one). Cheap when nothing is needed. Besides `signal`, the call
-     * takes the `renderSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
-     * does not resolve rejects with what `renderSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
+     * takes the `toSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
+     * does not resolve rejects with what `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
      */
     async ensure(presentation, callOptions = {}) {
       const lazy = [], scripts = [];
@@ -344,7 +344,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
       }
       return { scripts, lazy, uncovered };
     },
-    /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `renderSvg` throws for a document that does not resolve. */
+    /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
     pending,
     dispose: () => registry.dispose(),
   };

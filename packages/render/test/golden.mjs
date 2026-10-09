@@ -7,7 +7,7 @@ import { examples } from '@openpresentation/opf/examples';
 // FA-23: the renderer registers no catalog. The examples embed the records they use; the harness registers the gallery
 // snapshot as a host does, which changes nothing for a self-contained deck.
 import { defaultCatalog } from '@openpresentation/opf/catalog';
-import {svgToPng, renderSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import { diffManifests, readBaseline } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -39,10 +39,10 @@ const artifactMode = process.env.OPF_GOLDEN_ARTIFACTS;
 const reference = artifactMode === 'changed' ? readBaseline(baselinePath) : undefined;
 const slides = [];
 for (const { file, deck } of corpus) {
-  const svgs = renderSvg(deck, { trace: true, catalogs: [defaultCatalog] });
+  const svgs = toSvg(deck, { trace: true, catalogs: [defaultCatalog] });
   assert.equal(svgs.length, deck.slides.length, `${file}: slide count`);
   for (const [index, svg] of svgs.entries()) {
-    const png = await svgToPng(svg, { scale });
+    const png = await toPng(svg, { scale });
     const key = `${file}#${index}`;
     next.entries[key] = { sha256: sha256(png), bytes: png.byteLength };
     const keep = reference ? JSON.stringify(reference.entries[key]) !== JSON.stringify(next.entries[key]) : update || artifactMode === '1';
@@ -63,7 +63,7 @@ if (slides.length) {
       const x = (i % 8) * 180, y = Math.floor(i / 8) * 140;
       return `<image x="${x}" y="${y}" width="178" height="115" href="data:image/png;base64,${Buffer.from(png).toString('base64')}"/><text x="${x + 5}" y="${y + 132}" font-size="12" font-family="Roboto">${offset + i}</text>`;
     }).join('')}</svg>`;
-    writeFileSync(path.join(output, `sheet-${offset / 48}.png`), await svgToPng(svg));
+    writeFileSync(path.join(output, `sheet-${offset / 48}.png`), await toPng(svg));
   }
 }
 if (update) {

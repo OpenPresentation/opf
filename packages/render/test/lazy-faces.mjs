@@ -8,7 +8,7 @@
 //     partially loaded family (or a lone Roboto Regular beside a Roboto Bold the host can serve) still loads what is missing,
 //   - hosts that resolve layouts and font schemes through renderOptions.catalogs get the same answer from presentationFamilies,
 //     presentationFaces, pendingLazyFonts, ensureLazyFonts, pendingScripts and ensureScripts, and a document that does not
-//     resolve throws what renderSvg throws (it is not reported as needing nothing).
+//     resolve throws what toSvg throws (it is not reported as needing nothing).
 // OPF 0.15: the renderer registers no catalog. Decks that name gallery records (font schemes such as roboto, the example decks'
 // themes and layouts) resolve with the gallery catalog the host registers (`catalogs: [defaultCatalog]`), and a host catalog
 // is a registered `{source, layouts: {id: record}, ...}` keyed by id.
@@ -17,7 +17,7 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {examples} from '@openpresentation/opf/examples';
-import {catalogs, defaultCatalog, renderSlideSvg} from './catalog-harness.mjs';
+import {catalogs, defaultCatalog, toSvg} from './catalog-harness.mjs';
 import {createFontRegistry} from '../dist/font-registry.js';
 import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
 import {loadFonts as loadBrowserFonts, lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies} from '../dist/fonts-browser.js';
@@ -80,7 +80,7 @@ for (const {file, deck: example} of examples) {
     const drawnKeys = new Set(drawn.map(key));
     // A metric registry cannot draw a deck that names a family with only a visual replacement (Consolas); the plan still covers it.
     let svg;
-    try { svg = renderSlideSvg(example, 0, {fonts: handle}); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
+    try { svg = toSvg(example, 1, {fonts: handle}); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
     if (svg !== undefined) {
       for (const painted of paintedFaces(svg)) {
         const [family, weight, italic] = painted.split('|');
@@ -193,10 +193,10 @@ const catalogDeck = {name: 'x', design: {fontScheme: 'aptos'}, slides: [{layout:
 // A layout id no registered catalog has never throws: the slide composes with no layout and the render reports one
 // `unresolved-reference` for the layout.
 const unresolvedLayout = [];
-assert.ok(renderSlideSvg(catalogDeck, 0, {onDiagnostic: item => unresolvedLayout.push(item)}).startsWith('<svg'));
+assert.ok(toSvg(catalogDeck, 1, {onDiagnostic: item => unresolvedLayout.push(item)}).startsWith('<svg'));
 assert.deepEqual(unresolvedLayout.map(item => [item.code, item.kind, item.reference]), [['unresolved-reference', 'layouts', 'bullets']]);
 const resolvedLayout = [];
-assert.ok(renderSlideSvg(catalogDeck, 0, {catalogs: bullets, onDiagnostic: item => resolvedLayout.push(item)}).startsWith('<svg'));
+assert.ok(toSvg(catalogDeck, 1, {catalogs: bullets, onDiagnostic: item => resolvedLayout.push(item)}).startsWith('<svg'));
 assert.deepEqual(resolvedLayout.filter(item => item.code === 'unresolved-reference'), [], 'the host catalog resolves the layout');
 assert.deepEqual([...presentationFamilies(catalogDeck, {catalogs})].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono'], 'an unknown layout id does not change the families the deck draws');
 assert.deepEqual([...presentationFamilies(catalogDeck, {catalogs: bullets})].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono']);

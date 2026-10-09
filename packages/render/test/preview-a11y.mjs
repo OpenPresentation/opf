@@ -4,7 +4,7 @@
 // labelling so a slide is announced once. Attribute-level here; test/preview-a11y-browser.mjs reads the browser's accessibility tree.
 // Tables are checked for reachable cell text only: the table's own name is FA-27 (opf-render#166).
 import assert from 'node:assert/strict';
-import { renderSlideSvg } from './catalog-harness.mjs';
+import { toSvg } from './catalog-harness.mjs';
 import { parseXml, isElement, textContent } from '../dist/pdf-xml.js';
 import { prepareSlideSvg } from '../dist/deck-runtime.js';
 import { previewA11yDeck } from './preview-a11y-fixture.mjs';
@@ -19,7 +19,7 @@ const hiddenOrImage = (node) => node.attrs['aria-hidden'] === 'true' || node.att
 const reachable = (node) => !hiddenOrImage(node) && !ancestry(node).some(hiddenOrImage);
 const textsOf = (svg) => elements(parseXml(svg)).filter((node) => node.name === 'text');
 
-const svg = renderSlideSvg(previewA11yDeck(), 0);
+const svg = toSvg(previewA11yDeck(), 1);
 const root = parseXml(svg);
 const all = elements(root);
 
@@ -29,7 +29,7 @@ assert.equal(root.attrs['aria-roledescription'], 'slide');
 assert.equal(root.attrs['aria-label'], 'Quarterly review');
 assert.equal(all.filter((node) => node.attrs['aria-roledescription']).length, 1, 'exactly one slide container');
 // A title with runs names the slide by its plain text.
-assert.equal(parseXml(renderSlideSvg(deck({ title: ['Bold ', { text: 'title', bold: true }] }), 0)).attrs['aria-label'], 'Bold title');
+assert.equal(parseXml(toSvg(deck({ title: ['Bold ', { text: 'title', bold: true }] }), 1)).attrs['aria-label'], 'Bold title');
 
 // 2. Text is reachable: no role="img" or aria-hidden ancestor above any of the slide's words.
 const texts = textsOf(svg);
@@ -75,7 +75,7 @@ const backgrounds = [
   [{ type: 'image', src: png, alt: '' }, undefined]
 ];
 for (const [background, label] of backgrounds) {
-  const tree = elements(parseXml(renderSlideSvg(deck({ title: 'Over the photo', text: 'Copy', design: { background } }), 0)));
+  const tree = elements(parseXml(toSvg(deck({ title: 'Over the photo', text: 'Copy', design: { background } }), 1)));
   const picture = tree.find((node) => node.name === 'image');
   assert.equal(picture.attrs.role, label ? 'img' : undefined);
   assert.equal(picture.attrs['aria-label'], label);
@@ -89,20 +89,20 @@ for (const [background, label] of backgrounds) {
 
 // 7. Furniture pictures (a header or footer logo repeated on every slide) are hidden unless the author gave them alt.
 for (const [image, hidden] of [[{ src: png }, true], [{ src: png, alt: 'Acme logo' }, false]]) {
-  const picture = elements(parseXml(renderSlideSvg(deck({ title: 'T' }, { header: { right: { image } } }), 0))).find((node) => node.name === 'image');
+  const picture = elements(parseXml(toSvg(deck({ title: 'T' }, { header: { right: { image } } }), 1))).find((node) => node.name === 'image');
   assert.equal(picture.attrs['aria-hidden'], hidden ? 'true' : undefined, JSON.stringify(image));
   assert.equal(picture.attrs.role, hidden ? undefined : 'img');
 }
 
 // 8. A watermark is decorative.
-const watermark = elements(parseXml(renderSlideSvg(deck({ title: 'T' }, { watermark: { text: 'DRAFT', opacity: 0.1 } }), 0))).find((node) => node.name === 'text' && textContent(node) === 'DRAFT');
+const watermark = elements(parseXml(toSvg(deck({ title: 'T' }, { watermark: { text: 'DRAFT', opacity: 0.1 } }), 1))).find((node) => node.name === 'text' && textContent(node) === 'DRAFT');
 assert.ok(watermark && !reachable(watermark), 'the watermark text is hidden');
 
 // A picture watermark is hidden too (its group keeps only the opacity: opf-pptx's watermark parity test reads that).
-const watermarkPicture = elements(parseXml(renderSlideSvg(deck({ title: 'T' }, { watermark: { src: png, opacity: 0.1 } }), 0))).find((node) => node.name === 'image');
+const watermarkPicture = elements(parseXml(toSvg(deck({ title: 'T' }, { watermark: { src: png, opacity: 0.1 } }), 1))).find((node) => node.name === 'image');
 assert.deepEqual([watermarkPicture.attrs['aria-hidden'], watermarkPicture.attrs.role, watermarkPicture.parent.attrs['aria-hidden']], ['true', undefined, undefined]);
 
-// 9. The wrapper (the deck element, the player, renderDeckHtml) removes the root's labelling, so the slide section or figure around
+// 9. The wrapper (the deck element, the player, toHtml) removes the root's labelling, so the slide section or figure around
 // it is the one slide container; hidden parts stay hidden.
 const preparedRoot = parseXml(prepareSlideSvg(svg));
 assert.deepEqual(['role', 'aria-roledescription', 'aria-label', 'width', 'height'].map((name) => preparedRoot.attrs[name]), [undefined, undefined, undefined, undefined, undefined]);

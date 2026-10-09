@@ -19,7 +19,7 @@ import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {LANGUAGES} from '@openpresentation/opf/composition';
 import {defaultCatalog} from '@openpresentation/opf/catalog';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, itemizeScripts} from '../dist/script-fonts.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
@@ -127,11 +127,11 @@ for (const entry of report.faces) {
 {
   const deck = (language, title) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, slides: [{title, text: 'Body'}]});
   const prepared = await loadFonts({pack: 'office', scripts: 'all'});
-  assert.match(renderSlideSvg(deck('ja', '「括弧」、（かっこ）。'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.match(renderSlideSvg(deck('zh-Hans', '，。！？；：'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.match(renderSlideSvg(deck('zh-Hans', '“引号”'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.doesNotMatch(renderSlideSvg(deck('ja', '日本語のタイトル'), 0, {fonts: prepared}), /text-spacing-trim/);
-  assert.doesNotMatch(renderSlideSvg(deck('en', 'Quarterly review “quoted”'), 0, {fonts: prepared}), /text-spacing-trim/);
+  assert.match(toSvg(deck('ja', '「括弧」、（かっこ）。'), 1, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.match(toSvg(deck('zh-Hans', '，。！？；：'), 1, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.match(toSvg(deck('zh-Hans', '“引号”'), 1, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.doesNotMatch(toSvg(deck('ja', '日本語のタイトル'), 1, {fonts: prepared}), /text-spacing-trim/);
+  assert.doesNotMatch(toSvg(deck('en', 'Quarterly review “quoted”'), 1, {fonts: prepared}), /text-spacing-trim/);
 }
 
 // Host loading, Node: for each corpus script, a document in a language of that script whose text is a corpus sample loads exactly the pinned face
@@ -152,10 +152,10 @@ for (const entry of report.faces) {
       assert.ok(registry.describeFaces().some(face => face.family === family), `${group.script}: ${family} is loaded for a ${language} document`);
       loaded++;
     }
-    const svg = renderSlideSvg(deck, 0, {fonts: prepared});
+    const svg = toSvg(deck, 1, {fonts: prepared});
     assert.ok(svg.includes(family ?? 'Noto Sans') || group.script === 'Latn' || group.script === 'Cyrl' || group.script === 'Grek', `${group.script}: the SVG draws ${family}`);
     assert.deepEqual(fallbacks.filter(note => note.code === 'script-font-unavailable' || note.code === 'script-glyph-uncovered'), [], `${group.script}: no unavailable script`);
-    const png = await svgToPng(svg, {fonts: prepared, scale: 0.25});
+    const png = await toPng(svg, {fonts: prepared, scale: 0.25});
     assert.ok(png.length > 1000, `${group.script}: a raster is produced`);
   }
   assert.equal(loaded, Object.keys(designated).length);

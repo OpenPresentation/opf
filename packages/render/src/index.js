@@ -1,2 +1,2 @@
 export * from './svg.js';
-export {svgToPng,svgToPdf} from './raster.js';
+export {toPng,toPdf} from './raster.js';

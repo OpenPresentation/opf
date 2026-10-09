@@ -17,7 +17,7 @@ import {mkdir, writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import * as core from '@openpresentation/opf/composition';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptTextMeasurement} from '../dist/fonts.js';
 import {monochromeColorFonts, rasterFontFiles} from '../dist/color-fonts.js';
@@ -76,7 +76,7 @@ for (const entry of families) {
     }
     const notes = [];
     const strict = createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(deck), {glyphFallback: 'none', onFallback: note => notes.push(note)});
-    const svg = renderSlideSvg(deck, 0, { fonts: {...prepared, embeddedFonts: [], textMeasurement: strict}, glyphFallback: 'none', onDiagnostic: value => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); }});
+    const svg = toSvg(deck, 1, { fonts: {...prepared, embeddedFonts: [], textMeasurement: strict}, glyphFallback: 'none', onDiagnostic: value => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); }});
     assert.deepEqual(notes, [], `${where} ${sample.id}: no glyph fallback`);
     const runs = drawnRuns(svg);
     assert.ok(runs.length >= 3, `${where} ${sample.id}: the deck draws its title and two body runs (${runs.length})`);
@@ -106,9 +106,9 @@ for (const entry of families) {
     const loaded = rasterFontFiles(prepared.fontFiles);
     const own = loaded.find(file => slash(file).endsWith(colourFace ? '/noto-emoji/400Regular/NotoEmoji_400Regular.ttf' : `/${face.served}`));
     assert.ok(own, `${where}: ${colourFace ? 'the Noto Emoji stand-in' : face.served} is among the registry's font files`);
-    const everything = sha(await svgToPng(drawn, rasterOptions(loaded)));
-    assert.equal(everything, sha(await svgToPng(drawn, rasterOptions([own]))), `${where} ${face.weight}: resvg draws ${target} from ${path.basename(own)}`);
-    assert.notEqual(everything, sha(await svgToPng(drawn, rasterOptions(loaded.filter(file => file !== own)))), `${where} ${face.weight}: ${path.basename(own)} is what paints`);
+    const everything = sha(await toPng(drawn, rasterOptions(loaded)));
+    assert.equal(everything, sha(await toPng(drawn, rasterOptions([own]))), `${where} ${face.weight}: resvg draws ${target} from ${path.basename(own)}`);
+    assert.notEqual(everything, sha(await toPng(drawn, rasterOptions(loaded.filter(file => file !== own)))), `${where} ${face.weight}: ${path.basename(own)} is what paints`);
     paintChecks += 1;
   }
   report.push({

@@ -1,5 +1,6 @@
 import type { RenderFonts, ScriptFonts } from "./fonts.js";
-import type { Catalog, Finding, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
+import type { Catalog, Finding, SlideSelection, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
+export type { SlideSelection } from "@openpresentation/opf";
 import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-render";
 
@@ -49,8 +50,8 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   placeholder: "label" | "icon";
 };
 
-export interface RenderSvgOptions {
-  /** Leave out slides marked `hidden: true`, as the player does. Default false: one SVG per slide. With true the result holds only the visible slides, in order, so an index no longer names the slide at that index. Read by the deck-level `renderSvg`; `renderSlideSvg` draws the slide it is given. */
+export interface ToSvgOptions {
+  /** Leave out slides marked `hidden: true` when drawing the whole deck, as the player does. Default false: one SVG per slide. A slide number or selection draws exactly the slides it names. */
   skipHidden?: boolean;
   /**
    * The fonts the deck is laid out and drawn with: the handle `loadFonts()` returns (from `@openpresentation/opf-render/fonts-node` or
@@ -58,10 +59,12 @@ export interface RenderSvgOptions {
    * core's portable width estimate and the SVG names the design fonts without embedding them.
    */
   fonts?: RenderFonts;
-  /** `false` writes no `@font-face` data into the SVG (RR-61): the fonts handle still measures and the SVG still names the families, for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document). Default true: each SVG embeds the faces of `fonts.embeddedFonts` its own text draws. */
-  embedFonts?: boolean;
   /**
-   * `true` draws every `<text>` as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
+   * How the SVG draws text (RR-74). `"fonts"` (default): each SVG embeds, as `@font-face` data, the faces of `fonts.embeddedFonts` its
+   * own text draws (RR-61). `"system"`: no `@font-face` data; the fonts handle still measures and the SVG still names the families,
+   * for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document).
+   *
+   * `"paths"`: every `<text>` drawn as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
    * no font and looks the same in every viewer (about 40 KB a slide over the core example decks, against 0.5 to 4 MB of embedded
    * faces). Needs the fonts handle `loadFonts()` returns (`text-as-paths-needs-fonts` otherwise). The text is no longer text: it
    * cannot be edited in place. The glyphs are shaped by HarfBuzz (the browser's shaper; the Node handle always, a browser handle
@@ -70,9 +73,9 @@ export interface RenderSvgOptions {
    * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a colour or bitmap font
    * (`"colour-font"`), its face's fsType restricts embedding (`"restricted"`), or it has no pinned width and HarfBuzz and the
    * layout's measurement disagree on it (`"shaping"`). Use it for thumbnails, previews and portable SVG files, not for an editing
-   * surface or the vector PDF (which keeps real text from `<text>` SVG). Default false.
+   * surface or the vector PDF (which keeps real text from `<text>` SVG).
    */
-  textAsPaths?: boolean;
+  text?: "fonts" | "system" | "paths";
   /**
    * `false` embeds whole faces (RR-65). By default, with a fonts handle that carries `subsets` (the Node `loadFonts` handle, a browser
    * handle given `subsetWasm`), each face an SVG embeds is cut to the characters the slide draws, keeping every layout feature, so the
@@ -119,20 +122,8 @@ export interface RenderSvgOptions {
   strictReferences?: boolean;
 }
 
-export interface SvgToPngOptions {
-  /** The fonts the conversion draws with (Node): see `SvgToPngOptions` in the main entry. */
-  fonts?: RenderFonts;
-  scale?: number;
-  background?: string;
-  dpi?: number;
-  /** Extra directories of font files to draw with. */
-  fontDirs?: string[];
-  defaultFontFamily?: string;
-  sansSerifFamily?: string;
-  monospaceFamily?: string;
-}
-
-export interface SvgToPdfOptions extends SvgToPngOptions {}
+/** The Node conversion options (types only: `toPng` and `toPdf` run in Node, or from `/export-browser`). */
+export type { ToPngOptions, ToPdfOptions } from "./index.js";
 
 export interface ResolvedPresentation {
   presentation: unknown;
@@ -185,12 +176,16 @@ export declare class OPFRenderError extends Error {
   constructor(code: string, message: string, details?: Record<string, unknown>);
 }
 
-export declare function resolvePresentation(input: unknown, options?: RenderSvgOptions): ResolvedPresentation;
+export declare function resolvePresentation(input: unknown, options?: ToSvgOptions): ResolvedPresentation;
 
-/** The SVG of every slide of the deck, in order. */
-export declare function renderSvg(input: unknown, options?: RenderSvgOptions): string[];
+/** An SVG slide the renderer drew: its text, or its bytes. */
+export type SvgSlide = string | Uint8Array;
 
-/** The SVG of one slide of the deck (`index` is zero-based; out of range throws `slide-index-out-of-range`). */
-export declare function renderSlideSvg(input: unknown, index: number, options?: RenderSvgOptions): string;
-
-
+/**
+ * The deck as SVG (RR-73). `toSvg(deck)`: every slide, in order (without the hidden ones under `skipHidden`). `toSvg(deck, 3)`: the
+ * third slide (slides count from 1; out of range throws `slide-out-of-range`). `toSvg(deck, "1-3")` or `toSvg(deck, [1, 3])`: the
+ * selected slides (a malformed selection throws `invalid-slide-selection`). The second argument may be the options instead.
+ */
+export declare function toSvg(input: unknown, options?: ToSvgOptions): string[];
+export declare function toSvg(input: unknown, slide: number, options?: ToSvgOptions): string;
+export declare function toSvg(input: unknown, slides: Exclude<SlideSelection, number>, options?: ToSvgOptions): string[];

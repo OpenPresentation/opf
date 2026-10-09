@@ -14,7 +14,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
-import {svgToPdf as nodeSvgToPdf, svgToPng as nodeSvgToPng, renderSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toPdf as nodeToPdf, toPng as nodeToPng, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {compareImages, openPdf, pageItems, pageText, renderPdfPage} from './pdf-helpers.mjs';
 
@@ -23,12 +23,12 @@ const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/export-
 await mkdir(outputDirectory, {recursive: true});
 // RR-63: the entry holds no pdf-lib; the page imports it for raster mode and passes it as `pdfLib` (a second bundle of the entry alone proves the first part).
 const entryOnly = await build({
-  stdin: {contents: "import {svgToPdf,svgToPng,sniffImage} from './dist/export-browser.js';window.opfExport={svgToPdf,svgToPng,sniffImage};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {toPdf,toPng,sniffImage} from './dist/export-browser.js';window.opfExport={toPdf,toPng,sniffImage};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
 });
 assert.ok(!Object.keys(entryOnly.metafile.inputs).some(input => /pdf-lib/.test(input)), 'the browser export entry bundles no pdf-lib');
 const bundle = await build({
-  stdin: {contents: "import * as pdfLib from 'pdf-lib';import {svgToPdf,svgToPng,sniffImage} from './dist/export-browser.js';window.opfExport={svgToPdf,svgToPng,sniffImage};window.opfPdfLib=pdfLib;", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import * as pdfLib from 'pdf-lib';import {toPdf,toPng,sniffImage} from './dist/export-browser.js';window.opfExport={toPdf,toPng,sniffImage};window.opfPdfLib=pdfLib;", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
 });
 const inputs = Object.keys(bundle.metafile.inputs);
@@ -50,7 +50,7 @@ const deck = {
     {id: 'three', title: 'Data', table: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 12], ['Q2', 18]]}},
   ],
 };
-const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts},trace: true});
+const svgs = toSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts},trace: true});
 assert.equal(svgs.length, 3);
 const imageSvg = (width, height, uri, extra = '') => `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#ffffff"/><image aria-label="Specimen" x="0" y="0" width="${width}" height="${height}" href="${uri}" ${extra}/></svg>`;
 const uri = (type, bytes) => `data:${type};base64,${Buffer.from(bytes).toString('base64')}`;
@@ -70,14 +70,14 @@ try {
   });
   await page.goto('https://app.test/');
   await page.addScriptTag({content: script});
-  const run = (code, argument) => page.evaluate(`(async () => { const {svgToPdf, svgToPng, sniffImage} = window.opfExport; const input = ${JSON.stringify(argument ?? null)}; ${TO_BASE64} ${code} })()`);
+  const run = (code, argument) => page.evaluate(`(async () => { const {toPdf, toPng, sniffImage} = window.opfExport; const input = ${JSON.stringify(argument ?? null)}; ${TO_BASE64} ${code} })()`);
 
   // ---- Vector PDF of the rendered deck ------------------------------------------------------------------------------------------
   const vector = await run(`
     const diagnostics = [], progress = [];
     const options = {metadata: {title: 'Browser export', language: 'en'}};
-    const pdf = await svgToPdf(input.svgs, {...options, onDiagnostic: d => diagnostics.push(d), onProgress: p => progress.push(p)});
-    const again = await svgToPdf(input.svgs, options);
+    const pdf = await toPdf(input.svgs, {...options, onDiagnostic: d => diagnostics.push(d), onProgress: p => progress.push(p)});
+    const again = await toPdf(input.svgs, options);
     return {pdf: toBase64(pdf), same: pdf.length === again.length && pdf.every((b, i) => b === again[i]), diagnostics, progress};
   `, {svgs});
   const pdfBytes = toBytes(vector.pdf);
@@ -94,7 +94,7 @@ try {
   assert.match(text[0], /Revenue grew in every region/);
   assert.match(text[1], /First finding.*Second finding.*Third finding/);
   assert.match(text[2], /Quarter.*Revenue/);
-  const nodeDoc = await openPdf(await nodeSvgToPdf(svgs));
+  const nodeDoc = await openPdf(await nodeToPdf(svgs));
   for (const number of [1, 2, 3]) assert.equal(await pageText(nodeDoc, number), text[number - 1], `page ${number}: the browser and Node PDFs extract the same text`);
   const rendered = await renderPdfPage(doc, 1);
   const stats = await sharp(rendered.png).stats();
@@ -106,7 +106,7 @@ try {
     const out = {};
     for (const [name, svg] of Object.entries(input)) {
       const diagnostics = [];
-      out[name] = {pdf: toBase64(await svgToPdf(svg, {onDiagnostic: d => diagnostics.push(d)})), diagnostics: diagnostics.filter(d => d.code !== 'pdf-font-embedded')};
+      out[name] = {pdf: toBase64(await toPdf(svg, {onDiagnostic: d => diagnostics.push(d)})), diagnostics: diagnostics.filter(d => d.code !== 'pdf-font-embedded')};
     }
     return out;
   `, {
@@ -136,7 +136,7 @@ try {
     const expected = await sharp(expectedPath).metadata();
     const result = await run(`
       const sniffed = sniffImage(Uint8Array.from(atob(input.base64), c => c.charCodeAt(0)));
-      return {sniffed, pdf: toBase64(await svgToPdf(input.svg))};
+      return {sniffed, pdf: toBase64(await toPdf(input.svg))};
     `, {base64: jpeg.toString('base64'), svg: imageSvg(expected.width, expected.height, uri('image/jpeg', jpeg))});
     assert.equal(result.sniffed.format, 'jpeg');
     assert.equal(result.sniffed.orientation ?? 1, orientation, `orientation ${orientation} is read from EXIF`);
@@ -149,17 +149,17 @@ try {
 
   // ---- PNG, raster PDF, cancellation ------------------------------------------------------------------------------------------
   const outputs = await run(`
-    const one = await svgToPng(input.svgs[0]);
-    const double = await svgToPng(input.svgs[0], {scale: 2});
-    const clear = await svgToPng(input.bare, {background: 'transparent'});
-    const raster = await svgToPdf(input.svgs, {mode: 'raster', scale: 1, pdfLib: window.opfPdfLib});
+    const one = await toPng(input.svgs[0]);
+    const double = await toPng(input.svgs[0], {scale: 2});
+    const clear = await toPng(input.bare, {background: 'transparent'});
+    const raster = await toPdf(input.svgs, {raster: true, scale: 1, pdfLib: window.opfPdfLib});
     let noPdfLib = null;
-    try { await svgToPdf(input.svgs, {mode: 'raster', scale: 1}); } catch (error) { noPdfLib = error.code + ':' + error.details?.package; }
+    try { await toPdf(input.svgs, {raster: true, scale: 1}); } catch (error) { noPdfLib = error.code + ':' + error.details?.package; }
     const controller = new AbortController();
     let cancelled = null;
-    try { await svgToPdf(input.svgs, {signal: controller.signal, onProgress: () => controller.abort()}); } catch (error) { cancelled = error.name; }
+    try { await toPdf(input.svgs, {signal: controller.signal, onProgress: () => controller.abort()}); } catch (error) { cancelled = error.name; }
     let tooLarge = null;
-    try { await svgToPng(input.svgs[0], {scale: 100}); } catch (error) { tooLarge = error.code; }
+    try { await toPng(input.svgs[0], {scale: 100}); } catch (error) { tooLarge = error.code; }
     return {one: toBase64(one), double: toBase64(double), clear: toBase64(clear), raster: toBase64(raster), noPdfLib, cancelled, tooLarge};
   `, {svgs, bare: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="10" y="10" width="10" height="10" fill="#d03030"/></svg>'});
   const one = await sharp(toBytes(outputs.one)).metadata(), double = await sharp(toBytes(outputs.double)).metadata();
@@ -171,7 +171,7 @@ try {
   for (let index = 0; index < first.data.length; index += 3 * 997) colours.add(`${first.data[index]},${first.data[index + 1]},${first.data[index + 2]}`);
   assert.ok(colours.size >= 2, 'the PNG draws the slide, not a blank page');
   // The canvas draws the SVG's embedded Roboto, as resvg does: the two PNGs agree to anti-aliasing (a wrong font would move every glyph).
-  const compared = await compareImages(Buffer.from(toBytes(outputs.one)), Buffer.from(await nodeSvgToPng(svgs[0])), {factor: 4});
+  const compared = await compareImages(Buffer.from(toBytes(outputs.one)), Buffer.from(await nodeToPng(svgs[0])), {factor: 4});
   console.log('browser PNG vs resvg PNG', JSON.stringify(compared));
   assert.ok(compared.mae < 6 && compared.largePercent < 3, `the browser PNG matches the resvg PNG: ${JSON.stringify(compared)}`);
   const clearCorner = await sharp(toBytes(outputs.clear)).ensureAlpha().extract({left: 0, top: 0, width: 1, height: 1}).raw().toBuffer();

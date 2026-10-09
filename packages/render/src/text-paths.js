@@ -1,4 +1,4 @@
-// RR-64: `textAsPaths: true` draws every <text> of a slide as glyph outlines, so the SVG needs no font. The renderer has
+// RR-64: `text: "paths"` draws every <text> of a slide as glyph outlines, so the SVG needs no font. The renderer has
 // already decided every line, position and width (x, y, text-anchor, textLength); the vector PDF export's SVG text layout
 // (layoutText: text chunks, bidirectional runs, per-character fallback, fontkit shaping, textLength) turns that into positioned
 // glyph runs, and this module writes each glyph as a <use> of its outline. Outlines are kept once per slide in <defs>, in font
@@ -316,14 +316,14 @@ function precise(value) { return String(Number(Number(value).toPrecision(6))); }
 
 
 /**
- * The outline engine a fonts handle carries as `outlines` (RR-64): `renderSvg(deck, { fonts, textAsPaths: true })` draws each
+ * The outline engine a fonts handle carries as `outlines` (RR-64): `toSvg(deck, { fonts, text: "paths" })` draws each
  * slide's text with it. The faces are read from the handle when a slide is outlined, so faces it loads later are used too.
  */
 export function textOutlines(fonts) {
   return Object.freeze({
     outlineSlideText: (content, options) => {
       const library = outlineLibrary(fonts);
-      if (!library) throw options.fail("text-as-paths-needs-fonts", "textAsPaths needs font faces to outline: pass the handle loadFonts() returns as `fonts`.");
+      if (!library) throw options.fail("text-as-paths-needs-fonts", 'text: "paths" needs font faces to outline: pass the handle loadFonts() returns as `fonts`.');
       return outlineSlideText(content, { ...options, library, shaper: fonts.shaper });
     },
   });

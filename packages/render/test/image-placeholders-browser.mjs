@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fonts=(await loadFonts({pack: 'base'})).registry,fixtures=[];
@@ -11,7 +11,7 @@ for(const [width,height]of [[1280,720],[540,960],[96,96]])for(const dark of [fal
  const description='Complete image description & <literal markup> '.repeat(width===96?4:1);
  const deck={design:{dimensions:{widthInches:width/96,heightInches:height/96},fontScheme:'roboto',background:dark?'#000000':'#FFFFFF',colorScheme:{id:'cool-horizon',dark1:dark?'#FFFFFF':'#000000',light1:dark?'#FFFFFF':'#000000',dark2:dark?'#334155':'#F8FAFC',light2:dark?'#334155':'#F8FAFC'},header:{right:{image:{src:'asset:icon',alt:description}}},watermark:{src:'asset:icon',opacity:.06}},assets:{icon:{src:'./missing.png',alt:description}},slides:[{image:'asset:icon'}]};
  const original=structuredClone(deck),diagnostics=[];
- const svg=renderSlideSvg(deck, 0,{ fonts: {textMeasurement:fonts.textMeasurement},trace:true,onDiagnostic:issue=>diagnostics.push(issue)});
+ const svg=toSvg(deck, 1,{ fonts: {textMeasurement:fonts.textMeasurement},trace:true,onDiagnostic:issue=>diagnostics.push(issue)});
  assert.deepEqual(deck,original);assert.equal(diagnostics.filter(issue=>issue.code==='unresolved-asset').length,3);
  fixtures.push({id:`${width}-${height}-${dark?'dark':'light'}`,width,height,description,svg,svgSha256:hash(svg),diagnostics});
 }

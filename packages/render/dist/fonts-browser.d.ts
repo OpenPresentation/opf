@@ -6,7 +6,7 @@ import type {
   FontsHandle,
 } from "./fonts.js";
 import type { AutoScriptSelection, BundledFontPackage, LazyFont, ScriptSelection } from "./fonts-node.js";
-import type { RenderSvgOptions } from "./svg.js";
+import type { ToSvgOptions } from "./svg.js";
 export type { LazyFont } from "./fonts-node.js";
 export type { AutoScriptSelection } from "./fonts-node.js";
 export { detectPresentationScripts, autoScriptSelection } from "./fonts-node.js";
@@ -26,17 +26,17 @@ export interface BrowserFontRegistry extends FontRegistry {
    * family the policy would not resolve, nor for a weight or style nothing draws), once each, from `lazyFontsBaseUrl`.
    * Fetches and verifies every file, then adds the faces to the document and the registry together; on failure nothing
    * changes and the call can be retried. Call it before measuring a document, and again after edits: an edit that adds a
-   * bold or italic run loads just that face. Besides `signal`, the call takes the `renderSvg` options the document resolves
+   * bold or italic run loads just that face. Besides `signal`, the call takes the `toSvg` options the document resolves
    * with (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with the error
-   * `renderSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
+   * `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
    */
-  ensureLazyFonts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<RenderSvgOptions>): Promise<LazyFont[]>;
+  ensureLazyFonts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<LazyFont[]>;
   /**
    * Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means
-   * `ensureLazyFonts` fetches nothing. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...)
-   * over the loader's `renderOptions`. Throws what `renderSvg` throws for a document that does not resolve.
+   * `ensureLazyFonts` fetches nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...)
+   * over the loader's `renderOptions`. Throws what `toSvg` throws for a document that does not resolve.
    */
-  pendingLazyFonts(presentation: unknown, renderOptions?: Partial<RenderSvgOptions>): LazyFont[];
+  pendingLazyFonts(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): LazyFont[];
 
   /** Load script faces for ISO 15924 codes (or "all") from `scriptBaseUrl`. Resolves with the newly loaded package names. */
   loadScripts(scripts: ScriptSelection, options?: { signal?: AbortSignal }): Promise<string[]>;
@@ -49,15 +49,15 @@ export interface BrowserFontRegistry extends FontRegistry {
    * OPFFontError whose `details` are `{ loaded: string[]; failed: {package, code, message}[] }`. A failed call (fetch, hash, FontFace load) leaves nothing loaded and can be retried; after
    * `dispose()` it rejects with `font-registry-disposed`.
    */
-  ensureScripts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<RenderSvgOptions>): Promise<AutoScriptSelection & { loaded: string[]; uncovered: string[] }>;
+  ensureScripts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<AutoScriptSelection & { loaded: string[]; uncovered: string[] }>;
   /** Synchronous: package names the presentation needs that are not loaded yet. Empty means `ensureScripts` fetches nothing, so a host can render immediately. Text decides, so a document is analyzed without resolving its layouts; `renderOptions.catalogs` matter for font schemes only the host's catalogs have (FF-41). */
-  pendingScripts(presentation: unknown, renderOptions?: Partial<RenderSvgOptions>): string[];
+  pendingScripts(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
   /** Names of the script-pack packages loaded so far. */
   readonly loadedScriptPackages: string[];
 }
 /**
  * The fonts handle of a browser: the faces you list, registered with the document, and on demand the script and vendored faces a deck
- * draws. Pass it as `{ fonts }` to `renderSvg`, `renderSlideSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor.
+ * draws. Pass it as `{ fonts }` to `toSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor.
  * The registry behind it keeps the lower-level loaders (`ensureLazyFonts`, `ensureScripts`, `loadScripts`, `pendingLazyFonts`, `pendingScripts`).
  */
 export interface BrowserFontsHandle extends FontsHandle {
@@ -66,13 +66,13 @@ export interface BrowserFontsHandle extends FontsHandle {
   dispose(): void;
   /**
    * Load the vendored and script faces the presentation draws (each hash-verified, all or nothing), repeating while loading changes what
-   * is needed. Cheap when nothing is needed. Besides `signal`, the call takes the `renderSvg` options the document resolves with
-   * (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with what `renderSvg` throws for it; after
+   * is needed. Cheap when nothing is needed. Besides `signal`, the call takes the `toSvg` options the document resolves with
+   * (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with what `toSvg` throws for it; after
    * `dispose()` it rejects with `font-registry-disposed`.
    */
-  ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<RenderSvgOptions>): Promise<EnsureResult>;
-  /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `renderSvg` throws for a document that does not resolve. */
-  pending(presentation: unknown, renderOptions?: Partial<RenderSvgOptions>): string[];
+  ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<EnsureResult>;
+  /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
+  pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
 }
 export declare function loadFonts(
   options?: FontRegistryOptions & {
@@ -83,12 +83,12 @@ export declare function loadFonts(
     signal?: AbortSignal;
     /**
      * RR-65: harfbuzzjs's `harfbuzz-subset.wasm` (the URL the host serves it from, its bytes or a compiled WebAssembly.Module). With
-     * it the handle carries `subsets`, and every SVG `renderSvg` draws with this handle embeds each face cut to the characters the
+     * it the handle carries `subsets`, and every SVG `toSvg` draws with this handle embeds each face cut to the characters the
      * slide draws. Without it a browser handle embeds whole faces (the Node handle always subsets).
      */
     subsetWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
     /**
-     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `textAsPaths` shapes outlines with
+     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `text: "paths"` shapes outlines with
      * HarfBuzz, as the browser shapes text; without it a browser handle shapes them with fontkit (the Node handle always uses HarfBuzz).
      */
     shapeWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
@@ -111,11 +111,11 @@ export declare function loadFonts(
      */
     extraLazyFonts?: readonly ExtraLazyFont[];
     /**
-     * FF-41: the `renderSvg` options the documents resolve with (`catalogs` above all), the default for `pendingLazyFonts`,
+     * FF-41: the `toSvg` options the documents resolve with (`catalogs` above all), the default for `pendingLazyFonts`,
      * `ensureLazyFonts`, `pendingScripts` and `ensureScripts`. A layout or font scheme id that only the host's catalogs have
      * resolves the same way here as it does when the host renders. A call's own options win.
      */
-    renderOptions?: Partial<RenderSvgOptions>;
+    renderOptions?: Partial<ToSvgOptions>;
   },
 ): Promise<BrowserFontsHandle>;
 export declare function scriptFontPackages(scripts: ScriptSelection): BundledFontPackage[];
@@ -138,10 +138,10 @@ export interface ExtraLazyFont { family: string; weight: number; italic?: boolea
 export declare function splitStartupFaces<T extends { family: string; weight: number; italic?: boolean }>(faces: readonly T[], options?: { startup?: (face: T) => boolean }): { startup: T[]; rest: T[] };
 /**
  * The font families a presentation's slides resolve (heading, body and code roles of every slide). `options` are the
- * `renderSvg` options the document resolves with (`catalogs`, ...). A document that does not resolve throws what `renderSvg`
+ * `toSvg` options the document resolves with (`catalogs`, ...). A document that does not resolve throws what `toSvg`
  * throws for it (FF-41: it no longer returns an empty set). This is the role families, not what is drawn: see `presentationFaces`.
  */
-export declare function presentationFamilies(presentation: unknown, options?: Partial<RenderSvgOptions>): Set<string>;
+export declare function presentationFamilies(presentation: unknown, options?: Partial<ToSvgOptions>): Set<string>;
 /** A face request or a drawn face: a family, a weight and a style. */
 export interface FaceRequest { family: string; weight: number; italic: boolean }
 /**
@@ -151,16 +151,16 @@ export interface FaceRequest { family: string; weight: number; italic: boolean }
  * faces are the styles as the document names them. With `registry` (`{faces, policy, aliases, fallbackFamily}`: the faces a
  * registry holds or could hold and its substitution options) every style resolves as that registry resolves it, in the two
  * steps drawing takes (role family, then weight within it), and the result is the faces the registry paints.
- * `options` are the `renderSvg` options the document resolves with; a document that does not resolve throws what `renderSvg`
+ * `options` are the `toSvg` options the document resolves with; a document that does not resolve throws what `toSvg`
  * throws for it.
  */
-export declare function presentationFaces(presentation: unknown, options?: Partial<RenderSvgOptions>, registry?: { faces: Iterable<FaceRequest>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): FaceRequest[];
+export declare function presentationFaces(presentation: unknown, options?: Partial<ToSvgOptions>, registry?: { faces: Iterable<FaceRequest>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): FaceRequest[];
 /**
  * The vendored faces (of `lazy`) a presentation draws that the registry does not hold. `held` is `registry.describeFaces()`,
  * `loaded` the lazy files already loaded; `policy`, `aliases` and `fallbackFamily` are the registry's. Face level: only the
  * drawn faces, so an edit adding a bold run adds one face.
  */
-export declare function lazyFacesNeeded(presentation: unknown, renderOptions: Partial<RenderSvgOptions> | undefined, context: { lazy: readonly LazyFont[]; held: Iterable<FaceRequest>; loaded?: ReadonlySet<string>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): LazyFont[];
+export declare function lazyFacesNeeded(presentation: unknown, renderOptions: Partial<ToSvgOptions> | undefined, context: { lazy: readonly LazyFont[]; held: Iterable<FaceRequest>; loaded?: ReadonlySet<string>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): LazyFont[];
 /**
  * The vendored faces a list of requests needs that the registry does not hold, following the registry's own order and
  * `policy` (default "visual"): the family itself, an alias target, the declared replacement, then its alternates.

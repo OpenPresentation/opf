@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 import {examples} from '@openpresentation/opf/examples';
-import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {resolvePresentation, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2]??'artifacts/rich-spacing-browser';
 if(out)await mkdir(out,{recursive:true});
@@ -28,7 +28,7 @@ try {
     if(out)await writeFile(path.join(out,name+'.opf.json'),source+'\n');
     for(const mode of ['estimated','measured']) for(const rendering of ['default','geometricPrecision']) {
       const options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:fonts.textMeasurement}}:{})};
-      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=renderSlideSvg(fixture.deck, slideIndex,options).replace('<svg ',rendering==='default'?'<svg ':'<svg text-rendering="geometricPrecision" ');
+      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=toSvg(fixture.deck, slideIndex + 1,options).replace('<svg ',rendering==='default'?'<svg ':'<svg text-rendering="geometricPrecision" ');
       assert.equal(JSON.stringify(fixture.deck),source);
       const items=bound.geometry.items.filter(item=>item.field==='text'&&item.text?.richLines);assert.ok(items.length);
       const expected=items.map(item=>({path:item.path,source:item.value,lines:item.text.richLines}));

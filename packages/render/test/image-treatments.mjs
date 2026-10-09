@@ -6,7 +6,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSlideSvg, svgToPng } from '../dist/index.js';
+import { toSvg, toPng } from '../dist/index.js';
 import { TREATMENTS, samplePicture, treatmentDocument } from './fixtures/image-treatments.mjs';
 
 const directory = new URL('./fixtures/image-treatments-0.14/', import.meta.url);
@@ -24,7 +24,7 @@ for (const treatment of TREATMENTS) {
   const slug = treatment.slug, expected = reference.treatments[slug];
   const document = treatmentDocument(treatment, picture);
   const diagnostics = [];
-  const svg = renderSlideSvg(document, 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg(document, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.deepEqual(diagnostics.filter(entry => entry.code.startsWith('unresolved-')).map(entry => entry.code), [], `${slug}: a self-contained treatment resolves everything`);
 
   // Geometry: the headings and the body compose in the same boxes, and the picture has the same frame and outlines.
@@ -48,7 +48,7 @@ for (const treatment of TREATMENTS) {
   }
 
   // Pixels: exactly the 0.14 render at the same scale, with the bundled fonts.
-  const actual = await pixels(await svgToPng(svg, { scale: reference.scale }));
+  const actual = await pixels(await toPng(svg, { scale: reference.scale }));
   const wanted = await pixels(readFileSync(new URL(`${slug}.png`, directory)));
   assert.deepEqual([actual.info.width, actual.info.height], [wanted.info.width, wanted.info.height], `${slug}: raster size`);
   let differing = 0, worst = 0;
@@ -60,7 +60,7 @@ for (const treatment of TREATMENTS) {
     failures.push(`${slug}: ${differing} channel values differ (largest ${worst})`);
     const out = new URL('../artifacts/image-treatments/', import.meta.url);
     mkdirSync(out, { recursive: true });
-    writeFileSync(new URL(`${slug}.0.15.png`, out), await svgToPng(svg, { scale: reference.scale }));
+    writeFileSync(new URL(`${slug}.0.15.png`, out), await toPng(svg, { scale: reference.scale }));
     writeFileSync(new URL(`${slug}.svg`, out), svg);
   }
   checked++;

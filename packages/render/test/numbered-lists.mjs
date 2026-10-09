@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 // The decks name the gallery font scheme roboto: render with the host catalog registered.
-import {renderSvg, resolvePresentation, renderSlideSvg} from './catalog-harness.mjs';
+import {toSvg, resolvePresentation} from './catalog-harness.mjs';
 
 // RR-33: numbered lists. The preview draws the number core composed (marker.text) at core's marker geometry
 // (marker.x, marker.y, marker.fontSize) with the weight and slant core measured it at; bullets are untouched.
@@ -25,7 +25,7 @@ const markers = svg => [...svg.matchAll(/<text\b([^>]*\baria-hidden="true"[^>]*)
 let drawn = 0, numbered = 0;
 const resolved = resolvePresentation(deck);
 for (const bound of resolved.slides) {
-  const svg = renderSlideSvg(deck, bound.index);
+  const svg = toSvg(deck, bound.index + 1);
   const entries = bound.geometry.items.filter(item => item.text?.listEntries).flatMap(item => item.text.listEntries);
   const drawnMarkers = markers(svg);
   assert.equal(drawnMarkers.length, entries.length, `slide ${bound.index}: one marker per list entry`);
@@ -53,14 +53,14 @@ assert.equal(numbered, 9 + 4 + 7 + 8 + 4 + 3, 'every numbered entry was drawn');
 assert.equal(drawn, numbered + 2);
 
 // The numbers themselves, read from the SVG.
-const text = index => markers(renderSlideSvg(deck, index)).map(marker => marker.text);
+const text = index => markers(toSvg(deck, index + 1)).map(marker => marker.text);
 assert.deepEqual(text(0), ['1.', '2.', '3.', 'I.', 'II.', 'III.', 'a.', 'b.', 'c.']);
 assert.deepEqual(text(1), ['C)', 'D)', 'E)', 'F)']);
 assert.deepEqual(text(2), ['1.', 'a)', 'b)', '(i)', '2.', 'a)', '3.']);
 assert.deepEqual(text(3), ['(viii)', '(ix)', '(x)', '(xi)', '(xii)', '(xiii)', '(xiv)', '(xv)']);
 assert.deepEqual(text(4), ['1.', '2.', '6.', '7.', '•', '•']);
 assert.deepEqual(text(5), ['1.', '2.', '3.']);
-const bold = markers(renderSlideSvg(deck, 5));
+const bold = markers(toSvg(deck, 6));
 assert.deepEqual(bold.map(marker => [marker.weight, marker.style]), [['700', undefined], [undefined, 'italic'], [undefined, undefined]]);
 
 // Wide markers never touch their text: the text starts after the widest marker plus a gap.
@@ -70,11 +70,11 @@ assert.deepEqual(bold.map(marker => [marker.weight, marker.style]), [['700', und
   for (const entry of wide.text.listEntries) assert.ok(entry.marker.x + widest < entry.textBox.x, 'the text starts after the widest marker');
 }
 
-// The same deck renders the same through renderSvg, and a deck without numbering draws bullets exactly as before.
-assert.equal(renderSvg(deck)[1], renderSlideSvg(deck, 1));
+// The same deck renders the same through toSvg, and a deck without numbering draws bullets exactly as before.
+assert.equal(toSvg(deck)[1], toSvg(deck, 2));
 const plain = {design: {fontScheme: 'roboto'}, slides: [{title: 'Plain', items: ['One', {text: 'Two', level: 1}, 'Three']}]};
 const withUndefined = {design: {fontScheme: 'roboto'}, slides: [{title: 'Plain', items: ['One', {text: 'Two', level: 1}, 'Three'], numbering: undefined}]};
-assert.equal(renderSlideSvg(plain, 0), renderSlideSvg(withUndefined, 0));
-assert.deepEqual(markers(renderSlideSvg(plain, 0)).map(marker => marker.text), ['•', '◦', '•']);
+assert.equal(toSvg(plain, 1), toSvg(withUndefined, 1));
+assert.deepEqual(markers(toSvg(plain, 1)).map(marker => marker.text), ['•', '◦', '•']);
 
 console.log(`Numbered lists passed: ${numbered} numbers drawn at core's marker geometry (text, position, size, weight, slant), bullets unchanged.`);

@@ -4,7 +4,7 @@ import { isTrueTypeOutlines, subsetTrueType } from "./pdf-subset.js";
 import { hex, name, num, sha256, textString, utf16Hex } from "./pdf-writer.js";
 
 // Font selection, shaping and embedding for the vector PDF export (RR-12). Fonts come only from the faces the
-// caller supplies (the same bundled font files, `fontFiles` and `fontDirs` the PNG preview draws with, and the
+// caller supplies (the same bundled font files, fonts handle or font folders the PNG preview draws with, and the
 // `@font-face` data of the SVG itself); nothing is read from the system and nothing is fetched. A face whose
 // OS/2 embedding bits forbid embedding is never embedded.
 

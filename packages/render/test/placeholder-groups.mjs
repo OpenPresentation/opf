@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { chartPrimaryLayout, composeSlide } from '@openpresentation/opf/composition';
-import { renderSlideSvg, resolvePresentation } from '../dist/svg.js';
+import { toSvg, resolvePresentation } from '../dist/svg.js';
 
 const deck = JSON.parse(readFileSync(new URL('./fixtures/placeholder-groups.opf.json', import.meta.url), 'utf8'));
 const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
@@ -35,7 +35,7 @@ for (const [index, slide] of deck.slides.entries()) {
   assert.deepEqual(drawn.items.map((item) => [item.path, item.box]), geometry.items.map((item) => [item.path, item.box]), `${slide.id}: the renderer composes like core`);
   assert.deepEqual(drawn.slots, geometry.slots, `${slide.id}: slots`);
   if (slide.layout) assert.ok(drawn.slots?.length, `${slide.id}: composes through the record's placeholder groups`);
-  const svg = renderSlideSvg(deck, index, { trace: true });
+  const svg = toSvg(deck, index + 1, { trace: true });
   for (const item of drawn.items.filter((entry) => !headings.has(entry.field))) {
     if (item.field === 'items') {
       // A list draws one traced group per entry; the first entry's first line starts at the box top.

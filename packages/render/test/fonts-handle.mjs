@@ -1,10 +1,10 @@
 // RR-55: one fonts handle. `loadFonts()` returns { textMeasurement, embeddedFonts, fontFiles, useBundledFonts, loadSystemFonts, registry, outlines (RR-64),
-// manifest, substitutions, ensure, pending }; every deck-level function takes it as `{ fonts }`; `renderSvg` draws the deck and
-// `renderSlideSvg` one slide.
+// manifest, substitutions, ensure, pending }; every deck-level function takes it as `{ fonts }`; `toSvg` draws the deck and
+// `toSvg` one slide.
 import assert from 'node:assert/strict';
 import { OPFFontError } from '../dist/fonts.js';
 import { loadFonts } from '../dist/fonts-node.js';
-import { OPFRenderError, renderSlideSvg, renderSvg, svgToPdf, svgToPng } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { OPFRenderError, toSvg, toPdf, toPng } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const deck = { name: 'Handle', design: { fontScheme: 'roboto' }, slides: [{ title: 'One', text: 'First slide' }, { title: 'Two', text: 'Second slide' }, { title: 'Three', items: ['a', 'b'] }] };
 const fonts = await loadFonts();
@@ -29,34 +29,34 @@ await assert.rejects(loadFonts({ pack: 'nope' }), { code: 'invalid-font-pack' })
 }
 
 // The deck and the slide.
-const slides = renderSvg(deck, { fonts });
+const slides = toSvg(deck, { fonts });
 assert.equal(Array.isArray(slides), true);
 assert.equal(slides.length, 3);
-for (const [index, svg] of slides.entries()) assert.equal(renderSlideSvg(deck, index, { fonts }), svg, `slide ${index}`);
-assert.throws(() => renderSlideSvg(deck, 3, { fonts }), (error) => error instanceof OPFRenderError && error.code === 'slide-index-out-of-range' && error.details.slideCount === 3);
-assert.throws(() => renderSlideSvg(deck, -1, { fonts }), { code: 'slide-index-out-of-range' });
-assert.equal(typeof renderSlideSvg(deck, 0), 'string');
+for (const [index, svg] of slides.entries()) assert.equal(toSvg(deck, index + 1, { fonts }), svg, `slide ${index}`);
+assert.throws(() => toSvg(deck, 4, { fonts }), (error) => error instanceof OPFRenderError && error.code === 'slide-out-of-range' && error.details.slideCount === 3);
+assert.throws(() => toSvg(deck, (-1) + 1, { fonts }), { code: 'slide-out-of-range' });
+assert.equal(typeof toSvg(deck, 1), 'string');
 // An invalid deck throws one error whose findings are core's.
-assert.throws(() => renderSvg({ slides: 'not an array' }), (error) => error.code === 'invalid-opf' && error.findings.length > 0 && error.findings.every((finding) => finding.severity === 'error' && typeof finding.ruleId === 'string') && error.details.findings === error.findings && error.details.report.valid === false);
+assert.throws(() => toSvg({ slides: 'not an array' }), (error) => error.code === 'invalid-opf' && error.findings.length > 0 && error.findings.every((finding) => finding.severity === 'error' && typeof finding.ruleId === 'string') && error.details.findings === error.findings && error.details.report.valid === false);
 // The measurement and the faces of the handle are what the SVG uses: embedding follows `fonts.embeddedFonts`.
 assert.match(slides[0], /@font-face/);
-assert.doesNotMatch(renderSlideSvg(deck, 0, { fonts: { textMeasurement: fonts.textMeasurement } }), /@font-face/);
+assert.doesNotMatch(toSvg(deck, 1, { fonts: { textMeasurement: fonts.textMeasurement } }), /@font-face/);
 // A stale top-level option is not read; the handle is the only way in.
-assert.doesNotMatch(renderSlideSvg(deck, 0, { embeddedFonts: fonts.embeddedFonts }), /@font-face/);
+assert.doesNotMatch(toSvg(deck, 1, { embeddedFonts: fonts.embeddedFonts }), /@font-face/);
 
 // Conversions take the same handle.
-const png = await svgToPng(slides[0], { fonts, scale: 0.25 });
-assert.deepEqual(png, await svgToPng(slides[0], { scale: 0.25 }), 'the handle holds the bundled base faces the default draws with');
+const png = await toPng(slides[0], { fonts, scale: 0.25 });
+assert.deepEqual(png, await toPng(slides[0], { scale: 0.25 }), 'the handle holds the bundled base faces the default draws with');
 assert.equal(Buffer.from(png.subarray(1, 4)).toString(), 'PNG');
-const pdf = await svgToPdf(slides, { fonts });
+const pdf = await toPdf(slides, { fonts });
 assert.equal(Buffer.from(pdf.subarray(0, 4)).toString(), '%PDF');
-await assert.rejects(svgToPdf(slides, { fonts: { ...fonts, loadSystemFonts: true } }), { code: 'pdf-system-fonts-unsupported' });
+await assert.rejects(toPdf(slides, { fonts: { ...fonts, loadSystemFonts: true } }), { code: 'pdf-system-fonts-unsupported' });
 
 // ensure() and pending(): script faces the text needs are loaded on demand, once.
 {
   const base = await loadFonts();
   const japanese = { name: 'ja', language: 'ja', design: { fontScheme: 'roboto' }, slides: [{ title: '四半期レビュー', text: '売上は増加しました。' }] };
-  assert.throws(() => renderSvg(japanese, { fonts: base }), { code: 'missing-glyph' });
+  assert.throws(() => toSvg(japanese, { fonts: base }), { code: 'missing-glyph' });
   const needed = base.pending(japanese);
   assert.deepEqual(needed, ['@expo-google-fonts/noto-sans-jp']);
   const files = base.fontFiles.length, embedded = base.embeddedFonts.length;
@@ -66,8 +66,8 @@ await assert.rejects(svgToPdf(slides, { fonts: { ...fonts, loadSystemFonts: true
   assert.deepEqual(base.pending(japanese), []);
   assert.equal(base.fontFiles.length, files + 2, 'the files are in the handle for the raster');
   assert.equal(base.embeddedFonts.length, embedded, 'script faces are embedded only on request');
-  assert.match(renderSvg(japanese, { fonts: base })[0], /Noto Sans JP/);
+  assert.match(toSvg(japanese, { fonts: base })[0], /Noto Sans JP/);
   assert.deepEqual((await base.ensure(japanese)).scripts, [], 'nothing is loaded twice');
   await assert.rejects(base.ensure(null), { code: 'invalid-font-scripts' });
 }
-console.log('Fonts handle: shape, pack none, renderSvg and renderSlideSvg, findings on invalid decks, raster and PDF with the handle, ensure and pending.');
+console.log('Fonts handle: shape, pack none, toSvg and toSvg, findings on invalid decks, raster and PDF with the handle, ensure and pending.');

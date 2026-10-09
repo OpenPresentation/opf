@@ -1,7 +1,7 @@
 // FA-12: a quote's photo is drawn as an image clipped to the core circle frame, beside the footer lines; the role is a footer line.
 import assert from 'node:assert/strict';
 import {deflateSync} from 'node:zlib';
-import { resolvePresentation, renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { resolvePresentation, toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 
 const fonts=await loadFonts({pack:'office'});
@@ -18,7 +18,7 @@ const photo={src:`data:image/png;base64,${png(40,60).toString('base64')}`,alt:'P
 const quote={text:'We would rather spend a week on capacity than a month on an outage.',attribution:'Priya Raman',role:'Head of Platform, Acme',photo,source:'Interview'};
 const deck=(value,extra={})=>({design:{fontScheme:'roboto'},...extra,slides:[{title:'Customers',quote:value}]});
 const textMeasurement=fonts.textMeasurement;
-const render=(document,options={})=>{const diagnostics=[];const svg=renderSlideSvg(document, 0,{fonts:{textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item),...options});return {svg,diagnostics};};
+const render=(document,options={})=>{const diagnostics=[];const svg=toSvg(document, 1,{fonts:{textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item),...options});return {svg,diagnostics};};
 const attr=(source,name)=>new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(source)?.[1];
 
 // The photo: an <image> inside a clip group whose path is core's circle outline, at core's frame, cropped to cover.

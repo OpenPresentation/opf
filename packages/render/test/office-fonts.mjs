@@ -3,7 +3,7 @@ import {create} from 'fontkit';
 import {loadFonts} from '../dist/fonts-node.js';
 import {Resvg} from '@resvg/resvg-js';
 import sharp from 'sharp';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import {separateLigatures} from '../dist/font-compatibility.js';
 import {createFontRegistry} from '../dist/font-registry.js';
 import {FONT_COMPATIBILITY, fontPolicyFor} from '../dist/fonts.js';
@@ -76,7 +76,7 @@ for(const [weight,italic,name] of [[400,false,'Regular'],[700,false,'Bold'],[400
 }
 // The SVG says the same to browsers, only on text drawn with Gelasio.
 const deck=family=>({design:{fontScheme:{major:family,minor:family,code: 'Cousine'}},slides:[{title:'Office affine',text:'A finite field of flat office files. '.repeat(4)}]});
-const svgOf=family=>renderSlideSvg(deck(family), 0,{ fonts: {textMeasurement:metricOnly.textMeasurement}});
+const svgOf=family=>toSvg(deck(family), 1,{ fonts: {textMeasurement:metricOnly.textMeasurement}});
 const georgia=svgOf('Georgia'),calibri=svgOf('Calibri');
 assert.match(georgia,/<text[^>]*font-family="Gelasio, [a-z-]+"[^>]*style="[^"]*font-variant-ligatures:none;font-feature-settings:'liga' 0,'clig' 0"/);
 assert.doesNotMatch(georgia,/font-family="Georgia/);
@@ -84,14 +84,14 @@ assert.doesNotMatch(calibri,/font-variant-ligatures|font-feature-settings/);
 assert.deepEqual(georgia,svgOf('Georgia'));
 // Flow lines (estimated measurement): the outer text element carries no style; each tspan names its own family,
 // so a Cousine run inside a Gelasio-first line does not inherit ligatures:none.
-const flow=renderSlideSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Flow',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]}, 0,{});
+const flow=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Flow',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]}, 1,{});
 const flowText=flow.split('\n').find(line=>line.includes('office fluffy'));
 assert.match(flowText,/<text(?![^>]*font-variant-ligatures)[^>]*>/);
 assert.match(flowText,/<tspan[^>]*font-family="Gelasio[^"]*"[^>]*font-variant-ligatures:none[^>]*>office fluffy /);
 assert.match(flowText,/<tspan(?![^>]*font-variant-ligatures)[^>]*font-family="Cousine[^"]*"[^>]*>code ff/);
 // Nested script runs inside a Gelasio run go back to default shaping.
 {const scripts=await loadFonts({pack:'office',scripts:['Arab'],substitutionPolicy:'metric'});
-const mixed=renderSlideSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Mixed',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]}, 0, {fonts: scripts});
+const mixed=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Mixed',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]}, 1, {fonts: scripts});
 assert.match(mixed,/<text[^>]*font-variant-ligatures:none[^>]*>/);
 assert.match(mixed,/<tspan[^>]*font-family="[^"]*"[^>]*style="font-variant-ligatures:normal;font-feature-settings:normal"[^>]*>\u0633\u0644\u0627\u0645/);}}
 // Raster: resvg ignores the SVG properties, so the rasterizer separates the letters a ligature would join
@@ -105,7 +105,7 @@ const inkWidth=async png=>{const {data,info}=await sharp(png).greyscale().raw().
   for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++)if(data[y*info.width+x]<128){low=Math.min(low,x);high=Math.max(high,x);}
   return (high-low+1)/scale;};
 const ligated=await inkWidth(new Resvg(svg,{fitTo:{mode:'zoom',value:scale},font:{fontFiles:registry.fontFiles,defaultFontFamily:'Gelasio'}}).render().asPng());
-const separated=await inkWidth(await svgToPng(svg,{ fonts: {fontFiles:registry.fontFiles, useBundledFonts:false},scale}));
+const separated=await inkWidth(await toPng(svg,{ fonts: {fontFiles:registry.fontFiles, useBundledFonts:false},scale}));
 assert.ok(measured-ligated>3,`resvg alone ligates: ink ${ligated} vs measured ${measured}`);
 assert.ok(Math.abs(measured-separated)<1,`rasterizer closes the gap: ink ${separated} vs measured ${measured}`);
 assert.ok(!svg.includes('\u200C'),'the SVG itself is never changed');}

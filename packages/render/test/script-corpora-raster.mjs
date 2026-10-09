@@ -1,7 +1,7 @@
 // FF-44 (RR-17): the script corpora through the raster path (resvg-js, which draws PNG and the PDF built from it).
 // Each regular-weight sample is drawn twice with resvg from the same pinned face and compared:
 //   - reference: HarfBuzz (harfbuzzjs) shapes the text with the sample's language and every glyph is drawn as an SVG path;
-//   - drawn: the same text as an ordinary SVG <text> element through svgToPng, which rewrites complex-script text cluster by cluster
+//   - drawn: the same text as an ordinary SVG <text> element through toPng, which rewrites complex-script text cluster by cluster
 //     before resvg shapes it (src/raster-text.js).
 // Ink width and the mean absolute pixel difference of the two ink boxes say whether the raster equals HarfBuzz's shaping. Every script
 // must agree (ink width within 2 percent, mean pixel difference at most 40), except the fixture's `rasterLimits`:
@@ -15,7 +15,7 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as hb from 'harfbuzzjs';
-import {svgToPng} from '../dist/index.js';
+import {toPng} from '../dist/index.js';
 import {loadCorpora, loadFaces} from '../scripts/script-corpora.mjs';
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
@@ -57,7 +57,7 @@ for (const face of faces) {
       const reference = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><g fill="#000">${paths}</g></svg>`;
       const drawn = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><text x="${startX}" y="100" font-family="${face.family}" font-size="${SIZE}" ${rtl ? 'direction="rtl" ' : ''}xml:lang="${sample.lang}" xml:space="preserve" fill="#000">${escape(sample.text)}</text></svg>`;
       const options = { fonts: {fontFiles: [face.file], useBundledFonts: false}};
-      const [a, b] = await Promise.all([svgToPng(reference, options), svgToPng(drawn, options)]);
+      const [a, b] = await Promise.all([toPng(reference, options), toPng(drawn, options)]);
       const boxA = await ink(a), boxB = await ink(b);
       assert.ok(boxA && boxB, `${face.family} ${sample.id}: both renderings have ink`);
       const width = Math.max(boxA.width, boxB.width), height = Math.max(boxA.height, boxB.height);
@@ -91,4 +91,4 @@ for (const script of new Set(rows.map(row => row.script))) {
   }
 }
 console.log(summary.join('\n'));
-console.log(`Script corpora raster: ${rows.length} regular-weight samples through svgToPng; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ') || 'no script'} shaping; ${[...languageDependent].join(', ')} lang: punctuation forms).`);
+console.log(`Script corpora raster: ${rows.length} regular-weight samples through toPng; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ') || 'no script'} shaping; ${[...languageDependent].join(', ')} lang: punctuation forms).`);

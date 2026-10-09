@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {paginate} from '@openpresentation/opf/pagination';
-import {resolvePresentation, renderSvg, renderSlideSvg} from './catalog-harness.mjs';
+import {resolvePresentation, toSvg} from './catalog-harness.mjs';
 import {slideInfo} from '../src/deck-runtime.js';
 
 // FA-31: {{slide.number}}, {{slide.section}} and {{deck.slideCount}} are drawn from the substituted slide, in body text,
@@ -19,7 +19,7 @@ const deck = make('Short body.');
 const before = structuredClone(deck);
 
 // Unpaginated: the body token and the footer token draw the same number on every slide.
-const svgs = renderSvg(deck, {trace: true});
+const svgs = toSvg(deck, {trace: true});
 assert.deepEqual(deck, before, 'the input document is not changed');
 assert.ok(svgs[0].includes('This is slide 1 of 3 in Intro.'), 'body text carries the number, the count and the section');
 assert.ok(svgs[0].includes('Page 1 of 3'), 'the footer carries the same number and count');
@@ -32,11 +32,11 @@ assert.deepEqual(parts.map(part => [part.zone, part.field, part.text]), [['left'
 assert.deepEqual(parts[1].fields, [{type: 'slideNumber', start: 5, end: 6}]);
 
 // An escaped token is the literal text.
-const escaped = renderSlideSvg({slides: [{title: 'Escape', text: String.raw`Write \{{slide.number}} to show the slide number`}]}, 0);
+const escaped = toSvg({slides: [{title: 'Escape', text: String.raw`Write \{{slide.number}} to show the slide number`}]}, 1);
 assert.ok(escaped.includes('Write {{slide.number}} to show the slide number'));
 
 // A slide without a section draws empty text for {{slide.section}}.
-assert.ok(renderSlideSvg({slides: [{title: 'No section {{slide.section}}!'}]}, 0).includes('No section !'));
+assert.ok(toSvg({slides: [{title: 'No section {{slide.section}}!'}]}, 1).includes('No section !'));
 
 // Pagination: the slides core splits show consecutive numbers, and the count is the paginated count.
 const pages = paginate(make(long));
@@ -44,7 +44,7 @@ const paginated = pages.presentation;
 assert.ok(paginated.slides.length > 3, `the long slide paginates (${paginated.slides.length} slides)`);
 assert.ok(JSON.stringify(paginated).includes('{{deck.slideCount}}'), 'paginate returns the source tokens, not values');
 const count = paginated.slides.length;
-const rendered = renderSvg(paginated);
+const rendered = toSvg(paginated);
 assert.equal(rendered.length, count);
 const titles = [];
 rendered.forEach((svg, index) => {

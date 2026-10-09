@@ -6,7 +6,7 @@ import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
 import * as core from '@openpresentation/opf/composition';
-import {renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptTextMeasurement} from '../dist/fonts.js';
 
@@ -17,7 +17,7 @@ const EMOJI = {
 const NOTO_COLOR_EMOJI_ADVANCE = 1.2451;
 const prepared = await loadFonts({pack: 'office', scripts: ['Zsye', 'Zmth']}), {registry} = prepared;
 const deck = (id, title, design) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: `FF-45 ${id}`, slides: [{title, text: 'Body'}], ...(design ? {design} : {})});
-const render = document => renderSlideSvg(document, 0, { fonts: {...prepared, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(document, {catalogs}))}});
+const render = document => toSvg(document, 1, { fonts: {...prepared, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(document, {catalogs}))}});
 const cases = [
   {id: 'emoji-latin', document: deck('emoji-latin', `Launch ${EMOJI.rocket} ${EMOJI.family} ${EMOJI.flag} ${EMOJI.thumbsMedium}`)},
   {id: 'emoji-sequences', document: deck('emoji-sequences', `${EMOJI.keycap} ${EMOJI.heartVS16} ${EMOJI.scotland} ${EMOJI.womanTechnologist}`)},

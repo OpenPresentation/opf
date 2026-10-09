@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { loadFonts } from '../dist/fonts-node.js';
 import { loadFonts as loadBrowserFonts } from '../dist/fonts-browser.js';
 import { dataUrlFsType, fsTypeOf } from '../dist/font-fstype.js';
-import { renderSlideSvg } from '../dist/index.js';
+import { toSvg } from '../dist/index.js';
 
 const base = await loadFonts({ pack: 'base' });
 const described = base.registry.describeFaces(), exported = base.registry.exportFaces();
@@ -26,7 +26,7 @@ const deck = { name: 'Licensed', design: { fontScheme: 'x-one' }, catalogs: { cu
 const render = async (value, load = loadFonts, extra = {}) => {
   const fonts = await load({ pack: 'base', ...extra, faces: [{ data: withFsType(value), family: 'Host', weight: 400 }, { data: withFsType(value, 700), family: 'Host', weight: 700 }] });
   const diagnostics = [];
-  const svg = renderSlideSvg(deck, 0, { fonts, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
+  const svg = toSvg(deck, 1, { fonts, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
   return { svg, restricted: diagnostics.filter((diagnostic) => diagnostic.code === 'font-embedding-restricted').flatMap((diagnostic) => diagnostic.faces.map((face) => ({ ...face, message: diagnostic.message }))), fonts };
 };
 const hostFaces = (svg) => [...svg.matchAll(/@font-face\{font-family:"Host";font-weight:(\d+);[^}]*base64,([^"]+)"/g)].map(([, weight, base64]) => [Number(weight), base64.length]);
@@ -65,7 +65,7 @@ for (const value of [0, 0x0004, 0x0008, 0x0100]) {
 // Text as paths: a restricted run stays text and is still not embedded.
 {
   const fonts = await loadFonts({ pack: 'base', faces: [{ data: withFsType(0x0002), family: 'Host', weight: 400 }, { data: withFsType(0x0002, 700), family: 'Host', weight: 700 }] });
-  const svg = renderSlideSvg(deck, 0, { fonts, textAsPaths: true, onDiagnostic: () => {} });
+  const svg = toSvg(deck, 1, { fonts, text: "paths", onDiagnostic: () => {} });
   assert.match(svg, /<text [^>]*font-family="Host, sans-serif"[^>]*>Quarterly review<\/text>/, 'the restricted run stays text');
   assert.deepEqual(hostFaces(svg), [], 'and its face is not embedded');
 }

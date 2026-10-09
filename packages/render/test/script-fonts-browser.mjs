@@ -7,7 +7,7 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
 // The decks name gallery font schemes (meiryo, david, ...): render with the host catalog registered.
-import {renderSlideSvg} from './catalog-harness.mjs';
+import {toSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
 
 const prepared = await loadFonts({pack:'base',scripts:'all'}), {registry} = prepared;
@@ -33,7 +33,7 @@ const cases=[
   ['ka','ka','sylfaen','ქართული'],['fa','fa','arabic-typesetting','فارسی'],['ur','ur','arabic-typesetting','اردو'],['mr','mr','mangal','मराठी'],
   // Noto Sans Mongolian: fontkit cannot decode its GSUB type 8 lookup; the skipped lookup keeps Node advances equal to the browser's (FF-44).
   ['mn-Mong','mn','noto-sans-mongolian','ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ'],
-].map(([id,language,scheme,title])=>({id,language,title,svg:renderSlideSvg(deck(language,scheme,title), 0, {fonts: prepared})}));
+].map(([id,language,scheme,title])=>({id,language,title,svg:toSvg(deck(language,scheme,title), 1, {fonts: prepared})}));
 
 // Serve every loaded face from a local route; nothing else may load.
 const faces=registry.describeFaces(),files=prepared.fontFiles;

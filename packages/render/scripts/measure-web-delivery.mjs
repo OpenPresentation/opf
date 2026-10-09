@@ -9,8 +9,8 @@ import {gzipSync} from 'node:zlib';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadFonts} from '../dist/fonts-node.js';
-import {renderDeckHtml} from '../dist/element.js';
-import {renderSvg} from '../dist/svg.js';
+import {toHtml} from '../dist/element.js';
+import {toSvg} from '../dist/svg.js';
 import {copyPreviewFonts} from '../dist/preview-fonts-node.js';
 import {embed} from '@openpresentation/opf';
 import {defaultCatalog} from '@openpresentation/opf/catalog';
@@ -31,7 +31,7 @@ const fonts = await loadFonts({pack: 'office'});
 const payloads = {};
 for (const pack of ['base', 'office']) {
   const handle = pack === 'office' ? fonts : await loadFonts({pack});
-  const svg = renderSvg(deck, {fonts: handle})[0];
+  const svg = toSvg(deck, {fonts: handle})[0];
   payloads[pack] = {svgBytes: Buffer.byteLength(svg), svgGzipBytes: gzipSync(svg).length, fontRules: (svg.match(/@font-face/g) ?? []).length};
 }
 const entries = {
@@ -42,7 +42,7 @@ for (const [name, contents] of Object.entries(entries)) await writeFile(path.joi
 const built = await build({entryPoints: ['immediate', 'deferred'].map(name => path.join(output, `${name}.js`)), bundle: true, minify: true, splitting: true, format: 'esm', platform: 'browser', outdir: path.join(output, 'bundle'), metafile: true});
 assert.ok(!Object.keys(built.metafile.inputs).some(input => /sharp|resvg|fonts-node|raster\.js/.test(input)));
 copyPreviewFonts({outDir: path.join(output, 'opf-fonts')});
-const html = mode => renderDeckHtml(deck, {slides: 'all', fonts, fontMode: mode, embed: true, attributes: {id: 'deck', fonts: '/opf-fonts/'}});
+const html = mode => toHtml(deck, '1-', {fonts, fontMode: mode, embed: true, attributes: {id: 'deck', fonts: '/opf-fonts/'}});
 const shell = body => `<!doctype html><html lang="en"><meta charset="utf-8"><title>Delivery</title><style>body{margin:0}opf-deck{display:block;width:960px}figure svg{width:960px}opf-deck::part(viewport){border:0;border-radius:0}</style><body>${body}</body></html>`;
 const pages = {
   '/standalone': shell(html('standalone')),
@@ -98,7 +98,7 @@ try {
   const offlineContext = await browser.newContext({javaScriptEnabled: false, viewport: {width: 960, height: 900}});
   await offlineContext.setOffline(true);
   const offline = await offlineContext.newPage();
-  const svgUrl = `data:image/svg+xml;base64,${Buffer.from(renderSvg(deck, {fonts})[0]).toString('base64')}`;
+  const svgUrl = `data:image/svg+xml;base64,${Buffer.from(toSvg(deck, {fonts})[0]).toString('base64')}`;
   await offline.setContent(shell(`<img style="display:block;width:960px" src="${svgUrl}" alt="Offline slide">`));
   assert.deepEqual(await offline.locator('img').screenshot(), firstSlide, 'standalone image paints the same fonts with HTTP unavailable');
   report.offlineStandalonePixelMatch = true;

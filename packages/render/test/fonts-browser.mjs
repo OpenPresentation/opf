@@ -37,7 +37,7 @@ assert.equal(handle.embeddedFonts, handle.embeddedFonts, 'the embedded list is c
 assert.deepEqual(handle.substitutions, registry.substitutions);
 assert.equal(handle.fontFiles, undefined, 'a browser handle has no files');
 assert.deepEqual(handle.registry.exportFaces().map((face) => face.family), [registry.embeddedFonts[0].family]);
-// RR-64: the browser handle carries the outline engine `textAsPaths` draws with, over the same face bytes.
+// RR-64: the browser handle carries the outline engine `text: "paths"` draws with, over the same face bytes.
 {
   const { content, defs } = handle.outlines.outlineSlideText([`<text x="1" y="20" font-family="${source.family}" font-size="20">Hi</text>`], { fail: (code, message) => new Error(message) });
   assert.ok(/<use href="#opf-g-/.test(content[0]) && /<path id="opf-g-/.test(defs), "the browser handle outlines text");

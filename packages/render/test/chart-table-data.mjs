@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import * as core from '@openpresentation/opf/composition';
 // FA-23: the documents name the gallery's `roboto` font scheme, so the host catalog is registered.
-import {renderSlideSvg} from './catalog-harness.mjs';
+import {toSvg} from './catalog-harness.mjs';
 import { chartNumber, formatTick } from '../dist/charts.js';
 
 // RR-54: chart and table data in the preview. Strict chart numbers, number formats on data labels, value-axis ticks and table
@@ -18,7 +18,7 @@ const words = (svg) => [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map
 const paths = (svg) => [...svg.matchAll(/data-opf-path="([^"]*)"/g)].map(([, path]) => path);
 const LEGACY_TYPE = 'sketch';
 const drawsLegacyType = (document) => document.slides.some((slide) => [slide.chart, ...(slide.blocks ?? []).map((block) => block.chart)].some((chart) => chart?.type === LEGACY_TYPE));
-const render = (document, options = {}) => renderSlideSvg(document, 0, drawsLegacyType(document) ? { validate: false, ...options } : options);
+const render = (document, options = {}) => toSvg(document, 1, drawsLegacyType(document) ? { validate: false, ...options } : options);
 const doc = (slide, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [slide], ...extra });
 const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 

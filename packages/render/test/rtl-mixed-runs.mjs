@@ -8,7 +8,7 @@
 //      when a fallback face covers every character it replaces every glyph of the chunk with that face's.
 // Offline and deterministic: the office pack with the Arabic script faces (Noto Naskh Arabic previews Arabic Typesetting).
 import assert from 'node:assert/strict';
-import {catalogs, renderSvg} from './catalog-harness.mjs';
+import {catalogs, toSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
 
 const deck = {
@@ -22,7 +22,7 @@ const deck = {
   ],
 };
 const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, renderOptions: {catalogs}});
-const [paragraphSvg, listSvg] = renderSvg(structuredClone(deck), {fonts, trace: true});
+const [paragraphSvg, listSvg] = toSvg(structuredClone(deck), {fonts, trace: true});
 
 const ARABIC = /\p{Script=Arabic}/u, LATIN = /[A-Za-z0-9]/;
 const ISOLATES = /[⁦-⁩]/gu;

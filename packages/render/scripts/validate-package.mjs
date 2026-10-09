@@ -27,14 +27,13 @@ assert.equal(pkg.publishConfig?.access, "public");
 assert.ok(pkg.name.startsWith("@openpresentation/"));
 assert.ok(pkg.repository?.url?.includes("github.com/OpenPresentation/"));
 assert.ok(deps["@openpresentation/opf"], "Must declare compatibility with @openpresentation/opf");
-assert.equal(typeof api.renderSvg, "function");
-assert.equal(typeof api.renderSlideSvg, "function");
+assert.equal(typeof api.toSvg, "function");
 assert.equal(typeof api.resolvePresentation, "function");
-assert.equal(typeof api.svgToPng, "function");
-assert.equal(typeof api.svgToPdf, "function");
+assert.equal(typeof api.toPng, "function");
+assert.equal(typeof api.toPdf, "function");
 const browserExport = await import(new URL("../dist/export-browser.js", import.meta.url));
-assert.equal(typeof browserExport.svgToPdf, "function");
-assert.equal(typeof browserExport.svgToPng, "function");
+assert.equal(typeof browserExport.toPdf, "function");
+assert.equal(typeof browserExport.toPng, "function");
 assert.equal(api.runtimePolicy.requiredNetworkCalls, false);
 assert.equal(api.runtimePolicy.deterministicLocalExecution, true);
 
@@ -43,7 +42,7 @@ for (const key of ["./player", "./element", "./element/define", "./preview-fonts
 assert.deepEqual(pkg.sideEffects, ["./dist/element-define.js"], "Only the tag registration file may have side effects");
 const element = await import(new URL("../dist/element.js", import.meta.url));
 assert.equal(typeof element.defineOpfDeck, "function");
-assert.equal(typeof element.renderDeckHtml, "function");
+assert.equal(typeof element.toHtml, "function");
 assert.equal(element.defineOpfDeck(), undefined);
 assert.equal(typeof (await import(new URL("../dist/player.js", import.meta.url))).present, "function");
 
@@ -56,8 +55,8 @@ for (const name of ["pdf-lib", "@resvg/resvg-js", "sharp"]) {
 for (const name of Object.keys(pkg.dependencies)) assert.ok(!name.startsWith("@expo-google-fonts/"), `${name} must be an optional peer, not a runtime dependency`);
 // RR-63: the format entries (`/svg`, `/png`, `/pdf`) resolve; /png and /pdf are the Node converters.
 for (const key of ["./svg", "./png", "./pdf"]) assert.ok(pkg.exports[key], `Missing export ${key}`);
-assert.equal(typeof (await import(new URL("../dist/png.js", import.meta.url))).svgToPng, "function");
-assert.equal(typeof (await import(new URL("../dist/pdf.js", import.meta.url))).svgToPdf, "function");
+assert.equal(typeof (await import(new URL("../dist/png.js", import.meta.url))).toPng, "function");
+assert.equal(typeof (await import(new URL("../dist/pdf.js", import.meta.url))).toPdf, "function");
 
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);

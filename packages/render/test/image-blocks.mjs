@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { composeSlide, fitImage } from '@openpresentation/opf/composition';
-import { svgToPng, renderSlideSvg } from '../dist/index.js';
+import { toPng, toSvg } from '../dist/index.js';
 
 // A core without image block geometry is a pinning error, not a reason to skip.
 assert.ok(composeSlide({ blocks: [{ type: 'image', image: 'data:image/png;base64,AA' }] }).items.find(item => item.field === 'image')?.image?.shape,
@@ -37,7 +37,7 @@ let checked = 0;
 // Fit: cover (the default), contain and stretch draw in the frame (item.image.box) with the matching preserveAspectRatio.
 for (const [fit, aspect] of [[undefined, 'xMidYMid slice'], ['cover', 'xMidYMid slice'], ['contain', 'xMidYMid meet'], ['stretch', 'none']]) {
   const deck = deckWith({ image: split, ...(fit ? { fit } : {}) });
-  const item = imageOf(deck), svg = renderSlideSvg(deck, 0, { trace: true });
+  const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   const tag = imageTag(svg);
   assert.equal(item.image.fit, fit ?? 'cover');
   assert.deepEqual(['x', 'y', 'width', 'height'].map(name => Number(attr(tag, name))), ['x', 'y', 'width', 'height'].map(key => item.image.box[key]), `${fit}: frame`);
@@ -46,13 +46,13 @@ for (const [fit, aspect] of [[undefined, 'xMidYMid slice'], ['cover', 'xMidYMid 
   checked++;
 }
 // design.imageFit is the default for blocks without fit.
-assert.equal(attr(imageTag(renderSlideSvg(deckWith({ image: split }, { imageFit: 'contain' }), 0)), 'preserveAspectRatio'), 'xMidYMid meet');
+assert.equal(attr(imageTag(toSvg(deckWith({ image: split }, { imageFit: 'contain' }), 1)), 'preserveAspectRatio'), 'xMidYMid meet');
 checked++;
 
 // Focus: a cover crop away from the center places the whole picture by core's fit math and clips it to the frame.
 {
   const deck = deckWith({ image: split, focus: { x: 0, y: 0.5 } });
-  const item = imageOf(deck), svg = renderSlideSvg(deck, 0);
+  const item = imageOf(deck), svg = toSvg(deck, 1);
   const frame = item.image.box, placement = item.image.picture ?? fitImage(frame, 'cover', 2, { x: 0, y: 0.5 });
   const viewport = element(svg, 'svg', 'overflow="hidden"');
   assert.deepEqual(['x', 'y', 'width', 'height'].map(name => Number(attr(viewport, name))), ['x', 'y', 'width', 'height'].map(key => frame[key]));
@@ -61,7 +61,7 @@ checked++;
   assert.equal(Number(attr(tag, 'x')), Number((placement.image.x - frame.x).toFixed(3)), 'focus x = 0 keeps the left edge');
   assert.equal(Number(attr(tag, 'width')), Number(placement.image.width.toFixed(3)));
   // Raster: the left (red) half fills the frame.
-  const { data, info } = await sharp(await svgToPng(svg, { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(await toPng(svg, { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   const at = (x, y) => [...data.subarray((Math.round(y) * info.width + Math.round(x)) * info.channels, (Math.round(y) * info.width + Math.round(x)) * info.channels + 3)];
   // Each sampled point shows the half of the source the fit math puts there (red left, blue right); focus x = 0 keeps the red half in view.
   let sampled = 0;
@@ -83,7 +83,7 @@ checked++;
   const deck = deckWith({ image: './split.png', focus: { x: 0, y: 0.5 } });
   const item = imageOf(deck);
   assert.equal(item.image.picture, undefined, 'core reads no aspect from a relative path');
-  const tag = imageTag(renderSlideSvg(deck, 0, { imageResolver: src => src === './split.png' ? split : undefined }));
+  const tag = imageTag(toSvg(deck, 1, { imageResolver: src => src === './split.png' ? split : undefined }));
   const placement = fitImage(item.image.box, 'cover', 2, { x: 0, y: 0.5 });
   assert.equal(attr(tag, 'preserveAspectRatio'), 'none');
   assert.equal(Number(attr(tag, 'width')), Number(placement.image.width.toFixed(3)));
@@ -94,19 +94,19 @@ checked++;
 // Masks use exactly the core outline in a clipPath around the picture; rectangles need none.
 for (const shape of ['rounded', 'circle', 'hexagon']) {
   const deck = deckWith({ shape });
-  const item = imageOf(deck), svg = renderSlideSvg(deck, 0);
+  const item = imageOf(deck), svg = toSvg(deck, 1);
   const id = `opf-s1-image-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}-clip`;
   const clip = svg.match(new RegExp(`<clipPath id="${id}"><path d="([^"]+)"/></clipPath>`));
   assert.equal(clip?.[1], item.image.shape.path, shape);
   assert.match(svg, new RegExp(`<g clip-path="url\\(#${id}\\)"><image `));
   checked++;
 }
-assert.doesNotMatch(renderSlideSvg(deckWith({}), 0), /clipPath/);
+assert.doesNotMatch(toSvg(deckWith({}), 1), /clipPath/);
 
 // Border: centered stroke on the same outline, width scaled with the canvas; alpha as stroke-opacity.
 {
   const deck = deckWith({ shape: 'rounded', border: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
-  const item = imageOf(deck), stroke = element(renderSlideSvg(deck, 0), 'path', 'stroke=');
+  const item = imageOf(deck), stroke = element(toSvg(deck, 1), 'path', 'stroke=');
   assert.equal(attr(stroke, 'd'), item.image.shape.path);
   assert.equal(attr(stroke, 'stroke'), '#101820');
   assert.equal(Number(attr(stroke, 'stroke-opacity')), Math.round(0x80 / 255 * 1e6) / 1e6);
@@ -119,7 +119,7 @@ assert.doesNotMatch(renderSlideSvg(deckWith({}), 0), /clipPath/);
 // Recolor matrices and pixel-only opacity, checked on raster output at the frame's center.
 async function framePixel(deck) {
   const item = imageOf(deck), box = item.image.box;
-  const { data, info } = await sharp(await svgToPng(renderSlideSvg(deck, 0), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(await toPng(toSvg(deck, 1), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   const x = Math.round((box.x + box.width / 2) * 0.25), y = Math.round((box.y + box.height / 2) * 0.25), at = (y * info.width + x) * info.channels;
   return [...data.subarray(at, at + 3)];
 }
@@ -133,7 +133,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
   // Opacity blends the pixels over what lies beneath (a white slide background here).
   const faint = await framePixel(deckWith({ opacity: 0.25 }, { background: { type: 'solid', color: '#FFFFFF' } }));
   faint.forEach((channel, i) => assert.ok(Math.abs(channel - (255 + (orange[i] - 255) * 0.25)) <= 1, `opacity ${i}: ${channel}`));
-  const svg = renderSlideSvg(deckWith({ recolor: 'grayscale', opacity: 0.12345 }), 0);
+  const svg = toSvg(deckWith({ recolor: 'grayscale', opacity: 0.12345 }), 1);
   assert.match(svg, /<g filter="url\(#opf-s1-image-[A-Za-z0-9-]+-recolor\)" opacity="0\.12345"><image /);
   assert.match(svg, /<filter color-interpolation-filters="sRGB" id="opf-s1-image-[A-Za-z0-9-]+-recolor"><feColorMatrix type="matrix" values="0\.299 0\.587 0\.114 0 0 0\.299 0\.587 0\.114 0 0 0\.299 0\.587 0\.114 0 0 0 0 0 1 0"\/>/);
   checked += 4;
@@ -142,7 +142,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 // Overlay: its outline over the picture and border, colour alpha times overlay opacity; an edge band covers only its edge.
 {
   const deck = deckWith({ border: { color: 'dark1', width: 2 }, overlay: { color: '#00000080', opacity: 0.5, edge: 'bottom', size: 0.25 } });
-  const item = imageOf(deck), svg = renderSlideSvg(deck, 0, { trace: true });
+  const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   const overlay = element(svg, 'path', 'data-opf-image-overlay');
   assert.equal(attr(overlay, 'd'), item.image.overlay.shape.path);
   assert.equal(attr(overlay, 'data-opf-image-overlay'), item.image.overlay.path);
@@ -157,7 +157,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 // An edge overlay on a non-rectangle frame is not drawn; core reports it.
 {
   const diagnostics = [];
-  const svg = renderSlideSvg(deckWith({ shape: 'circle', overlay: { color: '#000000', opacity: 0.5, edge: 'top' } }), 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg(deckWith({ shape: 'circle', overlay: { color: '#000000', opacity: 0.5, edge: 'top' } }), 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.doesNotMatch(svg, /fill-opacity/);
   assert.ok(diagnostics.some(entry => entry.code === 'unsupported-image-treatment' && entry.path === 'slides.0.blocks.0.overlay.edge'), JSON.stringify(diagnostics));
   checked++;
@@ -166,7 +166,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 // Placement: the picture fills its band edge to edge, the copy composes beside it, and the trace names the edge.
 {
   const deck = deckWith({ image: split, placement: { edge: 'left', size: 0.45 } });
-  const item = imageOf(deck), svg = renderSlideSvg(deck, 0, { trace: true });
+  const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   assert.deepEqual(item.image.region, { x: 0, y: 0, width: 576, height: 720 });
   assert.deepEqual(item.image.box, item.image.region);
   assert.match(svg, /<g data-opf-image-placement="left">/);
@@ -180,9 +180,9 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 
 // Alt text comes from the Asset; an unresolved source draws the placeholder without treatments.
 {
-  assert.match(renderSlideSvg(deckWith({ image: { src: orangeUri, alt: 'Harbor at dusk' } }), 0), /aria-label="Harbor at dusk"/);
+  assert.match(toSvg(deckWith({ image: { src: orangeUri, alt: 'Harbor at dusk' } }), 1), /aria-label="Harbor at dusk"/);
   const diagnostics = [];
-  const svg = renderSlideSvg({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', shape: 'circle', border: { color: '#000000', width: 4 }, overlay: { color: '#000000', opacity: 0.5 } }] }] }, 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', shape: 'circle', border: { color: '#000000', width: 4 }, overlay: { color: '#000000', opacity: 0.5 } }] }] }, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.doesNotMatch(svg, /clipPath|fill-opacity|stroke-miterlimit/);
   assert.ok(diagnostics.some(entry => entry.code === 'unresolved-asset' && entry.path === 'slides.0.blocks.0.image'), JSON.stringify(diagnostics));
   checked += 2;
@@ -190,7 +190,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 
 // Slide.image is shorthand for one image block and draws the same way.
 {
-  const svg = renderSlideSvg({ design: { colorScheme: { ...COLORS } }, slides: [{ title: 'Root', image: { src: split, alt: 'Split' } }] }, 0, { trace: true });
+  const svg = toSvg({ design: { colorScheme: { ...COLORS } }, slides: [{ title: 'Root', image: { src: split, alt: 'Split' } }] }, 1, { trace: true });
   assert.equal((svg.match(/<image\b/g) ?? []).length, 1);
   assert.match(imageTag(svg), /aria-label="Split"/);
   assert.match(imageTag(svg), /data-opf-path="slides\.0\.image"/);

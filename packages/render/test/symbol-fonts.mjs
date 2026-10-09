@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 import sharp from 'sharp';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import {BUNDLED_FONT_MANIFEST,autoScriptSelection,detectPresentationScripts,loadFonts} from '../dist/fonts-node.js';
 import * as coreSymbols from '@openpresentation/opf/symbol-font-encodings';
 import {createFontRegistry} from '../dist/font-registry.js';
@@ -202,14 +202,14 @@ assert.deepEqual(autoScriptSelection(deck([{text:'Plain'}],{design:{fonts:{headi
 
 // ---- SVG: mapped characters, open families, positioned glyphs, no private-use text, identical for both input forms ----
 const svgDiagnostics=[];
-const svg=renderSlideSvg(runDeck, 0,{fonts: prepared, onDiagnostic:diagnostic=>svgDiagnostics.push(diagnostic)});
+const svg=toSvg(runDeck, 1,{fonts: prepared, onDiagnostic:diagnostic=>svgDiagnostics.push(diagnostic)});
 assert.ok(!/[-]/.test(svg),'no private-use character reaches the SVG');
 assert.ok(!/font-family="[^"]*(Wingdings|Webdings|Symbol\b)/.test(svg),'no proprietary family is named in the SVG');
 for(const character of ['✓','⚫','α','β','γ','\u{1F3D7}'])assert.ok(svg.includes(character),`the SVG draws ${character}`);
 assert.ok(/<tspan font-family="'Noto Sans Symbols 2', sans-serif"[^>]*>✓<\/tspan>/.test(svg),'the Wingdings check mark is a positioned Noto Sans Symbols 2 tspan (the name quoted: a digit-leading word is invalid unquoted CSS)');
 assert.ok(!/font-family="[^"']*Noto Sans Symbols 2/.test(svg),'a family with a digit-leading word is never written unquoted');
 const plainDeck=deck([{text:'Check: '},{text:'ül l',fontFamily:'Wingdings'},{text:' alpha '},{text:'abg',fontFamily:'Symbol'},{text:' web '},{text:'A',fontFamily:'Webdings'}]);
-assert.equal(renderSlideSvg(plainDeck, 0, {fonts: prepared}),svg,'the Windows-1252 form renders byte-identically to the private-use form');
+assert.equal(toSvg(plainDeck, 1, {fonts: prepared}),svg,'the Windows-1252 form renders byte-identically to the private-use form');
 const symbolNotes=svgDiagnostics.filter(diagnostic=>diagnostic.code==='font-glyph-fallback'&&diagnostic.scripts.includes(SYMBOL_SCRIPT));
 assert.deepEqual(symbolNotes.map(note=>[note.fontFamily,note.fallbackFamily,note.codes]),[['Wingdings','Noto Sans Symbols 2',['FC','6C']],['Symbol','Noto Sans',['61','62','67']],['Webdings','Noto Sans Symbols 2',['41']]]);
 assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview draws codes such as 0xFC, 0x6C as their Unicode equivalents with 'Noto Sans Symbols 2'\. The PPTX keeps the chosen font and the original codes\./);
@@ -226,7 +226,7 @@ assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview
 // A placeholder code (Wingdings 0xFF, the Windows logo) draws U+25A1 and is reported with its code.
 {
   const logoDiagnostics=[];
-  const logo=renderSlideSvg(deck([{text:'',fontFamily:'Wingdings'}]), 0,{fonts: prepared, onDiagnostic:diagnostic=>logoDiagnostics.push(diagnostic)});
+  const logo=toSvg(deck([{text:'',fontFamily:'Wingdings'}]), 1,{fonts: prepared, onDiagnostic:diagnostic=>logoDiagnostics.push(diagnostic)});
   assert.ok(logo.includes(SYMBOL_PLACEHOLDER));
   const note=logoDiagnostics.find(diagnostic=>diagnostic.code==='font-glyph-fallback'&&diagnostic.placeholder);
   assert.deepEqual([note.fontFamily,note.codes,note.placeholder],['Wingdings',['FF'],SYMBOL_PLACEHOLDER]);
@@ -235,8 +235,8 @@ assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview
 
 // ---- raster: the glyphs leave ink where the text sits ----
 {
-  const png=await svgToPng(svg,{fonts:prepared});
-  const blank=await svgToPng(renderSlideSvg(deck([{text:'Check: '},{text:'   ',fontFamily:'Roboto'},{text:' alpha '},{text:'   '},{text:' web '},{text:' '}]), 0, {fonts: prepared}),{fonts:prepared});
+  const png=await toPng(svg,{fonts:prepared});
+  const blank=await toPng(toSvg(deck([{text:'Check: '},{text:'   ',fontFamily:'Roboto'},{text:' alpha '},{text:'   '},{text:' web '},{text:' '}]), 1, {fonts: prepared}),{fonts:prepared});
   const a=await sharp(png).raw().toBuffer({resolveWithObject:true}),b=await sharp(blank).raw().toBuffer({resolveWithObject:true});
   assert.deepEqual(a.info,b.info);
   let differing=0;for(let index=0;index<a.data.length;index+=a.info.channels){if(a.data[index]!==b.data[index]||a.data[index+1]!==b.data[index+1]||a.data[index+2]!==b.data[index+2])differing++;}

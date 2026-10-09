@@ -23,7 +23,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/extra-lazy-fonts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {toSvg} from './dist/svg.js';window.opf={loadBrowserFonts,toSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
@@ -76,8 +76,8 @@ try {
   }, {startup: {family: startup[0].family, weight: startup[0].weight, italic: startup[0].italic}, extras, decks, catalog});
 
   const state = deckName => page.evaluate(async deckName => {
-    const registry = window.registry, {renderSlideSvg} = window.opf;
-    const host = document.querySelector('main'); host.innerHTML = renderSlideSvg(window.decks[deckName], 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
+    const registry = window.registry, {toSvg} = window.opf;
+    const host = document.querySelector('main'); host.innerHTML = toSvg(window.decks[deckName], 1, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     await document.fonts.ready;
     const family = value => value.split(',')[0].trim().replace(/^"|"$/g, '');
     const runs = [...host.querySelectorAll('text[textLength], tspan[textLength]')].map(element => {

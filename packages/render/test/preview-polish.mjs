@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 // The decks name gallery records (the roboto font scheme, every gallery colour scheme), so the host catalog is registered.
-import {defaultCatalog, renderSlideSvg} from './catalog-harness.mjs';
+import {defaultCatalog, toSvg} from './catalog-harness.mjs';
 import {PATTERN_PRESETS, patternBitmap, patternRuns, colorContrast, metricTrendColor, resolveCodeLanguage} from '@openpresentation/opf/composition';
 
 // RR-07: the preview draws code.language syntax colours, metric.trend arrows and every DrawingML preset pattern.
@@ -19,7 +19,7 @@ const runsOf = content => [...content.matchAll(/<tspan\b([^>]*)>([^<]*)<\/tspan>
 const lineText = content => decode(content.replace(/<\/?tspan\b[^>]*>/g, ''));
 
 {
-  const svg = renderSlideSvg(codeDeck({source: SOURCE, language: 'python', filename: 'greet.py'}), 0, {trace: true});
+  const svg = toSvg(codeDeck({source: SOURCE, language: 'python', filename: 'greet.py'}), 1, {trace: true});
   const lines = bodyLines(svg);
   assert.deepEqual(lines.map(lineText), ['def greet(name):', '    # say hi', '    return "Hello, " + name + str(42)'], 'Highlighting keeps the code text exact');
   const colours = new Map(lines.flatMap(runsOf).filter(([, fill]) => fill).map(([text, fill]) => [text, fill]));
@@ -40,7 +40,7 @@ const lineText = content => decode(content.replace(/<\/?tspan\b[^>]*>/g, ''));
 
 // Unknown or missing languages are plain: no fill on any tspan, and the same markup as a deck without a language label.
 for (const language of ['klingon', 'plaintext', undefined]) {
-  const svg = renderSlideSvg(codeDeck(language ? {source: SOURCE, language} : SOURCE), 0, {trace: true});
+  const svg = toSvg(codeDeck(language ? {source: SOURCE, language} : SOURCE), 1, {trace: true});
   assert.ok(!/<tspan\b[^>]*\bfill=/.test(svg), `${language ?? 'no language'}: plain`);
 }
 assert.equal(resolveCodeLanguage('klingon'), undefined);
@@ -49,7 +49,7 @@ assert.equal(resolveCodeLanguage('klingon'), undefined);
 const colorSchemeIds = Object.keys(defaultCatalog.colorSchemes);
 assert.ok(colorSchemeIds.length > 0, 'the gallery has colour schemes');
 for (const scheme of [...colorSchemeIds, {light1: '#000000', dark1: '#000000', accent1: '#000000', accent2: '#000000', accent3: '#000000'}, {light1: '#FFFFFF', dark1: '#FFFFFF', accent1: '#FFFFFF', accent2: '#FFFFFF', accent3: '#FFFFFF'}]) {
-  const svg = renderSlideSvg(codeDeck({source: SOURCE + '\nclass Box(Base): pass\n@dec\nTrue', language: 'python'}, {colorScheme: scheme}), 0);
+  const svg = toSvg(codeDeck({source: SOURCE + '\nclass Box(Base): pass\n@dec\nTrue', language: 'python'}, {colorScheme: scheme}), 1);
   const fills = new Set([...svg.matchAll(/<tspan fill="(#[0-9A-F]{6})"/g)].map(match => match[1]));
   assert.ok(fills.size >= 6, `${JSON.stringify(scheme)}: distinct token colours`);
   for (const fill of fills) assert.ok(colorContrast(fill, PANEL) >= 4.5, `${fill} on the code panel (${JSON.stringify(scheme)})`);
@@ -58,7 +58,7 @@ for (const scheme of [...colorSchemeIds, {light1: '#000000', dark1: '#000000', a
 // A multi-line string and CRLF source split into per-line spans without changing the text.
 {
   const source = 'x = """a\r\nb"""\r\n';
-  const lines = bodyLines(renderSlideSvg(codeDeck({source, language: 'py'}), 0, {trace: true}));
+  const lines = bodyLines(toSvg(codeDeck({source, language: 'py'}), 1, {trace: true}));
   assert.deepEqual(lines.map(lineText), ['x = """a', 'b"""']);
   assert.ok(lines[1].includes('fill='), 'the string continues on the next line in colour');
 }
@@ -69,7 +69,7 @@ const arrows = svg => [...svg.matchAll(/<g aria-label="([^"]*)" role="img"><poly
   .map(([, label, fill, points]) => ({label, fill, points: points.split(' ').map(pair => pair.split(',').map(Number))}));
 for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['flat', 'rightArrow']]) {
   for (const design of [{colorScheme: 'cool-horizon', background: '#FFFFFF'}, {background: '#0F172A', colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}}]) {
-    const svg = renderSlideSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%', trend}, design), 0, {trace: true});
+    const svg = toSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%', trend}, design), 1, {trace: true});
     const found = arrows(svg);
     assert.equal(found.length, 1, `${trend}: one arrow`);
     assert.equal(found[0].label, `Trend: ${trend}`);
@@ -85,9 +85,9 @@ for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['fla
     assert.ok(svg.includes(`>${trend}</tspan>`), 'the trend word is still drawn');
   }
 }
-assert.notEqual(arrows(renderSlideSvg(metricDeck({value: 1, trend: 'up'}), 0))[0].fill, arrows(renderSlideSvg(metricDeck({value: 1, trend: 'down'}), 0))[0].fill);
-assert.equal(arrows(renderSlideSvg(metricDeck({value: 42, label: 'Latency', delta: '+3'}), 0)).length, 0, 'no trend, no arrow');
-assert.equal(arrows(renderSlideSvg(metricDeck(42), 0)).length, 0);
+assert.notEqual(arrows(toSvg(metricDeck({value: 1, trend: 'up'}), 1))[0].fill, arrows(toSvg(metricDeck({value: 1, trend: 'down'}), 1))[0].fill);
+assert.equal(arrows(toSvg(metricDeck({value: 42, label: 'Latency', delta: '+3'}), 1)).length, 0, 'no trend, no arrow');
+assert.equal(arrows(toSvg(metricDeck(42), 1)).length, 0);
 
 // ---------------------------------------------------------------- patterns
 const patternDeck = (preset, extra = {}) => ({design: {fontScheme: 'roboto', background: {type: 'pattern', pattern: {preset, foregroundColor: '#112233', backgroundColor: '#FFEECC', ...extra}}}, slides: [{title: 'Pattern'}]});
@@ -99,7 +99,7 @@ const drawn = svg => {
 assert.equal(PATTERN_PRESETS.length, 54);
 for (const preset of [...PATTERN_PRESETS, 'diagStripe']) {
   const diagnostics = [];
-  const svg = renderSlideSvg(patternDeck(preset), 0, {onDiagnostic: item => diagnostics.push(item)});
+  const svg = toSvg(patternDeck(preset), 1, {onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.filter(item => item.code === 'unsupported-pattern'), [], `${preset} is drawn`);
   const found = drawn(svg);
   assert.ok(found, `${preset}: bitmap path`);
@@ -111,7 +111,7 @@ for (const preset of [...PATTERN_PRESETS, 'diagStripe']) {
 assert.deepEqual(patternBitmap('diagStripe'), patternBitmap('wdUpDiag'));
 {
   const diagnostics = [];
-  renderSlideSvg(patternDeck('engine-defined-id'), 0, {onDiagnostic: item => diagnostics.push(item)});
+  toSvg(patternDeck('engine-defined-id'), 1, {onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.map(item => item.code), ['unsupported-pattern'], 'an unknown id still reports once and keeps the background colour');
 }
 console.log(`RR-07 preview polish: code syntax colours (exact text, contrast >= 4.5 on ${colorSchemeIds.length + 2} schemes), metric trend arrows and colours, ${PATTERN_PRESETS.length + 1} pattern presets drawn from the core bitmaps.`);

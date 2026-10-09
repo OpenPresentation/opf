@@ -89,7 +89,7 @@ class Converter {
         this.reported.add(key);
         this.unsupported(d.code, d.message, { fontFamily: d.fontFamily, codePoint: d.codePoint });
       },
-      unavailable: (families) => this.error("pdf-font-unavailable", `No embeddable font face is available for ${families.length ? `'${families.join("', '")}'` : "the requested text"}. Supply font files (fontFiles/fontDirs) or keep useBundledFonts enabled.`, {}),
+      unavailable: (families) => this.error("pdf-font-unavailable", `No embeddable font face is available for ${families.length ? `'${families.join("', '")}'` : "the requested text"}. Pass the fonts handle or font folders as fonts, or keep useBundledFonts enabled.`, {}),
     };
   }
 
@@ -1228,7 +1228,7 @@ async function listFonts(directory, { readdir, path }) {
 }
 
 /**
- * Convert SVG slides to a vector PDF. `options` carries the resolved conversion settings (see svgToPdf in raster.js).
+ * Convert SVG slides to a vector PDF. `options` carries the resolved conversion settings (see toPdf in raster.js).
  */
 export async function svgsToVectorPdf(svgs, options) {
   const converter = new Converter(options);

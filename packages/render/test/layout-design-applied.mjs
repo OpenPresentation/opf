@@ -6,7 +6,7 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as composition from '@openpresentation/opf/composition';
-import { resolvePresentation, renderSlideSvg } from './catalog-harness.mjs';
+import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 if (typeof composition.resolveDesignHints !== 'function') {
   console.log('Layout design applied skipped: the linked @openpresentation/opf has no resolveDesignHints (core before FA-17).');
@@ -29,7 +29,7 @@ const cases = [
 let checked = 0;
 for (const [name, deck, expected] of cases) {
   const bound = resolvePresentation(deck).slides[0];
-  const svg = renderSlideSvg(deck, 0, { trace: true });
+  const svg = toSvg(deck, 1, { trace: true });
   for (const field of ['title', 'subtitle', 'text']) {
     const item = bound.geometry.items.find(entry => entry.field === field);
     assert.equal(item.alignment, expected[field], `${name}: core ${field} alignment`);
@@ -45,7 +45,7 @@ const bound = resolvePresentation(deckOf(layout({ titleAlignment: 'center', cont
 assert.deepEqual({ ...bound.geometry.design.sources }, { titleAlignment: 'layout', contentAlignment: 'layout', contentBox: 'layout', imageFit: 'layout', listBullet: 'layout' });
 
 // contentBox: the layout asks for cards; the deck's false removes them and the slide's true adds them back.
-const cards = (deck) => [...renderSlideSvg(deck, 0, { trace: true }).matchAll(/<rect\b[^>]*data-opf-path="slides\.0\.text"/g)].length;
+const cards = (deck) => [...toSvg(deck, 1, { trace: true }).matchAll(/<rect\b[^>]*data-opf-path="slides\.0\.text"/g)].length;
 assert.equal(cards(deckOf(layout({ contentBox: true }))), 1, 'layout contentBox draws a card');
 assert.equal(cards(deckOf(layout({ contentBox: true }), {}, { contentBox: false })), 0, 'deck contentBox false removes it');
 assert.equal(cards(deckOf(layout({ contentBox: false }), { design: { contentBox: true } })), 1, 'slide contentBox true adds it');
@@ -54,7 +54,7 @@ assert.equal(cards(deckOf(layout({}))), 0, 'engine default draws no card');
 // imageFit (FA-22): cover covers the frame, contain shows the whole image, stretch fills it.
 const wide = `data:image/png;base64,${(await sharp({ create: { width: 160, height: 40, channels: 3, background: { r: 200, g: 30, b: 30 } } }).png().toBuffer()).toString('base64')}`;
 const aspect = (deck) => {
-  const image = [...renderSlideSvg(deck, 0, { trace: true }).matchAll(/<image\b[^>]*>/g)].map(match => match[0]).find(tag => attr(tag, 'data-opf-path') === 'slides.0.image');
+  const image = [...toSvg(deck, 1, { trace: true }).matchAll(/<image\b[^>]*>/g)].map(match => match[0]).find(tag => attr(tag, 'data-opf-path') === 'slides.0.image');
   return attr(image, 'preserveAspectRatio');
 };
 const imageDeck = (design, slide = {}, deckDesign = {}) => deckOf(layout(design, [{ type: 'title' }, { type: 'image' }]), { image: { src: wide, alt: 'Wide' }, ...slide }, deckDesign);
@@ -65,7 +65,7 @@ assert.equal(aspect(imageDeck({})), 'xMidYMid slice', 'engine default cover');
 
 // listBullet: the layout's picture bullets draw the deck's icon logo; the deck's character beats them.
 const listDeck = (design, deckDesign = {}) => deckOf(layout(design, [{ type: 'title' }, { type: 'list' }]), { text: undefined, items: ['One', 'Two'] }, { logo: { icon: wide }, ...deckDesign });
-const bullets = (deck) => [...renderSlideSvg(deck, 0, { trace: true }).matchAll(/<image\b[^>]*>/g)].length;
+const bullets = (deck) => [...toSvg(deck, 1, { trace: true }).matchAll(/<image\b[^>]*>/g)].length;
 assert.equal(bullets(listDeck({ listBullet: 'image' })), 2, 'layout picture bullets');
 assert.equal(bullets(listDeck({ listBullet: 'image' }, { listBullet: 'character' })), 0, 'deck character over layout image');
 assert.equal(bullets(listDeck({})), 0, 'engine default draws glyph markers');

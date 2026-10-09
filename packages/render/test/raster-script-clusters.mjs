@@ -1,11 +1,11 @@
 // RR-17 (FF-44): the raster path draws complex scripts cluster by cluster (src/raster-text.js). Covers the cluster segmentation, the
 // rewrite of hand-written SVG text (outlines for Devanagari, pinned clusters for Thai, text-anchor middle and end, textLength, nested
-// and positioned tspans, whitespace collapsing, what is left alone), real renderSvg output through svgToPng and svgToPdf with
+// and positioned tspans, whitespace collapsing, what is left alone), real toSvg output through toPng and toPdf with
 // loadFonts({pack: 'office', scripts: 'auto', presentation}) for Hindi, Thai, Myanmar, Korean and mixed Latin lines (ink width
 // equal to the measured advance, deterministic bytes), and that Latin output is byte-identical to resvg's own.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import {svgToPng, svgToPdf, renderSlideSvg} from '../dist/index.js';
+import {toPng, toPdf, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {clusterPieces, pinScriptClusters} from '../dist/raster-text.js';
 
@@ -120,7 +120,7 @@ for (const body of [
   assert.equal(await pinScriptClusters(svg, {fontFiles}), svg, body);
 }
 
-// Real renderer output: Hindi, Thai, Myanmar, Korean and a mixed line through svgToPng, each title's ink as wide as its measured advance
+// Real renderer output: Hindi, Thai, Myanmar, Korean and a mixed line through toPng, each title's ink as wide as its measured advance
 // (the SVG's textLength), with byte-identical repeated rasters; and the raster PDF.
 async function inkWidth(png, box) {
   const {data, info} = await sharp(png).extract(box).greyscale().raw().toBuffer({resolveWithObject: true});
@@ -138,9 +138,9 @@ const decks = [
 for (const [language, title, text] of decks) {
   const presentation = {$schema: 'https://openpresentation.org/schema/opf/v1', name: `Raster ${language}`, language, slides: [{title, text}]};
   const prepared = await loadFonts({pack: 'office', scripts: 'auto', presentation});
-  const svg = renderSlideSvg(presentation, 0, {fonts: prepared, trace: true});
-  const png = await svgToPng(svg, {fonts: prepared});
-  assert.deepEqual(png, await svgToPng(svg, {fonts: prepared}), `${language}: deterministic raster`);
+  const svg = toSvg(presentation, 1, {fonts: prepared, trace: true});
+  const png = await toPng(svg, {fonts: prepared});
+  assert.deepEqual(png, await toPng(svg, {fonts: prepared}), `${language}: deterministic raster`);
   for (const path of ['slides.0.title', 'slides.0.text']) {
     const group = new RegExp(`<g data-opf-box-height="([\\d.]+)" data-opf-box-width="([\\d.]+)" data-opf-box-x="([\\d.]+)" data-opf-box-y="([\\d.]+)" data-opf-path="${path.replace('.', '\\.')}"`).exec(svg);
     assert.ok(group, `${language}: ${path} box`);
@@ -153,17 +153,17 @@ for (const [language, title, text] of decks) {
     // Ink and advance differ by the side bearings of the first and last glyph (a few px at 25 px); the resvg limit lost 15 to 40 percent.
     assert.ok(Math.abs(ink - measured) / measured < 0.05, `${language} ${path}: ink ${ink} px against the measured advance ${measured} px`);
   }
-  const pdf = await svgToPdf(svg, {fonts: prepared});
+  const pdf = await toPdf(svg, {fonts: prepared});
   assert.ok(pdf.length > 1000 && Buffer.from(pdf.subarray(0, 5)).toString() === '%PDF-');
-  assert.deepEqual(pdf, await svgToPdf(svg, {fonts: prepared}), `${language}: deterministic PDF`);
+  assert.deepEqual(pdf, await toPdf(svg, {fonts: prepared}), `${language}: deterministic PDF`);
 }
 
 // A Latin deck's raster input is exactly the SVG resvg always drew.
 {
   const presentation = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Latin', language: 'en', slides: [{title: 'Quarterly review', text: 'Office affluent fi fl ffi ffl first flow'}]};
   const prepared = await loadFonts({pack: 'office', scripts: 'auto', presentation});
-  const svg = renderSlideSvg(presentation, 0, {fonts: prepared});
+  const svg = toSvg(presentation, 1, {fonts: prepared});
   assert.equal(await pinScriptClusters(svg, {fontFiles: prepared.fontFiles}), svg);
-  assert.deepEqual(await svgToPng(svg, {fonts: prepared, scale: 0.25}), await svgToPng(svg, {fonts: prepared, scale: 0.25}));
+  assert.deepEqual(await toPng(svg, {fonts: prepared, scale: 0.25}), await toPng(svg, {fonts: prepared, scale: 0.25}));
 }
-console.log('Raster script clusters: segmentation, rewrite, five languages through renderSvg + svgToPng + svgToPdf, Latin untouched.');
+console.log('Raster script clusters: segmentation, rewrite, five languages through toSvg + toPng + toPdf, Latin untouched.');

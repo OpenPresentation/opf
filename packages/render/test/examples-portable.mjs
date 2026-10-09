@@ -3,14 +3,14 @@
 import assert from 'node:assert/strict';
 import { examples } from '@openpresentation/opf/examples';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
-import { renderSvg } from '../dist/index.js';
+import { toSvg } from '../dist/index.js';
 
 let slides = 0;
 for (const { file, deck } of examples) {
   const unresolved = [];
-  const bare = renderSvg(deck, { onDiagnostic: entry => { if (entry.code === 'unresolved-reference') unresolved.push(entry.reference); } });
+  const bare = toSvg(deck, { onDiagnostic: entry => { if (entry.code === 'unresolved-reference') unresolved.push(entry.reference); } });
   assert.deepEqual(unresolved, [], `${file}: every reference resolves from the document`);
-  assert.deepEqual(bare, renderSvg(deck, { catalogs: [defaultCatalog] }), `${file}: the registered catalog changes nothing`);
+  assert.deepEqual(bare, toSvg(deck, { catalogs: [defaultCatalog] }), `${file}: the registered catalog changes nothing`);
   slides += bare.length;
 }
 console.log(`examples portable: ${examples.length} decks, ${slides} slides render the same with and without a host catalog`);

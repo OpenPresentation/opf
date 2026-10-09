@@ -1,4 +1,4 @@
-// RR-64: `textAsPaths: true` draws every <text> as glyph outlines (<use> of outlines kept once per slide in <defs>), so the SVG
+// RR-64: `text: "paths"` draws every <text> as glyph outlines (<use> of outlines kept once per slide in <defs>), so the SVG
 // needs no font. Checked here: the option contract, the markup (no <text>, no @font-face, content-addressed glyph ids, byte
 // stability), the trace and labels an editor and assistive technology read, links, decorations, empty text, right-to-left text,
 // the colour-font fallback, and that resvg draws the outlined SVG like the <text> SVG on a set of core example decks.
@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { examples } from '@openpresentation/opf/examples';
 import { loadFonts } from '../dist/fonts-node.js';
-import { OPFRenderError, renderSlideSvg, renderSvg, svgToPdf, svgToPng } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
+import { OPFRenderError, toSvg, toPdf, toPng } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
 
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'all' });
 const count = (svg, pattern) => (svg.match(pattern) ?? []).length;
@@ -14,27 +14,28 @@ const count = (svg, pattern) => (svg.match(pattern) ?? []).length;
 const painted = (svg) => [...svg.matchAll(/<text\b[^>]*>/g)].filter(([tag]) => !/ fill="none"/.test(tag)).length;
 const readable = (svg) => [...svg.matchAll(/<text [^>]*fill="none"[^>]*>([^<]*)<\/text>/g)].map((match) => match[1]);
 
-// The option contract: it needs a handle that can outline, and it is a boolean.
+// The option contract: it needs a handle that can outline, and `text` is one of three modes (RR-74).
 const plain = { name: 'Paths', design: { fontScheme: 'roboto' }, slides: [{ title: 'Quarterly review', text: 'Revenue grew in every region.' }] };
-assert.throws(() => renderSlideSvg(plain, 0, { textAsPaths: true }), (error) => error instanceof OPFRenderError && error.code === 'text-as-paths-needs-fonts');
-assert.throws(() => renderSlideSvg(plain, 0, { fonts: { textMeasurement: fonts.textMeasurement }, textAsPaths: true }), { code: 'text-as-paths-needs-fonts' });
-assert.throws(() => renderSlideSvg(plain, 0, { fonts, textAsPaths: 'yes' }), { code: 'invalid-render-options' });
-assert.equal(renderSlideSvg(plain, 0, { fonts, textAsPaths: false }), renderSlideSvg(plain, 0, { fonts }), 'false changes nothing');
+assert.throws(() => toSvg(plain, 1, { text: "paths" }), (error) => error instanceof OPFRenderError && error.code === 'text-as-paths-needs-fonts');
+assert.throws(() => toSvg(plain, 1, { fonts: { textMeasurement: fonts.textMeasurement }, text: "paths" }), { code: 'text-as-paths-needs-fonts' });
+assert.throws(() => toSvg(plain, 1, { fonts, text: 'outlines' }), { code: 'invalid-render-options' });
+assert.throws(() => toSvg(plain, 1, { fonts, textAsPaths: true }), (error) => error.code === 'invalid-render-options' && /text: "paths"/.test(error.message), 'the 0.17 option names its replacement');
+assert.equal(toSvg(plain, 1, { fonts, text: 'fonts' }), toSvg(plain, 1, { fonts }), '"fonts" is the default');
 assert.equal(typeof fonts.outlines.outlineSlideText, 'function', 'the Node handle carries the outline engine');
 
 // The markup: no text and no face, every glyph a <use> of an outline defined once, byte-stable, the same from both entry points.
 const rich = { name: 'Rich', design: { fontScheme: 'roboto' }, slides: [{ title: 'Quarterly review', text: [{ text: 'Revenue grew in ' }, { text: 'every', bold: true }, { text: ' region, ' }, { text: 'see link', link: 'https://example.com' }, { text: ' and ' }, { text: 'italic', italic: true }, { text: ' and ' }, { text: 'struck', strikethrough: true }] }] };
-const text = renderSlideSvg(rich, 0, { fonts });
-const paths = renderSlideSvg(rich, 0, { fonts, textAsPaths: true });
+const text = toSvg(rich, 1, { fonts });
+const paths = toSvg(rich, 1, { fonts, text: "paths" });
 assert.equal(painted(paths), 0, 'no painted <text> is left: only the invisible readable layer');
 assert.doesNotMatch(paths, /@font-face/, 'nothing is embedded');
 assert.match(paths, /^<svg[^>]*>\n<defs><path id="opf-g-[0-9A-F]{12}-\d+" d="m/, 'the outlines come first, in <defs>, under content-addressed ids');
 const ids = [...paths.matchAll(/<path id="([^"]+)"/g)].map((match) => match[1]);
 assert.equal(new Set(ids).size, ids.length, 'each outline is defined once');
 for (const [, id] of paths.matchAll(/<use href="#([^"]+)"/g)) assert.ok(ids.includes(id), `${id} is defined`);
-assert.equal(renderSlideSvg(rich, 0, { fonts, textAsPaths: true }), paths, 'byte-stable');
-assert.equal(renderSvg(rich, { fonts, textAsPaths: true })[0], paths, 'renderSvg draws the same slide');
-const whole = renderSlideSvg(rich, 0, { fonts, subsetFonts: false });
+assert.equal(toSvg(rich, 1, { fonts, text: "paths" }), paths, 'byte-stable');
+assert.equal(toSvg(rich, { fonts, text: "paths" })[0], paths, 'toSvg draws the same slide');
+const whole = toSvg(rich, 1, { fonts, subsetFonts: false });
 assert.ok(paths.length < 40_000 && paths.length * 10 < whole.length && paths.length < text.length, `outlined ${paths.length} bytes against ${whole.length} with whole embedded faces and ${text.length} with RR-65 subsets`);
 // Everything outside the <text> elements is the renderer's own markup, byte for byte; ancestors' attributes style the text.
 {
@@ -51,9 +52,9 @@ assert.ok(paths.length < 40_000 && paths.length * 10 < whole.length && paths.len
 // outlined slide embeds no font and has no text (the PDF of a slide is made from its <text> SVG).
 {
   const bare = paths.replace(/<text [^>]*fill="none"[^>]*>[^<]*<\/text>/g, '');
-  assert.ok(Buffer.from(await svgToPng(paths, { fonts })).equals(Buffer.from(await svgToPng(bare, { fonts }))), 'the readable layer paints nothing in resvg');
+  assert.ok(Buffer.from(await toPng(paths, { fonts })).equals(Buffer.from(await toPng(bare, { fonts }))), 'the readable layer paints nothing in resvg');
   const embedded = [];
-  await svgToPdf([paths], { fonts, onDiagnostic: (diagnostic) => { if (diagnostic.code === 'pdf-font-embedded') embedded.push(diagnostic.family); } });
+  await toPdf([paths], { fonts, onDiagnostic: (diagnostic) => { if (diagnostic.code === 'pdf-font-embedded') embedded.push(diagnostic.family); } });
   assert.deepEqual(embedded, [], 'the vector PDF embeds no font for the readable layer');
 }
 
@@ -63,7 +64,7 @@ assert.equal(count(paths, /<rect x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\
 
 // The trace an editor reads stays on the groups, and each outlined element is labelled with its text; aria-hidden text stays hidden.
 const traced = { name: 'Traced', design: { fontScheme: 'roboto' }, slides: [{ title: 'Review', text: 'Plain words', items: ['One', 'Two'] }] };
-const tracedText = renderSlideSvg(traced, 0, { fonts, trace: true }), tracedPaths = renderSlideSvg(traced, 0, { fonts, trace: true, textAsPaths: true });
+const tracedText = toSvg(traced, 1, { fonts, trace: true }), tracedPaths = toSvg(traced, 1, { fonts, trace: true, text: "paths" });
 const traceOf = (svg) => [...svg.matchAll(/data-opf-(?:text-start|text-end|source-start|source-end|path)="[^"]*"/g)].map((match) => match[0]);
 assert.deepEqual(traceOf(tracedPaths), traceOf(tracedText), 'every data-opf trace attribute is kept, in order');
 assert.deepEqual(readable(tracedPaths), ['Review', 'Plain words', 'One', 'Two'], 'one readable line per outlined line, in reading order');
@@ -71,12 +72,12 @@ assert.equal(count(tracedPaths, /<g aria-hidden="true" fill="#FFFFFF"><g fill="#
 
 // An empty <text/> (an empty table cell) becomes an empty group.
 const table = examples.find((example) => example.file.endsWith('table-cell-types.opf.json')).deck;
-const tableSvg = renderSlideSvg(table, 0, { fonts, textAsPaths: true });
+const tableSvg = toSvg(table, 1, { fonts, text: "paths" });
 assert.equal(painted(tableSvg), 0, 'empty table cells leave no painted <text>');
 
 // Right-to-left text: the label is the source text in logical order.
 const arabic = { name: 'ar', language: 'ar', design: { fontScheme: 'roboto' }, slides: [{ title: 'التقرير الفصلي', text: 'نما الإيراد في كل منطقة.' }] };
-const arabicPaths = renderSlideSvg(arabic, 0, { fonts, textAsPaths: true });
+const arabicPaths = toSvg(arabic, 1, { fonts, text: "paths" });
 assert.equal(painted(arabicPaths), 0);
 assert.deepEqual(readable(arabicPaths), ['التقرير الفصلي', 'نما الإيراد في كل منطقة.'], 'readable lines in logical order');
 assert.equal(count(arabicPaths, /<text [^>]*direction="rtl"[^>]*fill="none"|<text [^>]*fill="none"[^>]*direction="rtl"/g), 2, 'right-to-left readable lines');
@@ -84,7 +85,7 @@ assert.equal(count(arabicPaths, /<text [^>]*direction="rtl"[^>]*fill="none"|<tex
 // A colour font has no plain outlines: only its run stays text (RR-64 phase 2), placed and pinned where the layout put it, and is reported.
 const emoji = { name: 'Emoji', design: { fontScheme: 'roboto' }, slides: [{ title: 'Launch 🚀 day', text: 'Plain text only' }] };
 const diagnostics = [];
-const emojiPaths = renderSlideSvg(emoji, 0, { fonts, textAsPaths: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
+const emojiPaths = toSvg(emoji, 1, { fonts, text: "paths", onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
 assert.deepEqual([...emojiPaths.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].filter(([tag]) => !/ fill="none"/.test(tag)).map((match) => match[1]), ['🚀'], 'only the emoji run stays painted text');
 assert.match(emojiPaths, /<text [^>]*font-family="Noto Color Emoji, sans-serif"[^>]*textLength="[\d.]+" lengthAdjust="spacingAndGlyphs">🚀<\/text>/);
 assert.deepEqual(readable(emojiPaths), ['Launch ', ' day', 'Plain text only'], 'the outlined parts of the title and the body are readable; the emoji is text already');
@@ -94,10 +95,10 @@ assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code === 'text-as
 const decks = examples.filter((example, index) => index % 12 === 0 || example.file.endsWith('table-cell-types.opf.json'));
 let slides = 0, worst = 0, worstKey = '';
 for (const { file, deck } of decks) {
-  const asText = renderSvg(deck, { fonts }), asPaths = renderSvg(deck, { fonts, textAsPaths: true });
+  const asText = toSvg(deck, { fonts }), asPaths = toSvg(deck, { fonts, text: "paths" });
   for (const [index, svg] of asPaths.entries()) {
     assert.equal(painted(svg), 0, `${file}#${index}: no painted <text> is left`);
-    const [a, b] = await Promise.all([asText[index], svg].map(async (source) => sharp(await svgToPng(source, { fonts, scale: 0.5 })).raw().toBuffer()));
+    const [a, b] = await Promise.all([asText[index], svg].map(async (source) => sharp(await toPng(source, { fonts, scale: 0.5 })).raw().toBuffer()));
     let sum = 0, strong = 0;
     for (let byte = 0; byte < a.length; byte++) { const delta = Math.abs(a[byte] - b[byte]); sum += delta; if (delta > 64) strong++; }
     const mean = sum / a.length;

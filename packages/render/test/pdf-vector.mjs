@@ -7,7 +7,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { PDFArray, PDFDict, PDFDocument, PDFName, PDFNumber, PDFRawStream, PDFRef, PDFString, PDFHexString, decodePDFRawStream } from "pdf-lib";
-import {svgToPdf, svgToPng, renderSvg} from "../dist/index.js";
+import {toPdf, toPng, toSvg} from "../dist/index.js";
 import {loadFonts} from "../dist/fonts-node.js";
 import sharp from "sharp";
 import { compareImages, openPdf, pageItems, pageText, pdfiumText, popplerText, qpdfCheck, renderPdfPage } from "./pdf-helpers.mjs";
@@ -20,7 +20,7 @@ const compact = (text) => nfkc(text).replace(/\s/g, "");
 
 async function renderDeck(deck, options = {}) {
   const fonts = (await loadFonts({pack: 'office', substitutionPolicy: "visual", scripts: "auto", presentation: deck})).registry;
-  const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true, ...options });
+  const svgs = toSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true, ...options });
   return { svgs, pdfOptions: { fonts: {fontFiles: fonts.fontFiles, useBundledFonts: false}} };
 }
 
@@ -34,13 +34,14 @@ async function lowLevel(bytes) {
 // ---- API surface ----------------------------------------------------------------------------------------------
 {
   const { svgs, pdfOptions } = await renderDeck({ $schema: SCHEMA, name: "API", slides: [{ title: "Hello", text: "World" }] });
-  const byDefault = await svgToPdf(svgs, pdfOptions);
-  const explicit = await svgToPdf(svgs, { ...pdfOptions, mode: "vector" });
+  const byDefault = await toPdf(svgs, pdfOptions);
+  const explicit = await toPdf(svgs, { ...pdfOptions });
   assert.deepEqual(byDefault, explicit, "vector is the default PDF mode");
-  const raster = await svgToPdf(svgs, { ...pdfOptions, mode: "raster", scale: 0.25 });
+  const raster = await toPdf(svgs, { ...pdfOptions, raster: true, scale: 0.25 });
   assert.notDeepEqual(raster, byDefault);
-  await assert.rejects(svgToPdf(svgs, { mode: "bitmap" }), (error) => error.code === "invalid-conversion-option" && error.details.option === "mode");
-  await assert.rejects(svgToPdf(svgs, { ...pdfOptions, fonts: { ...pdfOptions.fonts, loadSystemFonts: true } }), (error) => error.code === "pdf-system-fonts-unsupported");
+  await assert.rejects(toPdf(svgs, { raster: "yes" }), (error) => error.code === "invalid-conversion-option" && error.details.option === "raster");
+  await assert.rejects(toPdf(svgs, { mode: "raster" }), (error) => error.code === "invalid-conversion-option" && /raster: true/.test(error.message), "the 0.17 option names its replacement");
+  await assert.rejects(toPdf(svgs, { ...pdfOptions, fonts: { ...pdfOptions.fonts, loadSystemFonts: true } }), (error) => error.code === "pdf-system-fonts-unsupported");
   // The raster mode stays an image per page; the vector mode has no page-sized picture and real text.
   const rasterLow = await lowLevel(raster);
   const rasterImages = rasterLow.objects.filter(([, object]) => object instanceof PDFRawStream && object.dict.get(PDFName.of("Subtype"))?.toString() === "/Image");
@@ -54,7 +55,7 @@ async function lowLevel(bytes) {
   const deck = { $schema: SCHEMA, name: "Structure", language: "en-GB", slides: [{ title: "Quarterly review", text: "Revenue grew 12% year on year.", items: ["First point", "Second point"] }] };
   const { svgs, pdfOptions } = await renderDeck(deck);
   const diagnostics = [];
-  const pdf = await svgToPdf(svgs, { ...pdfOptions, onDiagnostic: (d) => diagnostics.push(d) });
+  const pdf = await toPdf(svgs, { ...pdfOptions, onDiagnostic: (d) => diagnostics.push(d) });
   const { document, objects, stream } = await lowLevel(pdf);
   const [page] = document.getPages();
   const { width, height } = page.getSize();
@@ -118,7 +119,7 @@ const roundTrips = [
 ];
 for (const { name, deck, expect } of roundTrips) {
   const { svgs, pdfOptions } = await renderDeck(deck);
-  const pdf = await svgToPdf(svgs, pdfOptions);
+  const pdf = await toPdf(svgs, pdfOptions);
   const text = nfkc(await pageText(await openPdf(pdf), 1));
   for (const wanted of expect) assert.ok(compact(text).includes(compact(wanted)), `${name}: extracted text keeps "${wanted}"; got "${text}"`);
 }
@@ -156,7 +157,7 @@ for (const { name, deck, expect } of roundTrips) {
   let popplerSeen = false;
   for (const [name, family, text, expected, skip] of cases) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="140"><text x="40" y="90" font-family="${family}" font-size="32" xml:space="preserve">${text}</text></svg>`;
-    const pdf = await svgToPdf(svg, options);
+    const pdf = await toPdf(svg, options);
     for (const [reader, read] of Object.entries(readers)) {
       if (skip.includes(reader)) continue;
       const got = await read(pdf);
@@ -170,7 +171,7 @@ for (const { name, deck, expect } of roundTrips) {
   // Mixed directions: every run reads in logical order inside itself; the order of runs in a line is the reader's.
   const mixed = `Revenue ${rtl("شركة")} growth and ${rtl("שלום עולם")} end`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="140"><text x="40" y="90" font-family="Roboto" font-size="32" xml:space="preserve">${mixed}</text></svg>`;
-  const pdf = await svgToPdf(svg, options);
+  const pdf = await toPdf(svg, options);
   for (const [reader, read] of Object.entries(readers)) {
     const got = await read(pdf);
     if (got === null) continue;
@@ -190,17 +191,17 @@ for (const { name, deck, expect } of roundTrips) {
 {
   const deck = { $schema: SCHEMA, name: "Determinism", slides: [{ title: "Same bytes", text: "Every run, every machine." }, { title: "Second slide", items: ["One", "Two"] }] };
   const { svgs, pdfOptions } = await renderDeck(deck);
-  const first = await svgToPdf(svgs, pdfOptions);
-  const second = await svgToPdf(svgs, pdfOptions);
+  const first = await toPdf(svgs, pdfOptions);
+  const second = await toPdf(svgs, pdfOptions);
   assert.deepEqual(first, second, "repeatable bytes");
-  const withDates = await svgToPdf(svgs, { ...pdfOptions, metadata: { title: "T", creationDate: "2026-01-02T03:04:05Z" } });
-  assert.deepEqual(withDates, await svgToPdf(svgs, { ...pdfOptions, metadata: { title: "T", creationDate: new Date("2026-01-02T03:04:05Z") } }), "caller-supplied dates are the only dates");
+  const withDates = await toPdf(svgs, { ...pdfOptions, metadata: { title: "T", creationDate: "2026-01-02T03:04:05Z" } });
+  assert.deepEqual(withDates, await toPdf(svgs, { ...pdfOptions, metadata: { title: "T", creationDate: new Date("2026-01-02T03:04:05Z") } }), "caller-supplied dates are the only dates");
   const text = Buffer.from(first).toString("latin1");
   assert.ok(!/CreationDate|ModDate/.test(text), "no timestamps unless the caller supplies them");
   assert.match(text, /\/ID\[<[0-9A-F]{32}><[0-9A-F]{32}>\]/);
   // Uncompressed output carries the same content (a debugging aid), also repeatable.
-  const plain = await svgToPdf(svgs, { ...pdfOptions, compress: false });
-  assert.deepEqual(plain, await svgToPdf(svgs, { ...pdfOptions, compress: false }));
+  const plain = await toPdf(svgs, { ...pdfOptions, compress: false });
+  assert.deepEqual(plain, await toPdf(svgs, { ...pdfOptions, compress: false }));
   assert.ok(plain.length > first.length);
 }
 
@@ -212,8 +213,8 @@ for (const { name, deck, expect } of roundTrips) {
   const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
   const svg = await readFile(new URL("fixtures/pdf/mixed-script-slide.svg", import.meta.url), "utf8");
   const options = { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, metadata: { title: "Fixture", author: "OPF", language: "en-GB", creationDate: "2026-01-01T00:00:00Z" } };
-  const pdf = await svgToPdf(svg, options);
-  assert.deepEqual(pdf, await svgToPdf(svg, options));
+  const pdf = await toPdf(svg, options);
+  assert.deepEqual(pdf, await toPdf(svg, options));
   const digest = createHash("sha256").update(pdf).digest("hex");
   assert.equal(digest, "60ae05d47ee3b394ff6d6b8cadc5e9740b52f9f2e3eb52388e20c80a185591e9", `fixture PDF bytes changed (${pdf.length} bytes, sha256 ${digest})`);
   const text = nfkc(await pageText(await openPdf(pdf), 1));
@@ -225,7 +226,7 @@ for (const { name, deck, expect } of roundTrips) {
   const wide = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" lang="fr-CA"><rect width="800" height="450" fill="#eef"/><a href="https://example.com/path?q=1&amp;r=%C3%A9"><text x="40" y="100" font-family="Roboto" font-size="30" fill="#06c" text-decoration="underline" xml:space="preserve">Lien de test</text></a><a href="javascript:alert(1)"><text x="40" y="160" font-family="Roboto" font-size="30" xml:space="preserve">Not a link</text></a></svg>`;
   const portrait = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="700" viewBox="0 0 400 700" lang="de"><rect width="400" height="700" fill="#fee"/><image width="64" height="64" x="20" y="20" aria-label="Pixel" href="${TINY_PNG}"/><text x="20" y="130" font-family="Roboto" font-size="20">Portrait page</text></svg>`;
   const diagnostics = [];
-  const pdf = await svgToPdf([wide, portrait], {
+  const pdf = await toPdf([wide, portrait], {
     metadata: { title: "Deck title", author: "Ada Lovelace", subject: "Test", keywords: ["a", "b"], language: "fr-CA", creationDate: "2026-05-06T07:08:09Z" },
     onDiagnostic: (d) => diagnostics.push(d),
   });
@@ -251,7 +252,7 @@ for (const { name, deck, expect } of roundTrips) {
   for (const role of ["/Document", "/Sect", "/P", "/Link", "/Figure"]) assert.ok(roles.includes(role), `structure has ${role}`);
   const sectionLanguages = objects.filter(([, object]) => object instanceof PDFDict && object.get(PDFName.of("S"))?.toString() === "/Sect").map(([, object]) => object.get(PDFName.of("Lang"))?.decodeText());
   assert.deepEqual(sectionLanguages.sort(), ["de", undefined], "a slide in another language than the document says so on its section");
-  const untagged = await svgToPdf([wide], { tagged: false });
+  const untagged = await toPdf([wide], { tagged: false });
   assert.ok(!(await lowLevel(untagged)).document.catalog.get(PDFName.of("StructTreeRoot")), "tagging can be switched off");
   assert.match(await pageText(await openPdf(pdf), 1), /Lien de test/);
 }
@@ -278,25 +279,25 @@ for (const { name, deck, expect } of roundTrips) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100"><text x="10" y="50" font-family="Roboto" font-size="20">Embeddable text</text></svg>`;
     // Only the restricted face is supplied: nothing may be embedded, so the export refuses rather than bypass it.
     const diagnostics = [];
-    await assert.rejects(svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted]}, onDiagnostic: (d) => diagnostics.push(d) }), (error) => error.code === "pdf-font-unavailable");
+    await assert.rejects(toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted]}, onDiagnostic: (d) => diagnostics.push(d) }), (error) => error.code === "pdf-font-unavailable");
     assert.ok(diagnostics.some((d) => d.code === "pdf-font-embedding-restricted"), "restriction reported");
     // With a permitted face also available, the permitted one is used and reported as the substitute.
     const both = [];
-    const pdf = await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted, registry.fontFiles.find((file) => /Roboto_500Medium\.ttf$/.test(file))]}, onDiagnostic: (d) => both.push(d) });
+    const pdf = await toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted, registry.fontFiles.find((file) => /Roboto_500Medium\.ttf$/.test(file))]}, onDiagnostic: (d) => both.push(d) });
     assert.match(await pageText(await openPdf(pdf), 1), /Embeddable text/);
     const embedded = both.filter((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.length, 1);
     assert.equal(embedded[0].weight, 500, "the permitted face was embedded");
     assert.ok(both.some((d) => d.code === "pdf-font-embedding-restricted"));
-    // fontDirs are searched too, and every face found there is checked the same way.
-    const fromDirectory = await svgToPdf(svg, { fonts: {useBundledFonts: false}, fontDirs: [path.dirname(roboto)] });
+    // Font folders (`fonts` as a path list) are searched too, and every face found there is checked the same way.
+    const fromDirectory = await toPdf(svg, { fonts: [path.dirname(roboto)] });
     assert.match(await pageText(await openPdf(fromDirectory), 1), /Embeddable text/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
   // A requested family that has no face is reported, with the face used instead.
   const notes = [];
-  await svgToPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><text x="10" y="50" font-family="Garamond, serif" font-size="20">Substituted</text></svg>`, { onDiagnostic: (d) => notes.push(d) });
+  await toPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><text x="10" y="50" font-family="Garamond, serif" font-size="20">Substituted</text></svg>`, { onDiagnostic: (d) => notes.push(d) });
   const substituted = notes.find((d) => d.code === "pdf-font-substituted");
   assert.equal(substituted?.requestedFamily, "Garamond");
   assert.equal(substituted?.resolvedFamily, "roboto");
@@ -306,19 +307,19 @@ for (const { name, deck, expect } of roundTrips) {
 {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><defs><filter id="f"><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="300" height="200" fill="#fff"/><g data-opf-path="slides.0.shape" filter="url(#f)"><rect x="20" y="20" width="100" height="60" fill="#f80"/></g><text x="20" y="150" font-family="Roboto" font-size="24">Still real text</text></svg>`;
   const diagnostics = [];
-  const pdf = await svgToPdf(svg, { onDiagnostic: (d) => diagnostics.push(d) });
+  const pdf = await toPdf(svg, { onDiagnostic: (d) => diagnostics.push(d) });
   const fallback = diagnostics.filter((d) => d.code === "pdf-raster-fallback");
   assert.equal(fallback.length, 1);
   assert.equal(fallback[0].path, "slides.0.shape", "the fallback names the affected path");
   assert.match(await pageText(await openPdf(pdf), 1), /Still real text/);
-  await assert.rejects(svgToPdf(svg, { strict: true }), (error) => error.code === "pdf-raster-fallback" && error.details.path === "slides.0.shape");
-  await assert.rejects(svgToPdf("<html/>"), (error) => error.code === "invalid-svg");
+  await assert.rejects(toPdf(svg, { strict: true }), (error) => error.code === "pdf-raster-fallback" && error.details.path === "slides.0.shape");
+  await assert.rejects(toPdf("<html/>"), (error) => error.code === "invalid-svg");
 }
 
 // ---- Vector drawing: shapes stay paths, gradients and patterns stay PDF shadings/tilings, translucent groups stay groups -----
 {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><defs><linearGradient id="g"><stop offset="0" stop-color="#f00"/><stop offset="1" stop-color="#00f"/></linearGradient><pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" stroke="#999" stroke-width="2"/></pattern></defs><rect width="400" height="300" fill="url(#p)"/><rect x="20" y="20" width="120" height="80" fill="url(#g)" rx="10"/><g opacity="0.5"><rect x="200" y="20" width="80" height="80" fill="#f00"/><rect x="240" y="60" width="80" height="80" fill="#00f"/></g></svg>`;
-  const pdf = await svgToPdf(svg);
+  const pdf = await toPdf(svg);
   const { objects } = await lowLevel(pdf);
   const types = objects.map(([, object]) => (object instanceof PDFDict ? object : object.dict)?.get?.(PDFName.of("PatternType"))?.toString()).filter(Boolean);
   assert.deepEqual(types.sort(), ["1", "2"], "one tiling pattern and one shading pattern");
@@ -333,7 +334,7 @@ for (const { name, deck, expect } of roundTrips) {
     const jpeg = await readFile(new URL(`fixtures/jpeg/orientation-${orientation}.jpg`, import.meta.url));
     const expected = await readFile(new URL(`fixtures/jpeg/expected-${orientation}.png`, import.meta.url));
     const { width, height } = await sharp(expected).metadata();
-    const pdf = await svgToPdf(imageSvg(width, height, "data:image/jpeg;base64," + jpeg.toString("base64")));
+    const pdf = await toPdf(imageSvg(width, height, "data:image/jpeg;base64," + jpeg.toString("base64")));
     const rendered = await renderPdfPage(await openPdf(pdf), 1);
     const { mae } = await compareImages(rendered.png, expected, { factor: 1 });
     assert.ok(mae <= 3, `JPEG orientation ${orientation} keeps its pixels in the vector PDF (mean error ${mae.toFixed(2)})`);
@@ -347,15 +348,15 @@ for (const { name, deck, expect } of roundTrips) {
     const decoded = await sharp(bytes).autoOrient().ensureAlpha().png().toBuffer();
     const webpSvg = imageSvg(reference.width, reference.height, "data:image/webp;base64," + bytes.toString("base64"));
     const pngSvg = imageSvg(reference.width, reference.height, "data:image/png;base64," + decoded.toString("base64"));
-    const rendered = await renderPdfPage(await openPdf(await svgToPdf(webpSvg)), 1);
-    const { mae } = await compareImages(rendered.png, await svgToPng(pngSvg), { factor: 1 });
+    const rendered = await renderPdfPage(await openPdf(await toPdf(webpSvg)), 1);
+    const { mae } = await compareImages(rendered.png, await toPng(pngSvg), { factor: 1 });
     assert.ok(mae <= 3, `${file}: WebP (with transparency) draws as the decoded picture (mean error ${mae.toFixed(2)})`);
   }
   // The same picture used twice is stored once.
   const png = TINY_PNG;
-  const twice = await svgToPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><image x="0" y="0" width="40" height="40" href="${png}"/><image x="50" y="0" width="40" height="40" href="${png}"/></svg>`);
+  const twice = await toPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><image x="0" y="0" width="40" height="40" href="${png}"/><image x="50" y="0" width="40" height="40" href="${png}"/></svg>`);
   assert.equal((await lowLevel(twice)).objects.filter(([, object]) => object instanceof PDFRawStream && object.dict.get(PDFName.of("Subtype"))?.toString() === "/Image").length, 1, "identical pictures share one image object");
-  await assert.rejects(svgToPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><image x="0" y="0" width="40" height="40" href="https://example.invalid/a.png"/></svg>`, { strict: true }), (error) => error.code === "pdf-image-skipped", "remote pictures are never fetched");
+  await assert.rejects(toPdf(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><image x="0" y="0" width="40" height="40" href="https://example.invalid/a.png"/></svg>`, { strict: true }), (error) => error.code === "pdf-image-skipped", "remote pictures are never fetched");
 }
 
 // ---- Arbitrary SVG: nothing is dropped silently, hostile input is bounded ------------------------------------------------------
@@ -367,7 +368,7 @@ for (const { name, deck, expect } of roundTrips) {
   };
   const collect = async (svg, options = {}) => {
     const diagnostics = [];
-    const pdf = await svgToPdf(svg, { compress: true, ...options, onDiagnostic: (d) => diagnostics.push(d) });
+    const pdf = await toPdf(svg, { compress: true, ...options, onDiagnostic: (d) => diagnostics.push(d) });
     return { pdf, diagnostics, content: await contentOf(pdf) };
   };
 
@@ -397,9 +398,9 @@ for (const { name, deck, expect } of roundTrips) {
   {
     const body = `<defs><symbol id="s" viewBox="0 0 10 10"><rect width="10" height="10" fill="#ff0000"/></symbol></defs><use href="#s" x="20" y="10" width="40" height="40"/><svg x="100" y="20" width="50" height="50" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#0000ff"/></svg><switch><rect x="170" y="10" width="20" height="20" fill="#00aa00"/><rect x="170" y="40" width="20" height="20" fill="#aa0000"/></switch>`;
     const svg = svgOf(`<rect width="200" height="100" fill="#ffffff"/>${body}`);
-    const pdf = await svgToPdf(svg);
+    const pdf = await toPdf(svg);
     const rendered = await renderPdfPage(await openPdf(pdf), 1, 2);
-    const reference = await svgToPng(svg, { scale: 2 });
+    const reference = await toPng(svg, { scale: 2 });
     const { mae } = await compareImages(rendered.png, reference, { factor: 1 });
     assert.ok(mae < 2, `symbol, nested svg and switch match the preview (mean error ${mae.toFixed(2)})`);
   }
@@ -413,14 +414,14 @@ for (const { name, deck, expect } of roundTrips) {
     const features = diagnostics.filter((d) => d.code === "pdf-unsupported-feature").map((d) => d.attribute).sort();
     assert.deepEqual(features, ["dominant-baseline", "rotate", "text-transform"]);
     assert.ok(diagnostics.some((d) => d.code === "pdf-unsupported-paint" && /spreadMethod/.test(d.message)));
-    await assert.rejects(svgToPdf(svgOf(body), { strict: true }), (error) => /^pdf-unsupported/.test(error.code));
+    await assert.rejects(toPdf(svgOf(body), { strict: true }), (error) => /^pdf-unsupported/.test(error.code));
   }
   // A character no supplied font has: reported (strict throws), never a silent .notdef box.
   {
     const svg = svgOf(`<text x="10" y="40" font-family="Roboto" font-size="20">A\u{10348}B</text>`);
     const { diagnostics } = await collect(svg);
     assert.ok(diagnostics.some((d) => d.code === "pdf-glyph-missing" && d.codePoint === 0x10348), "missing glyph reported");
-    await assert.rejects(svgToPdf(svg, { strict: true }), (error) => error.code === "pdf-glyph-missing");
+    await assert.rejects(toPdf(svg, { strict: true }), (error) => error.code === "pdf-glyph-missing");
   }
   // Absurd coordinates are clamped to something every reader accepts.
   {
@@ -435,11 +436,11 @@ for (const { name, deck, expect } of roundTrips) {
     const bomb = await collect(svgOf(`<defs>${defs}</defs><use href="#u24"/>`));
     assert.ok(performance.now() - started < 20000, "the expansion bomb is cut off quickly");
     assert.ok(bomb.diagnostics.some((d) => d.code === "pdf-expansion-limit"), "expansion limit reported");
-    await assert.rejects(svgToPdf(svgOf(`<defs>${defs}</defs><use href="#u24"/>`), { strict: true }), (error) => error.code === "pdf-expansion-limit");
+    await assert.rejects(toPdf(svgOf(`<defs>${defs}</defs><use href="#u24"/>`), { strict: true }), (error) => error.code === "pdf-expansion-limit");
     const deep = await collect(svgOf("<g>".repeat(900) + `<rect width="5" height="5"/>` + "</g>".repeat(900)));
     assert.ok(deep.pdf.length > 100);
     assert.ok(deep.diagnostics.some((d) => d.code === "pdf-expansion-limit"), "deep groups are cut off with a diagnostic");
-    await assert.rejects(svgToPdf(svgOf("<g>".repeat(60000) + "</g>".repeat(60000))), (error) => ["invalid-svg", "svg-too-deep"].includes(error.code), "absurd nesting is refused cleanly");
+    await assert.rejects(toPdf(svgOf("<g>".repeat(60000) + "</g>".repeat(60000))), (error) => ["invalid-svg", "svg-too-deep"].includes(error.code), "absurd nesting is refused cleanly");
     const long = await collect(svgOf(`<text x="0" y="50" font-family="Roboto" font-size="1">${"ab ".repeat(60000)}</text>`));
     assert.ok(long.pdf.length > 1000, "a 180,000-character text does not overflow the stack");
   }
@@ -449,7 +450,7 @@ for (const { name, deck, expect } of roundTrips) {
     const svg = svgOf(`<rect width="200" height="100" fill="#ffffff"/><image data-opf-path="slides.0.logo" x="10" y="10" width="60" height="60" href="data:image/svg+xml;charset=utf-8,${picture}"/>`);
     const { pdf, diagnostics } = await collect(svg);
     assert.ok(diagnostics.some((d) => d.code === "pdf-raster-fallback" && d.path === "slides.0.logo"), "an SVG picture is reported as a raster fallback");
-    const { mae } = await compareImages((await renderPdfPage(await openPdf(pdf), 1, 2)).png, await svgToPng(svg, { scale: 2 }), { factor: 1 });
+    const { mae } = await compareImages((await renderPdfPage(await openPdf(pdf), 1, 2)).png, await toPng(svg, { scale: 2 }), { factor: 1 });
     assert.ok(mae < 2, `the SVG picture is drawn as the preview draws it (mean error ${mae.toFixed(2)})`);
   }
   // A file reference inside a rasterized fragment is never read.
@@ -459,7 +460,7 @@ for (const { name, deck, expect } of roundTrips) {
       const red = path.join(directory, "red.png");
       await writeFile(red, await sharp({ create: { width: 8, height: 8, channels: 3, background: "#ff0000" } }).png().toBuffer());
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><filter id="f"><feColorMatrix type="saturate" values="1"/></filter></defs><g filter="url(#f)"><image x="0" y="0" width="100" height="100" href="${red.replace(/\\/g, "/")}"/></g></svg>`;
-      const rendered = await renderPdfPage(await openPdf(await svgToPdf(svg)), 1);
+      const rendered = await renderPdfPage(await openPdf(await toPdf(svg)), 1);
       const { data } = await sharp(rendered.png).raw().toBuffer({ resolveWithObject: true });
       assert.ok(!(data[0] > 200 && data[1] < 60 && data[2] < 60), "the local file was not drawn");
     } finally {
@@ -496,7 +497,7 @@ for (const { name, deck, expect } of roundTrips) {
       const file = path.join(directory, `${name}.ttf`);
       await writeFile(file, damaged);
       const diagnostics = [];
-      const pdf = await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [file, medium]}, onDiagnostic: (d) => diagnostics.push(d) });
+      const pdf = await toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [file, medium]}, onDiagnostic: (d) => diagnostics.push(d) });
       assert.ok(diagnostics.some((d) => d.code === "pdf-font-unreadable"), `${name}: the damaged font is reported unreadable`);
       assert.match(await pageText(await openPdf(pdf), 1), /Corrupt font text/);
     }
@@ -507,14 +508,14 @@ for (const { name, deck, expect } of roundTrips) {
     const previewFile = path.join(directory, "preview.ttf");
     await writeFile(previewFile, preview);
     const reports = [];
-    await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [previewFile]}, onDiagnostic: (d) => reports.push(d) });
+    await toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [previewFile]}, onDiagnostic: (d) => reports.push(d) });
     const embedded = reports.find((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.embeddingRestriction, "preview-and-print");
     assert.equal(embedded.fsType, 4);
     // A font declared by @font-face in the SVG is found by its declared family, whatever its name table says.
     const declared = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><style>@font-face{font-family:"Brand Sans";src:url("data:font/ttf;base64,${Buffer.from(original).toString("base64")}")}</style><text x="10" y="50" font-family="Brand Sans" font-size="20">Declared family</text></svg>`;
     const notes = [];
-    const declaredPdf = await svgToPdf(declared, { fonts: {useBundledFonts: false}, onDiagnostic: (d) => notes.push(d) });
+    const declaredPdf = await toPdf(declared, { fonts: {useBundledFonts: false}, onDiagnostic: (d) => notes.push(d) });
     assert.match(await pageText(await openPdf(declaredPdf), 1), /Declared family/);
     assert.ok(!notes.some((d) => d.code === "pdf-font-substituted"), "the declared family is the one drawn");
   } finally {
@@ -525,32 +526,32 @@ for (const { name, deck, expect } of roundTrips) {
 // ---- Dates read as UTC, structure is sound (qpdf --check), the page is painted white ---------------------------------------
 {
   const { spawnSync } = await import("node:child_process");
-  const script = `import { svgToPdf } from ${JSON.stringify(new URL("../dist/index.js", import.meta.url).href)};
+  const script = `import { toPdf } from ${JSON.stringify(new URL("../dist/index.js", import.meta.url).href)};
 import { createHash } from "node:crypto";
-const pdf = await svgToPdf('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="10" height="10"/></svg>', { metadata: { title: "T\\u0001itle", creationDate: "2026-03-04T05:06:07" } });
+const pdf = await toPdf('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="10" height="10"/></svg>', { metadata: { title: "T\\u0001itle", creationDate: "2026-03-04T05:06:07" } });
 console.log(createHash("sha256").update(pdf).digest("hex"));`;
   const digests = ["UTC", "Asia/Tokyo", "America/Los_Angeles"].map((zone) => spawnSync(process.execPath, ["--input-type=module", "-e", script], { env: { ...process.env, TZ: zone }, encoding: "utf8" }).stdout.trim());
   assert.match(digests[0], /^[0-9a-f]{64}$/);
   assert.equal(new Set(digests).size, 1, "a zone-less creation date is read as UTC whatever the time zone");
-  const dated = await svgToPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>", { metadata: { title: "T\u0001itle", creationDate: "2026-03-04T05:06:07" } });
+  const dated = await toPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>", { metadata: { title: "T\u0001itle", creationDate: "2026-03-04T05:06:07" } });
   assert.match(Buffer.from(dated).toString("latin1"), /\/CreationDate\(D:20260304050607Z\)/);
   assert.equal((await lowLevel(dated)).document.getTitle(), "Title", "control characters are stripped from the metadata");
 
   const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
   const fixture = await readFile(new URL("fixtures/pdf/mixed-script-slide.svg", import.meta.url), "utf8");
   const samples = [
-    await svgToPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, metadata: { title: "Fixture", language: "en-GB" } }),
-    await svgToPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, tagged: false, compress: false }),
-    await svgToPdf(["<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200'><rect width='300' height='200' fill='#eee'/><text x='10' y='50' font-family='Roboto'>Page one</text></svg>", "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><text x='10' y='50' font-family='Roboto'>Page two</text></svg>"]),
+    await toPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, metadata: { title: "Fixture", language: "en-GB" } }),
+    await toPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, tagged: false, compress: false }),
+    await toPdf(["<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200'><rect width='300' height='200' fill='#eee'/><text x='10' y='50' font-family='Roboto'>Page one</text></svg>", "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><text x='10' y='50' font-family='Roboto'>Page two</text></svg>"]),
   ];
   for (const [index, bytes] of samples.entries()) {
     const check = await qpdfCheck(bytes);
     assert.deepEqual({ status: check.status, text: check.text }, { status: 0, text: "" }, `qpdf --check, sample ${index}: ${check.text}`);
   }
-  const white = await svgToPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>");
+  const white = await toPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>");
   const whiteDoc = await lowLevel(white);
   assert.ok(whiteDoc.stream(whiteDoc.document.context.lookup(whiteDoc.document.getPages()[0].node.Contents())).toString("latin1").includes("1 1 1 rg 0 0 100 50 re f"), "the page is painted white by default");
-  const clear = await svgToPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>", { background: "none" });
+  const clear = await toPdf("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'/>", { background: "none" });
   const clearDoc = await lowLevel(clear);
   assert.ok(!clearDoc.stream(clearDoc.document.context.lookup(clearDoc.document.getPages()[0].node.Contents())).toString("latin1").includes("re f"), "background none leaves the page unpainted");
 }

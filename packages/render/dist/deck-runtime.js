@@ -1,9 +1,9 @@
 // RR-28: the part of the slideshow player and the <opf-deck> element that has no DOM of its own. It reads an OPF document,
-// decides which slides play (hidden ones do not), renders each slide once with the renderer's own SVG output (renderSlideSvg:
+// decides which slides play (hidden ones do not), renders each slide once with the renderer's own SVG output (toSvg:
 // there is no second layout engine) behind a face-level font gate, and synchronizes windows over a BroadcastChannel.
 // Nothing here fetches anything but the font files the host's font root serves.
 import { resolveSlideVariables } from "@openpresentation/opf";
-import { renderSlideSvg } from "./svg.js";
+import { toSvg } from "./svg.js";
 
 /** Error raised for a deck that cannot be read, rendered or loaded. */
 export class DeckError extends Error {
@@ -206,7 +206,7 @@ export function createFontGate(fonts) {
 
 /**
  * One deck's rendering, shared by the element, the full-screen player and the speaker view: font loading once, each slide
- * rendered once by `renderSlideSvg` and kept, so moving between slides never draws twice and every surface shows the same markup.
+ * rendered once by `toSvg` and kept, so moving between slides never draws twice and every surface shows the same markup.
  *
  * `fonts` is a browser fonts handle (or nothing: layout then uses estimated widths and the visitor's system sans-serif).
  */
@@ -237,7 +237,7 @@ export function createDeckStore({ document, fonts, renderOptions = {}, date } = 
       let svg = cache.get(index);
       if (svg === undefined) {
         try {
-          svg = renderSlideSvg(deck, index, { ...options(), validate: !validated });
+          svg = toSvg(deck, index + 1, { ...options(), validate: !validated });
         } catch (cause) {
           if (cause instanceof DeckError) throw cause;
           // A document the schema rejects says where: the first finding's path and message.

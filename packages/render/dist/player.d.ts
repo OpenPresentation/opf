@@ -1,5 +1,5 @@
 import type { BrowserFontsHandle } from "./fonts-browser.js";
-import type { RenderSvgOptions } from "./svg.js";
+import type { ToSvgOptions } from "./svg.js";
 
 /**
  * Why a deck could not be loaded, drawn or presented. `code` is stable: `invalid-document`, `fetch-failed`, `fonts-unavailable`,
@@ -19,8 +19,8 @@ export type BlankMode = "none" | "black" | "white";
 export interface PresentOptions {
   /** The self-hosted font root URL (see `copyPreviewFonts`), or a browser fonts handle the page already has (`loadFonts` from `/fonts-browser`). Without it layout uses estimated widths and system fonts. */
   fonts?: string | BrowserFontsHandle;
-  /** Extra `renderSlideSvg` options (catalogs, imageResolver, date, ...). */
-  renderOptions?: Partial<RenderSvgOptions>;
+  /** Extra `toSvg` options (catalogs, imageResolver, date, ...). */
+  renderOptions?: Partial<ToSvgOptions>;
   /** 1-based slide to start on, in the sequence that plays. Default 1. */
   startSlide?: number;
   /** Play hidden slides too. Default false. */

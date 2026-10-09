@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
+import {resolvePresentation, toSvg} from '../dist/index.js';
 import {layoutTable} from '@openpresentation/opf/composition';
 import {loadFonts} from '../src/fonts-node.js';
 
@@ -24,7 +24,7 @@ assert.equal(cell.fit.lines.join(''),sourceText);
 assert.deepEqual(fragments.filter(fragment=>fragment.kind==='tab').map(({runIndex,start,end,text})=>({runIndex,start,end,text})),[{runIndex:0,start:4,end:5,text:'\t'}]);
 for(const [runIndex,run] of deck.slides[0].table.rows[0][0].entries())assert.equal(fragments.filter(fragment=>fragment.runIndex===runIndex).map(fragment=>fragment.text).join(''),run.text);
 
-const svg=renderSlideSvg(deck, 0,renderOptions);
+const svg=toSvg(deck, 1,renderOptions);
 assert.equal(JSON.stringify(deck),source);
 assert.match(svg,/data-opf-rich-spacing="measured"/);
 const tabTag=[...svg.matchAll(/<text\b([^>]*)>(\t)<\/text>/g)].find(match=>/data-opf-segment="tab"/.test(match[1]));
@@ -40,7 +40,7 @@ assert.ok(followingTag);
 assert.ok(Math.abs(Number(attr(followingTag[1],'x'))-(cell.textBox.x+following.x))<.1);
 assert.ok(Math.abs(Number(attr(followingTag[1],'x'))-(Number(attr(tabTag[1],'x'))+Number(attr(tabTag[1],'textLength'))))<.1);
 
-const estimatedSvg=renderSlideSvg(deck, 0,{trace:true});
+const estimatedSvg=toSvg(deck, 1,{trace:true});
 assert.match(estimatedSvg,/data-opf-rich-spacing="mixed-estimated-tabs"/);
 const estimatedLineTrace=JSON.parse(attr(/<g\b([^>]*)data-opf-rich-spacing="mixed-estimated-tabs"[^>]*>/.exec(estimatedSvg)[1],'data-opf-rich-lines').replaceAll('&quot;','"'));
 assert.ok(estimatedLineTrace.some(line=>line.spacing==='natural-chunks-estimated-tabs'));
@@ -49,7 +49,7 @@ assert.match(estimatedSvg,/data-opf-segment="tab"/);
 // The shared rich-outline consumer must skip the layout control while retaining
 // glyph outlines on both sides. A strict registry would reject U+0009 here.
 const outlineDeck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{text:[{text:'Before	',fontFamily:'Carlito'},{text:'After',fontFamily:'Carlito',bold:true}]}]};
-assert.doesNotThrow(()=>renderSlideSvg(outlineDeck, 0,renderOptions));
+assert.doesNotThrow(()=>toSvg(outlineDeck, 1,renderOptions));
 assert.ok(measureCalls>0);
 assert.ok(outlineCalls>0);
 

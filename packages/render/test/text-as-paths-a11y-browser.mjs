@@ -1,6 +1,6 @@
 // RR-64 phase 3: an outlined slide is as accessible as its text version (FA-30). The glyphs are hidden from assistive technology
 // and each outlined line is real text again, invisible, pinned to the drawn width. Checked in a real browser on the FA-30 fixture
-// deck drawn with `textAsPaths: true`: the slide is one group named by its title; every piece of slide text is in the
+// deck drawn with `text: "paths"`: the slide is one group named by its title; every piece of slide text is in the
 // accessibility tree as text, outside any image except the chart's own marks; axe reports nothing; find-in-page finds the words;
 // the readable layer paints nothing (same pixels without it); and it names no font, so no face is embedded for it. Offline.
 import assert from 'node:assert/strict';
@@ -8,11 +8,11 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { chromium } from 'playwright';
 import { loadFonts } from '../dist/fonts-node.js';
-import { renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { previewA11yDeck } from './preview-a11y-fixture.mjs';
 
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'all' });
-const svg = renderSlideSvg(previewA11yDeck(), 0, { fonts, textAsPaths: true });
+const svg = toSvg(previewA11yDeck(), 1, { fonts, text: "paths" });
 const readable = [...svg.matchAll(/<text [^>]*fill="none"[^>]*>/g)];
 assert.ok(readable.length >= 10, `${readable.length} readable lines`);
 assert.ok(readable.every(([tag]) => /font-family="sans-serif"/.test(tag) && /textLength="[\d.]+"/.test(tag)), 'readable lines name the generic family and are pinned to the drawn width');

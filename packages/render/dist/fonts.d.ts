@@ -34,14 +34,14 @@ export interface FontRegistryOptions {
 export declare const FONT_COMPATIBILITY: readonly Readonly<{requestedFamily:string;substitutes:readonly string[];compatibility:"metric"|"visual";weights?:readonly number[];weight?:number;source?:string;measured?:FontReplacementMeasurement;decision?:string;metricModeFallback?:true;licenseClass?:FontPolicyEntry['licenseClass'];note:string}>[];
 export declare const EXPERIMENTAL_FONT_CANDIDATES: readonly Readonly<{requestedFamily:string;substitute:string;source:string;note:string}>[];
 /**
- * What the deck-level functions read from their `fonts` option: `renderSvg`, `renderSlideSvg` and `<opf-deck>` take the measurement and
- * the faces to embed; `svgToPng` and `svgToPdf` (Node) take the font files; core `paginate`, `validate` and `resolveSlideContext` take the
+ * What the deck-level functions read from their `fonts` option: `toSvg` and `<opf-deck>` take the measurement and
+ * the faces to embed; `toPng` and `toPdf` (Node) take the font files; core `paginate`, `validate` and `resolveSlideContext` take the
  * measurement. The object `loadFonts()` returns is a `FontsHandle`, which extends this; any object with these fields works.
  */
 export interface RenderFonts {
   /** Measures text with the real faces. Without it layout uses core's portable estimate. */
   textMeasurement?: TextMeasurement;
-  /** Faces `renderSvg` may write into an SVG as @font-face data: each only into the SVGs whose text draws it (its family, weight and style), unless flagged `embed: "always"` (RR-61). */
+  /** Faces `toSvg` may write into an SVG as @font-face data: each only into the SVGs whose text draws it (its family, weight and style), unless flagged `embed: "always"` (RR-61). */
   embeddedFonts?: readonly EmbeddedFont[];
   /** Font files the Node raster and PDF conversions draw with. */
   fontFiles?: readonly string[];
@@ -49,14 +49,14 @@ export interface RenderFonts {
   useBundledFonts?: boolean;
   /** Whether the raster conversion loads system fonts. Default false (the output never depends on the machine). */
   loadSystemFonts?: boolean;
-  /** The outline engine `textAsPaths: true` draws text with (RR-64); a `loadFonts` handle carries one over its registry's faces. */
+  /** The outline engine `text: "paths"` draws text with (RR-64); a `loadFonts` handle carries one over its registry's faces. */
   outlines?: TextOutlines;
   /** The subset engine (RR-65): each face an SVG embeds is cut to the characters the slide draws. The Node `loadFonts` handle carries one; a browser handle with `subsetWasm`. */
   subsets?: FontSubsets;
 }
 /** Cuts an embedded face to code points (RR-65), with hb-subset; a face whose license, Reserved Font Name or fsType does not allow it keeps its own data URL. */
 export interface FontSubsets { subsetDataUrl(font: EmbeddedFont, codePoints: Iterable<number>): string }
-/** Draws a slide's text as glyph outlines (RR-64). Read by `renderSvg`; hosts pass the handle and `textAsPaths: true`. */
+/** Draws a slide's text as glyph outlines (RR-64). Read by `toSvg`; hosts pass the handle and `text: "paths"`. */
 export interface TextOutlines { outlineSlideText(content: string[], options: object): { content: string[]; defs: string } }
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
 export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[] }
@@ -66,7 +66,7 @@ export interface FontsHandle extends RenderFonts {
   readonly embeddedFonts: EmbeddedFont[];
   /** The face registry behind the handle (shaping, resolution, lazy and script loading). */
   readonly registry: FontRegistry;
-  /** The outline engine for `textAsPaths: true` (RR-64), over this registry's faces, including faces `ensure` loads later. */
+  /** The outline engine for `text: "paths"` (RR-64), over this registry's faces, including faces `ensure` loads later. */
   readonly outlines: TextOutlines;
   /** The pinned manifest of the bundled font packages. */
   readonly manifest: { readonly version: number; readonly packages: readonly object[] };

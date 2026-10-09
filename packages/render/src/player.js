@@ -632,7 +632,7 @@ async function readSource(source, signal) {
  * player covers the page at once (and asks for full screen), then resolves with the running session when the first slide is
  * drawn. Call it from a click or key handler: full screen and the speaker view both need a user gesture.
  *
- * Options: `fonts` (the self-hosted font root URL, or a browser fonts handle from `loadFonts`), `renderOptions` (extra `renderSlideSvg` options),
+ * Options: `fonts` (the self-hosted font root URL, or a browser fonts handle from `loadFonts`), `renderOptions` (extra `toSvg` options),
  * `startSlide` (1-based), `includeHidden`, `fullscreen` (default true), `presenterView` (open the speaker view too),
  * `role: "presenter"` (this window is the speaker view: for a second tab or window of your page), `channel` (name, or `false`
  * for no sync), `container`, `signal` and `now` (an injectable clock).

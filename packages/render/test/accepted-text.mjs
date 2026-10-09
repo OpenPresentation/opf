@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {resolvePresentation, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
 const fonts=(await loadFonts({pack: 'office', substitutionPolicy:'visual'})).registry;
@@ -13,7 +13,7 @@ for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()
     ...(outlines?{outlineBounds(...args){inkCalls++;return fonts.textMeasurement.outlineBounds(...args);}}:{})}}};
   const bound=resolvePresentation(deck,options).slides[0],expectedCalls=calls,expectedStyles=styles,expectedInkCalls=inkCalls;
   calls=0;styles=0;inkCalls=0;
-  const diagnostics=[],svg=renderSlideSvg(deck, 0,{...options,onDiagnostic:issue=>diagnostics.push(issue)});
+  const diagnostics=[],svg=toSvg(deck, 1,{...options,onDiagnostic:issue=>diagnostics.push(issue)});
   assert.equal(calls,expectedCalls,`${id}: painting must not measure accepted text again`);
   assert.equal(styles,expectedStyles,`${id}: painting must consume resolved styles`);
   assert.equal(inkCalls,expectedInkCalls,`${id}: painting must consume accepted outlines`);
@@ -44,9 +44,9 @@ for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()
 }
 for(const text of ['Unabridged content. '.repeat(400),[{text:'Unabridged rich content. '.repeat(400),bold:true}]]) {
   const deck={design:{fontScheme:'roboto'},slides:[{text}]},issues=[];
-  renderSlideSvg(deck, 0,{fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:issue=>issues.push(issue)});
+  toSvg(deck, 1,{fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:issue=>issues.push(issue)});
   assert.equal(issues.filter(issue=>issue.code==='text-overflow'&&issue.path==='slides.0.text').length,1);
   deck.slides[0].composition={overflow:'error'};
-  assert.throws(()=>renderSlideSvg(deck, 0,{fonts:{textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
+  assert.throws(()=>toSvg(deck, 1,{fonts:{textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 }
 console.log(`Accepted text: ${cases} wide/portrait/card/alignment/scalar/rich cases consume exact accepted fits and styles; overflow diagnostics and strict rejection pass.`);

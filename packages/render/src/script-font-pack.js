@@ -130,7 +130,7 @@ function scriptOfFamily(family) {
  * scheme (`slide.design`), so each such slide is resolved too. `han` is the CJK script the scheme names, which tells
  * Han-only text apart when the language does not (a Yu Gothic deck whose language is English).
  *
- * `renderOptions` are the host's `renderSvg` options: their `catalogs` (core `Catalog[]`) go to core's `resolveScriptFonts`
+ * `renderOptions` are the host's `toSvg` options: their `catalogs` (core `Catalog[]`) go to core's `resolveScriptFonts`
  * unchanged, and the families the renderer resolves per slide count too, so a scheme that exists only in the host's catalogs
  * and names a script font still loads that font.
  */
@@ -176,8 +176,8 @@ function* namedFontFamilies(value, key) {
  * itemization, so language-dependent punctuation counts), the scripts its font schemes need (`design`, for example
  * Jpan for a Yu Gothic scheme) and the CJK characters that a glyph fallback might have to draw with another CJK face.
  * The text decides, so a document is analyzed without resolving its layouts and catalogs; `renderOptions` (the host's
- * `renderSvg` options) matter only for font schemes the host supplies in `renderOptions.catalogs`, which then resolve
- * like the renderer resolves them; a document that then does not resolve throws what `renderSvg` throws for it.
+ * `toSvg` options) matter only for font schemes the host supplies in `renderOptions.catalogs`, which then resolve
+ * like the renderer resolves them; a document that then does not resolve throws what `toSvg` throws for it.
  */
 export function analyzePresentationScripts(presentation, profile, renderOptions) {
   profile ??= presentationScriptProfile(presentation, renderOptions);
@@ -198,7 +198,7 @@ export function analyzePresentationScripts(presentation, profile, renderOptions)
  * (Japanese, Korean, Simplified or Traditional Chinese) and makes curly quotes, dashes and the ellipsis
  * East Asian. Text the preview never draws (ids, alt text, sources, assets, catalogs, notes) is ignored.
  * Greek and Cyrillic add nothing: the office registry always carries Noto Sans (the glyph-fallback face) and Roboto covers them.
- * Pass `profile` to reuse a resolved profile. Other options are the host's `renderSvg` options (`catalogs`, see `analyzePresentationScripts`).
+ * Pass `profile` to reuse a resolved profile. Other options are the host's `toSvg` options (`catalogs`, see `analyzePresentationScripts`).
  */
 export function detectPresentationScripts(presentation, { profile, ...renderOptions } = {}) {
   return analyzePresentationScripts(presentation, profile, renderOptions).detected;

@@ -7,7 +7,7 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
-import {svgToPng, renderSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toPng, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {readBaseline} from './golden-store.mjs';
 const [consumer,directory='artifacts/code-review']=process.argv.slice(2);assert.ok(consumer);
 const root=await realpath(consumer),base=await realpath(path.join(root,'node_modules/@openpresentation/opf-render'));
@@ -26,7 +26,7 @@ for(const [ordinal,key] of changed.entries()) {
   const split=key.lastIndexOf('#'),file=key.slice(0,split),index=Number(key.slice(split+1));
   const deck=examples.find(example=>example.file==='examples/'+file)?.deck;assert.ok(deck,key);
   const before=await baseline.svgToPng(baseline.renderSvgDeck(deck,{trace:true})[index],{scale:.25});
-  const after=await svgToPng(renderSvg(deck,{trace:true})[index],{scale:.25});
+  const after=await toPng(toSvg(deck,{trace:true})[index],{scale:.25});
   assert.equal(hash(before),expected.entries[key].sha256,'Baseline runtime must reproduce the approved slide');
   assert.equal(hash(after),candidate.entries[key].sha256,'Candidate must reproduce the new slide');
   const id=String(ordinal).padStart(2,'0');
@@ -39,7 +39,7 @@ for(const [ordinal,key] of changed.entries()) {
   records.push({id,key,beforeSha256:hash(before),afterSha256:hash(after)});
   if (file.startsWith('technical/') || ordinal === 3) {
     await writeFile(path.join(directory,id+'-before-full.png'),await baseline.svgToPng(baseline.renderSvgDeck(deck,{trace:true})[index]));
-    await writeFile(path.join(directory,id+'-after-full.png'),await svgToPng(renderSvg(deck,{trace:true})[index]));
+    await writeFile(path.join(directory,id+'-after-full.png'),await toPng(toSvg(deck,{trace:true})[index]));
   }
 }
 for(let offset=0;offset<pairs.length;offset+=6) {

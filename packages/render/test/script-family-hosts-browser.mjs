@@ -26,7 +26,7 @@ import {FULLWIDTH, assertFindings, expectedWeight, root, scriptDeck, scriptFamil
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/script-family-hosts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {toSvg} from './dist/svg.js';window.opf={loadBrowserFonts,toSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
@@ -92,10 +92,10 @@ try {
         row.fetched.push(...fetched);
       } else row.fetched.push(...fetched);
       const observed = await page.evaluate(async ({deck, family, weights}) => {
-        const registry = window.registry, {renderSlideSvg} = window.opf;
+        const registry = window.registry, {toSvg} = window.opf;
         const resolved = weights.map(weight => { const r = registry.resolveFont({fontFamily: family, fontWeight: weight, italic: false}); return {weight, family: r.resolvedFamily, resolvedWeight: r.resolvedWeight, compatibility: r.compatibility, substitute: r.substitute}; });
         const host = document.querySelector('main');
-        host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
+        host.innerHTML = toSvg(deck, 1, { fonts: {textMeasurement: registry.textMeasurement}});
         await document.fonts.ready;
         const clean = value => value.split(',')[0].trim().replace(/^["']|["']$/g, '');
         const faces = [...document.fonts].map(face => ({family: clean(face.family), weight: Number(face.weight), style: face.style, status: face.status}));
@@ -112,7 +112,7 @@ try {
           const natural = element.getComputedTextLength();
           return {text: element.textContent, family: runFamily, weight, size, accepted, natural, faceLoaded: faces.some(face => face.family === runFamily && face.weight === weight && face.status === 'loaded'), direction: getComputedStyle(element).direction, order: first, box: {x: svgBox.left + box.x * scale, y: svgBox.top + box.y * scale, width: box.width * scale, height: box.height * scale}};
         });
-        host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
+        host.innerHTML = toSvg(deck, 1, { fonts: {textMeasurement: registry.textMeasurement}});
         await document.fonts.ready;
         return {resolved, runs, registryFaces: registry.describeFaces().map(face => `${face.family}|${face.weight}|${face.italic}`).sort(), documentFaces: faces.map(face => `${face.family}|${face.weight}|${face.style === 'italic'}`).sort(), pendingAfter: registry.pendingScripts(deck)};
       }, {deck, family: entry.family, weights: [400, 700]});

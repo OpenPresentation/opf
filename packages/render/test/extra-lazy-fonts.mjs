@@ -14,7 +14,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {examples} from '@openpresentation/opf/examples';
 import {createFontRegistry} from '../dist/font-registry.js';
-import {renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {lazyFacesNeeded, loadFonts as loadBrowserFonts, presentationFaces, splitStartupFaces} from '../dist/fonts-browser.js';
 
@@ -119,7 +119,7 @@ await invalid({extraLazyFonts: [extras[0], extras[0]]}, /repeats url/);
   // Host faces are embed "used" like the vendored ones: registry.embeddedFonts holds the startup face only, and an SVG embeds a host face
   // only when it is passed explicitly and the slide's text uses its family.
   assert.deepEqual(registry.embeddedFonts.map(face => `${face.family} ${face.weight}`), ['Roboto 400']);
-  const svg = renderSlideSvg(plain, 0, { fonts: {textMeasurement: registry.textMeasurement, embeddedFonts: registry.selectEmbeddedFonts(() => true)}});
+  const svg = toSvg(plain, 1, { fonts: {textMeasurement: registry.textMeasurement, embeddedFonts: registry.selectEmbeddedFonts(() => true)}});
   assert.deepEqual([...svg.matchAll(/@font-face\{font-family:"([^"]+)";font-weight:(\d+)/g)].map(match => `${match[1]} ${match[2]}`).sort(), ['Roboto 400', 'Roboto 700'], 'Roboto Bold embeds because the title uses it; the other loaded faces do not exist yet');
 
   // The vendored loader still needs lazyFontsBaseUrl, the host's faces do not.

@@ -9,6 +9,6 @@ export * from '../dist/index.js';
 export { defaultCatalog };
 export const catalogs = Object.freeze([defaultCatalog]);
 export const withCatalogs = (options = {}) => ({ catalogs, ...options });
-export const renderSvg = (input, options) => renderer.renderSvg(input, withCatalogs(options));
-export const renderSlideSvg = (input, index, options) => renderer.renderSlideSvg(input, index, withCatalogs(options));
+// The second argument is a slide selection or the options, as toSvg takes them (RR-73).
+export const toSvg = (input, slides, options) => (slides !== null && typeof slides === "object" && !Array.isArray(slides) ? renderer.toSvg(input, withCatalogs(slides)) : renderer.toSvg(input, slides, withCatalogs(options)));
 export const resolvePresentation = (input, options) => renderer.resolvePresentation(input, withCatalogs(options));

@@ -1,6 +1,6 @@
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { pickFace } from "./font-registry.js";
-import { renderSvg, resolvePresentation } from "./svg.js";
+import { resolvePresentation, toSvg } from "./svg.js";
 export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
 
 /**
@@ -17,7 +17,7 @@ const lc = value => String(value).trim().toLowerCase();
 
 /**
  * Render options that decide how a document resolves (catalogs, validate, date, ...) are forwarded from the host's
- * `renderSvg` options. The analysis supplies its own measurement and reports nothing: callbacks, the host's fonts handle
+ * `toSvg` options. The analysis supplies its own measurement and reports nothing: callbacks, the host's fonts handle
  * (measurement and embedded fonts), asset resolution and tracing are dropped.
  */
 const NOT_RESOLVE_OPTIONS = new Set(["fonts", "onDiagnostic", "trace", "glyphFallback", "imageResolver", "strictAssets", "signal"]);
@@ -27,10 +27,10 @@ function resolveOptionsOf(options) {
 
 /**
  * The font families a presentation's slides resolve (heading, body and code roles of every slide, including per-slide
- * design overrides), as `renderSvg` resolves them with the same `options` (`catalogs`, ...). This is the role families,
+ * design overrides), as `toSvg` resolves them with the same `options` (`catalogs`, ...). This is the role families,
  * not what is drawn: use `presentationFaces` for that.
  *
- * A document that does not resolve throws the error `renderSvg` throws for it (an OPFRenderError such as
+ * A document that does not resolve throws the error `toSvg` throws for it (an OPFRenderError such as
  * `catalog-resolution-failed` for a layout id no catalog has, or `invalid-opf`), never an empty set: a document whose layout comes only from
  * `options.catalogs` needs those catalogs here too.
  */
@@ -57,7 +57,7 @@ function registryView({ faces, policy = "none", aliases = new Map(), fallbackFam
 
 /**
  * The faces a preview of the presentation draws, as `[{family, weight, italic}]`, sorted by family, style and weight. It is
- * the renderer's own layout and painting run with a recording measurement, so it follows exactly what `renderSvg` measures
+ * the renderer's own layout and painting run with a recording measurement, so it follows exactly what `toSvg` measures
  * and draws: the heading and body roles of every slide that draws them, bold and italic runs of rich text, table and cell
  * styles, header and footer furniture, chart labels, metrics, quotes and timelines, the code role only where code is
  * drawn, per-slide design overrides, font scheme and theme resolution, and script slots (a script run is requested in its
@@ -73,8 +73,8 @@ function registryView({ faces, policy = "none", aliases = new Map(), fallbackFam
  * family found. The result is the faces the registry paints, for example `Intos 700` for a 600-weight label of an Aptos
  * deck. A style the registry cannot resolve is left as named (drawing reports it).
  *
- * `options` are the `renderSvg` options the document resolves with (`catalogs`, `date`, `validate`, ...). A document that
- * does not resolve throws what `renderSvg` throws for it.
+ * `options` are the `toSvg` options the document resolves with (`catalogs`, `date`, `validate`, ...). A document that
+ * does not resolve throws what `toSvg` throws for it.
  * @param {unknown} presentation
  * @param {object} [options]
  * @param {{faces: Iterable<{family: string, weight: number, italic: boolean}>, policy?: "none"|"metric"|"visual", aliases?: ReadonlyMap<string, string>, fallbackFamily?: string}} [registry]
@@ -98,7 +98,7 @@ export function presentationFaces(presentation, options = {}, registry) {
     measure(text, size, style) { if (text !== "") record(settle(style)); return String(text).length * size * RECORDED_EM; },
     resolveStyle: settle,
   };
-  renderSvg(presentation, { ...resolveOptionsOf(options), fonts: { textMeasurement } });
+  toSvg(presentation, { ...resolveOptionsOf(options), fonts: { textMeasurement } });
   return [...seen.values()].sort((a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Number(a.italic) - Number(b.italic) || a.weight - b.weight);
 }
 
@@ -106,8 +106,8 @@ export function presentationFaces(presentation, options = {}, registry) {
  * The vendored faces (of `lazy`) a presentation draws that the registry does not hold: what a registry loads before it can
  * paint the document as Node paints it with every vendored face loaded. `held` lists the registry's faces
  * (`registry.describeFaces()`), `loaded` the lazy files already loaded; `policy`, `aliases` and `fallbackFamily` are the
- * registry's. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...), and a document that
- * does not resolve throws what `renderSvg` throws for it. Face level: a bold or italic run added by an edit adds just that face.
+ * registry's. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...), and a document that
+ * does not resolve throws what `toSvg` throws for it. Face level: a bold or italic run added by an edit adds just that face.
  */
 export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily }) {
   const heldFaces = [...held], heldKeys = new Set(heldFaces.map(faceKeyOf));

@@ -7,7 +7,7 @@ import { paginate, validate } from '@openpresentation/opf';
 import { resolveScriptFonts } from '@openpresentation/opf/composition';
 import { createScriptFonts } from '../dist/fonts.js';
 import { loadFonts } from '../dist/fonts-node.js';
-import { catalogs, renderSvg } from './catalog-harness.mjs';
+import { catalogs, toSvg } from './catalog-harness.mjs';
 
 const TITLE = 'مراجعة ربع سنوية للمنتج';
 const BODY = 'بدأ العمل على المنصة الجديدة في مطلع العام، وقد شمل ذلك إعادة تصميم تجربة المستخدم بالكامل، وتوحيد الخطوط والألوان عبر جميع الشرائح.';
@@ -46,7 +46,7 @@ for (const deck of [arabicDeck, runInEnglish]) {
   assert.deepEqual(layoutFailures(report), [], deck.name);
   assert.equal(report.checks.layout, 'measured');
   assert.equal(paginate(deck, { catalogs, fonts }).presentation.slides.length, deck.slides.length, deck.name);
-  assert.equal(renderSvg(deck, { fonts }).length, deck.slides.length, 'the same handle renders the deck');
+  assert.equal(toSvg(deck, { fonts }).length, deck.slides.length, 'the same handle renders the deck');
 }
 
 // 3. Control: without the Arabic script face no loaded face has the glyphs, and validate still reports it.

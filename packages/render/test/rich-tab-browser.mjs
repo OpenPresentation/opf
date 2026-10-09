@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
-import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
+import {resolvePresentation, toSvg} from '../dist/index.js';
 import {layoutTable} from '@openpresentation/opf/composition';
 import {loadFonts} from '../src/fonts-node.js';
 
@@ -17,7 +17,7 @@ const layout=layoutTable(item.value,item.box,{scale,minFontSize:(bound.compositi
 const cell=layout.rows[0].cells[0],fragments=cell.fit.richLines.flatMap(line=>line.fragments),tab=fragments.find(fragment=>fragment.kind==='tab'),following=fragments[fragments.indexOf(tab)+1];
 assert.ok(tab&&following);
 const expected={tabX:cell.textBox.x+tab.x,tabWidth:tab.width,followingX:cell.textBox.x+following.x};
-const svg=renderSlideSvg(deck, 0,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
+const svg=toSvg(deck, 1,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
 const errors=[],requests=[];let actual;
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720}});

@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSlideSvg} from '../dist/index.js';
+import {toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {SYMBOL_FONT_ENCODINGS} from '@openpresentation/opf/symbol-font-encodings';
 import {SYMBOL_SCRIPT,createScriptFonts} from '../dist/fonts.js';
@@ -27,7 +27,7 @@ for(const entry of SYMBOL_FONT_ENCODINGS.families){
   }
 }
 const deck={$schema:'https://openpresentation.org/schema/opf/v1',name:'FF-45 browser',slides:[{id:'a',title:'Symbols',text:[{text:'Check: '},{text:' l',fontFamily:'Wingdings'},{text:' alpha '},{text:'abg ∑',fontFamily:'Symbol'},{text:' web '},{text:'',fontFamily:'Webdings'}]}]};
-const svg=renderSlideSvg(deck, 0, {fonts: prepared});
+const svg=toSvg(deck, 1, {fonts: prepared});
 const expectedAdvances=mapSymbolAdvances('Wingdings',' l').map(item=>item.advance);
 
 const faces=registry.describeFaces(),files=prepared.fontFiles;

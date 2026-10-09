@@ -23,7 +23,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/lazy-face-fallback');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {toSvg} from './dist/svg.js';window.opf={loadBrowserFonts,toSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
 });
 const script = bundle.outputFiles[0].text;
@@ -76,9 +76,9 @@ try {
   const run = async (name, document) => {
     const before = {lazy: requests.lazy.length, pack: requests.pack.length};
     const result = await page.evaluate(async ({document, eager, origin}) => {
-      const {loadBrowserFonts, renderSlideSvg} = window.opf;
+      const {loadBrowserFonts, toSvg} = window.opf;
       const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}})).registry;
-      const draw = () => { const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs}); window.document.querySelector('main').innerHTML = svg; return svg; };
+      const draw = () => { const svg = toSvg(document, 1, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs}); window.document.querySelector('main').innerHTML = svg; return svg; };
       // The registry as a host has it after loading only the vendored faces: the script face is still pending.
       await registry.ensureLazyFonts(document);
       const pendingScripts = registry.pendingScripts(document).map(item => item.replace('@expo-google-fonts/', ''));
@@ -136,21 +136,21 @@ try {
   }
   // Loading the script face before the vendored one (an editor that detects scripts first) reaches the same preview.
   const swapped = await page.evaluate(async ({document, eager, origin}) => {
-    const {loadBrowserFonts, renderSlideSvg} = window.opf;
+    const {loadBrowserFonts, toSvg} = window.opf;
     const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}})).registry;
     await registry.ensureScripts(document);
     await registry.ensureLazyFonts(document);
-    const svg = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
+    const svg = toSvg(document, 1, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     const drawn = [...new Set([...svg.matchAll(/font-family="([^",]*)/g)].map(match => match[1]))];
     registry.dispose();
     return drawn;
   }, {document: cases[0][1], eager: eager.map(({bytes, ...rest}) => rest), origin: ORIGIN});
   assert.deepEqual(swapped.sort(), ['Intos', 'Intos Display', 'Noto Sans JP'], 'scripts first, vendored faces second');
   await page.evaluate(async ({document, eager, origin}) => {
-    const {loadBrowserFonts, renderSlideSvg} = window.opf;
+    const {loadBrowserFonts, toSvg} = window.opf;
     const registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${origin}/`, scriptBaseUrl: `${origin}/pack/`, renderOptions: {catalogs: window.catalogs}, scripts: 'auto', presentation: document})).registry;
     await registry.ensureLazyFonts(document);
-    window.document.querySelector('main').innerHTML = renderSlideSvg(document, 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
+    window.document.querySelector('main').innerHTML = toSvg(document, 1, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     await window.document.fonts.ready;
   }, {document: cases[0][1], eager: eager.map(({bytes, ...rest}) => rest), origin: ORIGIN});
   await page.locator('main svg').screenshot({path: path.join(outputDirectory, 'aptos-japanese.png')});

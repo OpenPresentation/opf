@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { examples } from '@openpresentation/opf/examples';
 import { loadFonts } from '../dist/fonts-node.js';
-import { renderSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
+import { toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
 
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'all', embedScriptFonts: true });
 const decks = examples.filter((example, index) => index % 6 === 0 || /arabic|japanese|hindi|chinese|korean|thai|hebrew|rtl|cjk/i.test(example.file));
@@ -19,7 +19,7 @@ try {
     return page.screenshot({ clip: { x: 0, y: 0, width: 1280, height: 720 } });
   };
   for (const { file, deck } of decks) {
-    const whole = renderSvg(deck, { fonts, subsetFonts: false }), cut = renderSvg(deck, { fonts });
+    const whole = toSvg(deck, { fonts, subsetFonts: false }), cut = toSvg(deck, { fonts });
     for (const [index, svg] of cut.entries()) {
       faces += (svg.match(/@font-face/g) ?? []).length;
       assert.ok(svg.length <= whole[index].length, `${file}#${index}: the subset SVG is not larger`);

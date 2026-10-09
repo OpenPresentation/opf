@@ -95,7 +95,7 @@ const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item
 /**
  * Adds the script pack. `scripts` is 'all', ISO 15924 codes, or 'auto' (FF-19): detect the scripts the
  * `presentation` draws and load only their faces. Auto never fails on a missing optional package or a
- * script no pinned font serves; it reports them through `onDiagnostic` and `selection`. `renderOptions` are the host's `renderSvg`
+ * script no pinned font serves; it reports them through `onDiagnostic` and `selection`. `renderOptions` are the host's `toSvg`
  * options (see `analyzePresentationScripts`).
  */
 async function withScripts(loaded, scripts, {presentation, onDiagnostic, renderOptions} = {}) {
@@ -250,7 +250,7 @@ async function ensureFonts(registry, loaded, presentation, {onDiagnostic, render
 }
 
 // RR-65: hb-subset from the pinned harfbuzzjs package (MIT), compiled once per process. The module has no imports, so it is
-// instantiated synchronously and renderSvg stays synchronous. A copy that cannot be loaded leaves the handle without `subsets`
+// instantiated synchronously and toSvg stays synchronous. A copy that cannot be loaded leaves the handle without `subsets`
 // (whole faces, as before RR-65): a byte saving never stops fonts from loading.
 let subsetterPromise;
 function nodeSubsetter() {
@@ -268,7 +268,7 @@ function nodeShaper() {
 
 /**
  * The fonts handle: one set of verified font inputs for layout, SVG, editor, PPTX and Node raster export. Pass it as `{ fonts }` to
- * `renderSvg`, `renderSlideSvg`, `svgToPng`, `svgToPdf`, core `paginate` and `validate`, and `toPptx`.
+ * `toSvg`, `toPng`, `toPdf`, core `paginate` and `validate`, and `toPptx`.
  *
  * Bundled, openly licensed faces only: no system font discovery and no network requests. `pack`: `base` (default, Roboto),
  * `office` (the Office substitutes and the open families) or `none` (only the `faces` you supply). Everything else
@@ -293,7 +293,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     useBundledFonts: false,
     loadSystemFonts: false,
     registry,
-    // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
+    // RR-64: the outline engine `toSvg(deck, { fonts, text: "paths" })` draws text with, over this registry's faces.
     outlines: textOutlines({ registry, shaper }),
     // RR-65: the subset engine that cuts each face an SVG embeds to the characters the slide draws.
     ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),

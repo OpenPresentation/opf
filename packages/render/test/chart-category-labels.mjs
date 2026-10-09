@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { resolveTextStyle, textWidthMeasurer } from '@openpresentation/opf/composition';
-import {renderSlideSvg} from '../dist/svg.js';
+import {toSvg} from '../dist/svg.js';
 
 // Category-axis labels (src/charts.js) follow PowerPoint's automatic labelling:
 // never broken inside a word, rotated (-45 then -90 degrees) when they do not
@@ -18,8 +18,8 @@ function render(type, rows, { columns = ['Category', 'Value'], onlyPath = true }
   const input = { slides: [{ title: 't', chart: { type, data: { columns, rows } } }] };
   const before = JSON.stringify(input);
   const diagnostics = [];
-  const svg = renderSlideSvg(input, 0, { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
-  assert.equal(renderSlideSvg(input, 0, { trace: true }), svg, `${type}: deterministic bytes`);
+  const svg = toSvg(input, 1, { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
+  assert.equal(toSvg(input, 1, { trace: true }), svg, `${type}: deterministic bytes`);
   assert.equal(JSON.stringify(input), before, `${type}: unchanged authored source`);
   assert.doesNotMatch(svg, /NaN|Infinity/, `${type}: finite output`);
   return { svg, diagnostics, ...labelsOf(svg) };

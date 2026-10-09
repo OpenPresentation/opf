@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {resolvePresentation, toSvg, catalogs} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {validate} from '@openpresentation/opf';
 const fonts=(await loadFonts({pack: 'office'})).registry,escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -12,7 +12,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const deck={design:{fontScheme:'roboto',contentAlignment:align,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSize:32},metric}]},before=structuredClone(deck);
   let calls=0,styles=0;const textMeasurement={measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);},resolveStyle:style=>{styles++;return fonts.textMeasurement.resolveStyle(style);}};
   const bound=resolvePresentation(deck,{ fonts: {textMeasurement}}).slides[0],expectedCalls=calls,expectedStyles=styles;calls=0;styles=0;
-  const diagnostics=[],svg=renderSlideSvg(deck, 0,{ fonts: {textMeasurement},trace:true,onDiagnostic:d=>diagnostics.push(d)});
+  const diagnostics=[],svg=toSvg(deck, 1,{ fonts: {textMeasurement},trace:true,onDiagnostic:d=>diagnostics.push(d)});
   assert.equal(calls,expectedCalls);assert.equal(styles,expectedStyles);assert.deepEqual(diagnostics,[]);assert.deepEqual(deck,before);
   const layout=bound.geometry.items[0].metricLayout;assert.equal(layout.alignment,align);
   const parts=layout.parts.filter(p=>p.visible),groups=[...svg.matchAll(/<g\b([^>]*data-opf-metric-role[^>]*)>/g)];
@@ -46,13 +46,13 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
 }
 assert.ok(anchored>0,'centered and right-aligned metrics exercise edge anchoring');
 const strict={slides:[{composition:{overflow:'error',minFontSize:32},blocks:[{metric:{value:42,label:'Unabridged label '.repeat(300)}}]}]};
-assert.throws(()=>renderSlideSvg(strict, 0),e=>e.code==='layout-overflow'&&e.diagnostics.some(d=>d.path.endsWith('.metric.label')));
+assert.throws(()=>toSvg(strict, 1),e=>e.code==='layout-overflow'&&e.diagnostics.some(d=>d.path.endsWith('.metric.label')));
 let invalidCases=0;
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];
 for(const point of forbidden)for(const field of ['shorthand','value','unit','label','description','delta']){
   const value='A😀B'+String.fromCodePoint(point)+'Z',metric=field==='shorthand'?value:{value:0,[field]:value},deck={slides:[{metric}]},before=structuredClone(deck);
   assert.equal(validate(deck,{only:['format'],catalogs}).valid,true);
-  assert.throws(()=>renderSlideSvg(deck, 0),e=>e.code==='invalid-metric-text'&&e.path==='slides.0.metric'+(field==='shorthand'?'':'.'+field)&&e.message.includes('UTF-16 offset 4'));
+  assert.throws(()=>toSvg(deck, 1),e=>e.code==='invalid-metric-text'&&e.path==='slides.0.metric'+(field==='shorthand'?'':'.'+field)&&e.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;
 }
 console.log(`Shared metric SVG: ${cases} accepted aligned layouts (${anchored} edge-anchored lines), exact zero/source/trace/line origins, no repeated measurement, strict rejection and ${invalidCases} XML boundary cases.`);

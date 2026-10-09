@@ -14,7 +14,7 @@
 import assert from 'node:assert/strict';
 import * as core from '@openpresentation/opf/composition';
 // The decks name gallery font schemes (calibri, yu-gothic, ...): render and select scripts with the host catalog registered.
-import {catalogs, renderSlideSvg} from './catalog-harness.mjs';
+import {catalogs, toSvg} from './catalog-harness.mjs';
 import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
 
 const short = name => name.replace('@expo-google-fonts/', '');
@@ -36,7 +36,7 @@ let checked = 0;
 async function render(label, document, {scripts = 'auto', policy = 'metric', slideIndex = 0} = {}) {
   const fonts = await loadFonts({pack: 'office', substitutionPolicy: policy, scripts, presentation: document, renderOptions: {catalogs}});
   const strict = fonts.registry.textMeasurement;
-  const svg = renderSlideSvg(document, slideIndex, {fonts});
+  const svg = toSvg(document, slideIndex + 1, {fonts});
   const runs = drawnRuns(svg);
   assert.ok(runs.length > 0, `${label}: draws text`);
   for (const [family, text] of runs) {
@@ -92,7 +92,7 @@ for (const scripts of [['Jpan'], 'all']) await render(`aptos + japanese with scr
 for (const [scheme, family] of [[undefined, 'Intos Display'], ['calibri', 'Carlito'], ['open-sans', 'Open Sans']]) {
   const document = deck({title: '日本語', scheme});
   const fonts = await loadFonts({pack: 'office'});
-  assert.throws(() => renderSlideSvg(document, 0, {fonts: fonts}), error => {
+  assert.throws(() => toSvg(document, 1, {fonts: fonts}), error => {
     assert.equal(error.code, 'missing-glyph');
     assert.equal(error.details.fontFamily, family);
     assert.equal(error.details.loadedFaceHasGlyph, false);

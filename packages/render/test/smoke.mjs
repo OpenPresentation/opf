@@ -3,7 +3,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {OPFRenderError, renderSvg, resolvePresentation, svgToPdf, svgToPng, renderSlideSvg} from "../dist/index.js";
+import {OPFRenderError, toSvg, resolvePresentation, toPdf, toPng} from "../dist/index.js";
 // FA-23: the renderer registers no catalog. Documents that name gallery records (the example corpus, the `text-2x` layout
 // below) render through the harness, which registers the gallery snapshot the way a host does.
 import * as host from "./catalog-harness.mjs";
@@ -26,28 +26,28 @@ const minimalDeck = {
   ]
 };
 
-const first = renderSlideSvg(minimalDeck, 0, { trace: true });
-const second = renderSlideSvg(minimalDeck, 0, { trace: true });
-assert.equal(first, second, "renderSvg must be byte-stable for the same input");
+const first = toSvg(minimalDeck, 1, { trace: true });
+const second = toSvg(minimalDeck, 1, { trace: true });
+assert.equal(first, second, "toSvg must be byte-stable for the same input");
 assert.match(first, /^<svg /);
 assert.match(first, /data-opf-path="slides\.0"/);
 assert.match(first, /Minimal OPF Deck/);
-assert.equal(renderSlideSvg(minimalDeck, 0).includes("data-opf-path"), false, "trace output must be optional");
-assert.equal(renderSvg(minimalDeck).length, 3);
+assert.equal(toSvg(minimalDeck, 1).includes("data-opf-path"), false, "trace output must be optional");
+assert.equal(toSvg(minimalDeck).length, 3);
 
-const png = await svgToPng(first, { scale: 0.5 });
-const repeatPng = await svgToPng(first, { scale: 0.5 });
-assert.deepEqual(png, repeatPng, "svgToPng must be byte-stable for the same input and scale");
+const png = await toPng(first, { scale: 0.5 });
+const repeatPng = await toPng(first, { scale: 0.5 });
+assert.deepEqual(png, repeatPng, "toPng must be byte-stable for the same input and scale");
 assert.equal(Buffer.from(png.subarray(0, 8)).toString("hex"), "89504e470d0a1a0a");
 
-const pdfSlides = renderSvg(minimalDeck).slice(0, 2);
-const pdf = await svgToPdf(pdfSlides, { scale: 0.25 });
-const repeatPdf = await svgToPdf(pdfSlides, { scale: 0.25 });
-assert.deepEqual(pdf, repeatPdf, "svgToPdf must be byte-stable for the same input and scale");
+const pdfSlides = toSvg(minimalDeck).slice(0, 2);
+const pdf = await toPdf(pdfSlides, { scale: 0.25 });
+const repeatPdf = await toPdf(pdfSlides, { scale: 0.25 });
+assert.deepEqual(pdf, repeatPdf, "toPdf must be byte-stable for the same input and scale");
 assert.equal(Buffer.from(pdf.subarray(0, 5)).toString("utf8"), "%PDF-");
 const { PDFDocument } = await import("pdf-lib");
 const loadedPdf = await PDFDocument.load(pdf);
-assert.equal(loadedPdf.getPageCount(), 2, "svgToPdf must emit one page per SVG");
+assert.equal(loadedPdf.getPageCount(), 2, "toPdf must emit one page per SVG");
 
 const resolved = resolvePresentation(minimalDeck);
 assert.equal(resolved.slides.length, 3);
@@ -75,11 +75,11 @@ const inlineCatalogDeck = {
     }
   ]
 };
-assert.match(renderSlideSvg(inlineCatalogDeck, 0, { trace: true }), /custom-title-text|Custom layout/);
+assert.match(toSvg(inlineCatalogDeck, 1, { trace: true }), /custom-title-text|Custom layout/);
 assert.equal(resolvePresentation(inlineCatalogDeck).slides[0].layout?.name, "Custom Title Text", "the embedded custom layout is the slide's layout");
 
 assert.throws(
-  () => renderSlideSvg({ slides: "not an array" }, 0),
+  () => toSvg({ slides: "not an array" }, 1),
   (error) => {
     assert.ok(error instanceof OPFRenderError);
     assert.equal(error.code, "invalid-opf");
@@ -98,8 +98,8 @@ if (examplesCorpus) {
 
   for (const file of files) {
     const deck = JSON.parse(readFileSync(file, "utf8"));
-    const svgs = host.renderSvg(deck, { trace: true });
-    const repeat = host.renderSvg(deck, { trace: true });
+    const svgs = host.toSvg(deck, { trace: true });
+    const repeat = host.toSvg(deck, { trace: true });
     assert.deepEqual(svgs, repeat, `${path.relative(examplesCorpus.dir, file)} must render deterministically`);
     assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
     for (const svg of svgs) {
@@ -143,19 +143,19 @@ const dynamic = { slides: [{ title: "Visible title", layout: "text-2x", blocks: 
 ] }] };
 const geometry = host.resolvePresentation(dynamic).slides[0].geometry;
 assert.equal(geometry.items.length, 5);
-assert.match(host.renderSlideSvg(dynamic, 0), /Visible title/);
+assert.match(host.toSvg(dynamic, 1), /Visible title/);
 assert.equal(resolvePresentation({ slides: [{ text: "Contrast" }], design: { background: "#000" } }).slides[0].design.colors.text, "#FFFFFF");
 assert.deepEqual(resolvePresentation({ slides: [{ text: "Portrait" }], design: { dimensions: { widthInches: 7.5, heightInches: 40 / 3 } } }).slides[0].design.dimensions, { width: 720, height: 1280 });
 const overflowMessages = [];
-const overflowing = renderSlideSvg({ slides: [{ text: "Preserve this sentence. ".repeat(1000) }] }, 0, { onDiagnostic: value => overflowMessages.push(value) });
+const overflowing = toSvg({ slides: [{ text: "Preserve this sentence. ".repeat(1000) }] }, 1, { onDiagnostic: value => overflowMessages.push(value) });
 assert.match(overflowing, /data-opf-overflow="true"/);
 assert.equal(overflowMessages.filter(value => value.code === "text-overflow").length, 1);
-assert.throws(() => renderSlideSvg({ slides: [{ image: "https://example.com/image.png" }] }, 0, { strictAssets: true }));
+assert.throws(() => toSvg({ slides: [{ image: "https://example.com/image.png" }] }, 1, { strictAssets: true }));
 
-assert.match(renderSlideSvg(minimalDeck, 0), /font-family="[^"]*, sans-serif"/);
+assert.match(toSvg(minimalDeck, 1), /font-family="[^"]*, sans-serif"/);
 
 const nestedDiagnostics = [];
-const nestedSvg = renderSlideSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, 0, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
+const nestedSvg = toSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, 1, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
 assert.match(nestedSvg, /slides.0.blocks.0.blocks.0.text/);
 assert.match(nestedSvg, /font-size="24"/);
 assert.ok(nestedDiagnostics.some(issue => issue.path === 'slides.0.blocks.0.blocks.0.text'));

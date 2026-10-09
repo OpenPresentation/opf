@@ -6,9 +6,9 @@ import {spawnSync} from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {svgToPng} from '../dist/index.js';
+import {toPng} from '../dist/index.js';
 // A deck below names the gallery font scheme meiryo: it renders and selects scripts with the host catalog registered.
-import {catalogs, renderSvg} from './catalog-harness.mjs';
+import {catalogs, toSvg} from './catalog-harness.mjs';
 import {loadFonts, detectPresentationScripts, autoScriptSelection, scriptFontPackages} from '../dist/fonts-node.js';
 import {detectScripts} from '../dist/fonts.js';
 import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
@@ -106,10 +106,10 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
   assert.equal(prepared.fontFiles.filter(file=>/noto-sans-jp/.test(file)).length,2);
   assert.equal(prepared.fontFiles.some(file=>/noto-sans-(sc|tc|kr|arabic)/.test(file)),false);
   assert.equal(prepared.embeddedFonts.some(face=>/Noto/.test(face.family)&&face.family!=='Noto Sans'),false,'only the default Noto Sans fallback (embed used) is offered');
-  const [svg]=renderSvg(presentation, {fonts: prepared});
+  const [svg]=toSvg(presentation, {fonts: prepared});
   assert.match(svg,/lang="ja/);
   assert.ok(svg.includes('Noto Sans JP'),'the SVG names the designated family');
-  const png=await svgToPng(svg, {fonts: prepared});
+  const png=await toPng(svg, {fonts: prepared});
   assert.equal(Buffer.from(png.subarray(1,4)).toString(),'PNG');
   if(process.env.OPF_AUTO_FONTS_OUT){await mkdir(process.env.OPF_AUTO_FONTS_OUT,{recursive:true});await writeFile(path.join(process.env.OPF_AUTO_FONTS_OUT,'auto-ja.png'),png);}
 }

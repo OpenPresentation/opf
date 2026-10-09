@@ -12,7 +12,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {create} from 'fontkit';
-import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {ALIASES, PROBES, RUNS, STYLES, expectedFace, faceFile, familyDeck, label, latinFamilies, neededFaces, runFace} from './latin-family-fixture.mjs';
 
@@ -60,7 +60,7 @@ for (const entry of families) {
     styleChecks += 1;
   }
   // One deck per family: heading and body in the family, the four styles in one paragraph.
-  const svg = renderSlideSvg(familyDeck(entry.family), 0, { fonts: {textMeasurement: registry.textMeasurement}});
+  const svg = toSvg(familyDeck(entry.family), 1, { fonts: {textMeasurement: registry.textMeasurement}});
   const runs = new Map();
   for (const match of svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)) {
     const [, attributes, content] = match;
@@ -82,9 +82,9 @@ for (const entry of families) {
     const file = pathOf(found.face);
     assert.ok(file, `${entry.family}: ${found.file} is among the registry's font files`);
     const drawn = `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="70"><rect width="700" height="70" fill="white"/><text x="8" y="48" font-family="${found.face.family}" font-weight="${found.face.weight}" font-style="${found.face.italic ? 'italic' : 'normal'}" font-size="36" fill="black">Hamburgefonstiv 1234</text></svg>`;
-    const everything = sha(await svgToPng(drawn, rasterOptions(prepared.fontFiles)));
-    assert.equal(everything, sha(await svgToPng(drawn, rasterOptions([file]))), `${entry.family}: resvg draws ${found.face.family} ${found.face.weight} from ${path.basename(file)}`);
-    assert.notEqual(everything, sha(await svgToPng(drawn, rasterOptions(prepared.fontFiles.filter(candidate => candidate !== file)))), `${entry.family}: ${path.basename(file)} is what paints`);
+    const everything = sha(await toPng(drawn, rasterOptions(prepared.fontFiles)));
+    assert.equal(everything, sha(await toPng(drawn, rasterOptions([file]))), `${entry.family}: resvg draws ${found.face.family} ${found.face.weight} from ${path.basename(file)}`);
+    assert.notEqual(everything, sha(await toPng(drawn, rasterOptions(prepared.fontFiles.filter(candidate => candidate !== file)))), `${entry.family}: ${path.basename(file)} is what paints`);
     paintChecks += 1;
   }
   const faces = neededFaces(entry);

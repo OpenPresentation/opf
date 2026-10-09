@@ -1,5 +1,6 @@
 import type { RenderFonts, ScriptFonts } from "./fonts.js";
-import type { Catalog, Finding, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
+import type { Catalog, Finding, SlideSelection, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
+export type { SlideSelection } from "@openpresentation/opf";
 import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-render";
 
@@ -49,8 +50,8 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   placeholder: "label" | "icon";
 };
 
-export interface RenderSvgOptions {
-  /** Leave out slides marked `hidden: true`, as the player does. Default false: one SVG per slide. With true the result holds only the visible slides, in order, so an index no longer names the slide at that index. Read by the deck-level `renderSvg`; `renderSlideSvg` draws the slide it is given. */
+export interface ToSvgOptions {
+  /** Leave out slides marked `hidden: true` when drawing the whole deck, as the player does. Default false: one SVG per slide. A slide number or selection draws exactly the slides it names. */
   skipHidden?: boolean;
   /**
    * The fonts the deck is laid out and drawn with: the handle `loadFonts()` returns (from `@openpresentation/opf-render/fonts-node` or
@@ -58,10 +59,12 @@ export interface RenderSvgOptions {
    * core's portable width estimate and the SVG names the design fonts without embedding them.
    */
   fonts?: RenderFonts;
-  /** `false` writes no `@font-face` data into the SVG (RR-61): the fonts handle still measures and the SVG still names the families, for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document). Default true: each SVG embeds the faces of `fonts.embeddedFonts` its own text draws. */
-  embedFonts?: boolean;
   /**
-   * `true` draws every `<text>` as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
+   * How the SVG draws text (RR-74). `"fonts"` (default): each SVG embeds, as `@font-face` data, the faces of `fonts.embeddedFonts` its
+   * own text draws (RR-61). `"system"`: no `@font-face` data; the fonts handle still measures and the SVG still names the families,
+   * for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document).
+   *
+   * `"paths"`: every `<text>` drawn as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
    * no font and looks the same in every viewer (about 40 KB a slide over the core example decks, against 0.5 to 4 MB of embedded
    * faces). Needs the fonts handle `loadFonts()` returns (`text-as-paths-needs-fonts` otherwise). The text is no longer text: it
    * cannot be edited in place. The glyphs are shaped by HarfBuzz (the browser's shaper; the Node handle always, a browser handle
@@ -70,9 +73,9 @@ export interface RenderSvgOptions {
    * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a colour or bitmap font
    * (`"colour-font"`), its face's fsType restricts embedding (`"restricted"`), or it has no pinned width and HarfBuzz and the
    * layout's measurement disagree on it (`"shaping"`). Use it for thumbnails, previews and portable SVG files, not for an editing
-   * surface or the vector PDF (which keeps real text from `<text>` SVG). Default false.
+   * surface or the vector PDF (which keeps real text from `<text>` SVG).
    */
-  textAsPaths?: boolean;
+  text?: "fonts" | "system" | "paths";
   /**
    * `false` embeds whole faces (RR-65). By default, with a fonts handle that carries `subsets` (the Node `loadFonts` handle, a browser
    * handle given `subsetWasm`), each face an SVG embeds is cut to the characters the slide draws, keeping every layout feature, so the
@@ -118,18 +121,18 @@ export interface RenderSvgOptions {
   strictReferences?: boolean;
 }
 
-export interface SvgToPngOptions {
+/** The options of `toPng`: the conversion's own, and the `toSvg` options that draw a deck. */
+export interface ToPngOptions extends Omit<ToSvgOptions, "fonts"> {
   /**
-   * The fonts the conversion draws with: the handle `loadFonts()` returns from `/fonts-node` (its `fontFiles`; `useBundledFonts` and
-   * `loadSystemFonts` say whether the bundled base faces are added, default true, and whether system fonts load, default false). Without
-   * it the bundled base faces draw. The same handle goes to `renderSvg`, so the preview and the PNG use the same faces.
+   * The fonts the deck is laid out and drawn with: the handle `loadFonts()` returns from `/fonts-node` (it measures the deck, and its
+   * `fontFiles` draw; `useBundledFonts` and `loadSystemFonts` say whether the bundled base faces are added, default true, and whether
+   * system fonts load, default false), so the preview and the PNG use the same faces. For SVG input it may instead be font folders
+   * (a path or a list of paths), whose faces are added to the bundled base faces. Without it the bundled base faces draw.
    */
-  fonts?: RenderFonts;
+  fonts?: RenderFonts | string | readonly string[];
   scale?: number;
   background?: string;
   dpi?: number;
-  /** Extra directories of font files to draw with. */
-  fontDirs?: string[];
   defaultFontFamily?: string;
   sansSerifFamily?: string;
   monospaceFamily?: string;
@@ -198,14 +201,14 @@ export interface PdfMetadata {
   modificationDate?: Date | string;
 }
 
-export interface SvgToPdfOptions extends SvgToPngOptions {
+export interface ToPdfOptions extends Omit<ToPngOptions, "onDiagnostic"> {
   /**
-   * `"vector"` (default): shapes, gradients and patterns as PDF vector graphics, pictures as images, text as real text
-   * with embedded font subsets (selectable, searchable, correct copy and paste); the fonts are the bundled files, the `fonts` handle's
-   * `fontFiles` and the `fontDirs` you supply, never system fonts. `"raster"`: each slide an image, as before.
+   * `true` draws each slide as an image (`scale`). Default false, a vector PDF: shapes, gradients and patterns as PDF vector graphics,
+   * pictures as images, text as real text with embedded font subsets (selectable, searchable, correct copy and paste); the fonts are
+   * the bundled files, the `fonts` handle's `fontFiles` and the font folders you supply, never system fonts.
    */
-  mode?: "vector" | "raster";
-  /** Vector mode paints the page this colour first (default white, as raster mode composites on white); `"none"` leaves it unpainted. */
+  raster?: boolean;
+  /** A vector PDF paints the page this colour first (default white, as a raster PDF composites on white); `"none"` leaves it unpainted. */
   background?: string;
   /** Vector only. Family drawn for the generic `serif`; default `defaultFontFamily`. */
   serifFamily?: string;
@@ -219,8 +222,8 @@ export interface SvgToPdfOptions extends SvgToPngOptions {
   strict?: boolean;
   /** Vector only. Pixel density of the rare element rasterized because it has no vector form; default 2. */
   rasterFallbackScale?: number;
-  /** Vector only. Receives font embedding reports, substitutions, fallbacks and unsupported features. */
-  onDiagnostic?: (diagnostic: PdfDiagnostic) => void;
+  /** Vector only: font embedding reports, substitutions, fallbacks and unsupported features; given a deck, also the diagnostics of drawing it. */
+  onDiagnostic?: (diagnostic: PdfDiagnostic | RenderDiagnostic) => void;
   /** Vector only. Checked between pages; an abort rejects with the signal's reason. */
   signal?: AbortSignal;
   /** Vector only. Called after each page is written. */
@@ -278,14 +281,32 @@ export declare class OPFRenderError extends Error {
   constructor(code: string, message: string, details?: Record<string, unknown>);
 }
 
-export declare function resolvePresentation(input: unknown, options?: RenderSvgOptions): ResolvedPresentation;
+export declare function resolvePresentation(input: unknown, options?: ToSvgOptions): ResolvedPresentation;
 
-/** The SVG of every slide of the deck, in order. */
-export declare function renderSvg(input: unknown, options?: RenderSvgOptions): string[];
+/** An SVG slide the renderer drew: its text, or its bytes. */
+export type SvgSlide = string | Uint8Array;
 
-/** The SVG of one slide of the deck (`index` is zero-based; out of range throws `slide-index-out-of-range`). */
-export declare function renderSlideSvg(input: unknown, index: number, options?: RenderSvgOptions): string;
+/**
+ * The deck as SVG (RR-73). `toSvg(deck)`: every slide, in order (without the hidden ones under `skipHidden`). `toSvg(deck, 3)`: the
+ * third slide (slides count from 1; out of range throws `slide-out-of-range`). `toSvg(deck, "1-3")` or `toSvg(deck, [1, 3])`: the
+ * selected slides (a malformed selection throws `invalid-slide-selection`). The second argument may be the options instead.
+ */
+export declare function toSvg(input: unknown, options?: ToSvgOptions): string[];
+export declare function toSvg(input: unknown, slide: number, options?: ToSvgOptions): string;
+export declare function toSvg(input: unknown, slides: Exclude<SlideSelection, number>, options?: ToSvgOptions): string[];
 
-export declare function svgToPng(svg: string | Uint8Array, options?: SvgToPngOptions): Promise<Uint8Array>;
+/**
+ * PNG (RR-73) of a deck, drawn with `toSvg` (the slide arguments are `toSvg`'s: one PNG for a slide number, a list otherwise), or of
+ * SVG the renderer drew (one SVG gives one PNG, a list a list). A slide selection with SVG input throws `invalid-conversion-option`.
+ */
+export declare function toPng(svg: Uint8Array | `<${string}`, options?: ToPngOptions): Promise<Uint8Array>;
+export declare function toPng(svgs: readonly SvgSlide[], options?: ToPngOptions): Promise<Uint8Array[]>;
+export declare function toPng(deck: unknown, slide: number, options?: ToPngOptions): Promise<Uint8Array>;
+export declare function toPng(deck: unknown, slides: Exclude<SlideSelection, number>, options?: ToPngOptions): Promise<Uint8Array[]>;
+export declare function toPng(deck: object, options?: ToPngOptions): Promise<Uint8Array[]>;
+/** A string is SVG when it starts with `<`, and the deck's JSON text otherwise. */
+export declare function toPng(source: string, options?: ToPngOptions): Promise<Uint8Array | Uint8Array[]>;
 
-export declare function svgToPdf(svgs: string | Uint8Array | Array<string | Uint8Array>, options?: SvgToPdfOptions): Promise<Uint8Array>;
+/** One PDF (RR-73), a page per slide: of a deck drawn with `toSvg` (every slide, or a selection: `toPdf(deck, "2-4")`), or of SVG slides. */
+export declare function toPdf(source: unknown, options?: ToPdfOptions): Promise<Uint8Array>;
+export declare function toPdf(deck: unknown, slides: SlideSelection, options?: ToPdfOptions): Promise<Uint8Array>;

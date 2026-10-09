@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 // FF-59: the slide tag is the eyebrow label. The preview draws it in the scheme's primary colour (accent1),
 // which is what opf-pptx writes for the tag run; title, subtitle and body keep the text colour.
@@ -20,14 +20,14 @@ const cases = [
   {name: 'dark', design: {colorScheme: {light1: '#F8FAFC', dark1: '#0B1220', accent1: '#38BDF8'}, background: {type: 'solid', color: '#0B1220'}, fontScheme: 'aptos'}, primary: '#38BDF8', text: '#F8FAFC'},
 ];
 for (const {name, design, primary, text} of cases) {
-  const svg = renderSlideSvg({design, slides: [slide]}, 0, {trace: true});
+  const svg = toSvg({design, slides: [slide]}, 1, {trace: true});
   assert.equal(one(fills(svg, 'slides.0.tag')).toUpperCase(), primary.toUpperCase(), `${name}: tag fill`);
   assert.equal(one(fills(svg, 'slides.0.title')).toUpperCase(), text.toUpperCase(), `${name}: title fill`);
   assert.equal(one(fills(svg, 'slides.0.subtitle')).toUpperCase(), text.toUpperCase(), `${name}: subtitle fill`);
 }
 
 // A tag that wraps draws every line in the primary colour.
-const wrapped = renderSlideSvg({design: {colorScheme: 'cool-horizon', fontScheme: 'aptos', background: white}, slides: [{...slide, tag: 'A long eyebrow label that needs more than one line to fit '.repeat(6)}]}, 0, {trace: true});
+const wrapped = toSvg({design: {colorScheme: 'cool-horizon', fontScheme: 'aptos', background: white}, slides: [{...slide, tag: 'A long eyebrow label that needs more than one line to fit '.repeat(6)}]}, 1, {trace: true});
 const lines = fills(wrapped, 'slides.0.tag');
 assert.ok(lines.length > 1, 'tag wraps');
 assert.equal(one(lines).toUpperCase(), '#2874A6');
@@ -53,26 +53,26 @@ for (const [primary, background, ratio] of pairs) {
   const expected = contrast(primary, background) < 4.5 ? text : primary;
   assert.equal(Number(contrast(primary, background).toFixed(2)), ratio, `${primary} on ${background}: ratio`);
   const design = {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: primary}, fontScheme: 'aptos', background: {type: 'solid', color: background}};
-  const svg = renderSlideSvg({design, slides: [slide]}, 0, {trace: true});
+  const svg = toSvg({design, slides: [slide]}, 1, {trace: true});
   assert.equal(one(fills(svg, 'slides.0.tag')).toUpperCase(), expected.toUpperCase(), `${primary} on ${background}: tag fill`);
   assert.equal(one(fills(svg, 'slides.0.title')).toUpperCase(), text.toUpperCase(), `${primary} on ${background}: title fill`);
 }
 // The threshold is 4.5 exactly: #767676 on white is 4.54 (kept), #777777 is 4.48 (text colour).
 for (const [primary, kept] of [['#767676', true], ['#777777', false]]) {
   const design = {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: primary}, fontScheme: 'aptos', background: white};
-  assert.equal(one(fills(renderSlideSvg({design, slides: [slide]}, 0, {trace: true}), 'slides.0.tag')).toUpperCase(), kept ? primary : '#111111');
+  assert.equal(one(fills(toSvg({design, slides: [slide]}, 1, {trace: true}), 'slides.0.tag')).toUpperCase(), kept ? primary : '#111111');
 }
 // A slide-level background is the one the tag sits on, per slide.
 {
   const design = {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#6A1B9A'}, fontScheme: 'aptos', background: white};
   const deck = {design, slides: [slide, {...slide, id: 'dark', design: {background: {type: 'solid', color: '#000000'}}}]};
-  const first = renderSlideSvg(deck, 0, {trace: true}), second = renderSlideSvg(deck, 1, {trace: true});
+  const first = toSvg(deck, 1, {trace: true}), second = toSvg(deck, 2, {trace: true});
   assert.equal(one(fills(first, 'slides.0.tag')).toUpperCase(), '#6A1B9A', 'white slide keeps the primary');
   assert.equal(one(fills(second, 'slides.1.tag')).toUpperCase(), '#FFFFFF', 'black slide takes the text colour');
 }
 // A wrapped low-contrast tag draws every line in the text colour.
 {
-  const long = renderSlideSvg({design: {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#FE938C'}, fontScheme: 'aptos', background: white}, slides: [{...slide, tag: 'A long eyebrow label that needs more than one line to fit '.repeat(6)}]}, 0, {trace: true});
+  const long = toSvg({design: {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#FE938C'}, fontScheme: 'aptos', background: white}, slides: [{...slide, tag: 'A long eyebrow label that needs more than one line to fit '.repeat(6)}]}, 1, {trace: true});
   const lines2 = fills(long, 'slides.0.tag');
   assert.ok(lines2.length > 1);
   assert.equal(one(lines2).toUpperCase(), '#111111');

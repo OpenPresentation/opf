@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { examples } from "@openpresentation/opf/examples";
-import {svgToPdf, svgToPng, renderSvg} from "./catalog-harness.mjs"; // FA-23: registers the gallery snapshot (the examples name gallery records)
+import {toPdf, toPng, toSvg} from "./catalog-harness.mjs"; // FA-23: registers the gallery snapshot (the examples name gallery records)
 import { loadFonts } from "../dist/fonts-node.js";
 import { parseXml, textContent } from "../dist/pdf-xml.js";
 import { compareImages, openPdf, pageText, pdfiumText, percentile, renderPdfPage } from "./pdf-helpers.mjs";
@@ -25,13 +25,13 @@ const options = { fonts: {fontFiles: fonts.fontFiles, useBundledFonts: false}};
 const rows = [];
 let corpusSlides = 0, vectorBytes = 0, rasterBytes = 0, vectorMs = 0;
 for (const { file, deck } of [...examples].sort((a, b) => (a.file < b.file ? -1 : 1))) {
-  const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true});
+  const svgs = toSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true});
   for (const [slide, svg] of svgs.entries()) {
     if (corpusSlides++ % step !== 0) continue;
     const key = `${file.replace(/^examples\//, "")}#${slide}`;
     const notes = [];
     const started = performance.now();
-    const pdf = await svgToPdf([svg], { ...options, onDiagnostic: (d) => { if (!/^pdf-font-(embedded|fallback|substituted)$/.test(d.code)) notes.push(d.code); } });
+    const pdf = await toPdf([svg], { ...options, onDiagnostic: (d) => { if (!/^pdf-font-(embedded|fallback|substituted)$/.test(d.code)) notes.push(d.code); } });
     vectorMs += performance.now() - started;
     const doc = await openPdf(pdf);
     const rendered = await renderPdfPage(doc, 1);
@@ -40,10 +40,10 @@ for (const { file, deck } of [...examples].sort((a, b) => (a.file < b.file ? -1 
     const readers = { pdfjs: await pageText(doc, 1), pdfium: await pdfiumText(pdf) };
     const textMatches = Object.fromEntries(Object.entries(readers).map(([name, text]) => [name, characters(text) === drawn]));
     for (const [name, matches] of Object.entries(textMatches)) if (!matches) notes.push(`text-mismatch-${name}`);
-    const preview = await svgToPng(svg, options);
+    const preview = await toPng(svg, options);
     const { mae, largePercent } = await compareImages(rendered.png, preview);
     vectorBytes += pdf.length;
-    rasterBytes += (await svgToPdf([svg], { ...options, mode: "raster" })).length;
+    rasterBytes += (await toPdf([svg], { ...options, raster: true })).length;
     rows.push({ key, mae, largePercent, bytes: pdf.length, textMatches, notes });
   }
 }

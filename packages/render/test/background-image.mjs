@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { composeSlide, fitImage } from '@openpresentation/opf/composition';
-import { svgToPng, renderSlideSvg } from '../dist/index.js';
+import { toPng, toSvg } from '../dist/index.js';
 
 assert.ok(composeSlide({ design: { background: { type: 'image', src: 'data:image/png;base64,AA' } } }).backgroundImage,
   'Linked core composition has no backgroundImage; pin a core with FA-22.');
@@ -24,7 +24,7 @@ const geometryOf = deck => composeSlide(deck.slides[0], resolveSlideContext(deck
 const attr = (tag, name) => tag?.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 const element = (svg, name, filter = '') => [...svg.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'g'))].map(m => m[0]).find(tag => tag.includes(filter));
 async function raster(deck, options) {
-  const { data, info } = await sharp(await svgToPng(renderSlideSvg(deck, 0, options), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(await toPng(toSvg(deck, 1, options), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   return (x, y) => [...data.subarray((Math.round(y * 0.25) * info.width + Math.round(x * 0.25)) * info.channels, (Math.round(y * 0.25) * info.width + Math.round(x * 0.25)) * info.channels + 3)];
 }
 const near = (actual, expected, tolerance = 2) => actual.every((channel, i) => Math.abs(channel - expected[i]) <= tolerance);
@@ -33,7 +33,7 @@ let checked = 0;
 // Paint order: canvas colour, picture, overlay, then the content; the canvas is the scheme's default slide background.
 {
   const deck = deckWith({ type: 'image', src: strip, alt: 'Harbour at dawn', overlay: { color: 'dark1', opacity: 0.4 } });
-  const svg = renderSlideSvg(deck, 0, { trace: true });
+  const svg = toSvg(deck, 1, { trace: true });
   const canvas = element(svg, 'rect');
   assert.equal(attr(canvas, 'fill'), COLORS.light1, 'canvas colour');
   const picture = svg.indexOf('<image'), overlay = svg.indexOf('data-opf-image-overlay'), title = svg.indexOf('data-opf-path="slides.0.title"');
@@ -43,7 +43,7 @@ let checked = 0;
   assert.equal(attr(element(svg, 'image'), 'data-opf-path'), 'slides.0.design.background');
   assert.equal(attr(element(svg, 'path', 'data-opf-image-overlay'), 'data-opf-image-overlay'), 'slides.0.design.background.overlay');
   // Without alt the picture is decorative.
-  const plain = element(renderSlideSvg(deckWith({ type: 'image', src: strip }), 0), 'image');
+  const plain = element(toSvg(deckWith({ type: 'image', src: strip }), 1), 'image');
   assert.equal(attr(plain, 'aria-hidden'), 'true');
   assert.equal(attr(plain, 'aria-label'), undefined);
   checked += 3;
@@ -51,7 +51,7 @@ let checked = 0;
 
 // Fits: cover (default; also what an image source string means), contain and stretch.
 for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid slice'], [strip, 'xMidYMid slice'], [{ type: 'image', src: strip, fit: 'contain' }, 'xMidYMid meet'], [{ type: 'image', src: strip, fit: 'stretch' }, 'none']]) {
-  const tag = element(renderSlideSvg(deckWith(background), 0), 'image');
+  const tag = element(toSvg(deckWith(background), 1), 'image');
   assert.deepEqual(['x', 'y', 'width', 'height'].map(name => Number(attr(tag, name))), [0, 0, 1280, 720]);
   assert.equal(attr(tag, 'preserveAspectRatio'), aspect, JSON.stringify(background).slice(0, 60));
   checked++;
@@ -83,7 +83,7 @@ for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid sl
 
 // Tile: the picture repeats at its intrinsic size (40x30 reference px) from the canvas top-left.
 {
-  const svg = renderSlideSvg(deckWith({ type: 'image', src: tile, fit: 'tile' }), 0);
+  const svg = toSvg(deckWith({ type: 'image', src: tile, fit: 'tile' }), 1);
   const pattern = element(svg, 'pattern');
   assert.deepEqual(['x', 'y', 'width', 'height'].map(name => Number(attr(pattern, name))), [0, 0, 40, 30]);
   assert.equal(attr(pattern, 'patternUnits'), 'userSpaceOnUse');
@@ -94,7 +94,7 @@ for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid sl
 // Opacity applies to the picture pixels only; the overlay keeps its own opacity on top.
 {
   const deck = deckWith({ type: 'image', src: strip, fit: 'stretch', opacity: 0.5, overlay: { color: '#000000', opacity: 0.5, edge: 'bottom', size: 0.25 } });
-  const svg = renderSlideSvg(deck, 0);
+  const svg = toSvg(deck, 1);
   assert.match(svg, /<g opacity="0\.5"><image /);
   const at = await raster(deck);
   const blended = [0, 1, 2].map(i => 0xF4F1EA >> (16 - 8 * i) & 255).map((canvas, i) => canvas + ([220, 30, 30][i] - canvas) * 0.5);
@@ -109,7 +109,7 @@ for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid sl
 // Recolor (draft 3): grayscale on the picture pixels only, before the overlay, like an image block.
 {
   const deck = deckWith({ type: 'image', src: strip, fit: 'stretch', recolor: 'grayscale', overlay: { color: '#1F5AA6', opacity: 0.5, edge: 'top', size: 0.2 } });
-  const svg = renderSlideSvg(deck, 0);
+  const svg = toSvg(deck, 1);
   assert.match(svg, /<g filter="url\(#opf-s1-background-recolor\)"><image /);
   const at = await raster(deck);
   const luma = Math.round(0.299 * 220 + 0.587 * 30 + 0.114 * 30);
@@ -130,7 +130,7 @@ for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid sl
 // Deck and theme levels: a deck background image applies to every slide that sets none, beneath the watermark.
 {
   const deck = { design: { colorScheme: { ...COLORS }, background: { type: 'image', src: strip }, watermark: { text: 'DRAFT', opacity: 0.1 } }, slides: [{ title: 'One' }] };
-  const svg = renderSlideSvg(deck, 0, { trace: true });
+  const svg = toSvg(deck, 1, { trace: true });
   assert.equal(attr(element(svg, 'image'), 'data-opf-path'), 'design.background');
   assert.ok(svg.indexOf('<image') < svg.indexOf('>DRAFT<'), 'picture beneath the watermark');
   checked++;
@@ -139,7 +139,7 @@ for (const [background, aspect] of [[{ type: 'image', src: strip }, 'xMidYMid sl
 // Unresolved sources keep the ordinary placeholder at the background's opacity, without recolor or overlay.
 {
   const diagnostics = [];
-  const svg = renderSlideSvg(deckWith({ type: 'image', src: 'asset:missing', opacity: 0.4, recolor: 'grayscale', overlay: { color: '#000000', opacity: 0.5 } }), 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg(deckWith({ type: 'image', src: 'asset:missing', opacity: 0.4, recolor: 'grayscale', overlay: { color: '#000000', opacity: 0.5 } }), 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.doesNotMatch(svg, /fill-opacity|feColorMatrix/);
   assert.match(svg, /<g opacity="0\.4"><g [^>]*data-opf-asset-status="unresolved"/);
   assert.ok(diagnostics.some(entry => entry.code === 'unresolved-asset' && entry.path === 'slides.0.design.background'), JSON.stringify(diagnostics));

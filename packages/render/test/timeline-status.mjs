@@ -2,7 +2,7 @@
 // and planned are drawn from the deck's colors and agree with core's timelineMarkerShapes / timelineTextColor.
 import assert from 'node:assert/strict';
 import { colorContrast, timelineMarkerShapes, timelineTextColor } from '@openpresentation/opf/composition';
-import { resolvePresentation, renderSlideSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { resolvePresentation, toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { loadFonts } from '../dist/fonts-node.js';
 
 const fonts = await loadFonts({ pack: 'base' });
@@ -17,17 +17,17 @@ const textFill = (svg, path) => {
 };
 
 // No status: unchanged markers, no status attributes, same bytes as an explicit "done" except the marker status trace.
-const plain = renderSlideSvg(deckOf([]), 0, options);
+const plain = toSvg(deckOf([]), 1, options);
 assert.ok(!plain.includes('status'));
 assert.equal(circles(plain).length, 3);
 for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['aria-hidden', 'cx', 'cy', 'data-opf-path', 'fill', 'r']); // FA-30: the marker is decorative
-const done = renderSlideSvg(deckOf(['done', 'done', 'done']), 0, options);
+const done = toSvg(deckOf(['done', 'done', 'done']), 1, options);
 assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(plain));
-assert.equal(renderSlideSvg(deckOf(['done', 'done', 'done']), 0, { fonts: { textMeasurement: fonts.textMeasurement } }), renderSlideSvg(deckOf([]), 0, { fonts: { textMeasurement: fonts.textMeasurement } }));
+assert.equal(toSvg(deckOf(['done', 'done', 'done']), 1, { fonts: { textMeasurement: fonts.textMeasurement } }), toSvg(deckOf([]), 1, { fonts: { textMeasurement: fonts.textMeasurement } }));
 
 // All three states.
 for (const design of [{}, { theme: 'dark' }]) {
-  const deck = deckOf(['done', 'current', 'planned'], design), svg = renderSlideSvg(deck, 0, options);
+  const deck = deckOf(['done', 'current', 'planned'], design), svg = toSvg(deck, 1, options);
   const bound = resolvePresentation(deck, options).slides[0];
   const layout = bound.geometry.items.find(item => item.field === 'timeline').timelineLayout;
   const colors = { background: bound.design.backgroundColor ?? bound.design.colors.background, primary: bound.design.colors.primary, text: bound.design.colors.text, mutedText: bound.design.colors.mutedText };

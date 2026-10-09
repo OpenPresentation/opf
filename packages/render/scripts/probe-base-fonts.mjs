@@ -5,14 +5,14 @@ import {createHash} from 'node:crypto';
 if(process.argv.length!==4)throw new Error('Usage: node scripts/probe-base-fonts.mjs <renderer-checkout> <output-directory>');
 const root=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);
 const {loadFonts}=await import(pathToFileURL(path.join(root,'dist/fonts-node.js')));
-const {svgToPng}=await import(pathToFileURL(path.join(root,'dist/index.js')));
+const {toPng}=await import(pathToFileURL(path.join(root,'dist/index.js')));
 const fonts=await loadFonts(),results=[];
 await mkdir(out,{recursive:true});
 const hash=b=>createHash('sha256').update(b).digest('hex');
 for(const [i,face] of fonts.embeddedFonts.entries()){
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120"><rect width="900" height="120" fill="white"/><text x="30" y="75" font-family="${face.family}" font-weight="${face.weight}" font-style="${face.italic?'italic':'normal'}" font-size="42">Office AVATAR 0123 — typography</text></svg>`;
- const defaultPng=await svgToPng(svg);
- const measuredPng=await svgToPng(svg,{fonts});
+ const defaultPng=await toPng(svg);
+ const measuredPng=await toPng(svg,{fonts});
  await writeFile(path.join(out,`${i}-default.png`),defaultPng);
  await writeFile(path.join(out,`${i}-complete.png`),measuredPng);
  results.push({family:face.family,weight:face.weight,italic:face.italic,fileSha256:hash(await readFile(fonts.fontFiles[i])),defaultSha256:hash(defaultPng),completeSha256:hash(measuredPng),same:hash(defaultPng)===hash(measuredPng)});

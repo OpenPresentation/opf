@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
-import { renderSlideSvg, renderSvg, resolvePresentation, engineDefaults, OPFRenderError } from '../dist/index.js';
+import { toSvg, resolvePresentation, engineDefaults, OPFRenderError } from '../dist/index.js';
 import { presentationFamilies } from '../dist/fonts-browser.js';
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME } from '@openpresentation/opf/composition';
 
@@ -34,7 +34,7 @@ const deck = { name: 'Catalogs', design: { theme: 'classic' }, slides: [{ ...sli
 // Without catalogs the references resolve nowhere: one unresolved-reference each, engine defaults, automatic composition.
 {
   const diagnostics = [];
-  const svg = renderSlideSvg(deck, 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg(deck, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.ok(svg.startsWith('<svg'));
   const unresolved = diagnostics.filter(entry => entry.code === 'unresolved-reference');
   assert.deepEqual(unresolved.map(entry => [entry.kind, entry.reference]).sort(), [['layouts', layoutId], ['themes', 'classic']]);
@@ -46,12 +46,12 @@ const deck = { name: 'Catalogs', design: { theme: 'classic' }, slides: [{ ...sli
 {
   const diagnostics = [];
   const options = { catalogs: [defaultCatalog], onDiagnostic: entry => diagnostics.push(entry) };
-  const one = renderSlideSvg(deck, 0, options), all = renderSvg(deck, options);
+  const one = toSvg(deck, 1, options), all = toSvg(deck, options);
   assert.equal(all[0], one);
   assert.deepEqual(diagnostics.filter(entry => entry.code === 'unresolved-reference'), []);
   const bound = resolvePresentation(deck, { catalogs: [defaultCatalog] }).slides[0];
   assert.ok(bound.layout, 'the layout resolves from the registered catalog');
-  assert.notEqual(one, renderSlideSvg(deck, 0), 'the registered catalog changes what is drawn');
+  assert.notEqual(one, toSvg(deck, 1), 'the registered catalog changes what is drawn');
   // The font loaders resolve with the same options.
   assert.ok(presentationFamilies({ ...deck, design: { fontScheme: 'roboto' } }, { catalogs: [defaultCatalog] }).has('Roboto'));
   assert.ok(!presentationFamilies({ ...deck, design: { fontScheme: 'roboto' } }).has('Roboto'));
@@ -63,33 +63,33 @@ const deck = { name: 'Catalogs', design: { theme: 'classic' }, slides: [{ ...sli
   const acme = { source: 'pkg:@acme/opf-catalog', fontSchemes: { serif: { name: 'Acme serif', type: 'serif', major: 'Tinos', minor: 'Tinos' } } };
   const document = { name: 'Acme', catalogs: { acme: { source: acme.source } }, design: { fontScheme: 'acme:serif' }, slides: [slide] };
   const families = svg => new Set([...svg.matchAll(/font-family="([^"]+)"/g)].map(match => match[1]));
-  assert.ok(families(renderSlideSvg(document, 0, { catalogs: [acme] })).has('Tinos, serif'));
+  assert.ok(families(toSvg(document, 1, { catalogs: [acme] })).has('Tinos, serif'));
   const diagnostics = [];
-  renderSlideSvg(document, 0, { onDiagnostic: entry => diagnostics.push(entry) });
+  toSvg(document, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.deepEqual(diagnostics.filter(entry => entry.code === 'unresolved-reference').map(entry => [entry.reference, entry.source]), [['acme:serif', acme.source]]);
   // Embedded records need no host catalog.
   const embedded = { ...document, catalogs: { acme: { source: acme.source, fontSchemes: acme.fontSchemes } } };
-  assert.ok(families(renderSlideSvg(embedded, 0)).has('Tinos, serif'));
+  assert.ok(families(toSvg(embedded, 1)).has('Tinos, serif'));
   checked += 2;
 }
 
 // Strict references: the render fails with the references instead of falling back.
 {
-  assert.throws(() => renderSlideSvg(deck, 0, { strictReferences: true }), error => error instanceof OPFRenderError && error.code === 'unresolved-reference'
+  assert.throws(() => toSvg(deck, 1, { strictReferences: true }), error => error instanceof OPFRenderError && error.code === 'unresolved-reference'
     && error.details.diagnostics.some(entry => entry.reference === 'classic'));
-  assert.ok(renderSlideSvg(deck, 0, { strictReferences: true, catalogs: [defaultCatalog] }).startsWith('<svg'));
+  assert.ok(toSvg(deck, 1, { strictReferences: true, catalogs: [defaultCatalog] }).startsWith('<svg'));
   checked++;
 }
 // An undeclared prefix (no catalogs.foo) is a format error: the boundary check rejects the document.
 {
-  assert.throws(() => renderSlideSvg({ design: { fontScheme: 'foo:serif' }, slides: [slide] }, 0, { catalogs: [defaultCatalog] }),
+  assert.throws(() => toSvg({ design: { fontScheme: 'foo:serif' }, slides: [slide] }, 1, { catalogs: [defaultCatalog] }),
     error => error instanceof OPFRenderError && error.code === 'invalid-opf' && error.findings.some(finding => finding.ruleId === 'opf/undeclared-catalog' && finding.path === '/design/fontScheme'));
   checked++;
 }
 
 // A malformed catalogs option is core's error (invalid-catalogs), passed through unchanged from every entry point.
 for (const bad of [{}, [{ layouts: {} }], 'https://www.pptx.gallery']) {
-  for (const call of [() => renderSlideSvg(deck, 0, { catalogs: bad }), () => renderSvg(deck, { catalogs: bad }), () => resolvePresentation(deck, { catalogs: bad })]) {
+  for (const call of [() => toSvg(deck, 1, { catalogs: bad }), () => toSvg(deck, { catalogs: bad }), () => resolvePresentation(deck, { catalogs: bad })]) {
     assert.throws(call, error => error.code === 'invalid-catalogs' && error.name === 'OPFCatalogsOptionError', JSON.stringify(bad));
   }
   checked++;
@@ -98,7 +98,7 @@ for (const bad of [{}, [{ layouts: {} }], 'https://www.pptx.gallery']) {
 // The browser bundle of the SVG entry carries no catalog records: no layout or narrative description from the gallery snapshot.
 {
   const { build } = await import('esbuild');
-  const result = await build({ stdin: { contents: "export { renderSlideSvg } from './dist/svg.js';", resolveDir: fileURLToPath(new URL('../', import.meta.url)), loader: 'js' }, bundle: true, platform: 'browser', format: 'esm', write: false, logLevel: 'error' });
+  const result = await build({ stdin: { contents: "export { toSvg } from './dist/svg.js';", resolveDir: fileURLToPath(new URL('../', import.meta.url)), loader: 'js' }, bundle: true, platform: 'browser', format: 'esm', write: false, logLevel: 'error' });
   const code = result.outputFiles[0].text;
   const samples = [...Object.values(defaultCatalog.layouts), ...Object.values(defaultCatalog.narratives ?? {})].map(record => record.description).filter(text => typeof text === 'string' && text.length > 40).slice(0, 40);
   assert.ok(samples.length >= 10, 'enough catalog descriptions to probe');

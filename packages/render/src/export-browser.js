@@ -1,22 +1,35 @@
 import { svgsToVectorPdf } from "./pdf-vector.js";
-import { OPFRenderError, packageName } from "./svg.js";
+import { OPFRenderError, packageName, toSvg } from "./svg.js";
+import { slideArguments, slideSources } from "./slide-sources.js";
 
-// RR-23: PNG and PDF output in a browser. `svgToPng` and `svgToPdf` of the root entry need Node (resvg, sharp); this entry
+// RR-23: PNG and PDF output in a browser. `toPng` and `toPdf` of the root entry need Node (resvg, sharp); this entry
 // has the same two names for a page. It uses the same vector PDF converter as Node (fontkit, bidi-js and pako, all pure
 // JavaScript) over the SVG the preview draws, so the text stays real text in the same embedded subsets. What differs from
 // Node is only how pixels are made: a canvas decodes pictures and draws PNGs. No system font is read (a browser has no way
 // to hand one over) and nothing is fetched: faces come from the SVG's own @font-face data (the `embeddedFonts` of the fonts handle
-// `renderSvg` was given), from the faces the `fonts` handle holds (`loadFonts` from `/fonts-browser`, so script faces the SVG does not
+// `toSvg` was given), from the faces the `fonts` handle holds (`loadFonts` from `/fonts-browser`, so script faces the SVG does not
 // embed reach the PDF too), or from `fontData`.
 //
-// RR-63: this entry imports no converter. The one optional piece is pdf-lib, for `mode: "raster"` only (the default vector PDF
+// RR-63: this entry imports no converter. The one optional piece is pdf-lib, for `raster: true` only (the default vector PDF
 // needs nothing): the host imports it and passes it as `options.pdfLib`, so a bundler never has to resolve it.
 
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const MAX_PIXELS = 40_000_000;
 
-/** Convert one SVG to PNG bytes with a canvas. `scale` multiplies the SVG's own size; `background` is a CSS colour (default white, `"transparent"` for none). */
-export async function svgToPng(svg, options = {}) {
+/**
+ * PNG with a canvas (RR-73): a deck drawn with `toSvg` (all slides, a slide number or a selection, as for the Node `toPng`) or SVG
+ * the renderer drew; one PNG for a slide number or one SVG, a list otherwise. `scale` multiplies the SVG's own size; `background`
+ * is a CSS colour (default white, `"transparent"` for none).
+ */
+export async function toPng(source, slides, options) {
+  ({ slides, options } = slideArguments(slides, options));
+  const { svgs, one } = slideSources(source, slides, options, toSvg);
+  const pngs = [];
+  for (const svg of svgs) pngs.push(await svgPng(svg, options));
+  return one ? pngs[0] : pngs;
+}
+
+async function svgPng(svg, options = {}) {
   const text = svgText(svg);
   const size = pageSize(text);
   const scale = positive(options.scale, "scale", 1);
@@ -32,19 +45,19 @@ export async function svgToPng(svg, options = {}) {
 }
 
 /**
- * Convert SVG slides to a PDF, one slide per page (1 SVG pixel is 1 PDF point, as in Node). `mode: "vector"` (default) writes
- * real text, paths, gradients and images; `"raster"` draws each slide as an image (`scale`, default 2). Takes the options of
- * the Node `svgToPdf` that make sense here (`metadata`, `tagged`, `strict`, `compress`, `onDiagnostic`, the generic family
- * names, `rasterFallbackScale`), `pdfLib` (raster mode only: `import * as pdfLib from "pdf-lib"`), `fonts` (the handle `loadFonts()` returns: every face it holds can be embedded), `fontData`
+ * One PDF (RR-73) of a deck drawn with `toSvg` (all slides or a selection) or of SVG slides, one slide per page (1 SVG pixel is 1
+ * PDF point, as in Node). Vector by default (real text, paths, gradients and images); `raster: true` draws each slide as an image
+ * (`scale`, default 2). Takes the options of the Node `toPdf` that make sense here (`metadata`, `tagged`, `strict`, `compress`,
+ * `onDiagnostic`, the generic family names, `rasterFallbackScale`), `pdfLib` (`raster: true` only: `import * as pdfLib from "pdf-lib"`), `fonts` (the handle `loadFonts()` returns: every face it holds can be embedded), `fontData`
  * (`[{ data, family? }]`, extra face bytes without a handle), `signal` (an AbortSignal, checked between pages) and
  * `onProgress({ page, pages })`.
  */
-export async function svgToPdf(svgs, options = {}) {
-  const inputs = (Array.isArray(svgs) ? svgs : [svgs]).map(svgText);
-  if (!inputs.length) throw new OPFRenderError("empty-pdf", "svgToPdf requires at least one SVG slide.");
-  const mode = options.mode ?? "vector";
-  if (mode !== "vector" && mode !== "raster") throw new OPFRenderError("invalid-conversion-option", 'mode must be "vector" or "raster".', { option: "mode", value: mode });
-  if (mode === "raster") return rasterPdf(inputs, options);
+export async function toPdf(source, slides, options) {
+  ({ slides, options } = slideArguments(slides, options));
+  const inputs = slideSources(source, slides, options, toSvg).svgs.map(svgText);
+  if (!inputs.length) throw new OPFRenderError("empty-pdf", "toPdf needs at least one slide.");
+  if (options.raster !== undefined && typeof options.raster !== "boolean") throw new OPFRenderError("invalid-conversion-option", "raster must be true or false.", { option: "raster", value: options.raster });
+  if (options.raster === true) return rasterPdf(inputs, options);
   const scale = positive(options.rasterFallbackScale, "rasterFallbackScale", 2);
   const fontCss = fontFaceCss(inputs);
   return svgsToVectorPdf(inputs, {
@@ -68,7 +81,7 @@ export async function svgToPdf(svgs, options = {}) {
     producer: packageName,
     ErrorClass: OPFRenderError,
     // The element's own text has no fonts in a standalone SVG image: give it the faces the slides embed.
-    rasterize: async (svg, factor) => ({ png: await svgToPng(fontCss && /<text[\s>]/.test(svg) ? svg.replace(/(<svg\b[^>]*>)/, `$1<style>${fontCss}</style>`) : svg, { scale: factor, background: "transparent", signal: options.signal }) }),
+    rasterize: async (svg, factor) => ({ png: await svgPng(fontCss && /<text[\s>]/.test(svg) ? svg.replace(/(<svg\b[^>]*>)/, `$1<style>${fontCss}</style>`) : svg, { scale: factor, background: "transparent", signal: options.signal }) }),
   });
 }
 
@@ -81,7 +94,7 @@ async function rasterPdf(inputs, options) {
   for (const [index, svg] of inputs.entries()) {
     options.signal?.throwIfAborted?.();
     const size = pageSize(svg);
-    const png = await svgToPng(svg, { scale, background: options.background ?? "#FFFFFF", signal: options.signal });
+    const png = await svgPng(svg, { scale, background: options.background ?? "#FFFFFF", signal: options.signal });
     const image = await pdf.embedPng(png);
     pdf.addPage([size.width, size.height]).drawImage(image, { x: 0, y: 0, width: size.width, height: size.height });
     options.onProgress?.({ page: index + 1, pages: inputs.length });
@@ -90,14 +103,14 @@ async function rasterPdf(inputs, options) {
   return pdf.save({ addDefaultPage: false, useObjectStreams: false });
 }
 
-// pdf-lib for raster mode when the host did not pass it. The specifier is not a literal, so a browser bundler leaves it alone (and
+// pdf-lib for `raster: true` when the host did not pass it. The specifier is not a literal, so a browser bundler leaves it alone (and
 // never fails for a host that does not install pdf-lib); it resolves where the page can import it by name, for example with an import map.
 async function importPdfLib() {
   const name = "pdf-lib";
   try {
     return await import(/* webpackIgnore: true */ /* @vite-ignore */ name);
   } catch (error) {
-    throw new OPFRenderError("converter-missing", 'Raster-mode PDF output needs pdf-lib, an optional peer dependency of @openpresentation/opf-render: run `npm install pdf-lib@^1.17.1` and pass it as the pdfLib option (import * as pdfLib from "pdf-lib"). The default vector mode needs nothing.', { package: "pdf-lib", range: "^1.17.1", install: "npm install pdf-lib@^1.17.1", cause: error instanceof Error ? error.message : String(error) });
+    throw new OPFRenderError("converter-missing", 'A raster PDF (raster: true) needs pdf-lib, an optional peer dependency of @openpresentation/opf-render: run `npm install pdf-lib@^1.17.1` and pass it as the pdfLib option (import * as pdfLib from "pdf-lib"). The default vector PDF needs nothing.', { package: "pdf-lib", range: "^1.17.1", install: "npm install pdf-lib@^1.17.1", cause: error instanceof Error ? error.message : String(error) });
   }
 }
 

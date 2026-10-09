@@ -3,7 +3,7 @@
 // A document that is not an SVG with a namespace and an intrinsic size keeps the "Image unavailable" placeholder.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import {renderSvg, svgToPng, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg, toPng} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
 const rect = `<svg ${NS} width="120" height="60"><rect width="120" height="60" fill="#00cc00"/></svg>`;
@@ -16,7 +16,7 @@ let checked = 0;
 // Every encoding of the data URI draws, as base64.
 for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponent(rect)}`, `data:image/svg+xml,${encodeURIComponent(rect)}`, `data:image/svg+xml;charset=utf-8;base64,${Buffer.from(rect).toString('base64')}`]) {
   const diagnostics = [];
-  const svg = renderSlideSvg({slides: [{title: 'T', image: {src: source, alt: 'Chart'}}]}, 0, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});
+  const svg = toSvg({slides: [{title: 'T', image: {src: source, alt: 'Chart'}}]}, 1, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});
   const [image] = images(svg);
   assert.ok(image, 'drawn as an image');
   assert.equal(attr(image, 'href'), base64(rect), 'normalized to base64');
@@ -31,7 +31,7 @@ for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponen
 // The box and the fit are the raster's: an SVG and a PNG of the same content get the same image element geometry.
 for (const fill of ['contain', 'cover', 'stretch']) {
   const make = source => ({design: {imageFit: fill}, slides: [{title: 'T', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
-  const [vector] = images(renderSlideSvg(make(base64(rect)), 0, {trace: true})), [bitmap] = images(renderSlideSvg(make(raster), 0, {trace: true}));
+  const [vector] = images(toSvg(make(base64(rect)), 1, {trace: true})), [bitmap] = images(toSvg(make(raster), 1, {trace: true}));
   for (const name of ['x', 'y', 'width', 'height', 'preserveAspectRatio']) assert.equal(attr(vector, name), attr(bitmap, name), `${fill} ${name}`);
   checked++;
 }
@@ -41,7 +41,7 @@ for (const fill of ['contain', 'cover', 'stretch']) {
   const deck = {design: {logo: base64(rect), watermark: {src: base64(rect), opacity: .1}, header: {right: {image: {src: base64(rect), alt: 'Header'}}},
     listBullet: 'image', background: {type: 'image', src: base64(rect)}}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Items', blocks: [{type: 'image', image: base64(rect), placement: {edge: 'right'}}, {items: ['One', 'Two']}]}]};
   const diagnostics = [];
-  const slides = renderSvg(deck, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});
+  const slides = toSvg(deck, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   for (const svg of slides) assert.ok(!svg.includes('data-opf-asset-status'), 'no placeholder');
   assert.ok(images(slides[0]).length >= 4, 'background, watermark, logo and header image on the cover');
@@ -55,36 +55,36 @@ for (const source of [base64(`<svg ${NS} width="40" height="20"><g></svg>`), bas
   base64(`<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///etc/passwd">]><svg ${NS} width="4" height="4"/>`), base64(`<!DOCTYPE svg [<!ENTITY x "<g/>">]><svg ${NS} width="4" height="4"/>`),
   base64(`<svg width="10" height="10"/>`), base64(`<svg ${NS}><rect width="4" height="4"/></svg>`), base64('<html></html>'), 'data:image/svg+xml;base64,@@@', `data:image/png;base64,${Buffer.from(rect).toString('base64')}`.replace(/^data:image\/png/, 'data:image/svg+xml').slice(0, 30)]) {
   const diagnostics = [];
-  const svg = renderSlideSvg({slides: [{title: 'T', image: {src: source, alt: 'Chart'}}]}, 0, {onDiagnostic: item => diagnostics.push(item)});
+  const svg = toSvg({slides: [{title: 'T', image: {src: source, alt: 'Chart'}}]}, 1, {onDiagnostic: item => diagnostics.push(item)});
   assert.ok(svg.includes('data-opf-asset-status="unresolved"'), 'placeholder');
   assert.equal(diagnostics.filter(item => item.code === 'unresolved-asset').length, 1);
-  assert.throws(() => renderSlideSvg({slides: [{title: 'T', image: source}]}, 0, {strictAssets: true}), {code: 'unresolved-asset'});
+  assert.throws(() => toSvg({slides: [{title: 'T', image: source}]}, 1, {strictAssets: true}), {code: 'unresolved-asset'});
   checked++;
 }
 
 // A prefixed root, a plain-text entity, CDATA and a utf-16 document with a BOM are well-formed and draw.
 for (const source of [base64(`<svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="8" height="4"><svg:rect width="8" height="4"/></svg:svg>`), base64(`<!DOCTYPE svg [<!ENTITY size "8">]><svg ${NS} width="&size;" height="4"><style><![CDATA[rect{fill:red}]]></style><title>a &amp; b &#169;</title></svg>`),
   `data:image/svg+xml;base64,${Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(rect, 'utf16le')]).toString('base64')}`]) {
-  assert.equal(images(renderSlideSvg({slides: [{title: 'T', image: source}]}, 0)).length, 1, source.slice(0, 60));
+  assert.equal(images(toSvg({slides: [{title: 'T', image: source}]}, 1)).length, 1, source.slice(0, 60));
   checked++;
 }
 
 // A viewBox alone is an intrinsic size; a DOCTYPE, a comment and a prolog do not hide the root.
 for (const text of [`<svg ${NS} viewBox="0 0 10 5"><rect width="10" height="5"/></svg>`, `<?xml version="1.0"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><!-- logo --><svg ${NS} width="2in" height="1in"/>`]) {
-  assert.ok(images(renderSlideSvg({slides: [{title: 'T', image: base64(text)}]}, 0)).length === 1, text);
+  assert.ok(images(toSvg({slides: [{title: 'T', image: base64(text)}]}, 1)).length === 1, text);
   checked++;
 }
 
 // PNG output draws the SVG (resvg, deterministic): the green rectangle is in the picture.
 {
   const deck = {design: {dimensions: {widthInches: 4, heightInches: 2}, background: {type: 'solid', color: '#FFFFFF'}}, slides: [{image: {src: base64(rect), alt: 'Chart'}}]};
-  const [svg] = renderSvg(deck, {strictAssets: true});
-  const png = await svgToPng(svg);
+  const [svg] = toSvg(deck, {strictAssets: true});
+  const png = await toPng(svg);
   const {data, info} = await sharp(png).ensureAlpha().raw().toBuffer({resolveWithObject: true});
   let green = 0;
   for (let offset = 0; offset < data.length; offset += 4) if (data[offset] === 0 && data[offset + 1] === 204 && data[offset + 2] === 0) green++;
   assert.ok(green > info.width * info.height * .1, `the SVG picture is painted (${green} green pixels)`);
-  assert.equal(Buffer.compare(Buffer.from(png), Buffer.from(await svgToPng(svg))), 0, 'deterministic');
+  assert.equal(Buffer.compare(Buffer.from(png), Buffer.from(await toPng(svg))), 0, 'deterministic');
   checked++;
 }
 
@@ -92,15 +92,15 @@ for (const text of [`<svg ${NS} viewBox="0 0 10 5"><rect width="10" height="5"/>
 {
   const label = `<svg ${NS} width="200" height="80"><text x="10" y="60" font-family="Roboto" font-size="64" font-weight="700" fill="#000000">Hi</text></svg>`;
   const deck = {design: {dimensions: {widthInches: 4, heightInches: 2}, background: {type: 'solid', color: '#FFFFFF'}}, slides: [{image: base64(label)}]};
-  const [svg] = renderSvg(deck, {strictAssets: true});
-  const {data} = await sharp(await svgToPng(svg)).ensureAlpha().raw().toBuffer({resolveWithObject: true});
+  const [svg] = toSvg(deck, {strictAssets: true});
+  const {data} = await sharp(await toPng(svg)).ensureAlpha().raw().toBuffer({resolveWithObject: true});
   let dark = 0;
   for (let offset = 0; offset < data.length; offset += 4) if (data[offset] < 64 && data[offset + 1] < 64 && data[offset + 2] < 64) dark++;
   assert.ok(dark > 200, `the picture's text is painted (${dark} dark pixels)`);
-  assert.equal(Buffer.compare(Buffer.from(await svgToPng(svg)), Buffer.from(await svgToPng(svg))), 0, 'deterministic');
+  assert.equal(Buffer.compare(Buffer.from(await toPng(svg)), Buffer.from(await toPng(svg))), 0, 'deterministic');
   // A picture that cannot be read does not fail the PNG output.
   const broken = `<svg ${NS} width="10" height="10"><text>`;
-  await svgToPng(renderSvg({slides: [{image: base64(broken)}]})[0]);
+  await toPng(toSvg({slides: [{image: base64(broken)}]})[0]);
   checked++;
 }
 
@@ -115,8 +115,8 @@ for (const text of [`<svg ${NS} viewBox="0 0 10 5"><rect width="10" height="5"/>
     const file = path.join(directory, 'red.png');
     await writeFile(file, red);
     const hostile = `<svg ${NS} xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="20"><image xlink:href="${file.replaceAll('\\', '/')}" width="40" height="20"/><script>alert(1)</script></svg>`;
-    const [svg] = renderSvg({design: {dimensions: {widthInches: 4, heightInches: 2}}, slides: [{image: base64(hostile)}]});
-    const {data} = await sharp(await svgToPng(svg)).ensureAlpha().raw().toBuffer({resolveWithObject: true});
+    const [svg] = toSvg({design: {dimensions: {widthInches: 4, heightInches: 2}}, slides: [{image: base64(hostile)}]});
+    const {data} = await sharp(await toPng(svg)).ensureAlpha().raw().toBuffer({resolveWithObject: true});
     for (let offset = 0; offset < data.length; offset += 4) assert.ok(!(data[offset] === 255 && data[offset + 1] === 0 && data[offset + 2] === 0), 'the local file is not drawn');
     checked++;
   } finally {

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 const fonts = (await loadFonts({pack: 'base'})).registry;
 let fitted = 0, rejected = 0;
@@ -7,11 +7,11 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   for (const repeats of [12,16,20,24,80]) {
     const deck = {design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
     const diagnostics = [];
-    const svg = renderSlideSvg(deck, 0,{ fonts: {textMeasurement:fonts.textMeasurement},trace:true,onDiagnostic:value=>diagnostics.push(value)});
+    const svg = toSvg(deck, 1,{ fonts: {textMeasurement:fonts.textMeasurement},trace:true,onDiagnostic:value=>diagnostics.push(value)});
     assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`), 'Actual SVG dimensions must match the fixture');
     if (diagnostics.some(value=>value.code==='text-overflow')) {
       deck.slides[0].composition = {overflow:'error'};
-      assert.throws(()=>renderSlideSvg(deck, 0,{ fonts: {textMeasurement:fonts.textMeasurement}}), {code:'layout-overflow'});
+      assert.throws(()=>toSvg(deck, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}), {code:'layout-overflow'});
       rejected++;
       continue;
     }

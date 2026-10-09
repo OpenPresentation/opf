@@ -5,7 +5,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSlideSvg, svgToPng } from '../../dist/index.js';
+import { toSvg, toPng } from '../../dist/index.js';
 import { COLOR_SCHEME, TREATMENTS, samplePicture } from './image-treatments.mjs';
 
 const out = new URL('./image-treatments-0.14/', import.meta.url);
@@ -31,7 +31,7 @@ for (const treatment of TREATMENTS) {
   const deck = document014(treatment);
   const context = resolveSlideContext(deck, 0, {});
   const geometry = composeSlide(deck.slides[0], context.options);
-  const png = await svgToPng(renderSlideSvg(deck, 0), { scale: reference.scale });
+  const png = await toPng(toSvg(deck, 1), { scale: reference.scale });
   writeFileSync(new URL(`${treatment.slug}.png`, out), png);
   const image = geometry.slideImage;
   reference.treatments[treatment.slug] = {

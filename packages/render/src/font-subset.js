@@ -2,7 +2,7 @@
 // `harfbuzz-subset.wasm` of the pinned harfbuzzjs package, MIT) keeps the glyphs a slide's characters reach through the
 // font's layout tables (every GSUB and GPOS feature is kept, so the browser shapes the subset exactly as the whole face),
 // renumbers them and trims cmap, hmtx, GPOS and the rest to them. The module has no imports, so it is instantiated
-// synchronously from its bytes and `renderSvg` stays synchronous; the same input always gives the same bytes.
+// synchronously from its bytes and `toSvg` stays synchronous; the same input always gives the same bytes.
 //
 // Only a face whose license allows it is subset: a bundled face (matched by the sha256 of its bytes against the pinned
 // manifest) under an allowed license, whose family and file names do not contain one of its package's Reserved Font Names

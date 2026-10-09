@@ -64,7 +64,7 @@ assert.deepEqual([...new Set(aptosNeeds.map(face => face.family))].sort(), ['Int
 assert.equal(aptosNeeds.length, 8);
 assert.deepEqual(needFor(eagerOnly(), deckWith('roboto')), [], 'a Roboto deck needs nothing');
 assert.deepEqual(needFor(eagerOnly(), deckWith('calibri')), [], 'Calibri resolves to the eager Carlito');
-assert.throws(() => needFor(eagerOnly(), {name: 'invalid', slides: 'not slides'}), {code: 'invalid-opf'}, 'a document that does not resolve throws what renderSvg throws (FF-41: it is no longer reported as needing nothing)');
+assert.throws(() => needFor(eagerOnly(), {name: 'invalid', slides: 'not slides'}), {code: 'invalid-opf'}, 'a document that does not resolve throws what toSvg throws (FF-41: it is no longer reported as needing nothing)');
 assert.ok(needFor(eagerOnly(), deckWith('open-sans')).every(face => face.family === 'Open Sans'));
 
 // Nothing is downloaded for a family the substitution policy would not resolve.

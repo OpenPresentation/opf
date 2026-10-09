@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import { resolveSlideContext } from '@openpresentation/opf';
 import { ENGINE_DEFAULT_FONT_SCHEME } from '@openpresentation/opf/composition';
 import * as bare from '../dist/index.js';
-import { catalogs, defaultCatalog, renderSlideSvg, renderSvg, resolvePresentation } from './catalog-harness.mjs';
+import { catalogs, defaultCatalog, toSvg, resolvePresentation } from './catalog-harness.mjs';
 
 // A measurement that records the family of every style it is asked about.
 const recorder = () => {
@@ -27,12 +27,12 @@ const GALLERY = defaultCatalog.source;
 // A deck font scheme wins over the engine default; the measurement is asked about Roboto and never about Aptos.
 {
   const { families, fonts } = recorder();
-  renderSvg(deck({ fontScheme: 'roboto' }), { fonts });
+  toSvg(deck({ fontScheme: 'roboto' }), { fonts });
   assert.ok(families.has('Roboto'), `composition measured with Roboto: ${[...families]}`);
   assert.ok(![...families].some((family) => /^Aptos/.test(family)), `and not with Aptos: ${[...families]}`);
 }
 // No design at all: the engine default font scheme (ENGINE_DEFAULT_FONT_SCHEME, Aptos) is measured, with or without a catalog.
-for (const render of [renderSvg, bare.renderSvg]) {
+for (const render of [toSvg, bare.toSvg]) {
   const { families, fonts } = recorder();
   render(deck(undefined), { fonts });
   assert.ok(families.has(ENGINE_DEFAULT_FONT_SCHEME.minor) && families.has(ENGINE_DEFAULT_FONT_SCHEME.major), `the engine default scheme is measured: ${[...families]}`);
@@ -43,7 +43,7 @@ for (const render of [renderSvg, bare.renderSvg]) {
   const { families, fonts } = recorder();
   const presentation = deck({ fontScheme: 'roboto' });
   presentation.slides[1].design = { fontScheme: 'georgia' };
-  renderSlideSvg(presentation, 1, { fonts });
+  toSvg(presentation, 2, { fonts });
   assert.ok([...families].some((family) => /^Georgia|^Gelasio/.test(family)), `slide scheme measured: ${[...families]}`);
 }
 
@@ -67,16 +67,16 @@ for (const render of [renderSvg, bare.renderSvg]) {
   const source = 'https://catalog.example/font-schemes';
   const hostCatalog = { source, fontSchemes: { 'host-serif': { name: 'Host serif', type: 'serif', major: 'Tinos', minor: 'Tinos' } } };
   const asDefault = recorder();
-  renderSvg(deck({ fontScheme: 'host-serif' }), { fonts: asDefault.fonts, catalogs: [hostCatalog] });
+  toSvg(deck({ fontScheme: 'host-serif' }), { fonts: asDefault.fonts, catalogs: [hostCatalog] });
   assert.ok(asDefault.families.has('Tinos'), `a host default font scheme is measured: ${[...asDefault.families]}`);
   const named = { ...deck({ fontScheme: 'acme:host-serif' }), catalogs: { acme: { source } } };
   const sourced = recorder();
-  const sourcedDiagnostics = diagnosticsOf((onDiagnostic) => renderSvg(named, { fonts: sourced.fonts, catalogs: [defaultCatalog, hostCatalog], onDiagnostic }));
+  const sourcedDiagnostics = diagnosticsOf((onDiagnostic) => toSvg(named, { fonts: sourced.fonts, catalogs: [defaultCatalog, hostCatalog], onDiagnostic }));
   assert.ok(sourced.families.has('Tinos'), `a named group's font scheme is measured: ${[...sourced.families]}`);
   assert.deepEqual(sourcedDiagnostics.filter((item) => item.code === 'unresolved-reference'), []);
   // A bare id never reaches a catalog that is registered but not the host default.
   const second = recorder();
-  const secondDiagnostics = diagnosticsOf((onDiagnostic) => renderSlideSvg(deck({ fontScheme: 'host-serif' }), 0, { fonts: second.fonts, catalogs: [defaultCatalog, hostCatalog], onDiagnostic }));
+  const secondDiagnostics = diagnosticsOf((onDiagnostic) => toSvg(deck({ fontScheme: 'host-serif' }), 1, { fonts: second.fonts, catalogs: [defaultCatalog, hostCatalog], onDiagnostic }));
   assert.ok(!second.families.has('Tinos'), `a bare id resolves in the host default only: ${[...second.families]}`);
   assert.deepEqual(secondDiagnostics.map((item) => [item.code, item.kind, item.reference, item.group, item.source]), [['unresolved-reference', 'fontSchemes', 'host-serif', 'default', GALLERY]]);
   // The named group resolves only from the catalog registered for its own source: not when that catalog is missing, and not
@@ -86,7 +86,7 @@ for (const render of [renderSvg, bare.renderSvg]) {
     ['another source', { ...named, catalogs: { acme: { source: 'https://other.example/font-schemes' } } }, [defaultCatalog, hostCatalog], 'https://other.example/font-schemes'],
   ]) {
     const { families, fonts } = recorder();
-    const diagnostics = diagnosticsOf((onDiagnostic) => renderSlideSvg(presentation, 0, { fonts, catalogs: registered, onDiagnostic }));
+    const diagnostics = diagnosticsOf((onDiagnostic) => toSvg(presentation, 1, { fonts, catalogs: registered, onDiagnostic }));
     assert.ok(!families.has('Tinos') && families.has(ENGINE_DEFAULT_FONT_SCHEME.minor), `${name}: the engine default is measured: ${[...families]}`);
     assert.deepEqual(diagnostics.map((item) => [item.code, item.kind, item.reference, item.path, item.group, item.source, item.fallback]), [['unresolved-reference', 'fontSchemes', 'acme:host-serif', 'design.fontScheme', 'acme', groupSource, 'engine-default']], name);
   }
@@ -95,35 +95,35 @@ for (const render of [renderSvg, bare.renderSvg]) {
 // A reference no catalog has never throws: a font scheme, theme or colour scheme falls back to core's engine default and a layout
 // to automatic composition, each with one `unresolved-reference` diagnostic that names the reference, the group and its source.
 {
-  const report = (presentation, index = 0) => diagnosticsOf((onDiagnostic) => renderSlideSvg(presentation, index, { onDiagnostic }));
+  const report = (presentation, index = 0) => diagnosticsOf((onDiagnostic) => toSvg(presentation, index + 1, { onDiagnostic }));
   const fields = (item) => [item.code, item.kind, item.reference, item.path, item.group, item.source, item.fallback];
   assert.deepEqual(report(deck({ fontScheme: 'no-such-scheme' })).map(fields), [['unresolved-reference', 'fontSchemes', 'no-such-scheme', 'design.fontScheme', 'default', GALLERY, 'engine-default']]);
   for (const diagnostic of report(deck({ fontScheme: 'no-such-scheme' }))) assert.match(diagnostic.message, /no-such-scheme/);
   assert.deepEqual(report(deck({ theme: 'no-such-theme' })).map(fields), [['unresolved-reference', 'themes', 'no-such-theme', 'design.theme', 'default', GALLERY, 'engine-default']]);
   assert.deepEqual(report(deck({ colorScheme: 'no-such-colors' })).map(fields), [['unresolved-reference', 'colorSchemes', 'no-such-colors', 'design.colorScheme', 'default', GALLERY, 'engine-default']]);
-  const engineDefault = renderSlideSvg(deck(undefined), 0);
-  assert.equal(renderSlideSvg(deck({ fontScheme: 'no-such-scheme' }), 0), engineDefault, 'an unknown font scheme draws the engine default');
-  assert.equal(renderSlideSvg(deck({ theme: 'no-such-theme' }), 0), engineDefault, 'an unknown theme draws the engine default theme');
-  assert.equal(renderSlideSvg(deck({ colorScheme: 'no-such-colors' }), 0), engineDefault, 'an unknown colour scheme draws the engine default colours');
+  const engineDefault = toSvg(deck(undefined), 1);
+  assert.equal(toSvg(deck({ fontScheme: 'no-such-scheme' }), 1), engineDefault, 'an unknown font scheme draws the engine default');
+  assert.equal(toSvg(deck({ theme: 'no-such-theme' }), 1), engineDefault, 'an unknown theme draws the engine default theme');
+  assert.equal(toSvg(deck({ colorScheme: 'no-such-colors' }), 1), engineDefault, 'an unknown colour scheme draws the engine default colours');
   // The engine defaults are the gallery's minimal theme's draw fields with cool-horizon and Aptos.
-  assert.equal(renderSlideSvg(deck({ theme: 'minimal' }), 0), engineDefault, 'the gallery minimal theme draws as the engine default');
+  assert.equal(toSvg(deck({ theme: 'minimal' }), 1), engineDefault, 'the gallery minimal theme draws as the engine default');
   const unlaidOut = { ...deck(undefined), slides: [{ ...slide, layout: 'no-such-layout' }] };
   const layouts = report(unlaidOut);
-  assert.equal(renderSlideSvg(unlaidOut, 0), renderSlideSvg({ ...unlaidOut, slides: [slide] }, 0), 'an unknown layout composes automatically');
+  assert.equal(toSvg(unlaidOut, 1), toSvg({ ...unlaidOut, slides: [slide] }, 1), 'an unknown layout composes automatically');
   assert.deepEqual(layouts.map(fields), [['unresolved-reference', 'layouts', 'no-such-layout', 'slides.0.layout', 'default', GALLERY, 'automatic']]);
   // With no catalog registered, a gallery id is unresolved too (no source is known), and `"default": false` turns the host
   // default off for the document.
-  assert.deepEqual(diagnosticsOf((onDiagnostic) => bare.renderSlideSvg(deck({ fontScheme: 'roboto' }), 0, { catalogs: [], onDiagnostic })).map(fields), [['unresolved-reference', 'fontSchemes', 'roboto', 'design.fontScheme', 'default', undefined, 'engine-default']]);
+  assert.deepEqual(diagnosticsOf((onDiagnostic) => bare.toSvg(deck({ fontScheme: 'roboto' }), 1, { catalogs: [], onDiagnostic })).map(fields), [['unresolved-reference', 'fontSchemes', 'roboto', 'design.fontScheme', 'default', undefined, 'engine-default']]);
   assert.deepEqual(report({ ...deck({ fontScheme: 'roboto' }), catalogs: { default: false } }).map(fields), [['unresolved-reference', 'fontSchemes', 'roboto', 'design.fontScheme', 'default', undefined, 'engine-default']]);
 }
 
 // strictReferences: the render fails instead of falling back, with core's diagnostics.
-assert.throws(() => renderSlideSvg(deck({ theme: 'no-such-theme' }), 0, { strictReferences: true }), (error) => {
+assert.throws(() => toSvg(deck({ theme: 'no-such-theme' }), 1, { strictReferences: true }), (error) => {
   assert.ok(error instanceof bare.OPFRenderError);
   assert.equal(error.code, 'unresolved-reference');
   assert.deepEqual(error.details.diagnostics.map((item) => [item.code, item.kind, item.reference, item.path]), [['unresolved-reference', 'themes', 'no-such-theme', 'design.theme']]);
   return true;
 });
-assert.ok(renderSlideSvg(deck({ fontScheme: 'roboto' }), 0, { strictReferences: true }).startsWith('<svg'), 'a resolved reference renders under strictReferences');
+assert.ok(toSvg(deck({ fontScheme: 'roboto' }), 1, { strictReferences: true }).startsWith('<svg'), 'a resolved reference renders under strictReferences');
 
 console.log('Slide context: core resolveSlideContext supplies the font families (roboto measures with Roboto); host Catalog[] reach it (host default, named groups by source only); unresolved references fall back to the engine defaults with unresolved-reference, or fail under strictReferences.');

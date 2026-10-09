@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { renderSlideSvg } from './catalog-harness.mjs';
+import { toSvg } from './catalog-harness.mjs';
 
 // FA-27: Table.alt is the table's accessible name in the preview, as Chart.alt is the chart's (FA-09), but a summary and not a picture:
 // a role="group" with aria-label wraps the table and its cell text stays readable (no role="img", no aria-hidden above it). An empty alt
@@ -28,15 +28,15 @@ const readable = (svg, needle) => {
 };
 const alt = 'North America leads EMEA, $18.1M against $11.5M in Q4 ("EMEA" in grey).';
 
-const plain = renderSlideSvg(deck(), 0);
-const labelled = renderSlideSvg(deck({ alt }), 0);
+const plain = toSvg(deck(), 1);
+const labelled = toSvg(deck({ alt }), 1);
 assert.match(labelled, /<g aria-label="North America leads EMEA, \$18\.1M against \$11\.5M in Q4 \(&quot;EMEA&quot; in grey\)\." role="group">/, 'labelled group');
 assert.equal(labelled.split('role="group"').length - 1, plain.split('role="group"').length, 'exactly one new role=group group');
 assert.equal(labelled.split('role="img"').length, plain.split('role="img"').length, 'a table is not a role=img picture');
 assert.ok(readable(labelled, 'North America').some((attributes) => /role="group"/.test(attributes)), 'the cells sit inside the labelled group');
 readable(labelled, 'EMEA');
 readable(labelled, 'Region');
-const decorative = renderSlideSvg(deck({ alt: '' }), 0);
+const decorative = toSvg(deck({ alt: '' }), 1);
 assert.match(decorative, /<g aria-hidden="true">/, 'a decorative table is aria-hidden');
 assert.doesNotMatch(decorative, /aria-label="[^"]*North/, 'no label on a decorative table');
 assert.ok(ancestorsOfText(decorative, 'North America').some((attributes) => /aria-hidden="true"/.test(attributes)), 'a decorative table hides its cells');
@@ -50,7 +50,7 @@ for (const [name, svg, open] of [['labelled', labelled, /<g aria-label="[^"]*" r
 
 // A table in a block, beside other text, is labelled the same way; the text beside it is untouched.
 {
-  const svg = renderSlideSvg({ design: { fontScheme: 'roboto' }, slides: [{ title: 'T', blocks: [{ table: { ...table, alt: 'Q4 by region' } }, { text: 'Beside' }] }] }, 0);
+  const svg = toSvg({ design: { fontScheme: 'roboto' }, slides: [{ title: 'T', blocks: [{ table: { ...table, alt: 'Q4 by region' } }, { text: 'Beside' }] }] }, 1);
   assert.match(svg, /aria-label="Q4 by region" role="group"/);
   assert.match(svg, />Beside</);
   readable(svg, 'North America');
@@ -58,7 +58,7 @@ for (const [name, svg, open] of [['labelled', labelled, /<g aria-label="[^"]*" r
 
 // A chart's alt does not leak onto a table beside it: each payload gets its own group.
 {
-  const both = (chartAlt) => renderSlideSvg({ design: { fontScheme: 'roboto' }, slides: [{ title: 'T', blocks: [{ table }, { chart: { type: 'column', ...chartAlt, data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } }] }] }, 0);
+  const both = (chartAlt) => toSvg({ design: { fontScheme: 'roboto' }, slides: [{ title: 'T', blocks: [{ table }, { chart: { type: 'column', ...chartAlt, data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } }] }] }, 1);
   const svg = both({ alt: 'Chart words' });
   assert.equal(svg.split('role="img"').length - both({}).split('role="img"').length, 1);
   assert.equal(svg.split('role="group"').length, both({}).split('role="group"').length, 'the chart alt adds no role=group');

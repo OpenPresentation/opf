@@ -17,7 +17,7 @@ await mkdir(outputDirectory,{recursive:true});
 
 // One entry: the loader (with the lazy script API) and the renderer, bundled for the browser.
 const bundle=await build({
-  stdin:{contents:`import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};`,resolveDir:root,sourcefile:'page.js'},
+  stdin:{contents:`import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {toSvg} from './dist/svg.js';window.opf={loadBrowserFonts,toSvg};`,resolveDir:root,sourcefile:'page.js'},
   bundle:true,platform:'browser',format:'iife',write:false,minify:true,metafile:true,
 });
 const script=bundle.outputFiles[0].text;
@@ -62,7 +62,7 @@ try{
   const step=async(name,source)=>{
     const before=requests.length;
     const result=await page.evaluate(async ({name,source,packRoot})=>{
-      const {loadBrowserFonts,renderSlideSvg}=window.opf;
+      const {loadBrowserFonts,toSvg}=window.opf;
       if(name==='latin'||!window.registry){
         if(window.registry)window.registry.dispose();
         const data=new Uint8Array(await (await fetch('/roboto.ttf')).arrayBuffer());
@@ -72,7 +72,7 @@ try{
       const document=source[name];
       const ensured=await registry.ensureScripts(document);
       const diagnostics=[];
-      const svg=renderSlideSvg(document, 0,{ fonts: {textMeasurement:registry.textMeasurement},catalogs:window.catalogs,onDiagnostic:value=>diagnostics.push(value.code)});
+      const svg=toSvg(document, 1,{ fonts: {textMeasurement:registry.textMeasurement},catalogs:window.catalogs,onDiagnostic:value=>diagnostics.push(value.code)});
       const host=window.document.querySelector('main');host.innerHTML=svg;
       await window.document.fonts.ready;
       // RR-38: an Arabic Typesetting title is drawn at 0.64 of the composed size (54 px), so its advance is checked at 34.5.

@@ -3,7 +3,7 @@
 // theme and `cool-horizon` colour scheme, so the host catalog is registered (./catalog-harness.mjs).
 import assert from 'node:assert/strict';
 import { resolveColorRoles } from '@openpresentation/opf/composition';
-import { defaultCatalog, renderSlideSvg } from './catalog-harness.mjs';
+import { defaultCatalog, toSvg } from './catalog-harness.mjs';
 
 const cool = defaultCatalog.colorSchemes['cool-horizon'];
 assert.ok(cool, 'the gallery cool-horizon colour scheme');
@@ -12,7 +12,7 @@ const fillOf = (svg, label) => {
   assert.ok(found, `${label} run in the SVG`);
   return found[1].toUpperCase();
 };
-const one = (design, run) => renderSlideSvg({ design, slides: [{ title: 'T', text: [run] }] }, 0);
+const one = (design, run) => toSvg({ design, slides: [{ title: 'T', text: [run] }] }, 1);
 
 // Role overrides on a light slide: every role ColorRef and the default text.
 const light = { theme: 'classic', colorScheme: { id: 'cool-horizon', surface: '#EEEEDD', text: '#334455', textSecondary: '#556677', background: '#FFF8E7', accent: '#FF00AA' } };

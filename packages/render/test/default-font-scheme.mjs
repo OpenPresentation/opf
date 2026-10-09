@@ -6,7 +6,7 @@
 import assert from 'node:assert/strict';
 import {ENGINE_DEFAULT_FONT_SCHEME, resolveFontFamilies} from '@openpresentation/opf/composition';
 import {paginate} from '@openpresentation/opf/pagination';
-import {catalogs, defaultCatalog, engineDefaults, svgToPng, renderSlideSvg} from './catalog-harness.mjs';
+import {catalogs, defaultCatalog, engineDefaults, toPng, toSvg} from './catalog-harness.mjs';
 import { loadFonts } from '../dist/fonts-node.js';
 
 // Parity with core's exported engine default: the renderer re-exports it, and it draws as the gallery's aptos scheme.
@@ -20,32 +20,32 @@ const noDesign = { name: 'No design', slides: [slide] };
 const families = svg => [...new Set([...svg.matchAll(/font-family="([^"]+)"/g)].map(match => match[1]))].sort();
 
 // Estimated layout: the SVG names the Aptos families, as a document with no design does.
-assert.deepEqual(families(renderSlideSvg(custom, 0)), ['Aptos Display, sans-serif', 'Aptos, sans-serif']);
-assert.deepEqual(families(renderSlideSvg(custom, 0)), families(renderSlideSvg(noDesign, 0)));
+assert.deepEqual(families(toSvg(custom, 1)), ['Aptos Display, sans-serif', 'Aptos, sans-serif']);
+assert.deepEqual(families(toSvg(custom, 1)), families(toSvg(noDesign, 1)));
 // A deck font scheme still wins over the last resort.
-assert.deepEqual(families(renderSlideSvg({ ...custom, design: { theme: 'bare', fontScheme: 'roboto' } }, 0)), ['Roboto, sans-serif']);
+assert.deepEqual(families(toSvg({ ...custom, design: { theme: 'bare', fontScheme: 'roboto' } }, 1)), ['Roboto, sans-serif']);
 // Aptos is not openly licensed and is not bundled. The default raster engine draws the
 // unavailable family with its bundled sans-serif fallback.
-assert.ok((await svgToPng(renderSlideSvg(custom, 0), { scale: 0.25 })).byteLength > 0);
+assert.ok((await toPng(toSvg(custom, 1), { scale: 0.25 })).byteLength > 0);
 
 // Measured layout takes the FF-31 font policy path (owner policy 2026-09-29): Aptos previews with
 // Intos and Aptos Display with Intos Display, both metric.
 const visual = await loadFonts({ pack: 'office', substitutionPolicy: 'visual' });
-const measured = renderSlideSvg(custom, 0, {fonts: visual});
+const measured = toSvg(custom, 1, {fonts: visual});
 assert.deepEqual(families(measured), ['Intos Display, sans-serif', 'Intos, sans-serif']);
 assert.deepEqual(
   visual.registry.substitutions.map(entry => `${entry.requestedFamily}->${entry.resolvedFamily}:${entry.compatibility}`).sort(),
   ['Aptos Display->Intos Display:metric', 'Aptos->Intos:metric'],
 );
 visual.registry.clearSubstitutions();
-assert.deepEqual(families(renderSlideSvg(noDesign, 0, {fonts: visual})), families(measured));
+assert.deepEqual(families(toSvg(noDesign, 1, {fonts: visual})), families(measured));
 assert.deepEqual(visual.registry.substitutions.map(entry => entry.requestedFamily).sort(), ['Aptos', 'Aptos Display']);
 // The metric office registry previews the default scheme with Intos, and the same measured SVG comes out.
 const metric = await loadFonts({ pack: 'office' });
-for (const deck of [custom, noDesign]) assert.deepEqual(families(renderSlideSvg(deck, 0, {fonts: metric})), families(measured));
+for (const deck of [custom, noDesign]) assert.deepEqual(families(toSvg(deck, 1, {fonts: metric})), families(measured));
 // With only the base pack there is no Aptos substitute, so measured preview fails explicitly.
 const baseMetric = await loadFonts({ pack: 'base', substitutionPolicy: 'metric' });
-for (const deck of [custom, noDesign]) assert.throws(() => renderSlideSvg(deck, 0, {fonts: baseMetric}), { code: 'font-unavailable' });
+for (const deck of [custom, noDesign]) assert.throws(() => toSvg(deck, 1, {fonts: baseMetric}), { code: 'font-unavailable' });
 
 console.log('shared engine default font scheme (Aptos Display / Aptos): estimated and measured previews match the no-design path');
 
@@ -78,7 +78,7 @@ const checkCore = (deck, expected, diagnostics, name) => {
 };
 for (const [name, input, expected, path] of unknownCases) {
   const deck = unknownDeck(input), diagnostics = [];
-  const svg = renderSlideSvg(deck, 0, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  const svg = toSvg(deck, 1, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   assert.deepEqual(families(svg).map(stack => stack.replace(/, sans-serif$/, '')).sort(), expected, name);
   assert.deepEqual(essentials(diagnostics), expectedDiagnostics(path), name);
   for (const diagnostic of diagnostics) assert.match(diagnostic.message, /no-such-scheme/, `${name}: the message names the reference`);
@@ -86,5 +86,5 @@ for (const [name, input, expected, path] of unknownCases) {
 }
 // A code role on an unresolved object reference still applies.
 const codeDeck = {name: 'Code', design: {fontScheme: {id: 'no-such-scheme', code: 'JetBrains Mono'}}, slides: [{id: 'c', layout: 'code-1x', title: 'Rule', code: {source: 'const x = 1;', language: 'ts'}}]};
-assert.ok(families(renderSlideSvg(codeDeck, 0)).includes('JetBrains Mono, monospace'));
+assert.ok(families(toSvg(codeDeck, 1)).includes('JetBrains Mono, monospace'));
 console.log('unresolved font schemes: engine default base and one unresolved-reference diagnostic, as in every engine');

@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 // FA-23: the documents name gallery records, so they render with the gallery snapshot registered, as a host does. Core's
 // packed-ecosystem checks copy this file and rewrite its relative imports, so it registers the catalog itself.
 import {defaultCatalog} from '@openpresentation/opf/catalog';
-import {resolvePresentation as resolvePresentationUnregistered, renderSlideSvg as renderSlideSvgUnregistered} from '../dist/svg.js';
+import {resolvePresentation as resolvePresentationUnregistered, toSvg as toSvgUnregistered} from '../dist/svg.js';
 const catalogs = [defaultCatalog];
 const resolvePresentation = (deck, options = {}) => resolvePresentationUnregistered(deck, {catalogs, ...options});
-const renderSlideSvg = (deck, index, options = {}) => renderSlideSvgUnregistered(deck, index, {catalogs, ...options});
+const toSvg = (deck, index, options = {}) => toSvgUnregistered(deck, index, {catalogs, ...options});
 import {loadFonts} from '../dist/fonts-node.js';
 import {validate} from '@openpresentation/opf';
 const fonts=(await loadFonts({pack: 'office'})).registry;
@@ -19,7 +19,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const textMeasurement={measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);},resolveStyle:style=>{styles++;return fonts.textMeasurement.resolveStyle(style);}};
     const bound=resolvePresentation(deck,{ fonts: {textMeasurement}}).slides[0],expectedCalls=calls,expectedStyles=styles;
     calls=0;styles=0;
-    const diagnostics=[],svg=renderSlideSvg(deck, 0,{ fonts: {textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item)});
+    const diagnostics=[],svg=toSvg(deck, 1,{ fonts: {textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item)});
     assert.equal(calls,expectedCalls,'No code measurement after acceptance');assert.equal(styles,expectedStyles,'No repeated style resolution');
     assert.deepEqual(diagnostics,[]);assert.deepEqual(deck,before);
     const parts=bound.geometry.items[0].codeLayout.parts,groups=[...svg.matchAll(/<g\b([^>]*data-opf-code-role[^>]*)>/g)];
@@ -61,12 +61,12 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   }
 }
 const overflow={design:{fontScheme:'roboto'},slides:[{code:{source:'Unabridged body\n'.repeat(100),language:'Keep case'}}]},diagnostics=[];
-renderSlideSvg(overflow, 0,{ fonts: {textMeasurement:fonts.textMeasurement},onDiagnostic:item=>diagnostics.push(item)});
+toSvg(overflow, 1,{ fonts: {textMeasurement:fonts.textMeasurement},onDiagnostic:item=>diagnostics.push(item)});
 assert.ok(diagnostics.some(item=>item.path==='slides.0.code.source'&&item.reason==='text-fit'));
 overflow.slides[0].composition={overflow:'error'};
-assert.throws(()=>renderSlideSvg(overflow, 0,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
+assert.throws(()=>toSvg(overflow, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const tiny={design:{fontScheme:'roboto',dimensions:{widthInches:40/96,heightInches:40/96}},slides:[{composition:{padding:0},code:'Keep all text'}]};
-assert.throws(()=>renderSlideSvg(tiny, 0,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
+assert.throws(()=>toSvg(tiny, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];
 let invalidCases=0;
 for (const point of forbidden) for (const field of ['shorthand','source','filename','language']) {
@@ -74,12 +74,12 @@ for (const point of forbidden) for (const field of ['shorthand','source','filena
   const deck={slides:[{blocks:[{code}]}]},before=structuredClone(deck);
   assert.equal(validate(deck,{only:['format'],catalogs}).valid,true,'Schema validity is separate from XML representability');
   const path='slides.0.blocks.0.code'+(field==='shorthand'?'':'.'+field);
-  assert.throws(()=>renderSlideSvg(deck, 0),error=>error.code==='invalid-code-text'&&error.path===path&&error.message.includes('UTF-16 offset 4'));
+  assert.throws(()=>toSvg(deck, 1),error=>error.code==='invalid-code-text'&&error.path===path&&error.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;
 }
 // XML character boundaries, not a glyph-coverage or shaping claim.
 const representable='\t\n\r\n\r <&>" \uD7FF\uE000\uFFFD\u{10000}\u{10FFFF}';
-const accepted=renderSlideSvg({slides:[{code:representable}]}, 0);
+const accepted=toSvg({slides:[{code:representable}]}, 1);
 for (const character of ['\uD7FF','\uE000','\uFFFD','\u{10000}','\u{10FFFF}']) assert.ok(accepted.includes(character));
 assert.ok(accepted.includes('&lt;&amp;&gt;'));
 console.log(`Shared code SVG: ${cases} accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, ${invalidCases} XML-boundary rejections and valid character boundaries.`);

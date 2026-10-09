@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation, renderSlideSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {resolvePresentation, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { loadFonts } from '../dist/fonts-node.js';
 const fonts = (await loadFonts({pack: 'base'})).registry;
 for (const count of [1, 2, 4, 8]) {
@@ -9,7 +9,7 @@ for (const count of [1, 2, 4, 8]) {
       blocks: [{ timeline: { events: Array.from({ length: count }, (_, i) => ({ when: `Q${i + 1}`, what: `Milestone ${i + 1}`, description: 'Keep every label inside its allocated space.' })) } }],
     }] };
     const options = { trace: true, fonts: {textMeasurement: fonts.textMeasurement} };
-    const svg = renderSlideSvg(deck, 0, options);
+    const svg = toSvg(deck, 1, options);
     const bound = resolvePresentation(deck, options).slides[0];
     const box = bound.geometry.items.find(item => item.field === 'timeline').box;
     const circles = [...svg.matchAll(/<circle\b([^>]*)>/g)];

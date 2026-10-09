@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {colorContrast, codeHighlightColors} from '@openpresentation/opf/composition';
 // The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
-import { renderSlideSvg } from './catalog-harness.mjs';
+import { toSvg } from './catalog-harness.mjs';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets in the SVG preview.
 
-const svg = (document, options = {}, index = 0) => renderSlideSvg(document, index, { trace: true, ...options});
+const svg = (document, options = {}, index = 0) => toSvg(document, index + 1, { trace: true, ...options});
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
 const codeDeck = highlight => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Highlight', code: {source, language: 'ts', ...(highlight ? {highlight} : {})}}]});
 

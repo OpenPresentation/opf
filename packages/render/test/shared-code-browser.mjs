@@ -6,10 +6,10 @@ import {chromium} from 'playwright';
 // FA-23: the documents name gallery records, so they render with the gallery snapshot registered, as a host does. Core's
 // packed-ecosystem checks copy this file and rewrite its relative imports, so it registers the catalog itself.
 import {defaultCatalog} from '@openpresentation/opf/catalog';
-import {resolvePresentation as resolvePresentationUnregistered, renderSlideSvg as renderSlideSvgUnregistered} from '../dist/svg.js';
+import {resolvePresentation as resolvePresentationUnregistered, toSvg as toSvgUnregistered} from '../dist/svg.js';
 const catalogs = [defaultCatalog];
 const resolvePresentation = (deck, options = {}) => resolvePresentationUnregistered(deck, {catalogs, ...options});
-const renderSlideSvg = (deck, index, options = {}) => renderSlideSvgUnregistered(deck, index, {catalogs, ...options});
+const toSvg = (deck, index, options = {}) => toSvgUnregistered(deck, index, {catalogs, ...options});
 import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fonts=(await loadFonts({pack: 'office'})).registry,faces=fonts.embeddedFonts.filter(face=>face.family==='Cousine'&&[400,700].includes(face.weight)&&!face.italic);
@@ -26,7 +26,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
   const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code: 'Courier New'}},slides:[{composition:{minFontSize:24},code}]};
   const options={trace:true,fonts:{textMeasurement:fonts.textMeasurement}},bound=resolvePresentation(deck,options).slides[0];
   assert.deepEqual(bound.geometry.diagnostics,[]);
-  const svg=renderSlideSvg(deck, 0,options),item=bound.geometry.items[0];
+  const svg=toSvg(deck, 1,options),item=bound.geometry.items[0];
   assert.ok(item.codeLayout.parts.every(part=>part.style.fontFamily==='Cousine'));
   cases.push({id:name+'-'+dimensions.width,...dimensions,svg,svgSha256:hash(svg),cell:item.box,parts:item.codeLayout.parts});
 }

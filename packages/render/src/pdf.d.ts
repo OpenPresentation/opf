@@ -1,2 +1,2 @@
-export { svgToPdf } from "./index.js";
-export type { SvgToPdfOptions, PdfDiagnostic, PdfMetadata } from "./index.js";
+export { toPdf } from "./index.js";
+export type { ToPdfOptions, PdfDiagnostic, PdfMetadata } from "./index.js";
