@@ -64,10 +64,13 @@ export interface RenderSvgOptions {
    * `true` draws every `<text>` as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
    * no font and looks the same in every viewer (about 40 KB a slide over the core example decks, against 0.5 to 4 MB of embedded
    * faces). Needs the fonts handle `loadFonts()` returns (`text-as-paths-needs-fonts` otherwise). The text is no longer text: it
-   * cannot be selected, searched or edited in place, and each outlined element is a `role="img"` group labelled with its text for
-   * assistive technology. Each element keeps its `data-opf-*` trace. Text in a colour or bitmap font stays text
-   * (`text-as-paths-kept-text`). Use it for thumbnails, previews and portable SVG files, not for an editing surface or the
-   * vector PDF (which keeps real text from `<text>` SVG). Default false.
+   * cannot be edited in place. The glyphs are shaped by HarfBuzz (the browser's shaper; the Node handle always, a browser handle
+   * given `shapeWasm`), are hidden from assistive technology, and each outlined line is also invisible real text pinned to the
+   * drawn width, so screen readers, selection, copy and find-in-page get the words. Each element keeps its `data-opf-*` trace.
+   * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a colour or bitmap font
+   * (`"colour-font"`), its face's fsType restricts embedding (`"restricted"`), or it has no pinned width and HarfBuzz and the
+   * layout's measurement disagree on it (`"shaping"`). Use it for thumbnails, previews and portable SVG files, not for an editing
+   * surface or the vector PDF (which keeps real text from `<text>` SVG). Default false.
    */
   textAsPaths?: boolean;
   /**

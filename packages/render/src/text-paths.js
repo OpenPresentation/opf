@@ -11,10 +11,11 @@
 // the font's own metrics. Text drawn with a colour or bitmap font (COLR, CBDT, sbix, SVG tables) stays <text>, reported as
 // `text-as-paths-kept-text`, and the SVG then embeds that face as usual.
 
-import { FontLibrary } from "./pdf-fonts.js";
-import { layoutText } from "./pdf-text.js";
-import { ROOT_STYLE, attributesOf, inheritStyle, parseLength } from "./pdf-style.js";
-import { decodeEntities, escapeAttribute, parseXml } from "./pdf-xml.js";
+import { FontLibrary, shape as fontkitShape } from "./pdf-fonts.js";
+import { featuresOf, layoutText } from "./pdf-text.js";
+import { ROOT_STYLE, attributesOf, inheritStyle, parseFontFamilies, parseLength } from "./pdf-style.js";
+import { openTypeLanguage } from "./script-fonts.js";
+import { decodeEntities, escapeAttribute, escapeText, parseXml } from "./pdf-xml.js";
 
 const TOKENS = /<(\/?)([A-Za-z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|[^<]+/g;
 const ATTRIBUTE = /([^\s=/>"']+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
@@ -58,15 +59,20 @@ export function outlineLibrary(fonts) {
 
 function newLibrary(fonts) {
   const fallback = fonts?.registry?.fallbackFamily ?? "Roboto";
-  return new FontLibrary({ genericFamilies: () => [fallback] });
+  const library = new FontLibrary({ genericFamilies: () => [fallback] });
+  library.restricted = new Set();
+  return library;
 }
 
-// The face is matched by the family, weight and style the registry gives it, the ones the SVG names.
+// The face is matched by the family, weight and style the registry gives it, the ones the SVG names. A CFF face can be outlined
+// (only the PDF cannot subset it); a face whose fsType restricts embedding is never outlined: its text stays text.
 function addFace(library, data, family, described) {
   const face = library.addData(data, "fonts", family);
   if (!face || face.outlineStyled) return;
   if (Number.isInteger(described?.weight)) face.weight = described.weight;
   if (typeof described?.italic === "boolean") face.italic = described.italic;
+  if (face.unusable === "pdf-font-unsupported-format" && face.font) face.embeddable = true;
+  if (face.unusable === "pdf-font-embedding-restricted") for (const name of face.names) library.restricted.add(name);
   face.outlineStyled = true;
 }
 
@@ -82,23 +88,30 @@ function decodeBase64(text) {
  * `rootStyle` holds what the <svg> element gives its children (lang), `report(diagnostic)` receives what cannot be outlined
  * and `fail(code, message)` builds the error thrown when no face draws a text. Returns the new content and the <defs> markup.
  */
-export function outlineSlideText(content, { library, rootStyle = {}, report = () => {}, fail }) {
+export function outlineSlideText(content, { library, shaper, rootStyle = {}, report = () => {}, fail }) {
   const defs = new Map();
   const reported = new Set();
   const env = {
     fonts: library,
     defaults: [],
     splitByOwner: true,
+    // HarfBuzz, the browser's shaper, when the handle carries one (RR-64 phase 2); fontkit otherwise.
+    ...(shaper ? { shape: (face, text, options) => shaper.shape(face.hash, face.data, text, { ...options, language: options.lang }) } : {}),
     // The renderer reports its own font substitutions and missing glyphs while it lays the slide out.
     diagnostic: () => {},
     missing: () => {},
     unavailable: (families) => fail("text-as-paths-font-unavailable", `No font face can outline text in ${families.length ? `'${families.join("', '")}'` : "the requested family"}; pass the fonts handle the slide was laid out with.`),
   };
   const base = inheritStyle(ROOT_STYLE, rootStyle);
-  const keep = (family) => {
-    if (reported.has(family)) return;
-    reported.add(family);
-    report({ code: "text-as-paths-kept-text", fontFamily: family, message: `'${family}' is a colour or bitmap font, which has no plain outlines; its text stays text and the SVG embeds the face.` });
+  const REASONS = {
+    "colour-font": "is a colour or bitmap font, which has no plain outlines",
+    restricted: "forbids embedding (OS/2 fsType), so its outlines are not written",
+    shaping: "shapes differently in HarfBuzz and in the layout's measurement on text with no pinned width",
+  };
+  const keep = (family, reason) => {
+    if (reported.has(`${family}|${reason}`)) return;
+    reported.add(`${family}|${reason}`);
+    report({ code: "text-as-paths-fallback", reason, fontFamily: family, message: `'${family}' ${REASONS[reason]}; that text stays text and the SVG embeds its face.` });
   };
   const outlined = content.map((markup) => typeof markup === "string" && markup.includes("<text") ? outlineMarkup(markup, base, env, defs, keep) : markup);
   const definitions = [...defs].map(([id, d]) => `<path id="${id}" d="${d}"/>`).join("");
@@ -150,14 +163,14 @@ function outlineText(source, parentStyle, env, defs, keep) {
   const node = parseXml(`<svg>${source}</svg>`)?.children.find((child) => child.name === "text");
   if (!node) return source;
   const { runs } = layoutText(node, env, parentStyle, null);
-  const colour = runs.find((run) => COLOUR_TABLES.some((table) => run.face.font.directory?.tables?.[table]));
-  if (colour) { keep([...colour.face.names][0]); return source; }
   const attrs = Object.entries(node.attrs).filter(([key]) => !TEXT_ONLY.has(key));
-  const hidden = node.attrs["aria-hidden"] === "true", words = logicalText(runs);
-  const label = hidden || !words ? [] : [["role", "img"], ["aria-label", words]];
-  const groups = [];
+  const hidden = node.attrs["aria-hidden"] === "true";
+  const groups = [], outlined = [];
   for (const run of runs) {
-    const drawn = drawRun(run, defs);
+    const reason = fallbackReason(run, env);
+    if (reason) keep([...run.face.names][0], reason);
+    else outlined.push(run);
+    const drawn = reason ? keptRun(run) : drawRun(run, defs);
     if (!drawn) continue;
     const owner = run.owner !== node && run.owner ? run.owner : null;
     const last = groups.at(-1);
@@ -168,14 +181,53 @@ function outlineText(source, parentStyle, env, defs, keep) {
     const trace = owner ? Object.entries(owner.attrs).filter(([key]) => key.startsWith("data-")) : [];
     return trace.length ? element("g", trace, parts.join("")) : parts.join("");
   }).join("");
-  return element("g", [...attrs, ...label], body);
+  // RR-64 phase 3: the glyphs are hidden from assistive technology and the words are real text again, invisible, one <text> per
+  // line in reading order, pinned to the drawn width: a screen reader reads text (FA-30), and selection, copy and find work.
+  return element("g", attrs, body + (hidden ? "" : readableText(outlined)));
 }
 
-// The text in reading order: runs are placed in visual order, so a right-to-left chunk is read from its logical text.
-function logicalText(runs) {
-  const chunks = [];
-  for (const run of runs) if (!chunks.includes(run.chunk)) chunks.push(run.chunk);
-  return chunks.map((chunk) => chunk.logical).join(" ").replace(/\s+/g, " ").trim();
+// The invisible text layer of the outlined runs (runs that stayed text are text already): per line, the runs in logical order, at
+// the line's left edge (its right edge for a right-to-left line), in the generic family (no face is embedded for it), sized like
+// the first run and stretched to the runs' drawn width.
+function readableText(runs) {
+  const lines = [];
+  for (const run of runs) { let line = lines.find((item) => item.chunk === run.chunk); if (!line) lines.push(line = { chunk: run.chunk, runs: [] }); line.runs.push(run); }
+  return lines.map(({ chunk, runs: parts }) => {
+    const words = [...parts].sort((a, b) => a.start - b.start).map((run) => run.logical).join("");
+    if (!/\S/.test(words)) return "";
+    const left = Math.min(...parts.map((run) => run.x)), width = parts.reduce((sum, run) => sum + run.width, 0), first = parts[0];
+    return element("text", [["x", fixed(chunk.rtl ? left + width : left)], ["y", fixed(first.y)], ["font-family", "sans-serif"], ["font-size", fixed(first.size)], ["fill", "none"],
+      ["direction", chunk.rtl ? "rtl" : undefined], ["xml:space", "preserve"], ["textLength", fixed(width)], ["lengthAdjust", "spacingAndGlyphs"], ["lang", first.style.lang]], escapeText(words));
+  }).join("");
+}
+
+// Why a run stays text, or null: a colour or bitmap font; a family whose fsType restricts embedding (the run was laid out with
+// another face); or, with HarfBuzz shaping, a run with no pinned width whose HarfBuzz advance differs from the fontkit advance
+// the layout measured by more than 0.1 px (inside a textLength the run is scaled to the measured width, as the browser does).
+function fallbackReason(run, env) {
+  if (COLOUR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
+  for (const family of parseFontFamilies(run.style["font-family"])) {
+    if (env.fonts.restricted?.has(family.toLowerCase())) return "restricted";
+    if (run.face.names.has(family.toLowerCase())) break;
+  }
+  if (env.shape && !run.scope) {
+    const direction = run.level % 2 === 1 ? "rtl" : "ltr", language = openTypeLanguage(run.style.lang ?? run.style["xml:lang"]);
+    const measured = fontkitShape(run.face, run.text, { features: featuresOf(run.style), language, direction }).reduce((sum, glyph) => sum + glyph.advance, 0);
+    const shaped = run.glyphs.reduce((sum, glyph) => sum + glyph.advance, 0);
+    if (Math.abs(measured - shaped) * run.scale > 0.1) return "shaping";
+  }
+  return null;
+}
+
+// A run that stays text, where layoutText placed it: its own family, size and paint, its width pinned with textLength.
+function keptRun(run) {
+  const style = run.style, rtl = run.level % 2 === 1;
+  const attrs = [["x", fixed(rtl ? run.x + run.width : run.x)], ["y", fixed(run.y)], ["font-family", style["font-family"]], ["font-size", fixed(run.size)],
+    ["font-weight", style["font-weight"]], ["font-style", style["font-style"] === "normal" ? undefined : style["font-style"]], ["fill", style.fill],
+    ["fill-opacity", style["fill-opacity"] === "1" ? undefined : style["fill-opacity"]], ["direction", rtl ? "rtl" : undefined], ["xml:space", "preserve"],
+    ["textLength", fixed(run.width)], ["lengthAdjust", "spacingAndGlyphs"], ["lang", style.lang]];
+  const text = `<text${attrs.filter(([, value]) => value !== undefined && value !== null && value !== "").map(([key, value]) => ` ${key}="${escapeAttribute(value)}"`).join("")}>${escapeAttribute(run.logical)}</text>`;
+  return run.link ? element("a", Object.entries(run.link.node?.attrs ?? { href: run.link.href }), text) : text;
 }
 
 function drawRun(run, defs) {
@@ -204,9 +256,9 @@ function drawRun(run, defs) {
   }
   if (style.visibility && style.visibility !== "visible") paint.push(["visibility", style.visibility]);
   const glyphs = uses.length ? `<g transform="matrix(${precise(scale * scaleX)} 0 0 ${precise(-scale)} ${fixed(run.x)} ${fixed(run.y)})">${uses.join("")}</g>` : "";
-  const drawn = element("g", paint, glyphs + decorations.join(""));
-  // A link inside the text keeps its element's attributes (href, rel, target).
-  return run.link ? element("a", Object.entries(run.link.node?.attrs ?? { href: run.link.href }), drawn) : drawn;
+  const drawn = element("g", [...paint, ["aria-hidden", "true"]], glyphs + decorations.join(""));
+  // A link inside the text keeps its element's attributes (href, rel, target) and is named by its words.
+  return run.link ? element("a", [...Object.entries(run.link.node?.attrs ?? { href: run.link.href }), ["aria-label", run.logical]], drawn) : drawn;
 }
 
 // Underline, line-through and overline in the text colour, from the font's own metrics (the vector PDF draws the same).
@@ -272,7 +324,7 @@ export function textOutlines(fonts) {
     outlineSlideText: (content, options) => {
       const library = outlineLibrary(fonts);
       if (!library) throw options.fail("text-as-paths-needs-fonts", "textAsPaths needs font faces to outline: pass the handle loadFonts() returns as `fonts`.");
-      return outlineSlideText(content, { ...options, library });
+      return outlineSlideText(content, { ...options, library, shaper: fonts.shaper });
     },
   });
 }

@@ -8,6 +8,7 @@ import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
 import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
+import { createShaper } from "./hb-shape.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -257,6 +258,14 @@ function nodeSubsetter() {
   return subsetterPromise;
 }
 
+// RR-64 phase 2: HarfBuzz's shaper (harfbuzz.wasm of the same package) for text drawn as outlines, so the outlines are shaped as
+// a browser shapes the text. Without it outlines are shaped with fontkit.
+let shaperPromise;
+function nodeShaper() {
+  shaperPromise ??= readFile(require.resolve("harfbuzzjs/dist/harfbuzz.wasm")).then(createShaper, () => null).catch(() => null);
+  return shaperPromise;
+}
+
 /**
  * The fonts handle: one set of verified font inputs for layout, SVG, editor, PPTX and Node raster export. Pass it as `{ fonts }` to
  * `renderSvg`, `renderSlideSvg`, `svgToPng`, `svgToPdf`, core `paginate` and `validate`, and `toPptx`.
@@ -276,7 +285,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
-  const subsetter = await nodeSubsetter();
+  const [subsetter, shaper] = await Promise.all([nodeSubsetter(), nodeShaper()]);
   return {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { return (embeddedFonts ??= selectEmbedded()); },
@@ -285,7 +294,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     loadSystemFonts: false,
     registry,
     // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
-    outlines: textOutlines({ registry }),
+    outlines: textOutlines({ registry, shaper }),
     // RR-65: the subset engine that cuts each face an SVG embeds to the characters the slide draws.
     ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
     manifest: BUNDLED_FONT_MANIFEST,

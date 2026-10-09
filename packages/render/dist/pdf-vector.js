@@ -744,6 +744,9 @@ class Converter {
       run.fill = await this.paint(run.style.fill, run.style, ctx, box, "fill");
       run.stroke = await this.paint(run.style.stroke, run.style, ctx, box, "stroke");
     }
+    // Text with neither fill nor stroke draws nothing (an outlined slide's invisible readable layer, RR-64): it adds no font,
+    // no glyph and no structure to the PDF.
+    if (!runs.some((run) => run.fill || run.stroke)) return;
     // Runs are drawn in visual (left to right) order. Right-to-left runs are marked /ReversedChars so extractors read
     // their characters back to front, and a cluster whose glyph-to-Unicode map cannot give its text (a ligature, a
     // letter split into base and dots, a mirrored bracket) carries /ActualText; a left-to-right run the map cannot

@@ -40,7 +40,8 @@ assert.deepEqual(handle.registry.exportFaces().map((face) => face.family), [regi
 // RR-64: the browser handle carries the outline engine `textAsPaths` draws with, over the same face bytes.
 {
   const { content, defs } = handle.outlines.outlineSlideText([`<text x="1" y="20" font-family="${source.family}" font-size="20">Hi</text>`], { fail: (code, message) => new Error(message) });
-  assert.ok(!content[0].includes("<text") && /<use href="#opf-g-/.test(content[0]) && /<path id="opf-g-/.test(defs), "the browser handle outlines text");
+  assert.ok(/<use href="#opf-g-/.test(content[0]) && /<path id="opf-g-/.test(defs), "the browser handle outlines text");
+  assert.match(content[0], /<text [^>]*fill="none"[^>]*>Hi<\/text>/, "the only text left is the invisible readable line");
 }
 const empty = { slides: [{}] };
 assert.deepEqual(handle.pending(empty), []);

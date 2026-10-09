@@ -166,7 +166,7 @@ function buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds) {
   for (const char of chunk.chars) { levels.push(embedding.levels[unit]); unit += char.ch.length; }
   const mirrored = bidi.getMirroredCharactersMap(text, embedding.levels);
   const runs = [];
-  const chunkInfo = { logical: chunk.chars.filter((char) => !IGNORED.test(char.ch)).map((char) => char.ch).join("") };
+  const chunkInfo = { logical: chunk.chars.filter((char) => !IGNORED.test(char.ch)).map((char) => char.ch).join(""), rtl: baseDirection === "rtl" || /^[⁧‫‮]/.test(text) };
   let current = null;
   unit = 0;
   chunk.chars.forEach((char, index) => {
@@ -179,7 +179,8 @@ function buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds) {
     const owner = env.splitByOwner ? linkId(ownerIds, { node: char.owner }) : 0;
     const key = `${resolved.styleId}|${resolved.face.id}|${level}|${char.scope?.id ?? 0}|${linkId(linkIds, char.link)}|${[...char.decoration].sort().join(",")}|${owner}`;
     if (!current || current.key !== key) {
-      current = { chunk: chunkInfo, key, face: resolved.face, style: char.style, level, scope: char.scope, link: char.link, decoration: char.decoration, owner: char.owner, chars: [], text: "", logical: "", weight: resolved.weight, italic: resolved.italic };
+      // `start`: the run's first character in logical order, so a reader can put runs back in reading order (RR-64).
+      current = { chunk: chunkInfo, start: index, key, face: resolved.face, style: char.style, level, scope: char.scope, link: char.link, decoration: char.decoration, owner: char.owner, chars: [], text: "", logical: "", weight: resolved.weight, italic: resolved.italic };
       runs.push(current);
     }
     current.logical += char.ch;
@@ -244,7 +245,9 @@ function shapeRun(run, env) {
   const size = parseFloat(style["font-size"]) || 16;
   const direction = run.level % 2 === 1 ? "rtl" : "ltr";
   const language = openTypeLanguage(style.lang ?? style["xml:lang"]);
-  const glyphs = shape(run.face, run.text, { features: featuresOf(style), language, direction });
+  // RR-64: outlined text is shaped by HarfBuzz (env.shape), the browser's shaper; the vector PDF keeps fontkit.
+  // HarfBuzz takes the BCP 47 tag (`lang`); fontkit the OpenType language system (`language`).
+  const glyphs = (env.shape ?? shape)(run.face, run.text, { features: featuresOf(style), language, lang: style.lang ?? style["xml:lang"], direction });
   const scale = size / run.face.upem;
   const letterSpacing = parseLength(style["letter-spacing"], { fontSize: size }) ?? 0;
   const wordSpacing = parseLength(style["word-spacing"], { fontSize: size }) ?? 0;

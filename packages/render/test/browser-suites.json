@@ -29,6 +29,10 @@
           "command": "npm run test:code-browser"
         },
         {
+          "id": "browser:text-as-paths-a11y-browser",
+          "command": "node test/text-as-paths-a11y-browser.mjs"
+        },
+        {
           "id": "browser:font-subsets-browser",
           "command": "node test/font-subsets-browser.mjs"
         },

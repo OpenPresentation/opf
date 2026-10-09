@@ -87,6 +87,11 @@ export declare function loadFonts(
      * slide draws. Without it a browser handle embeds whole faces (the Node handle always subsets).
      */
     subsetWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
+    /**
+     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `textAsPaths` shapes outlines with
+     * HarfBuzz, as the browser shapes text; without it a browser handle shapes them with fontkit (the Node handle always uses HarfBuzz).
+     */
+    shapeWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
     crypto?: { subtle: SubtleCrypto };
     /** Script faces to load once the registry exists: "auto" (with `presentation`), "all" or ISO 15924 codes. Needs `scriptBaseUrl`. */
     scripts?: ScriptSelection | "auto";
