@@ -202,7 +202,7 @@ test('opf/text-on-image: a picture background cannot be measured; a strong full-
 
 // ------------------------------------------------------------ alt text
 
-test('opf/missing-alt-text: images, video, logos, header images; "" is the decorative opt-out', () => {
+test('opf/missing-alt-text: images, video, organization logos, header images; "" is the decorative opt-out', () => {
 	const found = only(
 		deck(
 			[
@@ -212,13 +212,13 @@ test('opf/missing-alt-text: images, video, logos, header images; "" is the decor
 				{ title: 'D', blocks: [{ image: { src: 'https://example.com/d.png' } }, { video: { src: 'https://example.com/v.mp4' } }] },
 				{ title: 'E', video: { src: 'https://example.com/w.mp4', title: 'Product walkthrough' } },
 			],
-			{ design: { logo: { src: 'https://example.com/logo.svg' } }, organization: { id: 'acme', name: 'Acme', logo: { src: 'https://example.com/acme.svg', alt: 'Acme' } } },
+			{ organization: [{ id: 'acme', name: 'Acme', logo: { full: { src: 'https://example.com/acme.svg', alt: 'Acme' }, icon: { onLight: { src: 'https://example.com/icon.svg' } } } }], design: { footer: { left: { image: 'var:organization.logo.icon' } } } },
 		),
 		'missing-alt-text',
 	);
 	const paths = new Set(found.map((d) => d.path));
-	for (const expected of ['/slides/0/image', '/slides/3/blocks/0/image', '/slides/3/blocks/1/video', '/design/logo']) assert.ok(paths.has(expected), expected);
-	for (const unexpected of ['/slides/1/image', '/slides/2/image', '/slides/4/video', '/organization/logo']) assert.ok(!paths.has(unexpected), unexpected);
+	for (const expected of ['/slides/0/image', '/slides/3/blocks/0/image', '/slides/3/blocks/1/video', '/organization/0/logo/icon/onLight']) assert.ok(paths.has(expected), expected);
+	for (const unexpected of ['/slides/1/image', '/slides/2/image', '/slides/4/video', '/organization/0/logo/full', '/design/footer/left/image']) assert.ok(!paths.has(unexpected), unexpected);
 	const stringImage = found.find((d) => d.path === '/slides/0/image');
 	assert.equal(stringImage.fixes[0].kind, 'focus');
 	assert.deepEqual(stringImage.fixes[0].focus, { path: '/slides/0/image', field: 'alt', value: 'https://example.com/a.png' });

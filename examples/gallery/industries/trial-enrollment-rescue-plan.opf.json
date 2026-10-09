@@ -72,12 +72,6 @@
     "chartPrimary": "right",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06
@@ -258,7 +252,14 @@
     "id": "novara-therapeutics",
     "name": "Novara Therapeutics",
     "legalName": "Novara Therapeutics, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "novara-therapeutics.example",
     "email": "hello@novara-therapeutics.example",
     "phone": "+15551000012",

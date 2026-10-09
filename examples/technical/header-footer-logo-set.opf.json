@@ -1,23 +1,23 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Header Footer Logo Set",
-  "description": "Technical fixture for logo variants, repeated furniture, and watermark suppression.",
+  "description": "Technical fixture for organization logo shapes (onLight and onDark), logo references in header and footer zones, a zone row (logo beside text), repeated furniture, and watermark suppression.",
   "organization": {
     "id": "fixture-org",
     "name": "Fixture Org",
-    "logo": "asset:logo-dark"
-  },
-  "design": {
     "logo": {
-      "default": "asset:logo-dark",
-      "light": "asset:logo-light",
-      "dark": "asset:logo-dark",
+      "full": {
+        "onLight": "asset:logo-dark",
+        "onDark": "asset:logo-light"
+      },
       "icon": "asset:icon",
       "wordmark": "asset:wordmark"
-    },
+    }
+  },
+  "design": {
     "header": {
       "left": {
-        "image": "asset:icon"
+        "image": "var:organization.logo.icon"
       },
       "center": {
         "text": "{{slide.section}}"
@@ -28,6 +28,7 @@
     },
     "footer": {
       "left": {
+        "image": "var:organization.logo.icon",
         "text": "{{organization.name}}"
       },
       "center": {
@@ -46,7 +47,7 @@
     {
       "section": "Default Furniture",
       "title": "Header And Footer",
-      "text": "The deck-level header, footer, logo set, and watermark apply by default."
+      "text": "The deck-level header, footer, organization logo and watermark apply by default; the footer zone draws the logo icon beside the organization name."
     },
     {
       "section": "Suppressed Furniture",

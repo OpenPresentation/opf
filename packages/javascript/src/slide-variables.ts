@@ -1,5 +1,6 @@
 import { isRecord } from "./content-walk.js";
 import type { FurnitureField } from "./furniture-fields.js";
+import { parseLogoName, resolveOrganizationLogo } from "./logos.js";
 
 /**
  * Slide-scoped built-in variables (FA-31): `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}`.
@@ -8,6 +9,9 @@ import type { FurnitureField } from "./furniture-fields.js";
  * `resolveVariables` leaves them as written (with an escaped `\{{slide.number}}` kept escaped) and they resolve
  * here, per output slide: `resolveSlideVariables` for a slide's own strings and `substituteSlideTokens` for
  * header and footer text, which `layoutFurniture` substitutes so it can mark each slide number as a live field.
+ * The organization logo references (`var:organization.logo.icon`, RR-71) are slide-scoped too, because the
+ * `onLight`/`onDark` choice follows each slide's background: `resolveSlideVariables` resolves them in a slide's own
+ * fields when it is given the presentation, and `layoutFurniture` in zone images.
  * Pure: no clock, locale or I/O. See docs/templates-and-variables.md.
  */
 
@@ -95,19 +99,45 @@ export function slideTokenSpans(text: string): [number, number][] {
 }
 
 const skippedKeys = new Set(["extensions"]);
+/** A whole-field organization reference that may be a logo (`var:organization.logo.icon`). */
+const logoReferencePattern = /^var:organization(?:.[A-Za-z0-9_-]+){1,3}$/;
+const OMIT = Symbol("omit");
 
-function substitute(value: unknown, values: SlideVariableValues, root: boolean): unknown {
+/** What the slide-scoped logo references need: the deck (its organizations) and the slide's background. */
+interface LogoContext {
+  presentation?: unknown;
+  darkBackground?: boolean;
+}
+
+function clone<T>(value: T): T {
+  return typeof value === "object" && value !== null ? (structuredClone(value) as T) : value;
+}
+
+/** A logo reference resolved for this slide: the organization's asset, OMIT when the organization has none, or the string as written. */
+function substituteLogo(value: string, logos: LogoContext): unknown {
+  if (logos.presentation === undefined || !logoReferencePattern.test(value)) return value;
+  const reference = parseLogoName(value, logos.presentation);
+  if (!reference || "error" in reference) return value;
+  const result = resolveOrganizationLogo(logos.presentation, reference, { onDark: logos.darkBackground === true });
+  if (result.ok) return clone(result.logo.source);
+  return result.reason === "missing" ? OMIT : value;
+}
+
+function substitute(value: unknown, values: SlideVariableValues, root: boolean, logos: LogoContext = {}): unknown {
   if (typeof value === "string") {
+    const logo = substituteLogo(value, logos);
+    if (logo !== value) return logo;
     const result = substituteSlideTokens(value, values);
     return result.changed ? result.text : value;
   }
   if (Array.isArray(value)) {
     let changed = false;
-    const out = value.map((entry) => {
-      const next = substitute(entry, values, false);
+    const out: unknown[] = [];
+    for (const entry of value) {
+      const next = substitute(entry, values, false, logos);
       if (next !== entry) changed = true;
-      return next;
-    });
+      if (next !== OMIT) out.push(next);
+    }
     return changed ? out : value;
   }
   if (!isRecord(value)) return value;
@@ -117,18 +147,19 @@ function substitute(value: unknown, values: SlideVariableValues, root: boolean):
     let next = entry;
     if (skippedKeys.has(key)) next = entry;
     else if (root && key === "design" && isRecord(entry)) {
-      // Header and footer text is substituted by layoutFurniture, which marks each slide number as a live field.
+      // Header and footer are laid out by layoutFurniture, which marks each slide number as a live field and resolves
+      // zone logo references; design.logo is an override resolveLogo reads as written.
       const design: Record<string, unknown> = {};
       let designChanged = false;
       for (const [designKey, designEntry] of Object.entries(entry)) {
-        const designNext = designKey === "header" || designKey === "footer" ? designEntry : substitute(designEntry, values, false);
+        const designNext = designKey === "header" || designKey === "footer" || designKey === "logo" ? designEntry : substitute(designEntry, values, false, logos);
         if (designNext !== designEntry) designChanged = true;
-        design[designKey] = designNext;
+        if (designNext !== OMIT) design[designKey] = designNext;
       }
       next = designChanged ? design : entry;
-    } else next = substitute(entry, values, false);
+    } else next = substitute(entry, values, false, logos);
     if (next !== entry) changed = true;
-    out[key] = next;
+    if (next !== OMIT) out[key] = next;
   }
   return changed ? out : value;
 }
@@ -141,16 +172,25 @@ function substitute(value: unknown, values: SlideVariableValues, root: boolean):
  * text when it has none). The slide's own `design.header` and `design.footer` are left as written:
  * `layoutFurniture` substitutes header and footer text itself and marks each slide number as a live field.
  *
- * Engines call it on each output slide after pagination, with the same `slideNumber` and `slideCount` they pass to
- * `composeSlide`, and compose and draw the result; `resolveSlideContext` returns it as `slide`. Returns the input
- * object itself when nothing changes; never mutates it.
+ * With `presentation` (RR-71) it also resolves the slide-scoped logo references, a whole string
+ * `var:organization.logo[.<shape>]` or `var:organization.<id>.logo[.<shape>]` in any field (an image block, the slide
+ * `image`), to the organization's asset for this slide's background (`darkBackground`, the host's luminance test:
+ * `onDark` first, else `onLight`); a reference whose organization has no logo is omitted, like an unfilled optional
+ * variable, and an unknown one stays as written (validation reports it). The slide's own `design.logo` is left for
+ * `resolveLogo`, and zone images for `layoutFurniture`.
+ *
+ * Engines call it on each output slide after pagination, with the same `slideNumber`, `slideCount` and
+ * `darkBackground` they pass to `composeSlide`, and compose and draw the result; `resolveSlideContext` returns it as
+ * `slide`. Returns the input object itself when nothing changes; never mutates it.
  */
-export function resolveSlideVariables<T>(slide: T, values: { slideNumber: number; slideCount?: number }): T {
+export function resolveSlideVariables<T>(slide: T, values: { slideNumber: number; slideCount?: number; presentation?: unknown; darkBackground?: boolean }): T {
   if (!isRecord(slide)) return slide;
   const full: SlideVariableValues = { slideNumber: values?.slideNumber, ...(values?.slideCount !== undefined ? { slideCount: values.slideCount } : {}), section: slide.section } as SlideVariableValues;
   checkValues(full);
-  if (!quickCheck.test(JSON.stringify(slide))) return slide;
-  return substitute(slide, full, true) as T;
+  const logos: LogoContext = values.presentation !== undefined ? { presentation: values.presentation, darkBackground: values.darkBackground === true } : {};
+  const text = JSON.stringify(slide);
+  if (!quickCheck.test(text) && !(logos.presentation !== undefined && text.includes('"var:organization.'))) return slide;
+  return substitute(slide, full, true, logos) as T;
 }
 
 /** True when any string of the document (outside `extensions`) carries an unescaped `{{name}}` token. */

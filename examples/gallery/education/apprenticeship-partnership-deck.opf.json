@@ -68,12 +68,6 @@
     "chartPrimary": "bottom",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -251,7 +245,14 @@
     "id": "lakeview-tech-institute",
     "name": "Lakeview Tech Institute",
     "legalName": "Lakeview Tech Institute",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "lakeview-tech-institute.example",
     "email": "hello@lakeview-tech-institute.example",
     "phone": "+15551000064",

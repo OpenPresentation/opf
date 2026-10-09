@@ -254,8 +254,8 @@ test('asset references diagnose missing registry entries and cycles without fetc
 	assert.equal(cyclic.valid, false);
 	const nested = checkAll({
 		assets: { alias: { src: 'asset:missing-registry' } },
+		organization: { id: 'acme', name: 'Acme', logo: { full: { onLight: 'asset:missing-logo' } } },
 		design: {
-			logo: 'asset:missing-logo',
 			watermark: { src: 'asset:missing-watermark', opacity: 0.1 },
 			background: { type: 'image', src: 'asset:missing-background' },
 			footer: {
@@ -273,8 +273,8 @@ test('asset references diagnose missing registry entries and cycles without fetc
 			'/assets/alias/src',
 			'/design/background/src',
 			'/design/footer/right/image/src',
-			'/design/logo',
 			'/design/watermark/src',
+			'/organization/logo/full/onLight',
 			'/slides/0/video',
 		],
 	);

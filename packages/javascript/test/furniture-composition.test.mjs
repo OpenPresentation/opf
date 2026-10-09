@@ -68,7 +68,9 @@ test('images and every authored/generated field coexist without deleting text',(
   assert.deepEqual(layout.diagnostics,[]);assert.deepEqual(layout.parts.map(p=>p.field),['image','text','date']);
   assert.deepEqual(layout.parts[0].image,image);assert.equal(layout.parts[1].text,'Literal\nSection\n4');
   assert.deepEqual(layout.parts[1].fields,[{type:'slideNumber',start:16,end:17}]);assert.equal(layout.parts[1].generated,false);
-  for(let i=1;i<layout.parts.length;i++)assert.ok(layout.parts[i].box.y>=layout.parts[i-1].box.y+layout.parts[i-1].box.height);
+  // RR-71: one row, image then text then date, each vertically centered on the row.
+  const center=part=>part.box.y+part.box.height/2;
+  for(let i=1;i<layout.parts.length;i++){assert.ok(layout.parts[i].box.x>=layout.parts[i-1].box.x+layout.parts[i-1].box.width+12-1e-9);assert.ok(Math.abs(center(layout.parts[i])-center(layout.parts[0]))<1e-9);}
 });
 test('missing generated values diagnose controlling paths and strict composition/pagination reject them',()=>{
   const presentation={design:{header:{left:{date:true,socials:true}}}},slide={text:'Body'};
@@ -160,12 +162,15 @@ test('dates are fixed ISO values formatted without a clock, or host-supplied cur
   assert.throws(()=>part({date:true},{date:'2026-04-23T00:00:00Z'}),RangeError);
   assert.throws(()=>part({date:'2026-04-23',dateFormat:7}),TypeError);
 });
-test('date and slide number in one zone stack; in separate zones each keeps one line',()=>{
+test('date and slide number in one zone sit side by side on one line, aligned to the zone edge',()=>{
   const shared=layoutFurniture({design:{footer:{right:{text:'{{slide.number}}',date:'2026-04-23',dateFormat:'yyyy-MM-dd'}}}},{slideNumber:3});
   assert.deepEqual(shared.diagnostics,[]);assert.deepEqual(shared.parts.map(p=>[p.field,p.text]),[['text','3'],['date','2026-04-23']]);
-  assert.ok(shared.parts[1].box.y>=shared.parts[0].box.y+shared.parts[0].box.height);
+  const [number,date]=shared.parts;
+  assert.equal(number.box.y,date.box.y);assert.ok(Math.abs(date.box.x-(number.box.x+number.box.width+12))<1e-9,'one gap between the parts');
+  assert.ok(Math.abs(date.box.x+date.box.width-1280*.93)<1e-9,'the row ends at the right zone edge');
+  for(const part of shared.parts)assert.equal(part.fit.lines.length,1);
   const split=layoutFurniture({design:{footer:{left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},right:{text:'{{slide.number}}'}}}},{slideNumber:3});
-  assert.deepEqual(split.diagnostics,[]);assert.equal(split.parts[0].box.y,split.parts[1].box.y);assert.ok(split.footerTop>shared.footerTop);
+  assert.deepEqual(split.diagnostics,[]);assert.equal(split.parts[0].box.y,split.parts[1].box.y);assert.equal(split.footerTop,shared.footerTop);
 });
 test('whole-deck pagination resolves {{deck.slideCount}} to the final page count',()=>{
   const source='First sentence with enough detail. '.repeat(160);
@@ -243,5 +248,7 @@ test('one footer carries FF-27 live slide-number fields and FF-34 social links w
   assert.equal(socials.text,'x.com/acme\nVisit us');assert.equal(socials.fields,undefined);
   assert.deepEqual(socials.links.map(link=>[link.platform,link.href]),[['x','https://x.com/acme'],['custom',undefined]]);
   assert.equal(bare.text,'2');assert.deepEqual(bare.fields,[{type:'slideNumber',start:0,end:1}]);assert.equal(bare.links,undefined);
-  assert.ok(socials.box.y>=bare.box.y+bare.box.height);
+  // Side by side (RR-71): the one-line number is centered on the two-line socials.
+  assert.ok(socials.box.x>=bare.box.x+bare.box.width);
+  assert.ok(Math.abs(bare.box.y+bare.box.height/2-(socials.box.y+socials.box.height/2))<1e-9);
 });

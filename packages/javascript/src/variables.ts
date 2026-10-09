@@ -2,6 +2,7 @@ import { isRecord, pathFor } from "./content-walk.js";
 import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
+import { LOGO_SHAPES, logoReferenceName, parseLogoName, resolveOrganizationLogo, type LogoReference } from "./logos.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -112,13 +113,13 @@ export class OPFVariableError extends Error {
 
 const idPattern = /^[a-z][a-z0-9-]*$/;
 /**
- * A user-defined id, or a built-in name: `speakers`, or `deck`/`speaker`/`organization`/`slide` plus one or two
- * dotted segments (`speaker.name`, `organization.acme.logo`, `slide.number`). A user id never contains a dot, so the
- * two cannot collide.
+ * A user-defined id, or a built-in name: `speakers`, or `deck`/`speaker`/`organization`/`slide` plus one to three
+ * dotted segments (`speaker.name`, `organization.acme.logo`, `organization.acme.logo.icon`, `slide.number`). A user id
+ * never contains a dot, so the two cannot collide.
  */
-const nameSource = String.raw`[a-z][a-z0-9-]*|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,2}`;
+const nameSource = String.raw`[a-z][a-z0-9-]*|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,3}`;
 const referencePattern = new RegExp(String.raw`^var:(${nameSource})$`);
-const builtinNamePattern = /^(?:speakers|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,2})$/;
+const builtinNamePattern = /^(?:speakers|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,3})$/;
 /** Cheap pre-check: does this string carry a built-in token or a whole-field reference? */
 const builtinUsePattern = /\{\{\s*(?:speakers\b|(?:deck|speaker|organization|slide)\.)|^var:(?:speakers$|(?:deck|speaker|organization|slide)\.)/;
 const hexPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
@@ -380,7 +381,8 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
 /** Built-in fields per source, with their variable kind. */
 const DECK_FIELDS: Record<string, VariableKind> = { name: "text", description: "text", author: "text" };
 const SPEAKER_FIELDS: Record<string, VariableKind> = { name: "text", title: "text", email: "text", phone: "text", bio: "text", photo: "image" };
-const ORGANIZATION_FIELDS: Record<string, VariableKind> = { name: "text", legalName: "text", tagline: "text", domain: "text", email: "text", phone: "text", logo: "image" };
+/** The deck-wide organization fields. The logo is slide-scoped (RR-71): see `parseLogoName` in logos.ts. */
+const ORGANIZATION_FIELDS: Record<string, VariableKind> = { name: "text", legalName: "text", tagline: "text", domain: "text", email: "text", phone: "text" };
 
 /** True when `name` has the shape of a built-in (`speakers`, `speaker.name`, `organization.acme.logo`), known or not. */
 function isBuiltinName(name: string): boolean {
@@ -413,6 +415,12 @@ function builtinSource(name: string, doc: Record<string, unknown>): BuiltinSourc
   }
   const parts = name.split(".");
   const root = parts[0] as string;
+  if (root === "organization") {
+    // Logos are slide-scoped whole-field references; reached here only by an inline token or a malformed name.
+    const logo = parseLogoName(name, doc);
+    if (logo && "error" in logo) return { ok: false, message: logo.error };
+    if (logo) return { ok: false, message: `'{{${name}}}' is not supported: '${name}' is an image, used only as a whole field, 'var:${name}', which resolves for each slide's background.` };
+  }
   const fields = builtinFields(root);
   if (root === "deck") {
     const field = parts[1] as string;
@@ -425,6 +433,7 @@ function builtinSource(name: string, doc: Record<string, unknown>): BuiltinSourc
     return { ok: false, message: `'${name}' is not a built-in variable: '${field}' is not a ${root} field; the fields are ${list(Object.keys(fields))}.` };
   }
   let entity: Record<string, unknown> | undefined;
+  if (parts.length > 3) return { ok: false, message: `'${name}' is not a built-in variable.` };
   if (parts.length === 2) entity = root === "speaker" ? primarySpeaker(doc) : primaryOrganization(doc);
   else {
     const id = parts[1] as string;
@@ -533,6 +542,8 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
   const reference = referencePattern.exec(text);
   if (reference) {
     const id = reference[1] as string;
+    const logo = id.startsWith("organization.") ? parseLogoName(id, context.doc) : null;
+    if (logo) return reduceLogo(id, logo, path, context);
     const effective = lookupVariable(id, path, context);
     if (effective && effective.declaration.kind !== "color") {
       context.uses.push({ id, path, form: "reference" });
@@ -555,6 +566,36 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
   if (!text.includes("{{")) return { kind: "keep" };
   const result = interpolate(text, path, context);
   return result.changed ? { kind: "replace", value: result.value } : { kind: "keep" };
+}
+
+/**
+ * Where a logo reference resolves per output slide (resolveSlideVariables, layoutFurniture, resolveLogo): in a slide,
+ * in the deck's header and footer, and as the deck's design.logo override.
+ */
+function slideReachable(path: string): boolean {
+  return path.startsWith("/slides/") || path.startsWith("/design/header/") || path.startsWith("/design/footer/") || path === "/design/logo";
+}
+
+/**
+ * A whole-field logo reference (RR-71). It is slide-scoped: the onLight or onDark asset is chosen per slide, so where a
+ * slide reaches it the reference stays as written, and is only checked here (an unknown shape or organization is
+ * variable-unknown-builtin, an organization without a logo variable-builtin-missing). Anywhere else (a deck background,
+ * a watermark) no slide background applies, and it resolves now, as on a light background.
+ */
+function reduceLogo(id: string, logo: LogoReference | { error: string }, path: string, context: Context): Reduced {
+  context.uses.push({ id, path, form: "reference" });
+  if ("error" in logo) {
+    diag(context, { code: "variable-unknown-builtin", severity: "error", path, id, message: logo.error }, `ubi:${id}:${path}`);
+    return { kind: "keep" };
+  }
+  const result = resolveOrganizationLogo(context.doc, logo);
+  if (!result.ok) {
+    if (result.reason === "unknown") diag(context, { code: "variable-unknown-builtin", severity: "error", path, id, message: result.message }, `ubi:${id}:${path}`);
+    else diag(context, missingBuiltin(id, path), `bim:${id}:${path}`);
+  }
+  if (slideReachable(path)) return { kind: "keep" };
+  if (result.ok) return { kind: "replace", value: clone(result.logo.source) };
+  return context.shape ? { kind: "keep" } : { kind: "omit" };
 }
 
 const skippedKeys = new Set(["extensions"]);
@@ -821,13 +862,16 @@ export interface BuiltinVariableInfo {
   label: string;
   /**
    * `deck` for a value read once from the document; `slide` for `slide.number`, `slide.section` and
-   * `deck.slideCount`, which vary per slide and resolve as each slide is composed (inline tokens only).
+   * `deck.slideCount`, which vary per slide and resolve as each slide is composed (inline tokens only), and for the
+   * organization logos (`organization.logo`, `organization.logo.icon`, `organization.<id>.logo.wordmark`), whose
+   * onLight or onDark asset follows each slide's background (whole-field `var:` references only).
    */
   scope: "deck" | "slide";
   /** The value the document gives it, when it has one (a string, an Asset or the list of names). Never set for a slide-scoped built-in. */
   value?: unknown;
   /**
-   * True when the document has a source value for it. Unavailable built-ins resolve to nothing. A slide-scoped
+   * True when the document has a source value for it. Unavailable built-ins resolve to nothing. A logo is available
+   * when its organization has a logo (in any shape: missing shapes fall back). A slide-scoped
    * built-in is available when every slide gives it a value: always for `slide.number` and `deck.slideCount`, and
    * for `slide.section` when at least one slide has a section.
    */
@@ -843,7 +887,9 @@ const FIELD_LABELS: Record<string, string> = { name: "name", legalName: "legal n
  * The built-in variables of a deck, for pickers and agents: the generic names (`deck.*`, `speaker.*`, `speakers`,
  * `organization.*`) first, then the id-addressed ones (`speaker.<id>.*`, `organization.<id>.*`) of each speaker and
  * organization that has an id, then the slide-scoped `slide.number`, `slide.section` and `deck.slideCount` (scope
- * `slide`, no value). Each carries its kind, current source value and where the document uses it.
+ * `slide`, no value), then the slide-scoped organization logos (`organization.logo` and its `stacked`, `icon` and
+ * `wordmark` shapes, then the same per organization id; kind `image`, scope `slide`, no value). Each carries its kind,
+ * current source value and where the document uses it.
  */
 export function listBuiltinVariables(presentation: unknown): BuiltinVariableInfo[] {
   if (!isRecord(presentation)) return [];
@@ -872,6 +918,16 @@ export function listBuiltinVariables(presentation: unknown): BuiltinVariableInfo
   for (const name of SLIDE_SCOPED_BUILTINS) {
     const available = name !== "slide.section" || slides.some((slide) => isRecord(slide) && typeof slide.section === "string" && slide.section !== "");
     out.push({ name, kind: "text", label: SLIDE_SCOPED_LABELS[name] as string, scope: "slide", available, uses: built.context.uses.filter((use) => use.id === name) });
+  }
+  // Organization logos (RR-71): the primary organization's, then each organization's with an id, in every shape.
+  const logoReferences: { reference: LogoReference; label: string }[] = [{ reference: {}, label: "Organization" }];
+  for (const entry of organizationsOf(presentation)) if (typeof entry.id === "string" && entry.id !== "") logoReferences.push({ reference: { organization: entry.id }, label: `Organization ${entry.id}` });
+  for (const { reference, label } of logoReferences) {
+    for (const shape of LOGO_SHAPES) {
+      const name = logoReferenceName(reference, shape);
+      const available = resolveOrganizationLogo(presentation, reference, { shape }).ok;
+      out.push({ name, kind: "image", label: `${label} logo${shape === "full" ? "" : ` (${shape})`}`, scope: "slide", available, uses: built.context.uses.filter((use) => use.id === name || (shape === "full" && use.id === `${name}.full`)) });
+    }
   }
   return out;
 }

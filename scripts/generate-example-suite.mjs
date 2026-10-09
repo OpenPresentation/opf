@@ -343,6 +343,18 @@ function assetsFor(spec, index) {
   return assets;
 }
 
+// RR-71: logos live on the organization. Every fourth deck gives the full logo for both backgrounds plus an icon and
+// a wordmark; the others one logo for every shape.
+function organizationLogo(index) {
+  return index % 4 === 0
+    ? {
+        full: { onLight: "asset:brand-logo", onDark: "asset:brand-logo-light" },
+        icon: "asset:brand-icon",
+        wordmark: "asset:brand-logo",
+      }
+    : "asset:brand-logo";
+}
+
 function designFor(spec, index, catalogs, density) {
   const compact = density === "sparse";
   const base = {
@@ -388,14 +400,6 @@ function designFor(spec, index, catalogs, density) {
 
   return {
     ...base,
-    logo: index % 4 === 0
-      ? {
-          default: "asset:brand-logo",
-          light: "asset:brand-logo-light",
-          icon: "asset:brand-icon",
-          wordmark: "asset:brand-logo",
-        }
-      : "asset:brand-logo",
     watermark: index % 8 === 0 ? false : { src: "asset:watermark", opacity: 0.06 },
     header: index % 5 === 0
       ? false
@@ -917,7 +921,7 @@ function deckFor(rawSpec, index, catalogs) {
           {
             id: orgSlug,
             name: org,
-            logo: "asset:brand-logo",
+            logo: organizationLogo(index),
             domain: orgDomain(org),
             email: `hello@${orgDomain(org)}`,
             tagline: outcome,
@@ -937,7 +941,7 @@ function deckFor(rawSpec, index, catalogs) {
           id: orgSlug,
           name: org,
           legalName: legalNameFor(spec),
-          logo: "asset:brand-logo",
+          logo: organizationLogo(index),
           domain: orgDomain(org),
           email: `hello@${orgDomain(org)}`,
           phone: `+1555${String(1000000 + index).slice(0, 7)}`,

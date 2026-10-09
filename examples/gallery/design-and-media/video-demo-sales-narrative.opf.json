@@ -68,12 +68,6 @@
     "chartPrimary": "left",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -404,7 +398,14 @@
     "id": "signalkit",
     "name": "SignalKit",
     "legalName": "SignalKit, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "signalkit.example",
     "email": "hello@signalkit.example",
     "phone": "+15551000096",

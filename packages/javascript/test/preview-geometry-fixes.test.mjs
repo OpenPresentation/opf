@@ -22,7 +22,7 @@ const near = (actual, expected, message) => assert.ok(Math.abs(actual - expected
 
 test('a picture bullet draws as a square 0.65 of the font size with its bottom on the baseline and its left at the marker', () => {
   assert.equal(PICTURE_BULLET_SCALE, 0.65);
-  const presentation = {design: {listBullet: 'image', logo: png(64, 64)}};
+  const presentation = {design: {listBullet: 'image'}, organization: {id: 'acme', name: 'Acme', logo: png(64, 64)}};
   const result = composeSlide({title: 'List', items: ['One', {text: 'Two', level: 1}, 'Three']}, {presentation});
   const entries = result.items.find(item => item.field === 'items').text.listEntries;
   assert.equal(entries.length, 3);
@@ -38,7 +38,7 @@ test('a picture bullet draws as a square 0.65 of the font size with its bottom o
 });
 
 test('furniture images and logos align like the zone text: left edge, centered, right edge', () => {
-  const presentation = {design: {logo: {icon: png(128, 128)}, header: {left: {image: png(128, 128)}, center: {logo: true}, right: {image: png(128, 128)}}, footer: {left: {logo: true}, right: {text: 'Right'}}}};
+  const presentation = {organization: {id: 'acme', name: 'Acme', logo: {icon: png(128, 128)}}, design: {header: {left: {image: png(128, 128)}, center: {image: 'var:organization.logo.icon'}, right: {image: png(128, 128)}}, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: 'Right'}}}};
   const layout = layoutFurniture({}, {presentation});
   const zoneX = {left: 1280 * 0.07, center: 1280 * 0.37, right: 1280 * 0.67}, zoneWidth = 1280 * 0.26;
   const images = layout.parts.filter(part => part.type === 'image');
@@ -54,6 +54,9 @@ test('furniture images and logos align like the zone text: left edge, centered, 
   // Vertical placement is unchanged: the header band starts at 2.5% of the height.
   near(images.find(part => part.kind === 'header').box.y, 720 * 0.025, 'header image top');
   assert.deepEqual(layout.parts.map(part => part.alignment), layout.parts.map(part => part.zone));
+  // A logo reference draws the organization's asset and keeps the reference it came from.
+  const logo = images.find(part => part.kind === 'footer');
+  assert.deepEqual([logo.field, logo.reference, logo.sourcePath, logo.image], ['image', 'var:organization.logo.icon', 'organization.logo.icon', png(128, 128)]);
 });
 
 test('a furniture image keeps its own proportions, capped at the zone; unreadable sources are square', () => {

@@ -76,12 +76,6 @@
     "chartPrimary": "left",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06
@@ -414,7 +408,14 @@
     "id": "ironwood-devices",
     "name": "Ironwood Devices",
     "legalName": "Ironwood Devices, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "ironwood-devices.example",
     "email": "hello@ironwood-devices.example",
     "phone": "+15551000036",

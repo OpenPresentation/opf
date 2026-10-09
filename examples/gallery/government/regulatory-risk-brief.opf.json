@@ -72,12 +72,6 @@
     "chartPrimary": "right",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -255,7 +249,14 @@
     "id": "regional-clean-air-board",
     "name": "Regional Clean Air Board",
     "legalName": "Regional Clean Air Board",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "regional-clean-air-board.example",
     "email": "hello@regional-clean-air-board.example",
     "phone": "+15551000072",

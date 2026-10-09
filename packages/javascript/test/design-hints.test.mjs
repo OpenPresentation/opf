@@ -107,15 +107,15 @@ test('layout contentBox draws body cards unless the deck or the slide says other
   assert.equal(frames(composeSlide({...slide, design: {contentBox: true}}, {layout: layout('flat')({contentBox: false})})), 2);
 });
 
-test('layout listBullet image attaches the deck icon logo, and reports an unresolved logo at the layout reference', () => {
+test('layout listBullet image attaches the organization icon logo, and reports an unresolved logo at the layout reference', () => {
   const record = layout('bullets')({listBullet: 'image'});
   const slide = {title: 'List', items: ['One', 'Two']};
-  const presentation = {design: {logo: {icon: asset('icon')}}};
+  const presentation = {design: {}, organization: {id: 'acme', name: 'Acme', logo: {icon: asset('icon')}}};
   const withLogo = composeSlide(slide, {layout: record, presentation});
   const item = withLogo.items.find(entry => entry.field === 'items');
-  assert.deepEqual(item.bulletImage, {source: asset('icon'), path: 'design.logo.icon'});
+  assert.deepEqual(item.bulletImage, {source: asset('icon'), path: 'organization.logo.icon'});
   // The deck's `character` beats the layout's `image`.
-  assert.equal(composeSlide(slide, {layout: record, presentation: {design: {...presentation.design, listBullet: 'character'}}}).items.find(entry => entry.field === 'items').bulletImage, undefined);
+  assert.equal(composeSlide(slide, {layout: record, presentation: {...presentation, design: {listBullet: 'character'}}}).items.find(entry => entry.field === 'items').bulletImage, undefined);
   const unresolved = composeSlide(slide, {layout: record, presentation: {design: {}}, slideIndex: 4});
   assert.deepEqual(unresolved.diagnostics.map(({code, path}) => ({code, path})), [{code: 'unresolved-content', path: 'slides.4.layout'}]);
 });

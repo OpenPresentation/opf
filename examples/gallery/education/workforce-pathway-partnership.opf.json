@@ -68,12 +68,6 @@
     "chartPrimary": "left",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -404,7 +398,14 @@
     {
       "id": "metro-technical-college",
       "name": "Metro Technical College",
-      "logo": "asset:brand-logo",
+      "logo": {
+        "full": {
+          "onLight": "asset:brand-logo",
+          "onDark": "asset:brand-logo-light"
+        },
+        "icon": "asset:brand-icon",
+        "wordmark": "asset:brand-logo"
+      },
       "domain": "metro-technical-college.example",
       "email": "hello@metro-technical-college.example",
       "tagline": "Connect employer demand to short-cycle training capacity",

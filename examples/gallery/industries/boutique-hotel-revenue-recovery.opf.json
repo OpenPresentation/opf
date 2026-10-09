@@ -68,12 +68,6 @@
     "chartPrimary": "top",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -404,7 +398,14 @@
     "id": "harbor-and-loom-hotels",
     "name": "Harbor & Loom Hotels",
     "legalName": "Harbor & Loom Hotels, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "harbor-and-loom-hotels.example",
     "email": "hello@harbor-and-loom-hotels.example",
     "phone": "+15551000008",

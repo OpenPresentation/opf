@@ -18,6 +18,9 @@ import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
+import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type LogoVariant} from './logos.js';
+export {LOGO_SHAPES,resolveLogo} from './logos.js';
+export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
@@ -335,16 +338,13 @@ export interface ComposedBackgroundImage {
   /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
   picture?: ImageFitPlacement;
 }
-/** Which logo variant family a consumer asks for: the full lockup, a square mark, or a stacked lockup. */
-export type LogoSlot = 'lockup' | 'icon' | 'stacked';
-/** A logo asset chosen by resolveLogo, with its source value, OPF path, LogoSet variant key and the slot it serves. */
-export interface ResolvedLogo { source: unknown; path: string; variant: string; slot: LogoSlot }
 /**
  * The deck logo drawn on a cover or section slide, at the top-left of the free area and above the
- * centered heading group. Consumers fit the image inside `box` preserving its aspect ratio,
- * anchored left and vertically centered; content slides never carry one.
+ * centered heading group: the primary organization's full logo, or the `design.logo` override. Consumers fit the
+ * image inside `box` preserving its aspect ratio, anchored left and vertically centered; content slides never carry one.
+ * `shape`, `variant` and `reference` are those of `resolveLogo`.
  */
-export interface ComposedLogo { box: LayoutBox; slot: 'lockup'; path: string; source: unknown; variant: string; anchor: 'left' | 'right' }
+export interface ComposedLogo { box: LayoutBox; shape: LogoShape; path: string; source: unknown; variant: LogoVariant; reference: string; anchor: 'left' | 'right' }
 /** Picture bullet source for list markers: the deck's icon logo and the OPF path it was read from. */
 export interface ListBulletImage { source: unknown; path: string }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
@@ -462,8 +462,8 @@ export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
   presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
-   * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
-   * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
+   * Whether the slide background is dark, by the host's own luminance test. Selects each logo's
+   * `onDark` value (cover logo, `var:organization.logo.*` in zone images, picture bullets). Core never inspects colors.
    */
   darkBackground?: boolean;
   /**
@@ -682,73 +682,20 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
   return result;
 }
 
-/** LogoSet keys in preference order per slot and tone: same-tone variants first, neutral next, the opposite tone last. */
-const LOGO_LOCKUP_CHAINS = {
-  dark: ['light', 'default', 'stackedLight', 'stacked', 'wordmarkLight', 'wordmark', 'iconLight', 'icon', 'dark', 'stackedDark', 'wordmarkDark', 'iconDark'],
-  light: ['dark', 'default', 'stackedDark', 'stacked', 'wordmarkDark', 'wordmark', 'iconDark', 'icon', 'light', 'stackedLight', 'wordmarkLight', 'iconLight'],
-} as const;
-const LOGO_SET_KEYS = new Set<string>(LOGO_LOCKUP_CHAINS.dark);
-export interface ResolveLogoOptions {
-  /** Variant family to prefer; defaults to the full lockup. */
-  slot?: LogoSlot;
-  /** True on a dark background (host luminance test): light variants are preferred, dark ones come last. */
-  onDark?: boolean;
-  /** Index used in the `slides.N.design.logo` path of a slide-level logo; defaults to 0. */
-  slideIndex?: number;
-}
-/**
- * Resolve the logo a slide should draw, the same way in every engine. Source precedence:
- * `slides[i].design.logo`, then `design.logo`, then the primary organization's `logo` (`role: 'primary'`,
- * else the first organization; `organization` may be an object or an array). Absence inherits; a source
- * that yields no usable asset falls through to the next. A string or Asset object is the `default`
- * variant. A LogoSet picks by slot and tone: `icon` tries iconLight/iconDark (tone), then icon, then the
- * lockup chain; `stacked` tries stackedLight/stackedDark (tone), then stacked, then the lockup chain; the
- * lockup chain prefers same-tone variants, then neutral ones, then the opposite tone. `path` is the OPF
- * path of the chosen value (`design.logo`, `design.logo.light`, `organization.2.logo`,
- * `slides.3.design.logo.icon`) and `variant` the LogoSet key or `default`. Returns null without a logo.
- */
-export function resolveLogo(presentation: unknown, slide: unknown, options: ResolveLogoOptions = {}): ResolvedLogo | null {
-  const slot: LogoSlot = options.slot === 'icon' || options.slot === 'stacked' ? options.slot : 'lockup';
-  if (options.slot !== undefined && slot !== options.slot) throw new RangeError('Logo slot must be lockup, icon or stacked.');
-  const tone = options.onDark === true ? 'dark' : 'light';
-  const lockup = LOGO_LOCKUP_CHAINS[tone];
-  const chain = slot === 'icon' ? [tone === 'dark' ? 'iconLight' : 'iconDark', 'icon', ...lockup]
-    : slot === 'stacked' ? [tone === 'dark' ? 'stackedLight' : 'stackedDark', 'stacked', ...lockup] : lockup;
-  const usable = (value: unknown) => { const source = assetSource(value); return typeof source === 'string' && source.length > 0; };
-  const pick = (value: unknown, path: string): ResolvedLogo | null => {
-    if (value === undefined || value === null || value === false) return null;
-    if (typeof value === 'string' || (typeof value === 'object' && !Array.isArray(value) && 'src' in record(value))) {
-      return usable(value) ? { source: value, path, variant: 'default', slot } : null;
-    }
-    const set = record(value);
-    if (!Object.keys(set).some(key => LOGO_SET_KEYS.has(key))) return null;
-    for (const key of chain) {
-      const variant = set[key];
-      if (variant !== undefined && usable(variant)) return { source: variant, path: `${path}.${key}`, variant: key, slot };
-    }
-    return null;
-  };
-  const deck = record(presentation), slideIndex = Number.isSafeInteger(options.slideIndex) && options.slideIndex! >= 0 ? options.slideIndex! : 0;
-  const own = pick(record(record(slide).design).logo, `slides.${slideIndex}.design.logo`);
-  if (own) return own;
-  const shared = pick(record(deck.design).logo, 'design.logo');
-  if (shared) return shared;
-  const organizations: unknown[] = Array.isArray(deck.organization) ? deck.organization : [deck.organization];
-  const primaryIndex = organizations.findIndex(item => record(item).role === 'primary');
-  const index = primaryIndex >= 0 ? primaryIndex : organizations.findIndex(Boolean);
-  if (index < 0) return null;
-  return pick(record(organizations[index]).logo, Array.isArray(deck.organization) ? `organization.${index}.logo` : 'organization.logo');
-}
-
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'logo' | 'socials' | 'date';
+  field: 'text' | 'image' | 'socials' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
-  /** String/asset source, when different from a generated field's flag. */
+  /** String/asset source, when different from a generated field's flag; for a logo reference, the organization logo value drawn. */
   sourcePath?: string;
   generated: boolean;
+  /**
+   * The part's own box. A zone lays its parts out in one row, in the order image, text, socials, date (mirrored in a
+   * right-to-left deck), aligned to the zone's edge with FURNITURE_GAP between parts and each part vertically centered
+   * in the row. A zone with one part keeps the full zone width for text.
+   */
   box: LayoutBox;
   alignment: 'left' | 'center' | 'right';
 }
@@ -806,7 +753,13 @@ export function resolveSocialProfile(platform: string, value: string, owner: 'or
   if (!webUrl.test(url)) return {text: raw, resolved: false};
   return {text: display(url), href: encodeURI(url), resolved: true};
 }
-export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
+export interface FurnitureImagePart extends FurniturePartBase {
+  type: 'image';
+  /** The asset to draw: the zone `image` as written, or the organization logo a logo reference resolved to for this slide. */
+  image: unknown;
+  /** The slide-scoped logo reference the zone wrote (`var:organization.logo.icon`), when `image` came from one. */
+  reference?: string;
+}
 export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
 export interface FurnitureLayout {
   algorithm: 'furniture-flow-v2';
@@ -819,6 +772,9 @@ export interface FurnitureLayout {
   headerBottom: number; footerTop: number;
   diagnostics: LayoutDiagnostic[]; overflow: boolean;
 }
+
+/** Gap between the parts of one header/footer zone row, in reference pixels (scaled with the canvas's short edge). */
+export const FURNITURE_GAP = 12;
 
 /** Resolve and measure repeated fields without mutating metadata or consulting a clock. */
 export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {}): FurnitureLayout {
@@ -854,45 +810,32 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       // Right to left: the authored `left` zone is drawn at the right and `right` at the left; `zone` keeps the authored name.
       // `alignment` is the physical edge the zone's text sits on (never flipped again by line direction).
       const side=furnitureRtl&&zone!=='center'?(zone==='left'?'right':'left'):zone;
-      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+(furnitureRtl?2-index:index)*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
+      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+(furnitureRtl?2-index:index)*.3),zoneWidth=width*.26;
+      type PendingText={type:'text';field:FurniturePartBase['field'];text:string;generated:boolean;sourcePath:string|undefined;extras:FurnitureTextExtras;partPath:string;style:TextStyle};
+      type PendingImage={type:'image';sourcePath:string;image:unknown;reference?:string;width:number;height:number};
+      const pending:(PendingText|PendingImage)[]=[];
       const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,extras:FurnitureTextExtras={})=>{
         if(text===undefined)return;
         if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
-        const partPath=`${path}.${field}`,style=resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement);
-        const fit=fitText(text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,zoneWidth-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(style,options.textMeasurement));
-        const ink=fit.sourceLines.map((line,index)=>{
-          let outline:LayoutBox|null=null;
-          if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
-            const bounds=measureTextOutline(text.slice(segment.start,segment.end),size,style,options.textMeasurement);
-            if(bounds){const next={...bounds,x:bounds.x+segment.x};if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}}
-          }
-          return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline};
-        });
-        const natural=outlines?placeTextLines(ink,{x,y,width:zoneWidth,height:Number.MAX_VALUE},side,padding):undefined;
-        const partHeight=natural?.height??fit.sourceLines.length*fit.lineHeight;
-        if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
-        const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,side,padding):undefined;
-        const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:size,minFontSize:minimum,box,alignment:side,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
-        if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
-        y+=box.height;
+        const partPath=`${path}.${field}`;
+        pending.push({type:'text',field,text,generated,sourcePath:sourcePath??(!generated?partPath:undefined),extras,partPath,style:resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement)});
       };
-      // An image or logo part is as wide as its own aspect ratio makes it at the band height (a square when
-      // the source's dimensions are not readable), capped at the zone, and aligns like the zone's text: left zone to
-      // its left edge, center zone centered, right zone to its right edge. Consumers fit the image inside this box.
-      const imageBox=(source:unknown)=>{
+      // An image part is as wide as its own aspect ratio makes it at the band height (a square when the source's
+      // dimensions are not readable), capped at the zone. Consumers fit the image inside this box.
+      const addImage=(source:unknown,sourcePath:string,reference?:string)=>{
         const imageHeight=Math.max(32*scale,Math.min(height*.05,72*scale)),imageWidth=Math.min(zoneWidth,imageHeight*(intrinsicImageAspect(source,record(options.presentation).assets)??1));
-        return {x:side==='left'?x:side==='center'?x+(zoneWidth-imageWidth)/2:x+zoneWidth-imageWidth,y,width:imageWidth,height:imageHeight};
+        pending.push({type:'image',sourcePath,image:source,...(reference!==undefined?{reference}:{}),width:imageWidth,height:imageHeight});
       };
-      if(content.logo===true){
-        // The deck's icon logo (slide design, deck design, then the primary organization), as a generated image part.
-        const resolved=resolveLogo(options.presentation,slide,{slot:'icon',onDark:options.darkBackground,slideIndex:options.slideIndex});
-        if(resolved){const box=imageBox(resolved.source);zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:side});y+=box.height;}
-        else error(`${path}.logo`,'Generated logo needs design.logo or a primary organization logo.','unresolved-content');
-      }
       if(content.image!==undefined){
-        const box=imageBox(content.image);
-        zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:side});y+=box.height;
+        // A logo reference (`var:organization.logo.icon`) is slide-scoped: it resolves here, for this slide's background.
+        const logo=typeof content.image==='string'&&content.image.startsWith('var:organization.')?parseLogoName(content.image,options.presentation):null;
+        if(!logo)addImage(content.image,`${path}.image`);
+        else if('error' in logo)error(`${path}.image`,logo.error,'unresolved-content');
+        else{
+          const resolved=resolveOrganizationLogo(options.presentation,logo,{onDark:options.darkBackground===true});
+          if(resolved.ok)addImage(resolved.logo.source,resolved.logo.path,content.image as string);
+          else error(`${path}.image`,`${resolved.message} Give the organization a logo, or change the zone image.`,'unresolved-content');
+        }
       }
       if(typeof content.text==='string'){
         // The slide-scoped built-ins resolve here, per slide; each {{slide.number}} becomes a live slide-number field.
@@ -917,9 +860,55 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(content.dateFormat===undefined)add('date',content.date);
         else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
       }
+      // Text fitted at a box width, with each source line's ink when outlines are provided.
+      const fitPart=(part:PendingText,boxWidth:number)=>{
+        const fit=fitText(part.text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,boxWidth-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(part.style,options.textMeasurement));
+        const ink:TextLineInk[]=fit.sourceLines.map((line,index)=>{
+          let outline:LayoutBox|null=null;
+          if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
+            const bounds=measureTextOutline(part.text.slice(segment.start,segment.end),size,part.style,options.textMeasurement);
+            if(bounds){const next={...bounds,x:bounds.x+segment.x};if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}}
+          }
+          return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline};
+        });
+        const natural=outlines?placeTextLines(ink,{x:0,y:0,width:boxWidth,height:Number.MAX_VALUE},side,padding):undefined;
+        const partHeight=natural?.height??fit.sourceLines.length*fit.lineHeight;
+        if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
+        return {fit,ink,height:Math.max(scale,partHeight)};
+      };
+      // The zone's parts sit in one row. A lone text part keeps the whole zone width (it wraps there); with other
+      // parts each text part is as wide as its longest line, and when the row is wider than the zone the text parts
+      // share what the images and gaps leave (narrow parts keep their width, the rest wrap at an equal share).
+      const gap=FURNITURE_GAP*scale,gaps=gap*Math.max(0,pending.length-1);
+      const widths=pending.map(part=>part.type==='image'?part.width:pending.length===1?zoneWidth:Math.max(scale,...fitPart(part,1e7).ink.map(line=>Math.max(line.width+(outlines?2*padding:0),line.outline?line.outline.width+2*padding:0))));
+      if(pending.length>1&&widths.reduce((sum,entry)=>sum+entry,0)+gaps>zoneWidth+.01){
+        const texts=pending.map((_,index)=>index).filter(index=>pending[index]!.type==='text').sort((a,b)=>widths[a]!-widths[b]!);
+        let remaining=zoneWidth-gaps-pending.reduce((sum,part,index)=>sum+(part.type==='image'?widths[index]!:0),0),count=texts.length;
+        if(remaining<scale*Math.max(1,count))error(path,`The parts of this zone (${pending.map(part=>part.type==='image'?'image':part.field).join(', ')}) are wider side by side than the zone; remove a part or move one to another zone.`);
+        for(const index of texts){const share=Math.max(scale,remaining/count);widths[index]=Math.min(widths[index]!,share);remaining-=widths[index]!;count--;}
+      }
+      const measured=pending.map((part,index)=>part.type==='image'?{part,width:widths[index]!,height:part.height}:{part,width:widths[index]!,...fitPart(part,widths[index]!)});
+      const row=Math.max(0,...measured.map(entry=>entry.height));
+      const total=measured.reduce((sum,entry)=>sum+entry.width,0)+gaps;
+      // The row aligns to the zone's edge; a right-to-left deck runs it from the right (the image is at the start edge).
+      let cursor=side==='left'||total>zoneWidth+.01?x:side==='center'?x+(zoneWidth-total)/2:x+zoneWidth-total;
+      const placed=new Map<number,number>();
+      for(const index of (furnitureRtl?[...measured.keys()].reverse():[...measured.keys()])){placed.set(index,cursor);cursor+=measured[index]!.width+gap;}
+      const zoneParts:FurniturePart[]=measured.map((entry,index)=>{
+        const box={x:placed.get(index)!,y:(row-entry.height)/2,width:entry.width,height:entry.height};
+        if(entry.part.type==='image'){
+          const part=entry.part;
+          return {type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:part.sourcePath,generated:false,image:part.image,...(part.reference!==undefined?{reference:part.reference}:{}),box,alignment:side};
+        }
+        const part=entry.part,{fit,ink}=entry as unknown as {fit:SourceTextFit;ink:TextLineInk[]};
+        const placement=outlines?placeTextLines(ink,box,side,padding):undefined;
+        const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
+        if(accepted.overflow)error(part.partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
+        return {type:'text',kind,zone,field:part.field,path:part.partPath,...(part.sourcePath!==undefined?{sourcePath:part.sourcePath}:{}),generated:part.generated,text:part.text,style:part.style,requestedFontSize:size,minFontSize:minimum,box,alignment:side,fit:accepted,...(part.extras.fields?.length?{fields:part.extras.fields}:{}),...(part.extras.links?.length?{links:part.extras.links}:{})};
+      });
       zones.push(zoneParts);
     }
-    const tallest=Math.max(0,...zones.map(zone=>zone.reduce((sum,part)=>sum+part.box.height,0)));
+    const tallest=Math.max(0,...zones.flat().map(part=>part.box.y+part.box.height));
     if(!tallest)continue;
     const top=kind==='header'?height*.025:Math.max(height*.025,height-height*.04-tallest);
     if(kind==='header')headerBottom=top+tallest;else footerTop=top;
@@ -2246,7 +2235,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }, options.textMeasurement);
   const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
-    const resolved = resolveLogo(options.presentation, slide, { slot: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
+    const resolved = resolveLogo(options.presentation, slide, { shape: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
   })() : undefined;
   const widthFor = (field: string, path: string) => textWidthMeasurer(styleFor(field,path),options.textMeasurement);
@@ -2375,16 +2364,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(flowBlocks) || fields.some(field => !(placedRoot && field === 'image') && !emptyPayload(slide[field]));
   const isCover = !hasBodyPayload && (headingOnlyLayout || !hasLayoutRecord);
   coverGroup = isCover;
-  // Cover and section slides draw the lockup logo at the top-left of the free area, below any header
+  // Cover and section slides draw the primary organization's full logo (or the design.logo override) at the top-left of the free area, below any header
   // furniture; the heading group then centers in the remaining span. Content slides never get one.
   let logo: ComposedLogo | undefined;
   if (isCover) {
-    const resolved = resolveLogo(options.presentation, slide, { slot: 'lockup', onDark: options.darkBackground, slideIndex: options.slideIndex });
+    const resolved = resolveLogo(options.presentation, slide, { shape: 'full', onDark: options.darkBackground, slideIndex: options.slideIndex });
     if (resolved) {
       const logoHeight = 56 * scale;
       const logoWidth = Math.max(scale, Math.min(4 * logoHeight, area.right - area.left - 2 * padding));
       const box = { x: round(rtl ? area.right - padding - logoWidth : area.left + padding), y: round(headingTop), width: round(logoWidth), height: round(logoHeight) };
-      logo = { box, slot: 'lockup', path: resolved.path, source: resolved.source, variant: resolved.variant, anchor: rtl ? 'right' : 'left' };
+      logo = { box, shape: resolved.shape, path: resolved.path, source: resolved.source, variant: resolved.variant, reference: resolved.reference, anchor: rtl ? 'right' : 'left' };
     }
   }
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
@@ -2669,7 +2658,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     slots.sort((a, b) => order.get(a.path)! - order.get(b.path)!);
   } else arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
-    diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need design.logo or a primary organization logo; the marker glyph is drawn instead.' });
+    diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
 
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
