@@ -129,6 +129,8 @@ opf import-data revenue.csv --as chart --category Quarter --series '["Revenue","
 
 Data can come from a file or stdin (`-`). JSON accepts arrays of records, row matrices, or `{columns, rows}`. `--path /slides/0/table` replaces or adds a table field inside an existing parent; use `/chart` for charts. With `--into` and no path, a new slide is appended. Other options include `--format csv|tsv|json`, `--delimiter`, `--no-header`, `--columns` (a JSON array), and `--title`. Preview on stdout by omitting an output destination. All file writes validate the complete document. CSV table strings are preserved; chart measures must be numeric (strict decimal syntax: `12%` or `$5` is rejected). `--dataset <id>` writes the data into the deck's top-level `datasets` map (replacing that dataset's columns and rows, keeping the format of each column whose name is unchanged, and recording the file as its `source`) and references it from the table or chart, so several tables and charts can share it. Data is embedded, not linked to the source file.
 
+Import is deterministic. A new slide is named `data-` plus eight hex digits of a SHA-256 over the data and the import options (`data-xxxxxxxx-2`, `-3` if the deck already has the id); `--id <slideId>` names it instead and fails if the id is taken. With `--dataset`, `source.src` is the data file relative to the deck's folder with `/` separators, and `source.retrieved` is set only by `--date YYYY-MM-DD` (the command never reads the clock).
+
 ## Fill a template
 
 A template is an OPF file with `"template": true` and variables (`{{id}}` tokens and `var:id` references, see [templates and variables](../../docs/templates-and-variables.md)). `opf fill` resolves them from data:
