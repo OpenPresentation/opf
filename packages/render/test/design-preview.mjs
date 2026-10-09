@@ -3,7 +3,7 @@ import {renderSlideSvg} from '../src/svg.js';
 // The alignment decks below name the gallery's roboto font scheme, so they pass the host catalog (core Catalog[]) explicitly.
 import {defaultCatalog} from '@openpresentation/opf/catalog';
 const catalogs=[defaultCatalog];
-const deck={organization:{id:'acme',name:'Acme'},design:{header:{left:{text:'Confidential'},center:{section:true},right:{organization:true}},footer:{left:{slideNumber:true},center:{date:'2026-09-07'},right:{text:'Review'}}},slides:[{title:'Slide',section:'Results'}]};
+const deck={organization:{id:'acme',name:'Acme'},design:{header:{left:{text:'Confidential'},center:{text:'{{slide.section}}'},right:{text:'{{organization.name}}'}},footer:{left:{text:'{{slide.number}}'},center:{date:'2026-09-07'},right:{text:'Review'}}},slides:[{title:'Slide',section:'Results'}]};
 const svg=renderSlideSvg(deck, 0,{trace:true});for(const text of ['Confidential','Results','Acme','2026-09-07','Review','design.header.left'])assert.ok(svg.includes(text),text);
 const hidden=renderSlideSvg({...deck,slides:[{title:'Slide',design:{header:false,footer:false}}]}, 0);assert.ok(!hidden.includes('Confidential'));assert.ok(!hidden.includes('Review'));
 for(const angle of [0,90,180]){const svg=renderSlideSvg({design:{background:{type:'gradient',gradient:{angle,stops:[{position:0,color:'#FF0000'},{position:1,color:'#0000FF'}]},opacity:.4}},slides:[{title:'Gradient'}]}, 0);assert.match(svg,/opacity="0.4"/);assert.ok(svg.includes(angle===0?'x1="0%"':angle===90?'y1="0%"':'x1="100%"'));}

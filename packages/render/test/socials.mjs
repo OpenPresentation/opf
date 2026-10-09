@@ -6,7 +6,7 @@ import {SOCIAL_PLATFORMS} from '@openpresentation/opf/composition';
 // SOCIAL_PLATFORMS, no catalog lookup); core formats each handle through its platform's URL pattern and handle prefix, and
 // the renderer draws what core formats. There are no document or host social-platform records any more.
 const deck={organization:{id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',mastodon:'https://hachyderm.io/@acme'}},
- design:{footer:{left:{organization:true},right:{socials:true}}},slides:[{title:'Socials',text:'Body'}]};
+ design:{footer:{left:{text:'{{organization.name}}'},right:{socials:true}}},slides:[{title:'Socials',text:'Body'}]};
 const lines='linkedin.com/company/acme\nx.com/acme\nhachyderm.io/@acme';
 const before=structuredClone(deck),config={trace:true};
 const geometry=resolvePresentation(deck,config).slides[0].geometry,svg=renderSlideSvg(deck, 0,config);
@@ -38,12 +38,12 @@ for(const [id,platform] of platforms){
  assert.equal(link.resolved,true,id);assert.equal(link.href,expected,id);
  assert.ok(renderSlideSvg(one, 0).includes(`>${expected.replace(/^https:\/\//,'').replace(/&/g,'&amp;')}<`),id);
 }
-// FF-27 + FF-34: one footer with a live slide-number field and linked socials in the same zone.
-const mixed={...deck,design:{footer:{left:{slideNumber:true,slideNumberFormat:'Slide {current} of {total}'},right:{slideNumber:true,socials:true}}},slides:[{text:'One'},{text:'Two'}]};
+// FF-27 + FF-34 + FA-31: one footer with a live slide-number field and linked socials in the same zone (text stacks before socials).
+const mixed={...deck,design:{footer:{left:{text:'Slide {{slide.number}} of {{deck.slideCount}}'},right:{text:'{{slide.number}}',socials:true}}},slides:[{text:'One'},{text:'Two'}]};
 const mixedParts=resolvePresentation(mixed).slides[1].geometry.furniture.parts;
-assert.deepEqual(mixedParts.map(part=>[part.zone,part.field,part.text,part.fields?.length??0,part.links?.length??0]),[['left','slideNumber','Slide 2 of 2',1,0],['right','socials',lines,0,3],['right','slideNumber','2',1,0]]);
+assert.deepEqual(mixedParts.map(part=>[part.zone,part.field,part.text,part.fields?.length??0,part.links?.length??0]),[['left','text','Slide 2 of 2',1,0],['right','text','2',1,0],['right','socials',lines,0,3]]);
 const mixedSvg=renderSlideSvg(mixed, 1,{trace:true});
 // Rendered in document order: left zone first, then the right zone top to bottom.
-const order=['Slide 2 of 2',...lines.split('\n'),'>2<'].map(text=>mixedSvg.indexOf(text.startsWith('>')?text:`>${text}<`,mixedSvg.indexOf('data-opf-furniture-field')));
+const order=['Slide 2 of 2','>2<',...lines.split('\n')].map(text=>mixedSvg.indexOf(text.startsWith('>')?text:`>${text}<`,mixedSvg.indexOf('data-opf-furniture-field')));
 assert.ok(order.every(index=>index>=0),JSON.stringify(order));assert.deepEqual([...order].sort((a,b)=>a-b),order,'furniture text renders in part and line order');
 console.log(`Socials furniture passed: ${platforms.length} engine platforms (SOCIAL_PLATFORMS), URL pass-through, unknown-key rejection and unresolved-content.`);

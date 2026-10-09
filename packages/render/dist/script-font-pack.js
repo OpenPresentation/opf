@@ -54,28 +54,23 @@ export function scriptPackageEntries(packages, {baseUrl}) {
 // Everywhere: the schema URL, embedded assets, catalog records, speaker notes, ids, image alt text and sources,
 // links, metadata and typed `extensions` passthrough. On the presentation: name (aria-label fallback), description,
 // filename, author, audience, purpose, tone, takeaway, duration, tags, narrative, language and version.
-// On a slide: beat. The organization (name), the speaker (name and title) and a slide's section are drawn only as
-// generated header/footer furniture (`organization: true` / `speaker: true` / `section: true` in a design), so they count
-// only when a design asks for them; built-in variables copy their values into slide strings before this runs. Everything else is drawn text: titles, text blocks, list items, runs, table cells, chart labels,
-// categories and series names, code, quotes, metrics, timelines, furniture text.
+// On a slide: beat. The organization (name), the speaker (name and title) and a slide's section are drawn only through the
+// built-in variables that read them ({{organization.name}}, {{speaker.title}}, {{slide.section}}, FA-31), so they count
+// only when a string the preview draws holds such a token. Everything else is drawn text: titles, text blocks, list items,
+// runs, table cells, chart labels, categories and series names, code, quotes, metrics, timelines, header and footer text.
 const UNDRAWN_KEYS = Object.freeze(["$schema", "assets", "catalogs", "notes", "id", "alt", "altText", "src", "url", "href", "link", "metadata", "extensions"]);
 const UNDRAWN_ROOT_KEYS = Object.freeze(["name", "description", "filename", "author", "authors", "creator", "audience", "purpose", "tone", "takeaway", "duration", "tags", "narrative", "language", "license", "version", "keywords"]);
 const UNDRAWN_SLIDE_KEYS = Object.freeze(["beat"]);
 const UNDRAWN_VALUE = /^(?:https?|data|blob|pkg|file|mailto):\S*$/i;
 
-/** True when a design in the presentation turns on generated `field` furniture (`organization`, `speaker` or `section`). */
-function furnitureUses(presentation, field) {
-  const designs = [presentation?.design, ...(Array.isArray(presentation?.slides) ? presentation.slides.map(slide => slide?.design) : [])];
-  const pattern = new RegExp(`"${field}"\\s*:\\s*true`);
-  return designs.some(design => design && pattern.test(JSON.stringify(design)));
-}
+// The built-in variables that copy a document value into drawn text: the inline token and the whole-field reference
+// (a logo or photo reference draws a picture, not text).
+const ORGANIZATION_TOKEN = /\{\{\s*organization\.|var:organization\.(?!logo\b)/;
+const SPEAKER_TOKEN = /\{\{\s*speaker\.|var:speaker\.(?!photo\b|image\b|avatar\b)/;
+const SECTION_TOKEN = /\{\{\s*slide\.section\s*[|}]/;
 
-/** The strings a preview of this presentation draws. */
-export function* drawnStrings(presentation) {
-  const undrawn = new Set(UNDRAWN_KEYS), undrawnRoot = new Set(UNDRAWN_ROOT_KEYS), undrawnSlide = new Set(UNDRAWN_SLIDE_KEYS);
-  if (!furnitureUses(presentation, "organization")) undrawnRoot.add("organization");
-  if (!furnitureUses(presentation, "speaker")) undrawnRoot.add("speaker");
-  if (!furnitureUses(presentation, "section")) undrawnSlide.add("section");
+/** The strings under `presentation`, skipping the keys in the three sets (root keys, slide keys, and everywhere). */
+function* walkStrings(presentation, undrawn, undrawnRoot, undrawnSlide) {
   function* visit(item, level) {
     if (typeof item === "string") { if (!UNDRAWN_VALUE.test(item)) yield item; }
     else if (Array.isArray(item)) for (const child of item) yield* visit(child, level === "slides" ? "slide" : level === "root" ? "deep" : level);
@@ -87,6 +82,18 @@ export function* drawnStrings(presentation) {
     }
   }
   yield* visit(presentation, "root");
+}
+
+/** The strings a preview of this presentation draws. */
+export function* drawnStrings(presentation) {
+  const undrawn = new Set(UNDRAWN_KEYS), undrawnRoot = new Set([...UNDRAWN_ROOT_KEYS, "organization", "speaker"]), undrawnSlide = new Set([...UNDRAWN_SLIDE_KEYS, "section"]);
+  // The organization, the speaker and a slide's section draw only where a drawn string reads them with a built-in variable.
+  for (const text of walkStrings(presentation, undrawn, undrawnRoot, undrawnSlide)) {
+    if (ORGANIZATION_TOKEN.test(text)) undrawnRoot.delete("organization");
+    if (SPEAKER_TOKEN.test(text)) undrawnRoot.delete("speaker");
+    if (SECTION_TOKEN.test(text)) undrawnSlide.delete("section");
+  }
+  yield* walkStrings(presentation, undrawn, undrawnRoot, undrawnSlide);
 }
 
 /**

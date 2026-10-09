@@ -15,7 +15,7 @@ const tracedBox = (svg, path) => {
 const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.006, `${message}: ${a} vs ${b}`);
 const headings = items => items.filter(item => ['tag', 'title', 'subtitle'].includes(item.field));
 
-const deck = {design: {fontScheme: 'roboto', header: {left: {text: 'Header'}}, footer: {right: {slideNumber: true}}}, slides: [
+const deck = {design: {fontScheme: 'roboto', header: {left: {text: 'Header'}}, footer: {right: {text: '{{slide.number}}'}}}, slides: [
   {layout: 'title-subtitle', tag: 'Kickoff', title: 'Cover slide title', subtitle: 'A supporting line'},
   {layout: 'title', title: 'A cover title that is long enough to wrap onto a second line when drawn at the cover size'},
   {layout: 'title-subtitle', title: 'Centered cover', subtitle: 'Centered subtitle', design: {titleAlignment: 'center', contentAlignment: 'center'}},

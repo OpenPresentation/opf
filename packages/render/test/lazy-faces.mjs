@@ -40,7 +40,7 @@ assert.ok(presentationFamilies(deck([{title: 'Hello', text: 'World'}])).has('Rob
 assert.deepEqual(label(presentationFaces(deck([{title: 'One', text: 'a'}, {title: 'Two', text: 'b', design: {fontScheme: 'open-sans'}}]), {catalogs})), ['Aptos 400', 'Aptos Display 700', 'Open Sans 400', 'Open Sans 700'], 'a per-slide design override adds its own faces');
 assert.deepEqual(label(presentationFaces({name: 'faces', design: {fontScheme: 'roboto'}, slides: [{title: 'Hello', text: 'World'}]}, {catalogs})), ['Roboto 400', 'Roboto 700']);
 assert.deepEqual(label(presentationFaces(deck([{title: 'Hello', table: {columns: ['A', 'B'], rows: [['1', '2']]}}]))), ['Aptos 400', 'Aptos 700', 'Aptos Display 700'], 'table headers draw bold');
-assert.deepEqual(label(presentationFaces({name: 'faces', design: {footer: {right: {slideNumber: true}}}, slides: [{title: 'Hello'}]})), ['Aptos 400', 'Aptos Display 700'], 'furniture draws the body role');
+assert.deepEqual(label(presentationFaces({name: 'faces', design: {footer: {right: {text: '{{slide.number}}'}}}, slides: [{title: 'Hello'}]})), ['Aptos 400', 'Aptos Display 700'], 'furniture draws the body role');
 const before = structuredClone(deck([{title: 'Hello', text: 'World'}]));
 const probe = structuredClone(before);
 presentationFaces(probe, { fonts: {textMeasurement: {measure: () => { throw new Error('the host measurement is not used'); }}}, onDiagnostic: () => { throw new Error('the host callback is not called'); }});

@@ -33,12 +33,14 @@ for(const [field,value] of Object.entries({title:drawn.title[0],subtitle:drawn.s
 for(const [index,block] of drawn.blocks.entries())assert.deepEqual(detectPresentationScripts({slides:[{title:"T",blocks:[block]}]}),["Jpan"],`block ${index}`);
 assert.deepEqual(detectPresentationScripts({design:drawn.design,slides:[{title:'T'}]}),['Jpan']);
 // Deck metadata is not drawn: description, filename, speaker, audience, purpose, tone, takeaway, duration, tags, narrative,
-// extensions, and a slide's beat. Organization and section are drawn only as generated furniture, when a design asks for them.
+// extensions, and a slide's beat. Organization, speaker and section are drawn only through the built-in variables that read them (FA-31).
 assert.deepEqual(detectPresentationScripts({description:'説明です',filename:'ファイル',speaker:{name:'山田さん'},audience:'顧客です',purpose:'目的です',tone:'丁寧です',takeaway:'要点です',duration:'三十分',tags:['タグです'],narrative:'物語です',extensions:{x:'拡張です'},
   organization:{name:'株式会社です'},slides:[{title:'T',beat:'導入です',section:'第一章です',extensions:{y:'値です'}}]}),[]);
-assert.deepEqual(detectPresentationScripts({organization:{name:'株式会社です'},design:{footer:{left:{organization:true}}},slides:[{title:'T'}]}),['Jpan']);
-assert.deepEqual(detectPresentationScripts({design:{footer:{left:{section:true}}},slides:[{title:'T',section:'第一章です'}]}),['Jpan']);
-assert.deepEqual(detectPresentationScripts({design:{footer:{left:{section:true}}},organization:{name:'株式会社です'},slides:[{title:'T'}]}),[],'a section footer does not draw the organization');
+assert.deepEqual(detectPresentationScripts({organization:{name:'株式会社です'},design:{footer:{left:{text:'{{organization.name}}'}}},slides:[{title:'T'}]}),['Jpan']);
+assert.deepEqual(detectPresentationScripts({design:{footer:{left:{text:'{{slide.section}}'}}},slides:[{title:'T',section:'第一章です'}]}),['Jpan']);
+assert.deepEqual(detectPresentationScripts({design:{footer:{left:{text:'{{slide.section}}'}}},organization:{name:'株式会社です'},slides:[{title:'T'}]}),[],'a section footer does not draw the organization');
+assert.deepEqual(detectPresentationScripts({speaker:{name:'山田さん'},slides:[{title:'T',text:'By {{speaker.name}}'}]}),['Jpan'],'a speaker token in body text draws the speaker');
+assert.deepEqual(detectPresentationScripts({organization:{name:'株式会社です'},slides:[{title:'T',section:'第一章です',text:'{{slide.number}}'}]}),[],'a slide number token draws neither the organization nor the section');
 // A URL is not text; ids, alt, src, notes and metadata are not drawn; the presentation's own name and author are not either.
 assert.deepEqual(detectPresentationScripts({slides:[{title:'T',text:'https://例え.jp/日本語'}]}),[]);
 

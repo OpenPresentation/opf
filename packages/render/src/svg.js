@@ -540,7 +540,7 @@ function resolveContext(presentation, index, context) {
   }
 }
 
-function bindSlide(presentation, slide, index, context) {
+function bindSlide(presentation, index, context) {
   const slidePath = `slides.${index}`;
   // Core resolves the slide's canvas, layout, theme, colour scheme, font scheme and family names the one way every engine must
   // (slide design, deck design, theme, engine default), from the records the document embeds and the catalogs the host
@@ -548,6 +548,9 @@ function bindSlide(presentation, slide, index, context) {
   // `layout` composes automatically; one whose reference resolves nowhere does too, with an `unresolved-reference` diagnostic,
   // or the render fails under `strictReferences`.
   const slideContext = resolveContext(presentation, index, context);
+  // FA-31: every string the slide draws (titles, body text, table cells, notes) is the substituted slide: {{slide.number}}, {{slide.section}} and
+  // {{deck.slideCount}} hold this slide's number, its section and the deck's slide count, the same values the furniture draws. Core resolved them.
+  const slide = slideContext.slide;
   const layout = slideContext.options.layout;
   const placeholders = Array.isArray(layout?.placeholders) ? layout.placeholders : [];
   const titleBindings = [];
@@ -660,7 +663,7 @@ function resolveDeck(input, options) {
   }
 
   const context = { presentation, options };
-  const slides = presentation.slides.map((slide, index) => bindSlide(presentation, slide, index, context));
+  const slides = presentation.slides.map((_, index) => bindSlide(presentation, index, context));
 
   return {
     presentation,

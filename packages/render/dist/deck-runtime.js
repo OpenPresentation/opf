@@ -2,6 +2,7 @@
 // decides which slides play (hidden ones do not), renders each slide once with the renderer's own SVG output (renderSlideSvg:
 // there is no second layout engine) behind a face-level font gate, and synchronizes windows over a BroadcastChannel.
 // Nothing here fetches anything but the font files the host's font root serves.
+import { resolveSlideVariables } from "@openpresentation/opf";
 import { renderSlideSvg } from "./svg.js";
 
 /** Error raised for a deck that cannot be read, rendered or loaded. */
@@ -49,7 +50,10 @@ export function presentableIndexes(document, { includeHidden = false } = {}) {
 
 /** Facts about one slide for a counter, a label, a thumbnail or the speaker view. `notes` is plain text only. */
 export function slideInfo(document, index) {
-  const slide = isObject(document?.slides?.[index]) ? document.slides[index] : {};
+  const authored = isObject(document?.slides?.[index]) ? document.slides[index] : {};
+  // FA-31: the strings a counter, label or speaker view shows hold this slide's number, section and the deck's slide count, as the drawn slide does.
+  const { title: shownTitle, subtitle, tag, notes, section } = resolveSlideVariables({ title: authored.title, subtitle: authored.subtitle, tag: authored.tag, notes: authored.notes, section: authored.section }, { slideNumber: Math.max(1, index + 1), slideCount: Math.max(1, document?.slides?.length ?? 1) });
+  const slide = { ...authored, title: shownTitle, subtitle, tag, notes, section };
   const title = plainText(slide.title).trim() || plainText(slide.subtitle).trim() || plainText(slide.tag).trim();
   return {
     index,

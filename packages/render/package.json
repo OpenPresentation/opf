@@ -4,6 +4,9 @@
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",
+  "opf": {
+    "requiresUnreleasedCore": "0.17.0"
+  },
   "private": false,
   "engines": {
     "node": ">=22"
