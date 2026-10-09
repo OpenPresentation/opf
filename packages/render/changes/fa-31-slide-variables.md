@@ -1,4 +1,0 @@
----
-type: changed
----
-FA-31 (breaking, lockstep 0.17.0): the renderer draws `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` in any string of a slide (titles, body text, table cells, notes) and in header and footer `text`, from the substituted slide core's `resolveSlideContext` returns, so the body and the footer show the same number. The `<opf-deck>` element and the player show the same values in their slide titles, labels and speaker notes. Header and footer furniture follows core's narrowed parts (`text`, `image`, `logo`, `socials`, `date`): a zone's `text` is one part (`data-opf-furniture-field="text"`), and the removed `organization`, `speaker`, `section`, `slideNumber` and `slideNumberFormat` keys are no longer drawn. Script detection counts the organization, the speaker and a slide's section as drawn only where a string reads them with `{{organization.…}}`, `{{speaker.…}}` or `{{slide.section}}`. Requires core 0.17.0.

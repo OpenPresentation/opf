@@ -1,4 +1,0 @@
----
-type: added
----
-RR-64: `textAsPaths: true` for `renderSvg` and `renderSlideSvg` draws every `<text>` as glyph outlines (`<use>` of outlines kept once per slide in `<defs>`), so the SVG needs no font and looks the same in every viewer. Over the core example decks an outlined slide is about 38 KB at the median (98 KB at most) against 0.5 to 4 MB with embedded faces, and resvg draws it like its text (mean channel difference at most 0.006 of 255). It needs the fonts handle `loadFonts()` returns, which now carries the outline engine as `fonts.outlines`. Outlined elements keep their `data-opf-*` trace and are labelled with their text for assistive technology; links stay links; text in a colour font (emoji) stays text (`text-as-paths-kept-text`). The text is no longer selectable or editable, so it is meant for thumbnails, previews and portable SVG files, not an editing surface or the vector PDF (opf-render#164).
