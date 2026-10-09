@@ -1,6 +1,6 @@
 # The `opf` CLI: producing and reading files
 
-The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, edits, paginates and bundles documents (see
+The CLI (`@openpresentation/cli`, binary `opf`, Node 22 or later; verified on Node 24) validates, edits, paginates and bundles documents (see
 [its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Four commands
 produce and read files: `opf render`, `opf export`, `opf convert` and `opf import`. They run core's file engine, the one
 applications call as [`@openpresentation/opf/node`](node.md) (`convert`, `open`, `save`); the commands add the flags, the

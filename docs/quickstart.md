@@ -11,18 +11,18 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.16.0**,
-CLI **0.16.0**, renderer **0.16.0**, PPTX **0.16.0**, editor **0.16.0**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.17.0**,
+CLI **0.17.1**, renderer **0.17.0**, PPTX **0.17.0**, editor **0.17.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.16.0 \
-  @openpresentation/opf-render@0.16.0 \
-  @openpresentation/opf-editor@0.16.0 \
-  @openpresentation/opf-pptx@0.16.1 \
-  @openpresentation/cli@0.16.0
-# opf-render 0.16 keeps its converters and font packages as optional peers: install the ones you use
+npm install @openpresentation/opf@0.17.0 \
+  @openpresentation/opf-render@0.17.0 \
+  @openpresentation/opf-editor@0.17.0 \
+  @openpresentation/opf-pptx@0.17.0 \
+  @openpresentation/cli@0.17.1
+# opf-render 0.17 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5

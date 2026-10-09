@@ -6,7 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the published 0.16 set recorded in `release-plan.json` (RR-20, 9 October 2026). Immutable tag commits pin
+dated handoff as current. The pin set below matches the published 0.17 set recorded in `release-plan.json` (RR-20, 9 October 2026). Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
 accepted fixes and release prerequisites. Those source changes have not updated
@@ -25,13 +25,31 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.16.0 | — |
-| `@openpresentation/cli` | 0.16.0 | `@openpresentation/opf@^0.16.0` (a regular dependency since RR-62, no bundled copy); optional peers `@openpresentation/opf-render@^0.16.0` and `@openpresentation/opf-pptx@^0.16.0` |
-| `@openpresentation/opf-render` | 0.16.0 | `@openpresentation/opf@^0.16.0`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
-| `@openpresentation/opf-editor` | 0.16.0 | `@openpresentation/opf@^0.16.0`; optional peer `@openpresentation/opf-render@^0.16.0` |
-| `@openpresentation/opf-pptx` | 0.16.0 | `@openpresentation/opf@^0.16.0`; optional peer `@openpresentation/opf-render@^0.16.0` |
+| `@openpresentation/opf` | 0.17.0 | optional peers `@openpresentation/opf-render@^0.17.0` and `@openpresentation/opf-pptx@^0.17.0`, which `@openpresentation/opf/node` loads for `convert`, `open` and `save` |
+| `@openpresentation/cli` | 0.17.1 | `@openpresentation/opf@^0.17.0` (a regular dependency, no bundled copy); optional peers `@openpresentation/opf-render@^0.17.0` and `@openpresentation/opf-pptx@^0.17.0` |
+| `@openpresentation/opf-render` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
+| `@openpresentation/opf-editor` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peer `@openpresentation/opf-render@^0.17.0` |
+| `@openpresentation/opf-pptx` | 0.17.0 | `@openpresentation/opf@^0.17.0`; optional peer `@openpresentation/opf-render@^0.17.0` |
 
-The 0.16 set is the lockstep minor after 0.15 (owner decision 2026-10-08: no 0.15.x patch train). It adds nested
+The 0.17 set is the lockstep minor after 0.16. It is a breaking release:
+- **Furniture variables (FA-31):** header and footer text uses the `{{slide.number}}`, `{{slide.section}}` and
+  `{{deck.slideCount}}` variables, and the `HeaderFooterItem` flags are removed.
+- **`@openpresentation/opf/node` (RR-62):** `convert`, `open` and `save` work from files and bytes. `parse` and
+  `stringify` replace `readDeck` and `writeDeck`. `opf convert` is new, and `@openpresentation/cli/api` is removed.
+- **Fixes and additions:**
+  - deterministic data import;
+  - `validate` and `paginate` that plan script faces (RR-59);
+  - the Arabic and Latin preview fixes;
+  - `renderSvg(deck, { textAsPaths: true })` (RR-64 phase 1);
+  - the Windows CLI path fixes (RR-66).
+
+See the 0.17.0 entries of the [changelog](../CHANGELOG.md) and the 0.17.1 entry of the
+[CLI changelog](../packages/cli/CHANGELOG.md).
+
+The CLI starts at **0.17.1**. `cli-v0.17.0` was tagged, but its publish run failed before `npm publish`, because the
+release commit carried a stale generated gallery tracker. So 0.17.1 is the first published 0.17 CLI.
+
+The 0.16 set (core, CLI, renderer and editor 0.16.0, PPTX 0.16.1) was the lockstep minor after 0.15 (owner decision 2026-10-08: no 0.15.x patch train). It adds nested
 placeholder groups in layout records (FA-26), `Table.alt` (FA-27), the `opf/language-tag` warning (FA-29), Markdown
 decks (`.opf.md`) in every command with core `readDeck`/`writeDeck` (RR-60), SVGs that embed only the faces they draw
 (RR-61), the CLI's programmatic `@openpresentation/cli/api` (RR-62), a lighter renderer install with optional
@@ -57,13 +75,14 @@ Core starts at **0.15.1**: `opf-v0.15.0` was tagged, but its publish run failed 
 through the published renderer and PPTX ran in the core publish workflow before those 0.15 siblings existed), so 0.15.1
 is the first published 0.15 core and the floor of every 0.15 sibling.
 
-From CLI 0.16.0 the CLI depends on core (`@openpresentation/opf`, a regular dependency, not a bundled copy) and
-exposes `@openpresentation/cli/api`; the renderer and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
+From CLI 0.16.0 the CLI depends on core (`@openpresentation/opf`, a regular dependency, not a bundled copy). CLI 0.16.0
+exposed `@openpresentation/cli/api`, and 0.17 removes it in favour of core's `@openpresentation/opf/node`. The renderer
+and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.16.0 with renderer 0.16.0, PPTX 0.16.1 and editor 0.16.0), so
+core in lockstep (core 0.17.0 with renderer, PPTX and editor 0.17.0), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -376,6 +395,7 @@ every other core entry stay browser-safe. In a browser, use the engines' browser
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.16.0, CLI 0.16.0, renderer 0.16.0, PPTX 0.16.1, editor 0.16.0 | Previous coordinated set (Markdown decks, used-face SVG embedding, optional renderer converters, nested placeholder groups, `@openpresentation/cli/api`). The 0.17 set is breaking: header and footer flags become `{{slide.number}}`-style variables (FA-31), `readDeck`/`writeDeck` become `parse`/`stringify`, and `@openpresentation/cli/api` is replaced by `@openpresentation/opf/node`. |
 | core 0.15.1, CLI 0.15.0, renderer 0.15.0, PPTX 0.15.0, editor 0.15.0 | Previous coordinated set (OPF 0.15, format audit wave C; CLI 0.15.0 bundles core 0.15.1). The 0.16 set is additive for documents; the renderer's converters and font packages became optional peers (RR-63), so a 0.16 host installs the ones it uses, and the CLI depends on core instead of bundling it (RR-62). |
 | core 0.14.0, CLI 0.11.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.2 | Previous coordinated set (format audit waves A and B, RR-55 and RR-56; CLI 0.11.0 bundles core 0.13.0). The 0.15 set is breaking: a 0.14 document's catalog shape (`catalogs.<kind>.records`), catalog-id languages and `design.slideImage` are invalid in 0.15, and the 0.15 engines need the host to register the default catalog. |
 | core 0.13.0, CLI 0.11.0, renderer 0.13.1, PPTX 0.13.2, editor 0.12.1 | Previous coordinated set (chart and table data, RR-54). |

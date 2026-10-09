@@ -26,7 +26,7 @@ The browser preview supports imported column, bar, line, area, pie, and donut ch
 
 ## CLI
 
-Use the published [CLI 0.16.0](../packages/cli/README.md) on Node 24:
+Use the published [CLI 0.17.1](../packages/cli/README.md) on Node 24:
 
 ```sh
 opf import-data revenue.csv --as table --output table.opf.json
@@ -63,7 +63,7 @@ This is an embedded data snapshot, not a live file link. Record the origin with 
 
 `parseTabularData` and `importData` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `toExcelNumberFormat`, `fromExcelNumberFormat`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
 
-These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 and later include `import-data`. Use the coordinated Node 24 train with core 0.16.0, renderer 0.16.0, editor 0.16.0 and PPTX 0.16.1 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 and later include `import-data`. Use the coordinated Node 24 train with core 0.17.0, renderer 0.17.0, editor 0.17.0 and PPTX 0.17.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 
 ## Verification
 
