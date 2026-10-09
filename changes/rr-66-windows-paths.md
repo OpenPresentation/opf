@@ -1,5 +1,0 @@
----
-type: fixed
-packages: [cli]
----
-RR-66: Windows path fixes. Commands that check whether two paths name one file (`merge --report` against the output, `import --signals` against `--out`, `edit`, `merge` and `import-data --into` writing back to their input, `format --output`) compare file identity, and names that differ only in case on Windows, instead of the resolved path text: on a case-insensitive file system `merge --report MERGED.opf.json --output merged.opf.json --force` no longer replaces the merged deck with the report, and `format deck.json --output Deck.json` rewrites the file instead of refusing it without `--force`. `import-data` and `fill --data` read the data format from the extension in any case (`DATA.TSV` is TSV, not CSV). The packed-install test (`packages/cli/test/packed.mjs --registry`) installs its global prefix beside the folder its `npm exec` step runs in, not around it, so the step finds the `opf` command on Windows ([opf#466](https://github.com/OpenPresentation/opf/issues/466)).
