@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@node-projects/jszip": "4.3.0",
-    "@openpresentation/opf": "^0.15.1",
+    "@openpresentation/opf": "^0.16.0",
     "@rgrove/parse-xml": "4.2.3",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
@@ -73,7 +73,7 @@
     "sharp": "0.35.5"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.15.0"
+    "@openpresentation/opf-render": "^0.16.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -92,7 +92,7 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-render": "0.15.0",
+    "@openpresentation/opf-render": "0.16.0",
     "@resvg/resvg-js": "2.6.2",
     "esbuild": "0.28.2",
     "playwright": "1.63.0"
@@ -102,8 +102,5 @@
       "browser": "./dist/image-fallback-browser.js",
       "default": "./dist/image-fallback-node.js"
     }
-  },
-  "opf": {
-    "requiresUnreleasedCore": "0.16.0"
   }
 }
