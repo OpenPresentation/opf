@@ -16,7 +16,7 @@ export interface CliContext {
    * ending .yaml/.yml or `--format yaml`, as Markdown for an output ending .opf.md or `--format markdown`, else as JSON; `source` (the
    * deck that was read) decides when the output is stdout or has another name.
    */
-  emit(document: unknown, output: string, options: CliOptions, original?: { file: string; raw: string }, extra?: object, source?: CliSource): Promise<void>;
+  emit(document: unknown, output: string, options: CliOptions, original?: { file: string; raw: string }, extra?: object, source?: CliSource, flag?: string | boolean | null): Promise<void>;
   /** Atomically write text to a file; `overwrite` must be true to replace an existing file. */
   saveText(file: string, text: string, overwrite: boolean, original?: { file: string; raw: string }): Promise<void>;
   print(value: unknown): void;

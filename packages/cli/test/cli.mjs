@@ -125,7 +125,7 @@ try {
   const refreshed=run(['import-data','data.csv','--as','chart','--series','["Revenue"]','--dataset','revenue','--into','formatted-deck.json']).json;
   assert.deepEqual(refreshed.datasets.revenue.columns,['Quarter',{name:'Revenue',format:'$#,##0'}]);
   assert.equal(refreshed.datasets.revenue.title,'Revenue');
-  assert.deepEqual(Object.keys(refreshed.datasets.revenue.source).sort(),['retrieved','src']);
+  assert.deepEqual(Object.keys(refreshed.datasets.revenue.source).sort(),['src']);
   assert.equal(refreshed.datasets.revenue.source.src,'data.csv');
   const piped=run(['import-data','-','--as','chart','--dataset','revenue','--into','formatted-deck.json'],{input:'Quarter,Revenue\nQ1,12'}).json;
   assert.equal(piped.datasets.revenue.source,undefined);
