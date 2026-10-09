@@ -46,7 +46,8 @@ export const PACKAGES = [
   // The CLI depends on core (RR-62: a regular dependency whose `/node` engine the commands run; the pnpm workspace links it
   // through an override), so core is upstream and its floor is a `dependencies` range that `prep` raises like the others. The
   // other floors name the renderer and PPTX (devDependencies pinned exactly, optional peers as ranges, and PEER_RANGES in core's
-  // src/node/peers.ts, which core's own peerDependencies equal: scripts/unreleased-gate.test.mjs checks the three agree).
+  // src/node/peers.ts, which core's own peerDependencies equal; core raises its peers before its own release prep and the CLI's
+  // may lag them until the CLI's prep: scripts/unreleased-gate.test.mjs checks the three agree).
   { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: false, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"], peersFile: "packages/javascript/src/node/peers.ts" },
 ];
 export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
@@ -547,13 +548,21 @@ async function missingUpstream(deps, pkg, train) {
   return missing;
 }
 
-/** Every floor in a manifest that names a version npm does not have (it would publish an uninstallable package). */
-async function unpublishedFloors(deps, manifest) {
+/**
+ * Every floor in a manifest that names a version npm does not have (it would publish an uninstallable package). An
+ * optional peer on a later package of the same train, at the train's version, is not one: npm never installs an optional
+ * peer, and the train publishes it next (core's `/node` peers on the renderer and PPTX, opf#498).
+ */
+export async function unpublishedFloors(deps, manifest, pkg, train = {}) {
   const out = [];
   for (const dependency of ecosystemDependencies(manifest)) {
     if (dependency.field === "devDependencies") continue;
     const floor = floorOf(dependency.spec);
-    if (floor && !(await deps.npm.manifest(dependency.name, floor.version))) out.push(`${dependency.field} ${dependency.name} ${dependency.spec}`);
+    if (!floor || (await deps.npm.manifest(dependency.name, floor.version))) continue;
+    const peer = packageOf(dependency.name);
+    const laterInTrain = pkg && peer.stage > pkg.stage && train[peer.key] === floor.version;
+    if (dependency.field === "peerDependencies" && manifest.peerDependenciesMeta?.[dependency.name]?.optional === true && laterInTrain) continue;
+    out.push(`${dependency.field} ${dependency.name} ${dependency.spec}`);
   }
   return out;
 }
@@ -571,7 +580,7 @@ export async function plan(deps, train) {
         state.notes.push(`waits for ${missing.join(", ")} on npm`);
       }
       if (state.merged) {
-        const unpublished = await unpublishedFloors(deps, state.manifest);
+        const unpublished = await unpublishedFloors(deps, state.manifest, pkg, train);
         const own = unpublished.filter((line) => !missing.some((m) => line.includes(m.slice(0, m.lastIndexOf("@")))));
         for (const line of own) state.problems.push(`${line} names a version npm does not have`);
       }
@@ -800,7 +809,7 @@ export async function tagRelease(deps, pkg, version, train, { execute = false, w
   if (state.merged !== true) throw new TrainStop(`${pkg.name}@${version}: the release-prep PR is not merged (${state.notes.join("; ")})`);
   const missing = await missingUpstream(deps, pkg, train);
   if (missing.length) throw new TrainStop(`${pkg.name}@${version} waits for ${missing.join(", ")} on npm; tag the upstream first`);
-  const unpublished = await unpublishedFloors(deps, state.manifest);
+  const unpublished = await unpublishedFloors(deps, state.manifest, pkg, train);
   if (unpublished.length) throw new TrainStop(`${pkg.name}@${version}: ${unpublished.join(", ")} names a version npm does not have`);
   const sha = state.release.sha;
   // Re-verify at the commit itself, right before tagging: the version, and that the commit is on main.
