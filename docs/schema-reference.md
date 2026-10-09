@@ -144,19 +144,19 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `id`, `name`
-- Purpose: An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the default deck logo (unless design.logo overrides it) and the 'socials' header/footer field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'var:organization.logo', 'organization.<id>.<field>'). Nothing else about an organization is drawn automatically. See d...
+- Purpose: An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the cover and section logo (unless design.logo overrides it) and the 'socials' header/footer field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'organization.<id>.<field>'), and every logo a slide-scoped image ('var:organization.logo.icon', 'var:organization...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | yes | `string` | Stable identifier for the organization, used to reference it from Speaker.organizationId and to address it in built-in variables as 'organization.<id>.<field>'. Must be unique among organizations (a duplicate is a val... |
 | `name` | yes | `string` | Display name. The built-in variable 'organization.name' (primary organization) or 'organization.<id>.name' carries it into any string, such as a header or footer text of '{{organization.name}}'. |
 | `legalName` | no | `string` | Optional legal entity name when it differs from the display name. Never drawn automatically; available as the built-in variable 'organization.legalName'. |
-| `logo` | no | `ref:Asset` | Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector log... |
+| `logo` | no | `oneOf:ref:Asset / ref:OrganizationLogo` | The organization's logo. A path, URL or Asset is one logo for every shape; an object gives up to four shapes (full, stacked, icon, wordmark), each a path or Asset, or { onLight, onDark } for the two backgrounds. A pat... |
 | `domain` | no | `string` | Bare internet domain for the organization. Never drawn automatically and not used to look up assets; available as the built-in variable 'organization.domain'. |
 | `email` | no | `string` | General contact email for the organization. Never drawn automatically; available as the built-in variable 'organization.email'. |
 | `phone` | no | `string` | Main contact phone number for the organization. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'organization.phone'. |
 | `tagline` | no | `string` | Short tagline. Never drawn automatically (cover slides do not show it); available as the built-in variable 'organization.tagline', for example in a footer 'text' of '{{organization.tagline}}'. |
-| `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. Only 'primary' has behavior: it selects the primary organization (deck logo, the 'socials' header/footer field, and the 'organization.<field>' built-ins). When no... |
+| `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. Only 'primary' has behavior: it selects the primary organization (cover and section logo, the 'socials' header/footer field, and the 'organization.<field>' built-... |
 | `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. The primary organization's socials render in header/footer zones that set socials: true; otherwise they are authoring metadata. |
 
 
@@ -201,7 +201,7 @@ _No named properties._
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
-| `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
+| `logo` | no | `oneOf:string / const:false` | Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets it... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
@@ -621,26 +621,27 @@ _No named properties._
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
-### LogoSet
+### OrganizationLogo
 
 - Type: `object`
 - Required fields: none
-- Purpose: Deck logo variants surfaced by covers, section dividers, headers, footers and picture bullets. Organization identity lives in organization; this object only controls visual rendering assets. Engines select one variant per slot and background tone (resolveLogo in @openpresentation/opf): same-tone variants first, neutral ones next, the opposite tone last. Lockup on a dark background: light, default, stackedLight, stacked, wordmarkLight, wordmark, iconLight, icon, then dark, stackedDark, wordmar...
+- Purpose: An organization's logo in up to four shapes. Each shape is a path or Asset, or { onLight, onDark } for the two backgrounds. A missing shape falls back to full, and full to the first defined of wordmark, stacked and icon; within a shape a missing onLight or onDark uses the other. Shapes are placed with slide-scoped references such as 'var:organization.logo.icon'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `default` | no | `ref:Asset` | Default full-lockup logo. Used as fallback when no more specific variant is set. |
-| `light` | no | `ref:Asset` | Light-colored full-lockup logo intended for rendering on dark backgrounds. |
-| `dark` | no | `ref:Asset` | Dark-colored full-lockup logo intended for rendering on light backgrounds. |
-| `stacked` | no | `ref:Asset` | Stacked vertical logo lockup, suited to portrait or square brand-mark slots. |
-| `stackedLight` | no | `ref:Asset` | Light-colored stacked logo variant intended for rendering on dark backgrounds. |
-| `stackedDark` | no | `ref:Asset` | Dark-colored stacked logo variant intended for rendering on light backgrounds. |
-| `icon` | no | `ref:Asset` | Default icon, mark, or symbol without wordmark. Useful for tight spaces such as footers, badges, and slide-corner marks. |
-| `iconLight` | no | `ref:Asset` | Light-colored icon variant intended for rendering on dark backgrounds. |
-| `iconDark` | no | `ref:Asset` | Dark-colored icon variant intended for rendering on light backgrounds. |
-| `wordmark` | no | `ref:Asset` | Default wordmark: the organization name set in branded typography, without icon. |
-| `wordmarkLight` | no | `ref:Asset` | Light-colored wordmark variant intended for rendering on dark backgrounds. |
-| `wordmarkDark` | no | `ref:Asset` | Dark-colored wordmark variant intended for rendering on light backgrounds. |
+| `full` | no | `ref:LogoSource` | The full logo (lockup): mark and name side by side. Drawn on cover and section slides, and placed by 'var:organization.logo'. |
+| `stacked` | no | `ref:LogoSource` | The stacked lockup: mark above the name, for portrait or square slots. Placed by 'var:organization.logo.stacked'. |
+| `icon` | no | `ref:LogoSource` | The mark or symbol without the name, for tight spaces such as header and footer zones and picture bullets. Placed by 'var:organization.logo.icon'. |
+| `wordmark` | no | `ref:LogoSource` | The name set in the brand's lettering, without the mark. Placed by 'var:organization.logo.wordmark'. |
+
+
+### LogoSource
+
+- Type: `oneOf:ref:Asset / object`
+- Required fields: none
+- Purpose: One logo shape: a path or Asset for every background, or { onLight, onDark }. onLight is drawn on light backgrounds (usually dark artwork) and onDark on dark backgrounds (usually light artwork), by each slide's background; a missing one uses the other.
+
+_No named properties._
 
 
 ### Watermark
@@ -673,13 +674,12 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, socials, date. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order; a line break is '\n'. Put a date and a slide number in different zones to keep each on the zone's...
+- Purpose: One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (left, center or right) and vertically centered on each other; a line break inside text or socials ('\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, t...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `logo` | no | `boolean` | Whether to render the deck's icon logo in this zone: a slide's design.logo, then design.logo, then the primary organization's logo (LogoSet icon variants first, light ones on dark backgrounds). It is a generated image... |
 | `text` | no | `string` | Text rendered in this zone. Variables resolve inside it like any string: deck-wide ones ('{{organization.name}}', '{{speaker.name}}, {{speaker.title}}', '{{customer}}') before composition, and the slide-scoped built-i... |
-| `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
+| `image` | no | `ref:Asset` | Image rendered first in this zone's row, such as a logo, partner mark, certification badge, or icon: a path, URL or Asset, or an organization logo reference ('var:organization.logo.icon', 'var:organization.<id>.logo.w... |
 | `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given an explicit ISO date by its host (core never reads a clock). PPTX export writes a native date field only for a supported dateFormat whose complete... |
 | `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
 | `socials` | no | `boolean` | Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else... |
