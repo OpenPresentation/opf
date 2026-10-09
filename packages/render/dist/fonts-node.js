@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
+import { textOutlines } from "./text-paths.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -272,6 +273,8 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     useBundledFonts: false,
     loadSystemFonts: false,
     registry,
+    // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
+    outlines: textOutlines({ registry }),
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /** Load the script faces the presentation's text needs (see `ensureFonts`); `embeddedFonts` and `fontFiles` then include them. */

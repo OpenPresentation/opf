@@ -59,7 +59,7 @@ export function layoutText(textNode, env, parentStyle, link) {
     const preserve = own["xml:space"] === "preserve" || /^pre/.test(own["white-space"] ?? "");
     for (const child of node.children) {
       if (child.text !== undefined) {
-        for (const character of child.text.replace(/[\r\n\t]/g, " ")) chars.push({ ch: character, style: own, scope: nextScope, decoration: nextDecoration, link: activeLink, preserve });
+        for (const character of child.text.replace(/[\r\n\t]/g, " ")) chars.push({ ch: character, style: own, scope: nextScope, decoration: nextDecoration, link: activeLink, preserve, owner: node });
       } else if (isElement(child)) {
         if (child.name === "tspan" || child.name === "textPath" || child.name === "tref") walk(child, own, nextScope, nextDecoration, activeLink);
         else if (child.name === "a") {
@@ -89,7 +89,8 @@ export function layoutText(textNode, env, parentStyle, link) {
   const styleIds = new Map();
   const faceCache = new Map();
   const linkIds = new Map();
-  const runsByChunk = chunks.map((chunk) => buildRuns(chunk, env, styleIds, faceCache, linkIds));
+  const ownerIds = new Map();
+  const runsByChunk = chunks.map((chunk) => buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds));
 
   // textLength: the renderer gives lines and tabs an exact width; reproduce it per scope over all its runs.
   const scopeWidth = new Map();
@@ -155,7 +156,7 @@ function collapseWhitespace(chars) {
   for (const char of kept) chars.push(char);
 }
 
-function buildRuns(chunk, env, styleIds, faceCache, linkIds) {
+function buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds) {
   const text = chunk.chars.map((char) => char.ch).join("");
   const baseDirection = chunk.chars[0].style.direction === "rtl" ? "rtl" : "ltr";
   // Levels per UTF-16 unit; characters take the level of their first unit.
@@ -174,9 +175,11 @@ function buildRuns(chunk, env, styleIds, faceCache, linkIds) {
     if (IGNORED.test(char.ch)) return;
     const level = levels[index];
     const resolved = pickFace(char, env, styleIds, faceCache);
-    const key = `${resolved.styleId}|${resolved.face.id}|${level}|${char.scope?.id ?? 0}|${linkId(linkIds, char.link)}|${[...char.decoration].sort().join(",")}`;
+    // RR-64: outlined text keeps each element's trace, so with `env.splitByOwner` a run never spans two elements.
+    const owner = env.splitByOwner ? linkId(ownerIds, { node: char.owner }) : 0;
+    const key = `${resolved.styleId}|${resolved.face.id}|${level}|${char.scope?.id ?? 0}|${linkId(linkIds, char.link)}|${[...char.decoration].sort().join(",")}|${owner}`;
     if (!current || current.key !== key) {
-      current = { chunk: chunkInfo, key, face: resolved.face, style: char.style, level, scope: char.scope, link: char.link, decoration: char.decoration, chars: [], text: "", logical: "", weight: resolved.weight, italic: resolved.italic };
+      current = { chunk: chunkInfo, key, face: resolved.face, style: char.style, level, scope: char.scope, link: char.link, decoration: char.decoration, owner: char.owner, chars: [], text: "", logical: "", weight: resolved.weight, italic: resolved.italic };
       runs.push(current);
     }
     current.logical += char.ch;

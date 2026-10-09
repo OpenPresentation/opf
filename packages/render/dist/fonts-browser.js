@@ -2,6 +2,7 @@ import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { lazyFacesNeeded } from "./lazy-fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
+import { textOutlines } from "./text-paths.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
 export { lazyFontEntries, lazyFontList, splitStartupFaces } from "./lazy-font-list.js";
@@ -293,6 +294,8 @@ export async function loadFonts({ faces = [], ...options } = {}) {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { if (stale) { embedded = registry.embeddedFonts; stale = false; } return embedded; },
     registry,
+    // RR-64: the outline engine `renderSvg(deck, { fonts, textAsPaths: true })` draws text with, over this registry's faces.
+    outlines: textOutlines({ registry }),
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /**

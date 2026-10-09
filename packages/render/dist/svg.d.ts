@@ -60,6 +60,16 @@ export interface RenderSvgOptions {
   fonts?: RenderFonts;
   /** `false` writes no `@font-face` data into the SVG (RR-61): the fonts handle still measures and the SVG still names the families, for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document). Default true: each SVG embeds the faces of `fonts.embeddedFonts` its own text draws. */
   embedFonts?: boolean;
+  /**
+   * `true` draws every `<text>` as glyph outlines (RR-64): `<use>` of outlines kept once per slide in `<defs>`, so the SVG needs
+   * no font and looks the same in every viewer (about 40 KB a slide over the core example decks, against 0.5 to 4 MB of embedded
+   * faces). Needs the fonts handle `loadFonts()` returns (`text-as-paths-needs-fonts` otherwise). The text is no longer text: it
+   * cannot be selected, searched or edited in place, and each outlined element is a `role="img"` group labelled with its text for
+   * assistive technology. Each element keeps its `data-opf-*` trace. Text in a colour or bitmap font stays text
+   * (`text-as-paths-kept-text`). Use it for thumbnails, previews and portable SVG files, not for an editing surface or the
+   * vector PDF (which keeps real text from `<text>` SVG). Default false.
+   */
+  textAsPaths?: boolean;
   /** `"chain"` (default): a character the resolved face lacks is drawn with the first bundled face that has it, and reported as `font-glyph-fallback`. `"none"`: exact faces, a missing glyph raises `missing-glyph`. */
   glyphFallback?: "chain" | "none";
   /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */

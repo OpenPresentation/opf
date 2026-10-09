@@ -49,7 +49,11 @@ export interface RenderFonts {
   useBundledFonts?: boolean;
   /** Whether the raster conversion loads system fonts. Default false (the output never depends on the machine). */
   loadSystemFonts?: boolean;
+  /** The outline engine `textAsPaths: true` draws text with (RR-64); a `loadFonts` handle carries one over its registry's faces. */
+  outlines?: TextOutlines;
 }
+/** Draws a slide's text as glyph outlines (RR-64). Read by `renderSvg`; hosts pass the handle and `textAsPaths: true`. */
+export interface TextOutlines { outlineSlideText(content: string[], options: object): { content: string[]; defs: string } }
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
 export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[] }
 /** The fonts handle `loadFonts()` returns from `/fonts-node` and `/fonts-browser`: pass it as `{ fonts }` to every deck-level function. */
@@ -58,6 +62,8 @@ export interface FontsHandle extends RenderFonts {
   readonly embeddedFonts: EmbeddedFont[];
   /** The face registry behind the handle (shaping, resolution, lazy and script loading). */
   readonly registry: FontRegistry;
+  /** The outline engine for `textAsPaths: true` (RR-64), over this registry's faces, including faces `ensure` loads later. */
+  readonly outlines: TextOutlines;
   /** The pinned manifest of the bundled font packages. */
   readonly manifest: { readonly version: number; readonly packages: readonly object[] };
   /** The substitutions made so far (a requested family drawn with another face), as `registry.substitutions`. */

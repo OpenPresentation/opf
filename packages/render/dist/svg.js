@@ -637,9 +637,12 @@ function bindSlide(presentation, slide, index, context) {
 // `options.fonts` is the handle `loadFonts()` returns (or any object with a `textMeasurement` and, to embed faces in the SVG, an
 // `embeddedFonts` list). The renderer reads the two as plain options from here on. `embedFonts: false` (RR-61) keeps the
 // measurement and drops the faces, for a host whose page already holds them.
+// `textAsPaths: true` (RR-64) draws text as glyph outlines with the handle's `outlines` engine (a `loadFonts` handle carries one).
 function normalizeOptions(options) {
-  const { fonts, embedFonts, ...rest } = options ?? {};
-  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: embedFonts === false ? undefined : fonts?.embeddedFonts };
+  const { fonts, embedFonts, textAsPaths, ...rest } = options ?? {};
+  if (textAsPaths !== undefined && typeof textAsPaths !== "boolean") throw new OPFRenderError("invalid-render-options", "textAsPaths must be true or false.", { option: "textAsPaths" });
+  if (textAsPaths && typeof fonts?.outlines?.outlineSlideText !== "function") throw new OPFRenderError("text-as-paths-needs-fonts", "textAsPaths needs the fonts handle loadFonts() returns (from /fonts-node or /fonts-browser), passed as `fonts`.", { option: "textAsPaths" });
+  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: embedFonts === false ? undefined : fonts?.embeddedFonts, ...(textAsPaths ? { outlines: fonts.outlines } : {}) };
 }
 
 /**
@@ -700,7 +703,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   const { width, height } = bound.design.dimensions;
   // The title may be TextRun[] (FA-10): the accessible name is its plain text.
   const title = (Array.isArray(bound.slide.title) ? flattenText(bound.slide.title) : bound.slide.title) ?? resolved.presentation.name ?? `Slide ${slideIndex + 1}`;
-  const content = [
+  let content = [
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     ...renderSlideContent(bound, width, height, options),
@@ -709,7 +712,14 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
     renderFurniture(bound, resolved.presentation, width, height, options, "footer")
   ].filter(Boolean);
-  const children = [renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content)), ...content].filter(Boolean);
+  // RR-64: text as glyph outlines. The used-face rule below then embeds only the faces of text that stays text.
+  let glyphs = "";
+  if (options.outlines) {
+    const outlined = options.outlines.outlineSlideText(content, { rootStyle: lang ? { lang } : {}, report: diagnostic => reportDiagnostic(diagnostic, options), fail: (code, message) => new OPFRenderError(code, message, { slideIndex }) });
+    content = outlined.content;
+    glyphs = outlined.defs;
+  }
+  const children = [glyphs, renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content)), ...content].filter(Boolean);
   // FF-44: Chromium (123+) trims adjacent fullwidth punctuation by default (CSS text-spacing-trim: normal; a sequence such as
   // 「」。 is up to 10 percent narrower), but measurement and PowerPoint advance every such character by its full width, so the browser
   // would stretch the glyphs back to the pinned textLength. space-all keeps the drawn advances equal to the measured ones. Only slides

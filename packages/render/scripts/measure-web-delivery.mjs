@@ -16,6 +16,8 @@ import {embed} from '@openpresentation/opf';
 import {defaultCatalog} from '@openpresentation/opf/catalog';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// A module specifier in generated code: forward slashes and a quoted literal, so a Windows path is not read as escapes.
+const elementModule = JSON.stringify(path.join(root, 'dist/element.js').split(path.sep).join('/'));
 const output = path.resolve(root, process.argv[2] ?? 'artifacts/web-delivery');
 await mkdir(output, {recursive: true});
 // OPF 0.15: the deck embeds the font scheme it names (core embed), so the server markup and the browser upgrade resolve
@@ -33,8 +35,8 @@ for (const pack of ['base', 'office']) {
   payloads[pack] = {svgBytes: Buffer.byteLength(svg), svgGzipBytes: gzipSync(svg).length, fontRules: (svg.match(/@font-face/g) ?? []).length};
 }
 const entries = {
-  immediate: `import {defineOpfDeck} from '${path.join(root, 'dist/element.js')}'; defineOpfDeck();`,
-  deferred: `document.querySelector('#upgrade').addEventListener('click', async event => { event.currentTarget.disabled = true; const {defineOpfDeck} = await import('${path.join(root, 'dist/element.js')}'); defineOpfDeck(); await document.querySelector('opf-deck').ready; event.target.hidden = true; });`,
+  immediate: `import {defineOpfDeck} from ${elementModule}; defineOpfDeck();`,
+  deferred: `document.querySelector('#upgrade').addEventListener('click', async event => { event.currentTarget.disabled = true; const {defineOpfDeck} = await import(${elementModule}); defineOpfDeck(); await document.querySelector('opf-deck').ready; event.target.hidden = true; });`,
 };
 for (const [name, contents] of Object.entries(entries)) await writeFile(path.join(output, `${name}.js`), contents);
 const built = await build({entryPoints: ['immediate', 'deferred'].map(name => path.join(output, `${name}.js`)), bundle: true, minify: true, splitting: true, format: 'esm', platform: 'browser', outdir: path.join(output, 'bundle'), metafile: true});
