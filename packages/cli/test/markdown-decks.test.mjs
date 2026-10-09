@@ -152,11 +152,11 @@ describe("reading a deck.opf.md", () => {
 
   test("render and export read a Markdown deck and locate validation errors in it", () => {
     write("render.opf.md", "---\nname: Render\n---\n\n<!-- slide: id=s1 -->\n# Hello\n\nWorld\n");
-    const rendered = run(["render", "render.opf.md", "--slides", "1", "--out", "-", "--format", "svg", "--svg-fonts", "none"]);
+    const rendered = run(["render", "render.opf.md", "--slides", "1", "--out", "-", "--format", "svg", "--text", "system"]);
     if (rendered.status === 2 && /opf-render/.test(rendered.stderr)) return; // the optional renderer is not installed
     assert.equal(rendered.status, 0, rendered.stderr.slice(0, 500));
     assert.match(rendered.stdout, /<svg/);
-    const exported = run(["export", "render.opf.md", "--format", "svg", "--out", "exported", "--svg-fonts", "none"]);
+    const exported = run(["export", "render.opf.md", "--format", "svg", "--out", "exported", "--text", "system"]);
     assert.equal(exported.status, 0, exported.stderr.slice(0, 500));
     assert.ok(readdirSync(path.join(temp, "exported")).some((name) => name.endsWith(".svg")));
     write("render-bad.opf.md", "---\nname: Render\nlanguage: 5\n---\n\n# Hello\n");

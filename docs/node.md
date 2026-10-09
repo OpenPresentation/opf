@@ -102,16 +102,21 @@ Any other extension, and a plain `.md` file, rejects with `invalid-option`, whic
 that disagrees with the output's extension is refused too; it is only needed for a `.zip`.
 
 **Without an output path**, pass the format in the options: `convert(input, { format })` writes nothing and returns the files
-with their names and bytes. The names follow the deck: its `filename`, else its slugified `name`, else the input file's stem
-(`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`).
+with their names and bytes. `name` sets the base name of the files; without it they follow the deck: its `filename`, else its
+slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`). `zip: true` returns one archive of
+the PNG or SVG slides; with an output path a `.zip` name makes the archive instead.
 
 **Options** are those of `opf export` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
-(0.1 to 8, PNG and raster PDF), `pdfMode` (`vector`, the default, or `raster`), `svgFonts` (`used` or `none`), `chartex`,
-`provenance` and `imageFormat` (PPTX), `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
-catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`), `fontDirs`
-(directories of `.ttf`/`.otf` files), `assetDir`, plus `signals` (a `.pptx` input: also return the importer's per-shape
-signals), `zip` and `overwrite`. An option that does not apply to the pair rejects with `invalid-option`: `scale` for a deck
-output, `slides` for a PPTX, `pdfMode` for anything but a PDF.
+(0.1 to 8, PNG and raster PDF), `raster` (`true` draws a PDF as a picture per page; vector text is the default), `text` (an SVG
+carries `"fonts"`, the default, which embeds the faces the slide uses; `"system"`, none, for a page that has the fonts; or
+`"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `provenance` and `images`
+(`"compatible"` or `"preserve"`) for PPTX, `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
+catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`, or a folder or a list
+of folders of `.ttf`/`.otf` files), `assetDir`, plus `signals` (a `.pptx` input: also return the importer's per-shape
+signals), and for output without a path `zip` and `name`, and `overwrite`. An option that does not apply to the pair rejects with
+`invalid-option`: `scale` for a deck output, `slides` for a PPTX, `raster` for anything but a PDF, `text` for anything but an SVG,
+`zip` or `name` with an output path. The 0.17 names (`pdfMode`, `svgFonts`, `chartex`, `imageFormat`, `fontDirs`, `filename`) were
+renamed in 0.18 and are refused with the new name.
 
 **Writing.** Everything is checked, read and produced before anything is written; on any error nothing is written. Parent
 folders are created. Each file is written to a temporary sibling and renamed, so no partial file ever has the final name, and
@@ -157,9 +162,9 @@ Every error has a `code`; branch on it, never on the message.
 
 ## Fonts, determinism and the network
 
-Drawing uses the renderer's bundled open font pack (the office pack with visual substitution) plus the `fontDirs` files, never
-system fonts. The pack is prepared once per process and reused by every call that passes neither `fonts` nor `fontDirs` (with
-`fontDirs`, once per list of files); a deck that draws a script beyond Latin, Greek and Cyrillic gets a handle with its script
+Drawing uses the renderer's bundled open font pack (the office pack with visual substitution) plus the files in the `fonts` folders, never
+system fonts. The pack is prepared once per process and reused by every call that passes no `fonts` (with `fonts` folders, once per
+list of files); a deck that draws a script beyond Latin, Greek and Cyrillic gets a handle with its script
 faces. Concurrent calls share the one preparation and draw one at a time on it. The output is the same bytes as with a handle
 of the caller's own. Nothing is fetched and no clock is read: the same input, options and installed versions give the same
 bytes on every machine.

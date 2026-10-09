@@ -12,7 +12,7 @@ import { OPFApiError } from "../api-errors.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.17.0", [PPTX_PACKAGE]: "^0.17.0" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.18.0", [PPTX_PACKAGE]: "^0.18.0" } as const;
 
 export interface Diagnostic {
 	code: string;
@@ -47,10 +47,14 @@ export interface FontsHandle extends RenderFonts {
 	registry: FontRegistry;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
 }
+/** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
-	renderSlideSvg(presentation: unknown, index: number, options?: Record<string, unknown>): string;
-	svgToPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
-	svgToPdf(svgs: string | string[], options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** One slide of the deck as SVG; slides count from 1. */
+	toSvg(presentation: unknown, slide: number, options?: Record<string, unknown>): string;
+	/** One SVG slide as PNG. */
+	toPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** SVG slides as one PDF, a page each. */
+	toPdf(svgs: string[], options?: Record<string, unknown>): Promise<Uint8Array>;
 }
 export interface FontsNodeModule {
 	loadFonts(options?: Record<string, unknown>): Promise<FontsHandle>;
@@ -164,7 +168,7 @@ export interface Renderer {
 
 export async function loadRenderer(): Promise<Renderer> {
 	const render = await loadPeer<RenderModule>(RENDER_PACKAGE);
-	requireFeature(render, ["renderSlideSvg", "svgToPng", "svgToPdf"]);
+	requireFeature(render, ["toSvg", "toPng", "toPdf"]);
 	const fonts = await loadPeer<FontsNodeModule>(RENDER_PACKAGE, "/fonts-node");
 	requireFeature(fonts, ["loadFonts"]);
 	return { render, fonts: fonts.module };

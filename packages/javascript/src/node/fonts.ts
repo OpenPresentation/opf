@@ -1,5 +1,5 @@
 // Fonts for render and export. Policy (owner, 2026-09-29): only the renderer's bundled open font pack and the files
-// the caller names with --font-dir. System fonts are never loaded: rasterizing and PDF output get explicit font
+// the caller names with --fonts (`fonts` of the API). System fonts are never loaded: rasterizing and PDF output get explicit font
 // files, so the same deck gives the same bytes on every machine. The pack is loaded once per process for the decks it
 // serves unchanged (leaseSharedFonts), so a library caller that converts many decks does not reload it every time.
 import { readdir, stat } from "node:fs/promises";
@@ -11,14 +11,14 @@ import type { Reporter } from "./reporter.js";
 export interface PreparedFonts {
 	/** The fonts handle of opf-render `loadFonts()`: passed as `{ fonts }` to every deck-level call. */
 	handle: FontsHandle;
-	/** Absolute paths of the --font-dir files, in load order. */
+	/** Absolute paths of the --fonts files, in load order. */
 	userFonts: string[];
 }
 
 const FONT_FILE = /\.(ttf|otf)$/i;
 
 /** Font files directly inside each directory (no recursion), sorted by name so the load order is the same everywhere. */
-export async function listFontDirectories(directories: string[], label = "--font-dir"): Promise<string[]> {
+export async function listFontDirectories(directories: string[], label = "--fonts"): Promise<string[]> {
 	const files: string[] = [];
 	for (const directory of directories) {
 		const resolved = path.resolve(directory);
@@ -40,7 +40,7 @@ export async function listFontDirectories(directories: string[], label = "--font
 /**
  * The office pack (Carlito, Intos, the open families font schemes select and the open replacements the font policy
  * routes to, with lazy faces loaded on demand), visual substitution, and Noto script packages for the scripts the
- * deck's text draws when they are installed. `faces` are the --font-dir files, loaded first.
+ * deck's text draws when they are installed. `faces` are the --fonts files, loaded first.
  */
 export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<PreparedFonts> {
 	try {
@@ -132,11 +132,12 @@ function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {
 }
 
 /**
- * Faces an SVG should carry. Marking every face `embed: "used"` makes the renderer embed a face only when the slide's
- * text names its family, so a slide in one family ships kilobytes of font rather than the whole pack.
+ * Faces an SVG should carry for `text`. `"fonts"` (the default) marks every face `embed: "used"`, so the renderer embeds a face only
+ * when the slide's text names its family and a slide in one family ships kilobytes of font rather than the whole pack. `"system"`
+ * embeds none, and `"paths"` draws the text as outlines from the fonts handle itself, so it has no faces to list.
  */
-export function embeddedFor(handle: FontsHandle, mode: "used" | "none"): (EmbeddedFace & { embed?: "used" })[] {
-	return mode === "none" ? [] : handle.embeddedFonts.map((face) => ({ ...face, embed: "used" as const }));
+export function embeddedFor(handle: FontsHandle, text: "fonts" | "system" | "paths" = "fonts"): (EmbeddedFace & { embed?: "used" })[] {
+	return text === "fonts" ? handle.embeddedFonts.map((face) => ({ ...face, embed: "used" as const })) : [];
 }
 
 /** The substitutions made while rendering, one row per requested family and the face that stood in for it. */

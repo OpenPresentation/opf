@@ -172,7 +172,7 @@ Each is one `unresolved-reference` diagnostic: `{ code, kind, reference, path, g
 | Engine | Diagnostic channel | Reported |
 | --- | --- | --- |
 | Core pagination | `paginate(..., { onDiagnostic })` | once per path per call |
-| opf-render preview | `renderSvg` / `renderSlideSvg` `onDiagnostic` | once per path per rendered slide |
+| opf-render preview | `toSvg` `onDiagnostic` | once per path per rendered slide |
 | opf-editor | `session.composeSlide` / `paginateSlide` `onDiagnostic` option | once per call |
 | opf-pptx export | `toPptx(..., { onDiagnostic })` | once per path per export |
 

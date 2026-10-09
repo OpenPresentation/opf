@@ -47,7 +47,7 @@
 // covered when any slot holds the value. Deck-wide factors take one value.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads';
@@ -56,12 +56,12 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, svgToPng, checkTypefaces, fromPptx, defaultCatalog, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, toPng, checkTypefaces, fromPptx, defaultCatalog, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
 // OPF 0.15: core registers no catalog. The matrix is a host: it registers the default catalog with every engine and core
 // call, as the CLI does, so its decks name gallery records by id without embedding them.
 const CATALOGS = [defaultCatalog];
 const withCatalogs = (options = {}) => ({catalogs: CATALOGS, ...options});
-const renderSvg = (deck, options) => engines.renderSvg(deck, withCatalogs(options));
+const toSvg = (deck, options) => engines.toSvg(deck, withCatalogs(options));
 const toPptx = (deck, options) => engines.toPptx(deck, withCatalogs(options));
 const createEditorSession = (deck, options) => engines.createEditorSession(deck, withCatalogs(options));
 const resolveScriptFonts = (deck, options) => engines.resolveScriptFonts(deck, withCatalogs(options));
@@ -81,6 +81,8 @@ const OUTPUT = process.env.OPF_MATRIX_OUT ? path.resolve(process.env.OPF_MATRIX_
 const WITH_PNG = !process.argv.includes('--no-png');
 // Host font directories handed to the rasterizer (resvg), to prove a host face named like a bundled one does not shadow it.
 const HOST_FONT_DIRS = (process.env.OPF_MATRIX_FONT_DIRS ?? '').split(path.delimiter).filter(Boolean);
+// RR-74: the rasterizer takes font files in the fonts handle (folders add the bundled faces too), so the host folders are listed here.
+const HOST_FONT_FILES = (await Promise.all(HOST_FONT_DIRS.map(async (directory) => (await readdir(directory)).filter((name) => /.(ttf|otf)$/i.test(name)).sort().map((name) => path.join(directory, name))))).flat();
 const LOAD_SYSTEM_FONTS = process.env.OPF_MATRIX_SYSTEM_FONTS === '1';
 // --determinism: the bounded subset the FF-11 grid re-runs under every locale, time zone, clock and font environment:
 // every fourth pairwise deck plus the decks that add the remaining languages, the language and theme chains, CJK in a
@@ -656,7 +658,7 @@ async function verifyState(label, presentation, {png = false} = {}) {
   // Preview and export share one registry, so both record what they resolved.
   registry.clearSubstitutions();
   const diagnostics = [];
-  const svgs = renderSvg(document, {...measured, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
+  const svgs = toSvg(document, {...measured, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
   // A face that lacks the text's glyphs is drawn per character with a bundled fallback face and reported as a note.
   const fallbackNotes = diagnostics.filter((diagnostic) => diagnostic.code === 'font-glyph-fallback');
   assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code !== 'font-glyph-fallback'), [], `${label}: preview diagnostics`);
@@ -715,7 +717,7 @@ async function verifyState(label, presentation, {png = false} = {}) {
   assert.equal(digests[label], undefined, `${label}: state labels are unique`);
   digests[label] = {pptx: sha256(bytes), svg: sha256(svgs.join('\0')), slides: svgs.map((svg) => sha256(svg).slice(0, 16))};
   // The pairwise decks also record a PNG of the first and last slide (resvg with the registry's own font files only unless asked for host fonts).
-  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}, fontDirs: HOST_FONT_DIRS}))));
+  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await toPng(svg, {fonts: {fontFiles: [...registry.fontFiles, ...HOST_FONT_FILES], useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}}))));
   return {bytes: new Uint8Array(bytes), svgs, drawn, fonts, faces: [...chosenFaces].sort(compareNames).join('|')};
 }
 
@@ -1014,8 +1016,8 @@ for (const chart of catalogs.chartTypes) {
   const bare = {...deck, slides: [{...slide, chart: undefined}]};
   delete bare.slides[0].chart;
   const measured = engineOptions(deck);
-  const withChart = marks(renderSvg(deck, measured)[0]);
-  const without = marks(renderSvg(bare, measured)[0]);
+  const withChart = marks(toSvg(deck, measured)[0]);
+  const without = marks(toSvg(bare, measured)[0]);
   const native = withChart.text - without.text > 1;
   assert.equal(native, PREVIEW_NATIVE.includes(chart.id), `${chart.id}: the preview ${native ? 'now draws this chart natively: limitation resolved, add it to PREVIEW_NATIVE' : 'no longer draws it natively, though PREVIEW_NATIVE lists it'}`);
   const exportedBytes = await toPptx(deck, measured);
@@ -1033,7 +1035,7 @@ for (const chart of catalogs.chartTypes) {
     assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('<mc:AlternateContent'), `${chart.id}: the chartEx frame is an AlternateContent with the classic chart as Fallback`);
   } else assert.equal(chartEx, undefined, `${chart.id}: no chartEx part (a classic type, or the map, which stays the clustered column)`);
   assert.deepEqual(checkTypefaces(exported, {families: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']}).violations, [], `${chart.id}: chart parts name only the chosen fonts`);
-  digests[`chart:${chart.id}`] = {pptx: sha256(exportedBytes), svg: sha256(renderSvg(deck, measured).join('\0'))};
+  digests[`chart:${chart.id}`] = {pptx: sha256(exportedBytes), svg: sha256(toSvg(deck, measured).join('\0'))};
   chartPaths.push({id: chart.id, nominal, exported: element, previewNative: native});
 }
 
@@ -1116,7 +1118,7 @@ const EXPECTED_FAILURES = [
 ];
 for (const failure of EXPECTED_FAILURES) {
   const measured = engineOptions(failure.deck);
-  await expectLimitation(failure.id, 'the preview', () => renderSvg(failure.deck, measured), failure.preview);
+  await expectLimitation(failure.id, 'the preview', () => toSvg(failure.deck, measured), failure.preview);
   await expectLimitation(failure.id, 'the measured export', () => toPptx(failure.deck, measured), failure.measuredExport);
   const fonts = chosenFonts(failure.deck);
   const bytes = await toPptx(failure.deck);
@@ -1136,12 +1138,12 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   const deck = {name: fallback.id, language: tag(fallback.language), design: {fontScheme: fallback.scheme}, slides: [{id: 'a', title: fallback.title, text: fallback.body}]};
   const measured = engineOptions(deck);
   const notes = [];
-  const svgs = renderSvg(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
+  const svgs = toSvg(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
   assert.ok(notes.length > 0 && notes.every((note) => note.code === 'font-glyph-fallback'), `${fallback.id}: the preview reports only glyph fallback notes: ${JSON.stringify(notes.map((note) => note.code))}`);
   assert.ok(notes.every((note) => fallback.from.has(note.fontFamily) && (fallback.allowed ?? fallback.to).includes(note.fallbackFamily)), `${fallback.id}: falls back from the scheme face to ${fallback.allowed ?? fallback.to}: ${JSON.stringify(notes.map((note) => [note.fontFamily, note.fallbackFamily]))}`);
   for (const character of fallback.characters ?? []) assert.ok(notes.some((note) => note.characters.includes(character)), `${fallback.id}: reports U+${character.codePointAt(0).toString(16)}`);
   assert.ok(fallback.to.every((family) => svgFamilies(svgs).includes(family)), `${fallback.id}: draws ${fallback.to}`);
-  assert.deepEqual(renderSvg(deck, measured), svgs, `${fallback.id}: deterministic`);
+  assert.deepEqual(toSvg(deck, measured), svgs, `${fallback.id}: deterministic`);
   const exportBytes = await toPptx(deck, measured);
   const fonts = chosenFonts(deck);
   assert.deepEqual(checkTypefaces(exportBytes, {families: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
@@ -1179,9 +1181,9 @@ if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is
 // must not shadow the bundled faces (the PNG digests above equal the baseline run's, which the determinism grid asserts).
 if (HOST_FONT_DIRS.length) {
   const deck = {name: 'decoy', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
-  const [svg] = renderSvg(deck, engineOptions(deck));
-  const decoyOnly = sha256(await svgToPng(svg, {useBundledFonts: false, fontDirs: HOST_FONT_DIRS}));
-  const bundledOnly = sha256(await svgToPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}}));
+  const [svg] = toSvg(deck, engineOptions(deck));
+  const decoyOnly = sha256(await toPng(svg, {fonts: {fontFiles: HOST_FONT_FILES, useBundledFonts: false}}));
+  const bundledOnly = sha256(await toPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}}));
   assert.notEqual(decoyOnly, bundledOnly, 'the decoy host faces draw differently when they are the only faces');
 }
 const seconds = (Date.now() - started) / 1000;

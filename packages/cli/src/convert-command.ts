@@ -10,17 +10,17 @@ import { FileCommandError, arity, commandError, json, parseOptions, sha256 } fro
 import type { Host } from "./render.js";
 
 const SPEC = {
-	values: ["slides", "format", "scale", "date", "asset-dir", "svg-fonts", "fail-on", "pdf-mode", "chartex", "provenance", "image-format"],
-	repeated: ["font-dir"],
-	flags: ["force", "json", "paginate", "include-hidden"],
+	values: ["slides", "format", "scale", "date", "asset-dir", "text", "fail-on", "charts", "provenance", "images"],
+	repeated: ["fonts"],
+	flags: ["force", "json", "paginate", "include-hidden", "raster"],
 };
 
 /** Codes whose findings describe the document: the command prints its report (exit 1) instead of an error. */
 const REPORTED = new Set(["invalid-presentation", "export-failed", "import-failed"]);
 
-export const CONVERT_USAGE = `  opf convert <input> <output> [--slides <1,3-5>] [--format <png|svg>] [--scale <0.1-8>] [--pdf-mode <vector|raster>]
-           [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>] [--image-format <compatible|preserve>]
-           [--svg-fonts <used|none>] [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]...
+export const CONVERT_USAGE = `  opf convert <input> <output> [--slides <1,3-5>] [--format <png|svg>] [--scale <0.1-8>] [--raster]
+           [--charts <auto|native|picture>] [--provenance <full|references-only|none>] [--images <compatible|preserve>]
+           [--text <fonts|system|paths>] [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--fonts <directory>]...
            [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]`;
 
 export async function runConvertCommand(args: string[], host: Host) {
@@ -48,12 +48,12 @@ async function run(args: string[], host: Host) {
 			scale: text("scale") === undefined ? undefined : Number(text("scale")),
 			date: text("date"),
 			assetDir: text("asset-dir"),
-			svgFonts: text("svg-fonts"),
-			pdfMode: text("pdf-mode"),
-			chartex: text("chartex"),
+			text: text("text"),
+			raster: options.raster === true ? true : undefined,
+			charts: text("charts"),
 			provenance: text("provenance"),
-			imageFormat: text("image-format"),
-			fontDirs: repeated["font-dir"],
+			images: text("images"),
+			fonts: repeated.fonts,
 			paginate: options.paginate === true ? true : undefined,
 			includeHidden: options["include-hidden"] === true ? true : undefined,
 		}).filter(([, value]) => value !== undefined),

@@ -404,7 +404,7 @@ describe("decks read from YAML by every command", () => {
 
   test("render and export read a YAML deck and locate validation errors in it", () => {
     write("render.opf.yaml", "name: Render\nslides:\n  - id: s1\n    title: Hello\n    text: World\n");
-    const rendered = run(["render", "render.opf.yaml", "--slides", "1", "--out", "-", "--format", "svg", "--svg-fonts", "none"]);
+    const rendered = run(["render", "render.opf.yaml", "--slides", "1", "--out", "-", "--format", "svg", "--text", "system"]);
     if (rendered.status === 2 && /opf-render/.test(rendered.stderr)) return; // the optional renderer is not installed
     assert.equal(rendered.status, 0, rendered.stderr.slice(0, 500));
     assert.match(rendered.stdout, /<svg/);

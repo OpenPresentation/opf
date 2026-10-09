@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSlideSvg,svgToPng} from '../../opf-render/dist/index.js';
+import {toSvg, toPng} from '../../opf-render/dist/index.js';
 const [beforeDir,currentDir,secondDir,output]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(beforeDir&&currentDir&&secondDir&&output,'Pass previous/current/second-runtime corpus directories and a new output directory.');
 const hash=value=>createHash('sha256').update(value).digest('hex'),json=async file=>JSON.parse(await readFile(file,'utf8'));
@@ -29,14 +29,14 @@ for(let offset=0;offset<changed.length;offset+=24){
     }
     entries.push(`<text x="${x+5}" y="${y+123}" font-size="11" font-family="Roboto">${item.index}: previous / accepted</text>`);
   }
-  const png=await svgToPng(`<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="792"><rect width="100%" height="100%" fill="#ddd"/>${entries.join('')}</svg>`),file=`pairs-${offset/24}.png`;
+  const png=await toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="792"><rect width="100%" height="100%" fill="#ddd"/>${entries.join('')}</svg>`),file=`pairs-${offset/24}.png`;
   await writeFile(path.join(output,file),png);sheets.push({file,sha256:hash(png),indices:changed.slice(offset,offset+24).map(item=>item.index)});
 }
 const selected=[];
 for(const type of ['quote','code','table','chart']){
   const item=changed.find(({key})=>{const [file,slide]=key.split('#');return JSON.stringify(corpus.get(file).slides[Number(slide)]).includes(`"${type}":`);});
   if(!item)continue;
-  const [source,slide]=item.key.split('#'),svg=renderSlideSvg(corpus.get(source),Number(slide),{trace:true}),png=await svgToPng(svg,{fonts:{loadSystemFonts:false}}),file=`full-${item.index}.png`;
+  const [source,slide]=item.key.split('#'),svg=toSvg(corpus.get(source),(Number(slide))+1,{trace:true}),png=await toPng(svg,{fonts:{loadSystemFonts:false}}),file=`full-${item.index}.png`;
   await writeFile(path.join(output,file),png);selected.push({...item,type,full:file,fullSha256:hash(png),svgSha256:hash(svg)});
 }
 const report={source:current.source,verifierSha256:hash(await readFile(new URL(import.meta.url))),verifiedImages:keys.length*3,changed,unchanged:keys.length-changed.length,sheets,selected,

@@ -20,7 +20,8 @@ const load = async name => {
   return import(pathToFileURL(path.resolve(path.dirname(manifestPath),target)).href);
 };
 const {validate} = await load('@openpresentation/opf');
-const {renderSvg, svgToPng} = await load('@openpresentation/opf-render');
+// RR-74: the consumer's installed renderer is any release: 0.18 names it toSvg and toPng, older ones renderSvg and svgToPng.
+const render = await load('@openpresentation/opf-render'), toSvg = render.toSvg ?? render.renderSvg, toPng = render.toPng ?? render.svgToPng;
 const {loadFonts} = await load('@openpresentation/opf-render/fonts-node');
 const {toPptx, fromPptx} = await load('@openpresentation/opf-pptx');
 const output = path.join(consumer, 'evidence');
@@ -55,11 +56,11 @@ if (mode === 'generate') {
   assert.equal(validation.valid,true,JSON.stringify(validation));
   const diagnostics=[];
   const options={fonts,onDiagnostic:d=>diagnostics.push(d)};
-  const slides=renderSvg(document,options);
+  const slides=toSvg(document,options);
   for(let index=0;index<slides.length;index++) {
     // No embedded proprietary font bytes in evidence SVGs.
     await writeFile(path.join(output,`renderer-${index+1}.svg`),slides[index]);
-    await writeFile(path.join(output,`renderer-${index+1}.png`),await svgToPng(slides[index],{fonts:{fontFiles,useBundledFonts:false,loadSystemFonts:false}}));
+    await writeFile(path.join(output,`renderer-${index+1}.png`),await toPng(slides[index],{fonts:{fontFiles,useBundledFonts:false,loadSystemFonts:false}}));
   }
   await writeFile(path.join(output,'source.pptx'),await toPptx(document,options));
   await writeJson('source.opf.json',document);

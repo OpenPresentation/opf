@@ -98,7 +98,7 @@ const { presentation, pages } = paginate(document, { fonts });
 
 `loadFonts({ pack: 'base' })` loads the bundled Roboto faces for
 `design.fontScheme: 'roboto'`. It returns the fonts handle: every deck-level
-verb (`paginate`, `renderSvg`, `svgToPng`, `svgToPdf`, `toPptx`) takes it as
+verb (`paginate`, `toSvg`, `toPng`, `toPdf`, `toPptx`) takes it as
 `{ fonts }` and reads what it needs from it (the `textMeasurement`, the faces
 to embed, the font files). `resolveSlideContext(document, index, { fonts, catalogs })` resolves
 one slide's layout, canvas, theme and font families (slide design, then deck
@@ -166,19 +166,19 @@ errors are in [OPF files in Node](node.md).
 or options the function does not expose.
 
 ```js
-import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
+import { toSvg, toPng, toPdf } from '@openpresentation/opf-render';
 import { toPptx } from '@openpresentation/opf-pptx';
 
-const svgs = renderSvg(presentation, { fonts });   // one SVG per slide
-const png = await svgToPng(svgs[0], { fonts });
-const pdf = await svgToPdf(svgs, { fonts });
+const svgs = toSvg(presentation, { fonts });   // one SVG per slide
+const png = await toPng(svgs[0], { fonts });
+const pdf = await toPdf(svgs, { fonts });
 const pptx = await toPptx(presentation, { fonts });
 ```
 
-`renderSvg` is the local preview of every slide (`renderSlideSvg` draws one). PNG rasterizes that SVG.
+`toSvg` is the local preview of every slide (`toSvg(presentation, 3, { fonts })` draws slide 3 as one string). PNG rasterizes that SVG.
 PDF (opf-render 0.12.0 and later) converts the same SVG to **vector paths with
 selectable, searchable text** in embedded font subsets, with no second layout pass;
-pass `{ mode: 'raster' }` for the image-per-slide output that renderers up to 0.11.9
+pass `{ raster: true }` for the image-per-slide output that renderers up to 0.11.9
 always wrote. Pass the same fonts handle as for PNG; vector PDF never uses system
 fonts.
 `toPptx` is the supported editable PowerPoint export from OPF. Shared

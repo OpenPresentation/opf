@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
-import {renderSlideSvg,resolvePresentation} from '../../opf-render/src/svg.js';
+import {toSvg, resolvePresentation} from '../../opf-render/src/svg.js';
 import {loadFonts} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 import {embed} from '../packages/javascript/dist/index.js';
@@ -17,7 +17,7 @@ const document=embed({name:'Measured lists',design:{fontScheme:'roboto'},slides:
  {text:['H',{text:'2',subscript:true},'O and x',{text:'2',superscript:true}],level:4}
  ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]},{catalogs:[defaultCatalog]}).document;
 const fonts=await loadFonts({pack:'office'}),options={fonts};
-const bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document,0,{...options,trace:true});
+const bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,{...options,trace:true});
 assert.equal(bound.geometry.diagnostics.length,0);
 for(const pattern of [/font-weight="700"/,/font-style="italic"/,/#2563EB/,/href="https:\/\/openpresentation.org"/,/data-opf-path="slides.0.blocks.0.items.0.description"/,/data-opf-path="slides.0.blocks.1.bullets.1.text"/])assert.match(svg,pattern);
 const bytes=await toPptx(document,options),files=unzipSync(bytes),raw=new TextDecoder().decode(files['ppt/slides/slide1.xml']),xml=parser.parse(raw);

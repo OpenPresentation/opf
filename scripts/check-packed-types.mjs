@@ -139,7 +139,7 @@ async function typedNode() {
   const file: ConvertedFile | undefined = returned.files[0];
   const bytes: Uint8Array | undefined = file?.bytes;
   const name: string | undefined = file?.name;
-  const options: ConvertOptions = {slides: '1-3', scale: 2, fontDirs: ['fonts'], assetDir: '.', overwrite: false, date: '2026-01-01'};
+  const options: ConvertOptions = {slides: '1-3', scale: 2, fonts: ['fonts'], assetDir: '.', overwrite: false, date: '2026-01-01'};
   await convert('deck.opf.md', 'slides/deck.png', options);
   await convert(bytes ?? new Uint8Array(), 'deck.opf.yaml', {signals: true});
   const opened: Presentation = await open('deck.opf.md');
@@ -183,12 +183,12 @@ const invalid: Presentation = {slides: 42};
 ingest([], {as: 'unsupported'});
 void valid; void invalid;
 ${downstream ? `
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx} from '@openpresentation/opf-pptx';
 const editor = createEditorSession(deck);
 const edited = editor.presentation;
-const svg: string = renderSlideSvg(edited, 0);
+const svg: string = toSvg(edited, 1);
 toPptx(edited); void svg;
 ` : ''}
 `);

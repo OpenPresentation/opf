@@ -14,7 +14,7 @@ import { composeSlide } from '../packages/javascript/dist/composition.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const renderDir = path.resolve(process.env.OPF_RENDER_DIR ?? path.join(root, '../opf-render'));
 const pptxDir = path.resolve(process.env.OPF_PPTX_DIR ?? path.join(root, '../opf-pptx'));
-const { renderSlideSvg } = await import(pathToFileURL(path.join(renderDir, 'dist/index.js')));
+const { toSvg } = await import(pathToFileURL(path.join(renderDir, 'dist/index.js')));
 const { toPptx, fromPptx } = await import(pathToFileURL(path.join(pptxDir, 'dist/index.js')));
 const require = createRequire(path.join(pptxDir, 'package.json'));
 const { unzipSync } = require('fflate');
@@ -41,7 +41,7 @@ for (const [index, slide] of deck.slides.entries()) {
   const xml = new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]);
   const sld = parser.parse(xml)['p:sld'];
   const tree = sld['p:cSld']['p:spTree'];
-  const svg = renderSlideSvg(deck, index, { trace: true });
+  const svg = toSvg(deck, index+1, { trace: true });
   const pictures = array(tree['p:pic']);
   const shapes = array(tree['p:sp']);
 

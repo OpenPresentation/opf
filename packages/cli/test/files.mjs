@@ -83,8 +83,8 @@ try {
   assert.deepEqual(second.outputs.map(item => item.sha256), first.outputs.map(item => item.sha256), 'deterministic SVG');
   run(['render', 'deck.opf.json', '--out', 'svg1'], {status: 1});
   run(['render', 'deck.opf.json', '--out', 'svg1', '--force']);
-  const bare = run(['render', 'deck.opf.json', '--out', 'svg3', '--svg-fonts', 'none']).report;
-  assert.ok(bare.outputs[0].bytes < 20000, 'font embedding can be turned off');
+  const bare = run(['render', 'deck.opf.json', '--out', 'svg3', '--text', 'system']).report;
+  assert.ok(bare.outputs[0].bytes < 20000, 'font embedding can be turned off (--text system)');
   // Pinned digests for this fixture on the installed renderer; set UPDATE_GOLDEN=1 after a renderer or core bump.
   {
     const golden = JSON.parse(await readFile(goldenFile, 'utf8'));
@@ -162,8 +162,8 @@ try {
   assert.equal(run(['export', 'deck.opf.json', '--out', 'again.pptx']).report.outputs[0].sha256, pptx.outputs[0].sha256, 'deterministic PPTX, format inferred from --out');
   run(['export', 'deck.opf.json', '--format', 'pptx', '--out', 'deck.pptx'], {status: 1});
   run(['export', 'deck.opf.json', '--format', 'pptx', '--slides', '1'], {status: 2}); run(['export', 'deck.opf.json'], {status: 2});
-  run(['export', 'deck.opf.json', '--format', 'pptx', '--chartex', 'nonsense'], {status: 2}); run(['export', 'deck.opf.json', '--format', 'pdf', '--chartex', 'native'], {status: 2});
-  const references = run(['export', 'deck.opf.json', '--format', 'pptx', '--out', 'refs.pptx', '--provenance', 'references-only', '--chartex', 'fallback']).report;
+  run(['export', 'deck.opf.json', '--format', 'pptx', '--charts', 'nonsense'], {status: 2}); run(['export', 'deck.opf.json', '--format', 'pdf', '--charts', 'native'], {status: 2});
+  const references = run(['export', 'deck.opf.json', '--format', 'pptx', '--out', 'refs.pptx', '--provenance', 'references-only', '--charts', 'picture']).report;
   assert.notEqual(references.outputs[0].sha256, pptx.outputs[0].sha256, '--provenance changes the package');
   const noTags = run(['export', 'deck.opf.json', '--format', 'pptx', '--out', 'none.pptx', '--provenance', 'none']).report;
   assert.ok(noTags.outputs[0].bytes < pptx.outputs[0].bytes);
@@ -171,8 +171,8 @@ try {
   const pdf = run(['export', 'deck.opf.json', '--format', 'pdf']).report;
   assert.equal((await read('Files-test.pdf')).subarray(0, 5).toString(), '%PDF-'); assert.equal(pdf.pdf.mode, 'vector', 'vector is the default PDF mode'); assert.equal(pdf.outputs[0].pages, 3);
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--out', 'again.pdf']).report.outputs[0].sha256, pdf.outputs[0].sha256, 'deterministic PDF');
-  assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'raster', '--out', 'raster.pdf']).report.pdf.mode, 'raster');
-  const vector = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf']).report;
+  assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--raster', '--out', 'raster.pdf']).report.pdf.mode, 'raster');
+  const vector = run(['export', 'deck.opf.json', '--format', 'pdf', '--out', 'vector.pdf']).report;
   assert.equal(vector.pdf.mode, 'vector'); assert.ok(vector.findings.some(item => item.ruleId === 'pdf/pdf-font-embedded'));
   assert.equal(vector.outputs[0].sha256, pdf.outputs[0].sha256, 'vector is the default mode');
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--slides', '2-3', '--out', 'partial.pdf']).report.outputs[0].pages, 2);
@@ -182,7 +182,7 @@ try {
   assert.deepEqual(zipNames(zipBytes), ['Files-test-001.png', 'Files-test-002.png', 'Files-test-003.png']);
   assert.deepEqual([...zipEntry(zipBytes, 'Files-test-002.png').subarray(0, 4)], [0x89, 0x50, 0x4e, 0x47]);
   assert.equal(run(['export', 'deck.opf.json', '--format', 'png', '--scale', '0.25', '--out', 'slides2.zip']).report.outputs[0].sha256, zip.outputs[0].sha256, 'deterministic archive');
-  run(['export', 'deck.opf.json', '--format', 'svg', '--svg-fonts', 'none', '--out', 'svgs.zip']);
+  run(['export', 'deck.opf.json', '--format', 'svg', '--text', 'system', '--out', 'svgs.zip']);
   assert.equal(zipNames(await read('svgs.zip')).length, 3);
   run(['export', 'deck.opf.json', '--format', 'svg', '--slides', '2', '--out', 'two.svg']);
   assert.ok((await read('two.svg')).toString('utf8').includes('Priorities'));
@@ -263,9 +263,9 @@ try {
   assert.equal(path.basename(path.dirname(dir)), 'Q4-Review-2026-slides'); assert.equal(path.basename(dir), 'Q4-Review-2026-001.svg');
 
   // Fonts and options: bad inputs are usage errors.
-  run(['render', 'deck.opf.json', '--font-dir', 'does-not-exist'], {status: 2});
+  run(['render', 'deck.opf.json', '--fonts', 'does-not-exist'], {status: 2});
   await mkdir(path.join(temp, 'empty-fonts'));
-  run(['render', 'deck.opf.json', '--font-dir', 'empty-fonts'], {status: 2});
+  run(['render', 'deck.opf.json', '--fonts', 'empty-fonts'], {status: 2});
   run(['render', 'deck.opf.json', '--date', '2026-02-30'], {status: 2});
 
   // Optional peers: without them the commands explain what to install and exit 2; everything else keeps working.

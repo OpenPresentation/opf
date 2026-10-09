@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {createEditorSession} from '../../opf-editor/src/index.js';
 import {prepareTrackResize,prepareBlockMove,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove} from '../../opf-editor/src/layout.js';
-import {resolvePresentation,renderSlideSvg} from '../../opf-render/src/svg.js';
+import {resolvePresentation, toSvg} from '../../opf-render/src/svg.js';
 import {loadFonts} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
@@ -36,7 +36,7 @@ for(let i=0;i<shapes.length;i++){
 }
 await mkdir('artifacts/layout-resize',{recursive:true});
 await writeFile('artifacts/layout-resize/resized.opf.json',JSON.stringify(editor.presentation,null,2));
-await writeFile('artifacts/layout-resize/resized.svg',renderSlideSvg(editor.presentation,0,options));
+await writeFile('artifacts/layout-resize/resized.svg',toSvg(editor.presentation,1,options));
 await writeFile('artifacts/layout-resize/resized.pptx',bytes);
 for(let i=0;i<6;i++)editor.undo();assert.deepEqual(editor.presentation,original);
 console.log('Track resize ecosystem passed: root and nested weights, block moves/creation/duplication/deletion, measured SVG/native PPTX geometry, editable shapes and undo.');

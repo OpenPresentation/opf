@@ -40,7 +40,7 @@ for(const [name,builder] of [
    assert.ok(!document.meta && !document.version);
    assert.ok(document.slides.every(slide=>!slide.elements));
    count++;
-   if(renderer) { try { renderer.renderSvg(document); } catch(error) { renderFailures.push({name:`${name}/${record.id??record.slug}`,code:error.code,message:error.message}); } }
+   if(renderer) { try { renderer.toSvg(document); } catch(error) { renderFailures.push({name:`${name}/${record.id??record.slug}`,code:error.code,message:error.message}); } }
   }catch(error){throw new Error(`${name}/${record.id??record.slug}: ${error.message}`,{cause:error});}
  }
  console.log(`${name}: ${records.length} canonical OPF examples`);

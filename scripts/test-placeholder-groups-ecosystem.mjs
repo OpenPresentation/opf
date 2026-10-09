@@ -14,7 +14,7 @@ import { composeSlide } from '../packages/javascript/dist/composition.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const renderDir = path.resolve(process.env.OPF_RENDER_DIR ?? path.join(root, '../opf-render'));
 const pptxDir = path.resolve(process.env.OPF_PPTX_DIR ?? path.join(root, '../opf-pptx'));
-const { renderSlideSvg, resolvePresentation } = await import(pathToFileURL(path.join(renderDir, 'dist/index.js')));
+const { toSvg, resolvePresentation } = await import(pathToFileURL(path.join(renderDir, 'dist/index.js')));
 const { toPptx } = await import(pathToFileURL(path.join(pptxDir, 'dist/index.js')));
 const { unzipSync } = createRequire(path.join(pptxDir, 'package.json'))('fflate');
 
@@ -63,7 +63,7 @@ let leaves = 0;
 for (const [index, slide] of deck.slides.entries()) {
   const geometry = composeSlide(slide, resolveSlideContext(deck, index).options);
   const rendered = resolved.slides[index].geometry;
-  const svg = renderSlideSvg(deck, index, { trace: true });
+  const svg = toSvg(deck, index+1, { trace: true });
   const frames = nativeFrames(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
   const body = geometry.items.filter((item) => !['tag', 'title', 'subtitle'].includes(item.field));
   assert.ok(body.length > 0, slide.id);
