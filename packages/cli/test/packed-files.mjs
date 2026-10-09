@@ -24,6 +24,9 @@ const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.s
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
+// The candidate core declares the same peers (optional, for /node; opf#498 raises them to the next train's line before
+// core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
+if (!report(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (/node optional peers)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
 assert.deepEqual(Object.keys(manifest.dependencies ?? {}), ['@openpresentation/opf'], 'core is the only runtime dependency of the CLI');
 const temp = await mkdtemp(path.join(tmpdir(), 'opf-cli-peers-'));
