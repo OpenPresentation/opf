@@ -47,7 +47,8 @@ const before = await readFile(declaration, 'utf8');
 // depends on (opf-render 0.18: toSvg draws one slide when it is given a slide number, a whole deck as string[] otherwise).
 const oneSlide = /^export declare function toSvg\([^)]*\b(?:slide|index)\??: number\b[^)]*\): string;$/gm;
 assert.equal(before.match(oneSlide)?.length, 1, 'Negative control must change exactly one public downstream signature');
-const after = before.replace(oneSlide, (signature) => signature.replace(/\): string;$/, '): number;'));
+const signature = before.match(oneSlide)[0];
+const after = before.replace(signature, signature.replace(/\): string;$/, '): number;'));
 await writeFile(declaration, after);
 await assert.rejects(checkPackedTypes(poisoned, {downstream: true}), /failed in 4 compiler\/mode combinations/);
 const negative = JSON.parse(await readFile(path.join(poisoned, 'artifacts/packed-types/report.json'), 'utf8'));
