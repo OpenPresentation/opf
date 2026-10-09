@@ -11,7 +11,7 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
-import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
+import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cli');
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
@@ -59,6 +59,10 @@ try {
   const modules = path.join(temp, process.platform === 'win32' ? 'node_modules' : 'lib/node_modules');
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
   assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
+  // A new core minor is released before its siblings: until they publish, the published siblings' own core range does not
+  // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
+  // the core tag; the CLI release keeps the hard gate).
+  if (!report(peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version}))) process.exit(0);
   // One core for the command, @openpresentation/cli/api and both peers.
   await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);
