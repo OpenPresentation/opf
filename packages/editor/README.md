@@ -471,12 +471,12 @@ Chart columns and table headers may be `DataColumn` objects (`{ name, format }`;
 
 ```js
 import { setGridColumnFormat, setChartMapping, detachGridDataset } from "@openpresentation/opf-editor/data-grid";
-import { prepareDatasetImport, importData } from "@openpresentation/opf-editor/data";
+import { prepareDatasetImport, ingest } from "@openpresentation/opf-editor/data";
 
 setGridColumnFormat(editor, "slides.3.blocks.0.chart", 1, "$#,##0.0");   // header "Revenue" becomes { name: "Revenue", format }; null clears it
 setChartMapping(editor, "slides.3.blocks.0.chart", { category: "Region", series: ["Revenue"] });
 detachGridDataset(editor, "slides.3.blocks.1.table");                   // its own copy instead of the shared dataset
-const stored = prepareDatasetImport(editor.presentation, importData(csv, { as: "chart" }), { id: "revenue" });
+const stored = prepareDatasetImport(editor.presentation, ingest(csv, { as: "chart" }), { id: "revenue" });
 editor.applyPatch([...stored.patches, { op: "add", path: "/slides/-", value: { id: "rev", title: "Revenue", ...stored.content } }]);
 ```
 

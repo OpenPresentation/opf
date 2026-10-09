@@ -67,7 +67,7 @@ const render = await import("@openpresentation/opf-render/svg");
 const browserFonts = await import("@openpresentation/opf-render/fonts-browser");
 const pptx = await import("@openpresentation/opf-pptx");
 const required = [
-  [core, ["validate", "validateCatalogRecord", "resolveSlideContext", "listBuiltinVariables", "paginate", "stats", "importData", "resolveVariables", "listVariables", "hasContentVariables", "variableDeclarations", "coerceVariableValue", "resolveChartData", "inlineChartData", "inlineTableData", "isXYChartType", "chartNumber", "numberFormatError", "formatDataNumber"]],
+  [core, ["validate", "validateCatalogRecord", "resolveSlideContext", "listBuiltinVariables", "paginate", "stats", "ingest", "resolveVariables", "listVariables", "hasContentVariables", "variableDeclarations", "coerceVariableValue", "resolveChartData", "inlineChartData", "inlineTableData", "isXYChartType", "chartNumber", "numberFormatError", "formatDataNumber"]],
   [composition, ["composeSlide", "resolveScriptFonts", "listNumbers", "chartOptionSupport", "chartOptionTarget", "resolveChartOptions", "collectCitations", "walkCitationRuns", "referencesSlide", "captionSettings"]],
   [render, ["renderSvg", "renderSlideSvg", "resolvePresentation"]],
   [browserFonts, ["loadFonts"]],

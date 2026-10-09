@@ -11,7 +11,7 @@ import * as chart from "../dist/chart-data.js";
 import * as tables from "../dist/table-options.js";
 import * as findReplace from "../dist/find-replace.js";
 import * as switches from "../dist/switches.js";
-import { DATASET_ID_PATTERN, importData, prepareDatasetImport } from "../dist/data.js";
+import { DATASET_ID_PATTERN, ingest, prepareDatasetImport } from "../dist/data.js";
 import { prepareOpfImport } from "../dist/transfer.js";
 
 const C_INLINE = "slides.0.blocks.0.chart";
@@ -441,7 +441,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- import as a shared dataset ------------------------------------------------------------------------------------
 {
   const csv = "Quarter,Revenue,Costs\nQ1,12,8\nQ2,18,11\n";
-  const content = importData(csv, { as: "chart", chartType: "column" });
+  const content = ingest(csv, { as: "chart", chartType: "column" });
   const editor = session({ name: "Import", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "a", title: "A", text: "Hello" }] });
   const stored = prepareDatasetImport(editor.presentation, content, { id: "revenue", source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
   assert.deepEqual(stored.content, { chart: { type: "column", data: { dataset: "revenue" } } });
@@ -458,7 +458,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   editor.redo();
 
   // Importing into an existing id replaces its columns and rows and keeps its title and source.
-  const again = prepareDatasetImport(editor.presentation, importData("Quarter,Revenue,Costs\nQ1,1,2\n", { as: "table" }), { id: "revenue" });
+  const again = prepareDatasetImport(editor.presentation, ingest("Quarter,Revenue,Costs\nQ1,1,2\n", { as: "table" }), { id: "revenue" });
   assert.equal(again.replaced, true);
   assert.deepEqual(again.content, { table: { dataset: "revenue" } });
   editor.applyPatch([...again.patches, { op: "add", path: "/slides/2", value: { id: "t", title: "T", ...again.content } }]);
