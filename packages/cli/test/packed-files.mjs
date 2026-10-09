@@ -17,7 +17,10 @@ const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cl
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
 const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map(name => `${name}@${manifest.devDependencies[name]}`);
 // RR-63: the renderer's converters (pdf-lib, @resvg/resvg-js, sharp) and font packages are its optional peers; install the ones the CLI's outputs use beside it.
-const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`);
+// RR-59 (opf#476): and the Noto JP and SC script packages the installed-package regression draws Japanese and Chinese SVG with (opf-render pins them exactly as peers;
+// installed-regression.mjs checks the installed versions against the renderer's declared ones).
+const scriptFonts = ['@expo-google-fonts/noto-sans-jp@0.4.3', '@expo-google-fonts/noto-sans-sc@0.4.3'];
+const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`).concat(scriptFonts);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
@@ -77,6 +80,8 @@ try {
   assert.deepEqual(JSON.parse(run(process.execPath, [apiProbe], temp)), {pdf: '%PDF-', png: 1, slides: 1});
   const output = run(process.execPath, [path.join(pkg, 'test/files.mjs')], temp, {OPF_TEST_BIN: bin});
   console.log(output.trim());
+  // RR-59 (opf#476): script-font SVG, the unresolved-image gate and zero fetches through the installed binary (the candidate CLI and core, the peers and Noto packages beside them).
+  console.log(run(process.execPath, [path.join(pkg, 'test/installed-regression.mjs')], temp, {OPF_TEST_BIN: bin}).trim());
 
   // npx-style: one run with the CLI and both peers in a single temporary install.
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));

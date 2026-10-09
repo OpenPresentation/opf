@@ -34,6 +34,8 @@ const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion
 const verifyFurniture = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] > 10 || (coreVersion?.[1] === 10 && coreVersion?.[2] >= 1);
 // RR-55: the candidate packages and the registry plan are both the 0.14 train (loadFonts handle, renderSvg for a deck, { fonts },
 // editor.presentation), so each inline consumer below is one variant.
+// RR-59: the portable script-font SVG and the unresolved-image gate ship in core/CLI/renderer/PPTX 0.16.
+const verifyInstalledCliRegression = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 16;
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
@@ -88,8 +90,9 @@ const renderSourceVersion = registry ? releasePlan.packages.find(item => item.na
 // RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). Each consumer
 // here (the candidate tarballs, the registry consumer the gallery and the registry checks build on) is a complete host:
 // it installs every optional peer the planned renderer declares (the converters, the base and office fonts and the
-// script packs that `scripts: 'all'` and the office-pack checks load), at the versions the renderer tests. A renderer
-// that still lists them as dependencies adds nothing.
+// script packs that `scripts: 'all'`, the office-pack checks and the installed CLI's Japanese and Chinese SVG
+// regression (RR-59, opf#476) load), at the versions the renderer tests. A renderer that still lists them as
+// dependencies adds nothing.
 const rendererPeers = {};
 if (manifest.artifacts.some(item => item.name === '@openpresentation/opf-render')) {
   const rendererPackage = JSON.parse(await readHarness('opf-render', 'package.json'));
@@ -433,6 +436,9 @@ if (registry) {
     run(process.execPath, [entry,'--version']);
     run(process.execPath, [entry,'create', 'registry.opf.json', '--title', 'Registry consumer']);
     run(process.execPath, [entry,'validate', 'registry.opf.json']);
+    // RR-59 (opf#476): script-font SVG, the unresolved-image gate and zero fetches through the published CLI beside the published peers (a CLI that predates the contract has no such test).
+    const regression = path.join(root, 'packages/cli/test/installed-regression.mjs');
+    if (verifyInstalledCliRegression) run(process.execPath, [regression], {OPF_TEST_BIN: entry});
   }
 }
 

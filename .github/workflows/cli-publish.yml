@@ -38,6 +38,11 @@ jobs:
       - run: pnpm check:breaking
       - name: Verify standalone executable installation
         run: pnpm test:cli:packed
+      # RR-59 (opf#476): the release gate of the installed contract: the candidate CLI and core beside the published opf-render and opf-pptx
+      # and the Noto JP/SC packages, offline after install (portable script-font SVG, the unresolved-image gate, zero fetches). On a cli-v* tag
+      # the peers must satisfy the CLI's ranges; there is no skip (scripts/unreleased-gate.mjs).
+      - name: Verify the installed CLI with its peers (script-font SVG, unresolved-image gate)
+        run: pnpm test:cli:packed:peers
       # Configure this workflow as the CLI's npm trusted publisher after the
       # authenticated first publication. No long-lived npm token is required here.
       - name: Publish bundled CLI
