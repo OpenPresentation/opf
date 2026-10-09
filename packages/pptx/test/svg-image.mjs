@@ -13,8 +13,8 @@ import {fileURLToPath} from 'node:url';
 import {XMLValidator} from 'fast-xml-parser';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import sharp from 'sharp';
-import {svgToPng} from '@openpresentation/opf-render';
-import {renderSlideSvg, resolvePresentation, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {toPng} from '@openpresentation/opf-render';
+import {toSvg, resolvePresentation, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {prepareSvg, svgDataUriBytes, svgIntrinsicSize, svgRasterScale} from '../dist/svg-image.js';
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
@@ -229,9 +229,9 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const [picture] = pictures(slideXml(entries));
   const png = entries[target(entries, 0, picture.embed).part];
   const {width} = await sharp(png).metadata();
-  const direct = await svgToPng(wideText, {scale: width / 120, background: 'rgba(0, 0, 0, 0)', fonts: {useBundledFonts: false, loadSystemFonts: false}});
+  const direct = await toPng(wideText, {scale: width / 120, background: 'rgba(0, 0, 0, 0)', fonts: {useBundledFonts: false, loadSystemFonts: false}});
   assert.equal(sha(png), sha(direct), 'the embedded fallback is the renderer raster');
-  const pinned = await svgToPng(wideText, {scale: 4, background: 'rgba(0, 0, 0, 0)', fonts: {useBundledFonts: false, loadSystemFonts: false}});
+  const pinned = await toPng(wideText, {scale: 4, background: 'rgba(0, 0, 0, 0)', fonts: {useBundledFonts: false, loadSystemFonts: false}});
   assert.equal(sha(pinned), 'f5b5253e22d9587f0d87d4d08ab5acdb91d39dcdea3d4110499be346ff7442d2', 'pinned raster of an axis-aligned drawing');
   checked++;
 }
@@ -383,7 +383,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   // renderer supports it; the raster of the same proportions is the control either way.
   for (const fill of ['contain', 'cover']) {
     const make = source => ({design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
-    const preview = renderSlideSvg(make(wide), 0, {trace: true}), control = renderSlideSvg(make(widePng), 0, {trace: true});
+    const preview = toSvg(make(wide), 1, {trace: true}), control = toSvg(make(widePng), 1, {trace: true});
     const draws = /<image\b/.test(preview);
     const {entries} = await open(make(wide));
     const [picture] = pictures(slideXml(entries));

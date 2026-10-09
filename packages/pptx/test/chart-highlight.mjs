@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {chartHighlightColors, textColorForFill} from '@openpresentation/opf/composition';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
@@ -38,7 +38,7 @@ const ACCENT = '<a:schemeClr val="accent1"/>';
 
 // The preview's own accent and muted colours for the same deck, read from its SVG: the chart panel fill and the first chart marks.
 function previewColors(chart, design) {
-  const svg = renderSlideSvg(deckOf(chart, design), 0, {trace: true});
+  const svg = toSvg(deckOf(chart, design), 1, {trace: true});
   const panel = /<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/.exec(svg)[0].match(/fill="([^"]+)"/)[1];
   return {svg, panel};
 }

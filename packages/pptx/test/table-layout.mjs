@@ -4,7 +4,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { composeSlide } from '@openpresentation/opf/composition';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 // OPF 0.15: the gallery ids these decks name (roboto, classic) resolve from the registered default catalog.
-import { renderSlideSvg, toPptx } from './helpers/default-catalog.mjs';
+import { toSvg, toPptx } from './helpers/default-catalog.mjs';
 
 const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false });
 const fonts = await loadFonts({pack: 'office'});
@@ -35,7 +35,7 @@ for (const align of ['left', 'center', 'right']) {
     }] };
     const geometry = composeSlide(deck.slides[0], { width: 1280 * scale, height: 720 * scale, fontFamilies: {body:family,heading:family}, textMeasurement: fonts.textMeasurement });
     const item = geometry.items.find(item => item.field === 'table');
-    const svg = parser.parse(renderSlideSvg(deck, 0, { trace: true, fonts }));
+    const svg = parser.parse(toSvg(deck, 1, { trace: true, fonts }));
     const bytes = await toPptx(deck, { fonts });
     const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
     const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));

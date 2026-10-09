@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createFontRegistry} from '@openpresentation/opf-render/fonts';
-import {renderSvg,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
+import {toSvg,resolvePresentation,toPng} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
 const [mode,directory='artifacts/native-code',selectedDeck]=process.argv.slice(2);
@@ -47,11 +47,11 @@ if(mode==='generate') {
     const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',heading:family,body:family,code:family}},slides:values.map(code=>({composition:{minFontSize:24},code}))};
     const options={fonts:handle},bound=resolvePresentation(document,options);
     for(const slide of bound.slides)assert.deepEqual(slide.geometry.diagnostics,[]);
-    const pptx=await toPptx(document,options),svgs=renderSvg(document,options);
+    const pptx=await toPptx(document,options),svgs=toSvg(document,options);
     await writeFile(path.join(output,id+'.pptx'),pptx);
     const rasters=[];
     for(const [index,svg] of svgs.entries()) {
-      const png=await svgToPng(svg,{fonts:handle});await writeFile(path.join(output,`${id}-svg-${index+1}.png`),png);
+      const png=await toPng(svg,{fonts:handle});await writeFile(path.join(output,`${id}-svg-${index+1}.png`),png);
       rasters.push(hash(png));
     }
     decks.push({id,...dimensions,document,pptxSha256:hash(pptx),svgRasterSha256:rasters,layouts:bound.slides.map(slide=>({cell:slide.geometry.items[0].box,...slide.geometry.items[0].codeLayout}))});

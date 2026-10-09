@@ -3555,7 +3555,7 @@ async function resolveImage(asset, presentation, options, path, outcome = {}) {
   if (raster) return dataUriMediaType(resolved.data) === raster.mediaType ? resolved : {...resolved, data: `data:${raster.mediaType};base64,${bytesToBase64(bytes)}`};
   const svg = svgDataUriBytes(resolved.data);
   if (svg) return resolveSvgImage(svg, options, path, outcome);
-  const message = `The image is not a readable PNG, JPEG, GIF or WebP (${dataUriMediaType(resolved.data) ?? "unknown type"}); supply a raster through imageResolver (for example opf-render svgToPng).`;
+  const message = `The image is not a readable PNG, JPEG, GIF or WebP (${dataUriMediaType(resolved.data) ?? "unknown type"}); supply a raster through imageResolver (for example opf-render toPng).`;
   if (options.strictAssets) throw new OPFPptxError("unsupported-image-dimensions", `Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. ${message}`, { path });
   options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "unsupported-format", message });
   outcome.reported = true;

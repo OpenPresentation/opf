@@ -4,13 +4,13 @@ import assert from "node:assert/strict";
 import { unzipSync } from "fflate";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { resolveColorRoles } from "@openpresentation/opf/composition";
-import { renderSlideSvg as renderSvg } from "@openpresentation/opf-render";
+import { toSvg as renderToSvg } from "@openpresentation/opf-render";
 import {fromPptx as importPptx, toPptx as exportPptx} from "../dist/index.js";
 
 // OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
 // (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
 const records = Object.fromEntries(Object.entries(defaultCatalog).filter(([, map]) => map && typeof map === 'object').map(([kind, map]) => [kind, Object.entries(map).map(([id, record]) => ({id, ...record}))]));
-const renderSlideSvg = (presentation, index, options = {}) => renderSvg(presentation, index, {catalogs: [defaultCatalog], ...options});
+const toSvg = (presentation, slide, options = {}) => renderToSvg(presentation, slide, {catalogs: [defaultCatalog], ...options});
 const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalogs: [defaultCatalog], ...options});
 const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultCatalog], ...options});
 
@@ -63,7 +63,7 @@ for (const { name, design, link: linkSource } of cases) {
   const theme = themeColors(files);
   const slide = (label) => {
     const index = runs.findIndex((run) => run.text === label);
-    return { svg: renderSlideSvg(deck, index), xml: decode(files[`ppt/slides/slide${index + 1}.xml`]) };
+    return { svg: toSvg(deck, index + 1), xml: decode(files[`ppt/slides/slide${index + 1}.xml`]) };
   };
   const fills = (label) => { const { svg, xml } = slide(label); return { svg: svgFill(svg, label), pptx: pptxFill(xml, label, theme) }; };
   for (const role of ROLES) {
@@ -92,11 +92,11 @@ assert.equal(expected.surface, "#EEEEDD");
 assert.equal(expected.textSecondary, "#556677");
 assert.equal(expected.background, "#FFF8E7");
 assert.equal(resolveColorRoles({ ...cool, ...cases[0].design.colorScheme }, { background: "#000000" }).text, cool.light1.toUpperCase(), "a text override does not apply on a dark background");
-const lightSvg = renderSlideSvg({ design: cases[0].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 0);
+const lightSvg = toSvg({ design: cases[0].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 1);
 assert.equal(svgFill(lightSvg, "reftext"), "334455");
 
 // A text override does not make text unreadable on a dark background: the dark slide keeps light1 text, in both engines.
-const darkSvg = renderSlideSvg({ design: cases[1].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 0);
+const darkSvg = toSvg({ design: cases[1].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 1);
 assert.notEqual(svgFill(darkSvg, "reftext"), "334455", "text override ignored on a dark background");
 
 // Import: a link written in the theme hyperlink color comes back as a link with no color; a link with its own color keeps it.

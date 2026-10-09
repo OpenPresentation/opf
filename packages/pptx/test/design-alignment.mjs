@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {toPptx, renderSvg} from './helpers/default-catalog.mjs';
+import {toPptx, toSvg} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 // design.titleAlignment/contentAlignment are Design properties: the slide design
@@ -20,7 +20,7 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
     {tag:'Tag',title:'Aligned heading',subtitle:'Aligned subtitle',text:'Aligned body text'},
     {title:'Overridden heading',subtitle:'Overridden subtitle',text:'Overridden body text',design:override},
   ]};
-  const svgs=renderSvg(deck,{...options,trace:true});
+  const svgs=toSvg(deck,{...options,trace:true});
   const entries=unzipSync(await toPptx(deck,options));
   for(const [slideIndex,slide]of deck.slides.entries()) {
     const effective={...deck.design,...slide.design};

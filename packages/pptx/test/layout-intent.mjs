@@ -3,7 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {validate, validateCatalogRecord} from '@openpresentation/opf';
 import {defaultCatalog} from '@openpresentation/opf/catalog';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 
 // FF-29, OPF 0.15 (FA-23): slide layout intent (layout reference, type, composition, composition hints and the record the
 // document embeds for it, with its catalogs group) is part of each OPF_SLIDE_V1 record. Import restores it with the
@@ -44,7 +44,7 @@ const read = async (bytes, options = {}) => {
   const deck = await fromPptx(bytes, {...options, onDiagnostic: issue => issues.push(issue)});
   assert.equal(validate(deck, {only: ['format']}).valid, true);
   // Every restored layout reference resolves, so the imported document always renders.
-  assert.equal(renderSvg(deck, {catalogs}).length, deck.slides.length);
+  assert.equal(toSvg(deck, {catalogs}).length, deck.slides.length);
   return {deck, provenance: issues.filter(issue => /provenance|reference|slide-id/.test(issue.code)).map(issue => [issue.code, issue.path])};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };

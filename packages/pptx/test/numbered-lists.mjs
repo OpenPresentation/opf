@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {composeSlide, listNumbers} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
@@ -75,7 +75,7 @@ const deck = {design: {theme: 'classic', fontScheme: 'roboto'}, slides: [
 for (const [label, options] of [['estimated', {}], ['measured', {fonts}]]) {
   const diagnostics = [];
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options, onDiagnostic: d => diagnostics.push(d)}));
-  const previews = renderSvg(deck, options);
+  const previews = toSvg(deck, options);
   assert.deepEqual(diagnostics.filter(d => /numbering/.test(d.code)), [], `${label}: no numbering diagnostics`);
   let numbered = 0, bullets = 0;
   for (const [index, slide] of deck.slides.entries()) {

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {XMLParser} from 'fast-xml-parser';
 import {strFromU8, unzipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {renderSvg, resolvePresentation} from '@openpresentation/opf-render';
+import {toSvg, resolvePresentation} from '@openpresentation/opf-render';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
@@ -20,7 +20,7 @@ for (const deck of cases) {
   const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck});
   // The handle remains glyph-strict: script segmentation fixes the family selection, never disables glyph validation.
   assert.throws(() => fonts.textMeasurement.measure('م', 24, {fontFamily: 'Aptos Display', fontWeight: 700}), error => error.code === 'missing-glyph');
-  assert.equal(renderSvg(deck, {fonts}).length, deck.slides.length);
+  assert.equal(toSvg(deck, {fonts}).length, deck.slides.length);
   const bound = resolvePresentation(deck, {fonts});
   const diagnostics = [];
   const bytes = await toPptx(deck, {fonts, onDiagnostic: issue => diagnostics.push(issue)});

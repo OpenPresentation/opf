@@ -131,7 +131,7 @@ export interface ToPptxOptions {
   /**
    * Draws the PNG fallback of an SVG picture (the raster older viewers show; PowerPoint 2016 and Microsoft 365 draw the SVG itself). It receives the
    * sanitized SVG text and the pixel size to draw (the SVG's own aspect, about 192 dpi of the displayed size) and returns PNG bytes with a transparent
-   * background. It must be deterministic for the export to be. Default in Node: opf-render's `svgToPng` (resvg with the bundled fonts), loaded only when an
+   * background. It must be deterministic for the export to be. Default in Node: opf-render's `toPng` (resvg with the bundled fonts), loaded only when an
    * SVG is exported (optional peer `@openpresentation/opf-render`). Without it, and without opf-render, an SVG picture exports as the "Image unavailable"
    * placeholder with an `unresolved-asset` diagnostic (`reason: "svg-rasterizer-unavailable"`); a browser build has no default.
    */

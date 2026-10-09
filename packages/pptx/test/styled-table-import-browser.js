@@ -6,7 +6,7 @@ import {nativeTableBytes} from './table-values.js';
 // OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
 const host = options => ({catalogs: [defaultCatalog], ...options});
 const toPptx = (deck, options) => pptx.toPptx(deck, host(options)), fromPptx = (bytes, options) => pptx.fromPptx(bytes, host(options));
-const renderSlideSvg = (deck, index, options) => render.renderSlideSvg(deck, index, host(options));
+const toSvg = (deck, slide, options) => render.toSvg(deck, slide, host(options));
 const out=document.querySelector('pre');let checks=0;
 const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
 try {
@@ -25,7 +25,7 @@ try {
  check(table.rows[2][0].colSpan===3&&table.rows[2][1]===null&&table.rows[2][2]===null,'Horizontal anchor and covered slots');
  check(table.rows[0][0].style.verticalAlign==='middle','Native vertical alignment');
  check(table.rows[2][0].style.borders.top.dash==='dash','Native dashed border');
- document.querySelector('main').innerHTML=renderSlideSvg(deck, 0,{trace:true});
+ document.querySelector('main').innerHTML=toSvg(deck, 1,{trace:true});
  const tableBlock=deck.slides[0].blocks?.findIndex(block=>block.table)??-1;
  const prefix=deck.slides[0].table!==undefined?'slides.0.table':`slides.0.blocks.${tableBlock}.table`;
  const rect=document.querySelector(`rect[data-opf-path="${prefix}.rows.0.0"]`);

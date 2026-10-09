@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
-import { renderSlideSvg, resolvePresentation } from '@openpresentation/opf-render';
+import { toSvg, resolvePresentation } from '@openpresentation/opf-render';
 import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
@@ -76,7 +76,7 @@ let checked = 0;
     // Paint order: watermark, then the logo, then every heading.
     assert.ok(xml.indexOf('name="OPF watermark"') < xml.indexOf('name="OPF logo"') && xml.indexOf('name="OPF logo"') < xml.indexOf('name="OPF heading'), `slide ${index}: watermark, logo, content`);
     // The preview draws the same rectangle.
-    const svg = renderSlideSvg(deck, index, {trace: true});
+    const svg = toSvg(deck, index + 1, {trace: true});
     const generated = imageTags(svg).filter(element => attr(element, 'data-opf-generated') === 'true');
     assert.equal(generated.length, 1, 'one preview logo');
     const preview = drawn(generated[0], sizes.get(wide));
@@ -118,7 +118,7 @@ let checked = 0;
     const bytes = mediaFor(entries, index, logo.embed);
     assert.ok(sameBytes(bytes, Buffer.from(source.split(',')[1], 'base64')), `slide ${index} draws the ${['dark', 'light', 'slide'][index]} variant`);
     // The same variant the preview chooses.
-    const svg = renderSlideSvg(deck, index, {trace: true});
+    const svg = toSvg(deck, index + 1, {trace: true});
     const generated = imageTags(svg).find(element => attr(element, 'data-opf-generated') === 'true');
     assert.equal(attr(generated, 'href'), source, `slide ${index} preview variant`);
   }
@@ -141,7 +141,7 @@ let checked = 0;
   assert.match(slideXml(entries, 0), /name="OPF image placeholder 1"/, 'the panel stands where the logo would be');
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['design.logo']);
   await assert.rejects(() => toPptx(missing, {strictAssets: true}));
-  const svg = renderSlideSvg(missing, 0, {trace: true});
+  const svg = toSvg(missing, 1, {trace: true});
   assert.match(svg, /data-opf-asset-status="unresolved"/);
   checked++;
 }
@@ -157,7 +157,7 @@ let checked = 0;
   assert.equal(parts.length, 2);
   const natives = pictures(slideXml(entries, 0)).filter(picture => /^OPF image \d+$/.test(picture.name));
   assert.equal(natives.length, 2, 'header and footer logo pictures');
-  const svg = renderSlideSvg(deck, 0, {trace: true});
+  const svg = toSvg(deck, 1, {trace: true});
   const groups = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="logo"[^>]*>[\s\S]*?<\/g>/g)].map(match => match[0]);
   assert.equal(groups.length, 2);
   for (const part of parts) {
@@ -209,7 +209,7 @@ let checked = 0;
   assert.equal(new Set(ids).size, ids.length, 'shape ids stay unique');
   assert.match(xml, /<a:buSzPct val="100000"\/><a:buBlip>/, 'the bullet is the text size');
   // The preview marker is a square of the text size.
-  const svg = renderSlideSvg(deck, 0, {trace: true});
+  const svg = toSvg(deck, 1, {trace: true});
   const markers = imageTags(svg).filter(element => attr(element, 'aria-hidden') === 'true');
   assert.equal(markers.length, entries.length);
   const textSize = Number(xml.match(/name="OPF list [^"]*"[\s\S]*?<a:rPr lang="en-US" sz="(\d+)"/)?.[1]) / 100 / .75;
@@ -279,7 +279,7 @@ let checked = 0;
   const plain = await open({design: {fontScheme: 'aptos'}, slides: deck.slides});
   assert.ok(!/Georgia/.test(slideXml(plain.entries, 0)) && !/Georgia/.test(slideXml(plain.entries, 1)));
   // The preview draws the same families.
-  const svg = renderSlideSvg(deck, 0, {trace: true});
+  const svg = toSvg(deck, 1, {trace: true});
   const tag = [...svg.matchAll(/<text\b([^>]*)>/g)].map(match => match[1]).filter(attrs => attrs.includes('data-opf-path="slides.0.tag"')).map(attrs => attr(` ${attrs}`, 'font-family'));
   assert.ok(tag.length && tag.every(family => family.startsWith(accent)), 'preview tag family');
   checked++;

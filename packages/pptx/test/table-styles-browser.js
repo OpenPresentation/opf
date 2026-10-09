@@ -1,5 +1,5 @@
 import {fromPptx,toPptx} from '@openpresentation/opf-pptx';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 import {tableValues} from './table-values.js';
 const out=document.querySelector('pre');let checks=0;
@@ -17,7 +17,7 @@ try {
  check(cell(1,1).color==='#404040'&&cell(1,2).color==='#505050','Column bands override row colors');
  check(cell(1,1).italic===true&&cell(2,1).italic===false,'Row bands retain inherited emphasis');
  check(cell(0,1).bold===true&&cell(0,1).fontFamily==='Aptos','Theme font and header emphasis');
- document.querySelector('main').innerHTML=renderSlideSvg(deck, 0,{trace:true});
+ document.querySelector('main').innerHTML=toSvg(deck, 1,{trace:true});
  check(document.querySelectorAll('[data-opf-rich-text="true"]').length===25,'Every styled cell remains editable rich text in preview');
  check(document.querySelector('main').innerHTML.includes('#D0D0D0'),'Preview contains imported corner color');
  const again=tableOf(await fromPptx(await toPptx(deck)));

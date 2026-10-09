@@ -13,7 +13,7 @@
 // opf-render `scripts/derive-pattern-bitmaps.mjs` on the pattern exports) is a separate step.
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
-import {svgToPng, renderSvg} from '@openpresentation/opf-render';
+import {toPng, toSvg} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {PATTERN_PRESETS, PATTERN_TILE_SIZE, patternBitmap, tokenizeCode, codeSyntaxPaletteForScheme} from '@openpresentation/opf/composition';
 import {toPptx} from '../dist/index.js';
@@ -26,13 +26,13 @@ const tile = preset => [...patternBitmap(preset)].map(row => [...Array(8)].map((
 const version = name => JSON.parse(readFileSync(new URL(`../node_modules/${name}/package.json`, import.meta.url), 'utf8')).version;
 
 async function build(name, deck, describe) {
-  const svgs = renderSvg(deck, {fonts});
+  const svgs = toSvg(deck, {fonts});
   writeFileSync(path.join(outDir, `${name}.pptx`), await toPptx(deck, {seed: 1, fonts}));
   const slides = [];
   for (const [index, svg] of svgs.entries()) {
     const info = describe(index);
     const preview = `preview/${info.preview ?? `${name}-${pad(index + 1)}`}.png`;
-    writeFileSync(path.join(outDir, preview), await svgToPng(svg, {fonts}));
+    writeFileSync(path.join(outDir, preview), await toPng(svg, {fonts}));
     slides.push({index: index + 1, ...info, preview});
   }
   return {file: `${name}.pptx`, slides};

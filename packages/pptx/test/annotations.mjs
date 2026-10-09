@@ -3,7 +3,7 @@
 // marker numbers, and the round trip with and without provenance.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSlideSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
+import {toSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {composeSlide} from '@openpresentation/opf/composition';
 
@@ -93,7 +93,7 @@ for (const options of [{}, {fonts}]) {
   assert.deepEqual(captionTags.map(tag => [tag.path, tag.field, tag.media, tag.position, tag.align]).sort(), [['slides.1.blocks.0.image', 'slides.1.blocks.0.caption', 'OPF image 1', 'below', 'left'], ['slides.1.blocks.1.table', 'slides.1.blocks.1.caption', 'OPF table 1', 'above', 'center'], ['slides.3.chart', 'slides.3.caption', 'OPF chart 1', 'below', 'left']].sort());
 
   // Preview parity: the same boxes and marker numbers read from the SVG.
-  const svg = index => renderSlideSvg(source, index, {trace: true, date: '2026-10-01', ...options});
+  const svg = index => toSvg(source, index + 1, {trace: true, date: '2026-10-01', ...options});
   const svg0 = svg(0), svg1 = svg(1);
   const previewMarkers = [...svg0.matchAll(/data-opf-marker="([^"]*)"/g)].map(match => match[1]);
   assert.deepEqual(previewMarkers, markerRuns(xml(0)), 'marker numbers agree');

@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {validate, paginateSlide} from '@openpresentation/opf';
-import {renderSvg, svgToPng, resolvePresentation} from '@openpresentation/opf-render';
+import {toSvg, toPng, resolvePresentation} from '@openpresentation/opf-render';
 import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import sharp from 'sharp';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
@@ -69,14 +69,14 @@ if(mode==='generate') {
       const item=slide.geometry.items.find(item=>item.field==='quote');
       return {cell:item.box,parts:item.quoteLayout.parts};
     });
-    const svgs=renderSvg(document,options), bytes=await toPptx(document,options), hashes={};
+    const svgs=toSvg(document,options), bytes=await toPptx(document,options), hashes={};
     assert.ok(!diagnostics.some(value=>value.code==='text-overflow'),'Native cases must fit before comparing');
     const save=async(file,bytes)=>{await writeFile(path.join(output,file),bytes);hashes[file]=hash(bytes);};
     await save(id+'.pptx',bytes);
     await save(id+'.opf.json',JSON.stringify(document,null,2)+'\n');
     for(const [index,svg] of svgs.entries()) {
       assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`),'Actual preview dimensions must match');
-      await save(`${id}-renderer-${index+1}.png`,await svgToPng(svg,{fonts:handle}));
+      await save(`${id}-renderer-${index+1}.png`,await toPng(svg,{fonts:handle}));
     }
     decks.push({id,...dimensions,slides:document.slides.length,hashes,layouts});
   }

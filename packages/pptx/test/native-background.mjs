@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
-import {renderSlideSvg,svgToPng} from '@openpresentation/opf-render';
+import {toSvg,toPng} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 const {toPptx,fromPptx}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const root=new URL('fixtures/native-backgrounds/',import.meta.url);
@@ -31,8 +31,8 @@ for(const group of manifest.groups) {
   const slides=[source.slides[i]];
   if(group.name==='opaque')slides.push(nativeDoc.slides[i]);
   for(const slide of slides) {
-   const svg=renderSlideSvg({design:{dimensions},slides:[slide]}, 0, {validate:false});
-   const reference=await raw(await svgToPng(svg,{fonts:{useBundledFonts:false},background:group.transparent?'transparent':'#FFFFFF'}));
+   const svg=toSvg({design:{dimensions},slides:[slide]}, 1, {validate:false});
+   const reference=await raw(await toPng(svg,{fonts:{useBundledFonts:false},background:group.transparent?'transparent':'#FFFFFF'}));
    assert.equal(reference.info.width,native.info.width);assert.equal(reference.info.height,native.info.height);
    let max=0,total=0,alphaMax=0,premultipliedMax=0,premultipliedTotal=0;
    for(let p=0;p<native.data.length;p+=4) {

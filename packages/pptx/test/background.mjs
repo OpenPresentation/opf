@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 const {toPptx,fromPptx:importTagged}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''});
@@ -25,7 +25,7 @@ for(const [width,height] of [[1280,720],[720,1280],[960,960]]) {
   assert.ok(gradient,'Gradient must remain an editable native fill');
   assert.equal(JSON.stringify(document),source,'Source unchanged');
   assert.ok(!Object.keys(unzipSync(bytes)).some(p=>p.startsWith('ppt/media/') && !p.endsWith('/')),'No rasterized slide or background');
-  const svg=renderSlideSvg(document, 0),svgDoc=parser.parse(svg).svg;
+  const svg=toSvg(document, 1),svgDoc=parser.parse(svg).svg;
   const defs=Array.isArray(svgDoc.defs)?svgDoc.defs:[svgDoc.defs];
   const g=defs.find(def=>def?.linearGradient)?.linearGradient;
   assert.ok(g);

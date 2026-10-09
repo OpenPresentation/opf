@@ -14,7 +14,12 @@ const withCatalogs = (options = {}) => (options.catalogs === undefined ? {...opt
 
 export const toPptx = (document, options) => pptx.toPptx(document, withCatalogs(options));
 export const fromPptx = (bytes, options) => pptx.fromPptx(bytes, withCatalogs(options));
-export const renderSvg = (document, options) => render.renderSvg(document, withCatalogs(options));
-export const renderSlideSvg = (document, index, options) => render.renderSlideSvg(document, index, withCatalogs(options));
+// toSvg(deck, options?) draws every slide; toSvg(deck, slide, options?) draws the selected slide(s) (1-based).
+export const toSvg = (document, ...rest) => {
+  while (rest.length && rest.at(-1) === undefined) rest.pop();
+  const last = rest.at(-1);
+  const options = last !== null && typeof last === 'object' && !Array.isArray(last) ? rest.pop() : undefined;
+  return render.toSvg(document, ...rest, withCatalogs(options));
+};
 export const resolvePresentation = (document, options) => render.resolvePresentation(document, withCatalogs(options));
 export const resolveScriptFonts = (document, options) => coreResolveScriptFonts(document, withCatalogs(options));

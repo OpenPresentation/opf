@@ -1,5 +1,5 @@
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 import {colorContrast} from '@openpresentation/opf/composition';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
@@ -13,7 +13,7 @@ try{
   const bytes=await toPptx(source),imported=await fromPptx(bytes);
   check(validate(imported, {only: ['format']}).valid,'Reimport validates in the browser');
   check(JSON.stringify(chartOf(imported).data)===JSON.stringify(data),'Browser preserves exact heading, labels, series and values');
-  document.querySelector('main').innerHTML=renderSlideSvg(source, 0,{trace:true});
+  document.querySelector('main').innerHTML=toSvg(source, 1,{trace:true});
   check(document.querySelector('rect[data-opf-path="slides.0.chart"]').getAttribute('fill')===surface,'SVG chart uses its resolved panel');
   check([...document.querySelectorAll('svg text')].every(label=>label.getAttribute('fill')===text),'Live SVG labels use the tested inherited color');
   const marks=[...document.querySelectorAll('[data-opf-path^="slides.0.chart.data"]')].filter(node=>['rect','path','circle','polyline'].includes(node.tagName));

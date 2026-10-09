@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {PATTERN_PRESETS, patternRuns, resolvePatternPreset, codeSyntaxPaletteForScheme} from '@openpresentation/opf/composition';
 // OPF 0.15: the gallery colour schemes come from the registered default catalog (records keyed by id).
-import {defaultCatalog, fromPptx, renderSlideSvg, toPptx} from './helpers/default-catalog.mjs';
+import {defaultCatalog, fromPptx, toSvg, toPptx} from './helpers/default-catalog.mjs';
 const colorSchemes = Object.entries(defaultCatalog.colorSchemes).map(([id, record]) => ({id, ...record}));
 import {presetPatterns, nativePatternPreset} from '../dist/background.js';
 
@@ -58,7 +58,7 @@ const SCHEMES = [...colorSchemes.map(({id}) => id), {light1: '#FFFFFF', dark1: '
 let checkedLines = 0, coloured = 0;
 for (const [language, source] of Object.entries(SAMPLES)) for (const colorScheme of SCHEMES) {
   const deck = {design: {fontScheme: 'roboto', colorScheme}, slides: [{code: {source, language, filename: `sample.${language}`}}]};
-  const svg = renderSlideSvg(deck, 0, {trace: true});
+  const svg = toSvg(deck, 1, {trace: true});
   const [xml] = await slideXml(deck);
   const native = shapes(xml).filter(shape => /^OPF code \d+ body line \d+$/.test(shape.name));
   const preview = svgBodyLines(svg);
@@ -91,7 +91,7 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
 ]) decks.push({trend, align, deck: {design: {fontScheme: 'roboto', contentAlignment: align, ...design}, slides: [{metric: {value: 42, unit: 'ms', label: 'Latency', description: 'Median', delta: '-3%', trend}}]}});
 let arrowsChecked = 0;
 for (const {trend, align, deck} of decks) {
-  const svg = renderSlideSvg(deck, 0, {trace: true}), [xml] = await slideXml(deck);
+  const svg = toSvg(deck, 1, {trace: true}), [xml] = await slideXml(deck);
   const svgArrow = [...svg.matchAll(/<g aria-label="([^"]*)" role="img"><polygon fill="#([0-9A-F]{6})" points="([^"]*)"\/><\/g>/g)];
   const nativeArrow = shapes(xml).filter(shape => / trend mark$/.test(shape.name));
   assert.equal(svgArrow.length, 1, `${trend}/${align}: preview arrow`);
@@ -118,7 +118,7 @@ for (const {trend, align, deck} of decks) {
 // No trend, no arrow in either engine.
 {
   const deck = {design: {fontScheme: 'roboto'}, slides: [{metric: {value: 42, delta: '+3'}}]};
-  assert.ok(!renderSlideSvg(deck, 0).includes('role="img"><polygon'));
+  assert.ok(!toSvg(deck, 1).includes('role="img"><polygon'));
   assert.ok(!shapes((await slideXml(deck))[0]).some(shape => / trend mark$/.test(shape.name)));
 }
 
@@ -130,7 +130,7 @@ const hex = value => value.slice(1).toUpperCase();
 for (const preset of [...PATTERN_PRESETS, 'diagStripe']) {
   const deck = {design: {fontScheme: 'roboto', background: {type: 'pattern', pattern: {preset, foregroundColor: '#112233', backgroundColor: '#FFEECC'}}}, slides: [{title: 'Pattern'}]};
   const diagnostics = [];
-  const svg = renderSlideSvg(deck, 0, {onDiagnostic: item => diagnostics.push(item)});
+  const svg = toSvg(deck, 1, {onDiagnostic: item => diagnostics.push(item)});
   const [xml] = await slideXml(deck, {onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.filter(item => /pattern/.test(item.code)), [], `${preset}: drawn and exported`);
   assert.match(xml, new RegExp(`<a:pattFill prst="${resolvePatternPreset(preset)}"><a:fgClr><a:srgbClr val="112233"(?:/>|></a:srgbClr>)</a:fgClr><a:bgClr><a:srgbClr val="FFEECC"(?:/>|></a:srgbClr>)</a:bgClr></a:pattFill>`), `${preset}: native pattFill`);
@@ -142,7 +142,7 @@ for (const preset of [...PATTERN_PRESETS, 'diagStripe']) {
 // The deck's own colours (theme slots, defaults) resolve the same in both engines.
 {
   const deck = {design: {fontScheme: 'roboto', colorScheme: 'cool-horizon', background: {type: 'pattern', pattern: {preset: 'wdUpDiag', foregroundColor: 'accent1', backgroundColor: 'light1'}, opacity: 0.5}}, slides: [{title: 'Pattern'}]};
-  const svg = renderSlideSvg(deck, 0), [xml] = await slideXml(deck);
+  const svg = toSvg(deck, 1), [xml] = await slideXml(deck);
   const nativeFg = /<a:fgClr>(?:<a:schemeClr val="(\w+)"|<a:srgbClr val="([0-9A-F]{6})")/.exec(xml);
   assert.ok(nativeFg, 'foreground resolves natively');
   assert.match(svg, /<pattern\b[^>]*id="opf-s1-pattern"/);

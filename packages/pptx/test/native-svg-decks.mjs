@@ -96,7 +96,7 @@ const pictureRows = (entries, slideNumber) => {
 async function loadRenderer() {
   const target = process.env.OPF_RENDER_DIST ? pathToFileURL(path.resolve(process.env.OPF_RENDER_DIST, 'dist/index.js')).href : '@openpresentation/opf-render';
   const renderer = await import(target);
-  const probe = renderer.renderSlideSvg({slides: [{image: uri(logoWide)}]}, 0);
+  const probe = renderer.toSvg({slides: [{image: uri(logoWide)}]}, 1);
   return {...renderer, drawsSvg: /<image\b/.test(probe) && !probe.includes('data-opf-asset-status'), source: process.env.OPF_RENDER_DIST ?? 'installed @openpresentation/opf-render'};
 }
 
@@ -119,11 +119,11 @@ async function generate(output) {
   });
 
   // 2. The raster control: the same deck with each SVG as a PNG picture only (what an exporter without SVG support wrote).
-  const {svgToPng} = renderer;
+  const {toPng} = renderer;
   const png = await toPptx(deckFor(), {...FIXED, imageResolver: async src => {
     const bytes = svgDataUriBytes(src);
     if (!bytes) return null;
-    return {data: await svgToPng(prepareSvg(bytes).text, {scale: 1, background: 'rgba(0, 0, 0, 0)'}), mediaType: 'image/png'};
+    return {data: await toPng(prepareSvg(bytes).text, {scale: 1, background: 'rgba(0, 0, 0, 0)'}), mediaType: 'image/png'};
   }});
   await write('rr10-svg-raster-control.pptx', png, 'The same slides with each SVG as a 1x PNG picture only: compare at 400% zoom with rr10-svg-pictures.pptx (the control is soft, the SVG deck is sharp).', {
     slides: slides.map((slide, index) => ({n: index + 1, id: slide.id, pictures: pictureRows(unzipSync(png), index + 1)})),
@@ -153,8 +153,8 @@ async function generate(output) {
 
   // Previews (this renderer) and the PNG fallbacks that were embedded.
   for (const [file, deck] of [['rr10-svg-pictures', deckFor()], ['rr10-svg-effects-probe', effectDeck]]) {
-    const svgs = renderer.renderSvg(deck, {});
-    for (const [index, svg] of svgs.entries()) await writeFile(path.join(output, 'preview', `${file}-${index + 1}.png`), await svgToPng(svg, {scale: 1}));
+    const svgs = renderer.toSvg(deck, {});
+    for (const [index, svg] of svgs.entries()) await writeFile(path.join(output, 'preview', `${file}-${index + 1}.png`), await toPng(svg, {scale: 1}));
   }
   for (const [file, entries] of [['rr10-svg-pictures', mainEntries]]) {
     for (const [part, bytes] of Object.entries(entries)) if (part.endsWith('.png') && part.startsWith('ppt/media/')) await writeFile(path.join(output, 'fallback', `${file}-${path.basename(part)}`), bytes);

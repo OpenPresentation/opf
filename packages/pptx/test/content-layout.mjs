@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {renderSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
+import {toSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -21,7 +21,7 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
     {title: 'Single event', timeline: {events: [{when: 'Now', what: 'One event'}]}},
   ]};
   const options = {fonts};
-  const svgSlides = renderSvg(deck, options);
+  const svgSlides = toSvg(deck, options);
   const pptx = await toPptx(deck, options), entries = unzipSync(pptx);
   const imported = await fromPptx(pptx);
   // FF-24b: default text on a theme background is a scheme reference. Resolve it
@@ -103,7 +103,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
 assert.ok(separatedQuotes>=4&&overflowQuotes>=1,'Native long quotes cover fitting and explicit overflow');
 const chartDeck = {slides: [{title: 'Readable native axes', chart: {type: 'line', data: {columns: ['Quarter', 'Value'], rows: [['Q1', 10], ['Q2', 20]]}}}]};
 const chartOptions = {fonts};
-const chartSvg = parser.parse(renderSvg(chartDeck, chartOptions)[0]);
+const chartSvg = parser.parse(toSvg(chartDeck, chartOptions)[0]);
 const axisLabel = all(chartSvg, 'text').find(value => content(value) === 'Q1');
 assert.ok(axisLabel, 'Published renderer axis label required');
 const chartEntries = unzipSync(await toPptx(chartDeck, chartOptions));

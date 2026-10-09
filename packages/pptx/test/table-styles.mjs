@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {tableValues, nativeTableEntries} from './table-values.js';
 
@@ -55,7 +55,7 @@ assert.equal(run(themed.table.rows[0][1]).italic,true);
 assert.equal(run(themed.table.rows[1][1]).italic,false);
 assert.equal(run(themed.table.rows[2][1]).italic,true);
 assert.equal(run(themed.table.rows[0][1]).fontFamily,'Aptos');
-assert.match(renderSlideSvg(themed.deck, 0),/#D0D0D0/i);
+assert.match(toSvg(themed.deck, 1),/#D0D0D0/i);
 assert.deepEqual(allRows(themed.table).map(r=>r.map(text)),Array.from({length:5},(_,r)=>Array.from({length:5},(_,c)=>`${r},${c}`)));
 const repeated=await fromPptx(await toPptx(themed.deck));
 assert.deepEqual(allRows(tableOf(repeated)).map(row=>row.map(cell=>({color:run(cell).color,bold:run(cell).bold??false,italic:run(cell).italic??false}))),allRows(themed.table).map(row=>row.map(cell=>({color:run(cell).color,bold:run(cell).bold??false,italic:run(cell).italic??false}))));

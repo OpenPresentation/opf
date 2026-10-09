@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 
 // PptxGenJS ignores `pt` in shape `line` options and writes its 1 pt default
@@ -39,7 +39,7 @@ const emu = px => String(Math.round(px * PX_PT * EMU_PT));
 let checked = 0;
 for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {widthInches: 540 / 96, heightInches: 960 / 96}]) {
   const source = deck(dimensions);
-  const previews = renderSvg(source, {trace: true});
+  const previews = toSvg(source, {trace: true});
   const slides = Object.entries(unzipSync(await toPptx(source, {seed: 1}))).filter(([name]) => /^ppt\/slides\/slide\d+\.xml$/.test(name))
     .sort(([a], [b]) => a.localeCompare(b, 'en', {numeric: true})).map(([, bytes]) => shapes(decoder.decode(bytes)));
   const named = (slide, name) => {

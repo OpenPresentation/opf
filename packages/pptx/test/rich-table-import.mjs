@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {validate} from '@openpresentation/opf';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {tableValues, nativeTableEntries} from './table-values.js';
 
@@ -28,8 +28,8 @@ assert.equal(table.rows[0][1].find(run=>run.text==='2').subscript,true);
 assert.equal(table.rows[1][1].find(run=>run.text==='2').superscript,true);
 assert.equal(plain(table.rows[1][0]),'\nStart\n\nEnd\n');
 assert.deepEqual(table, source, 'Full provenance preserves authored cells, rich values and empty representations');
-assert.match(renderSlideSvg(imported, 0),/A/);
-assert.match(renderSlideSvg(imported, 0),/https:\/\/example.com/);
+assert.match(toSvg(imported, 1),/A/);
+assert.match(toSvg(imported, 1),/https:\/\/example.com/);
 const again=tableOf(await fromPptx(await toPptx(imported)));
 assert.equal(plain(again.rows[1][0]),'\nStart\n\nEnd\n');
 assert.deepEqual(again.rows[0][0],table.rows[0][0],'Representable styles survive repeated native conversion');

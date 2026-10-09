@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {renderSvg, toPptx} from './helpers/default-catalog.mjs';
+import {toSvg, toPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 // FF-38: an image that cannot be embedded exports the preview's placeholder,
@@ -71,7 +71,7 @@ const deck = {
 let checked = 0;
 const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 for (const options of [{}, {fonts}]) {
-  const preview = renderSvg(deck, {trace: true, ...options});
+  const preview = toSvg(deck, {trace: true, ...options});
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
   const native = index => shapes(decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
 

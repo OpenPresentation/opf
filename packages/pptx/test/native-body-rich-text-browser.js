@@ -9,7 +9,7 @@ import {defaultCatalog} from '@openpresentation/opf/catalog';
 // OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
 const host = options => ({catalogs: [defaultCatalog], ...options});
 const toPptx = (deck, options) => pptx.toPptx(deck, host(options)), fromPptx = (bytes, options) => pptx.fromPptx(bytes, host(options));
-const renderSlideSvg = (deck, index, options) => render.renderSlideSvg(deck, index, host(options));
+const toSvg = (deck, slide, options) => render.toSvg(deck, slide, host(options));
 const output=document.querySelector('pre');
 let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);checks++;};
@@ -52,7 +52,7 @@ try {
   const deleted=await fromPptx(native('',true));check(textBlocks(deleted).length===0,'Deleted body is not restored');
   const unstyled=await fromPptx(native('<p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:t> current&#13;\n&#9; &amp;#13; </a:t></a:r></a:p></p:txBody>'));
   check(textBlocks(unstyled)[0]===' current\r\n\t &#13; ','Numeric references and literal entity spelling stay current');
-  document.querySelector('main').innerHTML=renderSlideSvg(deck, 0);
+  document.querySelector('main').innerHTML=toSvg(deck, 1);
   check(document.querySelector('main').textContent.includes('CURRENT'),'Current imported body appears in preview');
   check(!!document.querySelector('main a[href="https://example.com/current"]'),'Current link appears in preview DOM');
   observations.push({mode,deck,diagnostics});

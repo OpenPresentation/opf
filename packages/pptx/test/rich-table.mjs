@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const all=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -18,7 +18,7 @@ const table={columns:[[{text:'Normal ',bold:false},{text:'bold',bold:true}],'Sca
 const deck={design:{theme:'classic',fontScheme:'roboto'},slides:[{table}]},before=structuredClone(deck);
 const measurement={measure:(text,size,style)=>[...text].length*size*(style.fontWeight>=600?.6:.5),resolveStyle:style=>style.fontFamily==='Alias'?{...style,fontFamily:'Resolved'}:style};
 assert.equal(validate(deck, {only: ['format']}).valid,true);
-const svg=renderSlideSvg(deck, 0,{trace:true,fonts:{textMeasurement:measurement}});
+const svg=toSvg(deck, 1,{trace:true,fonts:{textMeasurement:measurement}});
 assert.match(svg,/data-opf-rich-text="true"/);
 assert.match(svg,/data-opf-path="slides\.0\.table\.rows\.0\.0"/);
 assert.ok(/<text(?=[^>]*font-weight="700")(?=[^>]*fill="#A00000")[^>]*>Bold<\/text>/.test(svg));

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {toPptx} from '../dist/index.js';
@@ -47,7 +47,7 @@ const expected = [
 let checked = 0;
 const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 for (const options of [{}, {fonts}]) {
-  const native = await slideXml(deck, options), preview = renderSvg(deck, options);
+  const native = await slideXml(deck, options), preview = toSvg(deck, options);
   for (const [index, pairs] of expected.entries()) for (const [text, align] of pairs) {
     assert.deepEqual(alignmentOf(native[index], text), [align], `${text}: native alignment`);
     // Estimated previews anchor at the alignment edge; measured previews anchor
@@ -71,7 +71,7 @@ let metricLines = 0;
 for (const align of ['left', 'center', 'right']) {
   const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: align}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: '$6B', label: 'SAM', description: 'Serviceable market'}}]}]};
   for (const options of [{}, {fonts}]) {
-    const [xml] = await slideXml(metricDeck, options), [svg] = renderSvg(metricDeck, options);
+    const [xml] = await slideXml(metricDeck, options), [svg] = toSvg(metricDeck, options);
     for (const text of ['$48B', 'TAM', '$6B', 'SAM', 'Serviceable market']) {
       assert.deepEqual(alignmentOf(xml, text), [{left: 'l', center: 'ctr', right: 'r'}[align]], `${text}: native metric alignment (${align})`);
       assert.equal(previewAnchor(svg, text), {left: 'start', center: 'middle', right: 'end'}[align], `${text}: preview metric anchor (${align})`);
@@ -94,7 +94,7 @@ const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', conten
 const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['ctr', 'l', 'ctr']];
 let coverChecks = 0;
 for (const options of [{}, {fonts}]) {
-  const native = await slideXml(coverDeck, options), preview = renderSvg(coverDeck, options);
+  const native = await slideXml(coverDeck, options), preview = toSvg(coverDeck, options);
   for (const [index, aligns] of coverExpected.entries()) for (const [position, field] of ['tag', 'title', 'subtitle'].entries()) {
     const text = coverText[field];
     assert.deepEqual(alignmentOf(native[index], text), [aligns[position]], `slide ${index} ${field}: native alignment`);
@@ -106,7 +106,7 @@ assert.equal(coverChecks, 18);
 
 // Media placeholders draw the same surface, play badge and caption as the preview.
 const media = {design: {fontScheme: 'roboto'}, slides: [{title: 'Media', video: {src: 'https://example.com/video.mp4', description: 'Walkthrough'}}]};
-const [mediaXml] = await slideXml(media), [mediaSvg] = renderSvg(media);
+const [mediaXml] = await slideXml(media), [mediaSvg] = toSvg(media);
 const mediaShapes = shapes(mediaXml);
 const frame = mediaShapes.find(shape => shape.name === 'OPF media slides.0.video frame');
 const badge = mediaShapes.find(shape => shape.name === 'OPF media slides.0.video badge');

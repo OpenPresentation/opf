@@ -3,7 +3,7 @@ import {strFromU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
 import {colorContrast, resolveCanvasDimensions} from '@openpresentation/opf/composition';
-import {renderSlideSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.
@@ -238,7 +238,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
     const mark = named(slide(index), /^OPF watermark text$/)[0];
     const color = mark.match(/<a:rPr\b[\s\S]*?<a:solidFill><a:(srgbClr|schemeClr) val="(\w+)"/);
     const exported = color[1] === 'srgbClr' ? color[2].toUpperCase() : slot(color[2]);
-    const preview = renderSlideSvg(deck, index - 1).match(/<text [^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>DRAFT/)[1].slice(1).toUpperCase();
+    const preview = toSvg(deck, index).match(/<text [^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>DRAFT/)[1].slice(1).toUpperCase();
     assert.equal(exported, preview, `slide ${index}: preview and export use one color`);
     seen.push(exported);
   }

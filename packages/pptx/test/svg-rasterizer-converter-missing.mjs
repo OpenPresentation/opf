@@ -1,5 +1,5 @@
 // RR-63: opf-render 0.16 makes its PNG converter (@resvg/resvg-js) an optional peer. An installed opf-render whose converter is
-// missing rejects svgToPng with `converter-missing`; the exporter maps that to its existing `svg-rasterizer-unavailable`
+// missing rejects toPng with `converter-missing`; the exporter maps that to its existing `svg-rasterizer-unavailable`
 // path (placeholder plus an unresolved-asset diagnostic, or a throw under strictAssets) and keeps render's install command in
 // the message. Any other renderer failure stays `svg-render-failed`.
 //
@@ -31,10 +31,10 @@ const run = (script, label) => {
   return child.stdout;
 };
 
-// ---- 1. A stub opf-render whose svgToPng rejects like render 0.16 with a missing converter.
+// ---- 1. A stub opf-render whose toPng rejects like render 0.16 with a missing converter.
 {
   const stubSource = `
-    export async function svgToPng() {
+    export async function toPng() {
       throw Object.assign(new Error('@resvg/resvg-js is not installed. It is an optional peer dependency of @openpresentation/opf-render, used for PNG output: run \`${INSTALL}\`.'), {
         code: 'converter-missing',
         details: {package: '@resvg/resvg-js', range: '^2.6.2', install: '${INSTALL}', purpose: 'PNG output', installed: false},
@@ -67,7 +67,7 @@ const run = (script, label) => {
 
 // ---- 2. Any other renderer error is not a missing rasterizer.
 {
-  const stubSource = `export async function svgToPng() { throw Object.assign(new Error('boom'), {code: 'font-resource-unavailable'}); }`;
+  const stubSource = `export async function toPng() { throw Object.assign(new Error('boom'), {code: 'font-resource-unavailable'}); }`;
   const hook = `export async function resolve(s,c,n){if(s==="@openpresentation/opf-render")return{url:"data:text/javascript,"+encodeURIComponent(${JSON.stringify(stubSource)}),shortCircuit:true};return n(s,c);}`;
   run(`${preamble(hook)}
     const diagnostics=[];

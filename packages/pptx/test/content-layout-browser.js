@@ -6,7 +6,7 @@ import {defaultCatalog} from '@openpresentation/opf/catalog';
 // OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
 const host = options => ({catalogs: [defaultCatalog], ...options});
 const toPptx = (deck, options) => pptx.toPptx(deck, host(options)), fromPptx = (bytes, options) => pptx.fromPptx(bytes, host(options));
-const renderSvg = (deck, options) => svgEngine.renderSvg(deck, host(options)), resolvePresentation = (deck, options) => svgEngine.resolvePresentation(deck, host(options));
+const toSvg = (deck, options) => svgEngine.toSvg(deck, host(options)), resolvePresentation = (deck, options) => svgEngine.resolvePresentation(deck, host(options));
 
 const output = document.querySelector('pre');
 let checks = 0;
@@ -22,7 +22,7 @@ try {
   ]};
   // Exercise browser-default measurement on both sides. Loaded-font/native fidelity
   // is checked separately; this is the actual browser conversion/formatting boundary.
-  const svgs = renderSvg(source);
+  const svgs = toSvg(source);
   const bytes = await toPptx(source), entries = unzipSync(bytes);
   for (const [index, svg] of svgs.entries()) {
     const native = xml(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));

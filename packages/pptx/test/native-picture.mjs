@@ -48,7 +48,7 @@ for (const name of packageNames) {
 }
 const {validate} = await import(publicEntries['@openpresentation/opf']);
 const {toPptx, fromPptx} = await import(publicEntries['@openpresentation/opf-pptx']);
-const {renderSlideSvg, svgToPng} = await import(publicEntries['@openpresentation/opf-render']);
+const {toSvg, toPng} = await import(publicEntries['@openpresentation/opf-render']);
 const {unzipSync} = resolve('fflate');
 const {XMLParser, XMLValidator} = resolve('fast-xml-parser');
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -97,7 +97,7 @@ assert.equal(importedPictures.length, 1);
 assert.equal(importedPictures[0].alt, source.slides[0].image.alt);
 assert.equal(sha(Buffer.from(importedPictures[0].src.split(',')[1], 'base64')), sha(image));
 assert.equal(diagnostics.length, 0);
-const svg = renderSlideSvg(source, 0), png = await svgToPng(svg, {fonts: {loadSystemFonts: false, useBundledFonts: false}});
+const svg = toSvg(source, 1), png = await toPng(svg, {fonts: {loadSystemFonts: false, useBundledFonts: false}});
 await mkdir(output, {recursive: false});
 await writeFile(path.join(output, 'source.png'), image);
 await writeJson(path.join(output, 'source.opf.json'), source);

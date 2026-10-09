@@ -13,12 +13,12 @@ export async function webpToPng(bytes) {
 // not installed, and also when it is installed but its PNG converter (`@resvg/resvg-js`, an optional peer of opf-render
 // 0.16) is not: opf-render's `converter-missing` error maps to the same code, with its install command on `install`.
 //
-// This is the one place the exporter calls the renderer. opf-render's svgToPng(svg, {fonts, scale, background}) takes the
+// This is the one place the exporter calls the renderer. opf-render's toPng(svg, {fonts, scale, background}) takes the
 // fonts handle for the faces it may draw with: here only the bundled ones, never the system's.
 export async function svgToPng(svg, {scale, text}) {
   let render;
   try {
-    ({svgToPng: render} = await import('@openpresentation/opf-render'));
+    ({toPng: render} = await import('@openpresentation/opf-render'));
   } catch (error) {
     const unavailable = new Error('SVG pictures need the optional peer @openpresentation/opf-render (or an options.svgRasterizer).', {cause: error});
     unavailable.code = 'svg-rasterizer-unavailable';

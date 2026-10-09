@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false});
 const array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 const find=(value,key)=>!value||typeof value!=='object'?[]:Array.isArray(value)?value.flatMap(item=>find(item,key)):Object.entries(value).flatMap(([name,child])=>name===key?[...array(child),...find(child,key)]:find(child,key));
 const deck={slides:[{table:{columns:[['Normal ',{text:'bold',bold:true}],'Value'],rows:[['Short','one'],[['\nStart\n',{text:'\nEnd\n',bold:true}],[]]]}}]};
 const diagnostics=[];
-const svg=parser.parse(renderSlideSvg(deck, 0,{trace:true,onDiagnostic:d=>diagnostics.push(d)}));
+const svg=parser.parse(toSvg(deck, 1,{trace:true,onDiagnostic:d=>diagnostics.push(d)}));
 assert.ok(!diagnostics.some(d=>d.code==='text-overflow'));
 const native=parser.parse(new TextDecoder().decode(unzipSync(await toPptx(deck))['ppt/slides/slide1.xml']));
 const rows=find(native,'a:tr'),rectangles=find(svg,'rect');

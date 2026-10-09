@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { unzipSync } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
-import { renderSlideSvg } from '@openpresentation/opf-render';
+import { toSvg } from '@openpresentation/opf-render';
 import { toPptx } from '../dist/index.js';
 import { rasterDimensions } from '../dist/image-geometry.js';
 const parser = new XMLParser({ignoreAttributes:false, parseTagValue:false});
@@ -19,7 +19,7 @@ for (const [name,width,height] of fixtures) {
   // 0.15: design.imageFit (cover, contain, stretch) is the default fit of image blocks; cover when nothing sets it.
   const mode=slideMode??deckMode??'cover';
   const deck={design:{...(deckMode?{imageFit:deckMode}:{})},slides:[{design:slideMode?{imageFit:slideMode}:{},image:{src:uri,alt:'Four quadrants and a circle'}}]};
-  const svg=renderSlideSvg(deck, 0,{trace:true});
+  const svg=toSvg(deck, 1,{trace:true});
   const image=find(parser.parse(svg),'image')[0];
   assert.equal(image['@_preserveAspectRatio'],mode==='cover'?'xMidYMid slice':'xMidYMid meet');
   const bounds=Object.fromEntries(['x','y','width','height'].map(k=>[k,Number(image[`@_${k}`])]));
