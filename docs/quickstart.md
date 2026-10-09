@@ -12,13 +12,13 @@ shipped versus deferred.
 ## Versions
 
 Pin the coordinated set from `release-plan.json` (currently core **0.17.0**,
-CLI **0.17.1**, renderer **0.17.0**, PPTX **0.17.0**, editor **0.17.0**). All of these packages declare
+CLI **0.17.1**, renderer **0.17.1**, PPTX **0.17.0**, editor **0.17.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
 npm install @openpresentation/opf@0.17.0 \
-  @openpresentation/opf-render@0.17.0 \
+  @openpresentation/opf-render@0.17.1 \
   @openpresentation/opf-editor@0.17.0 \
   @openpresentation/opf-pptx@0.17.0 \
   @openpresentation/cli@0.17.1

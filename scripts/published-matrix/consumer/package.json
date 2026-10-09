@@ -55,7 +55,7 @@
     "@openpresentation/opf": "0.17.0",
     "@openpresentation/opf-editor": "0.17.0",
     "@openpresentation/opf-pptx": "0.17.0",
-    "@openpresentation/opf-render": "0.17.0",
+    "@openpresentation/opf-render": "0.17.1",
     "@resvg/resvg-js": "^2.6.2",
     "fast-xml-parser": "5.11.2",
     "fflate": "0.8.3",
