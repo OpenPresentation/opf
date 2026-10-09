@@ -1,5 +1,5 @@
 // opf-render and opf-pptx are optional peer dependencies of core: core stays small (no native image or PDF engines, no
-// font packs), and an application that only reads, validates or edits a deck never needs them. `@openpresentation/opf/node`
+// font packs), and an application that only reads, validates or edits a deck never needs them. Core's Node build
 // (and the opf CLI, through it) loads them the first time a call needs them, from core's own install location first (a
 // project dependency, a global CLI install, an npx run with several --package flags) and from the working directory
 // second (a project that has them installed while the CLI is global). Nothing is ever fetched.
@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError } from "../api-errors.js";
 
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
@@ -88,9 +88,9 @@ const renderHint = () =>
 	`    svg:                   fonts only`;
 
 const hint = (name: string) =>
-	`${name} is not installed. It is an optional peer of @openpresentation/opf, loaded only by @openpresentation/opf/node and the opf commands that need it. Install it next to the CLI or in your project:\n` +
+	`${name} is not installed. It is an optional peer of @openpresentation/opf, loaded only by the file API of @openpresentation/opf in Node (convert, open) and the opf commands that need it. Install it next to the CLI or in your project:\n` +
 	`  npm install -g ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (global CLI)\n` +
-	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that imports @openpresentation/opf/node or depends on the CLI)\n` +
+	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that calls convert or open of @openpresentation/opf, or depends on the CLI)\n` +
 	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)` +
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 

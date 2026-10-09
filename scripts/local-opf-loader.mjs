@@ -9,6 +9,8 @@ export function resolve(specifier, context, nextResolve) {
   if (specifier.startsWith('@openpresentation/opf/')) {
     const subpath = specifier.slice('@openpresentation/opf/'.length);
     if (subpath === 'package.json') return { url: new URL('../package.json', dist).href, shortCircuit: true };
+    // RR-70: the CLI engine is `./internal/engine` (dist/node-engine.js).
+    if (subpath === 'internal/engine') return { url: new URL('node-engine.js', dist).href, shortCircuit: true };
     if (!subpath.includes('..')) return { url: new URL(subpath.startsWith('spec/') ? subpath : `${subpath}.js`, dist).href, shortCircuit: true };
   }
   return nextResolve(specifier, context);

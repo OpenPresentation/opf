@@ -4,7 +4,7 @@
 // serves unchanged (leaseSharedFonts), so a library caller that converts many decks does not reload it every time.
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError } from "../api-errors.js";
 import { type Diagnostic, type EmbeddedFace, type FontsHandle, type Renderer, missingPeerFrom } from "./peers.js";
 import type { Reporter } from "./reporter.js";
 

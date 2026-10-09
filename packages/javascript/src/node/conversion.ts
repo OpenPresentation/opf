@@ -1,4 +1,4 @@
-// `convert`, `open` and `save` of `@openpresentation/opf/node` (RR-62), and the plan `opf convert` runs: files in, files out, the
+// `convert`, `open` and `save` of `@openpresentation/opf` in Node (RR-62, RR-70), and the plan `opf convert` runs: files in, files out, the
 // formats named by the file names. A conversion is planned first (every option checked, the input read, checked and drawn or
 // serialized, every byte produced), then written atomically, so an error writes nothing. The command applies --fail-on to the
 // plan and writes it; `convert` writes it at once, or returns the bytes when no output path is given.
@@ -11,10 +11,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { type DeckFormat, type DeckReport, deckFormatOf, readDeckReport } from "../deck-report.js";
 import { stringify } from "../deck.js";
-import type { Finding, Presentation, ValidationReport } from "../index.js";
+import type { Finding, Presentation, ValidationReport } from "../core.js";
 import { OPFValidationError, validate } from "../validator.js";
 import { DEFAULT_CATALOGS } from "./catalogs.js";
-import { OPFApiError, OPFExportError, OPFImportError, asApiError } from "./errors.js";
+import { OPFApiError, OPFExportError, OPFImportError, asApiError } from "../api-errors.js";
 import { type ExportFile, type ExportFormat, type ExportOptions, checkDate, checkScale } from "./export.js";
 import { writeFiles } from "./files.js";
 import { type Peer, type PptxModule, loadPptx } from "./peers.js";

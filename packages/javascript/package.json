@@ -32,7 +32,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "bun": "./dist/index.js",
+      "deno": "./dist/index.js",
+      "workerd": "./dist/browser.js",
+      "worker": "./dist/browser.js",
+      "browser": "./dist/browser.js",
+      "node": "./dist/index.js",
+      "default": "./dist/browser.js"
     },
     "./schemas": {
       "types": "./dist/schemas.d.ts",
@@ -116,13 +122,9 @@
       "types": "./dist/convert.d.ts",
       "import": "./dist/convert.js"
     },
-    "./node": {
-      "types": "./dist/node.d.ts",
-      "import": "./dist/node.js"
-    },
-    "./node/engine": {
+    "./internal/engine": {
       "types": "./dist/node-engine.d.ts",
-      "import": "./dist/node-engine.js"
+      "node": "./dist/node-engine.js"
     }
   },
   "files": [

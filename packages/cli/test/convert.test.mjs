@@ -1,4 +1,4 @@
-// `opf convert` (RR-62), the thin command over `convert` of `@openpresentation/opf/node`, and the --out rule that `opf render` and
+// `opf convert` (RR-62), the thin command over `convert` of `@openpresentation/opf`, and the --out rule that `opf render` and
 // `opf export` share with it. Deck-to-deck conversions and the errors need no optional peer and always run; the drawing checks
 // run through the installed opf-render and opf-pptx and wait, like files.mjs, while those do not satisfy the CLI's peer ranges
 // (scripts/unreleased-gate.mjs). A missing peer is simulated with a copy of the build and of core in a tree without peers.

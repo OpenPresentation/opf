@@ -1,10 +1,10 @@
 // `opf convert <input> <output>`: one file to another, the formats named by the file names, through `convert` of
-// `@openpresentation/opf/node` (its plan, conversion.ts in core). The command adds the flags, --fail-on, the JSON report of
+// `@openpresentation/opf` (its plan, conversion.ts in core). The command adds the flags, --fail-on, the JSON report of
 // `opf export` and its exit codes: nothing is written when the document is invalid, a step failed or a finding reaches
 // --fail-on, and an existing output needs --force.
 import path from "node:path";
-import { type ConversionPlan, OPFApiError, Reporter, finishReport, planConversion, writePlanned } from "@openpresentation/opf/node/engine";
-import type { ConvertOptions } from "@openpresentation/opf/node";
+import { type ConversionPlan, OPFApiError, Reporter, finishReport, planConversion, writePlanned } from "@openpresentation/opf/internal/engine";
+import type { ConvertOptions } from "@openpresentation/opf";
 import { FAIL_ON_MESSAGE, parseFailOn } from "./check.js";
 import { FileCommandError, arity, commandError, json, parseOptions, sha256 } from "./io.js";
 import type { Host } from "./render.js";
@@ -124,7 +124,7 @@ async function run(args: string[], host: Host) {
 		report(false);
 		return;
 	}
-	// The commands refuse an existing output unless --force, while `convert` of /node replaces by default: pass it explicitly.
+	// The commands refuse an existing output unless --force, while core's `convert` replaces by default: pass it explicitly.
 	const overwrite = options.force === true;
 	await writePlanned(plan.files, overwrite, true);
 	report(true);

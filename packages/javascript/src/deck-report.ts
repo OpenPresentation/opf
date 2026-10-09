@@ -1,4 +1,4 @@
-// The deck reader behind `parse` (deck.ts) and `@openpresentation/opf/node`, which never throws for content: the deck and the
+// The deck reader behind `parse` (deck.ts) and the Node file API (`open`, `convert`), which never throws for content: the deck and the
 // `validate` report of it, every finding located in the text. It is not a package entry: `parse` is the public reader.
 // No Node APIs, so it runs in a browser.
 import { type Catalog, checkCatalogsOption } from "./catalog-refs.js";
@@ -58,7 +58,7 @@ export interface DeckReport extends ValidationReport {
 
 /**
  * The reader behind `parse` that never throws for content: the deck and the `validate` report of it, every finding
- * located in the text. Not exported from the package entries; `@openpresentation/opf/node` and `parse` use it.
+ * located in the text. Not exported from the package root; the Node file API and `parse` use it.
  */
 export function readDeckReport(text: string, options: DeckReportOptions = {}, caller = "parse"): DeckReport {
   if (typeof text !== "string") throw new TypeError(`${caller} expects a string.`);

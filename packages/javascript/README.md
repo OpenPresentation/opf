@@ -49,10 +49,10 @@ console.log(Object.keys(saved.catalogs.default.themes)); // ["classic"]
 console.log(Object.keys(defaultCatalog.tones));
 ```
 
-In Node, `@openpresentation/opf/node` adds files: `convert` turns one file into another (a deck to PDF, PNG, SVG or PPTX, a PowerPoint file to a deck, one deck form to another, or bytes with no output path), `open` reads a deck file or imports a `.pptx`, and `save` writes one. It re-exports the rest of core, so one namespace import covers an application:
+In Node (and Bun and Deno), the root adds files: `convert` turns one file into another (a deck to PDF, PNG, SVG or PPTX, a PowerPoint file to a deck, one deck form to another, or bytes with no output path), `open` reads a deck file or imports a `.pptx`, and `save` writes one. The same import works in every runtime, so one namespace import covers an application:
 
 ```ts
-import * as opf from "@openpresentation/opf/node";
+import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");
 const deck = await opf.open("deck.opf.md");
@@ -61,7 +61,7 @@ await opf.save(deck, "deck.opf.md");
 const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing written
 ```
 
-Drawing and PowerPoint go through the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx`, which `/node` loads the first time a call needs them; npm does not install them for you. `/node` is the only Node-only entry: the root and every other subpath run in a browser. See [OPF files in Node](../../docs/node.md).
+Drawing and PowerPoint go through the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx`, which core loads the first time a call needs them; npm does not install them for you. The root has conditional exports (OPF 0.18 removed `/node`): `node`, `bun` and `deno` get this full build, and `browser`, `worker`, `workerd` and `default` get a browser-safe build with the same names and the same types, where `open`, `save` and `convert` reject with `OPFApiError` code `node-only`. Every other subpath runs in a browser. `parseSlideSelection(3 | "1-3" | [1, 3], total)` reads slide selections in both. See [OPF files in Node](../../docs/node.md).
 
 Use focused imports when you only need one surface:
 
@@ -91,7 +91,7 @@ The layout engine's names are not on the root. `composeSlide`, `fitText`, `layou
 
 ### Reading and writing a deck in any form
 
-`parse(text, { format, filename, catalogs })` and `stringify(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write a deck as JSON (canonical), YAML or Markdown. The format is the `format` option, else the file name (`.opf.md` is Markdown, `.yaml` and `.yml` are YAML, anything else JSON; a plain `.md` is not a deck), and never the content. `parse` returns the presentation and throws `OPFValidationError` for a syntax, schema or reference error; the error's `report.findings` are located by line and column in the text (`opf/json-syntax`, `yaml/<rule>` or `markdown/<rule>` for syntax errors). Warnings do not throw: `validate(text)` returns the full report. Both run in a browser; files are `/node`'s job (below).
+`parse(text, { format, filename, catalogs })` and `stringify(presentation, { format | filename })` (the root and `@openpresentation/opf/deck`) read and write a deck as JSON (canonical), YAML or Markdown. The format is the `format` option, else the file name (`.opf.md` is Markdown, `.yaml` and `.yml` are YAML, anything else JSON; a plain `.md` is not a deck), and never the content. `parse` returns the presentation and throws `OPFValidationError` for a syntax, schema or reference error; the error's `report.findings` are located by line and column in the text (`opf/json-syntax`, `yaml/<rule>` or `markdown/<rule>` for syntax errors). Warnings do not throw: `validate(text)` returns the full report. Both run in a browser; files are the Node build's job (above).
 
 ### OPF as YAML
 

@@ -16,7 +16,7 @@ Use the [content guide](references/content.md) for payload shapes. [The starter]
 
 ## CLI workflow
 
-When the project's CLI is installed, use `opf create deck.opf.json --title "Decision brief"` for a minimal starter, or `opf create deck.opf.json --from authored.json` for a complete authored document. Run `opf validate deck.opf.json` and inspect both errors and warnings. `opf schema presentation '/$defs/Slide'` exposes current options. `opf --version` reports the CLI and the installed core (format) versions; match them to the target project. From code, `open`, `save` and `convert` (PDF, PNG, SVG, PPTX) of `@openpresentation/opf/node` read, write and export a deck file, and core's `parse`/`stringify` read and write deck text (see the opf-export skill). Check `opf --help` before using an older installation.
+When the project's CLI is installed, use `opf create deck.opf.json --title "Decision brief"` for a minimal starter, or `opf create deck.opf.json --from authored.json` for a complete authored document. Run `opf validate deck.opf.json` and inspect both errors and warnings. `opf schema presentation '/$defs/Slide'` exposes current options. `opf --version` reports the CLI and the installed core (format) versions; match them to the target project. From code, `open`, `save` and `convert` (PDF, PNG, SVG, PPTX) of `@openpresentation/opf` in Node read, write and export a deck file, and core's `parse`/`stringify` read and write deck text (see the opf-export skill). Check `opf --help` before using an older installation.
 
 ## Tabular data
 

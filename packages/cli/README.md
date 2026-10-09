@@ -2,7 +2,7 @@
 
 The `opf` command, for agents and people working with OPF presentations. Create documents, validate them, apply precise edits, paginate content, embed the catalog records a deck uses for offline use (`opf embed`), inspect the bundled schemas and the default catalog, render, export (PPTX, PDF, PNG, SVG), convert and import (PPTX) files. Node 22 or later on macOS, Linux, or Windows is required (`engines.node` `>=22` from the release after 0.10.0; 0.10.0 and earlier 24.x-only releases make npm on Node 22 or 26 silently install the 0.7.0 CLI, which has no `export` or `render` command).
 
-The CLI depends on `@openpresentation/opf` (core), which holds the OPF schema, catalogs and validator and reads and writes the text formats, and whose `@openpresentation/opf/node` engine reads and writes files; the CLI is the command over it. It needs no API key or network connection at runtime. `opf --version` reports the CLI and the installed core versions. Validation and editing never render; successful validation is not visual verification. `opf render`, `opf export`, `opf convert` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
+The CLI depends on `@openpresentation/opf` (core), which holds the OPF schema, catalogs and validator and reads and writes the text formats, and whose Node build reads and writes files; the CLI is the command over it. It needs no API key or network connection at runtime. `opf --version` reports the CLI and the installed core versions. Validation and editing never render; successful validation is not visual verification. `opf render`, `opf export`, `opf convert` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 
 ## Install
 
@@ -193,10 +193,10 @@ A deck can be written as YAML (`deck.opf.yaml`) and every command that reads a d
 
 ## From code
 
-The CLI is the command. An application reads, writes, converts and exports files with core's `@openpresentation/opf/node`, the engine the `convert`, `render`, `export` and `import` commands run, so the command and the code give the same bytes:
+The CLI is the command. An application reads, writes, converts and exports files with core's `@openpresentation/opf` (in Node), the engine the `convert`, `render`, `export` and `import` commands run, so the command and the code give the same bytes:
 
 ```ts
-import * as opf from "@openpresentation/opf/node";
+import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");
 const deck = await opf.open("deck.opf.md");
@@ -223,9 +223,9 @@ opf convert deck.pptx deck.opf.yaml
 
 These commands write files; every other command only prints JSON. They check the document's format and references first and print the `opf validate` report (`findings`, `counts`, exit 1 on errors, or on findings at or above `--fail-on`, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`. `render` and `export` take the format from `--out`'s extension (`--out deck.png` is PNG) and refuse an `--out` with another file extension.
 
-`opf convert <input> <output>` turns a `.pptx`, `.opf.md`, `.yaml`/`.yml` or `.json` file into a `.pdf`, `.pptx`, `.png`, `.svg`, `.zip`, `.opf.md`, `.yaml`/`.yml` or `.json` file, the formats named by the extensions, with the flags, report and exit codes of `opf export`. PNG and SVG give one file per slide beside the output (`slides/deck.png` writes `slides/deck-001.png`, ...; one selected slide is written to the output itself), a `.zip` holds the slides (`--format png`, the default, or `svg`), and a deck output writes the deck in that form. Images resolve next to the input file unless `--asset-dir`. It is `convert` of `@openpresentation/opf/node`.
+`opf convert <input> <output>` turns a `.pptx`, `.opf.md`, `.yaml`/`.yml` or `.json` file into a `.pdf`, `.pptx`, `.png`, `.svg`, `.zip`, `.opf.md`, `.yaml`/`.yml` or `.json` file, the formats named by the extensions, with the flags, report and exit codes of `opf export`. PNG and SVG give one file per slide beside the output (`slides/deck.png` writes `slides/deck-001.png`, ...; one selected slide is written to the output itself), a `.zip` holds the slides (`--format png`, the default, or `svg`), and a deck output writes the deck in that form. Images resolve next to the input file unless `--asset-dir`. It is `convert` of `@openpresentation/opf`.
 
-opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer, or one that lacks `loadFonts`, `renderSlideSvg` or the other names of its API, exits 2 (the declared range is `^0.16.0`) with the install command. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). From code, the same engine is `@openpresentation/opf/node` ([From code](#from-code)). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer, or one that lacks `loadFonts`, `renderSlideSvg` or the other names of its API, exits 2 (the declared range is `^0.16.0`) with the install command. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). From code, the same engine is `@openpresentation/opf` in Node ([From code](#from-code)). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
 
 ## Development checks
 

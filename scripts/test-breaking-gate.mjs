@@ -19,5 +19,25 @@ try{
  assert.equal(rejected.status,1,rejected.stdout+rejected.stderr);assert.match(rejected.stdout+rejected.stderr,/opf-v0.1.0/);
  write("packages/javascript/package.json",{version:"0.2.0"});
  const accepted=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(accepted.status,0,accepted.stdout+accepted.stderr);
- console.log("Release gate regression passed: a tag at HEAD cannot hide removals from the prior release.");
+ // RR-70: a removed package export is breaking. The version bump acknowledges it, or before the bump a pending `changed`
+ // fragment that names the removed specifier exactly.
+ const manifest=(version,exports)=>write("packages/javascript/package.json",{name:"@openpresentation/opf",version,exports});
+ manifest("0.2.0",{".":{},"./node":{},"./node/engine":{}});
+ git("add",".");git("commit","-qm","Exports");git("tag","opf-v0.2.0");writeFileSync(path.join(root,"README.md"),"after the tag\n");git("add",".");git("commit","-qm","After the tag");
+ manifest("0.2.0",{".":{}});
+ const removed=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(removed.status,1,removed.stdout+removed.stderr);assert.match(removed.stderr,/\[export removed\] @openpresentation\/opf\/node \(/);assert.match(removed.stderr,/@openpresentation\/opf\/node\/engine/);
+ mkdirSync(path.join(root,"changes"));
+ const fragment=(type,text)=>writeFileSync(path.join(root,"changes","rr-70.md"),`---\ntype: ${type}\npackages: [opf, cli]\n---\n${text}\n`);
+ fragment("changed","Removed `@openpresentation/opf/node`: import the root.");
+ const partly=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(partly.status,1,"a fragment naming /node does not acknowledge /node/engine");assert.match(partly.stderr,/opf\/node\/engine/);
+ fragment("added","Removed `@openpresentation/opf/node` and `@openpresentation/opf/node/engine`.");
+ assert.equal(run(process.execPath,["scripts/check-breaking-changes.mjs"]).status,1,"only a changed fragment acknowledges a removal");
+ fragment("changed","Removed `@openpresentation/opf/node` and `@openpresentation/opf/node/engine`.");
+ const named=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(named.status,0,named.stdout+named.stderr);assert.match(named.stdout,/"acknowledgedBy": "changelog-fragment"/);
+ rmSync(path.join(root,"changes"),{recursive:true});manifest("0.3.0",{".":{}});
+ const bumped=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(bumped.status,0,bumped.stdout+bumped.stderr);
+ console.log("Release gate regression passed: a tag at HEAD cannot hide removals from the prior release; a removed package export needs the bump or a changed fragment naming it.");
 }finally{rmSync(root,{recursive:true,force:true});}

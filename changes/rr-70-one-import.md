@@ -1,0 +1,10 @@
+---
+type: changed
+packages: [opf, cli]
+---
+RR-70 (breaking, OPF 0.18): one import for every runtime. `import * as opf from "@openpresentation/opf"` works in Node, Bun, Deno, browsers and workers through conditional exports on the root. The `node`, `bun` and `deno` conditions get the full build: core plus `open`, `save` and `convert`, whose file engine loads on the first call. The `browser`, `worker`, `workerd` and `default` conditions get a browser-safe build with the same names. There, `open`, `save` and `convert` (the in-memory `convert(deck, { format })` too, for now) reject with `OPFApiError` code `node-only`, and the message names the browser-safe alternative. Both builds share one type surface, `dist/index.d.ts`, which needs no Node types.
+    - **Removed:** the `@openpresentation/opf/node` subpath, with no alias. Import `@openpresentation/opf` instead. The names are the same except `defaultCatalog`, which stays at `@openpresentation/opf/catalog`; `open`, `save` and `convert` still use the default catalog when no `catalogs` are passed.
+    - **Removed:** the CLI-internal `@openpresentation/opf/node/engine`. The opf CLI now imports `@openpresentation/opf/internal/engine`, which is exported under the `node` condition only and is not an application API.
+    - **Moved to the root:** `OPFApiError`, `OPFExportError` and `OPFImportError` are browser-safe and exported by both builds. `parseSlideSelection(selection, total, label?)` is new at the root. It reads `3`, `[1, 3]`, `"1,3-5"`, `"2-"` and `"-3"` (one-based) and throws `OPFApiError` `invalid-option` or `no-slides`. `convert`'s `slides` option also takes a single slide number.
+    - **Bundlers:** a bundler that sets no runtime condition gets the browser-safe build (`default`). A Node bundle should set the `node` condition.
+    - **Checks:** `check:browser-safe` bundles the root for the browser, worker and default conditions and asserts that each reaches the browser build and that its file functions throw `node-only`. `check:breaking` now also reports removed package exports.

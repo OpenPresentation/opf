@@ -3,7 +3,7 @@
 The CLI (`@openpresentation/cli`, binary `opf`, Node 22 or later; verified on Node 24) validates, edits, paginates and bundles documents (see
 [its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Four commands
 produce and read files: `opf render`, `opf export`, `opf convert` and `opf import`. They run core's file engine, the one
-applications call as [`@openpresentation/opf/node`](node.md) (`convert`, `open`, `save`); the commands add the flags, the
+applications call as [`@openpresentation/opf`](node.md) (`convert`, `open`, `save`); the commands add the flags, the
 JSON report and the exit codes.
 
 All four are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
@@ -12,7 +12,7 @@ and installed package versions give the same bytes on every operating system.
 ## Install
 
 `render`, `export` and `convert` to PDF, PNG or SVG need `@openpresentation/opf-render`; PPTX output and `.pptx` input (`export
---format pptx`, `import`, `convert` from or to `.pptx`) also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision RR-27, below; RR-62 moved the engine into core's `/node`), loaded the
+--format pptx`, `import`, `convert` from or to `.pptx`) also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision RR-27, below; RR-62 moved the engine into core, RR-70 made it the root's Node build), loaded the
 first time a command needs them. Install them next to the CLI:
 
 ```sh
@@ -29,7 +29,7 @@ commands check the functions they call and name the version to install when an o
 
 From opf-render 0.16 the renderer's own dependencies are optional peers too: the converters (`pdf-lib`, `@resvg/resvg-js`,
 `sharp`) and every `@expo-google-fonts/*` package, so a host installs only what its outputs use. The CLI and
-`@openpresentation/opf/node` always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
+`@openpresentation/opf` in Node always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
 
 | Output | Also install |
 | --- | --- |
@@ -41,15 +41,15 @@ From opf-render 0.16 the renderer's own dependencies are optional peers too: the
 
 A converter or font package that is missing is reported as the same missing-peer error as a missing renderer: the command
 exits 2 with `code: "peer-not-installed"` and the renderer's own install command in `error`, with `package` (or `packages`),
-`range`, `install` and `purpose` beside it; `convert` of `@openpresentation/opf/node` throws `OPFExportError` with the same `code` and `details`.
+`range`, `install` and `purpose` beside it; `convert` of `@openpresentation/opf` throws `OPFExportError` with the same `code` and `details`.
 
 ## From code
 
-The commands are the CLI; the engine they run is core's `@openpresentation/opf/node`, which an application imports instead
+The commands are the CLI; the engine they run is core's `@openpresentation/opf` in Node, which an application imports instead
 of spawning `opf`:
 
 ```ts
-import * as opf from "@openpresentation/opf/node";
+import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");                         // opf convert deck.opf.md deck.pdf
 const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
@@ -242,7 +242,7 @@ same codes; text that is not valid JSON is an invalid document, exit `1`, with a
 - **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
   native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
   turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
-  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, whose `/node` engine the commands run).
+  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, whose Node engine the commands run).
 - **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
   human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.

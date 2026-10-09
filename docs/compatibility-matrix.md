@@ -162,7 +162,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | Edit + undo | `@openpresentation/opf-editor` `createEditorSession` | JSON Patch undo/redo |
 | JSON Patch CLI | `opf edit` | No persistent CLI undo history |
 | SVG preview | `renderSvg` (every slide) / `renderSlideSvg` (one slide) | Local; the same `{ fonts }` as layout |
-| Convert, export and import files from code | `convert`, `open` and `save` of `@openpresentation/opf/node` (core 0.17.0 and later; CLI 0.16.0 had `exportDeck` / `importDeck` in `@openpresentation/cli/api`) | PDF, PNG, SVG and PPTX out, PPTX in, deck forms both ways, with the bundled fonts, no network and no clock; calls opf-render and opf-pptx as optional peers and throws `OPFExportError` / `OPFImportError` with the install command when one is missing. `opf convert`, `opf render`, `opf export` and `opf import` run the same engine ([OPF files in Node](node.md)) |
+| Convert, export and import files from code | `convert`, `open` and `save` of `@openpresentation/opf` in Node (core 0.18.0 and later; core 0.17 had them at `@openpresentation/opf/node`; CLI 0.16.0 had `exportDeck` / `importDeck` in `@openpresentation/cli/api`) | PDF, PNG, SVG and PPTX out, PPTX in, deck forms both ways, with the bundled fonts, no network and no clock; calls opf-render and opf-pptx as optional peers and throws `OPFExportError` / `OPFImportError` with the install command when one is missing. `opf convert`, `opf render`, `opf export` and `opf import` run the same engine ([OPF files in Node](node.md)) |
 | Read and write a deck in JSON, YAML or Markdown | `parse` / `stringify` (core 0.17.0 and later; `readDeck` / `writeDeck` in 0.16) | One entry point for the three text formats; `parse` throws `OPFValidationError` with located findings |
 | PNG | `svgToPng` | Node raster of SVG |
 | PDF | `svgToPdf` | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `mode: "raster"` keeps the image-per-slide output. Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
@@ -388,8 +388,9 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 CLI 0.9.2 and earlier do not render or export PPTX; CLI 0.10.0 adds `opf render`, `opf export` and `opf import`
 through the optional peers opf-render and opf-pptx ([CLI reference](cli.md)). The Node `svgToPng` / `svgToPdf`
 APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-render/export-browser` entry for browsers.
-`@openpresentation/opf/node` is Node-only too: it reads files, font files and the engines' native packages. The core root and
-every other core entry stay browser-safe. In a browser, use the engines' browser entries.
+Core's file API (`open`, `save`, `convert`) is Node-only too: it reads files, font files and the engines' native packages. From
+core 0.18 the root resolves to a browser-safe build in a browser or a worker, with the same names, where those three reject
+with `node-only`; every other core entry is browser-safe. In a browser, use the engines' browser entries.
 
 ## Predecessor notes
 

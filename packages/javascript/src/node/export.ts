@@ -1,5 +1,5 @@
 // The one export engine: a checked OPF presentation to per-slide SVG and PNG, a PDF or a PPTX through the optional peers
-// opf-render and opf-pptx (see peers.ts). `convert` of `@openpresentation/opf/node` (conversion.ts) and the CLI commands
+// opf-render and opf-pptx (see peers.ts). `convert` of `@openpresentation/opf` (conversion.ts) and the CLI commands
 // `opf render`, `opf export` and `opf convert` all run `runExport`: the command adds what is about files and flags (reading
 // the document, the located check, --out, atomic writes, the JSON report, exit codes), the function adds nothing but a check.
 //
@@ -7,12 +7,13 @@
 // caller names, so the same presentation gives the same bytes on every machine.
 import { statSync } from "node:fs";
 import path from "node:path";
-import { type Catalog, type Fonts, paginate } from "../index.js";
+import { type Catalog, type Fonts, paginate } from "../core.js";
 import { createImageResolver } from "./assets.js";
 import { DEFAULT_CATALOGS } from "./catalogs.js";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError } from "../api-errors.js";
 import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
-import { deckStem, parseSlideSelection } from "./files.js";
+import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
+import { deckStem } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./peers.js";
 import { Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
@@ -32,8 +33,8 @@ export interface ExportOptions {
 	fontDirs?: readonly string[];
 	/** The catalogs the presentation's references resolve in. Omitted: core's default catalog. */
 	catalogs?: readonly Catalog[];
-	/** The slides to write, one-based: numbers or a selection such as `"1,3-5"`. Omitted: every slide that is not hidden. Not for `pptx`. */
-	slides?: readonly number[] | string;
+	/** The slides to write, one-based: a number, numbers or a selection such as `"1,3-5"` (`parseSlideSelection`). Omitted: every slide that is not hidden. Not for `pptx`. */
+	slides?: SlideSelection;
 	/** Write hidden slides too (`svg`, `png`, `pdf`). */
 	includeHidden?: boolean;
 	/** Split overflowing slides with the same fonts before drawing, as `opf paginate` does. */
@@ -150,7 +151,7 @@ export function resolveExportOptions(options: ExportOptions): Required<Pick<Expo
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
 	if (svgFonts !== undefined && format !== "svg") throw invalid("svgFonts applies to format svg.");
 	if (options.zip && format !== "svg" && format !== "png") throw invalid("zip applies to format svg and png.");
-	if (options.slides !== undefined && typeof options.slides !== "string" && !(Array.isArray(options.slides) && options.slides.every((n) => Number.isInteger(n) && n >= 1))) throw invalid("slides must be a selection such as \"1,3-5\" or an array of slide numbers counted from 1.");
+	if (options.slides !== undefined && typeof options.slides !== "string" && !(typeof options.slides === "number" && Number.isInteger(options.slides) && options.slides >= 1) && !(Array.isArray(options.slides) && options.slides.every((n) => Number.isInteger(n) && n >= 1))) throw invalid("slides must be a slide number, an array of slide numbers counted from 1, or a selection such as \"1,3-5\".");
 	const scale = checkScale(options.scale);
 	checkDate(options.date);
 	if (options.fonts !== undefined && options.fontDirs?.length) throw invalid("Give fonts or fontDirs, not both: fontDirs loads font files into the handle that fonts already is.");
@@ -246,7 +247,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Ret
 	const isHidden = (number: number) => (deck as { slides?: { hidden?: unknown }[] }).slides?.[number - 1]?.hidden === true;
 	const everySlide = Array.from({ length: slideCount }, (_, index) => index + 1);
 	const slidesLabel = ctx.flags ? "--slides" : "slides";
-	const named = typeof options.slides === "string" ? parseSlideSelection(options.slides, slideCount, slidesLabel) : options.slides === undefined ? undefined : parseSlideSelection(options.slides.join(","), slideCount, slidesLabel);
+	const named = options.slides === undefined ? undefined : parseSlideSelection(options.slides, slideCount, slidesLabel);
 	const selected = format === "pptx" ? [] : named ?? (options.includeHidden ? everySlide : everySlide.filter((number) => !isHidden(number)));
 	const skippedHidden = format === "pptx" || named || options.includeHidden ? [] : everySlide.filter(isHidden);
 	if (format !== "pptx" && !selected.length)

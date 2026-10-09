@@ -1,9 +1,9 @@
 // The checked export and import of the Node engine: `convert` and `open` (conversion.ts) chain them with reading and writing
 // files. They throw `OPFApiError`; the public functions turn it into `OPFExportError` or `OPFImportError`.
-import { type Catalog, type Finding, type Presentation, type ValidateOptions, type ValidationReport, validate } from "../index.js";
+import { type Catalog, type Finding, type Presentation, type ValidateOptions, type ValidationReport, validate } from "../core.js";
 import { DEFAULT_CATALOGS } from "./catalogs.js";
 import { runImport } from "./pptx-import.js";
-import { OPFApiError } from "./errors.js";
+import { OPFApiError } from "../api-errors.js";
 import { type ExportFile, type ExportFontSummary, type ExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
 import { listFontDirectories } from "./fonts.js";
 import { PPTX_PACKAGE, type Peer, type PptxModule, type Renderer, loadPptx, loadRenderer } from "./peers.js";

@@ -44,10 +44,10 @@ ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
 ## The short path
 
-With core 0.17.0 and later, three calls of `@openpresentation/opf/node` cover files in an application:
+With core 0.18.0 and later, three calls of `@openpresentation/opf` cover files in a Node application (core 0.17 had them at `@openpresentation/opf/node`):
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf');            // also .pptx, .png (one per slide), .svg, .zip and the deck forms
 const deck = await opf.open('deck.opf.md');              // .opf.md, .opf.yaml, .opf.json, or a .pptx to import
@@ -142,11 +142,11 @@ history. Use the editor session or version control for undo.
 
 ## Preview and export
 
-`@openpresentation/opf/node` (core 0.17.0 and later) reads and writes files with the bundled fonts and loads the render and
+`@openpresentation/opf` in Node (core 0.18.0 and later) reads and writes files with the bundled fonts and loads the render and
 PPTX engines you installed:
 
 ```js
-import * as opf from '@openpresentation/opf/node';
+import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.json', 'deck.pdf');
 await opf.convert('deck.opf.json', 'slides/deck.png', { scale: 2 });   // slides/deck-001.png, -002, ...
