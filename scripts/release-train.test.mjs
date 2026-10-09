@@ -28,6 +28,7 @@ import {
   runTrain,
   TrainStop,
   tagRelease,
+  unpublishedFloors,
   unreleasedCoreOf,
   verify,
 } from "./release-train.mjs";
@@ -556,6 +557,27 @@ test("plan flags siblings left on the old core floor and reads geometry hints fr
   assert.match(result.flags[0], /^opf-render: its core floor is \^0\.12\.0 and opf-render is not in the train/);
   assert.match(result.flags[0], /Hints in core's notes: changes\/rr-99-cover\.md\.$/);
   assert.match(result.flags[1], /^opf-editor:/);
+});
+
+test("opf#498: an optional peer on a later package of the train, at the train's version, is not an unpublished floor", async () => {
+  const published = new Set(["@openpresentation/opf-render@0.16.0", "@openpresentation/opf-pptx@0.16.1"]);
+  const deps = { npm: { manifest: async (name, version) => (published.has(`${name}@${version}`) ? { name, version } : null) } };
+  const core = {
+    name: "@openpresentation/opf",
+    version: "0.17.0",
+    peerDependencies: { "@openpresentation/opf-pptx": "^0.17.0", "@openpresentation/opf-render": "^0.17.0" },
+    peerDependenciesMeta: { "@openpresentation/opf-pptx": { optional: true }, "@openpresentation/opf-render": { optional: true } },
+  };
+  const train = { core: "0.17.0", render: "0.17.0", pptx: "0.17.0" };
+  assert.deepEqual(await unpublishedFloors(deps, core, packageOf("core"), train), []);
+  // Not in the train, at another version than the train's, or not optional: still unpublished.
+  assert.deepEqual(await unpublishedFloors(deps, core, packageOf("core"), { core: "0.17.0", render: "0.17.0" }), ["peerDependencies @openpresentation/opf-pptx ^0.17.0"]);
+  assert.deepEqual(await unpublishedFloors(deps, core, packageOf("core"), { ...train, pptx: "0.17.1" }), ["peerDependencies @openpresentation/opf-pptx ^0.17.0"]);
+  const required = { ...core, peerDependenciesMeta: { "@openpresentation/opf-pptx": { optional: true } } };
+  assert.deepEqual(await unpublishedFloors(deps, required, packageOf("core"), train), ["peerDependencies @openpresentation/opf-render ^0.17.0"]);
+  // A later stage only: the renderer's dependency on a core that is not on npm stays a problem in any train.
+  const render = { name: "@openpresentation/opf-render", version: "0.17.0", dependencies: { "@openpresentation/opf": "^0.17.0" } };
+  assert.deepEqual(await unpublishedFloors(deps, render, packageOf("render"), train), ["dependencies @openpresentation/opf ^0.17.0"]);
 });
 
 test("plan: a merged release-prep PR on a green commit is ready to tag; red or lagging floors are reported", async () => {
