@@ -13,10 +13,10 @@
         "text": "Developer  quickstart"
       },
       "center": {
-        "organization": true
+        "text": "{{organization.name}}"
       },
       "right": {
-        "section": true
+        "text": "{{slide.section}}"
       }
     },
     "footer": {
@@ -24,7 +24,7 @@
         "text": "Local, no account"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     }
   },

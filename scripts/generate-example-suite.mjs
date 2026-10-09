@@ -400,13 +400,13 @@ function designFor(spec, index, catalogs, density) {
     header: index % 5 === 0
       ? false
       : {
-          left: { section: true },
+          left: { text: "{{slide.section}}" },
           right: { image: "asset:brand-icon" },
         },
     footer: {
-      left: { organization: true },
+      left: { text: "{{organization.name}}" },
       center: { text: index % 2 === 0 ? "Internal planning draft" : "Decision review" },
-      right: { slideNumber: true },
+      right: { text: "{{slide.number}}" },
     },
   };
 }

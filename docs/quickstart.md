@@ -76,8 +76,8 @@ import { composeSlide } from '@openpresentation/opf/composition';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 
 const fonts = await loadFonts({ pack: 'base' });
-const { options } = resolveSlideContext(document, 0, { fonts });
-const geometry = composeSlide(document.slides[0], options);
+const { slide, options } = resolveSlideContext(document, 0, { fonts });
+const geometry = composeSlide(slide, options);
 const { presentation, pages } = paginate(document, { fonts });
 ```
 
@@ -89,13 +89,18 @@ to embed, the font files). `resolveSlideContext(document, index, { fonts, catalo
 one slide's layout, canvas, theme and font families (slide design, then deck
 design, then theme, then the engine default font scheme) into the options `composeSlide`
 takes, so you never look up a font scheme yourself; a reference that resolves
-nowhere comes back as an `unresolved-reference` diagnostic. `paginate`
+nowhere comes back as an `unresolved-reference` diagnostic. It also returns
+`slide`: the slide with `{{slide.number}}`, `{{slide.section}}` and
+`{{deck.slideCount}}` substituted for `options.slideNumber` and
+`options.slideCount`; compose and draw that slide. `paginate`
 does the same for every slide. The helper does not install system fonts or
 change the authored scheme. Reuse the same `fonts` for SVG preview and PPTX
 export.
 
 Shared headers and footers use `furniture-flow-v2`. Body content stays between
-`geometry.furniture.headerBottom` and `geometry.furniture.footerTop`.
+`geometry.furniture.headerBottom` and `geometry.furniture.footerTop`. A zone
+writes generated values as variables in its `text`, such as
+`"{{slide.number}} / {{deck.slideCount}}"` or `"{{organization.name}}"`.
 
 Pagination returns a new presentation plus source mappings. It preserves
 authored text, whitespace and reading order; it does not drop overflowed

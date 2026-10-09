@@ -21,7 +21,7 @@ const compositionNames = [
   "snapFontSizeDown", "snapFontSizeUp", "FONT_SIZE_GRID_PER_PX", "MAX_COMPOSITION_DEPTH", "OPFCompositionError",
   "resolveFontFamilies", "resolveTextStyle", "textWidthMeasurer",
   "layoutQuote", "layoutCode", "layoutMetric", "layoutTimeline", "layoutFurniture", "layoutCaption", "layoutFootnotes",
-  "resolveSocialProfile", "resolveLogo", "PICTURE_BULLET_SCALE", "formatFurnitureDate", "formatSlideNumber", "DEFAULT_FURNITURE_DATE_FORMAT", "DEFAULT_SLIDE_NUMBER_FORMAT",
+  "resolveSocialProfile", "resolveLogo", "PICTURE_BULLET_SCALE", "formatFurnitureDate", "DEFAULT_FURNITURE_DATE_FORMAT",
   "NUMBERING_STYLES", "NUMBERING_SUFFIXES", "MAX_NUMBERING_VALUE", "MAX_ROMAN_VALUE", "MAX_NUMBERING_LEVELS", "formatListNumber", "listNumbers", "resolveNumbering", "numberingAtLevel", "numberingStyleDraws", "sliceNumberedItems",
   "CAPTIONABLE_FIELDS", "CAPTION_FONT_RATIO", "CAPTION_MAX_RATIO", "CITATION_MARKER_RAISE", "CITATION_MARKER_SCALE", "FOOTNOTE_MAX_RATIO", "annotationText", "captionSettings", "citationMarkerText", "collectCitations", "referencesSlide", "slideCitations", "walkCitationRuns",
   "colorContrast", "textColorForFill", "chartColorForFill", "chartPaletteForFill", "normalizeHexColor", "resolveColorRef", "CHART_SERIES_MIN_DIFFERENCE", "CHART_SERIES_MIN_LIGHTNESS_STEP",
@@ -50,7 +50,7 @@ describe("package root", () => {
   });
 
   test("the app-level verbs, data helpers and font policy stay at the root", () => {
-    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "embed", "copySlides", "updateFromCatalog", "importData", "parseTabularData", "resolveVariables", "listVariables", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
+    for (const name of ["stats", "resolveSlideContext", "paginate", "paginateSlide", "embed", "copySlides", "updateFromCatalog", "importData", "parseTabularData", "resolveVariables", "resolveSlideVariables", "listVariables", "schemas"]) assert.equal(typeof root[name] === "function" || typeof root[name] === "object", true, name);
     for (const name of dataNames) { assert.equal(typeof root[name], "function", name); assert.equal(root[name], data[name], name); }
     for (const name of ["FONT_POLICY", "fontPolicyFor", "applyFontPolicyDecisions", "fontAvailabilityDiagnostics"]) { assert.notEqual(root[name], undefined, name); assert.equal(root[name], fontPolicy[name], name); }
   });

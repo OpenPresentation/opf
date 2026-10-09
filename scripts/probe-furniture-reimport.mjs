@@ -24,12 +24,12 @@ const image = {
 const cases = [
   {
     id: 'literal-and-generated',
-    source: {design: {fontScheme: 'roboto', header: {left: {text: literal}, right: {section: true}}, footer: {left: {date: ' 2026-09-14 '}, right: {slideNumber: true}}}, slides: [{title: 'First', section: 'Overview', text: 'First body'}, {title: 'Second', section: 'Details', text: 'Second body'}]},
+    source: {design: {fontScheme: 'roboto', header: {left: {text: literal}, right:{text:'{{slide.section}}'}}, footer: {left: {date: ' 2026-09-14 '}, right:{text:'{{slide.number}}'}}}, slides: [{title: 'First', section: 'Overview', text: 'First body'}, {title: 'Second', section: 'Details', text: 'Second body'}]},
     checks: deck => ({
       literalWhitespace: [0, 1].every(index => effective(deck, index, 'header')?.left?.text === literal),
       literalDate: [0, 1].every(index => effective(deck, index, 'footer')?.left?.date === ' 2026-09-14 '),
-      generatedNumberIntent: [0, 1].every(index => effective(deck, index, 'footer')?.right?.slideNumber === true),
-      sectionIntent: [0, 1].every(index => effective(deck, index, 'header')?.right?.section === true),
+      generatedNumberIntent: [0, 1].every(index => effective(deck, index, 'footer')?.right?.text === '{{slide.number}}'),
+      sectionIntent: [0, 1].every(index => effective(deck, index, 'header')?.right?.text === '{{slide.section}}'),
       currentSectionMetadata: deck.slides[0].section === 'Overview' && deck.slides[1].section === 'Details',
     }),
   },

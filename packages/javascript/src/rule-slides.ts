@@ -76,14 +76,14 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 			const result: Composed = { layoutDiagnostics: [] };
 			const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition => composeSlide(input, { ...resolved().options, layout: withLayout } as never);
 			try {
-				result.composition = compose(slide, layout());
+				result.composition = compose(resolved().slide, layout());
 				result.layoutDiagnostics.push(...result.composition.diagnostics.map((diagnostic: LayoutDiagnostic) => ({ diagnostic, strict: false })));
 			} catch (error) {
 				if (error instanceof OPFCompositionError) {
 					result.layoutDiagnostics.push(...error.diagnostics.map((diagnostic) => ({ diagnostic, strict: true })));
 					try {
 						const relaxedLayout = layout();
-						result.composition = compose(relax(slide), relaxedLayout ? relax(relaxedLayout) : undefined);
+						result.composition = compose(relax(resolved().slide), relaxedLayout ? relax(relaxedLayout) : undefined);
 					} catch (second) {
 						result.layoutError = second instanceof Error ? second.message : String(second);
 					}

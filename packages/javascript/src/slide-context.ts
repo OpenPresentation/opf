@@ -3,6 +3,7 @@ import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions,
 import { resolveColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
 import { decisionColor } from './rule-design.js';
+import { resolveSlideVariables } from './slide-variables.js';
 
 /**
  * One slide's composition context: the layout, canvas, theme and font families that `composeSlide` needs,
@@ -23,7 +24,7 @@ export interface SlideContextOptions extends CatalogOptions {
   fonts?: Fonts;
   /** One-based displayed slide number. Default: index + 1. */
   slideNumber?: number;
-  /** Displayed slide count for `{total}`. Default: the deck's slide count. */
+  /** Displayed slide count for `{{deck.slideCount}}`. Default: the deck's slide count. */
   slideCount?: number;
   /** Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. */
   date?: string;
@@ -32,6 +33,13 @@ export interface SlideContextOptions extends CatalogOptions {
 }
 
 export interface SlideContext {
+  /**
+   * The slide to compose and draw: slide `index` with `{{slide.number}}`, `{{slide.section}}` and
+   * `{{deck.slideCount}}` substituted (`resolveSlideVariables`) for `options.slideNumber` and `options.slideCount`.
+   * Its own header and footer text keeps the tokens: `layoutFurniture` substitutes them and marks each slide number
+   * as a live field. The source slide object itself when it carries no slide-scoped token.
+   */
+  slide: Rec;
   /** Ready for `composeSlide(slide, options)`. */
   options: ComposeSlideOptions;
   diagnostics: SlideContextDiagnostic[];
@@ -54,9 +62,10 @@ export interface SlideContext {
 }
 
 /**
- * Resolve slide `index` of `presentation` into the options `composeSlide` takes. Never throws for an unresolved
- * reference unless `strictReferences` is set: the engine default (or automatic composition, for a layout) applies and
- * `diagnostics` holds one `unresolved-reference` per reference. Throws a RangeError for an index outside the deck or
+ * Resolve slide `index` of `presentation` into the slide and the options `composeSlide` takes: engines compose and draw
+ * `composeSlide(context.slide, context.options)`, so the slide-scoped built-ins carry the same number and count as the
+ * header and footer. Never throws for an unresolved reference unless `strictReferences` is set: the engine default (or
+ * automatic composition, for a layout) applies and `diagnostics` holds one `unresolved-reference` per reference. Throws a RangeError for an index outside the deck or
  * non-positive canvas dimensions, which a schema-valid deck cannot have.
  */
 export function resolveSlideContext(presentation: unknown, index: number, options: SlideContextOptions = {}): SlideContext {
@@ -95,5 +104,6 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
-  return { options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
+  const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number });
+  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

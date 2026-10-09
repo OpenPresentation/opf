@@ -294,7 +294,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
   "design": {
     "theme": "classic",
     "colorScheme": "forest-green",
-    "footer": { "left": { "organization": true }, "right": { "slideNumber": true } }
+    "footer": { "left": { "text": "{{organization.name}}" }, "right": { "text": "{{slide.number}}" } }
   },
   "assets": {
     "adoption-csv": { "src": "./data/adoption.csv", "alt": "Monthly adoption data" }

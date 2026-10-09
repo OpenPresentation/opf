@@ -15,7 +15,6 @@ export interface FurnitureField {
 
 /** PowerPoint's first Insert > Date and Time choice for en-US (`datetime1`). */
 export const DEFAULT_FURNITURE_DATE_FORMAT = 'M/d/yyyy';
-export const DEFAULT_SLIDE_NUMBER_FORMAT = '{current}';
 
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -81,18 +80,4 @@ export function formatFurnitureDate(iso: string, pattern: string): {text: string
     else { const name = weekdays[utc.getUTCDay()] ?? ''; text += width === 4 ? name : name.slice(0, 3); }
   }
   return {text};
-}
-
-/** Resolve a slide-number template. `{current}` becomes a live field; `{total}` is fixed text. */
-export function formatSlideNumber(format: string, current: number, total: number | undefined): {text: string; fields: FurnitureField[]} | {error: string} {
-  if (!format.includes('{current}')) return {error: 'slideNumberFormat must contain {current}.'};
-  if (format.includes('{total}') && total === undefined) return {error: 'slideNumberFormat uses {total}, which needs the rendered slide count.'};
-  let text = '';
-  const fields: FurnitureField[] = [];
-  for (const piece of format.split(/(\{current\}|\{total\})/)) {
-    if (piece === '{current}') { const value = String(current); fields.push({type:'slideNumber',start:text.length,end:text.length + value.length}); text += value; }
-    else if (piece === '{total}') text += String(total);
-    else text += piece;
-  }
-  return {text, fields};
 }

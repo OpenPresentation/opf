@@ -20,7 +20,7 @@
         "image": "asset:icon"
       },
       "center": {
-        "section": true
+        "text": "{{slide.section}}"
       },
       "right": {
         "date": "2026-05-05"
@@ -28,13 +28,13 @@
     },
     "footer": {
       "left": {
-        "organization": true
+        "text": "{{organization.name}}"
       },
       "center": {
         "text": "Confidential fixture"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     },
     "watermark": {

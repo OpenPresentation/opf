@@ -16,8 +16,9 @@ export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceE
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
-import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
-export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
+import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
+import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
+export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
 export type {ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
@@ -471,9 +472,9 @@ export interface ComposeSlideOptions {
    * `resolveSlideContext` passes it.
    */
   themeBackground?: unknown;
-  /** One-based displayed number; source paths still use slideIndex. */
+  /** One-based displayed number for `{{slide.number}}` in header/footer text; source paths still use slideIndex. */
   slideNumber?: number;
-  /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
+  /** Displayed slide count for `{{deck.slideCount}}` in header/footer text. Defaults to `presentation.slides.length`. */
   slideCount?: number;
   /**
    * Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` furniture. Core never
@@ -742,7 +743,7 @@ export function resolveLogo(presentation: unknown, slide: unknown, options: Reso
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'logo' | 'organization' | 'speaker' | 'socials' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'logo' | 'socials' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -755,9 +756,10 @@ export interface FurnitureTextPart extends FurniturePartBase {
   type: 'text'; text: string; style: TextStyle;
   requestedFontSize: number; minFontSize: number; fit: SourceTextFit;
   /**
-   * Live values inside `text`: every `{current}` slide number, and a whole current
-   * (`date: true`) date. Hosts such as PPTX may emit them as native fields; all other
-   * text, including `{total}` and formatted fixed dates, is fixed.
+   * Live values inside `text`: every substituted `{{slide.number}}` of a `text` part (type
+   * `slideNumber`), and a whole current (`date: true`) date (type `date`), as half-open UTF-16
+   * offsets into `text`. Hosts such as PPTX may emit them as native fields; all other text,
+   * including `{{deck.slideCount}}`, `{{slide.section}}` and formatted fixed dates, is fixed.
    */
   fields?: FurnitureField[];
   /**
@@ -838,8 +840,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const outlines=options.textMeasurement?.outlineBounds!==undefined,parts:FurniturePart[]=[],diagnostics:LayoutDiagnostic[]=[];
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
-  const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
-  const speakers=Array.isArray(options.presentation?.speaker)?options.presentation.speaker:[options.presentation?.speaker],speaker=record(speakers[0]),speakerRoot=Array.isArray(options.presentation?.speaker)?'speaker.0':'speaker';
+  const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization';
   const fontFamily=options.fontFamilies?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
@@ -893,20 +894,18 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         const box=imageBox(content.image);
         zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:side});y+=box.height;
       }
-      add('text',content.text);
-      if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
-      if(content.speaker===true){if(typeof speaker.name==='string'&&speaker.name.trim())add('speaker',typeof speaker.title==='string'&&speaker.title.trim()?`${speaker.name}, ${speaker.title}`:speaker.name,true,`${speakerRoot}.name`);else error(`${path}.speaker`,'Generated speaker needs a named speaker in the presentation.','unresolved-content');}
+      if(typeof content.text==='string'){
+        // The slide-scoped built-ins resolve here, per slide; each {{slide.number}} becomes a live slide-number field.
+        const resolved=substituteSlideTokens(content.text,{slideNumber:number,...(slideCount!==undefined?{slideCount}:{}),section:slide.section});
+        if(slideCount===undefined&&usesSlideBuiltin(content.text,'deck.slideCount'))error(`${path}.text`,'{{deck.slideCount}} needs the rendered slide count (the slideCount option or the presentation slides).','unresolved-content');
+        add('text',resolved.text,false,undefined,{fields:resolved.fields});
+      }
+      else add('text',content.text);
       if(content.socials===true){
         const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,'organization')}));
         if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');
       }
-      if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
-      for(const setting of ['slideNumberFormat','dateFormat'])if(content[setting]!==undefined&&typeof content[setting]!=='string')throw new TypeError(`Furniture setting ${path}.${setting} requires a string.`);
-      if(content.slideNumber===true){
-        const resolved=formatSlideNumber(content.slideNumberFormat??DEFAULT_SLIDE_NUMBER_FORMAT,number,slideCount);
-        if('error' in resolved)error(`${path}.slideNumberFormat`,resolved.error,'unresolved-content');
-        else add('slideNumber',resolved.text,true,undefined,{fields:resolved.fields});
-      }
+      if(content.dateFormat!==undefined&&typeof content.dateFormat!=='string')throw new TypeError(`Furniture setting ${path}.dateFormat requires a string.`);
       if(content.date===true){
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;

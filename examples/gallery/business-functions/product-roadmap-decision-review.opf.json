@@ -82,7 +82,7 @@
     },
     "header": {
       "left": {
-        "section": true
+        "text": "{{slide.section}}"
       },
       "right": {
         "image": "asset:brand-icon"
@@ -90,13 +90,13 @@
     },
     "footer": {
       "left": {
-        "organization": true
+        "text": "{{organization.name}}"
       },
       "center": {
         "text": "Decision review"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     }
   },

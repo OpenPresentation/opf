@@ -84,13 +84,13 @@
     "header": false,
     "footer": {
       "left": {
-        "organization": true
+        "text": "{{organization.name}}"
       },
       "center": {
         "text": "Decision review"
       },
       "right": {
-        "slideNumber": true
+        "text": "{{slide.number}}"
       }
     }
   },

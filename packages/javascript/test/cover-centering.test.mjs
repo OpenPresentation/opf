@@ -127,7 +127,7 @@ test('explicit heading alignment survives centering', () => {
 });
 
 test('headers and footers bound the centered group', () => {
-  const presentation = {design: {header: {left: {text: 'Header'}}, footer: {right: {slideNumber: true}}}};
+  const presentation = {design: {header: {left: {text: 'Header'}}, footer: {right: {text: '{{slide.number}}'}}}};
   const result = composeSlide({title: 'Cover with furniture', subtitle: 'Centered in remaining space'}, {
     layout: titleSubtitle, presentation, slideNumber: 3,
   });
