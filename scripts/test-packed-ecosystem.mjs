@@ -85,14 +85,16 @@ const manifest = registry
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
-// RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). The consumer is the host, so it installs
-// the ones the checks below use, at the versions the renderer tests: an older renderer that still ships them as dependencies adds nothing.
+// RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). Each consumer
+// here (the candidate tarballs, the registry consumer the gallery and the registry checks build on) is a complete host:
+// it installs every optional peer the planned renderer declares (the converters, the base and office fonts and the
+// script packs that `scripts: 'all'` and the office-pack checks load), at the versions the renderer tests. A renderer
+// that still lists them as dependencies adds nothing.
 const rendererPeers = {};
 if (manifest.artifacts.some(item => item.name === '@openpresentation/opf-render')) {
   const rendererPackage = JSON.parse(await readHarness('opf-render', 'package.json'));
   for (const [name, range] of Object.entries(rendererPackage.peerDependencies ?? {})) {
-    const wanted = ['sharp', '@resvg/resvg-js', 'pdf-lib'].includes(name) || name.startsWith('@expo-google-fonts/') && ['roboto', 'roboto-mono', 'arimo', 'caladea', 'cousine', 'gelasio', 'tinos', 'noto-sans'].includes(name.slice('@expo-google-fonts/'.length));
-    if (wanted && rendererPackage.peerDependenciesMeta?.[name]?.optional === true && !rendererPackage.dependencies?.[name]) rendererPeers[name] = rendererPackage.devDependencies?.[name] ?? range;
+    if (rendererPackage.peerDependenciesMeta?.[name]?.optional === true && !rendererPackage.dependencies?.[name]) rendererPeers[name] = rendererPackage.devDependencies?.[name] ?? range;
   }
 }
 await mkdir(out,{recursive:true});
