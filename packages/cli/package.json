@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Local OPF CLI for agents and the library API @openpresentation/cli/api: create, validate, edit, paginate, render, export to PPTX/PDF, import PPTX, and inspect presentation JSON.",
   "license": "MIT",
   "type": "module",
@@ -35,8 +35,8 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "0.15.0",
-    "@openpresentation/opf-render": "0.15.0",
+    "@openpresentation/opf-pptx": "0.16.0",
+    "@openpresentation/opf-render": "0.16.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/node": "^24.13.4",
     "pdf-lib": "1.17.1",
@@ -50,8 +50,8 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.15.0",
-    "@openpresentation/opf-render": "^0.15.0"
+    "@openpresentation/opf-pptx": "^0.16.0",
+    "@openpresentation/opf-render": "^0.16.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {
