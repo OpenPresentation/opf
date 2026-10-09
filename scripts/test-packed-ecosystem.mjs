@@ -34,6 +34,8 @@ const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion
 const verifyFurniture = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] > 10 || (coreVersion?.[1] === 10 && coreVersion?.[2] >= 1);
 // RR-55: the candidate packages and the registry plan are both the 0.14 train (loadFonts handle, renderSvg for a deck, { fonts },
 // editor.presentation), so each inline consumer below is one variant.
+// RR-59: the portable script-font SVG and the unresolved-image gate ship in core/CLI/renderer/PPTX 0.16.
+const verifyInstalledCliRegression = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 16;
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
@@ -87,11 +89,13 @@ if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.n
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 // RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). The consumer is the host, so it installs
 // the ones the checks below use, at the versions the renderer tests: an older renderer that still ships them as dependencies adds nothing.
+// RR-59 (opf#476): the installed CLI regression draws Japanese and Chinese SVG, so a registry consumer that has the CLI also installs the Noto JP and SC script packages.
+const scriptFontPeers = registry && !librariesOnly && !cliNotice ? ['noto-sans-jp', 'noto-sans-sc'] : [];
 const rendererPeers = {};
 if (manifest.artifacts.some(item => item.name === '@openpresentation/opf-render')) {
   const rendererPackage = JSON.parse(await readHarness('opf-render', 'package.json'));
   for (const [name, range] of Object.entries(rendererPackage.peerDependencies ?? {})) {
-    const wanted = ['sharp', '@resvg/resvg-js', 'pdf-lib'].includes(name) || name.startsWith('@expo-google-fonts/') && ['roboto', 'roboto-mono', 'arimo', 'caladea', 'cousine', 'gelasio', 'tinos', 'noto-sans'].includes(name.slice('@expo-google-fonts/'.length));
+    const wanted = ['sharp', '@resvg/resvg-js', 'pdf-lib'].includes(name) || name.startsWith('@expo-google-fonts/') && [...['roboto', 'roboto-mono', 'arimo', 'caladea', 'cousine', 'gelasio', 'tinos', 'noto-sans'], ...scriptFontPeers].includes(name.slice('@expo-google-fonts/'.length));
     if (wanted && rendererPackage.peerDependenciesMeta?.[name]?.optional === true && !rendererPackage.dependencies?.[name]) rendererPeers[name] = rendererPackage.devDependencies?.[name] ?? range;
   }
 }
@@ -431,6 +435,9 @@ if (registry) {
     run(process.execPath, [entry,'--version']);
     run(process.execPath, [entry,'create', 'registry.opf.json', '--title', 'Registry consumer']);
     run(process.execPath, [entry,'validate', 'registry.opf.json']);
+    // RR-59 (opf#476): script-font SVG, the unresolved-image gate and zero fetches through the published CLI beside the published peers (a CLI that predates the contract has no such test).
+    const regression = path.join(root, 'packages/cli/test/installed-regression.mjs');
+    if (verifyInstalledCliRegression) run(process.execPath, [regression], {OPF_TEST_BIN: entry});
   }
 }
 
