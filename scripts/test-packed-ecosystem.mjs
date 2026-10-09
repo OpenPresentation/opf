@@ -19,6 +19,8 @@ if (cliNotice) console.log(`SKIP the CLI part of the registry consumer: ${cliNot
 // layoutTable first shipped in core 0.6.0. Keep historical registry plans
 // testable, while requiring the API and its pinned regression suite thereafter.
 const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
+// RR-73: core 0.18 renamed importData to ingest; a registry plan before 0.18 still has the old name.
+const dataImportName = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 18 ? 'ingest' : 'importData';
 const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
 // Styled-cell rollout targets core 0.7; published 0.6 fixtures remain separate.
 const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
@@ -337,7 +339,7 @@ await loadFonts({pack:'unknown'});
 await writeFile(
   path.join(consumer, "check.mjs"),
   `import assert from 'node:assert/strict';
-import {ingest} from '@openpresentation/opf/data';
+import {${dataImportName} as ingest} from '@openpresentation/opf/data';
 import {fitRichText,fitList} from '@openpresentation/opf/composition';
 import {parseTabularData} from '@openpresentation/opf-editor/data';
 import {formatRichTextRange, replaceRichTextRange, richTextContent} from '@openpresentation/opf-editor/rich-text';
