@@ -1,6 +1,6 @@
 ---
 type: added
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-62: `@openpresentation/opf/node`, core's Node-only file API, and `opf convert`.
     - `convert(input, output, options?)` turns a `.pptx`, `.opf.md`, `.yaml`/`.yml` or `.json` file, a deck object or PPTX bytes into a `.pdf`, `.pptx`, `.png`, `.svg`, `.zip`, `.opf.md`, `.yaml`/`.yml` or `.json` file, the formats named by the extensions (`slides/deck.png` writes `slides/deck-001.png`, ...; one selected slide is written to the output itself; a `.zip` holds PNG slides, or SVG with `format: "svg"`). Everything is produced before anything is written, each file atomically, parent folders created; an existing output is replaced, as `save` does (`overwrite: false` refuses it; the commands keep refusing without `--force`). Images resolve next to the input file. `convert(input, { format })` returns `{ files: [{ name, type, bytes }], findings }` and writes nothing.
