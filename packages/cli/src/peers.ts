@@ -12,7 +12,7 @@ import { OPFApiError } from "./errors.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.15.0", [PPTX_PACKAGE]: "^0.15.0" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.16.0", [PPTX_PACKAGE]: "^0.16.0" } as const;
 
 export interface Diagnostic {
 	code: string;
