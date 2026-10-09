@@ -17,7 +17,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `description` | no | `string` | Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/co... |
 | `filename` | no | `string` | Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted... |
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (Organization.role 'primary', else the first item) su... |
-| `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. The first speaker is the primary speaker: the built-in variables 'speaker.<field>' and the 'speaker' header/footer field read it, 'speake... |
+| `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. The first speaker is the primary speaker: the built-in variables 'speaker.<field>' read it, 'speakers' lists every name, and 'speaker.<id... |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
 | `audience` | no | `oneOf:string / ref:Audience / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts any of: - A single string: an audiences reference ('executive', or 'acme:board' for a record of the catalogs.acme group), or free-form text ('Series B investors'). A st... |
 | `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string: a purposes reference ('decide', or 'acme:fundraise' for a record of the catalogs.acme group), or a free-form goal ('Raise a Series B round of $30M'). A str... |
@@ -144,19 +144,19 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `id`, `name`
-- Purpose: An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the default deck logo (unless design.logo overrides it), the 'organization' header/footer field (its name) and the 'socials' field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'var:organization.logo', 'organization.<id>.<field>'). Nothing else about an organ...
+- Purpose: An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the default deck logo (unless design.logo overrides it) and the 'socials' header/footer field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'var:organization.logo', 'organization.<id>.<field>'). Nothing else about an organization is drawn automatically. See d...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | yes | `string` | Stable identifier for the organization, used to reference it from Speaker.organizationId and to address it in built-in variables as 'organization.<id>.<field>'. Must be unique among organizations (a duplicate is a val... |
-| `name` | yes | `string` | Display name. Drawn by the 'organization' header/footer field for the primary organization; the built-in variable 'organization.name' (or 'organization.<id>.name') carries it into any string. |
+| `name` | yes | `string` | Display name. The built-in variable 'organization.name' (primary organization) or 'organization.<id>.name' carries it into any string, such as a header or footer text of '{{organization.name}}'. |
 | `legalName` | no | `string` | Optional legal entity name when it differs from the display name. Never drawn automatically; available as the built-in variable 'organization.legalName'. |
 | `logo` | no | `ref:Asset` | Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector log... |
 | `domain` | no | `string` | Bare internet domain for the organization. Never drawn automatically and not used to look up assets; available as the built-in variable 'organization.domain'. |
 | `email` | no | `string` | General contact email for the organization. Never drawn automatically; available as the built-in variable 'organization.email'. |
 | `phone` | no | `string` | Main contact phone number for the organization. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'organization.phone'. |
 | `tagline` | no | `string` | Short tagline. Never drawn automatically (cover slides do not show it); available as the built-in variable 'organization.tagline', for example in a footer 'text' of '{{organization.tagline}}'. |
-| `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. Only 'primary' has behavior: it selects the primary organization (deck logo, 'organization' and 'socials' header/footer fields, and the 'organization.<field>' bui... |
+| `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. Only 'primary' has behavior: it selects the primary organization (deck logo, the 'socials' header/footer field, and the 'organization.<field>' built-ins). When no... |
 | `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. The primary organization's socials render in header/footer zones that set socials: true; otherwise they are authoring metadata. |
 
 
@@ -164,13 +164,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `id`, `name`
-- Purpose: A person presenting the deck. A speaker is drawn only through built-in variables ('{{speaker.name}}' inside any string, 'var:speaker.photo' as a whole image field) and the 'speaker' header/footer field (the first speaker's name and title). No layout, cover or bio slide places a speaker on its own. See docs/templates-and-variables.md.
+- Purpose: A person presenting the deck. A speaker is drawn only through built-in variables ('{{speaker.name}}' inside any string, a header or footer text included, and 'var:speaker.photo' as a whole image field). No layout, cover or bio slide places a speaker on its own. See docs/templates-and-variables.md.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | yes | `string` | Stable identifier for the speaker. Must be unique among speakers (a duplicate is a validation error). Addresses this speaker in built-in variables as 'speaker.<id>.<field>', such as '{{speaker.alice.title}}'. |
-| `name` | yes | `string` | Display name. Built-in variable 'speaker.name' (first speaker) or 'speaker.<id>.name'; the first speaker's name is also drawn by the 'speaker' header/footer field and every name is listed by 'speakers'. |
-| `title` | no | `string` | Role or title. Built-in variable 'speaker.title'; the 'speaker' header/footer field draws it after the name ('Alice Chen, VP of Engineering'). |
+| `name` | yes | `string` | Display name. Built-in variable 'speaker.name' (first speaker) or 'speaker.<id>.name'; every name is listed by 'speakers'. |
+| `title` | no | `string` | Role or title. Built-in variable 'speaker.title' (or 'speaker.<id>.title'), for example in a footer text of '{{speaker.name}}, {{speaker.title}}'. |
 | `photo` | no | `ref:Asset` | Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropr... |
 | `email` | no | `string` | Contact email. Never drawn automatically; available as the built-in variable 'speaker.email'. |
 | `phone` | no | `string` | Contact phone number for the speaker. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'speaker.phone'. |
@@ -673,20 +673,15 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, organization, speaker, socials, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.
+- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, socials, date. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order; a line break is '\n'. Put a date and a slide number in different zones to keep each on the zone's...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `logo` | no | `boolean` | Whether to render the deck's icon logo in this zone: a slide's design.logo, then design.logo, then the primary organization's logo (LogoSet icon variants first, light ones on dark backgrounds). It is a generated image... |
-| `text` | no | `string` | Literal text rendered in this zone. |
+| `text` | no | `string` | Text rendered in this zone. Variables resolve inside it like any string: deck-wide ones ('{{organization.name}}', '{{speaker.name}}, {{speaker.title}}', '{{customer}}') before composition, and the slide-scoped built-i... |
 | `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
-| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes a native slide-number field when its value fits within one accepted text line; a value split across lines exports as static text with a diagn... |
-| `slideNumberFormat` | no | `string` | Template for the slide number when slideNumber is true. {current} is the displayed slide number (a native PPTX field when its value fits within one accepted text line); {total} is the number of slides in the rendered... |
 | `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given an explicit ISO date by its host (core never reads a clock). PPTX export writes a native date field only for a supported dateFormat whose complete... |
 | `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
-| `organization` | no | `boolean` | Whether to render the primary organization's name from organization (role 'primary', else the first organization). |
-| `speaker` | no | `boolean` | Whether to render the primary (first) speaker's name and title from speaker, joined as 'Ada Lovelace, CTO' (just the name when the speaker has no title). It is generated text: without a named speaker the engine report... |
-| `section` | no | `boolean` | Whether to render the current slide section label. |
 | `socials` | no | `boolean` | Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else... |
 
 
@@ -769,7 +764,7 @@ _No named properties._
 | `top+middle+bottom:center+right` | no | `ref:ContentPayload` |  |
 | `top+middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
-| `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
+| `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. Also the slide-scoped built-in variable '{{sli... |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
 | `composition` | no | `ref:Composition` |  |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { "authoring... |

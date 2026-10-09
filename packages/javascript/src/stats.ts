@@ -40,7 +40,7 @@ export interface HeaderFooterFact {
   /** The deck sets it to `false`. */
   suppressed: boolean;
   zones: string[];
-  /** Fields set in any zone: logo, image, text, organization, socials, section, slideNumber, date. */
+  /** Fields set in any zone: logo, image, text, socials, date. */
   fields: string[];
 }
 export interface TableFact {
@@ -230,7 +230,7 @@ export interface StatsOptions extends CatalogOptions {
 
 const DEFAULT_WORDS_PER_MINUTE = 130;
 const KIND_ORDER = ['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline', 'chart', 'table', 'image', 'video'] as const;
-const FURNITURE_FIELDS = ['logo', 'image', 'text', 'organization', 'socials', 'section', 'slideNumber', 'date'] as const;
+const FURNITURE_FIELDS = ['logo', 'image', 'text', 'socials', 'date'] as const;
 const ZONES = ['left', 'center', 'right'] as const;
 const LOGO_VARIANTS = ['default', 'light', 'dark', 'stacked', 'stackedLight', 'stackedDark', 'icon', 'iconLight', 'iconDark', 'wordmark', 'wordmarkLight', 'wordmarkDark'] as const;
 

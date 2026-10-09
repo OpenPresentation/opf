@@ -1,6 +1,7 @@
 import { isRecord, pathFor } from "./content-walk.js";
 import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
+import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -111,14 +112,15 @@ export class OPFVariableError extends Error {
 
 const idPattern = /^[a-z][a-z0-9-]*$/;
 /**
- * A user-defined id, or a built-in name: `speakers`, or `deck`/`speaker`/`organization` plus one or two dotted
- * segments (`speaker.name`, `organization.acme.logo`). A user id never contains a dot, so the two cannot collide.
+ * A user-defined id, or a built-in name: `speakers`, or `deck`/`speaker`/`organization`/`slide` plus one or two
+ * dotted segments (`speaker.name`, `organization.acme.logo`, `slide.number`). A user id never contains a dot, so the
+ * two cannot collide.
  */
-const nameSource = String.raw`[a-z][a-z0-9-]*|(?:deck|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,2}`;
+const nameSource = String.raw`[a-z][a-z0-9-]*|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,2}`;
 const referencePattern = new RegExp(String.raw`^var:(${nameSource})$`);
-const builtinNamePattern = /^(?:speakers|(?:deck|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,2})$/;
+const builtinNamePattern = /^(?:speakers|(?:deck|speaker|organization|slide)(?:\.[A-Za-z0-9_-]+){1,2})$/;
 /** Cheap pre-check: does this string carry a built-in token or a whole-field reference? */
-const builtinUsePattern = /\{\{\s*(?:speakers\b|(?:deck|speaker|organization)\.)|^var:(?:speakers$|(?:deck|speaker|organization)\.)/;
+const builtinUsePattern = /\{\{\s*(?:speakers\b|(?:deck|speaker|organization|slide)\.)|^var:(?:speakers$|(?:deck|speaker|organization|slide)\.)/;
 const hexPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 const urlPattern = /^(?:https?:\/\/|mailto:|tel:)\S+$/;
 const datePrefixPattern = /^(\d{4}-\d{2}-\d{2})(?:[T ].*)?$/;
@@ -403,13 +405,18 @@ function builtinSource(name: string, doc: Record<string, unknown>): BuiltinSourc
     const names = speakersOf(doc).map((speaker) => present(speaker.name)).filter((entry): entry is string => typeof entry === "string");
     return { ok: true, kind: "list", raw: names.length ? names : undefined };
   }
+  const list = (names: readonly string[]) => names.map((entry) => `'${entry}'`).join(", ");
+  if (isSlideScopedName(name)) {
+    // Reached only by a whole-field reference or an unknown name: a known slide-scoped token stays for the per-slide pass.
+    if (isSlideScopedBuiltin(name)) return { ok: false, message: `'var:${name}' is not supported: '${name}' is a slide-scoped built-in, written only as the inline token '{{${name}}}'.` };
+    return { ok: false, message: `'${name}' is not a built-in variable; the slide-scoped built-ins are ${list(SLIDE_SCOPED_BUILTINS)}.` };
+  }
   const parts = name.split(".");
   const root = parts[0] as string;
   const fields = builtinFields(root);
-  const list = (names: string[]) => names.map((entry) => `'${entry}'`).join(", ");
   if (root === "deck") {
     const field = parts[1] as string;
-    if (parts.length !== 2 || !Object.hasOwn(fields, field)) return { ok: false, message: `'${name}' is not a built-in variable; the deck built-ins are ${list(Object.keys(fields).map((key) => `deck.${key}`))}.` };
+    if (parts.length !== 2 || !Object.hasOwn(fields, field)) return { ok: false, message: `'${name}' is not a built-in variable; the deck built-ins are ${list(Object.keys(fields).map((key) => `deck.${key}`))} and the slide-scoped 'deck.slideCount'.` };
     const value = doc[field];
     return { ok: true, kind: "text", raw: field === "author" && Array.isArray(value) ? present(value.filter((entry) => typeof entry === "string").join(", ")) : present(value) };
   }
@@ -482,16 +489,18 @@ function lookupVariable(id: string, path: string, context: Context): Effective |
 
 function interpolate(text: string, path: string, context: Context): { value: string; changed: boolean } {
   let changed = false;
-  const value = text.replace(tokenPattern, (match, id: string | undefined, format: string | undefined) => {
+  const value = text.replace(tokenPattern, (match: string, id: string | undefined, format: string | undefined, offset: number) => {
     if (id === undefined) {
-      // The escape `\{{`.
-      if (context.unescape) {
+      // The escape `\{{`. In front of a slide-scoped token it stays, so the per-slide pass draws the literal token.
+      if (context.unescape && !slideTokenFollows(text.slice(offset + match.length))) {
         changed = true;
         return "{{";
       }
       return match;
     }
     context.uses.push({ id, path, form: "token" });
+    // `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` resolve per slide (resolveSlideVariables, layoutFurniture).
+    if (isSlideScopedBuiltin(id)) return match;
     const effective = lookupVariable(id, path, context);
     if (!effective) {
       if (!isBuiltinName(id)) diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
@@ -700,6 +709,26 @@ function rebuildVariables(presentation: Record<string, unknown>, built: Plan, ke
   return out.length ? Object.fromEntries(out) : undefined;
 }
 
+/**
+ * One `variable-builtin-missing` warning per slide that has no `section` but uses `{{slide.section}}`, in its own
+ * strings or in the header or footer text it inherits from `design`, at that slide's path.
+ */
+function slideSectionDiagnostics(presentation: Record<string, unknown>, uses: VariableUse[]): VariableDiagnostic[] {
+  const paths = uses.filter((use) => use.id === "slide.section").map((use) => use.path);
+  if (!paths.length || !Array.isArray(presentation.slides)) return [];
+  const out: VariableDiagnostic[] = [];
+  presentation.slides.forEach((slide, index) => {
+    if (!isRecord(slide) || (typeof slide.section === "string" && slide.section !== "")) return;
+    const own = `/slides/${index}/`;
+    const design = isRecord(slide.design) ? slide.design : {};
+    const inherited = (["header", "footer"] as const).filter((kind) => design[kind] === undefined).map((kind) => `/design/${kind}/`);
+    const where = paths.find((path) => path.startsWith(own) || inherited.some((prefix) => path.startsWith(prefix)));
+    if (where === undefined) return;
+    out.push({ code: "variable-builtin-missing", severity: "warning", path: `/slides/${index}`, id: "slide.section", message: `Slide ${index + 1} has no section, so '{{slide.section}}' (used at ${where}) resolves to nothing on it; give the slide a section or remove the token.` });
+  });
+  return out;
+}
+
 function finish(presentation: Record<string, unknown>, built: Plan, options: ResolveVariablesOptions & { shape?: boolean }): ResolveVariablesResult {
   const { context } = built;
   const complete = built.unfilled.length === 0;
@@ -719,6 +748,8 @@ function finish(presentation: Record<string, unknown>, built: Plan, options: Res
       }
     }
   }
+  // The validation view also checks the slide-scoped `{{slide.section}}` per slide; the deck-wide pass never does.
+  if (context.shape) context.diagnostics.push(...slideSectionDiagnostics(presentation, context.uses));
   const diagnostics = context.diagnostics;
   if (options.strict && diagnostics.some((entry) => entry.severity === "error")) throw new OPFVariableError(diagnostics);
   return { presentation: result, diagnostics, unfilled: built.unfilled, examplesUsed: built.examplesUsed, complete };
@@ -788,20 +819,31 @@ export interface BuiltinVariableInfo {
   kind: VariableKind;
   /** Short label for pickers, such as "Speaker name". */
   label: string;
-  /** The value the document gives it, when it has one (a string, an Asset or the list of names). */
+  /**
+   * `deck` for a value read once from the document; `slide` for `slide.number`, `slide.section` and
+   * `deck.slideCount`, which vary per slide and resolve as each slide is composed (inline tokens only).
+   */
+  scope: "deck" | "slide";
+  /** The value the document gives it, when it has one (a string, an Asset or the list of names). Never set for a slide-scoped built-in. */
   value?: unknown;
-  /** True when the document has a source value for it. Unavailable built-ins resolve to nothing. */
+  /**
+   * True when the document has a source value for it. Unavailable built-ins resolve to nothing. A slide-scoped
+   * built-in is available when every slide gives it a value: always for `slide.number` and `deck.slideCount`, and
+   * for `slide.section` when at least one slide has a section.
+   */
   available: boolean;
   /** Every place the document uses it. */
   uses: VariableUse[];
 }
 
+const SLIDE_SCOPED_LABELS: Record<string, string> = { "slide.number": "Slide number", "slide.section": "Section", "deck.slideCount": "Slide count" };
 const FIELD_LABELS: Record<string, string> = { name: "name", legalName: "legal name", tagline: "tagline", domain: "domain", email: "email", phone: "phone", logo: "logo", title: "title", bio: "bio", photo: "photo", description: "description", author: "author" };
 
 /**
  * The built-in variables of a deck, for pickers and agents: the generic names (`deck.*`, `speaker.*`, `speakers`,
  * `organization.*`) first, then the id-addressed ones (`speaker.<id>.*`, `organization.<id>.*`) of each speaker and
- * organization that has an id. Each carries its kind, current source value and where the document uses it.
+ * organization that has an id, then the slide-scoped `slide.number`, `slide.section` and `deck.slideCount` (scope
+ * `slide`, no value). Each carries its kind, current source value and where the document uses it.
  */
 export function listBuiltinVariables(presentation: unknown): BuiltinVariableInfo[] {
   if (!isRecord(presentation)) return [];
@@ -824,7 +866,12 @@ export function listBuiltinVariables(presentation: unknown): BuiltinVariableInfo
     const source = builtinSource(name, presentation);
     if (!source.ok) continue;
     const coerced = source.raw === undefined ? undefined : coerceVariableValue(source.kind, source.raw);
-    out.push({ name, kind: source.kind, label, ...(coerced?.ok ? { value: coerced.value } : {}), available: coerced?.ok === true, uses: built.context.uses.filter((use) => use.id === name) });
+    out.push({ name, kind: source.kind, label, scope: "deck", ...(coerced?.ok ? { value: coerced.value } : {}), available: coerced?.ok === true, uses: built.context.uses.filter((use) => use.id === name) });
+  }
+  const slides = Array.isArray(presentation.slides) ? presentation.slides : [];
+  for (const name of SLIDE_SCOPED_BUILTINS) {
+    const available = name !== "slide.section" || slides.some((slide) => isRecord(slide) && typeof slide.section === "string" && slide.section !== "");
+    out.push({ name, kind: "text", label: SLIDE_SCOPED_LABELS[name] as string, scope: "slide", available, uses: built.context.uses.filter((use) => use.id === name) });
   }
   return out;
 }

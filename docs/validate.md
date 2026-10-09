@@ -406,7 +406,7 @@ Default severity: **error**. Cost: structure. A variable value does not match it
 
 Default severity: **error**. Cost: structure. A token names a built-in variable that does not exist.
 
-**Why.** The `deck.`, `speaker.` and `organization.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally.
+**Why.** The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -817,7 +817,7 @@ Default severity: **warning**. Cost: structure. A code highlight range ends befo
 
 Default severity: **warning**. Cost: structure. A built-in variable has no value in this document.
 
-**Why.** A `{{deck.*}}`, `{{speaker.*}}` or `{{organization.*}}` token whose field the document does not set resolves to nothing, so the text shows a gap.
+**Why.** A `{{deck.*}}`, `{{speaker.*}}` or `{{organization.*}}` token whose field the document does not set resolves to nothing, so the text shows a gap. `{{slide.section}}` is checked per slide: a slide without a `section` that uses it, in its own text or in the header or footer it inherits, is reported at that slide.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

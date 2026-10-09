@@ -202,28 +202,19 @@ test('built-ins are listed with kind, availability and uses for pickers', () => 
   assert.deepEqual(listBuiltinVariables(null), []);
 });
 
-test('the speaker furniture field draws the first speaker name and title after organization', () => {
-  const presentation = deck({design: {footer: {left: {organization: true, speaker: true}, right: {speaker: true}}}});
-  const geometry = composeSlide({id: 'cover', title: 'Hello'}, {width: 1280, height: 720, presentation, slideIndex: 0});
+test('header and footer text carries speaker and organization built-ins in the author order', () => {
+  const presentation = deck({design: {footer: {left: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, right: {text: '{{speaker.name}}'}}}});
+  const {presentation: concrete} = resolved(presentation);
+  assert.equal(concrete.design.footer.left.text, 'Acme Corp\nAda Lovelace, CTO');
+  const geometry = composeSlide({id: 'cover', title: 'Hello'}, {width: 1280, height: 720, presentation: concrete, slideIndex: 0});
   assert.deepEqual(geometry.diagnostics, []);
   const parts = geometry.furniture.parts;
-  assert.deepEqual(parts.filter((part) => part.zone === 'left').map((part) => part.field), ['organization', 'speaker']);
-  const speaker = parts.find((part) => part.field === 'speaker');
-  assert.equal(speaker.text, 'Ada Lovelace, CTO');
-  assert.equal(speaker.generated, true);
-  assert.equal(speaker.sourcePath, 'speaker.0.name');
-  assert.ok(speaker.box.y > parts.find((part) => part.field === 'organization').box.y);
-  // No title: the name alone; a single speaker object keeps the unindexed path.
-  const single = deck({speaker: {id: 'solo', name: 'Solo'}, design: {footer: {left: {speaker: true}}}});
-  const part = composeSlide({id: 'cover'}, {width: 1280, height: 720, presentation: single}).furniture.parts[0];
-  assert.equal(part.text, 'Solo');
-  assert.equal(part.sourcePath, 'speaker.name');
-  // No speaker: a diagnostic, no part.
-  const absent = deck({design: {footer: {left: {speaker: true}}}});
-  delete absent.speaker;
-  const none = composeSlide({id: 'cover'}, {width: 1280, height: 720, presentation: absent});
-  assert.equal(none.furniture.parts.length, 0);
-  assert.ok(none.furniture.diagnostics.some((entry) => entry.code === 'unresolved-content' && entry.path === 'design.footer.left.speaker'));
+  assert.deepEqual(parts.map((part) => [part.zone, part.field, part.text]), [['left', 'text', 'Acme Corp\nAda Lovelace, CTO'], ['right', 'text', 'Ada Lovelace']]);
   const validation = check(presentation);
   assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
+  // FA-31: the 0.16 furniture flags are gone, with no alias.
+  for (const key of ['organization', 'speaker', 'section', 'slideNumber', 'slideNumberFormat']) {
+    const old = deck({design: {footer: {left: {[key]: key === 'slideNumberFormat' ? '{current}' : true}}}});
+    assert.equal(check(old).valid, false, key);
+  }
 });

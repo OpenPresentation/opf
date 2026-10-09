@@ -70,6 +70,8 @@ export type {
   VariableUseForm,
   VariableValues,
 } from "./variables.js";
+export { SLIDE_SCOPED_BUILTINS, resolveSlideVariables } from "./slide-variables.js";
+export type { SlideScopedBuiltin } from "./slide-variables.js";
 
 export {
   specFileEntries,

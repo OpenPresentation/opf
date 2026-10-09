@@ -33,7 +33,7 @@ const deck = () => ({
     watermark: "asset:wm",
     background: { type: "image", src: "./bg.jpg" },
     header: { left: { logo: true }, right: { text: "Confidential" } },
-    footer: { center: { slideNumber: true, date: true } },
+    footer: { center: { text: "{{slide.number}}", date: true } },
   },
   variables: {
     brand: "#112233",
@@ -247,7 +247,7 @@ describe("stats: citations, variables, header/footer, fonts, colours", () => {
 
   test("describes header and footer at deck level and per slide", () => {
     assert.deepEqual(result.headerFooter.header, { configured: true, suppressed: false, zones: ["left", "right"], fields: ["logo", "text"] });
-    assert.deepEqual(result.headerFooter.footer, { configured: true, suppressed: false, zones: ["center"], fields: ["slideNumber", "date"] });
+    assert.deepEqual(result.headerFooter.footer, { configured: true, suppressed: false, zones: ["center"], fields: ["text", "date"] });
     assert.deepEqual(result.headerFooter.slides, { headerOverrides: 0, headerSuppressed: 1, footerOverrides: 1, footerSuppressed: 0 });
   });
 

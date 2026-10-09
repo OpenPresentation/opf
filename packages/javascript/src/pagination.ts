@@ -6,6 +6,7 @@ import { resolveSlideContext, type SlideContextDiagnostic } from './slide-contex
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
+import { resolveSlideVariables, slideTokenSpans, usesSlideBuiltin } from './slide-variables.js';
 
 export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasurement'> {
   /** The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. */
@@ -70,6 +71,11 @@ interface Leaf {
   slice?: (start: number, end: number) => any;
 }
 interface Portion { leaf: Leaf; start: number; end: number; value: any }
+/** Drop text boundaries that fall inside a slide-scoped token, so a page break never cuts `{{slide.number}}`. */
+function keepTokensWhole(boundaries: number[], text: string): number[] {
+  const spans = slideTokenSpans(text);
+  return spans.length ? boundaries.filter(boundary => !spans.some(([start,end]) => boundary > start && boundary < end)) : boundaries;
+}
 function leafFor(path: string, field: string, value: any): Leaf {
   const leaf: Leaf = { path, field, value };
   let text: string | undefined;
@@ -91,7 +97,7 @@ function leafFor(path: string, field: string, value: any): Leaf {
   }
   if (text !== undefined) {
     leaf.unit = 'utf16';
-    leaf.boundaries = [0, ...Array.from(graphemes.segment(text), segment => segment.index + segment.segment.length)];
+    leaf.boundaries = keepTokensWhole([0, ...Array.from(graphemes.segment(text), segment => segment.index + segment.segment.length)], text);
   } else if (field === 'items' || field === 'bullets') {
     leaf.unit = 'items'; leaf.boundaries = Array.from({length:value.length+1},(_,i)=>i);
     leaf.slice = (a,b) => value.slice(a,b);
@@ -149,9 +155,14 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     return {...layout, placeholders: visit(layout.placeholders)};
   };
   if (options.layout !== undefined) composeOptions.layout = readableLayout(options.layout) as ComposeSlideOptions['layout'];
+  // FA-31: pages are measured with the slide-scoped built-ins substituted for their final number and the deck's slide
+  // count, but returned with the tokens kept, so the output stays a source document.
+  const presentationSlides = options.presentation?.slides;
+  const slideCount = options.slideCount ?? (Array.isArray(presentationSlides) && presentationSlides.length ? presentationSlides.length : undefined);
   const geometry = (slide: Record<string, any>, pageIndex = 0) => {
     if (++evaluations > 20000) throw new OPFPaginationError('Pagination exceeded its layout evaluation limit. Split the input into smaller sections.');
-    return composeSlide(withReadability(slide,true), {...composeOptions,slideNumber:(options.slideNumber??sourceIndex+1)+pageIndex});
+    const slideNumber = (options.slideNumber??sourceIndex+1)+pageIndex;
+    return composeSlide(resolveSlideVariables(withReadability(slide,true),{slideNumber,...(slideCount!==undefined?{slideCount}:{})}), {...composeOptions,slideNumber});
   };
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
@@ -168,7 +179,15 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   if (!fit(initial.diagnostics).length) return { slides:[source], pages:[{slideIndex:sourceIndex,mappings:initial.items.map(item=>({sourcePath:item.path,outputPath:item.path})),...(initial.furniture?{repeatedMappings:repeatedMappings(0)}:{})}] };
   const headerIssues = initial.diagnostics.filter(issue=>headingFields.has(issue.path.slice(sourceBase.length+1))||initial.furniture?.diagnostics.includes(issue));
   if (headerIssues.length) throw new OPFPaginationError('Repeated headings or header/footer content cannot fit or resolve. Change the repeated content or slide design before pagination.',headerIssues);
-  const leaves = initial.items.filter(item=>!headingFields.has(item.field)).map(item=>leafFor(item.path,item.field,item.value));
+  // A slide with slide-scoped tokens is measured substituted: split its own (token) values, so pages keep the tokens.
+  const tokens = resolveSlideVariables(source,{slideNumber:1,slideCount:1}) !== source;
+  const sourceValue = (path: string, fallback: unknown): unknown => {
+    if (!tokens || !path.startsWith(`${sourceBase}.`)) return fallback;
+    let node: unknown = source;
+    for (const key of path.slice(sourceBase.length+1).split('.')) node = isRecord(node) || Array.isArray(node) ? (node as any)[key] : undefined;
+    return node === undefined ? fallback : node;
+  };
+  const leaves = initial.items.filter(item=>!headingFields.has(item.field)).map(item=>leafFor(item.path,item.field,sourceValue(item.path,item.value)));
   const leafPaths = new Set(leaves.map(leaf=>leaf.path));
   const slides: Record<string, any>[] = [], pages: PaginatedPage[] = [];
   let selected = new Map<string,Portion>();
@@ -299,11 +318,6 @@ export interface PresentationPaginationResult {
   pages: (PaginatedPage & { sourceSlideIndex: number })[];
 }
 
-const usesSlideTotal = (presentation: Record<string, any>): boolean => [presentation, ...presentation.slides].some((owner: Record<string, any>) =>
-  ['header','footer'].some(kind => ['left','center','right'].some(zone => {
-    const content = owner?.design?.[kind]?.[zone];
-    return content?.slideNumber === true && typeof content.slideNumberFormat === 'string' && content.slideNumberFormat.includes('{total}');
-  })));
 
 /** Resolve the slides' references (the document's catalogs groups, then the registered catalogs) and paginate a complete presentation without mutating it. */
 export function paginate(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
@@ -315,7 +329,7 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
   // Reserve every id already in the document — slide and payload alike — so a
   // generated continuation id can never collide with one an author chose.
   const authoredIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
-  // Outside run(): a {total} retry must not repeat diagnostics.
+  // Outside run(): a slide-count retry must not repeat diagnostics.
   const reported = new Set<string>();
   const run = (slideCount: number) => {
     const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [], reservedIds = [...authoredIds];
@@ -338,11 +352,12 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
     });
     return {output,pages};
   };
-  // {total} in a slide-number format depends on the final page count, which can in
-  // turn depend on the width of that label. Iterate to a bounded fixed point.
+  // {{deck.slideCount}} anywhere in the deck depends on the final page count, which can in
+  // turn depend on the width of that value. Iterate to a bounded fixed point.
+  const usesSlideCount = usesSlideBuiltin(presentation, 'deck.slideCount');
   let slideCount = presentation.slides.length, result = run(slideCount);
-  for (let attempt = 0; usesSlideTotal(presentation) && result.output.length !== slideCount; attempt++) {
-    if (attempt >= 3) throw new OPFPaginationError('Slide-number totals did not converge. Change the slide-number format or split the input.');
+  for (let attempt = 0; usesSlideCount && result.output.length !== slideCount; attempt++) {
+    if (attempt >= 3) throw new OPFPaginationError('The slide count did not converge. Change the text around {{deck.slideCount}} or split the input.');
     slideCount = result.output.length; result = run(slideCount);
   }
   const {output,pages} = result;

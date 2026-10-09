@@ -145,7 +145,7 @@ test('content slides never get an automatic logo', () => {
 
 test('furniture logo: true generates an icon image part before the zone image, with the icon variant', () => {
   const presentation = {
-    design: {logo: {default: asset('default'), icon: asset('icon'), iconLight: asset('iconLight')}, footer: {left: {logo: true, image: asset('badge'), text: 'Acme'}, right: {slideNumber: true}}},
+    design: {logo: {default: asset('default'), icon: asset('icon'), iconLight: asset('iconLight')}, footer: {left: {logo: true, image: asset('badge'), text: 'Acme'}, right: {text: '{{slide.number}}'}}},
     organization: {name: 'Acme'},
   };
   for (const [width, height] of [[1280, 720], [720, 1280]]) {
