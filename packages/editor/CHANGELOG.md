@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.17.0 (2026-10-09)
+
+- FA-31 (breaking, needs core 0.17.0): the header and footer controls follow the format. Each zone is a text box plus an "Insert value" menu (slide number, slide count, section, organization, speaker, deck name) that puts the matching `{{ }}` variable at the cursor as one undoable, validated edit (`insertZoneValue`, `prepareZoneValue`, `ZONE_VALUES` from `@openpresentation/opf-editor/design-options`). The logo, image, date and social-profile controls stay. Removed with no alias: the organization, speaker, section, slide number and slide number format controls and the `organization`, `speaker`, `section`, `slideNumber` and `slideNumberFormat` fields of `setHeaderFooterZone`, `prepareHeaderFooterZone` and `ZONE_FIELDS` (write the variable in `text`). `designWarnings` now warns about a zone's `{{organization.name}}`-style variable the deck has no value for and about `{{slide.section}}` on a slide without a section. `editor.composeSlide` composes the slide with the slide-scoped variables substituted, and the Fill template panel lists `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` as "varies per slide".
+
 ## 0.16.0 (2026-10-09)
 
 - FA-26 (needs core 0.16.0): layout records with nested placeholder groups in the editor. The canvas composes the same leaf boxes as the preview and the PPTX export; the layout picker, the JSON field menu and "Add slide with layout" name nested slots (`title, column (text, text), chart`) and compare layouts by their leaf regions; a layout switch adds the empty slots the record's leaves declare; and Arrange (`setLayoutEditing(true)`) draws every slot of the record (`geometry.slots`) as an outline at its cell, labelling the empty ones.
