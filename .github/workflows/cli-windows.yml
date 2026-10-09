@@ -13,6 +13,7 @@ on:
       - 'skills/**'
       - 'scripts/run-tests.mjs'
       - 'scripts/package-manager.mjs'
+      - 'scripts/global-prefix.mjs'
       - 'scripts/typecheck.mjs'
       - 'scripts/check-packed-types.mjs'
       - 'package.json'
@@ -48,6 +49,7 @@ jobs:
             skills/**
             scripts/run-tests.mjs
             scripts/package-manager.mjs
+            scripts/global-prefix.mjs
             scripts/typecheck.mjs
             scripts/check-packed-types.mjs
             package.json
@@ -84,3 +86,11 @@ jobs:
       - run: pnpm test:cli
       - run: pnpm test:cli:packed
       - run: pnpm test:cli:packed:peers
+      # RR-66 (opf#466): the published CLI from the npm registry, installed globally and run through npm exec, as the
+      # ecosystem registry shard checks it on Linux. Its command tests come from the CLI's release commit, which the shallow
+      # checkout does not have: fetch that one commit.
+      - name: Verify the published CLI from the npm registry
+        shell: bash
+        run: |
+          git fetch --no-tags --depth=1 origin "$(node -p "require('./release-plan.json').verificationRefs.cli")"
+          node packages/cli/test/packed.mjs --registry

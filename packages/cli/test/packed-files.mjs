@@ -12,6 +12,7 @@ import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
+import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cli');
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
@@ -61,8 +62,10 @@ try {
   assert.ok(packed.size < 3 * 1024 * 1024, `CLI tarball is ${packed.size} bytes`);
 
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
-  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers, ...renderExtras], temp);
-  const modules = path.join(temp, process.platform === 'win32' ? 'node_modules' : 'lib/node_modules');
+  // RR-66 (opf#466): in a folder of its own, so the npm exec runs below never resolve into it (scripts/global-prefix.mjs).
+  const global = globalPrefixLayout(path.join(temp, 'global'));
+  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers, ...renderExtras], temp);
+  const modules = global.modules;
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
   assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
   // A new core minor is released before its siblings: until they publish, the published siblings' own core range does not
@@ -89,6 +92,7 @@ try {
 
   // npx-style: one run with the CLI and both peers in a single temporary install.
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
+  assertExecOutsideGlobal(work, global);
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
   const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');

@@ -18,6 +18,7 @@ import {yamlCommand, YAML_USAGE, YAML_HELP} from './yaml.js';
 import {DeckReadError, commentWarning, decode, deckExtension, fenceWarning, inputFormatOf, isDeckFormatFlag, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
+import {dataFormatOf, samePath} from './io.js';
 import {CONVERT_USAGE, runConvertCommand} from './convert-command.js';
 import {runValidate, VALIDATE_USAGE} from './validate.js';
 import {FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches} from './check.js';
@@ -270,7 +271,7 @@ async function main(args0: string[]) {
     }
     const document = applyPatch(source.value, (await readDeck(String(options.patch), false, "patch")).value);
     const output = options["in-place"] ? input : String(options.output ?? "-");
-    const sameFile = input !== "-" && output !== "-" && path.resolve(input) === path.resolve(output);
+    const sameFile = input !== "-" && output !== "-" && samePath(input, output);
     await emit(document, output, options, sameFile ? { file: input, raw: source.raw } : undefined, {}, source); return;
   }
   if (command === "diff") { await diffCommand(args, cli); return; }
@@ -289,7 +290,7 @@ async function main(args0: string[]) {
     let records: FillRecord[] = [{}];
     if (options.data !== undefined) {
       const data = String(options.data), raw = data === "-" ? await stdin() : await readFile(data, "utf8");
-      const format = (outFlag ? undefined : options.format) ?? (data.endsWith(".json") ? "json" : data.endsWith(".tsv") ? "tsv" : data.endsWith(".csv") ? "csv" : /^[\s\uFEFF]*[\[{]/.test(raw) ? "json" : "csv");
+      const format = (outFlag ? undefined : options.format) ?? dataFormatOf(data) ?? (/^[\s\uFEFF]*[\[{]/.test(raw) ? "json" : "csv");
       if (!["csv", "tsv", "json"].includes(String(format))) throw new CliError("Unknown data format.");
       records = recordsFromData(raw, format as "csv" | "tsv" | "json", { delimiter: options.delimiter as string | undefined, header: !options["no-header"] });
     }

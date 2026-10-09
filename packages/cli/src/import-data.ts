@@ -7,6 +7,7 @@ import { importData, CHART_TYPES, type ImportedChartType } from "@openpresentati
 import { applyPatch, parsePointer } from "@openpresentation/opf/patch";
 import type { CliContext } from "./context.js";
 import { isDeckFormatFlag } from "./deck.js";
+import { dataFormatOf, samePath } from "./io.js";
 
 export const IMPORT_DATA_USAGE = `  opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
@@ -72,7 +73,8 @@ export async function importDataCommand(args: string[], cli: CliContext): Promis
   };
   // --format yaml or markdown names the output; csv, tsv and json name the data.
   const outFlag = isDeckFormatFlag(options.format) ? String(options.format) : undefined;
-  const format = (outFlag ? undefined : options.format) ?? (input.endsWith(".json") ? "json" : input.endsWith(".tsv") ? "tsv" : undefined);
+  const named = dataFormatOf(input);
+  const format = (outFlag ? undefined : options.format) ?? (named === "csv" ? undefined : named);
   if (format !== undefined && !["csv", "tsv", "json"].includes(String(format))) throw cli.fail("Unknown data format.");
   // OPF 0.15: chart types are an engine vocabulary; an unknown one would only surface as an invalid deck later.
   const chartType = options["chart-type"] === undefined ? undefined : String(options["chart-type"]);
@@ -127,6 +129,6 @@ export async function importDataCommand(args: string[], cli: CliContext): Promis
       document = applyPatch(withDataset(source.value), [{ op: "add", path: "/slides/-", value: { id, title, ...content } }]);
     }
   } else document = withDataset({ slides: [{ id: options.id !== undefined ? String(options.id) : "data-1", title, ...content }] });
-  const sameFile = source && options.into !== "-" && output !== "-" && path.resolve(String(options.into)) === path.resolve(output);
+  const sameFile = source && options.into !== "-" && output !== "-" && samePath(String(options.into), output);
   await cli.emit(document, output, options, sameFile ? { file: String(options.into), raw: source.raw } : undefined, {}, source, outFlag ?? null);
 }

@@ -1,6 +1,6 @@
-import path from "node:path";
 import { merge } from "@openpresentation/opf/diff";
 import { ratio, type CliContext } from "./context.js";
+import { samePath } from "./io.js";
 
 /** `opf merge <base> <ours> <theirs>`: three-way merge with conflict reporting. */
 export async function mergeCommand(args: string[], cli: CliContext): Promise<void> {
@@ -12,7 +12,7 @@ export async function mergeCommand(args: string[], cli: CliContext): Promise<voi
   if (options.prefer !== undefined && options.prefer !== "ours" && options.prefer !== "theirs") throw cli.fail("--prefer must be ours or theirs.");
   const output = options["in-place"] ? oursFile : String(options.output ?? "-");
   const report = options.report === undefined ? undefined : String(options.report);
-  if (report !== undefined && (report === "-" || (output !== "-" && path.resolve(report) === path.resolve(output)))) throw cli.fail("--report must be a file different from the merged output.");
+  if (report !== undefined && (report === "-" || (output !== "-" && samePath(report, output)))) throw cli.fail("--report must be a file different from the merged output.");
 
   const base = await cli.readDeck(baseFile, true), ours = await cli.readDeck(oursFile, true), theirs = await cli.readDeck(theirsFile, true);
   const result = merge(base.value, ours.value, theirs.value, { prefer: options.prefer as "ours" | "theirs" | undefined, threshold: ratio(cli, options.threshold) });
@@ -27,6 +27,6 @@ export async function mergeCommand(args: string[], cli: CliContext): Promise<voi
     process.exitCode = 1;
     return;
   }
-  const sameFile = oursFile !== "-" && output !== "-" && path.resolve(oursFile) === path.resolve(output);
+  const sameFile = oursFile !== "-" && output !== "-" && samePath(oursFile, output);
   await cli.emit(result.merged, output, options, sameFile ? { file: oursFile, raw: ours.raw } : undefined, { merge: summary }, ours);
 }
