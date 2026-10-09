@@ -3171,13 +3171,57 @@ function slideTextMeasurement(presentation, index, options) {
   return chosenFamilyMeasurement(adapted);
 }
 
+// DrawingML has only a bold flag: a run written for the chosen family (no provider face such as Roboto SemiBold) draws that
+// family's bold face at 600 and above and its regular face below, whatever weight the engine asked for.
+const nativeDrawnWeight = weight => weight >= 600 ? 700 : 400;
+const FACE_WEIGHTS = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+const styleName = (weight, italic) => `weight ${weight} ${italic ? 'italic' : 'upright'}`;
+
+// RR-59 (opf-pptx#214): a provider's font-unavailable for a family whose faces are loaded, only not at the requested weight and
+// style, names the family, weight and style that are missing and the ones that are loaded. Any other error is returned unchanged.
+function missingFaceError(error, style, measurement, drawn) {
+  if (error?.code !== 'font-unavailable' || typeof style?.fontFamily !== 'string') return error;
+  const weight = style.fontWeight ?? 400, italic = !!style.italic, loaded = [];
+  for (const candidateItalic of [false, true]) for (const candidate of FACE_WEIGHTS) {
+    if (candidate === weight && candidateItalic === italic) continue;
+    try { const face = measurement.resolveStyle({...style, fontWeight: candidate, italic: candidateItalic}); loaded.push({weight: candidate, italic: candidateItalic, family: face?.fontFace?.family ?? face?.fontFamily}); }
+    catch { /* not loaded at this weight and style */ }
+  }
+  if (!loaded.length) return error;
+  const policy = error.details?.substitutionPolicy, replacement = error.details?.replacement;
+  const families = [...new Set(loaded.map(face => face.family).filter(Boolean))], wanted = styleName(drawn ?? weight, italic);
+  const message = `No local font face for '${style.fontFamily}' at ${styleName(weight, italic)}${policy ? ` under substitutionPolicy '${policy}'` : ''}`
+    + `${drawn !== undefined && drawn !== weight ? `, nor at ${wanted}, the face PowerPoint draws the run with` : ''}. '${style.fontFamily}' resolves only at ${loaded.map(face => styleName(face.weight, face.italic)).join(', ')}`
+    + `${families.length ? ` (${families.join(', ')})` : ''}. Load ${typeof replacement === 'string' ? `its replacement '${replacement}' or licensed '${style.fontFamily}' files` : `a '${style.fontFamily}' face`} at ${wanted} (loadFonts({faces})).`;
+  const Type = typeof error.constructor === 'function' && error.constructor !== Error ? error.constructor : undefined;
+  const details = {...error.details, fontFamily: style.fontFamily, fontWeight: weight, italic, loadedStyles: loaded.map(({weight, italic}) => ({weight, italic})), cause: error.message};
+  let improved;
+  try { improved = Type ? new Type('font-unavailable', message, details) : undefined; } catch { improved = undefined; }
+  if (!(improved instanceof Error) || improved.code !== 'font-unavailable') improved = Object.assign(new Error(message), {name: error.name, code: 'font-unavailable', details});
+  improved.cause = error;
+  return improved;
+}
+
 function chosenFamilyMeasurement(measurement) {
   if (!measurement || typeof measurement.resolveStyle !== 'function') return measurement;
   const resolveFont = typeof measurement.resolveFont === 'function' ? style => measurement.resolveFont(style) : undefined;
   const wrapped = {
     measure: (text, size, style) => measurement.measure(text, size, style),
-    resolveStyle: style => {
-      const resolved = measurement.resolveStyle(style);
+    resolveStyle: input => {
+      // RR-59 (opf-pptx#214): engine-chosen weights (the image placeholder label and media caption at 600, core's metric value at
+      // 800, metric labels and timeline event text at 500) are not always loaded: a metric replacement holds at 400 and 700 only
+      // (Aptos -> Intos). The run is written for the chosen family with a bold flag, so it is measured at the weight PowerPoint
+      // draws it in, which the policy does resolve. A family the policy cannot resolve at that weight either still fails, and
+      // a style that resolves keeps its own resolution, so no output that exported before changes.
+      let style = input, resolved;
+      try { resolved = measurement.resolveStyle(style); }
+      catch (error) {
+        const weight = style?.fontWeight ?? 400, drawn = nativeDrawnWeight(weight);
+        if (error?.code !== 'font-unavailable' || drawn === weight) throw missingFaceError(error, style, measurement);
+        style = {...style, fontWeight: drawn};
+        try { resolved = measurement.resolveStyle(style); }
+        catch { throw missingFaceError(error, input, measurement, drawn); }
+      }
       const requested = style?.fontFamily;
       // Theme tokens are provider business; the exporter always passes concrete families.
       if (typeof requested !== 'string' || requested.startsWith('+')) return resolved;

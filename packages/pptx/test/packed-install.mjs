@@ -90,7 +90,7 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
   // does; install it next to them, rewritten to the installed package.
   await mkdir(path.join(consumer,'helpers'),{recursive:true});
   await writeFile(path.join(consumer,'helpers/default-catalog.mjs'),(await readFile(path.join(root,'test/helpers/default-catalog.mjs'),'utf8')).replaceAll("'../../dist/index.js'","'@openpresentation/opf-pptx'"));
-  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','media-placeholder.mjs','layout-intent.mjs','chart-cache-import.mjs','zip-date.mjs','native-text-whitespace.mjs','native-underline.mjs','native-body-rich-text.mjs']){
+  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','media-placeholder.mjs','layout-intent.mjs','chart-cache-import.mjs','zip-date.mjs','native-text-whitespace.mjs','native-underline.mjs','native-body-rich-text.mjs','engine-text-weights.mjs']){
     const shared=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
       .replaceAll("'../dist/code-provenance.js'","'./node_modules/@openpresentation/opf-pptx/dist/code-provenance.js'")
