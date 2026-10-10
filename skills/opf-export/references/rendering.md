@@ -45,7 +45,7 @@ try { await opf.convert('deck.opf.md', 'deck.pdf'); } catch (error) {
 ## Prepared font inputs
 
 `loadFonts` in `/fonts-node` returns the fonts handle
-(current coordinated set: core 0.17.0, renderer 0.17.1, PPTX 0.17.0, editor 0.17.0):
+(current coordinated set: core 0.18.1, renderer 0.18.0, PPTX 0.18.0, editor 0.18.0):
 
 ```js
 const fonts = await loadFonts({
