@@ -309,7 +309,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
     assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
     const verdict = areas.find((area) => area.name === 'verdict').box;
-    assert.ok(near(verdict.height, 2 * 25 * 1.22));
+    assert.ok(near(verdict.height, 2 * 25 * 1.22 + 24), 'two body lines inside the card insets (comparison draws cards)');
     assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
     const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
     assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');
@@ -317,9 +317,10 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
 
   test('the boxes a slide composes to: header, footer, placed-image bands and bleed (RR-81 review)', async () => {
     const { composeLayoutAreas } = await import('../dist/composition.js');
-    const presentation = { design: { header: { left: { text: 'Acme' }, right: { text: 'Confidential' } }, footer: { right: { text: '{{slide.number}}' } } } };
+    const furniture = { header: { left: { text: 'Acme' }, right: { text: 'Confidential' } }, footer: { right: { text: '{{slide.number}}' } } };
     const placements = [{ edge: 'left', size: 0.25 }];
-    for (const [id, record] of Object.entries(layouts)) {
+    // Without cards and with cards on the deck (the card insets live in the auto rows too).
+    for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
       const kept = { ...record, regions: Object.fromEntries(Object.entries(record.regions).map(([name, region]) => [name, { ...region, empty: 'keep' }])) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       const composed = composeSlide(slide, { layout: kept, presentation });
@@ -328,6 +329,14 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
       assert.deepEqual(areas.find((area) => area.name === 'title').box, composed.headingAreas.find((area) => area.name === 'title').box, `${id} title`);
       for (const region of composed.regions) assert.equal(region.collapsed, undefined, `${id} ${region.name} nothing collapses`);
     }
+    // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
+    const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }] }, { layout: layouts.comparison });
+    const verdictItem = filled.items.find((item) => item.region === 'verdict');
+    assert.equal(verdictItem.text.lines.length, 2);
+    assert.ok(verdictItem.frameBox, 'carded');
+    const placeholder = composeLayoutAreas(layouts.comparison).areas.find((area) => area.name === 'verdict').box;
+    assert.ok(near(placeholder.height, filled.regions.find((region) => region.name === 'verdict').box.height, 0.5), `${placeholder.height} vs the filled verdict`);
     const image = composeLayoutAreas(layouts.image).areas.find((area) => area.name === 'media').box;
     assert.equal(image.x, 0, 'bled to the slide edge by default');
     const inside = composeLayoutAreas(layouts.image, { bleed: false }).areas.find((area) => area.name === 'media').box;

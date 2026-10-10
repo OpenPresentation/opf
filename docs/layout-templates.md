@@ -112,7 +112,8 @@ Columns share the content width in proportion. Rows are allocated so that no row
    headings.
 3. The other `auto` rows take what they need (at most half the content box each; the implicit row below the grid, which
    holds what no region took, has no such cap) from what is left, and shrink together in proportion when it is not enough.
-   An empty region with `empty: "keep"` holds two lines of body text in an `auto` row.
+   An empty region with `empty: "keep"` holds two lines of body text in an `auto` row (plus the card insets on a slide
+   that draws cards, as a filled region does).
 4. The numeric rows share the rest in proportion to their sizes.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit

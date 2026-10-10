@@ -2955,8 +2955,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
     const regionNeed = (name: string, areaWidth: number): number => {
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
-      // A kept empty region holds its place: two lines of body text in an auto row.
-      if (!units.length) return region.empty === 'keep' ? 2 * startSize * 1.22 : 0;
+      // A kept empty region holds its place: two lines of body text in an auto row, inside a card's insets when the slide
+      // draws cards, as a filled region's text would be (naturalHeight).
+      if (!units.length) return region.empty === 'keep' ? 2 * startSize * 1.22 + (hasCards && !region.bleed ? 2 * Math.min(12 * scale, areaWidth / 4) : 0) : 0;
       const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
