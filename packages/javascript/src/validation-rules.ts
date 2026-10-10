@@ -78,6 +78,17 @@ const formatRules: ValidationRuleInfo[] = [
 	),
 	rule('run-color-unrecognized', 'format', 'warning', 'A text run colour is none of the documented forms.', 'Run colours are open strings so imported decks stay valid, but a value that is not a hex colour, a colour-scheme name or a `var:` reference falls back to the theme colour.', { standard: SCHEMA }),
 	rule('numbering-start-ignored', 'format', 'warning', 'A list entry sets `start` where nothing is numbered.', 'A start value only restarts an auto-number; without `numbering` on the payload it has no effect.', { standard: SCHEMA }),
+	rule(
+		'slide-size-out-of-range',
+		'format',
+		'warning',
+		"The slide size is outside PowerPoint's 1 to 56 inch range.",
+		"The schema accepts any positive custom `widthInches` and `heightInches`, but a PPTX stores the size as `p:sldSz` with each side between 914400 and 51206400 EMU, which is 1 to 56 inches. A custom size outside that range exports a file that does not conform to the standard, which PowerPoint may reject or clamp. It is a warning because the document is still correct OPF and the preview draws it.",
+		{
+			standard: 'ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) and section 19.7.17 (ST_SlideSizeCoordinate): 914400 to 51206400 EMU',
+			approximations: "Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behaviour at the limits was not measured.",
+		},
+	),
 ];
 
 const referenceRules: ValidationRuleInfo[] = [

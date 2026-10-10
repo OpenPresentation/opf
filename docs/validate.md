@@ -94,6 +94,19 @@ validate(presentation, {
 
 `validateCatalogRecord(kind, record)` and `assertValidCatalogRecord(kind, record)` check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same shape; its findings are `format`, and a record that links to an unknown id only warns.
 
+## Pass `fonts`, otherwise the estimate
+
+The layout rules (`opf/text-overflow`, `opf/min-font-size`, reading order, image resolution) depend on how wide the text is. `validate` measures it with `options.fonts`, the handle that opf-render's `loadFonts()` returns:
+
+```js
+const fonts = await loadFonts({ pack: 'office' });
+const report = validate(deck, { fonts });   // report.checks.layout === 'measured'
+```
+
+Pass the same `fonts` handle to preview (`toSvg`), pagination (`paginate`) and export (`toPng`, `toPdf`, `toPptx`), so that validation measures with the faces the preview draws and a finding means what the slide shows. The same handle gives identical geometry across engines; opf-pptx's `layout-parity` test checks that the exported PowerPoint paragraphs agree with the SVG preview and with core's composed items, with and without `fonts`. See [Pass `fonts`, otherwise the estimate](font-fidelity.md#pass-fonts-otherwise-the-estimate) for the full list.
+
+Without `fonts` the rules use core's built-in estimate and `checks.layout` says `estimated`: 0.54 em per character, 0.62 em for capitals and digits, 0.32 em for a space, 1 em for CJK characters and zero for combining marks. It needs no font files and is stable from run to run, but it is too narrow for some scripts, and it can differ from the real faces by a few percent, so an estimated overflow finding (or its absence) is a first pass. Improving the estimate for other scripts is tracked in opf#566. `opf validate` on the command line loads no fonts, so its layout checks are estimated too. Node `convert` and the CLI's `opf convert` and `opf paginate` prepare an office-pack handle for you; a library call to `validate` never loads fonts itself.
+
 ## Cost
 
 `validate` is lazy: it builds only what the rules you ask for need. Measured with Node 24 on three bundled example decks (milliseconds per call, warm; your machine will differ, the ratios hold):
@@ -219,6 +232,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
 | [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run colour is none of the documented forms. |
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
+| [`opf/slide-size-out-of-range`](#opfslide-size-out-of-range) | Format | warning | structure | The slide size is outside PowerPoint's 1 to 56 inch range. |
 | [`opf/undeclared-catalog`](#opfundeclared-catalog) | Format | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
@@ -456,6 +470,16 @@ Default severity: **warning**. Cost: structure. A list entry sets `start` where 
 **Why.** A start value only restarts an auto-number; without `numbering` on the payload it has no effect.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/slide-size-out-of-range`
+
+Default severity: **warning**. Cost: structure. The slide size is outside PowerPoint's 1 to 56 inch range.
+
+**Why.** The schema accepts any positive custom `widthInches` and `heightInches`, but a PPTX stores the size as `p:sldSz` with each side between 914400 and 51206400 EMU, which is 1 to 56 inches. A custom size outside that range exports a file that does not conform to the standard, which PowerPoint may reject or clamp. It is a warning because the document is still correct OPF and the preview draws it.
+
+**Basis.** ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) and section 19.7.17 (ST_SlideSizeCoordinate): 914400 to 51206400 EMU
+
+**Approximations.** Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behaviour at the limits was not measured.
 
 ### `opf/undeclared-catalog`
 

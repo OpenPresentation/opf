@@ -612,6 +612,57 @@ function slideThemeDimensionsWarnings(
   )];
 }
 
+// ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) limits each side of the slide to 914400 to 51206400 EMU, which is
+// 1 to 56 inches (ST_SlideSizeCoordinate, section 19.7.17). The schema accepts any positive custom size, so a deck can export a
+// size PowerPoint rejects or clamps. The check reads the deck's resolved size (design.dimensions, else its theme's) in EMU the
+// way the PPTX exporter writes it: Math.round(inches * 914400). Presets are all inside the range.
+const SLIDE_SIDE_MIN_EMU = 914400;
+const SLIDE_SIDE_MAX_EMU = 51206400;
+const EMU_PER_INCH = 914400;
+const EMU_PER_REFERENCE_PIXEL = EMU_PER_INCH / 96;
+
+function slideSizeRangeWarnings(document: Record<string, unknown>, catalogs: readonly Catalog[] | undefined): ValidationIssue[] {
+  const design = isRecord(document.design) ? document.design : {};
+  const explicit = design.dimensions !== undefined;
+  let dimensions: unknown = design.dimensions;
+  if (!explicit) {
+    const theme = resolveDesignRecords(document, undefined, { catalogs: catalogs ?? [] }).theme;
+    dimensions = theme.dimensions;
+    // No size in the deck or its theme is the widescreen default, which is in range.
+    if (dimensions === undefined) return [];
+  }
+  let size: { width: number; height: number };
+  try {
+    size = resolveCanvasDimensions(dimensions);
+  } catch {
+    return [];
+  }
+  const sides = ([["width", size.width], ["height", size.height]] as const).map(([side, pixels]) => ({
+    side,
+    inches: pixels / 96,
+    emu: Math.round(pixels * EMU_PER_REFERENCE_PIXEL),
+  }));
+  const outside = sides.filter(({ emu }) => emu < SLIDE_SIDE_MIN_EMU || emu > SLIDE_SIDE_MAX_EMU);
+  if (outside.length === 0) return [];
+  const inches = (value: number): string => String(Math.round(value * 10000) / 10000);
+  const detail = outside.map(({ side, inches: value, emu }) => `${side} ${inches(value)} in (${emu} EMU) is ${emu < SLIDE_SIDE_MIN_EMU ? "below 1 in" : "above 56 in"}`).join(", ");
+  const path = explicit ? "/design/dimensions" : typeof design.theme === "string" ? "/design/theme" : "/design";
+  return [semanticIssue(
+    path,
+    `the slide size ${inches(sides[0]!.inches)} x ${inches(sides[1]!.inches)} in is outside PowerPoint's 1 to 56 inch range per side (${detail}); the PPTX p:sldSz allows 914400 to 51206400 EMU${explicit ? "" : ", and the size comes from the deck's theme"}`,
+    {
+      code: "slide-size-out-of-range",
+      widthInches: sides[0]!.inches,
+      heightInches: sides[1]!.inches,
+      widthEmu: sides[0]!.emu,
+      heightEmu: sides[1]!.emu,
+      minEmu: SLIDE_SIDE_MIN_EMU,
+      maxEmu: SLIDE_SIDE_MAX_EMU,
+      sides: outside.map(({ side }) => side),
+    },
+  )];
+}
+
 function chartTypeWarnings(
   payload: unknown,
   path: string,
@@ -814,6 +865,7 @@ function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalo
   const issues: ValidationIssue[] = [];
 
   issues.push(...variableReferenceWarnings(value));
+  issues.push(...slideSizeRangeWarnings(value, catalogs));
 
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) {
