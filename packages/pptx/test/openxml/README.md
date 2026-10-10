@@ -14,7 +14,7 @@ node test/openxml/generate.mjs artifacts/openxml-new
 dotnet restore test/openxml/Validator.csproj --locked-mode
 dotnet build test/openxml/Validator.csproj --no-restore
 dotnet run --project test/openxml/Validator.csproj --no-build -- artifacts/openxml-new/original artifacts/openxml-new/original-sdk.json
-# The original files currently fail: preserve the nonzero result and report.
+# Before 0.18 the original files failed here (see the history below); preserve any nonzero result and report it.
 dotnet run --project test/openxml/Validator.csproj --no-build -- artifacts/openxml-new/reordered artifacts/openxml-new/reordered-sdk.json
 node test/openxml/inspect-opc.mjs artifacts/openxml-new/original artifacts/openxml-new/original-opc.json
 node test/openxml/inspect-opc.mjs artifacts/openxml-new/reordered artifacts/openxml-new/reordered-opc.json
@@ -28,6 +28,11 @@ image controls, empty/disabled furniture, and a two-slide speaker-notes control.
 The relationship probe checks only target existence, unique IDs and content-type
 override targets; it is not a complete OPC validator.
 
+Every export and import the generator makes passes `catalogs: [defaultCatalog]` (`@openpresentation/opf/catalog`),
+because `strictAssets` implies `strictReferences` and the `roboto` font scheme resolves only through a registered
+catalog. `npm test` runs `test/manual-harness-smoke.mjs`, which runs the generator from source and reads every part
+back as XML, so the harness cannot go stale unnoticed (no .NET, Office or network).
+
 Pass the fresh installed consumer directory as the generator's third argument
 to exercise installed package exports. `pnpm pack:ecosystem` only makes tarballs;
 run `pnpm test:packed-ecosystem` from core to create the fresh consumer before
@@ -39,7 +44,10 @@ nonexistent generated slide masters; the regular smoke and 126-deck corpus tests
 require every override to name an actual part. This does not resolve the
 separate notes-master ordering discrepancy below.
 
-The original package has `p:notesMasterIdLst` after `p:sldIdLst`; the SDK requires
+Status since 0.18 (opf-pptx#222): production writes `p:notesMasterIdLst` before `p:sldIdLst`, the schema order, so
+the generator's diagnostic variant now swaps the pair the other way (notes master after the slide list, the order the
+exporter used earlier). The paragraphs below describe the historical direction: the original package had
+`p:notesMasterIdLst` after `p:sldIdLst`; the SDK requires
 notes masters earlier in the presentation child sequence. The isolated reordered
 variants change only these two elements in `ppt/presentation.xml`. All other
 uncompressed package parts remain byte-identical, including slide XML, speaker

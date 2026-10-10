@@ -15,15 +15,18 @@ try { await access(output); throw new Error(`Preserve the prior attempt and sele
 
 const resolve=createRequire(path.join(consumer,'package.json'));
 const sha=value=>createHash('sha256').update(value).digest('hex');
-const publicSpecifiers=['@openpresentation/opf','@openpresentation/opf-pptx','@openpresentation/opf-render/svg'];
+const publicSpecifiers=['@openpresentation/opf','@openpresentation/opf/catalog','@openpresentation/opf-pptx','@openpresentation/opf-render/svg'];
 const esmProbe=spawnSync(process.execPath,['--input-type=module','--eval',
   `console.log(JSON.stringify(Object.fromEntries(${JSON.stringify(publicSpecifiers)}.map(name=>[name,import.meta.resolve(name)]))))`],
 {cwd:consumer,encoding:'utf8',timeout:10000,windowsHide:true});
 assert.equal(esmProbe.status,0,esmProbe.error?.message??esmProbe.stderr);
 const publicEntries=JSON.parse(esmProbe.stdout);
-const [{validate},{toPptx,fromPptx},{resolvePresentation}]=await Promise.all([
-  import(publicEntries['@openpresentation/opf']),import(publicEntries['@openpresentation/opf-pptx']),import(publicEntries['@openpresentation/opf-render/svg']),
+const [{validate},{defaultCatalog},{toPptx:exportPptx,fromPptx:importPptx},{resolvePresentation}]=await Promise.all([
+  import(publicEntries['@openpresentation/opf']),import(publicEntries['@openpresentation/opf/catalog']),import(publicEntries['@openpresentation/opf-pptx']),import(publicEntries['@openpresentation/opf-render/svg']),
 ]);
+// Since FA-23 strictAssets implies strictReferences, and the font scheme 'roboto' resolves only through a registered catalog (opf-pptx#222).
+const catalogs=[defaultCatalog];
+const toPptx=(source,options={})=>exportPptx(source,{catalogs,...options}), fromPptx=(bytes,options={})=>importPptx(bytes,{catalogs,...options});
 const {unzipSync,zipSync}=resolve('fflate'), {XMLParser,XMLValidator}=resolve('fast-xml-parser');
 const packageNames=['@openpresentation/opf','@openpresentation/opf-pptx','@openpresentation/opf-render','fflate','fast-xml-parser'];
 const inside=(root,file)=>{const relative=path.relative(root,file); return relative!== '..'&&!relative.startsWith(`..${path.sep}`)&&!path.isAbsolute(relative);};
@@ -94,15 +97,16 @@ function normalize(value){
 function semanticSummary(deck){
   return normalize({organization:deck.organization,design:{header:deck.design?.header,footer:deck.design?.footer},slides:deck.slides.map(slide=>({
     title:slide.title,section:slide.section,localDesign:{header:slide.design?.header,footer:slide.design?.footer},
-    effectiveHeader:slide.design?.header??deck.design?.header,effectiveFooter:slide.design?.footer??deck.design?.footer,blocks:slide.blocks,
+    effectiveHeader:slide.design?.header??deck.design?.header,effectiveFooter:slide.design?.footer??deck.design?.footer,body:bodyTexts(slide),
   }))});
 }
-function bodyTexts(slide){return (slide.blocks??[]).flatMap(block=>typeof block.text==='string'?[block.text]:[]);}
+// fromPptx returns a lone body paragraph as the slide's scalar `text` shorthand; `blocks` still carries any other body content.
+function bodyTexts(slide){return [...(typeof slide.text==='string'?[slide.text]:[]),...(slide.blocks??[]).flatMap(block=>typeof block.text==='string'?[block.text]:[])];}
 function assertBodies(deck,source){for(const [index,slide] of source.slides.entries()) assert.ok(bodyTexts(deck.slides[index]).includes(slide.text),`Slide ${index+1} scalar body changed.`);}
 function expectedBaselineSummary(source){return normalize({organization:source.organization,design:{header:source.design?.header,footer:source.design?.footer},slides:source.slides.map(slide=>({
   title:slide.title,section:slide.section,localDesign:{header:slide.design?.header,footer:slide.design?.footer},
   effectiveHeader:slide.design?.header??source.design?.header,effectiveFooter:slide.design?.footer??source.design?.footer,
-  blocks:[{type:'text',text:slide.text}],
+  body:[slide.text],
 }))});}
 
 function sourcePartForRelationships(relPath){
@@ -243,8 +247,10 @@ for(const [id,variant] of Object.entries(variants)){
   assert.deepEqual(inspection.slides.map(slide=>slide.acceptedGeometry.shapes),baselineInspection.slides.map(slide=>slide.acceptedGeometry.shapes),`${id}: shape geometry changed.`);
   const diagnostics=[], imported=await fromPptx(variant.bytes,{onDiagnostic:item=>diagnostics.push(item)});
   assert.equal(validate(imported, {only: ['format']}).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,inherited);
+  // RR-72: the header and footer words every slide shares sit once on the slide master or a layout, so slide 1 holds only its own
+  // per-slide shapes; the damaged tag belongs to the section shape ({{slide.section}}), whose current words stay on the slide.
   const wholeSlideInvalid=['variant-duplicate-shape-tag','variant-changed-shape-tag'].includes(id);
-  const expected={invalidFurnitureRoles:{'1':wholeSlideInvalid?['header','footer']:['header']},validHeaderSlides:[2,3],validFooterSlides:wholeSlideInvalid?[2,3]:[1,2,3],retainedCurrentText:wholeSlideInvalid?['Inherited header','Inherited footer']:['Inherited header'],diagnostic:'invalid-furniture-provenance'};
+  const expected={invalidFurnitureRoles:{'1':wholeSlideInvalid?['header','footer']:['header']},validHeaderSlides:[2,3],validFooterSlides:wholeSlideInvalid?[2,3]:[1,2,3],retainedCurrentText:['Alpha section'],diagnostic:'invalid-furniture-provenance'};
   assert.equal(effective(imported,0,'header'),undefined);
   if(wholeSlideInvalid) assert.equal(effective(imported,0,'footer'),undefined);
   for(const index of wholeSlideInvalid?[1,2]:[0,1,2]) assert.deepEqual(normalize(effective(imported,index,'footer')),normalize(inherited.slides[index].design?.footer??inherited.design.footer),`${id}: footer ${index+1}`);

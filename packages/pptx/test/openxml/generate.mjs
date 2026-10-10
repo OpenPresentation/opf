@@ -11,6 +11,10 @@ const converterModule = consumer ? pathToFileURL(consumer.resolve('@openpresenta
 const fontModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/opf-render/fonts-node')).href : '@openpresentation/opf-render/fonts-node';
 const {toPptx, fromPptx} = await import(converterModule);
 const {loadFonts} = await import(fontModule);
+// Since FA-23 strictAssets implies strictReferences and nothing resolves without a registered catalog, so every call passes the default catalog (opf-pptx#222).
+const catalogModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/opf/catalog')).href : '@openpresentation/opf/catalog';
+const {defaultCatalog} = await import(catalogModule);
+const catalogs = [defaultCatalog];
 const root = path.resolve(process.argv[2]);
 await mkdir(root, {recursive: false});
 for (const variant of ['original', 'repacked', 'reordered']) await mkdir(path.join(root, variant));
@@ -35,14 +39,15 @@ cases.push(
 const manifest = [];
 for (const {id, source, options = {}} of cases) {
   const before = JSON.stringify(source);
-  const bytes = await toPptx(source, {...options, strictAssets: true});
+  const bytes = await toPptx(source, {...options, catalogs, strictAssets: true});
   if (before !== JSON.stringify(source)) throw new Error(`Changed source: ${id}`);
   // This is an isolated diagnostic variant, never a production postprocessor.
   const entries = unzipSync(bytes);
   const unchanged = repack(entries);
   assert.equal(hash(unchanged), hash(bytes), 'An unmodified repack must reproduce production bytes before comparing XML ordering.');
   const originalXml = new TextDecoder().decode(entries['ppt/presentation.xml']);
-  const match = /(<p:sldIdLst>[\s\S]*?<\/p:sldIdLst>)(<p:notesMasterIdLst>[\s\S]*?<\/p:notesMasterIdLst>)/;
+  // Production writes the schema order, <p:notesMasterIdLst> before <p:sldIdLst>; the diagnostic variant swaps them to the reverse order.
+  const match = /(<p:notesMasterIdLst>[\s\S]*?<\/p:notesMasterIdLst>)(<p:sldIdLst>[\s\S]*?<\/p:sldIdLst>)/;
   assert.ok(match.test(originalXml), 'Record an upstream ordering change instead of silently rewriting another structure.');
   const changedXml = originalXml.replace(match, '$2$1');
   entries['ppt/presentation.xml'] = new TextEncoder().encode(changedXml);
@@ -53,7 +58,7 @@ for (const {id, source, options = {}} of cases) {
   const differences = Object.keys(originalParts).filter(name => hash(originalParts[name]) !== hash(changedParts[name]));
   assert.deepEqual(differences, ['ppt/presentation.xml']);
   assert.equal(changedXml.replace(match, '$2$1'), changedXml, 'The candidate no longer contains the production pair.');
-  const originalImport = await fromPptx(bytes), reorderedImport = await fromPptx(reordered);
+  const originalImport = await fromPptx(bytes, {catalogs}), reorderedImport = await fromPptx(reordered, {catalogs});
   assert.deepEqual(reorderedImport, originalImport, 'Reordering must not change current semantic reimport.');
   await writeFile(path.join(root, 'original', `${id}.pptx`), bytes);
   await writeFile(path.join(root, 'repacked', `${id}.pptx`), unchanged);
