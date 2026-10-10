@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "agenda",
+  "name": "Agenda",
+  "summary": "Numbered list of topics with timing or section markers. Sets expectations and gives your audience a roadmap.",
+  "description": "Numbered list of topics with timing or section markers. Sets expectations and gives your audience a roadmap.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Structure",
+    "Planning",
+    "Navigation"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
+  }
+}

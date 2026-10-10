@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+  "id": "vibes",
+  "name": "Vibes",
+  "accent1": "#4A1BE4",
+  "accent2": "#B8E109",
+  "accent3": "#95928C",
+  "accent4": "#E48A1B",
+  "accent5": "#9E1BE4",
+  "accent6": "#1BE4A1",
+  "dark1": "#000000",
+  "dark2": "#2C2C2C",
+  "followedHyperlink": "#C30052",
+  "hyperlink": "#0078D7",
+  "light1": "#FFFFFF",
+  "light2": "#EFEFEF",
+  "summary": "Expressive purple, green, and orange accents for creative decks.",
+  "description": "A vibrant mixed-accent scheme for presentations that need personality, motion, and visual variety.",
+  "tags": [
+    "creative",
+    "playful",
+    "vibrant",
+    "expressive",
+    "distinctive"
+  ]
+}

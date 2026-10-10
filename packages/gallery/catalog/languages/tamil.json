@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "tamil",
+  "name": "Tamil",
+  "code": "TAM",
+  "bcp47": "ta",
+  "ooxmlLang": "ta-IN",
+  "script": "Taml",
+  "direction": "ltr",
+  "fontScheme": "latha",
+  "googleFontScheme": "noto-sans-tamil"
+}

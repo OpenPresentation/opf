@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-3x-fit-vertical",
+  "name": "Image_3x_Fit_Vertical",
+  "summary": "Canonical OPF image 3x vertical layout.",
+  "description": "Image 3x Fit Vertical OPF layout with 3 fit image zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "imageFit": "contain"
+  },
+  "placeholders": [
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "3 zones",
+    "Center aligned",
+    "Fit",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-3x-fit-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

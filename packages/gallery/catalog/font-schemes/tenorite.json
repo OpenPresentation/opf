@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "tenorite",
+  "name": "Tenorite",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Tenorite Display",
+  "minor": "Tenorite",
+  "textSample": "Rounded modern tone",
+  "type": "sans-serif",
+  "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+}

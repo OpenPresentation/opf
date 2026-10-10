@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "gantt-project-plan",
+  "name": "Gantt_Project_Plan",
+  "summary": "Horizontal bar chart of tasks across a timeline. The canonical project-status slide.",
+  "description": "Horizontal bar chart of tasks across a timeline. The canonical project-status slide.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "timeline"
+    }
+  ],
+  "tags": [
+    "Timeline",
+    "Schedule",
+    "Projects"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/gantt-project-plan.svg"
+  },
+  "composition": {
+    "padding": 0.04
+  }
+}

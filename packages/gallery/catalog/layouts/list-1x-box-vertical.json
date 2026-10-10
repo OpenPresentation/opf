@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-1x-box-vertical",
+  "name": "List_1x_Box_Vertical",
+  "summary": "Canonical OPF list 1x boxed vertical layout.",
+  "description": "List 1x Box Vertical OPF layout with a list content zone in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "1 zone",
+    "Left aligned",
+    "Boxed",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x-box-vertical.svg"
+  }
+}

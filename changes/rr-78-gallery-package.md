@@ -1,0 +1,5 @@
+---
+type: added
+packages: [gallery]
+---
+RR-78: first release of `@openpresentation/gallery` from `OpenPresentation/opf` (`packages/gallery`), the pptx.gallery catalog on its own version line. `import { gallery } from "@openpresentation/gallery"` and register it with `catalogs: [gallery]`; it holds the same records as `@openpresentation/opf/catalog`'s `defaultCatalog` (278 layouts, 4 themes, 14 colour schemes, 89 font schemes, 48 narratives, 16 audiences, 9 purposes, 7 tones). The package also exports `GALLERY_SOURCE`, `CATALOG_SCHEMA` (`1`, also `opf.catalogSchema` in `package.json`), `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `@openpresentation/gallery/previews` exports the layout previews. No runtime dependency; the types name core's `Catalog`. New records are a minor release; a removed or renamed id or a changed drawing is a major release, which CI enforces by drawing every existing layout, theme, colour scheme and font scheme against the previous published release. Replaces the hand-published 0.0.1 placeholder, whose `repository` named `Data-Advantage/pptx-gallery`.

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-mongolian",
+  "name": "Noto Sans Mongolian",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "mn"
+  ],
+  "major": "Noto Sans Mongolian",
+  "minor": "Noto Sans Mongolian",
+  "textSample": "Энэ маш сайхан",
+  "type": "sans-serif",
+  "description": "Noto Sans Mongolian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Mongolian for both headings and body text."
+}

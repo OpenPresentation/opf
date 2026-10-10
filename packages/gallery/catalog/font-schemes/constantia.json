@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "constantia",
+  "name": "Constantia",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Constantia",
+  "minor": "Constantia",
+  "textSample": "Elegant modern serif",
+  "type": "serif",
+  "description": "Constantia is a serif OPF font scheme for Latin presentations, using Constantia for both headings and body text."
+}

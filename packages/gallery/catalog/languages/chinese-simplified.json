@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "chinese-simplified",
+  "name": "Chinese (Simplified)",
+  "code": "ZHO",
+  "bcp47": "zh-Hans",
+  "ooxmlLang": "zh-CN",
+  "script": "Hans",
+  "direction": "ltr",
+  "fontScheme": "microsoft-yahei",
+  "googleFontScheme": "noto-sans-sc"
+}

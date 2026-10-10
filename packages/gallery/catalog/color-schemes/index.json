@@ -1,0 +1,79 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "color-schemes",
+  "version": "1",
+  "description": "Catalog of color schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full color-scheme records live in the per-id JSON files alongside this index.",
+  "contentSha256": "ee641dfe0091c15a443d5b75e0d8f2573aed93003a18ba0cc51aab115b38a826",
+  "records": [
+    {
+      "id": "black-and-white",
+      "name": "Black & White",
+      "file": "black-and-white.json"
+    },
+    {
+      "id": "bold-red",
+      "name": "Bold Red",
+      "file": "bold-red.json"
+    },
+    {
+      "id": "boost",
+      "name": "Boost",
+      "file": "boost.json"
+    },
+    {
+      "id": "burnt-orange",
+      "name": "Burnt Orange",
+      "file": "burnt-orange.json"
+    },
+    {
+      "id": "cool-horizon",
+      "name": "Cool Horizon",
+      "file": "cool-horizon.json"
+    },
+    {
+      "id": "corporate-blue",
+      "name": "Corporate Blue",
+      "file": "corporate-blue.json"
+    },
+    {
+      "id": "deep-purple",
+      "name": "Deep Purple",
+      "file": "deep-purple.json"
+    },
+    {
+      "id": "forest-green",
+      "name": "Forest Green",
+      "file": "forest-green.json"
+    },
+    {
+      "id": "golden-yellow",
+      "name": "Golden Yellow",
+      "file": "golden-yellow.json"
+    },
+    {
+      "id": "luxury",
+      "name": "Luxury",
+      "file": "luxury.json"
+    },
+    {
+      "id": "pastel-red",
+      "name": "Pastel Red",
+      "file": "pastel-red.json"
+    },
+    {
+      "id": "slate-gray",
+      "name": "Slate Gray",
+      "file": "slate-gray.json"
+    },
+    {
+      "id": "steel-blue",
+      "name": "Steel Blue",
+      "file": "steel-blue.json"
+    },
+    {
+      "id": "vibes",
+      "name": "Vibes",
+      "file": "vibes.json"
+    }
+  ]
+}

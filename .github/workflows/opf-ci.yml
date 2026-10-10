@@ -93,6 +93,16 @@ jobs:
       - name: Verify packed package install
         run: node packages/javascript/test/packed-install-smoke.mjs
 
+      # RR-78: @openpresentation/gallery has its own release lane (gallery-publish.yml). Every pull request checks its
+      # tarball and holds it to the pixel-stability rule against the previous published release: a minor or patch
+      # release draws every existing record the same and removes no id. Its build writes only changed files, so it can
+      # run beside the background `pnpm test`.
+      - name: Verify the gallery package contents
+        run: pnpm --filter @openpresentation/gallery pack:dry-run
+
+      - name: Gallery pixel stability against the previous published release
+        run: pnpm check:gallery-stability
+
       - name: Verify packed CLI install
         run: pnpm test:cli:packed
 

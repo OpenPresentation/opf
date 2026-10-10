@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "regulatory",
+  "name": "Regulatory / Compliance",
+  "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+  "description": "Government agencies, auditors, and compliance bodies reviewing adherence to rules and standards. Lead with evidence, date-stamp material, cite document references, and map each claim to the requirement it satisfies. Moderate chart density; 20-40 slides with an appendix.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 60,
+  "recommendedNarratives": [
+    "situation-complication-resolution",
+    "pyramid-principle"
+  ],
+  "recommendedTones": [
+    "formal",
+    "technical",
+    "authoritative"
+  ],
+  "tags": [
+    "external",
+    "compliance",
+    "policy"
+  ]
+}

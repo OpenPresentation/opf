@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-3x",
+  "name": "List 3x",
+  "summary": "Reach for it when three groups of points need their own lists.",
+  "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "composition": {
+    "mode": "row"
+  },
+  "tags": [
+    "List",
+    "Triads",
+    "Scannable"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+  }
+}

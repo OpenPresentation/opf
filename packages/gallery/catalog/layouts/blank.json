@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "blank",
+  "name": "Blank",
+  "summary": "Reach for it when the slide is one hand-built composition with no title or content slots.",
+  "description": "An empty slide with no placeholders. Use it for a full-bleed visual, a diagram you place yourself, or any slide whose content does not follow a title-and-body pattern.",
+  "placeholders": [],
+  "tags": [
+    "Minimal",
+    "Freeform",
+    "Visual"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/blank.svg"
+  }
+}

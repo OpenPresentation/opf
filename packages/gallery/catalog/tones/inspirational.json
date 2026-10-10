@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-tone/v1",
+  "id": "inspirational",
+  "name": "Inspirational",
+  "summary": "Aspirational, narrative-driven voice for keynotes, founders, and rallying cries.",
+  "description": "Reach for shared belief and possibility, then ground it in something concrete. Use vivid imagery and rhythm; avoid collapsing into hype by always pairing aspiration with a real anchor.",
+  "voiceCues": [
+    "Open with belief; close with action.",
+    "Use rhythm — paired phrases, repetition, deliberate beats.",
+    "Pair every aspirational claim with a concrete proof point.",
+    "Speak in present tense to make the future feel inevitable."
+  ],
+  "avoid": [
+    "Empty hype without evidence.",
+    "Stacked superlatives ('the very best, world-changing, revolutionary').",
+    "Cynical or hedging language.",
+    "Dense data tables — push numbers into supporting slides."
+  ],
+  "samplePhrases": [
+    "We're building the runtime that makes agents feel instant.",
+    "When latency disappears, what becomes possible?",
+    "The next decade of software belongs to teams who treat speed as a feature."
+  ],
+  "recommendedNarratives": [
+    "golden-circle",
+    "conference-talk",
+    "venture-pitch",
+    "company-intro"
+  ],
+  "tags": ["motivational", "keynote", "founder"]
+}

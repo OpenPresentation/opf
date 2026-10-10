@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "doughnut",
+  "name": "Doughnut",
+  "mappings": {
+    "openxml": {
+      "element": "doughnutChart",
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Doughnut"
+      }
+    }
+  },
+  "group": "Pie",
+  "groupSort": 3,
+  "series": 1,
+  "complexity": "simple"
+}

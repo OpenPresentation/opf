@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "segoe-ui",
+  "name": "Segoe UI",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Segoe UI Semibold",
+  "minor": "Segoe UI",
+  "textSample": "Modern interface font",
+  "type": "sans-serif",
+  "description": "Segoe UI is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semibold for headings with Segoe UI for body text."
+}

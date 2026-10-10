@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-5x-title-center",
+  "name": "List_5x_Title_Center",
+  "summary": "Canonical OPF list 5x title layout.",
+  "description": "List 5x Title Center OPF layout with 5 list content zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "5 zones",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-5x-title-center.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  }
+}

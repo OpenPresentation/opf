@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "bengali",
+  "name": "Bengali",
+  "code": "BEN",
+  "bcp47": "bn",
+  "ooxmlLang": "bn-BD",
+  "script": "Beng",
+  "direction": "ltr",
+  "fontScheme": "shonar-bangla",
+  "googleFontScheme": "noto-sans-bengali"
+}
