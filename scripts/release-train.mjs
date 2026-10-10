@@ -56,8 +56,8 @@ const SLSA = "https://slsa.dev/provenance/v1";
 /** Default bound (minutes) on waiting for npm's attestation bundle and installability after a publish (RR-51). */
 const ATTEST_WAIT_MINUTES = 15;
 const NOT_YET_SERVED = /\bnotarget\b|No matching version found/i;
-/** Check runs that are advisory and never gate a release (the merge watcher ignored the same one). */
-const ADVISORY_CHECKS = new Set(["Cursor Bugbot"]);
+/** Check runs that are advisory and never gate a release: Cursor Bugbot, and Dependabot, whose update jobs run on a push and fail on their own (a cooldown that predates the release). */
+const ADVISORY_CHECKS = new Set(["Cursor Bugbot", "Dependabot"]);
 const SCRIPT = "node scripts/release-train.mjs";
 
 /** A package by key ("pptx"), repository ("opf-pptx"; "opf" is core) or npm name. */

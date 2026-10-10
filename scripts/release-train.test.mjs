@@ -594,6 +594,10 @@ test("plan: a merged release-prep PR on a green commit is ready to tag; red or l
   assert.match(state.notes.join("\n"), /main moved on after the release commit/);
   assert.equal(nextStep(result), "node scripts/release-train.mjs tag pptx --pptx 0.12.3 --execute");
 
+  // A failed Dependabot update job on the release commit is advisory (its own cooldown, not the release's code).
+  world.repos["opf-pptx"].checkRuns[release] = [{ name: "CI", status: "completed", conclusion: "success", started_at: "1" }, { name: "Dependabot", status: "completed", conclusion: "failure", started_at: "1" }];
+  assert.equal((await plan(world.deps, { pptx: "0.12.3" })).states[0].step, "ready-to-tag");
+
   world.repos["opf-pptx"].checkRuns[release] = [{ name: "CI", status: "completed", conclusion: "failure", started_at: "1" }];
   result = await plan(world.deps, { pptx: "0.12.3" });
   assert.match(result.states[0].problems.join("\n"), /checks on the release commit [0-9a-f]{12}: red \(failing: CI\)/);
