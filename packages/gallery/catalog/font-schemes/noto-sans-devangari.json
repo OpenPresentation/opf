@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-devangari",
+  "name": "Noto Sans Devanagari",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "hi",
+    "ne"
+  ],
+  "major": "Noto Sans Devanagari",
+  "minor": "Noto Sans Devanagari",
+  "textSample": "यह बहुत अच्छा",
+  "type": "sans-serif",
+  "description": "Noto Sans Devanagari is a sans serif OPF font scheme for complex script presentations, using Noto Sans Devanagari for both headings and body text."
+}

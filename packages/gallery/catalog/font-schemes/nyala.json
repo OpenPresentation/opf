@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "nyala",
+  "name": "Nyala",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "am"
+  ],
+  "major": "Nyala",
+  "minor": "Nyala",
+  "textSample": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+  "type": "sans-serif",
+  "description": "Nyala is a sans serif OPF font scheme for complex script presentations, using Nyala for both headings and body text."
+}

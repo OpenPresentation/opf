@@ -1,0 +1,52 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "chart-3x-bottom-vertical-title-left",
+  "name": "Chart_3x_Bottom_Vertical_Title_Left",
+  "summary": "Canonical OPF chart 3x title vertical layout.",
+  "description": "Chart 3x Bottom Vertical Title Left OPF layout: a slide title over two supporting charts side by side, with a primary chart below them.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "vertical"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Chart",
+    "3 zones",
+    "Center aligned",
+    "Titled",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x-bottom-vertical-title-left.svg"
+  },
+  "composition": {
+    "mode": "column",
+    "weights": [
+      2,
+      3
+    ]
+  }
+}

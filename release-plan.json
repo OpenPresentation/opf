@@ -21,6 +21,14 @@
       "version": "0.17.1"
     }
   ],
+  "independentPackages": [
+    {
+      "name": "@openpresentation/gallery",
+      "version": "0.0.1",
+      "workflow": "gallery-publish.yml",
+      "tagPrefix": "gallery-v"
+    }
+  ],
   "exampleRefs": {
     "opf-editor": "0cf5504b95461a346337887147d07968506c243c"
   },

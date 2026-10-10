@@ -162,11 +162,45 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 
 - **pptx.gallery owns every catalog record** and publishes it; each id has one owner. Its display metadata lives under
   `x-*` members.
-- **`spec/catalogs/` is a pinned, one-way snapshot.** `spec/catalogs/manifest.json` records the gallery commit and a
-  content hash per kind. Records change in the gallery and reach core through the sync below; a record rewrite that the
-  0.15 spec itself requires lands in the snapshot and in the gallery in the same release train.
-- **A catalog release never needs a core release.** Hosts register the catalog version they choose; documents carry
-  the records they were saved with.
+- **`packages/gallery/catalog/` is a pinned, one-way snapshot** (RR-78), published as `@openpresentation/gallery`.
+  Its `manifest.json` records the gallery commit and a content hash per kind. Records change in the gallery and reach
+  the package through the sync below. Until core drops `/catalog` in OPF 0.19, `spec/catalogs/` (and
+  `spec/previews/layouts/`) are byte-identical copies that the sync writes and `pnpm check:catalog` holds.
+- **A catalog release never needs a core release.** `@openpresentation/gallery` has its own version line and its own
+  publish workflow (see below). Hosts register the catalog version they choose; documents carry the records they were
+  saved with.
+
+## The `@openpresentation/gallery` package
+
+```js
+import { gallery } from '@openpresentation/gallery';
+validate(document, { catalogs: [gallery] });
+```
+
+`gallery` holds the same records as `@openpresentation/opf/catalog`'s `defaultCatalog`: `source` and the eight content
+kinds, each record keyed by id without `$schema`, `id` or `x-*` members. The package also exports `GALLERY_SOURCE`,
+`CATALOG_SCHEMA` (the version of core's catalog record schemas the records target; `package.json` declares the same
+number as `opf.catalogSchema`), `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and its `/previews` subpath
+exports the layout previews (`layoutPreviews`, `layoutPreviewIndex`, `layoutPreviewSlugs`, `getLayoutPreview`,
+`hasLayoutPreview`). It has no runtime dependency; its types name core's `Catalog`.
+
+It is built from `packages/gallery/catalog/` and `packages/gallery/previews/layouts/` in this repository and published
+from it, so its npm provenance names `OpenPresentation/opf`. Versions:
+
+- **minor**: new records only. A minor or patch release draws every existing record exactly as the previous published
+  release does and removes no id.
+- **major**: an id removed or renamed, a change to how an existing record draws, or a record schema change
+  (`CATALOG_SCHEMA`).
+
+`pnpm check:gallery-stability` enforces the rule on every pull request (OPF CI) and before every publish
+(`gallery-publish.yml`). It downloads the highest published version at or below the candidate's, and for every layout,
+theme, colour scheme and font scheme both releases have, it draws a fixture deck (`packages/gallery/scripts/fixtures.mjs`:
+a slide with sample content in every region of a layout, a six-slide sample deck for a design record) with the pinned
+core and opf-render of the package's devDependencies, once per release. The SVG bytes are hashed first; only a mismatch
+is rasterized (resvg, the renderer's bundled faces) to report how many pixels differ. A mismatch fails unless the
+candidate's major version is higher; so does a removed id of any kind. New ids, and changes to text a drawing never
+shows (names, summaries, tags), pass. The run draws 770 slides in under two seconds; with the download of the previous
+release's tarball it takes a few seconds.
 
 ## Endpoints
 
@@ -232,7 +266,7 @@ names a retired id gets `opf/unresolved-reference`.
 
 ## The snapshot
 
-`spec/catalogs/manifest.json` (schema `spec/schemas/catalog-manifest.schema.json`):
+`packages/gallery/catalog/manifest.json` (schema `spec/schemas/catalog-manifest.schema.json`):
 
 ```json
 {
@@ -260,9 +294,13 @@ pnpm build:opf-catalog            # regenerate and validate public/<kind>/
 git commit                        # the snapshot pins a commit
 
 # in this repository
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery          # writes spec/catalogs + manifest
+node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery          # writes packages/gallery/catalog + manifest (and core's copy)
 node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts
 ```
+
+A sync pull request against this repository changes the package's records. It needs a changelog fragment for the
+gallery (`packages: [gallery]`) and, when it is released, the version bump the rule above asks for; OPF CI's
+pixel-stability step tells a new record (minor) from a changed one (major).
 
 The sync validates every published index and record against the schemas in `spec/schemas/`, checks the published
 `contentSha256`, drops `x-*` members, and rewrites only the files whose content changed. Writes require a clean gallery
@@ -271,7 +309,8 @@ site for inspection and requires `--check` or `--report`. Every kind takes every
 per-id selection.
 
 A record rewrite the spec itself requires (the 0.15 font-scheme `languages` tags, for example) is edited under
-`spec/catalogs/<kind>/` and rehashed, and the gallery publishes the same records in the same train:
+`packages/gallery/catalog/<kind>/` and rehashed (which also rewrites core's copy), and the gallery publishes the same
+records in the same train:
 
 ```sh
 node scripts/sync-gallery-catalog.mjs --rehash                  # index contentSha256, manifest records and contentSha256
@@ -281,7 +320,10 @@ node scripts/sync-gallery-catalog.mjs --rehash --match-gallery  # also each kind
 ### Checks
 
 - `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline that every kind's records still hash
-  to the value in its index and the manifest.
+  to the value in its index and the manifest; `check:catalog` also fails when core's `spec/catalogs/` or
+  `spec/previews/layouts/` differ from the package's files.
+- `pnpm check:gallery` (in `pnpm test`) builds `@openpresentation/gallery` and runs its tests (shape, hashes, that core
+  resolves its records, the stability rule itself); `pnpm check:gallery-stability` is the pixel-stability check above.
 - `pnpm check:catalog-free` fails when a catalog module reappears in the import graph of core's root or of any subpath
   other than `/catalog`, or when their gzip size passes the recorded budget.
 - `sync-gallery-catalog.mjs --check` compares a local gallery checkout with the snapshot.

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "qa-discussion",
+  "name": "Qa_Discussion",
+  "summary": "Intentional pause for questions. Frames the conversation and shows you expect dialogue, not monologue.",
+  "description": "Intentional pause for questions. Frames the conversation and shows you expect dialogue, not monologue.",
+  "design": {
+    "titleAlignment": "left",
+    "contentBox": false
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Engagement",
+    "Dialogue",
+    "Pause"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/qa-discussion.svg"
+  },
+  "composition": {
+    "padding": 0.12
+  }
+}

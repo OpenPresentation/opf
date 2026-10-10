@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "decision-tree",
+  "name": "Decision_Tree",
+  "summary": "Branching diagram showing choices and consequences. Makes decision logic visual and transparent.",
+  "description": "Branching diagram showing choices and consequences. Makes decision logic visual and transparent.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Decisions",
+    "Branching",
+    "Logic"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/decision-tree.svg"
+  }
+}

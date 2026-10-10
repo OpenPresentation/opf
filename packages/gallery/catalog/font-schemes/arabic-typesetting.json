@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "arabic-typesetting",
+  "name": "Arabic Typesetting",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "ar"
+  ],
+  "major": "Arabic Typesetting",
+  "minor": "Arabic Typesetting",
+  "textSample": "هذا مكتوب بخط الأنواع العربية",
+  "type": "serif",
+  "description": "Arabic Typesetting is a serif OPF font scheme for complex script presentations, using Arabic Typesetting for both headings and body text."
+}

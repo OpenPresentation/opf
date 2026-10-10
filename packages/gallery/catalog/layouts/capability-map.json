@@ -1,0 +1,80 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "capability-map",
+  "name": "Capability_Map",
+  "summary": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
+  "description": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "Capabilities",
+    "Domains",
+    "Strategy"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/capability-map.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

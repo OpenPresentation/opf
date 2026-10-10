@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "armenian",
+  "name": "Armenian",
+  "code": "HYE",
+  "bcp47": "hy",
+  "ooxmlLang": "hy-AM",
+  "script": "Armn",
+  "direction": "ltr",
+  "fontScheme": "sylfaen",
+  "googleFontScheme": "noto-sans-armenian"
+}

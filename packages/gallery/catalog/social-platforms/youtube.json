@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
+  "id": "youtube",
+  "name": "YouTube",
+  "summary": "Video-sharing platform with creator and brand channels.",
+  "description": "YouTube channels are addressable via the '@<handle>' form. The handlePrefix is '@' but it is part of the URL itself.",
+  "baseUrl": "https://youtube.com",
+  "profileUrlPattern": "https://youtube.com/@{handle}",
+  "handlePrefix": "@",
+  "handleExample": "@acme",
+  "brandColor": "#FF0000",
+  "tags": ["video", "creator", "brand"]
+}
+

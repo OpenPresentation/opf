@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
+  "id": "tiktok",
+  "name": "TikTok",
+  "summary": "Short-form video network with strong recommendation feed.",
+  "description": "TikTok profiles are addressable as '@<handle>'. The handlePrefix is '@' and is included in the URL.",
+  "baseUrl": "https://tiktok.com",
+  "profileUrlPattern": "https://tiktok.com/@{handle}",
+  "handlePrefix": "@",
+  "handleExample": "@acme",
+  "brandColor": "#010101",
+  "tags": ["video", "short-form"]
+}
+

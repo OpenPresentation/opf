@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "investor",
+  "name": "Investor",
+  "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+  "description": "Angel, venture, and institutional investors judging financial viability, market opportunity, and the team. Lead with traction, size the market (TAM, SAM, SOM), make the moat and differentiation explicit, and show financial projections with their assumptions stated. Moderate chart density; 12-20 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "heros-journey",
+    "problem-solution"
+  ],
+  "recommendedTones": [
+    "persuasive",
+    "authoritative",
+    "inspirational"
+  ],
+  "tags": [
+    "external",
+    "capital",
+    "fundraising"
+  ]
+}

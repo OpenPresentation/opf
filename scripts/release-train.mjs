@@ -51,6 +51,14 @@ export const PACKAGES = [
   { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: false, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"], peersFile: "packages/javascript/src/node/peers.ts" },
 ];
 export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
+/**
+ * RR-78: packages released on their own version line, outside the lockstep train (docs/release-process.md, "The gallery
+ * lane"). No train names them, so plan, prep, tag and run never touch them and no lockstep floor names them; `verify`
+ * checks one of their published releases like any other (tag, gitHead, provenance from the named workflow, signatures).
+ */
+export const INDEPENDENT_PACKAGES = [
+  { key: "gallery", name: "@openpresentation/gallery", repo: "opf", manifest: "packages/gallery/package.json", tagPrefix: "gallery-v", workflow: "gallery-publish.yml", githubRelease: false, changelog: { file: "packages/gallery/CHANGELOG.md", package: "gallery" }, lockfile: "pnpm", independent: true, upstream: [] },
+];
 const SLSA = "https://slsa.dev/provenance/v1";
 /** `npm install` output for a version that is in the packument but not yet installable (registry/CDN propagation lag). */
 /** Default bound (minutes) on waiting for npm's attestation bundle and installability after a publish (RR-51). */
@@ -60,18 +68,24 @@ const NOT_YET_SERVED = /\bnotarget\b|No matching version found/i;
 const ADVISORY_CHECKS = new Set(["Cursor Bugbot"]);
 const SCRIPT = "node scripts/release-train.mjs";
 
-/** A package by key ("pptx"), repository ("opf-pptx"; "opf" is core) or npm name. */
-export function packageOf(id) {
-  const found = PACKAGES.find((pkg) => pkg.key === id || pkg.name === id || (pkg.repo === id && pkg.key !== "cli"));
-  if (!found) throw new Error(`unknown package "${id}" (one of ${PACKAGE_KEYS.join(", ")}, a repository name or an npm name)`);
-  return found;
+/**
+ * A package by key ("pptx"), repository ("opf-pptx"; "opf" is core) or npm name. With `independent: true` (`verify`
+ * only) an independently released package is found too, by key or npm name.
+ */
+export function packageOf(id, { independent = false } = {}) {
+  const lockstep = PACKAGES.find((pkg) => pkg.key === id || pkg.name === id || (pkg.repo === id && pkg.key !== "cli"));
+  if (lockstep) return lockstep;
+  const lane = INDEPENDENT_PACKAGES.find((pkg) => pkg.key === id || pkg.name === id);
+  if (lane && independent) return lane;
+  if (lane) throw new Error(`${lane.name} is released on its own version line (${lane.workflow}, ${lane.tagPrefix}X.Y.Z tags), not by the train; only \`verify ${lane.key}@X.Y.Z\` applies to it`);
+  throw new Error(`unknown package "${id}" (one of ${PACKAGE_KEYS.join(", ")}, a repository name or an npm name)`);
 }
 
 /** "@openpresentation/opf-pptx@0.12.2" or "pptx@0.12.2" -> { pkg, version }. */
-export function parseSpec(spec) {
+export function parseSpec(spec, options) {
   const at = spec.lastIndexOf("@");
-  if (at <= 0) return { pkg: packageOf(spec), version: undefined };
-  return { pkg: packageOf(spec.slice(0, at)), version: spec.slice(at + 1) };
+  if (at <= 0) return { pkg: packageOf(spec, options), version: undefined };
+  return { pkg: packageOf(spec.slice(0, at), options), version: spec.slice(at + 1) };
 }
 
 export const tagOf = (pkg, version) => `${pkg.tagPrefix}${version}`;
@@ -1106,7 +1120,8 @@ const USAGE = `Usage: node scripts/release-train.mjs <command> [--core X.Y.Z] [-
   tag <package>[@X.Y.Z] [--execute] [--checks-wait-minutes 0] [--wait-minutes 90] [--poll-seconds 120] [--attest-wait-minutes 15] [--attest-poll-seconds 30]
   verify <package>@X.Y.Z [--json] [--wait <minutes>] [--attest-poll-seconds 30]   e.g. @openpresentation/opf-pptx@0.12.2
   run [--execute] [--item RR-nn]        the whole train in lockstep order (same wait options as tag)
-Packages: ${PACKAGE_KEYS.join(", ")} (or the repository or npm name). Without --execute nothing is written.`;
+Packages: ${PACKAGE_KEYS.join(", ")} (or the repository or npm name). Without --execute nothing is written.
+Released on their own version line, verify only: ${INDEPENDENT_PACKAGES.map((pkg) => `${pkg.key} (${pkg.name}, ${pkg.tagPrefix}X.Y.Z)`).join(", ")}.`;
 
 export async function main(argv, deps = defaultDeps()) {
   const [command, ...args] = argv;
@@ -1130,7 +1145,7 @@ export async function main(argv, deps = defaultDeps()) {
     }
     if (command === "verify") {
       if (!args[0] || args[0].startsWith("--")) throw new Error("verify needs <package>@X.Y.Z");
-      const { pkg, version } = parseSpec(args[0]);
+      const { pkg, version } = parseSpec(args[0], { independent: true });
       if (!version) throw new Error("verify needs <package>@X.Y.Z");
       const wait = Number(option(args, "--wait") ?? 0);
       if (!Number.isFinite(wait) || wait < 0) throw new Error("--wait must be a non-negative number of minutes");

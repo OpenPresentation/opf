@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "partner",
+  "name": "Partner / Channel",
+  "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+  "description": "Strategic partners, resellers, and channel organizations who need positioning and enablement content. Highlight partner economics, include co-branding guidelines, state the value proposition for their customers, and link enablement resources. Moderate chart density; 15-25 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "advisory",
+  "attentionBudgetMinutes": 45,
+  "recommendedNarratives": [
+    "problem-solution",
+    "heros-journey"
+  ],
+  "recommendedTones": [
+    "persuasive",
+    "casual",
+    "authoritative"
+  ],
+  "tags": [
+    "partner",
+    "channel",
+    "enablement"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-5x",
+  "name": "Number 5x",
+  "summary": "Reach for it when five figures need to be read together.",
+  "description": "A title above five metrics in a three-column grid. Use it for a scorecard of five measures when none outranks the others.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  },
+  "tags": [
+    "Numbers",
+    "KPIs",
+    "Grid"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-5x.svg"
+  }
+}

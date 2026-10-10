@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "screenshot-walkthrough",
+  "name": "Screenshot_Walkthrough",
+  "summary": "Product screenshot with labeled callouts pointing to features. Shows the product in context, not in abstract.",
+  "description": "Product screenshot with labeled callouts pointing to features. Shows the product in context, not in abstract.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Product",
+    "Demo",
+    "UI"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/screenshot-walkthrough.svg"
+  }
+}

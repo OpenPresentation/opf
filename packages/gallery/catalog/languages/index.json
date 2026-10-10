@@ -1,0 +1,567 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "languages",
+  "version": "1",
+  "description": "Catalog of languages available in the openpresentation.org catalog. Each entry is a lightweight summary with the canonical BCP-47 tag; full language records live in the per-id JSON files alongside this index.",
+  "contentSha256": "cede71a78095d5abc4272bb294d4ea3013785bb9689c7b9a48bb4538f34929da",
+  "records": [
+    {
+      "id": "afrikaans",
+      "name": "Afrikaans",
+      "bcp47": "af",
+      "file": "afrikaans.json"
+    },
+    {
+      "id": "albanian",
+      "name": "Albanian",
+      "bcp47": "sq",
+      "file": "albanian.json"
+    },
+    {
+      "id": "amharic",
+      "name": "Amharic",
+      "bcp47": "am",
+      "file": "amharic.json"
+    },
+    {
+      "id": "arabic",
+      "name": "Arabic",
+      "bcp47": "ar",
+      "file": "arabic.json"
+    },
+    {
+      "id": "armenian",
+      "name": "Armenian",
+      "bcp47": "hy",
+      "file": "armenian.json"
+    },
+    {
+      "id": "aymara",
+      "name": "Aymara",
+      "bcp47": "ay",
+      "file": "aymara.json"
+    },
+    {
+      "id": "azerbaijani",
+      "name": "Azerbaijani",
+      "bcp47": "az",
+      "file": "azerbaijani.json"
+    },
+    {
+      "id": "bengali",
+      "name": "Bengali",
+      "bcp47": "bn",
+      "file": "bengali.json"
+    },
+    {
+      "id": "berber-latin",
+      "name": "Berber (Latin)",
+      "bcp47": "ber-Latn",
+      "file": "berber-latin.json"
+    },
+    {
+      "id": "bosnian-latin",
+      "name": "Bosnian (Latin)",
+      "bcp47": "bs-Latn",
+      "file": "bosnian-latin.json"
+    },
+    {
+      "id": "bulgarian",
+      "name": "Bulgarian",
+      "bcp47": "bg",
+      "file": "bulgarian.json"
+    },
+    {
+      "id": "catalan",
+      "name": "Catalan",
+      "bcp47": "ca",
+      "file": "catalan.json"
+    },
+    {
+      "id": "cebuano",
+      "name": "Cebuano",
+      "bcp47": "ceb",
+      "file": "cebuano.json"
+    },
+    {
+      "id": "chinese-simplified",
+      "name": "Chinese (Simplified)",
+      "bcp47": "zh-Hans",
+      "file": "chinese-simplified.json"
+    },
+    {
+      "id": "chinese-traditional",
+      "name": "Chinese (Traditional)",
+      "bcp47": "zh-Hant",
+      "file": "chinese-traditional.json"
+    },
+    {
+      "id": "chittagonian",
+      "name": "Chittagonian",
+      "bcp47": "ctg",
+      "file": "chittagonian.json"
+    },
+    {
+      "id": "croatian",
+      "name": "Croatian",
+      "bcp47": "hr",
+      "file": "croatian.json"
+    },
+    {
+      "id": "czech",
+      "name": "Czech",
+      "bcp47": "cs",
+      "file": "czech.json"
+    },
+    {
+      "id": "danish",
+      "name": "Danish",
+      "bcp47": "da",
+      "file": "danish.json"
+    },
+    {
+      "id": "dutch",
+      "name": "Dutch",
+      "bcp47": "nl",
+      "file": "dutch.json"
+    },
+    {
+      "id": "english",
+      "name": "English",
+      "bcp47": "en",
+      "file": "english.json"
+    },
+    {
+      "id": "english-au",
+      "name": "English (Australia)",
+      "bcp47": "en-AU",
+      "file": "english-au.json"
+    },
+    {
+      "id": "english-ca",
+      "name": "English (Canada)",
+      "bcp47": "en-CA",
+      "file": "english-ca.json"
+    },
+    {
+      "id": "english-gb",
+      "name": "English (United Kingdom)",
+      "bcp47": "en-GB",
+      "file": "english-gb.json"
+    },
+    {
+      "id": "english-in",
+      "name": "English (India)",
+      "bcp47": "en-IN",
+      "file": "english-in.json"
+    },
+    {
+      "id": "english-us",
+      "name": "English (United States)",
+      "bcp47": "en-US",
+      "file": "english-us.json"
+    },
+    {
+      "id": "estonian",
+      "name": "Estonian",
+      "bcp47": "et",
+      "file": "estonian.json"
+    },
+    {
+      "id": "filipino",
+      "name": "Filipino",
+      "bcp47": "fil",
+      "file": "filipino.json"
+    },
+    {
+      "id": "finnish",
+      "name": "Finnish",
+      "bcp47": "fi",
+      "file": "finnish.json"
+    },
+    {
+      "id": "french",
+      "name": "French",
+      "bcp47": "fr",
+      "file": "french.json"
+    },
+    {
+      "id": "fulfulde",
+      "name": "Fulfulde",
+      "bcp47": "ff",
+      "file": "fulfulde.json"
+    },
+    {
+      "id": "galician",
+      "name": "Galician",
+      "bcp47": "gl",
+      "file": "galician.json"
+    },
+    {
+      "id": "georgian",
+      "name": "Georgian",
+      "bcp47": "ka",
+      "file": "georgian.json"
+    },
+    {
+      "id": "german",
+      "name": "German",
+      "bcp47": "de",
+      "file": "german.json"
+    },
+    {
+      "id": "greek",
+      "name": "Greek",
+      "bcp47": "el",
+      "file": "greek.json"
+    },
+    {
+      "id": "gujarati",
+      "name": "Gujarati",
+      "bcp47": "gu",
+      "file": "gujarati.json"
+    },
+    {
+      "id": "hausa",
+      "name": "Hausa",
+      "bcp47": "ha",
+      "file": "hausa.json"
+    },
+    {
+      "id": "hebrew",
+      "name": "Hebrew",
+      "bcp47": "he",
+      "file": "hebrew.json"
+    },
+    {
+      "id": "hindi",
+      "name": "Hindi",
+      "bcp47": "hi",
+      "file": "hindi.json"
+    },
+    {
+      "id": "hungarian",
+      "name": "Hungarian",
+      "bcp47": "hu",
+      "file": "hungarian.json"
+    },
+    {
+      "id": "igbo",
+      "name": "Igbo",
+      "bcp47": "ig",
+      "file": "igbo.json"
+    },
+    {
+      "id": "indonesian",
+      "name": "Indonesian",
+      "bcp47": "id",
+      "file": "indonesian.json"
+    },
+    {
+      "id": "italian",
+      "name": "Italian",
+      "bcp47": "it",
+      "file": "italian.json"
+    },
+    {
+      "id": "japanese",
+      "name": "Japanese",
+      "bcp47": "ja",
+      "file": "japanese.json"
+    },
+    {
+      "id": "kannada",
+      "name": "Kannada",
+      "bcp47": "kn",
+      "file": "kannada.json"
+    },
+    {
+      "id": "kazakh",
+      "name": "Kazakh",
+      "bcp47": "kk",
+      "file": "kazakh.json"
+    },
+    {
+      "id": "khmer",
+      "name": "Khmer",
+      "bcp47": "km",
+      "file": "khmer.json"
+    },
+    {
+      "id": "kinyarwanda",
+      "name": "Kinyarwanda",
+      "bcp47": "rw",
+      "file": "kinyarwanda.json"
+    },
+    {
+      "id": "korean",
+      "name": "Korean",
+      "bcp47": "ko",
+      "file": "korean.json"
+    },
+    {
+      "id": "kurmanji",
+      "name": "Kurmanji",
+      "bcp47": "kmr",
+      "file": "kurmanji.json"
+    },
+    {
+      "id": "latvian",
+      "name": "Latvian",
+      "bcp47": "lv",
+      "file": "latvian.json"
+    },
+    {
+      "id": "lithuanian",
+      "name": "Lithuanian",
+      "bcp47": "lt",
+      "file": "lithuanian.json"
+    },
+    {
+      "id": "macedonian",
+      "name": "Macedonian",
+      "bcp47": "mk",
+      "file": "macedonian.json"
+    },
+    {
+      "id": "malagasy",
+      "name": "Malagasy",
+      "bcp47": "mg",
+      "file": "malagasy.json"
+    },
+    {
+      "id": "malay",
+      "name": "Malay",
+      "bcp47": "zsm",
+      "file": "malay.json"
+    },
+    {
+      "id": "malayalam",
+      "name": "Malayalam",
+      "bcp47": "ml",
+      "file": "malayalam.json"
+    },
+    {
+      "id": "maori",
+      "name": "Māori",
+      "bcp47": "mi",
+      "file": "maori.json"
+    },
+    {
+      "id": "marathi",
+      "name": "Marathi",
+      "bcp47": "mr",
+      "file": "marathi.json"
+    },
+    {
+      "id": "mongolian",
+      "name": "Mongolian",
+      "bcp47": "mn",
+      "file": "mongolian.json"
+    },
+    {
+      "id": "nepali",
+      "name": "Nepali",
+      "bcp47": "ne",
+      "file": "nepali.json"
+    },
+    {
+      "id": "norwegian",
+      "name": "Norwegian",
+      "bcp47": "no",
+      "file": "norwegian.json"
+    },
+    {
+      "id": "odia",
+      "name": "Odia",
+      "bcp47": "or",
+      "file": "odia.json"
+    },
+    {
+      "id": "oromo",
+      "name": "Oromo",
+      "bcp47": "om",
+      "file": "oromo.json"
+    },
+    {
+      "id": "pashto",
+      "name": "Pashto",
+      "bcp47": "ps",
+      "file": "pashto.json"
+    },
+    {
+      "id": "persian",
+      "name": "Persian",
+      "bcp47": "fa",
+      "file": "persian.json"
+    },
+    {
+      "id": "polish",
+      "name": "Polish",
+      "bcp47": "pl",
+      "file": "polish.json"
+    },
+    {
+      "id": "portuguese",
+      "name": "Portuguese",
+      "bcp47": "pt",
+      "file": "portuguese.json"
+    },
+    {
+      "id": "punjabi-gurmukhi",
+      "name": "Punjabi (Gurmukhi)",
+      "bcp47": "pa-Guru",
+      "file": "punjabi-gurmukhi.json"
+    },
+    {
+      "id": "punjabi-shahmukhi",
+      "name": "Punjabi (Shahmukhi)",
+      "bcp47": "pa-Arab",
+      "file": "punjabi-shahmukhi.json"
+    },
+    {
+      "id": "romanian",
+      "name": "Romanian",
+      "bcp47": "ro",
+      "file": "romanian.json"
+    },
+    {
+      "id": "russian",
+      "name": "Russian",
+      "bcp47": "ru",
+      "file": "russian.json"
+    },
+    {
+      "id": "serbian-cyrillic",
+      "name": "Serbian (Cyrillic)",
+      "bcp47": "sr-Cyrl",
+      "file": "serbian-cyrillic.json"
+    },
+    {
+      "id": "serbian-latin",
+      "name": "Serbian (Latin)",
+      "bcp47": "sr-Latn",
+      "file": "serbian-latin.json"
+    },
+    {
+      "id": "shona",
+      "name": "Shona",
+      "bcp47": "sn",
+      "file": "shona.json"
+    },
+    {
+      "id": "slovak",
+      "name": "Slovak",
+      "bcp47": "sk",
+      "file": "slovak.json"
+    },
+    {
+      "id": "slovenian",
+      "name": "Slovenian",
+      "bcp47": "sl",
+      "file": "slovenian.json"
+    },
+    {
+      "id": "somali",
+      "name": "Somali",
+      "bcp47": "so",
+      "file": "somali.json"
+    },
+    {
+      "id": "spanish",
+      "name": "Spanish",
+      "bcp47": "es",
+      "file": "spanish.json"
+    },
+    {
+      "id": "swahili",
+      "name": "Swahili",
+      "bcp47": "sw",
+      "file": "swahili.json"
+    },
+    {
+      "id": "swedish",
+      "name": "Swedish",
+      "bcp47": "sv",
+      "file": "swedish.json"
+    },
+    {
+      "id": "tagalog",
+      "name": "Tagalog",
+      "bcp47": "tl",
+      "file": "tagalog.json"
+    },
+    {
+      "id": "tajik",
+      "name": "Tajik",
+      "bcp47": "tg",
+      "file": "tajik.json"
+    },
+    {
+      "id": "tamil",
+      "name": "Tamil",
+      "bcp47": "ta",
+      "file": "tamil.json"
+    },
+    {
+      "id": "telugu",
+      "name": "Telugu",
+      "bcp47": "te",
+      "file": "telugu.json"
+    },
+    {
+      "id": "thai",
+      "name": "Thai",
+      "bcp47": "th",
+      "file": "thai.json"
+    },
+    {
+      "id": "turkish",
+      "name": "Turkish",
+      "bcp47": "tr",
+      "file": "turkish.json"
+    },
+    {
+      "id": "ukrainian",
+      "name": "Ukrainian",
+      "bcp47": "uk",
+      "file": "ukrainian.json"
+    },
+    {
+      "id": "urdu",
+      "name": "Urdu",
+      "bcp47": "ur",
+      "file": "urdu.json"
+    },
+    {
+      "id": "uzbek-latin",
+      "name": "Uzbek (Latin)",
+      "bcp47": "uz-Latn",
+      "file": "uzbek-latin.json"
+    },
+    {
+      "id": "vietnamese-quoc-ngu",
+      "name": "Vietnamese (Quốc Ngữ)",
+      "bcp47": "vi-Latn",
+      "file": "vietnamese-quoc-ngu.json"
+    },
+    {
+      "id": "xhosa",
+      "name": "Xhosa",
+      "bcp47": "xh",
+      "file": "xhosa.json"
+    },
+    {
+      "id": "yoruba",
+      "name": "Yoruba",
+      "bcp47": "yo",
+      "file": "yoruba.json"
+    },
+    {
+      "id": "zulu",
+      "name": "Zulu",
+      "bcp47": "zu",
+      "file": "zulu.json"
+    }
+  ]
+}

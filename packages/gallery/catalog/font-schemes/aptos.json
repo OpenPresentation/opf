@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "aptos",
+  "name": "Aptos",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Aptos Display",
+  "minor": "Aptos",
+  "textSample": "Modern clean design",
+  "type": "sans-serif",
+  "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+}
