@@ -1,0 +1,578 @@
+{
+ "item": "RR-05 / FF-12 bounded native font sample on the published 0.18 packages (opf#323 section 1)",
+ "built": {
+  "date": "2026-10-10T21:43:02.317Z",
+  "node": "v24.21.0",
+  "packages": {
+   "@openpresentation/opf": "0.18.1",
+   "@openpresentation/opf-render": "0.18.0",
+   "@openpresentation/opf-pptx": "0.18.0",
+   "@openpresentation/opf-editor": "0.18.0",
+   "fontkit": "2.0.4"
+  },
+  "zipDate": "2026-10-10T00:00:00Z",
+  "exportDate": "2026-01-15",
+  "note": "Published npm packages only, exact versions pinned in package.json. Decks, previews and absolute paths are never committed."
+ },
+ "maxDecks": 12,
+ "decks": {
+  "01-carlito-code-chart-table-notes": {
+   "title": "FF-12 Carlito",
+   "covers": "Carlito with code, chart, table and notes; no code family, so code uses the documented code fallback",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/01-carlito-code-chart-table-notes.pptx",
+   "bytes": 42405,
+   "sha256": "4e6b6ec0ffa18c6cb144c4fbea6d8207626f7201d2dc9447affbf664e8ac9869",
+   "slides": 5,
+   "expectedFonts": [
+    "Carlito",
+    "Roboto Mono"
+   ],
+   "requiredFonts": [
+    "Carlito",
+    "Roboto Mono"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "02-carlito-code-family-carlito": {
+   "title": "FF-12 Carlito code",
+   "covers": "the same content with fontScheme.code Carlito: the deck names Carlito only",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/02-carlito-code-family-carlito.pptx",
+   "bytes": 42384,
+   "sha256": "28ce8721f1230b187462e86de5313051c7e3698dce2ff5e1362b5e9638dedf5c",
+   "slides": 5,
+   "expectedFonts": [
+    "Carlito"
+   ],
+   "requiredFonts": [
+    "Carlito"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "03-default-aptos": {
+   "title": "FF-12 default",
+   "covers": "the default scheme (no fontScheme: engine default aptos)",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/03-default-aptos.pptx",
+   "bytes": 27038,
+   "sha256": "e26e8443d08175dbc759f07103b5e6415c6b2b6915aee2df91eef2bf56ebd859",
+   "slides": 3,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Roboto Mono"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Roboto Mono"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "04-ja-meiryo": {
+   "title": "FF-12 Japanese",
+   "covers": "Japanese with the Meiryo scheme (re-runs lang-ja-meiryo, the 2026-10-02 Aptos failure)",
+   "family": null,
+   "language": "ja",
+   "status": null,
+   "file": "decks/ff12/04-ja-meiryo.pptx",
+   "bytes": 25748,
+   "sha256": "23048b7312cbef341ce55a57543b01b37ec17b50d24d2fa555bb792c0e950972",
+   "slides": 3,
+   "expectedFonts": [
+    "Meiryo"
+   ],
+   "requiredFonts": [
+    "Meiryo"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "05-ar-rtl": {
+   "title": "FF-12 Arabic",
+   "covers": "Arabic, right to left (language ar: its scheme arabic-typesetting)",
+   "family": null,
+   "language": "ar",
+   "status": null,
+   "file": "decks/ff12/05-ar-rtl.pptx",
+   "bytes": 31803,
+   "sha256": "2f89a35e299364eeb1b814fe334d4d7c31def131fcd4c80bc5f881faf0aa8741",
+   "slides": 3,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Arabic Typesetting"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [
+    "Arabic Typesetting"
+   ],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "Arabic Typesetting"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "Arabic Typesetting"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "Arabic Typesetting"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "Arabic Typesetting"
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "06-monospace-consolas": {
+   "title": "FF-12 monospace",
+   "covers": "a monospace scheme (Consolas)",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/06-monospace-consolas.pptx",
+   "bytes": 26950,
+   "sha256": "fd679484173b5041972cd7da13ff17fb76d05d75ba7585dc269ece0cb51e3933",
+   "slides": 3,
+   "expectedFonts": [
+    "Consolas"
+   ],
+   "requiredFonts": [
+    "Consolas"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Consolas",
+     "ea": "Consolas",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Consolas",
+     "ea": "Consolas",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Consolas",
+     "ea": "Consolas",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Consolas",
+     "ea": "Consolas",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "07-per-slide-override": {
+   "title": "FF-12 per-slide",
+   "covers": "a per-slide override: Calibri deck, Georgia on slide 2, Courier New on slide 4",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/07-per-slide-override.pptx",
+   "bytes": 27795,
+   "sha256": "6f32d01ccb802eb0292153eb0609d22e0b0a811793df33a9c7888c17ab4e7afb",
+   "slides": 4,
+   "expectedFonts": [
+    "Calibri",
+    "Courier New",
+    "Georgia"
+   ],
+   "requiredFonts": [
+    "Calibri",
+    "Courier New",
+    "Georgia"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "08-cjk-in-latin": {
+   "title": "FF-12 CJK in Latin",
+   "covers": "CJK inside a Latin deck: Japanese and Chinese words in an English Aptos deck",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/08-cjk-in-latin.pptx",
+   "bytes": 21032,
+   "sha256": "5efe526e09946942912a18b4753acb84ded1a2975b6e1b7fc460796025195d8d",
+   "slides": 2,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Meiryo"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [
+    "Meiryo"
+   ],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "09-ko-malgun": {
+   "title": "FF-12 Korean",
+   "covers": "Korean with the Malgun Gothic scheme",
+   "family": null,
+   "language": "ko",
+   "status": null,
+   "file": "decks/ff12/09-ko-malgun.pptx",
+   "bytes": 20952,
+   "sha256": "811372ad8cc12bfa1a5da2f132ac0cd6e60006d308d920cac8d16cbbcd99052d",
+   "slides": 2,
+   "expectedFonts": [
+    "Malgun Gothic"
+   ],
+   "requiredFonts": [
+    "Malgun Gothic"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "10-hi-mangal": {
+   "title": "FF-12 Hindi",
+   "covers": "Hindi (language hi: its scheme mangal)",
+   "family": null,
+   "language": "hi",
+   "status": null,
+   "file": "decks/ff12/10-hi-mangal.pptx",
+   "bytes": 21008,
+   "sha256": "86c8282828b0672cfe2771f87fc5eb26e3233cf4d6c9e28bf36c92760ac86f0a",
+   "slides": 2,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Mangal"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [
+    "Mangal"
+   ],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "Mangal"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "Mangal"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "Mangal"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "Mangal"
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "11-he-rtl": {
+   "title": "FF-12 Hebrew",
+   "covers": "Hebrew, right to left (language he: its scheme david)",
+   "family": null,
+   "language": "he",
+   "status": null,
+   "file": "decks/ff12/11-he-rtl.pptx",
+   "bytes": 20987,
+   "sha256": "eb634f00dce945eef315c6bf15fa4ce6561305f0b1c94eac42ea01a0b53be3dd",
+   "slides": 2,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "David"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [
+    "David"
+   ],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "David"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "David"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": "David"
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": "David"
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "12-serif-georgia": {
+   "title": "FF-12 serif",
+   "covers": "a serif scheme (Georgia)",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff12/12-serif-georgia.pptx",
+   "bytes": 20923,
+   "sha256": "b7ecc17dd5ba387da6fe66982b2d71eb7dc3433b59c93a956d256f16efcf32df",
+   "slides": 2,
+   "expectedFonts": [
+    "Georgia"
+   ],
+   "requiredFonts": [
+    "Georgia"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Georgia",
+     "ea": "Georgia",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Georgia",
+     "ea": "Georgia",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Georgia",
+     "ea": "Georgia",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Georgia",
+     "ea": "Georgia",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  }
+ }
+}

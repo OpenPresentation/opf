@@ -1,0 +1,34 @@
+{
+ "host": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "os": "Microsoft Windows NT 10.0.26200.0",
+  "powershell": "5.1.26100.9444",
+  "culture": "en-US",
+  "runStartedUtc": "2026-10-10T21:45:22.6048184Z",
+  "runFinishedUtc": "2026-10-10T21:47:57.2782849Z"
+ },
+ "harnessNote": "exitCode is null for every deck: run-deck.ps1 of this attempt did not cache the child process handle, so PowerShell reported no exit code. compare.mjs counts a run as successful only when status is completed and the read-out JSON exists, parses and reached stage done; run-deck.ps1 now caches the handle.",
+ "runs": [
+  {
+   "deck": "01-footer-fields",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 41300,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.1,
+   "sha256": "04fc3914455323f687349dabce56ecebf90bf33836bc97a6ad795937f86ad435"
+  },
+  {
+   "deck": "02-header-forms",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 51016,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "be91d501be7b70046b1a5e277f7b698247e5d0910fe769efa0bc8860f35e2523"
+  }
+ ]
+}
