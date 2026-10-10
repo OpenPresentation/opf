@@ -3,6 +3,10 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+
+const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
 // FA-30: the canvas draws the renderer's SVG, which now hides decorative drawing (background, card frames, a picture or chart with an
 // empty alt) with aria-hidden and labels its root a "slide" group. Real-browser check that the canvas stays operable by assistive
@@ -30,6 +34,18 @@ const deck = {design: {fontScheme: 'roboto'}, slides: [
     {image: {src: png, alt: ''}},
     {chart: {type: 'column', alt: '', data: {columns, rows}}},
     {chart: {type: 'column', alt: 'Revenue by quarter', data: {columns, rows}}},
+  ]},
+  // Targets that draw text of every kind (a long paragraph, a list, a quote, a table, code, a metric, a timeline): WCAG 2.5.3, below.
+  {title: 'Text slide', blocks: [
+    {text: 'A long paragraph of text that goes on and on well past the eighty character mark, so a name cut at eighty characters would no longer contain it.'},
+    {items: ['One', 'Two', {text: 'Two point one', level: 1}, 'Three']},
+    {quote: {text: 'Quote text here', attribution: 'Someone'}},
+    {table: {columns, rows}},
+  ]},
+  {title: 'More text', blocks: [
+    {code: {source: 'const a = 1;', language: 'ts'}},
+    {metric: {value: 42, label: 'Answer', unit: '%'}},
+    {timeline: [{when: 'Now', what: 'Prototype'}, {what: 'Review'}]},
   ]},
 ]};
 
@@ -71,6 +87,16 @@ try {
   assert.doesNotMatch(snapshot, /img /, 'no image role is left above an editing target');
   assert.equal(await page.getByRole('button', {name: /^Edit image/}).count(), 2, 'both pictures are reachable as buttons');
   assert.equal(await page.getByRole('button', {name: /^Edit chart/}).count(), 2, 'both charts are reachable as buttons');
+  // WCAG 2.5.3 Label in Name (axe-core 4.14 label-content-name-mismatch): every editing target's accessible name contains the text it draws.
+  await page.addScriptTag({content: axeSource});
+  for (const [index, title] of [[0, 'Media slide'], [1, 'Text slide'], [2, 'More text']]) {
+    await page.evaluate((slide) => cv.setSlide(slide), index);
+    const mismatches = await page.evaluate(() => window.axe.run(document.querySelector('#canvas'), {runOnly: {type: 'rule', values: ['label-content-name-mismatch']}}).then((result) => result.violations.flatMap((violation) => violation.nodes.map((node) => node.target.join(' ') + ' ' + node.html.slice(0, 160)))));
+    assert.deepEqual(mismatches, [], `${title}: every editing target's name contains its visible text`);
+    const names = await page.evaluate(() => [...document.querySelectorAll('#canvas [data-canvas-target]')].map((node) => node.getAttribute('aria-label')));
+    assert.ok(names.length > 0 && names.every((name) => name.startsWith('Edit ')), `${title}: targets are named "Edit <field>: ..." (${names})`);
+    if (index === 1) assert.ok(names.some((name) => name.includes('would no longer contain it.')), 'a long paragraph is named in full, not cut off');
+  }
   assert.deepEqual(errors, []);
   console.log(`canvas a11y: ${facts.targets.length} editing targets are focusable buttons outside hidden groups; the root is the Editable slide group.`);
 } finally {

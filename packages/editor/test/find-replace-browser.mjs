@@ -213,6 +213,10 @@ try {
   assert.deepEqual(unlabeled, []);
   assert.equal(await count.getAttribute('aria-live'), 'polite');
   assert.equal(await page.locator('.opf-find-error').getAttribute('role'), 'alert');
+  // WCAG 2.5.3 (label in name): a result has no aria-label; its name is the place and the matching line it shows.
+  assert.equal(await page.locator('.opf-find-result[aria-label]').count(), 0);
+  const resultName = await results.first().evaluate((node) => `${node.querySelector('.opf-find-where').textContent} ${node.querySelector('.opf-find-text').textContent}`);
+  assert.match(await results.first().ariaSnapshot(), new RegExp(`^- '?button "${resultName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
   assert.ok((await page.locator('.opf-find-results').getAttribute('aria-label')) === 'Matches');
   for (const key of ['Control+F', 'Control+H']) assert.ok((await page.locator('#find-open').getAttribute('aria-keyshortcuts')).includes(key));
   mark('panel controls are labelled; count is a polite live region; errors are alerts');

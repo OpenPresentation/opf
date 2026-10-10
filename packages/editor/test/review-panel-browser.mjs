@@ -111,7 +111,11 @@ try {
   assert.match(await contrast.locator('.opf-review-sev').textContent(), /^Warning$/);
   assert.match(await contrast.locator('.opf-review-msg').textContent(), /contrast ratio of 1\.\d+:1; 3:1 is needed/);
   assert.match(await contrast.locator('.opf-review-meta').textContent(), /^Slide 1 · opf\/text-contrast$/);
-  assert.match(await contrast.locator('.opf-review-goto').getAttribute('aria-label'), /^Warning, Slide 1: .*Go to it\.$/);
+  // WCAG 2.5.3 (label in name): the go-to button has no aria-label; its name is its visible text and "Go to it." is its description.
+  const goto = contrast.locator('.opf-review-goto');
+  assert.equal(await goto.getAttribute('aria-label'), null);
+  assert.match(await goto.ariaSnapshot(), /^- '?button "Warning .*contrast ratio.* Slide 1 · opf\/text-contrast"/);
+  assert.equal(await goto.evaluate(node => document.getElementById(node.getAttribute('aria-describedby')).textContent), 'Go to it.');
   assert.equal(await item('missing-alt-text').count(), 2, 'both pictures lack alt text');
   assert.equal(await item('missing-slide-title').count(), 1);
   assert.match(await page.locator('.opf-review-counts').textContent(), /^\d+ findings: \d+ warnings?(, \d+ notes?)?\.$/);
@@ -245,7 +249,7 @@ try {
   assert.match(await review.locator('.opf-review-ignored summary').textContent(), /Hidden checks \(1\)/);
   assert.match(await page.locator('.opf-review-counts').textContent(), /1 finding hidden/);
   await review.locator('.opf-review-ignored summary').click();
-  await review.getByRole('button', { name: 'Show opf/missing-slide-title findings again' }).click();
+  await review.getByRole('button', { name: 'Show again, opf/missing-slide-title findings' }).click();
   await waitItems('missing-slide-title', 1, 'Show again restores it');
   mark('filters narrow the list and a check can be hidden and shown again');
 

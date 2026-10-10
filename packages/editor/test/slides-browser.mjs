@@ -92,6 +92,10 @@ try {
   };
   const cards = () => page.locator('#slide-list .slide-card');
   const card = index => page.locator(`#slide-list .slide-card[data-index="${index}"]`);
+  // WCAG 2.5.3 (label in name): a card has no aria-label. Its accessible name is its own text (number, title, "Hidden" badge) and the
+  // position and selection are its description (a hidden element it points to).
+  const cardSnapshot = async index => (await card(index).ariaSnapshot()).trim();
+  const cardPosition = locator => locator.evaluate(node => node.getAttribute('aria-describedby').split(' ').filter(id => id.endsWith('-position')).map(id => document.getElementById(id).textContent).join(''));
   const titles = () => page.locator('#slide-list .slide-card .thumbnail-title').allTextContents();
   const undoDepth = () => page.evaluate(() => { let depth = 0; return depth; });
   void undoDepth;
@@ -124,8 +128,9 @@ try {
   assert.deepEqual(await page.locator('#slide-list .section-name').allTextContents(), ['Intro', 'Body', 'End']);
   assert.equal(await page.locator('#slide-list').getAttribute('aria-label'), 'Slides');
   // Names: every card and section control says what it is; one card is the tab stop (roving), the current one.
-  const cardNames = await cards().evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label')));
-  assert.equal(cardNames[0], 'Slide 1 of 6: Alpha');
+  assert.equal(await cards().evaluateAll(nodes => nodes.filter(node => node.hasAttribute('aria-label')).length), 0, 'no card has an aria-label that could differ from its text');
+  assert.match(await cardSnapshot(0), /^- button "01 Alpha"/);
+  assert.equal(await cardPosition(card(0)), 'Slide 1 of 6');
   assert.equal(await page.locator('#slide-list .slide-card[tabindex="0"]').count(), 1);
   assert.equal(await card(0).getAttribute('aria-current'), 'true');
   assert.ok(await page.locator('#slide-list .section-more').first().getAttribute('aria-label'), 'section menus are labelled');
@@ -136,7 +141,8 @@ try {
   await card(1).click();
   await page.waitForFunction(() => document.querySelector('#slide-list .slide-card[data-index="1"]').getAttribute('aria-current') === 'true');
   await oneStep('Alt+Down moves a slide down one place', async () => { await page.keyboard.press('Alt+ArrowDown'); }, current => current.slides.map(slide => slide.id).join() === 'a,c,b,d,e,f', async () => {
-    assert.equal(await page.evaluate(() => document.activeElement.getAttribute('aria-label')), 'Slide 3 of 6: Beta, selected'.replace(', selected', ''), 'focus follows the moved slide');
+    assert.equal(await cardPosition(page.locator('#slide-list .slide-card:focus')), 'Slide 3 of 6', 'focus follows the moved slide');
+    assert.match(await page.locator('#slide-list .slide-card:focus').ariaSnapshot(), /^- button "03 Beta"/);
   });
   // After the redo above the order is a,c,b,...: Beta crossed into the Body section.
   assert.deepEqual(await sections(), ['Intro', 'Body', 'Body', 'Body', 'End', 'End'], 'crossing a boundary joins the next section');
@@ -183,7 +189,8 @@ try {
   await oneStep('hiding a slide', async () => { await page.locator('#slide-toolbar [data-action="hide"]').click(); },
     current => current.slides[1].hidden === true && !('hidden' in current.slides[0]),
     async () => {
-      assert.equal(await card(1).getAttribute('aria-label'), 'Slide 2 of 6: Beta, hidden');
+      assert.match(await cardSnapshot(1), /^- button "02 Beta Hidden"/);
+      assert.equal(await cardPosition(card(1)), 'Slide 2 of 6');
       assert.equal(await card(1).locator('.slide-badge').textContent(), 'Hidden');
       assert.equal(await page.locator('#slide-toolbar [data-action="hide"]').getAttribute('aria-label'), 'Show slide');
       await waitLive(/hidden from the slide show/, 'announces hiding');
@@ -218,7 +225,7 @@ try {
   await card(1).click();
   await card(3).click({ modifiers: ['Shift'] });
   assert.deepEqual(await cards().evaluateAll(nodes => nodes.map(node => node.dataset.selected)), ['false', 'true', 'true', 'true', 'false', 'false']);
-  assert.match(await card(2).getAttribute('aria-label'), /selected/);
+  assert.equal(await cardPosition(card(2)), 'Slide 3 of 6, selected');
   await oneStep('Alt+Down moves several selected slides together', async () => { await page.keyboard.press('Alt+ArrowDown'); },
     current => current.slides.map(slide => `${slide.id}:${slide.section}`).join() === 'a:Intro,e:End,b:End,c:End,d:End,f:End');
   await load(source);
@@ -409,8 +416,9 @@ try {
   for (const region of await page.locator('.opf-slides-live, #outline-view [role="status"]').all()) assert.equal(await region.getAttribute('aria-live'), 'polite');
   await page.locator('#view-slide').click();
   const snapshot = await page.locator('#slide-list').ariaSnapshot();
-  assert.match(snapshot, /Slide 1 of 6: Alpha/);
-  assert.match(snapshot, /button "Intro, 2 slides"/);
+  assert.match(snapshot, /button "01 Alpha"/);
+  assert.match(snapshot, /button "Intro" \[expanded\]/);
+  assert.equal(await page.locator('#slide-list .section-toggle').first().evaluate(node => document.getElementById(node.getAttribute('aria-describedby')).textContent), '2 slides', 'the slide count describes a section toggle');
   // The menu is a real menu: arrows move, Escape closes, and a dialog opened from a button returns focus on close.
   await card(2).focus();
   await page.keyboard.press('Shift+F10');

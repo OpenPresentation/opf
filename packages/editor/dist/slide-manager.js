@@ -139,10 +139,12 @@ export function createSlideManager(container, options) {
     const selected = selection.has(index);
     const title = slideTitle(slide) || "Untitled slide";
     const hidden = slide.hidden === true;
+    // WCAG 2.5.3 (label in name): the card has no aria-label. Its name is its own content (the number, the title and the "Hidden" badge;
+    // the thumbnail is aria-hidden), so the name always contains the visible text. The position and the selection are the description.
+    const position = `Slide ${index + 1} of ${slideCount}${selected && selection.size > 1 ? ", selected" : ""}`;
     const button = el("button", {
-      type: "button", class: "slide-card", draggable: "true", "data-index": index, "aria-current": String(index === current()),
-      "aria-label": `Slide ${index + 1} of ${slideCount}: ${title}${hidden ? ", hidden" : ""}${selected && selection.size > 1 ? ", selected" : ""}`,
-      "aria-describedby": `${id}-hint`, "aria-keyshortcuts": "Alt+ArrowUp Alt+ArrowDown Delete", tabindex: index === focusIndex ? "0" : "-1",
+      type: "button", class: "slide-card", draggable: "true", "data-index": index, "data-menu-label": `Slide ${index + 1} of ${slideCount}: ${title}`, "aria-current": String(index === current()),
+      "aria-describedby": `${id}-${index}-position ${id}-hint`, "aria-keyshortcuts": "Alt+ArrowUp Alt+ArrowDown Delete", tabindex: index === focusIndex ? "0" : "-1",
     });
     button.dataset.selected = String(selected);
     button.dataset.hidden = String(hidden);
@@ -156,8 +158,9 @@ export function createSlideManager(container, options) {
     thumbnail.querySelectorAll("[tabindex]").forEach((node) => node.removeAttribute("tabindex"));
     const label = el("span", { class: "thumbnail-title", text: slideTitle(slide) || "Untitled slide" });
     const content = el("span", { class: "thumbnail-content", draggable: "true" }, thumbnail, label);
-    if (hidden) content.append(el("span", { class: "slide-badge", text: "Hidden" }));
-    button.append(number, content);
+    if (hidden) content.append(" ", el("span", { class: "slide-badge", text: "Hidden" }));
+    // The explicit spaces keep the number, title and badge apart in the computed name; hidden elements still describe the button.
+    button.append(number, " ", content, el("span", { id: `${id}-${index}-position`, hidden: true, text: position }));
     button.addEventListener("click", (event) => choose(index, event));
     button.addEventListener("keydown", (event) => keydown(event, index));
     button.addEventListener("focus", () => { focusIndex = index; });
@@ -172,9 +175,11 @@ export function createSlideManager(container, options) {
     const name = sectionLabel(section.name);
     const header = el("div", { class: "slide-section", "data-section": section.index, "data-unnamed": String(section.unnamed) });
     const toggle = el("button", {
-      type: "button", class: "section-toggle", "aria-expanded": String(!isCollapsed), "aria-label": `${name}, ${plural(section.count, "slide")}`,
+      type: "button", class: "section-toggle", "aria-expanded": String(!isCollapsed), "aria-describedby": `${id}-section-${section.index}-count`,
       onclick: () => { if (isCollapsed) collapsed.delete(key); else collapsed.add(key); render(); },
-    }, el("span", { class: "section-caret", "aria-hidden": "true", text: isCollapsed ? "▸" : "▾" }), el("span", { class: "section-name", text: name }), el("span", { class: "section-count", "aria-hidden": "true", text: String(section.count) }));
+    }, el("span", { class: "section-caret", "aria-hidden": "true", text: isCollapsed ? "▸" : "▾" }), " ", el("span", { class: "section-name", text: name }), " ", el("span", { class: "section-count", "aria-hidden": "true", text: String(section.count) }),
+    // WCAG 2.5.3: no aria-label. The name is the visible section name; the slide count is the description.
+    el("span", { id: `${id}-section-${section.index}-count`, hidden: true, text: plural(section.count, "slide") }));
     const more = el("button", { type: "button", class: "section-more", "aria-label": `Section actions: ${name}`, "aria-haspopup": "menu", title: "Section actions" });
     more.append(icon("more"));
     more.addEventListener("click", () => { const box = more.getBoundingClientRect(); openMenu(box.left, box.bottom, more, sectionMenu(section)); });
@@ -424,7 +429,7 @@ export function createSlideManager(container, options) {
   }
   function openMenu(x, y, opener, items = slideMenu()) {
     closeMenu(false);
-    const root = el("div", { class: "opf-menu", role: "menu", "aria-label": opener.getAttribute?.("aria-label") ?? "Slide actions", tabindex: "-1" });
+    const root = el("div", { class: "opf-menu", role: "menu", "aria-label": opener.getAttribute?.("aria-label") ?? opener.dataset?.menuLabel ?? "Slide actions", tabindex: "-1" });
     const buttons = [];
     for (const item of items) {
       if (item.separator) { root.append(el("div", { class: "opf-menu-separator", role: "separator" })); continue; }

@@ -147,8 +147,9 @@ export function createFindPanel(container, options) {
     matches.slice(0, MAX_LISTED).forEach((match, index) => {
       const mark = h(doc, "mark", { text: match.context.match });
       const text = h(doc, "span", { class: "opf-find-text" }, doc.createTextNode(match.context.before), mark, doc.createTextNode(match.context.after));
-      const button = h(doc, "button", { type: "button", class: "opf-find-result", "aria-current": index === current ? "true" : "false", "data-index": String(index), "aria-label": `${whereLabel(match)}: ${match.context.before}${match.context.match}${match.context.after}` },
-        h(doc, "span", { class: "opf-find-where", text: whereLabel(match) }), text);
+      const button = h(doc, "button", { type: "button", class: "opf-find-result", "aria-current": index === current ? "true" : "false", "data-index": String(index) },
+        // WCAG 2.5.3 (label in name): no aria-label. The name is the visible text, the place and then the matching line, kept apart by a space.
+        h(doc, "span", { class: "opf-find-where", text: whereLabel(match) }), " ", text);
       list.append(h(doc, "li", {}, button));
     });
     if (matches.length > MAX_LISTED) list.append(h(doc, "li", { class: "opf-find-more", text: `Showing the first ${MAX_LISTED} of ${matches.length}${result.truncated ? "+" : ""} matches.` }));

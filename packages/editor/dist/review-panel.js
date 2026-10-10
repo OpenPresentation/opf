@@ -159,7 +159,8 @@ export function createReviewPanel(container, options) {
   const list = h(doc, "div", { class: "opf-review-list", role: "group", "aria-label": "Review findings" });
   const empty = h(doc, "p", { class: "opf-review-empty" });
   const ignoredBox = h(doc, "details", { class: "opf-review-ignored", hidden: true });
-  root.append(head, ...(hookStatus ? [hookStatus] : []), filters, list, empty, ignoredBox);
+  const gotoHint = h(doc, "span", { id: `${id}-goto-hint`, hidden: true, text: "Go to it." });
+  root.append(head, ...(hookStatus ? [hookStatus] : []), filters, list, empty, ignoredBox, gotoHint);
   container.append(root);
 
   const say = (message, error = false) => {
@@ -310,11 +311,13 @@ export function createReviewPanel(container, options) {
       type: "button",
       class: "opf-review-goto",
       "data-finding-id": finding.id,
-      "aria-label": `${SEVERITY_LABELS[finding.severity]}, ${where}: ${finding.message} Go to it.`,
+      // WCAG 2.5.3 (label in name): no aria-label. The name is the visible text (severity, message, where and rule), kept apart by spaces;
+      // what the button does is its description.
+      "aria-describedby": `${id}-goto-hint`,
       onclick: () => go(finding),
     },
-    h(doc, "span", { class: "opf-review-sev", text: SEVERITY_LABELS[finding.severity] }),
-    h(doc, "span", { class: "opf-review-msg", text: finding.message }),
+    h(doc, "span", { class: "opf-review-sev", text: SEVERITY_LABELS[finding.severity] }), " ",
+    h(doc, "span", { class: "opf-review-msg", text: finding.message }), " ",
     h(doc, "span", { class: "opf-review-meta", text: `${where} · ${finding.ruleId}${finding.source && finding.source !== CORE_SOURCE ? ` · ${finding.source}` : ""}` }));
     const li = h(doc, "li", { class: "opf-review-item", "data-finding-id": finding.id, "data-rule": finding.ruleId, "data-source": finding.source ?? CORE_SOURCE, "data-severity": finding.severity, "aria-current": String(finding.id === currentId) }, go_,
       finding.help ? h(doc, "p", { class: "opf-review-help", text: finding.help }) : undefined);
@@ -359,7 +362,7 @@ export function createReviewPanel(container, options) {
     ignoredBox.replaceChildren(
       h(doc, "summary", { text: `Hidden checks (${ignored.size})` }),
       h(doc, "ul", { class: "opf-review-ignored-list", style: "list-style:none;padding:0" }, ...[...ignored].map((ruleId) => h(doc, "li", {}, h(doc, "span", { text: ruleId }),
-        h(doc, "button", { type: "button", class: "opf-review-fix quiet", "data-restore": ruleId, text: "Show again", "aria-label": `Show ${ruleId} findings again`, onclick: () => setIgnored(ruleId, false) })))),
+        h(doc, "button", { type: "button", class: "opf-review-fix quiet", "data-restore": ruleId, text: "Show again", "aria-label": `Show again, ${ruleId} findings`, onclick: () => setIgnored(ruleId, false) })))),
     );
   }
 

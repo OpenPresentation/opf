@@ -247,6 +247,15 @@ export function createCanvasEditor(container, options = {}) {
     if (fonts?.pending(presentation ?? editor.presentation, resolveOptions()).length) show(presentation);
     else render(presentation);
   }
+  // The text an editing target draws: its outermost <text> elements, whitespace collapsed (the renderer's <title> and <desc> are not drawn).
+  function targetText(node) {
+    return [...node.querySelectorAll("text")]
+      .filter((text) => !text.parentNode.closest("text"))
+      .map((text) => text.textContent)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
   function render(presentation = editor.presentation) {
     if (disposed) return;
     requireFonts(presentation);
@@ -300,9 +309,12 @@ export function createCanvasEditor(container, options = {}) {
       }
       node.setAttribute("role", "button");
       node.setAttribute("tabindex", "0");
+      // WCAG 2.5.3 (label in name): the name carries every word the target draws, in drawing order, after "Edit <field>:", so the visible
+      // text is always part of the name. Content with no drawn text (a picture) falls back to the source text or "content properties".
+      const drawn = targetText(node);
       node.setAttribute(
         "aria-label",
-        `Edit ${path.split(".").at(-1)}: ${["string", "number"].includes(typeof value) ? String(value).slice(0, 80) : "content properties"}`,
+        `Edit ${path.split(".").at(-1)}: ${drawn || (["string", "number"].includes(typeof value) ? String(value) : "content properties")}`,
       );
       if (node.matches("g")) {
         const bounds = allocatedSelectionBox(node, item);

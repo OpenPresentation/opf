@@ -446,8 +446,9 @@ export function createDataGrid(container, options = {}) {
     updateFormatRow();
     const nameRows = count > 1 ? `${count} rows` : "row";
     buttons.get("delete-rows").textContent = count > 1 ? `Delete ${count} rows` : "Delete rows";
-    buttons.get("insert-row-above").setAttribute("aria-label", `Insert ${nameRows === "row" ? "row" : nameRows} above`);
-    buttons.get("insert-row-below").setAttribute("aria-label", `Insert ${nameRows === "row" ? "row" : nameRows} below`);
+    // WCAG 2.5.3 (label in name): the button says what it does in its text, so there is no aria-label to differ from it.
+    buttons.get("insert-row-above").textContent = `Insert ${nameRows} above`;
+    buttons.get("insert-row-below").textContent = `Insert ${nameRows} below`;
     buttons.get("delete-columns").textContent = columns > 1 ? `Delete ${columns} columns` : "Delete columns";
   }
 
