@@ -22,7 +22,8 @@ const temp = await mkdtemp(path.join(tmpdir(), 'opf-files-test-'));
 let checks = 0;
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 function run(args, {input, status = 0, cwd = temp, bin = executable} = {}) {
-  const result = spawnSync(process.execPath, [bin, ...args], {cwd, input: typeof input === 'string' ? Buffer.from(input) : input, encoding: 'buffer', timeout: 120000, maxBuffer: 256 * 1024 * 1024});
+  // RR-75: the install hint follows npm_config_user_agent; clear the one `pnpm test` sets so the hints read as npm's (convert.test.mjs covers the others).
+  const result = spawnSync(process.execPath, [bin, ...args], {cwd, input: typeof input === 'string' ? Buffer.from(input) : input, encoding: 'buffer', timeout: 120000, maxBuffer: 256 * 1024 * 1024, env: {...process.env, npm_config_user_agent: ''}});
   const stdout = result.stdout.toString('utf8'), stderr = result.stderr.toString('utf8');
   assert.equal(result.status, status, JSON.stringify({args, stdout: stdout.slice(0, 2000), stderr: stderr.slice(0, 2000)}));
   checks++;
