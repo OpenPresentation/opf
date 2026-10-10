@@ -5,7 +5,10 @@
 Use the coordinated versions in the [quickstart](quickstart.md). Load fonts once per worker with
 `loadFonts({pack: 'office', scripts: 'auto', presentation})` from `@openpresentation/opf-render/fonts-node`,
 and pass the same handle as `{fonts}` to preview and export. When reusing a worker for another deck,
-ensure its required faces are loaded before rendering; bound concurrency and measure memory with your own decks.
+ensure its required faces are loaded before rendering, and bound concurrency. The renderer's
+[soak benchmark](https://github.com/OpenPresentation/opf-render#long-lived-workers-measured-memory-and-latency-opf-render171)
+(`npm run bench:soak`) measured no memory growth over 500 jobs per worker. A worker holds about 1 GiB, peaking near
+2 GiB on script-heavy decks, and its output is byte-identical on every repeat. Measure your own decks the same way.
 For an authored Roboto deck, `pack: 'base'` avoids loading Office replacements. Neither loader reads system fonts by default.
 
 In browsers, serve the renderer's pinned font files from your own origin and await the font handle's `ensure(presentation)`

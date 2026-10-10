@@ -28,9 +28,9 @@
     "renderManifest": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
       "repository": "OpenPresentation/opf-render",
-      "commit": "8f0d6f1bbdec82f266494113e7e061b931bf44e2",
+      "commit": "8738c6598a45d5d5f3d398bea6e776c58d201e2c",
       "path": "src/font-manifest.js",
-      "capturedAt": "2026-10-02",
+      "capturedAt": "2026-10-10",
       "manifestVersion": 1,
       "packages": 66,
       "faces": 197
@@ -5625,9 +5625,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -5639,12 +5639,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -5906,9 +5906,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -5920,12 +5920,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -12824,9 +12824,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-sc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -15954,9 +15954,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -15968,12 +15968,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -16235,9 +16235,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -16249,12 +16249,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -20667,9 +20667,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -20681,12 +20681,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -21349,9 +21349,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-jp",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -21363,12 +21363,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansJP_400Regular.ttf",
-            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+            "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansJP_700Bold.ttf",
-            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+            "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
           }
         ],
         "stylesAvailable": [
@@ -21870,9 +21870,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-tc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -22479,9 +22479,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-sc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -22852,9 +22852,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-tc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -23633,9 +23633,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-jp",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -23647,12 +23647,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansJP_400Regular.ttf",
-            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+            "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansJP_700Bold.ttf",
-            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+            "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
           }
         ],
         "stylesAvailable": [
@@ -23950,9 +23950,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-jp",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -23964,12 +23964,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansJP_400Regular.ttf",
-            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+            "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansJP_700Bold.ttf",
-            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+            "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
           }
         ],
         "stylesAvailable": [
@@ -24573,9 +24573,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-color-emoji",
-            "version": "0.4.6",
+            "version": "0.4.7",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.7",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -24585,7 +24585,7 @@
           {
             "style": "400",
             "file": "400Regular/NotoColorEmoji_400Regular.ttf",
-            "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+            "sha256": "ad4a3478943b88660a194d1434793bc02c8007819f2d1e7da9ede289e78f9ca7"
           }
         ],
         "stylesAvailable": [
@@ -24749,9 +24749,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-emoji",
-            "version": "0.4.7",
+            "version": "0.4.8",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.7",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.8",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -27598,9 +27598,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-jp",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -27612,12 +27612,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansJP_400Regular.ttf",
-            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+            "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansJP_700Bold.ttf",
-            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+            "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
           }
         ],
         "stylesAvailable": [
@@ -28287,9 +28287,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-kr",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -28301,12 +28301,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansKR_400Regular.ttf",
-            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+            "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansKR_700Bold.ttf",
-            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+            "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
           }
         ],
         "stylesAvailable": [
@@ -29780,9 +29780,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-sc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -30658,9 +30658,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-tc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -32990,9 +32990,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-tc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -36672,9 +36672,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-color-emoji",
-            "version": "0.4.6",
+            "version": "0.4.7",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.7",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -36684,7 +36684,7 @@
           {
             "style": "400",
             "file": "400Regular/NotoColorEmoji_400Regular.ttf",
-            "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+            "sha256": "ad4a3478943b88660a194d1434793bc02c8007819f2d1e7da9ede289e78f9ca7"
           }
         ],
         "stylesAvailable": [
@@ -38441,9 +38441,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-sc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -38713,9 +38713,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-sc",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -44546,9 +44546,9 @@
         "packages": [
           {
             "name": "@expo-google-fonts/noto-sans-jp",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "pack": "scripts",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
             "vendored": null,
             "license": "OFL-1.1",
             "reservedFontNames": [
@@ -44560,12 +44560,12 @@
           {
             "style": "400",
             "file": "400Regular/NotoSansJP_400Regular.ttf",
-            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+            "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
           },
           {
             "style": "700",
             "file": "700Bold/NotoSansJP_700Bold.ttf",
-            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+            "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
           }
         ],
         "stylesAvailable": [
