@@ -1,7 +1,8 @@
 // opf-pptx#221: the "Image unavailable" placeholder of an image that cannot be embedded (a remote source is never fetched) is
 // one native group, so PowerPoint moves or deletes it as one object. The group `OPF image placeholder N group` carries the
 // accessible name (descr) the preview gives its <g>; it holds the dashed panel `OPF image placeholder N` and the label lines
-// (`... text line i`) or the cross strokes (`... icon i`), each an editable shape with its own box. The group transform is
+// (`... text line i`) or the cross strokes (`... icon i`), each an editable shape with its own box; the empty panel is marked decorative
+// (adec:decorative) because the group carries the alt text. The group transform is
 // the identity, so no member moves. In `full` mode the panel carries OPF_IMAGE_PLACEHOLDER_V1 and import restores the image
 // block (the round trip is deep-equal); without the tag the shapes import as ordinary content, as before. Logo and furniture
 // placeholders stay ungrouped (generated furniture is never grouped, src/master-furniture.js).
@@ -27,6 +28,10 @@ const edit = (bytes, transform) => {
   for (const name of Object.keys(parts)) if (/\.(xml|rels)$/.test(name)) parts[name] = strToU8(transform(name, strFromU8(parts[name])));
   return zipSync(parts);
 };
+const cNvPrOf = shape => shape.match(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/)[0];
+// The standard Office "Mark as decorative" extension (MS-ODRAWXML, {C183D7F6-B498-43B3-948B-1728B52AA6E4}).
+const DECORATIVE = '<a:extLst><a:ext uri="{C183D7F6-B498-43B3-948B-1728B52AA6E4}"><adec:decorative xmlns:adec="http://schemas.microsoft.com/office/drawing/2017/decorative" val="1"/></a:ext></a:extLst>';
+const decorativeCount = xml => (xml.match(/adec:decorative/g) ?? []).length;
 let checks = 0;
 
 const long = 'A description long enough that no label can fit. '.repeat(120);
@@ -47,6 +52,13 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
   const shapes = members(group);
   assert.deepEqual(shapes.map(shape => shape.name), ['OPF image placeholder 1', `OPF image placeholder 1 ${kind} 1`.replace('text line 1', 'text line 0'), `OPF image placeholder 1 ${kind} ${kind === 'icon' ? 2 : 1}`]);
   assert.ok(shapes.every(shape => shape.descr === undefined), `${label}: no member repeats the accessible name`);
+  // The empty panel has no alt text of its own, so it is decorative (once); the text lines and the group are not.
+  const panel = cNvPrOf(shapes[0].xml);
+  assert.equal(decorativeCount(panel), 1, `${label}: the panel is marked decorative once`);
+  assert.equal(panel, `<p:cNvPr id="${attr(panel, 'id')}" name="OPF image placeholder 1">${DECORATIVE}</p:cNvPr>`, `${label}: the panel cNvPr is its name plus the decorative extension`);
+  for (const shape of shapes.slice(1)) assert.equal(decorativeCount(shape.xml), 0, `${label}: ${shape.name} carries text or a stroke and is not decorative`);
+  assert.equal(decorativeCount(nv), 0, `${label}: the group keeps its descr and is not decorative`);
+  assert.equal(decorativeCount(xml), 1, `${label}: one decorative marker on the slide`);
   // The identity transform: the group box is the members' union and chOff/chExt equal off/ext.
   const [x, y, cx, cy] = group.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/><a:chOff x="(-?\d+)" y="(-?\d+)"\/><a:chExt cx="(\d+)" cy="(\d+)"\/>/).slice(1, 5).map(Number);
   assert.deepEqual(group.match(/<a:chOff x="(-?\d+)" y="(-?\d+)"\/><a:chExt cx="(\d+)" cy="(\d+)"\/>/).slice(1).map(Number), [x, y, cx, cy]);
@@ -56,7 +68,7 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
   // Unique object ids across the slide.
   const ids = [...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match => match[1]);
   assert.equal(new Set(ids).size, ids.length, `${label}: unique ids`);
-  checks += 2;
+  checks += 7;
 }
 
 // 2. The record: the panel carries OPF_IMAGE_PLACEHOLDER_V1 in full mode only, never on the group.
@@ -134,7 +146,11 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
   assert.equal(groups(footer).length, 0, 'generated furniture is never grouped');
   const quote = slideXml(await toPptx({slides: [{quote: {text: 'Ship it.', attribution: 'Priya Raman', photo: {src, alt: 'Priya Raman'}}}]}));
   assert.deepEqual(groups(quote).map(group => attr(group.match(/<p:cNvPr\b[^>]*>/)[0], 'name')), ['OPF image placeholder 1 group']);
-  checks += 3;
+  assert.equal(decorativeCount(quote), 1, 'the quote photo placeholder panel is decorative');
+  // Ungrouped placeholders keep the accessible name on the panel (descr) and are not decorative.
+  assert.equal(decorativeCount(logo), 0, 'the logo placeholder panel is not decorative');
+  assert.equal(decorativeCount(footer), 0, 'the furniture placeholder panel is not decorative');
+  checks += 6;
 }
 
-console.log(`Image placeholder group passed: ${checks} checks (one p:grpSp in schema order with the accessible name and an identity transform, editable members, the full-mode record, untouched round trips, ordinary import without a valid record, logo and furniture ungrouped).`);
+console.log(`Image placeholder group passed: ${checks} checks (one p:grpSp in schema order with the accessible name and an identity transform, editable members, a decorative panel, the full-mode record, untouched round trips, ordinary import without a valid record, logo and furniture ungrouped).`);

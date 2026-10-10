@@ -10,7 +10,7 @@ import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineCha
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
-import {applyFrameAlt,readFrameAlt} from './frame-alt.js';
+import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
@@ -4290,8 +4290,11 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       const describe=description=>description.replace(/[&<>"'\r\n\t]/g,char=>escapes[char]);
       xml=xml.replace(/<p:cNvPr id="(\d+)" name="(OPF image placeholder \d+)"(\/?)>/g,(node,id,name,close)=>{
         const description=context.imagePlaceholders.get(name);
-        // opf-pptx#221: a grouped placeholder's accessible name is on its group (below), as the preview names its <g>.
-        if(description===undefined||context.imagePlaceholderGroups.has(name))return node;
+        if(description===undefined)return node;
+        // opf-pptx#221: a grouped placeholder's accessible name is on its group (below), as the preview names its <g>. The empty panel
+        // then has no alt text of its own, so it is marked decorative (the adec:decorative extension, "Mark as decorative"), or
+        // PowerPoint's Accessibility Checker flags it. The text lines carry text and are not marked. PptxGenJS writes this cNvPr self-closing.
+        if(context.imagePlaceholderGroups.has(name))return close?writeFrameAlt(node,''):node;
         return `<p:cNvPr id="${id}" name="${name}" descr="${describe(description)}"${close}>`;
       });
       xml=groupImagePlaceholders(xml,context.imagePlaceholderGroups,name=>describe(context.imagePlaceholders.get(name)));
