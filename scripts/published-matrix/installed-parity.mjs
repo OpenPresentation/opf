@@ -104,6 +104,10 @@ async function prepare() {
   const core = path.join(sources, 'parity-opf', 'packages', 'javascript');
   await copyPackage('@openpresentation/opf', core);
   await linkModules(modules, path.join(core, 'node_modules'));
+  // RR-78: from core 0.19 the catalog is the @openpresentation/gallery package (core's dependency); the harness reads it at
+  // packages/gallery, as in the repository. An older core has it at /catalog.
+  const gallery = path.join(modules, '@openpresentation', 'gallery');
+  if (existsSync(path.join(gallery, 'package.json'))) await cp(gallery, path.join(sources, 'parity-opf', 'packages', 'gallery'), {recursive: true, dereference: true});
   // The harness reads the head of each source from its root package.json gitHead when the root is not a git checkout.
   await writeFile(path.join(sources, 'parity-opf', 'package.json'), JSON.stringify({name: 'parity-opf', private: true, gitHead: installed['@openpresentation/opf'].gitHead}, null, 2));
   await mkdir(path.join(sources, 'parity-opf', 'scripts'), {recursive: true});
