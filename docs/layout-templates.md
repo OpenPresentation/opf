@@ -49,7 +49,7 @@ slide that has headings. Region names may not be `title`, `subtitle`, `tag`, `au
 | `flow` | `none`, `grid`, `column`, `auto` | `auto` |
 | `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
-| `listColumns` | `"auto"` (a lone list flows into up to three columns) or `1` | `1` |
+| `listColumns` | `"auto"` (a list that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `anchor` | `top`, `middle`, `bottom` | `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -98,12 +98,31 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size, counted with core's estimate, never a host font. |
 
 `design.contentDirection` makes every flowing region one row or one column. A slide's own `composition.mode`, `columns` and
-`weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A lone list in a region
-with `listColumns: "auto"`, or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size
-(a column at least a quarter of the slide wide); `columns: 2` or `3` fixes the count.
+`weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A list in a region
+with `listColumns: "auto"` (the lone list of the design, and, since the RR-81 review, any list of the region that does not
+fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size (a column at
+least a quarter of the slide wide); `columns: 2` or `3` fixes the count.
+
+### Tracks
+
+Columns share the content width in proportion. Rows are allocated so that no row with content is squeezed to nothing:
+
+1. A heading `auto` row takes what its headings need, at most half the content box.
+2. The numeric rows keep at least what their content needs at the starting size, up to half of the space under the
+   headings.
+3. The other `auto` rows take what they need (at most half the content box each; the implicit row below the grid, which
+   holds what no region took, has no such cap) from what is left, and shrink together in proportion when it is not enough.
+   An empty region with `empty: "keep"` holds two lines of body text in an `auto` row.
+4. The numeric rows share the rest in proportion to their sizes.
+
+Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
+uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
+beyond the room go to the overflow region and, through `paginate`, to a continuation slide; what remains is the
+`opf/text-overflow` or `opf/layout-unplaced` diagnostic.
 
 Pagination continues on a new slide with the same layout: blocks beyond a region's `max` move first, in source order, and
-carry a `region` pin to the region they came from.
+carry a `region` pin to the region they came from. A block that no region of the layout accepts, on a layout with no
+overflow region, stays below the grid on every page and never drives a split.
 
 ## Design keys
 
@@ -118,14 +137,17 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 
 | Field | Meaning |
 | --- | --- |
-| `regions` | Every region in reading order: `name`, `box` (after collapse, mirroring and bleed), `accepts`, `role`, `flow`, `max`, `anchor`, `arrangement` (`grid`, `row`, `column`, or `composition`), `content` (root block paths bound within `max`), `overflow` (paths drawn beyond it), `collapsed`, `bleed`. It replaces `slots` for templates. |
-| `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. |
+| `regions` | Every region in reading order: `name`, `box` (after collapse, mirroring and bleed), `accepts`, `role`, `flow`, `max`, `anchor`, `arrangement` (`grid`, `row`, `column`, or `composition`), `content` (root block paths bound within `max`), `overflow` (paths drawn beyond it), `collapsed`, `bleed` and, on a bled region, `areaBox` (its cell before bleed). It replaces `slots` for templates. |
+| `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. On a template without a `subtitle` area the title area carries `parts: { title, subtitle }`: it is split where the stacked heading group puts the subtitle, so `title` runs from the area's top to the bottom of the title (the tag above it included) and `subtitle` from the subtitle's top (half a gap under the title when the slide has none) to the area's bottom. PowerPoint's `ctrTitle` and `subTitle` placeholders use these boxes. |
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
-| `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. |
+| `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
 
-`composeLayoutAreas(record, { width, height, mirror, direction })` gives the areas of the empty layout at a canvas size,
-with nothing collapsed and `auto` rows sized for one title line or two body lines: where a PowerPoint slide layout puts a
-placeholder per area. `bindRegions`, `layoutTemplate`, `regionAccepts` and `gridFlowShape` expose the rest of the model.
+`composeLayoutAreas(record, options)` gives the areas of the empty layout: where a PowerPoint slide layout puts a placeholder
+per area. It is `composeSlide`'s own geometry for a slide with a one-line title and subtitle and every region kept, so it
+takes `composeSlide`'s options (`width`, `height`, `presentation` for the deck's header and footer, `direction`, ...) plus
+`mirror`, `placements` (placed-image bands to reserve, `{ edge, size, inset }`) and `bleed` (default `true`: a bled region
+reaches the slide edge as on a slide; `false` gives its cell inside the content box). Its title area carries the same
+`parts` as a slide's. `bindRegions`, `layoutTemplate`, `regionAccepts` and `gridFlowShape` expose the rest of the model.
 
 ## Migration from the 0.18 ids
 

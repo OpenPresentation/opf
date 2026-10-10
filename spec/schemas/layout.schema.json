@@ -317,7 +317,7 @@
               "const": 1
             }
           ],
-          "description": "'auto': a lone list in the region flows into up to three columns before it shrinks (as a list payload's columns: 'auto'). Default 1."
+          "description": "'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'. Default 1."
         },
         "anchor": {
           "type": "string",

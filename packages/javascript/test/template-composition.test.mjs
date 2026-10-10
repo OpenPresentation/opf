@@ -203,7 +203,11 @@ describe('one long list in columns', () => {
     assert.equal(list.listColumns.length, 2);
     assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 7], [7, 14]]);
     assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 25)));
-    assert.equal(list.text, list.listColumns[0].text);
+    // The item's text is the whole list, every column's entries at their columns (RR-81 review).
+    assert.equal(list.text.listEntries.length, 14);
+    assert.deepEqual(list.text.listEntries.map((entry) => entry.index), Array.from({ length: 14 }, (_, index) => index));
+    assert.deepEqual(list.text.listEntries.slice(7), list.listColumns[1].text.listEntries);
+    assert.equal(list.text.overflow, false);
     assert.ok(list.listColumns[1].box.x > list.listColumns[0].box.x, 'reading order runs column by column');
   });
 
@@ -309,5 +313,64 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
     const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
     assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');
+  });
+
+  test('the boxes a slide composes to: header, footer, placed-image bands and bleed (RR-81 review)', async () => {
+    const { composeLayoutAreas } = await import('../dist/composition.js');
+    const presentation = { design: { header: { left: { text: 'Acme' }, right: { text: 'Confidential' } }, footer: { right: { text: '{{slide.number}}' } } } };
+    const placements = [{ edge: 'left', size: 0.25 }];
+    for (const [id, record] of Object.entries(layouts)) {
+      const kept = { ...record, regions: Object.fromEntries(Object.entries(record.regions).map(([name, region]) => [name, { ...region, empty: 'keep' }])) };
+      const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
+      const composed = composeSlide(slide, { layout: kept, presentation });
+      const { areas } = composeLayoutAreas(record, { presentation, placements });
+      for (const region of composed.regions) assert.deepEqual(areas.find((area) => area.name === region.name).box, region.box, `${id} ${region.name}`);
+      assert.deepEqual(areas.find((area) => area.name === 'title').box, composed.headingAreas.find((area) => area.name === 'title').box, `${id} title`);
+      for (const region of composed.regions) assert.equal(region.collapsed, undefined, `${id} ${region.name} nothing collapses`);
+    }
+    const image = composeLayoutAreas(layouts.image).areas.find((area) => area.name === 'media').box;
+    assert.equal(image.x, 0, 'bled to the slide edge by default');
+    const inside = composeLayoutAreas(layouts.image, { bleed: false }).areas.find((area) => area.name === 'media').box;
+    assert.ok(inside.x > 0 && inside.y > 0, 'bleed: false keeps the cell inside the content box');
+  });
+
+  test('a template without a subtitle area carves ctrTitle and subTitle boxes from the title area, as slides do', async () => {
+    const { composeLayoutAreas } = await import('../dist/composition.js');
+    for (const id of ['cover', 'section', 'text']) {
+      const title = composeLayoutAreas(layouts[id]).areas.find((area) => area.name === 'title');
+      const { parts } = title;
+      assert.ok(parts, id);
+      assert.ok(near(parts.title.y, title.box.y) && near(parts.subtitle.y + parts.subtitle.height, title.box.y + title.box.height), id);
+      assert.ok(parts.title.y + parts.title.height <= parts.subtitle.y + 1e-6, `${id}: title above subtitle`);
+      const slide = composeSlide({ title: 'Title', subtitle: 'Subtitle' }, { layout: layouts[id] });
+      const heading = slide.items.find((item) => item.field === 'title'), subtitle = slide.items.find((item) => item.field === 'subtitle');
+      const sliceParts = slide.headingAreas[0].parts;
+      assert.ok(near(sliceParts.subtitle.y, subtitle.box.y) && near(sliceParts.title.y + sliceParts.title.height, heading.box.y + heading.box.height), id);
+    }
+    // Without a subtitle on the slide, the subtitle box starts half a gap under the title.
+    const lone = composeSlide({ title: 'Title' }, { layout: layouts.section });
+    const titleItem = lone.items[0], parts = lone.headingAreas[0].parts;
+    assert.ok(near(parts.subtitle.y, titleItem.box.y + titleItem.box.height + 12));
+  });
+});
+
+describe('list columns keep the source paths (RR-81 review)', () => {
+  test('a later column starting with a plain string item traces to <list>.<n>, never <list>.<n>.text', () => {
+    const items = Array.from({ length: 16 }, (_, index) => (index === 3 ? { text: `Agenda point ${index + 1} with a few words`, description: 'Detail' } : `Agenda point number ${index + 1} with a few words`));
+    const slide = { title: 'x', blocks: [{ items, numbering: 'arabic' }] };
+    const list = compose(slide, layouts.agenda).items.find((item) => item.field === 'items');
+    assert.ok(list.listColumns.length >= 2);
+    const resolve = (path) => path.split('.').slice(2).reduce((node, key) => (node === undefined || node === null ? undefined : node[key]), slide);
+    for (const column of list.listColumns) {
+      assert.ok(column.start > 0 ? typeof items[column.start] === 'string' || true : true);
+      for (const entry of column.text.listEntries) {
+        const source = items[entry.index];
+        assert.equal(entry.textPath, typeof source === 'string' ? `slides.0.blocks.0.items.${entry.index}` : `slides.0.blocks.0.items.${entry.index}.text`);
+        assert.notEqual(resolve(entry.textPath), undefined, entry.textPath);
+      }
+    }
+    const later = list.listColumns.slice(1).map((column) => column.text.listEntries[0]);
+    assert.ok(later.some((entry) => typeof items[entry.index] === 'string'), 'a later column starts with a string item');
+    assert.ok(later.every((entry) => entry.marker.number !== undefined));
   });
 });

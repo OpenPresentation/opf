@@ -181,8 +181,16 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
   // image treatment, never clear by splitting content; hosts report them from their own
   // composition and the pages keep the source design.
-  // OPF 0.19: a block no region of the slide's layout has room for (layout-unplaced) moves to a continuation slide.
-  const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || issue.code === 'layout-unplaced' || !!initial.furniture?.diagnostics.includes(issue));
+  // OPF 0.19: a block no region had room for (layout-unplaced) moves to a continuation slide, where a region of the same
+  // layout can take it. A block that no region of the layout accepts and that has no overflow region to go to is drawn
+  // below the grid on every page, so it never drives a split.
+  const movable = (issue: LayoutDiagnostic): boolean => {
+    if (issue.region !== undefined) return true;
+    const match = /^slides\.\d+\.blocks\.(\d+)$/.exec(issue.path);
+    const block = match && Array.isArray(source.blocks) ? source.blocks[Number(match[1])] : undefined;
+    return block !== undefined && (initial.regions ?? []).some(region => regionAccepts(region, block));
+  };
+  const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || (issue.code === 'layout-unplaced' && movable(issue)) || !!initial.furniture?.diagnostics.includes(issue));
   // The region each root block of a template slide was drawn in, by block index: a moved block keeps it as a pin.
   const regionOfBlock = new Map<number, { name: string; accepts: readonly string[] }>();
   for (const region of initial.regions ?? []) for (const content of [...region.content, ...(region.overflow ?? [])]) {
