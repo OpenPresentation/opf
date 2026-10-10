@@ -100,6 +100,7 @@
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
     "test:golden": "npm run build && node test/golden.mjs",
     "test:packed": "node test/packed-install.mjs",
+    "test:next-bundle": "node scripts/check-next-bundle.mjs",
     "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
     "golden:update": "npm run build && node test/golden.mjs --update",
     "golden:promote": "node scripts/golden-promote.mjs",

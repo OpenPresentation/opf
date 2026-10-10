@@ -5,16 +5,14 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { previewFontLayout } from "./preview-fonts.js";
 import { scriptFontPackages } from "./script-font-pack.js";
+import { packageRoot as rendererRoot, resolveInstalled } from "./node-resolve.js";
 
 const ALLOWED_LICENSES = ["OFL-1.1", "Apache-2.0", "MIT", "UFL-1.0"];
 const sha256 = (bytes) => crypto.createHash("sha256").update(bytes).digest("hex");
 const safeFile = /^[A-Za-z0-9_./-]+$/;
-const rendererRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function within(directory, file) {
   const resolved = path.resolve(directory, file);
@@ -23,9 +21,8 @@ function within(directory, file) {
 }
 
 function resolvePackageDirectory(name, from) {
-  const searched = [createRequire(path.join(rendererRoot, "package.json")), createRequire(path.join(from ?? process.cwd(), "package.json"))];
-  for (const requireFrom of searched) {
-    try { return path.dirname(requireFrom.resolve(`${name}/package.json`)); } catch { /* try the next location */ }
+  for (const directory of [rendererRoot, from ?? process.cwd()]) {
+    try { return path.dirname(resolveInstalled(`${name}/package.json`, directory)); } catch { /* try the next location */ }
   }
   return undefined;
 }

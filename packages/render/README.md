@@ -130,6 +130,8 @@ Converter ranges: `@resvg/resvg-js@^2.6.2`, `sharp@^0.35.5`, `pdf-lib@^1.17.1`.
 
 There is no `/html` entry: it would only repeat `/element` (`toHtml`, `defineOpfDeck`) and `/player` (`present`) under a second name. A bundler that bundles Node code (a server framework) sees the converters' dynamic `import()` in the root and in `/png` and `/pdf`; an app that only draws SVG should import `/svg`, which has none, and an app that exports should list the converters as installed (or external) in its bundler.
 
+A server bundle needs no bundler config for `/fonts-node` and `/preview-fonts-node` either: a Next.js app (Turbopack or webpack) that imports them builds and renders what plain Node renders (`npm run test:next-bundle` checks this against Next.js 16). They read harfbuzzjs's `.wasm` files, the installed `@expo-google-fonts/*` packages and this package's `fonts/` directory from disk at run time, through Node's own resolution, so a bundler does not trace them. A deployment that ships only traced files (Next.js `output: "standalone"`, serverless functions) must include those packages, for example with `outputFileTracingIncludes`. Without harfbuzzjs, `loadFonts` still loads the fonts and reports `harfbuzz-unavailable` through `onDiagnostic`: an SVG then embeds whole faces, and outlines are shaped with fontkit.
+
 ### A missing converter or font package
 
 An export that needs a converter that is not installed rejects with `OPFRenderError` code `converter-missing`. `details` holds `package`, `range`, `install` (the command), `purpose` and `installed` (`false` when the package is absent; `true` when it is installed but cannot load, for example a native binary missing for the platform):

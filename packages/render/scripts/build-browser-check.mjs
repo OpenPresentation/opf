@@ -51,7 +51,7 @@ console.log('Quote browser fixtures ready: actual glyph containment with four bu
 // (`/svg`, `/fonts-browser`) or exports in the browser (`/export-browser`) bundles no pdf-lib, resvg, sharp, Node font loader or @expo-google-fonts file.
 for(const entry of ['svg','fonts-browser','export-browser','player','element']){
   const bundle=await build({stdin:{contents:`import * as entry from './dist/${entry}.js';globalThis.entry=entry;`,resolveDir:fileURLToPath(new URL('../',import.meta.url)),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,logLevel:'error',metafile:true});
-  const forbidden=Object.keys(bundle.metafile.inputs).filter(path=>/(^|\/)(pdf-lib|@pdf-lib|@resvg|sharp|@img|@expo-google-fonts|converters\.js|fonts-node\.js|raster[a-z-]*\.js|preview-fonts-node\.js)(\/|$)/.test(path));
+  const forbidden=Object.keys(bundle.metafile.inputs).filter(path=>/(^|\/)(pdf-lib|@pdf-lib|@resvg|sharp|@img|@expo-google-fonts|converters\.js|fonts-node\.js|raster[a-z-]*\.js|preview-fonts-node\.js|node-resolve\.js)(\/|$)/.test(path));
   assert.deepEqual(forbidden,[],`The /${entry} browser bundle must not reach the optional converters or Node font loading`);
 }
 console.log('Browser entries (/svg, /fonts-browser, /export-browser, /player, /element) bundle no converter or font package.');

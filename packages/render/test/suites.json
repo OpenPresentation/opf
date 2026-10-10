@@ -34,6 +34,7 @@
   ],
   "contractExclude": {
     "aptos-preview.mjs": "Intos metric-compatibility constants of this package (no core input); full run only.",
+    "bundler-safe-resolve.mjs": "render#199: how the Node entries locate harfbuzzjs, font packages and vendored fonts on disk (renderer packaging, no core input).",
     "extra-lazy-fonts.mjs": "Host-served lazy font loading and hash validation, renderer internal; the examples are only a loop input.",
     "latin-family-hosts.mjs": "Per-family Latin font host fixtures: renderer font registry and advances against the fixture model.",
     "lazy-face-fallback.mjs": "Lazy script-face loading and glyph fallback of the renderer for the Aptos scheme.",

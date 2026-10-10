@@ -1,6 +1,4 @@
 import { readFile } from "node:fs/promises";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
@@ -9,12 +7,12 @@ import { lazyFontList } from "./lazy-font-list.js";
 import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { createShaper } from "./hb-shape.js";
+import { packageRoot, resolveInstalled } from "./node-resolve.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
 // Script faces are embedded in a standalone SVG only when the slide's text uses their family.
 const embedUsed = entries => entries.map(entry => ({...entry, embed: "used"}));
-const require = createRequire(import.meta.url);
 
 async function verifiedFile(file, expected, details) {
   let bytes;
@@ -33,7 +31,7 @@ const FALLBACK_PACKAGE = "@expo-google-fonts/noto-sans";
 function requireInstalled(packages, what) {
   const missing = packages.filter(pkg => {
     if (pkg.vendored) return false;
-    try { require.resolve(`${pkg.name}/package.json`); return false; } catch { return true; }
+    try { resolveInstalled(`${pkg.name}/package.json`); return false; } catch { return true; }
   });
   if (!missing.length) return;
   const install = `npm install ${missing.map(pkg => `${pkg.name}@${pkg.version}`).join(" ")}`;
@@ -50,7 +48,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false, what = "Th
     if (pkg.vendored) {
       // FF-31: vendored faces ship inside this package (pkg.vendored, for example fonts/carlito), hash-pinned like the npm packs. The open pack is
       // embedded in an SVG only when the slide's text names the family (embed "used"); raster output reads the files.
-      const directory = fileURLToPath(new URL(`../${pkg.vendored}/`, import.meta.url));
+      const directory = path.join(packageRoot, pkg.vendored);
       let license = (await verifiedFile(path.join(directory, pkg.licenseFile), pkg.licenseSha256, {package:pkg.name, file:pkg.licenseFile})).toString("utf8");
       // A notice file carries provenance and upstream copyright lines that the upstream license file omits.
       if (pkg.noticeFile) license += "\n\n" + (await verifiedFile(path.join(directory, pkg.noticeFile), pkg.noticeSha256, {package:pkg.name, file:pkg.noticeFile})).toString("utf8");
@@ -66,7 +64,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false, what = "Th
     }
     let manifestPath, installed;
     try {
-      manifestPath = require.resolve(`${pkg.name}/package.json`);
+      manifestPath = resolveInstalled(`${pkg.name}/package.json`);
       installed = JSON.parse(await readFile(manifestPath, "utf8"));
     } catch (error) {
       if (skipped) { skipped.push({package: pkg.name, version: pkg.version, scripts: [...pkg.scripts]}); continue; }
@@ -252,18 +250,19 @@ async function ensureFonts(registry, loaded, presentation, {onDiagnostic, render
 // RR-65: hb-subset from the pinned harfbuzzjs package (MIT), compiled once per process. The module has no imports, so it is
 // instantiated synchronously and toSvg stays synchronous. A copy that cannot be loaded leaves the handle without `subsets`
 // (whole faces, as before RR-65): a byte saving never stops fonts from loading.
-let subsetterPromise;
-function nodeSubsetter() {
-  subsetterPromise ??= readFile(require.resolve("harfbuzzjs/dist/harfbuzz-subset.wasm")).then(createSubsetter, () => null).catch(() => null);
-  return subsetterPromise;
-}
-
 // RR-64 phase 2: HarfBuzz's shaper (harfbuzz.wasm of the same package) for text drawn as outlines, so the outlines are shaped as
 // a browser shapes the text. Without it outlines are shaped with fontkit.
-let shaperPromise;
-function nodeShaper() {
-  shaperPromise ??= readFile(require.resolve("harfbuzzjs/dist/harfbuzz.wasm")).then(createShaper, () => null).catch(() => null);
-  return shaperPromise;
+// render#199: a file that cannot be found (a bundled server that did not ship it) loads as null too, and `loadFonts` reports it
+// through `onDiagnostic` (`harfbuzz-unavailable`).
+const HARFBUZZ = {
+  subsets: {file: "harfbuzzjs/dist/harfbuzz-subset.wasm", create: createSubsetter, without: "standalone SVG embeds whole faces instead of subsets"},
+  shaper: {file: "harfbuzzjs/dist/harfbuzz.wasm", create: createShaper, without: "text drawn as outlines is shaped with fontkit instead of HarfBuzz"},
+};
+const harfbuzzEngines = {};
+function nodeHarfbuzz(kind) {
+  const {file, create} = HARFBUZZ[kind];
+  harfbuzzEngines[kind] ??= Promise.resolve().then(() => readFile(resolveInstalled(file))).then(create).catch(() => null);
+  return harfbuzzEngines[kind];
 }
 
 /**
@@ -285,7 +284,11 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
-  const [subsetter, shaper] = await Promise.all([nodeSubsetter(), nodeShaper()]);
+  const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
+  for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
+    const {file, without} = HARFBUZZ[kind];
+    options.onDiagnostic?.({code: "harfbuzz-unavailable", package: "harfbuzzjs", file, message: `${file} could not be loaded, so ${without}. Ship the harfbuzzjs package with the server.`});
+  }
   return {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { return (embeddedFonts ??= selectEmbedded()); },
