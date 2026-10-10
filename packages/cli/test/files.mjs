@@ -18,7 +18,8 @@ const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/in
 // other run fails (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: fileURLToPath(new URL('..', import.meta.url)), executable, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const goldenFile = fileURLToPath(new URL('./fixtures/render-hashes.json', import.meta.url));
-const temp = await mkdtemp(path.join(tmpdir(), 'opf-files-test-'));
+// The real path: on macOS tmpdir() is a symlink (/var -> /private/var) and the CLI reports resolved paths (opf#547).
+const temp = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-files-test-')));
 let checks = 0;
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 function run(args, {input, status = 0, cwd = temp, bin = executable} = {}) {
