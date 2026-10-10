@@ -219,6 +219,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
 | [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run colour is none of the documented forms. |
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
+| [`opf/slide-size-out-of-range`](#opfslide-size-out-of-range) | Format | warning | structure | The slide size is outside PowerPoint's 1 to 56 inch range. |
 | [`opf/undeclared-catalog`](#opfundeclared-catalog) | Format | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
@@ -449,6 +450,16 @@ Default severity: **warning**. Cost: structure. A list entry sets `start` where 
 **Why.** A start value only restarts an auto-number; without `numbering` on the payload it has no effect.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/slide-size-out-of-range`
+
+Default severity: **warning**. Cost: structure. The slide size is outside PowerPoint's 1 to 56 inch range.
+
+**Why.** The schema accepts any positive custom `widthInches` and `heightInches`, but a PPTX stores the size as `p:sldSz` with each side between 914400 and 51206400 EMU, which is 1 to 56 inches. A custom size outside that range exports a file that does not conform to the standard, which PowerPoint may reject or clamp. It is a warning because the document is still correct OPF and the preview draws it.
+
+**Basis.** ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) and section 19.7.17 (ST_SlideSizeCoordinate): 914400 to 51206400 EMU
+
+**Approximations.** Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behaviour at the limits was not measured.
 
 ### `opf/undeclared-catalog`
 
