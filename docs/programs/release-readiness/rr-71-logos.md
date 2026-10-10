@@ -1,7 +1,8 @@
 # RR-71: logos live on the organization; zones lay out in a row
 
 Core part of design §3 of `0.18-consistent-api.md` (opf#521). The renderer, PPTX and editor parts are RR-72. Every
-decision below is an agent decision, vetoable; each says what changing it would cost.
+decision below is an agent decision, vetoable, except those marked **decided by the owner (2026-10-09)**; each says
+what changing it would cost.
 
 ## The format
 
@@ -20,14 +21,15 @@ decision below is an agent decision, vetoable; each says what changing it would 
 2. **Fallbacks.** The requested shape, then `full`, then the first defined of `wordmark`, `stacked`, `icon`. Within a
    shape, the missing one of `onLight`/`onDark` uses the other. A plain asset serves every shape (`variant: 'default'`).
 3. **`onLight` means "for light backgrounds"** (usually dark artwork). The 0.17 LogoSet `dark` ("dark-colored, for
-   light backgrounds") maps to `onLight`, and `light` maps to `onDark`. `default` fills both.
+   light backgrounds") maps to `onLight`, and `light` maps to `onDark`. `default` fills both. **Decided by the owner
+   (2026-10-09).**
 4. **A named shape in `design.logo` wins over the consumer's shape.** `var:organization.logo.wordmark` draws the
    wordmark on covers and as picture bullets. A bare `var:organization.beta.logo` picks only the organization: covers
    take its `full`, bullets its `icon`. The alternative (the consumer always picks the shape) would make a shaped
    override mean nothing on covers.
 5. **An override never falls back.** `design.logo` naming an organization without a logo draws nothing, with a
    `variable-builtin-missing` warning; it does not quietly draw the primary logo. `false` hides the logo at the level
-   that sets it (a slide's reference re-enables it under a deck `false`).
+   that sets it (a slide's reference re-enables it under a deck `false`). **Decided by the owner (2026-10-09).**
 6. **Logo references are whole-field only.** An inline `{{organization.logo}}` is `variable-unknown-builtin`. Inline
    it would give a file path in text, never what an author wants. `organization.logo` is no longer a deck-wide
    built-in.
@@ -75,7 +77,7 @@ decision below is an agent decision, vetoable; each says what changing it would 
   `logo: true` → `image: "var:organization.logo.icon"`.
 - The gallery examples come from `scripts/generate-example-suite.mjs`, which now writes the logo on the organization.
   Same assets, so no pixels move.
-- Flagged:
+- Flagged, both **decided by the owner (2026-10-09)**:
   - `technical/asset-source-forms` had no organization. The script created `{ id: 'brand', name: 'Asset Source Forms' }`.
   - `technical/header-footer-logo-set` had an organization logo different from its LogoSet. The LogoSet won, as it
     did on 0.17 covers.
