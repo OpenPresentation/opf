@@ -1,0 +1,63 @@
+{
+ "item": "FF-13 font-embed fixture, published 0.18 packages (opf#323 section 4)",
+ "built": {
+  "date": "2026-10-10T21:43:02.317Z",
+  "node": "v24.21.0",
+  "packages": {
+   "@openpresentation/opf": "0.18.1",
+   "@openpresentation/opf-render": "0.18.0",
+   "@openpresentation/opf-pptx": "0.18.0",
+   "@openpresentation/opf-editor": "0.18.0",
+   "fontkit": "2.0.4"
+  },
+  "zipDate": "2026-10-10T00:00:00Z",
+  "exportDate": "2026-01-15",
+  "note": "Published npm packages only, exact versions pinned in package.json. Decks, previews and absolute paths are never committed."
+ },
+ "decks": {
+  "ff13-carlito-embed-source": {
+   "title": "FF-13 embed fixture",
+   "covers": "FF-13 font-embed fixture: Carlito only, regular, bold, italic and bold italic",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff13/ff13-carlito-embed-source.pptx",
+   "bytes": 20971,
+   "sha256": "70bd9c1e6006a5c2df290182f416f7abc05086c6c0bed49fd25f4c24d55b4f5f",
+   "slides": 2,
+   "expectedFonts": [
+    "Carlito"
+   ],
+   "requiredFonts": [
+    "Carlito"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Carlito",
+     "ea": "Carlito",
+     "cs": ""
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  }
+ }
+}
