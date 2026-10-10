@@ -254,6 +254,10 @@ export function createFontRegistry(entries, options = {}) {
     if(face.fontFace) resolved.fontFace={...face.fontFace};
     // FF-45: the planner maps a symbol-encoded family's codes (symbol-fonts.js); the face only lends its glyphs.
     if(resolution.symbolEncoding) resolved.symbolEncoding=resolution.symbolEncoding;
+    // render#220: resolving a resolved style again keeps its encoding. Core composes each list paragraph from its block's resolved
+    // style, so the item asks for the open symbol face (Noto Sans Symbols 2) by name; that face is the encoding's own, so the codes
+    // still map. Any other family drops a stale encoding.
+    else if(style.symbolEncoding && symbolPreviewFaces(style.symbolEncoding).some(name=>name.toLowerCase()===face.family.toLowerCase())) resolved.symbolEncoding=symbolEncodingFamily(style.symbolEncoding);
     return resolved;
   };
   const metrics = (text,size,style,includeOutline=false) => {

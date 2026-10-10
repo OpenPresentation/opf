@@ -29,6 +29,16 @@ const textRuns = svg => [...svg.matchAll(/<(?:text|tspan)\b([^>]*)>([^<]*)(?=<)/
     assert.ok(!textRuns(svg).some(([, text]) => /[-]/.test(text)), `${family}: no private-use code is drawn (the aria-label keeps the source text)`);
     assert.ok(!new RegExp(`font-family="[^"]*${family}`, 'i').test(svg), `${family}: the SVG never names the proprietary family`);
   }
+  // render#220: a list body (paragraph objects or plain strings) maps its codes too, under heading/body and major/minor roles. Core
+  // composes each paragraph from its block's resolved style, so the renderer resolves the open symbol face again and must keep the encoding.
+  const listCheck = '';
+  for (const fontScheme of [{id: 'x', heading: 'Aptos', body: 'Wingdings'}, {id: 'y', major: 'Aptos', minor: 'Wingdings'}]) for (const body of [[{text: listCheck}], [listCheck], [{text: `${listCheck} done`}, 'second']]) {
+    const presentation = deck('Title', body, {fontScheme});
+    const svg = svgOf(presentation, await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation}));
+    assert.ok(svg.includes(mapSymbolText('Wingdings', listCheck)), `${fontScheme.id} ${JSON.stringify(body)}: the list paragraph draws the mapped check mark`);
+    assert.ok(!textRuns(svg).some(([, text]) => /[-]/.test(text)), `${fontScheme.id} ${JSON.stringify(body)}: no private-use code is drawn`);
+    assert.ok(!/font-family="[^"]*Wingdings/i.test(svg), `${fontScheme.id} ${JSON.stringify(body)}: the SVG never names Wingdings`);
+  }
   // The role case draws the same glyph as the run-level symbol path (a run that names the family itself).
   const check = '';
   const role = deck('Role', check, scheme('Aptos', 'Wingdings'));
