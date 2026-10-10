@@ -94,6 +94,19 @@ validate(presentation, {
 
 `validateCatalogRecord(kind, record)` and `assertValidCatalogRecord(kind, record)` check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same shape; its findings are `format`, and a record that links to an unknown id only warns.
 
+## Pass `fonts`, otherwise the estimate
+
+The layout rules (`opf/text-overflow`, `opf/min-font-size`, reading order, image resolution) depend on how wide the text is. `validate` measures it with `options.fonts`, the handle that opf-render's `loadFonts()` returns:
+
+```js
+const fonts = await loadFonts({ pack: 'office' });
+const report = validate(deck, { fonts });   // report.checks.layout === 'measured'
+```
+
+Pass the same `fonts` handle to preview (`toSvg`), pagination (`paginate`) and export (`toPng`, `toPdf`, `toPptx`), so that validation measures with the faces the preview draws and a finding means what the slide shows. The same handle gives identical geometry across engines; opf-pptx's `layout-parity` test checks that the exported PowerPoint paragraphs agree with the SVG preview and with core's composed items, with and without `fonts`. See [Pass `fonts`, otherwise the estimate](font-fidelity.md#pass-fonts-otherwise-the-estimate) for the full list.
+
+Without `fonts` the rules use core's built-in estimate and `checks.layout` says `estimated`: 0.54 em per character, 0.62 em for capitals and digits, 0.32 em for a space, 1 em for CJK characters and zero for combining marks. It needs no font files and is stable from run to run, but it is too narrow for some scripts, and it can differ from the real faces by a few percent, so an estimated overflow finding (or its absence) is a first pass. Improving the estimate for other scripts is tracked in opf#566. `opf validate` on the command line loads no fonts, so its layout checks are estimated too. Node `convert` and the CLI's `opf convert` and `opf paginate` prepare an office-pack handle for you; a library call to `validate` never loads fonts itself.
+
 ## Cost
 
 `validate` is lazy: it builds only what the rules you ask for need. Measured with Node 24 on three bundled example decks (milliseconds per call, warm; your machine will differ, the ratios hold):

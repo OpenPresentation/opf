@@ -18,6 +18,37 @@ The policy below is current. Version-specific measurements and implementation hi
 checkpoints, not transfer-size budgets for every release. The [font roadmap](plans/font-roadmap.md) records historical
 planning; use installed package APIs and measured output when choosing a deployment strategy.
 
+## Pass `fonts`, otherwise the estimate
+
+Text measurement comes from one place: the `fonts` handle that opf-render's `loadFonts()` returns. Since RR-55 the same
+handle carries it for every step that lays text out:
+
+- core's `validate`, `paginate` and the slide context (`resolveSlideContext`);
+- opf-render's `toSvg`, `toPng` and `toPdf`;
+- opf-pptx's `toPptx`.
+
+```js
+const fonts = await loadFonts({ pack: 'office' });
+validate(deck, { fonts });
+const { presentation } = paginate(deck, { fonts });
+const svg = toSvg(presentation, { fonts });
+const pptx = await toPptx(presentation, { fonts });
+```
+
+Pass the same handle to preview, validation, pagination and export, so that all of them measure with the faces the
+preview draws. Then line breaks, overflow findings, page breaks and the exported text boxes agree, and the same handle
+gives identical geometry across engines (opf-pptx's `layout-parity` test checks that the exported PPTX paragraphs agree with the SVG preview and with
+core's composed items, with and without `fonts`).
+
+A call without `fonts` is not an error: it uses core's built-in estimate, and says so (`checks.layout: "estimated"` in
+`validate`, `layout: "estimated"` in `paginate`). The estimate is deterministic and needs no font files: 0.54 em per
+character, 0.62 em for capital letters and digits, 0.32 em for a space, 1 em for CJK characters, and zero width for
+combining marks. It is close for Latin text in an ordinary text face and too narrow for some scripts (the tracking issue
+is opf#566), so treat an estimated result as a draft and measure before you rely on a page break or an overflow finding.
+Core's Node `convert` and the CLI's `convert` and `paginate` do this for you: they prepare an office-pack `fonts` handle once per process (`opf validate` loads none, so it is estimated). A library
+call (`validate`, `paginate`, `toSvg`, `toPptx`) never loads fonts on its own, because that would change every
+fonts-less result and pull font files into a browser bundle; pass the handle you want.
+
 ## Font policy (FF-31)
 
 OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.json`](../spec/reference/font-policy.json). Core exports it as `FONT_POLICY`, `fontPolicyFor()` and `applyFontPolicyDecisions()` from `@openpresentation/opf` or `@openpresentation/opf/font-policy`. Each row gives a family's license class, where viewers get it, whether OPF may ever embed it, and its preview replacement with a measured width difference. It also lists alternates, ending where possible with a face that already ships with opf-render. The [licensing table](programs/font-fidelity-everywhere/font-licensing.md) lists all 153 rows. [`font-policy.schema.json`](../spec/reference/font-policy.schema.json) is its JSON Schema. The [measurement evidence](evidence/font-replacements-20260923/README.md) explains how each replacement was chosen.
