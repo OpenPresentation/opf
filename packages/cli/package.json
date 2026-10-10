@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
   "license": "MIT",
   "type": "module",
@@ -20,7 +20,7 @@
     "prepack": "pnpm build"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.17.0"
+    "@openpresentation/opf": "^0.18.1"
   },
   "devDependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
@@ -31,8 +31,8 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "0.17.0",
-    "@openpresentation/opf-render": "0.17.0",
+    "@openpresentation/opf-pptx": "0.18.0",
+    "@openpresentation/opf-render": "0.18.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/node": "^24.13.4",
     "pdf-lib": "1.17.1",
