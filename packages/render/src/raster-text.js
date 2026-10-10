@@ -9,7 +9,9 @@
 // For the SVG about to be rasterized (never the emitted SVG), every <text> whose content has characters of an affected script (the
 // Indic scripts, Thai, Lao, Khmer, Myanmar), or Hangul in a KOR-language text, becomes a <g> that carries the text's attributes and
 // draws its content cluster by cluster at absolute positions:
-//   - the x of each cluster is the fontkit advance of the prefix of its run, measured with the face resvg will pick for the run
+//   - the x of each cluster is the fontkit pen at its first character in its run shaped as a whole (opf-render#189: a prefix shaped
+//     alone loses the context of the next character, such as a Thai leading vowel kerned to its consonant; the prefix's advance is used
+//     where the run's glyphs do not map back to its characters, or the run has a kinzi), measured with the face resvg will pick for the run
 //     (fontdb's family, style and weight matching over the same font files, with the same glyph fallback order), the OpenType language
 //     of the SVG's lang and the policy features, scaled to the run's textLength when it has one; text-anchor middle and end are
 //     resolved into absolute starts, baseline-shift into the y;
@@ -27,6 +29,7 @@
 import { readFile } from "node:fs/promises";
 import { create } from "fontkit";
 import { disabledFeaturesFor } from "./font-compatibility.js";
+import { pinGlyphCodePoints } from "./font-registry.js";
 import { openTypeLanguage } from "./script-fonts.js";
 
 const AFFECTED = /[\p{scx=Devanagari}\p{scx=Bengali}\p{scx=Gurmukhi}\p{scx=Gujarati}\p{scx=Oriya}\p{scx=Tamil}\p{scx=Telugu}\p{scx=Kannada}\p{scx=Malayalam}\p{scx=Sinhala}\p{scx=Thai}\p{scx=Lao}\p{scx=Khmer}\p{scx=Myanmar}]/u;
@@ -353,6 +356,8 @@ async function readFace(file) {
   const data = new Uint8Array(await readFile(file));
   const font = create(data);
   if (!font?.layout || !font.unitsPerEm) return null;
+  // opf-render#125: an outline drawn for one cluster (ऱ, whose component is the nukta glyph) must not change how a later nukta shapes.
+  pinGlyphCodePoints(font);
   const records = font.name?.records ?? {};
   const names = Object.values(records.preferredFamily ?? {}).length ? Object.values(records.preferredFamily) : Object.values(records.fontFamily ?? {});
   const os2 = font["OS/2"], selection = os2?.fsSelection;
@@ -433,14 +438,40 @@ function measurePrefixes(runs, ends, props) {
   };
   const widths = [];
   try {
+    const pens = new Map();
+    // opf-render#189: the pen at a cluster boundary inside a run is read from the run shaped as a whole, so an advance its context
+    // changes (a Thai leading vowel kerned to its consonant) is the one the browser draws; a prefix shaped alone ends without it.
+    const prefix = (run, length) => {
+      if (!pens.has(run)) pens.set(run, contextPens(run.face, run.text, props));
+      return pens.get(run)?.get(length) ?? width(run.face, run.text.slice(0, length));
+    };
     let runIndex = 0, before = 0;
     for (const end of ends) {
       while (runIndex < runs.length && runs[runIndex].start + runs[runIndex].text.length <= end) { before += width(runs[runIndex].face, runs[runIndex].text); runIndex++; }
       const run = runs[runIndex];
-      widths.push(run && end > run.start ? before + width(run.face, run.text.slice(0, end - run.start)) : before);
+      widths.push(run && end > run.start ? before + prefix(run, end - run.start) : before);
     }
   } catch { return null; }
   return widths;
+}
+
+/**
+ * The pen (px) at each character offset of `value` where a glyph carrying characters starts, with `value` shaped as one run: the sum
+ * of the advances of the glyphs before it. Null for text with a kinzi (measured without it, so its offsets are not the text's).
+ */
+function contextPens(face, value, props) {
+  if (value.includes(KINZI)) return null;
+  const { run } = shapeRun(face, value, props);
+  const pens = new Map(), scale = props.fontSize / face.font.unitsPerEm;
+  let consumed = 0, pen = 0;
+  for (const [index, glyph] of run.glyphs.entries()) {
+    if (glyph.codePoints?.length) {
+      if (!pens.has(consumed)) pens.set(consumed, pen * scale);
+      for (const point of glyph.codePoints) consumed += point > 0xffff ? 2 : 1;
+    }
+    pen += run.positions[index].xAdvance;
+  }
+  return consumed === value.length ? pens : null;
 }
 
 /** The glyph outlines of one cluster, or null when fontkit needed the mark retry (its glyph placement is then not the browser's). */
