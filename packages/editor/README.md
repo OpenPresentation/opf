@@ -158,6 +158,19 @@ Plain-text carets are resolved from the rendered SVG glyphs: each line carries i
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
+### Input methods (IME): not certified
+
+IME input is **not certified**. Real Japanese (Kana to Kanji), Chinese (pinyin) and Korean (Hangul) input methods have not been tested in this editor, on any browser or operating system; no run with a real input method is recorded (opf-editor#137). Only synthetic `CompositionEvent`s are tested (`test/rich-input-browser.mjs` dispatches `compositionstart`, an `insertCompositionText` input and `compositionend` on the rich-text input and checks that the canvas does not commit midway and that one Undo restores the original). Synthetic events do not reproduce a candidate window, a re-render during a composition, or the order of `keydown`, `compositionend` and `input` that real browsers and input methods produce, so treat inline editing with an input method as unverified until a pass is recorded.
+
+What exists in the code (written for input methods, not verified with one):
+
+- **Canvas** (`src/canvas.js`): the inline text input marks the field as composing between `compositionstart` and `compositionend` (no draft and no commit are made meanwhile, and the input is repositioned), ignores `keydown` while `isComposing` (so Enter and Escape that act on a composition do not commit or cancel the edit), and queues a draft when the composition ends.
+- **Rich-text input** (`src/rich-text-input.js`): tracks composition, keeps the pre-composition value so one history step covers the composed text, and ignores `isComposing` key events.
+- **Data grid** (`src/data-grid.js`): an Enter or Tab that confirms a composition is not treated as a command (`isComposing`).
+- **Outline view** (`src/outline-view.js`) and the **design controls** (`src/design-controls.js`): Enter during a composition does not commit (`isComposing`).
+
+Not tested at all, even with synthetic events: the data grid, the outline view and the design controls. Failures with a real input method are reported as defects with the input method named.
+
 ## List numbering (RR-33)
 
 `@openpresentation/opf-editor/numbering` is the headless model and `/numbering-panel` the DOM control for the `numbering` field of `items` and `bullets` payloads (a style name, a `{ style, start, suffix }` object, or an array per list level). `setNumbering(editor, path, value)` numbers the list a path points at or into (`undefined` turns numbering off and drops the entry `start` values), `setEntryStart(editor, itemPath, start)` restarts the count at an entry, `numberingValue(levels)` writes the shortest form, `numberingState(presentation, path)` reads the settings and the markers the list draws, and `findNumberableLists(presentation, slideIndex)` lists a slide's lists. Each write is one validated, undoable session edit. `createNumberingPanel(container, { editor, getTarget, getSlideIndex, onStatus })` mounts the control: number this list, style, start and suffix, different numbering per level, the markers it will draw, and a restart at the selected entry. The playground opens it from **List numbering**. Needs a core release that ships `numbering`; see core's [numbered lists](https://github.com/OpenPresentation/opf/blob/main/docs/numbered-lists.md).
