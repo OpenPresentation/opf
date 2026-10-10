@@ -19,11 +19,10 @@ const paths = src => [
   ['slides.0.design.background', {slides: [{title: 'Background', design: {background: {type: 'image', src, alt: 'A harbour at dawn'}}}]}, 'no picture'],
   ['design.background', {design: {background: {type: 'image', src}}, slides: [{title: 'Background'}]}, 'no picture'],
   ['design.watermark', {design: {watermark: {src, opacity: 0.2}}, slides: [{title: 'Watermark'}]}, 'no picture'],
-  ['design.logo', {design: {logo: src, background: light}, slides: [{title: 'Cover', layout: 'title'}]}, 'placeholder'],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]}, 'placeholder'],
   ['design.footer.left.image', {design: {footer: {left: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
-  ['design.footer.left.logo', {design: {logo: src, footer: {left: {logo: true}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
-  ['design.logo', {design: {logo: src, listBullet: 'image', background: light}, slides: [{title: 'List', items: ['Alpha', 'Beta']}]}, 'character bullets'],
+  ['organization.logo.icon', {organization: {id: 'acme', name: 'Acme', logo: {full: 'logo.png', icon: src}}, design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
+  ['organization.logo', {organization: {id: 'acme', name: 'Acme', logo: src}, design: {listBullet: 'image', background: light}, slides: [{title: 'List', items: ['Alpha', 'Beta']}]}, 'character bullets'],
 ];
 
 const network = globalThis.fetch;

@@ -26,20 +26,19 @@ try {
   const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
   const deck = {name: 'Interop', filename: 'interop-deck', extensions: {'x-vendor': {a: 1}}, tone: 'formal', purpose: 'inform',
     organization: {id: 'acme', name: 'Acme', logo: png}, assets: {spare: png},
-    design: {fontScheme: 'arial', logo: png, contentAlignment: 'center'},
-    slides: [{id: 'one', layout: 'title-subtitle', title: 'One', subtitle: 'Two', section: 'Intro', extensions: {'x-s': true}, design: {logo: png, titleAlignment: 'center'}},
+    design: {fontScheme: 'arial', logo: 'var:organization.acme.logo', contentAlignment: 'center'},
+    slides: [{id: 'one', layout: 'title-subtitle', title: 'One', subtitle: 'Two', section: 'Intro', extensions: {'x-s': true}, design: {logo: false, titleAlignment: 'center'}},
       {title: 'Two', section: 'Intro', blocks: [{type: 'group', id: 'g', blocks: [{type: 'text', text: 'a'}, {type: 'text', text: 'b'}]}]}]};
   const bytes = await toPptx(deck, {timestamp: '2026-01-01T00:00:00Z', seed: 1});
   const entries = unzipSync(bytes);
   const tagValue = part => JSON.parse(Buffer.from(dec.decode(entries[part]).match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
   const document = tagValue('ppt/tags/opfDocument.xml'), slide = tagValue('ppt/tags/opfSlide1.xml');
   assert.deepEqual(Object.keys(document.supplement), ['design', 'metadata'], 'new document keys live under supplement');
-  // A logo drawn on a cover (a core that composes it) is an exported media part and keeps the $opfMedia reference; an undrawn one is stored inline.
-  const storedLogo = value => value === png || (value?.$opfMedia?.startsWith('ppt/media/') && value.prefix === 'data:image/png;base64,');
-  assert.deepEqual(Object.keys(document.supplement.design), ['logo']); assert.ok(storedLogo(document.supplement.design.logo), 'the deck logo is stored');
+  // design.logo is a logo reference or false (RR-71); the logo itself is the organization's.
+  assert.deepEqual(Object.keys(document.supplement.design), ['logo']); assert.equal(document.supplement.design.logo, 'var:organization.acme.logo', 'the deck logo reference is stored');
   assert.deepEqual(Object.keys(document.supplement.metadata).sort(), ['extensions', 'filename']);
   assert.equal(document.design.logo, undefined); assert.equal(document.metadata.filename, undefined);
-  assert.deepEqual(Object.keys(slide.supplement), ['design']); assert.ok(storedLogo(slide.supplement.design.logo), 'the slide logo is stored'); assert.equal(slide.design.logo, undefined);
+  assert.deepEqual(Object.keys(slide.supplement), ['design']); assert.equal(slide.supplement.design.logo, false, 'the slide logo is stored'); assert.equal(slide.design.logo, undefined);
 
   // The published importer keeps every value it knows; it ignores the rest without a diagnostic.
   const issues = [];
@@ -54,24 +53,25 @@ try {
   // This build restores everything.
   const current = await fromPptx(bytes);
   assert.equal(current.filename, 'interop-deck'); assert.deepEqual(current.extensions, {'x-vendor': {a: 1}});
-  assert.equal(current.design.logo, png); assert.equal(current.slides[0].design.logo, png);
+  assert.equal(current.design.logo, 'var:organization.acme.logo'); assert.equal(current.slides[0].design.logo, false);
+  assert.deepEqual(current.organization, {id: 'acme', name: 'Acme', logo: png});
   assert.deepEqual(current.slides.map(item => item.section), ['Intro', 'Intro']);
   assert.equal(current.slides[1].blocks[0].type, 'group');
   // Spec-gap P2: a design-fields export (cover logo, footer logo, picture bullets). FA-07 (0.14) made FontScheme roles
   // family strings, which importers before 0.14 do not read, so the scheme carries no role override here (design-fields.mjs
   // round-trips role overrides with this build). Nothing new goes
   // inside a record the published importer validates strictly: OPF_LOGO_V1 is a new tag, the furniture manifest lists
-  // generated logos under `logos` beside its strictly validated `parts`/`definitions`. With a core that composes the
-  // fields (core 0.11.4 or the coordinated source) the export carries them; with the published core it carries none,
-  // and the checks that need them are skipped.
+  // the logo references of zone images under `images` beside its strictly validated `parts`/`definitions`. With a core
+  // that composes the fields (core 0.11.4 or the coordinated source) the export carries them; with the published core it
+  // carries none, and the checks that need them are skipped.
   {
     const {resolveLogo} = await import('@openpresentation/opf/composition');
     const rich = typeof resolveLogo === 'function';
     const square = png;
     const p2 = {name: 'Interop P2', narrative: 'problem-solution', audience: 'Executives',
-      organization: {id: 'acme', name: 'Acme', role: 'primary'},
-      design: {fontScheme: {id: 'aptos'}, logo: {default: square, icon: square}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
-        header: {right: {logo: true}}, footer: {left: {logo: true}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
+      organization: {id: 'acme', name: 'Acme', role: 'primary', logo: square},
+      design: {fontScheme: {id: 'aptos'}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
+        header: {right: {image: 'var:organization.logo.icon'}}, footer: {left: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
       slides: [{tag: 'Eyebrow', title: 'Cover', subtitle: 'Subtitle', layout: 'title-subtitle'},
         {title: 'Section', layout: 'section-divider', section: 'Part one'},
         {title: 'Items', items: ['Alpha', 'Beta', 'Gamma']},
@@ -97,10 +97,12 @@ try {
     const newer = await fromPptx(exported);
     assert.deepEqual(newer.design.fontScheme, {id: 'aptos'});
     assert.equal(newer.design.listBullet, 'image');
-    assert.deepEqual(newer.design.logo, {default: square, icon: square});
+    assert.equal(newer.organization.logo, square);
     assert.deepEqual(newer.design.footer?.right, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
     if (rich) {
-      assert.deepEqual(newer.design.footer?.left, {logo: true}); assert.deepEqual(newer.design.header?.right, {logo: true});
+      assert.deepEqual(newer.design.footer?.left, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.right, {image: 'var:organization.logo.icon'});
+      // The published importer reads the footer logo as the ordinary picture it is.
+      assert.ok(JSON.stringify(older.slides[0].design.footer.left).includes('data:image/png'), 'an older importer keeps the footer logo as an image');
       assert.ok(!newer.slides[0].image && !newer.slides[0].blocks, 'the cover logo is not content');
       assert.equal(Array.isArray(newer.slides[2].items) ? newer.slides[2].items.length : newer.slides[2].blocks?.[0]?.items?.length, 3, 'picture-bullet entries import as a list');
     }

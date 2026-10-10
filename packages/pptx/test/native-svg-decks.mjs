@@ -67,7 +67,7 @@ const slides = [
   {id: 'content-crop', title: 'Content image, cover fit', layout: 'image-1x', design: {imageFit: 'cover'}, image: {src: uri(logoWide), alt: 'Wide logo cropped to the content box'},
     check: 'design.imageFit cover: the wide logo fills the content box, trimmed at the sides (a:srcRect). Sharp at zoom.'},
   {id: 'header-footer-logo', title: 'Header and footer logos', text: 'The header image and the footer logo are generated pictures.',
-    design: {header: {right: {image: {src: uri(iconSquare), alt: 'Icon'}}}, footer: {left: {logo: true}}},
+    design: {header: {right: {image: {src: uri(iconSquare), alt: 'Icon'}}}, footer: {left: {image: 'var:organization.logo'}}},
     check: 'Both furniture pictures are SVG pictures at their furniture boxes.'},
   {id: 'viewbox-only', title: 'viewBox-only SVG', layout: 'image-1x', image: {src: uri(viewBoxOnly), alt: 'Rising line chart'},
     check: 'An SVG with only a viewBox (no width or height) is a 2:1 SVG picture, not stretched.'},
@@ -78,7 +78,7 @@ const slides = [
 ];
 
 function deckFor(options = {}) {
-  return {name: 'RR-10 SVG pictures', design: {theme: 'classic', logo: uri(logoWide), background: light}, slides: slides.map(({id: _id, check: _check, ...slide}) => slide), ...options};
+  return {name: 'RR-10 SVG pictures', organization: {id: 'acme', name: 'Acme', logo: uri(logoWide)}, design: {theme: 'classic', background: light}, slides: slides.map(({id: _id, check: _check, ...slide}) => slide), ...options};
 }
 
 // What each exported slide holds, read from the package.

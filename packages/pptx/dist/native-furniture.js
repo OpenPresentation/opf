@@ -78,9 +78,10 @@ const guid = (kind, n) => `{0F0F2701-${kind}-4000-8000-${n.toString(16).toUpperC
  * maps a generated object name to its placeholder type. Runs after the tags are
  * attached: the shape keeps its name, geometry, runs, fields and tags, and gains
  * `p:ph` (a placeholder is a text shape the layout can supply defaults for).
+ * `bands` maps a generated object name to its zone's band (`{x, width}` in pixels) for a part narrower than its zone.
  * Returns the placeholders in use and the first geometry/alignment seen per type.
  */
-export function attachNativePlaceholders(entries, records) {
+export function attachNativePlaceholders(entries, records, bands = new Map()) {
   const used = new Set(), first = new Map(), seen = new Set();
   if (!records.size) return {used, first};
   const slides = Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]));
@@ -101,7 +102,10 @@ export function attachNativePlaceholders(entries, records) {
       if (!first.has(ph)) {
         const geometry = shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/);
         const algn = shape.match(/<a:pPr\b[^>]*\balgn="(\w+)"/)?.[1] ?? 'l';
-        if (geometry) first.set(ph, {x: Number(geometry[1]), y: Number(geometry[2]), cx: Number(geometry[3]), cy: Number(geometry[4]), algn});
+        // A part in a zone with other parts (a logo beside the footer text) is only as wide as its text (RR-71); the master and
+        // layout placeholders a footer added natively lands in use the zone's whole band at the same edge.
+        const band = bands.get(name);
+        if (geometry) first.set(ph, {x: band ? Math.round(band.x * EMU) : Number(geometry[1]), y: Number(geometry[2]), cx: band ? Math.round(band.width * EMU) : Number(geometry[3]), cy: Number(geometry[4]), algn});
       }
       changed = true;
       return shape;

@@ -13,6 +13,8 @@ const hashBytes = bytes => {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (h2 >>> 0).toString(16) + (h1 >>> 0).toString(16);
 };
+/** The content key of a media part's bytes: its length and hash (a bucket key; equal keys are confirmed byte for byte where it matters). */
+export const mediaKey = bytes => `${bytes.byteLength}:${hashBytes(bytes)}`;
 const sameBytes = (a, b) => a.byteLength === b.byteLength && a.every((value, index) => value === b[index]);
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 

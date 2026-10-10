@@ -3,13 +3,13 @@ import {normalizeCrop, withoutSvgBlip} from './svg-image.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {pictureTransform} from './image-geometry.js';
 
-// The deck logo (core's `geometry.logo`: design.logo, a slide's own logo or the
-// primary organization's logo on a cover or section slide) exports as one native
+// The cover and section logo (core's `geometry.logo`: the primary organization's full logo, or the
+// organization a `design.logo` reference names, RR-71) exports as one native
 // picture per slide named `OPF logo`, after the watermark and before content. It
 // is fitted into core's box without cropping, anchored left and vertically
 // centered (the preview's `xMinYMid meet`). The native tag records the exact
 // picture, so an unchanged picture is consumed on import (the logo itself returns
-// from the document and slide design records) while an edited one stays an
+// from the document record's organization) while an edited one stays an
 // ordinary picture and reports `invalid-logo-provenance`.
 const TAG = 'OPF_LOGO_V1', REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const EMUS_PER_INCH = 914400;
@@ -19,8 +19,8 @@ const array = value => value === undefined ? [] : Array.isArray(value) ? value :
 // Whitespace-only text between elements is not identity: the vendored writer indents, PowerPoint drops it on save.
 const canonical = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
-// The OPF paths core reports for a logo source.
-const LOGO_PATH = /^(?:slides\.\d{1,9}\.design\.logo|design\.logo|organization(?:\.\d{1,9})?\.logo)(?:\.[A-Za-z]{1,16})?$/;
+// The OPF paths core reports for a logo source: the organization's `logo`, then a shape and a tone below it.
+const LOGO_PATH = /^organization(?:\.\d{1,9})?\.logo(?:\.[A-Za-z]{1,16}){0,2}$/;
 
 export const LOGO_TAG = TAG;
 export const logoName = () => 'OPF logo';
@@ -138,10 +138,10 @@ export function importLogoPlaceholders(shapes, relationships, entries, slideInde
 }
 
 /**
- * Consume an unchanged tagged logo picture: it is generated from design.logo (or
- * the organization's logo), never content. Returns the consumed picture indexes
+ * Consume an unchanged tagged logo picture: it is drawn from the organization's
+ * logo, never content. Returns the consumed picture indexes
  * and `fallback`, the picture's own `{path, image}`: the caller uses it for the
- * logo only when the stored document and slide design did not restore one (an
+ * organization's logo only when the stored document did not restore one (an
  * export without provenance, or one that omitted the field), so the logo is never
  * lost. An edited, ambiguous or damaged tagged picture stays an ordinary picture
  * and is reported. readPicture(picture) returns the ordinary imported payload.

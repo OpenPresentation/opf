@@ -10,7 +10,7 @@ The geometry is core's and does not move: preview, export and the parity harness
 ## Mapping
 
 OPF furniture has two bands (`design.header`, `design.footer`), three zones each (left, center, right) and parts
-stacked in a zone: logo, image, text, socials, date. Generated values (slide number, slide count, section, organization name,
+laid out in one row in a zone (RR-71): image (a picture, or an organization logo reference such as `var:organization.logo.icon`), text, socials, date. Generated values (slide number, slide count, section, organization name,
 speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no per-value flags. `{{slide.number}}`,
 `{{slide.section}}` and `{{deck.slideCount}}` are filled in for each slide as it is laid out; core marks each substituted
 `{{slide.number}}` as a slide-number field (`part.fields`), which is what this exporter writes as a native field.
@@ -20,8 +20,8 @@ speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no pe
 | `footer.<zone>.text` without a `{{slide.number}}` (the first one, one accepted line) | **Footer placeholder** (`ftr`, layout idx 11) | The dialog's Footer text. |
 | `footer.<zone>.date` (the first one, one line) | **Date placeholder** (`dt`, idx 10) | `date: true` with an en-US pattern is a live `datetime1`-`datetime7` field ("Update automatically"); a fixed or literal date, or a pattern with no field type, is fixed text ("Fixed"). |
 | `footer.<zone>.text` with a `{{slide.number}}` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | Each substituted number is a live `slidenum` field; the words around it (`Page `, ` of 12`) and a `{{deck.slideCount}}` or `{{slide.section}}` value are fixed runs. |
-| every header part (text, socials, date, image, logo) | ordinary tagged shapes | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape. |
-| footer socials, image, `logo: true` | ordinary tagged shapes | No native object. |
+| every header part (text, socials, date, image) | ordinary tagged shapes | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape. |
+| footer socials, image (a logo reference included) | ordinary tagged shapes | No native object. |
 | a second footer text, date or text with a slide number in another zone | ordinary tagged shapes | One placeholder per type per slide; the second keeps its live fields. |
 | footer text, date or number text that breaks or wraps over several lines | ordinary tagged shapes (one per line) | A placeholder is one shape; core's accepted lines are never re-wrapped by PowerPoint. A `{{slide.number}}` that fits one of the lines is still a live field. |
 | empty footer text | ordinary tagged shape | |
@@ -31,11 +31,21 @@ Each native shape is the same shape the exporter wrote before (same name `OPF fu
 The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A slide whose `design.footer` is `false`
 (or has no such part) has no placeholder of that type, which the dialog shows as unchecked.
 
+## Row layout (RR-71)
+
+Core lays the parts of a zone out side by side (image, text, socials, date), each at its natural width, aligned to the zone's edge and
+vertically centered. A lone text part keeps the whole zone width, as before; a text part that shares its zone with a logo is only as
+wide as its words. The exporter draws every part at `part.box` and the native placeholder keeps that box, so a `ftr` beside a logo is a
+narrow placeholder at the right of the logo. The master and layout placeholders do not follow it: each spans the zone's band (the box
+core gives a lone part in that zone, `left` `.07`, `center` `.37`, `right` `.67` of the width, `.26` wide), at the edge the part is aligned to,
+so a footer added through the dialog fits any text. On import, a placeholder's zone is still the third its centre falls in, which is the
+zone the row sits in. A row too wide for its zone is a `text-overflow` diagnostic from core.
+
 ## Master, layout, notes master, presentation
 
 * **Slide master and layout.** Every deck, with or without a footer, gets on the master Date (idx 2), Footer (idx 3) and
   Slide Number (idx 4) placeholders and the layout the three layout placeholders (idx 10, 11, 12) the slides point at.
-  They sit where the first slide's native part of that type sits; a type no slide uses sits where core draws a default
+  They sit where the first slide's native part of that type sits (the whole zone band when that part shares its zone with a logo); a type no slide uses sits where core draws a default
   footer (date left, text center, number right, composed through `composeSlide`). Their text style (size, theme colour,
   font) is the first furniture run's, so a footer added through the dialog looks like the exported ones.
 * **`p:hf`.** Master and layout: `hdr="0"` (slides have no header placeholder) and `sldNum`, `ftr`, `dt` are `1` when at
@@ -130,6 +140,13 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
     `{{organization.name}}`, `{{speaker.name}}` and `{{customer}}` resolve before export like any string. A text that also uses
     a user variable (`{{customer}}`) is not stored: the filled deck is what round-trips, so its words import (a slide-scoped token in
     it still returns as a token, from the filled text).
+
+13. (RR-71) A footer text beside a logo is a narrow placeholder on the slide (core's box, so preview and export agree) but the master and
+    layout placeholder spans the zone, so Reset or a newly added footer does not clip a longer text.
+14. (RR-71) A logo reference in a zone `image` is written into the slide manifest (`images`) with the content key of the embedded bytes and
+    returns as the reference only while the picture still embeds them and the stored organization has a logo for it. Replacing the
+    picture in PowerPoint therefore imports the new picture, not the reference. Furniture that has no placeholder and is the same on every
+    slide (a logo) is still written per slide here; moving it to the slide master is RR-72.
 
 ## Not covered
 

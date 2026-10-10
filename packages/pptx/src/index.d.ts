@@ -97,7 +97,7 @@ export interface ToPptxOptions {
   /**
    * OPF_DOCUMENT_V1 / OPF_SLIDE_V1 customer-data tags that let fromPptx restore
    * catalog references, layout ids, authoring metadata (`filename` and `extensions`
-   * included), `design.logo`, the asset registry, slide `section`/`extensions` and
+   * included), `design.logo` (a logo reference or `false`), the organizations with their logos, the asset registry, slide `section`/`extensions` and
    * the slide content structure: nested groups, promoted regions, the root payload
    * form, block ids and extensions, group composition (docs/document-roundtrip.md).
    * Tags are not shown in PowerPoint's UI. Default "full"; "references-only"

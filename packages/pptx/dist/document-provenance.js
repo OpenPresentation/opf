@@ -108,10 +108,12 @@ export function splitAuthors(creator) {
 export const DEFAULT_AUTHOR = 'OpenPresentation';
 // Stored only when the native creator cannot carry the authored form by itself (or would read as the default).
 const authorNeedsRecord = author => Array.isArray(author) || (typeof author === 'string' && (author === DEFAULT_AUTHOR || Array.isArray(splitAuthors(author))));
-// Brand images have no native gate: they return from the stored value once
-// their media and asset references resolve. The P2 logo picture (`OPF_LOGO_V1`)
-// consumes the drawn logo; `design.logo` itself always returns from here.
+// `design.logo` (RR-71: a logo reference such as `var:organization.beta.logo`, or `false`) has no native gate: it returns
+// from the stored value. The logo image itself lives on the organization (metadata `organization`); the cover picture
+// (`OPF_LOGO_V1`) only consumes the drawn logo.
 export const BRAND_ASSETS = Object.freeze(['logo']);
+// A logo reference names an organization's logo, which 'references-only' mode does not store: the reference stays out with it.
+const storesOnlyWithOrganization = (key, value) => key === 'logo' && typeof value === 'string';
 const STYLE_REFERENCES = ['theme', 'colorScheme', 'fontScheme'];
 const SLIDE_STRUCTURE = ['layout', 'type', 'composition'];
 // Slide fields with no native counterpart, restored from the stored value.
@@ -471,7 +473,7 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
   const design = {}, metadata = {};
   for (const key of DESIGN_FIELDS) {
     if (!own(presentation.design, key)) continue;
-    if (referencesOnly && carriesSource(presentation.design[key])) continue;
+    if (referencesOnly && (carriesSource(presentation.design[key]) || storesOnlyWithOrganization(key, presentation.design[key]))) continue;
     design[key] = clone(presentation.design[key]);
   }
   for (const key of METADATA) {
@@ -499,7 +501,7 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
     }
     const slideDesign = {};
     for (const key of SLIDE_DESIGN_FIELDS) {
-      if (!own(slide.design, key) || (referencesOnly && carriesSource(slide.design[key]))) continue;
+      if (!own(slide.design, key) || (referencesOnly && (carriesSource(slide.design[key]) || storesOnlyWithOrganization(key, slide.design[key])))) continue;
       slideDesign[key] = clone(slide.design[key]);
     }
     if (Object.keys(slideDesign).length) record.design = slideDesign;

@@ -5,8 +5,8 @@ import { toSvg, resolvePresentation } from '@openpresentation/opf-render';
 import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
-// - the deck logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
-// - header/footer `logo: true`: a generated image part, re-imported as the flag
+// - the primary organization's logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
+// - header/footer `image: 'var:organization.logo.icon'`: an image part, re-imported as the reference
 // - design.listBullet: image: native picture bullets (a:buBlip), re-imported as a list
 // - fontScheme.accent: the slide tag and the quote body carry the accent typeface
 
@@ -52,7 +52,7 @@ let checked = 0;
 
 // ---- Cover and section logos: placement, order, parity with the preview, provenance, re-import.
 {
-  const deck = {design: {logo: wide, background: light, watermark: tall}, slides: [
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light, watermark: tall}, slides: [
     {title: 'Quarterly review', subtitle: 'Results', layout: 'title-subtitle'},
     {title: 'Part one', layout: 'section-divider'},
     {title: 'Content', text: 'Body copy stays logo free.'},
@@ -84,12 +84,13 @@ let checked = 0;
     checked++;
   }
   for (const index of [2, 3]) assert.ok(!/name="OPF logo"/.test(slideXml(entries, index)), `content slide ${index} has no logo`);
-  // Native tag, then re-import: the logo returns as design.logo; the picture is not content.
+  // Native tag, then re-import: the logo returns on the organization; the picture is not content.
   assert.match(slideXml(entries, 0), /<p:custDataLst><p:tags r:id="rIdOpfLogo1"\/>/);
   assert.ok(entries['ppt/tags/opfLogo1.xml'] && entries['ppt/tags/opfLogo2.xml'] && /OPF_LOGO_V1/.test(strFromU8(entries['ppt/tags/opfLogo1.xml'])));
   const diagnostics = [];
   const imported = await fromPptx(bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
-  assert.equal(imported.design.logo, wide, 'design.logo round-trips');
+  assert.equal(imported.organization.logo, wide, 'organization.logo round-trips');
+  assert.equal(imported.design.logo, undefined, 'no design.logo is invented');
   assert.equal(imported.design.watermark?.src, tall, 'the watermark is unaffected');
   for (const [index, slide] of imported.slides.entries()) assert.ok(!slide.image && !slide.blocks && !(slide.design && slide.design.logo), `slide ${index} carries no content picture`);
   assert.ok(!diagnostics.some(item => item.code === 'invalid-logo-provenance'), 'no provenance report on an unchanged export');
@@ -102,13 +103,13 @@ let checked = 0;
   checked++;
 }
 
-// ---- Variant choice follows the slide background, as in the preview; the organization logo is the fallback.
+// ---- Variant choice follows the slide background, as in the preview; a slide's design.logo names another organization.
 {
-  const set = {light: tall, dark: square, default: wide};
-  const deck = {design: {logo: set, background: light}, slides: [
+  const organization = [{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: square, onDark: tall}, icon: wide}}, {id: 'beta', name: 'Beta', logo: jpg}];
+  const deck = {organization, design: {background: light}, slides: [
     {title: 'On light', layout: 'title'},
     {title: 'On dark', layout: 'title', design: {background: dark}},
-    {title: 'Own logo', layout: 'title', design: {logo: jpg}},
+    {title: 'Partner logo', layout: 'title', design: {logo: 'var:organization.beta.logo'}},
   ]};
   const {entries} = await open(deck);
   const expected = [square, tall, jpg];
@@ -116,78 +117,82 @@ let checked = 0;
     const [logo] = pictures(slideXml(entries, index)).filter(picture => picture.name === 'OPF logo');
     assert.ok(logo, `slide ${index} logo`);
     const bytes = mediaFor(entries, index, logo.embed);
-    assert.ok(sameBytes(bytes, Buffer.from(source.split(',')[1], 'base64')), `slide ${index} draws the ${['dark', 'light', 'slide'][index]} variant`);
+    assert.ok(sameBytes(bytes, Buffer.from(source.split(',')[1], 'base64')), `slide ${index} draws the ${['onLight', 'onDark', 'partner'][index]} logo`);
     // The same variant the preview chooses.
     const svg = toSvg(deck, index + 1, {trace: true});
     const generated = imageTags(svg).find(element => attr(element, 'data-opf-generated') === 'true');
     assert.equal(attr(generated, 'href'), source, `slide ${index} preview variant`);
   }
-  const organization = {organization: {id: 'acme', name: 'Acme', logo: tall}, design: {background: light}, slides: [{title: 'Org', layout: 'title'}]};
-  const org = await open(organization);
-  const [logo] = pictures(slideXml(org.entries, 0)).filter(picture => picture.name === 'OPF logo');
-  assert.ok(logo && sameBytes(mediaFor(org.entries, 0, logo.embed), tallBytes), 'organization.logo is drawn where the deck logo would be');
-  const imported = await fromPptx(org.bytes);
-  assert.equal(imported.organization.logo, tall, 'organization.logo returns from the document tag');
-  assert.equal(imported.design?.logo, undefined, 'no design.logo is fabricated from the organization logo');
+  // The organizations and the partner override return; the logo pictures are consumed.
+  const imported = await fromPptx((await open(deck)).bytes);
+  assert.deepEqual(imported.organization, organization, 'the organizations return from the document tag');
+  assert.equal(imported.slides[2].design.logo, 'var:organization.beta.logo', "a slide's logo reference returns");
+  assert.equal(imported.design?.logo, undefined);
+  for (const slide of imported.slides) assert.ok(!slide.image && !slide.blocks, 'logo pictures are not content');
+  // A single asset is one logo for every shape; design.logo: false draws none.
+  const single = await open({organization: {id: 'acme', name: 'Acme', logo: tall}, design: {background: light}, slides: [{title: 'Org', layout: 'title'}]});
+  const [singleLogo] = pictures(slideXml(single.entries, 0)).filter(picture => picture.name === 'OPF logo');
+  assert.ok(singleLogo && sameBytes(mediaFor(single.entries, 0, singleLogo.embed), tallBytes), 'organization.logo is drawn on the cover');
   checked++;
 }
 
 // ---- Unresolved and unsupported logos: the preview's placeholder panel and one unresolved-asset diagnostic.
 {
-  const missing = {design: {logo: 'asset:missing', background: light}, slides: [{title: 'Cover', layout: 'title'}]};
+  const missing = {organization: {id: 'acme', name: 'Acme', logo: 'asset:missing'}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]};
   const diagnostics = [];
   const {entries} = await open(missing, {onDiagnostic: item => diagnostics.push(item)});
   assert.ok(!/name="OPF logo"/.test(slideXml(entries, 0)));
   assert.match(slideXml(entries, 0), /name="OPF image placeholder 1"/, 'the panel stands where the logo would be');
-  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['design.logo']);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['organization.logo']);
   await assert.rejects(() => toPptx(missing, {strictAssets: true}));
   const svg = toSvg(missing, 1, {trace: true});
   assert.match(svg, /data-opf-asset-status="unresolved"/);
   checked++;
 }
 
-// ---- Header and footer `logo: true`: a generated image part with the icon variant, re-imported as the flag.
+// ---- Header and footer `image: 'var:organization.logo.icon'`: an image part drawn from the icon, re-imported as the reference.
 {
   const icon = jpg;
-  const deck = {design: {logo: {default: wide, icon}, background: light, footer: {left: {logo: true}}, header: {right: {logo: true, text: 'Confidential'}}},
+  const organization = {id: 'acme', name: 'Acme', logo: {full: wide, icon}};
+  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}, header: {right: {image: 'var:organization.logo.icon', text: 'Confidential'}}},
     slides: [{title: 'Content', text: 'Body copy.'}, {title: 'Cover', layout: 'title'}]};
   const {entries, bytes} = await open(deck);
   const geometry = resolvePresentation(deck).slides[0].geometry;
-  const parts = geometry.furniture.parts.filter(part => part.field === 'logo');
+  const parts = geometry.furniture.parts.filter(part => part.reference === 'var:organization.logo.icon');
   assert.equal(parts.length, 2);
   const natives = pictures(slideXml(entries, 0)).filter(picture => /^OPF image \d+$/.test(picture.name));
   assert.equal(natives.length, 2, 'header and footer logo pictures');
   const svg = toSvg(deck, 1, {trace: true});
-  const groups = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="logo"[^>]*>[\s\S]*?<\/g>/g)].map(match => match[0]);
-  assert.equal(groups.length, 2);
+  const previewImages = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="image"[^>]*>[\s\S]*?<\/g>/g)].map(match => drawn(imageTags(match[0])[0], sizes.get(icon)));
+  assert.equal(previewImages.length, 2);
   for (const part of parts) {
-    const native = natives.find(picture => Math.abs(picture.x - (part.box.x + (part.box.width - Math.min(part.box.width, part.box.height * 2)) / 2)) < 2 && Math.abs(picture.y - part.box.y) < part.box.height);
-    assert.ok(native, `${part.kind} logo native picture near its part box`);
-    assert.ok(sameBytes(mediaFor(entries, 0, native.embed), jpgBytes), 'the icon variant is embedded');
+    const scale = Math.min(part.box.width / 120, part.box.height / 60);
+    const native = natives.find(picture => Math.abs(picture.x - (part.box.x + (part.box.width - 120 * scale) / 2)) < 2 && Math.abs(picture.y - (part.box.y + (part.box.height - 60 * scale) / 2)) < 2);
+    assert.ok(native, `${part.kind} logo native picture at its part box`);
+    assert.ok(sameBytes(mediaFor(entries, 0, native.embed), jpgBytes), 'the icon shape is embedded');
   }
   // Pixel parity with the preview's image part: same fitted rectangle.
-  const previewImages = groups.map(group => drawn(imageTags(group)[0], sizes.get(icon)));
   for (const native of natives) assert.ok(previewImages.some(rect => ['x', 'y', 'w', 'h'].every(key => Math.abs(rect[key] - native[key]) <= 1)), 'native logo matches a preview logo rectangle');
   const imported = await fromPptx(bytes);
-  assert.deepEqual(imported.design.footer?.left, {logo: true}, 'the footer logo returns as the flag');
-  assert.deepEqual(imported.design.header?.right, {logo: true, text: 'Confidential'}, 'the header logo and text return');
-  assert.ok(!JSON.stringify(imported.design.footer).includes('data:'), 'no data URI image is fabricated');
-  assert.deepEqual(imported.design.logo, {default: wide, icon}, 'design.logo itself is restored from the document tag');
-  // Without any logo the part reports unresolved-content and nothing is drawn; the flag still round-trips.
-  const bare = {design: {footer: {left: {logo: true}}}, slides: [{title: 'Content', text: 'Body copy.'}]};
+  assert.deepEqual(imported.design.footer?.left, {image: 'var:organization.logo.icon'}, 'the footer logo returns as its reference');
+  assert.deepEqual(imported.design.header?.right, {image: 'var:organization.logo.icon', text: 'Confidential'}, 'the header logo and text return');
+  assert.ok(!JSON.stringify(imported.design).includes('data:'), 'no data URI image is fabricated');
+  assert.deepEqual(imported.organization, organization, 'the logo itself returns on the organization');
+  // Without any logo the part reports unresolved-content and nothing is drawn; the reference still round-trips.
+  const bare = {design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Content', text: 'Body copy.'}]};
   const diagnostics = [];
   const result = await open(bare, {onDiagnostic: item => diagnostics.push(item)});
-  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.left.logo']);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.left.image']);
   assert.equal(pictures(slideXml(result.entries, 0)).length, 0);
   const reimported = await fromPptx(result.bytes);
-  assert.deepEqual(reimported.design.footer, {left: {logo: true}});
+  assert.deepEqual(reimported.design.footer, {left: {image: 'var:organization.logo.icon'}});
   checked++;
 }
 
 // ---- Picture bullets: a:buBlip per entry in place of a:buChar, the preview's marker size, still a list on import.
 {
   const entries = ['Alpha', 'Beta', 'Gamma'];
-  const deck = {design: {logo: {default: wide, icon: square}, listBullet: 'image', background: light}, slides: [{title: 'Items', items: entries}, {title: 'More', items: ['Delta']}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: {full: wide, icon: square}}, design: {listBullet: 'image', background: light}, slides: [{title: 'Items', items: entries}, {title: 'More', items: ['Delta']}]};
   const character = {...deck, design: {...deck.design, listBullet: undefined}};
   const picture = await open(deck), plain = await open(character);
   const xml = slideXml(picture.entries, 0);
@@ -199,7 +204,7 @@ let checked = 0;
   assert.ok(!/name="OPF bullet image"/.test(xml) && pictures(xml).length === 0, 'the embedding picture is not drawn');
   const embeds = [...xml.matchAll(/<a:buBlip><a:blip r:embed="([^"]+)"\/><\/a:buBlip>/g)].map(match => match[1]);
   assert.equal(new Set(embeds).size, 1, 'one relationship serves every bullet');
-  assert.ok(sameBytes(mediaFor(picture.entries, 0, embeds[0]), squareBytes), 'the icon variant is the bullet picture');
+  assert.ok(sameBytes(mediaFor(picture.entries, 0, embeds[0]), squareBytes), 'the icon shape is the bullet picture');
   // Same paragraph geometry as the character bullets: only the marker changes.
   const normalize = text => text.replace(/<a:buBlip>.*?<\/a:buBlip>/g, '<BU/>').replace(/<a:buChar [^>]*\/>/g, '<BU/>').replace(/<a:buClr>.*?<\/a:buClr>|<a:buSzPts [^>]*\/>|<a:buFont [^>]*\/>/g, '');
   // Shape ids stay unique but leave the removed embedding picture's id unused.
@@ -232,12 +237,12 @@ let checked = 0;
   assert.deepEqual(lists.map(list => list.length), [entries.length], 'tagless picture-bullet paragraphs import as one list');
   assert.equal(plainImport.design?.listBullet, undefined, 'plain PPTX: no listBullet hint without provenance');
   // An icon that cannot be drawn keeps the character bullets with one diagnostic.
-  const broken = {design: {logo: 'asset:missing', listBullet: 'image', background: light}, slides: [{title: 'Items', items: entries}]};
+  const broken = {organization: {id: 'acme', name: 'Acme', logo: 'asset:missing'}, design: {listBullet: 'image', background: light}, slides: [{title: 'Items', items: entries}]};
   const diagnostics = [];
   const fallback = await open(broken, {onDiagnostic: item => diagnostics.push(item)});
   assert.equal([...slideXml(fallback.entries, 0).matchAll(/<a:buChar/g)].length, entries.length);
   assert.ok(!/<a:buBlip>/.test(slideXml(fallback.entries, 0)));
-  assert.equal(diagnostics.filter(item => item.code === 'unresolved-asset' && item.path === 'design.logo').length, 1, 'one unresolved-asset for the icon');
+  assert.equal(diagnostics.filter(item => item.code === 'unresolved-asset' && item.path === 'organization.logo').length, 1, 'one unresolved-asset for the icon');
   // Without any logo the glyph bullets stay and core reports the missing logo.
   const noLogo = {design: {listBullet: 'image'}, slides: [{title: 'Items', items: entries}]};
   const reported = [];
@@ -287,7 +292,7 @@ let checked = 0;
 
 // ---- Provenance: edited and damaged logo pictures, no provenance, and a plain PPTX.
 {
-  const deck = {design: {logo: wide, background: light}, slides: [{title: 'Cover', layout: 'title'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]};
   const {bytes, entries} = await open(deck);
   const repack = edit => zipSync(Object.fromEntries(Object.entries(unzipSync(bytes)).map(([path, data]) => [path, edit(path, data) ?? data])));
   const text = value => new TextEncoder().encode(value);
@@ -302,10 +307,11 @@ let checked = 0;
   const reports = [];
   await fromPptx(damaged, {onDiagnostic: item => reports.push(item)});
   assert.equal(reports.filter(item => item.code === 'invalid-logo-provenance').length, 1, 'damaged tag reported');
-  // Exported with provenance: false, the document tag is absent; the logo picture still restores design.logo.
+  // Exported with provenance: false, the document tag is absent; the logo picture still restores the organization's logo.
   const noTag = await open(deck, {provenance: false});
   const fromPicture = await fromPptx(noTag.bytes);
-  assert.equal(fromPicture.design?.logo?.src, wide, 'design.logo returns from the picture when nothing else restored it');
+  assert.equal(fromPicture.organization?.logo?.src, wide, "the organization's logo returns from the picture when nothing else restored it");
+  assert.equal(fromPicture.design?.logo, undefined, 'never a design.logo asset');
   assert.ok(!fromPicture.slides[0].image && !fromPicture.slides[0].blocks, 'never a content image');
   // A PPTX whose logo picture has no OPF tag (a deck from another tool) imports it as an ordinary picture.
   const untagged = zipSync(Object.fromEntries(Object.entries(unzipSync(noTag.bytes)).filter(([path]) => !/^ppt\/tags\/opfLogo/.test(path)).map(([path, data]) => [path,
@@ -313,6 +319,7 @@ let checked = 0;
     /^ppt\/slides\/_rels\/slide1\.xml\.rels$/.test(path) ? text(decoder.decode(data).replace(/<Relationship Id="rIdOpfLogo1"[^>]*\/>/, '')) :
     path === '[Content_Types].xml' ? text(decoder.decode(data).replace(/<Override PartName="\/ppt\/tags\/opfLogo1.xml"[^>]*\/>/, '')) : data])));
   const plain = await fromPptx(untagged);
+  assert.equal(plain.organization, undefined, 'plain PPTX: no organization is invented');
   assert.equal(plain.design?.logo, undefined, 'plain PPTX: no design.logo is invented');
   assert.ok(JSON.stringify(plain.slides[0]).includes('data:image/png'), 'plain PPTX: the logo imports as an ordinary picture');
   assert.equal(pictures(slideXml(entries, 0)).filter(picture => picture.name === 'OPF logo').length, 1);
@@ -357,11 +364,11 @@ const powerpointSave = bytes => {
   return zipSync(result);
 };
 {
-  const deck = {design: {logo: {default: wide, light: tall, dark: square, icon: jpg}, listBullet: 'image', background: light, footer: {left: {logo: true}, right: {text: '{{slide.number}}'}}},
-    organization: {id: 'acme', name: 'Acme', logo: tall},
+  const organization = [{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: square, onDark: tall}, icon: jpg}}, {id: 'beta', name: 'Beta', logo: wide}];
+  const deck = {organization, design: {listBullet: 'image', background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}},
     slides: [
       {title: 'Cover', subtitle: 'On light', layout: 'title-subtitle'},
-      {title: 'Own', layout: 'title', design: {logo: jpg}},
+      {title: 'Own', layout: 'title', design: {logo: 'var:organization.beta.logo'}},
       {title: 'Items', items: ['Alpha', {text: 'Beta wraps ' + 'word '.repeat(40)}, {text: 'Gamma', description: 'A description line'}, {text: 'Nested', level: 1}]},
     ]};
   const original = await open(deck);
@@ -371,11 +378,10 @@ const powerpointSave = bytes => {
   for (const [label, input] of [['original', original.bytes], ['saved by PowerPoint', saved]]) {
     const diagnostics = [];
     const imported = await fromPptx(input, {onDiagnostic: item => diagnostics.push(item)});
-    assert.deepEqual(imported.design.logo, deck.design.logo, `${label}: design.logo restores with every variant`);
-    assert.equal(imported.organization.logo, tall, `${label}: organization.logo restores`);
-    assert.equal(imported.slides[1].design.logo, jpg, `${label}: a slide's own logo restores`);
+    assert.deepEqual(imported.organization, organization, `${label}: every organization logo shape and tone restores`);
+    assert.equal(imported.slides[1].design.logo, 'var:organization.beta.logo', `${label}: a slide's logo reference restores`);
     assert.equal(imported.design.listBullet, 'image', `${label}: listBullet`);
-    assert.deepEqual(imported.design.footer.left, {logo: true}, `${label}: footer logo flag`);
+    assert.deepEqual(imported.design.footer.left, {image: 'var:organization.logo.icon'}, `${label}: footer logo reference`);
     for (const code of ['invalid-logo-provenance', 'unresolved-asset-reference', 'content-structure-changed', 'invalid-document-provenance', 'invalid-furniture-provenance']) {
       assert.deepEqual(diagnostics.filter(item => item.code === code).map(item => item.path), [], `${label}: no ${code}`);
     }
@@ -389,19 +395,15 @@ const powerpointSave = bytes => {
   checked++;
 }
 
-// ---- Logo fallbacks without document provenance: a slide's own tagged logo restores whatever the deck logo is, in any slide order.
+// ---- Logo fallback without document provenance: the cover picture restores the organization's logo (the primary one, else a new one).
 {
   for (const provenance of [false, 'references-only']) {
-    for (const order of [[{title: 'Deck', layout: 'title'}, {title: 'Own', layout: 'title', design: {logo: jpg}}], [{title: 'Own', layout: 'title', design: {logo: jpg}}, {title: 'Deck', layout: 'title'}]]) {
-      const deck = {design: {logo: wide, background: light}, slides: order};
-      const {bytes} = await open(deck, {provenance});
-      const imported = await fromPptx(bytes);
-      const own = order.findIndex(slide => slide.design?.logo), other = 1 - own;
-      assert.equal(imported.slides[own].design?.logo?.src, jpg, `${provenance}: the slide's own logo restores (slide ${own})`);
-      assert.equal(imported.design?.logo?.src, wide, `${provenance}: the deck logo restores`);
-      assert.equal(imported.slides[other].design?.logo, undefined, `${provenance}: the other slide inherits the deck logo`);
-      assert.ok(!imported.slides[0].blocks && !imported.slides[1].blocks, `${provenance}: logos are not content`);
-    }
+    const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Deck', layout: 'title'}, {title: 'Own', layout: 'title', design: {logo: 'var:organization.acme.logo'}}]};
+    const {bytes} = await open(deck, {provenance});
+    const imported = await fromPptx(bytes);
+    assert.equal(imported.organization?.logo?.src, wide, `${provenance}: the organization's logo restores from the first logo picture`);
+    assert.equal(imported.design?.logo, undefined, `${provenance}: no design.logo`);
+    assert.ok(!imported.slides[0].blocks && !imported.slides[1].blocks, `${provenance}: logos are not content`);
   }
   checked++;
 }
@@ -409,19 +411,19 @@ const powerpointSave = bytes => {
 // ---- An unresolvable logo (a malformed SVG: no xmlns) draws the "Image unavailable" panel; the tagged panel is not content on import.
 {
   const svg = `data:image/svg+xml;base64,${Buffer.from('<svg width="10" height="10"/>').toString('base64')}`;
-  const deck = {design: {logo: svg, background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', text: 'Copy.'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: svg}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', text: 'Copy.'}]};
   for (const provenance of ['full', false]) {
     const diagnostics = [];
     const {bytes, entries} = await open(deck, {provenance, onDiagnostic: item => diagnostics.push(item)});
     assert.match(slideXml(entries, 0), /name="OPF image placeholder 1"/, 'the panel is drawn');
     assert.match(slideXml(entries, 0), /name="OPF image placeholder 1 text line 0"/, 'with named text lines');
     assert.ok(/OPF_LOGO_V1/.test(Object.entries(entries).filter(([path]) => /^ppt\/tags\/opfLogoPlaceholder/.test(path)).map(([, data]) => strFromU8(data)).join('')), 'the panel carries a logo tag');
-    assert.ok(diagnostics.some(item => item.code === 'unresolved-asset' && item.path === 'design.logo'));
+    assert.ok(diagnostics.some(item => item.code === 'unresolved-asset' && item.path === 'organization.logo'));
     const reports = [];
     const imported = await fromPptx(bytes, {onDiagnostic: item => reports.push(item)});
     assert.ok(!imported.slides[0].blocks && !imported.slides[0].text && !imported.slides[0].image, `${provenance}: the panel is not content`);
     assert.deepEqual(reports.filter(item => /structure|invalid-/.test(item.code)).map(item => item.code), [], `${provenance}: a clean round trip`);
-    if (provenance === 'full') assert.equal(imported.design.logo, svg, 'the stored logo returns');
+    if (provenance === 'full') assert.equal(imported.organization.logo, svg, 'the stored logo returns');
     // An edited panel (its tag removed) is ordinary content again.
     const untagged = zipSync(Object.fromEntries(Object.entries(unzipSync(bytes)).filter(([path]) => !/^ppt\/tags\/opfLogoPlaceholder/.test(path)).map(([path, data]) => [path,
       path === 'ppt/slides/slide1.xml' ? new TextEncoder().encode(decoder.decode(data).replace(/<p:custDataLst><p:tags r:id="rIdOpfLogoPlaceholder1"\/><\/p:custDataLst>/, '')) :
@@ -433,4 +435,4 @@ const powerpointSave = bytes => {
   checked++;
 }
 
-console.log(`Design fields passed: ${checked} groups (cover and section logo, variants and organization fallback, unresolved logo, footer logo, picture bullets, accent font, provenance).`);
+console.log(`Design fields passed: ${checked} groups (cover and section logo, tones and partner logo, unresolved logo, footer logo reference, picture bullets, accent font, provenance).`);

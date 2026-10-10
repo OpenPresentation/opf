@@ -3,7 +3,8 @@ import {attachTextTags, decodeTextTag, encodeTextTag} from './code-provenance.js
 import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
-import {LOGO_TAG} from './logo-provenance.js';
+import {resolveLogo} from '@openpresentation/opf/composition';
+import {mediaKey} from './media-dedupe.js';
 import {NATIVE_PLACEHOLDERS, footerValue, isNativePlaceholderType, readNativePlaceholders} from './native-furniture.js';
 
 const TAG = 'OPF_FURNITURE_V1';
@@ -26,6 +27,8 @@ const platformId = new RegExp(schemas.presentation.$defs.Socials.propertyNames.p
 const socialLines = part => part.links.map(link => ({platform: link.platform,
   scheme: link.href && !/^[a-z][a-z0-9+.-]*:/i.test(link.text) ? 'https://' : ''}));
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const LOGO_REFERENCE = /^var:organization(?:\.[A-Za-z0-9_-]{1,64}){1,3}$/;
+const isLogoReference = value => typeof value === 'string' && value.length <= 200 && LOGO_REFERENCE.test(value);
 const key = part => `${part.kind}.${part.zone}.${part.field}`;
 // Key order is not meaning: a value merged from native placeholders equals the same value read from a manifest.
 const canonical = value => JSON.stringify(value, (key, item) => object(item) ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : item);
@@ -72,11 +75,13 @@ function unchangedStaticDate(marker, format, ordered, paragraphs) {
   }), 'Current static date text or boundaries differ from the exported lines.');
 }
 
-// This manifest contains topology, identities, inactive flags, format settings and the authored text of a zone whose
-// `text` uses built-in variables (`templates`, FA-31; `authored` is the document as given to toPptx, before the deck-wide pass). Current native shapes supply all words, image bytes and
-// alt text, even after edits; a recorded format or template is kept only while the current text still matches it exactly.
+// This manifest contains topology, identities, inactive flags, format settings, the authored text of a zone whose `text` uses
+// built-in variables (`templates`, FA-31; `authored` is the document as given to toPptx, before the deck-wide pass) and the
+// organization logo reference of a zone `image` (`images`, RR-71: `{reference, media?, drawn?}` per `kind.zone`). Current native
+// shapes supply all words, image bytes and alt text, even after edits; a recorded format, template or logo reference is kept
+// only while the current text or picture still matches it exactly.
 export function furnitureManifest(presentation, slide, layout, slideIndex, staticDates = new Map(), natives = new Map(), authored) {
-  const definitions = {}, formats = {}, templates = {};
+  const definitions = {}, formats = {}, templates = {}, images = {};
   for (const kind of kinds) {
     const local = slide.design?.[kind] !== undefined;
     const source = local ? slide.design[kind] : presentation.design?.[kind];
@@ -84,8 +89,14 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
     const value = source === false ? false : {};
     if (value !== false) for (const zone of zones) if (source[zone] !== undefined) {
       value[zone] = {};
+      // An organization logo reference (`var:organization.logo.icon`): core lays out an image part with `reference`; the manifest keeps
+      // the authored string. With no part (the organization has no logo) the reference is all there is, and import restores it.
+      const reference = isLogoReference(source[zone].image) ? source[zone].image : undefined;
+      const imagePart = layout.parts.find(part => part.kind === kind && part.zone === zone && part.type === 'image');
+      if (reference !== undefined) images[`${kind}.${zone}`] = imagePart ? {reference} : {reference, drawn: false};
       for (const field of fields) if (source[zone][field] !== undefined) {
         const current = source[zone][field];
+        if (field === 'image' && reference !== undefined && !imagePart) continue;
         value[zone][field] = field === 'image' ? 'native' : typeof current === 'string' ? 'literal' : current;
       }
       const format = Object.fromEntries(settings.filter(setting => typeof source[zone][setting] === 'string').map(setting => [setting, source[zone][setting]]));
@@ -103,35 +114,19 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
   if (!Object.keys(definitions).length) return null;
   const organizations = array(presentation.organization);
   const organization = organizations.find(item => item.role === 'primary') ?? organizations[0];
-  // Generated deck logos (logo: true) are listed beside the topology, never inside it: the part list and the field
-  // definitions are validated strictly by every released importer (0.11.6 and earlier reject an unknown field there),
-  // so they keep describing only what those importers know. `drawn` is false when no logo resolved at export.
-  const logos = [];
-  for (const kind of kinds) {
-    const source = (slide.design?.[kind] !== undefined ? slide.design : presentation.design)?.[kind];
-    for (const zone of zones) if (definitions[kind]?.value?.[zone] && source?.[zone]?.logo === true) {
-      logos.push({kind, zone, drawn: layout.parts.some(part => part.field === 'logo' && part.kind === kind && part.zone === zone)});
-    }
-  }
   return {v: 1, role: 'slide', group: String(slideIndex), definitions, ...(Object.keys(formats).length ? {formats} : {}),
-    ...(Object.keys(templates).length ? {templates} : {}),
+    ...(Object.keys(templates).length ? {templates} : {}), ...(Object.keys(images).length ? {images} : {}),
     ...(layout.parts.some(part => part.field === 'socials') ? {organizationId: organization?.id} : {}),
-    parts: layout.parts.flatMap((part, index) => part.field === 'logo' ? [] : [{kind: part.kind, zone: part.zone, field: part.field,
+    parts: layout.parts.map((part, index) => ({kind: part.kind, zone: part.zone, field: part.field,
       type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
       ...(part.field === 'socials' ? {socials: socialLines(part)} : {}),
       ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {}),
       // RR-11: this part is a native PowerPoint placeholder (dt, ftr or sldNum); deleting it in PowerPoint's dialog is then intent.
-      ...(natives.has(index) ? {ph: natives.get(index)} : {})}]),
-    ...(logos.length ? {logos} : {})};
+      ...(natives.has(index) ? {ph: natives.get(index)} : {})}))};
 }
 
-// The manifest index of a layout part: logo parts are not in the manifest, so later parts shift down.
-export const manifestPartIndex = (parts, index) => parts.slice(0, index).filter(part => part.field !== 'logo').length;
-
-export function attachFurnitureTags(entries, records, manifests, logoRecords = new Map()) {
+export function attachFurnitureTags(entries, records, manifests) {
   attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true});
-  // A generated logo picture carries the logo tag (never the furniture tag): see logo-provenance.js.
-  attachTextTags(entries, logoRecords, LOGO_TAG, 'opfFurnitureLogo', 'furniture logo', {pictures: true});
   const types = [];
   for (const [path, manifest] of manifests) {
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
@@ -151,6 +146,49 @@ export function attachFurnitureTags(entries, records, manifests, logoRecords = n
     types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
   }
   if (types.length) entries['[Content_Types].xml'] = enc.encode(dec.decode(entries['[Content_Types].xml']).replace('</Types>', types.join('') + '</Types>'));
+}
+
+/**
+ * An organization `logo` value reduced to what logo resolution needs (RR-71): the shapes and tones that exist, each as a
+ * placeholder string (a stored picture, an asset reference and a path all count), or undefined when it has none.
+ */
+export function logoShape(value) {
+  if (typeof value === 'string') return value.trim() ? 'x' : undefined;
+  if (!object(value)) return undefined;
+  if (typeof value.src === 'string') return value.src.trim() ? 'x' : undefined;
+  if (typeof value.$opfMedia === 'string') return 'x';
+  const kept = Object.fromEntries(Object.entries(value).map(([name, item]) => [name, logoShape(item)]).filter(([, item]) => item !== undefined));
+  return Object.keys(kept).length ? kept : undefined;
+}
+
+// The content key of the embedded bytes of a picture: its main blip's media part.
+function pictureKey(picture, relationships, entries) {
+  const target = relationships.get(picture?.['p:blipFill']?.['a:blip']?.['r:embed'])?.path;
+  return target && entries[target] ? mediaKey(entries[target]) : undefined;
+}
+
+/**
+ * Finish the `images` of each slide manifest once the package is final (SVG parts, format conversion and media de-duplication
+ * change what a picture embeds): the media key of every logo-reference picture, or `drawn: false` when the picture could not be
+ * embedded. Rewrites the slide's furniture tag part. `names` maps `<slide part>|<kind>.<zone>` to the picture's object name.
+ */
+export function stampFurnitureImageKeys(entries, manifests, names, relationshipsOf) {
+  for (const [path, manifest] of manifests) {
+    if (!manifest.images) continue;
+    const xml = dec.decode(entries[path]), relationships = relationshipsOf(entries, path);
+    const pictures = [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(match => match[0]);
+    for (const [slot, entry] of Object.entries(manifest.images)) {
+      if (entry.drawn === false) continue;
+      const name = names.get(`${path}|${slot}`);
+      const embed = name === undefined ? undefined : pictures.find(picture => picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] === name)?.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+      const target = embed === undefined ? undefined : relationships.get(embed)?.path;
+      if (target && entries[target]) entry.media = mediaKey(entries[target]);
+      else entry.drawn = false;
+    }
+    const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
+    if (!entries[part]) throw Error('Missing furniture tag part.');
+    entries[part] = enc.encode(dec.decode(entries[part]).replace(/\bval="[^"]*"/, () => `val="${encodeTextTag(manifest)}"`));
+  }
 }
 
 function readTags(container, relationships, entries) {
@@ -187,14 +225,16 @@ function validateManifest(manifest) {
       }
     }
   }
-  if (manifest.logos !== undefined) {
-    check(Array.isArray(manifest.logos) && manifest.logos.length <= 6, 'Invalid furniture logos.');
-    const seen = new Set();
-    for (const logo of manifest.logos) {
-      const slot = `${logo?.kind}.${logo?.zone}`;
-      check(object(logo) && kinds.includes(logo.kind) && zones.includes(logo.zone) && typeof logo.drawn === 'boolean' && Object.keys(logo).length === 3 &&
-        object(manifest.definitions[logo.kind]?.value?.[logo.zone]) && !seen.has(slot), 'Invalid furniture logo.');
-      seen.add(slot);
+  if (manifest.images !== undefined) {
+    check(object(manifest.images), 'Invalid furniture images.');
+    for (const [slot, entry] of Object.entries(manifest.images)) {
+      const [kind, zone, extra] = slot.split('.');
+      const flag = manifest.definitions[kind]?.value?.[zone]?.image;
+      check(extra === undefined && object(manifest.definitions[kind]?.value?.[zone]) && object(entry) && Object.keys(entry).every(name => ['reference', 'media', 'drawn'].includes(name)) &&
+        isLogoReference(entry.reference) && (entry.media === undefined || (typeof entry.media === 'string' && /^\d{1,12}:[0-9a-f]{1,32}$/.test(entry.media))) &&
+        (entry.drawn === undefined || (entry.drawn === false && entry.media === undefined)) &&
+        // A reference with no part at all has no image flag; one with a part has the part's flag.
+        (flag === 'native' || (flag === undefined && entry.drawn === false)), 'Invalid furniture image.');
     }
   }
   if (manifest.templates !== undefined) {
@@ -229,17 +269,6 @@ function validateManifest(manifest) {
   if (manifest.parts.some(part => part.field === 'socials')) check(typeof manifest.organizationId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.organizationId), 'Invalid organization identity.');
 }
 
-// The logo tags of a picture: any other OPF tag next to one is not an identity conflict for the furniture reader.
-function readLogoTags(container, relationships, entries) {
-  const found = [];
-  for (const link of array(container?.['p:tags'])) {
-    const rel = relationships.get(link['r:id']);
-    if (rel?.type !== REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
-    found.push(...array(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']).filter(tag => tag.name?.toUpperCase() === LOGO_TAG));
-  }
-  return found;
-}
-
 // The native fields of the lines of one tagged text part, with offsets into the text sourceLineParagraphs joins from them.
 function orderedFields(ordered, paragraphs) {
   const fields = [];
@@ -270,7 +299,7 @@ function importedZoneText(text, nativeFields, template, position) {
   return slideNumberTemplate(text, nativeFields);
 }
 
-function readSlide(context, entries, slideIndex, slideCount, report, taggedText, section, draw) {
+function readSlide(context, entries, slideIndex, slideCount, report, taggedText, section, draw, logoOwner) {
   const {root, shapes, paragraphs, pictures, relationships, readPicture} = context;
   const candidates = {};
   const records = [];
@@ -285,16 +314,8 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
       } catch { invalidRecord = true; }
     }
   }
-  // Generated logo pictures: identity only, the bytes come from design.logo.
-  const logoPictures = [];
-  for (const [index, node] of pictures.entries()) try {
-    for (const tag of readLogoTags(node['p:nvPicPr']?.['p:nvPr']?.['p:custDataLst'], relationships, entries)) {
-      const data = decodeTextTag(tag.val);
-      if (data?.role === 'furniture') logoPictures.push({index, data});
-    }
-  } catch { invalidRecord = true; }
   const tags = readTags(root['p:cSld']?.['p:custDataLst'], relationships, entries);
-  if (!tags.tags.length && !records.length && !invalidRecord && !logoPictures.length) return candidates;
+  if (!tags.tags.length && !records.length && !invalidRecord) return candidates;
   let manifest;
   try {
     check(!tags.ambiguous && tags.tags.length === 1 && !invalidRecord, 'Missing or ambiguous furniture manifest/shape tags.');
@@ -315,23 +336,29 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
       const candidate = {scope: definition.scope, value, text: [], pictures: [], socials: []};
-      // logo: true returns as its flag; the generated picture is consumed, never content or an image field.
-      for (const logo of (manifest.logos ?? []).filter(item => item.kind === kind)) {
-        const found = logoPictures.filter(item => item.data.v === 1 && item.data.group === manifest.group && item.data.furniture === kind && item.data.zone === logo.zone);
-        check(found.length <= 1, 'Duplicated furniture logo.');
-        if (found.length) { candidate.pictures.push(found[0].index); value[logo.zone].logo = true; }
-        else if (!logo.drawn) value[logo.zone].logo = true;
+      // A logo reference with no part (the organization had no logo to draw) returns as the reference.
+      for (const [slot, entry] of Object.entries(manifest.images ?? {})) {
+        const [slotKind, slotZone] = slot.split('.');
+        if (slotKind === kind && entry.drawn === false && !definition.value?.[slotZone]?.image && value !== false) value[slotZone].image = entry.reference;
       }
       for (const [partIndex, part] of manifest.parts.entries()) {
         if (part.kind !== kind) continue;
         const group = records.filter(record => record.data.part === partIndex);
+        const logo = part.type === 'image' ? manifest.images?.[`${kind}.${part.zone}`] : undefined;
+        // The picture of a logo reference could not be embedded at export: the reference is all there is.
+        if (logo?.drawn === false && group.length === 0) { value[part.zone].image = logo.reference; continue; }
         // A native placeholder PowerPoint's Header & Footer dialog removed is a deliberate removal, not damage.
         if (part.ph !== undefined && group.length === 0) { removedNative = true; continue; }
         check(group.length === part.count, 'Incomplete or duplicated furniture part.');
         if (part.type === 'image') {
-          const current = readPicture(pictures[group[0].index]);
-          check(current?.kind === 'image', 'Furniture image is no longer recoverable.');
-          value[part.zone].image = current.payload.image;
+          // An unchanged picture of an organization logo returns as its reference (the organization is stored with its logo, and the
+          // picture still embeds the bytes export drew); an edited, replaced or foreign one is an ordinary image.
+          if (logo && logoOwner(logo.reference) && logo.media !== undefined && logo.media === pictureKey(pictures[group[0].index], relationships, entries)) value[part.zone].image = logo.reference;
+          else {
+            const current = readPicture(pictures[group[0].index]);
+            check(current?.kind === 'image', 'Furniture image is no longer recoverable.');
+            value[part.zone].image = current.payload.image;
+          }
           candidate.pictures.push(group[0].index);
         } else {
           const ordered = Array(part.count);
@@ -398,9 +425,13 @@ function importedDate(flag, format, text, nativeFields, zone, marker, ordered, p
 // `options.organizations` the stored organizations (OPF_DOCUMENT_V1) a socials part can name by id, and `options.draw(template,
 // {index, count, section})` draws a stored zone text for a slide (its built-in variables resolved from the document's metadata).
 export function importFurniture(contexts, entries, onDiagnostic, {sections = [], organizations = [], draw = () => undefined} = {}) {
+  // A logo reference returns only while the stored organizations still give it a logo (RR-71): `organizations` carry `logo`.
+  const logoOwner = reference => {
+    try { return resolveLogo({organization: organizations.filter(item => item.logo !== undefined)}, {}, {reference}) !== null; } catch { return false; }
+  };
   const report = (index, message) => onDiagnostic?.({code: 'invalid-furniture-provenance', path: `slides.${index}.design`, message: `${message} Ordinary import retains current native content; no old source words are restored.`});
   const taggedText = contexts.map(() => new Set());
-  const candidates = contexts.map((context, index) => readSlide(context, entries, index, contexts.length, report, taggedText[index], sections[index], draw));
+  const candidates = contexts.map((context, index) => readSlide(context, entries, index, contexts.length, report, taggedText[index], sections[index], draw, logoOwner));
   // Social profiles belong to the organization the manifest names by id, which only the stored document metadata can supply
   // (no furniture part shows the organization's name any more); without it (or with disagreeing values) the lines stay
   // ordinary current text.

@@ -24,7 +24,7 @@ import {headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
-import {attachFurnitureTags, furnitureManifest, importFurniture, manifestPartIndex, staticDateFallback} from './furniture-provenance.js';
+import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListBreaks, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
@@ -278,10 +278,11 @@ export async function toPptx(input, options = {}) {
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
-  context.furnitureLogoTags = new Map();
+  context.furnitureImages = new Map();
   context.furnitureFields = new Map();
   context.furnitureManifests = new Map();
   context.nativeFurniture = new Map();
+  context.nativeFurnitureBands = new Map();
   context.hostDate = options.date;
   context.authored = authored;
   context.codeTags = new Map();
@@ -432,7 +433,7 @@ export async function fromPptx(input, options = {}) {
     ...(stored.organization !== undefined ? {organization: stored.organization} : {}),
     ...(stored.speaker !== undefined ? {speaker: stored.speaker} : {}),
   };
-  const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic, {sections: slideSections ?? [], organizations: asArray(stored.organization).filter(item => isPlainObject(item) && typeof item.id === 'string' && typeof item.name === 'string').map(item => ({id: item.id, name: item.name})),
+  const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic, {sections: slideSections ?? [], organizations: asArray(stored.organization).filter(item => isPlainObject(item) && typeof item.id === 'string' && typeof item.name === 'string').map(item => ({id: item.id, name: item.name, ...(typeof item.role === 'string' ? {role: item.role} : {}), ...(logoShape(item.logo) !== undefined ? {logo: logoShape(item.logo)} : {})})),
     draw: (template, {index, count, section}) => drawFurnitureText(template, {index, count, section}, importedMetadata)});
   if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
   if (furniture.organization) imported.organization = furniture.organization;
@@ -530,21 +531,19 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
   restoreRunColors(imported.slides, info, resolve, report);
 }
 
-// A consumed logo picture (OPF_LOGO_V1) never becomes content. Its own image restores the logo only when nothing else
-// did: the stored document and slide design (or the organization) win and carry LogoSet variants, so a package exported
-// without provenance still keeps its logo. A slide-level logo path restores slide design; every other path the deck's.
+// A consumed logo picture (OPF_LOGO_V1) never becomes content. Its own image restores the organization's logo only when the
+// stored document did not (RR-71: logos live on the organization), so a package exported without provenance still keeps its
+// logo: on the primary organization, else on a new one named after the deck. The picture is one drawn asset, so it becomes the
+// organization's single logo for every shape.
 function restoreLogoFallback(imported, contexts) {
   const organizations = asArray(imported.organization);
-  contexts.forEach((context, index) => {
-    const fallback = context.logoFallback;
-    if (!fallback) return;
-    const slide = imported.slides[index];
-    const image = fallback.image;
-    // A slide's own logo restores whenever the slide states none, whatever the deck logo is; the deck logo only
-    // when neither it nor the organization has one.
-    if (fallback.path.startsWith('slides.')) { if (slide.design?.logo === undefined) slide.design = {...slide.design, logo: image}; }
-    else if (imported.design?.logo === undefined && !organizations.some(item => item?.logo !== undefined)) imported.design = {...imported.design, logo: image};
-  });
+  if (organizations.some(item => item?.logo !== undefined)) return;
+  const image = contexts.map(context => context.logoFallback?.image).find(Boolean);
+  if (!image) return;
+  const primary = organizations.find(item => item?.role === 'primary') ?? organizations[0];
+  if (!primary) { imported.organization = {id: 'brand', name: imported.name ?? 'Brand', logo: image}; return; }
+  const index = organizations.indexOf(primary), withLogo = {...primary, logo: image};
+  imported.organization = Array.isArray(imported.organization) ? imported.organization.map((item, at) => at === index ? withLogo : item) : withLogo;
 }
 
 function readPptxZip(input) {
@@ -752,7 +751,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     diagnostic => options.onDiagnostic?.({...diagnostic, path: watermarkPath}));
   if (watermark.design) slide.design = {...slide.design, ...watermark.design};
   nativeContext.watermarkPictures = watermark.consumed;
-  // The generated deck logo picture is not content; its value returns from the stored design (or, without one, from the picture).
+  // The generated cover logo picture is not content; the logo returns from the stored organization (or, without one, from the picture).
   const logoPath = `slides.${slideIndex}.design.logo`;
   const logo = importLogo(nativeContext.pictures, relationships, entries, slideIndex,
     picture => importPicture(entries, picture, slidePath, relationships, diagnostic => {
@@ -1948,6 +1947,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const geometry = composeSlide(opfSlide, composeOptions);
   // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
   if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
+  slideContext.zoneBand = zoneBands(composeOptions);
   slide.background = { color: slideContext.colors.background };
   // An image background is core's geometry.backgroundImage (slide, deck, then theme background); every other kind is the
   // effective design or theme background definition.
@@ -2809,6 +2809,12 @@ function defaultFooterParts(composeOptions) {
   }
 }
 
+// The band core gives a lone text part in a zone (x and width in pixels): where a footer added natively sits.
+function zoneBands(composeOptions) {
+  let bands;
+  return zone => (bands ??= new Map((defaultFooterParts(composeOptions) ?? []).map(part => [part.zone, {x: part.box.x, width: part.box.width}]))).get(zone);
+}
+
 // The slide and deck as given to toPptx (variables not yet resolved), for the furniture manifest's authored header and footer text.
 const authoredFurniture = (context, slideIndex) => ({presentation: context.authored, slide: context.authored?.slides?.[slideIndex]});
 
@@ -2825,10 +2831,13 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
   for(const [index,part]of layout.parts.entries()){
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
-      const objectName = await addImagePayload(slide,presentation,part.image,region,part.path,context,options);
-      // A generated deck logo is listed beside the manifest topology (see furnitureManifest) and tagged as a logo.
-      if (objectName && part.field === 'logo') context.furnitureLogoTags.set(objectName, {v:1, role:'furniture', group:String(slideIndex), furniture:part.kind, zone:part.zone});
-      else if (objectName) context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:manifestPartIndex(layout.parts, index)});
+      // A logo reference draws the organization's asset: a source that cannot be drawn is reported where the asset is written.
+      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options);
+      if (objectName) {
+        context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
+        // RR-71: a part drawn from a logo reference (var:organization.logo.icon) records its picture, so import can tell it is unchanged.
+        if (part.reference !== undefined) context.furnitureImages.set(`ppt/slides/slide${slideIndex + 1}.xml|${part.kind}.${part.zone}`, objectName);
+      }
     }else{
       if(!part.fit?.sourceLines)throw new OPFPptxError('missing-furniture-layout','Repeated text requires accepted source lines from core.',{path:part.path});
       // Slide numbers ({{slide.number}}) and current dates become native PowerPoint fields; {{deck.slideCount}},
@@ -2848,8 +2857,14 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
           if(marker) staticDates.set(index,marker);
         }
       }
-      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.mutedColor,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:manifestPartIndex(layout.parts,index)},liveFields,links:part.links});
-      if(natives.has(index))context.nativeFurniture.set(`OPF furniture ${slideIndex} part ${index} line 0`,natives.get(index));
+      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.mutedColor,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields,links:part.links});
+      if(natives.has(index)){
+        const name=`OPF furniture ${slideIndex} part ${index} line 0`;
+        context.nativeFurniture.set(name,natives.get(index));
+        // RR-71: a part in a row with other parts is as wide as its text; the master's placeholder spans the zone.
+        const band=context.zoneBand?.(part.zone);
+        if(band&&part.box.width<band.width-.5)context.nativeFurnitureBands.set(name,band);
+      }
     }
   }
   const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates, natives, authoredFurniture(context, slideIndex));
@@ -3799,9 +3814,9 @@ async function normalizePptxZip(raw, context) {
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);
-  attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests,context.furnitureLogoTags);
+  attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests);
   // RR-11: the recorded footer shapes become PowerPoint's date, footer and slide-number placeholders.
-  context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture);
+  context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture,context.nativeFurnitureBands);
   // The "Image unavailable" panel of an unresolved logo: identity only, so import does not read it as content.
   attachTextTags(entries,context.logoPlaceholderTags,LOGO_TAG,'opfLogoPlaceholder','logo placeholder');
   for(const [part,bytes]of Object.entries(entries)){
@@ -3905,6 +3920,8 @@ async function normalizePptxZip(raw, context) {
   });
   // A picture repeated across slides embeds once (after fitting, which needs each slide's own relationship).
   dedupeMedia(entries, imageMetadata, resolveRelationshipTarget);
+  // The media keys of the logo-reference pictures, now that the package holds its final media (src/furniture-provenance.js).
+  stampFurnitureImageKeys(entries, context.furnitureManifests, context.furnitureImages, parseRelationships);
   // Charts and notes follow the language and fonts of the slide they belong to.
   context.partSlides = new Map();
   for (const part of Object.keys(entries)) {

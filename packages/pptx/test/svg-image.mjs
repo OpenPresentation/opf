@@ -115,13 +115,13 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 3. Every place an image appears.
 {
-  const logoDeck = {design: {logo: wide, imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {left: {logo: true}}},
+  const logoDeck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {left: {image: 'var:organization.logo'}}},
     slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'right'}}]}]};
   const {entries, diagnostics, bytes} = await open(logoDeck);
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   const cover = pictures(slideXml(entries, 0)), body = pictures(slideXml(entries, 1));
   const named = (list, prefix) => list.filter(item => item.name?.startsWith(prefix));
-  // Cover logo (design.logo): native, left-anchored in core's box.
+  // Cover logo (the organization's logo): native, left-anchored in core's box.
   const [logo] = named(cover, 'OPF logo');
   assert.ok(logo, 'the cover logo is drawn');
   await assertNative(entries, 0, logo, wideText, 'cover logo');
@@ -142,10 +142,11 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const wideParts = svgParts.filter(part => strFromU8(entries[part]) === wideText);
   assert.equal(wideParts.length, 1, 'identical SVG media parts are embedded once');
   assert.equal(new Set(svgParts).size, svgParts.length);
-  // The rebuilt package re-imports: the logo and watermark return as design fields, the placed block with its SVG source.
+  // The rebuilt package re-imports: the logo returns on the organization, the watermark as a design field, the placed block with its SVG source.
   const reports = [];
   const imported = await fromPptx(bytes, {onDiagnostic: item => reports.push(item)});
-  assert.equal(imported.design.logo, wide, 'design.logo returns as the authored SVG');
+  assert.equal(imported.organization.logo, wide, 'organization.logo returns as the authored SVG');
+  assert.equal(imported.design.footer.left.image, 'var:organization.logo', 'the footer logo returns as its reference');
   assert.equal(imported.design.watermark.src, square);
   assert.equal(imported.slides[1].blocks.find(block => block.placement)?.image.src, tall);
   assert.deepEqual(reports.filter(item => /invalid|unsupported/.test(item.code)), [], 'no provenance complaint for SVG pictures');
@@ -185,7 +186,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 }
 {
   const icon = uriOf(`<svg ${NS} width="32" height="32"><rect width="32" height="32" fill="#cc0000"/></svg>`);
-  const deck = {design: {logo: {default: wide, icon}, listBullet: 'image', background: light}, slides: [{title: 'Items', items: ['Alpha', 'Beta']}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: {full: wide, icon}}, design: {listBullet: 'image', background: light}, slides: [{title: 'Items', items: ['Alpha', 'Beta']}]};
   const {entries, diagnostics} = await open(deck);
   const xml = slideXml(entries);
   assert.equal([...xml.matchAll(/<a:buBlip>/g)].length, 2, 'picture bullets');
@@ -214,7 +215,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 6. Determinism: two exports, other time zones and locales, and a pinned fallback raster.
 {
-  const deck = {design: {logo: wide, background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', image: {src: tall, alt: 'Tall'}}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', image: {src: tall, alt: 'Tall'}}]};
   const first = await toPptx(deck, FIXED), second = await toPptx(deck, FIXED);
   assert.equal(sha(first), sha(second), 'two exports are byte-identical');
   const script = `import {toPptx} from ${JSON.stringify(new URL('../dist/index.js', import.meta.url).href)};
@@ -337,7 +338,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     }
     return zipSync(Object.fromEntries(Object.entries(result).filter(([name]) => !name.endsWith('/'))));
   }
-  const deck = {design: {logo: wide, watermark: {src: square, opacity: 1}, header: {right: {image: {src: tall, alt: 'Icon'}}}, footer: {left: {logo: true}}, background: light},
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {watermark: {src: square, opacity: 1}, header: {right: {image: {src: tall, alt: 'Icon'}}}, footer: {left: {image: 'var:organization.logo'}}, background: light},
     slides: [
       {title: 'Cover', layout: 'title'},
       {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, fit: 'contain', placement: {edge: 'right'}}]},
@@ -354,7 +355,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     const imported = await fromPptx(saved, {onDiagnostic: item => reports.push(item)});
     const label = dropFallback ? 'SVG only' : 'with fallback';
     assert.deepEqual(reports.filter(item => /^invalid-|^unsupported-image-(?!crop)/.test(item.code)), [], `${label}: no provenance complaint`);
-    assert.equal(imported.design.logo, wide, `${label}: design.logo`);
+    assert.equal(imported.organization.logo, wide, `${label}: organization.logo`);
     assert.equal(imported.design.watermark?.src, square, `${label}: design.watermark`);
     assert.equal(imported.slides[1].blocks?.find(block => block.placement)?.image.src, tall, `${label}: placed image (contain)`);
     assert.equal(imported.slides[2].blocks?.find(block => block.placement)?.image.src, wide, `${label}: placed image (cover)`);

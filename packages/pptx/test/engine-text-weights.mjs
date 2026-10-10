@@ -21,9 +21,9 @@ const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape])
   bold: shape.match(/<a:rPr\b[^>]*\bb="(\d)"/)?.[1],
   typeface: shape.match(/<a:latin typeface="([^"]*)"/)?.[1],
 }));
-const exportDeck = async (slide, options = {}) => {
+const exportDeck = async (slide, options = {}, deck = {}) => {
   const diagnostics = [];
-  const bytes = await toPptx({name: 'Unresolved', slides: [{id: 's', title: 'Title', ...slide}]}, {fonts, onDiagnostic: diagnostic => diagnostics.push(diagnostic), ...options});
+  const bytes = await toPptx({name: 'Unresolved', ...deck, slides: [{id: 's', title: 'Title', ...slide}]}, {fonts, onDiagnostic: diagnostic => diagnostics.push(diagnostic), ...options});
   return {bytes, xml: slideXml(bytes), diagnostics};
 };
 const unresolved = diagnostics => diagnostics.filter(diagnostic => diagnostic.code === 'unresolved-asset').map(diagnostic => diagnostic.path);
@@ -47,8 +47,8 @@ const remote = name => `https://example.invalid/${name}.png`;
   assert.ok(shapes(xml).some(shape => shape.name === 'OPF image placeholder 1'), 'the quote photo exports as the placeholder');
 }
 {
-  const {xml, diagnostics} = await exportDeck({text: 'Body', design: {logo: remote('logo'), footer: {left: {logo: true}, right: {text: '{{slide.number}}'}}}});
-  assert.deepEqual(unresolved(diagnostics), ['slides.0.design.footer.left.logo']);
+  const {xml, diagnostics} = await exportDeck({text: 'Body', design: {footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}}}, {}, {organization: {id: 'acme', name: 'Acme', logo: remote('logo')}});
+  assert.deepEqual(unresolved(diagnostics), ['organization.logo']);
   assert.ok(shapes(xml).some(shape => shape.name === 'OPF image placeholder 1'), 'the logo exports as the placeholder');
 }
 {
