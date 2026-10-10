@@ -319,6 +319,7 @@
     "@expo-google-fonts/tinos": "0.4.2",
     "@openpresentation/opf-pptx": "^0.17.0",
     "@openpresentation/opf-render": "^0.17.0",
+    "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
     "jszip": "3.10.2",
