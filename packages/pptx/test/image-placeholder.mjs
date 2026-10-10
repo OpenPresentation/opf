@@ -50,6 +50,9 @@ const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape])
     dash: shape.match(/<a:prstDash val="(\w+)"/)?.[1],
   };
 });
+// opf-pptx#221: the panel and its label lines or cross strokes are one native group that carries the accessible name.
+const PANEL = /^OPF image placeholder \d+$/;
+const groupDescr = (xml, panel) => attrs(xml.match(new RegExp(`<p:cNvPr\\b[^>]*\\bname="${panel} group"[^>]*>`))?.[0] ?? '').descr;
 const near = (actual, expected, message, tolerance = .05) => assert.ok(Math.abs(actual - expected) <= tolerance, `${message}: ${actual} vs ${expected}`);
 const hex = color => color.replace(/^#/, '').toUpperCase();
 
@@ -73,7 +76,8 @@ const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictG
 for (const options of [{}, {fonts}]) {
   const preview = toSvg(deck, {trace: true, ...options});
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
-  const native = index => shapes(decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
+  const slideXml = index => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]);
+  const native = index => shapes(slideXml(index));
 
   const labelled = placeholders(preview[0]);
   assert.deepEqual(labelled.map(item => item.label), [
@@ -83,16 +87,17 @@ for (const options of [{}, {fonts}]) {
     'Image unavailable: Image',
   ]);
   const first = native(0);
-  const panels = first.filter(shape => shape.name.startsWith('OPF image placeholder '));
+  const panels = first.filter(shape => PANEL.test(shape.name));
   assert.equal(panels.length, 4, 'One native panel per unavailable image');
   for (const [index, item] of labelled.entries()) {
     const panel = panels[index];
-    // The panel is the preview's dashed rect and carries its accessible name.
+    // The panel is the preview's dashed rect; its group carries the accessible name (the preview's <g> aria-label).
     assert.equal(panel.fill, hex(item.panel.fill), `${item.path}: panel fill`);
     assert.equal(panel.stroke, hex(item.panel.stroke), `${item.path}: panel line`);
     assert.equal(panel.dash, 'dash', `${item.path}: 4 3 dashes are PowerPoint's dash`);
     assert.equal(panel.strokeWidth, String(Math.round(+item.panel['stroke-width'] * PX_PT * 12700)), `${item.path}: panel line width`);
-    assert.equal(panel.descr, item.label, `${item.path}: accessible name`);
+    assert.equal(groupDescr(slideXml(0), panel.name), item.label, `${item.path}: accessible name`);
+    assert.equal(panel.descr, undefined, `${item.path}: the panel does not repeat it`);
     near(panel.x, +item.panel.x, `${item.path}: panel x`); near(panel.y, +item.panel.y, `${item.path}: panel y`);
     near(panel.w, +item.panel.width, `${item.path}: panel width`); near(panel.h, +item.panel.height, `${item.path}: panel height`);
     // Its label is the same lines, at the preview's size, weight and colour.
@@ -130,8 +135,8 @@ for (const options of [{}, {fonts}]) {
     assert.equal(stroke.flipV, index === 1, `cross ${index}: the second stroke runs bottom left to top right`);
     assert.equal(stroke.stroke, hex(crossColor), `cross ${index} colour`);
   }
-  const panel = second.find(shape => shape.name.startsWith('OPF image placeholder '));
-  assert.equal(panel.descr, tight.label, 'The long description stays in the accessible name');
+  const panel = second.find(shape => PANEL.test(shape.name));
+  assert.equal(groupDescr(slideXml(1), panel.name), tight.label, 'The long description stays in the accessible name');
   assert.ok(tight.label.startsWith('Image unavailable: A description long enough'));
   checked++;
 }
@@ -154,7 +159,7 @@ for (const [name, alt, code] of [
   const emoji = `${long}\u{1F600} & <done>`;
   const xml = decoder.decode(unzipSync(await toPptx({slides: [{image: {src: 'https://example.invalid/emoji.png', alt: emoji}}]}, {seed: 1}))['ppt/slides/slide1.xml']);
   assert.equal(XMLValidator.validate(xml), true);
-  assert.equal(shapes(xml).find(shape => shape.name.startsWith('OPF image placeholder ')).descr, `Image unavailable: ${emoji}`);
+  assert.equal(groupDescr(xml, shapes(xml).find(shape => PANEL.test(shape.name)).name), `Image unavailable: ${emoji}`);
   checked++;
 }
 

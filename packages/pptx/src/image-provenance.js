@@ -271,3 +271,57 @@ export function importImages({pictures, shapes, relationships, entries, slideInd
   }
   return {blocks, background, backgroundOverlay, backgroundOverlayShape, consumed, consumedShapes};
 }
+
+// opf-pptx#221: the "Image unavailable" placeholder of an image block whose source could not be embedded (a remote URL is never
+// fetched) is one native group, `OPF image placeholder N group`, that carries the panel's accessible name (descr) and holds the
+// dashed panel `OPF image placeholder N` and its label lines (`... text line i`) or cross strokes (`... icon i`), each an
+// editable shape. In `full` mode the panel carries OPF_IMAGE_PLACEHOLDER_V1: the slide, the block path, the authored image value
+// and the block's own fields. Import turns an intact tagged panel back into that image block and consumes its label shapes;
+// without a valid tag (provenance false or references-only, a damaged tag) the shapes stay ordinary content, as before.
+export const IMAGE_PLACEHOLDER_TAG = 'OPF_IMAGE_PLACEHOLDER_V1';
+export const imagePlaceholderGroupName = panel => `${panel} group`;
+const PLACEHOLDER_PANEL = /^OPF image placeholder \d+$/;
+const PLACEHOLDER_GROUP = /^OPF image placeholder \d+ group$/;
+const BLOCK_PATH = /^slides\.\d+(?:\.[A-Za-z0-9_:+-]{1,64}){1,32}$/;
+const placeholderPart = (panel, name) => typeof name === 'string' && name.startsWith(`${panel} `) && /^(?:text line|icon) \d+$/.test(name.slice(panel.length + 1));
+
+/** Whether a native group is an exported image placeholder group with an identity transform (its children keep their boxes). */
+export function isImagePlaceholderGroup(group) {
+  if (!PLACEHOLDER_GROUP.test(String(group?.['p:nvGrpSpPr']?.['p:cNvPr']?.name ?? ''))) return false;
+  const xfrm = group?.['p:grpSpPr']?.['a:xfrm'];
+  return ['x', 'y'].every(key => String(xfrm?.['a:off']?.[key]) === String(xfrm?.['a:chOff']?.[key]))
+    && ['cx', 'cy'].every(key => String(xfrm?.['a:ext']?.[key]) === String(xfrm?.['a:chExt']?.[key]));
+}
+
+/**
+ * Recover the image blocks of tagged unavailable-image placeholders on one slide. `shapes` are the slide's native text shapes
+ * (nativeTextShapes order, group members included); `valid(payload)` checks a recovered image block against the OPF format.
+ * Returns `items`: [{panel (shape index), members (shape indexes, the panel first), payload}] and `consumed`, every member index.
+ */
+export function importImagePlaceholders({shapes, relationships, entries, slideIndex, valid, report}) {
+  const slide = `slides.${slideIndex}`;
+  const items = [], consumed = new Set();
+  const names = shapes.map(shape => shape?.['p:nvSpPr']?.['p:cNvPr']?.name);
+  const invalid = message => report({code: 'invalid-image-provenance', path: slide, message});
+  for (const [index, shape] of shapes.entries()) {
+    let manifest;
+    try { manifest = ownTag(shape?.['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst'], relationships, entries, IMAGE_PLACEHOLDER_TAG); }
+    catch { invalid('A tagged OPF image placeholder is ambiguous; its shapes were imported as ordinary content.'); continue; }
+    if (manifest === null) continue;
+    const name = names[index];
+    const image = manifest?.image;
+    const treatment = manifest?.treatment ?? {};
+    if (manifest?.v !== 1 || manifest.slide !== slide || typeof manifest.path !== 'string' || !BLOCK_PATH.test(manifest.path) || !manifest.path.startsWith(`${slide}.`)
+      || !PLACEHOLDER_PANEL.test(name ?? '') || !(typeof image === 'string' || object(image)) || !object(treatment)
+      || Object.keys(treatment).some(key => !IMAGE_TREATMENT_KEYS.includes(key))) {
+      invalid('An edited or invalid tagged OPF image placeholder was imported as ordinary content; its image block is not reconstructed.');
+      continue;
+    }
+    const payload = {type: 'image', image: structuredClone(image), ...structuredClone(treatment)};
+    if (!valid(payload)) { invalid('A tagged OPF image placeholder does not form a valid image block; its shapes were imported as ordinary content.'); continue; }
+    const members = [index, ...names.flatMap((other, position) => position !== index && placeholderPart(name, other) ? [position] : [])];
+    for (const member of members) consumed.add(member);
+    items.push({panel: index, members, payload});
+  }
+  return {items, consumed};
+}

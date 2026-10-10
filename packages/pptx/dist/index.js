@@ -34,7 +34,7 @@ import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, na
 import {liftMasterFurniture} from './master-furniture.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
-import {placeImages, importImages, imageName, imageOverlayName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS} from './image-provenance.js';
+import {placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
 import {dedupeMedia} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
@@ -256,6 +256,9 @@ export async function toPptx(input, options = {}) {
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
   context.imagePlaceholders = new Map();
+  // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
+  context.imagePlaceholderGroups = new Set();
+  context.imagePlaceholderTags = new Map();
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   // FA-23: every exported image picture (image blocks, the alt-text form of an image background, timeline pictures) and
@@ -861,7 +864,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const tree = slideRoot["p:cSld"]?.["p:spTree"];
   const items = [];
   const shapes = nativeContext.shapes;
-  if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
+  // opf-pptx#221: an exported image placeholder group (identity transform) is not a reflow risk.
+  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
   // FF-45: OMML equations (a14:m math zones) have no OPF model. Their fallback text is imported as plain text; the equation
   // layout (fractions, radicals, limits, matrices) is lost, and that loss is diagnosed per shape instead of passing silently.
@@ -915,11 +919,17 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
+  // opf-pptx#221: a tagged unavailable-image placeholder is its image block again; its panel and label shapes are consumed.
+  const placeholders = importImagePlaceholders({shapes, relationships, entries, slideIndex, valid: payload => isValidFormat({slides: [{blocks: [payload]}]}), report: diagnostic => options.onDiagnostic?.(diagnostic)});
+  for (const item of placeholders.items) {
+    for (const member of item.members) roles.set(`sp:${member}`, 'image');
+    items.push({kind: 'image', bounds: shapeBounds(shapes[item.panel]['p:spPr']?.['a:xfrm']), payload: item.payload, sources: item.members.map(member => `sp:${member}`)});
+  }
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
-    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
@@ -2302,9 +2312,10 @@ function addListPayload(slide, items, region, context) {
 }
 
 // A content picture outside an image block (a timeline event image): one native picture contained in its region.
-async function addImagePayload(slide, presentation, asset, region, path, context, options) {
+// Generated furniture is never grouped (src/master-furniture.js), so a furniture part passes {group: false}.
+async function addImagePayload(slide, presentation, asset, region, path, context, options, {group = true} = {}) {
   const name = await addImagePicture(slide, presentation, asset, region, path, context, options, {fit: 'contain'});
-  if (!name) addImagePlaceholder(slide, presentation, asset, region, path, context, options);
+  if (!name) addImagePlaceholder(slide, presentation, asset, region, path, context, options, {group});
   return name;
 }
 
@@ -2384,8 +2395,13 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
     fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment: tagged ? treatment : undefined
   });
   if (!name) {
-    addImagePlaceholder(slide, presentation, item.value, box, item.path, context, options);
-    return `OPF image placeholder ${context.imagePlaceholders.size}`;
+    const panel = addImagePlaceholder(slide, presentation, item.value, box, item.path, context, options);
+    // opf-pptx#221: in full mode the panel records the authored image and the block's own fields, so import restores the block.
+    if (context.provenanceMode === 'full') {
+      const fields = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
+      context.imagePlaceholderTags.set(panel, {v: 1, slide: `slides.${slideIndex}`, path: item.path, image: structuredClone(item.value), ...(Object.keys(fields).length ? {treatment: fields} : {})});
+    }
+    return panel;
   }
   if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
   return name;
@@ -2894,7 +2910,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
       // A logo reference draws the organization's asset: a source that cannot be drawn is reported where the asset is written.
-      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options);
+      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options,{group:false});
       if (objectName) {
         entry.names.push(objectName);
         context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
@@ -3166,9 +3182,10 @@ function placeholderAsset(asset, presentation) {
 // minimum) in the readable text colour for the panel, or a cross when the label
 // cannot fit even at that minimum. The panel carries the accessible name the
 // preview gives its group, "Image unavailable: <description>".
-// {logo: true} names the panel's other shapes after its panel (OPF image placeholder N text line i / icon i) and returns the
-// panel's name, so a logo placeholder can be tagged and consumed on import.
-function addImagePlaceholder(slide, presentation, asset, region, path, context, options, {logo = false} = {}) {
+// The panel's other shapes are named after it (OPF image placeholder N text line i / icon i) and the panel's name is returned,
+// so a logo placeholder can be tagged and consumed on import. opf-pptx#221: unless it is a logo's ({logo: true}) or furniture's
+// ({group: false}) placeholder, packaging writes the panel and those shapes as one native group carrying the accessible name.
+function addImagePlaceholder(slide, presentation, asset, region, path, context, options, {logo = false, group = !logo} = {}) {
   const layered = placeholderAsset(asset, presentation);
   const description = String(layered.alt ?? layered.title ?? "Image");
   const label = `Image unavailable\n${description}`;
@@ -3189,6 +3206,8 @@ function addImagePlaceholder(slide, presentation, asset, region, path, context, 
   const fit = fitText(label, inner, 20 * scale, minimum, measurer);
   const objectName = `OPF image placeholder ${context.imagePlaceholders.size + 1}`;
   context.imagePlaceholders.set(objectName, `Image unavailable: ${description}`);
+  if (group) context.imagePlaceholderGroups.add(objectName);
+  const named = logo || group;
   slide.addShape("rect", {
     x: region.x, y: region.y, w: region.w, h: region.h,
     fill: { color: surface },
@@ -3202,18 +3221,18 @@ function addImagePlaceholder(slide, presentation, asset, region, path, context, 
     const centered = { ...inner, y: inner.y + offset };
     addMeasuredPayloadText(slide, label, centered, context, options, {
       path, fit: fitText(label, centered, 20 * scale, minimum, measurer), textStyle: style,
-      diagnosticsHandled: true, align: "center", color: textColor, ...(logo ? {objectName: `${objectName} text`} : {})
+      diagnosticsHandled: true, align: "center", color: textColor, ...(named ? {objectName: `${objectName} text`} : {})
     });
-    return logo ? objectName : undefined;
+    return objectName;
   }
   // A status indicator, not shortened authored content: the full description stays
   // in the panel's accessible name.
   const size = Math.max(0, Math.min(inner.width, inner.height, 24 * scale));
-  if (!size) return logo ? objectName : undefined;
+  if (!size) return objectName;
   const icon = { x: inner.x + (inner.width - size) / 2, y: inner.y + (inner.height - size) / 2 };
   const line = { color: textColor, width: Math.min(2 * scale, size / 8) * .75 };
-  for (const flipV of [false, true]) slide.addShape("line", { x: icon.x / 96, y: icon.y / 96, w: size / 96, h: size / 96, line, flipV, ...(logo ? {objectName: `${objectName} icon ${flipV ? 2 : 1}`} : {}) });
-  return logo ? objectName : undefined;
+  for (const flipV of [false, true]) slide.addShape("line", { x: icon.x / 96, y: icon.y / 96, w: size / 96, h: size / 96, line, flipV, ...(named ? {objectName: `${objectName} icon ${flipV ? 2 : 1}`} : {}) });
+  return objectName;
 }
 
 // A placeholder names what is missing in plain words. It never dumps the source value, so no data or URL lands in slide text.
@@ -3883,6 +3902,8 @@ async function normalizePptxZip(raw, context) {
   context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture,context.nativeFurnitureBands);
   // The "Image unavailable" panel of an unresolved logo: identity only, so import does not read it as content.
   attachTextTags(entries,context.logoPlaceholderTags,LOGO_TAG,'opfLogoPlaceholder','logo placeholder');
+  // opf-pptx#221: the image block of an unavailable-image placeholder, on its panel (full provenance).
+  attachTextTags(entries,context.imagePlaceholderTags,IMAGE_PLACEHOLDER_TAG,'opfImagePlaceholder','image placeholder');
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
     const relationships=parseRelationships(entries,part);
@@ -4265,12 +4286,15 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       });
       // PptxGenJS gives shapes no alternative text. An unavailable image's panel
       // carries the accessible name the preview gives its group.
+      const escapes={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;','\r':'&#13;','\n':'&#10;','\t':'&#9;'};
+      const describe=description=>description.replace(/[&<>"'\r\n\t]/g,char=>escapes[char]);
       xml=xml.replace(/<p:cNvPr id="(\d+)" name="(OPF image placeholder \d+)"(\/?)>/g,(node,id,name,close)=>{
         const description=context.imagePlaceholders.get(name);
-        if(description===undefined)return node;
-        const escapes={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;','\r':'&#13;','\n':'&#10;','\t':'&#9;'};
-        return `<p:cNvPr id="${id}" name="${name}" descr="${description.replace(/[&<>"'\r\n\t]/g,char=>escapes[char])}"${close}>`;
+        // opf-pptx#221: a grouped placeholder's accessible name is on its group (below), as the preview names its <g>.
+        if(description===undefined||context.imagePlaceholderGroups.has(name))return node;
+        return `<p:cNvPr id="${id}" name="${name}" descr="${describe(description)}"${close}>`;
       });
+      xml=groupImagePlaceholders(xml,context.imagePlaceholderGroups,name=>describe(context.imagePlaceholders.get(name)));
       // PptxGenJS 4.0.1 emitted pPr before each rich run (pptxgenjs-plus writes
       // one). OOXML allows one pPr, before all runs. Paragraph options belong
       // to the first run.
@@ -4298,6 +4322,34 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
 // their explicit per-shape buFont; only the master bodyStyle is touched.
 const VENDOR_MASTER_BULLET_FONT = '<a:buFont typeface="Arial" pitchFamily="34" charset="0"/>';
 const THEME_MINOR_BULLET_FONT = '<a:buFont typeface="+mn-lt"/>';
+// opf-pptx#221: each unavailable-image placeholder (panel, then its label lines or cross strokes, written consecutively) becomes
+// one p:grpSp (CT_GroupShape: nvGrpSpPr, grpSpPr, members) named "<panel> group" with the accessible name as its descr. Its
+// transform is the identity (chOff/chExt equal off/ext, the members' union), so every member keeps its box and stays an
+// editable shape; tags and names stay on the members.
+function groupImagePlaceholders(xml,panels,description){
+  if(!panels.size)return xml;
+  let next=Math.max(0,...[...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match=>Number(match[1])))+1;
+  const nameOf=shape=>shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1]??'';
+  const memberOf=(panel,name)=>name.startsWith(`${panel} `)&&/^(?:text line|icon) \d+$/.test(name.slice(panel.length+1));
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>(?:<p:sp>[\s\S]*?<\/p:sp>)*/g,run=>{
+    const shapes=run.match(/<p:sp>[\s\S]*?<\/p:sp>/g);
+    let out='';
+    for(let index=0;index<shapes.length;index++){
+      const panel=nameOf(shapes[index]);
+      if(!panels.has(panel)){out+=shapes[index];continue;}
+      const members=[shapes[index]];
+      while(index+1<shapes.length&&memberOf(panel,nameOf(shapes[index+1])))members.push(shapes[++index]);
+      const boxes=members.map(shape=>shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/)).filter(Boolean).map(match=>match.slice(1).map(Number));
+      if(!boxes.length){out+=members.join('');continue;}
+      const x=Math.min(...boxes.map(box=>box[0])),y=Math.min(...boxes.map(box=>box[1]));
+      const cx=Math.max(...boxes.map(box=>box[0]+box[2]))-x,cy=Math.max(...boxes.map(box=>box[1]+box[3]))-y;
+      out+=`<p:grpSp><p:nvGrpSpPr><p:cNvPr id="${next++}" name="${imagePlaceholderGroupName(panel)}" descr="${description(panel)}"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>`+
+        `<p:grpSpPr><a:xfrm><a:off x="${x}" y="${y}"/><a:ext cx="${cx}" cy="${cy}"/><a:chOff x="${x}" y="${y}"/><a:chExt cx="${cx}" cy="${cy}"/></a:xfrm></p:grpSpPr>${members.join('')}</p:grpSp>`;
+    }
+    return out;
+  });
+}
+
 function themeMasterBulletFonts(xml) {
   return xml.replace(/<p:bodyStyle>[\s\S]*?<\/p:bodyStyle>/, bodyStyle =>
     bodyStyle.split(VENDOR_MASTER_BULLET_FONT).join(THEME_MINOR_BULLET_FONT));
