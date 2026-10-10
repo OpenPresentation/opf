@@ -755,7 +755,7 @@
      }
     ]
    },
-   "sha256": "fbde00acffa3b05124898c12a778761ee225620efce42ac1633c05a8d6b2344a",
+   "sha256": "66ee74dbd87484edceaa5ae690e9ace20218e4b4bf5642801dada33c8299d917",
    "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
    "nativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
@@ -800,7 +800,7 @@
      }
     ]
    },
-   "sha256": "a19e88a696d20a9f038549f641bb4bb185f3a326ee5bddfa0a80da23b352f32f",
+   "sha256": "0c15e8bfbfa17618a23e1bf404ffb487b55fff0d00f7c95236fd758453aec8d5",
    "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
    "nativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."
@@ -850,7 +850,7 @@
      }
     ]
    },
-   "sha256": "ad9833d9bbddd6cb73d445a665d71c12cdbf024c3a6bb6d63a99caddd68186ad",
+   "sha256": "884f2202724f38110ee08308371622d013f34604ea0af6584a66cfeabff1234a",
    "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
    "nativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged."

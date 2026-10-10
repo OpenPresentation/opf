@@ -116,7 +116,7 @@ export function chartEvidence(xml) {
 }
 
 /** Native cell text, formatting and table geometry, canonicalized independently of XML attribute order. */
-export function tableCellEvidence(table, relationships = new Map()) {
+export function tableCellEvidence(table, relationships = new Map(), {form = 'current'} = {}) {
   const related = value => {
     const ids = new Set(), stack = [value];
     while (stack.length) {
@@ -132,8 +132,72 @@ export function tableCellEvidence(table, relationships = new Map()) {
       return [id, link ? {type: link.type, target: link.target, targetMode: link.targetMode} : null];
     }))} : {};
   };
-  const properties = {properties: table?.['a:tblPr'], grid: table?.['a:tblGrid']};
-  return array(table?.['a:tr']).map(row => array(row?.['a:tc']).map(cell => hash(canonical({properties, row: Object.fromEntries(Object.entries(row).filter(([key]) => key !== 'a:tc')), cell, ...related({properties, cell})}))));
+  // 'raw' hashes the XML as written (records before opf-pptx#241); 'saved' rebuilds the form this exporter wrote from a
+  // PowerPoint-saved copy of it, so such a record still matches a cell the save left alone.
+  const read = form === 'raw' ? value => value : form === 'saved' ? exporterForm : nativeDefaults;
+  const properties = {properties: table?.['a:tblPr'], grid: read(table?.['a:tblGrid'])};
+  return array(table?.['a:tr']).map(row => array(row?.['a:tc']).map(cell => hash(canonical({properties, row: read(Object.fromEntries(Object.entries(row).filter(([key]) => key !== 'a:tc'))), cell: read(cell), ...related({properties, cell})}))));
+}
+
+// opf-pptx#241: a PowerPoint save drops attributes that hold their schema default and adds identity extensions, so the same
+// table would hash differently. The evidence reads the native table with those defaults applied: an absent value and its
+// default are one value (on a:tcPr: anchor t, margins 0.1 / 0.05 inch, anchorCtr 0, horzOverflow clip, vert horz; on a:pPr:
+// marL 0, indent 0, algn l), whitespace between child elements, and the a16:colId / a16:rowId extensions PowerPoint adds to a:gridCol and a:tr are not content.
+// Attribute order never mattered (canonical sorts keys). Records written before this fix hash the raw XML (legacy), and the
+// importer still accepts that form for a file nobody changed.
+// What this exporter wrote on every cell before the evidence read defaults: anchor on a:tcPr, and the whitespace PptxGenJS leaves
+// after a:tcPr's children and after a:tcPr. A PowerPoint save removes all three; putting them back reproduces the recorded hash.
+function exporterForm(value) {
+  const cleaned = nativeDefaults(value, false);
+  const rebuild = item => {
+    if (Array.isArray(item)) return item.map(rebuild);
+    if (!object(item)) return item;
+    const out = {};
+    for (const [key, child] of Object.entries(item)) out[key] = rebuild(child);
+    if (Object.hasOwn(out, 'a:txBody') && Object.hasOwn(out, 'a:tcPr') && !Object.hasOwn(out, '#text')) {
+      const properties = object(out['a:tcPr']) ? {...out['a:tcPr']} : {};
+      if (!Object.hasOwn(properties, 'anchor')) properties.anchor = 't';
+      if (!Object.hasOwn(properties, '#text') && Object.keys(properties).some(name => name.startsWith('a:'))) properties['#text'] = '  ';
+      out['a:tcPr'] = properties;
+      out['#text'] = ' ';
+    }
+    return out;
+  };
+  return rebuild(cleaned);
+}
+const PROPERTY_DEFAULTS = {
+  'a:tcPr': {marL: '91440', marR: '91440', marT: '45720', marB: '45720', anchor: 't', anchorCtr: '0', horzOverflow: 'clip', vert: 'horz'},
+  'a:pPr': {marL: '0', indent: '0', algn: 'l'}
+};
+const IDENTITY_EXTENSIONS = new Set(['a16:colId', 'a16:rowId']);
+const attributeValue = (name, value) => {
+  const text = String(value).trim();
+  return name === 'anchorCtr' ? ({false: '0', off: '0', true: '1', on: '1'}[text.toLowerCase()] ?? text) : text;
+};
+function nativeDefaults(value, normalize = true) {
+  if (Array.isArray(value)) return value.map(item => nativeDefaults(item, normalize));
+  if (!object(value)) return value;
+  const out = {};
+  // Whitespace between child elements is not content (the exporter leaves some inside a:tcPr and a:tc; a save removes it).
+  const hasChildren = Object.keys(value).some(name => /^[a-z][w-]*:/i.test(name) && !/^xml(ns)?:/i.test(name));
+  for (const [key, item] of Object.entries(value)) {
+    if (key === '#text' && normalize && hasChildren && typeof item === 'string' && !item.trim()) continue;
+    if (key === 'a:extLst') {
+      const kept = array(item?.['a:ext']).filter(ext => !(object(ext) && Object.keys(ext).filter(name => name !== 'uri').every(name => IDENTITY_EXTENSIONS.has(name))));
+      if (kept.length) out[key] = {...item, 'a:ext': nativeDefaults(kept.length === 1 ? kept[0] : kept, normalize)};
+      continue;
+    }
+    out[key] = nativeDefaults(item, normalize);
+  }
+  if (!normalize) return out;
+  for (const [tag, defaults] of Object.entries(PROPERTY_DEFAULTS)) {
+    if (!Object.hasOwn(out, tag)) continue;
+    const properties = object(out[tag]) ? {...out[tag]} : {};
+    for (const [name, fallback] of Object.entries(defaults)) if (Object.hasOwn(properties, name) && attributeValue(name, properties[name]) === fallback) delete properties[name];
+    // No attributes and no children is the same as an empty element (the parser reads `<a:tcPr/>` as '').
+    out[tag] = Object.keys(properties).length ? properties : '';
+  }
+  return out;
 }
 
 /** Theme and table-style edits can change effective cell formatting without changing the cell XML. */
@@ -372,8 +436,11 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
 }
 
 /** The authored table data where the native evidence is unchanged; edited native cells otherwise. */
-export function restoreTableData(table, record, {datasets, report, evidence, environment}) {
+export function restoreTableData(table, record, {datasets, report, evidence: currentEvidence, olderEvidence = [], environment}) {
   if (!object(table)) return table;
+  // opf-pptx#241: a record written before the evidence read schema defaults hashes the raw XML (or, for a PowerPoint-saved copy, the
+  // form rebuilt from it); a cell still matching one of those is unchanged.
+  const evidence = currentEvidence?.map((row, r) => row.map((hash, c) => olderEvidence.map(older => older?.[r]?.[c]).find(older => older !== undefined && older === record.evidence?.[r]?.[c]) ?? hash));
   const columns = Array.isArray(table.columns) ? table.columns : undefined;
   const rows = Array.isArray(table.rows) ? table.rows : [];
   const sameCell = (row, column) => record.environment === environment && record.evidence?.[row]?.[column] === evidence?.[row]?.[column];
