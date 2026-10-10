@@ -1,0 +1,5 @@
+{"at":"2026-10-10T21:48:07.8441828Z","stage":"attached","data":{"version":"16.0","build":"20430"}}
+{"at":"2026-10-10T21:48:07.9451484Z","stage":"opened-read-only","data":{"readOnly":-1}}
+{"at":"2026-10-10T21:48:07.9850446Z","stage":"fonts-before-save","data":[{"index":1,"name":"Carlito","embedded":0,"embeddable":-1}]}
+{"at":"2026-10-10T21:48:08.0635940Z","stage":"saved-copy","data":{"path":"<set>\\ff13\\attempt-20261010T214806Z\\copy.pptx","format":24,"embedTrueTypeFonts":-1}}
+{"at":"2026-10-10T21:48:08.1011977Z","stage":"reopened-copy-read-only","data":[{"index":1,"name":"Carlito","embedded":0,"embeddable":-1}]}

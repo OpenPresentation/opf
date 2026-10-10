@@ -1,0 +1,124 @@
+{
+ "host": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "os": "Microsoft Windows NT 10.0.26200.0",
+  "powershell": "5.1.26100.9444",
+  "culture": "en-US",
+  "runStartedUtc": "2026-10-10T21:45:22.6048184Z",
+  "runFinishedUtc": "2026-10-10T21:47:57.2782849Z"
+ },
+ "harnessNote": "exitCode is null for every deck: run-deck.ps1 of this attempt did not cache the child process handle, so PowerShell reported no exit code. compare.mjs counts a run as successful only when status is completed and the read-out JSON exists, parses and reached stage done; run-deck.ps1 now caches the handle.",
+ "runs": [
+  {
+   "deck": "01-carlito-code-chart-table-notes",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 18212,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 3.9,
+   "sha256": "4e6b6ec0ffa18c6cb144c4fbea6d8207626f7201d2dc9447affbf664e8ac9869"
+  },
+  {
+   "deck": "02-carlito-code-family-carlito",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 22296,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 6.3,
+   "sha256": "28ce8721f1230b187462e86de5313051c7e3698dce2ff5e1362b5e9638dedf5c"
+  },
+  {
+   "deck": "03-default-aptos",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 5360,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.6,
+   "sha256": "e26e8443d08175dbc759f07103b5e6415c6b2b6915aee2df91eef2bf56ebd859"
+  },
+  {
+   "deck": "04-ja-meiryo",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 4680,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.8,
+   "sha256": "23048b7312cbef341ce55a57543b01b37ec17b50d24d2fa555bb792c0e950972"
+  },
+  {
+   "deck": "05-ar-rtl",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 17312,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.3,
+   "sha256": "2f89a35e299364eeb1b814fe334d4d7c31def131fcd4c80bc5f881faf0aa8741"
+  },
+  {
+   "deck": "06-monospace-consolas",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 49480,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.5,
+   "sha256": "fd679484173b5041972cd7da13ff17fb76d05d75ba7585dc269ece0cb51e3933"
+  },
+  {
+   "deck": "07-per-slide-override",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 47032,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.2,
+   "sha256": "6f32d01ccb802eb0292153eb0609d22e0b0a811793df33a9c7888c17ab4e7afb"
+  },
+  {
+   "deck": "08-cjk-in-latin",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 23364,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "5efe526e09946942912a18b4753acb84ded1a2975b6e1b7fc460796025195d8d"
+  },
+  {
+   "deck": "09-ko-malgun",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 53072,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "811372ad8cc12bfa1a5da2f132ac0cd6e60006d308d920cac8d16cbbcd99052d"
+  },
+  {
+   "deck": "10-hi-mangal",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 46184,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "86c8282828b0672cfe2771f87fc5eb26e3233cf4d6c9e28bf36c92760ac86f0a"
+  },
+  {
+   "deck": "11-he-rtl",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 1976,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "eb634f00dce945eef315c6bf15fa4ce6561305f0b1c94eac42ea01a0b53be3dd"
+  },
+  {
+   "deck": "12-serif-georgia",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 22444,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "b7ecc17dd5ba387da6fe66982b2d71eb7dc3433b59c93a956d256f16efcf32df"
+  }
+ ]
+}

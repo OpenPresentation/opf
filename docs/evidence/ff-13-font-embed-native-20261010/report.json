@@ -1,0 +1,36 @@
+{
+ "schemaVersion": 1,
+ "kind": "ff13-native-font-embed-report",
+ "source": "<set>\\decks\\ff13\\ff13-carlito-embed-source.pptx",
+ "copy": "<set>\\ff13\\attempt-20261010T214806Z\\copy.pptx",
+ "chosen": [
+  "Carlito"
+ ],
+ "verdict": null,
+ "stage": "done",
+ "error": null,
+ "startedPowerPoint": false,
+ "sourceSha256Before": "70bd9c1e6006a5c2df290182f416f7abc05086c6c0bed49fd25f4c24d55b4f5f",
+ "sourceSha256After": "70bd9c1e6006a5c2df290182f416f7abc05086c6c0bed49fd25f4c24d55b4f5f",
+ "powerpoint": {
+  "version": "16.0",
+  "build": "20430"
+ },
+ "fontsBeforeSave": [
+  {
+   "index": 1,
+   "name": "Carlito",
+   "embedded": 0,
+   "embeddable": -1
+  }
+ ],
+ "fontsAfterReopen": [
+  {
+   "index": 1,
+   "name": "Carlito",
+   "embedded": 0,
+   "embeddable": -1
+  }
+ ],
+ "saved": true
+}
