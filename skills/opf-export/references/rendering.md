@@ -5,7 +5,8 @@
 ```sh
 npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 opf doctor --format text                                  # what this install can write, and the one install command
-opf convert deck.opf.json slides/deck.png --slides 1,3-5 [--scale 2] [--include-hidden]   # slides/deck-001.png, ...
+opf convert deck.opf.json slides/deck.png --slides 1,3-5 [--scale 2] [--include-hidden]   # slides/deck-1.png, ... (zero-padded to the largest number: deck-01.png from ten slides)
+opf convert deck.opf.json "slides/slide-{n}.png"   # {n} = the slide number; always numbered, even for one slide
 opf convert deck.opf.json deck.pptx [--charts auto|native|picture] [--images compatible|preserve] [--provenance full|references-only|none]
 opf convert deck.opf.json deck.pdf [--raster] [--paginate] [--date YYYY-MM-DD] [--fonts dir]
 opf convert deck.opf.json slides.zip [--to svg] [--text fonts|system|paths]
@@ -27,7 +28,7 @@ import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.md', 'deck.pdf', { raster: true });          // a picture per page; vector text is the default
 await opf.convert('deck.opf.md', 'deck.svg', { text: 'paths' });        // glyph outlines: the SVG needs no font
-await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1,3-5', scale: 2 }); // slides/deck-001.png, -003, -004, -005
+await opf.convert('deck.opf.md', 'slides/deck.png', { slides: '1,3-5', scale: 2 }); // slides/deck-1.png, -3, -4, -5 (or "slides/slide-{n}.png": slide-1.png, ...)
 await opf.convert('deck.opf.md', 'slides.zip', { format: 'svg' });
 await opf.convert('deck.opf.md', 'deck.pptx', { date: '2026-10-08' });
 const { files, findings } = await opf.convert(deck, { format: 'png' });  // [{ name, type, bytes, slide, width, height }], nothing written
@@ -37,7 +38,7 @@ try { await opf.convert('deck.opf.md', 'deck.pdf'); } catch (error) {
 }
 ```
 
-- `convert(input, output, options?)` writes; `convert(input, { format })` returns the files. Names without an output follow `name`, else the deck's `filename`, else its slugified `name`, else the input file's stem; per-slide files end `-001.png`. The options are `slides`, `includeHidden`, `paginate`, `scale`, `raster`, `text` (`fonts`, `system` or `paths`), `charts`, `images`, `provenance`, `date`, `catalogs`, `fonts`, `assetDir`; the 0.17 names `pdfMode`, `svgFonts`, `chartex`, `imageFormat`, `fontDirs` and `filename` are refused with the new name.
+- `convert(input, output, options?)` writes; `convert(input, { format })` returns the files. Names without an output follow `name`, else the deck's `filename`, else its slugified `name`, else the input file's stem; per-slide files end `-1.png`, zero-padded to the width of the largest slide number written (`-01.png` from ten slides, `-001.png` from a hundred; with `slides: [3, 11]` they are `-03` and `-11`). With an output path, `{n}` in a `.png` or `.svg` path is the slide number (`"slides/slide-{n}.png"`, always numbered, even for one slide); any other `{key}`, and `{n}` in any other output, throws `invalid-option`. The options are `slides`, `includeHidden`, `paginate`, `scale`, `raster`, `text` (`fonts`, `system` or `paths`), `charts`, `images`, `provenance`, `date`, `catalogs`, `fonts`, `assetDir`; the 0.17 names `pdfMode`, `svgFonts`, `chartex`, `imageFormat`, `fontDirs` and `filename` are refused with the new name.
 - `findings` are the `opf validate` shape (rule ids `import/`, `render/`, `pptx/`, `pdf/`, `fonts/`, `cli/` for the engines' diagnostics). The format and references check runs first: an invalid deck throws `invalid-presentation` and `error.findings` hold its errors, located in the file.
 - Errors: `OPFApiError` (`invalid-option`, `input-not-found`, `output-exists`, ...), `OPFExportError` and `OPFImportError` (both extend it) with `code`: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, `import-failed`; `open` and `save` of an invalid deck throw `OPFValidationError`.
 - Fonts are the renderer's office pack (prepared once per process) plus the font folders in `fonts` (a folder, or a list of folders); pass `fonts` as the handle `loadFonts()` returns to use your own. Local images resolve next to the input file (`assetDir` overrides); URLs are never fetched.

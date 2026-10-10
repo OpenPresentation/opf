@@ -51,7 +51,7 @@ Every command that writes a deck takes the same arguments:
 The form written is the output's extension (`.json`, `.opf.yaml`/`.yml`, `.opf.md`), else `--to json|yaml|md`, else the form
 that was read. An existing output is refused before anything is printed or written.
 
-`opf fill` writes one deck per record through a file name pattern: `{n}` is the record number, `{column}` a slug of that
+`opf fill` writes one deck per record through a file name pattern: `{n}` is the record number (padded to the width of the largest, the rule of `opf convert`), `{column}` a slug of that
 column's value (`opf fill t.opf.md clients.csv decks/qbr-{client}.opf.md`); `--combine` writes one deck with every record's slides.
 
 ## What each flag means
@@ -115,7 +115,8 @@ The options are the flags in camel case (`--raster` is `raster: true`, `--fonts`
 
 ```sh
 opf convert deck.opf.md deck.pdf
-opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2   # slides/deck-001.png, -003, -004, -005
+opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2   # slides/deck-1.png, -3, -4, -5
+opf convert deck.opf.md "slides/slide-{n}.png"                  # slides/slide-1.png, slide-2.png, ... (always numbered)
 opf convert deck.opf.md slides.zip --to svg
 opf convert deck.pptx deck.opf.md --signals signals.json
 opf convert outline.md deck.opf.yaml                                 # a plain .md input is OPF Markdown
@@ -126,8 +127,10 @@ opf convert deck.opf.md - --to pdf > deck.pdf
 | Output | Written as |
 | --- | --- |
 | `.pdf`, `.pptx` | one file |
-| `.png`, `.svg` | one file per slide beside the output, named after it: `slides/deck.png` writes `slides/deck-001.png`, `-002`, ... (the deck's slide numbers). One selected slide, or a one-slide deck, is written to the output itself. The extension is the format: `deck.png` is always PNG. |
-| `.zip` | one archive of the slides, named as above inside it: PNG, or SVG with `--to svg`. Entries are stored with a fixed timestamp, so the archive is byte-identical everywhere. |
+| `.png`, `.svg` | one file per slide beside the output, named after it: `slides/deck.png` writes `slides/deck-1.png`, `-2`, ... (the deck's slide numbers). One selected slide, or a one-slide deck, is written to the output itself. The extension is the format: `deck.png` is always PNG. With `{n}` in the output (`"slides/slide-{n}.png"`) the files are always numbered, even for one slide or one selected slide, and `{n}` is the deck's slide number (2 and 5 with `--slides 2,5`). `{n}` is the only placeholder: any other `{key}`, and `{n}` in `.pdf`, `.pptx`, `.zip` or a deck form, is a usage error (exit 2, `invalid-option`). |
+
+Numbers are padded with zeros to the width of the largest number written: `1`...`9` for slides 1 to 9, `01`...`99` up to 99, `001` from 100. With `--slides` the width comes from the largest slide selected (`--slides 2,5` gives `deck-2.png`, `deck-5.png`). The same rule pads `{n}` in `opf fill` (the largest record number) and the zip entries below.
+| `.zip` | one archive of the slides, its entries named as the plain `.png` and `.svg` files above (`slides.zip` holds `slides-1.png`, ...; always numbered, and no `{n}` in the archive's own name): PNG, or SVG with `--to svg`. Entries are stored with a fixed timestamp, so the archive is byte-identical everywhere. |
 | `.json`, `.opf.yaml`, `.yml`, `.opf.md` | the deck in that form |
 | `-` | stdout, with `--to`: one file (`pdf`, `pptx`, `zip`, a deck form, or one slide as `png` or `svg`) |
 

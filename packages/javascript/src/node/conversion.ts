@@ -16,7 +16,7 @@ import { OPFValidationError, validate } from "../validator.js";
 import { DEFAULT_CATALOGS } from "./catalogs.js";
 import { OPFApiError, OPFExportError, OPFImportError, asApiError } from "../api-errors.js";
 import { type ExportFile, type ExportFormat, type ExportOptions, checkDate, checkRenamedOptions, checkScale } from "./export.js";
-import { deckStem, writeFiles } from "./files.js";
+import { checkOutputPattern, deckStem, expandOutputPattern, padNumber, writeFiles } from "./files.js";
 import { type Peer, type PptxModule, loadPptx } from "./peers.js";
 import { type ExportResult, type ImportResult, type PreparedExport, checkOptions, firstError, importPresentation, prepareExport, runPreparedExport } from "./pipeline.js";
 import { createZip } from "./zip.js";
@@ -36,7 +36,7 @@ export interface ConvertOptions extends Omit<ExportOptions, "format"> {
 	format?: ConvertFormat;
 	/** Without an output path: one archive of the slides (`png`, `svg`) instead of one file per slide. With an output path, a `.zip` path makes the archive and this option is refused. */
 	zip?: boolean;
-	/** Without an output path: the base name of the returned files (`name-001.png`, `name.pdf`). Omitted: the deck's `filename`, else its `name`, else the input file's stem. With an output path, the path names the file and this option is refused. */
+	/** Without an output path: the base name of the returned files (`name-1.png`, `name.pdf`; the number is padded to the largest slide number written). Omitted: the deck's `filename`, else its `name`, else the input file's stem. With an output path, the path names the file and this option is refused. */
 	name?: string;
 	/** A `.pptx` input: also return the raw per-shape layout and style signals of the file (`signals` in the result). */
 	signals?: boolean;
@@ -49,9 +49,9 @@ export interface ConvertOptions extends Omit<ExportOptions, "format"> {
 }
 
 export interface ConvertedFile {
-	/** The file name: the output's base name, or without an output path the deck's `filename`, else its slugified `name`, else the input file's stem, then `-001.png` for slide 1 and so on. */
+	/** The file name: the output's base name, or without an output path the deck's `filename`, else its slugified `name`, else the input file's stem, then `-1.png` for slide 1 and so on, padded to the largest slide number written (`-01.png` from ten slides). */
 	name: string;
-	/** With an output path, the file written: the path itself, or for one file per slide the path's folder and stem plus the slide number (`slides/deck-001.png`). */
+	/** With an output path, the file written: the path itself, or for one file per slide the path's folder and stem plus the slide number (`slides/deck-1.png`), or the path with `{n}` replaced by the slide number (`slides/slide-{n}.png`). */
 	path?: string;
 	/** The media type. */
 	type: string;
@@ -172,6 +172,7 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 	if (options.name !== undefined) throw invalid(`${flags ? "--name" : "name"} is for output without a path; the output path names the file.`);
 	if (path.extname(output).toLowerCase() === ".zip") {
 		if (format !== undefined && format !== "png" && format !== "svg") throw invalid(`A .zip output holds png or svg slides; ${formatLabel} ${format} is neither.`);
+		checkOutputPattern(output, false);
 		return { kind: "export", format: format ?? "png", zip: true };
 	}
 	const exported = exportFormatOf(output);
@@ -179,6 +180,8 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 	const named: ConvertFormat | undefined = exported ?? deck;
 	if (!named) throw invalid(`${flags ? "opf convert" : "convert"} writes ${OUTPUTS} files; ${output} is none of them.`, { path: output });
 	if (format !== undefined && format !== named) throw invalid(`${formatLabel} ${format} does not match the output ${output}, which is ${named}.`);
+	// `{n}` in a .png or .svg path numbers the files by slide; every other output is one file and takes no placeholder.
+	checkOutputPattern(output, exported === "png" || exported === "svg");
 	return exported ? { kind: "export", format: exported, zip: false } : { kind: "deck", format: deck as DeckFormat };
 }
 
@@ -332,14 +335,24 @@ export async function planConversion(input: ConvertInput, output: string | undef
 
 	const single = (file: ExportFile) => done([{ name: path.basename(output), path: output, type: file.type, bytes: file.bytes, ...facts(file) }]);
 	if (target.format === "pdf" || target.format === "pptx") return single(drawn[0] as ExportFile);
-	// One file per slide: the output's folder and stem plus the slide number, padded as the commands pad it (`-001`).
+	// One file per slide, numbered to the width of the largest slide number written (`1` to `9`, `01` to `99`, `001`...).
+	const largest = Math.max(...drawn.map((file) => file.slide ?? 0));
 	const stem = path.basename(output, path.extname(output));
-	const numbered = (file: ExportFile) => `${stem}-${/-(\d+)\.(?:png|svg)$/.exec(file.name)?.[1] ?? String(file.slide).padStart(3, "0")}.${target.format}`;
+	const numbered = (file: ExportFile) => `${stem}-${padNumber(file.slide as number, largest)}.${target.format}`;
 	if (target.zip) {
 		const entries = drawn.map((file) => ({ name: numbered(file), bytes: file.bytes }));
 		return done([{ name: path.basename(output), path: output, type: ZIP_MEDIA, bytes: createZip(entries), entries: entries.map((entry) => entry.name).sort() }]);
 	}
-	// One slide is written to the output name itself (`opf convert deck.opf.json slide.png --slides 2`); more are numbered beside it.
+	// A pattern (`slides/slide-{n}.png`) always numbers the files, one slide or many: {n} is the deck's slide number.
+	if (checkOutputPattern(output, true)) {
+		return done(
+			drawn.map((file) => {
+				const written = expandOutputPattern(output, file.slide as number, largest);
+				return { name: path.basename(written), path: written, type: file.type, bytes: file.bytes, ...facts(file) };
+			}),
+		);
+	}
+	// Without a pattern one slide is written to the output name itself (`opf convert deck.opf.json slide.png --slides 2`); more are numbered beside it.
 	if (drawn.length === 1) return single(drawn[0] as ExportFile);
 	const folder = path.dirname(output);
 	return done(drawn.map((file) => ({ name: numbered(file), path: path.join(folder, numbered(file)), type: file.type, bytes: file.bytes, ...facts(file) })));

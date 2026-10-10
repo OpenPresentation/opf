@@ -6,7 +6,7 @@ import { link, lstat, mkdir, readFile, rename, unlink, writeFile } from "node:fs
 import path from "node:path";
 import { CliError } from "./errors.js";
 
-export { type PlannedFile, deckStem, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
+export { type PlannedFile, checkOutputPattern, deckStem, padNumber, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
 
 /**
  * Whether two paths name the same file (RR-66). Comparing resolved strings misses a file named in another case on a

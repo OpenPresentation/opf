@@ -92,7 +92,8 @@ needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sh
 ```ts
 await opf.convert("deck.opf.md", "deck.pdf");
 await opf.convert("deck.opf.md", "deck.pptx");
-await opf.convert("deck.opf.md", "slides/deck.png");   // one PNG per slide: slides/deck-001.png, -002, ...
+await opf.convert("deck.opf.md", "slides/deck.png");   // one PNG per slide: slides/deck-1.png, -2, ...
+await opf.convert("deck.opf.md", "slides/slide-{n}.png");   // always numbered: slides/slide-1.png, slide-2.png, ...
 await opf.convert("deck.pptx", "deck.opf.yaml");       // import
 await opf.convert("deck.opf.json", "deck.opf.md");     // change the deck form
 await opf.convert("deck.opf.md", "deck.png", { slides: "1-3", scale: 2 });
@@ -111,8 +112,8 @@ await opf.convert("deck.opf.md", "slides.zip", { format: "svg" });
 | Output | Written as |
 | --- | --- |
 | `.pdf`, `.pptx` | one file |
-| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-001.png`, `-002`, ... (padded to three digits, or more for a longer deck; the numbers are the deck's slide numbers). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf convert deck.opf.json slide.png --slides 2` does. |
-| `.zip` | one archive of the slides, named as above inside it. The slides are PNG unless `format: "svg"`. |
+| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-1.png`, `-2`, ... (the numbers are the deck's slide numbers, padded with zeros to the width of the largest number written: `deck-01.png` from ten slides, `deck-001.png` from a hundred; `slides: "2,5"` gives `deck-2.png` and `deck-5.png`). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf convert deck.opf.json slide.png --slides 2` does. With `{n}` in the output (`"slides/slide-{n}.png"`) the files are always numbered, even for one slide, and `{n}` is the slide number padded by the same rule. `{n}` is the only placeholder: any other `{key}`, and `{n}` in a `.pdf`, `.pptx`, `.zip` or deck-form output, rejects with `invalid-option`. |
+| `.zip` | one archive of the slides, its entries named as the plain `.png` and `.svg` files above (`slides.zip` holds `slides-1.png`, ...; always numbered; the archive's own name takes no `{n}`). The slides are PNG unless `format: "svg"`. |
 | `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
 
 Any other extension, and a plain `.md` file, rejects with `invalid-option`, which names the supported extensions. A `format`
@@ -120,7 +121,7 @@ that disagrees with the output's extension is refused too; it is only needed for
 
 **Without an output path**, pass the format in the options: `convert(input, { format })` writes nothing and returns the files
 with their names and bytes. `name` sets the base name of the files; without it they follow the deck: its `filename`, else its
-slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`). `zip: true` returns one archive of
+slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-1.png`; padded like the files above, `Q4-Review-01.png` from ten slides, `deck.opf.yaml`). `zip: true` returns one archive of
 the PNG or SVG slides; with an output path a `.zip` name makes the archive instead.
 
 **Options** are the flags of `opf convert` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
