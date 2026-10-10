@@ -149,9 +149,9 @@ node packages/cli/dist/index.js validate deck.opf.json
 node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-place
 ```
 
-See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API, and [content conversions](./docs/conversions.md) for the pure converters (`@openpresentation/opf/convert`) that change a block's kind, nest list items, restructure a slide and split or merge slides, and [Markdown and outlines](./docs/markdown.md) for the deterministic Markdown dialect (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`) that reads and writes a whole deck as text.
+See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API, and [content conversions](./docs/conversions.md) for the pure converters (`@openpresentation/opf/convert`) that change a block's kind, nest list items, restructure a slide and split or merge slides, and [Markdown and outlines](./docs/markdown.md) for the deterministic Markdown dialect (`@openpresentation/opf/markdown`, `opf convert deck.md deck.opf.json`) that reads and writes a whole deck as text.
 
-[OPF as YAML](./docs/yaml.md) describes the strict YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` files in every command, editor autocomplete); JSON stays the canonical form. A deck can equally be a Markdown file, `deck.opf.md`: every command reads and writes it (see [Markdown decks in every command](./docs/markdown.md#markdown-decks-in-every-command)), and `parse` / `stringify` read and write a deck in JSON, YAML or Markdown with one call.
+[OPF as YAML](./docs/yaml.md) describes the strict YAML form of a deck (`@openpresentation/opf/yaml`, `opf convert deck.opf.json deck.opf.yaml`, `.opf.yaml` files in every command, editor autocomplete); JSON stays the canonical form. A deck can equally be a Markdown file, `deck.opf.md`: every command reads and writes it (see [Markdown decks in every command](./docs/markdown.md#markdown-decks-in-every-command)), and `parse` / `stringify` read and write a deck in JSON, YAML or Markdown with one call.
 
 See [Templates and variables](./docs/templates-and-variables.md) for fillable OPF templates: typed variables, `{{id}}` tokens, `opf fill` and `resolveVariables`.
 

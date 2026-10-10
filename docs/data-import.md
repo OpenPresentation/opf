@@ -29,18 +29,18 @@ The browser preview supports imported column, bar, line, area, pie, and donut ch
 Use the [CLI](../packages/cli/README.md) on Node 24. The command was `opf import-data` before OPF 0.18; it is now `opf ingest`, with the same flags, report and exit codes, and `import-data` is an unknown command:
 
 ```sh
-opf ingest revenue.csv --as table --output table.opf.json
-opf ingest revenue.json --as chart --chart-type line --output chart.opf.json
-opf ingest revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into deck.opf.json --in-place
-opf ingest revised.csv --as table --into deck.opf.json --path /slides/0/blocks/0/table --output reviewed.opf.json
-opf ingest revenue.csv --as chart --dataset revenue --into deck.opf.json --in-place
+opf ingest revenue.csv table.opf.json --as table
+opf ingest revenue.json chart.opf.json --as chart --chart-type line
+opf ingest revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into deck.opf.json -i
+opf ingest revised.csv reviewed.opf.json --as table --into deck.opf.json --path /slides/0/blocks/0/table
+opf ingest revenue.csv --as chart --dataset revenue --into deck.opf.json -i
 ```
 
 `ingest` is deterministic: the same data, options and deck always give the same bytes, from any working directory and on any OS. A new slide gets the id `data-` plus eight hex digits of a SHA-256 over the data text (line endings and a BOM normalised) and the options that shape the import; a deck that already has that id gets `data-xxxxxxxx-2`, `-3`, and so on. `--id <slideId>` names the slide yourself and fails (exit 1, nothing written) if the deck already has it. With `--dataset`, `source.src` is the data file's path relative to the deck's folder with `/` separators (relative to the working directory when the result goes to stdout), and `source.retrieved` is recorded only when you pass `--date YYYY-MM-DD`. The command never reads the clock, and a re-import drops an older `retrieved` because it described the old data.
 
-`--into` appends a new data slide unless `--path` names an existing content container's `/table` or `/chart` field. The parent must already exist. The complete resulting document must validate. Unrelated fields remain intact. Without `--output` or `--in-place`, the document goes to stdout for review or piping. Existing output files require `--force`.
+`--into` appends a new data slide unless `--path` names an existing content container's `/table` or `/chart` field. The parent must already exist. The complete resulting document must validate. Unrelated fields remain intact. The output follows every command's convention (CLI 0.18): an output file after the data, `-i` to rewrite the `--into` deck, and stdout without either, for review or piping. Existing output files require `--force`; `--to json|yaml|md` picks the form for stdout.
 
-Use `--format csv|tsv|json` to override format detection, `--delimiter ';'` for semicolon CSV, `--no-header` for row arrays without labels, `--columns '["Quarter","Revenue"]'` to select/reorder columns, and `--title` to name a new data slide. `--dataset <id>` (RR-54, in the CLI release after 0.10.0) writes the imported columns and rows into `datasets.<id>` (replacing an existing dataset's rows and columns and keeping its title, its description and the format of every column whose name is unchanged; `source` records the file, and keeps its other fields only when the same file is re-imported; data read from stdin records no `source`) and references it from the new table or chart instead of embedding a copy. `--series` and `--columns` accept JSON arrays so column names can contain commas. `-` reads data from stdin.
+Use `--data-format csv|tsv|json` (`--format csv|tsv|json` before CLI 0.18) to override format detection, `--delimiter ';'` for semicolon CSV, `--no-header` for row arrays without labels, `--columns '["Quarter","Revenue"]'` to select/reorder columns, and `--title` to name a new data slide. `--dataset <id>` (RR-54, in the CLI release after 0.10.0) writes the imported columns and rows into `datasets.<id>` (replacing an existing dataset's rows and columns and keeping its title, its description and the format of every column whose name is unchanged; `source` records the file, and keeps its other fields only when the same file is re-imported; data read from stdin records no `source`) and references it from the new table or chart instead of embedding a copy. `--series` and `--columns` accept JSON arrays so column names can contain commas. `-` reads data from stdin.
 
 ## Package API
 

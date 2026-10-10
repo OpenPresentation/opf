@@ -65,9 +65,8 @@ npx --no-install opf validate deck.opf.json
 npx --no-install opf validate deck.opf.json --format text
 ```
 
-The CLI depends on core, which holds the schema, catalogs and the checker. Validation never renders; `opf render`, `opf export` and
-`opf import` produce and read files through the optional peers `@openpresentation/opf-render` and
-`@openpresentation/opf-pptx` (see [the CLI reference](cli.md)).
+The CLI depends on core, which holds the schema, catalogs and the checker. Validation never renders; `opf convert` produces PDF, PPTX, PNG and SVG and reads `.pptx` files through the optional peers `@openpresentation/opf-render` and
+`@openpresentation/opf-pptx` (see [the CLI reference](cli.md); `opf doctor` says what is installed).
 `opf --version` reports the CLI and the installed core. Successful validation is not
 visual verification.
 

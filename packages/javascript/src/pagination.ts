@@ -327,6 +327,8 @@ export interface PresentationPaginationOptions extends CatalogOptions {
 export interface PresentationPaginationResult {
   presentation: Record<string, any>;
   pages: (PaginatedPage & { sourceSlideIndex: number })[];
+  /** How the page breaks were chosen: `measured` with the `fonts` handle's text measurement, `estimated` with core's portable estimate (no `fonts`). */
+  layout: 'measured' | 'estimated';
 }
 
 
@@ -374,5 +376,5 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
   const {output,pages} = result;
   presentation.slides=output;
   assertValid(presentation, { only: ['format'] });
-  return {presentation,pages};
+  return {presentation,pages,layout:options.fonts?'measured':'estimated'};
 }

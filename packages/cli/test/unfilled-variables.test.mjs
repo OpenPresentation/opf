@@ -35,14 +35,14 @@ describe("a deck with an unfilled required variable", () => {
     assert.deepEqual(report.findings.map((finding) => [finding.ruleId, finding.severity, finding.category]), [["opf/variable-unfilled", "error", "format"]]);
   });
 
-  test("create, edit, paginate and fill refuse to write it", async () => {
+  test("convert, edit, paginate and fill refuse to write it", async () => {
     const deck = await file("deck.json", declared);
     const patch = await file("patch.json", [{ op: "replace", path: "/slides/0/title", value: "Hi {{who}}" }]);
     for (const [name, args] of [
-      ["create", ["create", path.join(temp, "created.json"), "--from", deck]],
-      ["edit", ["edit", deck, "--patch", patch, "--output", path.join(temp, "edited.json")]],
+      ["convert", ["convert", deck, path.join(temp, "created.opf.json")]],
+      ["edit", ["edit", deck, path.join(temp, "edited.json"), "--patch", patch]],
       ["paginate", ["paginate", deck, path.join(temp, "paged.json")]],
-      ["fill", ["fill", deck, "--output", path.join(temp, "filled.json")]],
+      ["fill", ["fill", deck]],
     ]) {
       const result = run(args);
       assert.equal(result.status, 1, `${name}: ${result.stdout}${result.stderr}`);
@@ -53,8 +53,8 @@ describe("a deck with an unfilled required variable", () => {
 
   test("as a template it is incomplete on purpose: only a warning, and the write goes ahead", async () => {
     const template = await file("template.json", { ...declared, template: true });
-    const output = path.join(temp, "template-created.json");
-    const result = run(["create", output, "--from", template]);
+    const output = path.join(temp, "template-created.opf.json");
+    const result = run(["convert", template, output]);
     assert.equal(result.status, 0, result.stderr);
     const report = JSON.parse(result.stdout);
     assert.deepEqual(report.findings.map((finding) => [finding.ruleId, finding.severity]), [["opf/variable-unfilled", "warning"]]);

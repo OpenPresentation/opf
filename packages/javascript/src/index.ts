@@ -15,9 +15,16 @@
 //
 // Drawing and PowerPoint go through the optional peers @openpresentation/opf-render and @openpresentation/opf-pptx, loaded the
 // first time a call needs them; a missing one throws `peer-not-installed` with the install command. The Node engine itself
-// (./node/, which reads files and registers the default catalog) is loaded on the first call too, so importing the root costs no
-// more than core. Output is deterministic: no network, no system fonts, no clock unless `date` is passed.
+// (./node/, which reads files) is loaded on the first call too. Output is deterministic: no network, no system fonts, no clock
+// unless `date` is passed.
+//
+// RR-75: in Node the functions behind the CLI's verbs have the CLI's defaults, so `opf validate deck` and `validate(deck)` agree:
+// `validate`, `stats`, `paginate`, `embed` and `edit` resolve references in the default catalog (the pinned pptx.gallery
+// snapshot of `@openpresentation/opf/catalog`) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
+import { defaultCatalog } from "./catalog.js";
+import type { Catalog } from "./catalog-refs.js";
+import { edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck } from "./core.js";
 import { OPFApiError, asApiError } from "./api-errors.js";
 import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
 import { OPFValidationError } from "./validator.js";
@@ -26,6 +33,28 @@ export * from "./core.js";
 export type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, ConvertedFile, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
 export type { ExportFormat } from "./node/export.js";
 export type { FontsHandle } from "./node/peers.js";
+
+const DEFAULT_CATALOGS: readonly Catalog[] = [defaultCatalog];
+/**
+ * The options with the default catalog when they name no catalogs (an explicit `catalogs: []` registers none). Options that are
+ * not an object are passed on as they are, so the function's own check rejects them.
+ */
+const withDefaultCatalog = <T extends { catalogs?: readonly Catalog[] }>(options: T | undefined): T => {
+	if (options === undefined) return { catalogs: DEFAULT_CATALOGS } as T;
+	if (options === null || typeof options !== "object" || Array.isArray(options) || options.catalogs !== undefined) return options;
+	return { ...options, catalogs: DEFAULT_CATALOGS };
+};
+
+/** `validate` with the default catalog registered when `catalogs` is omitted, as `opf validate` does. */
+export const validate: typeof validateDeck = (input, options) => validateDeck(input, withDefaultCatalog(options));
+/** `stats` with the default catalog registered when `catalogs` is omitted, as `opf stats` does. */
+export const stats: typeof deckStats = (presentation, options) => deckStats(presentation, withDefaultCatalog(options));
+/** `paginate` with the default catalog registered when `catalogs` is omitted, as `opf paginate` does. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks. */
+export const paginate: typeof paginateDeck = (input, options) => paginateDeck(input, withDefaultCatalog(options));
+/** `embed` with the default catalog registered when `catalogs` is omitted, as `opf embed` does. */
+export const embed: typeof embedRecords = (document, options) => embedRecords(document, withDefaultCatalog(options));
+/** `edit` with the default catalog registered for the check when `catalogs` is omitted, as `opf edit` does. */
+export const edit: typeof editDeck = (deck, patch, options) => editDeck(deck, patch, withDefaultCatalog(options));
 
 /** The Node engine, loaded on the first file call. */
 const engine = () => import("./node/conversion.js");

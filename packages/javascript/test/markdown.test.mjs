@@ -72,8 +72,12 @@ describe("deck structure", () => {
       { title: "One", items: ["a", "b"], notes: "first notes" },
       { title: "Two", subtitle: "Sub", text: "Text" },
     ]);
-    // In the default mode the second # is a second title.
-    assert.ok(rule("# One\n- a\n# Two", "markdown/duplicate-title"));
+    // RR-75: the default (`auto`) cuts an outline (no --- line, two or more # headings outside fences, comments and notes) at its
+    // headings; with `rules` the second # is a second title. A # inside speaker notes does not make an outline: the notes run on.
+    assert.deepEqual(slides("# One\n- a\n# Two\nText\n"), [{ title: "One", items: ["a"] }, { title: "Two", text: "Text" }]);
+    assert.deepEqual(slides(outline), [{ title: "One", items: ["a", "b"], notes: "first notes\n# Two\n## Sub\nText" }]);
+    assert.ok(rule("# One\n- a\n# Two", "markdown/duplicate-title", { split: "rules" }));
+    assert.ok(rule("# One\n- a\n# Two\n\n---\n\n# Three", "markdown/duplicate-title"), "a deck with a --- line is cut by rules only");
   });
 
   test("defaults fill deck properties the front matter does not set", () => {
@@ -300,7 +304,7 @@ describe("findings carry line and column in the shared Finding format", () => {
 
   test("an unterminated fence, a duplicate title, an empty deck and bad embedded YAML are errors", () => {
     assert.ok(rule("# A\n\n```js\nnever closed", "markdown/fence-unterminated"));
-    assert.ok(rule("# A\n\n# B", "markdown/duplicate-title"));
+    assert.ok(rule("# A\n\n# B", "markdown/duplicate-title", { split: "rules" }), "with split auto this is an outline of two slides");
     assert.ok(rule("# A\n\n## B\n\n## C", "markdown/duplicate-subtitle"));
     assert.ok(rule("", "markdown/no-slides"));
     assert.ok(rule("```opf-block\ntext: [\n```", "markdown/opf-block"));

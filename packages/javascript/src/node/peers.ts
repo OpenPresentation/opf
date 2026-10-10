@@ -116,6 +116,50 @@ function locate(specifier: string): string | undefined {
 	return undefined;
 }
 
+/**
+ * A package as the engine would find it (RR-75, `opf doctor`): its manifest resolved from core's location, then the working
+ * directory, then `from` (a file inside another package, for the optional peers opf-render loads itself). Undefined when it is
+ * not installed. Nothing is loaded.
+ */
+export function locatePackage(name: string, from?: string): { manifest: string; version: string } | undefined {
+	const starts = [...bases(), ...(from === undefined ? [] : [pathToFileURL(from).href])];
+	for (const base of starts) {
+		const manifest = manifestFrom(name, base);
+		if (!manifest) continue;
+		try {
+			return { manifest, version: (JSON.parse(readFileSync(manifest, "utf8")) as { version?: string }).version ?? "unknown" };
+		} catch {
+			return { manifest, version: "unknown" };
+		}
+	}
+	return undefined;
+}
+
+/** A package's manifest from `base`: `<name>/package.json`, or (a package that does not export it, such as sharp) the folder of its entry that holds a manifest of that name. */
+function manifestFrom(name: string, base: string): string | undefined {
+	const require = createRequire(base);
+	try {
+		return require.resolve(`${name}/package.json`);
+	} catch {
+		// not exported, or not installed: try the entry
+	}
+	let entry: string;
+	try {
+		entry = require.resolve(name);
+	} catch {
+		return undefined;
+	}
+	for (let folder = path.dirname(entry); folder !== path.dirname(folder); folder = path.dirname(folder)) {
+		const candidate = path.join(folder, "package.json");
+		try {
+			if ((JSON.parse(readFileSync(candidate, "utf8")) as { name?: string }).name === name) return candidate;
+		} catch {
+			// no manifest here
+		}
+	}
+	return undefined;
+}
+
 const cache = new Map<string, Peer<unknown>>();
 
 async function loadPeer<T>(name: string, subpath = ""): Promise<Peer<T>> {

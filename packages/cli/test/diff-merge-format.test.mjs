@@ -81,12 +81,14 @@ describe("opf merge", () => {
     assert.equal(merged.name, "Their name");
     assert.equal(json(result.stderr).merge.clean, true);
     // Saved output carries the merge summary.
-    const saved = json(run(["merge", "base.json", "ours.json", "theirs.json", "--output", "merged.json"]).stdout);
-    assert.equal(saved.valid, true);
+    const saved = json(run(["merge", "base.json", "ours.json", "theirs.json", "merged.json"]).stdout);
+    assert.equal(saved.ok, true);
+    assert.equal(saved.command, "merge");
+    assert.equal(saved.input.length, 3);
     assert.equal(saved.merge.clean, true);
     assert.deepEqual(json(await read("merged.json")), merged);
-    run(["merge", "base.json", "ours.json", "theirs.json", "--output", "merged.json"], { status: 1 });
-    run(["merge", "base.json", "ours.json", "theirs.json", "--output", "merged.json", "--force"]);
+    run(["merge", "base.json", "ours.json", "theirs.json", "merged.json"], { status: 1 });
+    run(["merge", "base.json", "ours.json", "theirs.json", "merged.json", "--force"]);
   });
 
   test("conflicts exit 1, write nothing and name both sides", async () => {
@@ -94,10 +96,11 @@ describe("opf merge", () => {
     ours.slides[1].title = "B ours";
     theirs.slides[1].title = "B theirs";
     await write("cbase.json", base()); await write("cours.json", ours); await write("ctheirs.json", theirs);
-    const result = run(["merge", "cbase.json", "cours.json", "ctheirs.json", "--output", "conflicted.json"], { status: 1 });
+    const result = run(["merge", "cbase.json", "cours.json", "ctheirs.json", "conflicted.json"], { status: 1 });
     assert.equal(result.stdout, "");
     const report = json(result.stderr);
     assert.match(report.error, /1 conflict/);
+    assert.equal(report.code, "merge-conflict");
     assert.equal(report.merge.conflicts[0].ours, "B ours");
     assert.equal(report.merge.conflicts[0].theirs, "B theirs");
     assert.equal(report.merge.conflicts[0].base, "B");
@@ -119,7 +122,7 @@ describe("opf merge", () => {
     ours.slides[0].title = "A in place";
     theirs.slides[2].title = "C in place";
     await write("ipbase.json", base()); await write("ipours.json", ours); await write("iptheirs.json", theirs);
-    run(["merge", "ipbase.json", "ipours.json", "iptheirs.json", "--in-place"]);
+    run(["merge", "ipbase.json", "ipours.json", "iptheirs.json", "-i"]);
     const merged = json(await read("ipours.json"));
     assert.equal(merged.slides[0].title, "A in place");
     assert.equal(merged.slides[2].title, "C in place");
@@ -131,14 +134,16 @@ describe("opf merge", () => {
     ours.unexpected = { nope: true };
     await write("vbase.json", start); await write("vours.json", ours); await write("vtheirs.json", theirs);
     const result = run(["merge", "vbase.json", "vours.json", "vtheirs.json"], { status: 1 });
-    assert.equal(json(result.stderr).validation.valid, false);
+    assert.equal(json(result.stderr).code, "invalid-document");
+    assert.ok(json(result.stderr).findings.some((finding) => finding.severity === "error"));
   });
 
   test("usage errors exit 2", async () => {
     run(["merge", "cbase.json", "cours.json"], { status: 2 });
     run(["merge", "-", "-", "cours.json"], { status: 2, input: "{}" });
     run(["merge", "cbase.json", "cours.json", "ctheirs.json", "--prefer", "both"], { status: 2 });
-    run(["merge", "cbase.json", "cours.json", "ctheirs.json", "--in-place", "--output", "x.json"], { status: 2 });
+    run(["merge", "cbase.json", "cours.json", "ctheirs.json", "x.json", "-i"], { status: 2 });
+    run(["merge", "cbase.json", "cours.json", "ctheirs.json", "--output", "x.json"], { status: 2 });
     run(["merge", "cbase.json", "cours.json", "ctheirs.json", "--report", "-"], { status: 2 });
   });
 });
@@ -158,14 +163,18 @@ describe("opf format", () => {
   test("--check lists unformatted files and exits 1", async () => {
     await write("canon.json", canonical);
     const clean = json(run(["format", "canon.json", "--check"]).stdout);
-    assert.deepEqual(clean, { checked: 1, formatted: 1, unformatted: [] });
+    assert.equal(clean.command, "format");
+    assert.equal(clean.ok, true);
+    assert.deepEqual([clean.checked, clean.formatted, clean.unformatted], [1, 1, []]);
     const dirty = json(run(["format", "canon.json", "messy.json", "--check"], { status: 1 }).stdout);
     assert.deepEqual(dirty.unformatted, ["messy.json"]);
+    assert.equal(dirty.ok, false);
     assert.equal(await read("messy.json"), messy);
   });
 
   test("--in-place rewrites only what changes and is idempotent", async () => {
-    const report = json(run(["format", "canon.json", "messy.json", "--in-place"]).stdout);
+    const report = json(run(["format", "canon.json", "messy.json", "-i"]).stdout);
+    assert.deepEqual(report.outputs.map((item) => path.basename(item.file)), ["messy.json"]);
     assert.deepEqual(report.rewritten, ["messy.json"]);
     assert.deepEqual(report.unchanged, ["canon.json"]);
     assert.equal(await read("messy.json"), canonical);
@@ -173,13 +182,16 @@ describe("opf format", () => {
     assert.deepEqual(json(run(["format", "messy.json", "--in-place"]).stdout).rewritten, []);
   });
 
-  test("--output and line endings", async () => {
+  test("an output file and line endings", async () => {
     await write("messy2.json", messy);
-    const result = json(run(["format", "messy2.json", "--output", "out.json"]).stdout);
+    const result = json(run(["format", "messy2.json", "out.json"]).stdout);
     assert.equal(result.changed, true);
     assert.equal(await read("out.json"), canonical);
-    run(["format", "messy2.json", "--output", "out.json"], { status: 1 });
-    run(["format", "messy2.json", "--output", "out.json", "--force"]);
+    run(["format", "messy2.json", "out.json"], { status: 1 });
+    run(["format", "messy2.json", "out.json", "--force"]);
+    // format keeps the form: another form is opf convert's job.
+    assert.match(json(run(["format", "messy2.json", "out.opf.yaml"], { status: 2 }).stderr).error, /Use opf convert/);
+    run(["format", "messy2.json", "--output", "out.json"], { status: 2 });
     await write("crlf.json", canonical.replaceAll("\n", "\r\n"));
     run(["format", "crlf.json", "--check"], { status: 1 });
     run(["format", "crlf.json", "--check", "--eol", "crlf"]);
@@ -190,7 +202,8 @@ describe("opf format", () => {
 
   test("usage and input errors", async () => {
     run(["format"], { status: 2 });
-    run(["format", "messy.json", "canon.json"], { status: 2 });
+    run(["format", "messy.json", "canon.json"], { status: 1 }); // the second file is the output, and it exists
+    run(["format", "messy.json", "canon.json", "crlf.json"], { status: 2 });
     run(["format", "-", "--in-place"], { status: 2, input: "{}" });
     run(["format", "messy.json", "--check", "--in-place"], { status: 2 });
     run(["format", "messy.json", "--indent", "9"], { status: 2 });

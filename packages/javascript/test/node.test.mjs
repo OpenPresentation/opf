@@ -83,7 +83,8 @@ const fails = async (promise, ErrorClass, code) => {
 describe("the entry", () => {
   test("exports convert, open and save beside the rest of core, with one set of classes", () => {
     for (const name of ["convert", "open", "save", "validate", "parse", "stringify", "parseSlideSelection", "OPFValidationError", "OPFApiError", "OPFExportError", "OPFImportError"]) assert.ok(name in opf, name);
-    assert.equal(opf.validate, core.validate);
+    // RR-75: the Node build's validate registers the default catalog when a call names none (node-verbs.test.mjs).
+    assert.notEqual(opf.validate, core.validate);
     assert.equal(opf.parse, core.parse);
     assert.equal(opf.OPFValidationError, core.OPFValidationError);
     assert.ok(new opf.OPFExportError("x", "y") instanceof opf.OPFApiError);

@@ -5,8 +5,12 @@ import { type InlineIssue, matchBracket, parseAttributes, parseInline, parsePlai
 import { Ctx, DECIMAL, type Line, type Range, lineRange, readCsv, readYamlMapping, splitLines } from "./support.js";
 
 export interface ParseOptions {
-  /** `rules` (default): slides are separated by `---` lines. `headings`: a `# ` heading also starts a new slide (outline input). */
-  split?: "rules" | "headings";
+  /**
+   * How the Markdown is cut into slides. `auto` (the default): by `---` lines, and an outline (no `---` line, and two or more `# `
+   * headings outside fences, comments and notes) by its headings. `rules`: by `---` lines only, so a second `# ` heading on a slide is a second title.
+   * `headings`: a `# ` heading also starts a new slide (outline input).
+   */
+  split?: "auto" | "rules" | "headings";
 }
 
 export const SLIDE_OPTION_KEYS = ["id", "type", "layout", "section", "tag", "hidden", "beat"] as const;
@@ -105,6 +109,35 @@ export function splitSegments(lines: Line[], split: "rules" | "headings"): Line[
     current.push(line);
   }
   return segments;
+}
+
+/**
+ * RR-75 (`split: "auto"`): true when the lines read as an outline: no `---` line between slides, and at least two level-1
+ * headings outside fences, comments and speaker notes. Such a deck is cut at its headings; any other is cut at `---` lines.
+ */
+export function isOutline(lines: Line[]): boolean {
+  let fence: string | undefined;
+  let comment = false;
+  let notes = false;
+  let headings = 0;
+  for (const { text } of lines) {
+    if (fence !== undefined) {
+      if (fenceClose(fence).test(text)) fence = undefined;
+      continue;
+    }
+    if (comment) {
+      if (text.includes("-->")) comment = false;
+      continue;
+    }
+    if (SEPARATOR.test(text)) return false;
+    if (notes) continue;
+    if (/^#(?:[ \t]|$)/.test(text)) headings++;
+    const open = fenceStart(text);
+    if (open) fence = open.fence;
+    else if (COMMENT.test(text) && !text.includes("-->", text.indexOf("<!--") + 4)) comment = true;
+    else if (NOTES.test(text)) notes = true;
+  }
+  return headings >= 2;
 }
 
 // --- text helpers ------------------------------------------------------------------------------
