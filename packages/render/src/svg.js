@@ -19,6 +19,7 @@ import {
 } from "@openpresentation/opf";
 import { adjustedFontSize, baselineShift, createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
+import { isSymbolEncodedFamily } from "./symbol-fonts.js";
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
@@ -616,9 +617,12 @@ function bindSlide(presentation, index, context) {
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
   // resolves it again and draws the replacement's encoded weight (Montserrat 900, Red Hat Display 600 and 300); resolving the role to the
   // replacement family first would draw every run at 400 or 700 and measure it that way. Every other family resolves once, here.
+  // A symbol-encoded family (Symbol, Wingdings, Webdings; FF-45) keeps its name too: each run resolves it again and the script-font planner
+  // maps the run's private-use codes through the symbol table (symbol-fonts.js), as it does for a symbol run. Resolving the role to the open
+  // symbol face here would drop the encoding, and the codes would reach a face with no glyph for them (missing-glyph).
   for (const role of ["heading","body","code","accent"]) if (design.fonts[role] !== undefined) {
     const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
-    design.fonts[role] = fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
+    design.fonts[role] = isSymbolEncodedFamily(named) || fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
   }
   const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement });
   return {

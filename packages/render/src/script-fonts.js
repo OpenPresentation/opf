@@ -46,7 +46,9 @@ export const SCRIPT_FONT_FAMILIES = freeze({
   // text, not scripts a character carries: emoji and math characters are Common, so they stay in their
   // neighbours' run and reach these faces through the glyph fallback chain (emoji-presentation clusters
   // take the emoji face first). The keys are last so the chain tries every real script face before them.
-  Zsye: {sans: "Noto Color Emoji"},
+  // `fallback` is a further designated face, tried after the colour face: a host that installed only the monochrome Noto Emoji package
+  // still previews and exports emoji. The colour face stays first wherever it is loaded.
+  Zsye: {sans: "Noto Color Emoji", fallback: "Noto Emoji"},
   Zmth: {serif: "STIX Two Math", sans: "Noto Sans Math"},
 });
 
@@ -315,7 +317,7 @@ export function detectScripts(value, profile, { includeLanguage = true, ignoreKe
 export function designatedFamilies(script, serif = false) {
   const entry = SCRIPT_FONT_FAMILIES[script];
   if (!entry) return [];
-  return (serif ? [entry.serif, entry.sans] : [entry.sans, entry.serif]).filter(Boolean);
+  return (serif ? [entry.serif, entry.sans, entry.fallback] : [entry.sans, entry.serif, entry.fallback]).filter(Boolean);
 }
 
 const hanKeys = ["Jpan", "Hans", "Hant", "Kore"];

@@ -53,7 +53,7 @@ const colorEmoji = BUNDLED_FONT_MANIFEST.packages.find(item => item.name === '@e
 assert.deepEqual(colorEmoji.color, {format: 'COLRv1, SVG', rasterFamily: 'Noto Emoji'});
 assert.deepEqual(COLOR_FONT_FACES.map(face => [face.family, face.rasterFamily, face.format]), [['Noto Color Emoji', 'Noto Emoji', 'COLRv1, SVG']]);
 assert.deepEqual([...EMOJI_FONT_FAMILIES], ['Noto Color Emoji', 'Noto Emoji']);
-assert.deepEqual(designatedFamilies('Zsye'), ['Noto Color Emoji']);
+assert.deepEqual(designatedFamilies('Zsye'), ['Noto Color Emoji', 'Noto Emoji'], 'the colour face first, the monochrome face as the second designated face');
 assert.deepEqual(designatedFamilies('Zmth'), ['Noto Sans Math', 'STIX Two Math']);
 assert.deepEqual(designatedFamilies('Zmth', true), ['STIX Two Math', 'Noto Sans Math']);
 for (const [family, replacement, alternates] of [['Segoe UI Emoji', 'Noto Color Emoji', ['Noto Emoji']], ['Cambria Math', 'STIX Two Math', ['Noto Sans Math', 'Caladea']]]) {
@@ -68,7 +68,7 @@ assert.equal(scriptFontAliases(['STIX Two Math', 'Noto Sans Math'])['Cambria Mat
 assert.equal(scriptFontAliases(['Noto Sans Math'])['Cambria Math'], 'Noto Sans Math');
 // The chain tries every real script face before the emoji and math faces; the two symbol faces (FF-45 symbols) close it.
 const chain = glyphFallbackFamilies('\u{1F600}', core.resolveScriptFonts(deck('x')));
-assert.deepEqual(chain.slice(-5), ['Noto Color Emoji', 'Noto Sans Math', 'STIX Two Math', 'Noto Sans Symbols 2', 'Noto Sans Symbols'], 'a sans deck: the sans math face first, then the symbol faces');
+assert.deepEqual(chain.slice(-6), ['Noto Color Emoji', 'Noto Emoji', 'Noto Sans Math', 'STIX Two Math', 'Noto Sans Symbols 2', 'Noto Sans Symbols'], 'a sans deck: the sans math face first, then the symbol faces');
 assert.equal(chain[0], 'Noto Sans');
 
 // 2. Detection: emoji presentation and mathematical notation are reported as Zsye and Zmth; text-default symbols are not.
