@@ -95,6 +95,10 @@ first text, date and slide number as native `ftr`, `dt` and `sldNum` placeholder
 (with master/layout placeholders, `p:hf` flags and a notes-master flag) at the same
 geometry and reads them back with or without provenance; the rest stays tagged
 shapes. Native PowerPoint acceptance remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
+PPTX 0.18 (RR-72) writes a tagged part that is the same on two or more slides once,
+on the slide master or a shared layout (one per background tone for `onLight`/`onDark`
+logos; a hidden footer uses a layout that hides the master's), and reads it back from
+there ([rr-72-master-furniture.md](programs/release-readiness/rr-72-master-furniture.md)).
 
 The [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
 and accepted [native B/C bundle](evidence/windows-native-edits-20260921/README.md)

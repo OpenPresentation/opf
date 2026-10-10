@@ -49,7 +49,8 @@ decision below is an agent decision, vetoable; each says what changing it would 
     reference pixels at a 720-pixel short edge. The row is flush left, centered or flush right like the zone.
     - Each part is vertically centered on the row's tallest part.
     - Rows start at the band's top edge, as 0.17 zones did. Centering rows across zones would move single-part zones,
-      so it is left for RR-72 to decide with native evidence.
+      so it is left for RR-72 to decide with native evidence. RR-72 left it: aligning row text with single-part text moves
+      the band edges and so the body ([rr-72-master-furniture.md](rr-72-master-furniture.md), decision 8).
     - With other parts, a text part is as wide as its longest line. A lone text part keeps the full zone width, so
       single-part zones do not move.
     - When the row is too wide, text parts share what remains: narrow parts keep their width and the rest wrap at an

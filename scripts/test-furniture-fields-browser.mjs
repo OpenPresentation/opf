@@ -118,14 +118,32 @@ function expectedFooter(index, total, date, hidden) {
 function assertFooter(actual, index, total, date, hidden) {
   assert.deepEqual(actual, expectedFooter(index, total, date, hidden));
 }
+// The furniture each slide shows, in reading order (left to right, then top to bottom). RR-72: a part drawn the same on several
+// slides is written once, on the slide master or a layout, so a slide's furniture is its own shapes plus its layout's and its
+// master's (unless `showMasterSp="0"` hides them).
 function cacheRows(bytes) {
-  const entries = unzipSync(bytes), decode = new TextDecoder();
+  const entries = unzipSync(bytes), decode = new TextDecoder(), text = name => decode.decode(entries[name]);
+  const related = (name, type) => {
+    const rels = entries[name.replace(/([^/]+)$/, '_rels/$1.rels')];
+    const target = rels && [...text(name.replace(/([^/]+)$/, '_rels/$1.rels')).matchAll(/<Relationship\b[^>]*\/>/g)].map(match => match[0])
+      .find(node => node.includes(`relationships/${type}"`))?.match(/\sTarget="\.\.\/([^"]+)"/)?.[1];
+    return target ? `ppt/${target}` : undefined;
+  };
+  const shown = attribute => attribute !== '0' && attribute !== 'false';
+  const shapes = (name, pattern) => [...text(name).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]).filter(shape => pattern.test(shape));
   return Object.keys(entries).filter(name => /^ppt\/slides\/slide\d+\.xml$/.test(name))
     .sort((a, b) => Number(a.match(/slide(\d+)\.xml$/)[1]) - Number(b.match(/slide(\d+)\.xml$/)[1]))
-    .map(name => ({part: name, paragraphs: [...decode.decode(entries[name]).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)]
-      .map(match => match[0]).filter(shape => /name="OPF furniture/.test(shape))
-      .flatMap(shape => [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(match => [...match[0].matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:\1>/g)]
-        .map(([, kind, attributes, text]) => ({text, ...(kind === 'fld' ? {type: attributes.match(/type="([^"]+)"/)[1]} : {})}))))}));
+    .map(name => {
+      const layout = related(name, 'slideLayout'), master = layout && related(layout, 'slideMaster');
+      const slideShows = shown(text(name).match(/<p:sld\b[^>]*\bshowMasterSp="([^"]*)"/)?.[1]);
+      const layoutShows = shown(layout && text(layout).match(/<p:sldLayout\b[^>]*\bshowMasterSp="([^"]*)"/)?.[1]);
+      const lifted = /name="OPF furniture (?:header|footer) /;
+      const all = [...shapes(name, /name="OPF furniture/), ...(slideShows && layout ? shapes(layout, lifted) : []), ...(slideShows && layoutShows && master ? shapes(master, lifted) : [])];
+      const at = shape => shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/>/).slice(1).map(Number);
+      return {part: name, paragraphs: all.sort((a, b) => at(a)[0] - at(b)[0] || at(a)[1] - at(b)[1])
+        .flatMap(shape => [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(match => [...match[0].matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:\1>/g)]
+          .map(([, kind, attributes, text]) => ({text, ...(kind === 'fld' ? {type: attributes.match(/type="([^"]+)"/)[1]} : {})}))))};
+    });
 }
 function verifyCaches(rows, document, date, hidden, wrapped = false) {
   assert.equal(rows.length, document.slides.length);
