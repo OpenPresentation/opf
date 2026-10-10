@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-render",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",
@@ -139,7 +139,7 @@
     "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.17.0",
+    "@openpresentation/opf": "^0.18.1",
     "bidi-js": "1.1.0",
     "fontkit": "^2.0.4",
     "harfbuzzjs": "1.6.2",
@@ -395,8 +395,5 @@
   },
   "bin": {
     "opf-preview-fonts": "./dist/preview-fonts-cli.js"
-  },
-  "opf": {
-    "requiresUnreleasedCore": "0.18.0"
   }
 }
