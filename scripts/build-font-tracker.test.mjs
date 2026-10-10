@@ -11,12 +11,14 @@ const policy = read(FILES.policy);
 const overrides = read(FILES.overrides);
 const committed = read(FILES.json);
 const policyNames = policy.families.map((row) => row.family);
+/** FF-46 (opf#362): a family the native visual run passed and whose own fixture passes in every host. */
+const visualAccepted = (record) => record.nativeVisual?.outcome === "pass" && record.nativeVisual.ownFixtureHosts.length === overrides.visualAcceptance.hosts.length;
 
 // A scratch copy of the inputs, outputs and script, so drift and error cases never touch the checkout.
 function scratchCopy() {
   // realpath: on macOS the temporary directory is a symlink, and the script only runs when its resolved path is the entry point.
   const dir = realpathSync(mkdtempSync(path.join(tmpdir(), "font-tracker-")));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs", "scripts/tracker-staleness.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.scriptNameHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs", "scripts/tracker-staleness.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -64,7 +66,8 @@ test("the reviewed families split into the owner's four classes", () => {
   assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
   assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Symbol", "Webdings", "Wingdings"]);
   // FF-45: the three special families preview through the code-table route (opf-render#94), so none still needs a special path.
-  for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "code-table", record.family);
+  // FF-46 (opf#362): with a native visual pass and the name's own fixture in every host they are documented-visual instead.
+  for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, visualAccepted(record) ? "documented-visual" : "code-table", record.family);
   for (const record of committed.records.filter((item) => item.class === "open")) assert.equal(record.licenseClass, "open");
   for (const record of committed.records.filter((item) => item.class.startsWith("proprietary"))) assert.notEqual(record.licenseClass, "open");
 });
@@ -130,6 +133,12 @@ test("every proprietary script family and open script face carries its script-co
     assert.equal(corpus.face, record.previewRoute.family, record.family);
     assert.ok(corpus.faceSamples >= 8 || corpus.scripts.length > 0, record.family);
     assert.ok(corpus.equalToHarfBuzz + corpus.recordedFontkitLimits === corpus.faceSamples, record.family);
+    if (visualAccepted(record)) {
+      // FF-46 (opf#362): a native visual pass and the name's own fixture in every host.
+      assert.equal(record.status, "documented-visual", record.family);
+      assert.equal(record.acceptance.accepted, true, record.family);
+      continue;
+    }
     assert.equal(record.status, "script-gap", record.family);
     assert.match(record.statusReason, /script corpus/, record.family);
     assert.match(record.nextAction, /Native PowerPoint comparison/, record.family);
@@ -526,19 +535,16 @@ test("Symbol, Wingdings and Webdings carry the code-table route from the pinned 
     for (const face of item.previewRoute.chain) assert.ok(shipped.has(face), `${name}: ${face} is in the pinned render manifest`);
     assert.equal(item.bundled.yes, true, name);
     assert.equal(item.bundled.applies, "code-table", name);
-    assert.equal(item.status, "code-table", name);
     assert.equal(item.licenseClass, "proprietary-standard", name);
-    assert.equal(item.hostVerification.node, "verified", name);
-    assert.equal(item.hostVerification.browser, "verified", name);
-    assert.equal(item.hostVerification.editor, "unverified", name);
-    // Nothing is claimed beyond what is verified: the FF-46 native runs read the name back, the 2026-10-05 run compared the drawn lines
-    // (nativeVisual: pass), and acceptance stays pending until the family's own fixture is in every host.
+    // FF-46 (opf#362): the name's own fixture passes in every host (script-name-host-fixtures), so with the native visual pass of the
+    // 2026-10-05 run it is documented-visual.
+    assert.equal(item.status, "documented-visual", name);
+    for (const host of ["node", "browser", "editor", "galleryEditor"]) assert.equal(item.hostVerification[host], "verified", `${name} ${host}`);
     assert.equal(item.nativeVerification.status, "verified", name);
     assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"], name);
     assert.equal(item.nativeVisual.outcome, "pass", name);
-    assert.equal(item.acceptance.accepted, false, name);
-    assert.match(item.statusReason, /native PowerPoint name read-back passed/, name);
-    assert.match(item.nextAction, /no a:sym element/, name);
+    assert.equal(item.acceptance.accepted, true, name);
+    assert.match(item.statusReason, /native visual comparison \(FF-46\)/, name);
   }
   assert.deepEqual(snapshot.previewFaces.Wingdings, ["Noto Sans Symbols 2", "Noto Sans Symbols", "Noto Sans Math", "Noto Sans"]);
   assert.match(renderMarkdown(committed), /## Symbol-encoded families \(FF-45\)/);
@@ -911,10 +917,16 @@ test("a script, visual or code-table family is documented-visual only with a nat
     assert.deepEqual(rec.nativeVisual.reasons, entry.reasons, rec.family);
     if (rec.nativeVisual.outcome === "pass") assert.equal(entry.reasons.length, 0, rec.family);
     if (rec.nativeVisual.outcome === "unmeasured") assert.equal(entry.installedOnNativeHost, false, rec.family);
-    // No proprietary script, emoji, math or code-table family has its own host fixture yet, so none is accepted by this run alone.
+    // FF-46 (opf#362): a passing family with its own (name-keyed) fixture in every host is documented-visual; every other one keeps its status.
+    if (rec.nativeVisual.outcome === "pass" && rec.nativeVisual.ownFixtureHosts.length === rules.hosts.length) {
+      assert.equal(rec.status, "documented-visual", rec.family);
+      assert.equal(rec.acceptance.accepted, true, rec.family);
+      assert.match(rec.acceptance.note, /native visual comparison .* passed .* own fixture passes in every host/, rec.family);
+      continue;
+    }
     assert.ok(rules.statuses.includes(rec.status), `${rec.family} keeps its status (${rec.status})`);
     assert.equal(rec.acceptance.accepted, false, rec.family);
-    const pattern = { pass: /Not accepted yet: the native visual comparison .* passed .* own host fixture is missing in node, browser, editor, galleryEditor/, finding: /Not accepted: the native visual comparison .* recorded a finding: .*Owner decision needed/, unmeasured: /Not accepted: the real font is not installed on the native host/ }[rec.nativeVisual.outcome];
+    const pattern = { pass: /Not accepted yet: the native visual comparison .* passed .* own host fixture is missing in /, finding: /Not accepted: the native visual comparison .* recorded a finding: .*Owner decision needed/, unmeasured: /Not accepted: the real font is not installed on the native host/ }[rec.nativeVisual.outcome];
     assert.match(rec.acceptance.note, pattern, rec.family);
   }
   assert.deepEqual(counts, { pass: committed.inputs.nativeVisual.pass, finding: committed.inputs.nativeVisual.finding, unmeasured: committed.inputs.nativeVisual.unmeasured });
@@ -923,7 +935,11 @@ test("a script, visual or code-table family is documented-visual only with a nat
   const dir = scratchCopy();
   try {
     // A passing family with its own fixture in every host becomes documented-visual; a finding family with fixtures stays out; a passing
-    // family missing one host's fixture stays out and the note names the host.
+    // family missing one host's fixture stays out and the note names the host. The committed name fixtures are cleared first (FF-46).
+    const nameFile = path.join(dir, overrides.scriptNameHostFixtureEvidence);
+    const names = JSON.parse(readFileSync(nameFile, "utf8"));
+    for (const entry of Object.values(names.hosts)) entry.families = {};
+    writeFileSync(nameFile, JSON.stringify(names));
     const evidenceFile = path.join(dir, overrides.scriptHostFixtureEvidence);
     const evidence = JSON.parse(readFileSync(evidenceFile, "utf8"));
     const own = (family, hosts) => { for (const host of hosts) evidence.hosts[host].families[family] = { route: "fixture", files: ["fixture.ttf"], samples: ["a", "b"], lazyBytes: 1 }; };
@@ -956,9 +972,93 @@ test("a script, visual or code-table family is documented-visual only with a nat
     const without = buildTracker({ root: dir }).tracker.records;
     for (const rec of without) {
       assert.equal(rec.nativeVisual, undefined, rec.family);
-      assert.equal(rec.status, committed.records.find((item) => item.family === rec.family).status, rec.family);
+      const before = committed.records.find((item) => item.family === rec.family);
+      // A family the native run made documented-visual falls back to a status the rule starts from.
+      if (before.nativeVisual && before.status === "documented-visual") assert.ok(rules.statuses.includes(rec.status), rec.family);
+      else assert.equal(rec.status, before.status, rec.family);
     }
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ---- FF-46 (opf#362): the proprietary script, emoji, math and code-table names have their own per-host fixtures, keyed by the name ----
+
+test("a name that passes natively is documented-visual with its own fixture in all four hosts, and stays put with three", () => {
+  const rules = overrides.visualAcceptance;
+  const evidence = read(overrides.scriptNameHostFixtureEvidence);
+  assert.equal(evidence.schema, "opf-script-name-host-fixtures/v1");
+  assert.deepEqual(Object.keys(evidence.hosts), rules.hosts);
+  const names = Object.keys(evidence.hosts.node.families).sort();
+  for (const host of rules.hosts) {
+    const entry = evidence.hosts[host];
+    assert.match(entry.source.commit, /^[0-9a-f]{40}$/, host);
+    assert.deepEqual([...Object.keys(entry.families), ...Object.keys(entry.findings ?? {})].sort(), names, `${host} accounts for every name (passed or a finding)`);
+    for (const [family, value] of Object.entries(entry.families)) {
+      const rec = committed.records.find((item) => item.family === family);
+      assert.ok(rec?.inPolicy && rec.class !== "open", `${host}: ${family} is a proprietary policy family`);
+      assert.notEqual(value.route, family, `${host}: ${family} is drawn through a route face`);
+      assert.ok(value.scripts.length >= 1 && value.scripts.every((script) => script.samples.length >= 1) && value.files.length >= 1, `${host}: ${family} names its scripts, samples and files`);
+    }
+  }
+  // Every name with a passing native run and a fixture in every host is documented-visual (the 22 of opf#362 on 2026-10-10).
+  for (const family of names) {
+    const rec = committed.records.find((item) => item.family === family);
+    if (rec.nativeVisual?.outcome !== "pass" || rules.hosts.some((host) => !evidence.hosts[host].families[family])) continue;
+    assert.equal(rec.status, "documented-visual", family);
+    assert.equal(rec.acceptance.accepted, true, family);
+    for (const host of rules.hosts) assert.equal(rec.hostVerification[host], "verified", `${family} ${host}`);
+    assert.equal(rec.phase, 5, family);
+  }
+
+  const dir = scratchCopy();
+  try {
+    const nameFile = path.join(dir, overrides.scriptNameHostFixtureEvidence);
+    const edited = JSON.parse(readFileSync(nameFile, "utf8"));
+    const [first, second] = names.filter((family) => committed.records.find((item) => item.family === family).nativeVisual?.outcome === "pass");
+    // Three hosts: the name keeps the status the rule starts from, the note names the missing host, and a recorded finding is quoted.
+    delete edited.hosts.galleryEditor.families[first];
+    edited.hosts.galleryEditor.findings = { [first]: { check: "drawn in another face", reason: "the gallery manifest lacks the route" } };
+    delete edited.hosts.editor.families[second];
+    writeFileSync(nameFile, JSON.stringify(edited));
+    const records = buildTracker({ root: dir }).tracker.records;
+    const three = records.find((rec) => rec.family === first);
+    assert.ok(rules.statuses.includes(three.status), `${first} keeps its status (${three.status})`);
+    assert.equal(three.acceptance.accepted, false);
+    assert.match(three.acceptance.note, /own host fixture is missing in galleryEditor .*finding, and the check stays strict: galleryEditor: the gallery manifest lacks the route/);
+    assert.notEqual(three.hostVerification.galleryEditor, "verified");
+    const other = records.find((rec) => rec.family === second);
+    assert.ok(rules.statuses.includes(other.status), second);
+    assert.match(other.acceptance.note, /own host fixture is missing in editor/);
+    // The other names are untouched.
+    for (const family of names.filter((item) => item !== first && item !== second)) assert.equal(records.find((rec) => rec.family === family).status, committed.records.find((rec) => rec.family === family).status, family);
+
+    // A name in both the script and the name evidence is an error: each family has one fixture model.
+    const scriptFile = path.join(dir, overrides.scriptHostFixtureEvidence);
+    const script = JSON.parse(readFileSync(scriptFile, "utf8"));
+    script.hosts.node.families[names[0]] = script.hosts.node.families["Noto Sans JP"];
+    writeFileSync(scriptFile, JSON.stringify(script));
+    edited.hosts.node.families[names[0]] ??= JSON.parse(readFileSync(path.join(ROOT, overrides.scriptNameHostFixtureEvidence), "utf8")).hosts.node.families[names[0]];
+    writeFileSync(nameFile, JSON.stringify(edited));
+    assert.throws(() => buildTracker({ root: dir }), new RegExp(`${names[0]} is in both the script and the script name host fixture evidence`));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("the name assembler turns the four host reports into the evidence file, keyed by the name, with a finding beside the names", async () => {
+  const { assemble, defaultOut } = await import("./assemble-script-name-host-evidence.mjs");
+  const row = (family) => ({ family, kind: "script", route: "Noto Sans X", scripts: [{ script: "Xxxx", route: "Noto Sans X", via: "policy", samples: ["a", "b"] }], files: ["noto-sans-x/X.ttf"], lazyBytes: 1048576 });
+  const report = { node: "v26", browser: "1", renderer: "0.18.0", manifestVersion: "0.18.0", report: [row("A"), { ...row("B"), sizeAdjust: 0.64 }] };
+  const commit = "0".repeat(40);
+  const out = assemble({ node: report, browser: { ...report, report: [row("A")], findings: [{ family: "B", message: "advance differs", reason: "why" }] }, editor: report, gallery: report, commits: { render: commit, editor: commit, gallery: commit }, date: "2026-10-10" });
+  assert.equal(out.schema, "opf-script-name-host-fixtures/v1");
+  assert.deepEqual(Object.keys(out.hosts), ["node", "browser", "editor", "galleryEditor"]);
+  assert.deepEqual(Object.keys(out.hosts.browser.families), ["A"]);
+  assert.deepEqual(out.hosts.browser.findings, { B: { check: "advance differs", reason: "why" } });
+  assert.equal(out.hosts.node.families.B.sizeAdjust, 0.64);
+  assert.equal(out.hosts.node.families.A.route, "Noto Sans X");
+  assert.equal(out.hosts.node.findings, undefined);
+  assert.equal(out.lazyBudget.node.families, 2);
+  assert.equal(defaultOut("2026-10-10"), "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json");
 });
