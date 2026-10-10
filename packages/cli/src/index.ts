@@ -6,6 +6,7 @@ import { OPFDataImportError, OPFPatchError, OPFValidationError } from "@openpres
 import { OPFApiError } from "@openpresentation/opf/internal/engine";
 import { type CommandSpec, REMOVED_COMMANDS, nearest, parseArgs, printHelp } from "./args.js";
 import * as catalog from "./catalog.js";
+import { GALLERY_MISMATCH } from "./catalogs.js";
 import * as convert from "./convert-command.js";
 import * as create from "./create.js";
 import * as diffMerge from "./diff.js";
@@ -100,7 +101,7 @@ Exit codes: 0 success, 1 an invalid document, findings at or above --fail-on (de
 found changes, 2 a usage, read, I/O or install problem.
 
 Commands that write a deck check its format and references first; opf validate is the one checker and covers the rest
-(accessibility, layout, content). Every command registers the default catalog (the pinned pptx.gallery snapshot).
+(accessibility, layout, content). Every command registers the pptx.gallery catalog (@openpresentation/gallery).
 PDF, PNG, SVG and PPTX need the optional @openpresentation/opf-render (and opf-pptx); opf doctor says what is installed and
 prints the one command that installs the rest. Nothing is fetched and system fonts are never loaded.
 
@@ -150,6 +151,8 @@ async function main(argv: string[]): Promise<string | undefined> {
 		const guess = nearest(first, [...byName.keys()]);
 		throw usage(`Unknown command: ${first}.${guess ? ` Did you mean opf ${guess}?` : ""} Run opf --help.`, "unknown-command", guess ? { suggestion: guess } : {});
 	}
+	// RR-78: a gallery of another catalog schema than core reads is never registered; skills need no catalog.
+	if (GALLERY_MISMATCH && first !== "skills" && !rest.includes("--help") && !rest.includes("-h")) throw new CliError(GALLERY_MISMATCH, "gallery-schema-mismatch", 2);
 	await entry.runner(rest, host);
 	return first;
 }

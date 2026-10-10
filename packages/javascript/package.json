@@ -1,7 +1,7 @@
 {
   "name": "@openpresentation/opf",
   "version": "0.18.1",
-  "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; the pinned default catalog ships as the opt-in @openpresentation/opf/catalog.",
+  "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
   "license": "MIT",
   "author": "Open Presentation",
   "homepage": "https://openpresentation.org",
@@ -43,10 +43,6 @@
     "./schemas": {
       "types": "./dist/schemas.d.ts",
       "import": "./dist/schemas.js"
-    },
-    "./catalog": {
-      "types": "./dist/catalog.d.ts",
-      "import": "./dist/catalog.js"
     },
     "./validator": {
       "types": "./dist/validator.d.ts",
@@ -138,7 +134,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
-    "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
+    "generate": "pnpm --filter @openpresentation/gallery build && node scripts/generate.mjs && node scripts/generate-content.mjs",
     "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build && node ../../scripts/run-tests.mjs",
@@ -146,6 +142,7 @@
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
   "dependencies": {
+    "@openpresentation/gallery": "^1.0.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "jsonc-parser": "3.3.1",

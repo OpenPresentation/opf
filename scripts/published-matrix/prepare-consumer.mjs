@@ -88,6 +88,11 @@ await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: pr
 // The same entry points as engines-source.mjs, resolved from this consumer's node_modules. The matrix uses the 0.18 names of the
 // renderer (RR-74: toSvg of a whole deck, toPng of one SVG); a published renderer older than 0.18 has them as renderSvg and svgToPng, which the harness of the plan core's release tag still calls, so both names are exported then.
 const renderer = planned['@openpresentation/opf-render'].split('.').map(Number);
+// RR-78: core 0.19 drops /catalog; the pptx.gallery catalog is then the @openpresentation/gallery package (core's dependency).
+const core = planned['@openpresentation/opf'].split('.').map(Number);
+const catalogEngines = core[0] > 0 || core[1] >= 19
+  ? "export {catalogDisplay, gallery} from '@openpresentation/gallery';"
+  : "export {catalogDisplay, defaultCatalog as gallery} from '@openpresentation/opf/catalog';";
 const rendererEngines = renderer[0] > 0 || renderer[1] >= 18
   ? "export {toSvg, toPng} from '@openpresentation/opf-render';"
   : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export {renderSvg, svgToPng};', 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');
@@ -99,7 +104,7 @@ export {createEditorSession} from '@openpresentation/opf-editor';
 // The harness of the plan core's release tag (published-matrix.yml runs opf-v<core> as released) reads the deck of an editor session through
 // this accessor; the current harness uses editor.presentation. Drop it when the plan's core tag has a harness without it.
 export const presentationOf = (editor) => editor.presentation;
-export {catalogDisplay, defaultCatalog} from '@openpresentation/opf/catalog';
+${catalogEngines}
 export {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {resolveFontScheme, resolveReference, validate} from '@openpresentation/opf';
 // The package versions' own dependencies, as installed beside them.

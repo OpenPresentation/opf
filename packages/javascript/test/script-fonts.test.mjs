@@ -2,13 +2,13 @@ import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
 import { LANGUAGES, normalizeLanguageFamily } from "../dist/index.js";
 import { paragraphDirection, resolveScriptFonts as resolveWith, scriptFontRole } from "../dist/composition.js";
-import { catalogDisplay, defaultCatalog } from "../dist/catalog.js";
+import { catalogDisplay, gallery } from "@openpresentation/gallery";
 import { check, errorsOf } from "./support/validation.mjs";
 
 // OPF 0.15: the language is an engine vocabulary (a BCP-47 tag); font schemes are catalog records the host registers.
-const catalogs = [defaultCatalog];
+const catalogs = [gallery];
 const resolveScriptFonts = (document, options = {}) => resolveWith(document, { catalogs, ...options });
-const fontSchemes = Object.entries(defaultCatalog.fontSchemes).map(([id, record]) => ({ id, ...record }));
+const fontSchemes = Object.entries(gallery.fontSchemes).map(([id, record]) => ({ id, ...record }));
 // The gallery's language display records, by their display id. The tests name languages by that id for readability;
 // deck() writes the record's BCP-47 tag into the document, which is all a document can name.
 const languages = Object.entries(catalogDisplay.languages).map(([id, record]) => ({ id, ...record }));

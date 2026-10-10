@@ -56,6 +56,7 @@ try {
   // between runs, so a restored _npx could hold an earlier CLI. Only the content-addressed downloads are reused.
   if (sharedCache) await rm(path.join(sharedCache, '_npx'), {recursive: true, force: true});
   // RR-62: the CLI depends on core; the candidate core is packed with it and both are installed (scripts/pack-cli-candidate.mjs).
+  // RR-78: core and the CLI depend on @openpresentation/gallery; its candidate tarball is installed with them.
   const candidate = await packCliCandidate({cliDirectory: pkg, coreDirectory: path.join(root, 'packages/javascript'), destination: out, run, npmArgs: ['--cache', cache]});
   const packed = candidate.cli, tarball = candidate.cliTarball;
   // The published tarball stays small: no font packs, no native engines.
@@ -64,10 +65,10 @@ try {
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
   // RR-66 (opf#466): in a folder of its own, so the npm exec runs below never resolve into it (scripts/global-prefix.mjs).
   const global = globalPrefixLayout(path.join(temp, 'global'));
-  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers, ...renderExtras], temp);
+  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, candidate.galleryTarball, ...peers, ...renderExtras], temp);
   const modules = global.modules;
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
-  assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
+  assert.deepEqual(Object.keys(installed.dependencies ?? {}).sort(), ['@openpresentation/gallery', '@openpresentation/opf']);
   // A new core minor is released before its siblings: until they publish, the published siblings' own core range does not
   // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
   // the core tag; the CLI release keeps the hard gate).
@@ -96,7 +97,7 @@ try {
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   assertExecOutsideGlobal(work, global);
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, candidate.galleryTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
   assert.equal(rendered.ok, true);
   // FA-08: output files are named by the deck's `name` ("Npx"), not the input file's stem.

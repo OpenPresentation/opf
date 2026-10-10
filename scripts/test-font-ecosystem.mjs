@@ -6,13 +6,13 @@ import {toSvg, resolvePresentation, toPng} from '../../opf-render/dist/index.js'
 import {toPptx} from '../../opf-pptx/dist/index.js';
 import {createEditorSession} from '../../opf-editor/dist/index.js';
 import {paginate} from '../packages/javascript/dist/pagination.js';
-import {defaultCatalog} from '../packages/javascript/dist/catalog.js';
+import {gallery} from '@openpresentation/gallery';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate');const {XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array=v=>Array.isArray(v)?v:v?[v]:[];
 // OPF 0.15: core registers no catalog; this host registers the default catalog with every engine call (as the CLI does).
-const fonts=await loadFonts(),options={fonts,catalogs:[defaultCatalog]};
+const fonts=await loadFonts(),options={fonts,catalogs:[gallery]};
 const text='Wide letters WWW and narrow letters iii occupy different amounts of space. Actual fonts keep the layout honest. '.repeat(24);
 const source={name:'Measured font verification',design:{fontScheme:'roboto',theme:'classic'},slides:[{id:'metrics',title:'Use the actual font to fit the words',composition:{mode:'row',weights:[2,1]},blocks:[{text:'AVATAR office affinity. WWW iii. '.repeat(22)},{text:'Every preview and export starts from the same measured boxes.'}]},{id:'draft',title:'Continue at a readable size',text}]};
 const {presentation}=paginate(source,options);

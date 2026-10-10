@@ -24,7 +24,7 @@ Choose one content structure per slide:
 - `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
 - Promoted regions such as `left`, `center+right`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
 
-Reference records by id from the default catalog (`@openpresentation/opf/catalog`) or a catalog the host registers (`name:id` for a named group), and put the deck's own records in `catalogs.custom`. Embed what a deck uses before saving it (`embed`, `opf embed`), so it renders the same with no catalog registered. Do not invent an unresolvable layout or assume a network lookup will happen.
+Reference records by id from the pptx.gallery catalog (`gallery` of `@openpresentation/gallery`) or a catalog the host registers (`name:id` for a named group), and put the deck's own records in `catalogs.custom`. Embed what a deck uses before saving it (`embed`, `opf embed`), so it renders the same with no catalog registered. Do not invent an unresolvable layout or assume a network lookup will happen.
 
 A testimonial quote is `{ "quote": { "text": "...", "attribution": "Priya Raman", "role": "VP Operations, Acme", "photo": { "src": "asset:priya", "alt": "Priya Raman" } } }`: the attribution holds the name, `role` the title and organization, and `photo` a circular headshot that needs alt text.
 

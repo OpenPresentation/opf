@@ -5,7 +5,7 @@
   "description": "One record per item pptx.gallery shows or the OPF catalogs define (every catalog record, every gallery page item, every font tracker family, every slide-size preset and the gallery's coming teasers), with lifecycle columns from the committed measurements, a status and whether its gaps are addressed. Internal tracking only; never shown on a site.",
   "inputs": {
     "catalogs": {
-      "dir": "spec/catalogs",
+      "dir": "packages/gallery/catalog",
       "gallery": "cce9b8e",
       "kinds": 11
     },
@@ -272,7 +272,7 @@
     "broken": "Fix the value so it validates and composes."
   },
   "columns": {
-    "spec": "catalog (bundled in core spec/catalogs), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
+    "spec": "catalog (bundled in @openpresentation/gallery, packages/gallery/catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
     "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped).",
     "preview": "pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled.",
     "export": "pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name.",

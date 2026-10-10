@@ -30,7 +30,7 @@ Use the common root API for most application code:
 
 ```ts
 import { presentation, validate, embed } from "@openpresentation/opf";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery } from "@openpresentation/gallery";
 
 import type { Presentation } from "@openpresentation/opf";
 
@@ -40,13 +40,14 @@ const deck: Presentation = {
 };
 
 console.log(presentation.$id);
-// Register the catalogs your host trusts; core itself ships no records in its main entry.
-const catalogs = [defaultCatalog];
+// Register the catalogs your host trusts; core ships no records. In Node, validate, stats, paginate, embed and edit
+// register the gallery (@openpresentation/gallery, a dependency of core) when a call names none.
+const catalogs = [gallery];
 console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs }).valid);
 // Save with every record the deck uses embedded, so it renders the same with no catalog registered.
 const saved = embed({ ...deck, design: { theme: "classic" } }, { catalogs }).document;
 console.log(Object.keys(saved.catalogs.default.themes)); // ["classic"]
-console.log(Object.keys(defaultCatalog.tones));
+console.log(Object.keys(gallery.tones));
 ```
 
 In Node (and Bun and Deno), the root adds files: `convert` turns one file into another (a deck to PDF, PNG, SVG or PPTX, a PowerPoint file to a deck, one deck form to another, or bytes with no output path), `open` reads a deck file or imports a `.pptx`, and `save` writes one. The same import works in every runtime, so one namespace import covers an application:
@@ -67,13 +68,12 @@ Use focused imports when you only need one surface:
 
 ```ts
 import { presentation, audience } from "@openpresentation/opf/schemas";
-import { defaultCatalog, catalogDisplay, layoutPreviews, getLayoutPreview, hasLayoutPreview } from "@openpresentation/opf/catalog";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate, assertValid, validationRules } from "@openpresentation/opf/validator";
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
-The root entry holds the application-level API: schemas, catalog references and their resolution (`resolveReference`, `embed`, `copySlides`, `updateFromCatalog`), validation, variables, pagination, data helpers, font policy, `stats`, `resolveSlideContext` and `resolveSlideVariables`. Engines compose and draw `context.slide` from `resolveSlideContext(deck, index, { slideNumber, slideCount })`: the slide with the slide-scoped built-ins `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` substituted for the same numbers its `options` carry (`resolveSlideVariables(slide, { slideNumber, slideCount })` does that substitution alone). Header and footer text is substituted by `layoutFurniture`, which records each slide number in `FurnitureTextPart.fields`. See [templates and variables](../../docs/templates-and-variables.md#slide-scoped-built-ins). It carries no catalog records: the pinned pptx.gallery snapshot is the opt-in `@openpresentation/opf/catalog` (`defaultCatalog`, display metadata and layout previews), and every entry point that resolves references takes `{ catalogs }`, the catalogs the host registered; the first one is the default for documents that omit `catalogs.default`. See [catalogs and the default catalog](../../docs/default-catalog.md).
+The root entry holds the application-level API: schemas, catalog references and their resolution (`resolveReference`, `embed`, `copySlides`, `updateFromCatalog`), validation, variables, pagination, data helpers, font policy, `stats`, `resolveSlideContext` and `resolveSlideVariables`. Engines compose and draw `context.slide` from `resolveSlideContext(deck, index, { slideNumber, slideCount })`: the slide with the slide-scoped built-ins `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` substituted for the same numbers its `options` carry (`resolveSlideVariables(slide, { slideNumber, slideCount })` does that substitution alone). Header and footer text is substituted by `layoutFurniture`, which records each slide number in `FurnitureTextPart.fields`. See [templates and variables](../../docs/templates-and-variables.md#slide-scoped-built-ins). It carries no catalog records: the pptx.gallery catalog is the package `@openpresentation/gallery` (`gallery`, `catalogDisplay`, and the layout previews of `@openpresentation/gallery/previews`), a dependency of core released on its own version line, which the Node build registers when a call names no catalogs (OPF 0.19 removed `@openpresentation/opf/catalog` and `defaultCatalog`, with no alias). Every entry point that resolves references takes `{ catalogs }`, the catalogs the host registered; the first one is the default for documents that omit `catalogs.default`. See [catalogs and the default catalog](../../docs/default-catalog.md).
 
 The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, colour contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
 
@@ -107,14 +107,14 @@ Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the
 
 ### Layout previews
 
-`@openpresentation/opf/catalog` ships pre-rendered HTML thumbnails for the
+`@openpresentation/gallery/previews` ships pre-rendered HTML thumbnails for the
 slide layouts catalogued at pptx.gallery. Each preview is a Tailwind-styled
 fragment sized to fill a 16:9 container and only depends on the standard
 `--background`, `--foreground`, `--card`, `--muted`, `--muted-foreground`,
 `--accent`, and `--border` CSS variables.
 
 ```tsx
-import { getLayoutPreview } from "@openpresentation/opf/catalog";
+import { getLayoutPreview } from "@openpresentation/gallery/previews";
 
 export function LayoutThumbnail({ slug }: { slug: string }) {
   const html = getLayoutPreview(slug);
@@ -128,8 +128,7 @@ export function LayoutThumbnail({ slug }: { slug: string }) {
 }
 ```
 
-Raw HTML source-of-truth lives under `spec/previews/layouts/<slug>.html` and is
-also addressable via `@openpresentation/opf/spec/previews/layouts/<slug>.html`.
+The HTML source lives under `packages/gallery/previews/layouts/<slug>.html` in the OPF repository.
 
 ### Example decks
 
@@ -195,7 +194,7 @@ in the records the document embeds (`catalogs.custom`, `catalogs.default`, named
 groups), then in the catalogs the host registered with `{ catalogs }`.
 
 ```ts
-const report = validate(deck, { catalogs: [defaultCatalog] });
+const report = validate(deck, { catalogs: [gallery] });
 if (!report.valid) console.error(report.findings.filter((finding) => finding.severity === "error"));
 for (const finding of report.findings) console.warn(finding.ruleId, finding.path, finding.message);
 ```
@@ -203,10 +202,12 @@ for (const finding of report.findings) console.warn(finding.ruleId, finding.path
 Validate catalog records locally:
 
 ```ts
-import { audiences, validateCatalogRecord } from "@openpresentation/opf";
+import { validateCatalogRecord } from "@openpresentation/opf";
+import { gallery } from "@openpresentation/gallery";
 
-for (const record of audiences) {
-  const result = validateCatalogRecord("audiences", record);
+for (const [id, record] of Object.entries(gallery.audiences)) {
+  // A published record file carries its $schema and id; the gallery keys records by id without them.
+  const result = validateCatalogRecord("audiences", { $schema: "https://openpresentation.org/schema/opf-audience/v1", id, ...record });
   if (!result.valid) {
     console.error(result.findings);
   }
@@ -230,11 +231,11 @@ const openApi = specFileEntries.find((entry) => entry.path === "openapi.yaml");
 console.log(openApi?.packagePath);
 ```
 
-The snapshot's raw record files stay package-addressable (`@openpresentation/opf/spec/catalogs/<kind>/<id>.json`) for tools that read published records; documents never point at them. A host registers the catalog instead:
+Core ships no catalog record files (RR-78): the records are `@openpresentation/gallery`'s, and pptx.gallery serves each published record file at `https://www.pptx.gallery/<kind>/<id>.json`. Documents never point at them. A host registers the catalog instead:
 
 ```js
-import { defaultCatalog } from "@openpresentation/opf/catalog";
-validate(deck, { catalogs: [defaultCatalog] });
+import { gallery } from "@openpresentation/gallery";
+validate(deck, { catalogs: [gallery] });
 ```
 
 ## Development

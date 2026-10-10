@@ -6,7 +6,8 @@ Thanks for your interest in contributing to OpenPresentation (OPF). This project
 
 Before making changes, it helps to understand how the pieces fit together:
 
-- [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`), the engine reference data (`spec/reference/`) and the pinned snapshot of the default catalog pptx.gallery publishes (`spec/catalogs/<kind>/`, one JSON file per record plus an `index.json` per kind; it ships only as `@openpresentation/opf/catalog`). If you are proposing a change to the format itself, this is where it lives.
+- [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`) and the engine reference data (`spec/reference/`). If you are proposing a change to the format itself, this is where it lives.
+- [`packages/gallery/`](./packages/gallery) is `@openpresentation/gallery`, the pinned snapshot of the default catalog pptx.gallery publishes (`catalog/<kind>/`, one JSON file per record plus an `index.json` per kind, and the layout previews). It is released on its own version line (`gallery-publish.yml`); change records in pptx.gallery and sync them (`docs/default-catalog.md`).
 - [`packages/javascript`](./packages/javascript) publishes `@openpresentation/opf` to npm. Its TypeScript types, generated content, and layout previews are **generated from `spec/` at build time** by `packages/javascript/scripts/generate*.mjs`. Generated output (e.g. `src/generated/`) is never edited by hand — it is produced fresh on every build and would simply be overwritten.
 - [`packages/cli`](./packages/cli) is the local-only `@openpresentation/cli` package, published separately with the matching core bundled inside.
 - [`examples/`](./examples) contains `*.opf.json` decks that are validated against the schema in CI and, for the top-level `examples/` tree, bundled into the npm package.
@@ -23,7 +24,7 @@ pnpm typecheck
 pnpm test
 ```
 
-Run these from the repo root — they fan out to both workspace packages (`@openpresentation/opf` and `@openpresentation/cli`). `pnpm build` and `pnpm typecheck` regenerate TypeScript from `spec/` before compiling, so they will pick up any schema or catalog edits automatically.
+Run these from the repo root — they fan out to the workspace packages (`@openpresentation/opf`, `@openpresentation/cli` and `@openpresentation/gallery`). `pnpm build` and `pnpm typecheck` regenerate TypeScript from `spec/` before compiling, so they will pick up any schema or catalog edits automatically.
 
 Typechecking uses TypeScript 7 through the root `@typescript/native` npm alias
 and `scripts/typecheck.mjs`. Declaration builds deliberately retain the
@@ -53,7 +54,7 @@ Changes to `spec/schemas/*.schema.json` or the shape of catalog records affect e
 
 When a schema or catalog change is accepted:
 
-- Keep individual catalog record files and their directory's `index.json` in sync — adding, removing, or renaming a record without updating `index.json` will fail catalog checks.
+- Catalog records change in pptx.gallery and reach `packages/gallery/catalog/` through `scripts/sync-gallery-catalog.mjs`; a new record is a minor gallery release, a changed or removed one a major release (`pnpm check:gallery-stability`). Keep individual catalog record files and their directory's `index.json` in sync — adding, removing, or renaming a record without updating `index.json` will fail catalog checks.
 - Update any affected reference docs (`docs/schema-reference.md`, `docs/catalog-schema-reference.md`, `docs/content-payloads.md`, etc.) alongside the schema change.
 - Add or update an entry in `docs/migrations/` if the change is breaking.
 - Make sure `examples/**/*.opf.json` still validates, or update the affected examples.

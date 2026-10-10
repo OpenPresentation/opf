@@ -13,7 +13,7 @@ import {
 } from "../dist/examples.js";
 import { docs, getDoc } from "../dist/docs.js";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
-import { defaultCatalog } from './support/catalog.mjs';
+import { gallery } from './support/catalog.mjs';
 
 describe("example catalog sanity", () => {
   test("has at least one example", () => {
@@ -132,7 +132,7 @@ describe("fenced JSON presentation examples embedded in docs", () => {
   for (const { doc, parsed, blockIndex } of fencedPresentationExamples) {
     test(`doc '${doc.slug}' fenced JSON example #${blockIndex} validates cleanly`, () => {
       // A doc snippet names gallery records without embedding them; the host registers the default catalog.
-      const result = check(parsed, { only: ['format', 'references'], catalogs: [defaultCatalog] });
+      const result = check(parsed, { only: ['format', 'references'], catalogs: [gallery] });
       assert.equal(
         result.valid,
         true,

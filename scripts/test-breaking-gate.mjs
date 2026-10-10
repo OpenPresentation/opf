@@ -39,5 +39,13 @@ try{
  assert.equal(named.status,0,named.stdout+named.stderr);assert.match(named.stdout,/"acknowledgedBy": "changelog-fragment"/);
  rmSync(path.join(root,"changes"),{recursive:true});manifest("0.3.0",{".":{}});
  const bumped=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(bumped.status,0,bumped.stdout+bumped.stderr);
+ // RR-78: a record that moved from spec/catalogs to packages/gallery/catalog is not removed; one that is gone is.
+ mkdirSync(path.join(root,"spec/catalogs/tones"),{recursive:true});write("spec/catalogs/tones/formal.json",{id:"formal"});write("spec/catalogs/tones/casual.json",{id:"casual"});
+ git("add",".");git("commit","-qm","Records");git("tag","opf-v0.3.0");writeFileSync(path.join(root,"README.md"),"records tagged\n");git("add",".");git("commit","-qm","After the records");
+ rmSync(path.join(root,"spec/catalogs"),{recursive:true});mkdirSync(path.join(root,"packages/gallery/catalog/tones"),{recursive:true});write("packages/gallery/catalog/tones/formal.json",{id:"formal"});
+ const moved=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(moved.status,1,moved.stdout+moved.stderr);assert.match(moved.stdout+moved.stderr,/\[record removed\] tones\/casual/);assert.doesNotMatch(moved.stdout+moved.stderr,/tones\/formal/);
+ write("packages/gallery/catalog/tones/casual.json",{id:"casual"});
+ const kept=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(kept.status,0,kept.stdout+kept.stderr);
  console.log("Release gate regression passed: a tag at HEAD cannot hide removals from the prior release; a removed package export needs the bump or a changed fragment naming it.");
 }finally{rmSync(root,{recursive:true,force:true});}

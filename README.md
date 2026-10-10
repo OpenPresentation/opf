@@ -53,7 +53,7 @@ Your deck can live in git from the first commit. After installing dependencies a
 The canonical JavaScript/TypeScript package is published at [`packages/javascript`](./packages/javascript) as [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). Its responsibility is local and format-level only:
 
 - export the canonical schemas from [`spec/`](./spec)
-- export the pinned default catalog (the pptx.gallery snapshot in [`spec/catalogs/`](./spec/catalogs)) as the opt-in `@openpresentation/opf/catalog`, for hosts to register
+- register the pptx.gallery catalog of [`@openpresentation/gallery`](./packages/gallery) (a dependency, released on its own version line) as the Node defaults, as the CLI does; a browser host registers it itself
 - export a typed raw spec file manifest for package-addressable `spec/` content
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
@@ -62,10 +62,11 @@ In Node (and Bun and Deno) its root also reads and writes files (`convert`, `ope
 
 ## Toolkit libraries
 
-OPF is five packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released on its own version line; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
 | Repo | Role | Boundary |
 |---|---|---|
+| `gallery` (`@openpresentation/gallery`, this repository) | The pptx.gallery catalog | Catalog records only, no runtime dependency; minor releases add records, a changed or removed record is a major release |
 | `cli` (`@openpresentation/cli`, this repository) | `opf` command | Runs core's Node engine: reads and writes files and calls the engines below as optional peers |
 | `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
 | `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
@@ -93,7 +94,7 @@ Use the format package from JavaScript or TypeScript:
 
 ```ts
 import { presentation, validate } from "@openpresentation/opf";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery } from "@openpresentation/gallery";
 
 import type { Presentation } from "@openpresentation/opf";
 
@@ -105,9 +106,9 @@ const deck: Presentation = {
 const report = validate(deck);
 console.log(report.valid); // no finding has severity "error"
 console.log(report.findings); // every finding: rule id, severity, category, JSON Pointer path, message, fixes
-// Core ships no catalog records in its main entry; a host registers the catalogs it trusts.
-console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs: [defaultCatalog] }).valid);
-console.log(Object.keys(defaultCatalog.audiences).length);
+// Core ships no catalog records; in Node, validate registers the gallery when a call names no catalogs, and a host may name its own.
+console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs: [gallery] }).valid);
+console.log(Object.keys(gallery.audiences).length);
 ```
 
 Convert, open and save files in Node with `@openpresentation/opf`, the same import a browser uses (the engines `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; see [OPF files in Node](docs/node.md)):
@@ -126,7 +127,6 @@ Use focused imports when you only need one surface:
 
 ```ts
 import { presentation } from "@openpresentation/opf/schemas";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate } from "@openpresentation/opf/validator";
 import type { Presentation } from "@openpresentation/opf/types";
@@ -170,7 +170,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
-| [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | The pinned snapshot of the default catalog pptx.gallery publishes (shipped as `@openpresentation/opf/catalog`). |
+| [`packages/gallery/catalog/<catalog-kind>/`](./packages/gallery/catalog) | The pinned snapshot of the default catalog pptx.gallery publishes (shipped as `@openpresentation/gallery`). |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |

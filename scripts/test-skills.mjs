@@ -5,7 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {validate} from '../packages/javascript/dist/index.js';
-import {defaultCatalog} from '../packages/javascript/dist/catalog.js';
+import {gallery} from '@openpresentation/gallery';
 const root=fileURLToPath(new URL('../',import.meta.url)),skills=path.join(root,'skills'),helper=path.join(skills,'opf-inspect/scripts/opf-inspect.mjs');
 const temp=await mkdtemp(path.join(tmpdir(),'opf-skills-'));
 let checks=0;
@@ -42,7 +42,7 @@ try{
  const source=path.join(skills,'opf-author/assets/decision-brief.opf.json');assert.equal(run(['validate',source]).valid,true);
  const invalid=path.join(temp,'invalid.json');await writeFile(invalid,JSON.stringify({slides:'not-an-array'}));assert.equal(run(['validate',invalid],{status:1}).valid,false);
  const warning=path.join(temp,'warning.json');await writeFile(warning,JSON.stringify({design:{theme:'a-theme-no-catalog-defines'},slides:[{title:'Custom'}]}));assert.ok(run(['validate',warning]).findings.some(finding=>finding.ruleId==='opf/unresolved-reference'&&finding.severity==='warning'));
- const record=path.join(temp,'layout.json');{const [id,layout]=Object.entries(defaultCatalog.layouts)[0];await writeFile(record,JSON.stringify({$schema:'https://openpresentation.org/schema/opf-layout/v1',id,...layout}));}assert.equal(run(['validate',record,'layouts']).valid,true);
+ const record=path.join(temp,'layout.json');{const [id,layout]=Object.entries(gallery.layouts)[0];await writeFile(record,JSON.stringify({$schema:'https://openpresentation.org/schema/opf-layout/v1',id,...layout}));}assert.equal(run(['validate',record,'layouts']).valid,true);
  const broken=path.join(temp,'broken.json');await writeFile(broken,'{');assert.equal(run(['validate',broken],{status:1}).findings[0].ruleId,'opf/json-syntax');
  const copied=path.join(temp,'installed-skill');await cp(path.join(skills,'opf-inspect'),copied,{recursive:true});
  const portable=path.join(copied,'scripts/opf-inspect.mjs');assert.equal(run(['validate',source],{cwd:temp,script:portable,env:{OPF_ROOT:root}}).valid,true);

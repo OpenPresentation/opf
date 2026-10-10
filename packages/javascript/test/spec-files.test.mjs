@@ -14,7 +14,8 @@ describe("spec file manifest", () => {
   test("specFilePaths includes the expected canonical paths", () => {
     assert.ok(specFilePaths.includes("openapi.yaml"));
     assert.ok(specFilePaths.includes("schemas/opf.schema.json"));
-    assert.ok(specFilePaths.includes("catalogs/layouts/index.json"));
+    // RR-78: the catalog records are @openpresentation/gallery's; core's spec ships none.
+    assert.ok(!specFilePaths.some((file) => file.startsWith("catalogs/") || file.startsWith("previews/")));
   });
 
   test("openapi.yaml manifest entry has the expected kind, mediaType, and packagePath", () => {
@@ -28,10 +29,11 @@ describe("spec file manifest", () => {
 });
 
 describe("dist/spec assets", () => {
-  test("dist/spec ships openapi.yaml, the presentation schema, and the layouts catalog index", () => {
+  test("dist/spec ships openapi.yaml and the presentation schema, and no catalog records (RR-78: @openpresentation/gallery has them)", () => {
     assert.ok(existsSync(new URL("../dist/spec/openapi.yaml", import.meta.url)));
     assert.ok(existsSync(new URL("../dist/spec/schemas/opf.schema.json", import.meta.url)));
-    assert.ok(existsSync(new URL("../dist/spec/catalogs/layouts/index.json", import.meta.url)));
+    assert.ok(!existsSync(new URL("../dist/spec/catalogs", import.meta.url)));
+    assert.ok(!existsSync(new URL("../dist/spec/previews", import.meta.url)));
   });
 
   test("dist/spec/openapi.yaml starts with an 'openapi:' declaration", () => {

@@ -61,7 +61,7 @@ describe("the two builds", () => {
       else assert.equal(browserBuild[name], nodeBuild[name], name);
     }
     for (const name of ["open", "save", "convert", "OPFApiError", "OPFExportError", "OPFImportError", "parseSlideSelection", "parse", "stringify", "validate"]) assert.equal(typeof nodeBuild[name], "function", name);
-    assert.equal(nodeBuild.defaultCatalog, undefined, "the default catalog stays at @openpresentation/opf/catalog (FA-21)");
+    for (const name of ["defaultCatalog", "gallery"]) assert.equal(nodeBuild[name], undefined, `${name}: the catalog is @openpresentation/gallery's (RR-78); the root exports no records (FA-21)`);
   });
 
   test("the browser build's file functions reject with node-only and name the browser-safe alternative", async () => {

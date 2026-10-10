@@ -30,6 +30,11 @@ for (const name of names) {
   const directory = path.resolve(root, '..', name);
   if (!existsSync(path.join(directory, 'package.json'))) throw new Error(`Missing sibling checkout: ${directory}`);
   linkPackage(directory, '@openpresentation/opf', opfPackage);
+  // RR-78: the pptx.gallery catalog is this checkout's packages/gallery (core's dependency); a sibling that installed the
+  // gallery for its tests or its host code gets the same one.
+  if (existsSync(path.join(directory, 'node_modules', '@openpresentation', 'gallery', 'package.json'))) {
+    linkPackage(directory, '@openpresentation/gallery', path.join(root, 'packages/gallery'));
+  }
   if (name === 'opf-pptx' || name === 'opf-editor') {
     linkPackage(directory, '@openpresentation/opf-render', path.resolve(root, '../opf-render'));
   }

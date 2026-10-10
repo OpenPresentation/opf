@@ -2,14 +2,19 @@
 // Banded rows used `background`, which since FA-05 is the slide background; on a theme whose background is dark2
 // (minimal) that equals the dark `surface` of the plain rows, so the bands vanished.
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { gallery } from '@openpresentation/gallery';
 import { test } from 'node:test';
 import { colorContrast, resolveColorRef, resolveColorRoles, SURFACE_ALT_MIN_CONTRAST, surfaceAltColor } from '../dist/composition.js';
 
 
-const catalog = new URL('../../../spec/catalogs/', import.meta.url);
-const read = (path) => JSON.parse(readFileSync(new URL(path, catalog), 'utf8'));
-const schemes = readdirSync(new URL('color-schemes/', catalog)).filter((file) => file.endsWith('.json') && file !== 'index.json').map((file) => read(`color-schemes/${file}`));
+// RR-78: the records come from @openpresentation/gallery; read('<kind>/<id>.json') keeps the record file names.
+const KINDS = { themes: 'themes', 'color-schemes': 'colorSchemes' };
+const read = (file) => {
+  const [dir, name] = file.split('/');
+  const id = name.replace(/\.json$/, '');
+  return { id, ...gallery[KINDS[dir]][id] };
+};
+const schemes = Object.entries(gallery.colorSchemes).map(([id, record]) => ({ id, ...record }));
 
 function assertBand(roles, label) {
   assert.notEqual(roles.surfaceAlt, roles.surface, `${label}: band differs from the plain rows`);

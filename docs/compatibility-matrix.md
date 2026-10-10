@@ -161,8 +161,9 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 The gallery (RR-78) is released on its own version line by `gallery-publish.yml`, outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
-a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). Until OPF 0.19 core
-still ships the same records as `@openpresentation/opf/catalog`.
+a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). From OPF 0.19 core and the
+CLI depend on `@openpresentation/gallery@^1` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
+`@openpresentation/opf/catalog`.
 
 ## Supported in this set
 

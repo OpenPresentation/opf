@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import { ENGINE_DEFAULT_FONT_SCHEME, resolveFontScheme } from "../dist/index.js";
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 import {resolveFontFamilies} from '../dist/composition.js';
 import {paginate} from '../dist/pagination.js';
 import { check } from './support/validation.mjs';
@@ -12,9 +12,9 @@ import { check } from './support/validation.mjs';
 // FF-35 / FA-21: every engine shares one last-resort font scheme, ENGINE_DEFAULT_FONT_SCHEME
 // (Aptos Display / Aptos, spec/reference/engine-defaults.json), so pagination, preview and PPTX export agree.
 
-const catalogs=[defaultCatalog];
-const record=id=>defaultCatalog.fontSchemes[id];
-const fontSchemes=Object.entries(defaultCatalog.fontSchemes).map(([id,scheme])=>({id,...scheme}));
+const catalogs=[gallery];
+const record=id=>gallery.fontSchemes[id];
+const fontSchemes=Object.entries(gallery.fontSchemes).map(([id,scheme])=>({id,...scheme}));
 const codeSlide={id:'code',layout:'code-1x',title:'Rule',code:{source:'const score = urgency * confidence;',language:'ts'}};
 function measuredFamilies(presentation){
   const families=new Set();
@@ -66,7 +66,7 @@ test('one shared engine default font scheme: Aptos Display / Aptos (FF-35, docs/
   assert.deepEqual(resolveFontFamilies(ENGINE_DEFAULT_FONT_SCHEME),resolveFontFamilies(record('aptos')));
   assert.equal(ENGINE_DEFAULT_FONT_SCHEME.languageFamily,record('aptos').languageFamily);
   // Every gallery theme names a font scheme, so the last-resort default only applies to themes without one.
-  for(const [id,theme] of Object.entries(defaultCatalog.themes))assert.ok(record(theme.fontScheme),`${id} names a font scheme of the default catalog`);
+  for(const [id,theme] of Object.entries(gallery.themes))assert.ok(record(theme.fontScheme),`${id} names a font scheme of the default catalog`);
 });
 
 test('pagination measures a custom theme without a font scheme in the shared default (Aptos, as exported)',()=>{

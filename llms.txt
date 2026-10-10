@@ -24,7 +24,7 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 ## Spec
 
 - [Presentation JSON Schema](https://github.com/OpenPresentation/opf/blob/main/spec/schemas/opf.schema.json): draft 2020-12, $id https://openpresentation.org/schema/opf/v1
-- [Catalog records](https://github.com/OpenPresentation/opf/tree/main/spec/catalogs): the pinned snapshot of the default catalog (`@openpresentation/opf/catalog`): audiences, narratives, layouts, themes, color schemes, font schemes, tones, purposes, and display metadata for chart types, languages and social platforms
+- [Catalog records](https://github.com/OpenPresentation/opf/tree/main/packages/gallery/catalog): the pinned snapshot of the default catalog (the npm package `@openpresentation/gallery`, `import { gallery }`, registered with `catalogs: [gallery]`): audiences, narratives, layouts, themes, color schemes, font schemes, tones, purposes, and display metadata for chart types, languages and social platforms
 - [Full-feature example deck](https://github.com/OpenPresentation/opf/blob/main/examples/technical/full-feature-tour.opf.json): one file exercising every major schema surface
 
 ## Optional

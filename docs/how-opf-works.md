@@ -231,7 +231,7 @@ Every reference resolves the same way, first match wins:
 
 A reference written inside an embedded record resolves in that record's own group first: acme's `brand` theme finds acme's `ocean` colour scheme before the default catalog's. A reference that resolves nowhere is the warning `opf/unresolved-reference`, which names the reference and the catalog's source; the slide composes automatically and the design uses the [engine defaults](../spec/reference/engine-defaults.json). A strict export fails instead. A prefix that names no group is a validation error.
 
-Engines never fetch a catalog. Core ships no records in its main entry: a host registers the catalogs it trusts (`{ catalogs: [defaultCatalog, acmeCatalog] }`, where `defaultCatalog` comes from `@openpresentation/opf/catalog`), and authoring tools embed every record a document uses when they save it (`embed`), so a saved document renders the same anywhere, offline. See [the default catalog](default-catalog.md).
+Engines never fetch a catalog. Core ships no records in its main entry: a host registers the catalogs it trusts (`{ catalogs: [gallery, acmeCatalog] }`, where `gallery` comes from `@openpresentation/gallery`, the pptx.gallery catalog; in Node, core registers it when a call names none), and authoring tools embed every record a document uses when they save it (`embed`), so a saved document renders the same anywhere, offline. See [the default catalog](default-catalog.md).
 
 Two reference forms are accepted:
 

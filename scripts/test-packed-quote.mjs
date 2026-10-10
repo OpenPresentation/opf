@@ -5,8 +5,9 @@ import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation, toSvg} from '@openpresentation/opf-render/svg';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const fonts=await loadFonts();
-// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme); a 0.14 core has no /catalog.
-const host=await import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({}));
+// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme): @openpresentation/gallery from 0.19
+// (RR-78), core's /catalog before; a 0.14 core has neither.
+const host=await import('@openpresentation/gallery').then(module=>({catalogs:[module.gallery]}),()=>import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({})));
 const options={...host,fonts};
 const source={design:{fontScheme:'roboto'},slides:[{title:'Installed quote',quote:{text:'Retain the selected source.',attribution:'Reviewer',source:'Recorded interview'}}]};
 const editor=createEditorSession(source,host);

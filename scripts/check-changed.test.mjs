@@ -34,7 +34,7 @@ test('selectChangedChecks maps changed paths to checks', () => {
   assert.deepEqual(docs, ['check:changes', 'check:text']);
   const schema = selectChangedChecks(['spec/schemas/opf.schema.json'], scripts, config);
   for (const name of ['check:schema-docs', 'check:core-golden', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
-  const catalog = selectChangedChecks(['spec/catalogs/layouts/index.json'], scripts, config);
+  const catalog = selectChangedChecks(['packages/gallery/catalog/layouts/index.json'], scripts, config);
   assert.ok(catalog.includes('check:catalog'));
   // A check whose command names the changed file runs, with no rule needed.
   assert.ok(selectChangedChecks(['scripts/check-text-integrity.mjs'], scripts, config).includes('check:text'));

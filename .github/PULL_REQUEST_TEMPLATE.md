@@ -5,7 +5,7 @@
 ## Kind of change
 
 - [ ] Spec/schema (`spec/schemas/`)
-- [ ] Catalogs (`spec/catalogs/`)
+- [ ] Catalogs (`packages/gallery/catalog/`, `@openpresentation/gallery`)
 - [ ] Package code (`packages/javascript`, `packages/cli`)
 - [ ] Docs (`docs/`, `README.md`, examples)
 - [ ] Other (CI, tooling, chore)

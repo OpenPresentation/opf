@@ -7,7 +7,9 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
+// RR-78: core depends on @openpresentation/gallery (packages/gallery, built by `pnpm build`); its prerelease joins the set.
 const packages = [
+  ["gallery", "packages/gallery", "1.0.0-preview.11"],
   ["opf", "packages/javascript", "0.4.0-preview.11"],
   ["opf-render", "../opf-render", "0.1.0-preview.11"],
   ["opf-editor", "../opf-editor", "0.1.0-preview.11"],

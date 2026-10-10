@@ -20,6 +20,7 @@
     "prepack": "pnpm build"
   },
   "dependencies": {
+    "@openpresentation/gallery": "^1.0.0",
     "@openpresentation/opf": "^0.17.0"
   },
   "devDependencies": {
