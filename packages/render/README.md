@@ -275,6 +275,20 @@ const fonts = await loadFonts({ faces: fontFileEntries, subsetWasm: '/vendor/har
 const standalone = toSvg(presentation, 1, { fonts }); // each @font-face is a glyph subset
 ```
 
+### Safari and WebKit: no kerning in SVG text (known limitation)
+
+WebKit (Safari, and Playwright's WebKit) applies no kerning to SVG `<text>`, and neither `font-kerning` nor `font-feature-settings` changes that. Its canvas and HTML text do kern, and they match the renderer's metrics.
+
+The effect is small:
+
+- **Natural width:** a line's natural width in WebKit is up to about 1% wider than the renderer's layout (8 px on a long Arabic line, about 3 px on a title). Chromium is within 0.015 px.
+- **Line ends:** the renderer pins each line with `textLength`, so line ends stay where the layout put them. WebKit compresses the unkerned glyphs a little to fit, and one title ends about 3 px short.
+
+Measured on 2026-10-02 on a Mac (opf-render#118, `docs/evidence/mac-checks-20261002/` in the core repository).
+
+- **When this matters:** a host that needs WebKit to place every glyph exactly as Chromium and PowerPoint do should draw with `text: "paths"` (see [Text as outlines](#scope)). The renderer positions each glyph itself, with HarfBuzz's kerned advances, so no browser text layout is involved. The invisible text layer still serves selection, copy and screen readers. The editing canvas stays on real text.
+- **Default output:** the renderer does not write per-glyph `x` or `dx` positions into `<text>` to work around WebKit. It would make every SVG larger and change the selection and editing paths of every browser, for a difference `textLength` already holds to the line.
+
 ## Player and `<opf-deck>` (RR-28)
 
 A slideshow player and an embeddable web component, both built on `toSvg`: the slide a page shows is the slide the preview, the editor and the PDF show, with no second layout engine. They are plain ES modules, typed, framework-free and tree-shakeable, and importing them touches no DOM, so they are safe in Next.js and other server renderers.
@@ -541,7 +555,7 @@ Dependency policy:
 - Bundled OFL Roboto and Roboto Mono TTF files (the optional peers `@expo-google-fonts/roboto` and `roboto-mono`, which Node `loadFonts()` and the PNG/PDF default read) provide the default deterministic font fallback.
 - `toPng` and `toPdf` disable system-font loading by default. Hosts that require branded fonts should pass a handle with explicit `fontFiles` (or font folders as `fonts`); `fonts: { loadSystemFonts: true }` is an opt-in escape hatch for PNG and raster PDF output and can make it environment-dependent. A vector PDF rejects it (`pdf-system-fonts-unsupported`): it embeds only fonts you supply, so a system font can never be embedded by accident.
 
-Browser support boundary: `toSvg`, `toSvg`, and `resolvePresentation` are browser-importable pure JavaScript APIs. The root `toPng` and `toPdf` (also `/png` and `/pdf`) are Node APIs because they depend on the Node builds of resvg and sharp, which are optional peers loaded on first use (`converter-missing` when absent). For a page, `@openpresentation/opf-render/export-browser` has the same two names (see below).
+Browser support boundary: `toSvg` and `resolvePresentation` are browser-importable pure JavaScript APIs. The root `toPng` and `toPdf` (also `/png` and `/pdf`) are Node APIs because they depend on the Node builds of resvg and sharp, which are optional peers loaded on first use (`converter-missing` when absent). For a page, `@openpresentation/opf-render/export-browser` has the same two names (see below).
 
 Chartex chart previews (FF-22b) draw the constructs opf-pptx exports as Office 2016 chartex parts: `treemap` (squarified tiles of the first series, one colour per tile, category labels), `histogram` (a lone value column binned like PowerPoint with Scott's rule count and right-closed bins, or one column per category), `pareto` (columns sorted descending with the cumulative-percentage line on a 0-100% axis), `box-and-whisker` (rows grouped by category, one box per series, exclusive quartiles, whiskers within 1.5 IQR, mean markers, outlier points), `waterfall` (floating bars from the running total, increases and decreases in the first two palette colours, connector lines) and `funnel` (centred bars with value labels). `world` is an honest non-geographic preview: one tile per region shaded by value with its name and value. No geography data is shipped; PowerPoint draws the real map from Bing geodata it fetches itself, so the preview and the native map agree on labels, values and the series colour, not on shapes. Each chartex kind also accepts a lone value column (row numbers as categories; histogram and pareto bin the values). Every mark and label keeps a `data-opf-path` (bins and boxes trace to their value column).
 
