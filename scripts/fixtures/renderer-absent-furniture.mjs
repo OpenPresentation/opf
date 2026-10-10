@@ -28,10 +28,19 @@ assert.ok(!Object.keys(lock.packages).some(name=>name.includes('@openpresentatio
 runtime.lockSha256=hash(await readFile(new URL('./package-lock.json',import.meta.url)));
 await json(path.join(root,'runtime.json'),runtime);
 const fixed={seed:1,timestamp:'2026-01-01T00:00:00Z',zipDate:'2026-01-01T00:00:00Z'};
-const xml=(entries,i=2)=>decode(entries[`ppt/slides/slide${i}.xml`]);
+// RR-72: a furniture part drawn the same on several slides is written once, on the slide master or a layout, so a slide's XML here
+// is the slide followed by the furniture its layout and master draw for it (unless showMasterSp="0" hides them).
+const relatedPart=(entries,p,type)=>{const rels=entries[p.replace(/([^/]+)$/,'_rels/$1.rels')];const t=rels&&[...decode(rels).matchAll(/<Relationship\b[^>]*\/>/g)].map(m=>m[0]).find(n=>n.includes(`relationships/${type}"`))?.match(/\sTarget="\.\.\/([^"]+)"/)?.[1];return t?`ppt/${t}`:undefined;};
+const lifted=x=>[...x.matchAll(/<p:sp>[\s\S]*?<\/p:sp>|<p:pic>[\s\S]*?<\/p:pic>/g)].map(m=>m[0]).filter(s=>/name="OPF furniture (?:header|footer) /.test(s)).join('');
+const xml=(entries,i=2)=>{
+ const p=`ppt/slides/slide${i}.xml`,slide=decode(entries[p]),layout=relatedPart(entries,p,'slideLayout'),master=layout&&relatedPart(entries,layout,'slideMaster');
+ if(/<p:sld\b[^>]*showMasterSp="0"/.test(slide)||!layout)return slide;
+ const layoutXml=decode(entries[layout]);
+ return slide+lifted(layoutXml)+(master&&!/<p:sldLayout\b[^>]*showMasterSp="0"/.test(layoutXml)?lifted(decode(entries[master])):'');
+};
 const furniture=slide=>[...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]).filter(s=>/name="OPF furniture/.test(s)).map(s=>({name:s.match(/name="([^"]+)"/)[1],texts:[...s.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(m=>m[1]),fields:[...s.matchAll(/<a:fld\b[^>]*type="([^"]+)"/g)].map(m=>m[1])}));
 const markers=entries=>Object.entries(entries).filter(([p])=>p.startsWith('ppt/tags/')).flatMap(([,data])=>[...decode(data).matchAll(/name="OPF_FURNITURE_V1" val="([A-F0-9]+)"/g)]).map(m=>JSON.parse(Buffer.from(m[1],'hex').toString()));
-const markerCount=entries=>markers(entries).flatMap(r=>r.parts??[]).filter(part=>part.staticDate!==undefined).length;
+const markerCount=entries=>markers(entries).flatMap(r=>[...(r.parts??[]),...Object.values(r.shared??{})]).filter(part=>part.staticDate!==undefined).length;
 const footer=(document,i=1)=>document.slides[i].design?.footer??document.design?.footer;
 let groupDir;
 async function emit(label,source,extra={}){
@@ -104,7 +113,7 @@ await group('04','Missing host date and unsupported native pattern diagnostics',
 let wrappedExport;
 await group('05','Exact portrait minFontSize:32 fixture with estimated composition',async()=>{
  wrappedExport=await emit('wrapped',wrapped,{date:'2026-09-22'});
- const lines=furniture(xml(wrappedExport.entries)).filter(s=>/ part 0 line /.test(s.name)).map(s=>s.texts.join(''));
+ const lines=furniture(xml(wrappedExport.entries)).filter(s=>/ part 0 line | footer center date line /.test(s.name)).map(s=>s.texts.join(''));
  await json(path.join(groupDir,'observed-boundary.json'),{lines,wrapReached:lines.length>1,minFontSize:32,unit:'reference pixels',measurement:'estimated; no renderer/provider'});
  assert.ok(lines.length>1,'Exact fixture did not wrap under estimated composition; wrapped path is not covered.');assert.equal(lines.join(''),'September 22, 2026');
  assert.doesNotMatch(xml(wrappedExport.entries),/type="datetime/);assert.equal(markerCount(wrappedExport.entries),2);
@@ -125,11 +134,12 @@ await group('06','Provenance modes and current edited or cleared wrapped text',a
  const edits=[];
  for(const [label,cleared]of [['typed',false],['cleared',true]]){
   let count=0;
-  const entries=Object.fromEntries(Object.entries(wrappedExport.entries).map(([p,data])=>[p,/^ppt\/slides\/slide[23]\.xml$/.test(p)?enc.encode(decode(data).replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>{
-   if(!/name="OPF furniture[^\"]* part 0 line /.test(shape))return shape;
-   count++;const first=/ part 0 line 0"/.test(shape);return shape.replace(/<a:t>[^<]*<\/a:t>/g,'<a:t>'+(!cleared&&first?'Human words':'')+'</a:t>');
+  // The date lines are the same on both content slides, so (RR-72) they are drawn once, on the slide master: edit them where they are.
+  const entries=Object.fromEntries(Object.entries(wrappedExport.entries).map(([p,data])=>[p,/^ppt\/(?:slides\/slide[23]|slideLayouts\/slideLayout\d+|slideMasters\/slideMaster\d+)\.xml$/.test(p)?enc.encode(decode(data).replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>{
+   if(!/name="OPF furniture(?:[^\"]* part 0| footer center date) line /.test(shape))return shape;
+   count++;const first=/ line 0"/.test(shape);return shape.replace(/<a:t>[^<]*<\/a:t>/g,'<a:t>'+(!cleared&&first?'Human words':'')+'</a:t>');
   })):data]));
-  assert.ok(count>=4,'Expected multiple date-line shapes on both content slides.');const bytes=zipSync(entries);await writeFile(path.join(groupDir,label+'.pptx'),bytes);
+  assert.ok(count>=2,'Expected the date-line shapes of the content slides (on the slides, or once on their master).');const bytes=zipSync(entries);await writeFile(path.join(groupDir,label+'.pptx'),bytes);
   const {document,issues}=await read(label,bytes),expected=cleared?'':'Human words';assert.deepEqual(footer(document).center,{date:expected});assert.ok(issues.some(i=>i.code==='invalid-furniture-provenance'));
   const next=await emit(label+'-reexport',document,{date:'2030-01-01'});assert.deepEqual(footer((await read(label+'-reexport',next.bytes)).document).center,{date:expected});edits.push({label,changedShapes:count,expected});
  }
