@@ -98,6 +98,31 @@ Version 0.8.0 resolves OpenType preferred-family groups, so a Roboto request at 
 
 Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
+## Pass `fonts`, otherwise the estimate
+
+Text measurement comes from one place: the `fonts` handle that `loadFonts()` (from `/fonts-node` or `/fonts-browser`) returns. Pass the same handle to preview, validation, pagination and export, so that every step measures with the faces the preview draws:
+
+```js
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
+import { toSvg, toPng, toPdf } from '@openpresentation/opf-render';
+import { validate } from '@openpresentation/opf';
+import { paginate } from '@openpresentation/opf/pagination';
+import { toPptx } from '@openpresentation/opf-pptx';
+
+const fonts = await loadFonts({ pack: 'office' });
+const report = validate(deck, { fonts });                 // overflow findings use the real widths
+const { presentation } = paginate(deck, { fonts });        // page breaks use the real widths
+const svgs = toSvg(presentation, { fonts });              // line breaks use the real widths
+const png = await toPng(presentation, 1, { fonts });
+const pdf = await toPdf(presentation, { fonts });
+const pptx = await toPptx(presentation, { fonts });        // the same lines in editable PowerPoint text
+```
+
+One handle carries the measurement for core's `validate`, `paginate` and slide context, for `toSvg`, `toPng` and `toPdf`, and for opf-pptx's `toPptx`. The same handle gives identical text geometry across those engines: every engine reads core's one composition, so the measurement decides the lines. [opf-pptx's `layout-parity` test](https://github.com/OpenPresentation/opf-pptx/blob/main/test/layout-parity.mjs) checks that the exported PowerPoint paragraphs agree with this renderer's SVG and with core's composed items, with and without `fonts`.
+
+A call without `fonts` is not an error. It uses core's built-in estimate instead of measured widths: 0.54 em per character, 0.62 em for capitals and digits, 0.32 em for a space, 1 em for CJK characters and zero for combining marks. The estimate is deterministic and needs no font files, but it is too narrow for some scripts (opf#566 tracks improving it), so line breaks, overflow findings and page breaks from an estimated run can differ from what the faces actually draw. Treat an estimated preview as a draft. Core's Node `convert` and the `opf` CLI prepare an office-pack handle for you; a library call to `toSvg`, `toPng` or `toPdf` never loads fonts on its own, so pass the handle you want. Compare [opf#364](https://github.com/OpenPresentation/opf/issues/364).
+
+
 ## Install: what to add for what (RR-63)
 
 `npm install @openpresentation/opf-render` brings the SVG renderer, layout and text measurement (`@openpresentation/opf`, `fontkit`, `bidi-js`, `pako`) and the vendored font files under `fonts/`. The heavy pieces are **optional peer dependencies**, so you install only what your output needs. npm 7+ and pnpm do not install optional peers; add them yourself:
