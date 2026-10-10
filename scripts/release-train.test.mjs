@@ -381,6 +381,39 @@ test("verify fails on a gitHead that is not the tag, foreign provenance, a missi
   assert.deepEqual(failed(missing), ["npm version"]);
 });
 
+test("RR-20: every lockstep package's publish workflow creates a GitHub release, and verify requires each one", async () => {
+  assert.deepEqual(PACKAGES.filter((pkg) => !pkg.githubRelease).map((pkg) => pkg.key), [], "every lockstep package expects a release");
+  const failed = (result) => result.checks.filter((check) => !check.ok).map((check) => check.name);
+  const world = publishedWorld();
+  for (const [key, version] of [["render", "0.12.0"], ["pptx", "0.12.2"], ["editor", "0.11.2"]]) {
+    const pkg = packageOf(key);
+    assert.equal(world.repo(pkg.repo).releases[`${pkg.tagPrefix}${version}`].draft, false, `${key} has a release in the published fixture`);
+    const result = await verify(world.deps, pkg, version);
+    assert.equal(result.ok, true, JSON.stringify(result.checks));
+    assert.match(result.checks.find((check) => check.name === "GitHub release").detail, new RegExp(`releases/tag/${pkg.tagPrefix}${version}$`));
+    world.repo(pkg.repo).releases = {};
+    const without = await verify(world.deps, pkg, version);
+    assert.deepEqual(failed(without), ["GitHub release"], key);
+    assert.match(without.checks.find((check) => check.name === "GitHub release").detail, new RegExp(`no release for ${pkg.tagPrefix}${version}`));
+  }
+});
+
+test("RR-20: verify accepts the CLI's release when it is not the repository's Latest (core owns Latest in opf)", async () => {
+  const world = publishedWorld();
+  const coreCommit = world.repos.opf.tags["opf-v0.12.0"];
+  world.repos.opf.tags["cli-v0.10.0"] = coreCommit;
+  world.publish("cli", "0.10.0", coreCommit);
+  assert.ok(world.repos.opf.releases["opf-v0.12.0"], "core's release is the one a /releases/latest lookup would name");
+  assert.ok(world.repos.opf.releases["cli-v0.10.0"], "the CLI has its own release, created with --latest=false");
+  const result = await verify(world.deps, packageOf("cli"), "0.10.0");
+  assert.equal(result.ok, true, JSON.stringify(result.checks));
+  assert.match(result.checks.find((check) => check.name === "GitHub release").detail, /releases\/tag\/cli-v0\.10\.0$/);
+  assert.ok(!world.calls.some((call) => /releases\/latest/.test(call)), "verify looks the release up by tag and never asks which release is Latest");
+  world.repos.opf.releases = { "opf-v0.12.0": world.repos.opf.releases["opf-v0.12.0"] };
+  const missing = await verify(world.deps, packageOf("cli"), "0.10.0");
+  assert.deepEqual(missing.checks.filter((check) => !check.ok).map((check) => check.name), ["GitHub release"]);
+});
+
 // ---------------------------------------------------------------------------------------------------------------
 // verify: npm propagation (RR-51, the first live use for core 0.12.1)
 
