@@ -12,8 +12,6 @@
       "packages/javascript/test/**",
       "packages/cli/src/**",
       "packages/cli/test/**",
-      "packages/gallery/scripts/**",
-      "packages/gallery/test/**",
       "scripts/**",
       "!packages/javascript/src/generated",
       "!**/dist",
@@ -40,7 +38,7 @@
   "overrides": [
     {
       "includes": [
-        "packages/gallery/scripts/render-layout-previews.mjs"
+        "packages/javascript/scripts/render-layout-previews.mjs"
       ],
       "linter": {
         "rules": {
