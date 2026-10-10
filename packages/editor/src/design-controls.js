@@ -1,7 +1,7 @@
 // Design controls (RR-06): the DOM panel for the dimension switches, the design options, block
 // conversion, chart type and table style/merge. Every control commits one validated, undoable
-// change through the session (switchDimension, setDesignOption, setLogoVariant,
-// setHeaderFooterZone, convertBlock, setTableStyle, mergeTableCells, ...), so a host that already
+// change through the session (switchDimension, setDesignOption, setOrganizationLogo,
+// setHeaderFooterZone, insertZoneLogo, convertBlock, setTableStyle, mergeTableCells, ...), so a host that already
 // subscribes to the session redraws on every change, on Undo and on Redo. The panel owns no
 // document state: it reads the session, mirrors it into native form controls, and reports
 // problems in a live region. Importing this module does not need a DOM; mounting does.
@@ -20,20 +20,26 @@ import { BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, readB
 import {
   DATE_FORMAT_TOKENS,
   HEADER_FOOTER_ZONES,
-  LOGO_VARIANTS,
+  LOGO_BACKGROUNDS,
+  LOGO_SHAPES,
   ZONE_VALUES,
   designWarnings,
   getDesignOption,
   headerFooterState,
+  insertZoneLogo,
   insertZoneValue,
-  prepareHeaderFooterZone,
-  prepareLogoVariant,
+  listOrganizations,
+  logoReference,
+  parseLogoReference,
   prepareDesignOption,
+  prepareHeaderFooterZone,
+  prepareOrganizationLogo,
   readHeaderFooterZone,
-  readLogoVariants,
+  readLogoChoice,
+  readOrganizationLogo,
   setDesignOption,
   setHeaderFooterZone,
-  setLogoVariant,
+  setOrganizationLogo,
 } from "./design-options.js";
 import { createContentControls } from "./content-controls.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
@@ -57,19 +63,18 @@ const SECTION_TITLES = {
   "slide-content": "Slide structure",
 };
 const OPEN_BY_DEFAULT = new Set(["look", "selection", "image", "table"]);
-const LOGO_VARIANT_LABELS = {
-  default: "Default",
-  light: "Light (for dark backgrounds)",
-  dark: "Dark (for light backgrounds)",
-  stacked: "Stacked",
-  stackedLight: "Stacked, light",
-  stackedDark: "Stacked, dark",
-  icon: "Icon",
-  iconLight: "Icon, light",
-  iconDark: "Icon, dark",
-  wordmark: "Wordmark",
-  wordmarkLight: "Wordmark, light",
-  wordmarkDark: "Wordmark, dark",
+// RR-71: the four shapes of an organization's logo, and the two backgrounds a shape can be split by.
+const LOGO_SHAPE_LABELS = {
+  all: "All shapes (one image)",
+  full: "Full (mark and name side by side)",
+  stacked: "Stacked (mark above the name)",
+  icon: "Icon (the mark alone)",
+  wordmark: "Wordmark (the name alone)",
+};
+const LOGO_BACKGROUND_LABELS = {
+  both: "Both backgrounds",
+  onLight: "Light backgrounds (usually dark artwork)",
+  onDark: "Dark backgrounds (usually light artwork)",
 };
 const CELL_FILLS = [
   ["", "No fill"],
@@ -667,7 +672,7 @@ export function createDesignControls(container, options = {}) {
       { value: "footer", label: "Footer" },
     ]);
     furniture.set(pick.which);
-    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, social profiles, date." });
+    const zoneSelect = selectField("hf-zone", "Zone", { help: "A zone lays its parts out side by side, from the edge it sits on: image (or logo), text, social profiles, date." });
     zoneSelect.setOptions(HEADER_FOOTER_ZONES.map((value) => ({ value, label: titleCase(value) })));
     zoneSelect.set(pick.zone);
     furniture.select.addEventListener("change", () => {
@@ -720,12 +725,25 @@ export function createDesignControls(container, options = {}) {
       box.focus();
       box.setSelectionRange?.(caret, caret);
     });
-    const logo = checkField("hf-logo", "Show the logo", { onChange: (checked) => edit({ logo: checked }, `${where()} logo ${checked ? "shown" : "removed"}.`) });
     const image = imageCluster("hf-image", "Image", {
       apply: (ref) => setHeaderFooterZone(editor, which(), zone(), { image: ref }, scoped()),
       build: (ref, doc) => prepareHeaderFooterZone(doc, which(), zone(), { image: ref }, scoped()),
-      help: "A picture in this zone, such as a partner mark or badge. An asset reference, a web address or a data address. Press Enter to apply; clear the field to remove it.",
+      help: "A picture in this zone, such as a partner mark or badge: an asset reference, a web address or a data address, or an organization logo (Insert logo, below). Press Enter to apply; clear the field to remove it.",
     });
+    // RR-71: a logo is the zone's image, written as a reference to the organization's logo (var:organization.logo.icon). Which artwork is drawn (light or dark) follows each slide's background.
+    const logoShape = selectField("hf-logo-shape", "Logo shape", { help: "Icon is the mark alone and fits a zone best." });
+    logoShape.setOptions(LOGO_SHAPES.map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
+    logoShape.set("icon");
+    const logoOrganization = selectField("hf-logo-organization", "Logo of", { empty: "Primary organization", help: "Choose another organization when the deck has several." });
+    const insertLogoButton = button("Insert logo", () => {
+      const shape = logoShape.select.value;
+      const organization = logoOrganization.select.value || undefined;
+      run(() => insertZoneLogo(editor, which(), zone(), { ...scoped(), shape, ...(organization ? { organization } : {}) }), `${where()} now shows the ${shape} logo (${logoReference({ ...(organization ? { organization } : {}), ...(shape !== "full" ? { shape } : {}) })}), replacing any image.`);
+    });
+    insertLogoButton.dataset.action = "insert-logo";
+    const logoHelp = h("p", { class: "opf-dc-help", id: `${uid}-hf-logo-help` }, "Puts the organization's logo in this zone as its image. The logo comes from the organization's logo settings; add it under Logo, watermark and bullets.");
+    insertLogoButton.setAttribute("aria-describedby", logoHelp.id);
+    const logo = { wrap: h("fieldset", { class: "opf-dc-fieldset", "data-role": "hf-logo" }, h("legend", {}, "Logo"), logoShape.wrap, logoOrganization.wrap, h("div", { class: "opf-dc-actions" }, insertLogoButton), logoHelp) };
     const dateNow = checkField("hf-date-now", "Show the current date", {
       help: "Needs the host to supply today's date when it renders or exports; otherwise the part is reported as unresolved.",
       onChange: (checked) => edit({ date: checked }, `${where()} date ${checked ? "shown" : "removed"}.`),
@@ -764,14 +782,24 @@ export function createDesignControls(container, options = {}) {
         text.input.value = textValue;
       }
       text.set(textValue);
-      logo.set(fields.logo === true);
       image.set(stringOf(fields.image), "", `${target()}:${which()}:${zone()}`);
+      // The logo menus follow the organizations, and show the logo the zone already has.
+      const organizations = listOrganizations(editor.presentation);
+      logoOrganization.setOptions(organizations.filter((entry) => entry.id).map((entry) => ({ value: entry.id, label: entry.name ? `${entry.name} (${entry.id})` : entry.id })));
+      logoOrganization.wrap.hidden = organizations.length < 2;
+      const shown = parseLogoReference(fields.image);
+      if (shown) {
+        logoShape.set(shown.shape ?? "full");
+        logoOrganization.set(shown.organization ?? "");
+      }
+
       dateNow.set(fields.date === true);
       dateFixed.set(typeof fields.date === "string" ? fields.date : "");
       dateFormat.set(typeof fields.dateFormat === "string" ? fields.dateFormat : "");
       socials.set(fields.socials === true);
       insertValue.set("");
       for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,textarea,button")) input.disabled = state.hidden;
+      insertLogoButton.disabled = state.hidden || !listOrganizations(editor.presentation).length;
       summary.replaceChildren(
         ...HEADER_FOOTER_ZONES.map((name) => {
           const zoneFields = readHeaderFooterZone(editor.presentation, which(), name, scoped());
@@ -786,20 +814,109 @@ export function createDesignControls(container, options = {}) {
 
   if (built.brand) {
     const { body } = built.brand;
-    const variant = selectField("logo-variant", "Logo variant", { help: "Choose the variant to edit. Engines pick one by background: light on dark, dark on light, then the default." });
-    variant.setOptions(LOGO_VARIANTS.map((value) => ({ value, label: LOGO_VARIANT_LABELS[value] })));
-    variant.set("default");
-    const logoSource = imageCluster("logo", "Logo", {
-      apply: (ref) => setLogoVariant(editor, variant.select.value, ref, scoped()),
-      build: (ref, doc) => prepareLogoVariant(doc, variant.select.value, ref, scoped()),
-      help: "An asset reference, a web address or a data address for the selected variant. Press Enter to apply; clear the field to remove the variant.",
+    // RR-71: logos live on the organization. One image serves every shape, or each of the four shapes (full, stacked, icon,
+    // wordmark) has its own, optionally split by the background it is drawn on (light or dark).
+    const logoOrganizationPick = selectField("org-logo-organization", "Organization to edit", {
+      help: "Whose logo to edit. The primary organization's full logo is drawn on cover and section slides.",
+      onChange: () => sync(),
     });
-    variant.select.addEventListener("change", () => sync());
-    const orgLogo = imageCluster("org-logo", "Organization logo (whole presentation)", {
-      apply: (ref) => setDesignOption(editor, "organizationLogo", ref),
-      build: (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref),
-      help: "The primary organization's logo is the fallback wherever the logo is drawn.",
+    const logoShapePick = selectField("org-logo-shape", "Shape to edit", {
+      help: "All shapes sets one image for every place the logo is drawn. Set a shape to give it its own image; a missing shape falls back to the full logo.",
+      onChange: () => sync(),
     });
+    logoShapePick.setOptions(["all", ...LOGO_SHAPES].map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
+    logoShapePick.set("all");
+    const logoBackgroundPick = selectField("org-logo-background", "Background to edit", {
+      help: "Use a different image on light and on dark backgrounds. Each slide draws the one that suits its background; a missing one uses the other.",
+      onChange: () => sync(),
+    });
+    logoBackgroundPick.setOptions(LOGO_BACKGROUNDS.map((value) => ({ value, label: LOGO_BACKGROUND_LABELS[value] })));
+    logoBackgroundPick.set("both");
+    const logoTarget = () => ({ shape: logoShapePick.select.value, background: logoShapePick.select.value === "all" ? "both" : logoBackgroundPick.select.value, organization: Number(logoOrganizationPick.select.value || 0) });
+    const orgLogo = imageCluster("org-logo", "Organization logo", {
+      apply: (ref) => {
+        const { shape, ...rest } = logoTarget();
+        return setOrganizationLogo(editor, shape, ref, rest);
+      },
+      build: (ref, doc) => {
+        const { shape, ...rest } = logoTarget();
+        return prepareOrganizationLogo(doc, shape, ref, rest);
+      },
+      help: "An asset reference, a web address or a data address for the chosen shape and background. Press Enter to apply; clear the field to remove it.",
+    });
+    const logoSummary = h("ul", { class: "opf-dc-summary", "aria-label": "Logo shapes set" });
+    const organizationLogoGroup = h("fieldset", { class: "opf-dc-fieldset", "data-role": "organization-logo" }, h("legend", {}, "Organization logo"), logoOrganizationPick.wrap, logoShapePick.wrap, logoBackgroundPick.wrap, orgLogo.wrap, logoSummary);
+    const logoSummaryText = (state) => {
+      if (!state) return ["No organization yet: add one to give it a logo."];
+      if (state.all !== undefined) return ["One image for every shape."];
+      const rows = LOGO_SHAPES.filter((shape) => state.shapes[shape]).map((shape) => {
+        const entry = state.shapes[shape];
+        return `${titleCase(shape)}: ${entry.both !== undefined ? "both backgrounds" : [entry.onLight !== undefined ? "light backgrounds" : "", entry.onDark !== undefined ? "dark backgrounds" : ""].filter(Boolean).join(" and ")}`;
+      });
+      return rows.length ? rows : ["No logo yet."];
+    };
+    const syncOrganizationLogo = () => {
+      const organizations = listOrganizations(editor.presentation);
+      const wanted = logoOrganizationPick.select.value;
+      logoOrganizationPick.setOptions(organizations.map((entry) => ({ value: String(entry.index), label: `${entry.name ?? entry.id ?? `Organization ${entry.index + 1}`}${entry.primary ? " (primary)" : ""}` })));
+      const fallback = organizations.find((entry) => entry.primary) ?? organizations[0];
+      logoOrganizationPick.set(organizations.some((entry) => String(entry.index) === wanted) ? wanted : String(fallback?.index ?? ""));
+      logoOrganizationPick.wrap.hidden = organizations.length < 2;
+      const all = logoShapePick.select.value === "all";
+      logoBackgroundPick.wrap.hidden = all;
+      const state = organizations.length ? readOrganizationLogo(editor.presentation, { organization: Number(logoOrganizationPick.select.value) }) : null;
+      const { shape, background } = logoTarget();
+      const entry = shape === "all" ? undefined : state?.shapes[shape];
+      let value = "";
+      let note = "";
+      if (shape === "all") value = stringOf(state?.all);
+      else if (entry) value = stringOf(background === "both" ? entry.both : entry[background]);
+      else if (state?.all !== undefined) note = "uses the image for all shapes";
+      if (shape !== "all" && entry?.both !== undefined && background !== "both") note = "uses the image for both backgrounds";
+      if (shape !== "all" && background === "both" && entry && entry.both === undefined) note = "set per background";
+      orgLogo.set(value, note, `logo:${logoOrganizationPick.select.value}:${shape}:${background}`);
+      for (const input of [...orgLogo.wrap.querySelectorAll("input"), ...logoShapePick.wrap.querySelectorAll("select"), ...logoBackgroundPick.wrap.querySelectorAll("select")]) input.disabled = !organizations.length;
+      logoSummary.replaceChildren(...logoSummaryText(state).map((line) => h("li", {}, line)));
+    };
+    // The logo that covers, sections and picture bullets draw: the primary organization's by default, another organization's or shape, or none.
+    const choiceOrganizationPick = selectField("design-logo-organization", "Logo for covers, sections and bullets", {
+      empty: "Primary organization",
+      help: "Which organization's logo covers and sections draw, and picture bullets use. Choose None to draw no logo.",
+      onChange: () => applyLogoChoice(),
+    });
+    const choiceShapePick = selectField("design-logo-shape", "Shape to draw", {
+      empty: "Default (full; icon for bullets)",
+      help: "Choose a shape to draw it instead of the default for that place. A missing shape falls back to the full logo.",
+      onChange: () => applyLogoChoice(),
+    });
+    choiceShapePick.setOptions(LOGO_SHAPES.map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
+    const logoChoiceGroup = h("fieldset", { class: "opf-dc-fieldset", "data-role": "design-logo" }, h("legend", {}, "Which logo to draw"), choiceOrganizationPick.wrap, choiceShapePick.wrap);
+    const applyLogoChoice = () => {
+      const organization = choiceOrganizationPick.select.value;
+      const shape = choiceShapePick.select.value || undefined;
+      let value;
+      if (organization === "none") value = false;
+      else if (organization === "" && shape === undefined) value = null;
+      else value = logoReference({ ...(organization !== "" && organization !== "primary" ? { organization } : {}), ...(shape ? { shape } : {}) });
+      run(() => setDesignOption(editor, "logo", value, scoped()), value === null ? "Logo set to the primary organization's." : value === false ? "No logo is drawn." : `Logo set to ${value}.`);
+    };
+    const syncLogoChoice = () => {
+      const choice = readLogoChoice(editor.presentation, scoped());
+      const entries = listOrganizations(editor.presentation)
+        .filter((entry) => entry.id)
+        .map((entry) => ({ value: entry.id, label: `${entry.name ?? entry.id}${entry.primary ? " (primary)" : ""}` }));
+      // On a slide, an explicit reference to the primary organization overrides a logo setting the presentation made.
+      if (state.scope === "slide" && editor.presentation.design?.logo !== undefined) entries.unshift({ value: "primary", label: "Primary organization (instead of the presentation's setting)" });
+      entries.push({ value: "none", label: "None" });
+      choiceOrganizationPick.setOptions(entries);
+      let organization = "";
+      if (choice.mode === "none") organization = "none";
+      else if (choice.mode === "custom") organization = String(choice.value);
+      else if (choice.mode === "reference") organization = choice.organization ?? (state.scope === "slide" && choice.shape === undefined ? "primary" : "");
+      choiceOrganizationPick.set(organization, sourceNote(choice.scope, choice.value !== undefined));
+      choiceShapePick.set(choice.mode === "reference" ? (choice.shape ?? "") : "");
+      for (const input of choiceShapePick.wrap.querySelectorAll("select")) input.disabled = choice.mode === "none";
+    };
     const bullet = selectField("list-bullet", "List bullets", {
       empty: "Default (character)",
       help: "Picture bullets draw the logo as the marker and need a logo.",
@@ -839,16 +956,12 @@ export function createDesignControls(container, options = {}) {
     const watermarkOff = checkField("watermark-off", "Hide the inherited watermark", {
       onChange: (checked) => run(() => setDesignOption(editor, "watermark", checked ? false : null, scoped()), checked ? "Watermark hidden." : "Watermark restored."),
     });
-    body.append(variant.wrap, logoSource.wrap, orgLogo.wrap, bullet.wrap, accent.wrap, watermarkSource.wrap, watermarkText.wrap, watermarkOpacity.wrap, watermarkOff.wrap);
+    body.append(organizationLogoGroup, logoChoiceGroup, bullet.wrap, accent.wrap, watermarkSource.wrap, watermarkText.wrap, watermarkOpacity.wrap, watermarkOff.wrap);
     const warningList = h("ul", { class: "opf-dc-warnings", "aria-label": "Logo warnings" });
     body.append(warningList);
     syncs.push(() => {
-      const variants = readLogoVariants(editor.presentation, scoped());
-      logoSource.set(stringOf(variants[variant.select.value]), "", `${target()}:${variant.select.value}`);
-      const organization = editor.presentation.organization;
-      const owner = Array.isArray(organization) ? organization[0] : organization;
-      orgLogo.set(stringOf(owner?.logo), "", "org");
-      for (const input of orgLogo.wrap.querySelectorAll("input")) input.disabled = !owner;
+      syncOrganizationLogo();
+      syncLogoChoice();
       const bulletOption = getDesignOption(editor.presentation, "listBullet", scoped());
       bullet.set(bulletOption.value ?? "", sourceNote(bulletOption.scope, bulletOption.value !== undefined));
       const accentOption = getDesignOption(editor.presentation, "accentFont", scoped());
@@ -863,7 +976,7 @@ export function createDesignControls(container, options = {}) {
       const own = scopeIndex() === undefined ? editor.presentation.design?.watermark : editor.presentation.slides?.[scopeIndex()]?.design?.watermark;
       watermarkOff.set(own === false);
       watermarkOff.wrap.hidden = state.scope !== "slide";
-      warningList.replaceChildren(...designWarnings(editor.presentation, getSlide()).filter((warning) => warning.path === "design.listBullet").map((warning) => h("li", {}, warning.message)));
+      warningList.replaceChildren(...designWarnings(editor.presentation, getSlide()).filter((warning) => warning.path === "design.listBullet" || /^(slides\.\d+\.)?design\.logo$/.test(warning.path)).map((warning) => h("li", {}, warning.message)));
     });
   }
 

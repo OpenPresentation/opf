@@ -5,30 +5,24 @@
 // session form that commits it with `meta.source: "design-option"`.
 import { getValueAtPath, opfPathToJsonPointer } from "./index.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
-import { listBuiltinVariables } from "@openpresentation/opf";
+import { LOGO_SHAPES, listBuiltinVariables } from "@openpresentation/opf";
+import { resolveLogo } from "@openpresentation/opf/composition";
 import { checkFormat } from "./checks.js";
 
-/** The `design.logo` variant slots of a LogoSet, in schema order. */
-export const LOGO_VARIANTS = Object.freeze([
-  "default",
-  "light",
-  "dark",
-  "stacked",
-  "stackedLight",
-  "stackedDark",
-  "icon",
-  "iconLight",
-  "iconDark",
-  "wordmark",
-  "wordmarkLight",
-  "wordmarkDark",
-]);
+// RR-71 (OPF 0.18): logos live on the organization. `organization.logo` is one image for every shape, or up to four shapes
+// (full, stacked, icon, wordmark), each one image or an { onLight, onDark } pair. They are placed with whole-field
+// `var:organization(.<id>)?.logo(.<shape>)?` references: in a header or footer zone's `image`, and in `design.logo`, which
+// picks the organization and shape that covers, sections and picture bullets draw (or `false` for none).
+export { LOGO_SHAPES };
+/** The backgrounds a logo shape can be split by: one image for both, or one for light and one for dark backgrounds. */
+export const LOGO_BACKGROUNDS = Object.freeze(["both", "onLight", "onDark"]);
 export const HEADER_FOOTER_ZONES = Object.freeze(["left", "center", "right"]);
 // Flag fields of a header/footer zone: false is stored as "absent" (so is a `date` of false).
-const ZONE_FLAGS = ["logo", "socials"];
-export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "date", "dateFormat", "socials"]);
-// FA-31: generated values are `{{ }}` variables inside a zone's `text`. The keys 0.16 had for them are gone; say what to write instead.
+const ZONE_FLAGS = ["socials"];
+export const ZONE_FIELDS = Object.freeze(["text", "image", "date", "dateFormat", "socials"]);
+// FA-31, RR-71: generated values are `{{ }}` variables inside a zone's `text` and the logo is the zone's `image`. The keys 0.16 and 0.17 had for them are gone; say what to write instead.
 const REMOVED_ZONE_FIELDS = Object.freeze({
+  logo: "Use Insert logo (insertZoneLogo): the zone's image is var:organization.logo.icon.",
   organization: "Write {{organization.name}} in the text.",
   speaker: "Write {{speaker.name}} in the text.",
   section: "Write {{slide.section}} in the text.",
@@ -74,7 +68,7 @@ const ENUMS = Object.freeze({
 
 /**
  * Descriptors for every design option, in the order a panel shows them. `type` is "enum", "boolean",
- * "font", "asset", "logo", "watermark" or "organization-logo"; `scopes` says whether
+ * "font", "logo" (`design.logo`: a logo reference or false) or "watermark"; `scopes` says whether
  * the option applies to the deck, one slide, or both.
  */
 export const DESIGN_OPTIONS = Object.freeze([
@@ -87,7 +81,6 @@ export const DESIGN_OPTIONS = Object.freeze([
   { id: "imageFit", label: "Image fit", type: "enum", values: ENUMS.imageFit, scopes: ["deck", "slide"], path: "design.imageFit" },
   { id: "accentFont", label: "Accent font", type: "font", scopes: ["deck", "slide"], path: "design.fontScheme.accent" },
   { id: "logo", label: "Logo", type: "logo", scopes: ["deck", "slide"], path: "design.logo" },
-  { id: "organizationLogo", label: "Organization logo", type: "organization-logo", scopes: ["deck"], path: "organization.logo" },
   { id: "watermark", label: "Watermark", type: "watermark", scopes: ["deck", "slide"], path: "design.watermark" },
 ]);
 const BY_ID = Object.fromEntries(DESIGN_OPTIONS.map((option) => [option.id, option]));
@@ -112,9 +105,53 @@ function primaryOrganization(presentation) {
   return list.find((entry) => entry?.role === "primary") ?? list[0];
 }
 
-/** Whether a logo resolves for the slide: slide design, then deck design, then the primary organization. */
-export function hasResolvableLogo(presentation, slideIndex) {
-  return Boolean(presentation.slides?.[slideIndex]?.design?.logo ?? presentation.design?.logo ?? primaryOrganization(presentation)?.logo);
+// --- logo references ----------------------------------------------------------------------------
+
+const LOGO_REFERENCE = /^var:organization(?:\.([A-Za-z0-9_-]+))?\.logo(?:\.(full|stacked|icon|wordmark))?$/;
+/**
+ * Parse a logo reference (`var:organization.logo`, `var:organization.logo.icon`, `var:organization.beta.logo.wordmark`) into
+ * `{ organization?, shape? }` (the organization id, and the shape when the reference names one), or null for anything else.
+ */
+export function parseLogoReference(text) {
+  const match = typeof text === "string" ? LOGO_REFERENCE.exec(text) : null;
+  if (!match) return null;
+  return { ...(match[1] !== undefined ? { organization: match[1] } : {}), ...(match[2] !== undefined ? { shape: match[2] } : {}) };
+}
+/**
+ * The `var:` reference for an organization's logo: `organization` is the organization's id (omit it for the primary
+ * organization) and `shape` one of `LOGO_SHAPES` (omit it to leave the shape to where the logo is drawn).
+ */
+export function logoReference({ organization, shape } = {}) {
+  if (organization !== undefined && !(typeof organization === "string" && /^[A-Za-z0-9_-]+$/.test(organization)))
+    throw fail("invalid-design-value", "An organization is addressed by its id (letters, digits, - and _).", { organization });
+  if (shape !== undefined && !LOGO_SHAPES.includes(shape)) throw fail("invalid-design-value", `Logo shape is one of ${LOGO_SHAPES.join(", ")}.`, { shape });
+  return `var:organization${organization !== undefined ? `.${organization}` : ""}.logo${shape !== undefined ? `.${shape}` : ""}`;
+}
+
+/**
+ * The deck's organizations as a panel lists them: `{ index, id, name, primary, hasLogo }`. `id` is what a `var:` reference
+ * addresses (an organization without one is only reachable as the primary organization); `primary` marks the organization
+ * the unset logo and `var:organization.logo` mean (`role: "primary"`, else the first).
+ */
+export function listOrganizations(presentation) {
+  const raw = presentation?.organization;
+  const entries = Array.isArray(raw) ? raw : isObject(raw) ? [raw] : [];
+  const explicit = entries.findIndex((entry) => isObject(entry) && entry.role === "primary");
+  const primary = explicit >= 0 ? explicit : entries.findIndex(isObject);
+  return entries.flatMap((entry, index) =>
+    isObject(entry)
+      ? [{ index, ...(typeof entry.id === "string" ? { id: entry.id } : {}), ...(typeof entry.name === "string" ? { name: entry.name } : {}), primary: index === primary, hasLogo: entry.logo !== undefined }]
+      : [],
+  );
+}
+
+/** Whether a logo resolves for the slide: its `design.logo`, then the deck's, then the primary organization's (`shape`: the shape asked for, default full). */
+export function hasResolvableLogo(presentation, slideIndex, { shape } = {}) {
+  try {
+    return resolveLogo(presentation, presentation.slides?.[slideIndex], { slideIndex, ...(shape ? { shape } : {}) }) !== null;
+  } catch {
+    return false;
+  }
 }
 
 /** The variable names a zone's `text` uses (`{{name}}` and `{{name|format}}`); a token with a backslash before it is literal text. */
@@ -124,21 +161,41 @@ function zoneTextVariables(text) {
   return names;
 }
 
+function logoResolves(presentation, slide, slideIndex, options) {
+  try {
+    return resolveLogo(presentation, slide, { slideIndex, ...options }) !== null;
+  } catch {
+    return false;
+  }
+}
+function describeLogoReference(presentation, text) {
+  const parsed = parseLogoReference(text);
+  const organizations = listOrganizations(presentation);
+  const owner = parsed?.organization !== undefined ? organizations.find((entry) => entry.id === parsed.organization) : organizations.find((entry) => entry.primary);
+  const who = parsed?.organization !== undefined ? (owner?.name ?? `organization ${parsed.organization}`) : "the primary organization";
+  return `the ${parsed?.shape ?? "full"} logo of ${who}`;
+}
+
 /**
- * Plain-language warnings for settings that need content the document does not have: a logo (a header or footer
- * zone with `logo: true`, picture bullets), the organization's social profiles, or a value a zone's `text` asks for
- * with a variable (`{{organization.name}}` without an organization, `{{slide.section}}` on a slide without a section).
+ * Plain-language warnings for settings that need content the document does not have: a logo (a header or footer zone whose
+ * `image` is a logo reference, `design.logo` naming an organization, picture bullets) that no organization provides, the
+ * organization's social profiles, or a value a zone's `text` asks for with a variable (`{{organization.name}}` without an
+ * organization, `{{slide.section}}` on a slide without a section).
  * The renderers fall back to a glyph or report unresolved content; the editor surfaces it before export.
  */
 export function designWarnings(presentation, slideIndex = 0) {
   const slide = presentation.slides?.[slideIndex];
   const design = { ...presentation.design, ...slide?.design };
   const warnings = [];
-  const hasLogo = hasResolvableLogo(presentation, slideIndex);
+  // RR-71: a zone's image that is a logo reference needs the organization to have that logo; an override that names an organization never falls back to another.
   for (const which of ["header", "footer"])
-    for (const zone of HEADER_FOOTER_ZONES)
-      if (!hasLogo && isObject(design[which]) && design[which][zone]?.logo === true)
-        warnings.push({ code: "unresolved-logo", path: `design.${which}.${zone}.logo`, message: `The ${which} ${zone} zone shows the logo, but no logo is set. Add a logo or an organization logo.` });
+    for (const zone of HEADER_FOOTER_ZONES) {
+      const image = isObject(design[which]) ? design[which][zone]?.image : undefined;
+      if (parseLogoReference(image) && !logoResolves(presentation, slide, slideIndex, { reference: image }))
+        warnings.push({ code: "unresolved-logo", path: `design.${which}.${zone}.image`, message: `The ${which} ${zone} zone shows ${describeLogoReference(presentation, image)}, but it has no logo. Add the organization's logo.` });
+    }
+  if (typeof design.logo === "string" && !logoResolves(presentation, slide, slideIndex, {}))
+    warnings.push({ code: "unresolved-logo", path: slide?.design?.logo !== undefined ? `slides.${slideIndex}.design.logo` : "design.logo", message: `The logo setting points at ${describeLogoReference(presentation, design.logo)}, but it has no logo, so covers and sections draw none. Add the organization's logo.` });
   const organization = primaryOrganization(presentation);
   let builtins;
   for (const which of ["header", "footer"])
@@ -160,8 +217,8 @@ export function designWarnings(presentation, slideIndex = 0) {
           warnings.push({ code: "unresolved-content", path, message: `The ${which} ${zone} zone shows {{${name}}}, but the presentation has no value for it.` });
       }
     }
-  if (!hasLogo && design.listBullet === "image")
-    warnings.push({ code: "unresolved-logo", path: "design.listBullet", message: "Picture bullets use the logo, but no logo is set, so lists draw the character bullet. Add a logo or an organization logo." });
+  if (design.listBullet === "image" && !logoResolves(presentation, slide, slideIndex, { shape: "icon" }))
+    warnings.push({ code: "unresolved-logo", path: "design.listBullet", message: "Picture bullets use the organization's icon logo, but no logo resolves, so lists draw the character bullet. Add an organization logo." });
   return warnings;
 }
 
@@ -225,27 +282,29 @@ function fontSchemeWithAccent(presentation, base, family) {
   return object;
 }
 
-function logoSetOf(existing) {
-  if (existing === undefined) return {};
-  if (typeof existing === "string" || (isObject(existing) && Object.hasOwn(existing, "src"))) return { default: existing };
-  return isObject(existing) ? { ...existing } : {};
-}
-function collapseLogo(set) {
-  const keys = Object.keys(set);
-  if (!keys.length) return null;
-  if (keys.length === 1 && keys[0] === "default") return set.default;
-  return set;
-}
-
 // --- design option ----------------------------------------------------------------------------
+
+/**
+ * The value `design.logo` takes for a choice: `null` (unset), `false`, a `var:` logo reference, or `{ organization?, shape? }`
+ * (an organization id and shape, written as the reference). A reference to an organization the deck does not have is refused.
+ */
+function checkedLogoChoice(presentation, value) {
+  if (value === null || value === false) return value;
+  const reference = isObject(value) ? logoReference(value) : value;
+  const parsed = parseLogoReference(reference);
+  if (!parsed) throw fail("invalid-design-value", "The logo is null (the primary organization's), false (none) or a reference such as var:organization.logo.icon or var:organization.beta.logo.", { option: "logo", value });
+  if (parsed.organization !== undefined && !listOrganizations(presentation).some((entry) => entry.id === parsed.organization))
+    throw fail("unknown-organization", `The presentation has no organization with the id '${parsed.organization}'.`, { organization: parsed.organization });
+  return reference;
+}
 
 /**
  * Compute the patch that sets one design option, without touching any session. `value === null`
  * removes the option at that scope so it is inherited again. The object-valued `watermark` merges the
  * fields you pass into the existing object; a `null` field removes it.
- * Options: `slideIndex` (one slide instead of the deck), `clearSlideOverrides` (deck scope: also
- * remove slide-level values that hide it) and `index` (organizationLogo with several
- * organizations).
+ * Options: `slideIndex` (one slide instead of the deck) and `clearSlideOverrides` (deck scope: also
+ * remove slide-level values that hide it). The `logo` option is `design.logo`: `null` (the primary organization's logo),
+ * `false` (no logo), a reference such as `"var:organization.beta.logo.icon"`, or `{ organization?, shape? }` for one.
  */
 export function prepareDesignOption(presentation, option, value, options = {}) {
   const descriptor = BY_ID[option];
@@ -253,39 +312,23 @@ export function prepareDesignOption(presentation, option, value, options = {}) {
   if (!isObject(presentation)) throw fail("invalid-input", "Design options need an OPF document object.");
   if (value === undefined) throw fail("invalid-design-value", "Pass a value, or null to remove the option.", { option });
   const { scope, base, slideIndex } = scopeOf(presentation, option, options);
-  let patches = [];
-  let keys = [];
-
-  if (descriptor.type === "organization-logo") {
-    const organization = presentation.organization;
-    const index = options.index ?? 0;
-    const owner = Array.isArray(organization) ? organization[index] : organization;
-    if (!isObject(owner)) throw fail("missing-owner", "Add an organization to the document before setting its logo.", { option });
-    const path = Array.isArray(organization) ? ["organization", String(index), "logo"] : ["organization", "logo"];
-    const present = Object.hasOwn(owner, "logo");
-    if (value === null) patches = present ? [{ op: "remove", path: opfPathToJsonPointer(path) }] : [];
-    else if (!present) patches = [{ op: "add", path: opfPathToJsonPointer(path), value: structuredClone(value) }];
-    else if (!same(owner.logo, value)) patches = [{ op: "replace", path: opfPathToJsonPointer(path), value: structuredClone(value) }];
+  let entries;
+  if (descriptor.type === "enum") {
+    if (value !== null && !ENUMS[option].includes(value)) throw fail("invalid-design-value", `${descriptor.label} is one of ${ENUMS[option].join(", ")}.`, { option, value });
+    entries = { [option]: value };
+  } else if (descriptor.type === "boolean") {
+    if (value !== null && typeof value !== "boolean") throw fail("invalid-design-value", `${descriptor.label} is true or false.`, { option, value });
+    entries = { [option]: value };
+  } else if (descriptor.type === "font") {
+    entries = { fontScheme: fontSchemeWithAccent(presentation, base, value) };
+  } else if (descriptor.type === "logo") {
+    entries = { logo: checkedLogoChoice(presentation, value) };
   } else {
-    let entries;
-    if (descriptor.type === "enum") {
-      if (value !== null && !ENUMS[option].includes(value)) throw fail("invalid-design-value", `${descriptor.label} is one of ${ENUMS[option].join(", ")}.`, { option, value });
-      entries = { [option]: value };
-    } else if (descriptor.type === "boolean") {
-      if (value !== null && typeof value !== "boolean") throw fail("invalid-design-value", `${descriptor.label} is true or false.`, { option, value });
-      entries = { [option]: value };
-    } else if (descriptor.type === "font") {
-      entries = { fontScheme: fontSchemeWithAccent(presentation, base, value) };
-    } else if (descriptor.type === "logo") {
-      if (value !== null && typeof value !== "string" && !isObject(value)) throw fail("invalid-design-value", "A logo is an image source, an asset object or a set of logo variants.", { option });
-      entries = { logo: value };
-    } else {
-      const existing = ownDesign(presentation, base).watermark;
-      entries = { watermark: mergedWatermark(existing, value) };
-    }
-    keys = Object.keys(entries);
-    patches = designPatches(presentation, base, entries);
+    const existing = ownDesign(presentation, base).watermark;
+    entries = { watermark: mergedWatermark(existing, value) };
   }
+  const keys = Object.keys(entries);
+  const patches = designPatches(presentation, base, entries);
 
   let shadowedSlides = [];
   if (scope === "deck" && keys.length) {
@@ -322,16 +365,11 @@ export function setDesignOption(editor, option, value, options = {}) {
 /**
  * Read one design option for a panel: `{ value, scope, inherited }` where `scope` is "slide" when the
  * slide's own design sets it, "deck" when the deck does, and "default" when neither does.
- * `accentFont` reads the family name; `organizationLogo` reads the organization.
+ * `accentFont` reads the family name; `logo` reads `design.logo` (a reference, or false).
  */
 export function getDesignOption(presentation, option, options = {}) {
   const descriptor = BY_ID[option];
   if (!descriptor) throw fail("unknown-design-option", `Unknown design option: ${option}.`, { option });
-  if (descriptor.type === "organization-logo") {
-    const organization = presentation.organization;
-    const owner = Array.isArray(organization) ? organization[options.index ?? 0] : organization;
-    return { value: owner?.logo, scope: owner?.logo === undefined ? "default" : "deck", inherited: false };
-  }
   const key = descriptor.type === "font" ? "fontScheme" : option;
   const pick = (design) => {
     const value = design?.[key];
@@ -344,48 +382,120 @@ export function getDesignOption(presentation, option, options = {}) {
   return { value: undefined, scope: "default", inherited: false };
 }
 
-// --- logo variants ----------------------------------------------------------------------------
+// --- organization logo ------------------------------------------------------------------------
+
+const isAsset = (value) => (typeof value === "string" && value.trim() !== "") || (isObject(value) && typeof value.src === "string");
+const isToneSplit = (value) => isObject(value) && !Object.hasOwn(value, "src");
+
+/** The organization an edit or a read addresses: its index, or its id; omitted, the primary organization. Returns the list entry. */
+function organizationTarget(presentation, organization, option = "organization") {
+  const list = listOrganizations(presentation);
+  if (!list.length) throw fail("missing-owner", "Add an organization to the document before setting its logo.", { option });
+  if (organization === undefined || organization === null) return list.find((entry) => entry.primary) ?? list[0];
+  const found = typeof organization === "number" ? list.find((entry) => entry.index === organization) : list.find((entry) => entry.id === organization);
+  if (!found) throw fail("unknown-organization", `The presentation has no organization ${typeof organization === "number" ? `at index ${organization}` : `with the id '${organization}'`}.`, { organization });
+  return found;
+}
+
+/** A shape's value when it is edited for one background (or both); null clears. */
+function editedShape(current, background, source) {
+  if (background === "both") return source === null ? undefined : source;
+  // A plain image is both backgrounds: editing one background keeps the other as it was.
+  const tones = isAsset(current) ? { onLight: current, onDark: current } : isToneSplit(current) ? { ...current } : {};
+  if (source === null) delete tones[background];
+  else tones[background] = source;
+  return Object.keys(tones).length ? tones : undefined;
+}
 
 /**
- * Compute the patch that sets (a source, asset reference or Asset object) or clears (`null`) one logo
- * variant of `design.logo`. A single default logo stays a bare source; adding a second variant turns
- * it into a LogoSet, and clearing back to the default collapses it again.
+ * Compute the patch that sets (an image source, asset reference or Asset object) or clears (`null`) the organization's logo.
+ * `shape` is `"all"` (one image for every shape: `organization.logo` becomes that image) or one of `LOGO_SHAPES`. `options.background`
+ * is `"both"` (default: one image for the shape), `"onLight"` or `"onDark"` (the image for light or dark backgrounds only; the
+ * other keeps what the shape had). A bare logo is the full logo for every shape, so setting one shape keeps it as `full`; a lone
+ * plain `full` collapses back to the bare image. `options.organization` is the organization's index or id (default: the primary one).
  */
-export function prepareLogoVariant(presentation, variant, source, options = {}) {
-  if (!LOGO_VARIANTS.includes(variant)) throw fail("invalid-design-value", `Logo variant is one of ${LOGO_VARIANTS.join(", ")}.`, { variant });
-  if (source !== null && typeof source !== "string" && !isObject(source)) throw fail("invalid-design-value", "A logo variant is an image source, an asset object, or null to clear it.", { variant });
-  if (typeof source === "string" && !source.trim()) throw fail("invalid-design-value", "Enter an image source or asset reference, or clear the variant.", { variant });
-  const { scope, base, slideIndex } = scopeOf(presentation, "logo", options);
-  const set = logoSetOf(ownDesign(presentation, base).logo);
-  if (source === null) delete set[variant];
-  else set[variant] = typeof source === "string" ? source.trim() : source;
-  const patches = designPatches(presentation, base, { logo: collapseLogo(set) });
-  return finish(presentation, patches, { option: "logo", variant, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: [] });
+export function prepareOrganizationLogo(presentation, shape, source, options = {}) {
+  if (!isObject(presentation)) throw fail("invalid-input", "Organization logos need an OPF document object.");
+  if (shape !== "all" && !LOGO_SHAPES.includes(shape)) throw fail("invalid-design-value", `Logo shape is all or one of ${LOGO_SHAPES.join(", ")}.`, { shape });
+  const background = options.background ?? "both";
+  if (!LOGO_BACKGROUNDS.includes(background)) throw fail("invalid-design-value", `Logo background is one of ${LOGO_BACKGROUNDS.join(", ")}.`, { background });
+  if (shape === "all" && background !== "both") throw fail("invalid-design-value", "One image for every shape has no light or dark variant. Choose a shape to set one.", { shape, background });
+  if (source !== null && !isAsset(source)) throw fail("invalid-design-value", "A logo is an image source, an asset reference, an Asset object, or null to clear it.", { shape });
+  const clean = typeof source === "string" ? source.trim() : source;
+  const target = organizationTarget(presentation, options.organization, "organizationLogo");
+  const owner = Array.isArray(presentation.organization) ? presentation.organization[target.index] : presentation.organization;
+  const existing = owner.logo;
+  let logo;
+  if (shape === "all") logo = clean === null ? undefined : clean;
+  else {
+    const shapes = existing === undefined ? {} : isAsset(existing) ? { full: existing } : structuredClone(existing);
+    const next = editedShape(shapes[shape], background, clean);
+    if (next === undefined) delete shapes[shape];
+    else shapes[shape] = next;
+    const keys = Object.keys(shapes);
+    logo = !keys.length ? undefined : keys.length === 1 && keys[0] === "full" && isAsset(shapes.full) ? shapes.full : shapes;
+  }
+  const path = opfPathToJsonPointer(Array.isArray(presentation.organization) ? ["organization", String(target.index), "logo"] : ["organization", "logo"]);
+  const present = Object.hasOwn(owner, "logo");
+  let patches = [];
+  if (logo === undefined) patches = present ? [{ op: "remove", path }] : [];
+  else if (!present) patches = [{ op: "add", path, value: structuredClone(logo) }];
+  else if (!same(existing, logo)) patches = [{ op: "replace", path, value: structuredClone(logo) }];
+  return finish(presentation, patches, { option: "organizationLogo", shape, background, organization: target.index, scope: "deck", shadowed: [] });
 }
-/** Set or clear one logo variant as a single undoable transaction. */
-export function setLogoVariant(editor, variant, source, options = {}) {
+/** Set or clear the organization's logo (see {@link prepareOrganizationLogo}) as a single undoable transaction. */
+export function setOrganizationLogo(editor, shape, source, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
-  return apply(editor, prepareLogoVariant(editor.presentation, variant, source, rest), meta);
+  return apply(editor, prepareOrganizationLogo(editor.presentation, shape, source, rest), meta);
 }
-/** The variants `design.logo` sets at a scope: `{ variant: source }`, a bare logo reported as `default`. */
-export function readLogoVariants(presentation, options = {}) {
-  const own = options.slideIndex === undefined ? presentation.design?.logo : presentation.slides?.[options.slideIndex]?.design?.logo;
-  return logoSetOf(own);
+/**
+ * An organization's logo as a panel shows it: `{ organization, all, shapes }`. `organization` is its list entry (`listOrganizations`),
+ * `all` the bare image when one image serves every shape, and `shapes` the shapes the logo sets, each `{ both }` (one image) or
+ * `{ onLight?, onDark? }`. `null` when the deck has no organization.
+ */
+export function readOrganizationLogo(presentation, options = {}) {
+  if (!listOrganizations(presentation).length) return null;
+  const target = organizationTarget(presentation, options.organization);
+  const owner = Array.isArray(presentation.organization) ? presentation.organization[target.index] : presentation.organization;
+  const logo = owner.logo;
+  const shapes = {};
+  if (isToneSplit(logo))
+    for (const shape of LOGO_SHAPES) {
+      const value = logo[shape];
+      if (isAsset(value)) shapes[shape] = { both: value };
+      else if (isObject(value)) shapes[shape] = { ...(value.onLight !== undefined ? { onLight: value.onLight } : {}), ...(value.onDark !== undefined ? { onDark: value.onDark } : {}) };
+    }
+  return { organization: target, ...(isAsset(logo) ? { all: logo } : {}), shapes };
+}
+
+/**
+ * The `design.logo` choice at a scope as a panel shows it: `{ mode, organization?, shape?, value, scope, inherited }`. `mode` is
+ * "primary" (unset), "none" (`false`), "reference" (a `var:` reference to an organization and/or shape) or "custom" (any other value,
+ * for example one left over from an older document). `organization` is the id the reference names (absent for the primary one).
+ */
+export function readLogoChoice(presentation, options = {}) {
+  const option = getDesignOption(presentation, "logo", options);
+  const { value } = option;
+  if (value === undefined) return { mode: "primary", ...option };
+  if (value === false) return { mode: "none", ...option };
+  const parsed = parseLogoReference(value);
+  return parsed ? { mode: "reference", ...parsed, ...option } : { mode: "custom", ...option };
 }
 
 // --- header and footer zones ------------------------------------------------------------------
 
 /**
- * Compute the patch that edits one header or footer zone. `fields` merges into the zone (logo, text,
+ * Compute the patch that edits one header or footer zone. `fields` merges into the zone (text,
  * image, date, dateFormat, socials); `null`, `false` for a flag, or an empty string removes a field.
  * Generated values (slide number, slide count, section, organization, speaker, deck name) are `{{ }}`
- * variables in `text` (`ZONE_VALUES`, `insertZoneValue`). A zone left empty is removed, then an empty
+ * variables in `text` (`ZONE_VALUES`, `insertZoneValue`); the logo is the zone's `image`, a `var:organization.logo.icon`
+ * reference (`insertZoneLogo`). A zone left empty is removed, then an empty
  * header or footer, so a slide never carries `{}`. A slide's own header or footer replaces the deck's
  * whole one, so the first edit on a slide that has none of its own starts from a copy of the deck's
  * (the other zones stay); a slide emptied that way hides the furniture (`false`) instead of
  * inheriting it again. Setting a field on a suppressed (`false`) header replaces the suppression.
- * `logo: true` reports a warning when no logo resolves.
+ * An `image` that is a logo reference reports a warning when the organization has no logo.
  */
 export function prepareHeaderFooterZone(presentation, which, zone, fields, options = {}) {
   if (!["header", "footer"].includes(which)) throw fail("invalid-design-value", "Choose header or footer.", { which });
@@ -439,6 +549,26 @@ export function prepareZoneValue(presentation, which, zone, name, options = {}) 
   const to = end === undefined ? from : end;
   if (!Number.isInteger(from) || !Number.isInteger(to) || from < 0 || to < from || to > text.length) throw fail("invalid-selection", "The selection is outside the text.", { start: from, end: to });
   return prepareHeaderFooterZone(presentation, which, zone, { text: `${text.slice(0, from)}${value.token}${text.slice(to)}` }, rest);
+}
+/**
+ * Compute the patch that makes a zone show an organization's logo: its `image` becomes the reference
+ * `var:organization.logo.<shape>` (or `var:organization.<id>.logo.<shape>` with `options.organization`, an organization id).
+ * `options.shape` is one of `LOGO_SHAPES` (default `icon`, the mark that fits a zone); `full` is written as plain `var:organization.logo`.
+ * It replaces an image the zone had. Which image is drawn (light or dark artwork) follows each slide's background.
+ */
+export function prepareZoneLogo(presentation, which, zone, options = {}) {
+  const { shape = "icon", organization, ...rest } = options;
+  if (!LOGO_SHAPES.includes(shape)) throw fail("invalid-design-value", `Logo shape is one of ${LOGO_SHAPES.join(", ")}.`, { shape });
+  if (organization !== undefined && !listOrganizations(presentation).some((entry) => entry.id === organization))
+    throw fail("unknown-organization", `The presentation has no organization with the id '${organization}'.`, { organization });
+  const reference = logoReference({ ...(organization !== undefined ? { organization } : {}), ...(shape !== "full" ? { shape } : {}) });
+  return prepareHeaderFooterZone(presentation, which, zone, { image: reference }, rest);
+}
+/** Make a zone show an organization's logo as a single undoable transaction. See {@link prepareZoneLogo}. */
+export function insertZoneLogo(editor, which, zone, options = {}) {
+  checkEditor(editor);
+  const { meta, ...rest } = options;
+  return apply(editor, prepareZoneLogo(editor.presentation, which, zone, rest), meta);
 }
 /** Insert a value's token into one zone's `text` as a single undoable transaction. */
 export function insertZoneValue(editor, which, zone, name, options = {}) {

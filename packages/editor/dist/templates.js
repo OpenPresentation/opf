@@ -8,7 +8,7 @@ import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js
 
 const VARIABLE_ID = /^[a-z][a-z0-9-]*$/;
 // A built-in variable name (core FA-04): `speakers`, or deck/speaker/organization plus one or two dotted segments.
-const BUILTIN_NAME = /^(?:speakers|(?:deck|slide|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,2})$/;
+const BUILTIN_NAME = /^(?:speakers|(?:deck|slide|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,3})$/;
 const KINDS = ["color", "text", "number", "date", "image", "url", "list"];
 
 /** The form control each variable kind uses. */

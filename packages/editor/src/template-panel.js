@@ -67,7 +67,7 @@ export function createTemplatePanel(container, options) {
   const builtinList = h(doc, "ul", { class: "opf-template-builtin-list" });
   const builtinSection = h(doc, "details", { class: "opf-template-builtins", "data-opf-component": "template-builtins" },
     h(doc, "summary", { text: "Built-in variables" }),
-    h(doc, "p", { class: "opf-template-help", text: "Read from the presentation's own speaker, organization and deck fields; edit those fields to change them. Use them like any variable: {{speaker.name}} inside text, or var:speaker.photo as a whole image field. Slide number, section and slide count vary per slide: write them as {{slide.number}}, {{slide.section}} and {{deck.slideCount}} inside any text, not as a whole var: field." }),
+    h(doc, "p", { class: "opf-template-help", text: "Read from the presentation's own speaker, organization and deck fields; edit those fields to change them. Use them like any variable: {{speaker.name}} inside text, or var:speaker.photo as a whole image field. Slide number, section and slide count vary per slide: write them as {{slide.number}}, {{slide.section}} and {{deck.slideCount}} inside any text, not as a whole var: field. The organization logos are images that follow each slide's background (light or dark artwork): place one as a whole image field, for example var:organization.logo.icon in a header or footer zone's image, or choose it with Insert logo." }),
     builtinList);
   const live = h(doc, "p", { class: "opf-template-live", role: "status", "aria-live": "polite" });
   const applyButton = h(doc, "button", { type: "button", class: "opf-template-apply primary", text: "Fill the presentation" });
@@ -230,16 +230,19 @@ export function createTemplatePanel(container, options) {
     const builtins = listBuiltins(editor.presentation);
     insertSelect.replaceChildren(
       ...fields.map((field) => h(doc, "option", { value: field.id, text: `${field.label} (${KIND_LABELS[field.kind]})` })),
-      ...(builtins.length ? [h(doc, "optgroup", { label: "Built-in variables" }, ...builtins.map((entry) => h(doc, "option", { value: entry.name, text: `${entry.label} (${entry.name})` })))] : []),
+      // A slide-scoped image (an organization logo) is a whole-field var: reference, not a {{ }} token for text.
+      ...(builtins.length ? [h(doc, "optgroup", { label: "Built-in variables" }, ...builtins.filter((entry) => !(entry.scope === "slide" && entry.kind === "image")).map((entry) => h(doc, "option", { value: entry.name, text: `${entry.label} (${entry.name})` })))] : []),
     );
     builtinSection.hidden = !builtins.length;
     builtinList.replaceChildren(...builtins.map((entry) => {
       const uses = entry.uses.length;
       // A slide-scoped built-in has no single value: each slide gets its own when it is drawn or exported (FA-31).
       const slideScoped = entry.scope === "slide";
-      const shown = slideScoped ? h(doc, "em", { text: "varies per slide" }) : entry.available ? builtinValueText(entry) : h(doc, "em", { text: "not set" });
+      // RR-71: an organization logo is an image placed by var:, and the artwork follows each slide's background.
+      const logoImage = slideScoped && entry.kind === "image";
+      const shown = logoImage ? h(doc, "em", { text: "image; light or dark artwork per slide" }) : slideScoped ? h(doc, "em", { text: "varies per slide" }) : entry.available ? builtinValueText(entry) : h(doc, "em", { text: "not set" });
       return h(doc, "li", { "data-builtin": entry.name, "data-kind": entry.kind, "data-scope": entry.scope, "data-available": entry.available ? "true" : "false" },
-        h(doc, "code", { text: `{{${entry.name}}}` }), ` ${entry.label}: `, shown, slideScoped && !entry.available ? " (no slide has one yet)" : "", uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
+        h(doc, "code", { text: logoImage ? `var:${entry.name}` : `{{${entry.name}}}` }), ` ${entry.label}: `, shown, slideScoped && !logoImage && !entry.available ? " (no slide has one yet)" : "", logoImage && !entry.available ? " (no logo yet)" : "", uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
     }));
     slideSelect.replaceChildren(...(editor.presentation.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${slideTitle(slide) || "Untitled"}` })));
     previewSlide = Math.min(previewSlide, Math.max(0, (editor.presentation.slides?.length ?? 1) - 1));

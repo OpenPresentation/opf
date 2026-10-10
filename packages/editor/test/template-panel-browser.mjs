@@ -103,7 +103,18 @@ try {
   }
   assert.equal(await builtins.locator('li[data-builtin="speaker.name"]').getAttribute('data-scope'), 'deck');
   assert.match(await builtins.locator('li[data-builtin="slide.section"]').textContent(), /no slide has one yet/);
-  assert.deepEqual(await builtins.locator('li').evaluateAll(nodes => nodes.slice(-3).map(node => node.getAttribute('data-builtin'))), ['slide.number', 'slide.section', 'deck.slideCount'], 'they come last');
+  // RR-71: the organization logos are slide-scoped images, listed read-only after the text ones as whole-field var: references (no organization logo yet here).
+  const logoNames = ['organization.logo', 'organization.logo.stacked', 'organization.logo.icon', 'organization.logo.wordmark'];
+  assert.deepEqual(await builtins.locator('li').evaluateAll(nodes => nodes.slice(-7).map(node => node.getAttribute('data-builtin'))), ['slide.number', 'slide.section', 'deck.slideCount', ...logoNames], 'they come last, the logos after the slide-scoped text');
+  for (const name of logoNames) {
+    const row = builtins.locator(`li[data-builtin="${name}"]`);
+    assert.deepEqual([await row.getAttribute('data-kind'), await row.getAttribute('data-scope'), await row.getAttribute('data-available')], ['image', 'slide', 'false'], name);
+    const rowText = await row.textContent();
+    assert.ok(rowText.includes(`var:${name}`) && !rowText.includes('{{') && rowText.includes('light or dark artwork per slide') && rowText.includes('no logo yet'), `${name} is a read-only image reference: ${rowText}`);
+  }
+  assert.match(await builtins.locator('.opf-template-help').textContent(), /var:organization\.logo\.icon/, 'the help says how to place a logo');
+  assert.equal(await dialog.locator('.opf-template-insert-section option[value="organization.logo"]').count(), 0, 'a logo is not a text token to insert');
+  assert.equal(await dialog.locator('.opf-template-insert-section option[value="slide.number"]').count(), 1, 'the slide-scoped text values still insert');
   assert.equal(await builtins.locator('input,textarea').count(), 0);
   mark('built-in variables listed read-only');
 

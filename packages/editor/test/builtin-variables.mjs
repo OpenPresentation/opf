@@ -41,12 +41,30 @@ assert.throws(() => insertVariableToken(editor, ["slides", 0, "subtitle"], "spea
 assert.equal(editor.presentation.slides[0].subtitle, "By ", "the refused edit changed nothing");
 
 /// FA-31: the slide-scoped built-ins are listed with scope "slide", after the deck-wide ones, with no value of their own.
-const slideScoped = list.filter((entry) => entry.scope === "slide");
+const slideScoped = list.filter((entry) => entry.scope === "slide" && entry.kind === "text");
 assert.deepEqual(slideScoped.map((entry) => entry.name), ["slide.number", "slide.section", "deck.slideCount"]);
 assert.deepEqual(slideScoped.map((entry) => entry.label), ["Slide number", "Section", "Slide count"]);
 assert.ok(slideScoped.every((entry) => entry.kind === "text" && !("value" in entry)), "no single value for a value that varies per slide");
-assert.deepEqual(list.slice(-3).map((entry) => entry.name), ["slide.number", "slide.section", "deck.slideCount"], "they come last");
+assert.deepEqual(list.filter((entry) => entry.scope === "slide" && entry.kind === "text").map((entry) => entry.name), ["slide.number", "slide.section", "deck.slideCount"]);
 assert.ok(list.filter((entry) => entry.scope !== "slide").every((entry) => entry.scope === "deck"));
+
+/// RR-71: the organization logos are slide-scoped images (placed with var:, the artwork chosen per slide background), listed read-only
+/// after the slide-scoped text values: the primary organization's four shapes, then each organization by id.
+const logos = list.filter((entry) => entry.kind === "image" && entry.scope === "slide");
+assert.deepEqual(logos.map((entry) => entry.name), ["organization.logo", "organization.logo.stacked", "organization.logo.icon", "organization.logo.wordmark", "organization.acme.logo", "organization.acme.logo.stacked", "organization.acme.logo.icon", "organization.acme.logo.wordmark"]);
+assert.ok(logos.every((entry) => entry.label && !("value" in entry) && Array.isArray(entry.uses)), "no single value: each slide gets its own artwork");
+assert.deepEqual(logos.map((entry) => entry.label).slice(0, 4), ["Organization logo", "Organization logo (stacked)", "Organization logo (icon)", "Organization logo (wordmark)"]);
+assert.ok(list.indexOf(logos[0]) > list.indexOf(byName["deck.slideCount"]), "they come after the slide-scoped text values");
+assert.equal(list.filter((entry) => entry.name.includes(".logo")).length, logos.length, "no other kind of logo is listed");
+// The names are valid built-in names for the editor's token helpers, and a logo is not a {{ }} text token.
+assert.equal(variableToken("organization.logo.icon"), "{{organization.logo.icon}}");
+assert.equal(variableToken("organization.acme.logo.wordmark"), "{{organization.acme.logo.wordmark}}");
+// Using a logo as a whole image field records the use; availability follows the logo.
+const withLogo = createEditorSession({ ...document(), organization: { id: "acme", name: "Acme Corp", logo: { icon: "asset:mark" } }, assets: { mark: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=" } }, { rejectInvalid: true });
+setHeaderFooterZone(withLogo, "footer", "right", { image: "var:organization.logo.icon" });
+const used = listBuiltins(withLogo.presentation).find((entry) => entry.name === "organization.logo.icon");
+assert.equal(used.available, true);
+assert.deepEqual(used.uses.map((use) => use.path), ["/design/footer/right/image"]);
 assert.equal(byName["slide.number"].available, true);
 assert.equal(byName["deck.slideCount"].available, true);
 assert.equal(byName["slide.section"].available, false, "no slide has a section yet");
@@ -63,7 +81,7 @@ assert.throws(() => insertVariableToken(withNumber, ["slides", 0, "subtitle"], "
 assert.equal(withNumber.presentation.slides[0].subtitle, "By {{slide.number}}{{slide.section}}{{deck.slideCount}}", "the refused edit changed nothing");
 
 // Header and footer values are variables in a zone's text; the 0.16 flags are gone.
-for (const removed of ["organization", "speaker", "section", "slideNumber", "slideNumberFormat"]) assert.ok(!ZONE_FIELDS.includes(removed), `${removed} is not a zone field`);
+for (const removed of ["organization", "speaker", "section", "slideNumber", "slideNumberFormat", "logo"]) assert.ok(!ZONE_FIELDS.includes(removed), `${removed} is not a zone field`);
 setHeaderFooterZone(editor, "footer", "left", { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
 assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "left"), { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
 assert.throws(() => prepareHeaderFooterZone(editor.presentation, "footer", "left", { speaker: true }), /Unknown header\/footer field: speaker\. Write \{\{speaker\.name\}\} in the text\./);

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 // RR-06 gaps in a real browser, on the built playground: image upload (file to asset, one undo step, alt text, refusals)
-// for the logo (all 12 variants), organization logo, watermark, background and zone images; every background
+// for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, background and zone images; every background
 // form (gradient with scheme-slot stops, image, all 54 patterns); and every header/footer part per zone with the scope rules.
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.ttf': 'font/ttf' };
@@ -125,34 +125,42 @@ try {
   // --- uploads: every place an image can go, each one undo step and one asset ----------------------------
   {
     const before = await doc();
-    const after = await step('upload: logo', () => upload(design, 'Upload logo file', 'Company Logo.png', png, 'image/png'), current => current.design.logo === 'asset:company-logo');
+    const after = await step('upload: organization logo', () => upload(design, 'Upload organization logo file', 'Company Logo.png', png, 'image/png'), current => current.organization.logo === 'asset:company-logo');
     const id = assetsOf(after).find(name => !assetsOf(before).includes(name));
     assert.equal(id, 'company-logo');
     assert.match(after.assets[id].src, /^data:image\/png;base64,/);
     assert.equal(after.assets[id].mediaType, 'image/png');
     assert.equal(after.assets[id].title, 'Company Logo.png');
   }
-  // All 12 logo variants take an upload (PNG, JPEG and SVG among them).
-  for (const variant of ['default', 'light', 'dark', 'stacked', 'stackedLight', 'stackedDark', 'icon', 'iconLight', 'iconDark', 'wordmark', 'wordmarkLight', 'wordmarkDark']) {
-    await field(design, 'Logo variant').selectOption(variant);
-    const file = variant === 'icon' ? ['x.svg', svgFile, 'image/svg+xml'] : variant === 'iconLight' ? ['x.jpg', jpeg, 'image/jpeg'] : ['x.png', png, 'image/png'];
-    await step(`upload: logo variant ${variant}`, () => upload(design, 'Upload logo file', ...file), current => (variant === 'default' ? current.design.logo === 'asset:x' : current.design.logo?.[variant] === 'asset:x'));
+  // RR-71: every place an organization's logo can go takes an upload (PNG, JPEG and SVG among them): one image for every shape,
+  // and each of the four shapes for both backgrounds, for light backgrounds and for dark backgrounds.
+  for (const [shape, background] of [['all', 'both'], ...['full', 'stacked', 'icon', 'wordmark'].flatMap(name => ['both', 'onLight', 'onDark'].map(tone => [name, tone]))]) {
+    await field(design, 'Shape to edit').selectOption(shape);
+    if (shape !== 'all') await field(design, 'Background to edit').selectOption(background);
+    const file = shape === 'icon' && background === 'both' ? ['x.svg', svgFile, 'image/svg+xml'] : shape === 'icon' && background === 'onLight' ? ['x.jpg', jpeg, 'image/jpeg'] : ['x.png', png, 'image/png'];
+    const placed = current => {
+      const logo = current.organization.logo;
+      // A lone full logo for both backgrounds is the same as one image for every shape, and is written that way.
+      if (shape === 'all' || (shape === 'full' && background === 'both')) return logo === 'asset:x';
+      const entry = logo?.[shape];
+      return background === 'both' ? entry === 'asset:x' : entry?.[background] === 'asset:x';
+    };
+    await step(`upload: organization logo ${shape} ${background}`, () => upload(design, 'Upload organization logo file', ...file), placed);
   }
-  await field(design, 'Logo variant').selectOption('default');
-  await step('upload: organization logo', () => upload(design, 'Upload organization logo (whole presentation) file', 'org.png', png, 'image/png'), current => current.organization.logo === 'asset:org');
+  await field(design, 'Shape to edit').selectOption('all');
   await step('upload: watermark', () => upload(design, 'Upload watermark file', 'wm.png', png, 'image/png'), current => current.design.watermark === 'asset:wm');
   await step('upload: footer image', () => upload(design, 'Upload image file', 'badge.svg', svgFile, 'image/svg+xml'), current => current.design.footer?.center?.image === 'asset:badge');
 
   // Alt text: typed before the upload it lands on the new asset; afterwards it edits that asset.
   {
-    await typeInto(design, 'Logo alt text', 'Acme logo, blue mark');
+    await typeInto(design, 'Organization logo alt text', 'Acme logo, blue mark');
     assert.deepEqual(await doc(), source, 'alt text typed with no image only waits for the upload');
-    await upload(design, 'Upload logo file', 'alt-test.png', png, 'image/png');
+    await upload(design, 'Upload organization logo file', 'alt-test.png', png, 'image/png');
     const uploaded = await waitDoc(current => current.assets['alt-test']?.alt === 'Acme logo, blue mark', 'alt text on the new asset');
-    assert.equal(uploaded.design.logo, 'asset:alt-test');
+    assert.equal(uploaded.organization.logo, 'asset:alt-test');
     await settle();
-    assert.equal(await field(design, 'Logo alt text').inputValue(), 'Acme logo, blue mark');
-    await typeInto(design, 'Logo alt text', 'New description');
+    assert.equal(await field(design, 'Organization logo alt text').inputValue(), 'Acme logo, blue mark');
+    await typeInto(design, 'Organization logo alt text', 'New description');
     await waitDoc(current => current.assets['alt-test'].alt === 'New description', 'alt text edit');
     await button('Undo').click();
     await waitDoc(current => current.assets['alt-test'].alt === 'Acme logo, blue mark', 'alt edit is one undo step');
@@ -164,10 +172,10 @@ try {
 
   // Alt text and a background draft belong to one target: another variant or slide never inherits them.
   {
-    await typeInto(design, 'Logo alt text', 'Only for the default logo');
-    await field(design, 'Logo variant').selectOption('light');
-    assert.equal(await field(design, 'Logo alt text').inputValue(), '', 'a different variant starts with no alt text');
-    await field(design, 'Logo variant').selectOption('default');
+    await typeInto(design, 'Organization logo alt text', 'Only for the logo for every shape');
+    await field(design, 'Shape to edit').selectOption('icon');
+    assert.equal(await field(design, 'Organization logo alt text').inputValue(), '', 'a different shape starts with no alt text');
+    await field(design, 'Shape to edit').selectOption('all');
     // A deck-wide draft survives moving between slides; a slide's draft belongs to that slide.
     await field(design, 'Background type').selectOption('gradient');
     await field(design, 'Angle in degrees').fill('77');
@@ -189,7 +197,7 @@ try {
   {
     const refuse = async (name, buffer, mimeType, pattern) => {
       const before = await doc();
-      await upload(design, 'Upload logo file', name, buffer, mimeType);
+      await upload(design, 'Upload organization logo file', name, buffer, mimeType);
       await page.waitForFunction(() => document.querySelector('#design-controls .opf-dc-error').textContent.length > 0);
       assert.match(await error(), pattern, name);
       assert.deepEqual(await doc(), before, `${name}: nothing changed`);
@@ -313,7 +321,17 @@ try {
     await field(design, 'Edit').selectOption('footer');
     await zone('left');
     await write('text', current => current.design.footer?.left?.text === 'Acme Corp', 'Text', 'Acme Corp');
-    await toggle('logo', current => current.design.footer?.left?.logo === true, 'Show the logo');
+    // RR-71: the logo is the zone's image, a reference to the organization's logo; Insert logo writes it.
+    assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
+    await step('footer: Insert logo', async () => {
+      await design.getByRole('button', { name: 'Insert logo', exact: true }).click();
+      assert.equal(await field(design, 'Image source').inputValue(), 'var:organization.logo.icon', 'the image field shows the logo reference');
+    }, current => current.design.footer?.left?.image === 'var:organization.logo.icon');
+    await step('footer: Insert logo, stacked shape', async () => {
+      await field(design, 'Logo shape').selectOption('stacked');
+      await design.getByRole('button', { name: 'Insert logo', exact: true }).click();
+    }, current => current.design.footer?.left?.image === 'var:organization.logo.stacked');
+    await field(design, 'Logo shape').selectOption('icon');
     await write('image by address', current => current.design.footer?.left?.image === 'https://example.com/badge.png', 'Image source', 'https://example.com/badge.png');
     // FA-31: the generated values are variables in the text, put there by the Insert value menu.
     assert.deepEqual(await field(design, 'Insert value').locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [
@@ -407,7 +425,7 @@ try {
   // --- accessibility ------------------------------------------------------------------------------------
   const unlabeled = await page.evaluate(() => [...document.querySelectorAll('#design-controls select, #design-controls input, #design-controls textarea')].filter(node => !node.labels?.length).map(node => node.id || node.outerHTML.slice(0, 80)));
   assert.deepEqual(unlabeled, [], 'every control, including every file input, is labelled');
-  assert.ok(await page.locator('#design-controls input[type=file]').count() >= 5, 'file inputs exist for logo, organization logo, watermark, background and zone image');
+  assert.ok(await page.locator('#design-controls input[type=file]').count() >= 4, 'file inputs exist for the organization logo, watermark, background and zone image');
   await page.locator('#design-controls input[type=file]:visible').first().focus();
   assert.equal(await page.evaluate(() => document.activeElement.type), 'file');
   mark('every control and file input is labelled; file inputs take keyboard focus');

@@ -61,8 +61,13 @@ export declare function groupFindings(findings: readonly ReviewFinding[]): { cat
 export declare function findingTarget(presentation: unknown, finding: Pick<ReviewFinding, "path">): ReviewTarget;
 /** Apply a `patch` fix as one undoable, validated session change; refuses a stale or unsafe patch. */
 export declare function applyReviewFix(editor: EditorSession, finding: Pick<ReviewFinding, "ruleId"> | undefined, fix: ReviewFix, meta?: Record<string, unknown>): EditorChange;
-/** The patch that sets (or, for `""`, marks decorative) the alt text of the picture at `pointer`; null when nothing changes. */
+/**
+ * The patch that sets (or, for `""`, marks decorative) the alt text of the picture at `pointer`; null when nothing changes. A
+ * logo reference (`var:organization.logo.icon`) stays a whole-field string: its alt is written on the organization logo
+ * asset(s) it draws, and a reference that names no logo is refused (`unresolved-logo-alt`).
+ */
 export declare function altTextPatch(presentation: unknown, pointer: string, text: string): JsonPatchOperation[] | null;
 export declare function setReviewAltText(editor: EditorSession, pointer: string, text: string, meta?: Record<string, unknown>): { changed: boolean } & Partial<EditorChange>;
 export declare function markDecorative(editor: EditorSession, pointer: string, meta?: Record<string, unknown>): { changed: boolean } & Partial<EditorChange>;
+/** The alt text a picture has now; for a logo reference, the alt of the organization asset it draws. */
 export declare function currentAltText(presentation: unknown, pointer: string): string;

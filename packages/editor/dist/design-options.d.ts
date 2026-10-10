@@ -10,22 +10,25 @@ export type DesignOptionId =
   | "imageFit"
   | "accentFont"
   | "logo"
-  | "organizationLogo"
   | "watermark";
 export interface DesignOptionDescriptor {
   id: DesignOptionId;
   label: string;
-  type: "enum" | "boolean" | "font" | "logo" | "organization-logo" | "watermark";
+  type: "enum" | "boolean" | "font" | "logo" | "watermark";
   /** Allowed values of an enum option. */
   values?: readonly string[];
   scopes: ("deck" | "slide")[];
   path: string;
 }
 export declare const DESIGN_OPTIONS: readonly DesignOptionDescriptor[];
-export declare const LOGO_VARIANTS: readonly ["default", "light", "dark", "stacked", "stackedLight", "stackedDark", "icon", "iconLight", "iconDark", "wordmark", "wordmarkLight", "wordmarkDark"];
-export type LogoVariant = (typeof LOGO_VARIANTS)[number];
-/** Every field a header or footer zone can hold. */
-export declare const ZONE_FIELDS: readonly ["logo", "text", "image", "date", "dateFormat", "socials"];
+/** The shapes an organization's logo can have (core's `LOGO_SHAPES`). */
+export declare const LOGO_SHAPES: readonly ["full", "stacked", "icon", "wordmark"];
+export type LogoShape = (typeof LOGO_SHAPES)[number];
+/** The backgrounds a logo shape can be split by: one image for `both`, or one for `onLight` and one for `onDark` backgrounds. */
+export declare const LOGO_BACKGROUNDS: readonly ["both", "onLight", "onDark"];
+export type LogoBackground = (typeof LOGO_BACKGROUNDS)[number];
+/** Every field a header or footer zone can hold. The logo is the zone's `image` (`var:organization.logo.icon`, see `insertZoneLogo`). */
+export declare const ZONE_FIELDS: readonly ["text", "image", "date", "dateFormat", "socials"];
 /** One entry of a zone's "Insert value" menu: the built-in variable `name`, its menu `label` and the `token` (`{{name}}`) that lands in the zone's `text`. */
 export interface ZoneValue {
   readonly name: "slide.number" | "deck.slideCount" | "slide.section" | "organization.name" | "speaker.name" | "deck.name";
@@ -40,12 +43,10 @@ export declare const HEADER_FOOTER_ZONES: readonly ["left", "center", "right"];
 export type HeaderFooterZone = (typeof HEADER_FOOTER_ZONES)[number];
 
 export interface DesignOptionOptions {
-  /** One slide instead of the deck. Not allowed for organizationLogo. */
+  /** One slide instead of the deck. */
   slideIndex?: number;
   /** Deck scope: also remove slide-level values that would hide the change. */
   clearSlideOverrides?: boolean;
-  /** organizationLogo with several organizations (default 0). */
-  index?: number;
   /** Session change metadata (session forms only). */
   meta?: Record<string, unknown>;
 }
@@ -58,15 +59,14 @@ export interface PreparedDesignOption {
   option: string;
   scope: "deck" | "slide";
   slideIndex?: number;
-  /** The logo variant or header/footer zone an edit named. */
-  variant?: string;
+  /** The header/footer zone an edit named. */
   zone?: string;
   presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   /** Slides whose own design hides a deck-level change. */
   shadowed: number[];
-  /** Settings that need a logo the document does not have. */
+  /** Settings that need a logo or other content the document does not have. */
   warnings: DesignWarning[];
 }
 export interface DesignOptionChange extends Omit<EditorChange, "presentation" | "patches"> {
@@ -85,14 +85,60 @@ export declare function prepareDesignOption(presentation: unknown, option: Desig
 /** Set one option as a single undoable transaction. */
 export declare function setDesignOption(editor: EditorSession, option: DesignOptionId, value: unknown, options?: DesignOptionOptions): DesignOptionChange;
 /** `{ value, scope, inherited }`; scope is "slide", "deck" or "default". */
-export declare function getDesignOption(presentation: unknown, option: DesignOptionId, options?: Pick<DesignOptionOptions, "slideIndex" | "index">): { value: unknown; scope: "slide" | "deck" | "default"; inherited: boolean };
-export declare function prepareLogoVariant(presentation: unknown, variant: LogoVariant, source: string | Record<string, unknown> | null, options?: DesignOptionOptions): PreparedDesignOption;
-/** Set or clear one `design.logo` variant; a lone default stays a bare source. */
-export declare function setLogoVariant(editor: EditorSession, variant: LogoVariant, source: string | Record<string, unknown> | null, options?: DesignOptionOptions): DesignOptionChange;
-/** The variants `design.logo` sets at a scope (a bare logo is reported as `default`). */
-export declare function readLogoVariants(presentation: unknown, options?: Pick<DesignOptionOptions, "slideIndex">): Partial<Record<LogoVariant, unknown>>;
+export declare function getDesignOption(presentation: unknown, option: DesignOptionId, options?: Pick<DesignOptionOptions, "slideIndex">): { value: unknown; scope: "slide" | "deck" | "default"; inherited: boolean };
+/** A parsed `var:organization(.<id>)?.logo(.<shape>)?` reference: the organization's id (absent: the primary organization) and the shape when the reference names one. */
+export interface LogoReference {
+  organization?: string;
+  shape?: LogoShape;
+}
+/** Parse a logo reference, or null for any other string. */
+export declare function parseLogoReference(text: unknown): LogoReference | null;
+/** Write a logo reference: `logoReference({ organization: "beta", shape: "icon" })` is `"var:organization.beta.logo.icon"`. */
+export declare function logoReference(reference?: LogoReference): string;
+/** What `design.logo` takes: `null` (unset: the primary organization's logo), `false` (no logo), a reference, or the organization and shape to write as one. */
+export type LogoChoice = null | false | string | LogoReference;
+export interface OrganizationEntry {
+  index: number;
+  /** What a `var:` reference addresses; an organization without one is only reachable as the primary organization. */
+  id?: string;
+  name?: string;
+  /** The organization the unset logo and `var:organization.logo` mean (`role: "primary"`, else the first). */
+  primary: boolean;
+  hasLogo: boolean;
+}
+/** The deck's organizations (a single organization object is a list of one). */
+export declare function listOrganizations(presentation: unknown): OrganizationEntry[];
+export interface OrganizationLogoOptions extends Omit<DesignOptionOptions, "slideIndex" | "clearSlideOverrides"> {
+  /** The organization's index or id (default: the primary organization). */
+  organization?: number | string;
+  /** `both` (default): one image for the shape. `onLight` or `onDark`: the image for that background only. Not with shape `all`. */
+  background?: LogoBackground;
+}
+/** Compute the patch that sets or clears (`null`) the organization's logo: `all` is one image for every shape, otherwise one shape (for one background or both). */
+export declare function prepareOrganizationLogo(presentation: unknown, shape: "all" | LogoShape, source: string | Record<string, unknown> | null, options?: Omit<OrganizationLogoOptions, "meta">): PreparedDesignOption & { shape: "all" | LogoShape; background: LogoBackground; organization: number };
+/** Set or clear the organization's logo as a single undoable transaction. */
+export declare function setOrganizationLogo(editor: EditorSession, shape: "all" | LogoShape, source: string | Record<string, unknown> | null, options?: OrganizationLogoOptions): DesignOptionChange;
+export interface OrganizationLogoState {
+  organization: OrganizationEntry;
+  /** The bare image when one image serves every shape. */
+  all?: unknown;
+  /** The shapes the logo sets: `{ both }` for one image, or `{ onLight?, onDark? }`. */
+  shapes: Partial<Record<LogoShape, { both?: unknown; onLight?: unknown; onDark?: unknown }>>;
+}
+/** An organization's logo as a panel shows it; null when the deck has no organization. */
+export declare function readOrganizationLogo(presentation: unknown, options?: Pick<OrganizationLogoOptions, "organization">): OrganizationLogoState | null;
+export interface LogoChoiceState {
+  /** "primary" (unset), "none" (false), "reference" (a logo reference) or "custom" (any other value). */
+  mode: "primary" | "none" | "reference" | "custom";
+  organization?: string;
+  shape?: LogoShape;
+  value: unknown;
+  scope: "slide" | "deck" | "default";
+  inherited: boolean;
+}
+/** The `design.logo` choice at a scope. */
+export declare function readLogoChoice(presentation: unknown, options?: Pick<DesignOptionOptions, "slideIndex">): LogoChoiceState;
 export interface HeaderFooterZoneFields {
-  logo?: boolean | null;
   text?: string | null;
   image?: string | Record<string, unknown> | null;
   date?: boolean | string | null;
@@ -113,11 +159,21 @@ export interface ZoneValueOptions extends DesignOptionOptions {
 export declare function prepareZoneValue(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, name: ZoneValue["name"], options?: ZoneValueOptions): PreparedDesignOption;
 /** Insert a value's token into one zone's `text` as a single undoable transaction. */
 export declare function insertZoneValue(editor: EditorSession, which: "header" | "footer", zone: HeaderFooterZone, name: ZoneValue["name"], options?: ZoneValueOptions): DesignOptionChange;
+export interface ZoneLogoOptions extends DesignOptionOptions {
+  /** The shape to show (default `icon`). */
+  shape?: LogoShape;
+  /** The organization's id (default: the primary organization). */
+  organization?: string;
+}
+/** The patch that makes a zone show an organization's logo: its `image` becomes `var:organization.logo.<shape>` (`var:organization.<id>.logo.<shape>` for a named organization). */
+export declare function prepareZoneLogo(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, options?: ZoneLogoOptions): PreparedDesignOption;
+/** Make a zone show an organization's logo as a single undoable transaction. */
+export declare function insertZoneLogo(editor: EditorSession, which: "header" | "footer", zone: HeaderFooterZone, options?: ZoneLogoOptions): DesignOptionChange;
 /** One zone's fields as they apply at a scope: the slide's own header or footer when it has one, else the deck's. */
 export declare function readHeaderFooterZone(presentation: unknown, which: "header" | "footer", zone: HeaderFooterZone, options?: Pick<DesignOptionOptions, "slideIndex">): HeaderFooterZoneFields;
 /** Whether the scope sets the header or footer itself (`own`), shows the deck's (`inherited`) or hides it with `false` (`hidden`). */
 export declare function headerFooterState(presentation: unknown, which: "header" | "footer", options?: Pick<DesignOptionOptions, "slideIndex">): { own: boolean; inherited: boolean; hidden: boolean };
-/** Whether a logo resolves for the slide: slide design, deck design, then the primary organization. */
-export declare function hasResolvableLogo(presentation: unknown, slideIndex: number): boolean;
-/** Settings that need content the document does not have: a logo (zones with `logo: true`, picture bullets), the organization's social profiles, or a value a zone's `text` asks for (`{{organization.name}}` without an organization, `{{slide.section}}` on a slide without a section). */
+/** Whether a logo resolves for the slide: its `design.logo`, then the deck's, then the primary organization's (`shape`: the shape asked for, default full). */
+export declare function hasResolvableLogo(presentation: unknown, slideIndex: number, options?: { shape?: LogoShape }): boolean;
+/** Settings that need content the document does not have: a logo (a zone image or `design.logo` that names a logo no organization has, picture bullets), the organization's social profiles, or a value a zone's `text` asks for (`{{organization.name}}` without an organization, `{{slide.section}}` on a slide without a section). */
 export declare function designWarnings(presentation: unknown, slideIndex?: number): DesignWarning[];

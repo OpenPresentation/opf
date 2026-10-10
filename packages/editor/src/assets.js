@@ -115,7 +115,7 @@ export function prepareImageAsset(presentation, image, { alt, id } = {}) {
 /**
  * Add an uploaded image and use it in one undoable transaction. `build(reference, presentation)` returns the
  * prepared change that uses the image (any `prepare...` function of this package, for example
- * `(ref, doc) => prepareLogoVariant(doc, "light", ref)`); its patches run after the asset patch.
+ * `(ref, doc) => prepareOrganizationLogo(doc, "icon", ref, { background: "onDark" })`); its patches run after the asset patch.
  *
  * Options: `alt` (saved on the asset), `maxBytes`, `meta`, and `onAddAsset({ name, mediaType, bytes, size, alt, file })`
  * for a host that stores images itself: it returns the reference to use (a web address or an `asset:` id the

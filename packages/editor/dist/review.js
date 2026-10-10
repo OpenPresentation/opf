@@ -7,7 +7,9 @@
 // module needs no DOM.
 import { validationCategories } from "@openpresentation/opf";
 import { OPFEditorError, getValueAtPath, hasValueAtPath, jsonPointerToOpfPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
+import { resolveLogo } from "@openpresentation/opf/composition";
 import { assetIdOf, prepareAssetAlt } from "./assets.js";
+import { parseLogoReference } from "./design-options.js";
 
 function fail(code, message, details) {
   return new OPFEditorError(code, message, details);
@@ -158,10 +160,36 @@ export function applyReviewFix(editor, finding, fix, meta = {}) {
 
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
-/** The patch operations that give the asset value at `pointer` alt text (`""` marks it decorative), or `null` when it already has exactly this alt. */
+// RR-71: a logo reference (`var:organization.logo.icon`) is a whole-field string, so its alt text cannot be written beside
+// it ({ src: "var:…", alt } is an ordinary image whose source is no longer the logo). The logo's alt lives on the
+// organization's asset (Organization.logo, each shape and onLight/onDark value a path or Asset): these are the OPF paths of
+// the assets the reference draws, on a light and on a dark background (one path when both resolve to the same asset).
+function logoAltPaths(presentation, value) {
+  if (typeof value !== "string" || !parseLogoReference(value)) return null;
+  const paths = new Set();
+  for (const onDark of [false, true]) {
+    const logo = resolveLogo(presentation, undefined, { reference: value, onDark });
+    if (logo) paths.add(logo.path);
+  }
+  if (!paths.size) {
+    throw fail("unresolved-logo-alt", `${value} names no logo yet. Add the organization's logo first; its alt text is written on the logo in the organization.`, { reference: value });
+  }
+  return [...paths];
+}
+
+/**
+ * The patch operations that give the asset value at `pointer` alt text (`""` marks it decorative), or `null` when it already
+ * has exactly this alt. For a logo reference the alt is written on the organization logo asset(s) it draws.
+ */
 export function altTextPatch(presentation, pointer, text) {
   const value = getValueAtPath(presentation, pointer);
   if (value === undefined) throw fail("stale-finding", "The picture this finding is about no longer exists.", { pointer });
+  const logoPaths = logoAltPaths(presentation, value);
+  if (logoPaths) {
+    // Both backgrounds may name one registry asset (asset:<id>): write it once.
+    const operations = [...new Map(logoPaths.flatMap((path) => altTextPatch(presentation, opfPathToJsonPointer(splitOpfPath(path)), text) ?? []).map((operation) => [JSON.stringify(operation), operation])).values()];
+    return operations.length ? operations : null;
+  }
   const alt = String(text ?? "");
   const id = assetIdOf(value);
   const entry = id === undefined ? undefined : getValueAtPath(presentation, ["assets", id]);
@@ -202,6 +230,14 @@ export function markDecorative(editor, pointer, meta = {}) {
 /** The alt text a picture has now (own or through the assets registry), for pre-filling the field. */
 export function currentAltText(presentation, pointer) {
   const value = getValueAtPath(presentation, pointer);
+  // A logo reference shows the alt of the organization asset it draws (on a light background first).
+  if (typeof value === "string" && parseLogoReference(value)) {
+    for (const onDark of [false, true]) {
+      const logo = resolveLogo(presentation, undefined, { reference: value, onDark });
+      if (logo) return currentAltText(presentation, opfPathToJsonPointer(splitOpfPath(logo.path)));
+    }
+    return "";
+  }
   if (isObject(value) && typeof value.alt === "string") return value.alt;
   const id = assetIdOf(value);
   const entry = id === undefined ? undefined : getValueAtPath(presentation, ["assets", id]);

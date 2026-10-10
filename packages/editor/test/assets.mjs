@@ -1,5 +1,5 @@
 // RR-06 gaps: image upload. A local file becomes an `assets` entry (or goes to the host's onAddAsset)
-// and is used by a logo, watermark, slide image, background or header/footer zone in one undo step.
+// and is used by an organization logo, watermark, slide image, background or header/footer zone in one undo step.
 import assert from "node:assert/strict";
 import { defaultCatalog } from "@openpresentation/opf/catalog";
 import { validate } from "@openpresentation/opf";
@@ -18,7 +18,7 @@ import {
   sniffImageType,
   uniqueAssetId,
 } from "../dist/assets.js";
-import { prepareDesignOption, prepareHeaderFooterZone, prepareLogoVariant, LOGO_VARIANTS } from "../dist/design-options.js";
+import { prepareDesignOption, prepareHeaderFooterZone, prepareOrganizationLogo, LOGO_BACKGROUNDS, LOGO_SHAPES } from "../dist/design-options.js";
 import { prepareBackground } from "../dist/background-options.js";
 
 const bytesOf = (...values) => Uint8Array.from(values);
@@ -73,8 +73,8 @@ assert.equal(assetIdOf("https://example.com/a.png"), undefined);
 
 // One upload, one undo step, for every place an image can go.
 const uploads = [
-  { name: "logo variant", build: (ref, doc) => prepareLogoVariant(doc, "light", ref), check: (doc, ref) => assert.equal(doc.design.logo.light, ref) },
-  { name: "organization logo", build: (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref), check: (doc, ref) => assert.equal(doc.organization.logo, ref) },
+  { name: "organization logo shape", build: (ref, doc) => prepareOrganizationLogo(doc, "icon", ref, { background: "onDark" }), check: (doc, ref) => assert.deepEqual(doc.organization.logo, { icon: { onDark: ref } }) },
+  { name: "organization logo", build: (ref, doc) => prepareOrganizationLogo(doc, "all", ref), check: (doc, ref) => assert.equal(doc.organization.logo, ref) },
   { name: "watermark", build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }), check: (doc, ref) => assert.equal(doc.design.watermark, ref) },
   { name: "background shorthand", build: (ref, doc) => prepareBackground(doc, ref, { slideIndex: 0 }), check: (doc, ref) => assert.equal(doc.slides[0].design.background, ref) },
   { name: "background", build: (ref, doc) => prepareBackground(doc, { type: "image", src: ref, fit: "contain", alt: "Backdrop" }), check: (doc, ref) => assert.equal(doc.design.background.src, ref) },
@@ -104,19 +104,21 @@ for (const [index, entry] of uploads.entries()) {
   editor.redo();
   entry.check(editor.presentation, change.reference);
 }
-assert.equal(LOGO_VARIANTS.length, 12);
-// All 12 logo variants take an upload.
-for (const variant of LOGO_VARIANTS) {
+// Every place an organization's logo can go takes an upload: one image for every shape, and each of the four shapes for both
+// backgrounds, light only and dark only.
+const logoPlaces = [["all", "both"], ...LOGO_SHAPES.flatMap((shape) => LOGO_BACKGROUNDS.map((background) => [shape, background]))];
+assert.equal(logoPlaces.length, 13);
+for (const [shape, background] of logoPlaces) {
   const editor = session();
-  await applyImageUpload(editor, file(PNG, `${variant}.png`, "image/png"), (ref, doc) => prepareLogoVariant(doc, variant, ref));
-  assert.ok(JSON.stringify(editor.get("design.logo")).includes("asset:"), variant);
+  await applyImageUpload(editor, file(PNG, `${shape}-${background}.png`, "image/png"), (ref, doc) => prepareOrganizationLogo(doc, shape, ref, { background }));
+  assert.ok(JSON.stringify(editor.get("organization.logo")).includes("asset:"), `${shape} ${background}`);
   assert.equal(editor.snapshot().undoDepth, 1);
 }
 
 // Ids stay unique across uploads; alt text edits the asset in one step.
 {
   const editor = session();
-  const build = (ref, doc) => prepareLogoVariant(doc, "default", ref);
+  const build = (ref, doc) => prepareOrganizationLogo(doc, "all", ref);
   const first = await applyImageUpload(editor, file(PNG, "logo.png", "image/png"), build);
   const second = await applyImageUpload(editor, file(PNG, "logo.png", "image/png"), build);
   assert.deepEqual([first.assetId, second.assetId], ["logo", "logo-2"]);
@@ -139,13 +141,13 @@ for (const variant of LOGO_VARIANTS) {
 // Refusals change nothing.
 {
   const editor = session();
-  const build = (ref, doc) => prepareLogoVariant(doc, "default", ref);
+  const build = (ref, doc) => prepareOrganizationLogo(doc, "all", ref);
   await assert.rejects(applyImageUpload(editor, file(new TextEncoder().encode("plain text"), "logo.png", "image/png"), build), (error) => error.code === "invalid-image");
   await assert.rejects(applyImageUpload(editor, file(PNG, "logo.png", "image/png"), build, { maxBytes: 20 }), (error) => error.code === "image-too-large");
   assert.equal(editor.snapshot().undoDepth, 0);
   assert.deepEqual(editor.presentation, deck());
   // A build that fails leaves no orphaned asset behind.
-  await assert.rejects(applyImageUpload(editor, file(PNG, "logo.png", "image/png"), (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref, { slideIndex: 0 })), (error) => error.code === "invalid-scope");
+  await assert.rejects(applyImageUpload(editor, file(PNG, "logo.png", "image/png"), (ref, doc) => prepareOrganizationLogo(doc, "all", ref, { organization: "nobody" })), (error) => error.code === "unknown-organization");
   assert.equal(editor.get("assets"), undefined);
   assert.equal(editor.snapshot().undoDepth, 0);
 }
@@ -167,7 +169,7 @@ for (const variant of LOGO_VARIANTS) {
   assert.equal(editor.get("assets"), undefined, "nothing is added to assets");
   assert.equal(editor.snapshot().undoDepth, 1);
   assert.deepEqual([seen[0].name, seen[0].mediaType, seen[0].size, seen[0].alt, seen[0].bytes.length], ["mark.png", "image/png", PNG.length, "Mark", PNG.length]);
-  const stored = await applyImageUpload(editor, file(PNG, "logo.png", "image/png"), (ref, doc) => prepareLogoVariant(doc, "default", ref), { onAddAsset: () => ({ src: "asset:host-logo" }) });
+  const stored = await applyImageUpload(editor, file(PNG, "logo.png", "image/png"), (ref, doc) => prepareOrganizationLogo(doc, "all", ref), { onAddAsset: () => ({ src: "asset:host-logo" }) });
   assert.equal(stored.reference, "asset:host-logo");
   // The hook sees only validated files, and a bad answer changes nothing.
   let called = false;
@@ -191,4 +193,4 @@ for (const variant of LOGO_VARIANTS) {
   assert.throws(() => prepareImageAsset({ ...presentation, assets: { logo: "y" } }, image, { id: "logo" }), (error) => error.code === "asset-exists");
 }
 
-console.log("Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for logo (all 12 variants), organization logo, watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.");
+console.log("Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.");

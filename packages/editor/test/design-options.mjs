@@ -12,20 +12,28 @@ import { switchDimension } from "../dist/switches.js";
 import {
   DESIGN_OPTIONS,
   HEADER_FOOTER_ZONES,
-  LOGO_VARIANTS,
+  LOGO_BACKGROUNDS,
+  LOGO_SHAPES,
   ZONE_FIELDS,
   ZONE_VALUES,
   designWarnings,
   getDesignOption,
   headerFooterState,
+  insertZoneLogo,
   insertZoneValue,
+  listOrganizations,
+  logoReference,
+  parseLogoReference,
   prepareDesignOption,
+  prepareOrganizationLogo,
+  prepareZoneLogo,
   prepareZoneValue,
   readHeaderFooterZone,
-  readLogoVariants,
+  readLogoChoice,
+  readOrganizationLogo,
   setDesignOption,
   setHeaderFooterZone,
-  setLogoVariant,
+  setOrganizationLogo,
 } from "../dist/design-options.js";
 
 const PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=";
@@ -48,11 +56,13 @@ const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1
 {
   assert.deepEqual(
     DESIGN_OPTIONS.map((option) => option.id),
-    ["titleAlignment", "contentAlignment", "contentDirection", "chartPrimary", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "organizationLogo", "watermark"],
+    ["titleAlignment", "contentAlignment", "contentDirection", "chartPrimary", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "watermark"],
   );
   const design = schemas.presentation.$defs.Design.properties;
   for (const option of DESIGN_OPTIONS.filter((entry) => entry.type === "enum")) assert.deepEqual([...option.values], design[option.id].enum, `${option.id} values follow the schema`);
-  assert.deepEqual([...LOGO_VARIANTS], Object.keys(schemas.presentation.$defs.LogoSet.properties), "logo variants follow the schema");
+  assert.deepEqual([...LOGO_SHAPES], Object.keys(schemas.presentation.$defs.OrganizationLogo.properties), "logo shapes follow the schema");
+  assert.deepEqual([...LOGO_BACKGROUNDS], ["both", "onLight", "onDark"]);
+  assert.equal(schemas.presentation.$defs.LogoSet, undefined, "the 12-field LogoSet is gone");
   assert.deepEqual([...HEADER_FOOTER_ZONES], ["left", "center", "right"]);
   // FA-31: the zone fields are the schema's (generated values are variables in `text`, not fields).
   assert.deepEqual([...ZONE_FIELDS].sort(), Object.keys(schemas.presentation.$defs.HeaderFooterItem.properties).sort(), "zone fields follow the schema");
@@ -68,12 +78,12 @@ const cases = [
   { option: "chartPrimary", value: "left", slide: 2, patch: { op: "add", path: "/design/chartPrimary", value: "left" } },
   { option: "contentBox", value: true, slide: 1, patch: { op: "add", path: "/design/contentBox", value: true }, preview: true },
   { option: "accentFont", value: "Georgia", slide: 0, patch: { op: "replace", path: "/design/fontScheme", value: { id: "aptos", accent: "Georgia" } } },
-  { option: "logo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/design/logo", value: "asset:logo" } },
-  { option: "organizationLogo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/organization/logo", value: "asset:logo" } },
+  // RR-71: design.logo picks the organization and shape that covers, sections and bullets draw; the organization has the logo.
+  { option: "logo", value: "var:organization.logo.icon", slide: 0, setup: (editor) => setOrganizationLogo(editor, "all", "asset:logo"), patch: { op: "add", path: "/design/logo", value: "var:organization.logo.icon" } },
   { option: "watermark", value: { src: "asset:mark", opacity: 0.1 }, slide: 1, patch: { op: "add", path: "/design/watermark", value: { src: "asset:mark", opacity: 0.1 } }, preview: true },
   { option: "imageFit", value: "contain", slide: 2, patch: { op: "add", path: "/design/imageFit", value: "contain" } },
-  // listBullet "image" needs a logo to draw; the fixture sets one first.
-  { option: "listBullet", value: "image", slide: 1, setup: (editor) => setDesignOption(editor, "logo", "asset:logo"), patch: { op: "add", path: "/design/listBullet", value: "image" }, preview: true },
+  // listBullet "image" needs a logo to draw; the fixture gives the organization one first.
+  { option: "listBullet", value: "image", slide: 1, setup: (editor) => setOrganizationLogo(editor, "all", "asset:logo"), patch: { op: "add", path: "/design/listBullet", value: "image" }, preview: true },
 ];
 for (const entry of cases) {
   const editor = session();
@@ -153,7 +163,7 @@ for (const entry of cases) {
   assert.deepEqual(cleared.patches.map((patch) => patch.op), ["replace", "remove"]);
   assert.deepEqual(cleared.shadowed, []);
   assert.equal(editor.snapshot().undoDepth, depth + 1);
-  assert.throws(() => setDesignOption(editor, "organizationLogo", "asset:logo", { slideIndex: 0 }), (error) => error.code === "invalid-scope");
+  assert.throws(() => setDesignOption(editor, "organizationLogo", "asset:logo"), (error) => error.code === "unknown-design-option", "the organization logo is edited with setOrganizationLogo");
   assert.throws(() => setDesignOption(editor, "titleAlignment", "left", { slideIndex: 9 }), (error) => error.code === "slide-index-out-of-range");
 }
 
@@ -169,6 +179,10 @@ for (const entry of cases) {
     ["imageFit", "crop", "invalid-design-value"],
     ["slideImage", "asset:photo", "unknown-design-option"],
     ["logo", 4, "invalid-design-value"],
+    ["logo", "asset:logo", "invalid-design-value"],
+    ["logo", "var:organization.logo.banner", "invalid-design-value"],
+    ["logo", { shape: "huge" }, "invalid-design-value"],
+    ["logo", "var:organization.zz.logo", "unknown-organization"],
     ["nope", "x", "unknown-design-option"],
   ];
   for (const [option, value, code] of bad) assert.throws(() => setDesignOption(editor, option, value), (error) => error.code === code, `${option} ${JSON.stringify(value)}`);
@@ -178,7 +192,7 @@ for (const entry of cases) {
   assert.throws(() => setDesignOption({}, "titleAlignment", "left"), (error) => error.code === "invalid-editor");
   // The organization logo needs an organization.
   const none = createEditorSession({ slides: [{ title: "x", text: "y" }] });
-  assert.throws(() => setDesignOption(none, "organizationLogo", "asset:logo"), (error) => error.code === "missing-owner");
+  assert.throws(() => setOrganizationLogo(none, "all", "asset:logo"), (error) => error.code === "missing-owner");
 }
 
 // Accent font: object-form font scheme overrides, collapsing back to the bare id.
@@ -224,30 +238,160 @@ for (const entry of cases) {
   assert.equal(editor.get("design.watermark"), undefined);
 }
 
-// Logo variants: a lone default is a bare source; more variants make a LogoSet; clearing collapses.
+// RR-71: logos live on the organization. One image sets every shape; a shape has its own image, optionally one per background.
 {
   const editor = session();
-  setLogoVariant(editor, "default", "asset:logo");
-  assert.equal(editor.get("design.logo"), "asset:logo");
-  setLogoVariant(editor, "light", "asset:mark");
-  assert.deepEqual(editor.get("design.logo"), { default: "asset:logo", light: "asset:mark" });
-  assert.deepEqual(readLogoVariants(editor.presentation), { default: "asset:logo", light: "asset:mark" });
-  setLogoVariant(editor, "icon", "asset:photo", { slideIndex: 0 });
-  assert.deepEqual(readLogoVariants(editor.presentation, { slideIndex: 0 }), { icon: "asset:photo" }, "a slide logo starts from the slide's own value");
-  setLogoVariant(editor, "light", null);
-  assert.equal(editor.get("design.logo"), "asset:logo");
-  setLogoVariant(editor, "default", null);
-  assert.equal(editor.get("design.logo"), undefined);
-  assert.throws(() => setLogoVariant(editor, "huge", "asset:logo"), (error) => error.code === "invalid-design-value");
-  assert.throws(() => setLogoVariant(editor, "default", "  "), (error) => error.code === "invalid-design-value");
-  // Variant switching resolves by background: a light variant is chosen for a dark background.
-  setLogoVariant(editor, "default", "asset:logo");
-  setLogoVariant(editor, "light", "asset:mark");
-  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
-  assert.ok(bytes.byteLength > 0);
+  assert.deepEqual(listOrganizations(editor.presentation), [{ index: 0, id: "acme", name: "Acme", primary: true, hasLogo: false }]);
+  assert.deepEqual(readOrganizationLogo(editor.presentation).shapes, {});
+  // One image serves every shape: the bare asset.
+  const all = setOrganizationLogo(editor, "all", "asset:logo");
+  assert.deepEqual(all.patches, [{ op: "add", path: "/organization/logo", value: "asset:logo" }]);
+  assert.equal(all.option, "organizationLogo");
+  assert.equal(readOrganizationLogo(editor.presentation).all, "asset:logo");
+  assert.equal(setOrganizationLogo(editor, "all", "asset:logo").changed, false, "the same image again changes nothing");
+  // Setting a shape keeps the bare image as the full logo.
+  const icon = setOrganizationLogo(editor, "icon", "asset:mark");
+  assert.deepEqual(icon.patches, [{ op: "replace", path: "/organization/logo", value: { full: "asset:logo", icon: "asset:mark" } }]);
+  assert.deepEqual(readOrganizationLogo(editor.presentation), { organization: { index: 0, id: "acme", name: "Acme", primary: true, hasLogo: true }, shapes: { full: { both: "asset:logo" }, icon: { both: "asset:mark" } } });
+  // A background splits the shape; the other background keeps what the shape had.
+  setOrganizationLogo(editor, "icon", "asset:photo", { background: "onDark" });
+  assert.deepEqual(editor.get("organization.logo.icon"), { onLight: "asset:mark", onDark: "asset:photo" });
+  assert.deepEqual(readOrganizationLogo(editor.presentation).shapes.icon, { onLight: "asset:mark", onDark: "asset:photo" });
+  setOrganizationLogo(editor, "wordmark", { src: "asset:mark", alt: "Acme wordmark" }, { background: "onLight" });
+  assert.deepEqual(editor.get("organization.logo.wordmark"), { onLight: { src: "asset:mark", alt: "Acme wordmark" } }, "a lone background is kept as written");
+  // Clearing one background leaves the other; clearing both removes the shape; both = one image replaces the split.
+  setOrganizationLogo(editor, "icon", null, { background: "onLight" });
+  assert.deepEqual(editor.get("organization.logo.icon"), { onDark: "asset:photo" });
+  setOrganizationLogo(editor, "icon", "asset:mark");
+  assert.equal(editor.get("organization.logo.icon"), "asset:mark");
+  setOrganizationLogo(editor, "wordmark", null);
+  assert.equal(editor.get("organization.logo.wordmark"), undefined);
+  // The last shape that is a plain full image collapses back to the bare image; clearing everything removes the logo.
+  setOrganizationLogo(editor, "icon", null);
+  assert.equal(editor.get("organization.logo"), "asset:logo");
+  setOrganizationLogo(editor, "all", null);
+  assert.equal(editor.get("organization.logo"), undefined);
+  assert.equal(setOrganizationLogo(editor, "all", null).changed, false);
+  assert.deepEqual(editor.presentation, deck(), "nothing else changed");
+  // Every edit is one undo step, validated, and prepared without a session.
+  const depth = editor.snapshot().undoDepth;
+  setOrganizationLogo(editor, "full", "asset:logo", { background: "onLight" });
+  setOrganizationLogo(editor, "full", "asset:mark", { background: "onDark" });
+  assert.equal(editor.snapshot().undoDepth, depth + 2);
+  assert.equal(editor.validation.valid, true);
+  assert.deepEqual(prepareOrganizationLogo(editor.presentation, "full", "asset:photo").presentation.organization.logo, "asset:photo", "a lone plain full collapses to the bare image");
+  editor.undo();
+  assert.deepEqual(editor.get("organization.logo"), { full: { onLight: "asset:logo" } });
+  editor.undo();
+  assert.equal(editor.get("organization.logo"), undefined);
+  // Refusals change nothing.
+  const before = JSON.stringify(editor.presentation);
+  for (const [args, code] of [
+    [["huge", "asset:logo"], "invalid-design-value"],
+    [["icon", "asset:logo", { background: "dark" }], "invalid-design-value"],
+    [["all", "asset:logo", { background: "onLight" }], "invalid-design-value"],
+    [["icon", "  "], "invalid-design-value"],
+    [["icon", 5], "invalid-design-value"],
+    [["icon", "asset:logo", { organization: "nobody" }], "unknown-organization"],
+    [["icon", "asset:logo", { organization: 4 }], "unknown-organization"],
+  ])
+    assert.throws(() => setOrganizationLogo(editor, ...args), (error) => error.code === code, JSON.stringify(args));
+  assert.equal(JSON.stringify(editor.presentation), before);
+  // An uploaded or typed source is trimmed.
+  setOrganizationLogo(editor, "all", "  asset:logo  ");
+  assert.equal(editor.get("organization.logo"), "asset:logo");
 }
 
-// Header and footer zones: merge fields, drop empties, keep suppression, warn when a logo is missing.
+// Several organizations: the primary one by default (role primary, else the first), another by id or index.
+{
+  const organization = [{ id: "beta", name: "Beta", logo: "asset:photo" }, { id: "acme", name: "Acme", role: "primary" }];
+  const editor = session({ ...deck(), organization });
+  assert.deepEqual(listOrganizations(editor.presentation).map((entry) => [entry.index, entry.id, entry.primary, entry.hasLogo]), [[0, "beta", false, true], [1, "acme", true, false]]);
+  assert.equal(readOrganizationLogo(editor.presentation).organization.id, "acme", "the primary organization by default");
+  assert.equal(setOrganizationLogo(editor, "all", "asset:logo").patches[0].path, "/organization/1/logo");
+  assert.equal(setOrganizationLogo(editor, "icon", "asset:mark", { organization: "beta" }).patches[0].path, "/organization/0/logo");
+  assert.deepEqual(editor.get("organization.0.logo"), { full: "asset:photo", icon: "asset:mark" });
+  assert.equal(setOrganizationLogo(editor, "all", "asset:mark", { organization: 0 }).patches[0].path, "/organization/0/logo", "an organization by index");
+  assert.equal(readOrganizationLogo(editor.presentation, { organization: "beta" }).all, "asset:mark");
+  assert.equal(readOrganizationLogo(session().presentation, {}).organization.id, "acme");
+  assert.equal(readOrganizationLogo({ slides: [] }), null, "no organization, nothing to read");
+  // Without a role the first organization is primary; a single organization may have no id.
+  assert.equal(listOrganizations({ organization: [{ id: "a", name: "A" }, { id: "b", name: "B" }] }).find((entry) => entry.primary).index, 0);
+  assert.deepEqual(listOrganizations({ organization: { name: "Solo" } }), [{ index: 0, name: "Solo", primary: true, hasLogo: false }]);
+}
+
+// RR-71: design.logo picks the organization and shape that covers, sections and picture bullets draw, or none.
+{
+  const organization = [
+    { id: "acme", name: "Acme", role: "primary", logo: { full: { onLight: "asset:logo", onDark: "asset:mark" }, icon: "asset:mark" } },
+    { id: "beta", name: "Beta", logo: "asset:photo" },
+    { id: "gamma", name: "Gamma" },
+  ];
+  // Three cover slides on a light background (only covers and sections draw the logo), so the onLight artwork is the one drawn.
+  const covers = ["One", "Two", "Three"].map((title) => ({ layout: "title-subtitle", title, subtitle: "Cover", design: { background: "#ffffff" } }));
+  const editor = session({ ...deck(), organization, slides: covers });
+  const drawn = (index = 0) => editor.composeSlide(index).logo;
+  assert.deepEqual(readLogoChoice(editor.presentation), { mode: "primary", value: undefined, scope: "default", inherited: false });
+  assert.equal(drawn().reference, "var:organization.logo", "the primary organization's full logo");
+  assert.equal(drawn().source, "asset:logo");
+  // A specific organization writes the var: string.
+  const beta = setDesignOption(editor, "logo", { organization: "beta" });
+  assert.deepEqual(beta.patches, [{ op: "add", path: "/design/logo", value: "var:organization.beta.logo" }]);
+  assert.deepEqual(readLogoChoice(editor.presentation), { mode: "reference", organization: "beta", value: "var:organization.beta.logo", scope: "deck", inherited: false });
+  assert.equal(drawn().reference, "var:organization.beta.logo");
+  assert.equal(drawn().source, "asset:photo");
+  // A shape: with an organization, or the primary organization's.
+  setDesignOption(editor, "logo", { organization: "acme", shape: "icon" });
+  assert.equal(editor.get("design.logo"), "var:organization.acme.logo.icon");
+  setDesignOption(editor, "logo", { shape: "wordmark" });
+  assert.equal(editor.get("design.logo"), "var:organization.logo.wordmark");
+  assert.deepEqual(readLogoChoice(editor.presentation), { mode: "reference", shape: "wordmark", value: "var:organization.logo.wordmark", scope: "deck", inherited: false });
+  assert.equal(drawn().source, "asset:logo", "a missing shape falls back to full");
+  setDesignOption(editor, "logo", "var:organization.gamma.logo");
+  assert.ok(!drawn(), "an organization without a logo draws none, and never another organization's");
+  assert.deepEqual(designWarnings(editor.presentation, 0).map((warning) => [warning.code, warning.path]), [["unresolved-logo", "design.logo"]]);
+  // None is false; unset (null) goes back to the primary organization's logo.
+  const none = setDesignOption(editor, "logo", false);
+  assert.deepEqual(none.patches, [{ op: "replace", path: "/design/logo", value: false }]);
+  assert.equal(readLogoChoice(editor.presentation).mode, "none");
+  assert.ok(!drawn(), "false draws no logo");
+  assert.deepEqual(designWarnings(editor.presentation, 0), []);
+  setDesignOption(editor, "logo", null);
+  assert.equal(editor.get("design.logo"), undefined);
+  assert.equal(drawn().reference, "var:organization.logo");
+  // On a slide: its own choice wins, reads with its scope, and null inherits the deck's again.
+  setDesignOption(editor, "logo", { organization: "beta" });
+  setDesignOption(editor, "logo", false, { slideIndex: 1 });
+  assert.deepEqual(readLogoChoice(editor.presentation, { slideIndex: 1 }), { mode: "none", value: false, scope: "slide", inherited: false });
+  assert.deepEqual(readLogoChoice(editor.presentation, { slideIndex: 2 }), { mode: "reference", organization: "beta", value: "var:organization.beta.logo", scope: "deck", inherited: true });
+  assert.ok(!drawn(1));
+  assert.equal(drawn(2).reference, "var:organization.beta.logo");
+  setDesignOption(editor, "logo", "var:organization.logo", { slideIndex: 2 });
+  assert.equal(drawn(2).reference, "var:organization.logo", "an explicit primary reference overrides the deck's choice on one slide");
+  setDesignOption(editor, "logo", null, { slideIndex: 1 });
+  assert.equal(editor.get("slides.1.design.logo"), undefined);
+  assert.equal(drawn(1).reference, "var:organization.beta.logo");
+  // The picture bullet uses the icon shape.
+  setDesignOption(editor, "logo", null);
+  assert.deepEqual(setDesignOption(editor, "listBullet", "image").warnings, []);
+  setDesignOption(editor, "logo", false);
+  assert.deepEqual(designWarnings(editor.presentation, 0).map((warning) => warning.path), ["design.listBullet"], "no logo resolves for the bullets");
+  // The helpers.
+  assert.deepEqual(parseLogoReference("var:organization.logo"), {});
+  assert.deepEqual(parseLogoReference("var:organization.logo.icon"), { shape: "icon" });
+  assert.deepEqual(parseLogoReference("var:organization.beta.logo"), { organization: "beta" });
+  assert.deepEqual(parseLogoReference("var:organization.beta.logo.wordmark"), { organization: "beta", shape: "wordmark" });
+  assert.equal(parseLogoReference("var:organization.name"), null);
+  assert.equal(parseLogoReference("asset:logo"), null);
+  assert.equal(logoReference({ organization: "beta", shape: "stacked" }), "var:organization.beta.logo.stacked");
+  assert.equal(logoReference(), "var:organization.logo");
+  assert.throws(() => logoReference({ shape: "huge" }), (error) => error.code === "invalid-design-value");
+  assert.throws(() => logoReference({ organization: "has space" }), (error) => error.code === "invalid-design-value");
+  // The picker's choice is on the descriptor, with `design.logo` as its path.
+  assert.equal(DESIGN_OPTIONS.find((option) => option.id === "logo").path, "design.logo");
+}
+
+// Header and footer zones: merge fields, drop empties, keep suppression, warn when a logo reference has no logo.
 {
   const editor = session();
   const text = setHeaderFooterZone(editor, "footer", "center", { text: "Confidential" });
@@ -256,21 +400,22 @@ for (const entry of cases) {
   setHeaderFooterZone(editor, "footer", "right", { text: "{{slide.number}}" });
   assert.deepEqual(editor.get("design.footer"), { center: { text: "Confidential" }, right: { text: "{{slide.number}}" } });
   assert.ok(/>2</.test(svg(editor.presentation, 1)), "the slide number token draws the slide's number");
-  const logo = setHeaderFooterZone(editor, "header", "left", { logo: true });
-  assert.deepEqual(logo.warnings.map((warning) => warning.code), ["unresolved-logo"], "logo: true with no logo is reported");
-  assert.equal(logo.warnings[0].path, "design.header.left.logo");
+  const logo = setHeaderFooterZone(editor, "header", "left", { image: "var:organization.logo.icon" });
+  assert.deepEqual(logo.warnings.map((warning) => warning.code), ["unresolved-logo"], "a logo reference with no logo is reported");
+  assert.equal(logo.warnings[0].path, "design.header.left.image");
   assert.deepEqual(designWarnings(editor.presentation, 0).length, 1);
-  setDesignOption(editor, "organizationLogo", "asset:logo");
+  setOrganizationLogo(editor, "all", "asset:logo");
   assert.deepEqual(designWarnings(editor.presentation, 0), [], "an organization logo resolves it");
-  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "left"), { logo: true });
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "left"), { image: "var:organization.logo.icon" });
   // Removing the last field removes the zone, then the header.
-  setHeaderFooterZone(editor, "header", "left", { logo: false });
+  setHeaderFooterZone(editor, "header", "left", { image: null });
   assert.equal(editor.get("design.header"), undefined);
   // false, null and "" all remove; unknown fields are refused.
   setHeaderFooterZone(editor, "footer", "right", { text: null });
   assert.equal(editor.get("design.footer.right"), undefined);
   assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { sparkle: true }), (error) => error.code === "invalid-design-value");
-  // The 0.16 flags are gone with no alias; the message says what to write instead.
+  // The 0.16 flags and the 0.17 logo flag are gone with no alias; the message says what to write instead.
+  assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { logo: true }), (error) => error.code === "invalid-design-value" && error.message.includes("Unknown header/footer field: logo.") && error.message.includes("var:organization.logo.icon"));
   for (const [key, token] of [["organization", "{{organization.name}}"], ["speaker", "{{speaker.name}}"], ["section", "{{slide.section}}"], ["slideNumber", "{{slide.number}}"], ["slideNumberFormat", "{{deck.slideCount}}"]])
     assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { [key]: key === "slideNumberFormat" ? "{current}" : true }), (error) => error.code === "invalid-design-value" && error.message.includes(`Unknown header/footer field: ${key}.`) && error.message.includes(token), key);
   assert.equal(editor.get("design.footer.right"), undefined, "a refused field changes nothing");
@@ -335,10 +480,10 @@ for (const entry of cases) {
 // Every header/footer part the schema has, per zone: validation, flags, date and format, warnings, export.
 {
   const editor = session();
-  setHeaderFooterZone(editor, "footer", "left", { text: "Acme", logo: true, socials: true });
+  setHeaderFooterZone(editor, "footer", "left", { text: "Acme", socials: true });
   setHeaderFooterZone(editor, "footer", "left", { image: "asset:photo" });
   setHeaderFooterZone(editor, "footer", "right", { text: "Page {{slide.number}} of {{deck.slideCount}}", date: true, dateFormat: "MMMM d, yyyy" });
-  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", logo: true, socials: true, image: "asset:photo" });
+  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", socials: true, image: "asset:photo" });
   assert.deepEqual(editor.get("design.footer.right"), { text: "Page {{slide.number}} of {{deck.slideCount}}", date: true, dateFormat: "MMMM d, yyyy" });
   // A fixed date replaces the current date; false removes a flag or the date.
   setHeaderFooterZone(editor, "footer", "right", { date: "2026-10-01" });
@@ -346,10 +491,11 @@ for (const entry of cases) {
   setHeaderFooterZone(editor, "footer", "right", { date: false, dateFormat: null });
   assert.deepEqual(editor.get("design.footer.right"), { text: "Page {{slide.number}} of {{deck.slideCount}}" });
   setHeaderFooterZone(editor, "footer", "left", { socials: false, image: null });
-  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", logo: true });
+  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme" });
   // Friendly validation before the schema.
   const bad = (fields, pattern) => assert.throws(() => setHeaderFooterZone(editor, "footer", "center", fields), (error) => error.code === "invalid-design-value" && pattern.test(error.message), JSON.stringify(fields));
-  bad({ logo: "yes" }, /logo is true or false/);
+  bad({ logo: true }, /Unknown header\/footer field: logo/);
+  bad({ socials: "yes" }, /socials is true or false/);
   bad({ text: 4 }, /Text is a string/);
   bad({ dateFormat: "  " }, /date format uses tokens/);
   bad({ date: "Autumn", dateFormat: "yyyy" }, /written YYYY-MM-DD/);
@@ -439,6 +585,81 @@ for (const entry of cases) {
   assert.equal(prepareZoneValue(deck(), "footer", "right", "slide.number").changed, true, "prepare computes the patch without a session");
 }
 
+// RR-71: "Insert logo" makes a zone show the organization's logo: its image is a var:organization.logo.<shape> reference, one undoable,
+// validated edit. The preview draws the artwork that suits each slide's background (onLight or onDark).
+{
+  const svgUri = (fill) => `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="${fill}"/></svg>`).toString("base64")}`;
+  const RED = svgUri("#ff0000");
+  const BLUE = svgUri("#0000ff");
+  const GREEN = svgUri("#00ff00");
+  const editor = session({
+    ...deck(),
+    organization: [
+      { id: "acme", name: "Acme", role: "primary" },
+      { id: "beta", name: "Beta", logo: { stacked: GREEN } },
+    ],
+    assets: { ...deck().assets, red: RED, blue: BLUE },
+    slides: [{ ...deck().slides[0], design: { background: "#ffffff" } }, { ...deck().slides[1], design: { background: "#000000" } }, deck().slides[2]],
+  });
+  // The primary organization's icon by default; its logo is not set yet, so the edit works and says so.
+  const first = insertZoneLogo(editor, "footer", "right");
+  assert.deepEqual(first.patches, [{ op: "add", path: "/design/footer", value: { right: { image: "var:organization.logo.icon" } } }]);
+  assert.deepEqual(first.warnings.map((warning) => [warning.code, warning.path]), [["unresolved-logo", "design.footer.right.image"]]);
+  assert.equal(first.option, "footer");
+  assert.equal(first.zone, "right");
+  assert.equal(editor.snapshot().undoDepth, 1, "one undo step");
+  assert.equal(editor.composeSlide(0).furniture.parts.length, 0, "no logo, nothing drawn");
+  // With the logo set the zone draws it, the onLight artwork on a light slide and the onDark artwork on a dark one.
+  setOrganizationLogo(editor, "icon", "asset:red", { background: "onLight" });
+  setOrganizationLogo(editor, "icon", "asset:blue", { background: "onDark" });
+  assert.deepEqual(designWarnings(editor.presentation, 0), []);
+  const partOf = (index) => editor.composeSlide(index).furniture.parts.find((part) => part.field === "image");
+  assert.equal(partOf(0).image, "asset:red");
+  assert.equal(partOf(0).sourcePath, "organization.0.logo.icon.onLight");
+  assert.equal(partOf(1).image, "asset:blue");
+  assert.equal(partOf(1).sourcePath, "organization.0.logo.icon.onDark");
+  assert.equal(partOf(1).reference, "var:organization.logo.icon");
+  assert.ok(svg(editor.presentation, 0).includes(RED) && !svg(editor.presentation, 0).includes(BLUE), "the light slide draws the onLight artwork");
+  assert.ok(svg(editor.presentation, 1).includes(BLUE) && !svg(editor.presentation, 1).includes(RED), "the dark slide draws the onDark artwork");
+  assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs })).byteLength > 0, "the export carries it");
+  // Shapes and organizations: full is the plain reference, a named organization is addressed by id.
+  for (const [shape, image] of [["full", "var:organization.logo"], ["stacked", "var:organization.logo.stacked"], ["icon", "var:organization.logo.icon"], ["wordmark", "var:organization.logo.wordmark"]]) {
+    insertZoneLogo(editor, "header", "left", { shape });
+    assert.equal(editor.get("design.header.left.image"), image, shape);
+  }
+  const beta = insertZoneLogo(editor, "header", "left", { shape: "stacked", organization: "beta" });
+  assert.equal(editor.get("design.header.left.image"), "var:organization.beta.logo.stacked");
+  assert.deepEqual(beta.warnings, [], "beta has the stacked logo");
+  assert.ok(svg(editor.presentation, 0).includes(GREEN), "another organization's logo draws");
+  assert.deepEqual(insertZoneLogo(editor, "header", "left", { shape: "stacked", organization: "beta" }).changed, false, "the same again commits nothing");
+  // It replaces an image the zone had, and Undo brings it back.
+  setHeaderFooterZone(editor, "header", "center", { text: "Draft", image: "asset:photo" });
+  const depth = editor.snapshot().undoDepth;
+  insertZoneLogo(editor, "header", "center");
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "center"), { text: "Draft", image: "var:organization.logo.icon" });
+  assert.equal(editor.snapshot().undoDepth, depth + 1);
+  editor.undo();
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "center"), { text: "Draft", image: "asset:photo" });
+  editor.redo();
+  assert.equal(editor.get("design.header.center.image"), "var:organization.logo.icon");
+  // A slide scope writes the slide's own copy of the footer and leaves the deck alone.
+  const slideScoped = insertZoneLogo(editor, "footer", "left", { slideIndex: 2, shape: "wordmark" });
+  assert.deepEqual(editor.get("slides.2.design.footer"), { right: { image: "var:organization.logo.icon" }, left: { image: "var:organization.logo.wordmark" } });
+  assert.equal(editor.get("design.footer.left"), undefined);
+  assert.equal(slideScoped.scope, "slide");
+  // prepare computes the patch without a session; refusals change nothing.
+  const before = JSON.stringify(editor.presentation);
+  assert.equal(prepareZoneLogo(deck(), "footer", "left").presentation.design.footer.left.image, "var:organization.logo.icon");
+  assert.throws(() => insertZoneLogo(editor, "footer", "left", { shape: "huge" }), (error) => error.code === "invalid-design-value");
+  assert.throws(() => insertZoneLogo(editor, "footer", "left", { organization: "nobody" }), (error) => error.code === "unknown-organization");
+  assert.throws(() => insertZoneLogo(editor, "middle", "left"), (error) => error.code === "invalid-design-value");
+  assert.throws(() => insertZoneLogo(editor, "footer", "top"), (error) => error.code === "invalid-design-value");
+  assert.equal(JSON.stringify(editor.presentation), before);
+  // The zone image is a plain field: clearing it removes the logo.
+  setHeaderFooterZone(editor, "header", "center", { image: null });
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "center"), { text: "Draft" });
+}
+
 // Undo and redo through a sequence keep every step separate.
 {
   const editor = session();
@@ -458,4 +679,4 @@ for (const entry of cases) {
   assert.equal(editor.get("design.footer.center.text"), "Draft");
 }
 
-console.log(`Design options: ${cases.length} options with patch, scope, undo/redo, preview and export; slide scope, shadowing, validation, accent font, watermark and slide image merging, logo variants, header/footer zones and logo warnings.`);
+console.log(`Design options: ${cases.length} options with patch, scope, undo/redo, preview and export; slide scope, shadowing, validation, accent font, watermark and slide image merging, organization logos, the logo choice, header/footer zones, Insert logo and logo warnings.`);

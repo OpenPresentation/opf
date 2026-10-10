@@ -258,10 +258,18 @@ try {
     await settle();
     mark('an accent font survives font scheme changes');
   }
-  await step('logo', async () => { const input = field(design, 'Logo source'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.design.logo === 'asset:logo');
-  await step('logo variant', async () => { await field(design, 'Logo variant').selectOption('light'); const input = field(design, 'Logo source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.logo?.light === 'asset:mark');
-  await field(design, 'Logo variant').selectOption('default');
-  await step('organization logo', async () => { const input = field(design, 'Organization logo (whole presentation) source'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.organization.logo === 'asset:logo');
+  // RR-71: logos live on the organization. One image sets every shape; a shape has its own image, optionally per background.
+  await step('organization logo (one image for every shape)', async () => { const input = field(design, 'Organization logo source'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.organization.logo === 'asset:logo');
+  await step('organization logo shape for a dark background', async () => { await field(design, 'Shape to edit').selectOption('icon'); await field(design, 'Background to edit').selectOption('onDark'); const input = field(design, 'Organization logo source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.organization.logo?.icon?.onDark === 'asset:mark');
+  assert.equal(await field(design, 'Background to edit').isVisible(), true, 'a shape can be split by background');
+  await field(design, 'Background to edit').selectOption('both');
+  await field(design, 'Shape to edit').selectOption('all');
+  assert.equal(await field(design, 'Background to edit').isVisible(), false, 'one image for every shape has no background choice');
+  // The logo covers, sections and bullets draw: the primary organization (unset), a specific organization and shape (a var: string), or none (false).
+  assert.equal(await field(design, 'Logo for covers, sections and bullets').inputValue(), '', 'the primary organization is the default');
+  await step('logo: a specific organization', () => field(design, 'Logo for covers, sections and bullets').selectOption('acme'), current => current.design.logo === 'var:organization.acme.logo');
+  await step('logo: a shape of the primary organization', () => field(design, 'Shape to draw').selectOption('icon'), current => current.design.logo === 'var:organization.logo.icon');
+  await step('logo: none', () => field(design, 'Logo for covers, sections and bullets').selectOption('none'), current => current.design.logo === false);
   assert.equal(await field(design, 'Watermark opacity (0 to 1)').isDisabled(), true, 'the opacity waits for a watermark image');
   await step('watermark', async () => { const input = field(design, 'Watermark source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.watermark === 'asset:mark', { preview: true });
   await field(design, 'Watermark source').fill('asset:mark');
@@ -273,13 +281,18 @@ try {
   await settle();
   // Picture bullets need a logo: without one the panel says so before export.
   await step('picture bullets', () => field(design, 'List bullets').selectOption('image'), current => current.design.listBullet === 'image');
-  assert.match(await error() + await status(), /Picture bullets use the logo/, 'picture bullets without a logo are explained');
+  assert.match(await error() + await status(), /Picture bullets use the organization's icon logo/, 'picture bullets without a logo are explained');
   await page.locator('#design-controls .opf-dc-warnings').first().waitFor({ state: 'attached' });
   mark('picture bullets warn when no logo is set');
-  // Header and footer zones, with the logo warning.
+  // Header and footer zones, with the logo warning (Insert logo writes a var:organization.logo reference as the zone's image).
   await field(design, 'Edit').selectOption('header');
   await field(design, 'Zone').selectOption('left');
-  await step('header logo zone', () => design.getByLabel('Show the logo').check(), current => current.design.header?.left?.logo === true);
+  assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
+  const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
+  await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.left?.image === 'var:organization.logo.icon');
+  await step('header zone: Insert logo, wordmark', async () => { await field(design, 'Logo shape').selectOption('wordmark'); await insertLogo.click(); }, current => current.design.header?.left?.image === 'var:organization.logo.wordmark');
+  await field(design, 'Logo shape').selectOption('icon');
+  assert.equal(await field(design, 'Logo of').isVisible(), false, 'one organization: no organization choice');
   await field(design, 'Edit').selectOption('footer');
   await field(design, 'Zone').selectOption('right');
   await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.right?.text === '{{slide.number}}');
@@ -539,6 +552,84 @@ try {
   await waitDoc(current => current.design.theme === 'classic', 'theme undone');
   assert.equal(await field(design, 'Theme').inputValue(), 'classic', 'the control follows Undo');
   mark('controls follow Undo and Redo');
+
+  // RR-71: several organizations. The logo controls choose whose logo to edit, the logo picker names an organization and shape, Insert logo
+  // takes an organization, and the preview draws the artwork that suits each slide's background.
+  {
+    const svgUri = fill => 'data:image/svg+xml;base64,' + Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="${fill}"/></svg>`).toString('base64');
+    const LIGHT = svgUri('#aa0000');
+    const DARK = svgUri('#00aa00');
+    const BETA = svgUri('#0000aa');
+    const partners = {
+      name: 'Partners',
+      language: 'en-US',
+      organization: [
+        { id: 'acme', name: 'Acme Corp', role: 'primary', logo: { icon: { onLight: LIGHT, onDark: DARK } } },
+        { id: 'beta', name: 'Beta Ltd', logo: BETA },
+      ],
+      design: { theme: 'classic', fontScheme: 'roboto' },
+      slides: [
+        { id: 'light', layout: 'title-subtitle', title: 'Light slide', subtitle: 'Cover', design: { background: '#ffffff' } },
+        { id: 'dark', layout: 'title-subtitle', title: 'Dark slide', subtitle: 'Cover', design: { background: '#000000' } },
+      ],
+    };
+    await button('Source').click();
+    await page.locator('#json').fill(JSON.stringify(partners));
+    await page.waitForFunction(() => !document.querySelector('#apply-json').disabled && !document.querySelector('#json-error').textContent);
+    await button('Apply changes').click();
+    await waitDoc(current => current.name === 'Partners', 'the partners deck');
+    await settle();
+    await page.locator('#tab-design').click();
+    await openAll();
+    await slide(0);
+    // The organization to edit shows only with several organizations; the primary one is the default.
+    const orgPick = field(design, 'Organization to edit');
+    assert.equal(await orgPick.isVisible(), true, 'several organizations: a choice of whose logo to edit');
+    assert.deepEqual(await orgPick.locator('option').evaluateAll(nodes => nodes.map(node => node.textContent)), ['Acme Corp (primary)', 'Beta Ltd']);
+    assert.equal(await orgPick.inputValue(), '0');
+    assert.deepEqual(await design.locator('[data-role="organization-logo"] .opf-dc-summary li').allTextContents(), ['Icon: light backgrounds and dark backgrounds']);
+    await step('beta: one image for every shape', async () => { await orgPick.selectOption('1'); const input = field(design, 'Organization logo source'); await input.fill(DARK); await input.press('Enter'); }, current => current.organization[1].logo === DARK);
+    await orgPick.selectOption('0');
+    // The logo picker: primary, each organization with an id, none; the shape follows.
+    const pick = field(design, 'Logo for covers, sections and bullets');
+    assert.deepEqual(await pick.locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [['', 'Primary organization'], ['acme', 'Acme Corp (primary)'], ['beta', 'Beta Ltd'], ['none', 'None']]);
+    await step('logo: another organization', () => pick.selectOption('beta'), current => current.design.logo === 'var:organization.beta.logo', { preview: true });
+    await pick.selectOption('beta');
+    await waitDoc(current => current.design.logo === 'var:organization.beta.logo', 'logo for the shape and slide scope checks');
+    await settle();
+    assert.equal(await field(design, 'Shape to draw').inputValue(), '');
+    await step('logo: a shape of that organization', () => field(design, 'Shape to draw').selectOption('stacked'), current => current.design.logo === 'var:organization.beta.logo.stacked');
+    // On a slide the picker reads the slide's own setting, and an explicit primary overrides the presentation's.
+    await field(design, 'Applies to').selectOption('slide');
+    assert.equal(await pick.inputValue(), 'beta', 'a slide shows the presentation setting it inherits');
+    assert.ok((await pick.locator('option').allTextContents()).includes("Primary organization (instead of the presentation's setting)"), 'a slide can name the primary organization over the presentation setting');
+    await step('slide logo: the primary organization over the presentation setting', () => pick.selectOption('primary'), current => current.slides[0].design?.logo === 'var:organization.logo' && current.design.logo === 'var:organization.beta.logo');
+    await step('slide logo: none', () => pick.selectOption('none'), current => current.slides[0].design?.logo === false && current.design.logo === 'var:organization.beta.logo');
+    await field(design, 'Applies to').selectOption('deck');
+    await button('Undo').click();
+    await waitDoc(current => current.design.logo === undefined, 'the deck logo undone');
+    await settle();
+    // Insert logo in a zone, with the organization choice; the preview picks onLight or onDark by each slide's background.
+    await field(design, 'Edit').selectOption('footer');
+    await field(design, 'Zone').selectOption('right');
+    const whose = field(design, 'Logo of');
+    assert.equal(await whose.isVisible(), true, 'several organizations: Insert logo takes an organization');
+    assert.deepEqual(await whose.locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [['', 'Primary organization'], ['acme', 'Acme Corp (acme)'], ['beta', 'Beta Ltd (beta)']]);
+    const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
+    await step('Insert logo of another organization', async () => { await whose.selectOption('beta'); await insertLogo.click(); }, current => current.design.footer?.right?.image === 'var:organization.beta.logo.icon');
+    await whose.selectOption('');
+    await insertLogo.click();
+    await waitDoc(current => current.design.footer?.right?.image === 'var:organization.logo.icon', 'the primary organization logo in the footer');
+    await settle();
+    const light = await preview();
+    assert.ok(light.includes(LIGHT) && !light.includes(DARK), 'the light slide draws the onLight artwork');
+    await slide(1);
+    const dark = await preview();
+    assert.ok(dark.includes(DARK) && !dark.includes(LIGHT), 'the dark slide draws the onDark artwork');
+    await button('Undo').click();
+    await waitDoc(current => current.design.footer === undefined, 'the footer logo undone');
+    mark('several organizations: logo editing, the logo picker, Insert logo, and the artwork per slide background');
+  }
 
   assert.deepEqual(errors, []);
   console.log(`Design controls (browser): ${checks.length} checks. ${checks.join('; ')}.`);
