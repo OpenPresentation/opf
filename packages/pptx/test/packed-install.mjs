@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, mkdir, rm, writeFile, readFile, realpath } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, writeFile, readFile, readdir, realpath } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -90,10 +90,12 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
   }
   const registryFixtures=[];
-  // FA-23: the copied tests import test/helpers/default-catalog.mjs, which registers the default catalog the way a host
-  // does; install it next to them, rewritten to the installed package.
+  // FA-23: the copied tests import helpers from test/helpers/ (default-catalog.mjs registers the default catalog the way a
+  // host does; RR-72's master-furniture.mjs reads a slide's layout and master). Install every helper next to them,
+  // rewritten to the installed package, so a new helper cannot be missing from the clean consumer.
   await mkdir(path.join(consumer,'helpers'),{recursive:true});
-  await writeFile(path.join(consumer,'helpers/default-catalog.mjs'),(await readFile(path.join(root,'test/helpers/default-catalog.mjs'),'utf8')).replaceAll("'../../dist/index.js'","'@openpresentation/opf-pptx'"));
+  for(const helper of (await readdir(path.join(root,'test/helpers'))).filter(name=>name.endsWith('.mjs')))
+    await writeFile(path.join(consumer,'helpers',helper),(await readFile(path.join(root,'test/helpers',helper),'utf8')).replaceAll("'../../dist/index.js'","'@openpresentation/opf-pptx'"));
   for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','media-placeholder.mjs','layout-intent.mjs','chart-cache-import.mjs','zip-date.mjs','native-text-whitespace.mjs','native-underline.mjs','native-body-rich-text.mjs','engine-text-weights.mjs']){
     const shared=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
