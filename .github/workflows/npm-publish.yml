@@ -104,14 +104,8 @@ jobs:
           VERSION="$(echo "${GITHUB_REF_NAME}" | sed -E 's/^(opf-v|@openpresentation\/opf@v)//')"
           NOTES_FILE="$(mktemp)"
 
-          awk -v ver="## ${VERSION}" '
-            $0 == ver { found=1; next }
-            /^## / { if (found) exit }
-            found { print }
-          ' CHANGELOG.md > "${NOTES_FILE}"
-
-          # Trim leading/trailing blank lines.
-          sed -i -e '/./,$!d' -e ':a' -e '/^\n*$/{$d;N;ba' -e '}' "${NOTES_FILE}"
+          # Matches `## X.Y.Z` and `## X.Y.Z (date)`, the form the changelog assembler writes.
+          node scripts/release-notes.mjs --version "${VERSION}" --out "${NOTES_FILE}"
 
           if [ ! -s "${NOTES_FILE}" ]; then
             echo "See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/CHANGELOG.md) for details." > "${NOTES_FILE}"
