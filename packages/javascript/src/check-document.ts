@@ -468,6 +468,7 @@ const HELP: Record<string, string> = {
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
+	'slide-size-out-of-range': 'Use a custom widthInches and heightInches between 1 and 56, or a preset. PowerPoint stores the slide size in 914400 to 51206400 EMU per side.',
 };
 
 /**

@@ -84,8 +84,12 @@ size, and changing `letter`, `a4` or `16:9` now would move every existing deck a
 - A deck whose slides resolve to different sizes (a slide-level theme with other `dimensions`) fails export with
   `mixed-slide-dimensions`, and `validate` warns first with `opf/slide-theme-dimensions`.
 - ECMA-376 limits `cx` and `cy` to 914,400 to 51,206,400 EMU (1 to 56 in). The OPF schema only requires a positive
-  size, and neither `validate` nor the exporter checks this range, so a custom size outside 1 to 56 in writes a
-  `p:sldSz` that does not conform to the standard.
+  size, so `validate` warns with `opf/slide-size-out-of-range` (a `format` warning, so `valid` does not change) when
+  the deck's custom size has a side outside that range. It reads `design.dimensions`, or the resolved theme's
+  `dimensions` when the deck sets none, and converts inches to EMU the way the exporter does
+  (`Math.round(inches x 914400)`), so exactly 1 in and 56 in pass. The presets are all in range. The exporter does not
+  check the range: it still writes the `p:sldSz` it is given, which does not conform to the standard when the size is
+  outside 1 to 56 in. Run `validate` first; PowerPoint's own behaviour at the limits was not measured.
 
 ## Import from PPTX
 
