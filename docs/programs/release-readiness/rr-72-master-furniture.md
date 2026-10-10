@@ -1,8 +1,10 @@
 # RR-72: PowerPoint master furniture
 
 PowerPoint part of design §3 of `0.18-consistent-api.md`, after RR-71 ([rr-71-logos.md](rr-71-logos.md)). The implementation is in
-opf-pptx (`src/master-furniture.js`, documented in its `docs/native-header-footer.md`, "Master furniture"). Core is unchanged:
-no schema, composition or golden change. Every decision below is an agent decision, vetoable; each says what changing it would cost.
+opf-pptx (`src/master-furniture.js`, documented in its `docs/native-header-footer.md`, "Master furniture"). Core's packages are
+unchanged (no schema, composition or golden change); two installed checks that read slide XML now also read the furniture a slide
+shows from its layout and master (`scripts/test-furniture-fields-browser.mjs`, `scripts/fixtures/renderer-absent-furniture.mjs`).
+Every decision below is an agent decision, vetoable; each says what changing it would cost.
 
 ## The rule
 
