@@ -12,6 +12,7 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 - [Validate](https://github.com/OpenPresentation/opf/blob/main/docs/validate.md): the one checker, `validate` and `opf validate`: rules by category, options, config, fixes and cost
 - [Content payloads](https://github.com/OpenPresentation/opf/blob/main/docs/content-payloads.md): payload shapes and inference rules
 - [Design resolution](https://github.com/OpenPresentation/opf/blob/main/docs/design-resolution.md): design precedence algorithm with worked examples
+- [Slide sizes](https://github.com/OpenPresentation/opf/blob/main/docs/slide-sizes.md): every `design.dimensions` preset in inches, points and EMU, compared with PowerPoint's slide-size presets
 - [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
 - [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
 - [Stats](https://github.com/OpenPresentation/opf/blob/main/docs/stats.md): neutral facts about a deck (`stats()`, `opf stats`): slides, words, notes, images, charts, tables, assets, fonts, an estimated speaking time

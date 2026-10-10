@@ -280,7 +280,7 @@ _No named properties._
 
 - Type: `enum:16:9 | 4:3 | 16:10 | 1:1 | 4:5 | 9:16 | letter | a4 | widescreen | standard`
 - Required fields: none
-- Purpose: Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size. The social-feed ratios keep the widescreen short edge of 7.5 in: 1:1 is 7.5 x 7.5 in, 4:5 is 7.5 x 9.375 in and 9:16 is 7.5 x 13.333 in (portrait).
+- Purpose: Named preset; sets aspect ratio and physical size. 16:9 ('widescreen'): 13.333 x 7.5 in, PowerPoint's Widescreen. 4:3 ('standard'): 10 x 7.5 in. 16:10: 10 x 6.25 in. letter (11 x 8.5 in) and a4 (11.69 x 8.27 in) are paper sizes, not PowerPoint's Letter Paper or A4 Paper. 1:1, 4:5 and 9:16 are 7.5 in on the short edge.
 
 _No named properties._
 
@@ -289,7 +289,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Slide dimensions; either pick a preset or specify custom inches.
+- Purpose: Slide dimensions: a preset, or custom inches that override it. PowerPoint's Letter Paper (10 x 7.5 in), A4 Paper (10.8333 x 7.5 in) and On-screen Show (16:9) (10 x 5.625 in) are not OPF presets; use widthInches and heightInches. docs/slide-sizes.md compares every preset.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
