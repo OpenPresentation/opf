@@ -8,7 +8,7 @@ import {loadConverter} from './converters.js';
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const DEFAULT_RASTER_SCALE = 1;
 const DEFAULT_RASTER_BACKGROUND = "#FFFFFF";
-let bundledFontFilesCache=null;
+let bundledFontsCache=null;
 
 // The faces a raster or PDF conversion draws with (RR-74: one `fonts`). The fonts handle (`loadFonts()` from `/fonts-node`) gives its
 // `fontFiles`, whether the bundled base faces are added (`useBundledFonts`, default true; a Node handle already holds its own, so it
@@ -82,12 +82,16 @@ async function vectorPdf(inputs, options) {
     ...(settings.useBundledFonts ? await bundledFontFiles() : []),
     ...settings.fontFiles
   ];
+  // opf-render#188: the runs are shaped by HarfBuzz, as the browser shapes them, through the fonts handle's shaper (or that of
+  // the bundled handle the conversion draws with); fontkit shapes them when neither has one.
+  const shape = options.fonts?.outlines?.shape ?? (settings.useBundledFonts ? (await bundledFonts()).outlines?.shape : undefined);
   const svgs = [];
   for (const input of inputs) svgs.push(await prepareRasterImages(normalizeSvgInput(input)));
   const {svgsToVectorPdf} = await import("./pdf-vector.js");
   return svgsToVectorPdf(svgs, {
     fontFiles,
     fontDirs: settings.fontDirs,
+    shape,
     defaultFontFamily: options.defaultFontFamily ?? "Roboto",
     sansSerifFamily: options.sansSerifFamily ?? options.defaultFontFamily ?? "Roboto",
     monospaceFamily: options.monospaceFamily ?? "Roboto Mono",
@@ -177,18 +181,18 @@ const loadResvg = () => loadConverter("@resvg/resvg-js");
 const loadPdfLib = () => loadConverter("pdf-lib");
 
 async function bundledFontFiles() {
-  if (!bundledFontFilesCache) {
-    bundledFontFilesCache = resolveBundledFontFiles().catch(error => {
-      bundledFontFilesCache = null;
+  return (await bundledFonts()).fontFiles;
+}
+
+// The bundled base handle (`loadFonts()`), loaded once: its font files, and its shaper for the vector PDF.
+function bundledFonts() {
+  if (!bundledFontsCache) {
+    bundledFontsCache = import('./fonts-node.js').then(({loadFonts}) => loadFonts()).catch(error => {
+      bundledFontsCache = null;
       throw error;
     });
   }
-  return bundledFontFilesCache;
-}
-
-async function resolveBundledFontFiles() {
-  const {loadFonts} = await import('./fonts-node.js');
-  return (await loadFonts()).fontFiles;
+  return bundledFontsCache;
 }
 
 function normalizeSvgInput(value) {

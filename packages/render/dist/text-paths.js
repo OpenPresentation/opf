@@ -96,7 +96,7 @@ export function outlineSlideText(content, { library, shaper, rootStyle = {}, rep
     defaults: [],
     splitByOwner: true,
     // HarfBuzz, the browser's shaper, when the handle carries one (RR-64 phase 2); fontkit otherwise.
-    ...(shaper ? { shape: (face, text, options) => shaper.shape(face.hash, face.data, text, { ...options, language: options.lang }) } : {}),
+    ...(shaper ? { shape: harfBuzzShape(shaper) } : {}),
     // The renderer reports its own font substitutions and missing glyphs while it lays the slide out.
     diagnostic: () => {},
     missing: () => {},
@@ -326,5 +326,17 @@ export function textOutlines(fonts) {
       if (!library) throw options.fail("text-as-paths-needs-fonts", 'text: "paths" needs font faces to outline: pass the handle loadFonts() returns as `fonts`.');
       return outlineSlideText(content, { ...options, library, shaper: fonts.shaper });
     },
+    // opf-render#188: the vector PDF shapes its runs with the same HarfBuzz. Each character stays with the glyph it became (cluster
+    // level 2: a mark, a reordered vowel sign), so the PDF's glyph-to-Unicode map and /ActualText spans give the text as before;
+    // the glyphs and positions are the outlines'.
+    ...(fonts.shaper ? { shape: harfBuzzShape(fonts.shaper, { clusterLevel: 2 }) } : {}),
   });
+}
+
+/**
+ * A layoutText `env.shape` over a HarfBuzz shaper (hb-shape.js), for faces of a FontLibrary (keyed by their content hash).
+ * HarfBuzz takes the BCP 47 tag (`lang`); fontkit the OpenType language system (`language`).
+ */
+function harfBuzzShape(shaper, { clusterLevel } = {}) {
+  return (face, text, options) => shaper.shape(face.hash, face.data, text, { ...options, language: options.lang, clusterLevel });
 }

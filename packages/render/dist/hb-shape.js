@@ -70,8 +70,13 @@ function shaperOver(instance, state) {
     return font;
   };
   return {
-    /** Shape `text` with the face (`key` names it, `data` is its bytes); `features` is an object of OpenType feature booleans. */
-    shape(key, data, text, { direction = "ltr", language, features } = {}) {
+    /**
+     * Shape `text` with the face (`key` names it, `data` is its bytes); `features` is an object of OpenType feature booleans.
+     * `clusterLevel` is HarfBuzz's cluster level (0 by default: a mark joins its base's cluster and a reordered syllable is one
+     * cluster; 2 keeps each character with the glyph it became). It changes only which glyph carries which characters, never the
+     * glyphs or their positions.
+     */
+    shape(key, data, text, { direction = "ltr", language, features, clusterLevel } = {}) {
       const font = fontFor(key, data);
       const buffer = hb.hb_buffer_create();
       const units = text.length, textPointer = hb.malloc(units * 2 + 2);
@@ -81,6 +86,7 @@ function shaperOver(instance, state) {
       try {
         hb.hb_buffer_add_utf16(buffer, textPointer, units, 0, units);
         hb.hb_buffer_set_direction(buffer, HB_DIRECTION[direction] ?? HB_DIRECTION.ltr);
+        if (clusterLevel) hb.hb_buffer_set_cluster_level(buffer, clusterLevel);
         if (language) { const tag = string(language); allocated.push(tag.pointer); hb.hb_buffer_set_language(buffer, hb.hb_language_from_string(tag.pointer, tag.length)); }
         hb.hb_buffer_guess_segment_properties(buffer);
         const entries = Object.entries(features ?? {});
@@ -102,12 +108,16 @@ function shaperOver(instance, state) {
           const info = infos + index * INFO_SIZE, position = positions + index * POSITION_SIZE;
           glyphs.push({ gid: data32.getUint32(info, true), cluster: data32.getUint32(info + 8, true), advance: data32.getInt32(position, true), xOffset: data32.getInt32(position + 8, true), yOffset: data32.getInt32(position + 12, true) });
         }
-        // The characters of each cluster go to its first glyph in output order; later glyphs of the cluster carry none.
+        // The characters of each cluster go to one of its glyphs: the first in logical order (output order, reversed right to left)
+        // that advances the pen, else the first; its other glyphs carry none (a mark or dot the font split off a letter).
         const starts = [...new Set(glyphs.map((glyph) => glyph.cluster))].sort((a, b) => a - b);
-        const seen = new Set();
+        const carriers = new Map();
+        for (const glyph of direction === "rtl" ? [...glyphs].reverse() : glyphs) {
+          const carrier = carriers.get(glyph.cluster);
+          if (!carrier || (carrier.advance === 0 && glyph.advance !== 0)) carriers.set(glyph.cluster, glyph);
+        }
         for (const glyph of glyphs) {
-          if (seen.has(glyph.cluster)) { glyph.codePoints = []; continue; }
-          seen.add(glyph.cluster);
+          if (carriers.get(glyph.cluster) !== glyph) { glyph.codePoints = []; continue; }
           const end = starts[starts.indexOf(glyph.cluster) + 1] ?? units;
           glyph.codePoints = [...text.slice(glyph.cluster, end)].map((character) => character.codePointAt(0));
         }

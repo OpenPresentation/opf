@@ -57,7 +57,14 @@ export interface RenderFonts {
 /** Cuts an embedded face to code points (RR-65), with hb-subset; a face whose license, Reserved Font Name or fsType does not allow it keeps its own data URL. */
 export interface FontSubsets { subsetDataUrl(font: EmbeddedFont, codePoints: Iterable<number>): string }
 /** Draws a slide's text as glyph outlines (RR-64). Read by `toSvg`; hosts pass the handle and `text: "paths"`. */
-export interface TextOutlines { outlineSlideText(content: string[], options: object): { content: string[]; defs: string } }
+export interface TextOutlines {
+  outlineSlideText(content: string[], options: object): { content: string[]; defs: string };
+  /**
+   * HarfBuzz shaping of one run of a face (opf-render#188), present when the handle has the shaper (the Node handle always, a browser
+   * handle with `shapeWasm`). Read by `toPdf`, which then shapes the vector PDF's text as the browser shapes it; fontkit otherwise.
+   */
+  shape?(face: { hash: string; data: Uint8Array }, text: string, options?: { direction?: "ltr" | "rtl"; lang?: string; features?: Record<string, boolean> }): { gid: number; codePoints: number[]; advance: number; xOffset: number; yOffset: number }[];
+}
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
 export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[] }
 /** The fonts handle `loadFonts()` returns from `/fonts-node` and `/fonts-browser`: pass it as `{ fonts }` to every deck-level function. */

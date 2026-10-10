@@ -63,6 +63,8 @@ export async function toPdf(source, slides, options) {
   return svgsToVectorPdf(inputs, {
     fontFiles: [], fontDirs: [],
     fontData: [...(options.fonts?.registry?.exportFaces?.() ?? []), ...(Array.isArray(options.fontData) ? options.fontData : [])],
+    // opf-render#188: shaped by HarfBuzz when the handle has the shaper (`shapeWasm`); fontkit otherwise.
+    shape: options.fonts?.outlines?.shape,
     imageCodec: canvasImageCodec(),
     defaultFontFamily: options.defaultFontFamily ?? "Roboto",
     sansSerifFamily: options.sansSerifFamily ?? options.defaultFontFamily ?? "Roboto",

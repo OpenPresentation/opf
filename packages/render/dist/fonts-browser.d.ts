@@ -88,8 +88,9 @@ export declare function loadFonts(
      */
     subsetWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
     /**
-     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `text: "paths"` shapes outlines with
-     * HarfBuzz, as the browser shapes text; without it a browser handle shapes them with fontkit (the Node handle always uses HarfBuzz).
+     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `text: "paths"` shapes outlines, and
+     * `toPdf` the vector PDF's text, with HarfBuzz, as the browser shapes text; without it a browser handle shapes them with fontkit (the
+     * Node handle always uses HarfBuzz).
      */
     shapeWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
     crypto?: { subtle: SubtleCrypto };

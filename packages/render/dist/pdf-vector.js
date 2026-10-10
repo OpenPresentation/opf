@@ -81,6 +81,8 @@ class Converter {
     this.env = {
       fonts: this.fonts,
       defaults: this.defaults,
+      // opf-render#188: HarfBuzz, the browser's shaper, from the fonts handle (`fonts.outlines.shape`); fontkit without one.
+      ...(typeof options.shape === "function" ? { shape: options.shape } : {}),
       diagnostic: (d) => this.diagnostic(d),
       // A feature the PDF cannot give: reported once per character and family, fatal under `strict`.
       missing: (d) => {
@@ -797,16 +799,24 @@ class Converter {
         // The text object starts at the glyph's natural position (PDFium merges an /ActualText span across adjacent objects only),
         // and the font's horizontal placement is a leading adjustment inside it.
         const shift = glyph.xOffset ? [num(-glyph.xOffset * 1000 / upem, 3)] : [];
-        operations.push({ at: [run.x + run.scaleX * penBefore, run.y - glyph.yOffset * scale], items: [...shift, `<${code}>`] });
+        // A glyph shown alone only because it follows a placed one keeps the baseline (the glyphs after it continue on its line).
+        operations.push({ at: [run.x + run.scaleX * penBefore, run.y - (placed ? glyph.yOffset * scale : 0)], items: [...shift, `<${code}>`] });
         current = null;
-        pending = 0;
+        // After a glyph that is not itself placed, the text continues from it: what its shaped advance (and its placement)
+        // differs from the font's width moves the next glyph (opf-render#188: a zero-width joiner after a mark put the rest of
+        // the run its nominal width off). After a placed glyph the next one is placed by its own Td.
+        pending = placed ? 0 : nominal - shaped + glyph.xOffset * 1000 / upem;
         placedBefore = placed;
         return;
       }
       if (current === null) { current = { items: [] }; operations.push(current); }
+      // A small horizontal placement (at most the threshold above) moves the glyph inside the TJ array and back after it
+      // (opf-render#188: it was dropped, which put an Arabic or Telugu glyph up to 0.025 em off).
+      const shift = glyph.xOffset * 1000 / upem;
+      pending -= shift;
       addNumber();
       hex += code;
-      pending += nominal - shaped;
+      pending += nominal - shaped + shift;
     };
     // Each unit is a glyph, or for a left-to-right run the glyph map cannot give back (reordered Indic or Khmer clusters, a
     // no-break space) a cluster of glyphs. A unit whose text the map cannot give carries it as /ActualText, one span per

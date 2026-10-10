@@ -7,8 +7,8 @@ import { attributesOf, inheritStyle, parseFontFamilies, parseFontWeight, parseLe
 // SVG text layout for the vector PDF export (RR-12): the renderer has already decided every line, position and
 // width (x, y, text-anchor, textLength), so this module only turns that into positioned glyph runs: text chunks,
 // the Unicode bidirectional algorithm (the SVG carries directional isolates around right-to-left paragraphs),
-// per-character font fallback, OpenType shaping with fontkit and textLength adjustment. It never wraps, shrinks
-// or truncates text.
+// per-character font fallback, OpenType shaping (HarfBuzz through `env.shape` when the fonts handle has it, fontkit
+// otherwise) and textLength adjustment. It never wraps, shrinks or truncates text.
 
 const bidi = bidiFactory();
 const IGNORED = /[⁦-⁩‎‏‪-‮؜]/u;
@@ -245,8 +245,8 @@ function shapeRun(run, env) {
   const size = parseFloat(style["font-size"]) || 16;
   const direction = run.level % 2 === 1 ? "rtl" : "ltr";
   const language = openTypeLanguage(style.lang ?? style["xml:lang"]);
-  // RR-64: outlined text is shaped by HarfBuzz (env.shape), the browser's shaper; the vector PDF keeps fontkit.
-  // HarfBuzz takes the BCP 47 tag (`lang`); fontkit the OpenType language system (`language`).
+  // RR-64, opf-render#188: outlined text and the vector PDF are shaped by HarfBuzz (env.shape), the browser's shaper, when the
+  // fonts handle carries it; fontkit otherwise. HarfBuzz takes the BCP 47 tag (`lang`); fontkit the OpenType language system (`language`).
   const glyphs = (env.shape ?? shape)(run.face, run.text, { features: featuresOf(style), language, lang: style.lang ?? style["xml:lang"], direction });
   const scale = size / run.face.upem;
   const letterSpacing = parseLength(style["letter-spacing"], { fontSize: size }) ?? 0;
