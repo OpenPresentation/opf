@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { PassThrough } from 'node:stream';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { selectChecks } from './run-checks.mjs';
-import { biomeBatches, buildPlan, formatTable, matches, referencedPaths, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
+import { biomeBatches, buildPlan, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
@@ -85,4 +87,39 @@ test('biomeBatches keeps every file, in order, within the command-line budget', 
   assert.deepEqual(biomeBatches(['a.ts', 'b.ts']), [['a.ts', 'b.ts']], 'a short list is one batch');
   assert.deepEqual(biomeBatches([]), [], 'no files, no batch');
   assert.deepEqual(biomeBatches(['x'.repeat(50)], 10), [['x'.repeat(50)]], 'an over-long single path still runs on its own');
+});
+
+// #525: check:changed spawned its steps through cmd.exe on Windows, which splits an unquoted "C:\Program Files\..." at the space.
+test('#525: a step runs with a space in the executable, the script path, the arguments and the working directory', async (t) => {
+  const parent = mkdtempSync(path.join(tmpdir(), 'opf-check-changed-'));
+  t.after(() => rmSync(parent, { recursive: true, force: true }));
+  const dir = path.join(parent, 'a folder with spaces');
+  mkdirSync(dir);
+  const script = path.join(dir, 'print args.mjs');
+  writeFileSync(script, 'process.stdout.write(JSON.stringify([process.cwd(), ...process.argv.slice(2)]));');
+  const run = async (argv) => {
+    const log = new PassThrough();
+    let text = '';
+    log.on('data', (chunk) => {
+      text += chunk;
+    });
+    const status = await runCommand(argv, dir, log);
+    return { status, text };
+  };
+  const printed = await run([process.execPath, script, 'one arg', 'two']);
+  assert.equal(printed.status, 0, printed.text);
+  assert.deepEqual(JSON.parse(printed.text), [realpathSync.native(dir), 'one arg', 'two']);
+  const pnpm = await run(['pnpm', '--version']);
+  assert.equal(pnpm.status, 0, pnpm.text);
+  assert.match(pnpm.text.trim(), /^\d+\.\d+\.\d+/);
+  const missing = await run([path.join(dir, 'no such program')]);
+  assert.notEqual(missing.status, 0);
+});
+
+test('#525: the plan names pnpm bare, so the launcher (not a .cmd shim path) decides how to start it', () => {
+  const plan = buildPlan(['packages/javascript/src/index.ts'], { ...env, needsInstall: true });
+  const argvs = plan.flatMap((step) => (step.commands ?? []).map((command) => command.argv));
+  assert.ok(argvs.some((argv) => argv[0] === 'pnpm'));
+  assert.ok(argvs.some((argv) => argv.includes('pnpm') && argv.some((part) => part.endsWith('agent-slot.mjs'))));
+  for (const argv of argvs) assert.ok(!argv.some((part) => /\.cmd$/i.test(part)), argv.join(' '));
 });
