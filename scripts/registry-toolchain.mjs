@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { readFile, realpath, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
@@ -29,6 +30,16 @@ export async function registryToolchain() {
   const resolver = path.join(consumer, 'asset-resolver.mjs');
   await writeFile(resolver, 'export const resolve = specifier => import.meta.resolve(specifier);\n');
   const { resolve } = await import(pathToFileURL(resolver).href);
+  // RR-20 (core 0.18): core's root export is conditional (node: the full build, browser: dist/browser.js). import.meta.resolve takes
+  // the node condition, so a browser bundle takes the subpath's `browser` entry instead, as a browser host's bundler does.
+  const browserEntry = (specifier) => {
+    const match = /^(@openpresentation\/[a-z-]+)(\/.*)?$/.exec(specifier);
+    if (!match) return null;
+    let manifestPath;
+    try { manifestPath = fileURLToPath(resolve(`${match[1]}/package.json`)); } catch { return null; }
+    const entry = JSON.parse(readFileSync(manifestPath, 'utf8')).exports?.[`.${match[2] ?? ''}`];
+    return entry && typeof entry === 'object' && typeof entry.browser === 'string' ? path.join(path.dirname(manifestPath), entry.browser) : null;
+  };
   return {
     consumer, packages, verificationRefs: plan.verificationRefs, exampleRefs: plan.exampleRefs,
     import: (specifier) => import(resolve(specifier)),
@@ -42,8 +53,8 @@ export async function registryToolchain() {
           if (UNEXPORTED_EDITOR_MODULES.includes(specifier)) {
             return { path: path.join(path.dirname(fileURLToPath(resolve('@openpresentation/opf-editor'))), `${specifier.split('/').pop()}.js`) };
           }
-          return { path: fileURLToPath(resolve(browser && specifier === '@openpresentation/opf-render'
-            ? '@openpresentation/opf-render/svg' : specifier)) };
+          if (browser && specifier === '@openpresentation/opf-render') return { path: fileURLToPath(resolve('@openpresentation/opf-render/svg')) };
+          return { path: (browser && browserEntry(specifier)) || fileURLToPath(resolve(specifier)) };
         });
       },
     }),
