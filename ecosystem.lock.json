@@ -3,10 +3,10 @@
   "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
   "version": 1,
   "repositories": {
-    "opf": { "sha": "6ef8806fe24829843d19257e3963af2de9c8e7ea" },
-    "opf-render": { "sha": "60e95dbd69691e249a8a6fc73495e3612f4acb0b" },
-    "opf-pptx": { "sha": "d7ae170314b246c5ea3d604b394c4723d69644bf" },
-    "opf-editor": { "sha": "d06b97b3ee51245eba1dff3bcd8335e70e7f2561" }
+    "opf": { "sha": "916eb65e8ca720a58d34bfcfaabbeb025520b50a" },
+    "opf-render": { "sha": "c9a8536777c4fb879c3213c1c373b1c59aba79b4" },
+    "opf-pptx": { "sha": "5b6c793ba0f91bd5ac21c0c6eef0091ec3760fa1" },
+    "opf-editor": { "sha": "1d8f63ced8bcf659a9c6750acfa03922abe58d7d" }
   },
   "golden": {
     "repository": "opf",
@@ -15,8 +15,8 @@
   },
   "provenance": {
     "source": "roller",
-    "at": "2026-10-10T12:09:14Z",
-    "run": "https://github.com/OpenPresentation/opf/actions/runs/38050910866",
-    "note": "Rolled to the four main branches (opf 6ef8806, opf-render 60e95db, opf-pptx d7ae170, opf-editor d06b97b); moved: opf, opf-render, opf-pptx, opf-editor."
+    "at": "2026-10-10T23:40:17Z",
+    "run": "https://github.com/OpenPresentation/opf/actions/runs/38095816778",
+    "note": "Rolled to the four main branches (opf 916eb65, opf-render c9a8536, opf-pptx 5b6c793, opf-editor 1d8f63c); moved: opf, opf-render, opf-pptx, opf-editor."
   }
 }
