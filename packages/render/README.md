@@ -598,6 +598,41 @@ Classic chart previews keep finite axis coordinates for subnormal values and val
 
 Category-axis labels follow PowerPoint's automatic labelling instead of wrapping inside a band (column, bar, line and area charts, including stacked and 100%, and the chartex histogram, pareto, waterfall, funnel and box-and-whisker previews). A label is never broken inside a word: it stays on one line, or splits at its spaces onto two lines when a band is too narrow, so `Category 1` cannot become `Ca` over `t 1`. When the labels do not fit horizontally they turn to -45 degrees, then -90 degrees (the plot area shrinks to make room, by at most 40% of the chart height, and a slanted first label must stay inside the chart), and when even that collides the axis draws every n-th label (Office's automatic `tickLblSkip`): n is the smallest interval that leaves no two drawn labels overlapping, the first label is always drawn, and ties go to the less rotated arrangement. In horizontal bar charts and funnels, where the category axis is vertical, rows shorter than a line of text are skipped the same way, and the label gutter grows with the longest label up to 30% of the chart width. Only a label wider than that gutter (or wider than the whole chart on a horizontal axis) is ellipsized, and then the renderer reports one `chart-label-truncated` diagnostic per chart with the affected label paths in `labels`; nothing is shortened silently, and no arrangement raises `text-overflow` for an axis label. Radar spoke labels use the same one-line, two-line or ellipsis rule and leave out a spoke label that would collide with one already drawn. Rotated labels are wrapped in a `<g transform="rotate(...)">` around their usual text group, so the traced `data-opf-box-*` attributes describe the unrotated box. PowerPoint applies its own automatic rotation and skip to the exported chart: opf-pptx writes an automatic axis text body (`<a:bodyPr/>`, no `rot`) and no `tickLblSkip` for these axes, so nothing forces a wrap, and the preview and the export make the same kind of choice, not identical ones (the export uses 9 pt labels, the preview the readability floor).
 
+## Long-lived workers: measured memory and latency (opf-render#171)
+
+A render or export service keeps one fonts handle per worker process and reuses it ("load fonts once per worker"). `npm run bench:soak` (`scripts/soak.mjs`; manual or scheduled, never part of the default CI gate) measures that pattern. Each worker process holds one `loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'auto' })` handle for its whole life, blocks the network (a guard counts and refuses any attempt) and repeats jobs: `fonts.ensure(deck)`, `toSvg`, `toPng` of those SVGs and `toPptx` (opf-pptx 0.18.0, which is not a dependency of this package: `npm install --no-save @openpresentation/opf-pptx@0.18.0` and run with `--link-renderer`, since opf-pptx imports the renderer as an optional peer; without opf-pptx the PPTX leg is skipped). The jobs take the 127 core example decks in rotation (5 jobs in 6) and a 30-slide script deck built from the script corpora (every sixth job; one slide per script from Latin to Tibetan, with CJK, Arabic and Indic text, so `ensure` loads the script faces), 500 jobs per worker at concurrency 1 and 4. Memory is sampled after every job following a forced garbage collection (`heapUsed`, the retained heap, and `rss`).
+
+Measured 2026-10-10 on an AMD Ryzen 7 9700X (8 cores, 16 threads), 31.6 GiB RAM, Windows 11 (10.0.26200), Node 24.21.0, opf-render 0.18.0 and opf-pptx 0.18.0, on a desktop that other programs also use (an earlier concurrency 1 run overlapped with other load, took twice as long per job and gave the same memory and determinism results; the numbers below are its rerun on a quieter machine). These are measurements, not an SLO; Linux and other hardware will differ.
+
+| | Concurrency 1 | Concurrency 4 (500 jobs per worker) |
+| --- | ---: | ---: |
+| Jobs / slides | 500 / 5,191 | 2,000 / 20,583 |
+| Wall time | 13.2 min | 19.0 min |
+| Throughput | 0.63 jobs/s, 6.6 slides/s | 1.75 jobs/s, 18.0 slides/s |
+| `toSvg` per job, p50 / p95 | 0.90 s / 1.11 s | 1.28 s / 1.85 s |
+| `toPng` of the SVGs per job, p50 / p95 | 0.37 s / 1.41 s | 0.48 s / 2.30 s |
+| `toPptx` per job, p50 / p95 | 0.09 s / 0.24 s | 0.15 s / 0.39 s |
+| Whole job, p50 / p95 / max | 1.36 s / 2.72 s / 6.1 s | 1.93 s / 4.34 s / 8.4 s |
+| RSS after warm-up, median per worker | 1,030 MiB | 1,021 to 1,035 MiB |
+| RSS after warm-up, highest sample | 1,774 MiB | 1,766 to 1,785 MiB |
+| Peak RSS of the process | 1,895 MiB | 1,892 to 1,901 MiB |
+| Retained heap after GC, median / highest | 230 / 233 MiB | 230 to 231 / 232 to 233 MiB |
+| Fonts handle load (once per worker) | 0.10 s | 0.21 to 0.25 s |
+
+- **Latency.** A job is one whole deck (a core example has at most 10 slides, the script deck 30), so the p95 is the script deck and the largest examples. Per slide, the steady-state p50 at concurrency 1 is 0.15 s for `toSvg` (which embeds a HarfBuzz subset of every face the slide draws), 0.04 s for the PNG and 0.01 s for the PPTX; the script deck takes about 2.7 s a job against 1.3 s for an example. Four workers on 16 threads give 2.8 times the throughput of one (70 % scaling); each worker is about 1.4 times slower than alone. Latency does not drift upward: each job's time over the median of its own deck moves by +6 % at most across the steady-state window (the criterion flags 10 %; it settles by job 250), and falls about 30 % in the four-worker run as V8 tiers up.
+- **Memory.** The heap grows while the process warms up (104 MiB after the first job, 215 MiB after 25 jobs, 227 MiB after 125) and plateaus at 230 to 231 MiB from job 200 on, in every worker. RSS has no trend: it swings between about 0.8 and 1.8 GiB with the PNG and script-deck jobs, because the allocator returns and re-takes large buffers. Over the steady state (jobs 125 to 500) the Theil-Sen slope of RSS is 4 to 15 MiB per 100 jobs with a Mann-Kendall z of 0.9 to 2.3 (the test needs z of 3.29 and a rise of at least 5 % of the median or 16 MiB; the largest rise was 55 MiB of 1,035 MiB), and the retained heap rises 2.3 to 2.5 MiB while it settles (z is high, the rise is far below the threshold). So **no worker shows monotonic growth of RSS or of the retained heap** after the 125-job warm-up, and the data give no reason for a recycle-after-N. Provision for the peak, not the median: **about 2 GiB of RSS per worker** when script-heavy decks are in the mix (the median is about 1 GiB; every handle held 190 font files at the end, because the script faces, once loaded, stay until the handle is dropped). An operator who wants a safety net can recycle a worker after a few thousand jobs; the cost is the 0.1 to 0.25 s font load plus the warm-up.
+- **Determinism.** Every deck came round about four times per worker. All 384 (deck, operation) outputs (the SVG and PNG of every slide, and the PPTX) were byte-identical on every repeat: 1,116 repeat observations at concurrency 1, 5,616 across the four workers at concurrency 4 (workers meet each deck at different points of their own history), and the two concurrency levels produce the same hashes. No network call was made. This covers the 127 example decks and the script deck; for them, no output depended on earlier renders in the same process (the measured-width dependence reported in #125 does not appear).
+
+The report (JSON with the per-job records and memory series) and a Markdown summary with the Node version, CPU and RAM go to the git-ignored `artifacts/soak/`; the criterion for monotonic growth is defined in the header of the script.
+
+```sh
+npm ci
+npm install --no-save @openpresentation/opf-pptx@0.18.0   # optional: without it the PPTX leg is skipped
+npm run build
+npm run bench:soak -- --link-renderer                       # 500 jobs per worker at concurrency 1 and 4 (about 35 minutes)
+npm run bench:soak -- --iterations 20 --concurrency 1,2 --decks 6 --script-every 0   # smoke run
+```
+
 ## Development
 
 ```sh

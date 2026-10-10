@@ -104,6 +104,7 @@
     "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
     "golden:update": "npm run build && node test/golden.mjs --update",
     "golden:promote": "node scripts/golden-promote.mjs",
+    "bench:soak": "node scripts/soak.mjs",
     "prepack": "npm run build",
     "build:browser-check": "node scripts/build-browser-check.mjs",
     "test:styled-table": "node test/styled-table.mjs",

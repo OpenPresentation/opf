@@ -41,6 +41,7 @@
     "pdf-vector.mjs": "Structure of the vector PDF writer (text extraction, tagging, embedding), renderer internal.",
     "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input.",
     "raster-script-clusters.mjs": "Cluster-by-cluster raster text path of the renderer, no core input.",
-    "script-corpora.mjs": "Per-face shaping qualification of the bundled script faces against HarfBuzz (about a minute), renderer internal; full run only."
+    "script-corpora.mjs": "Per-face shaping qualification of the bundled script faces against HarfBuzz (about a minute), renderer internal; full run only.",
+    "soak.mjs": "Statistics and a smoke run of the manual soak benchmark (scripts/soak.mjs), package tooling; it renders three core examples only as loop input."
   }
 }
