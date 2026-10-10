@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-3x-fit",
+  "name": "Image_3x_Fit",
+  "summary": "Canonical OPF image 3x layout.",
+  "description": "Image 3x Fit OPF layout with 3 fit image zones.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "contain"
+  },
+  "placeholders": [
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "3 zones",
+    "Center aligned",
+    "Fit"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-3x-fit.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

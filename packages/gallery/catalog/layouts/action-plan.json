@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "action-plan",
+  "name": "Action_Plan",
+  "summary": "Table of actions with owner, due date, and status. Turns conversation into commitments.",
+  "description": "Table of actions with owner, due date, and status. Turns conversation into commitments.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Actions",
+    "Owners",
+    "Deadlines"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/action-plan.svg"
+  }
+}

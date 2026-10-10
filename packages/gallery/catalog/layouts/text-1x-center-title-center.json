@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "text-1x-center-title-center",
+  "name": "Text_1x_Center_Title_Center",
+  "summary": "Canonical OPF text 1x title layout.",
+  "description": "Text 1x Center Title Center OPF layout with 2 placeholder zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Text",
+    "1 zone",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x-center-title-center.svg"
+  }
+}

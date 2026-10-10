@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "general-public",
+  "name": "General Public",
+  "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+  "description": "A mixed audience of non-experts with no assumed domain knowledge. Prefer analogies to data, use only simple charts, set large text for accessibility, and structure the talk as a story. Keep chart density low; 10-15 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "low",
+  "decisionPower": "informational",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "heros-journey",
+    "problem-solution"
+  ],
+  "recommendedTones": [
+    "conversational",
+    "casual",
+    "inspirational"
+  ],
+  "tags": [
+    "public",
+    "education",
+    "accessible"
+  ]
+}

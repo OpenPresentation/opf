@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "network-dependency-map",
+  "name": "Network_Dependency_Map",
+  "summary": "Graph of interconnected nodes. Exposes hidden dependencies and critical paths.",
+  "description": "Graph of interconnected nodes. Exposes hidden dependencies and critical paths.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Dependencies",
+    "Network",
+    "Graph"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/network-dependency-map.svg"
+  }
+}

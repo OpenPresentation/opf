@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-2x-box-title-center",
+  "name": "Number_2x_Box_Title_Center",
+  "summary": "Canonical OPF number 2x title boxed layout.",
+  "description": "Number 2x Box Title Center OPF layout with 2 numeric/data callouts and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "2 zones",
+    "Center aligned",
+    "Titled",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-2x-box-title-center.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

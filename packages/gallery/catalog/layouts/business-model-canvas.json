@@ -1,0 +1,94 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "business-model-canvas",
+  "name": "Business_Model_Canvas",
+  "summary": "9-box canvas covering customers, value, channels, and economics. Strategy on one page.",
+  "description": "9-box canvas covering customers, value, channels, and economics. Strategy on one page.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "group",
+          "composition": {
+            "mode": "column"
+          },
+          "placeholders": [
+            {
+              "type": "text"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "row"
+      },
+      "placeholders": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "Business Model",
+    "Canvas",
+    "Strategy"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/business-model-canvas.svg"
+  },
+  "composition": {
+    "mode": "column",
+    "weights": [
+      2,
+      1
+    ],
+    "padding": 0.04,
+    "gap": 0.02
+  }
+}

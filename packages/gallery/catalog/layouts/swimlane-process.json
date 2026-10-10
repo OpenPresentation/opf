@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "swimlane-process",
+  "name": "Swimlane_Process",
+  "summary": "Process flow broken into horizontal lanes per actor or team. Shows who does what, in what order.",
+  "description": "Process flow broken into horizontal lanes per actor or team. Shows who does what, in what order.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Process",
+    "Handoffs",
+    "Ownership"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/swimlane-process.svg"
+  }
+}

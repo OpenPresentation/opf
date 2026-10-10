@@ -1,0 +1,34 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-2x-box-vertical",
+  "name": "List_2x_Box_Vertical",
+  "summary": "Canonical OPF list 2x boxed vertical layout.",
+  "description": "List 2x Box Vertical OPF layout with 2 list content zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "vertical",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "2 zones",
+    "Left aligned",
+    "Boxed",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x-box-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

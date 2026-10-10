@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "berber-latin",
+  "name": "Berber (Latin)",
+  "code": "BER",
+  "bcp47": "ber-Latn",
+  "ooxmlLang": "tzm-Latn-DZ",
+  "script": "Latn",
+  "direction": "ltr",
+  "fontScheme": "aptos",
+  "googleFontScheme": "roboto"
+}

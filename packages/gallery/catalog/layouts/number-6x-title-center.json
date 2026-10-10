@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-6x-title-center",
+  "name": "Number_6x_Title_Center",
+  "summary": "Canonical OPF number 6x title layout.",
+  "description": "Number 6x Title Center OPF layout with 6 numeric/data callouts and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "6 zones",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-6x-title-center.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "key-takeaway",
+  "name": "Key_Takeaway",
+  "summary": "A single headline statement on a nearly empty slide. One idea, nothing to distract from it.",
+  "description": "A single headline statement on a nearly empty slide. One idea, nothing to distract from it.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    }
+  ],
+  "tags": [
+    "Headline",
+    "Message",
+    "Focus"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/key-takeaway.svg"
+  }
+}

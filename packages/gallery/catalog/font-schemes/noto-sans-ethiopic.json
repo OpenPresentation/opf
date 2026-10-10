@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-ethiopic",
+  "name": "Noto Sans Ethiopic",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "am"
+  ],
+  "major": "Noto Sans Ethiopic",
+  "minor": "Noto Sans Ethiopic",
+  "textSample": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+  "type": "sans-serif",
+  "description": "Noto Sans Ethiopic is a sans serif OPF font scheme for complex script presentations, using Noto Sans Ethiopic for both headings and body text."
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "candidates",
+  "name": "Candidates",
+  "summary": "Potential hires evaluating company, role, and people.",
+  "description": "Candidates are weighing a major life decision and have many alternatives. Lead with mission and why-now, show the team they'll work with, and be honest about the stage. Avoid generic recruiting copy — specifics build trust faster than polish.",
+  "seniority": "mixed",
+  "technicalFluency": "mixed",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 45,
+  "recommendedNarratives": [
+    "company-intro",
+    "golden-circle",
+    "rags-to-riches",
+    "venture-pitch"
+  ],
+  "recommendedTones": [
+    "inspirational",
+    "casual",
+    "authoritative"
+  ],
+  "tags": ["external", "hiring", "recruiting"]
+}

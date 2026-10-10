@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "hub-and-spoke",
+  "name": "Hub_And_Spoke",
+  "summary": "Central node with radiating connections. Shows one-to-many relationships clearly.",
+  "description": "Central node with radiating connections. Shows one-to-many relationships clearly.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Central",
+    "Network",
+    "Model"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/hub-and-spoke.svg"
+  }
+}

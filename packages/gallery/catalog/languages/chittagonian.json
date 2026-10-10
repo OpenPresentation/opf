@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "chittagonian",
+  "name": "Chittagonian",
+  "code": "CTG",
+  "bcp47": "ctg",
+  "ooxmlLang": "bn-BD",
+  "script": "Beng",
+  "direction": "ltr",
+  "fontScheme": "vrinda",
+  "googleFontScheme": "noto-sans-bengali"
+}

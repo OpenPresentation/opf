@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "malgun-gothic",
+  "name": "Malgun Gothic",
+  "app": "powerpoint",
+  "languageFamily": "ea",
+  "languages": [
+    "ko"
+  ],
+  "major": "Malgun Gothic",
+  "minor": "Malgun Gothic",
+  "textSample": "이것은 맑은 고딕 폰트로 쓰여졌습니다",
+  "type": "sans-serif",
+  "description": "Malgun Gothic is a sans serif OPF font scheme for East Asian presentations, using Malgun Gothic for both headings and body text."
+}

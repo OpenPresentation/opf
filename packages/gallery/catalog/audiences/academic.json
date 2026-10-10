@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "academic",
+  "name": "Academic",
+  "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+  "description": "Researchers, professors, and students who expect rigorous methodology, citations, and evidence-based conclusions. Cite every source, show confidence intervals, be transparent about method, and leave marketing language out. Chart density can be high; 20-50 slides with time reserved for questions.",
+  "seniority": "mixed",
+  "technicalFluency": "high",
+  "decisionPower": "advisory",
+  "attentionBudgetMinutes": 60,
+  "recommendedNarratives": [
+    "data-story",
+    "situation-complication-resolution"
+  ],
+  "recommendedTones": [
+    "technical",
+    "formal"
+  ],
+  "tags": [
+    "research",
+    "education",
+    "analytical"
+  ]
+}

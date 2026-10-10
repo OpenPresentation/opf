@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-tone/v1",
+  "id": "formal",
+  "name": "Formal",
+  "summary": "Polished, restrained voice for board, investor, and regulator audiences.",
+  "description": "Authoritative without being cold. Use third-person constructions, full sentences, and concrete numbers. Avoid hedges and humor that depend on shared in-jokes; rely on clarity and precision to land.",
+  "voiceCues": [
+    "Use third person and the corporate 'we' sparingly.",
+    "Lead with the recommendation, then evidence.",
+    "Quote concrete numbers; avoid round-tripping ranges.",
+    "Prefer full sentences to bullet fragments on key claims."
+  ],
+  "avoid": [
+    "Slang, idioms, or in-jokes.",
+    "Hedging language ('maybe', 'sort of', 'I think').",
+    "Marketing superlatives ('world-class', 'best-in-class').",
+    "Excessive emoji or exclamation points."
+  ],
+  "samplePhrases": [
+    "Q4 revenue grew 18% year over year, led by enterprise expansion.",
+    "We recommend approving the Series B raise at $30M.",
+    "Net retention was 124%; gross retention was 96%."
+  ],
+  "recommendedNarratives": [
+    "board-meeting",
+    "qbr",
+    "scqa",
+    "strategic-narrative"
+  ],
+  "tags": ["business", "executive", "formal"]
+}

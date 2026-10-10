@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "timeline-1x",
+  "name": "Timeline 1x",
+  "summary": "Reach for it when events or phases follow one another in time.",
+  "description": "A title above one timeline. Use it for a roadmap, a project history or a sequence of milestones in chronological order.",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "timeline"
+    }
+  ],
+  "tags": [
+    "Timeline",
+    "Schedule",
+    "Progress"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline-1x.svg"
+  }
+}

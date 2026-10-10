@@ -1,0 +1,105 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "audiences",
+  "version": "1",
+  "description": "Catalog of presentation audiences available in the openpresentation.org catalog. Each entry is a lightweight summary; full audience records (seniority, technical fluency, decision power, attention budget, recommended narratives and tones) live in the per-id JSON files alongside this index. Audiences are referenced from OPF documents via audience. The singular ids from executive onward match the audience pages on pptx.gallery and carry its recommendations.",
+  "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314",
+  "records": [
+    {
+      "id": "board",
+      "name": "Board of Directors",
+      "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+      "file": "board.json"
+    },
+    {
+      "id": "engineering-team",
+      "name": "Engineering Team",
+      "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+      "file": "engineering-team.json"
+    },
+    {
+      "id": "all-hands",
+      "name": "All Hands",
+      "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+      "file": "all-hands.json"
+    },
+    {
+      "id": "candidates",
+      "name": "Candidates",
+      "summary": "Potential hires evaluating company, role, and people.",
+      "file": "candidates.json"
+    },
+    {
+      "id": "executive",
+      "name": "Executive",
+      "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+      "file": "executive.json"
+    },
+    {
+      "id": "investor",
+      "name": "Investor",
+      "summary": "Angel investors, VCs, or institutional investors evaluating financial viability, market opportunity, and team.",
+      "file": "investor.json"
+    },
+    {
+      "id": "technical",
+      "name": "Technical",
+      "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+      "file": "technical.json"
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+      "file": "sales.json"
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+      "file": "marketing.json"
+    },
+    {
+      "id": "academic",
+      "name": "Academic",
+      "summary": "Researchers, professors, and students expecting rigorous methodology, citations, and evidence-based conclusions.",
+      "file": "academic.json"
+    },
+    {
+      "id": "internal-team",
+      "name": "Internal Team",
+      "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+      "file": "internal-team.json"
+    },
+    {
+      "id": "customer",
+      "name": "Customer",
+      "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+      "file": "customer.json"
+    },
+    {
+      "id": "general-public",
+      "name": "General Public",
+      "summary": "Mixed non-expert audience with no assumed domain knowledge.",
+      "file": "general-public.json"
+    },
+    {
+      "id": "media",
+      "name": "Media & Press",
+      "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+      "file": "media.json"
+    },
+    {
+      "id": "partner",
+      "name": "Partner / Channel",
+      "summary": "Strategic partners, resellers, or channel organizations needing positioning and enablement content.",
+      "file": "partner.json"
+    },
+    {
+      "id": "regulatory",
+      "name": "Regulatory / Compliance",
+      "summary": "Government agencies, auditors, or compliance bodies reviewing adherence to rules and standards.",
+      "file": "regulatory.json"
+    }
+  ]
+}

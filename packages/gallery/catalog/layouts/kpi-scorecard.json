@@ -1,0 +1,83 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "kpi-scorecard",
+  "name": "Kpi_Scorecard",
+  "summary": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
+  "description": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "KPIs",
+    "Tracking",
+    "Status"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/kpi-scorecard.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

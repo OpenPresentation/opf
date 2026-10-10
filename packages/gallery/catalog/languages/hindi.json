@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "hindi",
+  "name": "Hindi",
+  "code": "HIN",
+  "bcp47": "hi",
+  "ooxmlLang": "hi-IN",
+  "script": "Deva",
+  "direction": "ltr",
+  "fontScheme": "mangal",
+  "googleFontScheme": "noto-sans-devangari"
+}

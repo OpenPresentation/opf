@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-only-3x-crop-vertical-title-left",
+  "name": "Image_Only_3x_Crop_Vertical_Title_Left",
+  "summary": "Canonical OPF image 3x title vertical layout.",
+  "description": "Image Only 3x Crop Vertical Title Left OPF layout with 3 image zones in a vertical reading flow and a slide title.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "3 zones",
+    "Center aligned",
+    "Titled",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-only-3x-crop-vertical-title-left.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

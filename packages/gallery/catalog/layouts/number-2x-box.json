@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-2x-box",
+  "name": "Number_2x_Box",
+  "summary": "Canonical OPF number 2x boxed layout.",
+  "description": "Number 2x Box OPF layout with 2 numeric/data callouts.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "2 zones",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-2x-box.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

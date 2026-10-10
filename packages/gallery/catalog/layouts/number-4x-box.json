@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-4x-box",
+  "name": "Number_4x_Box",
+  "summary": "Canonical OPF number 4x boxed layout.",
+  "description": "Number 4x Box OPF layout with 4 numeric/data callouts.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "4 zones",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x-box.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
+}

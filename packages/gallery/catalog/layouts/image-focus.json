@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-focus",
+  "name": "Image_Focus",
+  "summary": "A title over one large image. For a photo behind the whole slide, give the slide an image background instead of a layout.",
+  "description": "A title above one image that fills the content area, cropped to cover it. Use it for a photograph or illustration that carries a mood or a transition. A full-bleed photo behind the title is the slide's design.background (an image), not a layout.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Visual",
+    "Emotional",
+    "Story"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-focus.svg"
+  }
+}

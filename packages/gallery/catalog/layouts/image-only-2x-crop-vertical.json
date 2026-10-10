@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-only-2x-crop-vertical",
+  "name": "Image_Only_2x_Crop_Vertical",
+  "summary": "Canonical OPF image 2x vertical layout.",
+  "description": "Image Only 2x Crop Vertical OPF layout with 2 image zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "2 zones",
+    "Center aligned",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-only-2x-crop-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

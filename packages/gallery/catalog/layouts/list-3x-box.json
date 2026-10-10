@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-3x-box",
+  "name": "List_3x_Box",
+  "summary": "Canonical OPF list 3x boxed layout.",
+  "description": "List 3x Box OPF layout with 3 list content zones.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "3 zones",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x-box.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

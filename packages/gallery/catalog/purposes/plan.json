@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+  "id": "plan",
+  "name": "Plan",
+  "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+  "description": "Use when the deck should turn strategy into coordinated action. Make sequencing, ownership, dependencies, risks, and checkpoints visible.",
+  "outcome": "The audience understands the plan and accepts the next actions.",
+  "successCriteria": [
+    "Milestones and owners are clear",
+    "Dependencies and risks are visible",
+    "Next steps can be executed"
+  ],
+  "recommendedNarratives": ["project-proposal", "capacity-planning", "strategic-advisory"],
+  "recommendedTones": ["authoritative", "technical"],
+  "tags": ["roadmap", "execution", "planning"]
+}

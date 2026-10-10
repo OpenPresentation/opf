@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "gujarati",
+  "name": "Gujarati",
+  "code": "GUJ",
+  "bcp47": "gu",
+  "ooxmlLang": "gu-IN",
+  "script": "Gujr",
+  "direction": "ltr",
+  "fontScheme": "shruti",
+  "googleFontScheme": "noto-sans-gujarati"
+}

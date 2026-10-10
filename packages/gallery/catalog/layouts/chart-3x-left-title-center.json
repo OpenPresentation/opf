@@ -1,0 +1,51 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "chart-3x-left-title-center",
+  "name": "Chart_3x_Left_Title_Center",
+  "summary": "Canonical OPF chart 3x title layout.",
+  "description": "Chart 3x Left Title Center OPF layout: a centered slide title over a primary chart on the left and two supporting charts stacked on the right.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "chart"
+        },
+        {
+          "type": "chart"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "Chart",
+    "3 zones",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x-left-title-center.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      3,
+      2
+    ]
+  }
+}

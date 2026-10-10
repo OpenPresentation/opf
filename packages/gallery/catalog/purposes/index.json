@@ -1,0 +1,63 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "purposes",
+  "version": "1",
+  "description": "Catalog of presentation purposes available in the openpresentation.org catalog. Each entry is a lightweight summary; full purpose records live in the per-id JSON files alongside this index. Purposes are referenced from OPF documents via purpose.",
+  "contentSha256": "43d9ba617491fe1d98b527d24032d5da9bc6763a01b0ea41da421c5ec27e649c",
+  "records": [
+    {
+      "id": "inform",
+      "name": "Inform",
+      "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+      "file": "inform.json"
+    },
+    {
+      "id": "decide",
+      "name": "Drive a Decision",
+      "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+      "file": "decide.json"
+    },
+    {
+      "id": "align",
+      "name": "Align",
+      "summary": "Create shared understanding and commitment across people who need to move together.",
+      "file": "align.json"
+    },
+    {
+      "id": "persuade",
+      "name": "Persuade",
+      "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+      "file": "persuade.json"
+    },
+    {
+      "id": "educate",
+      "name": "Educate",
+      "summary": "Teach a concept, process, product, or domain so the audience can use it correctly.",
+      "file": "educate.json"
+    },
+    {
+      "id": "report",
+      "name": "Report",
+      "summary": "Summarize performance, progress, or findings with enough context to interpret results.",
+      "file": "report.json"
+    },
+    {
+      "id": "pitch",
+      "name": "Pitch",
+      "summary": "Present an opportunity and ask for investment, approval, partnership, or sponsorship.",
+      "file": "pitch.json"
+    },
+    {
+      "id": "sell",
+      "name": "Sell",
+      "summary": "Move a buyer or evaluator toward purchase, adoption, renewal, or expansion.",
+      "file": "sell.json"
+    },
+    {
+      "id": "plan",
+      "name": "Plan",
+      "summary": "Establish a roadmap, operating plan, or sequence of actions with owners and next steps.",
+      "file": "plan.json"
+    }
+  ]
+}

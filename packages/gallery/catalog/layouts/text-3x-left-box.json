@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "text-3x-left-box",
+  "name": "Text_3x_Left_Box",
+  "summary": "Canonical OPF text 3x boxed layout.",
+  "description": "Text 3x Left Box OPF layout with 4 placeholder zones.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Text",
+    "3 zones",
+    "Left aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x-left-box.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

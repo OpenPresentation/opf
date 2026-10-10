@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "shonar-bangla",
+  "name": "Shonar Bangla",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "bn",
+    "ctg"
+  ],
+  "major": "Shonar Bangla",
+  "minor": "Shonar Bangla",
+  "textSample": "এটা খুব সুন্দর",
+  "type": "sans-serif",
+  "description": "Shonar Bangla is a sans serif OPF font scheme for complex script presentations, using Shonar Bangla for both headings and body text."
+}

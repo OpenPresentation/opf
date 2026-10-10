@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "architecture-stack",
+  "name": "Architecture_Stack",
+  "summary": "Layered diagram of a system from foundation to user-facing. Classic for tech stacks and capability layers.",
+  "description": "Layered diagram of a system from foundation to user-facing. Classic for tech stacks and capability layers.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Architecture",
+    "Layers",
+    "System"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/architecture-stack.svg"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-5x-box-title-center",
+  "name": "Number_5x_Box_Title_Center",
+  "summary": "Canonical OPF number 5x title boxed layout.",
+  "description": "Number 5x Box Title Center OPF layout with 5 numeric/data callouts and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "5 zones",
+    "Center aligned",
+    "Titled",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-5x-box-title-center.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "before-after",
+  "name": "Before_After",
+  "summary": "Two-panel layout showing transformation. Proves impact by making change visible and concrete.",
+  "description": "Two-panel layout showing transformation. Proves impact by making change visible and concrete.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Transformation",
+    "Proof",
+    "Impact"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/before-after.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

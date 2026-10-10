@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "swot-analysis",
+  "name": "Swot_Analysis",
+  "summary": "2x2 matrix for Strengths, Weaknesses, Opportunities, Threats. A strategic planning classic.",
+  "description": "2x2 matrix for Strengths, Weaknesses, Opportunities, Threats. A strategic planning classic.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Strategy",
+    "Matrix",
+    "Planning"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/swot-analysis.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
+}

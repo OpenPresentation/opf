@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-3x-itemimage-vertical",
+  "name": "List_3x_ItemImage_Vertical",
+  "summary": "Canonical OPF list 3x vertical layout.",
+  "description": "List 3x ItemImage Vertical OPF layout with 3 list content zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "listBullet": "image"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "3 zones",
+    "Left aligned",
+    "Item image",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x-itemimage-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

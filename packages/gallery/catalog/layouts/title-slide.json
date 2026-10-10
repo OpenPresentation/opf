@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "title-slide",
+  "name": "Title_Slide",
+  "summary": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
+  "description": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Opening",
+    "Impact",
+    "Minimal"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-slide.svg"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-3x-fit-title-center",
+  "name": "Image_3x_Fit_Title_Center",
+  "summary": "Canonical OPF image 3x title layout.",
+  "description": "Image 3x Fit Title Center OPF layout with 3 fit image zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "contain"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "3 zones",
+    "Center aligned",
+    "Fit",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-3x-fit-title-center.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

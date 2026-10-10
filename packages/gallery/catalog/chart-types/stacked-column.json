@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "stacked-column",
+  "name": "Stacked Column",
+  "mappings": {
+    "openxml": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "stacked",
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedColumn"
+      }
+    }
+  },
+  "group": "Column",
+  "groupSort": 1,
+  "series": 2,
+  "complexity": "simple"
+}

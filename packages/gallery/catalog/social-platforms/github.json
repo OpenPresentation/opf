@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
+  "id": "github",
+  "name": "GitHub",
+  "summary": "Code-hosting platform for developers and organizations.",
+  "description": "GitHub uses the same URL pattern for users and organizations ('/<handle>'). Use the companyUrlPattern for organization references for symmetry with platforms that distinguish.",
+  "baseUrl": "https://github.com",
+  "profileUrlPattern": "https://github.com/{handle}",
+  "companyUrlPattern": "https://github.com/{handle}",
+  "handlePrefix": "",
+  "handleExample": "alicechen",
+  "brandColor": "#181717",
+  "tags": ["developer", "code"]
+}
+

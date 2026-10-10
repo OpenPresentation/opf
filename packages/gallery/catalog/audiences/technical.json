@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "technical",
+  "name": "Technical",
+  "summary": "Engineers, data scientists, and technical specialists requiring precision, methodology details, and system-level understanding.",
+  "description": "Engineers, data scientists, and technical specialists who expect precision, methodology, and system-level understanding. Show the methodology and cite data sources, prefer technical diagrams to metaphors, and do not shy away from dense information. Chart density can be high; 20-40 slides is normal.",
+  "seniority": "ic",
+  "technicalFluency": "high",
+  "decisionPower": "advisory",
+  "attentionBudgetMinutes": 45,
+  "recommendedNarratives": [
+    "data-story",
+    "situation-complication-resolution"
+  ],
+  "recommendedTones": [
+    "technical",
+    "authoritative",
+    "conversational"
+  ],
+  "tags": [
+    "internal",
+    "technical",
+    "practitioner"
+  ]
+}

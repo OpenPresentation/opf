@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-6x-vertical",
+  "name": "List_6x_Vertical",
+  "summary": "Canonical OPF list 6x vertical layout.",
+  "description": "List 6x Vertical OPF layout with 6 list content zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "6 zones",
+    "Left aligned",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

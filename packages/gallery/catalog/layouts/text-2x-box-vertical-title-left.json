@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "text-2x-box-vertical-title-left",
+  "name": "Text_2x_Box_Vertical_Title_Left",
+  "summary": "Canonical OPF text 2x title boxed vertical layout.",
+  "description": "Text 2x Box Vertical Title Left OPF layout with 4 placeholder zones in a vertical reading flow and a slide title.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "vertical"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Text",
+    "2 zones",
+    "Left aligned",
+    "Titled",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x-box-vertical-title-left.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}

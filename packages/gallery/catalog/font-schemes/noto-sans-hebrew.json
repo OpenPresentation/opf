@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-hebrew",
+  "name": "Noto Sans Hebrew",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "he"
+  ],
+  "major": "Noto Sans Hebrew",
+  "minor": "Noto Sans Hebrew",
+  "textSample": "זה ספר יפהפה",
+  "type": "sans-serif",
+  "description": "Noto Sans Hebrew is a sans serif OPF font scheme for complex script presentations, using Noto Sans Hebrew for both headings and body text."
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+  "id": "black-and-white",
+  "name": "Black & White",
+  "accent1": "#9E9E9E",
+  "accent2": "#424242",
+  "accent3": "#616161",
+  "accent4": "#757575",
+  "accent5": "#9E9E9E",
+  "accent6": "#212121",
+  "dark1": "#000000",
+  "dark2": "#000000",
+  "followedHyperlink": "#424242",
+  "hyperlink": "#212121",
+  "light1": "#FFFFFF",
+  "light2": "#FFFFFF",
+  "summary": "Strict monochrome contrast for formal, document-style decks.",
+  "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+  "tags": [
+    "minimal",
+    "formal",
+    "neutral",
+    "high-contrast",
+    "restrained"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "geographic-map",
+  "name": "Geographic_Map",
+  "summary": "Map-based visualization of regions, territories, or location-based data. Turns spreadsheets into geography.",
+  "description": "Map-based visualization of regions, territories, or location-based data. Turns spreadsheets into geography.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Geography",
+    "Territory",
+    "Regional"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/geographic-map.svg"
+  }
+}

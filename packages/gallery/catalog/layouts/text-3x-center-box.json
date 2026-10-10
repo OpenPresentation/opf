@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "text-3x-center-box",
+  "name": "Text_3x_Center_Box",
+  "summary": "Canonical OPF text 3x boxed layout.",
+  "description": "Text 3x Center Box OPF layout with 4 placeholder zones.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Text",
+    "3 zones",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x-center-box.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

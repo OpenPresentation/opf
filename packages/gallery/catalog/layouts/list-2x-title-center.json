@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-2x-title-center",
+  "name": "List_2x_Title_Center",
+  "summary": "Canonical OPF list 2x title layout.",
+  "description": "List 2x Title Center OPF layout with 2 list content zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "2 zones",
+    "Center aligned",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x-title-center.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "image-1x-crop",
+  "name": "Image_1x_Crop",
+  "summary": "Canonical OPF image 1x layout.",
+  "description": "Image 1x Crop OPF layout with a crop image zone.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFit": "cover"
+  },
+  "placeholders": [
+    {
+      "type": "image"
+    }
+  ],
+  "tags": [
+    "Image",
+    "1 zone",
+    "Center aligned",
+    "Crop"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-1x-crop.svg"
+  }
+}

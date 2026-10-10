@@ -1,0 +1,461 @@
+#!/usr/bin/env node
+// Syncs catalog/ (the records of @openpresentation/gallery) from pptx.gallery, the canonical
+// publisher of the default OPF catalog. See docs/default-catalog.md.
+//
+// RR-78: the records live in the @openpresentation/gallery package, which is released on its own version line
+// (.github/workflows/gallery-publish.yml); core depends on it and carries no copy (OPF 0.19).
+//
+//   node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery   write the records from a gallery checkout
+//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --check     fail if the snapshot differs (CI)
+//   node scripts/sync-gallery-catalog.mjs --url https://www.pptx.gallery --check
+//                                                                       compare against the live site
+//   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
+//   node scripts/sync-gallery-catalog.mjs --rehash                     after a spec-first edit of the records: rewrite
+//                                                                       the index and manifest hashes and counts
+//   node scripts/sync-gallery-catalog.mjs --rehash --match-gallery     the same, and set every kind's gallery block to the new hash (for a
+//                                                                       spec-required edit that the gallery PR publishes identically)
+//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
+//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --allow-removed chart-types:<id>[,<id>...]
+//                                                                       drop snapshot ids on purpose (repeatable)
+//
+// Every gallery record is validated against the companion schemas in
+// the published @openpresentation/opf (its spec/schemas) before anything is written. Publisher `x-*` members are
+// dropped. Every kind mirrors the gallery (OPF 0.15): the snapshot holds every
+// record the gallery publishes, which `@openpresentation/gallery` exports as
+// `gallery`. The snapshot
+// never loses an id: removing a record is a breaking change, so a gallery that
+// stopped publishing a bundled id is refused. The one waiver is explicit and per
+// id: `--allow-removed <kind>:<id>` drops that id from the snapshot (and deletes
+// its file), for a removal or rename decided on purpose, such as the FA-03 pre-v1
+// cleanup of chart-type aliases.
+
+import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  CATALOG_INDEX_SCHEMA_ID,
+  CATALOG_MANIFEST_SCHEMA_ID,
+  DEFAULT_CATALOG_PUBLISHER,
+  SNAPSHOT_KINDS,
+  catalogContentSha256,
+  readJson,
+  readSnapshotKind,
+  sameJson,
+  serializeJson,
+  stripExtensions,
+  verifySnapshot,
+} from "./catalog-snapshot.mjs";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const defaultCatalogsRoot = path.join(repoRoot, "catalog");
+// The companion schemas of the published core this repository pins (devDependencies), never a workspace build.
+const coreRequire = createRequire(createRequire(path.join(repoRoot, "package.json")).resolve("@openpresentation/opf/package.json"));
+const schemasRoot = path.join(path.dirname(coreRequire.resolve("@openpresentation/opf/package.json")), "dist", "spec", "schemas");
+
+export const GALLERY_REPOSITORY = "https://github.com/Data-Advantage/pptx-gallery";
+export const GALLERY_PUBLISHED_PATH = "public";
+
+// Every kind mirrors the gallery. The manifest still names the mode, which the gallery's check:core-catalog reads.
+export const SNAPSHOT_MODE = "mirror";
+
+// ---------------------------------------------------------------------------
+// Loading the published gallery catalog
+
+/** Reads `<galleryDir>/public/<kind>/` as published by the gallery's build-opf-catalog script. */
+export async function readGalleryCheckout(galleryDir) {
+  const root = path.join(galleryDir, GALLERY_PUBLISHED_PATH);
+  const kinds = {};
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const dir = path.join(root, kind);
+    const indexPath = path.join(dir, "index.json");
+    if (!existsSync(indexPath)) throw new Error(`Gallery checkout has no ${GALLERY_PUBLISHED_PATH}/${kind}/index.json`);
+    const index = await readJson(indexPath);
+    const records = [];
+    for (const entry of index.records ?? []) records.push(await readJson(path.join(dir, entry.file)));
+    kinds[kind] = { index, records };
+  }
+  return kinds;
+}
+
+/** Fetches `<baseUrl>/<kind>/index.json` and every record it lists. */
+export async function fetchGalleryCatalog(baseUrl, fetchImpl = fetch) {
+  const base = baseUrl.replace(/\/+$/, "");
+  const get = async (url) => {
+    const response = await fetchImpl(url, { headers: { accept: "application/json" } });
+    if (!response.ok) throw new Error(`GET ${url} -> HTTP ${response.status}`);
+    return response.json();
+  };
+  const kinds = {};
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const index = await get(`${base}/${kind}/index.json`);
+    const records = [];
+    for (const entry of index.records ?? []) records.push(await get(`${base}/${kind}/${entry.file}`));
+    kinds[kind] = { index, records };
+  }
+  return kinds;
+}
+
+// ---------------------------------------------------------------------------
+// Validation
+
+let validatorCache;
+export async function loadValidators() {
+  if (validatorCache) return validatorCache;
+  const require = coreRequire;
+  const Ajv2020 = require("ajv/dist/2020.js").default;
+  const addFormats = require("ajv-formats").default;
+  const ajv = new Ajv2020({ allErrors: true, strict: false });
+  addFormats(ajv);
+  const record = {};
+  for (const { kind, schemaFile } of SNAPSHOT_KINDS) {
+    record[kind] = ajv.compile(JSON.parse(await readFile(path.join(schemasRoot, schemaFile), "utf8")));
+  }
+  const index = ajv.compile(JSON.parse(await readFile(path.join(schemasRoot, "catalog-index.schema.json"), "utf8")));
+  const manifest = ajv.compile(JSON.parse(await readFile(path.join(schemasRoot, "catalog-manifest.schema.json"), "utf8")));
+  validatorCache = { record, index, manifest };
+  return validatorCache;
+}
+
+function formatErrors(validate) {
+  return (validate.errors ?? []).map((error) => `${error.instancePath || "/"} ${error.message}`).join("; ");
+}
+
+/** Checks one published gallery kind for integrity and schema validity. */
+export function checkGalleryKind(kind, galleryKind, validators) {
+  const problems = [];
+  const config = SNAPSHOT_KINDS.find((entry) => entry.kind === kind);
+  const { index, records } = galleryKind;
+  if (index.$schema !== CATALOG_INDEX_SCHEMA_ID) problems.push(`${kind}/index.json: unexpected $schema '${index.$schema}'`);
+  if (index.kind !== kind) problems.push(`${kind}/index.json: kind is '${index.kind}'`);
+  if (!validators.index(stripExtensions(index))) problems.push(`${kind}/index.json: ${formatErrors(validators.index)}`);
+  const hash = catalogContentSha256(records);
+  if (index.contentSha256 !== hash) {
+    problems.push(`${kind}/index.json: published contentSha256 ${index.contentSha256} does not match its records (${hash})`);
+  }
+  const seen = new Set();
+  (index.records ?? []).forEach((entry, position) => {
+    const record = records[position];
+    if (!record) return;
+    if (seen.has(entry.id)) problems.push(`${kind}: duplicate id '${entry.id}'`);
+    seen.add(entry.id);
+    if (record.id !== entry.id || entry.file !== `${entry.id}.json`) {
+      problems.push(`${kind}/${entry.file}: record id '${record.id}' does not match index entry '${entry.id}'`);
+    }
+    if (record.$schema !== config.recordSchemaId) problems.push(`${kind}/${entry.file}: $schema is '${record.$schema}'`);
+    const validate = validators.record[kind];
+    if (!validate(stripExtensions(record))) problems.push(`${kind}/${entry.file}: ${formatErrors(validate)}`);
+  });
+  return problems;
+}
+
+// ---------------------------------------------------------------------------
+// Planning
+
+/**
+ * Computes the snapshot a gallery catalog implies.
+ * @param {object} input
+ * @param {Record<string, {index: object, records: object[]}>} input.gallery Published gallery catalog per kind.
+ * @param {Record<string, {index: object, records: object[]}>} input.current Current snapshot per kind.
+ * @param {object | undefined} input.manifest Current manifest, if any.
+ * @param {object} input.validators Compiled validators.
+ * @param {object} input.source Manifest `source` block.
+ * @param {Record<string, string[]>} [input.allowRemoved] Snapshot ids to drop on purpose (`--allow-removed`). The waiver
+ *   of the never-lose-an-id rule: only the listed ids may disappear, and an id the snapshot does not hold is a problem.
+ */
+export function planSnapshot({ gallery, current, manifest: _manifest, validators, source, allowRemoved = {} }) {
+  const problems = [];
+  const kinds = {};
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const published = gallery[kind];
+    problems.push(...checkGalleryKind(kind, published, validators));
+    const mode = SNAPSHOT_MODE;
+    const currentIds = new Set((current[kind]?.index.records ?? []).map((entry) => entry.id));
+    const galleryIds = published.index.records.map((entry) => entry.id);
+    const galleryIdSet = new Set(galleryIds);
+
+    const waived = new Set(allowRemoved[kind] ?? []);
+    for (const id of waived) {
+      if (!currentIds.has(id)) problems.push(`${kind}: --allow-removed '${id}' is not in the snapshot`);
+    }
+    for (const id of currentIds) {
+      if (!galleryIdSet.has(id) && !waived.has(id)) {
+        problems.push(`${kind}: the gallery no longer publishes '${id}', which the snapshot must keep (removing a catalog id is breaking); restore it in the gallery`);
+      }
+    }
+
+    // The gallery owns every record: the snapshot takes each published record as published.
+    const keep = new Set(galleryIdSet);
+    for (const id of waived) keep.delete(id);
+    const selected = [];
+    published.index.records.forEach((entry, position) => {
+      if (keep.has(entry.id)) selected.push({ entry, record: stripExtensions(published.records[position]) });
+    });
+
+    const records = selected.map(({ record }) => record);
+    const contentSha256 = catalogContentSha256(records);
+    const index = {
+      $schema: CATALOG_INDEX_SCHEMA_ID,
+      kind,
+      version: published.index.version,
+      description: published.index.description,
+      contentSha256,
+      records: selected.map(({ entry }) => entry),
+    };
+    const galleryOnly = galleryIds.filter((id) => !keep.has(id));
+    kinds[kind] = {
+      mode,
+      index,
+      records,
+      removed: [...waived].filter((id) => currentIds.has(id)),
+      galleryOnly,
+      manifestEntry: {
+        mode,
+        records: records.length,
+        contentSha256,
+        gallery: { records: published.records.length, contentSha256: published.index.contentSha256 },
+      },
+    };
+  }
+
+  const nextManifest = {
+    $schema: CATALOG_MANIFEST_SCHEMA_ID,
+    description:
+      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. It is the data of @openpresentation/gallery (RR-78); core imports none of it (pnpm check:catalog-free).",
+    publisher: DEFAULT_CATALOG_PUBLISHER,
+    source,
+    kinds: Object.fromEntries(SNAPSHOT_KINDS.map(({ kind }) => [kind, kinds[kind].manifestEntry])),
+  };
+  if (!validators.manifest(nextManifest)) problems.push(`manifest.json: ${formatErrors(validators.manifest)}`);
+  return { kinds, manifest: nextManifest, problems };
+}
+
+// ---------------------------------------------------------------------------
+// Applying / diffing
+
+async function currentFileMatches(file, value) {
+  if (!existsSync(file)) return false;
+  return sameJson(JSON.parse(await readFile(file, "utf8")), value);
+}
+
+/** Lists the files the plan would change (relative to the catalog directory). */
+export async function diffSnapshot(catalogsRoot, plan) {
+  const changes = [];
+  for (const [kind, planned] of Object.entries(plan.kinds)) {
+    for (const record of planned.records) {
+      if (!(await currentFileMatches(path.join(catalogsRoot, kind, `${record.id}.json`), record))) {
+        changes.push(`${kind}/${record.id}.json`);
+      }
+    }
+    for (const id of planned.removed) {
+      if (existsSync(path.join(catalogsRoot, kind, `${id}.json`))) changes.push(`${kind}/${id}.json (removed)`);
+    }
+    if (!(await currentFileMatches(path.join(catalogsRoot, kind, "index.json"), planned.index))) {
+      changes.push(`${kind}/index.json`);
+    }
+  }
+  if (!(await currentFileMatches(path.join(catalogsRoot, "manifest.json"), plan.manifest))) changes.push("manifest.json");
+  return changes;
+}
+
+// Keeps an existing record's key order for the keys it still has and appends
+// new keys in the publisher's order, so a sync diff shows content, not churn.
+function inExistingKeyOrder(existing, next) {
+  const ordered = {};
+  for (const key of Object.keys(existing)) if (key in next) ordered[key] = next[key];
+  for (const key of Object.keys(next)) if (!(key in ordered)) ordered[key] = next[key];
+  return ordered;
+}
+
+/** Writes the files that differ; content-identical files keep their bytes. */
+export async function applySnapshot(catalogsRoot, plan) {
+  const changes = await diffSnapshot(catalogsRoot, plan);
+  const pending = new Set(changes);
+  for (const [kind, planned] of Object.entries(plan.kinds)) {
+    await mkdir(path.join(catalogsRoot, kind), { recursive: true });
+    for (const record of planned.records) {
+      const relative = `${kind}/${record.id}.json`;
+      if (!pending.has(relative)) continue;
+      const target = path.join(catalogsRoot, relative);
+      const next = existsSync(target) ? inExistingKeyOrder(JSON.parse(await readFile(target, "utf8")), record) : record;
+      await writeFile(target, serializeJson(next), "utf8");
+    }
+    for (const id of planned.removed) {
+      await rm(path.join(catalogsRoot, kind, `${id}.json`), { force: true });
+    }
+    if (pending.has(`${kind}/index.json`)) {
+      await writeFile(path.join(catalogsRoot, kind, "index.json"), serializeJson(planned.index), "utf8");
+    }
+  }
+  if (pending.has("manifest.json")) {
+    await writeFile(path.join(catalogsRoot, "manifest.json"), serializeJson(plan.manifest), "utf8");
+  }
+  return changes;
+}
+
+export async function readCurrentSnapshot(catalogsRoot) {
+  const current = {};
+  for (const { kind } of SNAPSHOT_KINDS) {
+    if (existsSync(path.join(catalogsRoot, kind, "index.json"))) current[kind] = await readSnapshotKind(catalogsRoot, kind);
+  }
+  const manifestPath = path.join(catalogsRoot, "manifest.json");
+  const manifest = existsSync(manifestPath) ? await readJson(manifestPath) : undefined;
+  return { current, manifest };
+}
+
+function gallerySource(galleryDir, allowDirty) {
+  const git = (args) => execFileSync("git", ["-C", galleryDir, ...args], { encoding: "utf8" }).trim();
+  const commit = git(["rev-parse", "HEAD"]);
+  const dirty = git(["status", "--porcelain", "--", GALLERY_PUBLISHED_PATH, "data"]);
+  if (dirty && !allowDirty) {
+      throw new Error(`The gallery checkout has uncommitted catalog changes, so its commit would not pin them:\n${dirty}\nCommit them first, or use --check or --report for a read-only comparison.`);
+  }
+  return { repository: GALLERY_REPOSITORY, commit, path: GALLERY_PUBLISHED_PATH };
+}
+
+function printReport(plan) {
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const planned = plan.kinds[kind];
+    const entry = planned.manifestEntry;
+    const extra = planned.galleryOnly.length
+      ? `; gallery-only ${planned.galleryOnly.length}: ${planned.galleryOnly.slice(0, 8).join(", ")}${planned.galleryOnly.length > 8 ? ", ..." : ""}`
+      : "";
+    process.stdout.write(`${kind}: ${entry.mode} ${entry.records}/${entry.gallery.records}${extra}\n`);
+  }
+}
+
+function option(argv, name) {
+  const at = argv.indexOf(name);
+  return at === -1 ? undefined : argv[at + 1];
+}
+
+/** Parses every `<flag> <kind>:<id>[,<id>...]` (`--allow-removed`) into { kind: [ids] }. */
+export function parseKindIds(argv, flag) {
+  const include = {};
+  argv.forEach((arg, at) => {
+    if (arg !== flag) return;
+    const value = argv[at + 1] ?? "";
+    const split = value.indexOf(":");
+    const kind = value.slice(0, split);
+    const ids = value.slice(split + 1).split(",").filter(Boolean);
+    if (split < 1 || ids.length === 0 || !SNAPSHOT_KINDS.some((entry) => entry.kind === kind)) {
+      throw new Error(`${flag} needs <kind>:<id>[,<id>...] with a snapshot kind, for example ${flag} layouts:two-column,faq.`);
+    }
+    include[kind] = [...(include[kind] ?? []), ...ids];
+  });
+  return include;
+}
+
+/**
+ * Rewrites the index `contentSha256` and the manifest `records` and `contentSha256` of every kind from the
+ * records on disk, for a core-first catalog edit (core is the source of truth since the FF-37 decision, so
+ * a record can change here before the gallery publishes it). The manifest `source` and each `gallery` block
+ * keep describing the pinned gallery commit, so they are never touched. Returns the files it changed.
+ *
+ * With `matchGallery`, each kind's `gallery` block is set to the new records too. Use it only when the gallery
+ * change that publishes the same records is in review (FA-16): every kind must match the gallery hash, and the pin
+ * then names the commit before that change.
+ */
+export async function rehashSnapshot(catalogsRoot, { matchGallery = false } = {}) {
+  const manifestFile = path.join(catalogsRoot, "manifest.json");
+  const manifest = await readJson(manifestFile);
+  const changed = [];
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const entry = manifest.kinds?.[kind];
+    if (!entry) continue;
+    const { index, records } = await readSnapshotKind(catalogsRoot, kind);
+    const contentSha256 = catalogContentSha256(records);
+    if (index.contentSha256 !== contentSha256) {
+      await writeFile(path.join(catalogsRoot, kind, "index.json"), serializeJson({ ...index, contentSha256 }), "utf8");
+      changed.push(`${kind}/index.json`);
+    }
+    if (entry.contentSha256 !== contentSha256 || entry.records !== records.length) {
+      entry.contentSha256 = contentSha256;
+      entry.records = records.length;
+      changed.push(`manifest.json (${kind})`);
+    }
+    if (matchGallery && (entry.gallery?.contentSha256 !== contentSha256 || entry.gallery?.records !== records.length)) {
+      entry.gallery = { records: records.length, contentSha256 };
+      if (!changed.includes(`manifest.json (${kind})`)) changed.push(`manifest.json (${kind})`);
+    }
+  }
+  if (changed.some((name) => name.startsWith("manifest.json"))) await writeFile(manifestFile, serializeJson(manifest), "utf8");
+  return changed;
+}
+
+const relative = (file) => path.relative(repoRoot, file).split(path.sep).join("/");
+
+export async function main(argv = process.argv.slice(2)) {
+  const catalogsRoot = path.resolve(option(argv, "--catalogs") ?? defaultCatalogsRoot);
+
+  if (argv.includes("--verify")) {
+    const problems = await verifySnapshot(catalogsRoot);
+    if (problems.length > 0) throw new Error(`The gallery catalog is inconsistent (scripts/sync-gallery-catalog.mjs --rehash rewrites the hashes):\n${problems.join("\n")}`);
+    process.stdout.write("The gallery catalog matches its manifest.\n");
+    return;
+  }
+
+  if (argv.includes("--rehash")) {
+    const changed = await rehashSnapshot(catalogsRoot, { matchGallery: argv.includes("--match-gallery") });
+    const problems = await verifySnapshot(catalogsRoot);
+    if (problems.length > 0) throw new Error(`The gallery catalog is still inconsistent after rehashing:\n${problems.join("\n")}`);
+    process.stdout.write(changed.length > 0 ? `Rehashed:\n${changed.join("\n")}\n` : "Hashes already match the records.\n");
+    return;
+  }
+
+  const galleryDir = option(argv, "--gallery");
+  const url = option(argv, "--url");
+  if (!galleryDir && !url) throw new Error("Pass --gallery <pptx-gallery checkout> or --url <base URL> (or --verify or --rehash).");
+  if (argv.includes("--include")) throw new Error("--include was removed in OPF 0.15: every kind mirrors the gallery, so the snapshot already holds every published record.");
+  const readOnly = argv.includes("--check") || argv.includes("--report");
+  if (argv.includes("--allow-dirty") && !readOnly) {
+    throw new Error("--allow-dirty requires --check or --report; snapshot writes must pin committed catalog bytes.");
+  }
+  if (url && !readOnly) {
+    throw new Error("--url requires --check or --report because a live response cannot prove a source commit; write snapshots from a clean --gallery checkout.");
+  }
+
+  const { current, manifest } = await readCurrentSnapshot(catalogsRoot);
+  let gallery;
+  let source;
+  if (galleryDir) {
+    const dir = path.resolve(galleryDir);
+    gallery = await readGalleryCheckout(dir);
+    source = gallerySource(dir, readOnly);
+  } else {
+    gallery = await fetchGalleryCatalog(url);
+    // A live fetch cannot name a commit; keep the pinned source so --check
+    // compares content only.
+    source = manifest?.source ?? { repository: GALLERY_REPOSITORY, commit: "unpinned", path: GALLERY_PUBLISHED_PATH };
+  }
+
+  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, allowRemoved: parseKindIds(argv, "--allow-removed") });
+  if (plan.problems.length > 0) throw new Error(`Gallery catalog cannot be snapshotted:\n${plan.problems.join("\n")}`);
+
+  if (argv.includes("--report")) {
+    printReport(plan);
+    return;
+  }
+
+  if (argv.includes("--check")) {
+    const changes = await diffSnapshot(catalogsRoot, plan);
+    if (changes.length > 0) {
+      throw new Error(`${relative(catalogsRoot)} does not match the gallery catalog (${changes.length} file(s)); run scripts/sync-gallery-catalog.mjs --gallery <checkout>:\n${changes.slice(0, 40).join("\n")}`);
+    }
+    process.stdout.write(`${relative(catalogsRoot)} matches the gallery catalog at ${source.commit}.\n`);
+    return;
+  }
+
+  const changes = await applySnapshot(catalogsRoot, plan);
+  printReport(plan);
+  process.stdout.write(`${changes.length} file(s) updated.\n`);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    process.stderr.write(`${error.message ?? error}\n`);
+    process.exit(1);
+  });
+}

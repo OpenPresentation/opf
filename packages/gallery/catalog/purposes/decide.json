@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+  "id": "decide",
+  "name": "Drive a Decision",
+  "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+  "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+  "outcome": "The audience makes or authorizes a clear decision.",
+  "successCriteria": [
+    "Decision owner understands the options",
+    "Recommendation and tradeoffs are explicit",
+    "The final ask is concrete"
+  ],
+  "recommendedNarratives": ["scqa", "board-meeting", "project-proposal"],
+  "recommendedTones": ["formal", "authoritative", "persuasive"],
+  "tags": ["decision", "recommendation", "approval"]
+}

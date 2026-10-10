@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-4x-vertical",
+  "name": "List_4x_Vertical",
+  "summary": "Canonical OPF list 4x vertical layout.",
+  "description": "List 4x Vertical OPF layout with 4 list content zones in a vertical reading flow.",
+  "design": {
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "vertical",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "4 zones",
+    "Left aligned",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x-vertical.svg"
+  },
+  "composition": {
+    "mode": "column"
+  }
+}
