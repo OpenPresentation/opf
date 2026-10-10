@@ -3,6 +3,7 @@
  * areas and the column breaks of a long list. `composeSlide` measures content and calls these; nothing here measures text.
  */
 import type { LayoutBox } from './composition.js';
+import { layoutTemplate } from './layout-template.js';
 
 /** How a region's blocks are arranged on one slide. */
 export interface FlowShape {
@@ -177,4 +178,65 @@ export function listColumnBreaks(heights: readonly number[], levels: readonly nu
     return best;
   };
   return solve(0, count).breaks;
+}
+
+/** Options of `composeLayoutAreas`. */
+export interface LayoutAreasOptions {
+  /** Canvas size in reference pixels. Default 1280 x 720. */
+  width?: number;
+  height?: number;
+  /** The record's or the deck's composition padding and gap (fractions of the short edge). Defaults: the record's, else 0.08 and 1/30. */
+  padding?: number;
+  gap?: number;
+  /** Draw the template mirrored (design.mirror). */
+  mirror?: boolean;
+  /** A right-to-left deck mirrors the drawing (on top of `mirror`). */
+  direction?: 'ltr' | 'rtl';
+}
+/** One area of a template as a layout master places it. */
+export interface ComposedLayoutArea {
+  name: string;
+  /** `title` or `subtitle`. */
+  heading: boolean;
+  box: LayoutBox;
+}
+
+/**
+ * The areas of a template composed for an empty slide at the canvas size, with nothing collapsed: the geometry of a
+ * layout's placeholders on a PowerPoint slide layout (design section 8). The content box is the canvas minus the padding;
+ * an `auto` row is as tall as one line of title (the `title` row, plus a subtitle line when the template has no
+ * `subtitle` area), one line of subtitle (a `subtitle` row) or two lines of body text (any other row). Slides compose
+ * their own geometry with `composeSlide`; this is the empty layout only.
+ */
+export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions = {}): { contentBox: LayoutBox; areas: ComposedLayoutArea[] } {
+  const template = layoutTemplate(layout);
+  const width = options.width ?? 1280, height = options.height ?? 720;
+  if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError('Canvas dimensions must be finite and positive.');
+  const short = Math.min(width, height), scale = short / 720;
+  const composition = (layout !== null && typeof layout === 'object' ? (layout as { composition?: { padding?: number; gap?: number } }).composition : undefined) ?? {};
+  const padding = (options.padding ?? composition.padding ?? 0.08) * short, gap = (options.gap ?? composition.gap ?? 1 / 30) * short;
+  const frame: LayoutBox = { x: padding, y: padding, width: width - 2 * padding, height: height - 2 * padding };
+  const rects = areaRects(template.grid);
+  const needs = template.rows.map((size, row) => {
+    if (size !== 'auto') return 0;
+    let need = 0;
+    for (const [name, rect] of rects) {
+      if (rect.row !== row || rect.rowSpan !== 1) continue;
+      need = Math.max(need, name === 'title' ? (54 + (template.subtitle ? 0 : 25)) * 1.22 * scale : name === 'subtitle' ? 25 * 1.22 * scale : 2 * 25 * 1.22 * scale);
+    }
+    return need;
+  });
+  const heights = rowHeights(template.rows, needs, frame.height, gap), widths = columnWidths(template.columns, frame.width, gap);
+  const rowY: number[] = [], columnX: number[] = [];
+  heights.reduce((y, size, row) => { rowY.push(size > 0 || !heights.slice(0, row).some(above => above > 0) ? y : y - gap); return size > 0 ? y + size + gap : y; }, 0);
+  widths.reduce((x, size) => { columnX.push(x); return x + size + gap; }, 0);
+  const flip = (options.mirror === true) !== (options.direction === 'rtl');
+  const areas = template.areas.map(area => {
+    const last = area.row + area.rowSpan - 1, y = frame.y + rowY[area.row]!;
+    const boxWidth = widths.slice(area.column, area.column + area.columnSpan).reduce((a, b) => a + b, 0) + gap * (area.columnSpan - 1);
+    const x = frame.x + columnX[area.column]!;
+    const box = { x: flip ? frame.x + frame.width - (x - frame.x) - boxWidth : x, y, width: boxWidth, height: Math.max(0, frame.y + rowY[last]! + heights[last]! - y) };
+    return { name: area.name, heading: area.heading, box };
+  });
+  return { contentBox: frame, areas };
 }

@@ -298,3 +298,16 @@ describe('geometry.regions', () => {
     assert.throws(() => compose({ title: 'x', blocks: [text(long.repeat(20))], composition: { overflow: 'error' } }, layouts.statement), /does not fit/);
   });
 });
+
+describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout places its placeholders', () => {
+  test('nothing collapses; auto rows hold one title line or two body lines', async () => {
+    const { composeLayoutAreas } = await import('../dist/composition.js');
+    const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
+    assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
+    const verdict = areas.find((area) => area.name === 'verdict').box;
+    assert.ok(near(verdict.height, 2 * 25 * 1.22));
+    assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
+    const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
+    assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');
+  });
+});

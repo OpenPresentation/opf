@@ -124,7 +124,9 @@ export async function run(args: string[], host: Host): Promise<void> {
 	// -i --migrate rewrites the input deck in place (OPF 0.19); every other conversion names an input and an output.
 	const inPlace = options["in-place"] === true, migrating = options.migrate === true;
 	if (inPlace && !migrating) throw usage("-i rewrites the input deck and needs --migrate; to convert, name an output.", "option-not-applicable", { option: "-i" });
-	if (inPlace ? positional.length !== 1 : positional.length !== 2) throw usage(inPlace ? "-i takes the input deck only: opf convert <deck> -i --migrate." : "opf convert needs an input and an output.");
+	const usageLines = spec.usage.map((line) => `  ${line}`).join("\n");
+	if (inPlace && positional.length > 1) throw usage(`opf convert -i takes the input deck only; got ${positional.length} (${positional.slice(1).join(" ")} is extra). Usage:\n${usageLines}`, "extra-argument");
+	if (!inPlace && positional.length < 2) throw usage(`opf convert needs ${spec.operands?.[1] ?? "<output>"}. Usage:\n${usageLines}`, "missing-argument");
 	const input = positional[0] as string;
 	if (inPlace && input === "-") throw usage("-i rewrites a file; stdin cannot be rewritten in place.", "option-not-applicable", { option: "-i" });
 	if (inPlace && options.force) throw usage("-i takes no --force.");

@@ -499,6 +499,11 @@ export interface CompositionExplanation {
 export interface SlideComposition {
   width: number;
   height: number;
+  /**
+   * The body's frame: the canvas minus padding, header and footer bands, the footnote area and placed-image bands, below
+   * the headings on an automatic slide. For a template layout (OPF 0.19) it is the whole template frame, the title area
+   * included (`headingAreas` and `regions` lie inside it, except where a bled region reaches the slide edge).
+   */
   contentBox: LayoutBox;
   items: ComposedItem[];
   groups: ComposedGroup[];
@@ -3112,5 +3117,5 @@ export { layoutContent, layoutLeaves, layoutSlots, layoutStructure, hasPlacehold
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
-export { gridFlowShape, listColumnBreaks, type FlowShape } from './template-geometry.js';
+export { composeLayoutAreas, gridFlowShape, listColumnBreaks, type ComposedLayoutArea, type FlowShape, type LayoutAreasOptions } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';

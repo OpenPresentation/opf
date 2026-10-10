@@ -209,12 +209,14 @@
     }
   },
   "if": {
-    "required": [
-      "placeholders"
-    ]
+    "not": {
+      "required": [
+        "areas"
+      ]
+    }
   },
   "then": {
-    "description": "A 0.18 record (transition only).",
+    "description": "A record without areas is a 0.18 record (transition only).",
     "properties": {
       "composition": {
         "$ref": "#/$defs/LegacyComposition"
@@ -227,13 +229,12 @@
     }
   },
   "else": {
-    "required": [
-      "areas"
-    ],
+    "description": "A template (OPF 0.19).",
     "properties": {
       "composition": {
         "$ref": "#/$defs/Composition"
-      }
+      },
+      "placeholders": false
     }
   },
   "$defs": {
