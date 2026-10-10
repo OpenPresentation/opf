@@ -162,31 +162,27 @@ The steps by hand below remain the fallback when the script cannot run.
 
 ## The gallery lane (RR-78)
 
-`@openpresentation/gallery` (`packages/gallery`, the pptx.gallery catalog records) is released on its own version
-line, outside the lockstep train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES`, never in `PACKAGES`, so no
-train plans, preps or tags it, and `release-plan.json` lists it under `independentPackages`. A gallery release needs
-no core release, and a core release does not release the gallery.
+`@openpresentation/gallery` (the pptx.gallery catalog records) is released from its own repository,
+[OpenPresentation/gallery](https://github.com/OpenPresentation/gallery), on its own version line, outside the lockstep
+train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES` (repository `gallery`, tags `vX.Y.Z`, workflow
+`gallery-publish.yml`), never in `PACKAGES`, so no train plans, preps or tags it, and `release-plan.json` lists it under
+`independentPackages`. A gallery release needs no core release, and a core release does not release the gallery.
 
 - **Versions.** New records are a minor release. Removing or renaming an id, changing how an existing record draws, or
-  a change that needs a newer record schema (`opf.catalogSchema`) is a major release. `pnpm check:gallery-stability`
-  (OPF CI on every pull request, and the publish workflow) fails a minor or patch release that changes an existing
-  record's drawing or removes an id; see [default-catalog.md](default-catalog.md#the-openpresentationgallery-package).
-- **Release prep.** A pull request that changes only `packages/gallery/package.json` (the version),
-  `packages/gallery/CHANGELOG.md` (`node scripts/changelog-fragments.mjs assemble --version X.Y.Z --package gallery`)
-  and the lockfile if needed. Merge it with green CI.
-- **Publish.** Tag the release commit on `main` with `gallery-vX.Y.Z`. `.github/workflows/gallery-publish.yml` refuses
-  a tag that does not equal `gallery-v` plus `packages/gallery/package.json`'s version (and a package whose
-  `repository` is not `OpenPresentation/opf` `packages/gallery`), runs lint, `check:catalog`, `check:gallery`,
-  `check:gallery-stability` and the pack dry run, and publishes with `npm publish --access public --provenance`. A
-  manual run (`workflow_dispatch`) runs the same gates and publishes nothing.
-- **Verify.** `node scripts/release-train.mjs verify gallery@X.Y.Z` (tag, gitHead, provenance built by
-  `gallery-publish.yml` on `refs/tags/gallery-vX.Y.Z`, signatures). The workflow creates no GitHub release.
+  a change that needs a newer record schema (`opf.catalogSchema`) is a major release. The gallery repository's
+  pixel-stability check (`npm run check:stability`, on every pull request there and before every publish) fails a
+  minor or patch release that changes an existing record's drawing or removes an id.
+- **Release and publish.** In the gallery repository: a pull request that sets the version and the `CHANGELOG.md`
+  section, then a `vX.Y.Z` tag on main. Its `gallery-publish.yml` refuses a tag that is not `v` plus the version, a
+  tag off main and a `repository` other than OpenPresentation/gallery, runs every check, and publishes with
+  `npm publish --access public --provenance` (see its CONTRIBUTING.md).
+- **Verify.** `node scripts/release-train.mjs verify gallery@X.Y.Z` here (tag `vX.Y.Z` and gitHead in
+  OpenPresentation/gallery, provenance built by `gallery-publish.yml` on `refs/tags/vX.Y.Z`, signatures). The workflow
+  creates no GitHub release.
 - **Trusted publisher on npm** (`@openpresentation/gallery`, Settings, Trusted publishing): GitHub Actions,
-  organization `OpenPresentation`, repository `opf`, workflow filename `gallery-publish.yml`, no environment.
-- **First release.** `1.0.0` is the first version published from this repository. `0.0.1` was a placeholder
-  published by hand with `repository` pointing at `Data-Advantage/pptx-gallery`; 1.0.0's `package.json` names
-  `OpenPresentation/opf` (`directory: packages/gallery`). Against 0.0.1 the stability check runs as a major release
-  and reports no changed record.
+  organization `OpenPresentation`, repository `gallery`, workflow filename `gallery-publish.yml`, no environment.
+- **First release.** `1.0.0` is the first version published from OpenPresentation/gallery; `0.0.1` was a placeholder
+  published by hand. Against 0.0.1 the stability check runs as a major release and reports no changed record.
 
 Core depends on `@openpresentation/gallery@^1` from OPF 0.19 (its Node defaults and the CLI register `gallery`); a
 core release then needs the gallery version its range names on npm first, as for any dependency.

@@ -55,9 +55,10 @@ export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
  * RR-78: packages released on their own version line, outside the lockstep train (docs/release-process.md, "The gallery
  * lane"). No train names them, so plan, prep, tag and run never touch them and no lockstep floor names them; `verify`
  * checks one of their published releases like any other (tag, gitHead, provenance from the named workflow, signatures).
+ * The gallery is published from its own repository, OpenPresentation/gallery, with `vX.Y.Z` tags.
  */
 export const INDEPENDENT_PACKAGES = [
-  { key: "gallery", name: "@openpresentation/gallery", repo: "opf", manifest: "packages/gallery/package.json", tagPrefix: "gallery-v", workflow: "gallery-publish.yml", githubRelease: false, changelog: { file: "packages/gallery/CHANGELOG.md", package: "gallery" }, lockfile: "pnpm", independent: true, upstream: [] },
+  { key: "gallery", name: "@openpresentation/gallery", repo: "gallery", manifest: "package.json", tagPrefix: "v", workflow: "gallery-publish.yml", githubRelease: false, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", independent: true, upstream: [] },
 ];
 const SLSA = "https://slsa.dev/provenance/v1";
 /** `npm install` output for a version that is in the packument but not yet installable (registry/CDN propagation lag). */
@@ -77,7 +78,7 @@ export function packageOf(id, { independent = false } = {}) {
   if (lockstep) return lockstep;
   const lane = INDEPENDENT_PACKAGES.find((pkg) => pkg.key === id || pkg.name === id);
   if (lane && independent) return lane;
-  if (lane) throw new Error(`${lane.name} is released on its own version line (${lane.workflow}, ${lane.tagPrefix}X.Y.Z tags), not by the train; only \`verify ${lane.key}@X.Y.Z\` applies to it`);
+  if (lane) throw new Error(`${lane.name} is released on its own version line (${OWNER}/${lane.repo}, ${lane.workflow}, ${lane.tagPrefix}X.Y.Z tags), not by the train; only \`verify ${lane.key}@X.Y.Z\` applies to it`);
   throw new Error(`unknown package "${id}" (one of ${PACKAGE_KEYS.join(", ")}, a repository name or an npm name)`);
 }
 

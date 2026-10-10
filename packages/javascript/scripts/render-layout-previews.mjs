@@ -1,15 +1,13 @@
 // Renders the React/Tailwind layout preview elements from
 // pptx-gallery/lib/layout-previews.tsx to static HTML and writes them to
-// packages/gallery/previews/layouts/<slug>.html (RR-78: @openpresentation/gallery/previews). Also writes its index.json.
-// Run `node scripts/sync-gallery-catalog.mjs --rehash` from the repository root afterwards: it copies the previews to
-// core's spec/previews/layouts, which stays byte-identical until core drops /catalog (OPF 0.19).
+// opf/spec/previews/layouts/<slug>.html. Also writes spec/previews/layouts/index.json.
 //
-// Usage (from packages/gallery):
+// Usage:
 //   node --import tsx scripts/render-layout-previews.mjs
 //     [--source <path-to-layout-previews.tsx>] [--out <output-dir>]
 //
 // React/react-dom are resolved from the source file's nearest node_modules
-// (so this script works without adding react as a dependency of the gallery package).
+// (so this script works without adding react as a dep of @openpresentation/opf).
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
@@ -33,7 +31,7 @@ const sourcePath = path.resolve(
   ),
 );
 const outDir = path.resolve(
-  arg("out", path.join(packageRoot, "previews/layouts")),
+  arg("out", path.join(repoRoot, "spec/previews/layouts")),
 );
 
 const require = createRequire(pathToFileURL(sourcePath));

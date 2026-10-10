@@ -25,8 +25,9 @@
     {
       "name": "@openpresentation/gallery",
       "version": "0.0.1",
+      "repository": "OpenPresentation/gallery",
       "workflow": "gallery-publish.yml",
-      "tagPrefix": "gallery-v"
+      "tagPrefix": "v"
     }
   ],
   "exampleRefs": {
