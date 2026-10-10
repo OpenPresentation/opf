@@ -1,23 +1,12 @@
-// Shared plumbing for the commands that produce and read files: render, export and import.
-// They live outside index.ts so concurrent command work does not collide; index.ts only dispatches here.
-import { createHash } from "node:crypto";
+// Files and streams for every command: reading an input (a path or `-` for stdin), writing text atomically, and the facts a
+// report gives about a file (SHA-256, size).
+import { createHash, randomUUID } from "node:crypto";
 import { statSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { link, lstat, mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { OPFApiError } from "@openpresentation/opf/internal/engine";
+import { CliError } from "./errors.js";
 
-export { type PlannedFile, checkDestinations, deckStem, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
-
-/** Exit 2 is a usage, I/O or environment problem; exit 1 is a document, diagnostic or conflict problem. */
-export class FileCommandError extends Error {
-	constructor(
-		message: string,
-		readonly code = 2,
-		readonly extra: Record<string, unknown> = {},
-	) {
-		super(message);
-	}
-}
+export { type PlannedFile, deckStem, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
 
 /**
  * Whether two paths name the same file (RR-66). Comparing resolved strings misses a file named in another case on a
@@ -47,68 +36,80 @@ export function dataFormatOf(file: string): "json" | "tsv" | "csv" | undefined {
 
 export const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 export const sha256 = (value: string | Uint8Array) => createHash("sha256").update(value).digest("hex");
+export const byteLength = (value: string | Uint8Array) => (typeof value === "string" ? Buffer.byteLength(value) : value.length);
 
-export interface OptionSpec {
-	/** Options that take one value. */
-	values: string[];
-	/** Options that take a value and may repeat. */
-	repeated?: string[];
-	/** Options without a value. */
-	flags: string[];
-}
+let stdinTaken = false;
 
-/** Same rules as the other commands: unknown or duplicate options and a missing value are usage errors; `--` ends options. */
-export function parseOptions(args: string[], spec: OptionSpec) {
-	const positional: string[] = [];
-	const options: Record<string, string | boolean> = Object.create(null);
-	const repeated: Record<string, string[]> = Object.create(null);
-	let literal = false;
-	for (let i = 0; i < args.length; i++) {
-		const arg = args[i] as string;
-		if (arg === "--" && !literal) {
-			literal = true;
-			continue;
-		}
-		if (!literal && arg.startsWith("--")) {
-			const key = arg.slice(2);
-			const isValue = spec.values.includes(key);
-			const isRepeated = spec.repeated?.includes(key) ?? false;
-			if (!isValue && !isRepeated && !spec.flags.includes(key)) throw new FileCommandError(`Unknown or duplicate option: ${arg}`);
-			if (isValue || isRepeated) {
-				const value = args[++i];
-				if (value === undefined || value.startsWith("--")) throw new FileCommandError(`${arg} needs a value.`);
-				if (isRepeated) repeated[key] = [...(repeated[key] ?? []), value];
-				else if (key in options) throw new FileCommandError(`Unknown or duplicate option: ${arg}`);
-				else options[key] = value;
-			} else if (key in options) throw new FileCommandError(`Unknown or duplicate option: ${arg}`);
-			else options[key] = true;
-		} else positional.push(arg);
-	}
-	return { positional, options, repeated };
-}
-
-export function arity(args: string[], min: number, max = min) {
-	if (args.length < min || args.length > max) throw new FileCommandError("Incorrect arguments. Run opf --help.");
-}
-
+/** All of stdin. A command reads it at most once: a second `-` is a usage error. */
 export async function readStdin(): Promise<Buffer> {
+	if (stdinTaken) throw new CliError("stdin can supply only one input.", "usage");
+	stdinTaken = true;
 	const chunks: Buffer[] = [];
 	for await (const chunk of process.stdin) chunks.push(Buffer.from(chunk));
 	return Buffer.concat(chunks);
 }
 
-export async function readBytes(file: string): Promise<{ bytes: Uint8Array; name: string }> {
-	if (file === "-") return { bytes: new Uint8Array(await readStdin()), name: "stdin" };
+/** A file's bytes, or stdin's for `-`. A missing file is `input-not-found` (exit 2). */
+export async function readBytes(file: string): Promise<Uint8Array> {
+	if (file === "-") return new Uint8Array(await readStdin());
 	try {
-		return { bytes: new Uint8Array(await readFile(file)), name: file };
+		return new Uint8Array(await readFile(file));
 	} catch (error) {
-		throw new FileCommandError(`Cannot read ${file}: ${(error as NodeJS.ErrnoException).code ?? (error as Error).message}.`);
+		const reason = (error as NodeJS.ErrnoException).code ?? (error as Error).message;
+		const missing = reason === "ENOENT" || reason === "ENOTDIR";
+		throw new CliError(`Cannot read ${file}: ${missing ? "no such file" : reason}.`, missing ? "input-not-found" : "input-unreadable", 2, { file });
 	}
 }
 
-/** An API error of the engines as the command's failure: exit 1 for a state of the document, 2 for the request or the environment; the error report names the code unless it is a plain usage error. */
-export function commandError(error: OPFApiError): FileCommandError {
-	const document = ["invalid-presentation", "no-slides", "all-slides-hidden", "export-failed", "import-failed", "output-exists", "output-not-file"].includes(error.code);
-	const plain = ["invalid-option", "no-slides", "all-slides-hidden", "output-exists", "output-not-file"].includes(error.code);
-	return new FileCommandError(error.message, document ? 1 : 2, plain ? {} : { code: error.code, ...error.details });
+/** A file's text (UTF-8, a BOM kept), or stdin's for `-`. */
+export async function readText(file: string): Promise<string> {
+	return Buffer.from(await readBytes(file)).toString("utf8");
+}
+
+/** Refuse an existing output unless `overwrite` (exit 1, `output-exists`), and a symlink or non-regular file always. Run before anything is printed or written. */
+export async function checkOutput(file: string, overwrite: boolean): Promise<void> {
+	try {
+		const stat = await lstat(path.resolve(file));
+		if (!stat.isFile()) throw new CliError(`Refusing to replace ${file}: it is a symlink, a directory or another non-regular file.`, "output-not-file", 1, { file });
+		if (!overwrite) throw new CliError(`Output already exists: ${file}. Use --force to replace it.`, "output-exists", 1, { file });
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+	}
+}
+
+/**
+ * Write text atomically (a temporary sibling, then a rename or a link), creating folders. `overwrite` must be true to replace an
+ * existing file; `original` refuses the write when the input changed since it was read (an edit in place).
+ */
+export async function saveText(file: string, text: string | Uint8Array, overwrite: boolean, original?: { file: string; raw: string }): Promise<void> {
+	const output = path.resolve(file);
+	const temporary = path.join(path.dirname(output), `.${path.basename(output)}.${randomUUID()}.tmp`);
+	let mode: number | undefined;
+	try {
+		const stat = await lstat(output);
+		if (!stat.isFile()) throw new CliError(`Refusing to replace ${file}: it is a symlink, a directory or another non-regular file.`, "output-not-file", 1, { file });
+		if (!overwrite) throw new CliError(`Output already exists: ${file}. Use --force to replace it.`, "output-exists", 1, { file });
+		mode = stat.mode;
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+	}
+	await mkdir(path.dirname(output), { recursive: true });
+	try {
+		await writeFile(temporary, text, { flag: "wx", mode });
+		if (original && (await readFile(original.file, "utf8")) !== original.raw) throw new CliError("The input changed while it was being edited; read it again and retry.", "input-changed", 1, { file: original.file });
+		if (overwrite) await rename(temporary, output);
+		else {
+			// A link publishes a complete file without replacing an output created concurrently.
+			try {
+				await link(temporary, output);
+			} catch (error) {
+				if ((error as NodeJS.ErrnoException).code === "EEXIST") throw new CliError(`Output already exists: ${file}.`, "output-exists", 1, { file });
+				throw error;
+			}
+		}
+	} finally {
+		await unlink(temporary).catch((error) => {
+			if (error.code !== "ENOENT") throw error;
+		});
+	}
 }

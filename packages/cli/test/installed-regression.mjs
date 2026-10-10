@@ -2,9 +2,9 @@
 // installed `opf` binary, its published opf-render and opf-pptx peers and the Noto script packages. Nothing else locks it: the
 // font-policy test uses a stub renderer, and files.mjs does not render a script deck or export an unresolved remote image.
 //
-//   AUTO-25  `opf render --format svg` is standalone: a ja-JP (zh-CN) deck embeds Noto Sans JP (SC) 400 and 700, `--text system`
+//   AUTO-25  `opf convert deck deck.svg` is standalone: a ja-JP (zh-CN) deck embeds Noto Sans JP (SC) 400 and 700, `--text system`
 //            embeds no font bytes, and a Latin-only deck embeds no CJK face.
-//   AUTO-26  `opf export --format pptx` never fetches an image URL: the placeholder is written with an `unresolved-asset` warning
+//   AUTO-26  `opf convert deck deck.pptx` never fetches an image URL: the placeholder is written with an `unresolved-asset` warning
 //            finding at the slide path (image blocks, and the quote photo of opf-pptx#210), `--fail-on warning` exits 1 and writes
 //            no file, and an embedded or local PNG exports a native picture even under `--fail-on warning`.
 //   No fetches  every command runs with a preload that records and refuses any network connection or fetch, and a local HTTP server
@@ -37,9 +37,11 @@ const bin = realpathSync(executable);
 // request, merge-queue or roller-candidate run skips with a notice; every other run fails.
 if (!gateReport(cliPeerGate({cliRoot: path.dirname(path.dirname(bin)), executable: bin, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const require = createRequire(bin);
-// RR-74: the registry run drives the plan's published CLI, whose flag for "no embedded fonts" is --svg-fonts none before 0.18 and --text system from it
-// (the candidate CLI keeps its 0.17 version until release prep, so its usage says which).
-const noFonts = spawnSync(process.execPath, [bin, '--help'], {encoding: 'utf8'}).stdout.includes('[--text <fonts|system|paths>]') ? ['--text', 'system'] : ['--svg-fonts', 'none'];
+// RR-74, RR-75: the registry run drives the plan's published CLI, whose flag for "no embedded fonts" is --svg-fonts none before 0.18 and
+// --text system from it (the candidate CLI keeps its 0.17 version until release prep, so its usage says which: 0.18 has opf doctor).
+// Every check runs `opf convert <deck> <file>`, which both lines have.
+const usage = spawnSync(process.execPath, [bin, '--help'], {encoding: 'utf8'}).stdout;
+const noFonts = usage.includes('[--text <fonts|system|paths>]') || usage.includes('opf doctor') ? ['--text', 'system'] : ['--svg-fonts', 'none'];
 for (const name of ['@expo-google-fonts/noto-sans-jp', '@expo-google-fonts/noto-sans-sc', '@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
   try { require.resolve(`${name}/package.json`); } catch { assert.fail(`${name} must be installed beside the CLI (${bin}) for this test`); }
 }
@@ -157,13 +159,14 @@ try {
   await writeDeck('zh.opf.json', {name: 'Chinese', language: 'zh-CN', slides: [{id: 'zh', title: '季度回顾', text: '所有地区的收入都有增长。'}]});
   await writeDeck('en.opf.json', {name: 'English', slides: [{id: 'en', title: 'Quarterly review', text: 'Revenue grew in every region.'}]});
 
-  const ja = await run(['render', 'ja.opf.json', '--format', 'svg', '--out', 'ja-svg']);
+  // A one-slide deck is written to the output itself.
+  const ja = await run(['convert', 'ja.opf.json', 'ja-svg/Japanese.svg']);
   assert.equal(ja.ok, true); assert.equal(ja.written, true);
   assert.deepEqual(ja.fonts.scripts?.packages, ['@expo-google-fonts/noto-sans-jp'], 'the Japanese deck selects the Noto Sans JP package');
   assert.deepEqual(ja.fonts.scripts?.notInstalled, []);
   assert.ok(!ja.findings.some(item => item.ruleId === 'fonts/script-font-not-installed'));
-  assert.deepEqual(await readdir(path.join(temp, 'ja-svg')), ['Japanese-001.svg']);
-  const jaSvg = await readFile(path.join(temp, 'ja-svg/Japanese-001.svg'), 'utf8');
+  assert.deepEqual(await readdir(path.join(temp, 'ja-svg')), ['Japanese.svg']);
+  const jaSvg = await readFile(path.join(temp, 'ja-svg/Japanese.svg'), 'utf8');
   const jaFaces = embeddedFaces(jaSvg);
   const jp = facesOf(jaFaces, 'Noto Sans JP');
   assert.deepEqual(jp.map(face => face.weight).sort(), [400, 700], 'Noto Sans JP weights 400 and 700 are embedded');
@@ -176,24 +179,24 @@ try {
   assert.match(jaSvg, /font-family="Noto Sans JP, sans-serif"/, 'the text draws with the embedded family');
   checks++;
 
-  const none = await run(['render', 'ja.opf.json', '--format', 'svg', ...noFonts, '--out', 'ja-none']);
+  const none = await run(['convert', 'ja.opf.json', 'ja-none/Japanese.svg', ...noFonts]);
   assert.equal(none.ok, true);
-  const noneSvg = await readFile(path.join(temp, 'ja-none/Japanese-001.svg'), 'utf8');
+  const noneSvg = await readFile(path.join(temp, 'ja-none/Japanese.svg'), 'utf8');
   assert.deepEqual(embeddedFaces(noneSvg), []);
   assert.ok(!noneSvg.includes('@font-face') && !/data:(font|application\/(x-)?font)/.test(noneSvg), `${noFonts.join(' ')} embeds no font bytes`);
   assert.ok(noneSvg.length < 20_000, `${noFonts.join(' ')} leaves a small SVG (${noneSvg.length} bytes)`);
   checks++;
 
-  const zh = await run(['render', 'zh.opf.json', '--format', 'svg', '--out', 'zh-svg']);
+  const zh = await run(['convert', 'zh.opf.json', 'zh-svg/Chinese.svg']);
   assert.equal(zh.ok, true);
-  const zhFaces = embeddedFaces(await readFile(path.join(temp, 'zh-svg/Chinese-001.svg'), 'utf8'));
+  const zhFaces = embeddedFaces(await readFile(path.join(temp, 'zh-svg/Chinese.svg'), 'utf8'));
   assert.deepEqual(facesOf(zhFaces, 'Noto Sans SC').map(face => face.weight).sort(), [400, 700], 'a zh-CN deck embeds Noto Sans SC 400 and 700');
   assert.equal(facesOf(zhFaces, 'Noto Sans JP').length, 0);
   checks++;
 
-  const en = await run(['render', 'en.opf.json', '--format', 'svg', '--out', 'en-svg']);
+  const en = await run(['convert', 'en.opf.json', 'en-svg/English.svg']);
   assert.equal(en.ok, true);
-  const enSvg = await readFile(path.join(temp, 'en-svg/English-001.svg'), 'utf8');
+  const enSvg = await readFile(path.join(temp, 'en-svg/English.svg'), 'utf8');
   const enFaces = embeddedFaces(enSvg);
   assert.ok(enFaces.length > 0, 'a Latin deck still embeds its Latin faces');
   assert.deepEqual(enFaces.filter(face => /^Noto Sans (JP|SC|KR|TC)$/.test(face.family)), [], 'a Latin-only deck embeds no CJK face');
@@ -208,7 +211,7 @@ try {
     {id: 'b', title: 'Remote http image', image: httpPhoto},
     {id: 'c', quote: {text: 'A quote with a headshot', attribution: 'Someone', photo: {src: httpsPhoto, alt: 'Headshot'}}},
   ]});
-  const warned = await run(['export', 'remote.opf.json', '--format', 'pptx', '--out', 'remote.pptx']);
+  const warned = await run(['convert', 'remote.opf.json', 'remote.pptx']);
   assert.equal(warned.ok, true, 'a warning does not fail the default gate');
   assert.equal(warned.written, true);
   assert.equal(warned.counts.error, 0);
@@ -227,8 +230,9 @@ try {
   }
   checks++;
 
-  const refused = await run(['export', 'remote.opf.json', '--format', 'pptx', '--out', 'remote-strict.pptx', '--fail-on', 'warning'], {status: 1});
-  assert.equal(refused.ok, false); assert.equal(refused.written, false);
+  // 0.17 prints the refused report on stdout (written: false), 0.18 the error report on stderr (code findings-at-fail-on).
+  const refused = await run(['convert', 'remote.opf.json', 'remote-strict.pptx', '--fail-on', 'warning'], {status: 1});
+  assert.equal(refused.ok, false); assert.notEqual(refused.written, true);
   assert.equal(unresolved(refused).length, 3);
   assert.equal(existsSync(path.join(temp, 'remote-strict.pptx')), false, '--fail-on warning writes no file');
   assert.ok(!(await readdir(temp)).some(name => name.startsWith('remote-strict')), 'and no temporary file either');
@@ -242,7 +246,7 @@ try {
     {id: 'b', quote: {text: 'A quote with a headshot', attribution: 'Someone', photo: {src: dataPng, alt: 'Headshot'}}},
     {id: 'c', title: 'Local image', image: 'assets/pixel.png'},
   ]});
-  const native = await run(['export', 'embedded.opf.json', '--format', 'pptx', '--out', 'embedded.pptx', '--fail-on', 'warning']);
+  const native = await run(['convert', 'embedded.opf.json', 'embedded.pptx', '--fail-on', 'warning']);
   assert.equal(native.ok, true); assert.equal(native.written, true);
   assert.deepEqual(native.counts, {error: 0, warning: 0, info: 0}, JSON.stringify(native.findings));
   assert.deepEqual(unresolved(native), []);
@@ -254,8 +258,8 @@ try {
   checks++;
 
   // ---- No fetches ---------------------------------------------------------------------------------------------------------
-  // The same decks through render: the image URL is a render/unresolved-asset warning, never a request.
-  const rendered = await run(['render', 'remote.opf.json', '--format', 'svg', '--out', 'remote-svg']);
+  // The same decks drawn as SVG: the image URL is a render/unresolved-asset warning, never a request.
+  const rendered = await run(['convert', 'remote.opf.json', 'remote-svg/remote.svg']);
   assert.ok(rendered.findings.some(item => item.ruleId === 'render/unresolved-asset' && item.path === '/slides/0/image'));
   assert.deepEqual(await readNetworkLog(), [], 'no process tried to connect or fetch');
   assert.deepEqual(seen, {requests: 0, connections: 0}, 'the request counter saw no request and no connection');

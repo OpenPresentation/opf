@@ -1,37 +1,31 @@
-// `opf convert` (RR-62), the thin command over `convert` of `@openpresentation/opf`, and the --out rule that `opf render` and
-// `opf export` share with it. Deck-to-deck conversions and the errors need no optional peer and always run; the drawing checks
-// run through the installed opf-render and opf-pptx and wait, like files.mjs, while those do not satisfy the CLI's peer ranges
-// (scripts/unreleased-gate.mjs). A missing peer is simulated with a copy of the build and of core in a tree without peers.
+// RR-75: `opf convert`, the one command for every change of format (it absorbed render, export, import, from-md, to-md, from-yaml
+// and to-yaml). Deck-to-deck pairs and every usage error need no optional peer and always run; drawing runs against stand-in
+// opf-render and opf-pptx packages that record what the engine asks of them (scripts/stub-peers.mjs), so it runs whatever renderer
+// the workspace has; a missing peer is a copy of the build and of core in a tree without peers.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
-import { cliPeerGate, report } from "../../../scripts/unreleased-gate.mjs";
 
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
 const executable = process.env.OPF_TEST_BIN ?? path.join(cliRoot, "dist", "index.js");
-const peers = cliPeerGate({ cliRoot, executable, names: ["@openpresentation/opf-render", "@openpresentation/opf-pptx"] });
-const skip = report(peers) ? false : "the optional peers are not on npm at the versions the CLI asks for";
-// The commands report paths resolved against the working directory, which the OS gives as a real path (macOS /var is
-// /private/var): the expected paths start from the real path of the temporary folder too, as files.mjs does.
 const temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-convert-command-")));
 after(() => rm(temp, { recursive: true, force: true }));
 
 const deck = { name: "Convert deck", slides: [{ title: "One" }, { title: "Two", items: ["a", "b"] }, { title: "Three" }] };
-const PNG = (bytes) => bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
 
-function run(args, { status = 0, cwd = temp, bin = executable } = {}) {
-  const result = spawnSync(process.execPath, [bin, ...args], { cwd, encoding: "utf8", timeout: 120000, maxBuffer: 64 * 1024 * 1024 });
+function run(args, { status = 0, cwd = temp, bin = executable, input, env } = {}) {
+  const result = spawnSync(process.execPath, [bin, ...args], { cwd, input, encoding: "utf8", timeout: 120000, maxBuffer: 64 * 1024 * 1024, env: { ...process.env, npm_config_user_agent: "", ...env } });
   assert.equal(result.status, status, JSON.stringify({ args, stdout: result.stdout.slice(0, 2000), stderr: result.stderr.slice(0, 2000) }));
   const parse = (text) => {
     try {
-      return JSON.parse(text);
+      return JSON.parse(text.slice(Math.max(0, text.indexOf("{"))));
     } catch {
       return undefined;
     }
@@ -47,96 +41,162 @@ async function folder(presentation = deck) {
 }
 
 describe("opf convert, deck to deck", () => {
-  test("writes the form the output names and prints the report of opf export", async () => {
+  test("every pair of forms, by the output's name, with the report envelope", async () => {
     const dir = await folder();
-    const { report: out } = run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: dir });
-    assert.equal(out.command, "convert");
-    assert.equal(out.format, "markdown");
-    assert.equal(out.ok, true);
-    assert.equal(out.valid, true);
-    assert.equal(out.written, true);
-    assert.equal(out.input.file, path.join(dir, "deck.opf.json"));
-    assert.match(out.input.sha256, /^[0-9a-f]{64}$/);
-    assert.equal(out.outputs.length, 1);
-    assert.equal(out.outputs[0].file, path.join(dir, "deck.opf.md"));
-    assert.equal(out.outputs[0].mediaType, "text/markdown");
-    assert.deepEqual(out.counts, { error: 0, warning: 0, info: 0 });
-    assert.equal(out.checks.nativeExport, "not-checked");
+    const { report } = run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: dir });
+    assert.deepEqual(Object.keys(report).slice(0, 6), ["command", "ok", "input", "outputs", "findings", "counts"]);
+    assert.equal(report.command, "convert");
+    assert.equal(report.format, "markdown");
+    assert.equal(report.ok, true);
+    assert.equal(report.input.file, path.join(dir, "deck.opf.json"));
+    assert.match(report.input.sha256, /^[0-9a-f]{64}$/);
+    assert.equal(report.outputs.length, 1);
+    assert.deepEqual(Object.keys(report.outputs[0]), ["file", "sha256", "bytes", "mediaType"]);
+    assert.equal(report.outputs[0].file, path.join(dir, "deck.opf.md"));
+    assert.equal(report.outputs[0].mediaType, "text/markdown");
+    assert.deepEqual(report.counts, { error: 0, warning: 0, info: 0 });
     assert.match(await readFile(path.join(dir, "deck.opf.md"), "utf8"), /^---\nname: Convert deck\n---/);
     run(["convert", "deck.opf.md", "nested/deck.opf.yaml"], { cwd: dir });
     assert.match(await readFile(path.join(dir, "nested", "deck.opf.yaml"), "utf8"), /^name: Convert deck\n/);
+    run(["convert", "nested/deck.opf.yaml", "back.json"], { cwd: dir });
+    assert.deepEqual(JSON.parse(await readFile(path.join(dir, "back.json"), "utf8")), deck);
+    run(["convert", "nested/deck.opf.yaml", "deck.yml"], { cwd: dir });
+    // A plain .md input is OPF Markdown, an outline included.
+    await writeFile(path.join(dir, "outline.md"), "# A\n- x\n# B\ntext\n");
+    run(["convert", "outline.md", "outline.opf.yaml"], { cwd: dir });
+    assert.equal(await readFile(path.join(dir, "outline.opf.yaml"), "utf8"), "slides:\n  - title: A\n    items:\n      - x\n  - title: B\n    text: text\n");
+  });
+
+  test("stdin and stdout: --from (or { and [ sniffed as JSON), --to for stdout, the report on stderr", async () => {
+    const yaml = run(["convert", "-", "-", "--to", "yaml"], { input: JSON.stringify(deck) });
+    assert.match(yaml.stdout, /^name: Convert deck\n/);
+    assert.equal(yaml.error.outputs[0].file, "-");
+    assert.equal(yaml.error.input.file, "-");
+    const md = run(["convert", "-", "-", "--from", "yaml", "--to", "md"], { input: yaml.stdout });
+    assert.match(md.stdout, /^---\nname: Convert deck\n---/);
+    const unknown = run(["convert", "-", "-", "--to", "json"], { input: "name: x\n", status: 2 });
+    assert.equal(unknown.error.code, "unknown-input-format");
+    assert.match(unknown.error.error, /--from yaml\|md\|pptx/);
+    const noTo = run(["convert", "deck.opf.json", "-"], { cwd: await folder(), status: 2 });
+    assert.match(noTo.error.error, /stdout needs --to/);
+  });
+
+  test("--schema-comment and --to agree with the output's name or are refused", async () => {
+    const dir = await folder();
+    run(["convert", "deck.opf.json", "deck.opf.yaml", "--schema-comment"], { cwd: dir });
+    assert.match(await readFile(path.join(dir, "deck.opf.yaml"), "utf8"), /^# yaml-language-server: \$schema=/);
+    run(["convert", "deck.opf.json", "deck2.opf.yaml", "--to", "yaml"], { cwd: dir });
+    assert.equal(run(["convert", "deck.opf.json", "deck3.opf.yaml", "--to", "json"], { cwd: dir, status: 2 }).error.code, "invalid-value");
+    assert.equal(run(["convert", "deck.opf.json", "deck.pdf", "--to", "png"], { cwd: dir, status: 2 }).error.code, "invalid-value");
   });
 
   test("an existing output exits 1 without --force and is replaced with it", async () => {
     const dir = await folder();
     await writeFile(path.join(dir, "deck.opf.yaml"), "keep");
     const refused = run(["convert", "deck.opf.json", "deck.opf.yaml"], { cwd: dir, status: 1 });
-    assert.match(refused.error.error, /Output already exists: .*Use --force\./);
+    assert.equal(refused.error.code, "output-exists");
+    assert.match(refused.error.error, /Output already exists: .*Use --force/);
     assert.equal(await readFile(path.join(dir, "deck.opf.yaml"), "utf8"), "keep");
     run(["convert", "deck.opf.json", "deck.opf.yaml", "--force"], { cwd: dir });
     assert.match(await readFile(path.join(dir, "deck.opf.yaml"), "utf8"), /^name: Convert deck/);
   });
 
-  test("an invalid deck and a finding at --fail-on exit 1 with the report and write nothing", async () => {
+  test("an invalid deck and a finding at --fail-on exit 1 with the findings and write nothing", async () => {
     const dir = await folder({ slides: 42 });
     const invalid = run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: dir, status: 1 });
-    assert.equal(invalid.report.ok, false);
-    assert.equal(invalid.report.written, false);
-    assert.ok(invalid.report.findings.some((found) => found.severity === "error"));
+    assert.equal(invalid.error.ok, false);
+    assert.equal(invalid.error.code, "invalid-document");
+    assert.ok(invalid.error.findings.some((found) => found.severity === "error" && found.location));
     assert.equal(existsSync(path.join(dir, "deck.opf.md")), false);
     const warned = await folder({ slides: [{ title: "A", layout: "not-a-layout" }] });
     const gated = run(["convert", "deck.opf.json", "deck.opf.md", "--fail-on", "warning"], { cwd: warned, status: 1 });
-    assert.equal(gated.report.ok, false);
-    assert.equal(gated.report.written, false);
-    assert.equal(gated.report.outputs[0].planned, true);
+    assert.equal(gated.error.code, "findings-at-fail-on");
+    assert.equal(gated.error.outputs[0].planned, true);
     assert.equal(existsSync(path.join(warned, "deck.opf.md")), false);
     run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: warned });
   });
 
-  test("usage, names and files: exit 2", async () => {
+  test("names and files: exit 2", async () => {
     const dir = await folder();
-    assert.match(run(["convert", "deck.opf.json", "deck.docx"], { cwd: dir, status: 2 }).error.error, /writes \.pdf, \.pptx, \.png, \.svg, \.zip, \.opf\.md, \.yaml, \.yml or \.json files/);
-    assert.match(run(["convert", "notes.txt", "deck.pdf"], { cwd: dir, status: 2 }).error.error, /reads \.pptx, \.opf\.md, \.yaml, \.yml or \.json files/);
-    const missing = run(["convert", "absent.opf.json", "deck.opf.md"], { cwd: dir, status: 2 });
-    assert.equal(missing.error.code, "input-not-found");
-    run(["convert", "-", "deck.opf.md"], { cwd: dir, status: 2 });
-    run(["convert", "deck.opf.json"], { cwd: dir, status: 2 });
-    assert.match(run(["convert", "deck.opf.json", "deck.opf.md", "--scale", "2"], { cwd: dir, status: 2 }).error.error, /--scale applies to export outputs/);
+    assert.match(run(["convert", "deck.opf.json", "deck.docx"], { cwd: dir, status: 2 }).error.error, /writes \.json, \.opf\.yaml, \.yml, \.opf\.md, \.pdf, \.pptx, \.png, \.svg or \.zip files/);
+    assert.equal(run(["convert", "notes.txt", "deck.opf.md"], { cwd: dir, status: 2 }).error.code, "input-not-found");
+    assert.equal(run(["convert", "absent.opf.json", "deck.opf.md"], { cwd: dir, status: 2 }).error.code, "input-not-found");
+    assert.equal(run(["convert", "deck.opf.json"], { cwd: dir, status: 2 }).error.code, "missing-argument");
+    assert.equal(run(["convert", "deck.opf.json", "deck.opf.json"], { cwd: dir, status: 2 }).error.code, "usage");
     run(["convert", "deck.opf.json", "deck.opf.md", "--fail-on", "never"], { cwd: dir, status: 2 });
-    run(["convert", "deck.opf.json", "deck.opf.md", "--unknown"], { cwd: dir, status: 2 });
+    assert.equal(run(["convert", "deck.opf.json", "deck.opf.md", "--unknown"], { cwd: dir, status: 2 }).error.code, "unknown-option");
     assert.deepEqual((await readdir(dir)).sort(), ["deck.opf.json"]);
   });
+});
 
-  test("is listed in opf --help", () => {
-    assert.match(run(["--help"]).stdout, /opf convert <input> <output>/);
+describe("opf convert, flags apply only where their format is involved", () => {
+  test("each flag outside its format is a usage error (exit 2, option-not-applicable) and nothing is read or written", async () => {
+    const dir = await folder();
+    await writeFile(path.join(dir, "deck.opf.yaml"), "name: Y\nslides:\n  - title: A\n");
+    const cases = [
+      [["deck.opf.json", "x.opf.md", "--scale", "2"], /--scale applies to pdf, pptx, png and svg outputs/],
+      [["deck.opf.json", "x.opf.yaml", "--slides", "1"], /--slides applies to pdf, pptx, png and svg outputs/],
+      [["deck.opf.json", "x.opf.json", "--fonts", "fonts"], /--fonts applies to pdf, pptx, png and svg outputs/],
+      [["deck.opf.json", "x.opf.json", "--split", "headings"], /--split applies to a Markdown input/],
+      [["deck.opf.json", "x.opf.md", "--title", "T"], /--title applies to a Markdown input/],
+      [["deck.opf.json", "x.opf.md", "--aliases"], /--aliases applies to a YAML input/],
+      [["deck.opf.yaml", "x.opf.json", "--signals", "s.json"], /--signals applies to a \.pptx input/],
+      [["deck.opf.json", "x.opf.json", "--schema-comment"], /--schema-comment applies to a YAML output/],
+      [["deck.opf.json", "x.opf.yaml", "--drop-unsupported"], /--drop-unsupported applies to a Markdown/],
+    ];
+    for (const [args, pattern] of cases) {
+      const failed = run(["convert", ...args], { cwd: dir, status: 2 });
+      assert.equal(failed.error.code, "option-not-applicable", args.join(" "));
+      assert.match(failed.error.error, pattern, args.join(" "));
+    }
+    assert.deepEqual((await readdir(dir)).sort(), ["deck.opf.json", "deck.opf.yaml"]);
   });
 });
 
 describe("a missing peer", () => {
-  test("opf convert to an export format exits 2 with peer-not-installed and the install command", async () => {
-    const isolated = await mkdtemp(path.join(temp, "isolated-"));
+  let isolated;
+  before(async () => {
+    isolated = await mkdtemp(path.join(temp, "isolated-"));
     await cp(path.dirname(executable), path.join(isolated, "dist"), { recursive: true });
     await installIsolatedCore(path.join(isolated, "node_modules"));
     await writeFile(path.join(isolated, "deck.opf.json"), JSON.stringify(deck));
-    const bin = path.join(isolated, "dist", path.basename(executable));
-    const missing = run(["convert", "deck.opf.json", "deck.pdf"], { cwd: isolated, bin, status: 2 });
+    await writeFile(path.join(isolated, "picture.opf.json"), JSON.stringify({ slides: [{ title: "P", image: "photo.jpg" }] }));
+  });
+  const bin = () => path.join(isolated, "dist", path.basename(executable));
+
+  test("exits 2 with peer-not-installed and one exact install command for the format", () => {
+    const missing = run(["convert", "deck.opf.json", "deck.png"], { cwd: isolated, bin: bin(), status: 2 });
     assert.equal(missing.error.code, "peer-not-installed");
     assert.equal(missing.error.package, "@openpresentation/opf-render");
-    assert.match(missing.error.error, /npm install -g @openpresentation\/opf-render@/);
-    const importing = run(["convert", "deck.pptx", "deck.opf.json", "--force"], { cwd: isolated, bin, status: 2 });
-    assert.equal(importing.error.code, "peer-not-installed");
-    assert.equal(importing.error.package, "@openpresentation/opf-pptx");
-    run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: isolated, bin });
+    // A copy outside node_modules is a project: npm install without -g, the renderer, its fonts, and the PNG converters.
+    assert.match(missing.error.install, /^npm install @openpresentation\/opf-render@\^0\.18\.0 @expo-google-fonts\/roboto@0\.4\.3 .*@resvg\/resvg-js@\^2\.6\.2 sharp@\^0\.35\.5$/);
+    assert.ok(missing.error.error.includes(missing.error.install));
+    assert.ok(missing.error.missing.includes("@resvg/resvg-js@^2.6.2"));
+    // A vector PDF needs sharp only when the deck has pictures; a raster PDF needs pdf-lib.
+    assert.doesNotMatch(run(["convert", "deck.opf.json", "deck.pdf"], { cwd: isolated, bin: bin(), status: 2 }).error.install, /sharp|pdf-lib/);
+    assert.match(run(["convert", "picture.opf.json", "deck.pdf"], { cwd: isolated, bin: bin(), status: 2 }).error.install, /sharp@/);
+    assert.match(run(["convert", "deck.opf.json", "deck.pdf", "--raster"], { cwd: isolated, bin: bin(), status: 2 }).error.install, /pdf-lib@/);
+    const importing = run(["convert", "deck.pptx", "deck.opf.json"], { cwd: isolated, bin: bin(), status: 2 });
+    assert.equal(importing.error.code, "input-not-found", "the input is read first");
+    run(["convert", "deck.opf.json", "deck.opf.md"], { cwd: isolated, bin: bin() });
+  });
+
+  test("the install command matches the package manager in npm_config_user_agent", () => {
+    for (const [agent, pattern] of [
+      ["pnpm/10.0.0 npm/? node/v24.0.0 win32 x64", /^pnpm add @openpresentation\/opf-render@/],
+      ["yarn/1.22.0 npm/? node/v24.0.0", /^yarn add @openpresentation\/opf-render@/],
+      ["bun/1.2.0 npm/? node/v24.0.0", /^bun add @openpresentation\/opf-render@/],
+      ["npm/11.0.0 node/v24.0.0", /^npm install @openpresentation\/opf-render@/],
+    ]) {
+      const result = run(["convert", "deck.opf.json", "deck.svg"], { cwd: isolated, bin: bin(), status: 2, env: { npm_config_user_agent: agent } });
+      assert.match(result.error.install, pattern, agent);
+    }
   });
 });
 
-// RR-74 (core part): the flags of 0.18 reach the engine, and the 0.17 flags are gone. A copy of the CLI and of core in a tree with
-// stand-in opf-render and opf-pptx packages records what the engine asks of the renderer (scripts/stub-peers.mjs), so this runs
-// whatever renderer is installed in the workspace.
-describe("the 0.18 flags, through stub peers", () => {
+describe("drawing, through stub peers", () => {
   let stubbed;
   const callsOf = async (call) => parseStubLog(await readFile(path.join(stubbed.dir, STUB_LOG), "utf8").catch(() => "")).filter((item) => item.call === call);
-
   before(async () => {
     const dir = await mkdtemp(path.join(temp, "stub-"));
     await cp(path.dirname(executable), path.join(dir, "dist"), { recursive: true });
@@ -145,133 +205,75 @@ describe("the 0.18 flags, through stub peers", () => {
     await mkdir(path.join(dir, "fonts"));
     await writeFile(path.join(dir, "fonts", "a.ttf"), "not a font; the stub never reads it");
     await writeFile(path.join(dir, "deck.opf.json"), JSON.stringify({ name: "Stub deck", slides: [{ title: "One" }, { title: "Two" }] }));
+    await writeFile(path.join(dir, "one.opf.md"), "# Only slide\n");
     stubbed = { dir, bin: path.join(dir, "dist", path.basename(executable)) };
   });
-  const stub = async (args, status = 0) => {
+  const stub = async (args, status = 0, input) => {
     await writeFile(path.join(stubbed.dir, STUB_LOG), "");
-    return run(args, { cwd: stubbed.dir, bin: stubbed.bin, status });
+    return run(args, { cwd: stubbed.dir, bin: stubbed.bin, status, input });
   };
 
-  test("--text paths reaches the renderer's toSvg, with the whole fonts handle; --text system embeds no face", async () => {
-    for (const args of [
-      ["render", "deck.opf.json", "--format", "svg", "--text", "paths", "--out", "paths", "--force"],
-      ["export", "deck.opf.json", "--format", "svg", "--text", "paths", "--out", "export-paths", "--force"],
-      ["convert", "deck.opf.json", "convert-paths.svg", "--text", "paths", "--slides", "1", "--force"],
-    ]) {
-      const out = await stub(args);
-      assert.equal(out.report.ok, true, args.join(" "));
-      const svgs = await callsOf("toSvg");
-      assert.ok(svgs.length >= 1, args.join(" "));
-      for (const call of svgs) {
-        assert.equal(call.args[1].text, "paths", `${args[0]}: text paths reaches toSvg`);
-        assert.equal(call.args[1].fonts.stub, true, "the renderer draws outlines from the fonts handle");
-      }
-      assert.equal((await callsOf("loadFonts"))[0].args[0].embedScriptFonts, false);
-    }
-    const slides = await callsOf("toSvg");
-    assert.deepEqual(slides.map((call) => call.args[0]), [1], "convert --slides 1 draws slide 1, counted from 1");
-
-    const system = await stub(["render", "deck.opf.json", "--text", "system", "--out", "system", "--force"]);
-    assert.equal(system.report.ok, true);
-    for (const call of await callsOf("toSvg")) {
-      assert.equal(call.args[1].text, "system");
-      assert.deepEqual(call.args[1].fonts.embeddedFonts, []);
-    }
-    await stub(["render", "deck.opf.json", "--out", "default", "--force"]);
-    for (const call of await callsOf("toSvg")) {
-      assert.equal(call.args[1].text, undefined, "the default is the renderer's: the faces the slide uses");
-      assert.deepEqual(call.args[1].fonts.embeddedFonts.map((face) => face.embed), ["used"]);
-    }
+  test("the output's extension names the format, so deck.png is PNG and never SVG (the render --out bug)", async () => {
+    const png = await stub(["convert", "deck.opf.json", "slides/deck.png", "--scale", "0.5", "--slides", "1-2"]);
+    assert.equal(png.report.format, "png");
+    assert.deepEqual(png.report.outputs.map((item) => [path.basename(item.file), item.mediaType]), [["deck-001.png", "image/png"], ["deck-002.png", "image/png"]]);
+    assert.equal((await callsOf("toPng")).length, 2);
+    assert.equal((await callsOf("toPng"))[0].args[0].scale, 0.5);
+    const one = await stub(["convert", "one.opf.md", "one.png"]);
+    assert.deepEqual(one.report.outputs.map((item) => [path.basename(item.file), item.mediaType]), [["one.png", "image/png"]]);
+    const svg = await stub(["convert", "deck.opf.json", "svg/deck.svg", "--text", "paths"]);
+    assert.deepEqual(svg.report.outputs.map((item) => item.mediaType), ["image/svg+xml", "image/svg+xml"]);
+    for (const call of await callsOf("toSvg")) assert.equal(call.args[1].text, "paths");
+    assert.equal((await callsOf("toPng")).length, 0, "an svg output draws no png");
   });
 
-  test("--raster, --charts, --images and --fonts reach the engines", async () => {
-    await stub(["export", "deck.opf.json", "--format", "pdf", "--raster", "--out", "raster.pdf", "--force"]);
+  test("pdf, pptx and zip outputs, and their flags reach the engines", async () => {
+    await stub(["convert", "deck.opf.json", "raster.pdf", "--raster"]);
     assert.equal((await callsOf("toPdf"))[0].args[1].raster, true);
-    await stub(["convert", "deck.opf.json", "plain.pdf", "--force"]);
-    assert.equal("raster" in (await callsOf("toPdf"))[0].args[1], false);
-    await stub(["export", "deck.opf.json", "--format", "pptx", "--charts", "picture", "--images", "preserve", "--out", "charts.pptx", "--force"]);
-    const pptx = (await callsOf("toPptx"))[0].args[0];
-    assert.equal(pptx.chartex, "fallback", "opf-pptx still names it chartex, and its picture choice fallback");
-    assert.equal(pptx.imageFormat, "preserve");
-    const fonts = await stub(["render", "deck.opf.json", "--fonts", "fonts", "--out", "fonts-out", "--force"]);
+    const pptx = await stub(["convert", "deck.opf.json", "deck.pptx", "--charts", "picture", "--images", "preserve"]);
+    assert.equal(pptx.report.outputs[0].mediaType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+    assert.equal((await callsOf("toPptx"))[0].args[0].chartex, "fallback");
+    const zip = await stub(["convert", "deck.opf.json", "slides.zip", "--to", "svg"]);
+    assert.deepEqual(zip.report.outputs[0].entries, ["slides-001.svg", "slides-002.svg"]);
+    assert.equal(zip.report.outputs[0].mediaType, "application/zip");
+    const fonts = await stub(["convert", "deck.opf.json", "fonts.svg", "--fonts", "fonts", "--slides", "1"]);
     assert.match((await callsOf("loadFonts"))[0].args[0].faces[0].path, /fonts[\\/]a\.ttf$/);
     assert.equal(fonts.report.fonts.userFonts.length, 1);
   });
 
-  test("the 0.17 flags are usage errors (exit 2): --svg-fonts, --pdf-mode, --chartex, --image-format and --font-dir", async () => {
-    for (const args of [
-      ["render", "deck.opf.json", "--svg-fonts", "none"],
-      ["export", "deck.opf.json", "--format", "svg", "--svg-fonts", "used"],
-      ["convert", "deck.opf.json", "x.svg", "--svg-fonts", "none"],
-      ["export", "deck.opf.json", "--format", "pdf", "--pdf-mode", "raster"],
-      ["convert", "deck.opf.json", "x.pdf", "--pdf-mode", "raster"],
-      ["export", "deck.opf.json", "--format", "pptx", "--chartex", "native"],
-      ["convert", "deck.opf.json", "x.pptx", "--chartex", "native"],
-      ["export", "deck.opf.json", "--format", "pptx", "--image-format", "preserve"],
-      ["convert", "deck.opf.json", "x.pptx", "--image-format", "preserve"],
-      ["render", "deck.opf.json", "--font-dir", "fonts"],
-      ["convert", "deck.opf.json", "x.svg", "--font-dir", "fonts"],
-    ]) {
-      const failed = await stub(args, 2);
-      assert.match(failed.error.error, new RegExp(`Unknown or duplicate option: ${args.find((arg) => /^--(svg-fonts|pdf-mode|chartex|image-format|font-dir)$/.test(arg))}`), args.join(" "));
-      assert.deepEqual(await callsOf("toSvg"), [], "nothing was drawn");
-    }
+  test("stdout carries one file: --to pdf, or one slide as png or svg", async () => {
+    const pdf = await stub(["convert", "deck.opf.json", "-", "--to", "pdf"]);
+    assert.equal(pdf.stdout, "%PDF-stub");
+    const report = JSON.parse(pdf.stderr);
+    assert.equal(report.outputs[0].file, "-");
+    assert.equal(report.outputs[0].mediaType, "application/pdf");
+    const md = await stub(["convert", "-", "-", "--from", "md", "--to", "svg"], 0, "# Piped\n");
+    assert.match(md.stdout, /^<svg/);
+    const many = await stub(["convert", "deck.opf.json", "-", "--to", "png"], 2);
+    assert.match(many.error.error, /stdout takes one file, but 2 slides/);
+    await stub(["convert", "deck.opf.json", "-", "--to", "png", "--slides", "2"]);
+    assert.deepEqual((await callsOf("toSvg")).map((call) => call.args[0]), [2]);
   });
 
-  test("--text, --raster, --charts and --images name the format they apply to; --text takes fonts, system or paths", async () => {
+  test("format flags outside their format: --text, --raster, --charts, --images and --scale", async () => {
     const messages = [
-      [["render", "deck.opf.json", "--format", "png", "--text", "paths"], /--text applies to --format svg/],
-      [["export", "deck.opf.json", "--format", "pdf", "--text", "paths"], /--text applies to --format svg/],
-      [["convert", "deck.opf.json", "x.pdf", "--text", "paths"], /--text applies to svg output/],
-      [["export", "deck.opf.json", "--format", "svg", "--raster"], /--raster applies to --format pdf/],
-      [["export", "deck.opf.json", "--format", "svg", "--charts", "native"], /--charts, --provenance and --images apply to --format pptx/],
-      [["export", "deck.opf.json", "--format", "pptx", "--images", "jpeg"], /--images must be one of: compatible, preserve/],
-      [["export", "deck.opf.json", "--format", "pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],
-      [["render", "deck.opf.json", "--text", "outline"], /--text must be one of: fonts, system, paths/],
-      [["convert", "deck.opf.json", "x.svg", "--text", "outline"], /text must be one of: fonts, system, paths/],
+      [["deck.opf.json", "x.pdf", "--text", "paths"], /--text applies to svg output/],
+      [["deck.opf.json", "x.svg", "--raster"], /--raster applies to pdf output/],
+      [["deck.opf.json", "x.svg", "--charts", "native"], /--charts, --provenance and --images apply to pptx output/],
+      [["deck.opf.json", "x.pptx", "--images", "jpeg"], /--images must be one of: compatible, preserve/],
+      [["deck.opf.json", "x.pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],
+      [["deck.opf.json", "x.svg", "--text", "outline"], /text must be one of: fonts, system, paths/],
+      [["deck.opf.json", "x.svg", "--scale", "2"], /--scale applies to png output/],
     ];
-    for (const [args, pattern] of messages) assert.match((await stub(args, 2)).error.error, pattern, args.join(" "));
-  });
-});
-
-describe("drawing through the peers", { skip }, () => {
-  test("opf convert writes one PNG per slide beside the output, a PDF, a PPTX and a zip", async () => {
-    const dir = await folder();
-    const png = run(["convert", "deck.opf.json", "slides/deck.png", "--scale", "0.5"], { cwd: dir }).report;
-    assert.equal(png.format, "png");
-    assert.deepEqual(
-      png.outputs.map((item) => path.basename(item.file)),
-      ["deck-001.png", "deck-002.png", "deck-003.png"],
-    );
-    assert.deepEqual([png.outputs[0].width, png.outputs[0].height], [640, 360]);
-    assert.equal(png.checks.layout, "measured");
-    assert.ok(PNG(await readFile(path.join(dir, "slides", "deck-002.png"))));
-    const pdf = run(["convert", "deck.opf.json", "deck.pdf"], { cwd: dir }).report;
-    assert.equal(pdf.pdf.mode, "vector");
-    assert.equal(pdf.outputs[0].pages, 3);
-    const pptx = run(["convert", "deck.opf.json", "deck.pptx"], { cwd: dir }).report;
-    assert.equal(pptx.checks.nativeExport, "checked");
-    assert.equal(pptx.renderer.package, "@openpresentation/opf-render");
-    const back = run(["convert", "deck.pptx", "back.opf.yaml"], { cwd: dir }).report;
-    assert.equal(back.pptx.package, "@openpresentation/opf-pptx");
-    const zip = run(["convert", "deck.opf.json", "slides.zip", "--format", "svg"], { cwd: dir }).report;
-    assert.deepEqual(zip.outputs[0].entries, ["slides-001.svg", "slides-002.svg", "slides-003.svg"]);
-    assert.match(run(["convert", "deck.opf.json", "deck.svg", "--raster"], { cwd: dir, status: 2 }).error.error, /--raster applies to pdf output/);
+    for (const [args, pattern] of messages) assert.match((await stub(["convert", ...args], 2)).error.error, pattern, args.join(" "));
+    assert.deepEqual(await callsOf("toSvg"), [], "nothing was drawn");
   });
 
-  test("opf render and opf export take the format from --out: --out deck.png writes a PNG file, not a folder", async () => {
-    const dir = await folder({ name: "Single", slides: [{ title: "Only slide" }] });
-    const rendered = run(["render", "deck.opf.json", "--out", "deck.png"], { cwd: dir }).report;
-    assert.equal(rendered.format, "png");
-    assert.ok((await stat(path.join(dir, "deck.png"))).isFile(), "deck.png is a file");
-    assert.ok(PNG(await readFile(path.join(dir, "deck.png"))));
-    const exported = run(["export", "deck.opf.json", "--out", "exported.svg"], { cwd: dir }).report;
-    assert.equal(exported.format, "svg");
-    assert.ok((await stat(path.join(dir, "exported.svg"))).isFile());
-    // An --out with an extension the command does not write is a usage error; nothing is created.
-    for (const args of [["render", "deck.opf.json", "--out", "deck.txt"], ["render", "deck.opf.json", "--out", "deck.pdf"], ["export", "deck.opf.json", "--format", "png", "--out", "deck.jpg"], ["render", "deck.opf.json", "--format", "png", "--out", "deck.svg"]]) {
-      run(args, { cwd: dir, status: 2 });
+  test("the 0.17 flags are usage errors that name their 0.18 replacement", async () => {
+    for (const [flag, value, replacement] of [["--svg-fonts", "none", "--text"], ["--pdf-mode", "raster", "--raster"], ["--chartex", "native", "--charts"], ["--image-format", "preserve", "--images"], ["--font-dir", "fonts", "--fonts"], ["--out", "x.pdf", "last argument"], ["--json", undefined, "JSON already"]]) {
+      const failed = await stub(["convert", "deck.opf.json", "x.svg", flag, ...(value === undefined ? [] : [value])], 2);
+      assert.equal(failed.error.code, "removed-option", flag);
+      assert.ok(failed.error.error.includes(replacement), `${flag}: ${failed.error.error}`);
     }
-    assert.deepEqual((await readdir(dir)).sort(), ["deck.opf.json", "deck.png", "exported.svg"]);
   });
 });

@@ -130,8 +130,13 @@ describe("opf validate", () => {
     assert.equal(JSON.parse(syntax.stdout).findings[0].ruleId, "opf/json-syntax");
     assert.equal(run(["validate", "-"], "{").status, 1);
     assert.ok(run(["validate", "-"], '{"slides":[{"title":"First","title":"Second"}]}').stdout.includes("opf/duplicate-key"));
-    const yaml = JSON.parse(run(["validate", "-"], "name: Deck\nslides: []\n").stdout);
-    assert.match(yaml.findings[0].help, /fromYaml/);
+    // RR-75: stdin that does not start with { or [ needs --from; JSON is the only form sniffed.
+    const unsniffed = run(["validate", "-"], "name: Deck\nslides: []\n");
+    assert.equal(unsniffed.status, 2);
+    assert.equal(JSON.parse(unsniffed.stderr).code, "unknown-input-format");
+    assert.match(JSON.parse(unsniffed.stderr).error, /--from yaml\|md/);
+    const yaml = JSON.parse(run(["validate", "-", "--from", "yaml"], "name: Deck\nslides: []\n").stdout);
+    assert.ok(yaml.findings.length > 0);
     for (const args of [["validate"], ["validate", "missing.opf.json"], ["validate", "a", "b"], ["validate", "x.json", "--nope"], ["validate", write("d.opf.json", clean), "--only", "nope"], ["validate", "d.opf.json", "--ignore", "nope"], ["validate", "d.opf.json", "--format", "yaml"], ["validate", "d.opf.json", "--strict"]]) {
       assert.equal(run(args).status, 2, JSON.stringify(args));
     }
@@ -146,12 +151,12 @@ describe("opf validate", () => {
     assert.equal(run(["validate", "--list-rules", "deck.json"]).status, 2);
     assert.match(run(["validate", "--help"]).stdout, /--fail-on/);
     const usage = run(["--help"]).stdout;
-    assert.match(usage, /opf validate <file\|-> /);
+    assert.match(usage, /opf validate <file\|dir\|->\.\.\. /);
     assert.doesNotMatch(usage, /opf lint|opf audit|--strict/);
     for (const command of ["lint", "audit"]) {
       const result = run([command, "deck.opf.json"]);
       assert.equal(result.status, 2);
-      assert.match(result.stderr, /Unknown command/);
+      assert.match(result.stderr, /was removed: use opf validate/);
     }
   });
 

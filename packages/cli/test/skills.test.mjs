@@ -98,5 +98,7 @@ test('CLI bundles all six complete skills and advertises the actual npx command'
   assert.equal(run(['skills','install','--agent','unknown']).status,2);
   assert.match(run(['--help']).stdout,/npx @openpresentation\/cli@latest skills install/);
   const created=run(['create','deck.opf.json']);assert.equal(created.status,0,created.stderr);
-  assert.equal(JSON.parse(created.stdout).agentSkills,'npx @openpresentation/cli@latest skills install');
+  // RR-75: the create report carries no agentSkills hint; opf --help names the command.
+  assert.equal('agentSkills' in JSON.parse(created.stdout),false);
+  assert.equal(JSON.parse(installed.stdout).command,'skills');
 }));

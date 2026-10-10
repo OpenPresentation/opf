@@ -43,13 +43,13 @@ const base = ["ingest", "data/revenue.csv", "--as", "chart", "--series", '["Reve
 
 describe("opf ingest is deterministic", () => {
 	test("the same inputs write identical bytes from any working directory, and src is relative to the deck", async () => {
-		run([...base, "--into", "deck.opf.json", "--output", "one.json", "--force"]);
-		run([...base, "--into", "deck.opf.json", "--output", "one.json", "--force"], { noClock: true });
+		run([...base, "--into", "deck.opf.json", "one.json", "--force"]);
+		run([...base, "--into", "deck.opf.json", "one.json", "--force"], { noClock: true });
 		const first = await read("one.json");
 		// Another working directory: every path is spelled differently, absolute and relative to the parent.
 		const parent = temp;
-		run(["ingest", "work/data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", "work/deck.opf.json", "--output", "work/two.json"], { cwd: parent, noClock: true });
-		run(["ingest", path.join(work, "data", "revenue.csv"), "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", path.join(work, "deck.opf.json"), "--output", path.join(work, "three.json")], { cwd: parent, noClock: true });
+		run(["ingest", "work/data/revenue.csv", "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", "work/deck.opf.json", "work/two.json"], { cwd: parent, noClock: true });
+		run(["ingest", path.join(work, "data", "revenue.csv"), "--as", "chart", "--series", '["Revenue"]', "--dataset", "revenue", "--into", path.join(work, "deck.opf.json"), path.join(work, "three.json")], { cwd: parent, noClock: true });
 		assert.equal(await read("two.json"), first);
 		assert.equal(await read("three.json"), first);
 		const deck = JSON.parse(first);
@@ -143,9 +143,10 @@ describe("opf ingest is deterministic", () => {
 });
 
 describe("opf import-data was removed in 0.18", () => {
-	test("import-data is an unknown command (usage error, no alias) and the help names ingest", () => {
+	test("import-data is a usage error that names ingest (no alias) and the help names ingest", () => {
 		const result = run(["import-data", "data/revenue.csv", "--as", "table"], { status: 2 });
-		assert.match(result.stderr, /Unknown command: import-data/);
+		assert.match(result.stderr, /import-data was renamed opf ingest/);
+		assert.equal(JSON.parse(result.stderr).code, "removed-command");
 		assert.equal(result.stdout, "");
 		const usage = run(["--help"]).stdout;
 		assert.match(usage, /opf ingest </);

@@ -1,17 +1,37 @@
 import { CLI_CATALOGS } from "./catalogs.js";
 import { stats, type PresentationStats, type ReferenceFact, type StatsSlideRef, type SlideStats } from "@openpresentation/opf";
-import type { CliContext } from "./context.js";
+import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
+import { deckFormatFlag } from "./deck.js";
+import { CliError } from "./errors.js";
+import { type Host, envelope, inputFact, printReport, readDeck } from "./runtime.js";
+
+export const spec: CommandSpec = {
+  name: "stats",
+  usage: ["opf stats <file|-> [--format <json|text>] [--per-slide] [--from <format>]"],
+  summary: "Report neutral facts about a deck: structure, words, notes, images, charts, tables, assets, fonts, speaking time.",
+  operands: ["<file> (a deck, or - for stdin)"],
+  positional: [1, 1],
+  values: ["format", "from"],
+  flags: ["per-slide"],
+  help: `Stats never validates, composes or loads fonts, and never rates anything. --per-slide adds a row per slide. --format json
+(the default) is the report { command, ok, input, outputs, findings, counts, stats }; text is one block per topic.
+
+Example:
+  opf stats deck.opf.md --format text --per-slide`,
+};
 
 /** `opf stats <file|->`: neutral facts about a deck. Never validates, never composes, never needs fonts. */
-export async function statsCommand(args: string[], cli: CliContext): Promise<void> {
-  const { positional, options } = cli.parse(args, ["format", "per-slide"]);
-  cli.arity(positional, 1);
-  const format = String(options.format ?? "json");
-  if (!["json", "text"].includes(format)) throw cli.fail("--format must be json or text.");
-  const { value } = await cli.readDeck(positional[0] as string);
-  if (!value || typeof value !== "object" || Array.isArray(value)) throw cli.fail("stats needs a presentation object.", 1);
+export async function run(args: string[], _host: Host): Promise<void> {
+  const parsed = parseArgs(spec, args);
+  if (parsed === "help") return printHelp(spec);
+  const { positional, options } = parsed;
+  const format = oneOf("--format", options.format, ["json", "text"] as const) ?? "json";
+  const file = positional[0] as string;
+  const source = await readDeck(file, { from: deckFormatFlag("--from", options.from) });
+  const value = source.value;
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new CliError("opf stats needs a presentation object.", "invalid-document", 1);
   const result = stats(value, { perSlide: !!options["per-slide"], catalogs: CLI_CATALOGS });
-  if (format === "json") cli.print(result);
+  if (format === "json") printReport(envelope("stats", { input: inputFact(file, source.raw), stats: result }));
   else process.stdout.write(formatStats(result));
 }
 

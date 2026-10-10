@@ -25,7 +25,7 @@ test('filling an already marked template suggests values or partial output',asyn
     await writeFile(file,JSON.stringify({template:true,variables:{who:{type:'text',label:'Who'}},slides:[{title:'Hello {{who}}'}]}));
     const failed=run(['fill',file]);
     assert.equal(failed.status,1,failed.stdout+failed.stderr);
-    assert.match(failed.stderr,/--data/);
+    assert.match(failed.stderr,/in the data/);
     assert.match(failed.stderr,/--partial/);
     assert.doesNotMatch(failed.stderr,/mark the document as a template/);
     const recovered=run(['fill',file,'--partial']);
