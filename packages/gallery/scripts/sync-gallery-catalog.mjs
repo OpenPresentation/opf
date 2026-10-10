@@ -223,7 +223,7 @@ export function planSnapshot({ gallery, current, manifest: _manifest, validators
   const nextManifest = {
     $schema: CATALOG_MANIFEST_SCHEMA_ID,
     description:
-      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. It is the data of @openpresentation/gallery (RR-78); core imports none of it (pnpm check:catalog-free).",
+      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. It is the data of @openpresentation/gallery.",
     publisher: DEFAULT_CATALOG_PUBLISHER,
     source,
     kinds: Object.fromEntries(SNAPSHOT_KINDS.map(({ kind }) => [kind, kinds[kind].manifestEntry])),

@@ -61,16 +61,22 @@ to count the pixels that differ. A changed drawing or a removed id fails unless 
 
 ## Where the records come from
 
-The records are currently a pinned snapshot of the catalog pptx.gallery publishes at
-`https://www.pptx.gallery/<kind>/index.json`; `catalog/manifest.json` names the pptx.gallery commit. **The authoring flow
-(where records are written and how they reach this repository) is being redesigned.** Until then:
+In 1.x the records are a pinned snapshot of the catalog pptx.gallery publishes at
+`https://www.pptx.gallery/<kind>/index.json`; `catalog/manifest.json` names the pptx.gallery commit.
 
-- records change in [Data-Advantage/pptx-gallery](https://github.com/Data-Advantage/pptx-gallery): its `data/`, then
-  `pnpm build:opf-catalog`, which publishes `public/<kind>/`;
-- this repository takes them with `node scripts/sync-gallery-catalog.mjs --gallery <pptx-gallery checkout>` (`npm run
-  sync` with the checkout at `../pptx-gallery`). The sync validates every published index and record against the
-  published `@openpresentation/opf`, checks the published content hashes, drops `x-*` members, refuses a publisher that
-  stopped serving an id the snapshot holds (unless `--allow-removed <kind>:<id>` names it), and pins the gallery commit.
+- Records are written in [Data-Advantage/pptx-gallery](https://github.com/Data-Advantage/pptx-gallery): its `data/`,
+  then `pnpm build:opf-catalog`, which publishes `public/<kind>/`.
+- When pptx.gallery's main changes a published record, its `sync-gallery-package.yml` workflow opens or updates one
+  pull request here, from the branch `sync/pptx-gallery`, with the records, the version bump and the `CHANGELOG.md`
+  entry. A person reviews and merges it, then tags the release. See CONTRIBUTING.md, "Records from pptx.gallery".
+- The records are taken by this repository's `scripts/sync-gallery-catalog.mjs --gallery <pptx-gallery checkout>`
+  (`npm run sync` with the checkout at `../pptx-gallery`). The sync validates every published index and record
+  against the published `@openpresentation/opf`, checks the published content hashes, drops `x-*` members, refuses a
+  publisher that stopped serving an id the snapshot holds (unless `--allow-removed <kind>:<id>` names it), and pins the
+  gallery commit.
+
+The planned 2.0.0 release, with the OPF 0.19 layout redesign, makes this repository the place records are written, and
+pptx.gallery then reads them from the package.
 
 ## Contributing a layout
 
