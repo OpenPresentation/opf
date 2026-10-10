@@ -1,13 +1,8 @@
 #!/usr/bin/env node
-// Syncs packages/gallery/catalog/ (the records of @openpresentation/gallery) from pptx.gallery, the canonical
-// publisher of the default OPF catalog. See docs/default-catalog.md.
+// Syncs spec/catalogs/ (the pinned default-catalog snapshot) from pptx.gallery,
+// the canonical publisher of the default OPF catalog. See docs/default-catalog.md.
 //
-// RR-78: the records moved from core's spec/catalogs/ into the @openpresentation/gallery package, which is released on
-// its own version line (.github/workflows/gallery-publish.yml). Until core drops its /catalog subpath (OPF 0.19),
-// spec/catalogs/ is kept as a byte-identical mirror: every write goes to both, and --verify fails when they differ.
-// The same holds for the layout previews (packages/gallery/previews/layouts/ and spec/previews/layouts/).
-//
-//   node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery   write the records from a gallery checkout
+//   node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery   write the snapshot from a gallery checkout
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --check     fail if the snapshot differs (CI)
 //   node scripts/sync-gallery-catalog.mjs --url https://www.pptx.gallery --check
 //                                                                       compare against the live site
@@ -33,7 +28,7 @@
 
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -52,12 +47,7 @@ import {
 } from "./catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const defaultCatalogsRoot = path.join(repoRoot, "packages", "gallery", "catalog");
-/** RR-78: core's copies of the gallery data, kept byte-identical until core drops /catalog (OPF 0.19); written only while they exist. */
-export const MIRRORS = [
-  { from: defaultCatalogsRoot, to: path.join(repoRoot, "spec", "catalogs") },
-  { from: path.join(repoRoot, "packages", "gallery", "previews", "layouts"), to: path.join(repoRoot, "spec", "previews", "layouts") },
-];
+const defaultCatalogsRoot = path.join(repoRoot, "spec", "catalogs");
 const schemasRoot = path.join(repoRoot, "spec", "schemas");
 
 export const GALLERY_REPOSITORY = "https://github.com/Data-Advantage/pptx-gallery";
@@ -390,75 +380,21 @@ export async function rehashSnapshot(catalogsRoot, { matchGallery = false } = {}
   return changed;
 }
 
-const relative = (file) => path.relative(repoRoot, file).split(path.sep).join("/");
-
-/** The relative paths of every file under `dir`, sorted, with `/` separators. */
-async function listFiles(dir) {
-  const entries = await readdir(dir, { recursive: true, withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isFile())
-    .map((entry) => path.relative(dir, path.join(entry.parentPath, entry.name)).split(path.sep).join("/"))
-    .sort();
-}
-
-/** RR-78: how a mirror differs from its source (missing, extra or different files); nothing when it does not exist. */
-export async function mirrorProblems({ from, to }) {
-  if (!existsSync(to)) return [];
-  const source = await listFiles(from);
-  const copy = await listFiles(to);
-  const problems = [];
-  for (const file of source.filter((name) => !copy.includes(name))) problems.push(`${relative(to)}/${file} is missing (it is in ${relative(from)})`);
-  for (const file of copy.filter((name) => !source.includes(name))) problems.push(`${relative(to)}/${file} is not in ${relative(from)}`);
-  for (const file of source.filter((name) => copy.includes(name))) {
-    const [a, b] = await Promise.all([readFile(path.join(from, file)), readFile(path.join(to, file))]);
-    if (!a.equals(b)) problems.push(`${relative(to)}/${file} differs from ${relative(from)}/${file}`);
-  }
-  return problems;
-}
-
-/** RR-78: makes each existing mirror byte-identical to its source. Returns the files it wrote or removed. */
-export async function writeMirrors(mirrors = MIRRORS) {
-  const changed = [];
-  for (const { from, to } of mirrors) {
-    if (!existsSync(to)) continue;
-    const source = await listFiles(from);
-    for (const file of await listFiles(to)) {
-      if (source.includes(file)) continue;
-      await rm(path.join(to, file), { force: true });
-      changed.push(`${relative(to)}/${file} (removed)`);
-    }
-    for (const file of source) {
-      const bytes = await readFile(path.join(from, file));
-      const target = path.join(to, file);
-      if (existsSync(target) && (await readFile(target)).equals(bytes)) continue;
-      await mkdir(path.dirname(target), { recursive: true });
-      await writeFile(target, bytes);
-      changed.push(`${relative(to)}/${file}`);
-    }
-  }
-  return changed;
-}
-
 export async function main(argv = process.argv.slice(2)) {
-  const custom = option(argv, "--catalogs");
-  const catalogsRoot = path.resolve(custom ?? defaultCatalogsRoot);
-  // Only the package's own catalog has mirrors; a --catalogs directory is checked and written alone.
-  const mirrors = custom ? [] : MIRRORS;
+  const catalogsRoot = path.resolve(option(argv, "--catalogs") ?? defaultCatalogsRoot);
 
   if (argv.includes("--verify")) {
     const problems = await verifySnapshot(catalogsRoot);
-    for (const mirror of mirrors) problems.push(...(await mirrorProblems(mirror)));
-    if (problems.length > 0) throw new Error(`The gallery catalog is inconsistent (scripts/sync-gallery-catalog.mjs --rehash rewrites the hashes and core's copies):\n${problems.join("\n")}`);
-    process.stdout.write(`The gallery catalog matches its manifest${mirrors.some(({ to }) => existsSync(to)) ? ", and core's spec/ copies match the package" : ""}.\n`);
+    if (problems.length > 0) throw new Error(`Default-catalog snapshot is inconsistent:\n${problems.join("\n")}`);
+    process.stdout.write("Default-catalog snapshot matches its manifest.\n");
     return;
   }
 
   if (argv.includes("--rehash")) {
     const changed = await rehashSnapshot(catalogsRoot, { matchGallery: argv.includes("--match-gallery") });
     const problems = await verifySnapshot(catalogsRoot);
-    if (problems.length > 0) throw new Error(`The gallery catalog is still inconsistent after rehashing:\n${problems.join("\n")}`);
-    changed.push(...(await writeMirrors(mirrors)));
-    process.stdout.write(changed.length > 0 ? `Rewrote:\n${changed.join("\n")}\n` : "Hashes already match the records, and core's copies match the package.\n");
+    if (problems.length > 0) throw new Error(`Default-catalog snapshot is still inconsistent after rehashing:\n${problems.join("\n")}`);
+    process.stdout.write(changed.length > 0 ? `Rehashed:\n${changed.join("\n")}\n` : "Hashes already match the records.\n");
     return;
   }
 
@@ -499,14 +435,13 @@ export async function main(argv = process.argv.slice(2)) {
   if (argv.includes("--check")) {
     const changes = await diffSnapshot(catalogsRoot, plan);
     if (changes.length > 0) {
-      throw new Error(`${relative(catalogsRoot)} does not match the gallery catalog (${changes.length} file(s)); run scripts/sync-gallery-catalog.mjs --gallery <checkout>:\n${changes.slice(0, 40).join("\n")}`);
+      throw new Error(`spec/catalogs does not match the gallery catalog (${changes.length} file(s)); run scripts/sync-gallery-catalog.mjs --gallery <checkout>:\n${changes.slice(0, 40).join("\n")}`);
     }
-    process.stdout.write(`${relative(catalogsRoot)} matches the gallery catalog at ${source.commit}.\n`);
+    process.stdout.write(`spec/catalogs matches the gallery catalog at ${source.commit}.\n`);
     return;
   }
 
   const changes = await applySnapshot(catalogsRoot, plan);
-  await writeMirrors(mirrors);
   printReport(plan);
   process.stdout.write(`${changes.length} file(s) updated.\n`);
 }
