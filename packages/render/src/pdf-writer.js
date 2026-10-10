@@ -1,4 +1,4 @@
-import pako from "pako";
+import { deflate } from "pako";
 import { sha256Bytes } from "./sha256.js";
 
 // A small PDF object writer for the vector export (RR-12). Everything it emits is a pure function of the objects
@@ -62,8 +62,11 @@ export function ref(number) {
   return `${number} 0 R`;
 }
 
+// legacyHash keeps the classic zlib hash (canonical zlib bytes, as pako 1 wrote them). pako 3 defaults to the faster hash
+// of Chromium zlib (Node), which writes different and about 1% larger streams: the inflated content is the same, the
+// PDF bytes and their hashes are not.
 export function flate(bytes) {
-  return pako.deflate(bytes, { level: 9 });
+  return deflate(bytes, { level: 9, legacyHash: true });
 }
 
 export function sha256(bytes) {
