@@ -7,7 +7,7 @@ import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import type {Presentation} from '@openpresentation/opf/types';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {checkTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
-import {renderSvg, svgToPng} from '@openpresentation/opf-render';
+import {toPng, toSvg} from '@openpresentation/opf-render';
 import {createScriptTextMeasurement} from '@openpresentation/opf-render/fonts';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
@@ -34,9 +34,11 @@ const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scr
 // OPF 0.15: this host registers the published default catalog with every call (the deck names gallery records by id).
 const catalogs = [defaultCatalog];
 const measured = {catalogs, fonts: {textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck, {catalogs}))}};
-const svgs: string[] = renderSvg(deck, measured);
+const svgs: string[] = toSvg(deck, measured);
 if (svgs.length !== deck.slides.length) throw new Error('one preview per slide expected');
-const png: Uint8Array = await svgToPng(svgs[0], {fonts});
+// toSvg returns plain strings, so the list form of toPng (SVG slides in, one PNG each) keeps the result typed.
+const [png]: Uint8Array[] = await toPng(svgs.slice(0, 1), {fonts});
+if (!png) throw new Error('one PNG expected');
 
 const pptx: Uint8Array = await toPptx(deck, measured);
 const inventory = checkTypefaces(pptx, {families: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']});
