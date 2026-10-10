@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.18.1 (2026-10-10)
+
+- Core 0.18.1 is the first published core of the 0.18 line. `opf-v0.18.0` was tagged, but its publish run stopped before `npm publish`: a core test spawned the CLI, which the publish workflow's `pnpm test` had not built yet. The test now skips when the CLI is not built. 0.18.1 ships the core the 0.18.0 changelog section describes.
+
 ## 0.18.0 (2026-10-10)
 
 - RR-75 (OPF 0.18): the verbs `edit` and `fill` in both builds of the root, and the layout of `paginate`.
