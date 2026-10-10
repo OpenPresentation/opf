@@ -15,7 +15,7 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 - content payloads, rich text, blocks, charts, tables, media, metrics, quotes, and timelines
 - promoted region keys and span combinations
 - asset string/object forms and asset-backed chart data
-- design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides
+- design backgrounds, organization logo shapes, headers, footers, watermarks, and slide-level overrides
 - metadata array forms, language metadata, custom narrative records, and catalog overrides
 
 ## Gallery Folders
@@ -35,7 +35,7 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 - Technical fixtures that isolate validator and renderer behavior.
 - Sparse gallery documents that use shorthand catalog references and a small slide list.
 - Medium documents with schema ids, metadata, organization and speaker records, design overrides, assets, and richer slide payloads.
-- Dense documents with their own records in `catalogs.custom`, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, logo sets, watermarks, and extensions.
+- Dense documents with their own records in `catalogs.custom`, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, organization logo shapes, watermarks, and extensions.
 - Mixed content payloads across text, bullets, lists, image, video, chart, table, code, metric, quote, and timeline slides.
 - Catalog references across narratives, layouts, themes, color schemes, font schemes, audiences, purposes and tones, every record embedded under `catalogs.default` or `catalogs.custom`, so each deck validates and renders with no catalog registered; chart types, languages and social platforms as engine vocabularies.
 

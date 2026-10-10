@@ -10,7 +10,7 @@
   },
   "golden": {
     "repository": "opf",
-    "path": "scripts/fixtures/opf-examples-png.fa-31.sha256.json",
+    "path": "scripts/fixtures/opf-examples-png.rr-71.sha256.json",
     "note": "golden adopted from opf-render golden-override (core fixture)"
   },
   "provenance": {

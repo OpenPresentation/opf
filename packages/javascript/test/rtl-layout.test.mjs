@@ -64,7 +64,7 @@ describe('mirrored arrangement', () => {
   });
 
   it('mirrors a placed image, the cover logo and header/footer zones', () => {
-    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}, logo: 'logo.png'}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'left'}}, {text: 'نص'}]}]};
+    const presentation = {language: 'ar', organization: {id: 'acme', name: 'Acme', logo: 'logo.png'}, design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'left'}}, {text: 'نص'}]}]};
     const composed = compose(presentation);
     const placed = composed.items.find(item => item.field === 'image');
     assert.equal(placed.image.placement.edge, 'right');
@@ -80,7 +80,7 @@ describe('mirrored arrangement', () => {
   });
 
   it('mirrors cover logos', () => {
-    const presentation = {language: 'ar', design: {logo: 'data:image/png;base64,AAAA'}, slides: [{layout: 'title', title: 'عنوان'}]};
+    const presentation = {language: 'ar', organization: {id: 'acme', name: 'Acme', logo: 'data:image/png;base64,AAAA'}, slides: [{layout: 'title', title: 'عنوان'}]};
     const layout = {id: 'title', placeholders: [{type: 'title'}]};
     const composed = compose(presentation, presentation.slides[0], {layout});
     assert.equal(composed.logo.anchor, 'right');

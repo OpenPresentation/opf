@@ -24,7 +24,9 @@ const item = (geometry, field) => geometry.items.find((entry) => entry.field ===
 test('the slide-scoped built-ins are listed with a slide scope', () => {
   assert.deepEqual([...SLIDE_SCOPED_BUILTINS], ['slide.number', 'slide.section', 'deck.slideCount']);
   const list = listBuiltinVariables(deck());
-  const slide = list.filter((entry) => entry.scope === 'slide');
+  const slide = list.filter((entry) => entry.scope === 'slide' && entry.kind === 'text');
+  // The organization logos are slide-scoped images (RR-71).
+  assert.ok(list.filter((entry) => entry.scope === 'slide' && entry.kind === 'image').every((entry) => entry.name.startsWith('organization.') && !('value' in entry)));
   assert.deepEqual(slide.map((entry) => [entry.name, entry.kind, entry.label, entry.available, 'value' in entry]), [
     ['slide.number', 'text', 'Slide number', true, false],
     ['slide.section', 'text', 'Section', true, false],

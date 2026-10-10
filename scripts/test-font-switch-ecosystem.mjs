@@ -501,10 +501,11 @@ function buildDeck(name, row, index) {
     slides
   };
   for (const slide of slides) if (slide.design && Object.keys(slide.design).length === 0) delete slide.design;
-  // A gallery layout with picture bullets (design.listBullet: image) draws the deck logo as the marker, so the deck has one.
-  if (slides.some((slide) => slide.layout && byId('layouts', slide.layout)?.design?.listBullet === 'image')) deck.design.logo = 'asset:hero';
+  // A gallery layout with picture bullets (design.listBullet: image) draws the organization's icon logo as the marker, so the deck has one (RR-71: logos live on the organization).
+  const pictureBullets = slides.some((slide) => slide.layout && byId('layouts', slide.layout)?.design?.listBullet === 'image');
+  if (pictureBullets) deck.organization = {id: 'acme', name: 'Acme', logo: 'asset:hero'};
   if (row.socials === 'profiles') {
-    deck.organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'https://linkedin.com/company/acme', x: '@acme'}};
+    deck.organization = {id: 'acme', name: 'Acme', ...(pictureBullets ? {logo: 'asset:hero'} : {}), socials: {linkedin: 'https://linkedin.com/company/acme', x: '@acme'}};
     deck.speaker = {id: 'ava', name: 'Ava Chen', socials: {linkedin: 'https://linkedin.com/in/ava-chen', github: 'avachen'}};
   }
   return {deck, schemeA: schemes[0], schemeB: schemes[1]};

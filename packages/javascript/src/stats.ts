@@ -1,6 +1,7 @@
 import { catalogKinds, checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
+import { LOGO_SHAPES } from './logos.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
 import { listVariables, type VariableKind } from './variables.js';
 
@@ -40,7 +41,7 @@ export interface HeaderFooterFact {
   /** The deck sets it to `false`. */
   suppressed: boolean;
   zones: string[];
-  /** Fields set in any zone: logo, image, text, socials, date. */
+  /** Fields set in any zone: image, text, socials, date. */
   fields: string[];
 }
 export interface TableFact {
@@ -157,7 +158,7 @@ export interface PresentationStats {
   images: {
     /** Image payloads (image blocks and `Slide.image`). */
     content: { total: number; withAlt: number; decorative: number; missingAlt: number };
-    /** Logo images: `design.logo` (every LogoSet variant), deck and slides, plus organization logos. */
+    /** Logo images: every asset of every organization's logo (each shape, and each of onLight and onDark). */
     logos: number;
     watermarks: { deck: boolean; slides: number };
     backgrounds: { deck: boolean; slides: number };
@@ -230,9 +231,8 @@ export interface StatsOptions extends CatalogOptions {
 
 const DEFAULT_WORDS_PER_MINUTE = 130;
 const KIND_ORDER = ['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline', 'chart', 'table', 'image', 'video'] as const;
-const FURNITURE_FIELDS = ['logo', 'image', 'text', 'socials', 'date'] as const;
+const FURNITURE_FIELDS = ['image', 'text', 'socials', 'date'] as const;
 const ZONES = ['left', 'center', 'right'] as const;
-const LOGO_VARIANTS = ['default', 'light', 'dark', 'stacked', 'stackedLight', 'stackedDark', 'icon', 'iconLight', 'iconDark', 'wordmark', 'wordmarkLight', 'wordmarkDark'] as const;
 
 const WORD = /[\p{L}\p{N}\p{M}]+(?:['’.,-][\p{L}\p{N}\p{M}]+)*/gu;
 /** Scripts written without spaces between words (Thai, Lao, Myanmar, Khmer, kana, Han) count one unit per character: a fixed rule, so a count never depends on the runtime's ICU data. */
@@ -364,7 +364,8 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
   const images = { content: { total: 0, withAlt: 0, decorative: 0, missingAlt: 0 }, logos: 0, watermarks: { deck: false, slides: 0 }, backgrounds: { deck: false, slides: 0 }, headerFooter: 0, speakerPhotos: 0, videos: 0 };
   const contentImage = (asset: unknown): number => {
     if (srcOf(asset) === undefined) return 0;
-    useAsset(asset);
+    // A logo reference draws an organization logo, whose asset is counted on the organization.
+    if (!String(srcOf(asset)).startsWith('var:organization.')) useAsset(asset);
     images.content.total++;
     const alt = altOf(asset);
     if (alt === undefined || (alt !== '' && alt.trim() === '')) images.content.missingAlt++;
@@ -372,9 +373,15 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     else images.content.withAlt++;
     return 1;
   };
-  const logoImages = (value: unknown): void => {
-    if (srcOf(value) !== undefined) { useAsset(value); images.logos++; return; }
-    if (isRecord(value)) for (const variant of LOGO_VARIANTS) if (srcOf(value[variant]) !== undefined) { useAsset(value[variant]); images.logos++; }
+  /** The assets of an Organization.logo: one, or one per shape and background. */
+  const logoAssets = (value: unknown): unknown[] => {
+    if (srcOf(value) !== undefined) return [value];
+    if (!isRecord(value)) return [];
+    return LOGO_SHAPES.flatMap((shape) => {
+      const entry = value[shape];
+      if (srcOf(entry) !== undefined) return [entry];
+      return isRecord(entry) ? [entry.onLight, entry.onDark].filter((tone) => srcOf(tone) !== undefined) : [];
+    });
   };
   const watermarkOf = (value: unknown): boolean => {
     if (value === undefined || value === false) return false;
@@ -391,13 +398,15 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     if (!isRecord(value)) return;
     for (const zone of ZONES) {
       const item = value[zone];
-      if (isRecord(item) && srcOf(item.image) !== undefined) { useAsset(item.image); images.headerFooter++; }
+      if (!isRecord(item) || srcOf(item.image) === undefined) continue;
+      // A logo reference (`var:organization.logo.icon`) counts as a zone image; its asset is counted on the organization.
+      if (!String(srcOf(item.image)).startsWith('var:organization.')) useAsset(item.image);
+      images.headerFooter++;
     }
   };
-  /** Deck or slide design: the asset-bearing fields (logo, watermark, background picture, header and footer images). */
+  /** Deck or slide design: the asset-bearing fields (watermark, background picture, header and footer images). */
   const designAssets = (value: unknown, scope: 'deck' | 'slide'): void => {
     if (!isRecord(value)) return;
-    logoImages(value.logo);
     if (watermarkOf(value.watermark)) { if (scope === 'deck') images.watermarks.deck = true; else images.watermarks.slides++; }
     if (backgroundImage(value.background)) { if (scope === 'deck') images.backgrounds.deck = true; else images.backgrounds.slides++; }
     furnitureImages(value.header);
@@ -406,8 +415,9 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
 
   // ---- deck metadata -------------------------------------------------------------------------
   const organizations = list(deck.organization).filter(isRecord).map((entry) => {
-    const hasLogo = srcOf(entry.logo) !== undefined;
-    if (hasLogo) { useAsset(entry.logo); images.logos++; }
+    const logos = logoAssets(entry.logo);
+    for (const logo of logos) { useAsset(logo); images.logos++; }
+    const hasLogo = logos.length > 0;
     return { id: str(entry.id) ?? '', name: str(entry.name) ?? '', role: str(entry.role), hasLogo };
   });
   const speakers = list(deck.speaker).filter(isRecord).map((entry) => {

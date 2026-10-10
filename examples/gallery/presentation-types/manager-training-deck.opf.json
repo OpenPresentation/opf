@@ -77,12 +77,6 @@
     "chartPrimary": "top",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -413,7 +407,14 @@
     "id": "peoplecraft",
     "name": "PeopleCraft",
     "legalName": "PeopleCraft, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "peoplecraft.example",
     "email": "hello@peoplecraft.example",
     "phone": "+15551000088",

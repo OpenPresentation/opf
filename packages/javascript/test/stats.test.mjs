@@ -22,17 +22,16 @@ const deck = () => ({
   purpose: "decide",
   tone: { id: "formal" },
   narrative: { id: "story", name: "Story", beats: [{ id: "b1", name: "Open" }, { id: "b2", name: "Close" }] },
-  organization: [{ id: "acme", name: "Acme", role: "primary", logo: "./logo.svg" }],
+  organization: [{ id: "acme", name: "Acme", role: "primary", logo: { full: { onLight: "asset:dark-logo", onDark: "https://cdn.example.com/logo.png" }, icon: "./logo.svg" } }],
   speaker: { id: "ada", name: "Ada L", title: "CEO", organizationId: "acme", photo: PNG },
   design: {
     theme: "minimal",
     colorScheme: "cool-horizon",
     fontScheme: "roboto",
     dimensions: { widthInches: 10, heightInches: 5 },
-    logo: { default: "https://cdn.example.com/logo.png", dark: "asset:dark-logo" },
     watermark: "asset:wm",
     background: { type: "image", src: "./bg.jpg" },
-    header: { left: { logo: true }, right: { text: "Confidential" } },
+    header: { left: { image: "var:organization.logo.icon" }, right: { text: "Confidential" } },
     footer: { center: { text: "{{slide.number}}", date: true } },
   },
   variables: {
@@ -195,7 +194,7 @@ describe("stats: images, assets, charts, tables, datasets", () => {
     assert.equal(result.images.logos, 3);
     assert.deepEqual(result.images.watermarks, { deck: true, slides: 0 });
     assert.deepEqual(result.images.backgrounds, { deck: true, slides: 1 });
-    assert.equal(result.images.headerFooter, 0);
+    assert.equal(result.images.headerFooter, 1);
     assert.equal(result.images.speakerPhotos, 1);
     assert.equal(result.images.videos, 1);
   });
@@ -246,7 +245,7 @@ describe("stats: citations, variables, header/footer, fonts, colours", () => {
   });
 
   test("describes header and footer at deck level and per slide", () => {
-    assert.deepEqual(result.headerFooter.header, { configured: true, suppressed: false, zones: ["left", "right"], fields: ["logo", "text"] });
+    assert.deepEqual(result.headerFooter.header, { configured: true, suppressed: false, zones: ["left", "right"], fields: ["image", "text"] });
     assert.deepEqual(result.headerFooter.footer, { configured: true, suppressed: false, zones: ["center"], fields: ["text", "date"] });
     assert.deepEqual(result.headerFooter.slides, { headerOverrides: 0, headerSuppressed: 1, footerOverrides: 1, footerSuppressed: 0 });
   });

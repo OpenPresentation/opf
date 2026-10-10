@@ -238,7 +238,7 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 
 ## Brand assets and layout hints
 
-The 2026-09-30 spec coverage audit found that `design.logo`, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
+The 2026-09-30 spec coverage audit found that the deck logo, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
 
 ### Layout records: `placeholders` and `design`
 
@@ -252,39 +252,47 @@ A layout record (`opf-layout/v1`) holds what it contains in `placeholders` and h
 - Hosts no longer need to copy a layout's `design` into the deck or a slide. The pptx.gallery example builder and the editor's layout apply still do, which is harmless: a copied value is a deck or slide value and ranks above the record.
 - **Decision, 2026-10-06 (agent decision, vetoable).** On a cover, `tag` and `subtitle` follow `titleAlignment` unless the slide's own `design.contentAlignment` is set; a deck or layout `contentAlignment` does not split the heading group, exactly as a deck value did before.
 
-### Logo source and variant selection
+### Logos live on the organization (RR-71, OPF 0.18)
 
-`resolveLogo(presentation, slide, { slot, onDark, slideIndex })` returns `{ source, path, variant, slot }` or `null`:
+A logo belongs to an organization. `Organization.logo` is one path or Asset for every shape, or up to four shapes:
+
+```json
+"organization": {
+  "id": "acme", "name": "Acme",
+  "logo": {
+    "full": { "onLight": "./assets/acme-logo.svg", "onDark": "./assets/acme-logo-white.svg" },
+    "icon": "./assets/acme-mark.svg"
+  }
+}
+```
+
+`resolveLogo(presentation, slide, { shape, onDark, slideIndex, reference })` (`@openpresentation/opf/composition`) returns `{ source, path, shape, variant, reference, designPath? }` or `null`:
 
 ```
-  source        1. slides[i].design.logo
-                2. design.logo
-                3. the primary organization's logo   role "primary", else the first
-                                                    organization; object or array
-  variant       a string or Asset object is the "default" variant
-                a LogoSet picks by slot and tone (below)
-  path          design.logo, design.logo.light, organization.2.logo,
-                slides.3.design.logo.icon, ...
+  organization  1. options.reference                  var:organization.beta.logo.icon
+                2. slides[i].design.logo, then design.logo:
+                   false draws no logo; a reference picks the organization
+                   (and the shape, when it names one)
+                3. the primary organization            role "primary", else the first
+  shape         the reference's shape, else options.shape (default full)
+                missing shape -> full -> first of wordmark, stacked, icon
+  variant       onDark on a dark background, else onLight; a missing one uses
+                the other; a plain asset is "default"
+  path          organization.logo, organization.1.logo.icon,
+                organization.logo.full.onDark, ...
 ```
 
-Absence inherits (there is no `false` for logos); a level that yields no usable asset falls through to the next. A LogoSet is searched in this order, same-tone variants first, neutral ones next, the opposite tone last:
+An override that names an organization without a logo draws nothing: it never falls back to another organization. Hosts pass their own background luminance test as `composeSlide(..., { darkBackground })` (`resolveSlideContext` computes it); core never inspects colors.
 
-| Slot | On a dark background (`onDark: true`) | On a light background |
-| --- | --- | --- |
-| `lockup` | light, default, stackedLight, stacked, wordmarkLight, wordmark, iconLight, icon, then dark, stackedDark, wordmarkDark, iconDark | dark, default, stackedDark, stacked, wordmarkDark, wordmark, iconDark, icon, then light, stackedLight, wordmarkLight, iconLight |
-| `icon` | iconLight, icon, then the dark lockup chain | iconDark, icon, then the light lockup chain |
-| `stacked` | stackedLight, stacked, then the dark lockup chain | stackedDark, stacked, then the light lockup chain |
-
-Hosts pass their own background luminance test as `composeSlide(..., { darkBackground })`; core never inspects colors.
+The same logos are placed anywhere through slide-scoped built-in references (`var:organization.logo`, `var:organization.logo.icon`, `var:organization.beta.logo.wordmark`), which resolve for each slide's background: see [templates and variables](templates-and-variables.md#organization-logos).
 
 ### Where the logo is drawn (vetoable)
 
-1. **Cover and section slides.** A slide with no body payload on a heading-only layout (`title`, `title-subtitle`, `section-divider`, any layout whose placeholders are all headings or placed images, or no layout: the same rule that centers covers) draws the `lockup` logo at the top-left of the free area, inside the slide padding and below any header furniture. `composeSlide` returns it as `geometry.logo` (`{ box, slot: 'lockup', path, source, variant, anchor: 'left' }`): `x = area.left + padding`, `y` at the image-safe heading top, `height = 56` reference pixels at a 720-pixel short edge, `width = min(4 * height, free width)`. Headings start one gap below the box and the cover-centering rule centers the tag/title/subtitle group in the remaining span; the logo itself does not move. Consumers fit the image inside the box preserving its aspect ratio, anchored left and vertically centered (SVG `preserveAspectRatio="xMinYMid meet"`; PPTX computes the fitted size from the raster dimensions and places it at `box.x`). Nothing is drawn when no logo resolves. **Content slides never get an automatic logo** (vetoable: it would move every content area).
-2. **Headers and footers.** `HeaderFooterItem.logo: true` generates an image furniture part with `field: 'logo'`, `generated: true`, `image: resolved.source`, `path: <zone>.logo` and `sourcePath: resolved.path`, from the `icon` slot, in the same box as a zone `image`: as wide as the icon's proportions make it at the band height (a square when core cannot read them), flush with the zone's left edge, centered, or flush with its right edge like the zone's text. Fields in a zone stack in the order logo, image, text, organization, socials, section, slide number, date. Without a logo the engine reports `unresolved-content` at `<zone>.logo` ("Generated logo needs design.logo or a primary organization logo.").
-3. **Picture bullets.** See `listBullet` below.
-4. `organization.logo` is therefore drawn wherever the deck logo is: it is the fallback source, never a separate placement.
+1. **Cover and section slides.** A slide with no body payload on a heading-only layout (`title`, `title-subtitle`, `section-divider`, any layout whose placeholders are all headings or placed images, or no layout: the same rule that centers covers) draws the primary organization's `full` logo (or the `design.logo` override) at the top-left of the free area, inside the slide padding and below any header furniture. `composeSlide` returns it as `geometry.logo` (`{ box, shape, path, source, variant, reference, anchor: 'left' }`): `x = area.left + padding`, `y` at the image-safe heading top, `height = 56` reference pixels at a 720-pixel short edge, `width = min(4 * height, free width)`. Headings start one gap below the box and the cover-centering rule centers the tag/title/subtitle group in the remaining span; the logo itself does not move. Consumers fit the image inside the box preserving its aspect ratio, anchored left and vertically centered (SVG `preserveAspectRatio="xMinYMid meet"`; PPTX computes the fitted size from the raster dimensions and places it at `box.x`). Nothing is drawn when no logo resolves or `design.logo` is `false`. **Content slides never get an automatic logo** (vetoable: it would move every content area).
+2. **Headers and footers.** A zone places a logo like any picture: `"image": "var:organization.logo.icon"`. `layoutFurniture` resolves the reference for the slide's background; the image part carries the asset in `image`, the organization path in `sourcePath` and the reference in `reference`. Without a logo the engine reports `unresolved-content` at `<zone>.image`. The zone's parts sit in one row (see [dynamic composition](dynamic-composition.md)).
+3. **Picture bullets.** See `listBullet` below: the `icon` shape.
 
-> **Decision, 2026-09-30 (agent decision, vetoable).** 84 of the 126 bundled example decks carry a `design.logo` or an `organization.logo`, so 81 cover slides gain a logo and their heading group moves down. The placement (top-left, 56 px, lockup) and the content-slide exclusion are the reference-engine defaults; a layout-driven logo slot is a separate design.
+> **Decision, 2026-09-30 (agent decision, vetoable).** 84 of the 126 bundled example decks carry a logo, so 81 cover slides gain a logo and their heading group moves down. The placement (top-left, 56 px, full logo) and the content-slide exclusion are the reference-engine defaults; a layout-driven logo slot is a separate design.
 
 ### `speaker.photo` is a built-in image variable (vetoable)
 
@@ -326,7 +334,7 @@ The synthetic container has no OPF path, so it records no `groups`, `flows` or e
 
 ### `listBullet` (vetoable)
 
-`character` (the default) draws the current glyph marker. `image` draws the deck's icon logo (`resolveLogo(..., { slot: 'icon', onDark })`) as a picture bullet: every `items`/`bullets` item in `composeSlide` and every `listEntries[]` entry of its fit carry `bulletImage: { source, path }`. Marker geometry is unchanged, and each entry carries `bulletBox`, where the image draws: a square of side `marker.fontSize * PICTURE_BULLET_SCALE` (0.65, exported) whose bottom sits on the marker baseline (`marker.y`) with its left edge at `marker.x`. The scale is what desktop PowerPoint draws for an `a:buBlip` at `a:buSzPct 100000` (what the exporter writes), measured as a square 10, 15, 16, 20 and 31 px wide at font sizes of 16, 24, 25, 32 and 48 px (0.625 to 0.646; the heights run a pixel more from anti-aliasing) with its bottom on the text baseline, in Arial, Aptos, Georgia and Courier New alike, so it does not depend on the typeface; the text start and hanging indent are identical in both. The exporter sets no size, because PowerPoint sizes the bullet itself; consumers that draw it themselves (the preview) use `bulletBox`. Vetoable: the constant is a measurement, not a rule of the format. When `image` is set and no logo resolves, the glyph stays and the slide reports one `unresolved-content` diagnostic at `slides.N.design.listBullet` or `design.listBullet`, only when the slide has a list. The renderer draws an `<image>` per marker; the exporter writes native picture bullets (`a:buBlip`).
+`character` (the default) draws the current glyph marker. `image` draws the organization's icon logo (`resolveLogo(..., { shape: 'icon', onDark })`: the primary organization's, or the organization and shape `design.logo` names) as a picture bullet: every `items`/`bullets` item in `composeSlide` and every `listEntries[]` entry of its fit carry `bulletImage: { source, path }`. Marker geometry is unchanged, and each entry carries `bulletBox`, where the image draws: a square of side `marker.fontSize * PICTURE_BULLET_SCALE` (0.65, exported) whose bottom sits on the marker baseline (`marker.y`) with its left edge at `marker.x`. The scale is what desktop PowerPoint draws for an `a:buBlip` at `a:buSzPct 100000` (what the exporter writes), measured as a square 10, 15, 16, 20 and 31 px wide at font sizes of 16, 24, 25, 32 and 48 px (0.625 to 0.646; the heights run a pixel more from anti-aliasing) with its bottom on the text baseline, in Arial, Aptos, Georgia and Courier New alike, so it does not depend on the typeface; the text start and hanging indent are identical in both. The exporter sets no size, because PowerPoint sizes the bullet itself; consumers that draw it themselves (the preview) use `bulletBox`. Vetoable: the constant is a measurement, not a rule of the format. When `image` is set and no logo resolves, the glyph stays and the slide reports one `unresolved-content` diagnostic at `slides.N.design.listBullet` or `design.listBullet`, only when the slide has a list. The renderer draws an `<image>` per marker; the exporter writes native picture bullets (`a:buBlip`).
 
 ### `fontScheme.accent`
 

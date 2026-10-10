@@ -264,7 +264,7 @@ const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
+			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
 	},
 );
 const poorAltRule = rule(
@@ -280,7 +280,7 @@ const GENERIC_ALT = /^(image|picture|photo|photograph|graphic|img|icon|figure|sc
 const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|image|screenshot|screen shot|photo|pic)[ _-]?\d+/i;
 const GENERIC_CHART_ALT = /^((a|an|the)\s+)?([a-z-]+\s+){0,2}(chart|graph|plot|diagram|figure)$/i;
 const kindLabel = (kind: string) =>
-	({ chart: 'Chart', image: 'Image', video: 'Video', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', 'quote-photo': 'Quote photo', organization: 'Organization logo' })[kind] ?? 'Picture';
+	({ chart: 'Chart', image: 'Image', video: 'Video', furniture: 'Header/footer image', speaker: 'Speaker photo', 'quote-photo': 'Quote photo', organization: 'Organization logo' })[kind] ?? 'Picture';
 
 function altFixes(path: string, value: unknown): FindingFix[] {
 	const decorative: FindingFix =
@@ -304,12 +304,12 @@ const altRules: ValidationRule[] = [
 					if (alt !== undefined && alt.trim() !== '') continue;
 					if (alt === '') continue; // explicit decorative opt-out
 					const hasText = alt !== undefined;
-					const organization = ref.kind === 'organization' || ref.kind === 'logo' ? rec(Array.isArray(context.document.organization) ? context.document.organization[0] : context.document.organization).name : undefined;
+					const organization = ref.kind === 'organization' ? rec(Array.isArray(context.document.organization) ? context.document.organization[0] : context.document.organization).name : undefined;
 					context.report(altRule, {
 						path: ref.path,
 						slide: ref.path.startsWith('/slides/') ? slide : undefined,
 						message: `${kindLabel(ref.kind)} has ${hasText ? 'blank' : 'no'} alt text.`,
-						help: `Describe what the ${ref.kind === 'logo' || ref.kind === 'organization' ? 'logo shows' : 'picture shows or why it is here'}${typeof organization === 'string' ? ` (for a logo, the organization name, ${organization}, is usually right)` : ''}, or set alt to "" if it is purely decorative.`,
+						help: `Describe what the ${ref.kind === 'organization' ? 'logo shows' : 'picture shows or why it is here'}${typeof organization === 'string' ? ` (for a logo, the organization name, ${organization}, is usually right)` : ''}, or set alt to "" if it is purely decorative.`,
 						fixes: altFixes(ref.path, ref.value),
 					});
 				}

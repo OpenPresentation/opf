@@ -35,7 +35,8 @@ export interface SlideContextOptions extends CatalogOptions {
 export interface SlideContext {
   /**
    * The slide to compose and draw: slide `index` with `{{slide.number}}`, `{{slide.section}}` and
-   * `{{deck.slideCount}}` substituted (`resolveSlideVariables`) for `options.slideNumber` and `options.slideCount`.
+   * `{{deck.slideCount}}` substituted (`resolveSlideVariables`) for `options.slideNumber` and `options.slideCount`, and its
+   * logo references (`var:organization.logo.icon` in an image field) resolved for `options.darkBackground`.
    * Its own header and footer text keeps the tokens: `layoutFurniture` substitutes them and marks each slide number
    * as a live field. The source slide object itself when it carries no slide-scoped token.
    */
@@ -104,6 +105,6 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
-  const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number });
+  const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number, presentation, darkBackground: composeOptions.darkBackground === true });
   return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

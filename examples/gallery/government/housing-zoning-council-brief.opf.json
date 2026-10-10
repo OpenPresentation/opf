@@ -77,7 +77,6 @@
     "chartPrimary": "left",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": "asset:brand-logo",
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06

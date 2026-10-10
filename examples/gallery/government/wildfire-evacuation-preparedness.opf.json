@@ -72,12 +72,6 @@
     "chartPrimary": "top",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06
@@ -410,7 +404,14 @@
     "id": "pine-county-emergency-management",
     "name": "Pine County Emergency Management",
     "legalName": "Pine County Emergency Management",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "pine-county-emergency-management.example",
     "email": "hello@pine-county-emergency-management.example",
     "phone": "+15551000068",

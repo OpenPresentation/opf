@@ -72,12 +72,6 @@
     "chartPrimary": "left",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06
@@ -410,7 +404,14 @@
     "id": "city-sanitation-bureau",
     "name": "City Sanitation Bureau",
     "legalName": "City Sanitation Bureau",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "city-sanitation-bureau.example",
     "email": "hello@city-sanitation-bureau.example",
     "phone": "+15551000076",

@@ -1,5 +1,6 @@
 import { visitContentPayloads } from './content-walk.js';
 import { type Rec, rec } from './rule-design.js';
+import { LOGO_SHAPES } from './logos.js';
 
 /**
  * Typed walks over a slide's content for the validation rules. Everything returns JSON Pointer paths so a finding
@@ -156,7 +157,7 @@ export function runsOf(tv: TextValue): Run[] {
 export interface AssetRef {
 	path: string;
 	value: unknown;
-	kind: 'image' | 'video' | 'logo' | 'furniture' | 'speaker' | 'organization' | 'quote-photo';
+	kind: 'image' | 'video' | 'furniture' | 'speaker' | 'organization' | 'quote-photo';
 }
 
 /** Alt text of an asset value: its own `alt`, else the registry entry an `asset:<id>` source points to. */
@@ -176,27 +177,23 @@ export const sourceOfAsset = (value: unknown): string | undefined => {
 	return typeof source === 'string' ? source : undefined;
 };
 
-const LOGO_VARIANTS = ['default', 'light', 'dark', 'stacked', 'stackedLight', 'stackedDark', 'icon', 'iconLight', 'iconDark', 'wordmark', 'wordmarkLight', 'wordmarkDark'];
+/** A slide-scoped organization logo reference (`var:organization.logo.icon`): its assets are checked on the organization. */
+const isLogoReference = (value: unknown): boolean => typeof value === 'string' && value.startsWith('var:organization.');
 
 /** Every picture a viewer meets as content or branding that should carry (possibly empty, decorative) alt text. */
 export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeDeck: boolean): AssetRef[] {
 	const out: AssetRef[] = [];
 	for (const payload of slidePayloads(slide, slidePath)) {
 		const at = (...tail: string[]) => pointer(...splitPointer(payload.path), ...tail);
-		if (payload.node.image !== undefined) out.push({ path: at('image'), value: payload.node.image, kind: 'image' });
+		if (payload.node.image !== undefined && !isLogoReference(payload.node.image)) out.push({ path: at('image'), value: payload.node.image, kind: 'image' });
 		if (payload.node.video !== undefined) out.push({ path: at('video'), value: payload.node.video, kind: 'video' });
 		if (rec(payload.node.quote).photo !== undefined) out.push({ path: at('quote', 'photo'), value: rec(payload.node.quote).photo, kind: 'quote-photo' });
 	}
 	const designRefs = (design: Rec, base: string) => {
-		const logo = design.logo;
-		if (typeof logo === 'string' || (logo && typeof logo.src === 'string')) out.push({ path: `${base}/logo`, value: logo, kind: 'logo' });
-		else if (logo && typeof logo === 'object')
-			for (const variant of LOGO_VARIANTS)
-				if (logo[variant] !== undefined) out.push({ path: `${base}/logo/${variant}`, value: logo[variant], kind: 'logo' });
 		for (const kind of ['header', 'footer'])
 			for (const zone of ['left', 'center', 'right']) {
 				const item = rec(rec(design[kind])[zone]);
-				if (item.image !== undefined) out.push({ path: `${base}/${kind}/${zone}/image`, value: item.image, kind: 'furniture' });
+				if (item.image !== undefined && !isLogoReference(item.image)) out.push({ path: `${base}/${kind}/${zone}/image`, value: item.image, kind: 'furniture' });
 			}
 	};
 	designRefs(rec(slide.design), `${slidePath}/design`);
@@ -204,12 +201,20 @@ export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeD
 		designRefs(rec(document.design), '/design');
 		const organizations = Array.isArray(document.organization) ? document.organization : document.organization ? [document.organization] : [];
 		organizations.forEach((organization: Rec, index: number) => {
-			if (organization?.logo !== undefined)
-				out.push({
-					path: Array.isArray(document.organization) ? `/organization/${index}/logo` : '/organization/logo',
-					value: organization.logo,
-					kind: 'organization',
-				});
+			const logo = organization?.logo;
+			if (logo === undefined) return;
+			const base = Array.isArray(document.organization) ? `/organization/${index}/logo` : '/organization/logo';
+			// One asset for every shape, or one per shape and background (RR-71).
+			if (typeof logo === 'string' || (logo && typeof logo === 'object' && 'src' in logo)) {
+				out.push({ path: base, value: logo, kind: 'organization' });
+				return;
+			}
+			for (const shape of LOGO_SHAPES) {
+				const entry = rec(logo)[shape];
+				if (entry === undefined) continue;
+				if (typeof entry === 'string' || (entry && typeof entry === 'object' && 'src' in entry)) out.push({ path: `${base}/${shape}`, value: entry, kind: 'organization' });
+				else for (const tone of ['onLight', 'onDark']) if (rec(entry)[tone] !== undefined) out.push({ path: `${base}/${shape}/${tone}`, value: rec(entry)[tone], kind: 'organization' });
+			}
 		});
 		const speakers = Array.isArray(document.speaker) ? document.speaker : document.speaker ? [document.speaker] : [];
 		speakers.forEach((speaker: Rec, index: number) => {

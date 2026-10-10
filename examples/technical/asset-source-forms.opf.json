@@ -2,12 +2,18 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Asset Source Forms",
   "description": "Technical fixture for string shorthand and object-form assets across images, video, logos, and chart data.",
-  "design": {
+  "organization": {
+    "id": "brand",
+    "name": "Asset Source Forms",
     "logo": {
-      "default": "asset:logo",
-      "light": "asset:logo-light",
+      "full": {
+        "onLight": "asset:logo",
+        "onDark": "asset:logo-light"
+      },
       "icon": "asset:icon"
-    },
+    }
+  },
+  "design": {
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.08

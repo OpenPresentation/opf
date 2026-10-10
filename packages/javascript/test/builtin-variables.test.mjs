@@ -43,11 +43,14 @@ test('deck.author accepts a single string', () => {
   assert.equal(first(resolved(withSlide({title: '{{deck.author}}'}, {author: 'Solo'}))).title, 'Solo');
 });
 
-test('speaker and organization images resolve as whole fields and inline sources', () => {
-  const result = resolved(withSlide({image: 'var:speaker.photo', logo: 'var:organization.logo', text: '{{speaker.photo}} {{organization.logo}}'}));
+test('speaker images resolve as whole fields and inline sources; organization logos are slide-scoped whole fields (RR-71)', () => {
+  const result = resolveVariables(withSlide({image: 'var:speaker.photo', logo: 'var:organization.logo', text: '{{speaker.photo}} {{organization.logo}}'}));
   assert.equal(first(result).image, 'asset:ada-photo');
-  assert.deepEqual(first(result).logo, {src: 'asset:acme-logo', alt: 'Acme'});
-  assert.equal(first(result).text, 'asset:ada-photo asset:acme-logo');
+  // The logo's onLight or onDark asset is chosen per slide (resolveSlideVariables), so the deck-wide pass keeps the reference.
+  assert.equal(first(result).logo, 'var:organization.logo');
+  assert.equal(first(result).text, 'asset:ada-photo {{organization.logo}}');
+  assert.deepEqual(result.diagnostics.map((entry) => [entry.code, entry.path]), [['variable-unknown-builtin', '/slides/0/text']]);
+  assert.match(result.diagnostics[0].message, /only as a whole field, 'var:organization.logo'/);
 });
 
 test('the primary organization is role primary, else the first one, and a single object works', () => {

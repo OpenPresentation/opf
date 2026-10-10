@@ -68,12 +68,6 @@
     "chartPrimary": "bottom",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -251,7 +245,14 @@
     "id": "bloom-and-anchor-beauty",
     "name": "Bloom & Anchor Beauty",
     "legalName": "Bloom & Anchor Beauty, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "bloom-and-anchor-beauty.example",
     "email": "hello@bloom-and-anchor-beauty.example",
     "phone": "+15551000024",

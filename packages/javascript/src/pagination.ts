@@ -168,10 +168,12 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // count, but returned with the tokens kept, so the output stays a source document.
   const presentationSlides = options.presentation?.slides;
   const slideCount = options.slideCount ?? (Array.isArray(presentationSlides) && presentationSlides.length ? presentationSlides.length : undefined);
+  // RR-71: logo references in the slide resolve for its background, as the engines draw them.
+  const logoContext = options.presentation !== undefined ? {presentation: options.presentation, darkBackground: options.darkBackground === true} : {};
   const geometry = (slide: Record<string, any>, pageIndex = 0) => {
     if (++evaluations > 20000) throw new OPFPaginationError('Pagination exceeded its layout evaluation limit. Split the input into smaller sections.');
     const slideNumber = (options.slideNumber??sourceIndex+1)+pageIndex;
-    return composeSlide(resolveSlideVariables(withReadability(slide,true),{slideNumber,...(slideCount!==undefined?{slideCount}:{})}), {...composeOptions,slideNumber});
+    return composeSlide(resolveSlideVariables(withReadability(slide,true),{slideNumber,...(slideCount!==undefined?{slideCount}:{}),...logoContext}), {...composeOptions,slideNumber});
   };
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
@@ -189,7 +191,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const headerIssues = initial.diagnostics.filter(issue=>headingFields.has(issue.path.slice(sourceBase.length+1))||initial.furniture?.diagnostics.includes(issue));
   if (headerIssues.length) throw new OPFPaginationError('Repeated headings or header/footer content cannot fit or resolve. Change the repeated content or slide design before pagination.',headerIssues);
   // A slide with slide-scoped tokens is measured substituted: split its own (token) values, so pages keep the tokens.
-  const tokens = resolveSlideVariables(source,{slideNumber:1,slideCount:1}) !== source;
+  const tokens = resolveSlideVariables(source,{slideNumber:1,slideCount:1,...logoContext}) !== source;
   const sourceValue = (path: string, fallback: unknown): unknown => {
     if (!tokens || !path.startsWith(`${sourceBase}.`)) return fallback;
     let node: unknown = source;

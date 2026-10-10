@@ -112,22 +112,23 @@ Built-ins are read-only variables that come from the deck's own metadata, so a c
 | `speakers` | list | every speaker's name, in order |
 | `speaker.<id>.<field>` | as above | the speaker with that id |
 | `organization.name`, `.legalName`, `.tagline`, `.domain`, `.email`, `.phone` | text | the primary organization |
-| `organization.logo` | image | the primary organization |
 | `organization.<id>.<field>` | as above | the organization with that id |
+| `organization.logo`, `organization.logo.<shape>` | image, slide-scoped | the primary organization's logo, `full` or the named shape (`stacked`, `icon`, `wordmark`), for the slide's background ([below](#organization-logos)) |
+| `organization.<id>.logo`, `organization.<id>.logo.<shape>` | image, slide-scoped | the logo of the organization with that id |
 | `slide.number` | text, slide-scoped | the displayed number of this slide in the rendered or exported deck, after pagination (a slide split in two shows two numbers) |
 | `slide.section` | text, slide-scoped | this slide's `section`; a slide without one resolves to empty text |
 | `deck.slideCount` | text, slide-scoped | the number of slides in the rendered or exported deck, after pagination |
 
-The primary organization is the one with `role: 'primary'`, else the first (the rule the deck logo and the `socials` furniture field use). The speaker and organization fields may be an object or an array. A two-segment name (`speaker.name`) always means the first speaker or the primary organization; a three-segment name (`speaker.ada.name`) addresses an entry by its `id`.
+The primary organization is the one with `role: 'primary'`, else the first (the rule the cover logo and the `socials` furniture field use). The speaker and organization fields may be an object or an array. A two-segment name (`speaker.name`) always means the first speaker or the primary organization; a three-segment name (`speaker.ada.name`) addresses an entry by its `id`.
 
-They use the two forms above and work wherever the same kind of user variable works: `{{speaker.name}}` inside any string (`{{speakers|; }}` takes a separator, like any list), and `var:speaker.photo` or `var:organization.logo` as a whole field. `var:speakers` splices every name into an array.
+They use the two forms above and work wherever the same kind of user variable works: `{{speaker.name}}` inside any string (`{{speakers|; }}` takes a separator, like any list), and `var:speaker.photo` as a whole field. `var:speakers` splices every name into an array.
 
 ```json
 {
   "speaker": { "id": "ada", "name": "Ada Lovelace", "title": "CTO", "photo": "asset:ada" },
   "assets": { "ada": { "src": "./photos/ada.jpg", "mediaType": "image/jpeg" } },
-  "organization": { "id": "acme", "name": "Acme Corp", "tagline": "Build the future" },
-  "design": { "footer": { "left": { "text": "{{organization.tagline}}" } } },
+  "organization": { "id": "acme", "name": "Acme Corp", "tagline": "Build the future", "logo": { "full": "./assets/acme-logo.svg", "icon": "./assets/acme-mark.svg" } },
+  "design": { "footer": { "left": { "image": "var:organization.logo.icon", "text": "{{organization.tagline}}" } } },
   "slides": [{ "id": "cover", "title": "Quarterly review", "subtitle": "{{speaker.name}}, {{speaker.title}} · {{organization.name}}", "image": "var:speaker.photo" }]
 }
 ```
@@ -144,13 +145,34 @@ They use the two forms above and work wherever the same kind of user variable wo
 
 `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` (FA-31) depend on the slide being drawn and on the deck after pagination, so they resolve per output slide, at composition time, instead of in the deck-wide pass:
 
-- They work in any string of a slide (title, body text, runs, table cells, chart data, notes) and in header and footer `text`. They are inline tokens only: `var:slide.number`, any `var:slide.*` and `var:deck.slideCount` are `variable-unknown-builtin`, because every field that would take them is a string. `slide.` is a reserved prefix, so `{{slide.anything-else}}` is `variable-unknown-builtin`.
+- They work in any string of a slide (title, body text, runs, table cells, chart data, notes) and in header and footer `text`. (The organization logos, [below](#organization-logos), are slide-scoped too, as whole image fields.) They are inline tokens only: `var:slide.number`, any `var:slide.*` and `var:deck.slideCount` are `variable-unknown-builtin`, because every field that would take them is a string. `slide.` is a reserved prefix, so `{{slide.anything-else}}` is `variable-unknown-builtin`.
 - `resolveVariables` leaves them as written, also on a complete pass, and never reports them (`variable-unfilled` and `variable-unknown` do not apply). An escaped `\{{slide.number}}` keeps its escape through that pass and draws as the literal text `{{slide.number}}`.
 - `resolveSlideVariables(slide, { slideNumber, slideCount })` returns a copy of one slide with the three substituted in every string, with the same walk and exclusions as `resolveVariables` (`extensions` is never searched; code follows the same rule as user tokens). `slide.section` reads the slide's own `section`. The slide's own `design.header` and `design.footer` are left to `layoutFurniture`.
 - Engines (renderer, PPTX exporter, editor preview) compose and draw `context.slide` from `resolveSlideContext(deck, index, { slideNumber, slideCount })`, which is that substituted slide for the same numbers `context.options` carries; an engine that builds its own options calls `resolveSlideVariables` per output slide with the `slideNumber` and `slideCount` it gives `composeSlide`. Text is therefore measured with the real value.
 - `layoutFurniture` substitutes them in each zone's `text` for the slide it lays out, and every `{{slide.number}}` adds a `slideNumber` entry to `FurnitureTextPart.fields`, so the PPTX exporter writes it as a native slide-number field. `{{deck.slideCount}}` and `{{slide.section}}` are fixed text (PowerPoint has no slide-count field). In body text every slide token is fixed text.
 - `paginate` measures with the substituted values but returns slides with the tokens kept, so its output stays a source document, and runs its slide-count fixed point whenever `{{deck.slideCount}}` appears in the deck.
 - Validation warns `variable-builtin-missing` at each slide that has no `section` but uses `{{slide.section}}`, in its own strings or in the header or footer it inherits from `design`.
+
+### Organization logos
+
+Logos live on the organization (RR-71, OPF 0.18). `Organization.logo` is one path or Asset for every shape, or up to four shapes, each a path or Asset or `{ "onLight", "onDark" }`:
+
+```json
+"organization": [
+  { "id": "acme", "name": "Acme", "role": "primary",
+    "logo": { "full": { "onLight": "./assets/acme-logo.svg", "onDark": "./assets/acme-logo-white.svg" }, "icon": "./assets/acme-mark.svg" } },
+  { "id": "beta", "name": "Beta", "role": "partner", "logo": "./assets/beta.svg" }
+]
+```
+
+`onLight` is the artwork for light backgrounds (usually dark ink) and `onDark` the one for dark backgrounds. Plain file paths are the simplest source; an HTTPS URL, a data URI or an `asset:<id>` registry entry works too.
+
+- **Placing a logo.** A whole-field reference in any image field: `var:organization.logo` (the full logo), `var:organization.logo.full|stacked|icon|wordmark`, `var:organization.<id>.logo` and `var:organization.<id>.logo.<shape>` for another organization. A header or footer zone writes `"image": "var:organization.logo.icon"`; an image block or a slide `image` works the same way.
+- **Fallbacks.** A missing shape falls back to `full`, and `full` to the first defined of `wordmark`, `stacked` and `icon`. Within a shape a missing `onLight` or `onDark` uses the other.
+- **Slide-scoped.** The `onLight` or `onDark` asset follows each slide's background, so these references resolve per output slide, like `{{slide.number}}`: `resolveVariables` leaves them as written wherever a slide reaches them (slides, the deck's header and footer, `design.logo`), `resolveSlideVariables(slide, { slideNumber, slideCount, presentation, darkBackground })` and `resolveSlideContext` resolve them in a slide's fields, and `layoutFurniture` in zone images. Anywhere else (a deck watermark, say) no slide background applies and they resolve deck-wide, as on a light background. A reference to an organization without a logo omits the field, as an unfilled optional variable does.
+- **Whole fields only.** An inline `{{organization.logo}}` is `variable-unknown-builtin`, as are an unknown shape (`var:organization.logo.banner`) and an unknown organization id. A known organization without a logo is `variable-builtin-missing`.
+- **Covers and `design.logo`.** Cover and section slides draw the primary organization's full logo, and picture bullets its icon, with no reference at all. `design.logo` (deck or slide) is only an override: a reference such as `"var:organization.beta.logo"` or `"var:organization.logo.wordmark"` (a named shape wins everywhere the override applies), or `false` for no logo. See [design resolution](design-resolution.md#brand-assets-and-layout-hints).
+- `listBuiltinVariables` lists every logo and shape with kind `image` and scope `slide` (no `value`; `available` when the organization has a logo).
 
 Header and footer zones carry generated values only as variables in `text`, in the order the author writes them, with `\n` between lines: `"{{organization.name}}"`, `"{{speaker.name}}, {{speaker.title}}"`, `"{{slide.section}}"`, `"{{slide.number}} / {{deck.slideCount}}"`. See [dynamic composition](dynamic-composition.md).
 

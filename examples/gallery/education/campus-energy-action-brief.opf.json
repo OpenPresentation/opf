@@ -72,12 +72,6 @@
     "chartPrimary": "right",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": {
       "src": "asset:watermark",
       "opacity": 0.06
@@ -258,7 +252,14 @@
     "id": "lakeside-university",
     "name": "Lakeside University",
     "legalName": "Lakeside University",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "lakeside-university.example",
     "email": "hello@lakeside-university.example",
     "phone": "+15551000052",

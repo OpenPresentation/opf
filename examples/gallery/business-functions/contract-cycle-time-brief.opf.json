@@ -68,12 +68,6 @@
     "chartPrimary": "right",
     "imageFit": "cover",
     "listBullet": "character",
-    "logo": {
-      "default": "asset:brand-logo",
-      "light": "asset:brand-logo-light",
-      "icon": "asset:brand-icon",
-      "wordmark": "asset:brand-logo"
-    },
     "watermark": false,
     "header": {
       "left": {
@@ -251,7 +245,14 @@
     "id": "juniper-legal",
     "name": "Juniper Legal",
     "legalName": "Juniper Legal, Inc.",
-    "logo": "asset:brand-logo",
+    "logo": {
+      "full": {
+        "onLight": "asset:brand-logo",
+        "onDark": "asset:brand-logo-light"
+      },
+      "icon": "asset:brand-icon",
+      "wordmark": "asset:brand-logo"
+    },
     "domain": "juniper-legal.example",
     "email": "hello@juniper-legal.example",
     "phone": "+15551000032",

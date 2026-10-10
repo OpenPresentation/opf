@@ -320,8 +320,8 @@ describe("presentation shapes that must validate", () => {
           title: "Product demo",
         },
       },
+      organization: { id: "acme", name: "Acme", logo: { src: "asset:product-shot", alt: "Product screenshot" } },
       design: {
-        logo: { src: "asset:product-shot", alt: "Product screenshot" },
         watermark: { src: "asset:product-shot", opacity: 0.08 },
         background: "asset:product-shot",
       },
