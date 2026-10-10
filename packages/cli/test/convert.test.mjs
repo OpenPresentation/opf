@@ -216,7 +216,7 @@ describe("drawing, through stub peers", () => {
   test("the output's extension names the format, so deck.png is PNG and never SVG (the render --out bug)", async () => {
     const png = await stub(["convert", "deck.opf.json", "slides/deck.png", "--scale", "0.5", "--slides", "1-2"]);
     assert.equal(png.report.format, "png");
-    assert.deepEqual(png.report.outputs.map((item) => [path.basename(item.file), item.mediaType]), [["deck-001.png", "image/png"], ["deck-002.png", "image/png"]]);
+    assert.deepEqual(png.report.outputs.map((item) => [path.basename(item.file), item.mediaType]), [["deck-1.png", "image/png"], ["deck-2.png", "image/png"]]);
     assert.equal((await callsOf("toPng")).length, 2);
     assert.equal((await callsOf("toPng"))[0].args[0].scale, 0.5);
     const one = await stub(["convert", "one.opf.md", "one.png"]);
@@ -234,7 +234,7 @@ describe("drawing, through stub peers", () => {
     assert.equal(pptx.report.outputs[0].mediaType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
     assert.equal((await callsOf("toPptx"))[0].args[0].chartex, "fallback");
     const zip = await stub(["convert", "deck.opf.json", "slides.zip", "--to", "svg"]);
-    assert.deepEqual(zip.report.outputs[0].entries, ["slides-001.svg", "slides-002.svg"]);
+    assert.deepEqual(zip.report.outputs[0].entries, ["slides-1.svg", "slides-2.svg"]);
     assert.equal(zip.report.outputs[0].mediaType, "application/zip");
     const fonts = await stub(["convert", "deck.opf.json", "fonts.svg", "--fonts", "fonts", "--slides", "1"]);
     assert.match((await callsOf("loadFonts"))[0].args[0].faces[0].path, /fonts[\\/]a\.ttf$/);
