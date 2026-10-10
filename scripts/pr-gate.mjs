@@ -10,7 +10,8 @@
 // head and completed with success (skipped/neutral pass unless --no-skipped), and the PR's mergeability is computed and
 // not conflicting. Check runs and commit statuses both count; checks for older heads are ignored, and so are superseded
 // runs on the same head: only the newest report of each check counts (per workflow and job name; a re-run or a newer run
-// of the same job replaces the failed one, a newer failure replaces an older success). Zero checks or a required check
+// of the same job replaces the failed one, a newer failure replaces an older success; a CANCELLED check of a run that a newer
+// run of the same workflow superseded is ignored even before the newer run reports that check). Zero checks or a required check
 // that has not registered yet is pending, never green. Without a ruleset (or --required all) every check
 // counts except neutral bots (Cursor Bugbot), every GitHub Actions suite must be complete, and green must hold on two
 // consecutive polls. Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops
@@ -116,7 +117,7 @@ export function parseArgs(argv) {
 
 const CONTEXT_NODES =
   'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
-const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event}}}`;
+const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event workflow{name}}}}`;
 const PR_FIELDS = `id number url state merged isDraft mergeCommit{oid} headRefOid baseRefName mergeable mergeStateStatus isInMergeQueue mergeQueueEntry{state position} timelineItems(last:1,itemTypes:[REMOVED_FROM_MERGE_QUEUE_EVENT]){nodes{... on RemovedFromMergeQueueEvent{reason createdAt}}} commits(last:1){nodes{commit{oid ${CHECKS}}}}`;
 const COMMIT_FIELDS = `... on Commit{oid ${CHECKS}}`;
 
@@ -246,13 +247,36 @@ export function latestPerCheck(checks) {
 }
 
 /**
+ * A CANCELLED check of a workflow run that a newer run of the same workflow superseded on the same head does not count.
+ * Concurrency groups cancel the older run when a second event (a label added right after the PR opened, a push race) starts
+ * a new one; the newer run may not have created its check runs yet, so latestPerCheck alone would still see only the
+ * cancelled one. A newer run supersedes only while it is live: a run whose check runs are all cancelled, or whose suite
+ * completed as CANCELLED, does not hide anything, so the newest run being cancelled still counts as not green. Only
+ * cancellations are dropped; a real failure of an older run stays until a newer report of that same check replaces it.
+ */
+export function dropSupersededCancellations(checks, suites = []) {
+  const live = new Map();
+  const seen = (workflow, runId) => {
+    if (workflow == null || runId == null) return;
+    if (!live.has(workflow) || live.get(workflow) < runId) live.set(workflow, runId);
+  };
+  for (const check of checks) if (check.kind === 'check' && check.conclusion !== 'CANCELLED') seen(check.workflow, check.runId);
+  for (const suite of suites) {
+    if (suite?.app?.slug !== 'github-actions' || (suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED')) continue;
+    seen(suite.workflowRun?.workflow?.name, suite.workflowRun?.databaseId);
+  }
+  return checks.filter((check) => !(check.kind === 'check' && check.conclusion === 'CANCELLED' && check.workflow != null && check.runId != null && (live.get(check.workflow) ?? -1) > check.runId));
+}
+
+/**
  * The verdict on one head's checks. required: [{context, integrationId}] (a ruleset or --required list) or null for
  * "every check except the neutral bots". suites: the commit's check suites (only used in the "all" mode, where a GitHub
  * Actions suite that is not complete means jobs that have not created their check runs yet).
  * Returns {state: green|pending|red, mode, failing: [{name, conclusion, url, runId, id}], pending, missing, passed,
  * advisoryFailing, total}.
  */
-export function evaluateChecks({ checks, required, suites = [], allowSkipped = true, neutral = NEUTRAL_BOTS }) {
+export function evaluateChecks({ checks: reported, required, suites = [], allowSkipped = true, neutral = NEUTRAL_BOTS }) {
+  const checks = dropSupersededCancellations(reported, suites);
   const mode = required?.length ? 'required' : 'all';
   const verdicts = [];
   const missing = [];
