@@ -170,6 +170,8 @@ jobs:
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-render/artifacts/forced-colors/*.png
+            opf-render/artifacts/forced-colors/report.json
             opf-render/artifacts/quarantine/**
             opf-render/artifacts/jpeg/browser/report.json
             opf-render/artifacts/quote-footer/browser/report.json

@@ -17,6 +17,10 @@
           "command": "npm run test:preview-a11y-browser"
         },
         {
+          "id": "browser:forced-colors-browser",
+          "command": "npm run test:forced-colors-browser"
+        },
+        {
           "id": "browser:web-delivery",
           "command": "node scripts/measure-web-delivery.mjs"
         },

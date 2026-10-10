@@ -138,7 +138,8 @@
     "test:emoji-math-browser": "node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json",
     "test:player": "node test/player-unit.mjs",
     "test:player-browser": "node test/player-browser.mjs artifacts/player",
-    "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs"
+    "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs",
+    "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
   },
   "dependencies": {
     "@openpresentation/opf": "^0.18.1",

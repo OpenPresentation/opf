@@ -35,7 +35,10 @@ const AUDIENCE_CSS = `
 .goto[hidden] { display: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .msg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; }
-@media (forced-colors: active) { .hud button { border-color: ButtonText; } }
+@media (forced-colors: active) {
+  .hud button { border-color: ButtonText; }
+  .hud button[aria-disabled="true"] { opacity: 1; color: GrayText; border-color: GrayText; }
+}
 `;
 
 const PRESENTER_CSS = `
@@ -63,7 +66,10 @@ button[aria-pressed="true"] { background: #3d5a99; }
 button[aria-disabled="true"] { opacity: 0.45; cursor: default; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @media (max-width: 760px) { main { grid-template-columns: 1fr; overflow: auto; } }
-@media (forced-colors: active) { button, .notes, .slidebox { border-color: ButtonText; } }
+@media (forced-colors: active) {
+  button, .notes, .slidebox { border-color: ButtonText; }
+  button[aria-disabled="true"] { opacity: 1; color: GrayText; border-color: GrayText; }
+}
 `;
 
 /** Document indexes in the presentation order, from the options. */

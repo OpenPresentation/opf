@@ -47,7 +47,12 @@ button[aria-disabled="true"] { opacity: 0.45; cursor: default; }
 .rtl .flip { transform: scaleX(-1); }
 .rtl .bar, .rtl .thumbs { direction: rtl; }
 @media (prefers-reduced-motion: no-preference) { button { transition: background-color 120ms; } }
-@media (forced-colors: active) { .viewport, button, .thumb[aria-current="true"] { border-color: CanvasText; } .thumb[aria-current="true"] { outline-color: Highlight; } }
+@media (forced-colors: active) {
+  .viewport, button, .thumb[aria-current="true"] { border-color: CanvasText; }
+  .thumb[aria-current="true"] { outline-color: Highlight; }
+  /* A disabled control is drawn in GrayText at full opacity: fading would blend its frame and its focus ring into Canvas. */
+  button[aria-disabled="true"] { opacity: 1; color: GrayText; border-color: GrayText; }
+}
 `;
 
 const supportsCustomElements = () => typeof customElements !== "undefined" && typeof HTMLElement !== "undefined";
