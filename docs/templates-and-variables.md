@@ -29,8 +29,8 @@ Decisions in this document are vetoable. They are collected in [Decisions](#deci
 ```
 
 ```sh
-opf fill quarterly.opf.json --data clients.csv --out-dir decks     # one deck per CSV row
-opf fill quarterly.opf.json --data one.json --output globex.opf.json
+opf fill quarterly.opf.json clients.csv decks/deck-{n}.opf.json     # one deck per CSV row
+opf fill quarterly.opf.json one.json globex.opf.json
 ```
 
 ```js
@@ -243,14 +243,13 @@ The PPTX file contains the resolved text. The template form is not stored in the
 ## Decks from data: `opf fill`
 
 ```
-opf fill <template|-> [--data <values.json|data.csv|data.tsv|->] [--format csv|tsv|json]
-         [--delimiter <c>] [--no-header]
-         [--output <file|-> | --out-dir <dir> [--name <pattern>] | --combine --output <file|->]
-         [--partial] [--examples] [--force] [--fail-on <level>]
+opf fill <template|-> [data|-] [output|pattern|-] [--data-format csv|tsv|json]
+         [--delimiter <c>] [--no-header] [--combine]
+         [--partial] [--examples] [--from <format>] [--to <format>] [--force] [--fail-on <level>]
 ```
 
 - **Records.** A JSON object is one record. A JSON array of objects, a CSV or TSV file, `{columns, rows}` and a row matrix give one record per row; CSV and TSV columns are matched to variable ids by header name. JSON keeps rich values (text runs, lists, Asset objects); CSV and TSV cells are strings that coerce per kind. A blank cell keeps the declared value.
-- **Outputs.** One record gives one deck (`--output`, default stdout). Several records need `--out-dir` (one `<name>.opf.json` per record; `--name` is a pattern with `{n}`, the zero-padded index, and `{column}`, a slug of that column's value; default `deck-{n}`) or `--combine` (one deck whose slides are the filled slides of every record in order, with repeated slide ids suffixed by the record index; deck-level fields come from the first record).
+- **Outputs.** One record gives one deck (the output, default stdout). Several records need a file name pattern as the output (one file per record; `{n}` is the zero-padded index and `{column}` a slug of that column's value, so `decks/qbr-{client}.opf.md`; a repeated name gets `-2`, `-3`) or `--combine` (one deck whose slides are the filled slides of every record in order, with repeated slide ids suffixed by the record index; deck-level fields come from the first record).
 - **Failure.** An unfilled required variable, a value of the wrong kind or an unusable format fails with exit code 1 and the offending record and variable, before any file is written. `--partial` allows unfilled variables and keeps their declarations; `--examples` fills them from their example.
 - **Overlap with `ingest`.** `ingest` turns tabular data into a table or chart *content* payload and shares the same CSV/TSV/JSON parser. `fill` maps rows onto *variables* of a deck the author designed. They compose: a chart whose rows come from a data file stays `ingest`; a chart cell that varies per client is a `var:` reference.
 - Relative image paths in data are written as given, so they resolve against the OPF file's final location. Prefer HTTPS URLs, data URIs, `asset:` ids or absolute paths in data files, or write decks next to their images.

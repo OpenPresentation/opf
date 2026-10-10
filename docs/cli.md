@@ -1,259 +1,247 @@
-# The `opf` CLI: producing and reading files
+# The `opf` CLI
 
-The CLI (`@openpresentation/cli`, binary `opf`, Node 22 or later; verified on Node 24) validates, edits, paginates and bundles documents (see
-[its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Four commands
-produce and read files: `opf render`, `opf export`, `opf convert` and `opf import`. They run core's file engine, the one
-applications call as [`@openpresentation/opf`](node.md) (`convert`, `open`, `save`); the commands add the flags, the
-JSON report and the exit codes.
+The CLI (`@openpresentation/cli`, binary `opf`, Node 22 or later; verified on Node 24) creates, checks, edits, converts and
+inspects decks (see [its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)).
+`opf convert` is the one command that changes formats: a deck form, PDF, PPTX, PNG and SVG. Every command runs core's
+functions, the ones applications call from [`@openpresentation/opf`](node.md); the commands add the flags, the JSON report and
+the exit codes.
 
-All four are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
-and installed package versions give the same bytes on every operating system.
+Everything is deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options and
+installed package versions give the same bytes on every operating system.
+
+## Commands
+
+| Command | What it does |
+| --- | --- |
+| `opf create [output] [--title <text> \| --example <slug>]` | A one-slide starter deck, or one of core's bundled examples (`opf catalog examples` lists them). |
+| `opf validate <file\|dir\|->...` | The one checker: format, references, policy, accessibility, layout, content. Several files, folders and stdin in one run; `--format json\|text\|github`. |
+| `opf convert <input> <output>` | Any change of format: `.json`, `.opf.yaml`, `.opf.md` (and a plain `.md` input), `.pptx`, `.pdf`, `.png`, `.svg`, `.zip`, or stdin and stdout. |
+| `opf edit <file> [output] --patch <patch>` | A JSON Patch, applied whole or not at all, the result checked. |
+| `opf format <file>... [output]` | Canonical key order and layout, in the form the file has. |
+| `opf diff <a> <b>` | What changed between two decks (`--format text\|json\|patch`). |
+| `opf merge <base> <ours> <theirs> [output]` | A three-way merge; conflicts are listed. |
+| `opf stats <file>` | Neutral facts about a deck (`--format json\|text`). |
+| `opf paginate <input> [output]` | Overflowing slides split into continuation slides, measured with the renderer's fonts when it is installed. |
+| `opf embed <input> [output]` | The catalog records a deck references, copied into it. |
+| `opf fill <template> [data] [output]` | A template's variables filled: one deck per record (the output is a name pattern), or `--combine`. |
+| `opf ingest <data> [output] --as table\|chart` | CSV, TSV or JSON rows as a table or chart slide, alone or added `--into` a deck. |
+| `opf doctor [deck]` | Which formats this install can write, and the one command that installs what is missing. |
+| `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. |
+| `opf catalogs`, `opf catalog <kind> [id]`, `opf catalog examples [slug]` | The default catalog and the bundled example decks. |
+| `opf skills <install\|update\|status>` | The six bundled agent skills. |
+
+`opf <command> --help` (or `-h`, or `opf help <command>`) prints a command's flags and examples.
+
+Removed in 0.18 (each is a usage error, exit 2, that names its replacement): `opf render`, `opf export`, `opf import`,
+`opf from-md`, `opf to-md`, `opf from-yaml` and `opf to-yaml` (all `opf convert`), `opf create --from` (`opf convert`), and the
+flags `--output`, `--out`, `--out-dir` and `--name` (a positional output), `--input-format` (`--from`), `--json` (reports are
+JSON), `--dry-run` (stdout), `--data` (fill's second argument) and the deck values of `--format` (`--to`).
+
+## One output convention
+
+Every command that writes a deck takes the same arguments:
+
+| Form | Meaning |
+| --- | --- |
+| `opf embed deck.opf.json` | No output: the deck goes to stdout, the report to stderr. `-` says the same. |
+| `opf embed deck.opf.json out.opf.json` | An output after the inputs: written atomically (a temporary sibling, then a rename); an existing file needs `--force`. |
+| `opf embed deck.opf.json -i` | `-i` (`--in-place`) rewrites the input, refusing if it changed since it was read. Not for stdin, and not with an output. |
+| `opf embed deck.opf.json --check` | Writes nothing and exits 1 when the command would change something: `format --check` (not canonical), `embed --check` (not self-contained) and `paginate --check` (a slide overflows). |
+
+The form written is the output's extension (`.json`, `.opf.yaml`/`.yml`, `.opf.md`), else `--to json|yaml|md`, else the form
+that was read. An existing output is refused before anything is printed or written.
+
+`opf fill` writes one deck per record through a file name pattern: `{n}` is the record number, `{column}` a slug of that
+column's value (`opf fill t.opf.md clients.csv decks/qbr-{client}.opf.md`); `--combine` writes one deck with every record's slides.
+
+## What each flag means
+
+| Flag | Meaning |
+| --- | --- |
+| `--format json\|text\|github\|patch` | The report format only: `json` (the default), `text`, `github` (validate's workflow annotations) or `patch` (diff's JSON Patch). |
+| `--from json\|yaml\|md` | The form of a deck input: stdin, and names that say none. Without it, a name ending `.json`, `.opf.yaml`, `.yaml`, `.yml` or `.opf.md` says the form, and text that starts with `{` or `[` is JSON; anything else is a usage error that asks for `--from yaml\|md`. `opf convert` also takes `--from pptx`. |
+| `--to json\|yaml\|md` | The form of a deck output, for stdout and names that say none. `opf convert` also takes `pdf`, `pptx`, `png`, `svg` and `zip`. A `--to` that disagrees with the output's extension is refused. |
+| `--data-format csv\|tsv\|json` | The form of the data of `opf fill` and `opf ingest` (default: the extension, else JSON when it starts with `{` or `[`, else CSV). |
+| `--fail-on error\|warning\|info` | Findings at or above this severity fail the command (exit 1) and nothing is written (default `error`). |
+| `--force` | Replace an existing output. |
 
 ## Install
 
-`render`, `export` and `convert` to PDF, PNG or SVG need `@openpresentation/opf-render`; PPTX output and `.pptx` input (`export
---format pptx`, `import`, `convert` from or to `.pptx`) also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision RR-27, below; RR-62 moved the engine into core, RR-70 made it the root's Node build), loaded the
-first time a command needs them. Install them next to the CLI:
+Deck forms (JSON, YAML, Markdown) need nothing beyond the CLI. PDF, PNG and SVG need `@openpresentation/opf-render`; PPTX output
+and `.pptx` input also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision
+RR-27, below), loaded the first time a command needs them, from beside the CLI first and from the working directory second.
+
+`opf doctor` says what this install can write and prints the one command that installs the rest:
 
 ```sh
-npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
-# a project that depends on the CLI
-npm install -D @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
-# one run, nothing installed
-npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx -p @resvg/resvg-js -p sharp -p @expo-google-fonts/roboto@0.4.3 -p @expo-google-fonts/roboto-mono@0.4.2 -p @expo-google-fonts/caladea@0.4.2 -p @expo-google-fonts/arimo@0.4.3 -p @expo-google-fonts/tinos@0.4.2 -p @expo-google-fonts/cousine@0.4.3 -p @expo-google-fonts/gelasio@0.4.1 -p @expo-google-fonts/noto-sans@0.4.2 opf export deck.opf.json --format pptx
+opf doctor --format text          # per format: ready, or what is missing; then one install command
+opf doctor deck.opf.md            # JSON; with a deck, a PDF needs sharp only when the deck has pictures
 ```
 
-The CLI looks for a peer beside itself first (a global install, an npx run, a project dependency) and in the working
-directory second. Without it the command exits 2 with `code: "peer-not-installed"` and the install command. The
-commands check the functions they call and name the version to install when an older peer lacks one.
-
-From opf-render 0.16 the renderer's own dependencies are optional peers too: the converters (`pdf-lib`, `@resvg/resvg-js`,
-`sharp`) and every `@expo-google-fonts/*` package, so a host installs only what its outputs use. The CLI and
-`@openpresentation/opf` in Node always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
+The command matches the package manager that runs the CLI (`npm_config_user_agent`: npm, pnpm, yarn or bun) and the way the CLI
+is installed: global (`npm install -g ...`), a project (`npm install ...`), or one npx run (`npx -p @openpresentation/cli -p ... opf <command>`).
+A conversion that misses a peer exits 2 with `code: "peer-not-installed"` (or `peer-too-old`), and its `install` field and message
+carry that one command for the format asked for. What each output needs beside `@openpresentation/opf-render`:
 
 | Output | Also install |
 | --- | --- |
-| every format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
+| every drawn format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
 | `png` | `@resvg/resvg-js@^2.6.2 sharp@^0.35.5` |
 | `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--raster`; `sharp@^0.35.5` when the deck has pictures |
 | `svg` | the fonts only |
-| `pptx`, `import` | `@openpresentation/opf-pptx` (an SVG picture in a PPTX is rasterized by the renderer, so `@resvg/resvg-js`) |
-
-A converter or font package that is missing is reported as the same missing-peer error as a missing renderer: the command
-exits 2 with `code: "peer-not-installed"` and the renderer's own install command in `error`, with `package` (or `packages`),
-`range`, `install` and `purpose` beside it; `convert` of `@openpresentation/opf` throws `OPFExportError` with the same `code` and `details`.
+| `pptx`, a `.pptx` input | `@openpresentation/opf-pptx` |
 
 ## From code
 
-The commands are the CLI; the engine they run is core's `@openpresentation/opf` in Node, which an application imports instead
-of spawning `opf`:
+The engine the commands run is core's `@openpresentation/opf` in Node, which an application imports instead of spawning `opf`.
+In Node, `validate`, `stats`, `paginate`, `embed` and `edit` register the default catalog when a call names none, as the commands
+do, so `opf validate deck` and `validate(deck)` agree:
 
 ```ts
 import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");                         // opf convert deck.opf.md deck.pdf
 const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
-const deck = await opf.open("deck.pptx");                             // import
+const deck = await opf.open("deck.pptx");                             // opf convert deck.pptx -
+const { presentation } = opf.edit(deck, patch);                       // opf edit deck --patch patch.json
+const { decks } = opf.fill(template, csvText);                        // opf fill template data.csv out-{n}.opf.json
 ```
 
-The options are the flags in camel case (`--raster` is `raster: true`, `--fonts` is `fonts` (a folder or a list of folders), `--asset-dir` is
-`assetDir`, `--include-hidden` is `includeHidden`; `--text`, `--charts` and `--images` keep their names). The 0.17 names (`pdfMode`, `svgFonts`, `chartex`,
-`imageFormat`, `fontDirs`, `filename`) are refused with the new name. The commands refuse an existing output without `--force`; `convert` replaces it unless
-`overwrite: false`. The error codes are the commands': `peer-not-installed`,
-`peer-too-old`, `peer-load-failed`, `invalid-option` and `input-not-found` (command exit 2), `invalid-presentation`,
-`no-slides`, `all-slides-hidden`, `export-failed`, `import-failed` and `output-exists` (1). See [OPF files in Node](node.md).
-
-## `opf render`
-
-```sh
-opf render deck.opf.json [--slides 1,3-5] [--include-hidden] [--format svg|png] [--scale N] [--text fonts|system|paths] [--out dir|file|-]
-```
-
-One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). `--format` defaults to `svg`, or to the
-format `--out` names: `--out slide.png` is PNG. An `--out` with another file extension (`deck.pdf`, `deck.txt`) is a usage
-error (exit 2), so it never becomes a folder of that name. See [Output names](#output-names) for `<name>`.
-Slides marked `hidden: true` are skipped, as in the presenter, unless `--include-hidden`; the numbers in file names stay the
-slide numbers of the document, so skipping slide 2 writes `-001` and `-003`. `--slides` takes one-based
-numbers and ranges (`1,3-5`, `2-` to the end, `-3` from the start). `--format` defaults to `svg`. `--scale` (0.1 to 8,
-default 1) sets the PNG pixel density against the 1280 x 720 reference slide. `--out -` writes one slide to stdout.
-
-An SVG is standalone: it embeds the faces its text names (a Latin slide carries about 2 MB of font data), never the
-whole pack. `--text system` leaves the fonts out for a smaller file that depends on the viewer's fonts, and `--text paths` draws every
-glyph as an outline, so the file needs no font at all (see [Fonts](#fonts)). `--text fonts` is the default. PNG and PDF
-output reads the same font files and embeds nothing.
-
-## `opf export`
-
-```sh
-opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--slides 1,3-5] [--include-hidden]
-           [--raster] [--charts auto|native|picture] [--text fonts|system|paths]
-           [--provenance full|references-only|none] [--images compatible|preserve]
-```
-
-| Format | Output | Notes |
-| --- | --- | --- |
-| `pptx` | `<name>.pptx` | opf-pptx `toPptx`. The whole deck (`--slides` is refused). `--charts` (`picture` draws the charts as pictures), `--provenance` (`none` writes no provenance tags) and `--images` set the `toPptx` options. |
-| `pdf` | `<name>.pdf` | One page per selected slide. `--raster` draws each page as one image; the default is vector with selectable text. The report states the mode used (`pdf.mode`). |
-| `png`, `svg` | a directory, one file (`--out x.png`, one slide), or a zip (`--out x.zip`) | As `render`. Zip entries are stored (not deflated) with a fixed timestamp, so the archive is byte-identical everywhere. |
-
-The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`), with the rule
-`opf convert` uses. A `--format` that disagrees with that extension, and an `--out` with another file extension, are usage
-errors (exit 2).
-
-The PDF and the `png` and `svg` outputs skip hidden slides unless `--include-hidden`. The `pptx` output always carries them, as hidden slides (`--include-hidden` is refused for it).
-
-## `opf import`
-
-```sh
-opf import deck.pptx [--out deck.opf.json|-] [--signals signals.json]
-```
-
-`fromPptx` to an OPF document (default `<name>.opf.json` in the working directory; `-` reads or writes stdin/stdout).
-Import is a conversion, not a lossless round trip for arbitrary decks: what it cannot keep is reported as `import/...`
-diagnostics. `--signals` also writes the raw per-shape layout and style signals (`fromPptx` with `signals: true`, which returns
-`{ presentation, signals }`). The signals are deterministic data; they never leave the machine.
-AI reconstruction of third-party decks is not part of the CLI (it lives in pptx.dev).
+The options are the flags in camel case (`--raster` is `raster: true`, `--fonts` is `fonts` (a folder or a list of folders),
+`--asset-dir` is `assetDir`, `--include-hidden` is `includeHidden`). The commands refuse an existing output without `--force`;
+`convert` replaces it unless `overwrite: false`. See [OPF files in Node](node.md).
 
 ## `opf convert`
 
 ```sh
 opf convert deck.opf.md deck.pdf
-opf convert deck.opf.md slides/deck.png --slides 1-3 --scale 2   # slides/deck-001.png, -002, -003
-opf convert deck.opf.md slides.zip --format svg
-opf convert deck.pptx deck.opf.yaml
-opf convert deck.opf.json deck.opf.md
+opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2   # slides/deck-001.png, -003, -004, -005
+opf convert deck.opf.md slides.zip --to svg
+opf convert deck.pptx deck.opf.md --signals signals.json
+opf convert outline.md deck.opf.yaml                                 # a plain .md input is OPF Markdown
+opf convert deck.opf.json deck.opf.yaml --schema-comment
+opf convert deck.opf.md - --to pdf > deck.pdf
 ```
-
-One file to another, the formats named by the extensions. The input is `.pptx` (imported), `.opf.md`, `.yaml`/`.yml` or
-`.json`; the output is `.pdf`, `.pptx`, `.png`, `.svg`, `.zip`, `.opf.md`, `.yaml`/`.yml` or `.json`. Any other extension,
-and stdin or stdout (`-`), is a usage error (exit 2) that names the supported ones.
 
 | Output | Written as |
 | --- | --- |
 | `.pdf`, `.pptx` | one file |
-| `.png`, `.svg` | one file per slide beside the output, named after it: `slides/deck.png` writes `slides/deck-001.png`, `-002`, ... (the numbers are the deck's slide numbers, padded as `render` pads them). One selected slide, or a one-slide deck, is written to the output name itself, as `opf render --out slide.png` does. |
-| `.zip` | one archive of the slides, named as above inside it: PNG, or SVG with `--format svg` |
-| `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
+| `.png`, `.svg` | one file per slide beside the output, named after it: `slides/deck.png` writes `slides/deck-001.png`, `-002`, ... (the deck's slide numbers). One selected slide, or a one-slide deck, is written to the output itself. The extension is the format: `deck.png` is always PNG. |
+| `.zip` | one archive of the slides, named as above inside it: PNG, or SVG with `--to svg`. Entries are stored with a fixed timestamp, so the archive is byte-identical everywhere. |
+| `.json`, `.opf.yaml`, `.yml`, `.opf.md` | the deck in that form |
+| `-` | stdout, with `--to`: one file (`pdf`, `pptx`, `zip`, a deck form, or one slide as `png` or `svg`) |
 
-The flags are those of `opf export` (`--slides`, `--scale`, `--raster`, `--text`, `--charts`, `--provenance`,
-`--images`, `--paginate`, `--include-hidden`, `--date`, `--fonts`, `--asset-dir`, `--force`, `--fail-on`, `--json`);
-`--format` is needed only for a `.zip`. A flag that does not apply to the pair (`--scale` for a deck output, `--slides` for a
-PPTX) is a usage error. Relative images resolve next to the input file unless `--asset-dir`. Parent folders are created; every
-file is produced before any is written, each through a temporary sibling and a rename; an existing output needs `--force`.
+A flag applies only when its format is involved; anywhere else it is a usage error (exit 2, `option-not-applicable`):
 
-The report is `opf export`'s (`command: "convert"`, `format`, `ok`, `valid`, `written`, `input`, `outputs` with SHA-256
-digests, `findings`, `counts`, `checks`, the engines' versions and, for drawn output, `fonts`). A `.pptx` input is imported,
-checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer). The exit codes are
-`export`'s.
-
-## Options shared by `render` and `export`
-
-### Output names
-
-Files are named by the deck: its root `filename` (a trailing `.pptx`, `.pdf`, `.png` or `.svg` is dropped, in any case), else
-its `name` slugified (`Q4 Review / 2026` becomes `Q4-Review-2026`), else the input file's stem (`deck.opf.json` gives `deck`).
-The same rule names the editor's downloads. An explicit `--out` is used as given.
-
-### Hidden slides
-
-`render` and `export` skip slides marked `hidden: true` when they write one file per slide, a zip or a PDF, because a hidden slide is
-not part of the presented sequence. `--include-hidden` writes them too. Slides named with `--slides` are always written, hidden or
-not. The report lists the slide numbers left out in `skippedHidden`. A deck whose every slide is hidden exits 1 and names the flag.
-
-
-| Option | Meaning |
+| Involved | Flags |
 | --- | --- |
-| `--include-hidden` | Write hidden slides too (per-slide images, zips and PDF). See [Hidden slides](#hidden-slides). |
-| `--paginate` | Paginate with the same fonts first (as `opf paginate` does, but measured), so overflowing slides split instead of reporting `text-overflow`. `--slides` then counts the paginated slides. |
-| `--date YYYY-MM-DD` | The date for `date: true` header and footer fields. The CLI never reads a clock; without it a current date is reported as unresolved. |
-| `--fonts <directory>` (repeatable) | Your own `.ttf`/`.otf` files, loaded in addition to the bundled pack, directly inside the directory, sorted by name. A face that repeats a bundled family, weight and style is refused. |
-| `--asset-dir <directory>` | The folder relative image paths resolve against and the only folder read. Default: the document's folder (the working directory for stdin). |
-| `--fail-on <error\|warning\|info>` | Findings at or above this severity fail, and nothing is written (default `error`). `--fail-on warning` fails on warnings; every command that checks a document takes it. |
-| `--force` | Replace existing outputs. Without it any existing destination exits 1 before anything is written. |
-| `--json` | Accepted for scripts that pass it everywhere. JSON is the default report format; `--format text` selects human-readable diagnostics on commands that support it. |
+| a Markdown input | `--split auto\|rules\|headings` (default `auto`: slides at `---` lines, and an outline with none at its `#` headings), `--title <text>` (the deck name unless the front matter sets one) |
+| a YAML input | `--aliases` (expand anchors, aliases and merge keys, at most 100) |
+| a `.pptx` input | `--signals <file>` (also write the raw per-shape layout and style signals, `fromPptx` with `signals: true`) |
+| a YAML output | `--schema-comment` (the `# yaml-language-server: $schema=...` line) |
+| a Markdown output | `--drop-unsupported` (leave out what the dialect has no syntax for and list it as loss, instead of embedding it as YAML in a fence) |
+| pdf, png, svg | `--slides 1,3-5` (one-based; `2-` to the end), `--include-hidden` |
+| pdf, png, svg, pptx | `--paginate`, `--date YYYY-MM-DD`, `--fonts <dir>` (repeatable), `--asset-dir <dir>` |
+| png, raster pdf | `--scale 0.1-8` (1 draws the 1280 x 720 reference slide at 1280 x 720 pixels) |
+| pdf | `--raster` (each page a picture instead of selectable vector text) |
+| svg | `--text fonts\|system\|paths` (embed the faces the slide uses, none, or draw glyph outlines) |
+| pptx | `--charts auto\|native\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none` |
+
+A `.pptx` input is imported, checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer).
+Per-slide images and the PDF skip slides marked `hidden: true` unless `--include-hidden`; slides named with `--slides` are always
+written, and the report lists the slides left out in `skippedHidden`. The PPTX keeps a hidden slide as a hidden slide.
+
+## The other commands
+
+- **`opf create`** writes a starter deck (`--title`) or a bundled example (`--example <slug>`, from `opf catalog examples`).
+- **`opf validate`** checks files, folders (their `*.opf.json`, `*.opf.yaml`, `*.opf.yml` and `*.opf.md`, sorted, skipping
+  `node_modules` and dot folders) and `-`. One input prints its report; several print `{ command, ok, files: [reports], counts }`.
+  The exit status is the worst over every file. `--format github` prints `::error`, `::warning` and `::notice` annotations with the
+  file, line and column. See [validate](validate.md).
+- **`opf paginate`** measures the page breaks with the fonts `opf convert --paginate` draws with when `@openpresentation/opf-render`
+  is installed (`layout: "measured"`); without it they are estimated (`layout: "estimated"`) and `hint` names the install command.
+- **`opf fill`** reads CSV, TSV or JSON data; a blank cell keeps the variable's declared value; an unfilled required variable fails
+  unless `--partial`; `--examples` fills from the declared examples. With two arguments the second is the output when it is
+  named like a deck (`*.opf.json`, `*.opf.yaml`, `*.opf.md`) or holds `{ }`, else the data.
+- **`opf ingest`** gives the same slide id and bytes for the same inputs; `--dataset <id>` stores the rows in the deck's datasets.
+
+## Reports and errors
+
+Every command that reports prints one envelope:
+
+```json
+{ "command": "convert", "ok": true, "input": { "file": "/abs/deck.opf.md", "sha256": "…", "bytes": 1234 },
+  "outputs": [{ "file": "/abs/deck.pdf", "sha256": "…", "bytes": 56789, "mediaType": "application/pdf" }],
+  "findings": [], "counts": { "error": 0, "warning": 0, "info": 0 }, "format": "pdf", "…": "…" }
+```
+
+`input` is `null` when nothing was read and a list when several were (diff, merge, fill). The report is on stdout, or on stderr when
+stdout carries the document. Findings have the [`opf validate`](validate.md) shape (`ruleId`, `severity`, `category`, JSON Pointer
+`path`, `message`, `help`, and `location` when read from text); engine findings carry the prefix `render/`, `pptx/`, `pdf/`,
+`fonts/`, `import/` or `cli/`. The lookup commands (`schemas`, `schema`, `catalogs`, `catalog`, `--version`) print the data asked for.
+
+Errors are `{ command, ok: false, code, error, ... }` on stderr. The message states the fix: a missing argument names it and
+prints the usage, an unknown command, option or value suggests the nearest one ("Did you mean --check?"), and a removed command
+or flag names its replacement. Codes include `usage`, `unknown-command`, `unknown-option`, `removed-command`, `removed-option`,
+`missing-argument`, `extra-argument`, `missing-value`, `invalid-value`, `option-not-applicable`, `unknown-input-format`,
+`input-not-found`, `invalid-json`, `invalid-yaml`, `invalid-markdown`, `invalid-document`, `findings-at-fail-on`,
+`output-exists`, `merge-conflict`, `fill-failed`, `peer-not-installed` and `peer-too-old`.
+
+Exit `0`: success (warnings allowed). Exit `1`: an invalid document, a finding at or above `--fail-on`, an existing output, a
+merge conflict, or a `--check` that found a change. Exit `2`: usage, a read or I/O problem, text that is not valid JSON, YAML or
+Markdown, or a missing or too-old peer. (`opf validate` reports text that does not parse as a finding, exit 1.)
 
 ## Fonts
 
-The renderer's bundled open font pack (the office pack: Carlito, Intos for Aptos, the open families font schemes
-select and the open replacements the font policy routes proprietary families to, with lazy faces) with the visual
-substitution policy, plus the files from `--fonts`. **System fonts are never loaded**, and nothing is downloaded.
-Font substitutions are listed under `fonts.substitutions` in the report with their `compatibility` (`metric` or
-`visual`). The PPTX keeps the font names the document chose.
+The renderer's bundled open font pack (the office pack: Carlito, Intos for Aptos, the open families font schemes select and the
+open replacements the font policy routes proprietary families to) with the visual substitution policy, plus the files from
+`--fonts`. **System fonts are never loaded**, and nothing is downloaded. Font substitutions are listed under
+`fonts.substitutions` in the report. The PPTX keeps the font names the document chose.
 
-Scripts beyond Latin, Greek and Cyrillic need the optional Noto script packages of the renderer
-(`@expo-google-fonts/noto-sans-jp` and so on). Install the ones named in the `fonts/script-font-not-installed`
-diagnostic next to the CLI; without them, text the loaded faces cannot draw is the error `render/missing-glyph`.
-Standalone SVG (`--text fonts`, the default) embeds the installed script faces its text uses, just like Latin faces.
-`--text system` omits all font bytes and requires the viewer to provide the matching families. `--text paths` draws the text as
-glyph outlines (shaped, with the real text kept invisible beside it for selection and search), so the SVG needs no font and
-looks the same in every viewer; it is for previews and portable files, not for editing the text in place. `--text` applies to SVG output.
+Scripts beyond Latin, Greek and Cyrillic need the optional Noto script packages of the renderer (`@expo-google-fonts/noto-sans-jp`
+and so on); install the ones named in the `fonts/script-font-not-installed` diagnostic next to the CLI. A standalone SVG
+(`--text fonts`, the default) embeds the faces its text uses; `--text system` omits all font bytes; `--text paths` draws the text
+as glyph outlines (the real text kept invisible beside it for selection and search), so the SVG needs no font.
 
 ## Images and assets
 
-Relative image paths and `file:` paths resolve against the document's folder (or `--asset-dir`). Only `.png`, `.jpg`,
-`.jpeg`, `.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are
-resolved first), so a document cannot pull another file on the machine into an output. URLs are never fetched. For SVG
-and PNG output, an unreadable image draws the renderer's placeholder with an `unresolved-asset` or `cli/asset-blocked`
-warning. For PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`): opf-pptx would otherwise read the path itself.
-An unresolved remote URL is never fetched; the exporter can write an unavailable-image placeholder with a
-`pptx/unresolved-asset` warning. Use `--fail-on warning` to reject that incomplete output before any file is written. SVG
-pictures in a PPTX get their PNG fallback from the CLI's own opf-render install (`svgRasterizer`), so they export
-whichever way the packages were installed.
+Relative image paths and `file:` paths resolve against the input's folder (or `--asset-dir`). Only `.png`, `.jpg`, `.jpeg`,
+`.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are resolved first). URLs
+are never fetched. For SVG and PNG an unreadable image draws the renderer's placeholder with an `unresolved-asset` or
+`cli/asset-blocked` warning; for PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`), and an
+unresolved remote URL becomes an unavailable-image placeholder with a `pptx/unresolved-asset` warning. Use `--fail-on warning` to
+reject that output before any file is written.
 
 ## Markdown and YAML
 
-JSON stays the canonical form of a deck. YAML (`deck.opf.yaml`) and Markdown (`deck.opf.md`) are authoring forms of the same data, and every command that reads or writes a deck reads and writes all three. Two more groups of commands convert between a deck and text, with no renderer: they are core features (`@openpresentation/opf/markdown` and `@openpresentation/opf/yaml`) and need no optional peer.
+JSON stays the canonical form of a deck. YAML (`deck.opf.yaml`) and Markdown (`deck.opf.md`) are authoring forms of the same data,
+and every command that reads or writes a deck reads and writes all three:
 
 ```sh
-opf from-md deck.md deck.opf.json            # Markdown in the OPF dialect to a validated deck
-opf to-md deck.opf.json deck.md              # a deck as Markdown that reads back unchanged
-opf from-yaml deck.opf.yaml deck.opf.json    # strict YAML to a validated deck (--aliases expands anchors)
-opf to-yaml deck.opf.json deck.opf.yaml --schema-comment
-opf validate deck.opf.yaml                   # every command that reads a deck reads .yaml and .yml files
-opf validate deck.opf.md                     # ... and .opf.md Markdown decks (a plain .md file is never a deck)
-opf edit deck.opf.md --patch changes.json --in-place   # the file stays Markdown
-opf format deck.opf.md --check               # canonical Markdown
-opf render deck.opf.md --out slides
-opf edit deck.opf.json --patch changes.json --output deck.opf.yaml   # or --format yaml
-opf validate - --input-format yaml < deck.txt     # json (default), yaml or markdown (md)
+opf convert deck.md deck.opf.json                      # Markdown in the OPF dialect (or an outline) to a deck
+opf convert deck.opf.json deck.opf.md                  # a deck as Markdown that reads back unchanged
+opf convert deck.opf.yaml deck.opf.json --aliases      # strict YAML (--aliases expands anchors)
+opf validate deck.opf.yaml deck.opf.md                 # every command reads .yaml, .yml and .opf.md
+opf edit deck.opf.md --patch changes.json -i           # the file stays Markdown
+opf format deck.opf.md --check                         # canonical Markdown
+opf validate - --from yaml < deck.txt                  # stdin and other names: --from
 ```
 
-- `from-md` and `to-md` follow the Markdown dialect (YAML front matter, `---` between slides, `#` title, lists, tables, `chart`, `metric` and `timeline` fences, speaker notes): see [Markdown and outlines](markdown.md). `from-md --format yaml` or a `.yaml` output writes the deck as YAML.
-- `from-yaml` and `to-yaml` read and write a deck as JSON-compatible YAML 1.2, with canonical key order and an optional `# yaml-language-server` line for editor validation: see [OPF as YAML](yaml.md). A file ending `.yaml` or `.yml` is read as YAML by every command; stdin and other names are JSON unless `--input-format yaml` is given. Commands that write a deck write YAML for an output ending `.yaml`/`.yml` or with `--format yaml`. A YAML syntax error exits 2 with the line and column (`opf validate` reports it as a `yaml/<rule>` finding and exits 1); commands that rewrite a YAML file do not preserve its comments and say so on stderr.
-- A file ending `.opf.md` is read as a Markdown deck by every command, and `--input-format markdown` (or `md`) reads stdin and other names that way. A command that writes a deck writes Markdown for an output ending `.opf.md` or with `--format markdown`, and otherwise the format it read; `opf format deck.opf.md` canonicalizes it. A Markdown syntax error exits 2 with `line:column` (`opf validate` reports it as a `markdown/<rule>` finding and exits 1), and a rewrite that has to put content into an `opf-slide`/`opf-block` fence says so on stderr. See [Markdown decks in every command](markdown.md#markdown-decks-in-every-command).
-- All of them print JSON reports (on stderr when stdout carries the document) and use the exit codes below: 0 success, 1 invalid content, an output conflict or a finding at or above `--fail-on`, 2 usage, a read error or I/O.
-
-## Diagnostics and exit codes
-
-The report is the [`opf validate`](validate.md) report with the written files added: `ok`, `valid`, `schemaValid`,
-`findings` (`ruleId`, `severity`, `category`, JSON Pointer `path`, `scope`, `message`, `help`), `counts`, `checks`, `sha256` and
-`opfVersion`. The document's format and references are checked first (not accessibility or layout rules: a contrast
-warning never blocks a write); an invalid one exits 1 and nothing is rendered. Library findings are added with the
-prefix `render/`, `pptx/`, `pdf/`, `fonts/`, `import/` or `cli/` (the same word is their category), for example
-`render/text-overflow`. Notes (`font-glyph-fallback`, `pdf-font-embedded`, `svg-sanitized`) are `info`; everything else a
-library reports is a `warning`; a failed render, export or import is an `error`. `checks.layout` is `measured`: the
-CLI measures text with the fonts it loaded.
-
-`outputs` lists each file with `sha256`, `bytes`, `mediaType`, and for slides `slide`, `id`, `width`, `height`.
-`renderer` and `pptx` give the package versions used. With `--out -` the file goes to stdout and the report to stderr.
-
-Exit `0`: success (warnings allowed). Exit `1`: invalid document, error finding, a finding at or above `--fail-on`, or an
-existing output. Exit `2`: usage, I/O, a missing or too-old peer, a font directory problem. (`opf validate` has the
-same codes; text that is not valid JSON is an invalid document, exit `1`, with an `opf/json-syntax` finding.)
+See [Markdown and outlines](markdown.md) and [OPF as YAML](yaml.md). A syntax error exits 2 with the line and column (`opf
+validate` reports it as a `yaml/<rule>` or `markdown/<rule>` finding and exits 1); a command that rewrites a YAML file does not
+keep its comments and says so on stderr, and one that has to put content into an `opf-slide`/`opf-block` fence says so too.
 
 ## Runtime choices
 
-- **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
-  native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
-  turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
-  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, whose Node engine the commands run).
-- **JSON by default.** `--json` is a compatibility flag. Commands such as `validate` accept `--format text` for
-  human-readable diagnostics; render/export use `--format` to select the output file type and retain JSON reports.
+- **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the native `sharp`
+  engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would make the small CLI
+  impossible to install offline or on a locked-down agent host, and validating or editing a deck would pay for it.
+- **JSON reports.** `--format text` gives human-readable output where a command has it; `--format github` gives CI annotations.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.
 - **Fonts are the bundled pack plus `--fonts`.** Never system fonts (owner font policy).
 - **Stored zip entries.** Deflate output differs between zlib builds, which would make archive hashes host-dependent.
 
 ## Catalog names
 
-`opf catalogs` lists canonical camelCase names such as `colorSchemes` and `fontSchemes`.
-`opf catalog` also accepts the website-style `color-schemes`, `font-schemes` and `chart-types` spellings.
+`opf catalogs` lists canonical camelCase names such as `colorSchemes` and `fontSchemes`, and `examples`. `opf catalog` also
+accepts the website-style `color-schemes`, `font-schemes` and `chart-types` spellings.

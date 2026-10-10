@@ -84,7 +84,7 @@ Slides
   - slide #2 "Old" (id old)
 ```
 
-CLI: `opf diff <a|-> <b|-> [--format text|json|patch] [--exit-code] [--threshold <0-1>]`. `--format json` prints `{equal, summary, slides, changes, patch}`; `--format patch` prints only the patch (feed it to `opf edit --patch`). Exit 0 unless `--exit-code` is given and the documents differ (then 1); usage and I/O errors exit 2. `-` reads one side from stdin.
+CLI: `opf diff <a|-> <b|-> [--format text|json|patch] [--exit-code] [--threshold <0-1>]`. `--format json` prints the report `{command, ok, input, outputs, findings, counts, equal, summary, slides, changes, patch}` (CLI 0.18; `{equal, summary, slides, changes, patch}` before); `--format patch` prints only the patch (feed it to `opf edit --patch`). Exit 0 unless `--exit-code` is given and the documents differ (then 1); usage and I/O errors exit 2. `-` reads one side from stdin.
 
 ## Merge
 
@@ -104,7 +104,7 @@ Changes in different places merge automatically; the same change on both sides i
 
 The merge result is not schema-validated by the library; `opf merge` validates it before writing, because two valid documents can merge into an invalid one (for example duplicate ids).
 
-CLI: `opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer ours|theirs] [--report <file>] [--dry-run] [--threshold <0-1>] [--fail-on <level>]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `--in-place` rewrites the *ours* file (like `git merge-file`) with the same hash guard as `opf edit`. The usual output rules apply: stdout without an output option, `--force` to replace a file.
+CLI: `opf merge <base> <ours> <theirs> [output|-] [-i] [--force] [--prefer ours|theirs] [--report <file>] [--threshold <0-1>] [--fail-on <level>]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `-i` (`--in-place`) rewrites the *ours* file (like `git merge-file`) with the same guard as `opf edit`. The usual output rules apply: stdout without an output, `--force` to replace a file.
 
 ## Format
 
@@ -118,7 +118,7 @@ const text = format(sourceTextOrDocument);
 - **Layout** is two-space indentation (`indent` 0 to 8), LF line endings (`eol: "crlf"` for Windows checkouts that use `core.autocrlf`), no BOM, one trailing newline. Formatting is idempotent.
 - It does not validate: any JSON document can be formatted, and formatting never changes validity.
 
-CLI: `opf format <file|->... [--check | --in-place | --output <file|->] [--indent <0-8>] [--eol lf|crlf|preserve]`. One file with no mode prints the canonical text to stdout. `--check` prints `{checked, formatted, unformatted}` and exits 1 if any file would change (use it in CI); `--in-place` rewrites only changed files atomically; several files need `--check` or `--in-place`. `--eol preserve` keeps each file's own line endings.
+CLI: `opf format <file|-> [output|-]` or `opf format <file>... (-i | --check)`, with `[--indent <0-8>] [--eol lf|crlf|preserve]`. One file with no output prints the canonical text to stdout; an output must name the same form (`opf convert` changes forms). `--check` reports `checked`, `formatted` and `unformatted` and exits 1 if any file would change (use it in CI); `-i` rewrites only changed files atomically; several files need `--check` or `-i`. `--eol preserve` keeps each file's own line endings.
 
 ## What this does not do
 
