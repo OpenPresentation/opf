@@ -6,8 +6,10 @@ import type { Catalog } from "@openpresentation/opf";
 /**
  * The fonts the canvas, the export and `whenFontsReady` take: the renderer's handle from `loadFonts()` (`@openpresentation/opf-render/fonts-browser`).
  * Only `textMeasurement` is required to measure; `pending` and `ensure` make the canvas load script and vendored faces before it draws.
+ * `subsets` and `outlines` are there when the handle was created with `loadFonts({ subsetWasm, shapeWasm })` (opf-editor#141): `convert` then
+ * writes SVG downloads with each face cut to the slide's glyphs and can draw `renderOptions.text: "paths"` with HarfBuzz-shaped outlines.
  */
-export type EditorFonts = Pick<BrowserFontsHandle, "textMeasurement"> & Partial<Pick<BrowserFontsHandle, "embeddedFonts" | "pending" | "ensure" | "registry">>;
+export type EditorFonts = Pick<BrowserFontsHandle, "textMeasurement"> & Partial<Pick<BrowserFontsHandle, "embeddedFonts" | "pending" | "ensure" | "registry" | "subsets" | "outlines">>;
 export interface FontsReadyHandlers {
   /** Return false once the document was superseded; the late result is then dropped. */
   isCurrent?: () => boolean;

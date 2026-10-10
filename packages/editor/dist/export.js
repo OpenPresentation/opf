@@ -3,7 +3,9 @@
 // one-based `slide`). The slides are drawn by the same renderer the preview uses (`toSvg`, with the fonts handle's text measurement),
 // so a file is the preview, not a second layout. Fonts are the renderer's fonts handle's: the faces the document needs load through
 // the handle first, and only faces its registry holds (bundled or hash-pinned, permissively licensed) are embedded, as @font-face
-// data in each SVG and as subsets in the PDF. No system font is read and nothing is fetched at export time.
+// data in each SVG and as subsets in the PDF. No system font is read and nothing is fetched at export time. A browser handle made with
+// `loadFonts({ subsetWasm, shapeWasm })` (opf-editor#141) also cuts each SVG's faces to the slide's glyphs and draws
+// `renderOptions.text: "paths"` with HarfBuzz-shaped outlines.
 //
 //   const { files, findings } = await convert(editor.presentation, { format: "pdf", fonts, renderOptions, signal, onProgress });
 //   // files: one PDF; one PNG or SVG per slide; or, with `zip: true`, one archive of them.
@@ -241,11 +243,25 @@ export async function convert(input, options = {}) {
   });
   progress("render", 0, numbers.length, "Drawing slides…");
   await yieldToHost();
+  // RR-65, RR-64: the handle's subset engine (a browser handle created with `subsetWasm`) cuts each face a standalone SVG embeds to the
+  // slide's glyphs, and its outline engine (`shapeWasm` shapes them with HarfBuzz) draws `renderOptions.text: "paths"`. Both are carried
+  // from the handle by hand because the face list above is the editor's licensed one, not the handle's. A PDF reads whole faces and
+  // the SVG's own @font-face data (its converter cuts its own subsets), and selectable text is its point, so it gets neither: a
+  // `text: "paths"` render option draws a PDF's text as text. A PNG is a picture of the SVG: it takes the outlines, not the subsets.
+  const toPdf = format.extension === "pdf";
+  const handle = options.fonts;
+  const drawFonts = {
+    textMeasurement: handle?.textMeasurement,
+    embeddedFonts,
+    ...(format.extension === "svg" && handle?.subsets ? { subsets: handle.subsets } : {}),
+    ...(!toPdf && handle?.outlines ? { outlines: handle.outlines } : {}),
+  };
   const svgs = toSvg(deck, numbers, {
     ...renderOptions,
-    fonts: { textMeasurement: options.fonts?.textMeasurement, embeddedFonts },
+    ...(toPdf && renderOptions.text === "paths" ? { text: "fonts" } : {}),
+    fonts: drawFonts,
     // The PDF reports problems by element path; the SVG and PNG are the plain drawing.
-    trace: format.extension === "pdf",
+    trace: toPdf,
     onDiagnostic: (diagnostic) => {
       record("render", diagnostic);
       renderOptions.onDiagnostic?.(diagnostic);

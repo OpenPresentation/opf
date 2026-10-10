@@ -53,7 +53,13 @@ export interface ConvertOptions {
   renderOptions?: ToSvgOptions;
   /** Host catalogs (merged with `renderOptions.catalogs`). The deck is embedded first (core `embed`), like a saved file. */
   catalogs?: readonly Catalog[];
-  /** The renderer's fonts handle (`loadFonts()`): it measures the text, loads the faces the deck needs before anything is drawn, and its registry's faces are what gets embedded. */
+  /**
+   * The renderer's fonts handle (`loadFonts()`): it measures the text, loads the faces the deck needs before anything is drawn, and its registry's faces are what gets embedded.
+   * Create a browser handle with `loadFonts({ subsetWasm, shapeWasm })` (the URLs, bytes or compiled modules of harfbuzzjs's `harfbuzz-subset.wasm` and `harfbuzz.wasm`, which the host
+   * serves) and `convert` uses them: an SVG embeds each face cut to the glyphs its slide draws (a few KB to tens of KB instead of whole faces of hundreds of KB to MBs), and
+   * `renderOptions.text: "paths"` draws outlines shaped by HarfBuzz instead of fontkit. A Node handle (`/fonts-node`) always has both. Only SVG files are subset (a PNG is a picture, and a PDF cuts its own
+   * subsets); a PNG takes the outlines, and a PDF is always drawn as selectable text (`text: "paths"` is ignored for it).
+   */
   fonts?: EditorFonts;
   /** Faces to embed instead of the registry's. */
   embeddedFonts?: Array<Record<string, unknown>>;

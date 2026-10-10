@@ -631,6 +631,17 @@ const { files, findings } = await convert(editor.presentation, {
 ```
 
 - **Same drawing as the preview.** The slides are drawn by `toSvg` with the same fonts handle as the preview (its `textMeasurement`), so a PNG or SVG is the preview, and the PDF is converted from those SVGs rather than laid out again.
+- **Subset faces and outlined text (opf-editor#141).** A browser fonts handle embeds whole faces in an SVG (hundreds of KB to MBs per slide) unless it was created with `subsetWasm`, and shapes outlined text with fontkit unless it has `shapeWasm`. Serve harfbuzzjs's two WASM files like the font files (the copies of the `harfbuzzjs` package the renderer depends on: `harfbuzzjs/dist/harfbuzz-subset.wasm`, 651 KB, and `harfbuzzjs/dist/harfbuzz.wasm`, 434 KB, both MIT) and create the handle you pass as `fonts` with them:
+
+  ```js
+  const fonts = await loadFonts({
+    faces, scriptBaseUrl, lazyFontsBaseUrl,
+    subsetWasm: "/vendor/harfbuzz-subset.wasm", // URL, bytes or a WebAssembly.Module; SVG downloads embed each face cut to the slide's glyphs
+    shapeWasm: "/vendor/harfbuzz.wasm",         // outlined text (renderOptions.text: "paths") is shaped by HarfBuzz, as browsers shape text
+  });
+  ```
+
+  `convert` reads `fonts.subsets` and `fonts.outlines` from that handle, so nothing else changes: the same call writes SVG files with the faces cut to what each slide draws (the licence rule above still decides which faces may be embedded, and the renderer cuts only faces whose licence allows a modified version; the others stay whole) and, with `renderOptions: { text: "paths" }`, SVG and PNG files whose text is glyph outlines (no font needed). A PDF is unaffected: it embeds the registry's faces and cuts its own subsets, and it always draws selectable text. `renderOptions.subsetFonts: false` embeds whole faces. The canvas draws with `text: "system"`, which embeds nothing, so it never reads either. The playground does this: `npm run build:playground` copies both files next to the page.
 - **Fonts.** The fonts handle loads the faces the deck needs before anything is drawn (a failure rejects with `fonts-unavailable`). Only faces the handle's registry holds are embedded (bundled or hash-pinned, never a system font), only where a slide draws them, as `@font-face` data in each SVG and as subsets in the PDF. A face whose own license text is not OFL, Apache, MIT or UFL is left out and reported (`fonts/export-font-license`).
 - **PDF** is the renderer's vector PDF (selectable text, vector shapes, embedded subsets, tagged structure), `raster: true` is the image-only form. **PNG** is drawn on a canvas from the same SVG (within anti-aliasing of the renderer's resvg PNG) and is limited to 40 megapixels. **SVG** files are standalone (XML header, fonts embedded, no external references).
 - **Files.** A PDF is one file (`pages`, and the one-based `slides` it shows). PNG and SVG give one file per slide, in slide order, each with its one-based `slide`, its `id` and its `width` and `height` in pixels, as core's `convert` does; with `zip: true` they are one archive (`createZip`, no dependency; `entries` names the files in it), even for one slide. `zip` with a PDF, or `raster` with PNG or SVG, rejects with `invalid-option`.

@@ -29,6 +29,9 @@ import { splitSlideByBlocks, mergeSlides } from '../src/content-actions.js';
 import { createDataGrid } from '../src/data-grid.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
+// opf-editor#141: the handle is made with harfbuzzjs's two WASM files (served next to the page by build-playground.mjs). `subsetWasm` cuts the
+// faces a downloaded SVG embeds to the slide's glyphs, `shapeWasm` has HarfBuzz shape outlined text (renderOptions `text: 'paths'`). The live
+// canvas and thumbnails draw with `text: 'system'`, which embeds nothing, so they never use either.
 // fonts.json holds the faces the page starts with. A build that splits the eager faces (the gallery editor) adds base-fonts.json: the
 // rest of them, as separate hash-pinned files the registry loads on demand as its extra lazy faces (FF-41, renderer 0.11.7). Without it
 // fonts.json carries every eager face.
@@ -37,7 +40,7 @@ const fontFaces = await fetch('./fonts.json').then(response => {
   if (!response.ok) throw new Error('Bundled fonts are unavailable. Rebuild the editor demo.');
   return response.json();
 });
-const fonts = await browserFonts.loadFonts({faces:fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href,extraLazyFonts:baseFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,sha256:face.sha256,url:new URL(face.file,document.baseURI).href}))});
+const fonts = await browserFonts.loadFonts({faces:fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),substitutionPolicy:'visual',fallbackFamily:'Roboto',subsetWasm:new URL('./harfbuzz-subset.wasm',document.baseURI).href,shapeWasm:new URL('./harfbuzz.wasm',document.baseURI).href,scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href,extraLazyFonts:baseFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,sha256:face.sha256,url:new URL(face.file,document.baseURI).href}))});
 const fontRegistry = fonts.registry;
 // Script faces (Japanese, Arabic, Thai, ...) load lazily, once a document draws that script, and so do the vendored preview
 // faces (Intos for the Aptos scheme, the open families): they are not in fonts.json but separate hash-pinned files the

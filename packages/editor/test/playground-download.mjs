@@ -42,7 +42,9 @@ try {
   const errors = [], networkWrites = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  const wasmRequests = [];
   page.on('request', request => { if (!['GET', 'HEAD'].includes(request.method())) networkWrites.push(request.url()); });
+  page.on('request', request => { if (request.url().endsWith('.wasm')) wasmRequests.push(new URL(request.url()).pathname); });
   const button = name => page.getByRole('button', { name, exact: true });
   await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
   await page.locator('#preview svg').waitFor();
@@ -151,6 +153,13 @@ try {
   assert.equal(await wellFormed(svgText), 'svg', 'the SVG is well-formed XML');
   assert.match(svgText, /Revenue grew in every region/);
   assert.match(svgText, /@font-face/);
+  // opf-editor#141: the playground's fonts handle has the subset engine (harfbuzz-subset.wasm served next to the page), so the SVG embeds each face cut
+  // to the slide's glyphs. Roboto Regular alone is about 159 KB whole; the two Roboto faces of this slide are about 15 KB each.
+  const faceSizes = [...svgText.matchAll(/base64,([A-Za-z0-9+/=]+)/g)].map(match => Buffer.from(match[1], 'base64').length);
+  assert.ok(faceSizes.length >= 1, 'the SVG embeds its faces');
+  assert.ok(faceSizes.every(size => size < 40000), `each embedded face is cut to the slide's glyphs: ${faceSizes}`);
+  assert.ok(svg.bytes.length < 100000, `the single-slide SVG is small: ${svg.bytes.length} bytes`);
+  assert.ok(wasmRequests.includes('/harfbuzz-subset.wasm') && wasmRequests.includes('/harfbuzz.wasm'), `the page loads both HarfBuzz modules: ${wasmRequests}`);
   // Font license notices name URLs in comments; what must not appear is a reference that would be fetched.
   const external = svgText.replace(/data:[^"')]*/g, '').match(/(?:href\s*=\s*["']|url\(\s*["']?|@import\s+["']?)https?:\/\/(?!www\.w3\.org)[^\s"')<]*/g);
   assert.equal(external, null, `the SVG references nothing outside itself: ${external}`);

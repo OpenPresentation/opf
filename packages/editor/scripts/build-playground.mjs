@@ -69,6 +69,11 @@ let scriptFaces = 0;
     }
   }
 }
+// RR-65, RR-64 (opf-editor#141): harfbuzzjs's two WASM modules, served next to the page. The browser fonts handle takes them as
+// `subsetWasm` (SVG downloads embed each face cut to the slide's glyphs instead of whole) and `shapeWasm` (outlined text is shaped by
+// HarfBuzz). They are the copies the installed renderer depends on (harfbuzzjs, MIT), so the page runs the version the renderer was tested with.
+const renderRequire = createRequire(require.resolve('@openpresentation/opf-render/package.json'));
+for (const name of ['harfbuzz-subset.wasm', 'harfbuzz.wasm']) await copyFile(renderRequire.resolve(`harfbuzzjs/dist/${name}`), new URL(name, output));
 for (const [source, destination] of [['playground.html', 'index.html'], ['playground.css', 'playground.css'], ['galleries.json', 'galleries.json']]) {
   await copyFile(new URL('examples/' + source, root), new URL(destination, output));
 }
