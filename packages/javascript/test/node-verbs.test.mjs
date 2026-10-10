@@ -4,6 +4,7 @@
 // no catalog (FA-21): a host passes its own.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -24,7 +25,8 @@ describe("the Node build's defaults are the CLI's", () => {
     assert.deepEqual(unresolved(browser.validate(deck, { catalogs: [defaultCatalog] })), []);
   });
 
-  test("opf validate and validate() agree on the same deck", { skip: !cli }, () => {
+  // The core publish run (npm-publish.yml) runs `pnpm test` without building the CLI first, so its dist can be absent.
+  test("opf validate and validate() agree on the same deck", { skip: !existsSync(cli) && "the CLI is not built" }, () => {
     const result = spawnSync(process.execPath, [cli, "validate", "-"], { input: JSON.stringify(deck), encoding: "utf8" });
     if (result.error) return;
     const report = JSON.parse(result.stdout);
