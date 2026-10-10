@@ -97,13 +97,14 @@ try {
   assertExecOutsideGlobal(work, global);
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
   const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
-  const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
+  // RR-75: `opf convert` replaces render, export and import; the output path names the files (a one-slide deck writes one file).
+  const rendered = npx('convert', 'deck.opf.json', 'png/Npx.png');
   assert.equal(rendered.ok, true);
-  // FA-08: output files are named by the deck's `name` ("Npx"), not the input file's stem.
-  assert.deepEqual(await readdir(path.join(work, 'png')), ['Npx-001.png']);
-  assert.equal(npx('export', 'deck.opf.json', '--format', 'pptx').ok, true);
-  assert.ok((await readdir(work)).includes('Npx.pptx'), 'export without --out names the file after the deck');
-  assert.equal(npx('import', 'Npx.pptx', '--out', 'round.opf.json').valid, true);
+  assert.deepEqual(await readdir(path.join(work, 'png')), ['Npx.png']);
+  assert.equal(npx('convert', 'deck.opf.json', 'Npx.pptx').ok, true);
+  assert.ok((await readdir(work)).includes('Npx.pptx'));
+  assert.equal(npx('convert', 'Npx.pptx', 'round.opf.json').ok, true);
+  assert.ok((await readdir(work)).includes('round.opf.json'));
   console.log(`CLI plus optional peers passed (${peers.join(', ')}). Tarball: ${tarball}`);
 } finally {
   const actual = await realpath(temp), parent = await realpath(tmpdir());

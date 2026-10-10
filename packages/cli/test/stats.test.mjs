@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
@@ -10,7 +10,8 @@ import { stats } from "@openpresentation/opf";
 
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL("../dist/index.js", import.meta.url));
 let temp;
-before(async () => { temp = await mkdtemp(path.join(tmpdir(), "opf-cli-stats-")); });
+// The real path: on macOS tmpdir() is a symlink (/var -> /private/var) and the CLI reports resolved paths (opf#547).
+before(async () => { temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-cli-stats-"))); });
 after(async () => { await rm(temp, { recursive: true, force: true }); });
 
 const run = (args, { input, status = 0 } = {}) => {
