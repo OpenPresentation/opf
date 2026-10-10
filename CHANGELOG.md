@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.18.3 (2026-10-10)
+
+- RR-20: `scripts/link-ecosystem.mjs` now installs the linked renderer's exact script and emoji font pins (its `@expo-google-fonts/*` optional peers) in the opf-pptx and opf-editor checkouts, replacing only packages they already have, from `npm pack` tarballs and without re-running npm install. A renderer font bump on main (render#210) no longer makes the linked sibling load files the renderer's integrity check rejects, which had blocked the ecosystem lock roll for the 0.18.x patches.
+- RR-20: the #525 `check-changed` test reads pnpm's version from the last line of its output. In `npm-publish.yml`, setup-node writes an `.npmrc` that references `${NODE_AUTH_TOKEN}`, which is unset before the publish step, so pnpm prints a configuration warning before the version. That made the publish run for `opf-v0.18.2` fail, and 0.18.2 was never published; the patch ships as 0.18.3.
+
 ## 0.18.2 (2026-10-10)
 
 - opf#567: `validate` warns with the new format rule `opf/slide-size-out-of-range` when the deck's custom slide size (`design.dimensions`, or the resolved theme's `dimensions`) has a side outside PowerPoint's range of 1 to 56 inches. ECMA-376 / ISO/IEC 29500-1 §19.2.1.39 limits `p:sldSz` to 914400 to 51206400 EMU per side, and the schema accepts any positive size. Inches are converted to EMU as the PPTX exporter writes them, so exactly 1 in and 56 in pass, and presets never trigger it. It is a warning, so `valid` does not change, and `opf validate --list-rules` lists it (69 rules).
