@@ -68,6 +68,32 @@ export function skipUndecodableLookups(font) {
   return guarded;
 }
 
+// opf-render#125: fontkit 2.0.4 caches one Glyph per glyph id (font._glyphs) with the code points of the call that created it, and
+// its layout reads the input's code points back from that cache (glyphsForString -> getGlyph(id, [codePoint]) -> GlyphInfo). A glyph
+// first reached another way keeps other code points: a composite outline (run.bbox for outlineBounds, glyph.path) reaches its
+// components with none, and a substitution's output carries its input's. Noto Sans Bengali draws ra (U+09B0) with the nukta glyph
+// (U+09BC) as a component, so once any outline with ra was bounded, a later run with a nukta shaped the nukta as an unknown
+// character, the Indic shaper broke its cluster and inserted a dotted circle (0.51 em each): the measured width of a string
+// depended on what the process had measured before. Every request for a glyph with code points now gets a glyph that carries
+// exactly those (a view of the cached glyph when they differ), so shaping is a function of the text alone. The PDF writer's own
+// faces do the same (pdf-fonts.js parseFace).
+const codePointsPinned = new WeakSet();
+export function pinGlyphCodePoints(font) {
+  if (codePointsPinned.has(font) || typeof font?.getGlyph !== "function") return font;
+  codePointsPinned.add(font);
+  const getGlyph = font.getGlyph.bind(font);
+  font.getGlyph = (id, codePoints = []) => {
+    const glyph = getGlyph(id, codePoints);
+    if (!glyph || !codePoints.length) return glyph;
+    const cached = glyph.codePoints;
+    if (cached?.length === codePoints.length && codePoints.every((codePoint, index) => cached[index] === codePoint)) return glyph;
+    const view = Object.create(glyph);
+    view.codePoints = [...codePoints];
+    return view;
+  };
+  return font;
+}
+
 /**
  * The face a registry draws for `family` (a validated concrete family: theme tokens are already resolved) in `style`, chosen
  * from `faces` ({family, familyGroup, weight, italic, fallbackOnly?, scripts?}) under the substitution policy, aliases and
@@ -143,6 +169,7 @@ export function createFontRegistry(entries, options = {}) {
     let font;
     try { font = create(data, entry.postscriptName); } catch (error) { throw new OPFFontError("invalid-font-data", error.message); }
     if (!font?.layout || !font.unitsPerEm) throw new OPFFontError("font-collection", "Select one font from a collection with postscriptName.");
+    pinGlyphCodePoints(font);
     const family = validFamily(entry.family ?? font.familyName);
     // OpenType groups Medium/SemiBold/ExtraBold under a preferred family, while
     // retaining separate legacy families for four-style native font selectors.
