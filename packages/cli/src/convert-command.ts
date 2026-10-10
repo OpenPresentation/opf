@@ -15,7 +15,7 @@ import { WRITE_CHECK, reaches } from "./check.js";
 import { DECK_MEDIA, type DeckFormat, checkText, fenceWarning, formatNamed, nameOf, namedFormatOf, readFailure, serialize } from "./deck.js";
 import { CliError, fromApiError, usage } from "./errors.js";
 import { type DoctorFormat, hasPictures, installHint } from "./install.js";
-import { checkOutput, json, readBytes, samePath, saveText } from "./io.js";
+import { checkOutput, checkOutputPattern, json, readBytes, samePath, saveText } from "./io.js";
 import { type Host, type OutputFact, documentFailure, envelope, failOnOf, inputFact, outputFact, printReport } from "./runtime.js";
 
 type ExportTarget = "pdf" | "pptx" | "png" | "svg";
@@ -38,9 +38,12 @@ export const spec: CommandSpec = {
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
 (stdin: --from json|yaml|md|pptx, else text starting with { or [ is JSON). Output: .json, .opf.yaml/.yml, .opf.md, .pdf, .pptx,
-.png and .svg (one file per slide beside the output: slides/deck.png gives slides/deck-001.png; one selected slide is written
-to the output itself), .zip (the slides as png, or svg with --to svg), or - (stdout: --to json|yaml|md|pdf|pptx|png|svg|zip;
-png and svg need exactly one slide). --to that disagrees with the output's extension is refused.
+.png and .svg (one file per slide beside the output: slides/deck.png gives slides/deck-1.png, padded to the largest slide
+number written, so deck-01.png from ten slides; one selected slide is written to the output itself; {n} in the output is the
+slide number: slides/slide-{n}.png always numbers its files, even for one slide, and with --slides 2,5 writes slide-2.png and
+slide-5.png; any other {key}, and {n} in a single-file output, is exit 2), .zip (the slides as png, or svg with --to svg;
+entries named like slides/deck.png's files), or - (stdout: --to json|yaml|md|pdf|pptx|png|svg|zip; png and svg need exactly
+one slide). --to that disagrees with the output's extension is refused.
 
 Flags, each only where its format is involved (otherwise exit 2):
   Markdown input   --split <auto|rules|headings>  slides at --- lines, and in an outline with none at # headings (auto, the default)
@@ -66,6 +69,7 @@ bytes, mediaType }], findings, counts, format, ... }, on stderr when the output 
 
 Examples:
   opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2
+  opf convert deck.opf.md "slides/slide-{n}.png"
   opf convert deck.pptx deck.opf.md --signals signals.json
   opf convert outline.md deck.opf.yaml
   opf convert deck.opf.json deck.opf.yaml --schema-comment
@@ -88,6 +92,7 @@ function targetOf(output: string, to: (typeof TARGET_FORMATS)[number] | undefine
 	}
 	if (path.extname(output).toLowerCase() === ".zip") {
 		if (to !== undefined && to !== "png" && to !== "svg") throw usage(`A .zip output holds png or svg slides; --to ${to} is neither.`, "invalid-value", { option: "--to" });
+		checkOutputPattern(output, false);
 		return { kind: "export", format: (to ?? "png") as "png" | "svg", zip: true };
 	}
 	const exported = exportFormatOf(output);
@@ -98,6 +103,8 @@ function targetOf(output: string, to: (typeof TARGET_FORMATS)[number] | undefine
 	}
 	const named = (exported ?? deck) as string;
 	if (to !== undefined && (deckTo ?? to) !== named) throw usage(`--to ${to} does not match the output ${output}, which is ${named === "markdown" ? "md" : named}.`, "invalid-value", { option: "--to" });
+	// `{n}` in a .png or .svg output is the slide number; any other output is one file and takes no placeholder (exit 2).
+	checkOutputPattern(output, exported === "png" || exported === "svg");
 	return exported ? { kind: "export", format: exported, zip: false } : { kind: "deck", format: deck as DeckFormat };
 }
 

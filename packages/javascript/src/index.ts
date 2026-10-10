@@ -67,8 +67,10 @@ const rethrow = (error: unknown, fallback: string): never => {
 /**
  * Convert a file, a deck or the bytes of a `.pptx` file. With an `output` path the format comes from its extension and the
  * files are written: `.pdf`, `.pptx`, `.png` and `.svg` are exported (one PNG or SVG per slide, `slides/deck.png` giving
- * `slides/deck-001.png`, ...; one selected slide is written to `output` itself), `.zip` is one archive of the slides (`format`
- * `png`, the default, or `svg`), and `.opf.md`, `.yaml`/`.yml` or `.json` writes the deck in that form. Without an output path,
+ * `slides/deck-1.png`, ... padded to the width of the largest slide number written, `-01` from ten slides; one selected slide is
+ * written to `output` itself; `{n}` in the path is the slide number, so `slides/slide-{n}.png` always numbers its files, even
+ * for one slide; any other `{key}` is refused), `.zip` is one archive of the slides (`format`
+ * `png`, the default, or `svg`; its entries are named like the plain form, and `{n}` is refused), and `.opf.md`, `.yaml`/`.yml` or `.json` writes the deck in that form. Without an output path,
  * pass `{ format }`: nothing is written and the files come back with their names and bytes.
  *
  * A `.pptx` input is imported first. Local images resolve next to the input file unless `assetDir` says otherwise; URLs are

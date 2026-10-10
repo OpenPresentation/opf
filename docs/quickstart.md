@@ -148,7 +148,7 @@ PPTX engines you installed:
 import * as opf from '@openpresentation/opf';
 
 await opf.convert('deck.opf.json', 'deck.pdf');
-await opf.convert('deck.opf.json', 'slides/deck.png', { scale: 2 });   // slides/deck-001.png, -002, ...
+await opf.convert('deck.opf.json', 'slides/deck.png', { scale: 2 });   // slides/deck-1.png, -2, ... (or "slides/slide-{n}.png")
 await opf.convert('deck.opf.json', 'deck.pptx');
 const back = await opf.open('deck.pptx');                              // PowerPoint to OPF
 const { files } = await opf.convert(back, { format: 'svg' });          // bytes, nothing written
