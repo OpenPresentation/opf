@@ -137,3 +137,18 @@ test('a live, fresh slot blocks until it is released; CI and nested runs pass st
   assert.match(stderr, /waiting for a heavy-check slot \(1 busy: pid \d+ someone else/);
   assert.equal(stderr.match(/waiting for a heavy-check slot/g).length, 1, 'the waiting line is printed once');
 });
+
+// #525: the command and its arguments reach the program intact when the path or an argument has a space (Windows used to
+// join them into a cmd.exe command line).
+test('a script path and arguments with spaces reach the command, with and without a slot', async (t) => {
+  const parent = tempDir(t);
+  const dir = path.join(parent, 'a folder with spaces');
+  mkdirSync(dir);
+  const script = path.join(dir, 'print args.cjs');
+  writeFileSync(script, 'process.stdout.write(JSON.stringify(process.argv.slice(2)));');
+  for (const env of [{ OPF_AGENT_SLOT_DIR: path.join(parent, 'slots'), OPF_AGENT_SLOTS: '1' }, { OPF_AGENT_SLOTS: '0' }]) {
+    const { code, stdout } = await slot([process.execPath, script, 'one arg', 'two'], env).result;
+    assert.equal(code, 0);
+    assert.deepEqual(JSON.parse(stdout), ['one arg', 'two']);
+  }
+});

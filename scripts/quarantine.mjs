@@ -17,6 +17,7 @@ import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSpec } from './package-manager.mjs';
 
 export const MAX_DAYS = 14;
 export const DEFAULT_QUARANTINE = 'test/quarantine.json';
@@ -147,7 +148,6 @@ export function loadState({ quarantineFile = DEFAULT_QUARANTINE, suitesFile = DE
 
 // --- running -----------------------------------------------------------------------------------------------
 
-const needsShell = (program) => process.platform === 'win32' && /^(npm|pnpm|npx)$/.test(program);
 
 /** Run argv with inherited output. Resolves { code, tail } where `tail` is the last lines of output. */
 export function runArgv(argv, { cwd = process.cwd(), timeoutMs = 0, tailLines = 60 } = {}) {
@@ -159,7 +159,7 @@ export function runArgv(argv, { cwd = process.cwd(), timeoutMs = 0, tailLines = 
       if (lines.length > tailLines * 2) lines.splice(0, lines.length - tailLines);
     };
     let child;
-    try { child = spawn(argv[0], argv.slice(1), { cwd, stdio: ['ignore', 'pipe', 'pipe'], shell: needsShell(argv[0]) }); }
+    try { const { command, args, options } = spawnSpec(argv); child = spawn(command, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'], ...options }); }
     catch (error) { resolve({ code: 127, tail: [String(error.message)] }); return; }
     let timer;
     let timedOut = false;
