@@ -33,6 +33,7 @@ await copyFile(new URL('src/chart-options.js', root), new URL('chart-options.js'
 await copyFile(new URL('src/frame-alt.js', root), new URL('frame-alt.js', dist));
 await copyFile(new URL('src/chart-data.js', root), new URL('chart-data.js', dist));
 await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight.js', dist));
+await copyFile(new URL('src/chart-order.js', root), new URL('chart-order.js', dist));
 await copyFile(new URL('src/data-provenance.js', root), new URL('data-provenance.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
