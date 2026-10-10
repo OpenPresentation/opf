@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-74 (breaking, OPF 0.18): core's Node engine uses opf-render's 0.18 engines, and the `convert` options and the render and export flags take their 0.18 names, with no aliases. The optional peer ranges of opf-render and opf-pptx are `^0.18.0` for core and the CLI (the lockstep line; npm resolves the two together), because the engine calls `toSvg(deck, slide, options)` (slides count from 1), `toPng(svg, options)` and `toPdf(svgs, options)` in place of `renderSlideSvg`, `svgToPng` and `svgToPdf`; an older opf-render is `peer-too-old`. The output is the same bytes for the same rendering. The `opf` CLI reports the renderer's `^0.18.0` range when it is missing.
     - **Renamed `convert` options and flags:** `svgFonts` (`--svg-fonts used|none`) is `text` (`--text fonts|system|paths`); `pdfMode: "raster"` (`--pdf-mode raster`) is `raster: true` (`--raster`); `chartex` (`--chartex auto|native|fallback`) is `charts` (`--charts auto|native|picture`); `imageFormat` (`--image-format`) is `images` (`--images`); `fontDirs` (`--font-dir`, repeatable) joins `fonts`, which is a prepared fonts handle or a folder or a list of folders (`--fonts <directory>`, repeatable); `filename` is `name`, now the base name of the returned files and valid only without an output path.

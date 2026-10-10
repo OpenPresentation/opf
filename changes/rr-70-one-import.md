@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-70 (breaking, OPF 0.18): one import for every runtime. `import * as opf from "@openpresentation/opf"` works in Node, Bun, Deno, browsers and workers through conditional exports on the root. The `node`, `bun` and `deno` conditions get the full build: core plus `open`, `save` and `convert`, whose file engine loads on the first call. The `browser`, `worker`, `workerd` and `default` conditions get a browser-safe build with the same names. There, `open`, `save` and `convert` (the in-memory `convert(deck, { format })` too, for now) reject with `OPFApiError` code `node-only`, and the message names the browser-safe alternative. Both builds share one type surface, `dist/index.d.ts`, which needs no Node types.
     - **Removed:** the `@openpresentation/opf/node` subpath, with no alias. Import `@openpresentation/opf` instead. The names are the same except `defaultCatalog`, which stays at `@openpresentation/opf/catalog`; `open`, `save` and `convert` still use the default catalog when no `catalogs` are passed.
