@@ -23,7 +23,7 @@ installed package versions give the same bytes on every operating system.
 | `opf stats <file>` | Neutral facts about a deck (`--format json\|text`). |
 | `opf paginate <input> [output]` | Overflowing slides split into continuation slides, measured with the renderer's fonts when it is installed. |
 | `opf embed <input> [output]` | The catalog records a deck references, copied into it. |
-| `opf fill <template> [data] [output]` | A template's variables filled: one deck per record (the output is a name pattern), or `--combine`. |
+| `opf fill <template> <data> [output]` | A template's variables filled: one deck per record (the output is a name pattern), or `--combine`. The second argument is always the data (`-` for stdin). |
 | `opf ingest <data> [output] --as table\|chart` | CSV, TSV or JSON rows as a table or chart slide, alone or added `--into` a deck. |
 | `opf doctor [deck]` | Which formats this install can write, and the one command that installs what is missing. |
 | `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. |
@@ -161,8 +161,8 @@ written, and the report lists the slides left out in `skippedHidden`. The PPTX k
 - **`opf paginate`** measures the page breaks with the fonts `opf convert --paginate` draws with when `@openpresentation/opf-render`
   is installed (`layout: "measured"`); without it they are estimated (`layout: "estimated"`) and `hint` names the install command.
 - **`opf fill`** reads CSV, TSV or JSON data; a blank cell keeps the variable's declared value; an unfilled required variable fails
-  unless `--partial`; `--examples` fills from the declared examples. With two arguments the second is the output when it is
-  named like a deck (`*.opf.json`, `*.opf.yaml`, `*.opf.md`) or holds `{ }`, else the data.
+  unless `--partial`; `--examples` fills from the declared examples. The second argument is always the data, whatever its name
+  (`-` reads it from stdin), and the third is the output; a template alone fills from its own values, to stdout.
 - **`opf ingest`** gives the same slide id and bytes for the same inputs; `--dataset <id>` stores the rows in the deck's datasets.
 
 ## Reports and errors

@@ -14,7 +14,7 @@ A deck may be JSON (canonical), YAML (`deck.opf.yaml`) or Markdown (`deck.opf.md
 
 The CLI (Node 24, with the core it depends on) supports `opf edit deck.opf.json --patch changes.json` (the result on stdout, nothing written), then `opf edit deck.opf.json reviewed.opf.json --patch changes.json` or `-i` to save. Patches use JSON Patch arrays with `add`, `remove`, `replace`, `move`, `copy`, and `test`. The complete result must validate before saving. With no output the candidate goes to stdout; the report carries `inverse`, the patch that undoes the edit. Use `--expect-sha256` with the digest from an earlier `opf validate` for a file revision guard. File edits have no persistent undo history; save a separate output or use version control when needed. Coordinate concurrent writers externally. Check `opf --version` and `opf --help`; an older installed CLI may not support these commands.
 
-For a template (an OPF file with variables), `opf fill template.opf.json values.json|rows.csv [out.opf.json]` produces a filled deck, or one deck per row through a name pattern (`decks/deck-{n}.opf.json`, `{column}` for a column's value); check `opf --help` for `fill` in the installed CLI.
+For a template (an OPF file with variables), `opf fill template.opf.json values.json|rows.csv|- [out.opf.json]` (the second argument is always the data, `-` for stdin) produces a filled deck, or one deck per row through a name pattern (`decks/deck-{n}.opf.json`, `{column}` for a column's value); check `opf --help` for `fill` in the installed CLI.
 
 ## Compare, merge and format files
 

@@ -12,17 +12,18 @@ import { type Host, type OutputFact, checked, destinationOf, envelope, failOnOf,
 
 export const spec: CommandSpec = {
 	name: "fill",
-	usage: ["opf fill <template|-> [data|-] [output|pattern|-] [--data-format <csv|tsv|json>] [--delimiter <c>] [--no-header]", "         [--combine] [--partial] [--examples] [--from <format>] [--to <format>] [--force] [--fail-on <level>]"],
+	usage: ["opf fill <template|-> <data|-> [output|pattern] [--data-format <csv|tsv|json>] [--delimiter <c>] [--no-header]", "         [--combine] [--partial] [--examples] [--from <format>] [--to <format>] [--force] [--fail-on <level>]", "opf fill <template|-> [--examples] [--partial] [--to <format>]"],
 	summary: "Fill a template's variables from data: one deck per record, or one combined deck.",
 	operands: ["<template> (a deck with variables, or - for stdin)"],
 	positional: [1, 3],
 	values: ["data-format", "delimiter", "from", "to", "fail-on"],
 	flags: ["no-header", "combine", "partial", "examples", "force"],
-	help: `Data is CSV, TSV or JSON (by its extension, --data-format, or JSON when it starts with { or [): one record per row or per
-object of an array, or one JSON object. The output is a file name pattern: {n} is the record number (padded), {column} a slug
-of that column's value, and a repeated name gets -2, -3. Several records need a pattern with { } or --combine (one deck with
-every record's slides); one record writes the output as named, and no output writes stdout. With two arguments the second is
-the output when it is named like a deck (*.opf.json, *.opf.yaml, *.opf.md) or holds { }, else the data. Blank cells keep the variable's
+	help: `The second argument is always the data (- reads it from stdin), whatever its name; the third is the output. Data is CSV,
+TSV or JSON (by its extension, --data-format, or JSON when it starts with { or [): one record per row or per object of an
+array, or one JSON object. The output is a deck name or a file name pattern: {n} is the record number (padded), {column} a
+slug of that column's value, and a repeated name gets -2, -3. Several records need a pattern with { } or --combine (one deck
+with every record's slides); without an output the deck goes to stdout. A template alone fills from its own values (and
+their examples with --examples), to stdout. Blank cells keep the variable's
 declared value. An unfilled required variable fails (exit 1) unless --partial; --examples fills unfilled variables from
 their example. Every deck passes the format and references check (--fail-on) before anything is written. The report
 { command, ok, input, outputs: [{ file, record, ... }], findings, counts, fill } goes to stdout, or stderr for stdout output.
@@ -67,9 +68,8 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	const parsed = parseArgs(spec, args);
 	if (parsed === "help") return printHelp(spec);
 	const { positional, options } = parsed;
-	// Two arguments: the second is the output when it is named like a deck (*.opf.json, *.opf.yaml, *.opf.md) or is a pattern, else the data.
-	const outputLike = (name: string | undefined) => name !== undefined && name !== "-" && (/\.opf\.(json|ya?ml|md)$/i.test(name) || /\{[^{}]+\}/.test(name));
-	const [template, data, output] = (positional.length === 2 && outputLike(positional[1]) ? [positional[0], undefined, positional[1]] : positional) as [string, string | undefined, string | undefined];
+	// The second argument is always the data (`-` for stdin), the third the output; nothing is guessed from a name.
+	const [template, data, output] = positional as [string, string | undefined, string | undefined];
 	const failOn = failOnOf(options);
 	const from = deckFormatFlag("--from", options.from);
 	const to = deckFormatFlag("--to", options.to);

@@ -179,13 +179,14 @@ catalog record the deck references, transitively, into it once, so the file rend
 opf fill quarterly.opf.json globex.json globex.opf.json                  # one JSON object, one deck
 opf fill quarterly.opf.md clients.csv decks/qbr-{client}.opf.md          # one deck per row, named by a column
 opf fill quarterly.opf.json clients.csv all.opf.json --combine           # one deck, a slide group per row
-opf fill quarterly.opf.json preview.opf.json --examples                  # fill from each variable's example
+opf fill quarterly.opf.json --examples > preview.opf.json               # no data: fill from each variable's example
+export-rows | opf fill quarterly.opf.json - decks/deck-{n}.opf.json     # data from stdin
 opf ingest revenue.csv table.opf.json --as table
 opf ingest revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into decision.opf.json -i
 ```
 
-`fill`'s output is a file name pattern: `{n}` is the record number, `{column}` a slug of that column's value. With two arguments the
-second is the output when it is named like a deck (`*.opf.json`, `*.opf.yaml`, `*.opf.md`) or holds `{ }`, else the data. A blank
+`fill`'s second argument is always the data, whatever its name (`-` reads it from stdin), and the third is the output: a deck name,
+or a file name pattern where `{n}` is the record number and `{column}` a slug of that column's value. A blank
 cell keeps the declared value; an unfilled required variable fails unless `--partial`. `ingest` turns CSV, TSV or JSON rows into a
 table or chart, alone or added `--into` a deck (`--path` replaces one); `--dataset <id>` stores the rows in the deck's datasets. The
 same inputs give the same slide id and bytes. See [templates and variables](../../docs/templates-and-variables.md) and

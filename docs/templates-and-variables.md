@@ -243,7 +243,7 @@ The PPTX file contains the resolved text. The template form is not stored in the
 ## Decks from data: `opf fill`
 
 ```
-opf fill <template|-> [data|-] [output|pattern|-] [--data-format csv|tsv|json]
+opf fill <template|-> <data|-> [output|pattern] [--data-format csv|tsv|json]
          [--delimiter <c>] [--no-header] [--combine]
          [--partial] [--examples] [--from <format>] [--to <format>] [--force] [--fail-on <level>]
 ```

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -110,6 +111,31 @@ describe("opf fill", () => {
     assert.equal(error.code, "fill-failed");
     assert.equal(error.errors[0].id, "revenue");
     await assert.rejects(readdir(outDir));
+  });
+
+  test("the second argument is always the data, - reads it from stdin, and the third is the output", async () => {
+    const values = JSON.stringify({ client: "Initech", revenue: 5, kickoff: "2026-12-01", wins: ["One"] });
+    // Named like a deck, it is still the data: a missing file is a read error, never an output.
+    const missing = run(["fill", TEMPLATE, path.join(temp, "looks-like-output.opf.json")]);
+    assert.equal(missing.status, 2);
+    assert.equal(JSON.parse(missing.stderr).code, "input-not-found");
+    assert.equal(existsSync(path.join(temp, "looks-like-output.opf.json")), false);
+    const deckNamed = await file("values.opf.json", values);
+    const fromDeckName = run(["fill", TEMPLATE, deckNamed]);
+    assert.equal(fromDeckName.status, 0, fromDeckName.stderr);
+    assert.equal(JSON.parse(fromDeckName.stdout).slides[0].title, "Quarterly review: Initech");
+    // A pattern as the second argument is data too (a file name with braces).
+    assert.equal(run(["fill", TEMPLATE, path.join(temp, "deck-{n}.opf.json")]).status, 2);
+    const piped = run(["fill", TEMPLATE, "-"], { input: values });
+    assert.equal(piped.status, 0, piped.stderr);
+    assert.equal(JSON.parse(piped.stdout).slides[0].title, "Quarterly review: Initech");
+    assert.equal(JSON.parse(piped.stderr).input[1].file, "-");
+    const pipedCsv = run(["fill", TEMPLATE, "-", path.join(temp, "piped", "qbr-{client}.opf.json")], { input: "client,revenue,kickoff,wins\nAcme,1,2026-01-01,x\nBeta,2,2026-01-02,y\n" });
+    assert.equal(pipedCsv.status, 0, pipedCsv.stderr);
+    assert.deepEqual((await readdir(path.join(temp, "piped"))).sort(), ["qbr-acme.opf.json", "qbr-beta.opf.json"]);
+    const named = run(["fill", TEMPLATE, deckNamed, path.join(temp, "named.opf.json")]);
+    assert.equal(named.status, 0, named.stderr);
+    assert.equal(JSON.parse(await readFile(path.join(temp, "named.opf.json"), "utf8")).slides[0].title, "Quarterly review: Initech");
   });
 
   test("usage mistakes exit 2", () => {

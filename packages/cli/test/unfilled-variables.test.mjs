@@ -42,7 +42,7 @@ describe("a deck with an unfilled required variable", () => {
       ["convert", ["convert", deck, path.join(temp, "created.opf.json")]],
       ["edit", ["edit", deck, path.join(temp, "edited.json"), "--patch", patch]],
       ["paginate", ["paginate", deck, path.join(temp, "paged.json")]],
-      ["fill", ["fill", deck, path.join(temp, "filled.opf.json")]],
+      ["fill", ["fill", deck]],
     ]) {
       const result = run(args);
       assert.equal(result.status, 1, `${name}: ${result.stdout}${result.stderr}`);
