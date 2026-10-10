@@ -69,18 +69,31 @@ document.title = 'READY';
   const node = {};
   for (const { name, deck } of items) node[name] = createHash('sha256').update(await toPptx(structuredClone(deck), { ...options, imageResolver: async () => new Uint8Array(image) })).digest('hex');
 
+  // Read the file before any header is written: a missing file (the browser's automatic /favicon.ico, a typo) must answer
+  // 404 once. Calling writeHead(200) first and writeHead(404) in the catch throws ERR_HTTP_HEADERS_SENT (opf-pptx#220).
   server = createServer(async (request, response) => {
-    const file = path.join(consumer, 'page', path.basename(new URL(request.url, 'http://localhost').pathname) || 'index.html');
-    try { response.writeHead(200, { 'Content-Type': file.endsWith('.js') ? 'text/javascript' : 'text/html' }).end(await readFile(file)); }
-    catch { response.writeHead(404).end(); }
+    try {
+      const name = path.basename(new URL(request.url, 'http://localhost').pathname) || 'index.html';
+      if (name === 'favicon.ico') return void response.writeHead(204).end();
+      const body = await readFile(path.join(consumer, 'page', name));
+      response.writeHead(200, { 'Content-Type': name.endsWith('.js') ? 'text/javascript' : 'text/html' }).end(body);
+    } catch {
+      if (response.headersSent) response.destroy();
+      else response.writeHead(404).end();
+    }
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
+  // The static server survives requests for files that do not exist and keeps serving afterwards (opf-pptx#220).
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  assert.equal((await fetch(`${origin}/missing.js`)).status, 404, 'a missing file answers 404');
+  assert.equal((await fetch(`${origin}/favicon.ico`)).status, 204, '/favicon.ico answers 204');
+  assert.equal((await fetch(`${origin}/index.html`)).status, 200, 'the server keeps serving after a missing file');
   browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
-  await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
+  await page.goto(`${origin}/index.html`);
   await page.waitForFunction(() => document.title === 'READY', undefined, { timeout: 60000 });
   const web = {};
   for (let index = 0; index < items.length; index += 25)
