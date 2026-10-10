@@ -92,7 +92,8 @@ const renderer = planned['@openpresentation/opf-render'].split('.').map(Number);
 const core = planned['@openpresentation/opf'].split('.').map(Number);
 const catalogEngines = core[0] > 0 || core[1] >= 19
   ? "export {catalogDisplay, gallery} from '@openpresentation/gallery';"
-  : "export {catalogDisplay, defaultCatalog as gallery} from '@openpresentation/opf/catalog';";
+  // The harness of the plan core's release tag (before 0.19) reads `defaultCatalog`; the current harness reads `gallery`.
+  : "export {catalogDisplay, defaultCatalog, defaultCatalog as gallery} from '@openpresentation/opf/catalog';";
 const rendererEngines = renderer[0] > 0 || renderer[1] >= 18
   ? "export {toSvg, toPng} from '@openpresentation/opf-render';"
   : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export {renderSvg, svgToPng};', 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');
