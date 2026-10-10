@@ -182,7 +182,8 @@ kinds, each record keyed by id without `$schema`, `id` or `x-*` members. The pac
 `CATALOG_SCHEMA` (the version of core's catalog record schemas the records target; `package.json` declares the same
 number as `opf.catalogSchema`), `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and its `/previews` subpath
 exports the layout previews (`layoutPreviews`, `layoutPreviewIndex`, `layoutPreviewSlugs`, `getLayoutPreview`,
-`hasLayoutPreview`). It has no runtime dependency; its types name core's `Catalog`.
+`hasLayoutPreview`). It has no dependency, not even for its types
+(`GalleryCatalog` has the shape of core's `Catalog`).
 
 It is built from `packages/gallery/catalog/` and `packages/gallery/previews/layouts/` in this repository and published
 from it, so its npm provenance names `OpenPresentation/opf`. Versions:

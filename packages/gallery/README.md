@@ -34,7 +34,7 @@ registered catalog is the default for bare ids such as `layout: "two-column"`. D
 `@openpresentation/gallery/previews` exports the static HTML layout previews: `layoutPreviews`, `layoutPreviewIndex`,
 `layoutPreviewSlugs`, `getLayoutPreview` and `hasLayoutPreview`.
 
-The package has no runtime dependency. Its types name core's `Catalog` type from `@openpresentation/opf`.
+The package has no dependency, not even for its types: its `GalleryCatalog` type has the shape of core's `Catalog`, so `gallery` is assignable to it.
 
 ## Versions
 

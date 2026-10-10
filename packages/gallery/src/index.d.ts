@@ -3,9 +3,9 @@
 //   import { gallery } from "@openpresentation/gallery";
 //   validate(deck, { catalogs: [gallery] });
 //
-// The package has no runtime dependency. Its types name core's `Catalog` (a type-only import from
-// @openpresentation/opf, which every host that registers the gallery has installed).
-import type { Catalog } from "@openpresentation/opf";
+// The package has no dependency, not even for its types: core depends on it, so its declarations are self-contained.
+// `GalleryCatalog` has the shape of core's `Catalog` (@openpresentation/opf), so `gallery` is assignable to it; the
+// package's type test (test/types.ts) checks that against core's own declarations.
 
 /** The source the gallery is registered under, and the `source` of a document's `catalogs.default`. */
 export declare const GALLERY_SOURCE: "https://www.pptx.gallery";
@@ -13,11 +13,27 @@ export declare const GALLERY_SOURCE: "https://www.pptx.gallery";
 /** The version of core's catalog record schemas these records target (package.json `opf.catalogSchema`). */
 export declare const CATALOG_SCHEMA: 1;
 
+/** Records of one kind, keyed by id (core's `CatalogRecordMap`). */
+export type GalleryRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+
+/** The gallery as a registered catalog: core's `Catalog` shape, `source` and the eight content kinds. */
+export interface GalleryCatalog {
+  readonly source: typeof GALLERY_SOURCE;
+  readonly layouts: GalleryRecords;
+  readonly themes: GalleryRecords;
+  readonly colorSchemes: GalleryRecords;
+  readonly fontSchemes: GalleryRecords;
+  readonly narratives: GalleryRecords;
+  readonly audiences: GalleryRecords;
+  readonly purposes: GalleryRecords;
+  readonly tones: GalleryRecords;
+}
+
 /**
  * The pptx.gallery catalog: every content record by kind and then by id, with no `$schema` or `id` (the key is the id)
  * and no `x-*` display metadata. Register it with every entry point that resolves references: `{ catalogs: [gallery] }`.
  */
-export declare const gallery: Catalog & { readonly source: typeof GALLERY_SOURCE };
+export declare const gallery: GalleryCatalog;
 
 /** Records of one display kind, keyed by id. */
 export type CatalogDisplayRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;
