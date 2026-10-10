@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-tc",
+  "name": "Noto Sans TC",
+  "app": "google-slides",
+  "languageFamily": "ea",
+  "languages": [
+    "zh-Hant"
+  ],
+  "major": "Noto Sans TC",
+  "minor": "Noto Sans TC",
+  "textSample": "這很美麗",
+  "type": "sans-serif",
+  "description": "Noto Sans TC is a sans serif OPF font scheme for East Asian presentations, using Noto Sans TC for both headings and body text."
+}

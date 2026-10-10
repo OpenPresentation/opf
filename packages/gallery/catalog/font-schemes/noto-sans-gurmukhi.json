@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans-gurmukhi",
+  "name": "Noto Sans Gurmukhi",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "pa-Guru"
+  ],
+  "major": "Noto Sans Gurmukhi",
+  "minor": "Noto Sans Gurmukhi",
+  "textSample": "ਇਹ ਬਹੁਤ ਸੋਹਣਾ ਹੈ",
+  "type": "sans-serif",
+  "description": "Noto Sans Gurmukhi is a sans serif OPF font scheme for complex script presentations, using Noto Sans Gurmukhi for both headings and body text."
+}

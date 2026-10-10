@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-4x-itemimage-title-center",
+  "name": "List_4x_ItemImage_Title_Center",
+  "summary": "Canonical OPF list 4x title layout.",
+  "description": "List 4x ItemImage Title Center OPF layout with 4 list content zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "image"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "4 zones",
+    "Center aligned",
+    "Item image",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x-itemimage-title-center.svg"
+  },
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
+}

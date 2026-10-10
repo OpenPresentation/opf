@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "board",
+  "name": "Board of Directors",
+  "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+  "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+  "seniority": "c-suite",
+  "technicalFluency": "medium",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 90,
+  "recommendedNarratives": [
+    "board-meeting",
+    "qbr",
+    "scqa",
+    "strategic-advisory",
+    "pyramid-principle",
+    "situation-complication-resolution"
+  ],
+  "recommendedTones": [
+    "formal",
+    "authoritative"
+  ],
+  "tags": ["governance", "oversight", "leadership"]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "simsun",
+  "name": "SimSun",
+  "app": "powerpoint",
+  "languageFamily": "ea",
+  "languages": [
+    "zh-Hans"
+  ],
+  "major": "SimSun",
+  "minor": "SimSun",
+  "textSample": "这是用宋体字体写的",
+  "type": "serif",
+  "description": "SimSun is a serif OPF font scheme for East Asian presentations, using SimSun for both headings and body text."
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "daunpenh",
+  "name": "DaunPenh",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "km"
+  ],
+  "major": "DaunPenh",
+  "minor": "DaunPenh",
+  "textSample": "ភាសាខ្មែរពិតជាស្រស់ស្អាត",
+  "type": "sans-serif",
+  "description": "DaunPenh is a sans serif OPF font scheme for complex script presentations, using DaunPenh for both headings and body text."
+}

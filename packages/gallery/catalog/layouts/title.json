@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "title",
+  "name": "Title",
+  "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
+  "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
+  "placeholders": [
+    {
+      "type": "title"
+    }
+  ],
+  "tags": [
+    "Opening",
+    "Headline",
+    "Minimal"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
+  }
+}

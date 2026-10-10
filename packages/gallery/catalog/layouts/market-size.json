@@ -1,0 +1,53 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "market-size",
+  "name": "Market_Size",
+  "summary": "Nested TAM / SAM / SOM visualization showing total market, addressable segment, and obtainable share.",
+  "description": "Nested TAM / SAM / SOM visualization beside the three numbers stacked: total market, addressable segment, and obtainable share.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "group",
+      "composition": {
+        "mode": "column"
+      },
+      "placeholders": [
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        },
+        {
+          "type": "metric"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "Market",
+    "TAM",
+    "Opportunity"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/market-size.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      3,
+      2
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "data-visualization",
+  "name": "Data_Visualization",
+  "summary": "Clean charts and graphs with supporting text. Present complex data in digestible formats.",
+  "description": "Clean charts and graphs with supporting text. Present complex data in digestible formats.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Charts",
+    "Analytics",
+    "Data"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/data-visualization.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "weights": [
+      2,
+      1
+    ]
+  }
+}

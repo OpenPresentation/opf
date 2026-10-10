@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "pie",
+  "name": "Pie",
+  "mappings": {
+    "openxml": {
+      "element": "pieChart",
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Pie"
+      }
+    }
+  },
+  "group": "Pie",
+  "groupSort": 3,
+  "series": 1,
+  "complexity": "simple"
+}

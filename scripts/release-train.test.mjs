@@ -13,12 +13,14 @@ import {
   editPeersText,
   floorChanges,
   floorOf,
+  INDEPENDENT_PACKAGES,
   isPrepTitle,
   lockstepFlags,
   lockstepOrder,
   main,
   nextStep,
   npmRegistry,
+  PACKAGES,
   packageOf,
   parseSpec,
   plan,
@@ -197,7 +199,7 @@ function fakeWorld() {
   };
   /** Publishes name@version from repo@commit as the repository's workflow would. */
   world.publish = (pkgKey, version, commit, { workflowRef, workflowPath } = {}) => {
-    const pkg = packageOf(pkgKey);
+    const pkg = packageOf(pkgKey, { independent: true });
     const integrityBytes = createHash("sha512").update(`${pkg.name}@${version}`).digest();
     const url = `https://registry.npmjs.org/-/npm/v1/attestations/${pkg.name.replace("/", "%2f")}@${version}`;
     world.npm[`${pkg.name}@${version}`] = { name: pkg.name, version, gitHead: commit, dist: { integrity: `sha512-${integrityBytes.toString("base64")}`, attestations: { url, provenance: { predicateType: SLSA } } } };
@@ -923,4 +925,31 @@ test("the workflow is dispatch-only, plan-only without the App, and never publis
   assert.match(workflow, /GH_TOKEN: \$\{\{ steps\.app\.outputs\.token \}\}\n/, "execute runs only with the App token");
   assert.doesNotMatch(workflow, /^\s+(?:- )?run:.*npm publish|id-token: write/m, "publishing stays in each repository's own workflow");
   assert.match(workflow, /cancel-in-progress: false/);
+});
+
+// RR-78: @openpresentation/gallery is released on its own version line: never part of a train, verifiable like any release.
+test("the gallery is an independent package: verify finds it, the train never does", async () => {
+  assert.ok(!PACKAGES.some((pkg) => pkg.name === "@openpresentation/gallery"), "the gallery is not in the lockstep list");
+  assert.deepEqual(INDEPENDENT_PACKAGES.map((pkg) => [pkg.key, pkg.tagPrefix, pkg.workflow, pkg.repo]), [["gallery", "gallery-v", "gallery-publish.yml", "opf"]]);
+  assert.throws(() => packageOf("gallery"), /own version line \(gallery-publish\.yml, gallery-vX\.Y\.Z tags\)/);
+  assert.throws(() => parseSpec("@openpresentation/gallery@1.0.0"), /only `verify gallery@X\.Y\.Z`/);
+  assert.equal(packageOf("opf", { independent: true }).key, "core", "the repository name still means core");
+  assert.equal(parseSpec("@openpresentation/gallery@1.0.0", { independent: true }).pkg.key, "gallery");
+  const releasePlan = JSON.parse(readFileSync(path.join(root, "release-plan.json"), "utf8"));
+  assert.ok(!releasePlan.packages.some((entry) => entry.name === "@openpresentation/gallery"), "release-plan.json keeps the gallery out of the lockstep set");
+  assert.deepEqual(
+    releasePlan.independentPackages.map(({ name, workflow, tagPrefix }) => ({ name, workflow, tagPrefix })),
+    INDEPENDENT_PACKAGES.map(({ name, workflow, tagPrefix }) => ({ name, workflow, tagPrefix })),
+  );
+
+  const world = fakeWorld();
+  const release = world.commit("opf", "gallery-1.0.0", { "packages/gallery/package.json": manifestText("@openpresentation/gallery", "1.0.0") }, { pull: 560 });
+  world.repo("opf").tags["gallery-v1.0.0"] = release;
+  world.publish("gallery", "1.0.0", release);
+  const result = await verify(world.deps, packageOf("gallery", { independent: true }), "1.0.0");
+  assert.equal(result.ok, true, JSON.stringify(result.checks, null, 2));
+  assert.match(result.checks.find((check) => check.name === "GitHub release").detail, /not created by opf.s gallery-publish.yml/);
+  const logs = [];
+  assert.equal(await main(["verify", "gallery@1.0.0"], { ...world.deps, log: (line) => logs.push(line) }), 0, logs.join("\n"));
+  await assert.rejects(main(["tag", "gallery@1.0.0"], { ...world.deps, log: () => {} }), /own version line/);
 });

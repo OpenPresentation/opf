@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "azerbaijani",
+  "name": "Azerbaijani",
+  "code": "AZE",
+  "bcp47": "az",
+  "ooxmlLang": "az-Latn-AZ",
+  "script": "Latn",
+  "direction": "ltr",
+  "fontScheme": "aptos",
+  "googleFontScheme": "roboto"
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "text-1x",
+  "name": "Text 1x",
+  "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
+  "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Text",
+    "Body Copy",
+    "Narrative"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
+  }
+}

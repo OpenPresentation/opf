@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-3x-itemimage-title-center",
+  "name": "List_3x_ItemImage_Title_Center",
+  "summary": "Canonical OPF list 3x title layout.",
+  "description": "List 3x ItemImage Title Center OPF layout with 3 list content zones and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "image"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "3 zones",
+    "Center aligned",
+    "Item image",
+    "Titled"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x-itemimage-title-center.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

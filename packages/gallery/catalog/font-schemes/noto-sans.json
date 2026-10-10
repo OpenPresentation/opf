@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-sans",
+  "name": "Noto Sans",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "ru",
+    "uk",
+    "sr-Cyrl",
+    "tg"
+  ],
+  "major": "Noto Sans",
+  "minor": "Noto Sans",
+  "textSample": "Universal and clear",
+  "type": "sans-serif",
+  "description": "Noto Sans is a sans serif OPF font scheme for complex script presentations, using Noto Sans for both headings and body text."
+}

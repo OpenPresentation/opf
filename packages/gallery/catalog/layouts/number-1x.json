@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-1x",
+  "name": "Number 1x",
+  "summary": "Reach for it when one figure is the point of the slide.",
+  "description": "A title above a single large metric. Use it for the headline number of a result, a target or a milestone, with its label.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "Numbers",
+    "KPIs",
+    "Focus"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-1x.svg"
+  }
+}

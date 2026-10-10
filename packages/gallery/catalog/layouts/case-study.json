@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "case-study",
+  "name": "Case_Study",
+  "summary": "Three-panel narrative of Challenge, Solution, and Impact. Turns a customer story into proof.",
+  "description": "Three-panel narrative of Challenge, Solution, and Impact. Turns a customer story into proof.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Story",
+    "Proof",
+    "Customers"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/case-study.svg"
+  }
+}

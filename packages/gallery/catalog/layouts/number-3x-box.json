@@ -1,0 +1,34 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "number-3x-box",
+  "name": "Number_3x_Box",
+  "summary": "Canonical OPF number 3x boxed layout.",
+  "description": "Number 3x Box OPF layout with 3 numeric/data callouts.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "3 zones",
+    "Center aligned",
+    "Boxed"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-3x-box.svg"
+  },
+  "composition": {
+    "mode": "row"
+  }
+}

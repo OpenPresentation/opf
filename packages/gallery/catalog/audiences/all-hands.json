@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "all-hands",
+  "name": "All Hands",
+  "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
+  "description": "An all-hands audience spans the whole company. Frame the period in terms anyone can grasp: what we did, what mattered, and what's next. Highlight people and teams; surface successes and challenges; close on a forward-looking note. Avoid lapsing into function-specific jargon.",
+  "seniority": "mixed",
+  "technicalFluency": "mixed",
+  "decisionPower": "informational",
+  "attentionBudgetMinutes": 60,
+  "recommendedNarratives": [
+    "company-intro",
+    "weekly-progress",
+    "qbr",
+    "rags-to-riches",
+    "heros-journey",
+    "what-so-what-now-what"
+  ],
+  "recommendedTones": [
+    "casual",
+    "inspirational",
+    "conversational"
+  ],
+  "tags": ["internal", "company-wide"]
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "raleway",
+  "name": "Raleway",
+  "app": "google-slides",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Raleway",
+  "minor": "Raleway",
+  "textSample": "Stylish and modern",
+  "type": "sans-serif",
+  "description": "Raleway is a sans serif OPF font scheme for Latin presentations, using Raleway for both headings and body text."
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "list-1x-box-vertical-title-center",
+  "name": "List_1x_Box_Vertical_Title_Center",
+  "summary": "Canonical OPF list 1x title boxed vertical layout.",
+  "description": "List 1x Box Vertical Title Center OPF layout with a list content zone in a vertical reading flow and a slide title.",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "List",
+    "1 zone",
+    "Left aligned",
+    "Titled",
+    "Boxed",
+    "Vertical flow"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x-box-vertical-title-center.svg"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "two-column",
+  "name": "Two_Column",
+  "summary": "Content split into two equal columns for comparing concepts or showing related information side by side.",
+  "description": "Content split into two equal columns for comparing concepts or showing related information side by side.",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Comparison",
+    "Balance",
+    "Content"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+  },
+  "composition": {
+    "mode": "row",
+    "gap": 0.06
+  }
+}

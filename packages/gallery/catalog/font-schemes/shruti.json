@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "shruti",
+  "name": "Shruti",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "gu"
+  ],
+  "major": "Shruti",
+  "minor": "Shruti",
+  "textSample": "આ શ્રુતિ ફોન્ટમાં લખાયું છે",
+  "type": "sans-serif",
+  "description": "Shruti is a sans serif OPF font scheme for complex script presentations, using Shruti for both headings and body text."
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "line-with-markers",
+  "name": "Line with Markers",
+  "mappings": {
+    "openxml": {
+      "element": "lineChart",
+      "marker": true,
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "LineWithMarkers"
+      }
+    }
+  },
+  "group": "Line",
+  "groupSort": 2,
+  "series": 1,
+  "complexity": "simple"
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "century-schoolbook",
+  "name": "Century Schoolbook",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Century Schoolbook",
+  "minor": "Century Schoolbook",
+  "textSample": "Traditional learning style",
+  "type": "serif",
+  "description": "Century Schoolbook is a serif OPF font scheme for Latin presentations, using Century Schoolbook for both headings and body text."
+}
