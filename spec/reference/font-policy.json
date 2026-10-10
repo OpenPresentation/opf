@@ -47,7 +47,7 @@
         "lineAscent": 0.83,
         "lineAscentMixed": 0.86,
         "lineAscentBasis": "opf#361 native probe, PowerPoint 365 16.0 build 20430 (RR-38 setup, 2880 px; bottom edge of the last row with 35 percent of the darkest row's ink): 0.833 / 0.833 / 0.833 em at 18 / 24 / 32 pt, with a Latin run 0.856 / 0.866 / 0.862 (replaces the 0.85 read from 1280 px PNGs). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
-        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Angsana New 5.06 advances over Noto Sans Thai's, fontkit, read in place). Exact 0.7401; worst line thai-digits +1.6 percent; Latin slack 23.8 percent. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
+        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Angsana New 5.06 advances over Noto Sans Thai's, fontkit, read in place). Exact 0.7401; worst line thai-digits +1.6 percent; Latin slack 42.9 percent (Latin is drawn by the replacement at the composed size). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
         "measured": {
           "replacement": "Noto Sans Thai",
           "meanAbsWidthDelta": 0.7476,
@@ -1108,7 +1108,7 @@
         "lineAscent": 0.82,
         "lineAscentMixed": 0.85,
         "lineAscentBasis": "opf#361 native probe, PowerPoint 365 16.0 build 20430 (RR-38 setup, 2880 px; bottom edge of the last row with 35 percent of the darkest row's ink): 0.815 / 0.819 / 0.813 em at 18 / 24 / 32 pt, with a Latin run 0.856 / 0.852 / 0.841. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
-        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (DilleniaUPC 5.05 advances over Noto Sans Thai's, fontkit, read in place). Exact 0.6704; worst line thai-digits +1.6 percent; Latin slack 14.0 percent. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
+        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (DilleniaUPC 5.05 advances over Noto Sans Thai's, fontkit, read in place). Exact 0.6704; worst line thai-digits +1.6 percent; Latin slack 41.5 percent (Latin is drawn by the replacement at the composed size). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
         "measured": {
           "replacement": "Noto Sans Thai",
           "meanAbsWidthDelta": 0.7077,
@@ -1915,7 +1915,7 @@
         "family": "Noto Sans KR",
         "compatibility": "visual",
         "sizeAdjust": 1.07,
-        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Malgun Gothic 6.69 advances over Noto Sans KR's, fontkit, read in place). Exact 1.0557 on precomposed Hangul; worst line kore-sentence +1.6 percent at 1.07; Latin slack 8.0 percent. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010. Decomposed conjoining jamo (U+1100-11FF, U+A960-A97F, U+D7B0-D7FF; sample kore-jamo, 1.0669) is a documented limitation outside the row decision: PowerPoint draws it unshaped. No lineAscent: the native baseline is 1.06 em, below core's 1.0.",
+        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Malgun Gothic 6.69 advances over Noto Sans KR's, fontkit, read in place). Exact 1.0557 on precomposed Hangul; worst line kore-sentence +1.6 percent at 1.07 (Hangul); latn-numerals +2.7 percent (Latin, at any factor); Latin slack 1.6 percent (Latin is drawn by the replacement at the composed size). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010. Decomposed conjoining jamo (U+1100-11FF, U+A960-A97F, U+D7B0-D7FF; sample kore-jamo, 1.0669) is a documented limitation outside the row decision: PowerPoint draws it unshaped. No lineAscent: the native baseline is 1.06 em, below core's 1.0.",
         "measured": {
           "replacement": "Noto Sans KR",
           "meanAbsWidthDelta": 0.0176,
@@ -2210,7 +2210,7 @@
         "lineAscent": 0.97,
         "lineAscentMixed": 0.94,
         "lineAscentBasis": "opf#361 native probe, PowerPoint 365 16.0 build 20430 (RR-38 setup, 2880 px; bottom edge of the last row with 35 percent of the darkest row's ink): Devanagari stem bottoms 0.981 / 0.972 / 0.969 em at 18 / 24 / 32 pt, with a Latin run 0.930 / 0.935 / 0.935. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
-        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Nirmala UI 1.46 advances over Noto Sans Devanagari's, fontkit, read in place). Exact 1.0695; worst line deva-matras +2.9 percent; Latin slack 12.1 percent. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
+        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Nirmala UI 1.46 advances over Noto Sans Devanagari's, fontkit, read in place). Exact 1.0695; worst line deva-matras +2.9 percent; Latin slack 6.0 percent (Latin is drawn by the replacement at the composed size). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
         "measured": {
           "replacement": "Noto Sans Devanagari",
           "meanAbsWidthDelta": 0.0638,
@@ -2921,7 +2921,7 @@
         "lineAscent": 0.76,
         "lineAscentMixed": 0.81,
         "lineAscentBasis": "opf#361 native probe, PowerPoint 365 16.0 build 20430 (RR-38 setup, 2880 px; bottom edge of the last row with 35 percent of the darkest row's ink): 0.759 / 0.764 / 0.760 em at 18 / 24 / 32 pt, with a Latin run 0.819 / 0.810 / 0.810 (replaces the 0.78 read from 1280 px PNGs). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
-        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Sakkal Majalla 7.00 advances over Noto Naskh Arabic's, fontkit, read in place). Exact 0.8866; worst line arab-fa-digits +2.6 percent; Latin slack 27.1 percent. Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
+        "sizeAdjustBasis": "opf#361 rule: the smallest factor (0.01 steps, up) at which no line of the FF-44 script corpus or of the scheme's Latin overhangs over 3 percent natively, regular and bold (Sakkal Majalla 7.00 advances over Noto Naskh Arabic's, fontkit, read in place). Exact 0.8866; worst line arab-fa-digits +2.6 percent; Latin slack 35.1 percent (Latin is drawn by the replacement at the composed size). Evidence: docs/evidence/ff-46-sizeadjust-native-20261010.",
         "measured": {
           "replacement": "Noto Naskh Arabic",
           "meanAbsWidthDelta": 0.5423,

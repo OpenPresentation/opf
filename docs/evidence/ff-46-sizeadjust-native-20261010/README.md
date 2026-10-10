@@ -33,17 +33,17 @@ which no line of the line model overhangs by more than 3 % natively.
 - **Ship or not:** a family whose factor lies within 1 ± 0.03 ships no `sizeAdjust`.
 
 **The line model.** The published opf-render 0.18.0 planner lays out every line for a deck whose font scheme is the family.
-- The factor scales every run drawn in the replacement, Latin runs included. I checked this against Arabic Typesetting's 0.64.
+- The factor scales the script runs drawn in the replacement. Latin and common text in the family's own runs is drawn by the replacement at the composed size, as the renderer's SVG pipeline does (checked on the opf-render branch: a Latin title in a Malgun Gothic deck has the width of Noto Sans KR at the composed size). The first pass of the line model scaled the Latin too; the second pass, with Latin unscaled ([rule-own-unscaled.json](rule-own-unscaled.json)), gives the same five factors and the Latin column below.
 - The native width is the real font's fontkit advance width.
 - The basis matches RR-38 and reproduces the 2026-10-05 corpus factors to four decimals.
 
-| Family | Advance ratio, regular / bold | Rule factor (exact) | Worst line at the shipped factor | Latin of the scheme at the factor |
+| Family | Advance ratio, regular / bold | Rule factor (exact) | Worst line at the shipped factor | Latin of the scheme (unscaled) |
 | --- | --- | ---: | --- | --- |
-| Angsana New 5.06 | 0.703 / 0.668 | 0.75 (0.7401) | +1.6 % (`thai-digits`, regular) | 23.8 % slack (native / preview 0.72 to 0.84) |
-| DilleniaUPC 5.05 | 0.640 / 0.622 | 0.68 (0.6704) | +1.6 % (`thai-digits`, regular) | 14.0 % slack (0.79 to 0.96) |
-| Sakkal Majalla 7.00 | 0.803 / 0.796 | 0.89 (0.8866) | +2.6 % (`arab-fa-digits`, regular) | 27.1 % slack (0.70 to 0.80) |
-| Malgun Gothic 6.69 | 1.063 / 1.061 | 1.07 (precomposed Hangul 1.0557; with the jamo sample 1.0669) | +1.6 % (`kore-sentence`, regular; jamo excluded, see 4) | 8.0 % slack (0.87 to 0.96) |
-| Nirmala UI 1.46 | 1.067 / 1.067 | 1.07 (1.0695) | +2.9 % (`deva-matras`, regular) | 12.1 % slack (0.85 to 0.96) |
+| Angsana New 5.06 | 0.703 / 0.668 | 0.75 (0.7401) | +1.6 % (`thai-digits`, regular) | 42.9 % slack (median; native / preview 0.54 to 0.77) |
+| DilleniaUPC 5.05 | 0.640 / 0.622 | 0.68 (0.6704) | +1.6 % (`thai-digits`, regular) | 41.5 % slack (0.54 to 0.83) |
+| Sakkal Majalla 7.00 | 0.803 / 0.796 | 0.89 (0.8866) | +2.6 % (`arab-fa-digits`, regular) | 35.1 % slack (0.62 to 0.80) |
+| Malgun Gothic 6.69 | 1.063 / 1.061 | 1.07 (precomposed Hangul 1.0557; with the jamo sample 1.0669) | +1.6 % (`kore-sentence`, regular; jamo excluded, see 5); a Latin string reaches +2.7 % (`latn-numerals`) at any factor | 1.6 % slack (0.93 to 1.03) |
+| Nirmala UI 1.46 | 1.067 / 1.067 | 1.07 (1.0695) | +2.9 % (`deva-matras`, regular) | 6.0 % slack (0.91 to 0.97) |
 
 The digit samples drive the factor for the Thai and Arabic families. The plain corpus factors (0.70, 0.64 and 0.80) would let those
 lines overhang by 8 to 14 %.
@@ -137,7 +137,7 @@ lines in Arabic Typesetting alone and by 0.02 em on mixed lines: about 0.7 pt an
 | File | What |
 | --- | --- |
 | [measurements.md](measurements.md), [measurements.json](measurements.json) | Factors, per-sample spread, the Latin effect, every scenario's per-line ratios, and the rule section. |
-| [rule.json](rule.json) | The rule computation per family: lines counted, exact and rounded factor, worst line, top needs, lines out of the row's reach. |
+| [rule.json](rule.json), [rule-own-unscaled.json](rule-own-unscaled.json) | The rule computation per family (first pass with Latin scaled; second pass with Latin unscaled, as the SVG pipeline draws it): lines counted, exact and rounded factor, worst line, top needs, lines out of the row's reach. |
 | [compare-attempt-2.md](compare-attempt-2.md), [compare-attempt-2.json](compare-attempt-2.json) | The factor-applied FF-46 re-run, and the probe as first read. |
 | [compare-attempt-2-probe-corrected.md](compare-attempt-2-probe-corrected.md), [compare-attempt-2-probe-corrected.json](compare-attempt-2-probe-corrected.json) | The probe with the corrected rule. |
 | [compare-attempt-3.md](compare-attempt-3.md), [compare-attempt-3.json](compare-attempt-3.json) | The mixed-line probe for Angsana New, Sakkal Majalla and Arabic Typesetting. |
