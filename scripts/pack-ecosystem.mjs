@@ -33,6 +33,9 @@ for (const [name, source, version] of packages) {
   );
   const sourceVersion = manifest.version;
   manifest.version = version;
+  // A peer range keeps the shape of the published manifests (`^0.18.0`): npm cannot resolve an OPTIONAL peer pinned to an
+  // exact version when that peer is absent (ERESOLVE: core's optional opf-render peer in a consumer with no renderer), which
+  // is how test-packed-furniture-absent.mjs installs core and pptx. Dependencies stay exact.
   for (const section of [
     "dependencies",
     "peerDependencies",
@@ -40,7 +43,7 @@ for (const [name, source, version] of packages) {
   ])
     for (const dependency of Object.keys(manifest[section] ?? {}))
       if (versions[dependency])
-        manifest[section][dependency] = versions[dependency];
+        manifest[section][dependency] = section === "peerDependencies" ? `^${versions[dependency]}` : versions[dependency];
   // The stage contains built distributables, so packing never executes a missing source build.
   delete manifest.scripts;
   delete manifest.devDependencies;
