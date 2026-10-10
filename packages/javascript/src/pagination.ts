@@ -7,6 +7,7 @@ import { resolveSlideScriptMeasurement } from './script-measurement.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
+import { regionAccepts } from './bind-regions.js';
 import { resolveSlideVariables, slideTokenSpans, usesSlideBuiltin } from './slide-variables.js';
 
 export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasurement'> {
@@ -180,7 +181,14 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
   // image treatment, never clear by splitting content; hosts report them from their own
   // composition and the pages keep the source design.
-  const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || !!initial.furniture?.diagnostics.includes(issue));
+  // OPF 0.19: a block no region of the slide's layout has room for (layout-unplaced) moves to a continuation slide.
+  const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || issue.code === 'layout-unplaced' || !!initial.furniture?.diagnostics.includes(issue));
+  // The region each root block of a template slide was drawn in, by block index: a moved block keeps it as a pin.
+  const regionOfBlock = new Map<number, { name: string; accepts: readonly string[] }>();
+  for (const region of initial.regions ?? []) for (const content of [...region.content, ...(region.overflow ?? [])]) {
+    const match = /\.blocks\.(\d+)$/.exec(content);
+    if (match) regionOfBlock.set(Number(match[1]), { name: region.name, accepts: region.accepts });
+  }
   const repeatedMappings = (pageIndex: number): PaginationMapping[] => {
     if(!initial.furniture)return [];
     const paths = new Set(initial.items.filter(item=>headingFields.has(item.field)).map(item=>item.path));
@@ -198,7 +206,11 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     for (const key of path.slice(sourceBase.length+1).split('.')) node = isRecord(node) || Array.isArray(node) ? (node as any)[key] : undefined;
     return node === undefined ? fallback : node;
   };
-  const leaves = initial.items.filter(item=>!headingFields.has(item.field)).map(item=>leafFor(item.path,item.field,sourceValue(item.path,item.value)));
+  // A template slide draws its regions in reading order; its blocks still move to continuations in source order.
+  const blockIndex = (path: string) => { const match = /^slides\.\d+\.blocks\.(\d+)/.exec(path); return match ? Number(match[1]) : -1; };
+  const bodyItems = initial.items.filter(item=>!headingFields.has(item.field));
+  if (initial.regions) bodyItems.sort((a,b)=>blockIndex(a.path)-blockIndex(b.path));
+  const leaves = bodyItems.map(item=>leafFor(item.path,item.field,sourceValue(item.path,item.value)));
   const leafPaths = new Set(leaves.map(leaf=>leaf.path));
   const slides: Record<string, any>[] = [], pages: PaginatedPage[] = [];
   let selected = new Map<string,Portion>();
@@ -241,7 +253,11 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
           const children: Record<string,any>[] = [];
           value.forEach((child,index)=>{
             const projected = visit(child,`${childPath}.${index}`,`${outputPath}.${children.length}`);
-            if (projected) children.push(projected);
+            if (!projected) return;
+            // OPF 0.19: a root block moved to a continuation slide keeps the region it was drawn in, as a pin.
+            const region = root && pageIndex > 0 && projected.region === undefined ? regionOfBlock.get(index) : undefined;
+            if (region && regionAccepts(region, projected)) projected.region = region.name;
+            children.push(projected);
           });
           if (children.length) { result.blocks = children; hasContent = true; }
         } else if (root && isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) {

@@ -269,25 +269,93 @@ _No named properties._
 ## Slide Layout
 
 - File: `spec/schemas/layout.schema.json`
-- Schema id: `https://openpresentation.org/schema/opf-layout/v1`
+- Schema id: `https://openpresentation.org/schema/opf-layout/v2`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for slide-layout records. Each record describes a semantic slide layout: what regions it exposes, what content kinds those regions are intended to hold, how they are arranged (composition) and its design hints. Documents reference a layout from Slide.layout; a slide without a layout, or whose layout resolves nowhere, composes automatically. A document references a record as a bare id or 'name:id' and resolves it in its own catalogs groups first, then in the catalog the host registered...
+- Purpose: Schema for slide-layout records (OPF 0.19). A layout is a grid template: 'areas' names the cells of a grid in the notation of CSS grid-template-areas, 'columns' and 'rows' size its tracks, and 'regions' says, for every body area, which content kinds it takes and how several blocks share it. Slide content stays flat: engines bind a slide's blocks to the regions by reading order, role and kind (bindRegions in @openpresentation/opf), a block may pin itself to a region with 'region', and an empty...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout/v1"` | Identifies a published record file as a layout record. Required in a published file; an embedded copy omits it. |
-| `id` | yes | `string` | The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. |
-| `name` | yes | `string` | Human-readable layout name shown in layout pickers. |
+| `$schema` | yes | `enum:https://openpresentation.org/schema/opf-layout/v2 \| https://openpresentation.org/schema/opf-layout/v1` | Identifies a published record file as a layout record: 'https://openpresentation.org/schema/opf-layout/v2'. Required in a published file; an embedded copy omits it. 'https://openpresentation.org/schema/opf-layout/v1'... |
+| `id` | yes | `string` | The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this fie... |
+| `name` | yes | `string` | Human-readable layout name, shown in layout pickers and as the PowerPoint layout name. |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
-| `design` | no | `ref:DesignHints` | The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Eve... |
-| `placeholders` | no | `array<ref:PlaceholderEntry>` | Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutCon... |
+| `design` | no | `ref:DesignHints` | The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion.... |
+| `areas` | no | `array<string>` | The grid, in the notation of CSS grid-template-areas: each string is a row, each word a cell, and a name repeated over adjacent cells spans them; '.' is an empty cell. Words are lowercase names ([a-z][a-z0-9-]*) or '.... |
+| `columns` | no | `array<number>` | Relative column widths, one per cell of a row; the columns share the content width in proportion, separated by the gap. Omitted: all 1. Columns are numbers only. |
+| `rows` | no | `array<oneOf:number / const:"auto">` | Relative row heights, one per string of 'areas'. 'auto' is the height the row's content needs at the starting text size (at most half the content box; areas that span several rows do not size it); the numeric rows sha... |
+| `regions` | no | `object` | One entry per body area, keyed by the area's name. Region names may not be 'title', 'subtitle', 'tag', 'auto' or one of the promoted-region words ('left', 'center', 'right', 'top', 'middle', 'bottom'), so a Markdown b... |
+| `overflowRegion` | no | `string` | The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
-| `composition` | no | `ref:Composition` |  |
+| `composition` | no | `object` | Only 'gap', 'padding', 'minFontSize' and 'overflow', with their 0.18 meaning. A template's regions replace composition.mode, columns and weights. |
+| `placeholders` | no | `array<ref:PlaceholderEntry>` | Transition only (a 0.18 record; removed before OPF 0.19 is released). Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and... |
 
 ### Nested Types
+
+#### Region
+
+- Type: `object`
+- Required fields: `accepts`
+- Purpose: One body region of a layout: which content it takes and how several blocks share it.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `accepts` | yes | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A group is also accepted where every one of its leaf kinds is. |
+| `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
+| `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it; 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in four columns; rows and columns swap in a portrait re... |
+| `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
+| `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
+| `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a lone list in the region flows into up to three columns before it shrinks (as a list payload's columns: 'auto'). Default 1. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Default 'top'. |
+| `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
+
+#### DesignHints
+
+- Type: `object`
+- Required fields: none
+- Purpose: Design hints a layout carries. The keys and lowercase values are those of the deck's design and a slide's design in opf.schema.json (Design), so a slide overrides a layout by the same name and layout.design can be copied into slide.design unchanged. An absent key means the layout has no opinion. Only the keys the layout sets are stored. scripts/check-spec-integrity.mjs verifies that every key here has the same typ...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title placeholder. |
+| `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
+| `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
+| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. It is shorthand for a placeholder group... |
+| `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
+| `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
+| `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
+
+#### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: A template's composition: only gap, padding, minFontSize and overflow, with their 0.18 meaning. A slide's composition overrides them; a slide's composition.mode, columns and weights arrange its first primary flowing region.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
+
+#### LegacyComposition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Transition only: the composition of a 0.18 record. Portable dynamic composition. Slide fields override the resolved layout. Nested groups (placeholder groups here, content groups in a slide) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
 
 #### PlaceholderEntry
 
@@ -306,7 +374,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
-| `composition` | no | `ref:Composition` | How the group arranges its regions, with the semantics of a content group's composition: only minFontSize and overflow inherit from the enclosing composition; padding defaults to 0 and gap is a fraction of the group's... |
+| `composition` | no | `ref:LegacyComposition` | How the group arranges its regions, with the semantics of a content group's composition: only minFontSize and overflow inherit from the enclosing composition; padding defaults to 0 and gap is a fraction of the group's... |
 | `placeholders` | yes | `array<ref:PlaceholderGroupEntry2>` | The group's regions and nested groups, in reading order. |
 
 #### PlaceholderGroupEntry2
@@ -326,7 +394,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
-| `composition` | no | `ref:Composition` | How the group arranges its regions; see PlaceholderGroup.composition. |
+| `composition` | no | `ref:LegacyComposition` | How the group arranges its regions; see PlaceholderGroup.composition. |
 | `placeholders` | yes | `array<ref:PlaceholderGroupEntry3>` | The group's regions and nested groups, in reading order. |
 
 #### PlaceholderGroupEntry3
@@ -346,7 +414,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `const:"group"` | Marks the entry as a placeholder group. |
-| `composition` | no | `ref:Composition` | How the group arranges its regions; see PlaceholderGroup.composition. |
+| `composition` | no | `ref:LegacyComposition` | How the group arranges its regions; see PlaceholderGroup.composition. |
 | `placeholders` | yes | `array<ref:GroupedPlaceholder>` | The group's regions, in reading order. |
 
 #### GroupedPlaceholder
@@ -381,38 +449,6 @@ _No named properties._
 | `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. In a right-to-left deck 'left' is the start side, drawn at the right. |
 | `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
 | `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band instead of edge to edge. Default false. |
-
-#### DesignHints
-
-- Type: `object`
-- Required fields: none
-- Purpose: Design hints a layout carries. The keys and lowercase values are those of the deck's design and a slide's design in opf.schema.json (Design), so a slide overrides a layout by the same name and layout.design can be copied into slide.design unchanged. An absent key means the layout has no opinion. Only the keys the layout sets are stored. scripts/check-spec-integrity.mjs verifies that every key here has the same typ...
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title placeholder. |
-| `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
-| `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
-| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. It is shorthand for a placeholder group... |
-| `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
-| `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
-
-#### Composition
-
-- Type: `object`
-- Required fields: none
-- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups (placeholder groups here, content groups in a slide) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
-| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
-| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
-| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
-| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
-| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
-| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
 
 ## Narrative Template
 
@@ -518,6 +554,7 @@ _No named properties._
 | `fontScheme` | no | `string` | The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first. |
 | `background` | no | `ref:ThemeBackground` |  |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
+| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, contentDirection... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

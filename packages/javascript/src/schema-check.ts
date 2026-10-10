@@ -8,6 +8,7 @@ import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
 import { MAX_PLACEHOLDER_GROUP_DEPTH } from "./layout-content.js";
+import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
@@ -1042,6 +1043,8 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
   const mapped = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
   const errors = resolved.schemaName === "layout" ? withPlaceholderGroupIssues(mapped, subject) : mapped;
+  // OPF 0.19: the template rules a schema cannot express (opf/layout-template, opf/layout-region), on a record the schema accepts.
+  if (resolved.schemaName === "layout" && valid) for (const issue of layoutTemplateIssues(subject)) errors.push(semanticIssue(issue.path, issue.message, { code: issue.code }));
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {

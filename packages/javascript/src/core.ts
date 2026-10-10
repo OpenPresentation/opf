@@ -187,3 +187,6 @@ export type {
 // A font scheme's `languageFamily` catalog value, read as one of the three OOXML script slots.
 export { normalizeLanguageFamily } from './script-fonts.js';
 export type { LanguageFamilyName } from './script-fonts.js';
+// OPF 0.19: the layout ids the 0.18 default catalog had and 0.19 removed, and the deck migration (opf convert --migrate).
+export { LAYOUT_MIGRATION, convertLayoutRecord, layoutMigrationRow, migrate, migrateSlide, removedLayoutRow } from './layout-migration.js';
+export type { ConvertedLayout, LayoutMigrationChange, LayoutMigrationRow, MigrateOptions, MigrateResult } from './layout-migration.js';

@@ -328,6 +328,17 @@ async function generateFontPolicy() {
   await fs.writeFile(path.join(generatedRoot, "font-policy.ts"), lines.join("\n"));
 }
 
+async function generateLayoutMigration() {
+  // OPF 0.19: the 278 layout ids of the 0.18 default catalog and what replaces each (layout-migration.ts reads it).
+  const table = await readJson(path.join(specRoot, "reference", "layout-migration.json"));
+  const lines = [
+    generatedHeader("spec/reference/layout-migration.json"),
+    `export const layoutMigrationSource: unknown = ${asTs(table.layouts)};`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "layout-migration.ts"), lines.join("\n"));
+}
+
 async function generateEngineData() {
   // FA-20/21: engine defaults and engine vocabularies are reference data compiled into the engine code. They are not
   // catalog data: no catalog record is read here, and no catalog module may import them.
@@ -350,6 +361,7 @@ await fs.mkdir(generatedRoot, { recursive: true });
 await generateEngineData();
 await generateFontPolicy();
 await generateSymbolFontEncodings();
+await generateLayoutMigration();
 await generateSchemas();
 await generateCatalogs();
 await generateSpecFiles();

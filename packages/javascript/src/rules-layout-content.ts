@@ -53,10 +53,44 @@ const minFontRule = rule(
 	},
 );
 
+const regionUnknownRule = rule(
+	'region-unknown',
+	'layout',
+	'warning',
+	'A block is pinned to a region the layout does not have.',
+	'A region pin (`region` on a root block) names a region of the slide\'s layout. A name the layout does not have is ignored: the block is placed by its kind, which may not be where the author meant.',
+	{ cost: 'composition' },
+);
+const regionKindRule = rule(
+	'region-kind',
+	'layout',
+	'warning',
+	'A block is pinned to a region that does not accept its kind.',
+	'A region says which content kinds it takes. A pin to a region that does not take the block\'s kind is ignored and the block is placed by its kind.',
+	{ cost: 'composition' },
+);
+const regionFullRule = rule(
+	'region-full',
+	'layout',
+	'warning',
+	'A block is pinned to a region that is already full.',
+	'A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.',
+	{ cost: 'composition' },
+);
+const unplacedRule = rule(
+	'layout-unplaced',
+	'layout',
+	'warning',
+	'No region of the layout has room for a block.',
+	'Content is never dropped: a block no region has room for is drawn in the layout\'s overflow region beyond its max (or below the grid), where it crowds the others. Paginate moves it to a continuation slide with the same layout.',
+	{ cost: 'composition' },
+);
+const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
+
 const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
-		also: [unresolvedRule, layoutFailedRule, minFontRule],
+		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
@@ -74,6 +108,8 @@ const layoutRules: ValidationRule[] = [
 						context.report(overflowRule, { path, slide, message: diagnostic.message, help: 'Shorten the text, give it more space (fewer blocks, a different composition) or split the slide (paginate); raising the readable minimum makes it worse.' });
 					// A cell narrower than composition's comfort threshold is a taste judgment, not a finding.
 					else if (diagnostic.code === 'small-cell') continue;
+					else if (Object.hasOwn(REGION_RULES, diagnostic.code))
+						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.' });
 					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
 				}
 				for (const tv of slide.texts)

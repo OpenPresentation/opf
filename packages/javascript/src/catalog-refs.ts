@@ -300,7 +300,8 @@ export function catalogReferenceSites(document: unknown, options: { records?: bo
   if (options.slides !== false && Array.isArray(deck.slides))
     deck.slides.forEach((slide, index) => {
       if (!isRec(slide)) return;
-      pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
+      // `layout: "auto"` is automatic composition, not a reference (OPF 0.19).
+      if (slide.layout !== 'auto') pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
       designSites(sites, slide.design, ['slides', index, 'design']);
     });
   if (options.records !== false)
