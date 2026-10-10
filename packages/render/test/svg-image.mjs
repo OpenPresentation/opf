@@ -38,7 +38,7 @@ for (const fill of ['contain', 'cover', 'stretch']) {
 
 // Every place an image appears.
 {
-  const deck = {design: {logo: base64(rect), watermark: {src: base64(rect), opacity: .1}, header: {right: {image: {src: base64(rect), alt: 'Header'}}},
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: base64(rect)}, design: {watermark: {src: base64(rect), opacity: .1}, header: {right: {image: {src: base64(rect), alt: 'Header'}}},
     listBullet: 'image', background: {type: 'image', src: base64(rect)}}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Items', blocks: [{type: 'image', image: base64(rect), placement: {edge: 'right'}}, {items: ['One', 'Two']}]}]};
   const diagnostics = [];
   const slides = toSvg(deck, {trace: true, strictAssets: true, onDiagnostic: item => diagnostics.push(item)});

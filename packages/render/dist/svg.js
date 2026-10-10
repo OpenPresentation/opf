@@ -1697,10 +1697,25 @@ function renderBranding(bound,presentation,width,height,options) {
     // The group keeps its bare opacity attribute (opf-pptx's watermark parity test reads it); the picture itself is hidden.
     pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true})));
   }
-  // Cover and section slides: the deck logo core composed at the top-left of the free area, anchored left.
+  // Cover and section slides: the logo core composed (the primary organization's full logo, or the design.logo override, in the
+  // variant for this slide's background) at the top-left of the free area, anchored left. RR-71: the picture is named by its
+  // asset's alt text, else by the organization it belongs to ("Acme Corp logo"); an unnamed organization still says "Logo".
   const logo=bound.geometry.logo;
-  if(logo)pieces.push(renderImage({value:logo.source,path:logo.path},logo.box,bound,{...options,imageAnchor:logo.anchor??'left',imageLabel:'Logo',imageGenerated:true}));
+  if(logo)pieces.push(renderImage({value:logo.source,path:logo.path},logo.box,bound,{...options,imageAnchor:logo.anchor??'left',imageLabel:logoLabel(presentation,logo.path),imageGenerated:true}));
   return pieces.join('');
+}
+
+// The organization a logo path (`organization.logo.full`, `organization.1.logo.icon.onDark`) belongs to: the record at the index the path
+// names, else the single organization object.
+function logoOrganization(presentation,path){
+  const match=/^organization(?:\.(\d+))?\.logo(?:\.|$)/.exec(path??'');
+  if(!match)return undefined;
+  const organization=presentation?.organization;
+  return Array.isArray(organization)?organization[Number(match[1])]:match[1]===undefined?organization:undefined;
+}
+function logoLabel(presentation,path){
+  const name=logoOrganization(presentation,path)?.name;
+  return typeof name==='string'&&name.trim()?`${name.trim()} logo`:'Logo';
 }
 
 // A family name is written unquoted only when it is a valid sequence of CSS identifiers; a word that starts with a digit

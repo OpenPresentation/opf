@@ -65,7 +65,7 @@ const UNDRAWN_VALUE = /^(?:https?|data|blob|pkg|file|mailto):\S*$/i;
 
 // The built-in variables that copy a document value into drawn text: the inline token and the whole-field reference
 // (a logo or photo reference draws a picture, not text).
-const ORGANIZATION_TOKEN = /\{\{\s*organization\.|var:organization\.(?!logo\b)/;
+const ORGANIZATION_TOKEN = /\{\{\s*organization\.|var:organization\.(?!(?:[^.\s]+\.)?logo\b)/;
 const SPEAKER_TOKEN = /\{\{\s*speaker\.|var:speaker\.(?!photo\b|image\b|avatar\b)/;
 const SECTION_TOKEN = /\{\{\s*slide\.section\s*[|}]/;
 

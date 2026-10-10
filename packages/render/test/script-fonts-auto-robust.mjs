@@ -41,6 +41,9 @@ assert.deepEqual(detectPresentationScripts({design:{footer:{left:{text:'{{slide.
 assert.deepEqual(detectPresentationScripts({design:{footer:{left:{text:'{{slide.section}}'}}},organization:{name:'株式会社です'},slides:[{title:'T'}]}),[],'a section footer does not draw the organization');
 assert.deepEqual(detectPresentationScripts({speaker:{name:'山田さん'},slides:[{title:'T',text:'By {{speaker.name}}'}]}),['Jpan'],'a speaker token in body text draws the speaker');
 assert.deepEqual(detectPresentationScripts({organization:{name:'株式会社です'},slides:[{title:'T',section:'第一章です',text:'{{slide.number}}'}]}),[],'a slide number token draws neither the organization nor the section');
+// RR-71: a logo reference (the primary's or a partner's, any shape) draws a picture, so the organization's name stays undrawn; its other fields still count.
+for(const image of ['var:organization.logo','var:organization.logo.icon','var:organization.beta.logo','var:organization.beta.logo.icon.onDark'])assert.deepEqual(detectPresentationScripts({organization:[{id:'acme',name:'株式会社です',role:'primary'},{id:'beta',name:'別会社です'}],design:{footer:{left:{image}}},slides:[{title:'T'}]}),[],image+' draws a picture, not the organization name');
+assert.deepEqual(detectPresentationScripts({organization:{id:'beta',name:'株式会社です'},design:{footer:{left:{text:'{{organization.beta.name}}'}}},slides:[{title:'T'}]}),['Jpan'],'a partner name token draws the organization');
 // A URL is not text; ids, alt, src, notes and metadata are not drawn; the presentation's own name and author are not either.
 assert.deepEqual(detectPresentationScripts({slides:[{title:'T',text:'https://例え.jp/日本語'}]}),[]);
 

@@ -2,20 +2,48 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 // The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
 import {resolvePresentation, toSvg} from './catalog-harness.mjs';
+import {FURNITURE_GAP} from '@openpresentation/opf/composition';
 import {loadFonts} from '../dist/fonts-node.js';
 const prepared = await loadFonts();
 const bytes=await readFile(new URL('fixtures/jpeg/expected-1.png',import.meta.url));
 const image={src:`data:image/png;base64,${bytes.toString('base64')}`,alt:'Visible furniture logo'};
+const wideLogo=`data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100"/>').toString('base64')}`;
+const longWordOutcomes=[];
+// The header-left text wraps only between whole words: core's lines and the drawn <text> lines are each whole words of the source.
+function wholeWords(geometry,svg,source){
+ const words=source.split(' '),label=geometry.furniture.parts.find(part=>part.path==='design.header.left.text');
+ const check=(lines,where)=>{
+  assert.deepEqual(lines.map(line=>line.trim()).filter(Boolean).join(' ').split(' '),words,`${where} keep every word in order`);
+  for(const line of lines)for(const word of line.trim().split(/\s+/).filter(Boolean))assert.ok(words.includes(word),`${where}: "${line}" breaks inside a word`);
+ };
+ check(label.fit.lines,'core lines');
+ check([...svg.matchAll(/<text\b[^>]*data-opf-path="design\.header\.left\.text"[^>]*>([^<]*)<\/text>/g)].map(match=>match[1]),'drawn lines');
+}
 for(const measured of [false,true])for(const floor of [16,32])for(const [width,height]of [[1280,720],[720,1280]]){
  const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFit:'cover',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{image,text:'Keep both'},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer:{left:{date:'Literal date'},right:{text:'{{slide.number}}'}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};
  const before=structuredClone(deck),config={...(measured?{fonts:prepared}:{}),trace:true},geometry=resolvePresentation(deck,config).slides[0].geometry,svg=toSvg(deck, 1,config);
  assert.deepEqual(geometry.diagnostics,[]);assert.deepEqual(deck,before);
- assert.ok(svg.includes('Visible furniture logo'));assert.ok(svg.includes('xMidYMid meet'));assert.ok(svg.includes('Keep both'));
+ assert.ok(svg.includes('Visible furniture logo'));assert.ok(svg.includes('xMidYMid meet'));
+ // RR-71: the zone is a row, so a narrow portrait zone leaves the text little room and it wraps beside the image, between
+ // whole words only (core caps the image at FURNITURE_IMAGE_SHARE of the zone and never breaks a word silently).
+ wholeWords(geometry,svg,'Keep both');
  assert.equal((svg.match(/data-opf-furniture-field=/g)??[]).length,geometry.furniture.parts.length);
+ {const [picture,label]=geometry.furniture.parts.filter(part=>part.kind==='header'&&part.zone==='left');assert.deepEqual([picture.type,label.type],['image','text'],'image, then text');assert.ok(Math.abs(label.box.x-(picture.box.x+picture.box.width+FURNITURE_GAP*Math.min(width,height)/720))<.01,'text beside the image after the furniture gap');}
  for(const match of svg.matchAll(/<text\b([^>]*)data-opf-path="design\.(header|footer)\.[^"]+"([^>]*)>/g))assert.ok(Number(/font-size="([^"]+)"/.exec(match[0])[1])>=floor);
  const disabled=structuredClone(deck);disabled.slides[0].design={header:false,footer:false};const plain=toSvg(disabled, 1,config);assert.ok(!plain.includes('data-opf-furniture-field'));
  const empty=structuredClone(deck);empty.slides[0].design={header:{},footer:{}};assert.ok(!toSvg(empty, 1,config).includes('data-opf-furniture-field'));
+ // A word wider than its share beside a wide logo either fits whole or is core's text-overflow at the part (which the
+ // renderer refuses under overflow: 'error'); it is never broken across lines.
+ const long=structuredClone(deck);long.design.header.left={image:{src:wideLogo,alt:'Wide logo'},text:'Confidentiality'};long.slides[0].composition.overflow='warn';
+ const longGeometry=resolvePresentation(long,config).slides[0].geometry,flagged=longGeometry.diagnostics.filter(entry=>entry.code==='text-overflow'&&entry.path==='design.header.left.text');
+ if(flagged.length){
+  assert.match(flagged[0].message,/break inside the word/);
+  const strict=structuredClone(long);strict.slides[0].composition.overflow='error';
+  assert.throws(()=>toSvg(strict, 1,config),{code:'layout-overflow'});
+ }else{assert.deepEqual(longGeometry.diagnostics,[]);wholeWords(longGeometry,toSvg(long, 1,config),'Confidentiality');}
+ longWordOutcomes.push(flagged.length?'overflow':'whole');
 }
+assert.ok(longWordOutcomes.includes('whole')&&longWordOutcomes.includes('overflow'),'a long word fits whole where there is room and is reported where there is not');
 assert.throws(()=>toSvg({design:{header:{left:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1),{code:'layout-overflow'});
 // FF-27 / FA-31: slide-number text, fixed formatted dates and host-supplied current dates.
 {

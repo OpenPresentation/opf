@@ -63,8 +63,8 @@ assert.equal(aspect(imageDeck({ imageFit: 'contain' }, {}, { imageFit: 'stretch'
 assert.equal(aspect(imageDeck({ imageFit: 'contain' }, { design: { imageFit: 'cover' } })), 'xMidYMid slice', 'slide cover over layout contain');
 assert.equal(aspect(imageDeck({})), 'xMidYMid slice', 'engine default cover');
 
-// listBullet: the layout's picture bullets draw the deck's icon logo; the deck's character beats them.
-const listDeck = (design, deckDesign = {}) => deckOf(layout(design, [{ type: 'title' }, { type: 'list' }]), { text: undefined, items: ['One', 'Two'] }, { logo: { icon: wide }, ...deckDesign });
+// listBullet: the layout's picture bullets draw the organization's icon logo (RR-71); the deck's character beats them.
+const listDeck = (design, deckDesign = {}) => ({ ...deckOf(layout(design, [{ type: 'title' }, { type: 'list' }]), { text: undefined, items: ['One', 'Two'] }, deckDesign), organization: { id: 'acme', name: 'Acme', logo: { icon: wide } } });
 const bullets = (deck) => [...toSvg(deck, 1, { trace: true }).matchAll(/<image\b[^>]*>/g)].length;
 assert.equal(bullets(listDeck({ listBullet: 'image' })), 2, 'layout picture bullets');
 assert.equal(bullets(listDeck({ listBullet: 'image' }, { listBullet: 'character' })), 0, 'deck character over layout image');
