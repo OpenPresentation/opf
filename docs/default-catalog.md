@@ -192,7 +192,7 @@ validate(document, { catalogs: [gallery] });
 
 `gallery` holds `source` and the eight content kinds, each record keyed by id without `$schema`, `id` or `x-*` members
 (what core 0.15 to 0.18 exported as `defaultCatalog` from `/catalog`). The exports are listed under "Registering
-catalogs" above. It has no runtime dependency; its types name core's `Catalog`.
+catalogs" above. It has no dependency, not even for its types (`GalleryCatalog` has the shape of core's `Catalog`).
 
 It is built from `packages/gallery/catalog/` and `packages/gallery/previews/layouts/` in this repository and published
 from it, so its npm provenance names `OpenPresentation/opf`. Versions:

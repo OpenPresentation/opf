@@ -157,7 +157,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 0.0.1 (a placeholder; 1.0.0 is the first release from `OpenPresentation/opf`) | nothing at run time; its types name `@openpresentation/opf`'s `Catalog` |
+| `@openpresentation/gallery` | 0.0.1 (a placeholder; 1.0.0 is the first release from `OpenPresentation/opf`) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
 The gallery (RR-78) is released on its own version line by `gallery-publish.yml`, outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
