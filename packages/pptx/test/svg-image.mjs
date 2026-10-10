@@ -16,6 +16,7 @@ import sharp from 'sharp';
 import {toPng} from '@openpresentation/opf-render';
 import {toSvg, resolvePresentation, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {prepareSvg, svgDataUriBytes, svgIntrinsicSize, svgRasterScale} from '../dist/svg-image.js';
+import {shownFurnitureParts} from './helpers/master-furniture.mjs';
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
 const SVG_URI = '{96DAC541-7B7A-43D3-8B79-37D633B846F1}';
@@ -49,8 +50,13 @@ const pictures = xml => [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(([pic
   x: Number(picture.match(/<a:off x="(-?\d+)"/)?.[1]) / 9525, y: Number(picture.match(/<a:off x="-?\d+" y="(-?\d+)"/)?.[1]) / 9525,
   w: Number(picture.match(/<a:ext cx="(\d+)"/)?.[1]) / 9525, h: Number(picture.match(/<a:ext cx="\d+" cy="(\d+)"/)?.[1]) / 9525,
 }));
+// RR-72: the furniture pictures a slide shows from its layout or slide master, with the part each is drawn in (`path`).
+const liftedPictures = (entries, number) => shownFurnitureParts(entries, number).filter(shape => shape.on !== 'slide' && shape.xml.startsWith('<p:pic>'))
+  .flatMap(shape => pictures(shape.xml).map(picture => ({...picture, path: shape.path})));
+// `index` is a slide index, or the path of the layout or master a lifted picture is drawn in.
 const target = (entries, index, id) => {
-  const rel = slideRels(entries, index).match(new RegExp(`<Relationship Id="${id}"[^>]*>`))?.[0];
+  const rels = typeof index === 'string' ? decoder.decode(entries[index.replace(/([^/]+)$/, '_rels/$1.rels')]) : slideRels(entries, index);
+  const rel = rels.match(new RegExp(`<Relationship Id="${id}"[^>]*>`))?.[0];
   assert.ok(rel, `relationship ${id} on slide ${index}`);
   return {type: rel.match(/Type="([^"]+)"/)[1], part: `ppt/${rel.match(/Target="([^"]+)"/)[1].replace(/^\.\.\//, '')}`};
 };
@@ -76,7 +82,7 @@ async function assertNative(entries, index, picture, svgText, label, ours = true
   assert.ok(Math.max(png.width, png.height) <= 2304);
   const types = decoder.decode(entries['[Content_Types].xml']);
   assert.ok(/<Default Extension="svg" ContentType="image\/svg\+xml"\/>/.test(types) || types.includes(`PartName="/${svgPart.part}" ContentType="image/svg+xml"`), `${label}: svg content type registered`);
-  assert.equal(XMLValidator.validate(decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`])), true, `${label}: slide XML is well-formed`);
+  assert.equal(XMLValidator.validate(decoder.decode(entries[typeof index === 'string' ? index : `ppt/slides/slide${index + 1}.xml`])), true, `${label}: slide XML is well-formed`);
   return {png, svgPart, pngPart};
 }
 
@@ -134,9 +140,10 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const placed = body.find(item => item.svgEmbed && strFromU8(entries[target(entries, 1, item.svgEmbed).part]) === tallText);
   await assertNative(entries, 1, placed, tallText, 'placed image block');
   // The footer logo (generated image part) is native too, and a body image.
-  const footerLogos = body.filter(item => item !== placed && item.svgEmbed && item.name?.startsWith('OPF image'));
+  // RR-72: the footer logo is the same on both slides, so it is drawn once, on the slide master.
+  const footerLogos = [...body.filter(item => item !== placed && item.svgEmbed && item.name?.startsWith('OPF image')), ...liftedPictures(entries, 2)];
   assert.ok(footerLogos.length >= 2, 'footer logo and body image are native SVG pictures');
-  for (const picture of footerLogos) await assertNative(entries, 1, picture, wideText, `slide 2 ${picture.name}`);
+  for (const picture of footerLogos) await assertNative(entries, picture.path ?? 1, picture, wideText, `slide 2 ${picture.name}`);
   // One SVG part per distinct source: the wide logo appears on both slides and the footer, as one media part.
   const svgParts = Object.keys(entries).filter(part => part.endsWith('.svg'));
   const wideParts = svgParts.filter(part => strFromU8(entries[part]) === wideText);
@@ -151,7 +158,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   assert.equal(imported.slides[1].blocks.find(block => block.placement)?.image.src, tall);
   assert.deepEqual(reports.filter(item => /invalid|unsupported/.test(item.code)), [], 'no provenance complaint for SVG pictures');
   const rerun = await toPptx(imported, {...FIXED});
-  assert.equal(pictures(slideXml(unzipSync(rerun), 0)).filter(item => item.svgEmbed).length, 3, 're-export keeps the native SVG logo, watermark and footer logo on the cover');
+  const rerunEntries = unzipSync(rerun);
+  assert.equal([...pictures(slideXml(rerunEntries, 0)), ...liftedPictures(rerunEntries, 1)].filter(item => item.svgEmbed).length, 3, 're-export keeps the native SVG logo, watermark and footer logo on the cover');
   checked++;
 }
 
@@ -287,7 +295,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 {
   const enc = new TextEncoder();
   const relsOf = path => path.replace(/([^/]+)$/, '_rels/$1.rels');
-  const slideParts = entries => Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path));
+  // Slides, and the layouts and masters furniture drawn on every slide lives on (RR-72): PowerPoint renumbers them all.
+  const slideParts = entries => Object.keys(entries).filter(path => /^ppt\/(?:slides\/slide|slideLayouts\/slideLayout|slideMasters\/slideMaster)\d+\.xml$/.test(path));
   function powerpointSvgSave(bytes, {dropFallback}) {
     const entries = unzipSync(bytes);
     if (dropFallback) {

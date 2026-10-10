@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import { toSvg, resolvePresentation } from '@openpresentation/opf-render';
 import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
+import {relationshipPath, shownFurnitureParts} from './helpers/master-furniture.mjs';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
 // - the primary organization's logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
@@ -160,7 +161,11 @@ let checked = 0;
   const geometry = resolvePresentation(deck).slides[0].geometry;
   const parts = geometry.furniture.parts.filter(part => part.reference === 'var:organization.logo.icon');
   assert.equal(parts.length, 2);
-  const natives = pictures(slideXml(entries, 0)).filter(picture => /^OPF image \d+$/.test(picture.name));
+  // RR-72: both logos are the same on the two slides, so they are drawn once, on the slide master.
+  const shown = shownFurnitureParts(entries, 1).filter(shape => shape.xml.startsWith('<p:pic>'));
+  assert.deepEqual(shown.map(shape => shape.on), ['master', 'master'], 'header and footer logos are on the slide master');
+  assert.equal(pictures(slideXml(entries, 0)).length, 0, 'the slide does not repeat them');
+  const natives = shown.flatMap(shape => pictures(shape.xml).map(picture => ({...picture, path: shape.path})));
   assert.equal(natives.length, 2, 'header and footer logo pictures');
   const svg = toSvg(deck, 1, {trace: true});
   const previewImages = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="image"[^>]*>[\s\S]*?<\/g>/g)].map(match => drawn(imageTags(match[0])[0], sizes.get(icon)));
@@ -169,7 +174,7 @@ let checked = 0;
     const scale = Math.min(part.box.width / 120, part.box.height / 60);
     const native = natives.find(picture => Math.abs(picture.x - (part.box.x + (part.box.width - 120 * scale) / 2)) < 2 && Math.abs(picture.y - (part.box.y + (part.box.height - 60 * scale) / 2)) < 2);
     assert.ok(native, `${part.kind} logo native picture at its part box`);
-    assert.ok(sameBytes(mediaFor(entries, 0, native.embed), jpgBytes), 'the icon shape is embedded');
+    assert.ok(sameBytes(entries[relationshipPath(entries, native.path, native.embed)], jpgBytes), 'the icon shape is embedded');
   }
   // Pixel parity with the preview's image part: same fitted rectangle.
   for (const native of natives) assert.ok(previewImages.some(rect => ['x', 'y', 'w', 'h'].every(key => Math.abs(rect[key] - native[key]) <= 1)), 'native logo matches a preview logo rectangle');

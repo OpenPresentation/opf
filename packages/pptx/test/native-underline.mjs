@@ -7,6 +7,7 @@ import {unzipSync} from 'fflate';
 import {XMLParser, XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
 import {toPptx} from '../dist/index.js';
+import {shownFurniture} from './helpers/master-furniture.mjs';
 
 // Public exporter controls. No private converter calls or native Office claim.
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, trimValues:false});
@@ -75,8 +76,10 @@ for (const [name, slide] of shapes) {
 }
 test('linked furniture retains explicit native underline none', {skip:registryLane ? 'Published core 0.11 does not emit linked social furniture; current candidate/source lane is mandatory.' : false}, async () => {
   const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{left:{text:'{{organization.name}}'}, right:{socials:true}}}, slides:[{text:'Body'}]};
-  const {native} = await exportAndRetain('furniture-links', source);
-  const links = all(native, 'a:r').filter(run => run['a:rPr']?.['a:hlinkClick']);
+  const {entries} = await exportAndRetain('furniture-links', source);
+  // RR-72: a one-slide deck draws its furniture once, on the slide master: read what the slide shows.
+  const shown = parser.parse(`<shown>${shownFurniture(entries, 1).map(shape => shape.xml).join('')}</shown>`);
+  const links = all(shown, 'a:r').filter(run => run['a:rPr']?.['a:hlinkClick']);
   assert.ok(links.length > 0, 'Reach the linked furniture converter');
   for (const run of links) assert.equal(run['a:rPr'].u, 'none', 'Furniture explicitly suppresses hyperlink underline');
 });

@@ -101,8 +101,10 @@ try {
     assert.deepEqual(newer.design.footer?.right, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
     if (rich) {
       assert.deepEqual(newer.design.footer?.left, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.right, {image: 'var:organization.logo.icon'});
-      // The published importer reads the footer logo as the ordinary picture it is.
-      assert.ok(JSON.stringify(older.slides[0].design.footer.left).includes('data:image/png'), 'an older importer keeps the footer logo as an image');
+      // RR-72: the logos are the same on every slide, so they are drawn once, on the slide master. The published importer reads slide
+      // shapes only and ignores the manifest's `shared` entries: it reads the rest of the footer and no logo, without a complaint.
+      assert.ok(!JSON.stringify(older.slides[0].design.footer ?? {}).includes('data:image/png'), 'an older importer does not see the master logo');
+      assert.deepEqual(Object.keys(older.slides[0].design.footer).sort(), ['center', 'left', 'right']);
       assert.ok(!newer.slides[0].image && !newer.slides[0].blocks, 'the cover logo is not content');
       assert.equal(Array.isArray(newer.slides[2].items) ? newer.slides[2].items.length : newer.slides[2].blocks?.[0]?.items?.length, 3, 'picture-bullet entries import as a list');
     }

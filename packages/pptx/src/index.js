@@ -31,6 +31,7 @@ import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, r
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
+import {liftMasterFurniture} from './master-furniture.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeImages, importImages, imageName, imageOverlayName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS} from './image-provenance.js';
@@ -283,6 +284,8 @@ export async function toPptx(input, options = {}) {
   context.furnitureManifests = new Map();
   context.nativeFurniture = new Map();
   context.nativeFurnitureBands = new Map();
+  // RR-72: each slide's furniture parts and the object names of their shapes, for the slide master and layouts.
+  context.furnitureParts = [];
   context.hostDate = options.date;
   context.authored = authored;
   context.codeTags = new Map();
@@ -409,6 +412,19 @@ export async function fromPptx(input, options = {}) {
   // Layouts and the master are read once however many slides inherit a placeholder from them (RR-11).
   const cached = read => { const memo = new Map(); return path => { if (!memo.has(path)) memo.set(path, read(path)); return memo.get(path); }; };
   const cachedRelationships = cached(path => parseRelationships(entries, path)), cachedPart = cached(path => parseOptionalXml(entries, path));
+  // RR-72: the furniture a slide shows from its layout and slide master (src/master-furniture.js), read once per part.
+  const inheritedParts = new Map();
+  const inheritedPart = path => {
+    if (!path) return undefined;
+    if (!inheritedParts.has(path)) {
+      const element = /slideMaster/.test(path) ? 'p:sldMaster' : 'p:sldLayout', root = cachedPart(path)?.[element];
+      const tree = root?.['p:cSld']?.['p:spTree'];
+      inheritedParts.set(path, root ? {path, root, relationships: cachedRelationships(path), shapes: nativeTextShapes(tree), pictures: nativePictures(tree),
+        paragraphs: nativeShapeParagraphs(decodeText(entries[path]), element)} : undefined);
+    }
+    return inheritedParts.get(path);
+  };
+  const relatedPath = (path, type) => path ? [...cachedRelationships(path).values()].find(rel => rel.type === `http://schemas.openxmlformats.org/officeDocument/2006/relationships/${type}` && rel.targetMode !== 'External' && entries[rel.path])?.path : undefined;
   const furnitureContexts = slidePaths.map((slidePath, index) => {
     const root = parseRequiredXml(entries, slidePath)['p:sld'];
     if (!root) throw new OPFPptxError('invalid-pptx', `PPTX slide is not a PresentationML slide: ${slidePath}.`, {path: slidePath});
@@ -418,7 +434,12 @@ export async function fromPptx(input, options = {}) {
       path: slidePath, slideWidth: Number(presentationRoot['p:sldSz']?.cx), relationshipsOf: cachedRelationships, readPart: cachedPart,
       paragraphs: nativeShapeParagraphs(decodeText(entries[slidePath])),
       readPicture: picture => importPicture(entries, picture, slidePath, relationships,
-        diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`}))};
+        diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`})),
+      inherited: () => {
+        const layout = relatedPath(slidePath, 'slideLayout'), master = relatedPath(layout, 'slideMaster');
+        return Object.fromEntries([['layout', inheritedPart(layout)], ['master', inheritedPart(master)]].filter(([, part]) => part).map(([on, part]) => [on, {...part,
+          readPicture: picture => importPicture(entries, picture, part.path, part.relationships, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`}))}]));
+      }};
   });
   // Native sections (PowerPoint's own section list, `Default Section` = none) name each slide's `{{slide.section}}` for the footer text check
   // and, after the slides, are reconciled with the stored value in restoreDocumentProvenance.
@@ -2819,6 +2840,9 @@ function zoneBands(composeOptions) {
 const authoredFurniture = (context, slideIndex) => ({presentation: context.authored, slide: context.authored?.slides?.[slideIndex]});
 
 async function addFurniture(slide,presentation,source,layout,context,options,slideIndex) {
+  // RR-72: every slide is listed, a slide without furniture too (it may need a layout that hides the master's).
+  const drawn = [];
+  context.furnitureParts[slideIndex] = {path: `ppt/slides/slide${slideIndex + 1}.xml`, parts: drawn};
   if(!layout){
     if(['header','footer'].some(kind=>(source.design?.[kind]??presentation.design?.[kind])))throw new OPFPptxError('missing-furniture-layout','Header/footer export requires coordinated core furniture geometry.',{path:`slides.${slideIndex}.design`});
     const manifest = furnitureManifest(presentation, source, {parts: []}, slideIndex, undefined, undefined, authoredFurniture(context, slideIndex));
@@ -2829,11 +2853,14 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
   // RR-11: the first footer text, date and slide number that fit one line are native placeholders (src/native-furniture.js).
   const natives = nativeFurnitureParts(layout);
   for(const [index,part]of layout.parts.entries()){
+    const entry = {index, kind: part.kind, zone: part.zone, field: part.field, type: part.type, path: part.path, native: natives.has(index), names: []};
+    drawn.push(entry);
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
       // A logo reference draws the organization's asset: a source that cannot be drawn is reported where the asset is written.
       const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options);
       if (objectName) {
+        entry.names.push(objectName);
         context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
         // RR-71: a part drawn from a logo reference (var:organization.logo.icon) records its picture, so import can tell it is unchanged.
         if (part.reference !== undefined) context.furnitureImages.set(`ppt/slides/slide${slideIndex + 1}.xml|${part.kind}.${part.zone}`, objectName);
@@ -2858,6 +2885,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
         }
       }
       addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.mutedColor,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields,links:part.links});
+      entry.names.push(...part.fit.lines.map((line, number) => `OPF furniture ${slideIndex} part ${index} line ${number}`));
       if(natives.has(index)){
         const name=`OPF furniture ${slideIndex} part ${index} line 0`;
         context.nativeFurniture.set(name,natives.get(index));
@@ -3967,6 +3995,12 @@ async function normalizePptxZip(raw, context) {
       throw new OPFPptxError('packaging-failed', 'Slide masters for per-slide script fonts could not be written.', {cause: errorMessage(error)});
     }
     reportPerSlideNotesScriptFonts(context.scriptFonts, slideThemes);
+  }
+  // RR-72: furniture drawn the same on several slides moves to the slide master or a layout (src/master-furniture.js).
+  try {
+    liftMasterFurniture(output, context.furnitureParts, diagnostic => context.reportDiagnostic?.(diagnostic));
+  } catch (error) {
+    throw new OPFPptxError('packaging-failed', 'Header and footer furniture could not be written to the slide master and layouts.', {cause: errorMessage(error)});
   }
   finalizeFontsUsed(output);
   // Document references record evidence from the final normalized parts.

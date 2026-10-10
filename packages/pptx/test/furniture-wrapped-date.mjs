@@ -5,6 +5,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 import {validate} from '@openpresentation/opf';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {shownXml} from './helpers/master-furniture.mjs';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
 const source = {name: 'Wrapped generated date boundary', design: {fontScheme: 'roboto',
@@ -33,11 +34,14 @@ const changeTags = (entries, mutate) => Object.fromEntries(Object.entries(entrie
   path.startsWith('ppt/tags/') ? enc.encode(dec.decode(data).replace(/(<p:tag name="OPF_FURNITURE_V1" val=")([A-F0-9]+)("\/?>)/g,
     (all, start, value, end) => {const record = decode(value); mutate(record, path); return start + encode(record) + end;})) : data]));
 const editText = (entries, mutate) => Object.fromEntries(Object.entries(entries).map(([path, data]) => [path,
-  /^ppt\/slides\/slide[23]\.xml$/.test(path) ? enc.encode(mutate(dec.decode(data))) : data]));
+  // RR-72: the wrapped date is the same on both footer slides, so it is drawn once, on the slide master.
+  /^ppt\/(?:slides\/slide[23]|slideMasters\/slideMaster\d+|slideLayouts\/slideLayout\d+)\.xml$/.test(path) ? enc.encode(mutate(dec.decode(data))) : data]));
 const exported = await emit();
+// A slide manifest's parts, with those drawn on the slide master or a layout (RR-72: `shared`).
+const parts = record => [...(record.parts ?? []), ...Object.values(record.shared ?? {})];
 const markerCount = entries => Object.entries(entries).filter(([path]) => path.startsWith('ppt/tags/'))
   .flatMap(([, data]) => [...dec.decode(data).matchAll(/name="OPF_FURNITURE_V1" val="([A-F0-9]+)"/g)])
-  .map(match => decode(match[1])).flatMap(record => record.parts ?? []).filter(part => part.staticDate !== undefined).length;
+  .map(match => decode(match[1])).flatMap(record => [...(record.parts ?? []), ...Object.values(record.shared ?? {})]).filter(part => part.staticDate !== undefined).length;
 
 await test('measured wrapped baseline reports both static paths without native date fields or source mutation', () => {
   const resolved = resolvePresentation(source, options);
@@ -45,7 +49,7 @@ await test('measured wrapped baseline reports both static paths without native d
     const date = resolved.slides[index].geometry.furniture.parts.find(part => part.field === 'date');
     assert.deepEqual(date.fit.lines, ['September ', '22, 2026']);
     assert.deepEqual(date.fields, [{type: 'date', start: 0, end: 18, format: 'MMMM d, yyyy'}]);
-    const xml = dec.decode(exported.entries[`ppt/slides/slide${index + 1}.xml`]);
+    const xml = shownXml(exported.entries, index + 1);
     assert.doesNotMatch(xml, /type="datetime/);
     assert.equal([...xml.matchAll(/type="slidenum"/g)].length, 1);
   }
@@ -59,7 +63,7 @@ await test('unchanged full-mode wrapped dates recover generated source/format an
   assert.deepEqual(document.slides[0].design.footer, false);
   assert.equal(issues.filter(issue => issue.code === 'invalid-furniture-provenance').length, 0);
   const next = await emit(document, {date: '2027-04-23'});
-  const xml = dec.decode(next.entries['ppt/slides/slide2.xml']);
+  const xml = shownXml(next.entries, 2);
   assert.ok(xml.includes('April') && xml.includes('2027'));
   assert.ok(!xml.includes('September') && !xml.includes('2026'));
   assert.deepEqual(footer((await read(next.bytes)).document).center, source.design.footer.center);
@@ -73,7 +77,7 @@ await test('references-only/off export no fallback marker and do not regain gene
   }
 });
 await test('old or unmarked flattened dates stay literal', async () => {
-  const old = changeTags(exported.entries, record => record.parts?.forEach(part => delete part.staticDate));
+  const old = changeTags(exported.entries, record => parts(record).forEach(part => delete part.staticDate));
   assert.deepEqual(footer((await read(zipSync(old))).document).center, {date: 'September 22, 2026'});
 });
 for (const [label, mutate, expected] of [
@@ -92,7 +96,7 @@ for (const [label, mutate] of [
   ['format', marker => marker.format = 'M/d/yyyy'], ['fingerprint', marker => marker.fingerprints[0] = '0:0000000000000000'],
   ['extra words', marker => marker.text = 'September 22, 2026'], ['missing fingerprint', marker => marker.fingerprints.pop()],
 ]) await test(`damaged marker ${label} cannot restore generated intent`, async () => {
-  const changed = changeTags(exported.entries, record => record.parts?.forEach(part => {if (part.staticDate) mutate(part.staticDate);}));
+  const changed = changeTags(exported.entries, record => parts(record).forEach(part => {if (part.staticDate) mutate(part.staticDate);}));
   const {document, issues} = await read(zipSync(changed));
   assert.deepEqual(footer(document).center, {date: 'September 22, 2026'});
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'));
@@ -101,7 +105,8 @@ for (const [label, mutate] of [
   ['missing boundary', record => {delete record.boundary;}], ['damaged separator', record => record.separator = ' '],
   ['duplicate line', record => record.line = 0],
 ]) await test(`${label} conservatively retains ordinary native text`, async () => {
-  const changed = changeTags(exported.entries, record => {if (record.role === 'text' && record.part === 0) mutate(record);});
+  // RR-72: the date's lines are drawn once, on the slide master; their tags name the slot in place of a slide part.
+  const changed = changeTags(exported.entries, record => {if (record.role === 'text' && record.slot === 'footer.center.date') mutate(record);});
   const {document, issues} = await read(zipSync(changed));
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'));
   assert.ok(JSON.stringify(document).includes('September '));

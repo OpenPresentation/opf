@@ -5,6 +5,8 @@ import {attachFurnitureFields} from '../dist/furniture-fields.js';
 import {validate, schemas} from '@openpresentation/opf';
 import {SOCIAL_PLATFORMS} from '@openpresentation/opf/composition';
 import {resolvePresentation} from '@openpresentation/opf-render';
+import {readFile} from 'node:fs/promises';
+import {editEverywhere, shownXml, slideParts} from './helpers/master-furniture.mjs';
 
 // Generated socials furniture: every line is native text linked to its profile
 // URL, and re-import rebuilds organization.socials from the current lines.
@@ -14,12 +16,19 @@ const source = {organization, design: {footer: {left: {text: '{{organization.nam
 const read = async bytes => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validate(deck, {only: ['format']}).valid, true); return {deck, issues}; };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
 const slideXml = (entries, index = 1) => dec.decode(entries[`ppt/slides/slide${index}.xml`]);
-const shapeText = (entries, text, replacement) => { for (const index of [1, 2]) entries[`ppt/slides/slide${index}.xml`] = enc.encode(slideXml(entries, index).replace(`<a:t>${text}</a:t>`, `<a:t>${replacement}</a:t>`)); };
+// RR-72: lines drawn the same on both slides are written once, on the slide master; an edit there is every slide's.
+const shapeText = (entries, text, replacement) => editEverywhere(entries, xml => xml.replace(`<a:t>${text}</a:t>`, `<a:t>${replacement}</a:t>`));
+// The slide's relationships with its layout's and master's (lifted furniture links to its URLs from there).
+const shownRels = (entries, number = 1) => Object.values(slideParts(entries, number)).filter(Boolean).map(path => dec.decode(entries[path.replace(/([^/]+)$/, '_rels/$1.rels')] ?? new Uint8Array())).join('');
+// A picture bleeding off the right edge covers the right footer zone on both slides: the socials stay shapes on each slide, drawn above
+// it (furniture-on-slide), so the slides can disagree.
+const photo = `data:image/png;base64,${(await readFile(new URL('fixtures/images/wide.png', import.meta.url))).toString('base64')}`;
+const covered = {...source, slides: source.slides.map(slide => ({title: slide.title, blocks: [{text: 'Body'}, {image: photo, placement: {edge: 'right'}}]}))};
 
 const before = structuredClone(source), bytes = await toPptx(source);
 assert.deepEqual(source, before, 'Export leaves the source unchanged.');
 assert.deepEqual(await toPptx(source), bytes, 'Socials export is deterministic.');
-const entries = unzipSync(bytes), xml = slideXml(entries), rels = dec.decode(entries['ppt/slides/_rels/slide1.xml.rels']);
+const entries = unzipSync(bytes), xml = shownXml(entries, 1), rels = shownRels(entries);
 const shown = ['linkedin.com/company/acme', 'x.com/acme', 'bsky.app/profile/acme.bsky.social', 'Visit us', 'http://acme.example/profile'];
 for (const text of shown) assert.ok(xml.includes(`<a:t>${text}</a:t>`), text);
 for (const url of ['https://linkedin.com/company/acme', 'https://x.com/acme', 'https://bsky.app/profile/acme.bsky.social', 'http://acme.example/profile'])
@@ -30,10 +39,15 @@ assert.equal((xml.match(/<a:rPr [^>]*u="none"[^>]*>(?:(?!<\/a:rPr>).)*<a:hlinkCl
 
 // FA-31: no furniture part shows the organization's name any more ({{organization.name}} is resolved before export), so the profiles
 // belong to the organization the stored document record (FF-32) names by id. Without that record the lines stay ordinary current text.
+// RR-72: here the lines are drawn once, on the slide master, which an import without OPF provenance does not read (a plain PowerPoint
+// master); on slides they stay ordinary current text.
 const plain = await read(await toPptx(source, {provenance: false}));
 assert.equal(plain.deck.organization, undefined, 'No organization is rebuilt from the profile lines alone.');
-assert.ok(plain.issues.some(issue => issue.code === 'invalid-furniture-provenance' && /stored organization metadata/.test(issue.message)));
-assert.ok(JSON.stringify(plain.deck.slides).includes('x.com/acme'), 'The profile lines stay as current text.');
+assert.ok(!JSON.stringify(plain.deck).includes('x.com/acme'), 'Master lines of a file without provenance are not slide content.');
+const plainCovered = await read(await toPptx(covered, {provenance: false}));
+assert.equal(plainCovered.deck.organization, undefined);
+assert.ok(plainCovered.issues.some(issue => issue.code === 'invalid-furniture-provenance' && /stored organization metadata/.test(issue.message)));
+assert.ok(JSON.stringify(plainCovered.deck.slides).includes('x.com/acme'), 'The profile lines stay as current text.');
 // With provenance, unedited lines keep the authored form (a handle stays a handle).
 const {deck, issues} = await read(bytes);
 assert.deepEqual(deck.design.footer, source.design.footer, 'The organization token returns (drawn from the stored organization); the generated socials return as the flag.');
@@ -43,7 +57,7 @@ assert.ok(!issues.some(issue => issue.code === 'invalid-furniture-provenance'));
 for (const slide of deck.slides) assert.ok(!JSON.stringify(slide.blocks ?? []).includes('x.com/acme'), 'Social lines are not duplicated as body text.');
 // The re-imported deck exports the same visible profiles.
 const again = unzipSync(await toPptx(deck));
-for (const text of shown) assert.ok(slideXml(again).includes(`<a:t>${text}</a:t>`), text);
+for (const text of shown) assert.ok(shownXml(again, 1).includes(`<a:t>${text}</a:t>`), text);
 
 // Current native words win: an edited profile line becomes the new value.
 const edited = await read(modify(bytes, entries => shapeText(entries, 'x.com/acme', 'x.com/acme_news')));
@@ -53,10 +67,10 @@ assert.deepEqual(edited.deck.organization.socials, {...organization.socials, x: 
 const disagreeing = entries => { entries['ppt/slides/slide2.xml'] = enc.encode(slideXml(entries, 2).replace('<a:t>x.com/acme</a:t>', '<a:t>x.com/other</a:t>')); };
 const clearing = entries => shapeText(entries, 'Visit us', '');
 for (const [mutate, barePattern, storedPattern] of [[disagreeing, /stored organization metadata/, /social profile metadata disagrees/], [clearing, /social profile lines/, /social profile lines/]]) {
-  const bare = await read(modify(await toPptx(source, {provenance: false}), mutate));
+  const bare = await read(modify(await toPptx(covered, {provenance: false}), mutate));
   assert.equal(bare.deck.organization?.socials, undefined, String(barePattern));
   assert.ok(bare.issues.some(issue => issue.code === 'invalid-furniture-provenance' && barePattern.test(issue.message)), String(barePattern));
-  const stored = await read(modify(await toPptx(source), mutate));
+  const stored = await read(modify(await toPptx(covered), mutate));
   assert.deepEqual(stored.deck.organization, organization, `stored ${storedPattern}`);
   assert.ok(stored.issues.some(issue => issue.code === 'invalid-furniture-provenance' && storedPattern.test(issue.message)), String(storedPattern));
 }
@@ -106,7 +120,7 @@ assert.deepEqual((await read(await toPptx(keyed))).deck.organization.socials, {t
 const mixed = {organization: {id: 'acme', name: 'Acme', socials: {x: '@acme', threads: 'Visit us'}},
   design: {footer: {left: {text: '{{organization.name}}\nSlide {{slide.number}} of {{deck.slideCount}}'}, right: {socials: true, text: '{{slide.number}}'}}},
   slides: [{text: 'One'}, {text: 'Two'}]};
-const mixedBytes = await toPptx(mixed), mixedXml = slideXml(unzipSync(mixedBytes), 2);
+const mixedBytes = await toPptx(mixed), mixedXml = shownXml(unzipSync(mixedBytes), 2);
 assert.ok(/<a:fld [^>]*type="slidenum"[^>]*>(?:(?!<\/a:fld>).)*<a:t>2<\/a:t><\/a:fld>/.test(mixedXml), 'Live slide-number field.');
 assert.ok(mixedXml.includes('<a:t>Slide </a:t>') && mixedXml.includes('<a:t> of 2</a:t>'), 'Fixed text around the field.');
 assert.ok(/<a:hlinkClick [^>]*>(?:(?!<\/a:r>).)*<\/a:rPr><a:t>x\.com\/acme<\/a:t>/.test(mixedXml), 'Linked profile line.');
@@ -117,9 +131,10 @@ assert.ok(mixedXml.includes('<a:t>Visit us</a:t>'));
   assert.deepEqual(back.organization.socials, mixed.organization.socials);
   assert.ok(!mixedIssues.some(issue => issue.code === 'invalid-furniture-provenance'), JSON.stringify(mixedIssues));
   // Without the stored record the socials are ordinary text (see above); the slide-number fields still import as tokens in a native footer.
+  // (Here the socials are the same on both slides, so they are drawn once, on the slide master, which a plain import does not read.)
   const bare = await read(await toPptx(mixed, {provenance: false}));
   assert.equal(bare.deck.organization, undefined);
-  assert.ok(bare.issues.some(issue => issue.code === 'invalid-furniture-provenance' && /stored organization metadata/.test(issue.message)));
+  assert.ok(!JSON.stringify(bare.deck).includes('x.com/acme'));
 }
 // A single line that is both linked and holds a field keeps the link on every run
 // and on the field: attachFurnitureFields reuses the line's run properties.

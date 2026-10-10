@@ -3,9 +3,11 @@
 OPF footers compile into PowerPoint's own Header & Footer objects: the footer text, the date and the slide number
 are real `ftr`, `dt` and `sldNum` placeholders on the slide, with matching placeholders on the slide master and layout
 and `p:hf` flags, so Insert > Header & Footer shows the right state and "Apply to All" works
-([core issue 87](https://github.com/OpenPresentation/opf/issues/87)). Parts PowerPoint has no object for stay the
-ordinary tagged shapes the exporter has always written (`OPF_FURNITURE_V1`, see the README furniture section).
-The geometry is core's and does not move: preview, export and the parity harness agree.
+([core issue 87](https://github.com/OpenPresentation/opf/issues/87)). Parts PowerPoint has no object for are the
+ordinary tagged shapes the exporter has always written (`OPF_FURNITURE_V1`, see the README furniture section); since
+RR-72 one that is drawn the same on two or more slides is written once, on the slide master or a layout
+([Master furniture](#master-furniture-rr-72)). The geometry is core's and does not move: preview, export and the parity
+harness agree.
 
 ## Mapping
 
@@ -20,8 +22,8 @@ speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no pe
 | `footer.<zone>.text` without a `{{slide.number}}` (the first one, one accepted line) | **Footer placeholder** (`ftr`, layout idx 11) | The dialog's Footer text. |
 | `footer.<zone>.date` (the first one, one line) | **Date placeholder** (`dt`, idx 10) | `date: true` with an en-US pattern is a live `datetime1`-`datetime7` field ("Update automatically"); a fixed or literal date, or a pattern with no field type, is fixed text ("Fixed"). |
 | `footer.<zone>.text` with a `{{slide.number}}` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | Each substituted number is a live `slidenum` field; the words around it (`Page `, ` of 12`) and a `{{deck.slideCount}}` or `{{slide.section}}` value are fixed runs. |
-| every header part (text, socials, date, image) | ordinary tagged shapes | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape. |
-| footer socials, image (a logo reference included) | ordinary tagged shapes | No native object. |
+| every header part (text, socials, date, image) | ordinary tagged shapes, on the slide master or a layout when repeated (RR-72) | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape, which stays on each slide. |
+| footer socials, image (a logo reference included) | ordinary tagged shapes, on the slide master or a layout when repeated (RR-72) | No native object. |
 | a second footer text, date or text with a slide number in another zone | ordinary tagged shapes | One placeholder per type per slide; the second keeps its live fields. |
 | footer text, date or number text that breaks or wraps over several lines | ordinary tagged shapes (one per line) | A placeholder is one shape; core's accepted lines are never re-wrapped by PowerPoint. A `{{slide.number}}` that fits one of the lines is still a live field. |
 | empty footer text | ordinary tagged shape | |
@@ -40,6 +42,39 @@ narrow placeholder at the right of the logo. The master and layout placeholders 
 core gives a lone part in that zone, `left` `.07`, `center` `.37`, `right` `.67` of the width, `.26` wide), at the edge the part is aligned to,
 so a footer added through the dialog fits any text. On import, a placeholder's zone is still the third its centre falls in, which is the
 zone the row sits in. A row too wide for its zone is a `text-overflow` diagnostic from core.
+
+## Master furniture (RR-72)
+
+A furniture part with no placeholder (a zone image or logo, socials, header text, a footer text or date that is not the native
+one, multi-line text) that is drawn the same on two or more slides is written once, on the slide master or a layout, instead of on
+each slide (`src/master-furniture.js`). RR-11's `ftr`, `dt` and `sldNum` placeholders, the master and layout placeholders and `p:hf`
+do not change.
+
+* **The same.** The part's shapes have the same XML on those slides (text, runs and fields, box, style, picture crop, alt text),
+  apart from the object id, the name and the tags, with each relationship compared by its target (the embedded picture bytes, the
+  link URL). A logo reference that resolves to an `onLight` asset on light slides and an `onDark` one on dark slides is two values.
+* **Where.** A part drawn the same on every slide that shows such furniture goes on the slide master. A part shared by two or more
+  slides but not by all of them goes on a layout: each distinct set of such parts gets its own layout, a copy of the master's layout
+  with RR-11's three placeholders and `p:hf`, named `OPF furniture 1`, `OPF furniture 2`, ..., so a logo with `onLight`/`onDark`
+  variants has one layout per background tone and a section's header text one layout per section. A slide that does not show every
+  part on the master (its footer hidden, `design.footer: false`) uses a layout with `showMasterSp="0"` (PowerPoint's Hide
+  Background Graphics), carrying whatever shared parts it does show, or none (`OPF no furniture`). A slide that shows exactly the
+  master's parts stays on the master's own layout. Lifted shapes are named `OPF furniture <kind> <zone> <field>[ line N]`.
+* **What stays on the slide.** A part drawn on one slide only (nothing repeats; a one-slide deck keeps all its furniture on the slide),
+  a part with a live field (a header `{{slide.number}}` or a current date outside the native placeholders: the cached value is the
+  slide's own) and a part that slide content overlaps. PowerPoint draws master and layout shapes beneath every slide shape, while
+  core composes furniture above content and opf-render paints it last, so where a picture (a placed image bleeding to the edge, an
+  image overlay, a watermark) covers the part's box it stays on that slide, drawn above the content as in the preview, and that slide's
+  layout hides the master's copy; `furniture-on-slide` names the part and the slides.
+* **Per-script masters** (opf-pptx#168): each slide master is planned on its own, with its own slides.
+* **Provenance.** A lifted shape keeps its `OPF_FURNITURE_V1` tag, with `slot` (`footer.left.image`) in place of the slide's `group`
+  and `part`. Each slide manifest moves the part into `shared` (keyed by slot: its `parts` entry, `on: "master"` or `"layout"`, the
+  definition's flag, and its stored `templates` text or `images` logo reference), and the remaining slide parts are renumbered.
+  Importers before 0.18 read slide shapes only: they ignore `shared` and read the rest of each slide's furniture without a
+  complaint (`test/provenance-interop.mjs` runs published 0.11.6), so they do not see a master or layout part.
+* Measured over the 127 bundled core examples against the previous output: 81 decks move furniture off their slides (151 shapes
+  onto slide masters, 83 onto 83 added layouts); every one of the 127 imports to the same document as before, and no diagnostic is
+  added. No geometry changes.
 
 ## Master, layout, notes master, presentation
 
@@ -68,7 +103,22 @@ zone the row sits in. A row too wide for its zone is a `text-overflow` diagnosti
 
 ## Import
 
-`fromPptx` reads native placeholders back whether or not OPF tags are present.
+`fromPptx` reads native placeholders back whether or not OPF tags are present. Furniture on the slide master or a layout (RR-72)
+is read where the slide manifest says it is:
+
+* A `shared` part is read from the slide's layout or master, matched by its slot tag, exactly as a slide shape: a logo picture that
+  still embeds the bytes export drew returns as its `var:organization.logo.*` reference, on every slide that shows it; text returns
+  with its stored template while the words still match the slide.
+* PowerPoint edits: a part deleted on the master or layout is removed from every slide that showed it (intent, as when the dialog
+  removes a placeholder: the slides agree, so the deck's design loses it); Hide Background Graphics on a slide, or the slide moved to a
+  layout without the part, removes it from that slide (the slide becomes its own override); Change Picture on the master imports the
+  new picture as an ordinary image. A damaged tag on a master or layout shape is `invalid-furniture-provenance`, and that part's
+  current words (or picture) stay its value as literal text, since master shapes are never slide content.
+* **Third-party masters.** Shapes on a slide master or layout without OPF provenance are template decoration and are not read, as
+  before RR-72: a picture or text on a master PowerPoint or another tool wrote imports neither as slide content nor as header or
+  footer furniture (only the `dt`, `ftr` and `sldNum` placeholders are read, below). A tag-stripped OPF export is such a file: its
+  master and layout furniture is not read back. (Furniture tags are written whatever the `provenance` option, so `provenance: false`
+  exports still read it.)
 
 * **With provenance** the tagged placeholder is read like the tagged shape it replaces, so the footer returns exactly
   (zones, formats, scope). The manifest's `ph` marks a part PowerPoint can remove: when the dialog deletes it, the part is
@@ -145,14 +195,35 @@ zone the row sits in. A row too wide for its zone is a `text-overflow` diagnosti
     layout placeholder spans the zone, so Reset or a newly added footer does not clip a longer text.
 14. (RR-71) A logo reference in a zone `image` is written into the slide manifest (`images`) with the content key of the embedded bytes and
     returns as the reference only while the picture still embeds them and the stored organization has a logo for it. Replacing the
-    picture in PowerPoint therefore imports the new picture, not the reference. Furniture that has no placeholder and is the same on every
-    slide (a logo) is still written per slide here; moving it to the slide master is RR-72.
+    picture in PowerPoint therefore imports the new picture, not the reference. (RR-72 writes a logo drawn on several slides once, on
+    the master or a layout; its manifest entry moves into `shared` with the part.)
+15. (RR-72) The master holds the parts that are the same on every slide that shows such furniture, layouts the sets shared by some.
+    The alternative, the master holding the most common value with other slides on layouts that hide it, would put a tone's logo on the
+    master and every other tone on a `showMasterSp="0"` layout that repeats the master's other parts; one rule per part is easier to
+    edit in Slide Master view.
+16. (RR-72) A part drawn on one slide only stays on that slide, a one-slide deck included: nothing repeats, a layout for one slide
+    gains nothing, and the shape stays where a user editing that slide looks for it. The cost: a slide added in PowerPoint to a
+    one-slide deck does not get the furniture.
+17. (RR-72) Furniture under slide content stays on that slide (`furniture-on-slide`), so PowerPoint paints it above the content as
+    the preview does. A shape whose box overlaps the part's box counts even where its ink does not: the check is on boxes, not ink.
+18. (RR-72) A part with a live field stays on each slide: its cached value is the slide's, and whether PowerPoint evaluates a field in
+    a master text box per slide is not part of the native evidence.
+19. (RR-72) The manifest stores a lifted part under `shared` instead of marking it in `parts`, so the released importers, which
+    validate `parts` and `definitions` strictly, keep reading the rest of the slide's furniture instead of rejecting the band.
+20. (RR-72) Shapes on a third-party master or layout stay unread (a picture there is ignored, not imported as an image): they are
+    template decoration, and reading them would put a corporate template's logo into every imported deck's design.
+21. (RR-72) The row baseline is not changed. In RR-71's row zones each part is centred on the row's tallest part (the logo, 36 px at a
+    720 px short edge), so row text sits about 6 px below single-part text in the same band. Putting row text on the single-part
+    baseline leaves the logo 6 px above it: in the header the logo moves into the slide's top margin and `headerBottom` changes, in the
+    footer the band's top (`footerTop`, the body's lower bound) moves up or the logo crosses into the body gap. Either moves more than the
+    multi-part zones (the body of every slide with a logo row), so it is left to a core composition decision.
 
 ## Not covered
 
-PowerPoint opening, editing and re-saving these files is a native check (`scratchpad/rr-11-native/manifest.json`), not
-something the unit tests establish. Moving a layout placeholder in PowerPoint does not move slides that carry their own
-`a:xfrm`. Handout master and `hdr` text on notes pages are not produced.
+PowerPoint opening, editing and re-saving these files is a native check (`scratchpad/rr-11-native/manifest.json`, and for
+RR-72 the decks the furniture session hands to the native pass), not something the unit tests establish. Moving a layout
+placeholder in PowerPoint does not move slides that carry their own `a:xfrm`. Handout master and `hdr` text on notes pages are
+not produced. A shape added to a master or layout in PowerPoint (no OPF tag) is not imported.
 
 ## Tests
 
@@ -161,3 +232,8 @@ presentation), geometry parity with core (measured and estimated fonts), the par
 inherited placeholders written the way PowerPoint writes them, older tagged exports, and determinism. `test/slide-variables.mjs`
 covers the `{{slide.number}}`, `{{deck.slideCount}}` and `{{slide.section}}` forms: native field plus fixed words, body tokens as
 fixed text, consecutive numbers on a paginated deck, the tokens through a round trip and third-party footers.
+`test/master-furniture.mjs` (RR-72) covers the master and layout parts: the logo once on the master and not on the slides, per-tone
+layouts and a one-slide tone, hidden footers, a slide's own header, content over the logo, live fields, the round trip of
+`var:organization.logo.icon` on every slide, master edits (delete, Change Picture, Hide Background Graphics, damaged tags), an
+older importer's view without `shared`, third-party masters and per-script masters. `test/helpers/master-furniture.mjs` reads the
+furniture a slide shows (its own, its layout's, its master's) for the other furniture tests.

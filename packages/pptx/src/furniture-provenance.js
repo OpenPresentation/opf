@@ -205,6 +205,29 @@ function readTags(container, relationships, entries) {
     ambiguous: unreadable || tags.filter(tag => /^OPF_/i.test(tag.name) && tag.name.toUpperCase() !== SLIDE_TAG).length !== 1};
 }
 
+// RR-72: a part written once on the slide master or a layout is stored under `shared` (keyed by slot, with `on`, the definition's
+// flag and its text template or logo reference), so importers that read only slide shapes ignore it. Put it back in place, as a
+// part marked `on`, before the manifest is validated as one record.
+function withSharedParts(manifest) {
+  if (manifest?.shared === undefined) return manifest;
+  check(object(manifest.shared) && object(manifest.definitions) && Array.isArray(manifest.parts), 'Invalid shared furniture.');
+  const result = {...manifest, definitions: structuredClone(manifest.definitions), parts: [...manifest.parts],
+    ...(manifest.templates ? {templates: {...manifest.templates}} : {}), ...(manifest.images ? {images: {...manifest.images}} : {})};
+  delete result.shared;
+  for (const [slot, entry] of Object.entries(manifest.shared)) {
+    check(object(entry) && ['master', 'layout'].includes(entry.on) && slot === key(entry) && entry.ph === undefined, 'Invalid shared furniture part.');
+    const {on, flag, template, image, ...part} = entry;
+    const zone = result.definitions[entry.kind]?.value?.[entry.zone];
+    check(object(zone) && zone[entry.field] === undefined && flag !== undefined, 'Invalid shared furniture part.');
+    zone[entry.field] = flag;
+    const place = `${entry.kind}.${entry.zone}`;
+    if (template !== undefined) { check(entry.field === 'text' && result.templates?.[place] === undefined, 'Invalid shared furniture text.'); (result.templates ??= {})[place] = template; }
+    if (image !== undefined) { check(entry.field === 'image' && result.images?.[place] === undefined, 'Invalid shared furniture image.'); (result.images ??= {})[place] = image; }
+    result.parts.push({...part, on});
+  }
+  return result;
+}
+
 function validateManifest(manifest) {
   check(manifest?.v === 1 && manifest.role === 'slide' && /^\d{1,10}$/.test(manifest.group), 'Invalid slide identity.');
   check(object(manifest.definitions) && Object.keys(manifest.definitions).length > 0 && Object.keys(manifest.definitions).every(kind => kinds.includes(kind)), 'Invalid furniture definitions.');
@@ -258,6 +281,8 @@ function validateManifest(manifest) {
     check(object(part) && expected.get(key(part)) === part.type, 'Ambiguous furniture part.');
     check(Number.isSafeInteger(part.count) && part.count >= 1 && part.count <= 10000 && (part.type !== 'image' || part.count === 1), 'Invalid furniture line count.');
     // RR-11: a footer part that is a native PowerPoint placeholder (dt, ftr, sldNum), unique per slide.
+    // RR-72: a part drawn once on the slide master or a layout.
+    check(part.on === undefined || (['master', 'layout'].includes(part.on) && part.ph === undefined), 'Invalid shared furniture part.');
     if (part.ph !== undefined) check(isNativePlaceholderType(part.ph) && part.kind === 'footer' && part.type === 'text' && part.count === 1 &&
       NATIVE_PLACEHOLDERS[part.ph].field === part.field && manifest.parts.filter(other => other.ph === part.ph).length === 1, 'Invalid native placeholder part.');
     if (part.field === 'socials') check(Array.isArray(part.socials) && part.socials.length >= 1 && part.socials.length <= 100
@@ -299,8 +324,37 @@ function importedZoneText(text, nativeFields, template, position) {
   return slideNumberTemplate(text, nativeFields);
 }
 
+// RR-72: the tagged furniture shapes of the slide's layout and master, by `on` and slot, and whether the slide shows them: a slide
+// whose "Hide background graphics" is on (showMasterSp="0") shows neither; a layout with it hides the master's.
+function inheritedRecords(context, entries) {
+  const inherited = context.inherited?.() ?? {};
+  const records = new Map(), damaged = {};
+  for (const on of ['layout', 'master']) {
+    const source = inherited[on];
+    if (!source) continue;
+    for (const [type, nodes, properties] of [['text', source.shapes, 'p:nvSpPr'], ['image', source.pictures, 'p:nvPicPr']]) {
+      for (const [index, node] of nodes.entries()) {
+        const container = node[properties]?.['p:nvPr']?.['p:custDataLst'];
+        const result = readTags(container, source.relationships, entries);
+        // A tag that cannot be read (a missing part, two identities) leaves the part's shape unknown: that is damage, not a removal.
+        if (array(container?.['p:tags']).length && result.tags.length !== 1 && result.ambiguous) damaged[on] = true;
+        for (const tag of result.tags) {
+          let data;
+          try { data = decodeTextTag(tag.val); } catch { damaged[on] = true; continue; }
+          if (result.ambiguous || data?.v !== 1 || typeof data.slot !== 'string' || data.role !== type) { damaged[on] = true; continue; }
+          const slot = `${on}|${data.slot}`;
+          records.set(slot, [...(records.get(slot) ?? []), {type, index, data}]);
+        }
+      }
+    }
+  }
+  const hiddenSlide = context.root?.showMasterSp === '0' || context.root?.showMasterSp === 'false';
+  const hiddenLayout = inherited.layout?.root?.showMasterSp === '0' || inherited.layout?.root?.showMasterSp === 'false';
+  return {sources: inherited, records, damaged, hidden: {layout: hiddenSlide, master: hiddenSlide || hiddenLayout}};
+}
+
 function readSlide(context, entries, slideIndex, slideCount, report, taggedText, section, draw, logoOwner) {
-  const {root, shapes, paragraphs, pictures, relationships, readPicture} = context;
+  const {root, shapes, pictures, relationships} = context;
   const candidates = {};
   const records = [];
   let invalidRecord = false;
@@ -319,13 +373,14 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
   let manifest;
   try {
     check(!tags.ambiguous && tags.tags.length === 1 && !invalidRecord, 'Missing or ambiguous furniture manifest/shape tags.');
-    manifest = decodeTextTag(tags.tags[0].val);
+    manifest = withSharedParts(decodeTextTag(tags.tags[0].val));
     validateManifest(manifest);
     for (const record of records) {
       const data = record.data, part = manifest.parts[data?.part];
       check(data?.v === 1 && data.group === manifest.group && Number.isSafeInteger(data.part) && part && data.role === record.type && part.type === record.type, 'Unmatched furniture identity.');
     }
   } catch (error) { report(slideIndex, error.message); return candidates; }
+  const inherited = manifest.parts.some(part => part.on) ? inheritedRecords(context, entries) : undefined;
   for (const kind of kinds) {
     const definition = manifest.definitions[kind];
     if (!definition) continue;
@@ -343,23 +398,34 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
       }
       for (const [partIndex, part] of manifest.parts.entries()) {
         if (part.kind !== kind) continue;
-        const group = records.filter(record => record.data.part === partIndex);
+        // A part on the master or a layout is read there; the slide's own shapes otherwise.
+        const source = part.on ? inherited.sources[part.on] : context;
+        const group = part.on ? (inherited.hidden[part.on] || !source ? [] : inherited.records.get(`${part.on}|${key(part)}`) ?? []) : records.filter(record => record.data.part === partIndex);
+        const {paragraphs, relationships} = source ?? context;
         const logo = part.type === 'image' ? manifest.images?.[`${kind}.${part.zone}`] : undefined;
         // The picture of a logo reference could not be embedded at export: the reference is all there is.
         if (logo?.drawn === false && group.length === 0) { value[part.zone].image = logo.reference; continue; }
         // A native placeholder PowerPoint's Header & Footer dialog removed is a deliberate removal, not damage.
         if (part.ph !== undefined && group.length === 0) { removedNative = true; continue; }
+        // So is a master or layout part the slide no longer shows (deleted there, another layout, or the slide's background graphics hidden).
+        if (part.on !== undefined && group.length === 0) {
+          check(inherited.hidden[part.on] || !inherited.damaged[part.on], 'Damaged furniture tags on the slide master or layout.');
+          removedNative = true;
+          continue;
+        }
+        try {
         check(group.length === part.count, 'Incomplete or duplicated furniture part.');
         if (part.type === 'image') {
           // An unchanged picture of an organization logo returns as its reference (the organization is stored with its logo, and the
           // picture still embeds the bytes export drew); an edited, replaced or foreign one is an ordinary image.
-          if (logo && logoOwner(logo.reference) && logo.media !== undefined && logo.media === pictureKey(pictures[group[0].index], relationships, entries)) value[part.zone].image = logo.reference;
+          const picture = source.pictures[group[0].index];
+          if (logo && logoOwner(logo.reference) && logo.media !== undefined && logo.media === pictureKey(picture, relationships, entries)) value[part.zone].image = logo.reference;
           else {
-            const current = readPicture(pictures[group[0].index]);
+            const current = source.readPicture(picture);
             check(current?.kind === 'image', 'Furniture image is no longer recoverable.');
             value[part.zone].image = current.payload.image;
           }
-          candidate.pictures.push(group[0].index);
+          if (!part.on) candidate.pictures.push(group[0].index);
         } else {
           const ordered = Array(part.count);
           for (const record of group) {
@@ -375,7 +441,20 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
             candidate.socials.push({id: manifest.organizationId, socials: Object.fromEntries(part.socials.map((line, index) => [line.platform, line.scheme + lines[index]]))});
           }
           value[part.zone][part.field] = part.field === 'text' ? importedZoneText(text, orderedFields(ordered, paragraphs), manifest.templates?.[`${kind}.${part.zone}`], {index: slideIndex, count: slideCount, section, draw}) : part.field === 'date' ? importedDate(definition.value[part.zone].date, format, text, ordered.flatMap(record => (paragraphs[record.index] ?? []).flatMap(paragraph => paragraph.fields ?? [])), value[part.zone], part.staticDate, ordered, paragraphs, message => report(slideIndex, `${kind}.${part.zone}.date: ${message}`)) : true;
-          candidate.text.push(...ordered.map(record => record.index));
+          if (!part.on) candidate.text.push(...ordered.map(record => record.index));
+        }
+        } catch (error) {
+          // A part on the slide master or a layout is never slide content: when its record no longer reads, its current words (or
+          // picture) stay the part's value, as literal text, and the damage is reported.
+          if (!part.on) throw error;
+          report(slideIndex, `${kind}.${part.zone}.${part.field}: ${error.message} The current ${part.type === 'image' ? 'picture' : 'words'} on the slide master or layout are kept.`);
+          if (part.type === 'image') {
+            const current = source.readPicture(source.pictures[group[0].index]);
+            if (current?.kind === 'image') value[part.zone].image = current.payload.image;
+          } else if (part.field !== 'socials') {
+            const lines = [...group].sort((a, b) => (Number.isSafeInteger(a.data.line) ? a.data.line : 0) - (Number.isSafeInteger(b.data.line) ? b.data.line : 0) || a.index - b.index);
+            value[part.zone][part.field] = lines.map(record => (paragraphs[record.index] ?? []).map(paragraph => paragraph.text).join('\n')).join('\n');
+          }
         }
       }
       check(new Set(candidate.text).size === candidate.text.length && new Set(candidate.pictures).size === candidate.pictures.length, 'Repeated furniture shape identity.');

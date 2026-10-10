@@ -5,6 +5,7 @@ import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {validate} from '@openpresentation/opf';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
+import {editEverywhere} from './helpers/master-furniture.mjs';
 
 const fonts = await loadFonts({pack: 'office'}), enc = new TextEncoder(), dec = new TextDecoder();
 const literal = '  Native header\twords\r\nsecond line  \r\n';
@@ -88,24 +89,28 @@ assert.equal(missingDisabled.design.header, undefined, 'Missing false marker can
 assert.equal(effective(missingDisabled, 0, 'header'), undefined);
 assert.equal(effective(missingDisabled, 2, 'header').left.text, 'Inherited');
 
-const fixture = {design: {fontScheme: 'roboto', header: {left: {text: literal}}, footer: {right: {text: '{{slide.number}}'}}}, slides: [
+// RR-72: furniture drawn the same on several slides is written once, on the slide master (test/master-furniture.mjs has its edit and
+// damage controls). A live slide number keeps this header a shape on each slide, so the per-slide edits and damage below act on slide shapes.
+const numbered = `${literal}Page {{slide.number}}`;
+const fixture = {design: {fontScheme: 'roboto', header: {left: {text: numbered}}, footer: {right: {text: '{{slide.number}}'}}}, slides: [
   {title: 'First', text: 'First body'}, {title: 'Second', text: 'Second body'},
 ]};
 const bytes = await exportDeck(fixture);
 const changed = (await read(modify(bytes, entries => xml(entries, content => content.replace('Native header', 'Edited header'))))).deck;
-assert.equal(effective(changed, 0, 'header').left.text, literal.replace('Native header', 'Edited header'));
-assert.equal(effective(changed, 1, 'header').left.text, literal);
+assert.equal(effective(changed, 0, 'header').left.text, numbered.replace('Native header', 'Edited header'));
+assert.equal(effective(changed, 1, 'header').left.text, numbered);
 assert.equal(changed.design.header, undefined, 'Disagreeing current literals stay local.');
 const cleared = (await read(modify(bytes, entries => xml(entries, content => furnitureShapes(content, shape => shape.includes('part 0 line') ? shape.replace(/<a:t>[\s\S]*?<\/a:t>/g, '<a:t></a:t>') : shape))))).deck;
-assert.equal(effective(cleared, 0, 'header').left.text, '\r\n\r\n');
+// The words are gone; the native slide-number field is still there, so it stays a field.
+assert.equal(effective(cleared, 0, 'header').left.text, '\r\n\r\n{{slide.number}}');
 assert.ok(!JSON.stringify(cleared.slides[0]).includes('Native header'));
 const renamed = (await read(modify(bytes, entries => xml(entries, content => content.replace(/name="OPF furniture [^"]+"/g, 'name="Renamed by the user"'))))).deck;
-assert.equal(renamed.design.header.left.text, literal, 'Roles rely on tags, not current shape names.');
+assert.equal(renamed.design.header.left.text, numbered, 'Roles rely on tags, not current shape names.');
 const shapesReordered = (await read(modify(bytes, entries => xml(entries, content => {
   const shapes = [...content.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]);
   return content.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, () => shapes.pop());
 })))).deck;
-assert.equal(shapesReordered.design.header.left.text, literal);
+assert.equal(shapesReordered.design.header.left.text, numbered);
 const slidesReordered = await read(modify(bytes, entries => {
   const path = 'ppt/presentation.xml', content = dec.decode(entries[path]);
   const ids = [...content.matchAll(/<p:sldId\s[^>]+\/>/g)].map(match => match[0]);
@@ -113,7 +118,7 @@ const slidesReordered = await read(modify(bytes, entries => {
   entries[path] = enc.encode(content.replace(/<p:sldId\s[^>]+\/>/g, () => ids.pop()));
 }));
 assert.equal(slidesReordered.deck.slides[0].title, 'Second');
-assert.equal(slidesReordered.deck.design.header.left.text, literal);
+assert.equal(slidesReordered.deck.design.header.left.text, numbered);
 // A moved slide keeps its live slide-number field: the cached number is stale until PowerPoint refreshes it, and the field still
 // imports as {{slide.number}} (it renumbers in PowerPoint), so reordering neither invalidates the footer nor leaks a number into the body.
 for (const index of [0, 1]) {
@@ -139,7 +144,7 @@ const corruptions = {
 for (const [name, mutate] of Object.entries(corruptions)) {
   const {deck, issues} = await read(modify(bytes, mutate));
   assert.equal(effective(deck, 0, 'header'), undefined, `${name}: ambiguous furniture is not consumed`);
-  assert.equal(effective(deck, 1, 'header').left.text, literal, `${name}: valid slides remain recoverable`);
+  assert.equal(effective(deck, 1, 'header').left.text, numbered, `${name}: valid slides remain recoverable`);
   for (const word of ['Native header', 'words', 'second line', 'First body']) assert.ok(JSON.stringify(deck.slides[0]).includes(word), `${name}: current ${word}`);
   assert.ok(!JSON.stringify(deck).includes('STALE_INJECTED_WORDS'), name);
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'), name);
@@ -153,7 +158,8 @@ assert.ok(!JSON.stringify(clearedNumber.slides[0]).includes('PowerPoint shape:')
 // The slide that still agrees keeps the token.
 assert.deepEqual(effective(clearedNumber, 1, 'footer'), fixture.design.footer);
 
-const imageSource = {design: {fontScheme: 'roboto', header: {left: {image, text: 'Image label'}}}, slides: [{title: 'Picture', text: 'Body'}]};
+// RR-72: the picture is this slide's own (the other slide's header differs), so it stays a shape on the slide.
+const imageSource = {design: {fontScheme: 'roboto', header: {left: {image, text: 'Image label'}}}, slides: [{title: 'Picture', text: 'Body'}, {title: 'Other', text: 'Body', design: {header: {left: {text: 'Other header'}}}}]};
 const imageBytes = await exportDeck(imageSource), replacement = await readFile(new URL('fixtures/images/tall.png', import.meta.url));
 const imageChanged = (await read(modify(imageBytes, entries => {
   const file = Object.keys(entries).find(path => /^ppt\/media\/.*\.png$/.test(path));
@@ -186,15 +192,12 @@ assert.deepEqual(unchanged.organization, metadata.organization);
 assert.deepEqual(unchanged.design.header, metadata.design.header, 'The organization token returns while the stored organization draws the same words.');
 assert.deepEqual(unchanged.design.footer, metadata.design.footer);
 assert.deepEqual(unchanged.slides.map(slide => slide.section), ['First section', 'Second section']);
-const organizationChanged = (await read(modify(metadataBytes, entries => {for (const i of [1, 2]) xml(entries, content => content.replace('Original organization', 'Current organization'), i);}))).deck;
+// RR-72: the organization line is the same on both slides, so it is drawn once, on the slide master; an edit there is every slide's.
+// (Disagreeing per-slide words stay local: the `changed` control above.)
+const organizationChanged = (await read(modify(metadataBytes, entries => editEverywhere(entries, content => content.replace('Original organization', 'Current organization'))))).deck;
 assert.deepEqual(organizationChanged.organization, metadata.organization, 'The footer words do not edit the stored organization.');
 assert.equal(organizationChanged.design.header.left.text, 'Current organization');
 assert.ok(!JSON.stringify(organizationChanged.design).includes('Original organization') && !JSON.stringify(organizationChanged.design.header.left).includes('{{'));
-const disagreed = await read(modify(metadataBytes, entries => xml(entries, content => content.replace('Original organization', 'Different organization'))));
-assert.deepEqual(disagreed.deck.organization, metadata.organization);
-assert.equal(effective(disagreed.deck, 0, 'header').left.text, 'Different organization');
-assert.equal(effective(disagreed.deck, 1, 'header').left.text, '{{organization.name}}');
-assert.equal(disagreed.deck.design.header, undefined, 'Disagreeing words stay local.');
 // Retyped section words are the words as they stand, and the section itself comes from the native list, which wins.
 const sectionChanged = (await read(modify(metadataBytes, entries => xml(entries, content => content.replaceAll('First section', 'Current section'))))).deck;
 assert.equal(sectionChanged.slides[0].section, 'First section');

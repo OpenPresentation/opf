@@ -9,6 +9,7 @@ import {validate} from '@openpresentation/opf';
 import {resolvePresentation, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {nativeFurnitureParts, NATIVE_PLACEHOLDERS} from '../dist/native-furniture.js';
+import {shownFurniture} from './helpers/master-furniture.mjs';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -78,8 +79,10 @@ for (const measured of [false, true]) {
 
   // Slides: the title slide hides the footer; the others carry the three placeholders at core's geometry.
   assert.deepEqual(placeholderShapes(text(entries, slidePath(1))), [], 'design.footer false on a slide removes its placeholders.');
-  const header = furnitureShapes(text(entries, slidePath(1)));
-  assert.deepEqual(header.map(runsOf), ['Quarterly review', 'Northstar Health', 'Internal'], 'The header is unaffected by the footer override.');
+  // RR-72: the header is the same on all three slides, so it is drawn once, on the slide master (the slides do not repeat it).
+  const header = shownFurniture(entries, 1).filter(shape => !phOf(shape.xml));
+  assert.deepEqual(header.map(shape => runsOf(shape.xml)), ['Quarterly review', 'Northstar Health', 'Internal'], 'The header is unaffected by the footer override.');
+  assert.deepEqual(header.map(shape => shape.on), ['master', 'master', 'master']);
   for (const index of [2, 3]) {
     const xml = text(entries, slidePath(index));
     const placeholders = placeholderShapes(xml);
@@ -87,8 +90,9 @@ for (const measured of [false, true]) {
     assert.deepEqual(placeholders.map(phOf), ['type="dt" sz="half" idx="10"', 'type="ftr" sz="quarter" idx="11"', 'type="sldNum" sz="quarter" idx="12"']);
     for (const shape of placeholders) assert.match(shape, /<p:cNvSpPr><a:spLocks noGrp="1"\/><\/p:cNvSpPr>/);
     assert.deepEqual(placeholders.map(runsOf), [`[datetime1:9/10/2026]`, 'Confidential', `[slidenum:${index}]`]);
-    // The header stays tagged ordinary shapes: PowerPoint slides have no header placeholder.
-    const headerShapes = furnitureShapes(xml).filter(shape => !phOf(shape));
+    // The header stays tagged ordinary shapes (PowerPoint slides have no header placeholder), drawn once on the master (RR-72).
+    assert.deepEqual(furnitureShapes(xml).filter(shape => !phOf(shape)), [], 'The slide does not repeat the master header.');
+    const headerShapes = shownFurniture(entries, index).filter(shape => !phOf(shape.xml)).map(shape => shape.xml);
     assert.deepEqual(headerShapes.map(runsOf), ['Quarterly review', 'Northstar Health', 'Internal']);
     // Geometry parity: each placeholder has exactly the box core composed (and the tagged shape had).
     const parts = geometry[index - 1].geometry.furniture.parts.filter(part => part.kind === 'footer');
@@ -116,10 +120,10 @@ for (const measured of [false, true]) {
   assert.match(layout, /<a:fld [^>]*type="slidenum"><a:rPr lang="en-US"\/><a:t>‹#›<\/a:t>/);
   // Master: the same three (idx 2, 3, 4), at the first slide's boxes with its text style as the default, and the flags before txStyles.
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml');
-  assert.deepEqual(shapesOf(master).map(phOf), ['type="dt" sz="half" idx="2"', 'type="ftr" sz="quarter" idx="3"', 'type="sldNum" sz="quarter" idx="4"']);
+  assert.deepEqual(placeholderShapes(master).map(phOf), ['type="dt" sz="half" idx="2"', 'type="ftr" sz="quarter" idx="3"', 'type="sldNum" sz="quarter" idx="4"']);
   assert.match(master, /<\/p:sldLayoutIdLst><p:hf sldNum="1" hdr="0" ftr="1" dt="1"\/><p:txStyles>/);
   const slidePlaceholders = placeholderShapes(text(entries, slidePath(2)));
-  for (const [at, shape] of shapesOf(master).entries()) {
+  for (const [at, shape] of placeholderShapes(master).entries()) {
     assert.deepEqual(xfrmOf(shape), xfrmOf(slidePlaceholders[at]), 'The master placeholder sits where the first native footer sits.');
     assert.match(shape, new RegExp(`<a:defRPr sz="${slidePlaceholders[at].match(/\bsz="(\d+)"/)[1]}">`));
   }

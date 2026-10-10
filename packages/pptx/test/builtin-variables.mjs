@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {validate} from '@openpresentation/opf';
+import {editEverywhere, shownXml} from './helpers/master-furniture.mjs';
 
 // FA-04: built-in variables resolve before export. FA-31: in a header or footer `text` they are ordinary words
 // (`{{organization.name}}`, `{{speaker.name}}, {{speaker.title}}`), and the stored document record returns the metadata.
@@ -21,7 +22,8 @@ const before = structuredClone(source);
 const bytes = await toPptx(source);
 assert.deepEqual(source, before, 'Export leaves the source unchanged.');
 assert.deepEqual(await toPptx(source), bytes, 'Export is deterministic.');
-const entries = unzipSync(bytes), xml = slideXml(entries), second = slideXml(entries, 2);
+// RR-72: the footer lines are the same on both slides, so they are drawn once, on the slide master: read what slide 1 shows.
+const entries = unzipSync(bytes), xml = shownXml(entries, 1), second = slideXml(entries, 2);
 for (const text of ['Q4 Review', 'Ada Lovelace, CTO · Acme Corp', 'Build the future', 'Acme Corp', 'Ada Lovelace, CTO']) assert.ok(xml.includes(`<a:t>${text}</a:t>`), text);
 assert.ok(second.includes('<a:t>By Ada Lovelace, Grace Hopper</a:t>'), 'the speakers list joins');
 assert.ok(!xml.includes('{{'), 'no unresolved token reaches the file');
@@ -52,7 +54,7 @@ noTitle.design.footer.left.text = '{{organization.name}}\n{{speaker.name}}';
 assert.equal((await read(await toPptx(noTitle, {provenance: false}))).deck.design.footer.left.text, 'Acme Corp\nSolo, Jr.');
 
 // Current native words win: an edited line no longer matches the drawn text, so it is the footer's new text.
-const retitled = await read(modify(bytes, entries => { for (const index of [1, 2]) entries[`ppt/slides/slide${index}.xml`] = enc.encode(slideXml(entries, index).replace('<a:t>Ada Lovelace, CTO</a:t>', '<a:t>Ada Lovelace, CEO</a:t>')); }));
+const retitled = await read(modify(bytes, entries => editEverywhere(entries, xml => xml.replace('<a:t>Ada Lovelace, CTO</a:t>', '<a:t>Ada Lovelace, CEO</a:t>'))));
 assert.equal(retitled.deck.design.footer.left.text, 'Acme Corp\nAda Lovelace, CEO');
 assert.deepEqual(retitled.deck.speaker, source.speaker, 'The footer no longer names the speaker, so the stored speakers are unchanged.');
 

@@ -5,6 +5,7 @@ import {crc32, deflateSync} from 'node:zlib';
 import {FURNITURE_GAP, FURNITURE_IMAGE_SHARE, composeSlide} from '@openpresentation/opf/composition';
 import {resolveSlideContext} from '@openpresentation/opf';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {relationshipPath, shownFurnitureParts} from './helpers/master-furniture.mjs';
 
 // RR-71 (OPF 0.18): logos live on the organization; a header or footer zone image can be a logo reference
 // (`var:organization.logo.icon`) whose onLight/onDark asset follows each slide's background.
@@ -53,8 +54,12 @@ const mediaFor = (entries, index, embed) => {
 };
 const same = (a, b) => a && b && Buffer.compare(Buffer.from(a), Buffer.from(b)) === 0;
 const near = (actual, expected, label, tolerance = .75) => assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: ${actual} vs ${expected}`);
-// The pictures of a slide that carry bytes of `expected`.
-const drawnWith = (entries, index, expected) => pictures(slideXml(entries, index)).filter(picture => same(mediaFor(entries, index, picture.embed), expected));
+// RR-72: the furniture pictures a slide shows, from the slide, its layout or its slide master (`path` is the part each is drawn in).
+const furniturePictures = (entries, index) => shownFurnitureParts(entries, index + 1).filter(shape => shape.xml.startsWith('<p:pic>'))
+  .flatMap(shape => pictures(shape.xml).map(picture => ({...picture, on: shape.on, path: shape.path})));
+const pictureBytes = (entries, picture) => entries[relationshipPath(entries, picture.path, picture.embed)];
+// The furniture pictures a slide shows that carry bytes of `expected`.
+const drawnWith = (entries, index, expected) => furniturePictures(entries, index).filter(picture => same(pictureBytes(entries, picture), expected));
 const geometry = (deck, index) => { const context = resolveSlideContext(deck, index); return composeSlide(context.slide, context.options); };
 const noContentPictures = (imported, label) => imported.slides.forEach((slide, index) => assert.ok(!slide.image && !slide.blocks, `${label}: slide ${index} has no content picture`));
 const codes = (reports, ...wanted) => reports.filter(item => wanted.includes(item.code)).map(item => `${item.code} ${item.path}`);
@@ -76,7 +81,9 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
     assert.equal(part.reference, 'var:organization.logo.icon');
     assert.equal(part.sourcePath, `organization.logo.icon.${index === 1 ? 'onDark' : 'onLight'}`);
     const [logo] = drawnWith(entries, index, expected);
-    assert.ok(logo && logo.name.startsWith('OPF image'), `slide ${index} draws the ${index === 1 ? 'onDark' : 'onLight'} icon`);
+    assert.ok(logo && /^OPF (?:image|furniture)/.test(logo.name), `slide ${index} draws the ${index === 1 ? 'onDark' : 'onLight'} icon`);
+    // RR-72: the two light slides share one layout that draws the onLight icon; the one dark slide keeps its own picture.
+    assert.equal(logo.on, index === 1 ? 'slide' : 'layout', `slide ${index}'s logo is drawn on its ${index === 1 ? 'slide' : 'layout'}`);
     assert.equal(drawnWith(entries, index, other).length, 0, `slide ${index} does not draw the other tone`);
     // Contained in core's part box, centered.
     const scale = Math.min(part.box.width / 120, part.box.height / 60), size = index === 1 ? [120, 60] : [80, 80];
@@ -218,7 +225,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'left');
   near(logo.box.width, zone * FURNITURE_IMAGE_SHARE, 'the 8:1 logo is capped at its share of the zone', .01);
   near(text.box.x, logo.box.x + logo.box.width + FURNITURE_GAP, 'the text follows the capped logo', .01);
-  const [picture] = pictures(slideXml(entries, 0)).filter(entry => entry.name.startsWith('OPF image'));
+  const [picture] = furniturePictures(entries, 0);
   assert.ok(picture, 'the logo is drawn');
   assert.ok(picture.x >= logo.box.x - .75 && picture.x + picture.w <= logo.box.x + logo.box.width + .75, `the picture stays inside the capped box: ${picture.x}+${picture.w}`);
   assert.ok(picture.y >= logo.box.y - .75 && picture.y + picture.h <= logo.box.y + logo.box.height + .75, 'and inside its height');
@@ -239,10 +246,10 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {bytes: output, entries} = await exportDeck(deck);
   // PowerPoint's Change Picture: the same shape and tags, other bytes.
-  const media = pictures(slideXml(entries, 0)).find(picture => picture.name.startsWith('OPF image'));
-  const target = `ppt/${slideRels(entries, 0).match(new RegExp(`<Relationship Id="${media.embed}"[^>]*Target="([^"]+)"`))[1].replace(/^\.\.\//, '')}`;
-  const swapped = zipSync({...entries, [target]: bytes.wide});
-  // Both slides draw the same icon, which the package embeds once, so the swap changes both pictures.
+  // RR-72: both slides draw the same icon, so it is drawn once, on the slide master; the swap changes it for both.
+  const [media] = furniturePictures(entries, 0);
+  assert.equal(media.on, 'master');
+  const swapped = zipSync({...entries, [relationshipPath(entries, media.path, media.embed)]: bytes.wide});
   const reports = [];
   const changed = await fromPptx(swapped, {onDiagnostic: item => reports.push(item)});
   assert.ok(changed.design.footer.left.image?.src?.startsWith('data:image/png'), 'a replaced picture imports as an ordinary image');
@@ -255,14 +262,15 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
     assert.ok(!JSON.stringify(imported).includes('var:organization'), `${provenance}: no reference without the stored organization`);
     assert.equal(imported.organization, undefined, `${provenance}: the organization is not stored`);
   }
-  // A third-party picture in a footer (no OPF tags) is an ordinary picture.
+  // The same package without OPF tags is a plain PowerPoint file whose slide master holds a picture: a master picture is not slide
+  // content, so it is not imported (as before RR-72); test/master-furniture.mjs has a third-party slide picture and master picture.
   const untagged = zipSync(Object.fromEntries(Object.entries(entries).filter(([path]) => !/^ppt\/tags\//.test(path)).map(([path, data]) => [path,
-    /^ppt\/slides\/slide\d+\.xml$/.test(path) ? encoder.encode(decoder.decode(data).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '')) :
-    /^ppt\/slides\/_rels\//.test(path) ? encoder.encode(decoder.decode(data).replace(/<Relationship [^>]*relationships\/tags"[^>]*\/>/g, '')) :
+    /^ppt\/(?:slides\/slide|slideLayouts\/slideLayout|slideMasters\/slideMaster)\d+\.xml$/.test(path) ? encoder.encode(decoder.decode(data).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '')) :
+    /^ppt\/(?:slides|slideLayouts|slideMasters)\/_rels\//.test(path) ? encoder.encode(decoder.decode(data).replace(/<Relationship [^>]*relationships\/tags"[^>]*\/>/g, '')) :
     path === '[Content_Types].xml' ? encoder.encode(decoder.decode(data).replace(/<Override PartName="\/ppt\/tags\/[^>]*\/>/g, '')) : data])));
   const plain = await fromPptx(untagged);
   assert.ok(!JSON.stringify(plain).includes('var:organization'), 'a plain PPTX never gains a logo reference');
-  assert.ok(JSON.stringify(plain.slides[0]).includes('data:image/png'), 'a plain PPTX keeps the picture as an image');
+  assert.ok(!JSON.stringify(plain).includes('data:image/png'), 'a picture on a plain PPTX slide master is not imported');
   checked++;
 }
 
