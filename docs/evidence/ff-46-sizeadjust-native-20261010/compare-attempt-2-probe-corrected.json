@@ -1,0 +1,1142 @@
+{
+ "schema": "opf323-compare/v1",
+ "generated": "2026-10-10T22:07:50.266Z",
+ "native": "native/attempt-2",
+ "packages": {
+  "@openpresentation/opf": "0.18.1",
+  "@openpresentation/opf-render": "0.18.0",
+  "@openpresentation/opf-pptx": "0.18.0",
+  "@openpresentation/opf-editor": "0.18.0",
+  "fontkit": "2.0.4"
+ },
+ "items": {
+  "probe38": {
+   "item": "opf#361 lineAscent probe (RR-38 method)",
+   "criterion": "Baseline below the line-box top in em: the bottom edge of the last ink row with at least 35 % of the peak row (for a headline script such as Devanagari: the mode of the stem bottoms), median over 18, 24 and 32 pt (regular single lines = lineAscent, mixed line = lineAscentMixed). The controls (Angsana New 0.85, Sakkal Majalla 0.78, Arabic Typesetting 0.745 as re-derived from the RR-38 native PNGs) must reproduce within 0.03 em, or the probe values are not used.",
+   "controlsOk": true,
+   "families": [
+    {
+     "family": "DilleniaUPC",
+     "perSize": {
+      "single": [
+       0.815,
+       0.819,
+       0.813
+      ],
+      "bold": [
+       0.817,
+       0.808,
+       0.811
+      ],
+      "mixed": [
+       0.856,
+       0.852,
+       0.841
+      ],
+      "singleModeBottom": [
+       0.815,
+       0.819,
+       0.813
+      ]
+     },
+     "lineAscent": 0.82,
+     "lineAscentMixed": 0.85,
+     "boldMedian": 0.811,
+     "control": null
+    },
+    {
+     "family": "Malgun Gothic",
+     "perSize": {
+      "single": [
+       1.056,
+       1.056,
+       1.042
+      ],
+      "bold": [
+       1.058,
+       1.058,
+       1.051
+      ],
+      "mixed": [
+       1.004,
+       0.991,
+       0.998
+      ],
+      "singleModeBottom": [
+       1.056,
+       1.056,
+       1.042
+      ]
+     },
+     "lineAscent": 1.06,
+     "lineAscentMixed": 1,
+     "boldMedian": 1.058,
+     "control": null
+    },
+    {
+     "family": "Nirmala UI",
+     "perSize": {
+      "single": [
+       0.981,
+       0.972,
+       0.969
+      ],
+      "bold": [
+       0.984,
+       0.974,
+       0.968
+      ],
+      "mixed": [
+       0.93,
+       0.935,
+       0.935
+      ],
+      "singleModeBottom": [
+       0.333,
+       0.319,
+       0.313
+      ]
+     },
+     "lineAscent": 0.97,
+     "lineAscentMixed": 0.94,
+     "boldMedian": 0.974,
+     "control": null
+    },
+    {
+     "family": "Angsana New",
+     "perSize": {
+      "single": [
+       0.833,
+       0.833,
+       0.833
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.833,
+       0.833,
+       0.833
+      ]
+     },
+     "lineAscent": 0.83,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.85,
+      "reference": 0.85,
+      "referenceSource": "FF-46 run 2026-10-05 (opf#361 comment); attempt-1 PNGs re-read 0.841 title / 0.848 body",
+      "ok": true
+     }
+    },
+    {
+     "family": "Sakkal Majalla",
+     "perSize": {
+      "single": [
+       0.761,
+       0.766,
+       0.759
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.761,
+       0.766,
+       0.759
+      ]
+     },
+     "lineAscent": 0.76,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.78,
+      "reference": 0.78,
+      "referenceSource": "FF-46 run 2026-10-05 (opf#361 comment); attempt-1 PNGs re-read 0.767 title / 0.752 to 0.766 body",
+      "ok": true
+     }
+    },
+    {
+     "family": "Arabic Typesetting",
+     "perSize": {
+      "single": [
+       0.745,
+       0.741,
+       0.737
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.745,
+       0.741,
+       0.737
+      ]
+     },
+     "lineAscent": 0.74,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.7,
+      "reference": 0.745,
+      "referenceSource": "RR-38 native PNGs (probe-slide-1..3, 2560 px), bottom edge of the last row with >= 35 % of the peak row; policy 0.70 used an earlier estimator",
+      "ok": true
+     }
+    }
+   ],
+   "rows": [
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|18",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.815,
+     "baselineEmModeBottom": 0.815,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.815,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|18",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.817,
+     "baselineEmModeBottom": 0.817,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.817,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|18",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.856,
+     "baselineEmModeBottom": 0.856,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.856,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|24",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.819,
+     "baselineEmModeBottom": 0.819,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.819,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|24",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.808,
+     "baselineEmModeBottom": 0.808,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.808,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|24",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.852,
+     "baselineEmModeBottom": 0.852,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.852,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|32",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.813,
+     "baselineEmModeBottom": 0.813,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.813,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|32",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.811,
+     "baselineEmModeBottom": 0.811,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.811,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|32",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.841,
+     "baselineEmModeBottom": 0.841,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.841,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|18",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.056,
+     "baselineEmModeBottom": 1.056,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.056,
+     "baselineEm": 1.056,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|18",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.058,
+     "baselineEmModeBottom": 1.058,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.058,
+     "baselineEm": 1.058,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|18",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.004,
+     "baselineEmModeBottom": 0.949,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 1.004,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|24",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 1.056,
+     "baselineEmModeBottom": 1.056,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.056,
+     "baselineEm": 1.056,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|24",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 1.058,
+     "baselineEmModeBottom": 1.058,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.058,
+     "baselineEm": 1.058,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|24",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.991,
+     "baselineEmModeBottom": 0.935,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.991,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|32",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 1.042,
+     "baselineEmModeBottom": 1.042,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.042,
+     "baselineEm": 1.042,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|32",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 1.051,
+     "baselineEmModeBottom": 1.051,
+     "headlineScript": true,
+     "baselineEmStemBottom": 1.051,
+     "baselineEm": 1.051,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|32",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.998,
+     "baselineEmModeBottom": 0.998,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.998,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|18",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.704,
+     "baselineEmModeBottom": 0.333,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.981,
+     "baselineEm": 0.981,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|18",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.854,
+     "baselineEmModeBottom": 0.373,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.984,
+     "baselineEm": 0.984,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|18",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.93,
+     "baselineEmModeBottom": 0.93,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.93,
+     "baselineEm": 0.93,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|24",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.736,
+     "baselineEmModeBottom": 0.319,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.972,
+     "baselineEm": 0.972,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|24",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.836,
+     "baselineEmModeBottom": 0.363,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.974,
+     "baselineEm": 0.974,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|24",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.921,
+     "baselineEmModeBottom": 0.935,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.935,
+     "baselineEm": 0.935,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|32",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.729,
+     "baselineEmModeBottom": 0.313,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.969,
+     "baselineEm": 0.969,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|32",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.832,
+     "baselineEmModeBottom": 0.353,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.968,
+     "baselineEm": 0.968,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|32",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.935,
+     "baselineEmModeBottom": 0.279,
+     "headlineScript": true,
+     "baselineEmStemBottom": 0.935,
+     "baselineEm": 0.935,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|18",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|18",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.78,
+     "baselineEmPeak35": 0.761,
+     "baselineEmModeBottom": 0.761,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.761,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|18",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.7,
+     "baselineEmPeak35": 0.745,
+     "baselineEmModeBottom": 0.745,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.745,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|24",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|24",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.78,
+     "baselineEmPeak35": 0.766,
+     "baselineEmModeBottom": 0.766,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.766,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|24",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.7,
+     "baselineEmPeak35": 0.741,
+     "baselineEmModeBottom": 0.741,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.741,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|32",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|32",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.78,
+     "baselineEmPeak35": 0.759,
+     "baselineEmModeBottom": 0.759,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.759,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|32",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.7,
+     "baselineEmPeak35": 0.737,
+     "baselineEmModeBottom": 0.737,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.737,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

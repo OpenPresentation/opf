@@ -1,0 +1,3865 @@
+{
+ "schema": "opf323-compare/v1",
+ "generated": "2026-10-10T22:03:29.866Z",
+ "native": "native/attempt-2",
+ "packages": {
+  "@openpresentation/opf": "0.18.1",
+  "@openpresentation/opf-render": "0.18.0",
+  "@openpresentation/opf-pptx": "0.18.0",
+  "@openpresentation/opf-editor": "0.18.0",
+  "fontkit": "2.0.4"
+ },
+ "items": {
+  "ff46sa": {
+   "item": "FF-46 / opf#361 factor-applied re-run",
+   "criterion": "Names as FF-12; the script runs name the deck family; every exported line box reads one native line; no native-only overflow past the box (> 0.5 pt); native / preview ink on lines of at least 200 pt within 0.80 to 1.01. Image scores are reported, not gated.",
+   "tolerances": {
+    "lineOverflowPt": 0.5,
+    "realFontWiderThanReplacement": 0.01,
+    "previewWiderThanRealFont": 0.2,
+    "longLinePt": 200,
+    "imageClose": 0.02,
+    "imageReview": 0.06
+   },
+   "decks": [
+    {
+     "id": "sa-scripts-12-ko-malgun-gothic",
+     "family": "Malgun Gothic",
+     "language": "ko",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1668,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "FINDING",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Malgun Gothic"
+       ],
+       "expected": [
+        "Malgun Gothic"
+       ],
+       "required": [
+        "Malgun Gothic"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "",
+         "native": "",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "",
+         "native": "",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "",
+         "native": "",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Malgun Gothic",
+         "native": "Malgun Gothic",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "",
+         "native": "",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 10,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {
+        "+mn-cs -> (empty slot)": 10
+       }
+      }
+     },
+     "lines": {
+      "shapes": 10,
+      "missing": 0,
+      "singleLine": 10,
+      "multiLine": [],
+      "nativeOnlyOverflow": [
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "overflowPt": 82.03
+       }
+      ],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.807,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.5294,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1793,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2859,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2374,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.328,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 82.03,
+        "maxFill": 1.0939,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9857,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.982,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.7177,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 9,
+      "ok": 9,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 9,
+      "longLines": 8,
+      "longMedianRatio": 1.0226,
+      "medianRatio": 1.0244,
+      "minRatio": 0.9808,
+      "maxRatio": 1.8062,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 671.25,
+        "nativeWidthPt": 699.75,
+        "clipped": false,
+        "ratio": 1.0425,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 462,
+        "nativeWidthPt": 480,
+        "clipped": false,
+        "ratio": 1.039,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 96.75,
+        "nativeWidthPt": 174.75,
+        "clipped": false,
+        "ratio": 1.8062,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 273,
+        "nativeWidthPt": 267.75,
+        "clipped": false,
+        "ratio": 0.9808,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 222,
+        "nativeWidthPt": 225.75,
+        "clipped": false,
+        "ratio": 1.0169,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 283.5,
+        "nativeWidthPt": 282,
+        "clipped": false,
+        "ratio": 0.9947,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 847.5,
+        "nativeWidthPt": 915.75,
+        "clipped": true,
+        "ratio": 1.0805,
+        "nativeInkPastBoxPt": 42.45,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 831,
+        "nativeWidthPt": 851.25,
+        "clipped": false,
+        "ratio": 1.0244,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 830.25,
+        "nativeWidthPt": 847.5,
+        "clipped": false,
+        "ratio": 1.0208,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 461.25,
+        "nativeWidthPt": 624,
+        "clipped": false,
+        "ratio": 1.3528,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0205,
+       "band": "review"
+      },
+      {
+       "slide": 2,
+       "score": 0.0205,
+       "band": "review"
+      }
+     ],
+     "reasons": [
+      "1 boxes overflow only natively (max 82.03 pt)",
+      "native ink 1.0226 of the preview: the real font is wider"
+     ]
+    },
+    {
+     "id": "sa-scripts-19-ar-sakkal-majalla",
+     "family": "Sakkal Majalla",
+     "language": "ar",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1892,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "PASS",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Sakkal Majalla"
+       ],
+       "expected": [
+        "Sakkal Majalla"
+       ],
+       "required": [
+        "Sakkal Majalla"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 19,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 11,
+      "missing": 0,
+      "singleLine": 11,
+      "multiLine": [],
+      "nativeOnlyOverflow": [],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1922,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1671,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1763,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1223,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1756,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2103,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2247,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.8906,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.919,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9032,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.15,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.5703,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 13,
+      "ok": 13,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 11,
+      "longLines": 6,
+      "longMedianRatio": 0.9091,
+      "medianRatio": 0.9163,
+      "minRatio": 0.6583,
+      "maxRatio": 1.0088,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 177,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9322,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 178.5,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9244,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 188.25,
+        "nativeWidthPt": 172.5,
+        "clipped": false,
+        "ratio": 0.9163,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 142.5,
+        "nativeWidthPt": 125.25,
+        "clipped": false,
+        "ratio": 0.8789,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 169.5,
+        "nativeWidthPt": 171,
+        "clipped": false,
+        "ratio": 1.0088,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 231,
+        "nativeWidthPt": 202.5,
+        "clipped": false,
+        "ratio": 0.8766,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 298.5,
+        "nativeWidthPt": 196.5,
+        "clipped": false,
+        "ratio": 0.6583,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 850.5,
+        "nativeWidthPt": 774,
+        "clipped": false,
+        "ratio": 0.9101,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 867,
+        "nativeWidthPt": 799.5,
+        "clipped": false,
+        "ratio": 0.9221,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 864,
+        "nativeWidthPt": 784.5,
+        "clipped": false,
+        "ratio": 0.908,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 537.75,
+        "nativeWidthPt": 497.25,
+        "clipped": false,
+        "ratio": 0.9247,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0043,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.0168,
+       "band": "close"
+      }
+     ],
+     "reasons": []
+    },
+    {
+     "id": "sa-scripts-20-ur-sakkal-majalla",
+     "family": "Sakkal Majalla",
+     "language": "ur",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1546,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "PASS",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Sakkal Majalla"
+       ],
+       "expected": [
+        "Sakkal Majalla"
+       ],
+       "required": [
+        "Sakkal Majalla"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 11,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 11,
+      "missing": 0,
+      "singleLine": 11,
+      "multiLine": [],
+      "nativeOnlyOverflow": [],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1922,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1893,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1389,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1671,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1763,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1223,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2247,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 39.3,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.896,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 42.37,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.8574,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.91,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.3012,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 10,
+      "ok": 10,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 11,
+      "longLines": 6,
+      "longMedianRatio": 0.9018,
+      "medianRatio": 0.9074,
+      "minRatio": 0.6583,
+      "maxRatio": 0.9404,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 177,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9322,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 202.5,
+        "nativeWidthPt": 183.75,
+        "clipped": false,
+        "ratio": 0.9074,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 165.75,
+        "nativeWidthPt": 140.25,
+        "clipped": false,
+        "ratio": 0.8462,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 178.5,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9244,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 188.25,
+        "nativeWidthPt": 172.5,
+        "clipped": false,
+        "ratio": 0.9163,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 142.5,
+        "nativeWidthPt": 125.25,
+        "clipped": false,
+        "ratio": 0.8789,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 298.5,
+        "nativeWidthPt": 196.5,
+        "clipped": false,
+        "ratio": 0.6583,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 867,
+        "nativeWidthPt": 777,
+        "clipped": false,
+        "ratio": 0.8962,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 834,
+        "nativeWidthPt": 745.5,
+        "clipped": false,
+        "ratio": 0.8939,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 865.5,
+        "nativeWidthPt": 791.25,
+        "clipped": false,
+        "ratio": 0.9142,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 276.75,
+        "nativeWidthPt": 260.25,
+        "clipped": false,
+        "ratio": 0.9404,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0044,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.0153,
+       "band": "close"
+      }
+     ],
+     "reasons": []
+    },
+    {
+     "id": "sa-scripts-21-fa-sakkal-majalla",
+     "family": "Sakkal Majalla",
+     "language": "fa",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1535,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "PASS",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Sakkal Majalla"
+       ],
+       "expected": [
+        "Sakkal Majalla"
+       ],
+       "required": [
+        "Sakkal Majalla"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "Sakkal Majalla",
+         "native": "Sakkal Majalla",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 11,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 11,
+      "missing": 0,
+      "singleLine": 11,
+      "multiLine": [],
+      "nativeOnlyOverflow": [],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1922,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2055,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1405,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1671,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1763,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1223,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2247,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.08,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.8744,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.15,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9145,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9278,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.3012,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 10,
+      "ok": 10,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 11,
+      "longLines": 6,
+      "longMedianRatio": 0.9115,
+      "medianRatio": 0.917,
+      "minRatio": 0.6583,
+      "maxRatio": 1.0219,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 177,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9322,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 230.25,
+        "nativeWidthPt": 198,
+        "clipped": false,
+        "ratio": 0.8599,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 137.25,
+        "nativeWidthPt": 140.25,
+        "clipped": false,
+        "ratio": 1.0219,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 178.5,
+        "nativeWidthPt": 165,
+        "clipped": false,
+        "ratio": 0.9244,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 188.25,
+        "nativeWidthPt": 172.5,
+        "clipped": false,
+        "ratio": 0.9163,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 142.5,
+        "nativeWidthPt": 125.25,
+        "clipped": false,
+        "ratio": 0.8789,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 298.5,
+        "nativeWidthPt": 196.5,
+        "clipped": false,
+        "ratio": 0.6583,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 837.75,
+        "nativeWidthPt": 759,
+        "clipped": false,
+        "ratio": 0.906,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 867,
+        "nativeWidthPt": 795,
+        "clipped": false,
+        "ratio": 0.917,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 866.25,
+        "nativeWidthPt": 806.25,
+        "clipped": false,
+        "ratio": 0.9307,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 276,
+        "nativeWidthPt": 260.25,
+        "clipped": false,
+        "ratio": 0.9429,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0043,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.0154,
+       "band": "close"
+      }
+     ],
+     "reasons": []
+    },
+    {
+     "id": "sa-scripts-27-hi-nirmala-ui",
+     "family": "Nirmala UI",
+     "language": "hi",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1725,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "FINDING",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Nirmala UI"
+       ],
+       "expected": [
+        "Nirmala UI"
+       ],
+       "required": [
+        "Nirmala UI"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "Nirmala UI",
+         "native": "Nirmala UI",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 12,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 12,
+      "missing": 0,
+      "singleLine": 12,
+      "multiLine": [],
+      "nativeOnlyOverflow": [
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "overflowPt": 4.16
+       }
+      ],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.7428,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.235,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2899,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1912,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2896,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2411,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2347,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 4.16,
+        "maxFill": 1.0048,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.987,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9681,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9796,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 4",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.4202,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 11,
+      "ok": 11,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 12,
+      "longLines": 11,
+      "longMedianRatio": 1.0033,
+      "medianRatio": 1.0043,
+      "minRatio": 0.9233,
+      "maxRatio": 1.0254,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 645.75,
+        "nativeWidthPt": 650.25,
+        "clipped": false,
+        "ratio": 1.007,
+        "nativeInkPastBoxPt": 0.45,
+        "previewInkPastBoxPt": 0.45
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 226.5,
+        "nativeWidthPt": 225,
+        "clipped": false,
+        "ratio": 0.9934,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 276.75,
+        "nativeWidthPt": 273,
+        "clipped": false,
+        "ratio": 0.9864,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 183.75,
+        "nativeWidthPt": 186.75,
+        "clipped": false,
+        "ratio": 1.0163,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 266.25,
+        "nativeWidthPt": 273,
+        "clipped": false,
+        "ratio": 1.0254,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 229.5,
+        "nativeWidthPt": 230.25,
+        "clipped": false,
+        "ratio": 1.0033,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 215.25,
+        "nativeWidthPt": 198.75,
+        "clipped": false,
+        "ratio": 0.9233,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 864.75,
+        "nativeWidthPt": 871.5,
+        "clipped": false,
+        "ratio": 1.0078,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0.45
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 865.5,
+        "nativeWidthPt": 858,
+        "clipped": false,
+        "ratio": 0.9913,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0.45
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 834,
+        "nativeWidthPt": 841.5,
+        "clipped": false,
+        "ratio": 1.009,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0.45
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 846,
+        "nativeWidthPt": 850.5,
+        "clipped": false,
+        "ratio": 1.0053,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 4",
+        "previewWidthPt": 370.5,
+        "nativeWidthPt": 367.5,
+        "clipped": false,
+        "ratio": 0.9919,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0.45
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0133,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.0181,
+       "band": "close"
+      }
+     ],
+     "reasons": [
+      "1 boxes overflow only natively (max 4.16 pt)"
+     ]
+    },
+    {
+     "id": "sa-scripts-37-th-angsana-new",
+     "family": "Angsana New",
+     "language": "th",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1676,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "PASS",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "Angsana New"
+       ],
+       "expected": [
+        "Angsana New"
+       ],
+       "required": [
+        "Angsana New"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "Angsana New",
+         "native": "Angsana New",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 11,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 11,
+      "missing": 0,
+      "singleLine": 11,
+      "multiLine": [],
+      "nativeOnlyOverflow": [],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.28,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.2227,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.173,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1281,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1249,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1219,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.3395,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.95,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1792,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.39,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.502,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.26,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9442,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9304,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.7747,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 10,
+      "ok": 10,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 11,
+      "longLines": 7,
+      "longMedianRatio": 0.9488,
+      "medianRatio": 0.9553,
+      "minRatio": 0.5637,
+      "maxRatio": 1.5081,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 216.75,
+        "nativeWidthPt": 192.75,
+        "clipped": false,
+        "ratio": 0.8893,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 177.75,
+        "nativeWidthPt": 171,
+        "clipped": false,
+        "ratio": 0.962,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 141,
+        "nativeWidthPt": 130.5,
+        "clipped": false,
+        "ratio": 0.9255,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 134.25,
+        "nativeWidthPt": 128.25,
+        "clipped": false,
+        "ratio": 0.9553,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 128.25,
+        "nativeWidthPt": 125.25,
+        "clipped": false,
+        "ratio": 0.9766,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 335.25,
+        "nativeWidthPt": 315,
+        "clipped": false,
+        "ratio": 0.9396,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 276.75,
+        "nativeWidthPt": 156,
+        "clipped": false,
+        "ratio": 0.5637,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 460.5,
+        "nativeWidthPt": 694.5,
+        "clipped": false,
+        "ratio": 1.5081,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 864.75,
+        "nativeWidthPt": 820.5,
+        "clipped": false,
+        "ratio": 0.9488,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 843,
+        "nativeWidthPt": 807.75,
+        "clipped": false,
+        "ratio": 0.9582,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 705,
+        "nativeWidthPt": 675.75,
+        "clipped": false,
+        "ratio": 0.9585,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.0038,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.0135,
+       "band": "close"
+      }
+     ],
+     "reasons": []
+    },
+    {
+     "id": "sa-scripts-38-th-dilleniaupc",
+     "family": "DilleniaUPC",
+     "language": "th",
+     "status": "script-gap",
+     "probe": false,
+     "health": {
+      "ok": true,
+      "problems": [],
+      "notes": [],
+      "elapsedMs": 1560,
+      "startedPowerPoint": false,
+      "readErrors": 0
+     },
+     "verdict": "PASS",
+     "names": {
+      "presentationFonts": {
+       "ok": true,
+       "native": [
+        "DilleniaUPC"
+       ],
+       "expected": [
+        "DilleniaUPC"
+       ],
+       "required": [
+        "DilleniaUPC"
+       ],
+       "soft": [],
+       "extras": [],
+       "missingRequired": [],
+       "missingSoftAccepted": []
+      },
+      "themeSlots": {
+       "ok": true,
+       "slots": [
+        {
+         "theme": "master",
+         "slot": "major.latin",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.ea",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "major.cs",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.latin",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.ea",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "master",
+         "slot": "minor.cs",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.latin",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.ea",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "major.cs",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.latin",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.ea",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        },
+        {
+         "theme": "notes master",
+         "slot": "minor.cs",
+         "expected": "DilleniaUPC",
+         "native": "DilleniaUPC",
+         "ok": true
+        }
+       ]
+      },
+      "runNames": {
+       "ok": true,
+       "runs": 11,
+       "foreign": [],
+       "unresolvedThemeReferences": [],
+       "themeReferences": {}
+      }
+     },
+     "lines": {
+      "shapes": 11,
+      "missing": 0,
+      "singleLine": 11,
+      "multiLine": [],
+      "nativeOnlyOverflow": [],
+      "compositionOverflow": 0,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1558,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1525,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1246,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.112,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.109,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.3032,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "boxLeft": 43.2,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.1578,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "boxLeft": 43.44,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9222,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "boxLeft": 43.34,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9491,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "boxLeft": 43.34,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.9491,
+        "compositionOverflow": false
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "boxLeft": 43.34,
+        "boxWidth": 873.6,
+        "lineCount": 1,
+        "overflowPt": 0,
+        "maxFill": 0.0269,
+        "compositionOverflow": false
+       }
+      ]
+     },
+     "drawn": {
+      "runs": 9,
+      "ok": 9,
+      "fails": []
+     },
+     "ink": {
+      "boxes": 11,
+      "longLines": 5,
+      "longMedianRatio": 0.9474,
+      "medianRatio": 0.9455,
+      "minRatio": 0.5636,
+      "maxRatio": 0.9884,
+      "rows": [
+       {
+        "slide": 1,
+        "shape": "OPF heading slides.0.title line 0",
+        "previewWidthPt": 148.5,
+        "nativeWidthPt": 135,
+        "clipped": false,
+        "ratio": 0.9091,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 0",
+        "previewWidthPt": 163.5,
+        "nativeWidthPt": 153.75,
+        "clipped": false,
+        "ratio": 0.9404,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 1",
+        "previewWidthPt": 129.75,
+        "nativeWidthPt": 128.25,
+        "clipped": false,
+        "ratio": 0.9884,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 2",
+        "previewWidthPt": 123.75,
+        "nativeWidthPt": 117,
+        "clipped": false,
+        "ratio": 0.9455,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 3",
+        "previewWidthPt": 118.5,
+        "nativeWidthPt": 114.75,
+        "clipped": false,
+        "ratio": 0.9684,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 1,
+        "shape": "OPF list slides.0.items line 4",
+        "previewWidthPt": 306,
+        "nativeWidthPt": 284.25,
+        "clipped": false,
+        "ratio": 0.9289,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF heading slides.1.title line 0",
+        "previewWidthPt": 231.75,
+        "nativeWidthPt": 136.5,
+        "clipped": false,
+        "ratio": 0.589,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 0",
+        "previewWidthPt": 840,
+        "nativeWidthPt": 801,
+        "clipped": false,
+        "ratio": 0.9536,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 1",
+        "previewWidthPt": 870,
+        "nativeWidthPt": 824.25,
+        "clipped": false,
+        "ratio": 0.9474,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 2",
+        "previewWidthPt": 870,
+        "nativeWidthPt": 824.25,
+        "clipped": false,
+        "ratio": 0.9474,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       },
+       {
+        "slide": 2,
+        "shape": "OPF text slides.1.text line 3",
+        "previewWidthPt": 41.25,
+        "nativeWidthPt": 23.25,
+        "clipped": false,
+        "ratio": 0.5636,
+        "nativeInkPastBoxPt": 0,
+        "previewInkPastBoxPt": 0
+       }
+      ]
+     },
+     "images": [
+      {
+       "slide": 1,
+       "score": 0.006,
+       "band": "close"
+      },
+      {
+       "slide": 2,
+       "score": 0.016,
+       "band": "close"
+      }
+     ],
+     "reasons": []
+    }
+   ],
+   "families": [
+    {
+     "family": "Angsana New",
+     "status": "script-gap",
+     "decks": [
+      "sa-scripts-37-th-angsana-new"
+     ],
+     "outcome": "PASS",
+     "reasons": [],
+     "longMedianRatio": 0.9488
+    },
+    {
+     "family": "DilleniaUPC",
+     "status": "script-gap",
+     "decks": [
+      "sa-scripts-38-th-dilleniaupc"
+     ],
+     "outcome": "PASS",
+     "reasons": [],
+     "longMedianRatio": 0.9474
+    },
+    {
+     "family": "Malgun Gothic",
+     "status": "script-gap",
+     "decks": [
+      "sa-scripts-12-ko-malgun-gothic"
+     ],
+     "outcome": "FINDING",
+     "reasons": [
+      "sa-scripts-12-ko-malgun-gothic: 1 boxes overflow only natively (max 82.03 pt)",
+      "sa-scripts-12-ko-malgun-gothic: native ink 1.0226 of the preview: the real font is wider"
+     ],
+     "longMedianRatio": 1.0226
+    },
+    {
+     "family": "Nirmala UI",
+     "status": "script-gap",
+     "decks": [
+      "sa-scripts-27-hi-nirmala-ui"
+     ],
+     "outcome": "FINDING",
+     "reasons": [
+      "sa-scripts-27-hi-nirmala-ui: 1 boxes overflow only natively (max 4.16 pt)"
+     ],
+     "longMedianRatio": 1.0033
+    },
+    {
+     "family": "Sakkal Majalla",
+     "status": "script-gap",
+     "decks": [
+      "sa-scripts-19-ar-sakkal-majalla",
+      "sa-scripts-20-ur-sakkal-majalla",
+      "sa-scripts-21-fa-sakkal-majalla"
+     ],
+     "outcome": "PASS",
+     "reasons": [],
+     "longMedianRatio": 0.9115
+    }
+   ],
+   "summary": {
+    "decks": 7,
+    "pass": 5,
+    "finding": 2,
+    "fail": 0,
+    "missing": 0,
+    "familiesPass": 3,
+    "families": 5
+   },
+   "patchedPolicy": {
+    "Angsana New": {
+     "sizeAdjust": 0.75,
+     "lineAscent": 0.85
+    },
+    "DilleniaUPC": {
+     "sizeAdjust": 0.68
+    },
+    "Sakkal Majalla": {
+     "sizeAdjust": 0.89,
+     "lineAscent": 0.78,
+     "lineAscentMixed": 0.78
+    },
+    "Malgun Gothic": {
+     "sizeAdjust": 1.07
+    },
+    "Nirmala UI": {
+     "sizeAdjust": 1.07
+    }
+   }
+  },
+  "probe38": {
+   "item": "opf#361 lineAscent probe (RR-38 method)",
+   "criterion": "Baseline below the line-box top in em: the RR-38 last ink row with at least 35 % of the peak row, median over 18, 24 and 32 pt (regular single lines = lineAscent, mixed line = lineAscentMixed). The controls (Angsana New 0.85, Sakkal Majalla 0.78, Arabic Typesetting 0.70) must reproduce within 0.03 em, or the probe values are not used.",
+   "controlsOk": false,
+   "families": [
+    {
+     "family": "DilleniaUPC",
+     "perSize": {
+      "single": [
+       0.815,
+       0.819,
+       0.813
+      ],
+      "bold": [
+       0.817,
+       0.808,
+       0.811
+      ],
+      "mixed": [
+       0.856,
+       0.852,
+       0.841
+      ],
+      "singleModeBottom": [
+       0.815,
+       0.819,
+       0.813
+      ]
+     },
+     "lineAscent": 0.82,
+     "lineAscentMixed": 0.85,
+     "boldMedian": 0.811,
+     "control": null
+    },
+    {
+     "family": "Malgun Gothic",
+     "perSize": {
+      "single": [
+       1.056,
+       1.056,
+       1.042
+      ],
+      "bold": [
+       1.058,
+       1.058,
+       1.051
+      ],
+      "mixed": [
+       1.004,
+       0.991,
+       0.998
+      ],
+      "singleModeBottom": [
+       1.056,
+       1.056,
+       1.042
+      ]
+     },
+     "lineAscent": 1.06,
+     "lineAscentMixed": 1,
+     "boldMedian": 1.058,
+     "control": null
+    },
+    {
+     "family": "Nirmala UI",
+     "perSize": {
+      "single": [
+       0.704,
+       0.736,
+       0.729
+      ],
+      "bold": [
+       0.854,
+       0.836,
+       0.832
+      ],
+      "mixed": [
+       0.93,
+       0.921,
+       0.935
+      ],
+      "singleModeBottom": [
+       0.333,
+       0.319,
+       0.313
+      ]
+     },
+     "lineAscent": 0.73,
+     "lineAscentMixed": 0.93,
+     "boldMedian": 0.836,
+     "control": null
+    },
+    {
+     "family": "Angsana New",
+     "perSize": {
+      "single": [
+       0.833,
+       0.833,
+       0.833
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.833,
+       0.833,
+       0.833
+      ]
+     },
+     "lineAscent": 0.83,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.85,
+      "ok": true
+     }
+    },
+    {
+     "family": "Sakkal Majalla",
+     "perSize": {
+      "single": [
+       0.761,
+       0.766,
+       0.759
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.761,
+       0.766,
+       0.759
+      ]
+     },
+     "lineAscent": 0.76,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.78,
+      "ok": true
+     }
+    },
+    {
+     "family": "Arabic Typesetting",
+     "perSize": {
+      "single": [
+       0.745,
+       0.741,
+       0.737
+      ],
+      "bold": [],
+      "mixed": [],
+      "singleModeBottom": [
+       0.745,
+       0.741,
+       0.737
+      ]
+     },
+     "lineAscent": 0.74,
+     "lineAscentMixed": null,
+     "boldMedian": null,
+     "control": {
+      "known": 0.7,
+      "ok": false
+     }
+    }
+   ],
+   "rows": [
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|18",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.815,
+     "baselineEmModeBottom": 0.815,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|18",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.817,
+     "baselineEmModeBottom": 0.817,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|18",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.856,
+     "baselineEmModeBottom": 0.856,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|24",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.819,
+     "baselineEmModeBottom": 0.819,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|24",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.808,
+     "baselineEmModeBottom": 0.808,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|24",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.852,
+     "baselineEmModeBottom": 0.852,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|regular|single|32",
+     "family": "DilleniaUPC",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.813,
+     "baselineEmModeBottom": 0.813,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|bold|single|32",
+     "family": "DilleniaUPC",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.811,
+     "baselineEmModeBottom": 0.811,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-dilleniaupc",
+     "name": "probe38|DilleniaUPC|mixed|mixed|32",
+     "family": "DilleniaUPC",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.841,
+     "baselineEmModeBottom": 0.841,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "DilleniaUPC"
+      ],
+      [
+       "DilleniaUPC",
+       "DilleniaUPC",
+       "DilleniaUPC"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|18",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.056,
+     "baselineEmModeBottom": 1.056,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|18",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.058,
+     "baselineEmModeBottom": 1.058,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|18",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 1.004,
+     "baselineEmModeBottom": 0.949,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|24",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 1.056,
+     "baselineEmModeBottom": 1.056,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|24",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 1.058,
+     "baselineEmModeBottom": 1.058,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|24",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.991,
+     "baselineEmModeBottom": 0.935,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|regular|single|32",
+     "family": "Malgun Gothic",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 1.042,
+     "baselineEmModeBottom": 1.042,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|bold|single|32",
+     "family": "Malgun Gothic",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 1.051,
+     "baselineEmModeBottom": 1.051,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-malgun-gothic",
+     "name": "probe38|Malgun Gothic|mixed|mixed|32",
+     "family": "Malgun Gothic",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.998,
+     "baselineEmModeBottom": 0.998,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ],
+      [
+       "Aptos",
+       "Malgun Gothic",
+       "Aptos"
+      ],
+      [
+       "Malgun Gothic",
+       "Malgun Gothic",
+       "Malgun Gothic"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|18",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.704,
+     "baselineEmModeBottom": 0.333,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|18",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.854,
+     "baselineEmModeBottom": 0.373,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|18",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.93,
+     "baselineEmModeBottom": 0.93,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|24",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.736,
+     "baselineEmModeBottom": 0.319,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|24",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.836,
+     "baselineEmModeBottom": 0.363,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|24",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.921,
+     "baselineEmModeBottom": 0.935,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|regular|single|32",
+     "family": "Nirmala UI",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.729,
+     "baselineEmModeBottom": 0.313,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|bold|single|32",
+     "family": "Nirmala UI",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.832,
+     "baselineEmModeBottom": 0.353,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-nirmala-ui",
+     "name": "probe38|Nirmala UI|mixed|mixed|32",
+     "family": "Nirmala UI",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.935,
+     "baselineEmModeBottom": 0.279,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Nirmala UI"
+      ],
+      [
+       "Nirmala UI",
+       "Nirmala UI",
+       "Nirmala UI"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|18",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|18",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.78,
+     "baselineEmPeak35": 0.761,
+     "baselineEmModeBottom": 0.761,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|18",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": 0.7,
+     "baselineEmPeak35": 0.745,
+     "baselineEmModeBottom": 0.745,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|24",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|24",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.78,
+     "baselineEmPeak35": 0.766,
+     "baselineEmModeBottom": 0.766,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|24",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": 0.7,
+     "baselineEmPeak35": 0.741,
+     "baselineEmModeBottom": 0.741,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Angsana New|regular|single|32",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.85,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Sakkal Majalla|regular|single|32",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.78,
+     "baselineEmPeak35": 0.759,
+     "baselineEmModeBottom": 0.759,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38-controls",
+     "name": "probe38|Arabic Typesetting|regular|single|32",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": 0.7,
+     "baselineEmPeak35": 0.737,
+     "baselineEmModeBottom": 0.737,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

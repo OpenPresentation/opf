@@ -152,9 +152,20 @@ describe("font policy table", () => {
   });
 
   // RR-38: a visual replacement whose glyphs and advances are far from the real font's carries a preview size multiplier.
-  test("sizeAdjust is a preview-only multiplier on visual rows, with its basis, and only Arabic Typesetting has one", () => {
+  test("sizeAdjust is a preview-only multiplier on visual rows, with its basis, on the measured rows only", () => {
     const adjusted = rows.filter((row) => row.replacement?.sizeAdjust !== undefined);
-    assert.deepEqual(adjusted.map((row) => `${row.family}->${row.replacement.family}`), ["Arabic Typesetting->Noto Naskh Arabic"]);
+    // RR-38 (Arabic Typesetting) and opf#361 (the rule factors of five more script families, measured natively).
+    assert.deepEqual(adjusted.map((row) => `${row.family}->${row.replacement.family}`).sort(), [
+      "Angsana New->Noto Sans Thai", "Arabic Typesetting->Noto Naskh Arabic", "DilleniaUPC->Noto Sans Thai",
+      "Malgun Gothic->Noto Sans KR", "Nirmala UI->Noto Sans Devanagari", "Sakkal Majalla->Noto Naskh Arabic",
+    ]);
+    // opf#361 rule: the smallest factor with no line over 3 percent natively (precomposed Hangul for Malgun Gothic).
+    assert.deepEqual(Object.fromEntries(adjusted.map((row) => [row.family, row.replacement.sizeAdjust])), {
+      "Angsana New": 0.75, "Arabic Typesetting": 0.64, DilleniaUPC: 0.68, "Malgun Gothic": 1.07, "Nirmala UI": 1.07, "Sakkal Majalla": 0.89,
+    });
+    for (const row of adjusted.filter((r) => r.family !== "Arabic Typesetting")) assert.match(row.replacement.sizeAdjustBasis, /opf#361 rule/, row.family);
+    // Traditional Arabic, Ebrima and MS Gothic stay without a multiplier (opf#361 decision).
+    for (const family of ["Traditional Arabic", "Ebrima", "MS Gothic"]) assert.equal(fontPolicyFor(family).replacement.sizeAdjust, undefined, family);
     for (const row of adjusted) {
       const { sizeAdjust, sizeAdjustBasis, compatibility } = row.replacement;
       assert.equal(compatibility, "visual", row.family);
@@ -175,10 +186,17 @@ describe("font policy table", () => {
     assert.equal(validate(tooSmall), false);
     // Arabic Typesetting measured against the installed font, in place: 0.643 of Noto Naskh Arabic's advances, rounded to 0.64.
     assert.equal(fontPolicyFor("Arabic Typesetting").replacement.sizeAdjust, 0.64);
-    // RR-38 native probe: the baseline of an Arabic Typesetting line sits 0.70 em below the box top (hhea ascent 0.701), 0.78 em with a Latin run.
+    // opf#361 native probe (corrects RR-38's 0.70 / 0.78): the baseline of an Arabic Typesetting line sits 0.74 em below the box top,
+    // 0.80 em with a Latin run.
     const arabic = fontPolicyFor("Arabic Typesetting").replacement;
-    assert.deepEqual([arabic.lineAscent, arabic.lineAscentMixed], [0.7, 0.78]);
-    for (const row of adjusted) {
+    assert.deepEqual([arabic.lineAscent, arabic.lineAscentMixed], [0.74, 0.8]);
+    const ascents = Object.fromEntries(adjusted.filter((row) => row.replacement.lineAscent !== undefined).map((row) => [row.family, [row.replacement.lineAscent, row.replacement.lineAscentMixed]]));
+    assert.deepEqual(ascents, {
+      "Angsana New": [0.83, 0.86], "Arabic Typesetting": [0.74, 0.8], DilleniaUPC: [0.82, 0.85], "Nirmala UI": [0.97, 0.94], "Sakkal Majalla": [0.76, 0.81],
+    });
+    // Malgun Gothic's native baseline (1.06 em) sits below core's 1.0, which a renderer that only moves runs up cannot apply: no lineAscent.
+    assert.equal(fontPolicyFor("Malgun Gothic").replacement.lineAscent, undefined);
+    for (const row of adjusted.filter((r) => r.replacement.lineAscent !== undefined)) {
       const { lineAscent, lineAscentMixed, lineAscentBasis } = row.replacement;
       assert.ok(lineAscent >= 0.3 && lineAscent <= 1.2 && lineAscentMixed >= 0.3 && lineAscentMixed <= 1.2, row.family);
       assert.match(lineAscentBasis, /native/, row.family);

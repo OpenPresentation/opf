@@ -1,0 +1,411 @@
+{
+ "rule": "smallest single factor F (0.01 steps, rounded up) with native/(F*replacementRuns + otherRuns) <= 1.03 on every counted line; counted = the family script corpus samples the real font covers (letters, digits, punctuation, mixed) + corpus Latn + 300 FF-31 Latin strings, regular and bold; ships no sizeAdjust when |F-1| <= 0.03",
+ "limit": 1.03,
+ "measuredAt": "2026-10-10T23:06:20.055Z",
+ "families": [
+  {
+   "family": "Angsana New",
+   "replacement": "Noto Sans Thai",
+   "linesCounted": 620,
+   "linesRegular": 310,
+   "linesBold": 310,
+   "sumFactorRegular": 0.7027,
+   "sumFactorBold": 0.6682,
+   "medianFactor": 0.6897,
+   "ruleFactorExact": 0.7401,
+   "ruleFactor": 0.75,
+   "worstOverhangAtRule": 0.0164,
+   "worstLine": "corpus-Thai/thai-digits regular",
+   "scriptLinesAtRule": {
+    "min": 0.8395,
+    "median": 0.9196,
+    "max": 1.0164
+   },
+   "latinAtRule": {
+    "min": 0.5413,
+    "median": 0.5715,
+    "max": 0.7686,
+    "medianSlackPct": 42.9
+   },
+   "proposedFactor": 0.7,
+   "worstOverhangAtProposed": 0.089,
+   "worstLineAtProposed": "corpus-Thai/thai-digits regular",
+   "withinNoAdjustBand": false,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Thai/thai-digits regular",
+     "need": 0.7401
+    },
+    {
+     "line": "corpus-Thai/thai-pali regular",
+     "need": 0.7053
+    },
+    {
+     "line": "corpus-Thai/thai-digits bold",
+     "need": 0.693
+    },
+    {
+     "line": "corpus-Thai/thai-title regular",
+     "need": 0.6929
+    }
+   ]
+  },
+  {
+   "family": "DilleniaUPC",
+   "replacement": "Noto Sans Thai",
+   "linesCounted": 620,
+   "linesRegular": 310,
+   "linesBold": 310,
+   "sumFactorRegular": 0.6404,
+   "sumFactorBold": 0.6219,
+   "medianFactor": 0.6309,
+   "ruleFactorExact": 0.6704,
+   "ruleFactor": 0.68,
+   "worstOverhangAtRule": 0.0155,
+   "worstLine": "corpus-Thai/thai-digits regular",
+   "scriptLinesAtRule": {
+    "min": 0.8785,
+    "median": 0.9278,
+    "max": 1.0155
+   },
+   "latinAtRule": {
+    "min": 0.5393,
+    "median": 0.5851,
+    "max": 0.8268,
+    "medianSlackPct": 41.5
+   },
+   "proposedFactor": 0.64,
+   "worstOverhangAtProposed": 0.079,
+   "worstLineAtProposed": "corpus-Thai/thai-digits regular",
+   "withinNoAdjustBand": false,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Thai/thai-digits regular",
+     "need": 0.6704
+    },
+    {
+     "line": "corpus-Thai/thai-digits bold",
+     "need": 0.657
+    },
+    {
+     "line": "corpus-Thai/thai-tone-marks regular",
+     "need": 0.6453
+    },
+    {
+     "line": "corpus-Thai/thai-pali regular",
+     "need": 0.6324
+    }
+   ]
+  },
+  {
+   "family": "Sakkal Majalla",
+   "replacement": "Noto Naskh Arabic",
+   "linesCounted": 638,
+   "linesRegular": 319,
+   "linesBold": 319,
+   "sumFactorRegular": 0.8031,
+   "sumFactorBold": 0.7956,
+   "medianFactor": 0.7938,
+   "ruleFactorExact": 0.8866,
+   "ruleFactor": 0.89,
+   "worstOverhangAtRule": 0.0261,
+   "worstLine": "corpus-Arab/arab-fa-digits regular",
+   "scriptLinesAtRule": {
+    "min": 0.8169,
+    "median": 0.8919,
+    "max": 1.0261
+   },
+   "latinAtRule": {
+    "min": 0.6195,
+    "median": 0.6488,
+    "max": 0.799,
+    "medianSlackPct": 35.1
+   },
+   "proposedFactor": 0.8,
+   "worstOverhangAtProposed": 0.1415,
+   "worstLineAtProposed": "corpus-Arab/arab-fa-digits regular",
+   "withinNoAdjustBand": false,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Arab/arab-fa-digits regular",
+     "need": 0.8866
+    },
+    {
+     "line": "corpus-Arab/arab-digits regular",
+     "need": 0.8818
+    },
+    {
+     "line": "corpus-Arab/arab-digits bold",
+     "need": 0.8377
+    },
+    {
+     "line": "corpus-Arab/arab-fa-digits bold",
+     "need": 0.8085
+    }
+   ]
+  },
+  {
+   "family": "Traditional Arabic",
+   "replacement": "Noto Naskh Arabic",
+   "linesCounted": 624,
+   "linesRegular": 312,
+   "linesBold": 312,
+   "sumFactorRegular": 0.789,
+   "sumFactorBold": 0.8001,
+   "medianFactor": 0.7449,
+   "ruleFactorExact": 1.0152,
+   "ruleFactor": 1.02,
+   "worstOverhangAtRule": 0.0251,
+   "worstLine": "corpus-Arab/arab-fa-digits bold",
+   "scriptLinesAtRule": {
+    "min": 0.6946,
+    "median": 0.7303,
+    "max": 1.0251
+   },
+   "latinAtRule": {
+    "min": 0.8055,
+    "median": 0.869,
+    "max": 0.9537,
+    "medianSlackPct": 13.1
+   },
+   "proposedFactor": 0.79,
+   "worstOverhangAtProposed": 0.3236,
+   "worstLineAtProposed": "corpus-Arab/arab-fa-digits bold",
+   "withinNoAdjustBand": true,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Arab/arab-fa-digits bold",
+     "need": 1.0152
+    },
+    {
+     "line": "corpus-Arab/arab-fa-digits regular",
+     "need": 0.9857
+    },
+    {
+     "line": "corpus-Latn/latn-numerals bold",
+     "need": 0.9066
+    },
+    {
+     "line": "corpus-Arab/arab-digits bold",
+     "need": 0.8869
+    }
+   ]
+  },
+  {
+   "family": "Malgun Gothic",
+   "replacement": "Noto Sans KR",
+   "linesCounted": 614,
+   "linesRegular": 307,
+   "linesBold": 307,
+   "sumFactorRegular": 1.063,
+   "sumFactorBold": 1.0613,
+   "medianFactor": 1.0614,
+   "ruleFactorExact": 1.0669,
+   "ruleFactor": 1.07,
+   "worstOverhangAtRule": 0.0271,
+   "worstLine": "corpus-Latn/latn-numerals regular",
+   "scriptLinesAtRule": {
+    "min": 0.9633,
+    "median": 0.992,
+    "max": 1.027
+   },
+   "latinAtRule": {
+    "min": 0.9267,
+    "median": 0.9843,
+    "max": 1.0271,
+    "medianSlackPct": 1.6
+   },
+   "proposedFactor": 1.06,
+   "worstOverhangAtProposed": 0.0367,
+   "worstLineAtProposed": "corpus-Kore/kore-jamo regular",
+   "withinNoAdjustBand": false,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Kore/kore-jamo regular",
+     "need": 1.0669
+    },
+    {
+     "line": "corpus-Kore/kore-jamo bold",
+     "need": 1.0669
+    },
+    {
+     "line": "corpus-Kore/kore-sentence regular",
+     "need": 1.0557
+    },
+    {
+     "line": "corpus-Kore/kore-sentence bold",
+     "need": 1.0542
+    }
+   ]
+  },
+  {
+   "family": "Nirmala UI",
+   "replacement": "Noto Sans Devanagari",
+   "linesCounted": 624,
+   "linesRegular": 312,
+   "linesBold": 312,
+   "sumFactorRegular": 1.0665,
+   "sumFactorBold": 1.0674,
+   "medianFactor": 1.0647,
+   "ruleFactorExact": 1.0695,
+   "ruleFactor": 1.07,
+   "worstOverhangAtRule": 0.0295,
+   "worstLine": "corpus-Deva/deva-matras regular",
+   "scriptLinesAtRule": {
+    "min": 0.9539,
+    "median": 0.9951,
+    "max": 1.0295
+   },
+   "latinAtRule": {
+    "min": 0.9141,
+    "median": 0.9402,
+    "max": 0.9706,
+    "medianSlackPct": 6
+   },
+   "proposedFactor": 1.07,
+   "worstOverhangAtProposed": 0.0295,
+   "worstLineAtProposed": "corpus-Deva/deva-matras regular",
+   "withinNoAdjustBand": false,
+   "unreachable": {
+    "sets": [
+     "corpus-Beng",
+     "corpus-Guru",
+     "corpus-Gujr",
+     "corpus-Orya",
+     "corpus-Taml",
+     "corpus-Telu",
+     "corpus-Knda",
+     "corpus-Mlym",
+     "corpus-Sinh"
+    ],
+    "lines": 68,
+    "maxNativeOverPreview": 1.3272
+   },
+   "topNeeds": [
+    {
+     "line": "corpus-Deva/deva-matras regular",
+     "need": 1.0695
+    },
+    {
+     "line": "corpus-Deva/deva-mr bold",
+     "need": 1.0655
+    },
+    {
+     "line": "corpus-Deva/deva-reph regular",
+     "need": 1.0609
+    },
+    {
+     "line": "corpus-Deva/deva-mr regular",
+     "need": 1.0567
+    }
+   ]
+  },
+  {
+   "family": "Ebrima",
+   "replacement": "Noto Sans",
+   "linesCounted": 624,
+   "linesRegular": 312,
+   "linesBold": 312,
+   "sumFactorRegular": null,
+   "sumFactorBold": null,
+   "medianFactor": null,
+   "ruleFactorExact": null,
+   "ruleFactor": null,
+   "worstOverhangAtRule": null,
+   "worstLine": "corpus-Latn/latn-yo regular",
+   "scriptLinesAtRule": {
+    "min": null,
+    "median": null,
+    "max": null
+   },
+   "latinAtRule": {
+    "min": null,
+    "median": null,
+    "max": null,
+    "medianSlackPct": null
+   },
+   "proposedFactor": 0.94,
+   "worstOverhangAtProposed": 0.0172,
+   "worstLineAtProposed": "corpus-Latn/latn-numerals bold",
+   "withinNoAdjustBand": false,
+   "unreachable": {
+    "sets": [
+     "corpus-Ethi"
+    ],
+    "lines": 6,
+    "maxNativeOverPreview": null
+   },
+   "topNeeds": [
+    {
+     "line": "corpus-Latn/latn-yo regular",
+     "need": null
+    },
+    {
+     "line": "corpus-Latn/latn-ig regular",
+     "need": null
+    },
+    {
+     "line": "corpus-Latn/latn-ha-ff regular",
+     "need": null
+    },
+    {
+     "line": "corpus-Latn/latn-tr-az regular",
+     "need": null
+    }
+   ]
+  },
+  {
+   "family": "MS Gothic",
+   "replacement": "Noto Sans JP",
+   "linesCounted": 628,
+   "linesRegular": 314,
+   "linesBold": 314,
+   "sumFactorRegular": 1.0351,
+   "sumFactorBold": 1.0315,
+   "medianFactor": 1.011,
+   "ruleFactorExact": null,
+   "ruleFactor": null,
+   "worstOverhangAtRule": -1,
+   "worstLine": "corpus-Jpan/jpan-sentence regular",
+   "scriptLinesAtRule": {
+    "min": 0,
+    "median": 0,
+    "max": 0
+   },
+   "latinAtRule": {
+    "min": 0,
+    "median": null,
+    "max": null,
+    "medianSlackPct": null
+   },
+   "proposedFactor": 1.04,
+   "worstOverhangAtProposed": 0.3665,
+   "worstLineAtProposed": "corpus-Latn/latn-ligatures regular",
+   "withinNoAdjustBand": false,
+   "unreachable": null,
+   "topNeeds": [
+    {
+     "line": "corpus-Latn/latn-mi regular",
+     "need": null
+    },
+    {
+     "line": "corpus-Latn/latn-ligatures regular",
+     "need": null
+    },
+    {
+     "line": "latin-ff31/ff31-0 regular",
+     "need": null
+    },
+    {
+     "line": "latin-ff31/ff31-5 regular",
+     "need": null
+    }
+   ]
+  }
+ ]
+}
