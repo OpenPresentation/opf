@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 // Release notes for a version from a CHANGELOG: the body of its `## X.Y.Z` section, up to the next `## ` heading.
 // The assembler writes `## X.Y.Z (YYYY-MM-DD)` headings (scripts/changelog-fragments.mjs); a bare `## X.Y.Z` is accepted
-// too. The version is matched whole, so 0.18.1 never selects the 0.18.10 section. Used by the "Create GitHub Release" job of
-// .github/workflows/npm-publish.yml.
+// too. The version is matched whole, so 0.18.1 never selects the 0.18.10 section. Used by the "Create GitHub Release" jobs of
+// .github/workflows/npm-publish.yml and cli-publish.yml.
 //
-//   node scripts/release-notes.mjs --version 0.18.1 [--changelog CHANGELOG.md] [--out notes.md]
+//   node scripts/release-notes.mjs --version 0.18.1 [--changelog <path>] [--out notes.md]
 //
+// --changelog defaults to the repository's root CHANGELOG.md (core); the CLI release job passes packages/cli/CHANGELOG.md.
 // Prints the notes (or writes them to --out); prints nothing when the version has no section or an empty one.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT_CHANGELOG = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'CHANGELOG.md');
 
 export function escapeRegExp(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -26,11 +30,11 @@ export function extractReleaseNotes(changelog, version) {
 }
 
 function main(argv) {
-  const options = { changelog: 'CHANGELOG.md' };
+  const options = { changelog: ROOT_CHANGELOG };
   for (let i = 0; i < argv.length; i += 2) {
     const key = argv[i]?.replace(/^--/, '');
     if (!['version', 'changelog', 'out'].includes(key) || argv[i + 1] === undefined) {
-      console.error('Usage: node scripts/release-notes.mjs --version X.Y.Z [--changelog CHANGELOG.md] [--out notes.md]');
+      console.error('Usage: node scripts/release-notes.mjs --version X.Y.Z [--changelog <path>] [--out notes.md]');
       return 2;
     }
     options[key] = argv[i + 1];
