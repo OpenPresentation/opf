@@ -4,7 +4,7 @@
 
 As of 2026-10-02. Machine-readable source: [gallery-tracker.json](gallery-tracker.json). Authored rules: [gallery-tracker.overrides.json](gallery-tracker.overrides.json). Program: [burndown.md](burndown.md). Rebuild with `pnpm build:gallery-tracker`; `pnpm check:gallery-tracker` fails when this file is stale. Internal tracking only: nothing here is shown on a site.
 
-One record per item type and value: every catalog record in `spec/catalogs`, every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.
+One record per item type and value: every catalog record in `packages/gallery/catalog` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.
 
 ## Summary
 
@@ -53,7 +53,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Column | Values and source |
 | --- | --- |
-| spec | catalog (bundled in core spec/catalogs), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none. |
+| spec | catalog (bundled in @openpresentation/gallery, packages/gallery/catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none. |
 | compose | pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped). |
 | preview | pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled. |
 | export | pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name. |
@@ -94,7 +94,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Input | Source |
 | --- | --- |
-| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `cce9b8e`) |
+| Catalogs | `packages/gallery/catalog` (11 kinds, pinned to pptx-gallery `cce9b8e`) |
 | pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `5645db8`, captured 2026-10-08) |
 | Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.14.2 `09f4ce2`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
 | Audits A and B | `docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json`, `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json` (opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, pptx-gallery `c349a61`) |

@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { stats as statsOf } from "../dist/index.js";
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 import { examples } from "../dist/examples.js";
 
 // The decks name gallery records; the host registers the default catalog.
-const stats = (input, options = {}) => statsOf(input, { catalogs: [defaultCatalog], ...options });
+const stats = (input, options = {}) => statsOf(input, { catalogs: [gallery], ...options });
 
 const PNG = "data:image/png;base64,iVBORw0KGgo=";
 

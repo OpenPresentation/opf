@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { defaultCatalog } from '../dist/catalog.js';
+import { gallery } from '@openpresentation/gallery';
 import { validateCatalogRecord } from '../dist/validator.js';
 import { validate, validationRules, findValidationRule } from '../dist/index.js';
 // The narrative checks: unknown beats are references findings, durations and unused beats content findings.
 const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'content'], ...options });
 
 // FA-02: the deck holds a pointer (narrative: a reference); the plan is a catalog record.
-const narratives = Object.entries(defaultCatalog.narratives).map(([id, entry]) => ({ $schema: 'https://openpresentation.org/schema/opf-narrative/v1', id, ...entry }));
+const narratives = Object.entries(gallery.narratives).map(([id, entry]) => ({ $schema: 'https://openpresentation.org/schema/opf-narrative/v1', id, ...entry }));
 const host = (narratives) => ({ catalogs: [{ source: 'pkg:@host/narratives', narratives }] });
 const record = (extra = {}) => ({
 	name: 'Arc',
@@ -61,7 +61,7 @@ test('validate warns about a slide beat the resolved narrative does not define',
 test('validate resolves a bundled narrative and records the host loaded', () => {
 	const bundled = narratives.find((entry) => entry.id === 'qbr');
 	const document = { narrative: 'qbr', duration: 60, slides: [{ title: 'x', beat: bundled.beats[0].id }, { title: 'y', beat: 'not-a-beat' }] };
-	assert.deepEqual(rule(checkAll(document, { catalogs: [defaultCatalog] }), 'opf/unknown-beat').map((issue) => issue.path), ['/slides/1/beat']);
+	assert.deepEqual(rule(checkAll(document, { catalogs: [gallery] }), 'opf/unknown-beat').map((issue) => issue.path), ['/slides/1/beat']);
 	const loaded = { narrative: 'remote-arc', slides: [{ title: 'x', beat: 'zzz' }] };
 	assert.deepEqual(rule(checkAll(loaded, { catalogs: [] }), 'opf/unknown-beat'), []);
 	assert.equal(rule(checkAll(loaded, host({ 'remote-arc': record() })), 'opf/unknown-beat').length, 1);

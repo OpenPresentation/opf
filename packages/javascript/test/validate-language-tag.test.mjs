@@ -93,7 +93,7 @@ test('the rule is registered, can be switched off and sits in the content catego
 
 test('every bcp47 of the bundled language catalog records is a clean tag', () => {
 	const root = new URL('../../../', import.meta.url);
-	const dir = new URL('spec/catalogs/languages/', root);
+	const dir = new URL('packages/gallery/catalog/languages/', root);
 	for (const file of readdirSync(dir).filter((name) => name.endsWith('.json'))) {
 		const record = JSON.parse(readFileSync(new URL(file, dir), 'utf8'));
 		if (typeof record.bcp47 === 'string') assert.ok(clean(record.bcp47), `${file}: ${record.bcp47}`);

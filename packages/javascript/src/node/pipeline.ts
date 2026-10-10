@@ -1,7 +1,7 @@
 // The checked export and import of the Node engine: `convert` and `open` (conversion.ts) chain them with reading and writing
 // files. They throw `OPFApiError`; the public functions turn it into `OPFExportError` or `OPFImportError`.
 import { type Catalog, type Finding, type Presentation, type ValidateOptions, type ValidationReport, validate } from "../core.js";
-import { DEFAULT_CATALOGS } from "./catalogs.js";
+import { defaultCatalogs } from "./catalogs.js";
 import { runImport } from "./pptx-import.js";
 import { OPFApiError } from "../api-errors.js";
 import { type ExportFile, type ExportFontSummary, type ExportOptions, type ResolvedExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
@@ -10,7 +10,7 @@ import { PPTX_PACKAGE, type Peer, type PptxModule, type Renderer, loadPptx, load
 import { Reporter } from "./reporter.js";
 
 /** The check a presentation passes before it is exported or after it is imported: format and references, so a contrast warning never blocks a write. */
-export const checkOptions = (catalogs: readonly Catalog[] | undefined): ValidateOptions => ({ only: ["format", "references"], catalogs: catalogs ?? DEFAULT_CATALOGS });
+export const checkOptions = (catalogs: readonly Catalog[] | undefined): ValidateOptions => ({ only: ["format", "references"], catalogs: catalogs ?? defaultCatalogs() });
 
 export const firstError = (findings: readonly Finding[]) => {
 	const first = findings.find((found) => found.severity === "error");

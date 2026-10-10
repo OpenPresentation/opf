@@ -2,7 +2,7 @@
 //
 //   node scripts/gallery-catalog/sync-gallery-catalogs.mjs [--gallery <dir>] [--check]
 //
-// Default mode writes a record for every gallery id missing from spec/catalogs/{narratives,audiences},
+// Default mode writes a record for every gallery id missing from packages/gallery/catalog/{narratives,audiences},
 // inserts its index entry without reformatting the hand-written index files, adds the gallery's
 // recommended narratives to existing audience records, and rewrites the resolved per-beat table in
 // gallery-layout-map.json. Ids already in core are never overwritten.
@@ -29,7 +29,7 @@ const option = (name, fallback) => {
 };
 const galleryRoot = path.resolve(option("--gallery", path.join(repoRoot, "../pptx-gallery")));
 const check = flag("--check");
-const catalogDir = (kind) => path.join(repoRoot, "spec/catalogs", kind);
+const catalogDir = (kind) => path.join(repoRoot, "packages/gallery/catalog", kind);
 const mapPath = path.join(here, "gallery-layout-map.json");
 const readJson = async (file) => JSON.parse(await readFile(file, "utf8"));
 const writeJson = (file, value) => writeFile(file, `${JSON.stringify(value, null, 2)}\n`);

@@ -8,7 +8,7 @@
 //   node scripts/build-gallery-tracker.mjs --snapshot-editor <opf-editor checkout> --commit <sha>
 //                                                     refresh the pinned opf-editor switch snapshot, then rebuild
 //
-// Derived data (never hand edited): spec/catalogs, the opf schema, the gallery support audits A and B, the latest
+// Derived data (never hand edited): packages/gallery/catalog, the opf schema, the gallery support audits A and B, the latest
 // committed parity run, the font tracker, the committed native evidence under docs/evidence, the RR burndown and the
 // two pinned snapshots (pptx.gallery data and pages, opf-editor switch dimensions). Authored data:
 // docs/programs/release-readiness/gallery-tracker.overrides.json (the rules that give each gap its next action and its
@@ -373,7 +373,7 @@ export function buildTracker({ root = ROOT } = {}) {
       else if (!catalogKind) spec = "schema";
       else if (published.has(id)) spec = "gallery-catalog";
       else spec = "none";
-      if (spec === "gallery-catalog") gaps.push({ code: "missing-spec", detail: `published by the pptx.gallery ${publishedKind} catalog but not bundled in core spec/catalogs (portable through an inline record)` });
+      if (spec === "gallery-catalog") gaps.push({ code: "missing-spec", detail: `published by the pptx.gallery ${publishedKind} catalog but not bundled in @openpresentation/gallery (portable through an inline record)` });
       if (spec === "none") gaps.push({ code: "missing-spec", detail: `${legacy.has(id) ? "legacy gallery item" : "gallery item"} not published in any OPF catalog` });
 
       // gallery
@@ -573,7 +573,7 @@ export function renderMarkdown(tracker) {
     "",
     `As of ${tracker.asOf}. Machine-readable source: [gallery-tracker.json](gallery-tracker.json). Authored rules: [gallery-tracker.overrides.json](gallery-tracker.overrides.json). Program: [burndown.md](burndown.md). Rebuild with \`pnpm build:gallery-tracker\`; \`pnpm check:gallery-tracker\` fails when this file is stale. Internal tracking only: nothing here is shown on a site.`,
     "",
-    "One record per item type and value: every catalog record in `spec/catalogs`, every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.",
+    "One record per item type and value: every catalog record in `packages/gallery/catalog` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.",
     "",
     "## Summary",
     "",

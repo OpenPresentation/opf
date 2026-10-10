@@ -27,7 +27,7 @@ installed package versions give the same bytes on every operating system.
 | `opf ingest <data> [output] --as table\|chart` | CSV, TSV or JSON rows as a table or chart slide, alone or added `--into` a deck. |
 | `opf doctor [deck]` | Which formats this install can write, and the one command that installs what is missing. |
 | `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. |
-| `opf catalogs`, `opf catalog <kind> [id]`, `opf catalog examples [slug]` | The default catalog and the bundled example decks. |
+| `opf catalogs`, `opf catalog <kind> [id]`, `opf catalog examples [slug]` | The pptx.gallery catalog (`@openpresentation/gallery`) and the bundled example decks. |
 | `opf skills <install\|update\|status>` | The six bundled agent skills. |
 
 `opf <command> --help` (or `-h`, or `opf help <command>`) prints a command's flags and examples.
@@ -94,7 +94,7 @@ carry that one command for the format asked for. What each output needs beside `
 ## From code
 
 The engine the commands run is core's `@openpresentation/opf` in Node, which an application imports instead of spawning `opf`.
-In Node, `validate`, `stats`, `paginate`, `embed` and `edit` register the default catalog when a call names none, as the commands
+In Node, `validate`, `stats`, `paginate`, `embed` and `edit` register the gallery (`@openpresentation/gallery`) when a call names none, as the commands
 do, so `opf validate deck` and `validate(deck)` agree:
 
 ```ts

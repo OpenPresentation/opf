@@ -4,8 +4,9 @@
 //
 // "Breaking" is scoped narrowly to five kinds of removal — additions are
 // never breaking:
-//   1. a catalog record file (spec/catalogs/<kind>/<id>.json) that existed at
-//      the tag no longer exists (a removed record id).
+//   1. a catalog record file (packages/gallery/catalog/<kind>/<id>.json; before RR-78
+//      spec/catalogs/<kind>/<id>.json) that existed at the tag no longer exists under
+//      packages/gallery/catalog (a removed record id).
 //   2. a schema file (spec/schemas/*.schema.json) that existed at the tag no
 //      longer exists.
 //   3. a top-level `properties` or `$defs` entry removed from a schema file
@@ -43,7 +44,9 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const specRoot = path.join(repoRoot, "spec");
-const catalogsRoot = path.join(specRoot, "catalogs");
+// RR-78: the records moved from spec/catalogs to the gallery package; a tag before the move has them at the old path.
+const catalogsRoot = path.join(repoRoot, "packages", "gallery", "catalog");
+const formerCatalogsRoot = path.join(specRoot, "catalogs");
 const schemasRoot = path.join(specRoot, "schemas");
 const javascriptPackageJsonPath = path.join(repoRoot, "packages", "javascript", "package.json");
 const changesRoot = path.join(repoRoot, "changes");
@@ -57,6 +60,7 @@ function displayPath(absolute) {
 }
 
 const catalogsSubpath = displayPath(catalogsRoot);
+const formerCatalogsSubpath = displayPath(formerCatalogsRoot);
 const schemasSubpath = displayPath(schemasRoot);
 
 function latestOpfTag() {
@@ -154,17 +158,18 @@ function flagBreaking(message) {
 }
 
 async function checkRemovedCatalogRecords(tag) {
-  const oldCatalogFiles = listFilesAtTag(tag, catalogsSubpath).filter(
-    (relPath) => relPath.endsWith(".json") && !relPath.endsWith("/index.json"),
+  const oldCatalogFiles = [...listFilesAtTag(tag, formerCatalogsSubpath), ...listFilesAtTag(tag, catalogsSubpath)].filter(
+    (relPath) => relPath.endsWith(".json") && !relPath.endsWith("/index.json") && !relPath.endsWith("/manifest.json"),
   );
 
   for (const relPath of oldCatalogFiles) {
-    const absolutePath = path.join(repoRoot, relPath);
-    if (!existsSync(absolutePath)) {
-      const parts = relPath.split("/");
-      const kind = parts[parts.length - 2];
-      const id = parts[parts.length - 1].replace(/\.json$/, "");
-      flagBreaking(`[record removed] ${kind}/${id} (${relPath} existed at ${tag}, no longer exists)`);
+    const parts = relPath.split("/");
+    const kind = parts[parts.length - 2];
+    const id = parts[parts.length - 1].replace(/\.json$/, "");
+    // The same file below the catalog root, wherever the tag had that root.
+    const inCatalog = relPath.startsWith(`${formerCatalogsSubpath}/`) ? relPath.slice(formerCatalogsSubpath.length + 1) : relPath.slice(catalogsSubpath.length + 1);
+    if (!existsSync(path.join(catalogsRoot, ...inCatalog.split("/")))) {
+      flagBreaking(`[record removed] ${kind}/${id} (${relPath} existed at ${tag}, no longer exists under ${catalogsSubpath})`);
     }
   }
 }

@@ -37,7 +37,8 @@ const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
 // OPF 0.15: chart types are an engine vocabulary (CHART_TYPES); their display records, with the OpenXML mappings, are
 // catalogDisplay.chartTypes of the opt-in /catalog subpath, keyed by id.
 const {CHART_TYPES} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
-const {catalogDisplay} = await imp(path.join(CORE, 'packages/javascript/dist/catalog.js'));
+// RR-78: the display records are @openpresentation/gallery's (packages/gallery).
+const {catalogDisplay} = await imp(path.join(CORE, 'packages/gallery/dist/index.js'));
 const CHART_TYPE_RECORDS = CHART_TYPES.map((id) => ({id, ...catalogDisplay.chartTypes[id]}));
 const CX_EXPECT = chartexExpectations(CHART_TYPE_RECORDS);
 // A published package is not a git checkout: its npm gitHead names the commit it was built from.

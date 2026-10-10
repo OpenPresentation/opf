@@ -15,8 +15,9 @@ const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing
 ```
 
 The namespace is all of core (`validate`, `parse`, `stringify`, `paginate`, `parseSlideSelection`, the types and the error
-classes), so one import covers an application. The default catalog is exported only at `@openpresentation/opf/catalog`; in Node,
-`open`, `save` and `convert` use it when no `catalogs` are passed.
+classes), so one import covers an application. The pptx.gallery catalog is the package `@openpresentation/gallery` (`gallery`, a
+dependency of core, RR-78); in Node, `open`, `save` and `convert` register it when no `catalogs` are passed. A gallery that targets
+another catalog record schema than core reads (`CATALOG_SCHEMA`) is refused with `gallery-schema-mismatch`.
 
 ## The CLI's verbs, with the CLI's defaults
 
@@ -24,16 +25,16 @@ OPF 0.18 gives the Node build the verbs of the `opf` command, so a script calls 
 
 | Function | Command | In Node, when `catalogs` is omitted |
 | --- | --- | --- |
-| `validate(deck, options?)` | `opf validate` | the default catalog is registered, so `opf validate deck` and `validate(deck)` report the same findings |
-| `stats(deck, options?)` | `opf stats` | the default catalog |
-| `paginate(deck, options?)` | `opf paginate` | the default catalog. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
-| `embed(deck, options?)` | `opf embed` | the default catalog |
-| `edit(deck, patch, options?)` | `opf edit` | the default catalog for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
+| `validate(deck, options?)` | `opf validate` | the gallery is registered, so `opf validate deck` and `validate(deck)` report the same findings |
+| `stats(deck, options?)` | `opf stats` | the gallery |
+| `paginate(deck, options?)` | `opf paginate` | the gallery. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
+| `embed(deck, options?)` | `opf embed` | the gallery |
+| `edit(deck, patch, options?)` | `opf edit` | the gallery for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
 | `fill(template, data?, options?)` | `opf fill` | no catalog: `data` is CSV, TSV or JSON text, a record or a list of records; returns `{ decks, complete, unfilled, diagnostics }`, and `presentation` with `combine: true`. `fillRecords(text)` reads the records alone |
 | `diff(a, b)`, `merge(base, ours, theirs)` | `opf diff`, `opf merge` | no catalog |
 
 An explicit `catalogs: []` registers none. The browser build exports the same functions and registers no catalog (FA-21): a
-browser host passes `{ catalogs: [defaultCatalog] }` itself. Only `open`, `save` and `convert` are Node only.
+browser host passes `{ catalogs: [gallery] }` itself (`import { gallery } from "@openpresentation/gallery"`). Only `open`, `save` and `convert` are Node only.
 
 A shorter name is available as an npm alias, if you want one: `npm i opf@npm:@openpresentation/opf` installs the same package
 as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name.
@@ -41,7 +42,8 @@ as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name
 ## One import for every runtime
 
 OPF 0.18 removed the `@openpresentation/opf/node` subpath of 0.17: import `@openpresentation/opf` instead, with the same names
-(but `defaultCatalog`, which stays at `@openpresentation/opf/catalog`).
+(OPF 0.19 removed `@openpresentation/opf/catalog` and `defaultCatalog`, with no alias: import `gallery` from
+`@openpresentation/gallery`).
 The package's conditional exports pick the build:
 
 | Condition | Build | `open`, `save`, `convert` |
@@ -64,8 +66,9 @@ The package's conditional exports pick the build:
 
 ## The stack
 
-OPF is five packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
-`stringify`, composition and pagination, and in Node the files. **The CLI** (`@openpresentation/cli`) is the `opf` command;
+OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
+`stringify`, composition and pagination, and in Node the files. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery
+catalog, a dependency of core released on its own version line. **The CLI** (`@openpresentation/cli`) is the `opf` command;
 its `convert`, `render`, `export` and `import` commands run core's Node engine (through `@openpresentation/opf/internal/engine`,
 which the package exports under the `node` condition for the CLI only; it is not an application API). **opf-render**,
 **opf-pptx** and **opf-editor** are the engines: drawing (SVG, PNG, PDF), PowerPoint (export and import) and the editor.

@@ -17,3 +17,4 @@ export { type ReportFinding, Reporter, type Source, finishReport, reaches, repor
 export { createZip } from "./node/zip.js";
 export { type PaginateDeckOptions, type PaginatedDeck, paginateDeck } from "./node/paginate.js";
 export { RENDER_EXTRAS, locatePackage } from "./node/peers.js";
+export { defaultCatalogs, galleryMismatch } from "./node/catalogs.js";

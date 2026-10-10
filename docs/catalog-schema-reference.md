@@ -34,12 +34,12 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-catalog-index/v1`
 - Type: `object`
 - Required fields: `$schema`, `version`, `description`, `records`
-- Purpose: Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (spec/catalogs is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fiel...
+- Purpose: Generic shape shared by every `<kind>/index.json` file of the @openpresentation/gallery package (packages/gallery/catalog in the OPF repo) and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (the gallery package is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name,...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-catalog-index/v1"` |  |
-| `kind` | no | `enum:audiences \| chart-types \| color-schemes \| font-schemes \| languages \| layouts \| narratives \| purposes \| social-platforms \| themes \| tones` | Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `spec/catalogs/<kind>` directory name. |
+| `kind` | no | `enum:audiences \| chart-types \| color-schemes \| font-schemes \| languages \| layouts \| narratives \| purposes \| social-platforms \| themes \| tones` | Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `packages/gallery/catalog/<kind>` directory name. |
 | `version` | yes | `string` | Index format version, as a string. |
 | `description` | yes | `string` | Human-readable description of what this catalog kind holds and how entries are ordered. |
 | `contentSha256` | no | `string` | SHA-256 (lowercase hex) of the canonical JSON of the full records this index lists, in index order, with every top-level `x-*` member removed. Canonical JSON sorts object keys and has no insignificant whitespace. Lets... |
@@ -67,7 +67,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-catalog-manifest/v1`
 - Type: `object`
 - Required fields: `$schema`, `description`, `publisher`, `source`, `kinds`
-- Purpose: Shape of `spec/catalogs/manifest.json`, which pins the snapshot of the default OPF catalog published by pptx.gallery (shipped as @openpresentation/opf/catalog). It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a repo-internal file, not an O...
+- Purpose: Shape of the `manifest.json` of the @openpresentation/gallery package (packages/gallery/catalog/manifest.json), which pins the snapshot of the default OPF catalog published by pptx.gallery. It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -97,7 +97,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/opf/ca...
+- Purpose: Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/galler...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -218,7 +218,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-language/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `bcp47`
-- Purpose: Schema for language records: display metadata for the language pickers of authoring tools (name, ISO code, the default font schemes a picker suggests). The document's 'language' is an engine vocabulary, a BCP-47 tag validated directly; engines never look a language record up, and their script, direction, OOXML tag and default script fonts come from spec/reference/engine-vocabularies.json. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.langu...
+- Purpose: Schema for language records: display metadata for the language pickers of authoring tools (name, ISO code, the default font schemes a picker suggests). The document's 'language' is an engine vocabulary, a BCP-47 tag validated directly; engines never look a language record up, and their script, direction, OOXML tag and default script fonts come from spec/reference/engine-vocabularies.json. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.languages.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -243,7 +243,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-layout-preview-index/v1`
 - Type: `object`
 - Required fields: `$schema`, `version`, `description`, `records`
-- Purpose: Shape of `spec/previews/layouts/index.json`, the manifest for the vendored slide-archetype preview gallery under `spec/previews/layouts/`. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at spec/catalogs/layouts/ (e.g. 'title', 'chart-2x') see spec/README.md. This schema describes a repo-internal index file, not an OP...
+- Purpose: Shape of `previews/layouts/index.json` of the @openpresentation/gallery package, the manifest for the vendored slide-archetype preview gallery under packages/gallery/previews/layouts/. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at packages/gallery/catalog/layouts/ (e.g. 'title', 'chart-2x') see spec/README.md. Th...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -262,7 +262,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | yes | `string` | Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a spec/catalogs/layouts/ record id. |
+| `id` | yes | `string` | Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a layout record id. |
 | `file` | yes | `string` | HTML filename, relative to this index file's directory. |
 | `bytes` | yes | `integer` | Exact UTF-8 byte length of the referenced HTML file's contents. |
 
@@ -481,7 +481,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-social-platform/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for social-platform records: display metadata for authoring UIs (name, brand color, handle example) alongside the URL patterns. The keys of a Socials object are an engine vocabulary validated directly; engines link a handle with the patterns in spec/reference/engine-vocabularies.json and never look a social-platform record up. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.socialPlatforms.
+- Purpose: Schema for social-platform records: display metadata for authoring UIs (name, brand color, handle example) alongside the URL patterns. The keys of a Socials object are an engine vocabulary validated directly; engines link a handle with the patterns in spec/reference/engine-vocabularies.json and never look a social-platform record up. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.socialPlatforms.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

@@ -13,7 +13,7 @@ import { type DeckFormat, type DeckReport, deckFormatOf, readDeckReport } from "
 import { stringify } from "../deck.js";
 import type { Finding, Presentation, ValidationReport } from "../core.js";
 import { OPFValidationError, validate } from "../validator.js";
-import { DEFAULT_CATALOGS } from "./catalogs.js";
+import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError, OPFExportError, OPFImportError, asApiError } from "../api-errors.js";
 import { type ExportFile, type ExportFormat, type ExportOptions, checkDate, checkRenamedOptions, checkScale } from "./export.js";
 import { deckStem, writeFiles } from "./files.js";
@@ -265,7 +265,7 @@ export async function planConversion(input: ConvertInput, output: string | undef
 	const source = sourceOf(input, flags);
 	const target = targetOf(output, options, flags);
 	checkApplicable(source, target, options, flags);
-	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
+	const catalogs = options.catalogs ?? defaultCatalogs();
 	const ExportClass = target.kind === "export" ? OPFExportError : OPFApiError;
 	const inputFile = typeof input === "string" ? input : undefined;
 
@@ -372,7 +372,7 @@ export async function convertFiles(input: ConvertInput, output: string | undefin
 
 /** `open`: a deck file read and checked, or a PowerPoint file (a path or its bytes) imported. */
 export async function openDeck(input: string | Uint8Array | ArrayBuffer, options: OpenOptions = {}): Promise<Presentation> {
-	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
+	const catalogs = options.catalogs ?? defaultCatalogs();
 	if (input instanceof Uint8Array || input instanceof ArrayBuffer || (typeof input === "string" && /\.pptx$/i.test(input))) {
 		const bytes = typeof input === "string" ? await readInput(input) : input instanceof Uint8Array ? input : new Uint8Array(input);
 		return (await inStep(OPFImportError, "import-failed", () => importPresentation(bytes, { catalogs }))).result.presentation;
@@ -393,7 +393,7 @@ export async function saveDeck(presentation: Presentation, file: string, options
 	const format = deckFileFormat(file);
 	if (!format) throw invalid(`save writes ${DECKS} files; ${file} is none of them.${exportFormatOf(file) || /\.zip$/i.test(file) ? ` Export with convert(deck, "${file}").` : ""}`, { path: file });
 	if (options.validate !== false) {
-		const report = validate(presentation, checkOptions(options.catalogs ?? DEFAULT_CATALOGS));
+		const report = validate(presentation, checkOptions(options.catalogs ?? defaultCatalogs()));
 		if (!report.valid) throw new OPFValidationError(report);
 	}
 	const bytes = new TextEncoder().encode(deckText(presentation, format, options.schemaComment === true));

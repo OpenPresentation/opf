@@ -9,7 +9,7 @@ import { statSync } from "node:fs";
 import path from "node:path";
 import { type Catalog, type Fonts, paginate } from "../core.js";
 import { createImageResolver } from "./assets.js";
-import { DEFAULT_CATALOGS } from "./catalogs.js";
+import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
 import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
@@ -226,7 +226,7 @@ const MEDIA = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", 
 export async function runExport(presentation: unknown, options: ResolvedExportOptions, ctx: ExportContext): Promise<ExportRun> {
 	const { format, scale } = options;
 	const reporter = ctx.reporter;
-	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
+	const catalogs = options.catalogs ?? defaultCatalogs();
 	const date = checkDate(options.date);
 	const renderer = ctx.renderer ?? (await loadRenderer());
 	const pptx = format === "pptx" ? (ctx.pptx ?? (await loadPptx())) : undefined;

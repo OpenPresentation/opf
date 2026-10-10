@@ -10,7 +10,7 @@ Deliver ordinary `*.opf.json` that the user can edit, validate, preview, and exp
 
 ## Start from the actual format
 
-Find the host project's installed `@openpresentation/opf` version. In this repository, `spec/schemas/opf.schema.json` and `spec/catalogs/` are authoritative; in an npm consumer, use the `schemas` that package exports and the default catalog of `@openpresentation/opf/catalog` (the root carries no catalog records). A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
+Find the host project's installed `@openpresentation/opf` version. In this repository, `spec/schemas/opf.schema.json` and `packages/gallery/catalog/` are authoritative; in an npm consumer, use the `schemas` that package exports and the pptx.gallery catalog of `@openpresentation/gallery` (`gallery`, a dependency of core from 0.19; core's root carries no catalog records). A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
 
 Use the [content guide](references/content.md) for payload shapes. [The starter](assets/decision-brief.opf.json) is a valid complete document; its example content is illustrative, not evidence for the user's presentation.
 
