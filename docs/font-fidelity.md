@@ -36,7 +36,7 @@ OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.j
 
 1. **Licensed, non-free fonts are never bundled or embedded.** This covers Aptos, Calibri, Cambria, Segoe UI, Georgia, Tahoma, Grandview, Seaford, Tenorite, Consolas, Times New Roman, Arial, Courier New and the Windows script fonts. Rendering uses the family's designated open replacement instead:
    - **Metric-compatible** is the goal, used where a replacement exists and measures identical: Calibri→Carlito, Arial→Arimo, Times New Roman→Tinos, Courier New→Cousine and Georgia→Gelasio. A metric row needs an upstream statement and a measurement in all four styles, with a mean width difference below 0.1% and no corpus string more than 0.3% off. Georgia→Gelasio passes only with Gelasio shaped with its `liga` and `clig` features off (the row lists them as `disabledFeatures`): with default features Gelasio ligates fi, fl, ffi and ffl, which Georgia does not, and runs differ by up to 1.02%. With them off every one of the 300 corpus strings matches in all four styles (mean and maximum below 0.01%). opf-render turns those features off in measurement and in SVG, so a renderer that does not is visual against Georgia.
-   - **Size adjustment** (RR-38): a visual replacement whose advances and glyphs are far from the real font's can carry `sizeAdjust`, a preview-only font-size multiplier. A renderer scales the replacement's size by it when it measures and when it draws, so lines have the length PowerPoint's have; core's composed geometry, the exported sizes and every PPTX are unchanged. Arabic Typesetting→Noto Naskh Arabic is 0.64 (the real font's advances are 0.643 of the replacement's over the Arabic corpus; its ink height is 0.71, so glyphs draw about 10 percent smaller than PowerPoint's). It applies only when the face drawn is the row's replacement. `lineAscent` and `lineAscentMixed` (em; Arabic Typesetting 0.70 and 0.78, measured in a native PowerPoint 365 probe against the font's hhea ascent of 0.701) say where PowerPoint puts the baseline below the top of a line box, for a line in the real font alone and for a line that also holds other fonts; a renderer that puts baselines one em below the line top moves such runs up by `1 - lineAscent` em.
+   - **Size adjustment** (RR-38): a visual replacement whose advances and glyphs are far from the real font's can carry `sizeAdjust`, a preview-only font-size multiplier. A renderer scales the replacement's size by it when it measures and when it draws, so lines have the length PowerPoint's have; core's composed geometry, the exported sizes and every PPTX are unchanged. Arabic Typesetting→Noto Naskh Arabic is 0.64 (the real font's advances are 0.643 of the replacement's over the Arabic corpus; its ink height is 0.71, so glyphs draw about 10 percent smaller than PowerPoint's). It applies only when the face drawn is the row's replacement. `lineAscent` and `lineAscentMixed` (em; Arabic Typesetting 0.70 and 0.78, measured in a native PowerPoint 365 probe against the font's hhea ascent of 0.701) say where PowerPoint puts the baseline below the top of a line box, for a line in the real font alone and for a line that also holds other fonts; a renderer that puts baselines one em below the line top moves such runs up by `1 - lineAscent` em. The width that remains against PowerPoint is measured in [the Arabic line-width residual](#arabic-typesetting-and-traditional-arabic-line-width-residual-opf523).
    - **Alternates** are tried, in order, when the declared replacement's pack is not loaded. An alternate is always reported as visual, including on a metric row.
    - **Aptos family:** Aptos→Intos, Aptos Display→Intos Display, Aptos Narrow→Intos Narrow and Aptos Serif→Intos Serif are metric: 0.000% mean and maximum against Aptos 2.01 in all four styles, with equal vertical metrics.
    - **Otherwise the closest measured open face**, marked visual: a documented fallback and a known layout-fidelity gap until a metric-compatible replacement exists. For example, Segoe UI→Red Hat Display measures a 1.72% mean width difference.
@@ -160,6 +160,41 @@ An original OPF font project is technically feasible: independently designed or 
 ## Verification and remaining work
 
 Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and the known limits (fontkit has no Myanmar shaper; the PNG path of resvg-js mis-shapes the Indic scripts, Thai, Lao, Khmer and Myanmar).
+
+### Arabic Typesetting and Traditional Arabic: line-width residual (opf#523)
+
+Neither family is bundled; both preview and compose with Noto Naskh Arabic (OFL-1.1). Arabic Typesetting carries the RR-38 `sizeAdjust` of 0.64, and Traditional Arabic has none. Native PowerPoint draws lines in both families **narrower** than the shared composition measures them. This is a known, accepted residual.
+
+**Measured.** All widths are PowerPoint 365 `TextRange.Lines` bounds or ink, against the composed line.
+
+| Family | Native lines | Native / composed width | Largest gap |
+| --- | --- | --- | --- |
+| Arabic Typesetting (proxy at 0.64) | 16, in [RR-59](evidence/rr-59-native-20261008/README.md) and [FF-46 set 2](evidence/ff-46-documented-visual-native-20261005-fonts/README.md) | 14 lines at 0.86 to 0.97 (headings 0.86 to 0.92, body 0.90 to 0.97); one FF-46 body line at 1.04; one FF-46 heading at 0.55; pooled 0.94 without that heading | 56.6 pt narrower on an 856 pt body line (284 pt on the 0.55 heading); 31 pt wider on the 1.04 line |
+| Traditional Arabic (proxy at 1) | 10, in the same two runs | 0.68 to 0.90, pooled 0.79 | 223.6 pt narrower (an 842 pt body line) |
+
+The RR-38 probe agrees for Arabic Typesetting. Its 45-character line is 216.9, 289.0 and 386.1 pt at 18, 24 and 32 pt in PowerPoint, and composes at 222.1, 298.6 and 396.9 pt.
+
+**Why it exists.** Three reasons:
+- **No published metrics.** Microsoft's font pages for [Arabic Typesetting](https://learn.microsoft.com/en-us/typography/font-list/arabic-typesetting) and [Traditional Arabic](https://learn.microsoft.com/en-us/typography/font-list/traditional-arabic) give only the file names, styles, vendor, scripts and code pages. They publish no advance widths, `xAvgCharWidth` or vertical metrics.
+- **No metric-compatible open face.** None exists for either family: no fontconfig metric alias, no Croscore-style clone. OPF does not take metrics from the installed proprietary files.
+- **One factor cannot fit.** Per glyph, Noto Naskh Arabic's advances differ from these fonts' by more than any scale can absorb. Ligatures and letter widths vary by text. Arabic Typesetting also has only a regular face, so PowerPoint emboldens bold text synthetically, while the preview draws Noto Naskh Arabic Bold.
+
+**One factor per family does not fix it.** For Traditional Arabic, the native / Noto Naskh ratio of the 10 lines spans 0.68 to 0.90, so any one factor leaves large gaps:
+
+| Factor | Largest gap, composed wider | Largest gap, native wider |
+| --- | --- | --- |
+| 0.79 (the pooled ratio; the opf#361 proposal) | 47 pt | 48 pt |
+| 0.90 | 139 pt | none |
+
+Latin text in a deck that uses the Traditional Arabic scheme also draws in Noto Naskh Arabic's Latin, where the policy measures Traditional Arabic at 0.86 of the replacement's width. At 0.79, those lines would run about 9 percent past their composed width in PowerPoint. Arabic Typesetting's 0.64 already sits near the upper edge of its native ratios. A lower factor would let more lines run past their boxes.
+
+**Practical impact.**
+- **Line counts agree.** The PPTX export writes each composed line as its own text box, and PowerPoint does not re-wrap it. Line counts, the order of lines and the right edges of right-to-left lines therefore agree: within 0.13 pt in RR-59.
+- **Left edges differ.** The left edge of a right-to-left line (the right edge of a left-to-right one) sits closer to the text in PowerPoint. The same text could fit in fewer lines natively than the preview shows.
+- **Overhang is rare.** Because the proxy errs wide, a Traditional Arabic line keeps slack in its box. For Arabic Typesetting, an occasional line runs a few percent past its composed width: 3.78 pt past its box in RR-59 `ar-run-in-en`, not clipped.
+- **Wrapping can differ near the edge.** Text that PowerPoint lays out itself wraps where the real font's widths put it, which can differ from the preview. That covers a line box retyped in PowerPoint, and text another application re-flows.
+
+For layouts that must wrap exactly, choose a family with a metric replacement, or supply licensed font files through `loadFonts({faces})`.
 
 `pnpm test:fonts` checks that editor and SVG geometry match and that every native PPTX text box has the same coordinates and measured line breaks. With opf-pptx FF-31 (opf-pptx#63), export names the chosen family, not the preview substitute. It writes artifacts to `artifacts/fonts/`. A real-browser check of the same Roboto run measured 324.032 pixels versus the font engine's 324.170 pixels at 25 pixels, a difference of 0.138 pixels. These are measured tolerances, not a promise of pixel identity.
 
