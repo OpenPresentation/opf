@@ -15,7 +15,7 @@ The canonical release path is:
 1. Merge the release commit to `main`.
 2. Push a semver tag whose name matches the package version.
 3. Let GitHub Actions publish to npm through npm trusted publishing.
-4. Verify npm and the automatically generated GitHub release notes.
+4. Verify npm and the GitHub Release the publish workflow creates from the changelog section.
 
 ## Agent authorization and coordinated release order
 
@@ -131,8 +131,9 @@ What each step checks:
   (built by `.github/workflows/<publish workflow>` of the package's repository on `refs/tags/<tag>` from the tagged
   commit, subject digest equal to `dist.integrity`), `npm audit signatures --include-attestations` in a scratch
   project that installs exactly that version (no invalid or missing signatures; the package has a verified
-  attestation), and the GitHub release where the repository's workflow creates one (core only; the sibling and CLI
-  workflows create none). The dist-tag is reported for information.
+  attestation), and the GitHub release for the tag (every lockstep package's publish workflow creates one from 0.18
+  on, RR-20; a gallery release has none). A release that is not "Latest" passes: the CLI's is created with
+  `--latest=false` because core owns "Latest" in `OpenPresentation/opf`. The dist-tag is reported for information.
   - Propagation: right after a publish, npm serves the packument (with `dist.attestations.url`) minutes before the
     attestation bundle (HTTP 404 `{"error":"Not found"}`) and before a fresh `npm install` can resolve the version
     (`notarget`, "No matching version found"); the first live use, core 0.12.1, failed `verify` on exactly these two
@@ -298,16 +299,31 @@ The expected result is one `opf/unresolved-reference` warning for the narrative 
 
 ## GitHub Release Notes
 
-The core tag workflow creates a GitHub Release from the matching changelog section after publishing. Verify that release after npm is verified. If release creation failed, create the missing release for the existing tag:
+From 0.18 on, every lockstep package's tag workflow ends in a `release` job that creates a GitHub Release after the npm
+publish (RR-20). The job holds `contents: write`; the publish job keeps only `id-token: write` for provenance. It takes
+the notes from the matching `## X.Y.Z` section of the package's changelog and fails when the section is missing.
+
+| Package | Repository, workflow | Tag | Title | Changelog | Latest |
+| --- | --- | --- | --- | --- | --- |
+| `@openpresentation/opf` | `opf`, `npm-publish.yml` | `opf-vX.Y.Z` | `@openpresentation/opf X.Y.Z` | `CHANGELOG.md` | yes |
+| `@openpresentation/opf-render` | `opf-render`, `npm-publish.yml` | `opf-render-vX.Y.Z` | `@openpresentation/opf-render X.Y.Z` | `CHANGELOG.md` | yes |
+| `@openpresentation/opf-pptx` | `opf-pptx`, `release.yml` | `opf-pptx-vX.Y.Z` | `@openpresentation/opf-pptx X.Y.Z` | `CHANGELOG.md` | yes |
+| `@openpresentation/opf-editor` | `opf-editor`, `release.yml` | `opf-editor-vX.Y.Z` | `@openpresentation/opf-editor X.Y.Z` | `CHANGELOG.md` | yes |
+| `@openpresentation/cli` | `opf`, `cli-publish.yml` | `cli-vX.Y.Z` | `@openpresentation/cli X.Y.Z` | `packages/cli/CHANGELOG.md` | no (core owns it) |
+
+Releases before 0.18 are not backfilled. `verify` requires the release for each of these packages. If release creation
+failed, rerun the failed `release` job (it keeps an existing release and its notes), or create the missing release for
+the existing tag, for example:
 
 ```sh
-gh release create opf-vX.Y.Z \
-  --repo OpenPresentation/opf \
-  --title '@openpresentation/opf X.Y.Z' \
-  --notes-file /path/to/release-notes.md
+gh release create opf-render-vX.Y.Z \
+  --repo OpenPresentation/opf-render \
+  --title '@openpresentation/opf-render X.Y.Z' \
+  --notes-file /path/to/release-notes.md \
+  --verify-tag --latest
 ```
 
-Use the matching `## X.Y.Z` section from `CHANGELOG.md` as the release notes.
+Use the matching `## X.Y.Z` section of the changelog as the release notes.
 
 ## Troubleshooting
 
