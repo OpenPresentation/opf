@@ -151,6 +151,11 @@ export { applyPatch, OPFPatchError, OPFPatchValidationError } from './patch.js';
 export type { ApplyPatchOptions, PatchResult } from './patch.js';
 export { diff, merge } from './diff.js';
 export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
+// RR-75: `opf edit` and `opf fill` as functions. The Node build registers the default catalog for edit's check, as the CLI does.
+export { edit } from './edit.js';
+export type { EditOptions, EditResult } from './edit.js';
+export { fill, fillRecords } from './fill.js';
+export type { FillOptions, FillRecord, FillResult, FilledDeck } from './fill.js';
 export { format, OPFFormatError } from './format.js';
 export type { FormatOptions } from './format.js';
 export { fromMarkdown, toMarkdown, OPFMarkdownError } from './markdown.js';

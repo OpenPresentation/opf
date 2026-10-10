@@ -15,12 +15,12 @@ function run(args, {input, status=0}={}) {
 async function patch(operations) {await writeFile(path.join(temp,'patch.json'),JSON.stringify(operations));}
 try {
   assert.match(run(['--version']).json.cli,/^0\./);
-  assert.equal(run(['create','deck.opf.json','--title','Decision']).json.valid,true);
+  assert.equal(run(['create','deck.opf.json','--title','Decision']).json.ok,true);
   const original=await readFile(path.join(temp,'deck.opf.json'),'utf8');
   run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
   assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
-  assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
-  run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
+  assert.equal(run(['convert','-','copy.json'],{input:'\uFEFF'+original}).json.ok,true);
+  run(['convert','-','never.json'],{input:'{"slides":"bad"}',status:1});
   const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);assert.equal(validated.schemaValid,true);
   const warning=JSON.stringify({design:{theme:'not-a-bundled-theme'},slides:[{title:'Warning'}]});
   assert.ok(run(['validate','-','--only','format,references'],{input:warning}).json.findings.some(item=>item.ruleId==='opf/unresolved-reference'&&item.severity==='warning'));
@@ -54,9 +54,9 @@ try {
   await patch([{op:'test',path:'/slides/0/id',value:'slide-1'},{op:'replace',path:'/slides/0/title',value:'Updated'},{op:'add',path:'/slides/-',value:{id:'two',text:'Preserve me',notes:'Source note'}}]);
   assert.equal(run(['edit','deck.opf.json','--patch','patch.json']).json.slides.length,2);
   assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
-  run(['edit','deck.opf.json','--patch','patch.json','--output','result.json']);
-  run(['edit','deck.opf.json','--patch','patch.json','--output','result.json'],{status:1});
-  assert.equal(run(['edit','deck.opf.json','--patch','patch.json','--in-place','--dry-run']).json.slides[0].title,'Updated');
+  run(['edit','deck.opf.json','result.json','--patch','patch.json']);
+  run(['edit','deck.opf.json','result.json','--patch','patch.json'],{status:1});
+  assert.equal(run(['edit','deck.opf.json','--patch','patch.json']).json.slides[0].title,'Updated');
   assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256','0'.repeat(64)],{status:1});
   await chmod(path.join(temp,'deck.opf.json'),0o600);
@@ -87,7 +87,7 @@ try {
   run(['edit','-','--patch','patch.json'],{input:saved});
   run(['edit','deck.opf.json','--patch','-'],{input:'[]'});
   run(['edit','-','--patch','-'],{status:2});run(['edit','-','--patch','patch.json','--in-place'],{status:2});
-  run(['edit','deck.opf.json','--patch','patch.json','--in-place','--output','bad.json'],{status:2});
+  run(['edit','deck.opf.json','bad.json','--patch','patch.json','-i'],{status:2});
   let fileSymlink=true;
   try{await symlink(path.join(temp,'deck.opf.json'),path.join(temp,'alias.json'));}catch(error){
     if(process.platform!=='win32'||error.code!=='EPERM')throw error;
@@ -97,14 +97,14 @@ try {
   assert.equal(run(['schema','presentation','/$defs/Composition']).json.properties.mode.enum.includes('grid'),true);
   assert.ok(run(['schemas']).json.length>1);assert.ok(run(['catalogs']).json.length>1);
   assert.equal(run(['catalog','fontSchemes','roboto']).json.id,'roboto');run(['catalog','unknown'],{status:2});run(['schema','unknown'],{status:2});
-  assert.equal(run(['paginate','deck.opf.json','paginated.json']).json.valid,true);
+  assert.equal(run(['paginate','deck.opf.json','paginated.json']).json.ok,true);
   run(['paginate','deck.opf.json','paginated.json'],{status:1});
   await writeFile(path.join(temp,'data.csv'),'Quarter,Revenue,Cost\nQ1,12,4\nQ2,18,6');
   let imported=run(['ingest','data.csv','--as','table']).json;assert.equal(imported.slides[0].table.rows[0][1],'12');
   imported=run(['ingest','data.csv','--as','chart','--chart-type','line','--series','["Revenue"]']).json;assert.deepEqual(imported.slides[0].chart.data.rows,[['Q1',12],['Q2',18]]);
-  run(['ingest','data.csv','--as','chart','--into','deck.opf.json','--output','data-deck.json']);
+  run(['ingest','data.csv','data-deck.json','--as','chart','--into','deck.opf.json']);
   assert.equal(JSON.parse(await readFile(path.join(temp,'data-deck.json'),'utf8')).slides.length,3);
-  run(['ingest','-','--format','json','--as','chart','--into','data-deck.json','--path','/slides/2/chart','--in-place'],{input:'[{"Q":"Q3","R":24}]'});
+  run(['ingest','-','--data-format','json','--as','chart','--into','data-deck.json','--path','/slides/2/chart','--in-place'],{input:'[{"Q":"Q3","R":24}]'});
   assert.deepEqual(JSON.parse(await readFile(path.join(temp,'data-deck.json'),'utf8')).slides[2].chart.data.rows,[['Q3',24]]);
   const beforeData=await readFile(path.join(temp,'data-deck.json'),'utf8');
   run(['ingest','-','--as','chart','--into','data-deck.json','--in-place'],{input:'x,y\nQ1,not-numeric',status:1});
@@ -133,7 +133,7 @@ try {
   run(['ingest','data.csv','--as','table','--path','/slides/0/table'],{status:2});
   run(['ingest','data.csv','--as','chart','--series','Revenue'],{status:2});
   const styled={slides:[{table:{rows:[[{value:'Merged',rowSpan:2,colSpan:2,style:{fill:'#12345680',padding:{left:0},borders:{top:{color:'#ABCDEF',width:2,dash:'dot'}}}},null],[null,null]]}}]};
-  run(['create','styled.json','--from','-'],{input:JSON.stringify(styled)});
+  run(['convert','-','styled.json'],{input:JSON.stringify(styled)});
   assert.equal(run(['validate','styled.json']).json.valid,true);
   assert.ok(run(['schema','presentation','/$defs/StyledTableCell']).json.properties.rowSpan);
   await patch([{op:'replace',path:'/slides/0/table/rows/0/0/value',value:['Edited ',{text:'cell',bold:true}]},{op:'replace',path:'/slides/0/table/rows/0/0/style/fill',value:'#FEDCBA80'}]);

@@ -15,7 +15,7 @@ stats(deck, { perSlide: true }).perSlide;   // one row per slide
 ```
 
 ```sh
-opf stats deck.opf.json                      # JSON
+opf stats deck.opf.json                      # JSON: the report { command, ok, input, ..., stats } (CLI 0.18; the facts alone before)
 opf stats deck.opf.json --format text        # one readable block per topic
 opf stats - --per-slide < deck.opf.json      # adds a row per slide
 ```

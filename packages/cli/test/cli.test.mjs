@@ -49,7 +49,7 @@ describe("opf validate", () => {
     const result = runCli(["validate", NONEXISTENT_DECK]);
     assert.equal(result.status, 2);
     assert.equal(result.stdout, "");
-    assert.match(result.stderr, /ENOENT/);
+    assert.equal(JSON.parse(result.stderr).code, "input-not-found");
   });
 
   test("prints usage and exits 2 when 'validate' is called without a file argument", () => {
@@ -64,7 +64,7 @@ describe("opf usage", () => {
     const result = runCli([]);
     assert.equal(result.status, 0);
     assert.equal(result.stderr, "");
-    assert.match(result.stdout, /opf validate <file\|->/);
+    assert.match(result.stdout, /opf validate <file\|dir\|->/);
     assert.match(result.stdout, /opf catalogs/);
     assert.match(result.stdout, /opf schemas/);
   });
@@ -82,7 +82,8 @@ describe("opf catalogs", () => {
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const parsed = JSON.parse(result.stdout);
     assert.ok(Array.isArray(parsed));
-    assert.deepEqual(parsed.map((entry) => entry.kind), [...catalogKinds, ...catalogDisplayKinds]);
+    assert.deepEqual(parsed.map((entry) => entry.kind), [...catalogKinds, ...catalogDisplayKinds, "examples"]);
+    assert.equal(parsed.at(-1).examples, true);
     for (const kind of catalogKinds) {
       const match = parsed.find((candidate) => candidate.kind === kind);
       assert.equal(match.count, Object.keys(defaultCatalog[kind] ?? {}).length, kind);
@@ -134,7 +135,8 @@ describe("opf embed", () => {
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const document = JSON.parse(result.stdout);
     const report = JSON.parse(result.stderr);
-    assert.equal(report.valid, true);
+    assert.equal(report.ok, true);
+    assert.equal(report.command, "embed");
     assert.equal(document.catalogs.default.source, defaultCatalog.source);
     for (const kind of ["narratives", "tones", "themes", "layouts", "colorSchemes", "fontSchemes"]) {
       assert.ok(report.embed.added.some((entry) => entry.kind === kind), `expected ${kind} in the embed report: ${JSON.stringify(report.embed.added)}`);

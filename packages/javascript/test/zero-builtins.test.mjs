@@ -25,10 +25,11 @@ describe('no built-in records', () => {
 
   test('validate reports what no catalog defines, and nothing once the records are embedded', () => {
     const deck = { narrative: 'classic-story', design: { theme: 'classic' }, slides: [{ layout: 'two-column', title: 'x' }] };
-    const unresolved = validate(deck, { only: ['references'] }).findings.filter((finding) => finding.ruleId === 'opf/unresolved-reference');
+    // RR-75: the Node build registers the default catalog unless the call names catalogs; `catalogs: []` registers none.
+    const unresolved = validate(deck, { only: ['references'], catalogs: [] }).findings.filter((finding) => finding.ruleId === 'opf/unresolved-reference');
     assert.deepEqual(unresolved.map((finding) => finding.path), ['/narrative', '/design/theme', '/slides/0/layout']);
     const saved = embed(deck, { catalogs: [defaultCatalog] }).document;
-    assert.deepEqual(validate(saved, { only: ['format', 'references'] }).findings, []);
+    assert.deepEqual(validate(saved, { only: ['format', 'references'], catalogs: [] }).findings, []);
     // Reopened in a fresh process with no catalog registered: every referenced record is embedded exactly once.
     const reopened = JSON.parse(JSON.stringify(saved));
     assert.deepEqual(Object.keys(reopened.catalogs), ['default']);

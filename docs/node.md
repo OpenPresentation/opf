@@ -15,8 +15,25 @@ const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing
 ```
 
 The namespace is all of core (`validate`, `parse`, `stringify`, `paginate`, `parseSlideSelection`, the types and the error
-classes), so one import covers an application. The default catalog stays opt-in, at `@openpresentation/opf/catalog`; `open`,
-`save` and `convert` use it when no `catalogs` are passed.
+classes), so one import covers an application. The default catalog is exported only at `@openpresentation/opf/catalog`; in Node,
+`open`, `save` and `convert` use it when no `catalogs` are passed.
+
+## The CLI's verbs, with the CLI's defaults
+
+OPF 0.18 gives the Node build the verbs of the `opf` command, so a script calls them instead of spawning `opf`:
+
+| Function | Command | In Node, when `catalogs` is omitted |
+| --- | --- | --- |
+| `validate(deck, options?)` | `opf validate` | the default catalog is registered, so `opf validate deck` and `validate(deck)` report the same findings |
+| `stats(deck, options?)` | `opf stats` | the default catalog |
+| `paginate(deck, options?)` | `opf paginate` | the default catalog. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
+| `embed(deck, options?)` | `opf embed` | the default catalog |
+| `edit(deck, patch, options?)` | `opf edit` | the default catalog for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
+| `fill(template, data?, options?)` | `opf fill` | no catalog: `data` is CSV, TSV or JSON text, a record or a list of records; returns `{ decks, complete, unfilled, diagnostics }`, and `presentation` with `combine: true`. `fillRecords(text)` reads the records alone |
+| `diff(a, b)`, `merge(base, ours, theirs)` | `opf diff`, `opf merge` | no catalog |
+
+An explicit `catalogs: []` registers none. The browser build exports the same functions and registers no catalog (FA-21): a
+browser host passes `{ catalogs: [defaultCatalog] }` itself. Only `open`, `save` and `convert` are Node only.
 
 A shorter name is available as an npm alias, if you want one: `npm i opf@npm:@openpresentation/opf` installs the same package
 as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name.
@@ -94,7 +111,7 @@ await opf.convert("deck.opf.md", "slides.zip", { format: "svg" });
 | Output | Written as |
 | --- | --- |
 | `.pdf`, `.pptx` | one file |
-| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-001.png`, `-002`, ... (padded to three digits, or more for a longer deck; the numbers are the deck's slide numbers). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf render --out slide.png` does. |
+| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-001.png`, `-002`, ... (padded to three digits, or more for a longer deck; the numbers are the deck's slide numbers). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf convert deck.opf.json slide.png --slides 2` does. |
 | `.zip` | one archive of the slides, named as above inside it. The slides are PNG unless `format: "svg"`. |
 | `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
 
@@ -106,7 +123,7 @@ with their names and bytes. `name` sets the base name of the files; without it t
 slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`). `zip: true` returns one archive of
 the PNG or SVG slides; with an output path a `.zip` name makes the archive instead.
 
-**Options** are those of `opf export` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
+**Options** are the flags of `opf convert` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
 (0.1 to 8, PNG and raster PDF), `raster` (`true` draws a PDF as a picture per page; vector text is the default), `text` (an SVG
 carries `"fonts"`, the default, which embeds the faces the slide uses; `"system"`, none, for a page that has the fonts; or
 `"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `provenance` and `images`

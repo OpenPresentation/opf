@@ -1,6 +1,6 @@
 # Markdown and outlines
 
-`@openpresentation/opf/markdown` (RR-30) converts between OPF and a small, documented Markdown dialect, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-md` and `opf to-md`, and every command that reads or writes a deck understands a file ending `.opf.md` ([Markdown decks in every command](#markdown-decks-in-every-command)); `parse` and `stringify` read and write a deck in JSON, YAML or Markdown with one call, and `open`, `save` and `convert` of `@openpresentation/opf` do it for files in Node.
+`@openpresentation/opf/markdown` (RR-30) converts between OPF and a small, documented Markdown dialect, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it through `opf convert` (`deck.md` or `deck.opf.md` to `deck.opf.json` and back; `opf from-md` and `opf to-md` before 0.18), and every command that reads or writes a deck understands a file ending `.opf.md` ([Markdown decks in every command](#markdown-decks-in-every-command)); `parse` and `stringify` read and write a deck in JSON, YAML or Markdown with one call, and `open`, `save` and `convert` of `@openpresentation/opf` do it for files in Node.
 
 - **JSON stays canonical.** The schema, the interchange form and every package describe the JSON. A `.opf.md` file is an authoring serialization of the same data, as a `.opf.yaml` file is ([OPF as YAML](yaml.md)).
 - **Write a deck as text.** YAML front matter holds the deck, `---` separates slides, `#` is the title, `##` the subtitle, and lists, quotes, tables, images, code, charts, metrics, timelines and speaker notes have their own syntax.
@@ -16,10 +16,10 @@ const { markdown: text, report } = toMarkdown(presentation);
 ```
 
 ```sh
-opf from-md deck.md deck.opf.json
-opf to-md deck.opf.json deck.md
+opf convert deck.md deck.opf.json
+opf convert deck.opf.json deck.opf.md
 opf validate deck.opf.md
-opf render deck.opf.md --out slides
+opf convert deck.opf.md slides/deck.svg
 ```
 
 ## An example
@@ -80,7 +80,7 @@ converts to
 | --- | --- | --- |
 | Deck | YAML between a first line `---` and a closing `---` (or `...`) | Every deck property except `slides`: `name`, `description`, `language`, `design`, `variables`, `assets`, `extensions`, ... in the order written. JSON-compatible YAML only: no anchors, tags or duplicate keys. `slides` is not allowed |
 | Slides | Lines of three or more hyphens, outside fences, HTML comments and speaker notes' fences | One slide per segment. Empty segments are skipped (a warning when between two slides); `<!-- slide -->` keeps an empty slide |
-| Outline | `split: "headings"` (`--split headings`) | A `# ` heading also starts a slide, even inside speaker notes, so a bare outline needs no `---` |
+| Outline | `split: "auto"` (the default) or `"headings"` (`--split headings`) | With no `---` line and two or more `# ` headings outside fences, comments and notes, each `# ` heading starts a slide, so a bare outline needs no `---`. `"headings"` cuts at every `# ` heading, even inside speaker notes; `"rules"` (`--split rules`) cuts only at `---`, so a second `# ` is a second title |
 
 A deck without front matter starts with its first slide, so a file never begins with `---` unless it opens the front matter. Line endings may be LF, CRLF or CR and a leading BOM is ignored. The converter adds nothing the Markdown does not say: no `$schema`, no `name` (pass `defaults: { name }` or `--title` for a fallback that the front matter overrides).
 
@@ -161,29 +161,29 @@ Errors: `front-matter`, `front-matter-not-mapping`, `front-matter-unterminated`,
 ## Command line
 
 ```text
-opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--fail-on <level>]
-opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--fail-on <level>]
+opf convert <deck.md|deck.opf.md|-> <output.opf.json|output.opf.yaml|-> [--from md] [--to json|yaml] [--split <auto|rules|headings>] [--title <text>] [--force] [--fail-on <level>]
+opf convert <deck.opf.json|-> <output.opf.md|-> [--to md] [--drop-unsupported] [--force] [--fail-on <level>]
 ```
 
-Both write to stdout by default and print a JSON report (on stderr when stdout carries the document). Exit codes follow the other commands: 0 success, 1 invalid content, an output conflict or a `--fail-on` failure, 2 usage, JSON or I/O error. `from-md` exits 1 with `markdown.findings` (line and column) on a Markdown or OPF error, and writes nothing; `--fail-on warning` also fails on warnings. `to-md --fail-on warning` fails when anything had to be embedded or dropped (such parts count as warnings), which keeps a deck inside the plain dialect.
+A plain `.md` input is read as OPF Markdown (only on `opf convert`'s input side; a Markdown output is named `.opf.md`). Output `-` writes stdout (with `--to`) and the JSON report goes to stderr. Exit codes follow the other commands: 0 success, 1 a deck that is not valid OPF, an output conflict or a `--fail-on` failure, 2 usage, a Markdown syntax error (with the located `findings`), or I/O. Nothing is written on a failure. A part the dialect has no syntax for is embedded and counted as a warning (`markdown/embedded`; `markdown/dropped` with `--drop-unsupported`), so `--fail-on warning` keeps a deck inside the plain dialect. `--split` and `--title` apply to a Markdown input and `--drop-unsupported` to a Markdown output; anywhere else they are usage errors. `opf from-md` and `opf to-md` were removed in 0.18.
 
 ## Markdown decks in every command
 
-`from-md` and `to-md` convert with any file names. Besides them, every command that reads a deck reads Markdown, through one reader, as it reads [YAML](yaml.md#yaml-everywhere):
+Every command that reads a deck reads Markdown, through one reader, as it reads [YAML](yaml.md#yaml-everywhere):
 
-1. A file whose name ends `.opf.md` (in any case) is a Markdown deck. **Only `.opf.md` counts**: a plain `.md` file is never taken for a deck, so a README or notes file is never converted by accident (a plain `.md` read as a deck is a JSON syntax error; convert it with `opf from-md`, or name it `.opf.md`).
-2. Anything else (stdin and every other name) follows the global option `--input-format <json|yaml|markdown>` (`md` is an alias), with **JSON as the default**. The option may appear anywhere before `--`. A file name that says its format wins over the option.
-3. The Markdown is converted with the CLI's registered catalogs (the default catalog), so the references check of `validate`, `render` and `export` resolves `name:id` references as it does for JSON. A Markdown syntax or conversion error exits **2**, like invalid JSON, and the message carries the position: `Invalid Markdown in deck.opf.md at line 1, column 1: The front matter starting on line 1 is not closed. [markdown/front-matter-unterminated]`, with the located findings under `markdown` in the JSON error report. `opf validate` instead reports it as a `markdown/<rule>` finding and exits 1, and `render` and `export` report it as a finding and exit 1. A deck that is valid Markdown but not valid OPF is reported by the command as it is for JSON, and `validate`, `render` and `export` locate every finding in the Markdown (`deck.opf.md:3:1  error  opf/schema ...`). A JSON Patch is JSON or YAML, never Markdown.
+1. A file whose name ends `.opf.md` (in any case) is a Markdown deck. **Only `.opf.md` counts**: a plain `.md` file is never taken for a deck, so a README or notes file is never converted by accident (a plain `.md` needs `--from md`, or convert it with `opf convert notes.md deck.opf.json`, or name it `.opf.md`).
+2. Anything else (stdin and every other name) is JSON when the text starts with `{` or `[`; otherwise `--from md` (`markdown` is an alias; or `--from yaml`) says what it is, and without it the command exits 2 and asks for it. `--from` wins over a name.
+3. The Markdown is converted with the CLI's registered catalogs (the default catalog), so the references check of `validate` and `convert` resolves `name:id` references as it does for JSON. A Markdown syntax or conversion error exits **2**, like invalid JSON, and the message carries the position: `Invalid Markdown in deck.opf.md at line 1, column 1: The front matter starting on line 1 is not closed. [markdown/front-matter-unterminated]`, with the located `findings` and `code: "invalid-markdown"` in the JSON error report. `opf validate` instead reports it as a `markdown/<rule>` finding and exits 1. A deck that is valid Markdown but not valid OPF is reported by the command as it is for JSON, and `validate` and `convert` locate every finding in the Markdown (`deck.opf.md:3:1  error  opf/schema ...`). A JSON Patch is JSON or YAML, never Markdown.
 
-A deck is written as Markdown when the output name ends `.opf.md` or `--format markdown` (or `--format md`) is given; `--format json` and `--format yaml` force the others. When the output is stdout or has another name, the format of the deck that was read is used: a Markdown deck is edited, merged, formatted, filled, paginated and bundled back to Markdown, in place or to stdout. `create`, `from-md` and `import` have no deck input and default to JSON (`create --from` follows the deck it reads). In `fill` and `ingest`, `--format csv|tsv|json` still names the data format; `--format yaml` and `--format markdown` select the output. `from-md` and `from-yaml` convert to JSON (`from-md` also to YAML) and refuse a `.opf.md` output.
+A deck is written as Markdown when the output name ends `.opf.md` or `--to md` (or `--to markdown`) is given; `--to json` and `--to yaml` force the others. When the output is stdout or has another name, the format of the deck that was read is used: a Markdown deck is edited, merged, filled, paginated and embedded back to Markdown, in place (`-i`) or to stdout. `create` has no deck input and defaults to JSON. In `fill` and `ingest`, `--data-format csv|tsv|json` names the data format and `--to` the output.
 
 ```sh
-opf edit deck.opf.md --patch changes.json --in-place     # the file stays Markdown
+opf edit deck.opf.md --patch changes.json -i             # the file stays Markdown
 opf format deck.opf.md                                    # canonical Markdown: toMarkdown(fromMarkdown(text))
 opf format deck.opf.md --check                            # exit 1 if the file would change
-opf format deck.opf.json --output deck.opf.md             # convert; --format markdown for stdout
+opf convert deck.opf.json deck.opf.md                     # convert; - --to md for stdout
 opf paginate deck.opf.md deck.paginated.opf.md
-opf validate - --input-format markdown < deck.txt
+opf validate - --from md < deck.txt
 ```
 
 `opf format` rewrites a Markdown deck to the canonical form the writer produces, so the layout the dialect treats as equivalent (`*` and `-` bullets, extra blank lines, spacing in front matter) is normalized. Anything the dialect has no syntax for is carried in an `opf-slide` or `opf-block` fence, so a command that rewrites a deck can move content into a fence that was not there: for example an `edit` that adds `design` to a slide. The CLI prints `warning: <file> has N more opf-slide/opf-block fences than before: ...` on stderr when that happens (it does not fail, nothing is lost, and a deck that already had its fences does not warn). The `<!-- -->` comments of the source are not preserved beyond the slide and block options the dialect reads.

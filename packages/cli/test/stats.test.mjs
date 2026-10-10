@@ -34,16 +34,20 @@ describe("opf stats", () => {
     await writeFile(path.join(temp, "deck.opf.json"), JSON.stringify(deck));
     const result = run(["stats", "deck.opf.json"]);
     assert.equal(result.stderr, "");
-    assert.deepEqual(JSON.parse(result.stdout), stats(deck));
-    assert.equal(JSON.parse(result.stdout).slides.total, 3);
-    assert.equal("perSlide" in JSON.parse(result.stdout), false);
+    const report = JSON.parse(result.stdout);
+    assert.equal(report.command, "stats");
+    assert.equal(report.ok, true);
+    assert.equal(report.input.file, path.join(temp, "deck.opf.json"));
+    assert.deepEqual(report.stats, stats(deck));
+    assert.equal(report.stats.slides.total, 3);
+    assert.equal("perSlide" in report.stats, false);
     // A deck that fails validation still has facts.
     const invalid = run(["stats", "-"], { input: JSON.stringify({ slides: [{ title: 1, unknownField: true }] }) });
-    assert.equal(JSON.parse(invalid.stdout).slides.total, 1);
+    assert.equal(JSON.parse(invalid.stdout).stats.slides.total, 1);
   });
 
   test("--per-slide adds a row per slide", () => {
-    const result = JSON.parse(run(["stats", "deck.opf.json", "--per-slide"]).stdout);
+    const result = JSON.parse(run(["stats", "deck.opf.json", "--per-slide"]).stdout).stats;
     assert.deepEqual(result.perSlide.map((row) => row.id), ["intro", "data", "pic"]);
     assert.deepEqual(result.perSlide, stats(deck, { perSlide: true }).perSlide);
   });
