@@ -49,3 +49,55 @@ jobs:
       - run: npm run test:code-browser
       - run: npm pack --dry-run
       - run: npm publish --access public --provenance
+
+  # RR-20: every npm publish creates its GitHub Release (from 0.18 on), notes taken from the version's CHANGELOG.md section.
+  # Separate job: only it holds contents: write; the publish job keeps id-token: write for provenance and contents: read.
+  release:
+    name: Create GitHub Release
+    needs: npm
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          VERSION="$(echo "${GITHUB_REF_NAME}" | sed -E 's/^(opf-render-v|@openpresentation\/opf-render@v)//')"
+          NOTES_FILE="$(mktemp)"
+
+          # The section under "## VERSION" or "## VERSION (date)", without its blank edges.
+          awk -v ver="## ${VERSION}" '
+            $0 == ver || index($0, ver " ") == 1 { found = 1; next }
+            /^## / { if (found) exit }
+            found { lines[++n] = $0 }
+            END {
+              s = 1; while (s <= n && lines[s] ~ /^[[:space:]]*$/) s++
+              e = n; while (e >= s && lines[e] ~ /^[[:space:]]*$/) e--
+              for (i = s; i <= e; i++) print lines[i]
+            }
+          ' CHANGELOG.md > "${NOTES_FILE}"
+
+          if [ ! -s "${NOTES_FILE}" ]; then
+            echo "CHANGELOG.md has no '## ${VERSION}' section (or it is empty); add it before publishing." >&2
+            exit 1
+          fi
+
+          echo "NOTES_FILE=${NOTES_FILE}" >> "${GITHUB_ENV}"
+          echo "RELEASE_VERSION=${VERSION}" >> "${GITHUB_ENV}"
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" --json tagName >/dev/null 2>&1; then
+            echo "Release ${GITHUB_REF_NAME} already exists; preserving its notes."
+          else
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "@openpresentation/opf-render ${RELEASE_VERSION}" \
+              --notes-file "${NOTES_FILE}" \
+              --verify-tag \
+              --latest
+          fi
