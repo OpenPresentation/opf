@@ -266,7 +266,11 @@ import assert from 'node:assert/strict';
 import {validate as rootValidate,validationRules as rootRules} from '@openpresentation/opf';
 import {validate,validationRules} from '@openpresentation/opf/validator';
 globalThis.fetch=()=>{throw new Error('Offline validate must not fetch');};
-assert.equal(rootValidate,validate);assert.equal(rootRules,validationRules);
+// RR-75: the root's validate (the Node build) registers the default catalog when a call names none; /validator registers none.
+assert.notEqual(rootValidate,validate);assert.equal(rootRules,validationRules);
+const twoColumn={slides:[{title:'Default catalog',layout:'two-column'}]};
+assert.equal(rootValidate(twoColumn,{only:['references']}).counts.warning,0);
+assert.equal(validate(twoColumn,{only:['references']}).counts.warning,1);
 for(const gone of ['@openpresentation/opf/lint','@openpresentation/opf/audit'])await assert.rejects(import(gone));
 const source='{\\r\\n"slides":[{"layout":"partner","title":"Keep  spaces"}]\\n}';
 const options={catalogs:[{source:'pkg:@host/layouts',layouts:{partner:{name:'Partner',placeholders:[{type:'title'}]}}}]};

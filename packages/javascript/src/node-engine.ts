@@ -1,5 +1,5 @@
 // `@openpresentation/opf/internal/engine` (RR-70; `/node/engine` before 0.18): the engine behind the root's `convert`, `open` and
-// `save`, for the opf CLI, whose `convert`, `render`, `export` and `import` commands run it and add their flags, JSON reports
+// `save`, for the opf CLI, whose commands (`convert`, `paginate`, `doctor`) run it and add their flags, JSON reports
 // and exit codes. It is not an application API and has no compatibility promise: applications import `@openpresentation/opf`.
 // The package exports it under the `node` condition only (Node, Bun and Deno), so a browser or worker bundle cannot resolve it.
 export { readDeckReport } from "./deck-report.js";
@@ -15,3 +15,5 @@ export { PEER_RANGES, PPTX_PACKAGE, RENDER_PACKAGE, type Diagnostic, type FontsH
 export { type ImportRun, runImport } from "./node/pptx-import.js";
 export { type ReportFinding, Reporter, type Source, finishReport, reaches, reportThrown } from "./node/reporter.js";
 export { createZip } from "./node/zip.js";
+export { type PaginateDeckOptions, type PaginatedDeck, paginateDeck } from "./node/paginate.js";
+export { RENDER_EXTRAS, locatePackage } from "./node/peers.js";

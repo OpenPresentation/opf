@@ -14,7 +14,7 @@ import type { Finding, FindingLocation, FindingReport } from "./generated/types/
 import { NOT_CHECKED } from "./not-checked.js";
 import { type ValidateOptions, type ValidationReport, validate } from "./validator.js";
 import { type EmbeddedPart, emitSlide } from "./markdown/emit.js";
-import { type ParseOptions, emptySegment, frontMatter, parseSlide, readYamlMapping, splitSegments } from "./markdown/parse.js";
+import { type ParseOptions, emptySegment, frontMatter, isOutline, parseSlide, readYamlMapping, splitSegments } from "./markdown/parse.js";
 import { Ctx, OPFMarkdownError, lineRange, splitLines, writeYaml } from "./markdown/support.js";
 
 export { OPFMarkdownError } from "./markdown/support.js";
@@ -70,7 +70,9 @@ export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}
   }
 
   const document: Obj = { ...(options.defaults ?? {}), ...front };
-  const segments = splitSegments(body, options.split ?? "rules");
+  // `auto` (RR-75): an outline (no `---` line, two or more `# ` headings outside fences, comments and notes) is cut at its headings.
+  const split = options.split ?? "auto";
+  const segments = splitSegments(body, split === "headings" || (split === "auto" && isOutline(body)) ? "headings" : "rules");
   const slides: Obj[] = [];
   segments.forEach((segment, index) => {
     if (emptySegment(segment)) {

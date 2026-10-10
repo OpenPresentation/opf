@@ -1,7 +1,7 @@
 // The one export engine: a checked OPF presentation to per-slide SVG and PNG, a PDF or a PPTX through the optional peers
-// opf-render and opf-pptx (see peers.ts). `convert` of `@openpresentation/opf` (conversion.ts) and the CLI commands
-// `opf render`, `opf export` and `opf convert` all run `runExport`: the command adds what is about files and flags (reading
-// the document, the located check, --out, atomic writes, the JSON report, exit codes), the function adds nothing but a check.
+// opf-render and opf-pptx (see peers.ts). `convert` of `@openpresentation/opf` (conversion.ts) and the CLI's
+// `opf convert` run `runExport`: the command adds what is about files and flags (reading
+// the document, the located check, the output, atomic writes, the JSON report, exit codes), the function adds nothing but a check.
 //
 // Output is deterministic: no network, no system fonts, no clock unless `date` is given, bundled fonts plus the files the
 // caller names, so the same presentation gives the same bytes on every machine.

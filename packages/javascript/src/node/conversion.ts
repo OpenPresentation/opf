@@ -127,7 +127,7 @@ export function deckFileFormat(file: string): DeckFormat | undefined {
 	return format !== "json" ? format : /\.json$/i.test(file) ? "json" : undefined;
 }
 
-/** The export format a file name stands for (`.pdf`, `.pptx`, `.png`, `.svg`, any case), else undefined. `opf render` and `opf export` read `--out` with the same rule. */
+/** The export format a file name stands for (`.pdf`, `.pptx`, `.png`, `.svg`, any case), else undefined. `opf convert` reads its output name with this rule. */
 export function exportFormatOf(file: string): ExportFormat | undefined {
 	return EXPORT_EXTENSIONS[path.extname(file).toLowerCase()];
 }
@@ -186,7 +186,7 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "date", "fonts", "assetDir"] as const;
 const given = (value: unknown) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0);
 
-/** The rules of `opf export`, with each option named as the command's flag when `flags` is set. */
+/** Which option applies to which format (`opf convert`'s rule), with each option named as the command's flag when `flags` is set. */
 function checkApplicable(source: Source, target: Target, options: ConvertOptions, flags: boolean) {
 	const name = (key: string) => (flags ? `--${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}` : key);
 	const names = (...keys: string[]) =>
@@ -339,7 +339,7 @@ export async function planConversion(input: ConvertInput, output: string | undef
 		const entries = drawn.map((file) => ({ name: numbered(file), bytes: file.bytes }));
 		return done([{ name: path.basename(output), path: output, type: ZIP_MEDIA, bytes: createZip(entries), entries: entries.map((entry) => entry.name).sort() }]);
 	}
-	// One slide is written to the output name itself, as `opf render --out slide.png` does; more are numbered beside it.
+	// One slide is written to the output name itself (`opf convert deck.opf.json slide.png --slides 2`); more are numbered beside it.
 	if (drawn.length === 1) return single(drawn[0] as ExportFile);
 	const folder = path.dirname(output);
 	return done(drawn.map((file) => ({ name: numbered(file), path: path.join(folder, numbered(file)), type: file.type, bytes: file.bytes, ...facts(file) })));

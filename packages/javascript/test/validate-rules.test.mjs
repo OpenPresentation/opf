@@ -421,8 +421,10 @@ test('the root entry point exports the checker, and the old subpaths are gone', 
 	assert.equal(root.validationRules, validationRules);
 	assert.equal(root.findValidationRule, findValidationRule);
 	assert.equal(root.DEFAULT_VALIDATION_THRESHOLDS, DEFAULT_VALIDATION_THRESHOLDS);
+	// RR-75: the root's validate (the Node build) registers the default catalog; /validator has core's own, which registers none.
 	const validator = await import('../dist/validator.js');
-	assert.equal(validator.validate, validate);
+	assert.equal(typeof validator.validate, 'function');
+	assert.notEqual(validator.validate, validate);
 	const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 	assert.equal(manifest.exports['./lint'], undefined);
 	assert.equal(manifest.exports['./audit'], undefined);

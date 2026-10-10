@@ -71,8 +71,11 @@ describe("package root", () => {
 
 // RR-55: the verbs of the CLI are exported from the root and keep their subpaths. Hosts (render, PPTX, editor, the CLI)
 // feature-detect some of these names with typeof, so a rename that drops one must fail here, not silently turn a feature off.
+// RR-75: in the Node build validate, stats, paginate, embed and edit register the default catalog when a call names none, so they
+// are the Node build's own functions over the subpath's (node-verbs.test.mjs checks them); the browser build exports the subpath's.
+const nodeDefaults = ["validate", "stats", "paginate", "embed", "edit"];
 const verbs = {
-  validate: validator, assertValid: validator, paginate: pagination, paginateSlide: pagination, embed: root, copySlides: root, updateFromCatalog: root,
+  assertValid: validator, paginateSlide: pagination, copySlides: root, updateFromCatalog: root,
   diff: diffModule, merge: diffModule, format: formatModule, fromMarkdown: markdown, toMarkdown: markdown,
   applyPatch: patch, ingest: data, resolveVariables: root, toExcelNumberFormat: data, fromExcelNumberFormat: data,
 };
@@ -91,7 +94,9 @@ describe("the short verbs", () => {
       assert.equal(typeof root[name], "function", `root.${name}`);
       assert.equal(root[name], home[name], `${name} on its subpath`);
     }
-    assert.equal(typeof root.stats, "function");
+    for (const name of [...nodeDefaults, "fill", "fillRecords"]) assert.equal(typeof root[name], "function", name);
+    assert.notEqual(root.validate, validator.validate, "the Node build's validate registers the default catalog");
+    assert.notEqual(root.paginate, pagination.paginate);
     assert.equal(typeof root.resolveSlideContext, "function");
   });
 
