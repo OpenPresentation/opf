@@ -1,0 +1,466 @@
+{
+ "host": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "os": "Microsoft Windows NT 10.0.26200.0",
+  "powershell": "5.1.26100.9444",
+  "culture": "en-US",
+  "runStartedUtc": "2026-10-10T21:45:22.6048184Z",
+  "runFinishedUtc": "2026-10-10T21:47:57.2782849Z"
+ },
+ "harnessNote": "exitCode is null for every deck: run-deck.ps1 of this attempt did not cache the child process handle, so PowerShell reported no exit code. compare.mjs counts a run as successful only when status is completed and the read-out JSON exists, parses and reached stage done; run-deck.ps1 now caches the handle.",
+ "runs": [
+  {
+   "deck": "scripts-01-ja-meiryo",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 46040,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "f0b76ca015da5cb9e911fb90ef0994a2a60f609aec5cbf8ac6c0caf62160b7dc"
+  },
+  {
+   "deck": "scripts-02-ja-yu-gothic",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 29972,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "b12b6f55ffeec628544a0f3f2f54f5f0466cf912dd517662afb51f6d5179c3fb"
+  },
+  {
+   "deck": "scripts-03-ja-ms-gothic",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 26108,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.2,
+   "sha256": "3f7d7d2f3829dc06a6134e875ecf837e415342664be4511af485e03d4f87ff31"
+  },
+  {
+   "deck": "scripts-04-ja-ms-mincho",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 46788,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.1,
+   "sha256": "32e4666a68ad36cc634187e0eed2f6c5dbe0e83b82c1d26bc178a0109153f835"
+  },
+  {
+   "deck": "scripts-05-zh-hans-microsoft-yahei",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 54656,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "b05a71514652074145b0b08261ab6e4b21c6379c65f5e3a0e124315740666850"
+  },
+  {
+   "deck": "scripts-06-zh-hans-simsun",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 23628,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.1,
+   "sha256": "09a0797c6df2a544ec88b57360a1a3eb87e2e4eb402c3de0dc0645a401c3e3b8"
+  },
+  {
+   "deck": "scripts-07-zh-hans-simhei",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 54920,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.3,
+   "sha256": "9871018acdce6df721a7c8c65af31fb97c4f09ae21ed51fa8a73e8ec4a10c17a"
+  },
+  {
+   "deck": "scripts-08-zh-hans-fangsong",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 33388,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "3477199af3aac1dfb81141812f24065d971560ea925a5d9dcba81590372fb832"
+  },
+  {
+   "deck": "scripts-09-zh-hant-microsoft-jhenghei",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 27908,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.2,
+   "sha256": "854dd9976b9b630da324fd1499475e28db6f9b9e21b05c391d8a21f5b9ad3c3e"
+  },
+  {
+   "deck": "scripts-10-zh-hant-mingliu",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 48644,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.1,
+   "sha256": "2565f774c91f0d36a30dad0416ba9e52e7a1491d07d828f003188531c8a50515"
+  },
+  {
+   "deck": "scripts-11-zh-hant-pmingliu",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 35048,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.3,
+   "sha256": "ad98b0aeb45d8d6656cab46f9624d028c6eef2acc2f2ddd6abc2cf43a9e9bec0"
+  },
+  {
+   "deck": "scripts-12-ko-malgun-gothic",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 50360,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.7,
+   "sha256": "9cce449e9bef24c48a5405decdf8a2cfd9535193cd3cf1b9fc9d80e3f088cce3"
+  },
+  {
+   "deck": "scripts-13-ko-batang",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 51196,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.5,
+   "sha256": "cc2ae8660869fee7b6103f7e0bf1cbfa9743c596c7aa6f49637a864239bf8840"
+  },
+  {
+   "deck": "scripts-14-ko-batangche",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 31808,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "1b38a2b49aa8b8b68615ad9a5b3e8d5efbb2df55ef7f03a137da6641abbb38ee"
+  },
+  {
+   "deck": "scripts-15-ko-gungsuh",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 50832,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "db8d5a77b51d0255fdddb6c60273fd0ba3d1edae652a0389c98dc006d443c3f7"
+  },
+  {
+   "deck": "scripts-16-ko-gungsuhche",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 42500,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "47842902fb5de795948922d8454db4c55bd65277d15aa34cdbe0e3fcdc1978c0"
+  },
+  {
+   "deck": "scripts-17-ar-arabic-typesetting",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 49636,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.7,
+   "sha256": "f84eb72dd1127672ed917af0ff45fcdc87cceb647b9b91843b058eb4e7d26394"
+  },
+  {
+   "deck": "scripts-18-ar-traditional-arabic",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 51684,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "26724242331e99ffe8f8b30f7ab01ddf042b374b2cc164ddd3071726eac49802"
+  },
+  {
+   "deck": "scripts-19-ar-sakkal-majalla",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 20424,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "32e3e08b67fdfa720767240585c0133c9d83a0d24f62dfc011864073fc10c3e0"
+  },
+  {
+   "deck": "scripts-20-ur-sakkal-majalla",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 50520,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.7,
+   "sha256": "16a416d5e16b101e02b079f803ec44c7bbc05371b0b1fb1de0014354077db1aa"
+  },
+  {
+   "deck": "scripts-21-fa-sakkal-majalla",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 9928,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.9,
+   "sha256": "dbb2e441694f695c358748b7208d25cae5a5c7ad367632aa591163ddec920bfc"
+  },
+  {
+   "deck": "scripts-22-he-david",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 40308,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2,
+   "sha256": "cac643ef07ae185b2d0db376c8e648b6ae9efbd721ecdbd77e29ebe41c4d07ea"
+  },
+  {
+   "deck": "scripts-23-he-gisha",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 21672,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "cbbb1384c7df4b0bea1422df637923da73bb6815cc282d4521b648b50b49e320"
+  },
+  {
+   "deck": "scripts-24-he-miriam",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 32340,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "7c731d471cb02e0b695a8cd3c004d65f4baa7280e7c0f8178ad91d117e9204e0"
+  },
+  {
+   "deck": "scripts-25-hi-mangal",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 12996,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "ce9d24acf0d43ab7eac6bbd8fbd75e730db472a404b240c057d5adecc3a15b64"
+  },
+  {
+   "deck": "scripts-26-hi-aparajita",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 56288,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "53426ef501f08421b6d31413f4849d91db69e22a18b3ea41581432e9ca3e800c"
+  },
+  {
+   "deck": "scripts-27-hi-nirmala-ui",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 47288,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.7,
+   "sha256": "73f72c516300177df3fc72524535ec3fcfb5b4fc9aa090719f89772a6b207e9a"
+  },
+  {
+   "deck": "scripts-28-bn-vrinda",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 16836,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.6,
+   "sha256": "3b58f3368eb390a92e20e47ba974e6977665c267ccefe3fb6029fc90d2778608"
+  },
+  {
+   "deck": "scripts-29-bn-shonar-bangla",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 52920,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.4,
+   "sha256": "1f1fe7dbcd4ecd298bc337e086fc74e5780698777706be6b4e046ea93509b04e"
+  },
+  {
+   "deck": "scripts-30-pa-guru-raavi",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 49448,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.1,
+   "sha256": "d51b77753e3116b329b583f2902bf78e32ca2160976c4b65e9beb0c91cdeaa28"
+  },
+  {
+   "deck": "scripts-31-gu-shruti",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 57204,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "f87692b4f85e94ed6121c8173a5237afa95a6bdcd595b4bd6aea9d59c2cfee47"
+  },
+  {
+   "deck": "scripts-32-or-kalinga",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 50072,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.6,
+   "sha256": "8201c971323b73a78d546cbc629d48df0cb6b5e7698a582cbf63ba29c0067000"
+  },
+  {
+   "deck": "scripts-33-ta-latha",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 6680,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "1501dc1b9266fdaabd69d94ca3b3380741251278385d5a4376fc997203e5ae7a"
+  },
+  {
+   "deck": "scripts-34-te-gautami",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 26108,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.6,
+   "sha256": "79c2038649f888251d6088ca016668fbd7dbc7c451540cf00fe0bd7189392aa5"
+  },
+  {
+   "deck": "scripts-35-kn-tunga",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 49144,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.5,
+   "sha256": "ff871ab7459e65426863ce01fa1d9be7dd9c81aed129180d5110f4e25f26aaa4"
+  },
+  {
+   "deck": "scripts-36-ml-kartika",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 24568,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "2407e54350e844f6a56f9d4094879422cc03eb0665c2da95cf533f4c5eebaeac"
+  },
+  {
+   "deck": "scripts-37-th-angsana-new",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 47400,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.7,
+   "sha256": "4924305d734f9aef32228d62b40e2326c0403a1adb95047881ab84d7e2542dc5"
+  },
+  {
+   "deck": "scripts-38-th-dilleniaupc",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 19376,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "fa14cf369b92a07e4735187116359841284b7ad55f85f4cf1c23c347107521f2"
+  },
+  {
+   "deck": "scripts-39-km-daunpenh",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 32724,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.6,
+   "sha256": "18cc0dd0f605d765ab3a37430f961944198219edaaeebea99825bee27d672db7"
+  },
+  {
+   "deck": "scripts-40-km-khmer-ui",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 47580,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.6,
+   "sha256": "313bd9ade311c969e1b9f27c25bf4db0bb9ca42903d55d90f40b776bb6d850a5"
+  },
+  {
+   "deck": "scripts-41-am-nyala",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 25280,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.6,
+   "sha256": "35bcf843cee1f873180f7654f16d216adbdeb8092542964ee0f79d9c663e8253"
+  },
+  {
+   "deck": "scripts-42-am-ebrima",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 50716,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.5,
+   "sha256": "008932a210d2fafe3c735c74428d489265ae2e3e7b695cf64161965221e2cb8f"
+  },
+  {
+   "deck": "scripts-43-hy-sylfaen",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 41272,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.7,
+   "sha256": "aa4826c774209430866196fc7a4a42e7ef089e4f576cd59663c57f211acaf7c5"
+  },
+  {
+   "deck": "scripts-44-ka-sylfaen",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 42688,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.5,
+   "sha256": "c4757da72177a71e1023a952ad40d710d668e61b45b020fc1f073ba66f8a22c7"
+  },
+  {
+   "deck": "symbol-01-wingdings",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 44220,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.8,
+   "sha256": "9ac61794c7e773825f22b847cab7da076b0d553038912c6af2ce3a775ad42006"
+  },
+  {
+   "deck": "symbol-02-webdings",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 49268,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.9,
+   "sha256": "dd5926f86b5f3f2c9a95b90377bde051aca3c36d5554d06be04174ead3d39068"
+  },
+  {
+   "deck": "symbol-03-symbol",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 29536,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.9,
+   "sha256": "4fb98daac77281ea1be71f1212e0c836801ae325fc2856394cc90728f1bf8975"
+  },
+  {
+   "deck": "emoji-math-01-segoe-ui-emoji",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 41148,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 2.6,
+   "sha256": "caddb3ce330d2e4214aec4707fc2b68f00028b201eb2802b46214149ebb9199d"
+  },
+  {
+   "deck": "emoji-math-02-cambria-math",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 11272,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.8,
+   "sha256": "073dd117d618fc86c4484499f99e655aba374c478d888f47721006360e0b16da"
+  },
+  {
+   "deck": "emoji-math-03-emoji-in-aptos-deck",
+   "status": "completed",
+   "exitCode": null,
+   "childPid": 15460,
+   "timeoutSeconds": 90,
+   "elapsedSeconds": 1.5,
+   "sha256": "0dca375735ff89b3f0fea06a7d11c8c78be5520261ad3163d7d6802d1fa0cf9d"
+  }
+ ]
+}

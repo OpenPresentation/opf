@@ -1,0 +1,132 @@
+{
+ "item": "FF-27 fields renumber and update, 0.18 furniture forms (opf#323 section 2)",
+ "built": {
+  "date": "2026-10-10T21:43:02.317Z",
+  "node": "v24.21.0",
+  "packages": {
+   "@openpresentation/opf": "0.18.1",
+   "@openpresentation/opf-render": "0.18.0",
+   "@openpresentation/opf-pptx": "0.18.0",
+   "@openpresentation/opf-editor": "0.18.0",
+   "fontkit": "2.0.4"
+  },
+  "zipDate": "2026-10-10T00:00:00Z",
+  "exportDate": "2026-01-15",
+  "note": "Published npm packages only, exact versions pinned in package.json. Decks, previews and absolute paths are never committed."
+ },
+ "decks": {
+  "01-footer-fields": {
+   "title": "FF-27 footer fields",
+   "covers": "footer: left date:true MMMM d, yyyy (datetime4, the dt placeholder), center text (ftr), right {{slide.number}} (sldNum)",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff27/01-footer-fields.pptx",
+   "bytes": 41578,
+   "sha256": "04fc3914455323f687349dabce56ecebf90bf33836bc97a6ad795937f86ad435",
+   "slides": 5,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "fields": {
+    "slideNumber": {
+     "format": "{n}"
+    },
+    "date": {
+     "format": "MMMM d, yyyy",
+     "fieldType": "datetime4",
+     "ppFormat": 4
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "02-header-forms": {
+   "title": "FF-27 header forms",
+   "covers": "the other 0.18 forms: header left \"Page {{slide.number}} of {{deck.slideCount}}\" (field inside fixed words, a tagged header shape), header right date:true default M/d/yyyy (datetime1), footer right \"A-{{slide.number}}\" (sldNum with fixed prefix)",
+   "family": null,
+   "language": "en-US",
+   "status": null,
+   "file": "decks/ff27/02-header-forms.pptx",
+   "bytes": 41595,
+   "sha256": "be91d501be7b70046b1a5e277f7b698247e5d0910fe769efa0bc8860f35e2523",
+   "slides": 5,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "fields": {
+    "slideNumber": {
+     "format": "Page {n} of 5",
+     "alsoFooter": "A-{n}"
+    },
+    "date": {
+     "format": "M/d/yyyy",
+     "fieldType": "datetime1",
+     "ppFormat": 1
+    }
+   },
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  }
+ }
+}
