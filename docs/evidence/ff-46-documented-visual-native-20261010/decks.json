@@ -1,0 +1,3546 @@
+{
+ "item": "FF-46 / RR-17 native visual comparison, one family per deck, published 0.18 packages (opf#323 section 3)",
+ "built": {
+  "date": "2026-10-10T21:43:02.317Z",
+  "node": "v24.21.0",
+  "packages": {
+   "@openpresentation/opf": "0.18.1",
+   "@openpresentation/opf-render": "0.18.0",
+   "@openpresentation/opf-pptx": "0.18.0",
+   "@openpresentation/opf-editor": "0.18.0",
+   "fontkit": "2.0.4"
+  },
+  "zipDate": "2026-10-10T00:00:00Z",
+  "exportDate": "2026-01-15",
+  "note": "Published npm packages only, exact versions pinned in package.json. Decks, previews and absolute paths are never committed."
+ },
+ "previews": "opf-render 0.18.0 toSvg + toPng, 1280 px wide, gallery font host (office pack, all scripts, visual substitution); not committed",
+ "decks": {
+  "scripts-01-ja-meiryo": {
+   "title": "FF-46 Meiryo (ja)",
+   "covers": null,
+   "family": "Meiryo",
+   "language": "ja",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-01-ja-meiryo.pptx",
+   "bytes": 23440,
+   "sha256": "f0b76ca015da5cb9e911fb90ef0994a2a60f609aec5cbf8ac6c0caf62160b7dc",
+   "slides": 2,
+   "expectedFonts": [
+    "Meiryo"
+   ],
+   "requiredFonts": [
+    "Meiryo"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Meiryo",
+     "ea": "Meiryo",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-02-ja-yu-gothic": {
+   "title": "FF-46 Yu Gothic (ja)",
+   "covers": null,
+   "family": "Yu Gothic",
+   "language": "ja",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-02-ja-yu-gothic.pptx",
+   "bytes": 23484,
+   "sha256": "b12b6f55ffeec628544a0f3f2f54f5f0466cf912dd517662afb51f6d5179c3fb",
+   "slides": 2,
+   "expectedFonts": [
+    "Yu Gothic"
+   ],
+   "requiredFonts": [
+    "Yu Gothic"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Yu Gothic",
+     "ea": "Yu Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Yu Gothic",
+     "ea": "Yu Gothic",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Yu Gothic",
+     "ea": "Yu Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Yu Gothic",
+     "ea": "Yu Gothic",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-03-ja-ms-gothic": {
+   "title": "FF-46 MS Gothic (ja)",
+   "covers": null,
+   "family": "MS Gothic",
+   "language": "ja",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-03-ja-ms-gothic.pptx",
+   "bytes": 23883,
+   "sha256": "3f7d7d2f3829dc06a6134e875ecf837e415342664be4511af485e03d4f87ff31",
+   "slides": 2,
+   "expectedFonts": [
+    "MS Gothic"
+   ],
+   "requiredFonts": [
+    "MS Gothic"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "MS Gothic",
+     "ea": "MS Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MS Gothic",
+     "ea": "MS Gothic",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "MS Gothic",
+     "ea": "MS Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MS Gothic",
+     "ea": "MS Gothic",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-04-ja-ms-mincho": {
+   "title": "FF-46 MS Mincho (ja)",
+   "covers": null,
+   "family": "MS Mincho",
+   "language": "ja",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-04-ja-ms-mincho.pptx",
+   "bytes": 23462,
+   "sha256": "32e4666a68ad36cc634187e0eed2f6c5dbe0e83b82c1d26bc178a0109153f835",
+   "slides": 2,
+   "expectedFonts": [
+    "MS Mincho"
+   ],
+   "requiredFonts": [
+    "MS Mincho"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "MS Mincho",
+     "ea": "MS Mincho",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MS Mincho",
+     "ea": "MS Mincho",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "MS Mincho",
+     "ea": "MS Mincho",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MS Mincho",
+     "ea": "MS Mincho",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-05-zh-hans-microsoft-yahei": {
+   "title": "FF-46 Microsoft YaHei (zh-Hans)",
+   "covers": null,
+   "family": "Microsoft YaHei",
+   "language": "zh-Hans",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-05-zh-hans-microsoft-yahei.pptx",
+   "bytes": 23441,
+   "sha256": "b05a71514652074145b0b08261ab6e4b21c6379c65f5e3a0e124315740666850",
+   "slides": 2,
+   "expectedFonts": [
+    "Microsoft YaHei"
+   ],
+   "requiredFonts": [
+    "Microsoft YaHei"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Microsoft YaHei",
+     "ea": "Microsoft YaHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Microsoft YaHei",
+     "ea": "Microsoft YaHei",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Microsoft YaHei",
+     "ea": "Microsoft YaHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Microsoft YaHei",
+     "ea": "Microsoft YaHei",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-06-zh-hans-simsun": {
+   "title": "FF-46 SimSun (zh-Hans)",
+   "covers": null,
+   "family": "SimSun",
+   "language": "zh-Hans",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-06-zh-hans-simsun.pptx",
+   "bytes": 23396,
+   "sha256": "09a0797c6df2a544ec88b57360a1a3eb87e2e4eb402c3de0dc0645a401c3e3b8",
+   "slides": 2,
+   "expectedFonts": [
+    "SimSun"
+   ],
+   "requiredFonts": [
+    "SimSun"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "SimSun",
+     "ea": "SimSun",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "SimSun",
+     "ea": "SimSun",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "SimSun",
+     "ea": "SimSun",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "SimSun",
+     "ea": "SimSun",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-07-zh-hans-simhei": {
+   "title": "FF-46 SimHei (zh-Hans)",
+   "covers": null,
+   "family": "SimHei",
+   "language": "zh-Hans",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-07-zh-hans-simhei.pptx",
+   "bytes": 23386,
+   "sha256": "9871018acdce6df721a7c8c65af31fb97c4f09ae21ed51fa8a73e8ec4a10c17a",
+   "slides": 2,
+   "expectedFonts": [
+    "SimHei"
+   ],
+   "requiredFonts": [
+    "SimHei"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "SimHei",
+     "ea": "SimHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "SimHei",
+     "ea": "SimHei",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "SimHei",
+     "ea": "SimHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "SimHei",
+     "ea": "SimHei",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-08-zh-hans-fangsong": {
+   "title": "FF-46 FangSong (zh-Hans)",
+   "covers": null,
+   "family": "FangSong",
+   "language": "zh-Hans",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-08-zh-hans-fangsong.pptx",
+   "bytes": 23411,
+   "sha256": "3477199af3aac1dfb81141812f24065d971560ea925a5d9dcba81590372fb832",
+   "slides": 2,
+   "expectedFonts": [
+    "FangSong"
+   ],
+   "requiredFonts": [
+    "FangSong"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "FangSong",
+     "ea": "FangSong",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "FangSong",
+     "ea": "FangSong",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "FangSong",
+     "ea": "FangSong",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "FangSong",
+     "ea": "FangSong",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hans-sentence",
+      "hans-punctuation",
+      "hans-mixed-latin",
+      "hans-no-spaces"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-09-zh-hant-microsoft-jhenghei": {
+   "title": "FF-46 Microsoft JhengHei (zh-Hant)",
+   "covers": null,
+   "family": "Microsoft JhengHei",
+   "language": "zh-Hant",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-09-zh-hant-microsoft-jhenghei.pptx",
+   "bytes": 23397,
+   "sha256": "854dd9976b9b630da324fd1499475e28db6f9b9e21b05c391d8a21f5b9ad3c3e",
+   "slides": 2,
+   "expectedFonts": [
+    "Microsoft JhengHei"
+   ],
+   "requiredFonts": [
+    "Microsoft JhengHei"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Microsoft JhengHei",
+     "ea": "Microsoft JhengHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Microsoft JhengHei",
+     "ea": "Microsoft JhengHei",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Microsoft JhengHei",
+     "ea": "Microsoft JhengHei",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Microsoft JhengHei",
+     "ea": "Microsoft JhengHei",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-10-zh-hant-mingliu": {
+   "title": "FF-46 MingLiU (zh-Hant)",
+   "covers": null,
+   "family": "MingLiU",
+   "language": "zh-Hant",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-10-zh-hant-mingliu.pptx",
+   "bytes": 23370,
+   "sha256": "2565f774c91f0d36a30dad0416ba9e52e7a1491d07d828f003188531c8a50515",
+   "slides": 2,
+   "expectedFonts": [
+    "MingLiU"
+   ],
+   "requiredFonts": [
+    "MingLiU"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "MingLiU",
+     "ea": "MingLiU",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MingLiU",
+     "ea": "MingLiU",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "MingLiU",
+     "ea": "MingLiU",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "MingLiU",
+     "ea": "MingLiU",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-11-zh-hant-pmingliu": {
+   "title": "FF-46 PMingLiU (zh-Hant)",
+   "covers": null,
+   "family": "PMingLiU",
+   "language": "zh-Hant",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-11-zh-hant-pmingliu.pptx",
+   "bytes": 23384,
+   "sha256": "ad98b0aeb45d8d6656cab46f9624d028c6eef2acc2f2ddd6abc2cf43a9e9bec0",
+   "slides": 2,
+   "expectedFonts": [
+    "PMingLiU"
+   ],
+   "requiredFonts": [
+    "PMingLiU"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "PMingLiU",
+     "ea": "PMingLiU",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "PMingLiU",
+     "ea": "PMingLiU",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "PMingLiU",
+     "ea": "PMingLiU",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "PMingLiU",
+     "ea": "PMingLiU",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hant-sentence",
+      "hant-punctuation",
+      "hant-bopomofo",
+      "hant-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-12-ko-malgun-gothic": {
+   "title": "FF-46 Malgun Gothic (ko)",
+   "covers": null,
+   "family": "Malgun Gothic",
+   "language": "ko",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-12-ko-malgun-gothic.pptx",
+   "bytes": 22516,
+   "sha256": "9cce449e9bef24c48a5405decdf8a2cfd9535193cd3cf1b9fc9d80e3f088cce3",
+   "slides": 2,
+   "expectedFonts": [
+    "Malgun Gothic"
+   ],
+   "requiredFonts": [
+    "Malgun Gothic"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Malgun Gothic",
+     "ea": "Malgun Gothic",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-13-ko-batang": {
+   "title": "FF-46 Batang (ko)",
+   "covers": null,
+   "family": "Batang",
+   "language": "ko",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-13-ko-batang.pptx",
+   "bytes": 22870,
+   "sha256": "cc2ae8660869fee7b6103f7e0bf1cbfa9743c596c7aa6f49637a864239bf8840",
+   "slides": 2,
+   "expectedFonts": [
+    "Batang"
+   ],
+   "requiredFonts": [
+    "Batang"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Batang",
+     "ea": "Batang",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Batang",
+     "ea": "Batang",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Batang",
+     "ea": "Batang",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Batang",
+     "ea": "Batang",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-14-ko-batangche": {
+   "title": "FF-46 BatangChe (ko)",
+   "covers": null,
+   "family": "BatangChe",
+   "language": "ko",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-14-ko-batangche.pptx",
+   "bytes": 22888,
+   "sha256": "1b38a2b49aa8b8b68615ad9a5b3e8d5efbb2df55ef7f03a137da6641abbb38ee",
+   "slides": 2,
+   "expectedFonts": [
+    "BatangChe"
+   ],
+   "requiredFonts": [
+    "BatangChe"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "BatangChe",
+     "ea": "BatangChe",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "BatangChe",
+     "ea": "BatangChe",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "BatangChe",
+     "ea": "BatangChe",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "BatangChe",
+     "ea": "BatangChe",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-15-ko-gungsuh": {
+   "title": "FF-46 Gungsuh (ko)",
+   "covers": null,
+   "family": "Gungsuh",
+   "language": "ko",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-15-ko-gungsuh.pptx",
+   "bytes": 22887,
+   "sha256": "db8d5a77b51d0255fdddb6c60273fd0ba3d1edae652a0389c98dc006d443c3f7",
+   "slides": 2,
+   "expectedFonts": [
+    "Gungsuh"
+   ],
+   "requiredFonts": [
+    "Gungsuh"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Gungsuh",
+     "ea": "Gungsuh",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Gungsuh",
+     "ea": "Gungsuh",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Gungsuh",
+     "ea": "Gungsuh",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Gungsuh",
+     "ea": "Gungsuh",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-16-ko-gungsuhche": {
+   "title": "FF-46 GungsuhChe (ko)",
+   "covers": null,
+   "family": "GungsuhChe",
+   "language": "ko",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-16-ko-gungsuhche.pptx",
+   "bytes": 22906,
+   "sha256": "47842902fb5de795948922d8454db4c55bd65277d15aa34cdbe0e3fcdc1978c0",
+   "slides": 2,
+   "expectedFonts": [
+    "GungsuhChe"
+   ],
+   "requiredFonts": [
+    "GungsuhChe"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "GungsuhChe",
+     "ea": "GungsuhChe",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "GungsuhChe",
+     "ea": "GungsuhChe",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "GungsuhChe",
+     "ea": "GungsuhChe",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "GungsuhChe",
+     "ea": "GungsuhChe",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja",
+      "kore-mixed-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-17-ar-arabic-typesetting": {
+   "title": "FF-46 Arabic Typesetting (ar)",
+   "covers": null,
+   "family": "Arabic Typesetting",
+   "language": "ar",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-17-ar-arabic-typesetting.pptx",
+   "bytes": 22384,
+   "sha256": "f84eb72dd1127672ed917af0ff45fcdc87cceb647b9b91843b058eb4e7d26394",
+   "slides": 2,
+   "expectedFonts": [
+    "Arabic Typesetting"
+   ],
+   "requiredFonts": [
+    "Arabic Typesetting"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Arabic Typesetting",
+     "ea": "Arabic Typesetting",
+     "cs": "Arabic Typesetting"
+    },
+    "minor": {
+     "latin": "Arabic Typesetting",
+     "ea": "Arabic Typesetting",
+     "cs": "Arabic Typesetting"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Arabic Typesetting",
+     "ea": "Arabic Typesetting",
+     "cs": "Arabic Typesetting"
+    },
+    "minor": {
+     "latin": "Arabic Typesetting",
+     "ea": "Arabic Typesetting",
+     "cs": "Arabic Typesetting"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin",
+      "arab-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-18-ar-traditional-arabic": {
+   "title": "FF-46 Traditional Arabic (ar)",
+   "covers": null,
+   "family": "Traditional Arabic",
+   "language": "ar",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-18-ar-traditional-arabic.pptx",
+   "bytes": 23192,
+   "sha256": "26724242331e99ffe8f8b30f7ab01ddf042b374b2cc164ddd3071726eac49802",
+   "slides": 2,
+   "expectedFonts": [
+    "Traditional Arabic"
+   ],
+   "requiredFonts": [
+    "Traditional Arabic"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Traditional Arabic",
+     "ea": "Traditional Arabic",
+     "cs": "Traditional Arabic"
+    },
+    "minor": {
+     "latin": "Traditional Arabic",
+     "ea": "Traditional Arabic",
+     "cs": "Traditional Arabic"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Traditional Arabic",
+     "ea": "Traditional Arabic",
+     "cs": "Traditional Arabic"
+    },
+    "minor": {
+     "latin": "Traditional Arabic",
+     "ea": "Traditional Arabic",
+     "cs": "Traditional Arabic"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin",
+      "arab-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-19-ar-sakkal-majalla": {
+   "title": "FF-46 Sakkal Majalla (ar)",
+   "covers": null,
+   "family": "Sakkal Majalla",
+   "language": "ar",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-19-ar-sakkal-majalla.pptx",
+   "bytes": 23165,
+   "sha256": "32e3e08b67fdfa720767240585c0133c9d83a0d24f62dfc011864073fc10c3e0",
+   "slides": 2,
+   "expectedFonts": [
+    "Sakkal Majalla"
+   ],
+   "requiredFonts": [
+    "Sakkal Majalla"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits",
+      "arab-bidi-latin",
+      "arab-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-20-ur-sakkal-majalla": {
+   "title": "FF-46 Sakkal Majalla (ur)",
+   "covers": null,
+   "family": "Sakkal Majalla",
+   "language": "ur",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-20-ur-sakkal-majalla.pptx",
+   "bytes": 22708,
+   "sha256": "16a416d5e16b101e02b079f803ec44c7bbc05371b0b1fb1de0014354077db1aa",
+   "slides": 2,
+   "expectedFonts": [
+    "Sakkal Majalla"
+   ],
+   "requiredFonts": [
+    "Sakkal Majalla"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "arab-ur-letters",
+      "arab-ur-title",
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "arab-ur-letters",
+      "arab-ur-title",
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-21-fa-sakkal-majalla": {
+   "title": "FF-46 Sakkal Majalla (fa)",
+   "covers": null,
+   "family": "Sakkal Majalla",
+   "language": "fa",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-21-fa-sakkal-majalla.pptx",
+   "bytes": 22715,
+   "sha256": "dbb2e441694f695c358748b7208d25cae5a5c7ad367632aa591163ddec920bfc",
+   "slides": 2,
+   "expectedFonts": [
+    "Sakkal Majalla"
+   ],
+   "requiredFonts": [
+    "Sakkal Majalla"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    },
+    "minor": {
+     "latin": "Sakkal Majalla",
+     "ea": "Sakkal Majalla",
+     "cs": "Sakkal Majalla"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "arab-fa-letters",
+      "arab-fa-digits",
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "arab-fa-letters",
+      "arab-fa-digits",
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat",
+      "arab-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-22-he-david": {
+   "title": "FF-46 David (he)",
+   "covers": null,
+   "family": "David",
+   "language": "he",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-22-he-david.pptx",
+   "bytes": 23034,
+   "sha256": "cac643ef07ae185b2d0db376c8e648b6ae9efbd721ecdbd77e29ebe41c4d07ea",
+   "slides": 2,
+   "expectedFonts": [
+    "David"
+   ],
+   "requiredFonts": [
+    "David"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "David",
+     "ea": "David",
+     "cs": "David"
+    },
+    "minor": {
+     "latin": "David",
+     "ea": "David",
+     "cs": "David"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "David",
+     "ea": "David",
+     "cs": "David"
+    },
+    "minor": {
+     "latin": "David",
+     "ea": "David",
+     "cs": "David"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf",
+      "hebr-bidi-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-23-he-gisha": {
+   "title": "FF-46 Gisha (he)",
+   "covers": null,
+   "family": "Gisha",
+   "language": "he",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-23-he-gisha.pptx",
+   "bytes": 23023,
+   "sha256": "cbbb1384c7df4b0bea1422df637923da73bb6815cc282d4521b648b50b49e320",
+   "slides": 2,
+   "expectedFonts": [
+    "Gisha"
+   ],
+   "requiredFonts": [
+    "Gisha"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Gisha",
+     "ea": "Gisha",
+     "cs": "Gisha"
+    },
+    "minor": {
+     "latin": "Gisha",
+     "ea": "Gisha",
+     "cs": "Gisha"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Gisha",
+     "ea": "Gisha",
+     "cs": "Gisha"
+    },
+    "minor": {
+     "latin": "Gisha",
+     "ea": "Gisha",
+     "cs": "Gisha"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf",
+      "hebr-bidi-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-24-he-miriam": {
+   "title": "FF-46 Miriam (he)",
+   "covers": null,
+   "family": "Miriam",
+   "language": "he",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-24-he-miriam.pptx",
+   "bytes": 23040,
+   "sha256": "7c731d471cb02e0b695a8cd3c004d65f4baa7280e7c0f8178ad91d117e9204e0",
+   "slides": 2,
+   "expectedFonts": [
+    "Miriam"
+   ],
+   "requiredFonts": [
+    "Miriam"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Miriam",
+     "ea": "Miriam",
+     "cs": "Miriam"
+    },
+    "minor": {
+     "latin": "Miriam",
+     "ea": "Miriam",
+     "cs": "Miriam"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Miriam",
+     "ea": "Miriam",
+     "cs": "Miriam"
+    },
+    "minor": {
+     "latin": "Miriam",
+     "ea": "Miriam",
+     "cs": "Miriam"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud",
+      "hebr-geresh",
+      "hebr-maqaf",
+      "hebr-bidi-latin"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-25-hi-mangal": {
+   "title": "FF-46 Mangal (hi)",
+   "covers": null,
+   "family": "Mangal",
+   "language": "hi",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-25-hi-mangal.pptx",
+   "bytes": 22677,
+   "sha256": "ce9d24acf0d43ab7eac6bbd8fbd75e730db472a404b240c057d5adecc3a15b64",
+   "slides": 2,
+   "expectedFonts": [
+    "Mangal"
+   ],
+   "requiredFonts": [
+    "Mangal"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Mangal",
+     "ea": "Mangal",
+     "cs": "Mangal"
+    },
+    "minor": {
+     "latin": "Mangal",
+     "ea": "Mangal",
+     "cs": "Mangal"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Mangal",
+     "ea": "Mangal",
+     "cs": "Mangal"
+    },
+    "minor": {
+     "latin": "Mangal",
+     "ea": "Mangal",
+     "cs": "Mangal"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta",
+      "deva-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-26-hi-aparajita": {
+   "title": "FF-46 Aparajita (hi)",
+   "covers": null,
+   "family": "Aparajita",
+   "language": "hi",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-26-hi-aparajita.pptx",
+   "bytes": 22667,
+   "sha256": "53426ef501f08421b6d31413f4849d91db69e22a18b3ea41581432e9ca3e800c",
+   "slides": 2,
+   "expectedFonts": [
+    "Aparajita"
+   ],
+   "requiredFonts": [
+    "Aparajita"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aparajita",
+     "ea": "Aparajita",
+     "cs": "Aparajita"
+    },
+    "minor": {
+     "latin": "Aparajita",
+     "ea": "Aparajita",
+     "cs": "Aparajita"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aparajita",
+     "ea": "Aparajita",
+     "cs": "Aparajita"
+    },
+    "minor": {
+     "latin": "Aparajita",
+     "ea": "Aparajita",
+     "cs": "Aparajita"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta",
+      "deva-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-27-hi-nirmala-ui": {
+   "title": "FF-46 Nirmala UI (hi)",
+   "covers": null,
+   "family": "Nirmala UI",
+   "language": "hi",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-27-hi-nirmala-ui.pptx",
+   "bytes": 22714,
+   "sha256": "73f72c516300177df3fc72524535ec3fcfb5b4fc9aa090719f89772a6b207e9a",
+   "slides": 2,
+   "expectedFonts": [
+    "Nirmala UI"
+   ],
+   "requiredFonts": [
+    "Nirmala UI"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Nirmala UI",
+     "ea": "Nirmala UI",
+     "cs": "Nirmala UI"
+    },
+    "minor": {
+     "latin": "Nirmala UI",
+     "ea": "Nirmala UI",
+     "cs": "Nirmala UI"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Nirmala UI",
+     "ea": "Nirmala UI",
+     "cs": "Nirmala UI"
+    },
+    "minor": {
+     "latin": "Nirmala UI",
+     "ea": "Nirmala UI",
+     "cs": "Nirmala UI"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph",
+      "deva-matras",
+      "deva-nukta",
+      "deva-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-28-bn-vrinda": {
+   "title": "FF-46 Vrinda (bn)",
+   "covers": null,
+   "family": "Vrinda",
+   "language": "bn",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-28-bn-vrinda.pptx",
+   "bytes": 22594,
+   "sha256": "3b58f3368eb390a92e20e47ba974e6977665c267ccefe3fb6029fc90d2778608",
+   "slides": 2,
+   "expectedFonts": [
+    "Vrinda"
+   ],
+   "requiredFonts": [
+    "Vrinda"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Vrinda",
+     "ea": "Vrinda",
+     "cs": "Vrinda"
+    },
+    "minor": {
+     "latin": "Vrinda",
+     "ea": "Vrinda",
+     "cs": "Vrinda"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Vrinda",
+     "ea": "Vrinda",
+     "cs": "Vrinda"
+    },
+    "minor": {
+     "latin": "Vrinda",
+     "ea": "Vrinda",
+     "cs": "Vrinda"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph",
+      "beng-vowels",
+      "beng-khanda-ta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph",
+      "beng-vowels",
+      "beng-khanda-ta",
+      "beng-ctg"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-29-bn-shonar-bangla": {
+   "title": "FF-46 Shonar Bangla (bn)",
+   "covers": null,
+   "family": "Shonar Bangla",
+   "language": "bn",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-29-bn-shonar-bangla.pptx",
+   "bytes": 22610,
+   "sha256": "1f1fe7dbcd4ecd298bc337e086fc74e5780698777706be6b4e046ea93509b04e",
+   "slides": 2,
+   "expectedFonts": [
+    "Shonar Bangla"
+   ],
+   "requiredFonts": [
+    "Shonar Bangla"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Shonar Bangla",
+     "ea": "Shonar Bangla",
+     "cs": "Shonar Bangla"
+    },
+    "minor": {
+     "latin": "Shonar Bangla",
+     "ea": "Shonar Bangla",
+     "cs": "Shonar Bangla"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Shonar Bangla",
+     "ea": "Shonar Bangla",
+     "cs": "Shonar Bangla"
+    },
+    "minor": {
+     "latin": "Shonar Bangla",
+     "ea": "Shonar Bangla",
+     "cs": "Shonar Bangla"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph",
+      "beng-vowels",
+      "beng-khanda-ta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph",
+      "beng-vowels",
+      "beng-khanda-ta",
+      "beng-ctg"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-30-pa-guru-raavi": {
+   "title": "FF-46 Raavi (pa-Guru)",
+   "covers": null,
+   "family": "Raavi",
+   "language": "pa-Guru",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-30-pa-guru-raavi.pptx",
+   "bytes": 21597,
+   "sha256": "d51b77753e3116b329b583f2902bf78e32ca2160976c4b65e9beb0c91cdeaa28",
+   "slides": 2,
+   "expectedFonts": [
+    "Raavi"
+   ],
+   "requiredFonts": [
+    "Raavi"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Raavi",
+     "ea": "Raavi",
+     "cs": "Raavi"
+    },
+    "minor": {
+     "latin": "Raavi",
+     "ea": "Raavi",
+     "cs": "Raavi"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Raavi",
+     "ea": "Raavi",
+     "cs": "Raavi"
+    },
+    "minor": {
+     "latin": "Raavi",
+     "ea": "Raavi",
+     "cs": "Raavi"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-31-gu-shruti": {
+   "title": "FF-46 Shruti (gu)",
+   "covers": null,
+   "family": "Shruti",
+   "language": "gu",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-31-gu-shruti.pptx",
+   "bytes": 22001,
+   "sha256": "f87692b4f85e94ed6121c8173a5237afa95a6bdcd595b4bd6aea9d59c2cfee47",
+   "slides": 2,
+   "expectedFonts": [
+    "Shruti"
+   ],
+   "requiredFonts": [
+    "Shruti"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Shruti",
+     "ea": "Shruti",
+     "cs": "Shruti"
+    },
+    "minor": {
+     "latin": "Shruti",
+     "ea": "Shruti",
+     "cs": "Shruti"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Shruti",
+     "ea": "Shruti",
+     "cs": "Shruti"
+    },
+    "minor": {
+     "latin": "Shruti",
+     "ea": "Shruti",
+     "cs": "Shruti"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-32-or-kalinga": {
+   "title": "FF-46 Kalinga (or)",
+   "covers": null,
+   "family": "Kalinga",
+   "language": "or",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-32-or-kalinga.pptx",
+   "bytes": 22013,
+   "sha256": "8201c971323b73a78d546cbc629d48df0cb6b5e7698a582cbf63ba29c0067000",
+   "slides": 2,
+   "expectedFonts": [
+    "Kalinga"
+   ],
+   "requiredFonts": [
+    "Kalinga"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Kalinga",
+     "ea": "Kalinga",
+     "cs": "Kalinga"
+    },
+    "minor": {
+     "latin": "Kalinga",
+     "ea": "Kalinga",
+     "cs": "Kalinga"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Kalinga",
+     "ea": "Kalinga",
+     "cs": "Kalinga"
+    },
+    "minor": {
+     "latin": "Kalinga",
+     "ea": "Kalinga",
+     "cs": "Kalinga"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-33-ta-latha": {
+   "title": "FF-46 Latha (ta)",
+   "covers": null,
+   "family": "Latha",
+   "language": "ta",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-33-ta-latha.pptx",
+   "bytes": 23351,
+   "sha256": "1501dc1b9266fdaabd69d94ca3b3380741251278385d5a4376fc997203e5ae7a",
+   "slides": 2,
+   "expectedFonts": [
+    "Latha"
+   ],
+   "requiredFonts": [
+    "Latha"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Latha",
+     "ea": "Latha",
+     "cs": "Latha"
+    },
+    "minor": {
+     "latin": "Latha",
+     "ea": "Latha",
+     "cs": "Latha"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Latha",
+     "ea": "Latha",
+     "cs": "Latha"
+    },
+    "minor": {
+     "latin": "Latha",
+     "ea": "Latha",
+     "cs": "Latha"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures",
+      "taml-pulli",
+      "taml-ukaram"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures",
+      "taml-pulli",
+      "taml-ukaram"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-34-te-gautami": {
+   "title": "FF-46 Gautami (te)",
+   "covers": null,
+   "family": "Gautami",
+   "language": "te",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-34-te-gautami.pptx",
+   "bytes": 22061,
+   "sha256": "79c2038649f888251d6088ca016668fbd7dbc7c451540cf00fe0bd7189392aa5",
+   "slides": 2,
+   "expectedFonts": [
+    "Gautami"
+   ],
+   "requiredFonts": [
+    "Gautami"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Gautami",
+     "ea": "Gautami",
+     "cs": "Gautami"
+    },
+    "minor": {
+     "latin": "Gautami",
+     "ea": "Gautami",
+     "cs": "Gautami"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Gautami",
+     "ea": "Gautami",
+     "cs": "Gautami"
+    },
+    "minor": {
+     "latin": "Gautami",
+     "ea": "Gautami",
+     "cs": "Gautami"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels",
+      "telu-zwnj"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels",
+      "telu-zwnj"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-35-kn-tunga": {
+   "title": "FF-46 Tunga (kn)",
+   "covers": null,
+   "family": "Tunga",
+   "language": "kn",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-35-kn-tunga.pptx",
+   "bytes": 22006,
+   "sha256": "ff871ab7459e65426863ce01fa1d9be7dd9c81aed129180d5110f4e25f26aaa4",
+   "slides": 2,
+   "expectedFonts": [
+    "Tunga"
+   ],
+   "requiredFonts": [
+    "Tunga"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Tunga",
+     "ea": "Tunga",
+     "cs": "Tunga"
+    },
+    "minor": {
+     "latin": "Tunga",
+     "ea": "Tunga",
+     "cs": "Tunga"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Tunga",
+     "ea": "Tunga",
+     "cs": "Tunga"
+    },
+    "minor": {
+     "latin": "Tunga",
+     "ea": "Tunga",
+     "cs": "Tunga"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-36-ml-kartika": {
+   "title": "FF-46 Kartika (ml)",
+   "covers": null,
+   "family": "Kartika",
+   "language": "ml",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-36-ml-kartika.pptx",
+   "bytes": 23307,
+   "sha256": "2407e54350e844f6a56f9d4094879422cc03eb0665c2da95cf533f4c5eebaeac",
+   "slides": 2,
+   "expectedFonts": [
+    "Kartika"
+   ],
+   "requiredFonts": [
+    "Kartika"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Kartika",
+     "ea": "Kartika",
+     "cs": "Kartika"
+    },
+    "minor": {
+     "latin": "Kartika",
+     "ea": "Kartika",
+     "cs": "Kartika"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Kartika",
+     "ea": "Kartika",
+     "cs": "Kartika"
+    },
+    "minor": {
+     "latin": "Kartika",
+     "ea": "Kartika",
+     "cs": "Kartika"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts",
+      "mlym-vowels"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts",
+      "mlym-vowels"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-37-th-angsana-new": {
+   "title": "FF-46 Angsana New (th)",
+   "covers": null,
+   "family": "Angsana New",
+   "language": "th",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-37-th-angsana-new.pptx",
+   "bytes": 23490,
+   "sha256": "4924305d734f9aef32228d62b40e2326c0403a1adb95047881ab84d7e2542dc5",
+   "slides": 2,
+   "expectedFonts": [
+    "Angsana New"
+   ],
+   "requiredFonts": [
+    "Angsana New"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Angsana New",
+     "ea": "Angsana New",
+     "cs": "Angsana New"
+    },
+    "minor": {
+     "latin": "Angsana New",
+     "ea": "Angsana New",
+     "cs": "Angsana New"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Angsana New",
+     "ea": "Angsana New",
+     "cs": "Angsana New"
+    },
+    "minor": {
+     "latin": "Angsana New",
+     "ea": "Angsana New",
+     "cs": "Angsana New"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am",
+      "thai-pali",
+      "thai-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am",
+      "thai-pali",
+      "thai-no-spaces",
+      "thai-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-38-th-dilleniaupc": {
+   "title": "FF-46 DilleniaUPC (th)",
+   "covers": null,
+   "family": "DilleniaUPC",
+   "language": "th",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-38-th-dilleniaupc.pptx",
+   "bytes": 23496,
+   "sha256": "fa14cf369b92a07e4735187116359841284b7ad55f85f4cf1c23c347107521f2",
+   "slides": 2,
+   "expectedFonts": [
+    "DilleniaUPC"
+   ],
+   "requiredFonts": [
+    "DilleniaUPC"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "DilleniaUPC",
+     "ea": "DilleniaUPC",
+     "cs": "DilleniaUPC"
+    },
+    "minor": {
+     "latin": "DilleniaUPC",
+     "ea": "DilleniaUPC",
+     "cs": "DilleniaUPC"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "DilleniaUPC",
+     "ea": "DilleniaUPC",
+     "cs": "DilleniaUPC"
+    },
+    "minor": {
+     "latin": "DilleniaUPC",
+     "ea": "DilleniaUPC",
+     "cs": "DilleniaUPC"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am",
+      "thai-pali",
+      "thai-no-spaces"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am",
+      "thai-pali",
+      "thai-no-spaces",
+      "thai-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-39-km-daunpenh": {
+   "title": "FF-46 DaunPenh (km)",
+   "covers": null,
+   "family": "DaunPenh",
+   "language": "km",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-39-km-daunpenh.pptx",
+   "bytes": 22024,
+   "sha256": "18cc0dd0f605d765ab3a37430f961944198219edaaeebea99825bee27d672db7",
+   "slides": 2,
+   "expectedFonts": [
+    "DaunPenh"
+   ],
+   "requiredFonts": [
+    "DaunPenh"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "DaunPenh",
+     "ea": "DaunPenh",
+     "cs": "DaunPenh"
+    },
+    "minor": {
+     "latin": "DaunPenh",
+     "ea": "DaunPenh",
+     "cs": "DaunPenh"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "DaunPenh",
+     "ea": "DaunPenh",
+     "cs": "DaunPenh"
+    },
+    "minor": {
+     "latin": "DaunPenh",
+     "ea": "DaunPenh",
+     "cs": "DaunPenh"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words",
+      "khmr-digits"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words",
+      "khmr-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-40-km-khmer-ui": {
+   "title": "FF-46 Khmer UI (km)",
+   "covers": null,
+   "family": "Khmer UI",
+   "language": "km",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-40-km-khmer-ui.pptx",
+   "bytes": 22022,
+   "sha256": "313bd9ade311c969e1b9f27c25bf4db0bb9ca42903d55d90f40b776bb6d850a5",
+   "slides": 2,
+   "expectedFonts": [
+    "Khmer UI"
+   ],
+   "requiredFonts": [
+    "Khmer UI"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Khmer UI",
+     "ea": "Khmer UI",
+     "cs": "Khmer UI"
+    },
+    "minor": {
+     "latin": "Khmer UI",
+     "ea": "Khmer UI",
+     "cs": "Khmer UI"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Khmer UI",
+     "ea": "Khmer UI",
+     "cs": "Khmer UI"
+    },
+    "minor": {
+     "latin": "Khmer UI",
+     "ea": "Khmer UI",
+     "cs": "Khmer UI"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words",
+      "khmr-digits"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words",
+      "khmr-digits"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-41-am-nyala": {
+   "title": "FF-46 Nyala (am)",
+   "covers": null,
+   "family": "Nyala",
+   "language": "am",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-41-am-nyala.pptx",
+   "bytes": 21911,
+   "sha256": "35bcf843cee1f873180f7654f16d216adbdeb8092542964ee0f79d9c663e8253",
+   "slides": 2,
+   "expectedFonts": [
+    "Nyala"
+   ],
+   "requiredFonts": [
+    "Nyala"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Nyala",
+     "ea": "Nyala",
+     "cs": "Nyala"
+    },
+    "minor": {
+     "latin": "Nyala",
+     "ea": "Nyala",
+     "cs": "Nyala"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Nyala",
+     "ea": "Nyala",
+     "cs": "Nyala"
+    },
+    "minor": {
+     "latin": "Nyala",
+     "ea": "Nyala",
+     "cs": "Nyala"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-42-am-ebrima": {
+   "title": "FF-46 Ebrima (am)",
+   "covers": null,
+   "family": "Ebrima",
+   "language": "am",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-42-am-ebrima.pptx",
+   "bytes": 21940,
+   "sha256": "008932a210d2fafe3c735c74428d489265ae2e3e7b695cf64161965221e2cb8f",
+   "slides": 2,
+   "expectedFonts": [
+    "Ebrima"
+   ],
+   "requiredFonts": [
+    "Ebrima"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Ebrima",
+     "ea": "Ebrima",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Ebrima",
+     "ea": "Ebrima",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Ebrima",
+     "ea": "Ebrima",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Ebrima",
+     "ea": "Ebrima",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-43-hy-sylfaen": {
+   "title": "FF-46 Sylfaen (hy)",
+   "covers": null,
+   "family": "Sylfaen",
+   "language": "hy",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-43-hy-sylfaen.pptx",
+   "bytes": 21950,
+   "sha256": "aa4826c774209430866196fc7a4a42e7ef089e4f576cd59663c57f211acaf7c5",
+   "slides": 2,
+   "expectedFonts": [
+    "Sylfaen"
+   ],
+   "requiredFonts": [
+    "Sylfaen"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    },
+    "minor": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    },
+    "minor": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "scripts-44-ka-sylfaen": {
+   "title": "FF-46 Sylfaen (ka)",
+   "covers": null,
+   "family": "Sylfaen",
+   "language": "ka",
+   "status": "script-gap",
+   "file": "decks/ff46/scripts-44-ka-sylfaen.pptx",
+   "bytes": 21869,
+   "sha256": "c4757da72177a71e1023a952ad40d710d668e61b45b020fc1f073ba66f8a22c7",
+   "slides": 2,
+   "expectedFonts": [
+    "Sylfaen"
+   ],
+   "requiredFonts": [
+    "Sylfaen"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    },
+    "minor": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    },
+    "minor": {
+     "latin": "Sylfaen",
+     "ea": "Sylfaen",
+     "cs": "Sylfaen"
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false,
+     "corpus": [
+      "geor-title",
+      "geor-mtavruli"
+     ]
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true,
+     "corpus": [
+      "geor-title",
+      "geor-mtavruli"
+     ]
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "symbol-01-wingdings": {
+   "title": "FF-46 Wingdings",
+   "covers": null,
+   "family": "Wingdings",
+   "language": "en-US",
+   "status": "code-table",
+   "file": "decks/ff46/symbol-01-wingdings.pptx",
+   "bytes": 32219,
+   "sha256": "9ac61794c7e773825f22b847cab7da076b0d553038912c6af2ce3a775ad42006",
+   "slides": 5,
+   "expectedFonts": [
+    "Calibri",
+    "Wingdings"
+   ],
+   "requiredFonts": [
+    "Calibri",
+    "Wingdings"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 3,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 4,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 5,
+     "kind": "mixed",
+     "wrap": false
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": [
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/0/items/0/0/fontFamily",
+     "message": "Text uses \"Wingdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/1/items/0/0/fontFamily",
+     "message": "Text uses \"Wingdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/2/items/0/0/fontFamily",
+     "message": "Text uses \"Wingdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/3/items/0/0/fontFamily",
+     "message": "Text uses \"Wingdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/4/items/0/1/fontFamily",
+     "message": "Text uses \"Wingdings\", which is not in the font scheme (Calibri)."
+    }
+   ]
+  },
+  "symbol-02-webdings": {
+   "title": "FF-46 Webdings",
+   "covers": null,
+   "family": "Webdings",
+   "language": "en-US",
+   "status": "code-table",
+   "file": "decks/ff46/symbol-02-webdings.pptx",
+   "bytes": 32212,
+   "sha256": "dd5926f86b5f3f2c9a95b90377bde051aca3c36d5554d06be04174ead3d39068",
+   "slides": 5,
+   "expectedFonts": [
+    "Calibri",
+    "Webdings"
+   ],
+   "requiredFonts": [
+    "Calibri",
+    "Webdings"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 3,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 4,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 5,
+     "kind": "mixed",
+     "wrap": false
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": [
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/0/items/0/0/fontFamily",
+     "message": "Text uses \"Webdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/1/items/0/0/fontFamily",
+     "message": "Text uses \"Webdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/2/items/0/0/fontFamily",
+     "message": "Text uses \"Webdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/3/items/0/0/fontFamily",
+     "message": "Text uses \"Webdings\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/4/items/0/1/fontFamily",
+     "message": "Text uses \"Webdings\", which is not in the font scheme (Calibri)."
+    }
+   ]
+  },
+  "symbol-03-symbol": {
+   "title": "FF-46 Symbol",
+   "covers": null,
+   "family": "Symbol",
+   "language": "en-US",
+   "status": "code-table",
+   "file": "decks/ff46/symbol-03-symbol.pptx",
+   "bytes": 32169,
+   "sha256": "4fb98daac77281ea1be71f1212e0c836801ae325fc2856394cc90728f1bf8975",
+   "slides": 5,
+   "expectedFonts": [
+    "Calibri",
+    "Symbol"
+   ],
+   "requiredFonts": [
+    "Calibri",
+    "Symbol"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Calibri",
+     "ea": "Calibri",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 3,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 4,
+     "kind": "code-table",
+     "wrap": false
+    },
+    {
+     "slide": 5,
+     "kind": "mixed",
+     "wrap": false
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": [
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/0/items/0/0/fontFamily",
+     "message": "Text uses \"Symbol\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/1/items/0/0/fontFamily",
+     "message": "Text uses \"Symbol\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/2/items/0/0/fontFamily",
+     "message": "Text uses \"Symbol\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/3/items/0/0/fontFamily",
+     "message": "Text uses \"Symbol\", which is not in the font scheme (Calibri)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/4/items/0/1/fontFamily",
+     "message": "Text uses \"Symbol\", which is not in the font scheme (Calibri)."
+    }
+   ]
+  },
+  "emoji-math-01-segoe-ui-emoji": {
+   "title": "FF-46 Segoe UI Emoji",
+   "covers": null,
+   "family": "Segoe UI Emoji",
+   "language": "en-US",
+   "status": "visual-gap",
+   "file": "decks/ff46/emoji-math-01-segoe-ui-emoji.pptx",
+   "bytes": 24722,
+   "sha256": "caddb3ce330d2e4214aec4707fc2b68f00028b201eb2802b46214149ebb9199d",
+   "slides": 3,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Segoe UI Emoji"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display",
+    "Segoe UI Emoji"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "mixed",
+     "wrap": false
+    },
+    {
+     "slide": 3,
+     "kind": "line-breaks",
+     "wrap": true
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": [
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/0/items/0/0/fontFamily",
+     "message": "Text uses \"Segoe UI Emoji\", which is not in the font scheme (Aptos Display / Aptos)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/1/items/0/1/fontFamily",
+     "message": "Text uses \"Segoe UI Emoji\", which is not in the font scheme (Aptos Display / Aptos)."
+    },
+    {
+     "rule": "opf/font-outside-scheme",
+     "path": "/slides/2/text/0/fontFamily",
+     "message": "Text uses \"Segoe UI Emoji\", which is not in the font scheme (Aptos Display / Aptos)."
+    }
+   ]
+  },
+  "emoji-math-02-cambria-math": {
+   "title": "FF-46 Cambria Math",
+   "covers": null,
+   "family": "Cambria Math",
+   "language": "en-US",
+   "status": "visual-gap",
+   "file": "decks/ff46/emoji-math-02-cambria-math.pptx",
+   "bytes": 22666,
+   "sha256": "073dd117d618fc86c4484499f99e655aba374c478d888f47721006360e0b16da",
+   "slides": 2,
+   "expectedFonts": [
+    "Cambria Math"
+   ],
+   "requiredFonts": [
+    "Cambria Math"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Cambria Math",
+     "ea": "Cambria Math",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Cambria Math",
+     "ea": "Cambria Math",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Cambria Math",
+     "ea": "Cambria Math",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Cambria Math",
+     "ea": "Cambria Math",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "line-breaks",
+     "wrap": true
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  },
+  "emoji-math-03-emoji-in-aptos-deck": {
+   "title": "FF-46 emoji in Aptos",
+   "covers": "Probe: no family chosen for emoji; PowerPoint picks its own emoji font. Names are reported, not counted for Segoe UI Emoji.",
+   "family": "Segoe UI Emoji",
+   "language": "en-US",
+   "status": "visual-gap",
+   "probe": true,
+   "file": "decks/ff46/emoji-math-03-emoji-in-aptos-deck.pptx",
+   "bytes": 20775,
+   "sha256": "0dca375735ff89b3f0fea06a7d11c8c78be5520261ad3163d7d6802d1fa0cf9d",
+   "slides": 2,
+   "expectedFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "requiredFonts": [
+    "Aptos",
+    "Aptos Display"
+   ],
+   "softFonts": [],
+   "theme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "notesTheme": {
+    "major": {
+     "latin": "Aptos Display",
+     "ea": "Aptos Display",
+     "cs": ""
+    },
+    "minor": {
+     "latin": "Aptos",
+     "ea": "Aptos",
+     "cs": ""
+    }
+   },
+   "layout": [
+    {
+     "slide": 1,
+     "kind": "samples",
+     "wrap": false
+    },
+    {
+     "slide": 2,
+     "kind": "mixed",
+     "wrap": false
+    }
+   ],
+   "exportDiagnostics": [],
+   "validationWarnings": []
+  }
+ }
+}

@@ -1,0 +1,2291 @@
+{
+ "schema": "opf323-compare/v1",
+ "generated": "2026-10-10T21:50:11.217Z",
+ "native": "native/attempt-1",
+ "packages": {
+  "@openpresentation/opf": "0.18.1",
+  "@openpresentation/opf-render": "0.18.0",
+  "@openpresentation/opf-pptx": "0.18.0",
+  "@openpresentation/opf-editor": "0.18.0",
+  "fontkit": "2.0.4"
+ },
+ "host": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "os": "Microsoft Windows NT 10.0.26200.0",
+  "powershell": "5.1.26100.9444",
+  "culture": "en-US",
+  "runStartedUtc": "2026-10-10T21:45:22.6048184Z",
+  "runFinishedUtc": "2026-10-10T21:47:57.2782849Z"
+ },
+ "item": "RR-05 / FF-12",
+ "criterion": "Presentation.Fonts names only the chosen families (Latin run families listed; theme-only script families may be absent), theme slots of the slide and notes masters resolve to them, and no run names another family.",
+ "decks": [
+  {
+   "id": "01-carlito-code-chart-table-notes",
+   "covers": "Carlito with code, chart, table and notes; no code family, so code uses the documented code fallback",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 3531,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Carlito",
+      "Roboto Mono"
+     ],
+     "expected": [
+      "Carlito",
+      "Roboto Mono"
+     ],
+     "required": [
+      "Carlito",
+      "Roboto Mono"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 30,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 30
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 4,
+       "charts": [
+        1,
+        1
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 5,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        1,
+        1
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "02-carlito-code-family-carlito",
+   "covers": "the same content with fontScheme.code Carlito: the deck names Carlito only",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 5953,
+    "startedPowerPoint": true,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Carlito"
+     ],
+     "expected": [
+      "Carlito"
+     ],
+     "required": [
+      "Carlito"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Carlito",
+       "native": "Carlito",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 30,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 30
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 4,
+       "charts": [
+        1,
+        1
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 5,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        1,
+        1
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "03-default-aptos",
+   "covers": "the default scheme (no fontScheme: engine default aptos)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 2268,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos",
+      "Roboto Mono"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Roboto Mono"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display",
+      "Roboto Mono"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 16,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 16
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "04-ja-meiryo",
+   "covers": "Japanese with the Meiryo scheme (re-runs lang-ja-meiryo, the 2026-10-02 Aptos failure)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 2461,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Meiryo"
+     ],
+     "expected": [
+      "Meiryo"
+     ],
+     "required": [
+      "Meiryo"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 16,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 16
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        1,
+        1
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "05-ar-rtl",
+   "covers": "Arabic, right to left (language ar: its scheme arabic-typesetting)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 2011,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Arabic Typesetting"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "soft": [
+      "Arabic Typesetting"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": [
+      "Arabic Typesetting"
+     ]
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "Arabic Typesetting",
+       "native": "Arabic Typesetting",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "Arabic Typesetting",
+       "native": "Arabic Typesetting",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "Arabic Typesetting",
+       "native": "Arabic Typesetting",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "Arabic Typesetting",
+       "native": "Arabic Typesetting",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 7,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {}
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        1,
+        1
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "06-monospace-consolas",
+   "covers": "a monospace scheme (Consolas)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 2219,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Consolas"
+     ],
+     "expected": [
+      "Consolas"
+     ],
+     "required": [
+      "Consolas"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Consolas",
+       "native": "Consolas",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 16,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 16
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "07-per-slide-override",
+   "covers": "a per-slide override: Calibri deck, Georgia on slide 2, Courier New on slide 4",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1913,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Calibri",
+      "Georgia",
+      "Courier New"
+     ],
+     "expected": [
+      "Calibri",
+      "Courier New",
+      "Georgia"
+     ],
+     "required": [
+      "Calibri",
+      "Courier New",
+      "Georgia"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Calibri",
+       "native": "Calibri",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 8,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 8
+     }
+    },
+    "slideFamilies": {
+     "ok": true,
+     "rows": [
+      {
+       "slide": 1,
+       "expected": [
+        "Calibri"
+       ],
+       "ok": true
+      },
+      {
+       "slide": 2,
+       "expected": [
+        "Georgia"
+       ],
+       "ok": true
+      },
+      {
+       "slide": 3,
+       "expected": [
+        "Calibri"
+       ],
+       "ok": true
+      },
+      {
+       "slide": 4,
+       "expected": [
+        "Courier New"
+       ],
+       "ok": true
+      }
+     ]
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 3,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 4,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "08-cjk-in-latin",
+   "covers": "CJK inside a Latin deck: Japanese and Chinese words in an English Aptos deck",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1584,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Meiryo"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "soft": [
+      "Meiryo"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": [
+      "Meiryo"
+     ]
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Meiryo",
+       "native": "Meiryo",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 6,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 6
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "09-ko-malgun",
+   "covers": "Korean with the Malgun Gothic scheme",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1574,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Malgun Gothic"
+     ],
+     "expected": [
+      "Malgun Gothic"
+     ],
+     "required": [
+      "Malgun Gothic"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Malgun Gothic",
+       "native": "Malgun Gothic",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 6,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 6
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "10-hi-mangal",
+   "covers": "Hindi (language hi: its scheme mangal)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1521,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Mangal"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "soft": [
+      "Mangal"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": [
+      "Mangal"
+     ]
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "Mangal",
+       "native": "Mangal",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "Mangal",
+       "native": "Mangal",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "Mangal",
+       "native": "Mangal",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "Mangal",
+       "native": "Mangal",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 5,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {}
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "11-he-rtl",
+   "covers": "Hebrew, right to left (language he: its scheme david)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1597,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "David"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "soft": [
+      "David"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": [
+      "David"
+     ]
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "David",
+       "native": "David",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "David",
+       "native": "David",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "David",
+       "native": "David",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "David",
+       "native": "David",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 5,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {}
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        false,
+        false
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  },
+  {
+   "id": "12-serif-georgia",
+   "covers": "a serif scheme (Georgia)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1623,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Georgia"
+     ],
+     "expected": [
+      "Georgia"
+     ],
+     "required": [
+      "Georgia"
+     ],
+     "soft": [],
+     "extras": [],
+     "missingRequired": [],
+     "missingSoftAccepted": []
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "theme": "master",
+       "slot": "major.latin",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.ea",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.latin",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.ea",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.latin",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.ea",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.latin",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.ea",
+       "expected": "Georgia",
+       "native": "Georgia",
+       "ok": true
+      },
+      {
+       "theme": "notes master",
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "runNames": {
+     "ok": true,
+     "runs": 6,
+     "foreign": [],
+     "unresolvedThemeReferences": [],
+     "themeReferences": {
+      "+mn-cs -> (empty slot)": 6
+     }
+    },
+    "content": {
+     "ok": true,
+     "gated": false,
+     "rows": [
+      {
+       "slide": 1,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      },
+      {
+       "slide": 2,
+       "charts": [
+        0,
+        0
+       ],
+       "tables": [
+        0,
+        0
+       ],
+       "notes": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   },
+   "verdict": "PASS"
+  }
+ ],
+ "summary": {
+  "decks": 12,
+  "pass": 12,
+  "fail": 0,
+  "missing": 0
+ }
+}

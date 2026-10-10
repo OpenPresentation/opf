@@ -1,0 +1,38 @@
+{
+ "schemaVersion": 1,
+ "kind": "ff13-supervisor",
+ "attempt": "20261010T214806Z",
+ "source": "<set>\\decks\\ff13\\ff13-carlito-embed-source.pptx",
+ "sourceSha256": "70bd9c1e6006a5c2df290182f416f7abc05086c6c0bed49fd25f4c24d55b4f5f",
+ "deadlineSeconds": 90,
+ "powerpointPids": [
+  52012
+ ],
+ "probes": [
+  {
+   "when": "before-registration",
+   "requested": "Carlito",
+   "resolved": "Microsoft Sans Serif",
+   "fontFamily": "Microsoft Sans Serif"
+  },
+  {
+   "when": "during",
+   "requested": "Carlito",
+   "resolved": "Microsoft Sans Serif",
+   "fontFamily": "Microsoft Sans Serif"
+  },
+  {
+   "when": "after-removal",
+   "requested": "Carlito",
+   "resolved": "Microsoft Sans Serif",
+   "fontFamily": "Microsoft Sans Serif"
+  }
+ ],
+ "child": {
+  "pid": 43364,
+  "status": "completed",
+  "exitCode": null,
+  "elapsedSeconds": 0.7
+ },
+ "sourceSha256After": "70bd9c1e6006a5c2df290182f416f7abc05086c6c0bed49fd25f4c24d55b4f5f"
+}

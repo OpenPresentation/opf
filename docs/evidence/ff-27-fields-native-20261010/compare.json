@@ -1,0 +1,1153 @@
+{
+ "schema": "opf323-compare/v1",
+ "generated": "2026-10-10T21:50:11.217Z",
+ "native": "native/attempt-1",
+ "packages": {
+  "@openpresentation/opf": "0.18.1",
+  "@openpresentation/opf-render": "0.18.0",
+  "@openpresentation/opf-pptx": "0.18.0",
+  "@openpresentation/opf-editor": "0.18.0",
+  "fontkit": "2.0.4"
+ },
+ "host": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "os": "Microsoft Windows NT 10.0.26200.0",
+  "powershell": "5.1.26100.9444",
+  "culture": "en-US",
+  "runStartedUtc": "2026-10-10T21:45:22.6048184Z",
+  "runFinishedUtc": "2026-10-10T21:47:57.2782849Z"
+ },
+ "item": "FF-27",
+ "criterion": "After Slides(1).Duplicate() and Slides(last).MoveTo(1), in memory, every slide-number field reads its new position, and every live date field reads the host date in the chosen en-US format (never the cached export date).",
+ "decks": [
+  {
+   "id": "01-footer-fields",
+   "covers": "footer: left date:true MMMM d, yyyy (datetime4, the dt placeholder), center text (ftr), right {{slide.number}} (sldNum)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1787,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "steps": [
+    {
+     "step": "initial",
+     "operation": "",
+     "slideCount": 5,
+     "order": [
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide",
+      "Echo slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    },
+    {
+     "step": "after-duplicate",
+     "operation": "Slides(1).Duplicate()",
+     "slideCount": 6,
+     "order": [
+      "Alpha slide",
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide",
+      "Echo slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 261,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 6,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "6",
+         "value": 6
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    },
+    {
+     "step": "after-move",
+     "operation": "Slides(6).MoveTo(1)",
+     "slideCount": 6,
+     "order": [
+      "Echo slide",
+      "Alpha slide",
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 261,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      },
+      {
+       "position": 6,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "6",
+         "value": 6
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "October 10, 2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": -1,
+        "dateUseFormat": -1,
+        "dateFormat": 4,
+        "footerVisible": -1
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    }
+   ],
+   "verdict": "PASS",
+   "dateField": {
+    "format": "MMMM d, yyyy",
+    "expectedToday": "October 10, 2026",
+    "cachedExportText": "January 15, 2026",
+    "hostDate": "2026-10-10",
+    "culture": "en-US",
+    "nativeFormatCodes": [
+     4
+    ],
+    "useFormat": [
+     -1
+    ],
+    "expectedPpFormat": 4
+   }
+  },
+  {
+   "id": "02-header-forms",
+   "covers": "the other 0.18 forms: header left \"Page {{slide.number}} of {{deck.slideCount}}\" (field inside fixed words, a tagged header shape), header right date:true default M/d/yyyy (datetime1), footer right \"A-{{slide.number}}\" (sldNum with fixed prefix)",
+   "health": {
+    "ok": true,
+    "problems": [],
+    "notes": [
+     "harness: exit code not captured (run-deck.ps1 before the handle fix); success taken from status completed and the parsed read-out"
+    ],
+    "elapsedMs": 1732,
+    "startedPowerPoint": false,
+    "readErrors": 0
+   },
+   "steps": [
+    {
+     "step": "initial",
+     "operation": "",
+     "slideCount": 5,
+     "order": [
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide",
+      "Echo slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 0 line 0",
+         "text": "Page 1 of 5",
+         "value": 1,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "A-1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 0 line 0",
+         "text": "Page 2 of 5",
+         "value": 2,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "A-2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 0 line 0",
+         "text": "Page 3 of 5",
+         "value": 3,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "A-3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 0 line 0",
+         "text": "Page 4 of 5",
+         "value": 4,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "A-4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 0 line 0",
+         "text": "Page 5 of 5",
+         "value": 5,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "A-5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    },
+    {
+     "step": "after-duplicate",
+     "operation": "Slides(1).Duplicate()",
+     "slideCount": 6,
+     "order": [
+      "Alpha slide",
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide",
+      "Echo slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 0 line 0",
+         "text": "Page 1 of 5",
+         "value": 1,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "A-1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 261,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 0 line 0",
+         "text": "Page 2 of 5",
+         "value": 2,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "A-2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 0 line 0",
+         "text": "Page 3 of 5",
+         "value": 3,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "A-3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 0 line 0",
+         "text": "Page 4 of 5",
+         "value": 4,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "A-4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 0 line 0",
+         "text": "Page 5 of 5",
+         "value": 5,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "A-5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 6,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 0 line 0",
+         "text": "Page 6 of 5",
+         "value": 6,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "A-6",
+         "value": 6
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    },
+    {
+     "step": "after-move",
+     "operation": "Slides(6).MoveTo(1)",
+     "slideCount": 6,
+     "order": [
+      "Echo slide",
+      "Alpha slide",
+      "Alpha slide",
+      "Bravo slide",
+      "Charlie slide",
+      "Delta slide"
+     ],
+     "rows": [
+      {
+       "position": 1,
+       "slideId": 260,
+       "title": "Echo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 4 part 0 line 0",
+         "text": "Page 1 of 5",
+         "value": 1,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 4 part 2 line 0",
+         "text": "A-1",
+         "value": 1
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 2,
+       "slideId": 256,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 0 line 0",
+         "text": "Page 2 of 5",
+         "value": 2,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "A-2",
+         "value": 2
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 3,
+       "slideId": 261,
+       "title": "Alpha slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 0 part 0 line 0",
+         "text": "Page 3 of 5",
+         "value": 3,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 0 part 2 line 0",
+         "text": "A-3",
+         "value": 3
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 4,
+       "slideId": 257,
+       "title": "Bravo slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 1 part 0 line 0",
+         "text": "Page 4 of 5",
+         "value": 4,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 1 part 2 line 0",
+         "text": "A-4",
+         "value": 4
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 5,
+       "slideId": 258,
+       "title": "Charlie slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 2 part 0 line 0",
+         "text": "Page 5 of 5",
+         "value": 5,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 2 part 2 line 0",
+         "text": "A-5",
+         "value": 5
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      },
+      {
+       "position": 6,
+       "slideId": 259,
+       "title": "Delta slide",
+       "numbers": [
+        {
+         "shape": "OPF furniture 3 part 0 line 0",
+         "text": "Page 6 of 5",
+         "value": 6,
+         "fixedCount": 5
+        },
+        {
+         "shape": "OPF furniture 3 part 2 line 0",
+         "text": "A-6",
+         "value": 6
+        }
+       ],
+       "numbersOk": true,
+       "dates": [
+        "10/10/2026"
+       ],
+       "dateOk": true,
+       "dateIsCached": false,
+       "headersFooters": {
+        "slideNumberVisible": -1,
+        "dateVisible": 0,
+        "dateUseFormat": null,
+        "dateFormat": 14,
+        "footerVisible": 0
+       }
+      }
+     ],
+     "numbersOk": true,
+     "dateOk": true,
+     "dateCachedAnywhere": false
+    }
+   ],
+   "verdict": "PASS",
+   "dateField": {
+    "format": "M/d/yyyy",
+    "expectedToday": "10/10/2026",
+    "cachedExportText": "1/15/2026",
+    "hostDate": "2026-10-10",
+    "culture": "en-US",
+    "nativeFormatCodes": [
+     14
+    ],
+    "useFormat": [
+     null
+    ],
+    "expectedPpFormat": 1
+   }
+  }
+ ],
+ "summary": {
+  "decks": 2,
+  "pass": 2,
+  "fail": 0,
+  "missing": 0
+ }
+}
