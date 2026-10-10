@@ -212,6 +212,29 @@ The seven kept chart types with no ECMA-376 construct are written as Office 2016
 
 The chart area, label colour, label font (`latin`/`ea`/`cs` in the chart's body font) and series colours follow the classic charts. Re-import (`fromPptx`) reads the chartex part first: the layoutIds name the OPF id (an owned `paretoLine` is `pareto`), `cx:strDim type="cat"` restores the categories and each `cx:numDim` a series, under the same 100,000-point and 1,000,000-cell bounds as classic chart caches; a lone value column comes back as authored. A chartex part with no OPF construct (sunburst) falls back to the `mc:Fallback` chart, or to a text placeholder when PowerPoint's own text fallback is all there is. Native PowerPoint rendering of each construct is confirmed through the program's bounded native sample, not by this package's tests.
 
+## Pass `fonts`, otherwise the estimate
+
+Text measurement comes from one place: the `fonts` handle that opf-render's `loadFonts()` returns (`@openpresentation/opf-render/fonts-node`, or `/fonts-browser`). Pass the same handle to preview, validation, pagination and `toPptx`, so that the exported text boxes break lines where the preview does:
+
+```js
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
+import { toSvg } from '@openpresentation/opf-render';
+import { validate } from '@openpresentation/opf';
+import { paginate } from '@openpresentation/opf/pagination';
+import { toPptx } from '@openpresentation/opf-pptx';
+
+const fonts = await loadFonts({ pack: 'office' });
+const report = validate(deck, { fonts });
+const { presentation } = paginate(deck, { fonts });
+const svgs = toSvg(presentation, { fonts });            // preview
+const pptx = await toPptx(presentation, { fonts });     // export: the same lines, as editable text
+```
+
+One handle carries the measurement for core's `validate`, `paginate` and slide context, for opf-render's `toSvg`, `toPng` and `toPdf`, and for `toPptx`. The same handle gives identical text geometry across engines: every engine reads core's one composition, so it is the measurement that decides the lines. This package's `test/layout-parity.mjs` checks that the exported PowerPoint paragraphs agree with the SVG preview and with core's composed items, with and without `fonts`.
+
+Without `fonts`, `toPptx` uses core's built-in estimate: 0.54 em per character, 0.62 em for capitals and digits, 0.32 em for a space, 1 em for CJK characters and zero for combining marks. That is deterministic and needs no font files and no renderer, but it is too narrow for some scripts (opf#566 tracks improving it), and the line breaks it chooses can differ from the faces PowerPoint draws. The PPTX still names the font family the document chose (`fonts` changes where lines break, not which font is named). Core's Node `convert` and the `opf` CLI prepare an office-pack handle for you; a library call to `toPptx` never loads fonts on its own, so pass the handle you want. See also [opf#364](https://github.com/OpenPresentation/opf/issues/364) and core's [measured fonts](https://github.com/OpenPresentation/opf/blob/main/docs/font-fidelity.md#pass-fonts-otherwise-the-estimate).
+
+
 ## Languages, right-to-left text and script fonts
 
 The exporter reads the presentation `language` through core `resolveScriptFonts()` (FF-07; the model is core `docs/programs/font-fidelity-everywhere/script-font-model.md`):
