@@ -239,7 +239,6 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
 | [`opf/layout-template`](#opflayout-template) | References | error | structure | A layout template's grid is malformed. |
 | [`opf/layout-region`](#opflayout-region) | References | error | structure | A layout template's regions do not match its areas. |
-| [`opf/layout-removed`](#opflayout-removed) | References | error | structure | A slide names a layout that OPF 0.19 removed. |
 | [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
 | [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
@@ -535,16 +534,6 @@ Default severity: **error**. Cost: structure. A layout template's regions do not
 **Why.** Every body area of a layout needs a region that says what it accepts, and every region needs an area. Region names may not be title, subtitle, tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; a subtitle area needs a title area; a region with flow 'none' holds one block; overflowRegion must name a region. composeSlide refuses such a record.
 
 **Basis.** spec/schemas/layout.schema.json and the region rules of OPF 0.19 (docs/layout-templates.md)
-
-### `opf/layout-removed`
-
-Default severity: **error**. Cost: structure. A slide names a layout that OPF 0.19 removed.
-
-**Why.** OPF 0.19 replaced the 278 layout records of the 0.18 default catalog with 28 layouts named by intent; the variants (boxed, vertical, centred, ...) became design settings. A removed id resolves nowhere, so the slide composes automatically and a strict export fails. Engines never substitute the replacement: the fix (and opf convert --migrate, or migrate()) writes it.
-
-**Basis.** spec/reference/layout-migration.json
-
-**Approximations.** Reported for a bare or default: reference that resolves nowhere. The fix applies the table row: the new layout, the design settings neither the slide nor the deck sets, and the content rewrite (content groups, an image placement, or no layout).
 
 ### `opf/unresolved-reference`
 

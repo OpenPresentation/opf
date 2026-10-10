@@ -23,7 +23,6 @@ import { describeDurationRange, durationOutsideNarrative, durationRangeInverted,
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
-import { migrateSlide, removedLayoutRow, slidePatch } from './layout-migration.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
@@ -621,28 +620,6 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 				findings.push(issueFinding(issue, recordRuleId(issue), catalogSchemaNames[site.kind], pointer(['catalogs', found.group, site.kind, found.id]), 'context'));
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
-		// OPF 0.19: a removed 0.18 default layout id that resolves nowhere is an error with the fix that applies its replacement,
-		// unless the document embeds its own record of that id in catalogs.custom (an invalid one is reported as unresolved).
-		const custom = object(document) && object(document.catalogs) && object(document.catalogs.custom) && object(document.catalogs.custom.layouts) ? document.catalogs.custom.layouts : {};
-		const removed = site.kind === 'layouts' && site.path[0] === 'slides' && typeof site.path[1] === 'number' && !(parsed?.group === undefined && parsed && Object.hasOwn(custom, parsed.id)) ? removedLayoutRow(site.reference) : undefined;
-		if (removed) {
-			const deck = object(document) ? document : {};
-			const slides = Array.isArray(deck.slides) ? deck.slides : [];
-			const index = site.path[1] as number, slide = slides[index];
-			const target = removed.layout === 'auto' ? 'no layout (automatic composition)' : `'${removed.layout}'`;
-			const settings = Object.entries(removed.design ?? {}).map(([key, value]) => `${key}: ${JSON.stringify(value)}`);
-			findings.push(
-				finding('opf/layout-removed', {
-					path,
-					message: `Layout '${site.reference}' was removed in OPF 0.19; its replacement is ${target}${settings.length ? ` with ${settings.join(', ')}` : ''}. The slide composes automatically until it is migrated.`,
-					help: 'Apply the fix (or run opf convert --migrate, or migrate()) to use the replacement layout and the design settings that reproduce the old variant.',
-					definition: 'spec/reference/layout-migration.json',
-					lookup: ['opf', 'catalog', 'layouts'],
-					fixes: [{ id: 'migrate-layout', title: `Use ${target}`, kind: 'patch', safe: true, patch: slidePatch(slide, migrateSlide(slide, removed, object(deck.design) ? deck.design : {}), pointer(['slides', index])) }],
-				}),
-			);
-			continue;
-		}
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
 		const suggestions = catalogRecords(document, site.kind, options)
 			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))

@@ -29,9 +29,9 @@ const png = (width, height) => {
 
 test('every rule has a stable id, a category, a cost, a rationale and an entry in docs/validate.md', () => {
 	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8');
-	// OPF 0.19 (RR-79) added the template rules (layout-template, layout-region, layout-removed) and the binding warnings
-	// (region-unknown, region-kind, region-full, layout-unplaced).
-	assert.equal(validationRules.length, 76);
+	// OPF 0.19 (RR-79) added the template rules (layout-template, layout-region) and the binding warnings (region-unknown,
+	// region-kind, region-full, layout-unplaced).
+	assert.equal(validationRules.length, 75);
 	const seen = new Set();
 	for (const info of validationRules) {
 		assert.match(info.id, /^opf\/[a-z][a-z0-9-]*$/);

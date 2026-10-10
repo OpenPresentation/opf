@@ -126,14 +126,6 @@ const referenceRules: ValidationRuleInfo[] = [
 		{ standard: 'spec/schemas/layout.schema.json and the region rules of OPF 0.19 (docs/layout-templates.md)' },
 	),
 	rule(
-		'layout-removed',
-		'references',
-		'error',
-		'A slide names a layout that OPF 0.19 removed.',
-		'OPF 0.19 replaced the 278 layout records of the 0.18 default catalog with 28 layouts named by intent; the variants (boxed, vertical, centred, ...) became design settings. A removed id resolves nowhere, so the slide composes automatically and a strict export fails. Engines never substitute the replacement: the fix (and opf convert --migrate, or migrate()) writes it.',
-		{ standard: 'spec/reference/layout-migration.json', approximations: 'Reported for a bare or default: reference that resolves nowhere. The fix applies the table row: the new layout, the design settings neither the slide nor the deck sets, and the content rewrite (content groups, an image placement, or no layout).' },
-	),
-	rule(
 		'unresolved-reference',
 		'references',
 		'warning',

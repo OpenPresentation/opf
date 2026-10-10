@@ -117,3 +117,30 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.deepEqual(custom.regions.map((region) => region.name), ['timeline', 'notes', 'metrics']);
   });
 });
+
+describe('no migration path from the 0.18 ids (owner decision, 2026-10-10)', () => {
+  // The 0.19 catalog: the 28 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
+  const gallery2 = { source: 'https://www.pptx.gallery', layouts };
+
+  test('a former id such as list-2x is an unknown layout: opf/unresolved-reference, automatic composition', async () => {
+    const { findValidationRule, resolveSlideContext } = await import('../dist/index.js');
+    const deck = { slides: [{ layout: 'list-2x', title: 'Points', items: ['a', 'b'] }] };
+    const report = validate(deck, { catalogs: [gallery2] });
+    const found = report.findings.filter((entry) => entry.path === '/slides/0/layout');
+    assert.deepEqual(found.map((entry) => [entry.ruleId, entry.severity]), [['opf/unresolved-reference', 'warning']]);
+    assert.equal(findValidationRule('layout-removed'), undefined, 'no removed-layout rule');
+    const context = resolveSlideContext(deck, 0, { catalogs: [gallery2] });
+    assert.equal(context.options.layout, undefined);
+    assert.deepEqual(context.diagnostics.map((entry) => entry.code), ['unresolved-reference']);
+    assert.throws(() => resolveSlideContext(deck, 0, { catalogs: [gallery2], strictReferences: true }), /resolves nowhere/);
+  });
+
+  test('the six reused ids resolve to the 0.19 built-ins', async () => {
+    const { resolveSlideContext } = await import('../dist/index.js');
+    for (const id of ['agenda', 'comparison', 'dashboard', 'faq', 'timeline', 'two-column']) {
+      const deck = { slides: [{ layout: id, title: 'x' }] };
+      assert.deepEqual(validate(deck, { catalogs: [gallery2] }).findings.filter((entry) => entry.path === '/slides/0/layout'), [], id);
+      assert.ok(isLayoutTemplate(resolveSlideContext(deck, 0, { catalogs: [gallery2] }).options.layout), id);
+    }
+  });
+});

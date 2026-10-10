@@ -150,12 +150,9 @@ takes `composeSlide`'s options (`width`, `height`, `presentation` for the deck's
 reaches the slide edge as on a slide; `false` gives its cell inside the content box). Its title area carries the same
 `parts` as a slide's. `bindRegions`, `layoutTemplate`, `regionAccepts` and `gridFlowShape` expose the rest of the model.
 
-## Migration from the 0.18 ids
+## No migration from the 0.18 ids
 
-`spec/reference/layout-migration.json` maps the 278 layout ids of the 0.18 default catalog to a built-in layout, the design
-settings that reproduce the variant, and a content rewrite (content groups for 16 records, an image placement for 6, no
-layout for `blank`). A slide whose layout is a removed id that resolves nowhere is `opf/layout-removed` (error) with a safe
-fix that applies its row. `migrate(deck)` (and `opf convert <deck> -i --migrate`) applies every row, hoists a setting every
-slide received to the deck, converts embedded 0.18 records into templates and drops embedded copies of removed default
-records. Six ids (`agenda`, `comparison`, `dashboard`, `faq`, `timeline`, `two-column`) are also 0.19 built-ins and are
-never reported as removed.
+0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
+unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
+Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
+`two-column`. The release notes list the 28 built-ins.

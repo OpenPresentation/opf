@@ -5,7 +5,7 @@
 // format is involved; any other use is a usage error (exit 2). Drawing and PowerPoint run core's export engine
 // (`@openpresentation/opf/internal/engine`, the engine of `convert` of `@openpresentation/opf`) through the optional peers.
 import path from "node:path";
-import { type ConvertOptions, type ConvertedFile, type Finding, type FindingSeverity, type LayoutMigrationChange, type Presentation, migrate, validate } from "@openpresentation/opf";
+import { type ConvertOptions, type ConvertedFile, type Finding, type FindingSeverity, type Presentation } from "@openpresentation/opf";
 import { fromYaml } from "@openpresentation/opf/yaml";
 import { type ConversionPlan, OPFApiError, exportFormatOf, importPresentation, loadPptx, planConversion, writePlanned } from "@openpresentation/opf/internal/engine";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
@@ -29,13 +29,13 @@ const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", 
 
 export const spec: CommandSpec = {
 	name: "convert",
-	usage: ["opf convert <input|-> <output|-> [--from <format>] [--to <format>] [--force] [--fail-on <level>] [--migrate] [format flags]", "opf convert <deck> -i --migrate"],
+	usage: ["opf convert <input|-> <output|-> [--from <format>] [--to <format>] [--force] [--fail-on <level>] [format flags]"],
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
-	positional: [1, 2],
+	positional: [2, 2],
 	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "date", "asset-dir"],
 	repeated: ["fonts"],
-	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster", "migrate", "in-place"],
+	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
 (stdin: --from json|yaml|md|pptx, else text starting with { or [ is JSON). Output: .json, .opf.yaml/.yml, .opf.md, .pdf, .pptx,
 .png and .svg (one file per slide beside the output: slides/deck.png gives slides/deck-001.png; one selected slide is written
@@ -57,10 +57,6 @@ Flags, each only where its format is involved (otherwise exit 2):
   png, raster pdf  --scale <0.1-8>                1 draws the 1280 x 720 reference slide at 1280 x 720 pixels
   pdf              --raster                       each page a picture instead of selectable vector text
   svg              --text <fonts|system|paths>    embed the faces the slide uses (fonts), none (system), or draw outlines (paths)
-  any deck         --migrate                      move the deck to the OPF 0.19 layouts first: every slide that names a removed
-                                                  0.18 layout id takes its replacement and design settings, and embedded 0.18
-                                                  layout records become templates (the report lists the changes)
-                   -i (--in-place)                with --migrate and no output: rewrite the input deck in its own form
 
 The deck is checked (format and references) first; findings at or above --fail-on (default error) write nothing (exit 1). An
 existing output needs --force. Drawing never loads system fonts and never fetches URLs; images resolve next to the input unless
@@ -73,8 +69,7 @@ Examples:
   opf convert deck.pptx deck.opf.md --signals signals.json
   opf convert outline.md deck.opf.yaml
   opf convert deck.opf.json deck.opf.yaml --schema-comment
-  opf convert deck.opf.md - --to pdf > deck.pdf
-  opf convert deck.opf.json -i --migrate`,
+  opf convert deck.opf.md - --to pdf > deck.pdf`,
 };
 
 const SOURCE_FORMATS = ["json", "yaml", "md", "markdown", "pptx"] as const;
@@ -121,16 +116,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 	const parsed = parseArgs(spec, args);
 	if (parsed === "help") return printHelp(spec);
 	const { positional, options, repeated } = parsed;
-	// -i --migrate rewrites the input deck in place (OPF 0.19); every other conversion names an input and an output.
-	const inPlace = options["in-place"] === true, migrating = options.migrate === true;
-	if (inPlace && !migrating) throw usage("-i rewrites the input deck and needs --migrate; to convert, name an output.", "option-not-applicable", { option: "-i" });
-	const usageLines = spec.usage.map((line) => `  ${line}`).join("\n");
-	if (inPlace && positional.length > 1) throw usage(`opf convert -i takes the input deck only; got ${positional.length} (${positional.slice(1).join(" ")} is extra). Usage:\n${usageLines}`, "extra-argument");
-	if (!inPlace && positional.length < 2) throw usage(`opf convert needs ${spec.operands?.[1] ?? "<output>"}. Usage:\n${usageLines}`, "missing-argument");
-	const input = positional[0] as string;
-	if (inPlace && input === "-") throw usage("-i rewrites a file; stdin cannot be rewritten in place.", "option-not-applicable", { option: "-i" });
-	if (inPlace && options.force) throw usage("-i takes no --force.");
-	const output = inPlace ? input : (positional[1] as string);
+	const [input, output] = positional as [string, string];
 	const from = oneOf("--from", options.from, SOURCE_FORMATS);
 	const to = oneOf("--to", options.to, TARGET_FORMATS);
 	const failOn = failOnOf(options);
@@ -148,7 +134,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 	const split = oneOf("--split", options.split, ["auto", "rules", "headings"] as const);
 	const signalsFile = options.signals === undefined ? undefined : String(options.signals);
 	if (signalsFile !== undefined && (signalsFile === "-" || (output !== "-" && samePath(signalsFile, output)))) throw usage("--signals needs a file of its own: not -, and not the output.", "invalid-value", { option: "--signals" });
-	if (!inPlace && input !== "-" && output !== "-" && samePath(input, output)) throw usage(`The input and the output are the same file (${output}).`);
+	if (input !== "-" && output !== "-" && samePath(input, output)) throw usage(`The input and the output are the same file (${output}).`);
 
 	// The input and its form.
 	const bytes = await readBytes(input);
@@ -189,20 +175,9 @@ export async function run(args: string[], host: Host): Promise<void> {
 							})();
 			if (sourceFormat === "json" ? report.schemaValid === null : report.findings.some((found) => found.severity === "error" && /^(yaml|markdown)\//.test(found.ruleId)))
 				throw readFailure(nameOf(input), sourceFormat, report.findings.filter((found) => found.severity === "error" && (sourceFormat === "json" || /^(yaml|markdown)\//.test(found.ruleId))));
-			// --migrate: the 0.18 layout ids a 0.19 deck no longer has are the errors migration resolves, so it runs before the gate.
-			if (!report.valid && !(migrating && report.presentation && report.findings.every((found) => found.severity !== "error" || found.ruleId === "opf/layout-removed")))
-				throw documentFailure("convert", `${nameOf(input)} is not valid OPF; nothing was written.`, report.findings, { input: inputReport });
+			if (!report.valid) throw documentFailure("convert", `${nameOf(input)} is not valid OPF; nothing was written.`, report.findings, { input: inputReport });
 			presentation = report.presentation as Presentation;
 			findings = report.findings;
-		}
-		let migration: LayoutMigrationChange[] | undefined;
-		if (migrating) {
-			const migrated = migrate(presentation, { catalogs: CLI_CATALOGS });
-			presentation = migrated.document as unknown as Presentation;
-			migration = migrated.changes;
-			const checked = validate(presentation, WRITE_CHECK);
-			if (!checked.valid) throw documentFailure("convert", `The migrated deck is not valid OPF; nothing was written.`, checked.findings, { input: inputReport, migration });
-			findings = checked.findings;
 		}
 		if (target.kind === "export") return await exportDeck(presentation, input, output, target, options, repeated, failOn, context, findings);
 
@@ -232,16 +207,16 @@ export async function run(args: string[], host: Host): Promise<void> {
 			}
 		} else text = serialize(presentation, target.format, { schemaComment: options["schema-comment"] === true });
 		const planned = [outputFact(output, text, DECK_MEDIA[target.format])];
-		const extra = { format: target.format, ...(markdown ? { markdown } : {}), ...(importer ? { pptx: importer } : {}), ...(migration ? { migration } : {}), opfVersion: host.opfVersion, cli: host.cliVersion };
+		const extra = { format: target.format, ...(markdown ? { markdown } : {}), ...(importer ? { pptx: importer } : {}), opfVersion: host.opfVersion, cli: host.cliVersion };
 		if (reaches(findings, failOn)) throw documentFailure("convert", `Findings at or above --fail-on ${failOn}; nothing was written.`, findings, { input: inputReport, outputs: planned.map((item) => ({ ...item, planned: true })) });
 		const toStdout = output === "-";
-		if (!toStdout && !inPlace) await checkOutput(output, options.force === true);
+		if (!toStdout) await checkOutput(output, options.force === true);
 		if (signalsFile !== undefined) await checkOutput(signalsFile, options.force === true);
 		const fences = target.format === "markdown" ? fenceWarning(text, sourceFormat === "pptx" ? undefined : { format: sourceFormat, raw }, toStdout ? "the output" : output) : undefined;
 		if (fences) process.stderr.write(fences);
 		const outputs: OutputFact[] = [...planned];
 		if (toStdout) process.stdout.write(text);
-		else await saveText(output, text, options.force === true || inPlace);
+		else await saveText(output, text, options.force === true);
 		if (signalsFile !== undefined && signals) {
 			const signalsText = json(signals);
 			await saveText(signalsFile, signalsText, options.force === true);
