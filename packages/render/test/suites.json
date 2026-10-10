@@ -24,7 +24,6 @@
     "review-text-fits.mjs",
     "rich-flow-review-sheets.mjs",
     "script-corpora-raster.mjs",
-    "script-corpora.mjs",
     "script-family-fixture.mjs",
     "shared-code.mjs",
     "shared-metric.mjs",
@@ -41,6 +40,7 @@
     "pdf-vector-visual.mjs": "Appearance of the vector PDF writer; the raster golden already renders the same core examples.",
     "pdf-vector.mjs": "Structure of the vector PDF writer (text extraction, tagging, embedding), renderer internal.",
     "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input.",
-    "raster-script-clusters.mjs": "Cluster-by-cluster raster text path of the renderer, no core input."
+    "raster-script-clusters.mjs": "Cluster-by-cluster raster text path of the renderer, no core input.",
+    "script-corpora.mjs": "Per-face shaping qualification of the bundled script faces against HarfBuzz (about a minute), renderer internal; full run only."
   }
 }

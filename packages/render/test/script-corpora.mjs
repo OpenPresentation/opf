@@ -29,6 +29,7 @@ const {faces, registry} = await loadFaces();
 const report = await qualify({faces, registry, corpora});
 
 // The corpus covers the language vocabulary: every language's script and tag, and every script the renderer designates a face for.
+const SYMBOL_SETS = new Set(["Zsye", "Zmth"]);
 const groupByScript = new Map(corpora.groups.map(group => [group.script, group]));
 assert.equal(LANGUAGES.length, 93);
 const tagged = new Set(corpora.groups.flatMap(group => group.languages));
@@ -36,8 +37,10 @@ for (const language of LANGUAGES) {
   assert.ok(groupByScript.has(language.script), `${language.tag}: no corpus group for script ${language.script}`);
   assert.ok(tagged.has(language.tag), `${language.tag} is in no corpus group's languages`);
 }
-for (const script of Object.keys(SCRIPT_FONT_FAMILIES)) assert.ok(groupByScript.has(script), `script slot ${script} has a corpus group`);
-for (const rule of SCRIPT_FONT_REPLACEMENTS) assert.ok(groupByScript.has(rule.script) || rule.script === 'Latn', `${rule.requestedFamily}: script ${rule.script} has a corpus group`);
+// Zsye (emoji) and Zmth (mathematical notation), the FF-45 slots, are symbol sets, not written scripts: no language uses them and they
+// have no shaping to qualify; test/emoji-math.mjs covers their faces.
+for (const script of Object.keys(SCRIPT_FONT_FAMILIES)) assert.ok(groupByScript.has(script) || SYMBOL_SETS.has(script), `script slot ${script} has a corpus group`);
+for (const rule of SCRIPT_FONT_REPLACEMENTS) assert.ok(groupByScript.has(rule.script) || rule.script === 'Latn' || SYMBOL_SETS.has(rule.script), `${rule.requestedFamily}: script ${rule.script} has a corpus group`);
 for (const group of corpora.groups) {
   assert.ok(group.samples.length >= 2, `${group.script} has at least two samples`);
   assert.equal(new Set(group.samples.map(sample => sample.id)).size, group.samples.length, `${group.script} sample ids are unique`);
