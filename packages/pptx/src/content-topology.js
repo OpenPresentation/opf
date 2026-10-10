@@ -373,6 +373,31 @@ export function validateListBreaks(value) {
   return value;
 }
 
+// opf-pptx#212: `listRuns` = [[list path, {text: Look, description?: Look}]], the look the exporter writes on every run of a
+// list's entry lines (`text`) and description lines (`description`) where the source states none: Look = {bold, color,
+// fontSize, fontFamily} (color '#RRGGBB', fontSize in points). Import removes a run value still equal to it, so inherited
+// formatting returns absent; a value edited in PowerPoint differs and is imported as observed. Never text.
+const LOOK_KEYS = Object.freeze({
+  bold: value => typeof value === 'boolean',
+  color: value => typeof value === 'string' && /^#[0-9A-Fa-f]{6}$/.test(value),
+  fontSize: value => Number.isFinite(value) && value > 0 && value < 10000,
+  fontFamily: value => typeof value === 'string' && value.length > 0 && value.length <= 200,
+});
+const validLook = value => object(value) && Object.keys(value).length > 0 && Object.entries(value).every(([key, item]) => LOOK_KEYS[key]?.(item) === true);
+
+/** Throws when `value` is not a well-formed `listRuns` record (untrusted input). Returns it otherwise. */
+export function validateListRuns(value) {
+  if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list runs record.');
+  const paths = new Set();
+  for (const entry of value) {
+    if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string' || !LIST_PATH.test(entry[0]) || paths.has(entry[0]) || !object(entry[1])
+      || Object.keys(entry[1]).some(key => key !== 'text' && key !== 'description') || !validLook(entry[1].text)
+      || (entry[1].description !== undefined && !validLook(entry[1].description))) throw Error('Invalid list runs entry.');
+    paths.add(entry[0]);
+  }
+  return value;
+}
+
 // ---------------------------------------------------------------------------
 // Import: validation
 

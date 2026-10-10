@@ -68,7 +68,8 @@ const roundTrip = async slide => {
   }
   // Lists rejoin their list leaf: native lines interleave in reading order when two lists sit side by side.
   const lists = await roundTrip(cases['side-by-side lists']);
-  assert.deepEqual(lists.slide.blocks.map(block => block.items.map(item => item[0].text)), [['a', 'b'], ['c', 'd']]);
+  // opf-pptx#212: the items come back as the strings they were (no baked run styles).
+  assert.deepEqual(lists.slide.blocks.map(block => block.items), [['a', 'b'], ['c', 'd']]);
   // The record stores only structure and boxes, never words.
   const record = (await roundTrip(cases['nested group'])).record;
   assert.deepEqual(record.content.form, 'blocks');
@@ -99,7 +100,7 @@ const roundTrip = async slide => {
     assert.equal(slide.text, 'Body', name);
     if (source.chart) assert.deepEqual(words(slide.chart).data, chart.data, name);
     if (source.image) assert.deepEqual(slide.image, source.image, name);
-    if (source.items) assert.deepEqual(slide.items.map(item => item[0].text), ['one', 'two'], name);
+    if (source.items) assert.deepEqual(slide.items, ['one', 'two'], name);
   }
 }
 
@@ -108,11 +109,11 @@ const roundTrip = async slide => {
   const typed = await roundTrip({type: 'text', bullets: ['one', 'two']});
   assert.deepEqual(typed.provenance, []);
   assert.equal(typed.slide.type, 'text');
-  assert.deepEqual(typed.slide.bullets.map(item => item[0].text), ['one', 'two']);
+  assert.deepEqual(typed.slide.bullets, ['one', 'two']);
   assert.equal(typed.slide.items, undefined);
   const untyped = await roundTrip({bullets: ['one', 'two']});
   assert.deepEqual(untyped.provenance, []);
-  assert.deepEqual(untyped.slide.bullets.map(item => item[0].text), ['one', 'two']);
+  assert.deepEqual(untyped.slide.bullets, ['one', 'two']);
   assert.equal(untyped.slide.items, undefined);
   assert.equal(untyped.slide.type, undefined);
 }

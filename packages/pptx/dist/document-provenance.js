@@ -1,6 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks} from './content-topology.js';
+import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
 import {parseReference, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
@@ -548,6 +548,17 @@ export function recordContentTopology(provenance, slide, index, items) {
   if (omittedLists.length) provenance.slides[index].omittedLists = omittedLists;
 }
 
+/**
+ * opf-pptx#212: record the look the exporter writes on every run of list `path` on slide `index` where the source states none
+ * ({text, description?}, see validateListRuns), `full` mode only. Import removes a run value still equal to it.
+ */
+export function recordListRuns(provenance, index, path, look) {
+  if (!look || !provenance || provenance.mode !== 'full' || !provenance.slides[index]) return;
+  const record = provenance.slides[index];
+  record.listRuns ??= [];
+  if (record.listRuns.length < MAX_LIST_PATHS && !record.listRuns.some(([list]) => list === path)) record.listRuns.push([path, look]);
+}
+
 function base64ToBytes(value) {
   const binary = atob(value.replace(/\s+/g, ''));
   const bytes = new Uint8Array(binary.length);
@@ -698,7 +709,7 @@ function storable(entries, provenance) {
     const result = {v: 1, slide: index};
     if (record.omittedContent) omit(`slides.${index}.content`, record.omittedContent);
     for (const [path, reason] of record.omittedLists ?? []) omit(path, reason);
-    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists']) {
+    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists', 'listRuns']) {
       if (record[key] === undefined) continue;
       const value = prepare(`slides.${index}.${key}`, record[key]);
       if (value !== undefined) result[key] = value;
@@ -735,7 +746,7 @@ function storable(entries, provenance) {
   }
   for (const [index, record] of slides.entries()) {
     while (tagChars(record) > budget) {
-      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
+      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists', 'listRuns', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
         ...Object.keys(record.design ?? {}).map(key => ({key, design: true, size: sizeOf(record.design[key])}))];
       if (!candidates.length) break;
       const largest = candidates.sort((a, b) => b.size - a.size)[0];
@@ -874,6 +885,7 @@ function validateSlide(stored) {
   if (value.content !== undefined) validateTopology(value.content);
   if (value.colors !== undefined) validateRunColors(value.colors);
   if (value.lists !== undefined) validateListBreaks(value.lists);
+  if (value.listRuns !== undefined) validateListRuns(value.listRuns);
   validateOmitted(value.omitted);
   return value;
 }
@@ -914,19 +926,23 @@ function pruneDangling(value, dangling, path, removed) {
 }
 
 /**
- * The hard line breaks stored for the lists of one slide: Map(list path -> Map(line number -> gap)), or null when the slide
- * carries none, its record is unreadable, or its arrangement changed since export (the lines are then no longer the exported
- * ones). Read before the slide's shapes are merged into list blocks; any damage is reported later by restoreDocumentProvenance.
+ * The list records of one slide, read before its shapes are merged into list blocks:
+ * - `breaks`: the hard line breaks, Map(list path -> Map(line number -> gap)), or null when the slide carries none, its record is
+ *   unreadable, or its arrangement changed since export (the lines are then no longer the exported ones);
+ * - `runs` (opf-pptx#212): the look export wrote on every run of each list, Map(list path -> {text, description?}), or null. It
+ *   does not depend on the arrangement: import compares each run value with it, so an edited value is still observed.
+ * Any damage is reported later by restoreDocumentProvenance.
  */
-export function slideListBreaks(entries, path, root, rels) {
+export function slideListRecord(entries, path, root, rels) {
   try {
     const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], rels, SLIDE_TAG);
-    if (found.missing) return null;
+    if (found.missing) return {breaks: null, runs: null};
     const record = validateSlide(found.value);
-    if (record.lists === undefined || record.native.structure !== nativeSlide(entries, path).structure) return null;
-    return new Map(record.lists.map(([list, lines]) => [list, new Map(lines)]));
+    const runs = record.listRuns === undefined ? null : new Map(record.listRuns);
+    const breaks = record.lists === undefined || record.native.structure !== nativeSlide(entries, path).structure ? null : new Map(record.lists.map(([list, lines]) => [list, new Map(lines)]));
+    return {breaks, runs};
   } catch {
-    return null;
+    return {breaks: null, runs: null};
   }
 }
 

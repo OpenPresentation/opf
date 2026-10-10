@@ -82,10 +82,11 @@ assert.equal(imported.description, deck.description);
 assert.equal(imported.slides.length, deck.slides.length);
 assert.equal(imported.slides[0].title, deck.slides[0].title);
 assert.equal(imported.slides[0].subtitle, deck.slides[0].subtitle);
+// opf-pptx#212: the list's own size, family and colour stay inherited (OPF_SLIDE_V1 listRuns), so the items return as authored.
 assert.deepEqual((imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items), [
-  [{text:"Deterministic ZIP entries",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}],
-  {text:[{text:"Structured OPF validation errors",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}],level:1},
-  [{text:"No network or LibreOffice runtime dependency",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}]
+  "Deterministic ZIP entries",
+  {text:"Structured OPF validation errors",level:1},
+  "No network or LibreOffice runtime dependency"
 ]);
 assert.equal(imported.slides[0].notes, "Smoke notes");
 assert.equal((imported.slides[1].chart ?? imported.slides[1].blocks?.[0]?.chart).data.columns[1], "Revenue");

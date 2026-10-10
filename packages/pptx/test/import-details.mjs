@@ -127,7 +127,7 @@ const colors = (deck, slide) => {
     assert.deepEqual(deck.variables, colorDeck.variables);
     // Words and structure are untouched by the colour pass.
     assert.equal(deck.slides[0].blocks, undefined);
-    assert.deepEqual(withoutColors(deck.slides[1].blocks[1]), {bullets: [[{text: 'p'}], [{text: 'q'}]]});
+    assert.deepEqual(withoutColors(deck.slides[1].blocks[1]), {bullets: ['p', [{text: 'q'}]]});
   }
   checked++;
 
@@ -219,7 +219,9 @@ const colors = (deck, slide) => {
     if (strip) bytes = stripTags(bytes);
     const {deck} = await read(bytes);
     const back = strip ? deck.slides[0].blocks.find(block => block.type === 'list' && JSON.stringify(block).includes('Alpha')).items : dig(deck.slides[0]);
-    assert.deepEqual(noFont(withoutColors(back)).map(item => Array.isArray(item) ? item : item), [
+    // opf-pptx#212: with the slide record the items return as authored; without tags the runs carry their native look.
+    if (!strip) assert.deepEqual(back, items, `${name} save ${save}: authored items`);
+    else assert.deepEqual(noFont(withoutColors(back)).map(item => Array.isArray(item) ? item : item), [
       {text: [{text: 'Alpha'}], description: [{text: 'About alpha'}]},
       [{text: 'Beta'}],
       {text: [{text: 'Gam', bold: true}, {text: 'ma'}], description: [{text: 'rich ', italic: true}, {text: 'detail'}], level: 1}

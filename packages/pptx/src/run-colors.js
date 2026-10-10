@@ -87,7 +87,7 @@ export function validateRunColors(value) {
 function* markedRuns(value) {
   if (Array.isArray(value)) { for (const item of value) yield* markedRuns(item); return; }
   if (!object(value)) return;
-  if (Object.hasOwn(value, '_opfScheme')) yield value;
+  if (Object.hasOwn(value, '_opfScheme') || Object.hasOwn(value, '_opfInherited')) yield value;
   for (const item of Object.values(value)) if (item !== null && typeof item === 'object') yield* markedRuns(item);
 }
 
@@ -96,13 +96,17 @@ function* markedRuns(value) {
  * {record, structure, content}: the stored OPF_SLIDE_V1 value, whether the slide's arrangement matches it and whether its
  * content structure was restored from it, or undefined for an untagged slide. `resolve(slide, name)` returns the '#RRGGBB'
  * the name resolves to in the document (or undefined). Every transient `_opfScheme` marker is removed.
+ * opf-pptx#212: a list run whose colour import removed as the list's own (OPF_SLIDE_V1 listRuns) carries `_opfInherited`, that
+ * colour: a stored reference that resolves to it is restored (an authored `text` role equals the inherited colour), and the
+ * marker is removed; a run left with only its text becomes a plain string again.
  */
 export function restoreRunColors(slides, info, resolve, report) {
   slides.forEach((slide, index) => {
     const tag = info[index];
     const marked = [...markedRuns(slide)];
     const restoreName = (run, name) => {
-      const hex = typeof run.color === 'string' && /^#[0-9a-f]{6}$/i.test(run.color) ? run.color.toUpperCase() : undefined;
+      const current = run.color ?? run._opfInherited;
+      const hex = typeof current === 'string' && /^#[0-9a-f]{6}$/i.test(current) ? current.toUpperCase() : undefined;
       if (hex && resolve(slide, name)?.toUpperCase() === hex) run.color = name;
     };
     if (tag?.record?.colors) {
@@ -117,5 +121,27 @@ export function restoreRunColors(slides, info, resolve, report) {
       for (const run of marked) if (typeof run._opfScheme === 'string') restoreName(run, run._opfScheme);
     }
     for (const run of marked) delete run._opfScheme;
+    const inherited = new Set(marked.filter(run => Object.hasOwn(run, '_opfInherited')));
+    for (const run of inherited) delete run._opfInherited;
+    if (inherited.size) plainInheritedRuns(slide, inherited);
   });
+}
+
+// The list values of a slide in which a run of `runs` is left with only its text: that run becomes a string, and a value that
+// is then one string is that string (the authored form; the run slots are unchanged).
+function plainInheritedRuns(slide, runs) {
+  const plain = value => {
+    if (!Array.isArray(value) || !value.some(run => runs.has(run))) return value;
+    const next = value.map(run => runs.has(run) && Object.keys(run).length === 1 ? run.text : run);
+    return next.length === 1 && typeof next[0] === 'string' ? next[0] : next;
+  };
+  for (const leaf of leaves(slide)) for (const field of ['items', 'bullets']) {
+    if (!Array.isArray(leaf[field])) continue;
+    leaf[field] = leaf[field].map(item => {
+      if (!object(item)) return plain(item);
+      const next = {...item, text: plain(item.text)};
+      if (item.description !== undefined) next.description = plain(item.description);
+      return next;
+    });
+  }
 }

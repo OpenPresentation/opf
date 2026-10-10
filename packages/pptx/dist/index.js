@@ -20,14 +20,14 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {addCaption, addFootnotes} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
-import {headingValue,joinRichLines} from './rich-heading.js';
+import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListBreaks, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -816,8 +816,8 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
       item.text = current.map(paragraph => paragraph.text).join('\n');
     }
   }
-  const listBreaks = slideListBreaks(entries, slidePath, slideRoot, relationships);
-  const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listBreaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})))
+  const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
+  const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs))
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
@@ -1241,10 +1241,13 @@ function joinRich(a, b) {
   }
   return joined;
 }
-// `breaks` (slideListBreaks) holds the whitespace of the hard breaks the export recorded, by list path and line number: the
+// `breaks` (slideListRecord) holds the whitespace of the hard breaks the export recorded, by list path and line number: the
 // continuation line after a break joins with it, so a newline inside an item (or a description) returns. A blank line is a
 // native shape with no text: it is never a description. Without a record the lines join without a separator, as before.
-function mergeOpfListShapes(items, breaks = null, report = () => {}) {
+// `runs` (opf-pptx#212) holds the look export wrote on every run of a list ({text, description?}): a run value still equal to
+// it is inherited formatting, not authored run style, and is removed (as for a tagged heading), so an untouched round trip
+// adds no explicit sizes, families or colours; a value edited in PowerPoint differs and is kept. Without it runs are as read.
+function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null) {
   const lists = new Map();
   for (const item of items) {
     const match = /^OPF list (.+) line (\d+)$/.exec(item.name ?? '');
@@ -1257,6 +1260,26 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}) {
   for (const [path, entries] of lists) {
     entries.sort((a, b) => a.line - b.line);
     if (!entries[0].item.paragraphs[0].bullet) continue;
+    const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
+    // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
+    // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
+    // they stay run objects until the lines are joined (as before), then `plain` gives the authored form back.
+    const own = (paragraph, base) => {
+      if (!base) return paragraph.richText;
+      return richRuns(paragraph.richText ?? paragraph.text).flatMap(run => {
+        const value = headingValue([run], base);
+        const parts = value === '' ? [] : typeof value === 'string' ? [{text: value}] : value.map(part => typeof part === 'string' ? {text: part} : part);
+        // A removed colour stays known until the run colour references are restored (restoreRunColors): an authored `text`
+        // role equals the inherited colour natively.
+        if (typeof run === 'object' && typeof run.color === 'string' && parts.length === 1 && parts[0].color === undefined) parts[0]._opfInherited = run.color;
+        return parts;
+      });
+    };
+    const plain = value => {
+      if (!Array.isArray(value)) return value;
+      const runs = value.map(run => typeof run === 'object' && Object.keys(run).length === 1 ? run.text : run);
+      return runs.length === 0 ? '' : runs.length === 1 && typeof runs[0] === 'string' ? runs[0] : runs;
+    };
     const paragraphs = [];
     const recorded = breaks?.get(path), applied = new Set();
     let bounds, size = 0;
@@ -1264,16 +1287,16 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}) {
       const [paragraph] = item.paragraphs, current = paragraphs.at(-1);
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (paragraph.bullet) { paragraphs.push({...paragraph}); size = paragraph.maxFontSize; }
+      if (paragraph.bullet) { paragraphs.push({...paragraph, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
       else if (paragraph.maxFontSize < size - 0.01) {
-        const text = paragraph.richText ?? paragraph.text;
+        const text = own(paragraph, descriptionLook) ?? paragraph.text;
         if (current.description === undefined) current.description = text;
         else { current.description = join(current.description, text); applied.add(line); }
       } else {
-        const before = current.text;
+        const before = current.text, rich = own(paragraph, textLook);
         current.text += (gap === undefined ? '' : Array.isArray(gap) ? gap[0] : gap) + paragraph.text;
-        if (current.richText !== undefined || paragraph.richText !== undefined) current.richText = join(current.richText ?? before, paragraph.richText ?? paragraph.text);
+        if (current.richText !== undefined || rich !== undefined) current.richText = join(current.richText ?? before, rich ?? paragraph.text);
         applied.add(line);
       }
       const b = item.visualBounds ?? item.bounds;
@@ -1284,6 +1307,8 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}) {
       consumed.add(item);
     }
     if (recorded && [...recorded.keys()].some(line => !applied.has(line))) report({code: 'list-line-break-changed', message: `A hard line break recorded at export inside the list ${path} no longer has the continuation line it belonged to (a line was edited away, or became an entry), so that break was not restored; the list keeps the lines it has.`});
+    if (textLook) for (const paragraph of paragraphs) paragraph.richText = plain(paragraph.richText);
+    if (descriptionLook) for (const paragraph of paragraphs) if (paragraph.description !== undefined) paragraph.description = plain(paragraph.description);
     const first = entries[0].item;
     merged.set(first, {...first, paragraphs, text: paragraphs.map(paragraph => paragraph.text).join('\n'), bounds, visualBounds: undefined, sources: entries.flatMap(({item}) => item.sources ?? [])});
   }
@@ -2030,6 +2055,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
+      // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
+      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
@@ -2164,6 +2191,14 @@ function addTextPayload(slide, value, region, context) {
   slide.addText(stringifyText(value), textBoxOptions(region, context, 18));
 }
 
+// opf-pptx#212: the look (richBase) the runs of a measured list are written with where the source states none: {text,
+// description?}, or undefined when its entries do not share one (import then reads every run value as observed).
+function listRunLook(fit,style,context){
+  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],style,kind==='text'?context.colors.text:context.colors.mutedText))));
+  const text=looks('text'),description=looks('description');
+  if(text.size!==1||description.size>1)return undefined;
+  return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
+}
 function richLineRuns(line,color,native,context) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
