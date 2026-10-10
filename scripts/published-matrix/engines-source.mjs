@@ -1,4 +1,4 @@
-// RR-55, RR-74: the names and shapes are the 0.18 API (loadFonts, toSvg for a whole deck, toPng, { fonts }); the installed side adapts a published renderer older than 0.18 to them until the release plan moves.
+// RR-55, RR-74: the names and shapes are the 0.18 API (loadFonts, toSvg for a whole deck, toPng, { fonts }), as the published packages of the release plan install them.
 // Engine entry points for the font-switch matrix when it runs against sibling source checkouts
 // (`pnpm test:fonts`). The published-package consumer writes an `engines-installed.mjs` with the
 // same exports that resolves every package from the consumer's own node_modules instead.
