@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import { validateCatalogRecord } from '../dist/index.js';
 import { layouts } from './support/catalog.mjs';
+import { catalogIndexes } from '@openpresentation/gallery';
 import { layoutContent, layoutLeaves } from '../dist/composition.js';
 
 const HEAD = ['title', 'subtitle', 'tag'];
@@ -23,8 +24,8 @@ test('the placeholder kinds are one vocabulary', () => {
 });
 
 test('every bundled layout record uses the new shape', () => {
-  // The snapshot mirrors the gallery (OPF 0.15): every layout it publishes, as many as the snapshot index lists.
-  assert.equal(layouts.length, JSON.parse(readFileSync(new URL('../../../spec/catalogs/layouts/index.json', import.meta.url), 'utf8')).records.length);
+  // The gallery package mirrors pptx.gallery (OPF 0.15, RR-78): every layout it publishes, as many as its index lists.
+  assert.equal(layouts.length, catalogIndexes.layouts.records.length);
   assert.ok(layouts.length > 100);
   for (const record of layouts) {
     assert.equal(validateCatalogRecord('layouts', record).valid, true, record.id);

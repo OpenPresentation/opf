@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { paginate, paginateSlide, validate } from '../dist/index.js';
-import { defaultCatalog } from '../dist/catalog.js';
+import { gallery } from '@openpresentation/gallery';
 
 // opf#485: validate measured script text in the one face a style names (Arabic in the Latin title face) and reported
 // opf/layout-failed, while the engines plan each script run in its script slot's face. A fonts handle whose measurement
 // can plan (`forScripts`, the renderer's loadFonts() measurement) is now asked for the slide's plan, as the engines do.
 
-const catalogs = [defaultCatalog];
+const catalogs = [gallery];
 const arabic = /[؀-ۿ]/u;
 const arabicTitle = 'مراجعة ربع سنوية للمنتج';
 const arabicBody = 'بدأ العمل على المنصة الجديدة في مطلع العام، وقد شمل ذلك إعادة تصميم تجربة المستخدم بالكامل.';

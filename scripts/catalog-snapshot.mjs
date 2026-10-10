@@ -1,7 +1,7 @@
-// Shared helpers for the pinned default-catalog snapshot in spec/catalogs/.
+// Shared helpers for the pinned default-catalog snapshot in packages/gallery/catalog/ (RR-78: @openpresentation/gallery).
 //
-// pptx.gallery publishes the default OPF catalog; spec/catalogs/ is a pinned
-// snapshot of it, and spec/catalogs/manifest.json records the gallery commit
+// pptx.gallery publishes the default OPF catalog; packages/gallery/catalog/ is a pinned
+// snapshot of it, and its manifest.json records the gallery commit
 // and a content hash per kind. See docs/default-catalog.md.
 //
 // Zero external dependencies so scripts/check-spec-integrity.mjs can use it.
@@ -14,7 +14,7 @@ export const CATALOG_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-
 export const CATALOG_MANIFEST_SCHEMA_ID = "https://openpresentation.org/schema/opf-catalog-manifest/v1";
 export const DEFAULT_CATALOG_PUBLISHER = "https://www.pptx.gallery";
 
-// URL segment and spec/catalogs/<kind> directory -> OPF `catalogs.<key>`,
+// URL segment and packages/gallery/catalog/<kind> directory -> OPF `catalogs.<key>`,
 // companion schema file, and record $schema id. The URL segment is the one the
 // OPF schema names as each kind's default source (https://www.pptx.gallery/<kind>).
 export const SNAPSHOT_KINDS = [
@@ -74,7 +74,7 @@ export async function readJson(file) {
   return JSON.parse(await readFile(file, "utf8"));
 }
 
-/** Reads spec/catalogs/<kind>/index.json and its records, in index order. */
+/** Reads <catalogs>/<kind>/index.json and its records, in index order. */
 export async function readSnapshotKind(catalogsRoot, kind) {
   const dir = path.join(catalogsRoot, kind);
   const index = await readJson(path.join(dir, "index.json"));
@@ -95,7 +95,7 @@ export async function verifySnapshot(catalogsRoot) {
   try {
     manifest = await readJson(path.join(catalogsRoot, "manifest.json"));
   } catch (error) {
-    return [`spec/catalogs/manifest.json is missing or invalid: ${error.message}`];
+    return [`${path.basename(path.dirname(catalogsRoot))}/${path.basename(catalogsRoot)}/manifest.json is missing or invalid: ${error.message}`];
   }
   if (manifest.$schema !== CATALOG_MANIFEST_SCHEMA_ID) {
     problems.push(`manifest.json: $schema is '${manifest.$schema}', expected '${CATALOG_MANIFEST_SCHEMA_ID}'`);

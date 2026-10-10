@@ -1,8 +1,6 @@
 // Renders the React/Tailwind layout preview elements from
 // pptx-gallery/lib/layout-previews.tsx to static HTML and writes them to
 // packages/gallery/previews/layouts/<slug>.html (RR-78: @openpresentation/gallery/previews). Also writes its index.json.
-// Run `node scripts/sync-gallery-catalog.mjs --rehash` from the repository root afterwards: it copies the previews to
-// core's spec/previews/layouts, which stays byte-identical until core drops /catalog (OPF 0.19).
 //
 // Usage (from packages/gallery):
 //   node --import tsx scripts/render-layout-previews.mjs

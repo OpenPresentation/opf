@@ -3,9 +3,10 @@ import { describe, test } from "node:test";
 
 import * as root from "../dist/index.js";
 import { CHART_TYPES, audience, catalogKinds, presentation, socialPlatform, validateCatalogRecord } from "../dist/index.js";
-import { catalogDisplay, catalogIndexes, defaultCatalog } from "../dist/catalog.js";
+import { catalogDisplay, catalogIndexes, gallery } from "@openpresentation/gallery";
 import { audiences, chartTypes, languages, purposes, records, socialPlatforms, tones } from "./support/catalog.mjs";
 import { repoReadme } from "../dist/repo-readme.js";
+import packageJson from "../package.json" with { type: "json" };
 
 describe("schema $ids", () => {
   test("presentation schema has the canonical $id", () => {
@@ -21,20 +22,22 @@ describe("schema $ids", () => {
   });
 });
 
-describe("catalog export shapes (@openpresentation/opf/catalog)", () => {
-  test("the root carries no catalog data; /catalog exports the default catalog keyed by kind and id", () => {
+describe("catalog export shapes (@openpresentation/gallery, RR-78)", () => {
+  test("the root carries no catalog data and core has no /catalog subpath; the gallery package exports the records keyed by kind and id", () => {
+    assert.equal(packageJson.exports["./catalog"], undefined, "RR-78: @openpresentation/opf/catalog is removed, with no alias");
+    assert.equal(packageJson.dependencies["@openpresentation/gallery"], "^1.0.0");
     for (const name of ["catalogs", "catalogEntries", "catalogIndexes", "audiences", "tones", "themes", "layouts", "chartTypes", "narratives", "socialPlatforms", "languages", "colorSchemes", "fontSchemes", "layoutPreviews"])
       assert.equal(root[name], undefined, name);
-    assert.equal(defaultCatalog.source, "https://www.pptx.gallery");
-    assert.deepEqual(Object.keys(defaultCatalog).filter((key) => key !== "source").sort(), [...catalogKinds].sort());
-    for (const kind of catalogKinds) assert.ok(Object.keys(defaultCatalog[kind]).length > 0, kind);
+    assert.equal(gallery.source, "https://www.pptx.gallery");
+    assert.deepEqual(Object.keys(gallery).filter((key) => key !== "source").sort(), [...catalogKinds].sort());
+    for (const kind of catalogKinds) assert.ok(Object.keys(gallery[kind]).length > 0, kind);
     assert.deepEqual(Object.keys(catalogDisplay).sort(), ["chartTypes", "languages", "socialPlatforms"]);
     assert.equal(catalogIndexes.audiences.records.length, audiences.length);
   });
 
   test("records are keyed by id and carry no $schema, id or x-* member", () => {
     for (const kind of catalogKinds)
-      for (const [id, record] of Object.entries(defaultCatalog[kind])) {
+      for (const [id, record] of Object.entries(gallery[kind])) {
         assert.equal("$schema" in record || "id" in record, false, `${kind}/${id}`);
         assert.deepEqual(Object.keys(record).filter((key) => key.startsWith("x-")), [], `${kind}/${id}`);
       }
@@ -78,8 +81,8 @@ describe("catalog records carry no broken soft cross-links", () => {
   for (const kind of ["audiences", "purposes", "tones"]) {
     for (const record of records(kind)) {
       test(`${kind}/${record.id} has no broken cross-links`, () => {
-        for (const id of record.recommendedNarratives ?? []) assert.ok(defaultCatalog.narratives[id], `${kind}/${record.id} recommends unknown narrative ${id}`);
-        for (const id of record.recommendedTones ?? []) assert.ok(defaultCatalog.tones[id], `${kind}/${record.id} recommends unknown tone ${id}`);
+        for (const id of record.recommendedNarratives ?? []) assert.ok(gallery.narratives[id], `${kind}/${record.id} recommends unknown narrative ${id}`);
+        for (const id of record.recommendedTones ?? []) assert.ok(gallery.tones[id], `${kind}/${record.id} recommends unknown tone ${id}`);
       });
     }
   }

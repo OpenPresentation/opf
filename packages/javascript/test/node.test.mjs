@@ -35,7 +35,7 @@ globalThis.fetch = async (input) => {
 // RR-70: the Node build is the root itself; `core` is the browser build, which shares every class and function but the file API.
 const opf = await import("../dist/index.js");
 const core = await import("../dist/browser.js");
-const { defaultCatalog } = await import("../dist/catalog.js");
+const { gallery } = await import("@openpresentation/gallery");
 const here = path.dirname(fileURLToPath(import.meta.url));
 // RR-74: the drawing tests run through the opf-render that core's devDependencies install. While that is not the 0.18 release core asks
 // for (toSvg, toPng, toPdf), they wait on a pull request and merge-queue run (scripts/unreleased-gate.mjs); every other run fails.
@@ -88,7 +88,7 @@ describe("the entry", () => {
     assert.equal(opf.parse, core.parse);
     assert.equal(opf.OPFValidationError, core.OPFValidationError);
     assert.ok(new opf.OPFExportError("x", "y") instanceof opf.OPFApiError);
-    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck", "defaultCatalog"]) assert.equal(opf[gone], undefined, gone);
+    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck", "defaultCatalog", "gallery"]) assert.equal(opf[gone], undefined, gone);
   });
 });
 
@@ -114,7 +114,7 @@ describe("convert with an output path", () => {
 
     const imported = await opf.convert(path.join(dir, "deck.pptx"), path.join(dir, "back.opf.yaml"));
     assert.equal(imported.files[0].type, "application/yaml");
-    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [defaultCatalog] });
+    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [gallery] });
     assert.equal(back.slides.length, 4);
     assert.equal(back.slides[0].title, "Hello");
 

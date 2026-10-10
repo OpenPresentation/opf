@@ -97,6 +97,17 @@ export async function loadPackage(dir) {
   return { version: manifest.version, module };
 }
 
+/**
+ * The core the pinned renderer runs (its own dependency). The gallery has no direct core dependency, not even a dev one:
+ * core depends on the gallery, and a sibling that links this checkout's core and gallery must find one core (RR-78).
+ */
+export async function rendererCore() {
+  const require = createRequire(path.join(packageRoot, "package.json"));
+  const fromRenderer = createRequire(require.resolve("@openpresentation/opf-render/package.json"));
+  const manifest = fromRenderer.resolve("@openpresentation/opf/package.json");
+  return { module: await import(pathToFileURL(fromRenderer.resolve("@openpresentation/opf")).href), version: JSON.parse(readFileSync(manifest, "utf8")).version };
+}
+
 /** Loads the renderer that draws both releases and a rasterizer for SVG mismatches. */
 export async function loadEngines() {
   const require = createRequire(path.join(packageRoot, "package.json"));
@@ -110,7 +121,7 @@ export async function loadEngines() {
     return { width: image.width, height: image.height, pixels: image.pixels };
   };
   const versions = {
-    core: JSON.parse(readFileSync(require.resolve("@openpresentation/opf/package.json"), "utf8")).version,
+    core: (await rendererCore()).version,
     render: JSON.parse(readFileSync(path.join(renderPackage, "package.json"), "utf8")).version,
   };
   return { toSvg, raster, versions };

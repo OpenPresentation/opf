@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 import {embed,validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery} from '@openpresentation/gallery';
 const root=fileURLToPath(new URL('../',import.meta.url)),output=path.join(root,'outputs');
 await mkdir(output,{recursive:true});
 const require=createRequire(import.meta.url),hash=x=>createHash('sha256').update(x).digest('hex');
@@ -71,7 +71,7 @@ async function group(id,name,run){
 }
 const deck=footer=>({design:{footer},slides:[{title:'Title',design:{footer:false}},{title:'Two'},{title:'Three'}]});
 // OPF 0.15: the deck embeds the font scheme it names (no catalog is registered in this renderer-absent consumer).
-const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSize:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSize:32,overflow:'error'}}]},{catalogs:[defaultCatalog]}).document;
+const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSize:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSize:32,overflow:'error'}}]},{catalogs:[gallery]}).document;
 await group('01','Existing basic renderer-absent contract',async()=>{
  const source={name:'Installed package',slides:[{title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}},{title:'Metric',metric:{value:'42%',label:'Measured outcome'}},{title:'Quote',quote:{text:'Keep the source.',attribution:'Reviewer',source:'Interview'}},{title:'Code',code:{language:'python',source:'approve(change)'}},{title:'Timeline',timeline:{events:[{when:'Q1',what:'Pilot'},{when:'Q2',what:'Rollout'}]}}]};
  const exported=await emit('basic',source),{document}=await read('basic',exported.bytes);assert.ok(exported.bytes.length>1000);assert.equal(document.slides.length,5);

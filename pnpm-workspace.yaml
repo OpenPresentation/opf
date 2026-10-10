@@ -5,6 +5,9 @@ packages:
 # still does, so the lockfile is unchanged). Same ranges and targets as before.
 overrides:
   "@openpresentation/cli>@openpresentation/opf": "workspace:*"
+  # RR-78: core and the CLI depend on @openpresentation/gallery@^1; the workspace links the package in packages/gallery.
+  "@openpresentation/opf>@openpresentation/gallery": "workspace:*"
+  "@openpresentation/cli>@openpresentation/gallery": "workspace:*"
   "esbuild@>=0.27.3 <0.28.1": "0.28.2"
   "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
   "sharp@<0.35.5": "0.35.5"

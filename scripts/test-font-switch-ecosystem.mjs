@@ -56,10 +56,10 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, toPng, checkTypefaces, fromPptx, defaultCatalog, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
-// OPF 0.15: core registers no catalog. The matrix is a host: it registers the default catalog with every engine and core
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, toPng, checkTypefaces, fromPptx, gallery, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+// OPF 0.15: core registers no catalog. The matrix is a host: it registers the gallery (RR-78) with every engine and core
 // call, as the CLI does, so its decks name gallery records by id without embedding them.
-const CATALOGS = [defaultCatalog];
+const CATALOGS = [gallery];
 const withCatalogs = (options = {}) => ({catalogs: CATALOGS, ...options});
 const toSvg = (deck, options) => engines.toSvg(deck, withCatalogs(options));
 const toPptx = (deck, options) => engines.toPptx(deck, withCatalogs(options));
@@ -67,8 +67,8 @@ const createEditorSession = (deck, options) => engines.createEditorSession(deck,
 const resolveScriptFonts = (deck, options) => engines.resolveScriptFonts(deck, withCatalogs(options));
 const validate = (deck, options) => engines.validate(deck, withCatalogs(options));
 // The catalog records with their ids, by kind: the content kinds of the default catalog and the display kinds.
-const catalogs = Object.fromEntries([...Object.keys(defaultCatalog).filter((kind) => kind !== 'source'), ...Object.keys(catalogDisplay)]
-  .map((kind) => [kind, Object.entries(defaultCatalog[kind] ?? catalogDisplay[kind]).map(([id, record]) => ({id, ...record}))]));
+const catalogs = Object.fromEntries([...Object.keys(gallery).filter((kind) => kind !== 'source'), ...Object.keys(catalogDisplay)]
+  .map((kind) => [kind, Object.entries(gallery[kind] ?? catalogDisplay[kind]).map(([id, record]) => ({id, ...record}))]));
 // A deck's language is a BCP-47 tag; the matrix names languages by their catalog record ids.
 const tag = (id) => catalogDisplay.languages[id].bcp47;
 

@@ -80,7 +80,6 @@ try {
     "package/package.json",
     "package/dist/index.js",
     "package/dist/schemas.js",
-    "package/dist/catalog.js",
     "package/dist/validator.js",
     "package/dist/types.js",
     "package/dist/spec-files.js",
@@ -89,17 +88,17 @@ try {
     "package/dist/repo-readme.js",
     "package/dist/spec/openapi.yaml",
     "package/dist/spec/schemas/opf.schema.json",
-    "package/dist/spec/catalogs/audiences/board.json",
-    "package/dist/spec/catalogs/layouts/index.json",
   ]) {
     assertTarIncludes(files, entry);
   }
 
   assert.equal(files.some((file) => file.endsWith(".map")), false, "npm package should not ship source maps");
+  // RR-78: the catalog records are @openpresentation/gallery's: core ships no /catalog entry and no record files.
+  assert.equal(files.some((file) => file === "package/dist/catalog.js" || file.startsWith("package/dist/spec/catalogs/") || file.startsWith("package/dist/spec/previews/")), false, "core ships no catalog records");
 
   // RR-62: the packed CLI joins the same installation, so it must resolve (and the one-core check finds) the very core
   // under test (one core: the override below points the CLI's dependency at the candidate core tarball).
-  let cliTarball;
+  let cliTarball, galleryTarball;
   if (!registry) {
     await run('pnpm', ['--filter', '@openpresentation/cli', 'build'], { cwd: path.resolve(packageRoot, '../..') });
     const runSync = (command, args, cwd) => {
@@ -108,9 +107,10 @@ try {
       if (result.error || result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed: ${result.error?.message ?? result.stderr}`);
       return result.stdout;
     };
-    cliTarball = (await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync })).cliTarball;
+    // RR-78: core depends on @openpresentation/gallery@^1; its candidate tarball (packed with the CLI's) joins the install.
+    ({ cliTarball, galleryTarball } = await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync }));
   }
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), ...(galleryTarball ? [galleryTarball] : []), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
   await checkPackedTypes(projectDir, {downstream: downstream.length > 0, cli: !!cliTarball});
   if (cliTarball) {
     const one = await assertOneCore(path.join(projectDir, 'node_modules'));
@@ -130,11 +130,11 @@ for (const [entry, target] of Object.entries(manifest.exports)) {
   // exactly what the installed package computes, so a chunk whose code is needed but only bare-imported fails here.
   await writeFile(path.join(projectDir, 'bundle-probe.mjs'), `
 import {embed, paginate, resolveSlideContext, stats, toMarkdown, fromMarkdown, validate, validationRules, CHART_TYPES} from '@openpresentation/opf';
-import {defaultCatalog, catalogDisplay} from '@openpresentation/opf/catalog';
+import {gallery, catalogDisplay} from '@openpresentation/gallery';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {fromYaml, toYaml} from '@openpresentation/opf/yaml';
 import {applyPatch} from '@openpresentation/opf/patch';
-const catalogs = [defaultCatalog];
+const catalogs = [gallery];
 const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Bundle probe', language: 'en-US',
   design: {theme: 'classic', colorScheme: 'cool-horizon', fontScheme: 'roboto'},
   slides: [
@@ -198,7 +198,8 @@ import {
   validate,
 } from "@openpresentation/opf";
 import { presentation as focusedPresentation } from "@openpresentation/opf/schemas";
-import { defaultCatalog, layoutPreviews, getLayoutPreview } from "@openpresentation/opf/catalog";
+import { gallery } from "@openpresentation/gallery";
+import { layoutPreviews, getLayoutPreview } from "@openpresentation/gallery/previews";
 import { assertValid, validate as focusedValidate } from "@openpresentation/opf/validator";
 import * as typesRuntime from "@openpresentation/opf/types";
 import { specFileEntries, specFilePaths } from "@openpresentation/opf/spec-files";
@@ -207,22 +208,24 @@ import { docs, getDoc } from "@openpresentation/opf/docs";
 import { repoReadme } from "@openpresentation/opf/repo-readme";
 import { paginate } from "@openpresentation/opf/pagination";
 import rawPresentation from "@openpresentation/opf/spec/schemas/opf.schema.json" with { type: "json" };
-import rawBoardAudience from "@openpresentation/opf/spec/catalogs/audiences/board.json" with { type: "json" };
+import galleryManifest from "@openpresentation/gallery/package.json" with { type: "json" };
 import installedManifest from "@openpresentation/opf/package.json" with { type: "json" };
 assert.equal(installedManifest.version,${JSON.stringify(manifest.version)});
 
 assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(focusedPresentation.$id, presentation.$id);
 assert.equal(rawPresentation.$id, presentation.$id);
-assert.equal(rawBoardAudience.id, "board");
-assert.ok(defaultCatalog.audiences.executive);
-assert.ok(Object.keys(defaultCatalog.tones).length > 0);
+// RR-78: the pptx.gallery catalog is @openpresentation/gallery (core's dependency); core has no /catalog subpath.
+assert.equal(galleryManifest.opf.catalogSchema, 1);
+assert.ok(gallery.audiences.board && gallery.audiences.executive);
+assert.ok(Object.keys(gallery.tones).length > 0);
+await assert.rejects(import("@openpresentation/opf/catalog"));
 assert.deepEqual(Object.keys(typesRuntime), []);
 
 assert.ok(specFileEntries.length > 0, "spec-files subpath should ship entries");
 assert.ok(specFilePaths.includes("openapi.yaml"));
 const firstPreviewSlug = Object.keys(layoutPreviews)[0];
-assert.ok(firstPreviewSlug, "the catalog subpath should ship layout previews");
+assert.ok(firstPreviewSlug, "the gallery's /previews should ship layout previews");
 assert.ok(getLayoutPreview(firstPreviewSlug)?.length > 0);
 assert.ok(examples.length > 0, "examples subpath should ship example decks");
 assert.equal(getExample(examples[0].slug)?.slug, examples[0].slug);

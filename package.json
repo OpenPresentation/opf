@@ -91,6 +91,7 @@
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
+    "@openpresentation/gallery": "workspace:*",
     "@biomejs/biome": "^2.5.3",
     "@typescript/native": "npm:typescript@~7.0.2"
   }

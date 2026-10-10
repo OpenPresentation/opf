@@ -187,8 +187,11 @@ no core release, and a core release does not release the gallery.
   `OpenPresentation/opf` (`directory: packages/gallery`). Against 0.0.1 the stability check runs as a major release
   and reports no changed record.
 
-Core depends on `@openpresentation/gallery@^1` from OPF 0.19 (its Node defaults and the CLI register `gallery`); a
-core release then needs the gallery version its range names on npm first, as for any dependency.
+Core and the CLI depend on `@openpresentation/gallery@^1` (OPF 0.19: their Node defaults register `gallery`, and core has no
+`/catalog` subpath). A core or CLI release needs a gallery version its range accepts on npm first, as for any
+dependency; the first core that depends on it is released after gallery 1.0.0 is on npm. The packed tests install the
+candidate gallery tarball beside the candidate core (`scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`),
+so pull requests do not wait for it. Core's tests pin the exact gallery of the workspace through the lockfile.
 
 ## Geometry-moving core releases: lockstep floors
 

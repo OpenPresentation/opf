@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
-  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. Only @openpresentation/opf/catalog carries it; no other entry of core imports catalog data (pnpm check:catalog-free).",
+  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. It is the data of @openpresentation/gallery (RR-78); core imports none of it (pnpm check:catalog-free).",
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",

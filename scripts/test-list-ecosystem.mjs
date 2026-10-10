@@ -5,7 +5,7 @@ import {toSvg, resolvePresentation} from '../../opf-render/src/svg.js';
 import {loadFonts} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 import {embed} from '../packages/javascript/dist/index.js';
-import {defaultCatalog} from '../packages/javascript/dist/catalog.js';
+import {gallery} from '@openpresentation/gallery';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',trimValues:false,parseTagValue:false}),array=value=>Array.isArray(value)?value:value?[value]:[];
@@ -15,7 +15,7 @@ const document=embed({name:'Measured lists',design:{fontScheme:'roboto'},slides:
  {text:'Supporting evidence',level:1},
  {text:[{text:'Color and emphasis',color:'#2563EB',fontSize:22}],description:'A smaller description shares the text indent.',level:2},
  {text:['H',{text:'2',subscript:true},'O and x',{text:'2',superscript:true}],level:4}
- ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]},{catalogs:[defaultCatalog]}).document;
+ ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]},{catalogs:[gallery]}).document;
 const fonts=await loadFonts({pack:'office'}),options={fonts};
 const bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,{...options,trace:true});
 assert.equal(bound.geometry.diagnostics.length,0);

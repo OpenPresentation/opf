@@ -8,7 +8,6 @@ const packageRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(packageRoot, "../..");
 const specRoot = path.join(repoRoot, "spec");
 const schemaRoot = path.join(specRoot, "schemas");
-const catalogRoot = path.join(specRoot, "catalogs");
 const generatedRoot = path.join(packageRoot, "src", "generated");
 const generatedTypesRoot = path.join(generatedRoot, "types");
 
@@ -29,20 +28,6 @@ const schemaDefinitions = [
   // It is not a catalog kind. Its root schema is open so a richer report (validate's) still validates against it;
   // the generated type is closed so an unknown field is a type error.
   { name: "finding", typeName: "FindingReport", file: "finding.schema.json", typeFile: "finding", compileOptions: { additionalProperties: false } },
-];
-
-const catalogDefinitions = [
-  { kind: "audiences", schemaName: "audience", dir: "audiences" },
-  { kind: "purposes", schemaName: "purpose", dir: "purposes" },
-  { kind: "tones", schemaName: "tone", dir: "tones" },
-  { kind: "themes", schemaName: "theme", dir: "themes" },
-  { kind: "layouts", schemaName: "layout", dir: "layouts" },
-  { kind: "chartTypes", schemaName: "chartType", dir: "chart-types" },
-  { kind: "narratives", schemaName: "narrative", dir: "narratives" },
-  { kind: "socialPlatforms", schemaName: "socialPlatform", dir: "social-platforms" },
-  { kind: "languages", schemaName: "language", dir: "languages" },
-  { kind: "colorSchemes", schemaName: "colorScheme", dir: "color-schemes" },
-  { kind: "fontSchemes", schemaName: "fontScheme", dir: "font-schemes" },
 ];
 
 async function readJson(file) {
@@ -77,15 +62,6 @@ function specFileKind(file) {
   }
   if (file.startsWith("schemas/")) {
     return "schema";
-  }
-  if (file.startsWith("catalogs/") && file.endsWith("/index.json")) {
-    return "catalogIndex";
-  }
-  if (file === "catalogs/manifest.json") {
-    return "catalogManifest";
-  }
-  if (file.startsWith("catalogs/")) {
-    return "catalogRecord";
   }
   if (file.startsWith("reference/")) {
     return "reference";
@@ -145,103 +121,6 @@ async function generateSchemas() {
   lines.push("];", "");
 
   await fs.writeFile(path.join(generatedRoot, "schemas.ts"), lines.join("\n"));
-}
-
-async function orderedCatalogFiles(definition, catalogDir, index) {
-  const key = definition.indexRecordsKey ?? "records";
-  const indexedFiles = Array.isArray(index[key])
-    ? index[key].map((record) => record.file).filter(Boolean)
-    : [];
-  const allFiles = (await fs.readdir(catalogDir))
-    .filter((file) => file.endsWith(".json") && file !== "index.json")
-    .sort();
-  const extras = allFiles.filter((file) => !indexedFiles.includes(file));
-  return [...indexedFiles, ...extras];
-}
-
-async function generateCatalogs() {
-  const catalogs = [];
-  for (const definition of catalogDefinitions) {
-    const catalogDir = path.join(catalogRoot, definition.dir);
-    const index = await readJson(path.join(catalogDir, "index.json"));
-    const files = await orderedCatalogFiles(definition, catalogDir, index);
-    const records = [];
-    for (const file of files) {
-      records.push(await readJson(path.join(catalogDir, file)));
-    }
-    catalogs.push({ ...definition, index, records, files });
-  }
-
-  const schemaDefinitionByName = new Map(schemaDefinitions.map((definition) => [definition.name, definition]));
-  const typeInfoByKind = new Map(catalogs.map(({ kind, schemaName }) => {
-    const schemaDefinition = schemaDefinitionByName.get(schemaName);
-    return [kind, {
-      typeName: schemaDefinition.typeName,
-      typeFile: schemaDefinition.typeFile ?? schemaDefinition.name,
-    }];
-  }));
-
-  // Each catalog is typed as `readonly <Type>[]` (the same generated
-  // interface used for the schema's own type) instead of being inferred via
-  // `as const`. `as const` turned every record's every field into a literal
-  // type, and — because the records were referenced again from `catalogs`
-  // below — that literal structure was duplicated three
-  // times over in dist/catalogs.d.ts (~1.5 MB). Typing the source of truth
-  // once, structurally, means every later reference reuses that same (tiny)
-  // declared type instead of re-inferring the literal shape.
-  const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
-  for (const { kind } of catalogs) {
-    const { typeName, typeFile } = typeInfoByKind.get(kind);
-    lines.push(`import type { ${typeName} } from "./types/${typeFile}.js";`);
-  }
-  lines.push("");
-
-  // Deliberately no index signature: some catalog record interfaces (e.g.
-  // ChartType) come from schemas with `additionalProperties: false` and so
-  // have no index signature of their own. Requiring one here would make
-  // those types fail to structurally match `CatalogRecord`.
-  lines.push("/** Structural shape shared by every bundled catalog record. */");
-  lines.push("export interface CatalogRecord {");
-  lines.push("  readonly id: string;");
-  lines.push("}", "");
-
-  lines.push("/** A lightweight summary entry inside a catalog's `index.json`. */");
-  lines.push("export interface CatalogIndexRecord {");
-  lines.push("  readonly id: string;");
-  lines.push("  readonly name: string;");
-  lines.push("  readonly file: string;");
-  lines.push("  readonly [key: string]: unknown;");
-  lines.push("}", "");
-
-  lines.push("/** Parsed shape of a catalog's `index.json`. */");
-  lines.push("export interface CatalogIndex {");
-  lines.push("  readonly $schema: string;");
-  lines.push("  /** Catalog kind as its default-catalog URL segment, e.g. `chart-types`. */");
-  lines.push("  readonly kind?: string;");
-  lines.push("  readonly version: string;");
-  lines.push("  readonly description: string;");
-  lines.push("  /** SHA-256 of the canonical JSON of the index-ordered records (see docs/default-catalog.md). */");
-  lines.push("  readonly contentSha256?: string;");
-  lines.push("  readonly records: readonly CatalogIndexRecord[];");
-  lines.push("  readonly [key: string]: unknown;");
-  lines.push("}", "");
-
-  for (const { kind, records } of catalogs) {
-    const { typeName } = typeInfoByKind.get(kind);
-    lines.push(`export const ${kind}: readonly ${typeName}[] = ${asTs(records)} as readonly ${typeName}[];`, "");
-  }
-  lines.push("export const catalogs = {");
-  for (const { kind } of catalogs) {
-    lines.push(`  ${kind},`);
-  }
-  lines.push("} as const;", "");
-  lines.push("export type CatalogKind = keyof typeof catalogs;", "");
-  lines.push("export const catalogIndexes: Record<CatalogKind, CatalogIndex> = {");
-  for (const { kind, index } of catalogs) {
-    lines.push(`  ${kind}: ${asTs(index)},`);
-  }
-  lines.push("};", "");
-  await fs.writeFile(path.join(generatedRoot, "catalogs.ts"), lines.join("\n"));
 }
 
 function asUnion(values) {
@@ -351,6 +230,5 @@ await generateEngineData();
 await generateFontPolicy();
 await generateSymbolFontEncodings();
 await generateSchemas();
-await generateCatalogs();
 await generateSpecFiles();
 await generateTypes();

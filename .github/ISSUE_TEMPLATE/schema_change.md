@@ -1,6 +1,6 @@
 ---
 name: Schema/catalog change proposal
-about: Propose a change to the OPF format — spec/schemas or spec/catalogs
+about: Propose a change to the OPF format — spec/schemas or packages/gallery/catalog
 title: "[Schema]: "
 labels: schema-change
 assignees: ""
@@ -25,7 +25,7 @@ Show the proposed shape as it would appear in a `.opf.json` document, and/or the
 
 ## Catalogs affected
 
-List any catalog kinds (`spec/catalogs/<kind>/`) whose records need to be added, changed, or removed as part of this proposal, and note whether their `index.json` files need updating.
+List any catalog kinds (`packages/gallery/catalog/<kind>/`, changed in pptx.gallery and synced) whose records need to be added, changed, or removed as part of this proposal, and note whether their `index.json` files need updating.
 
 ## Alternatives considered
 

@@ -9,7 +9,6 @@
     "packages/javascript/src/",
     "packages/cli/src/",
     "packages/gallery/",
-    "spec/schemas/",
-    "spec/catalogs/"
+    "spec/schemas/"
   ]
 }

@@ -12,7 +12,7 @@ import {
   readJson,
   verifySnapshot,
 } from "./catalog-snapshot.mjs";
-import { MIRRORS, applySnapshot, diffSnapshot, loadValidators, main, mirrorProblems, parseKindIds, planSnapshot, readCurrentSnapshot, rehashSnapshot, writeMirrors } from "./sync-gallery-catalog.mjs";
+import { applySnapshot, diffSnapshot, loadValidators, main, parseKindIds, planSnapshot, readCurrentSnapshot, rehashSnapshot } from "./sync-gallery-catalog.mjs";
 
 const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "packages", "gallery", "catalog");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
@@ -324,34 +324,3 @@ describe("snapshot source provenance", () => {
 function serializeForTest(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
-
-// RR-78: the records live in packages/gallery/catalog; core's spec/catalogs (and spec/previews/layouts) stay
-// byte-identical copies until core drops /catalog.
-describe("core's copies of the gallery package data", () => {
-  test("the repository's copies match the package", async () => {
-    for (const mirror of MIRRORS) assert.deepEqual(await mirrorProblems(mirror), []);
-  });
-
-  test("a drifted copy is reported and rewritten; a missing one is left alone", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "opf-gallery-mirror-"));
-    try {
-      const from = path.join(dir, "from");
-      const to = path.join(dir, "to");
-      await cp(path.join(catalogsRoot, "tones"), from, { recursive: true });
-      await cp(from, to, { recursive: true });
-      await writeFile(path.join(to, "formal.json"), "{}\n");
-      await writeFile(path.join(to, "extra.json"), "{}\n");
-      await rm(path.join(to, "casual.json"));
-      const problems = await mirrorProblems({ from, to });
-      assert.equal(problems.length, 3, problems.join("\n"));
-      assert.ok(problems.some((problem) => /formal\.json differs/.test(problem)));
-      const written = await writeMirrors([{ from, to }]);
-      assert.equal(written.length, 3);
-      assert.deepEqual(await mirrorProblems({ from, to }), []);
-      assert.deepEqual(await mirrorProblems({ from, to: path.join(dir, "absent") }), []);
-      assert.deepEqual(await writeMirrors([{ from, to: path.join(dir, "absent") }]), []);
-    } finally {
-      await rm(dir, { recursive: true, force: true });
-    }
-  });
-});

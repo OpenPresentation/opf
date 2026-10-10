@@ -55,14 +55,13 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "typecheck": "node scripts/build.mjs && tsc -p test/tsconfig.json",
+    "typecheck": "pnpm --filter @openpresentation/opf build && node scripts/build.mjs && tsc -p test/tsconfig.json",
     "test": "node scripts/build.mjs && node --test test/*.test.mjs",
     "check:stability": "node scripts/build.mjs && node scripts/stability.mjs",
     "pack:dry-run": "npm pack --dry-run --cache /tmp/opf-npm-cache",
     "prepack": "node scripts/build.mjs"
   },
   "devDependencies": {
-    "@openpresentation/opf": "0.18.1",
     "@openpresentation/opf-render": "0.18.0",
     "@resvg/resvg-js": "2.6.2",
     "typescript": "~5.9.3"

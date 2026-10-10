@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, test } from "node:test";
 
 import { catalogDisplayKinds, catalogKinds, schemaEntries } from "@openpresentation/opf";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery } from "@openpresentation/gallery";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_BIN = path.resolve(__dirname, "../dist/index.js");
@@ -86,8 +86,8 @@ describe("opf catalogs", () => {
     assert.equal(parsed.at(-1).examples, true);
     for (const kind of catalogKinds) {
       const match = parsed.find((candidate) => candidate.kind === kind);
-      assert.equal(match.count, Object.keys(defaultCatalog[kind] ?? {}).length, kind);
-      assert.equal(match.source, defaultCatalog.source);
+      assert.equal(match.count, Object.keys(gallery[kind] ?? {}).length, kind);
+      assert.equal(match.source, gallery.source);
     }
     for (const kind of catalogDisplayKinds) assert.equal(parsed.find((candidate) => candidate.kind === kind).display, true, kind);
   });
@@ -98,7 +98,7 @@ describe("opf catalog", () => {
     const result = runCli(["catalog", "layouts"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const ids = JSON.parse(result.stdout).map((record) => record.id);
-    assert.equal(ids.length, Object.keys(defaultCatalog.layouts).length);
+    assert.equal(ids.length, Object.keys(gallery.layouts).length);
     assert.ok(ids.includes("title-subtitle"));
     const record = JSON.parse(runCli(["catalog", "chartTypes", "stacked-column"]).stdout);
     assert.equal(record.id, "stacked-column");
@@ -137,7 +137,7 @@ describe("opf embed", () => {
     const report = JSON.parse(result.stderr);
     assert.equal(report.ok, true);
     assert.equal(report.command, "embed");
-    assert.equal(document.catalogs.default.source, defaultCatalog.source);
+    assert.equal(document.catalogs.default.source, gallery.source);
     for (const kind of ["narratives", "tones", "themes", "layouts", "colorSchemes", "fontSchemes"]) {
       assert.ok(report.embed.added.some((entry) => entry.kind === kind), `expected ${kind} in the embed report: ${JSON.stringify(report.embed.added)}`);
       assert.ok(Object.keys(document.catalogs.default[kind]).length > 0, `expected embedded ${kind} records`);

@@ -6,6 +6,8 @@ settings:
 
 overrides:
   '@openpresentation/cli>@openpresentation/opf': workspace:*
+  '@openpresentation/opf>@openpresentation/gallery': workspace:*
+  '@openpresentation/cli>@openpresentation/gallery': workspace:*
   esbuild@>=0.27.3 <0.28.1: 0.28.2
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
   sharp@<0.35.5: 0.35.5
@@ -17,12 +19,18 @@ importers:
       '@biomejs/biome':
         specifier: ^2.5.3
         version: 2.5.14
+      '@openpresentation/gallery':
+        specifier: workspace:*
+        version: link:packages/gallery
       '@typescript/native':
         specifier: npm:typescript@~7.0.2
         version: typescript@7.0.2
 
   packages/cli:
     dependencies:
+      '@openpresentation/gallery':
+        specifier: workspace:*
+        version: link:../gallery
       '@openpresentation/opf':
         specifier: workspace:*
         version: link:../javascript
@@ -78,9 +86,6 @@ importers:
 
   packages/gallery:
     devDependencies:
-      '@openpresentation/opf':
-        specifier: 0.18.1
-        version: 0.18.1(@openpresentation/opf-render@0.18.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5))
       '@openpresentation/opf-render':
         specifier: 0.18.0
         version: 0.18.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5)
@@ -93,6 +98,9 @@ importers:
 
   packages/javascript:
     dependencies:
+      '@openpresentation/gallery':
+        specifier: workspace:*
+        version: link:../gallery
       ajv:
         specifier: ^8.17.1
         version: 8.20.0

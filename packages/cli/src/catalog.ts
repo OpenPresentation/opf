@@ -2,7 +2,7 @@
 // `opf catalog examples [slug]` (RR-75: core's bundled example decks, which `opf create --example <slug>` copies). They print the
 // data asked for, not a report.
 import { catalogDisplayKinds, catalogKinds, schemaEntries } from "@openpresentation/opf";
-import { catalogDisplay, defaultCatalog } from "@openpresentation/opf/catalog";
+import { catalogDisplay, gallery } from "@openpresentation/gallery";
 import { getAtPointer } from "@openpresentation/opf/patch";
 import { type CommandSpec, nearest, parseArgs, printHelp } from "./args.js";
 import { usage } from "./errors.js";
@@ -59,7 +59,7 @@ export async function runCatalogs(args: string[], _host: Host): Promise<void> {
 	if (parsed === "help") return printHelp(catalogsSpec);
 	const { examples } = await import("@openpresentation/opf/examples");
 	print([
-		...catalogKinds.map((kind) => ({ kind, count: Object.keys(defaultCatalog[kind] ?? {}).length, source: defaultCatalog.source })),
+		...catalogKinds.map((kind) => ({ kind, count: Object.keys(gallery[kind] ?? {}).length, source: gallery.source })),
 		...catalogDisplayKinds.map((kind) => ({ kind, count: Object.keys(catalogDisplay[kind]).length, display: true })),
 		{ kind: "examples", count: examples.length, examples: true },
 	]);
@@ -82,7 +82,7 @@ export async function runCatalog(args: string[], _host: Host): Promise<void> {
 	// `opf catalogs` lists camelCase kinds; the website spells them with hyphens (color-schemes, chart-types).
 	const kind = typed.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
 	const records = (catalogKinds as readonly string[]).includes(kind)
-		? defaultCatalog[kind as (typeof catalogKinds)[number]]
+		? gallery[kind as (typeof catalogKinds)[number]]
 		: (catalogDisplayKinds as readonly string[]).includes(kind)
 			? catalogDisplay[kind as (typeof catalogDisplayKinds)[number]]
 			: undefined;

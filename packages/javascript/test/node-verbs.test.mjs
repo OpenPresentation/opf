@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 import * as node from "../dist/index.js";
 import * as browser from "../dist/browser.js";
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 
 const cli = fileURLToPath(new URL("../../cli/dist/index.js", import.meta.url));
 // A deck whose layout resolves only in the default catalog: unresolved (a warning) without it.
@@ -22,7 +22,7 @@ describe("the Node build's defaults are the CLI's", () => {
     assert.deepEqual(unresolved(node.validate(deck)), []);
     assert.equal(unresolved(node.validate(deck, { catalogs: [] })).length, 1, "an explicit empty list registers none");
     assert.equal(unresolved(browser.validate(deck)).length, 1, "the browser build registers none");
-    assert.deepEqual(unresolved(browser.validate(deck, { catalogs: [defaultCatalog] })), []);
+    assert.deepEqual(unresolved(browser.validate(deck, { catalogs: [gallery] })), []);
   });
 
   // The core publish run (npm-publish.yml) runs `pnpm test` without building the CLI first, so its dist can be absent.
@@ -41,9 +41,9 @@ describe("the Node build's defaults are the CLI's", () => {
     assert.equal(node.paginate(deck).layout, "estimated", "without a fonts handle the page breaks are estimated");
     const embedded = node.embed(deck);
     assert.ok(embedded.added.some((record) => record.kind === "layouts" && record.id === "two-column"));
-    assert.equal(embedded.document.catalogs.default.source, defaultCatalog.source);
+    assert.equal(embedded.document.catalogs.default.source, gallery.source);
     assert.deepEqual(browser.embed(deck).added, [], "the browser build has no catalog to embed from");
-    assert.ok(browser.embed(deck, { catalogs: [defaultCatalog] }).added.length > 0);
+    assert.ok(browser.embed(deck, { catalogs: [gallery] }).added.length > 0);
   });
 });
 
