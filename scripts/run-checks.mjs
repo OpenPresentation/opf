@@ -13,6 +13,7 @@ import { createWriteStream, mkdirSync, readFileSync, realpathSync } from 'node:f
 import { availableParallelism } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { spawnSpec } from './package-manager.mjs';
 
 // scripts: the root package.json "scripts" object; config: scripts/checks.json. Returns the script names to run.
 export function selectChecks(scripts, config) {
@@ -65,7 +66,8 @@ function startCheck(root, logs, name) {
   const log = path.join(logs, `${name.replace(/[^A-Za-z0-9._-]/g, '_')}.log`);
   return new Promise((resolve) => {
     const out = createWriteStream(log);
-    const child = spawn('pnpm', ['run', name], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'], shell: process.platform === 'win32' });
+    const { command, args, options } = spawnSpec(['pnpm', 'run', name]);
+    const child = spawn(command, args, { cwd: root, stdio: ['ignore', 'pipe', 'pipe'], ...options });
     child.stdout.pipe(out, { end: false });
     child.stderr.pipe(out, { end: false });
     let settled = false;

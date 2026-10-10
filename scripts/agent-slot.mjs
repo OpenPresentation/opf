@@ -13,6 +13,7 @@ import { mkdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'no
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { spawnSpec } from './package-manager.mjs';
 
 export const DEFAULT_SLOTS = 3;
 export const STALE_MS = 2 * 60 * 60 * 1000;
@@ -168,17 +169,11 @@ export async function acquire({ dir = slotDir(), count = slotCount(), command, p
   }
 }
 
-function quote(arg) {
-  return /[\s"&|<>^()%!]/.test(arg) || arg === '' ? `"${arg.replaceAll('"', '\\"')}"` : arg;
-}
-
 function run(argv, held) {
   return new Promise((resolve) => {
     const env = held ? { ...process.env, [HELD_ENV]: '1' } : process.env;
-    const child =
-      process.platform === 'win32'
-        ? spawn(argv.map(quote).join(' '), { stdio: 'inherit', shell: true, env })
-        : spawn(argv[0], argv.slice(1), { stdio: 'inherit', env });
+    const { command, args, options } = spawnSpec(argv);
+    const child = spawn(command, args, { stdio: 'inherit', env, ...options });
     const forward = (signal) => () => {
       child.kill(signal);
     };

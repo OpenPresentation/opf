@@ -20,6 +20,7 @@ import { createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, re
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { spawnSpec } from './package-manager.mjs';
 import { checkJobs, selectChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -108,7 +109,8 @@ export function selectPackageTests(pkg, files, { suites = {}, present = [], dist
   return { ...pkg, scope: 'files', files: runnable, build };
 }
 
-const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+// The bare name: spawnSpec (scripts/package-manager.mjs) turns it into the right Windows invocation, with no shell.
+const pnpm = 'pnpm';
 const slot = (...command) => [process.execPath, path.join(root, 'scripts', 'agent-slot.mjs'), '--', ...command];
 
 function packageSteps(selection) {
@@ -169,10 +171,12 @@ function readPackages() {
   return packages;
 }
 
-function runCommand(argv, cwd, log) {
+export function runCommand(argv, cwd, log) {
   return new Promise((resolve) => {
-    const [command, ...args] = argv;
-    const child = spawn(command, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'], shell: process.platform === 'win32' });
+    // No shell: a shell joins the executable and the arguments with spaces, so "C:\Program Files\nodejs\node.exe" (or a
+    // checkout under a folder with a space) was split at the space ("'C:\Program' is not recognized", #525).
+    const { command, args, options } = spawnSpec(argv);
+    const child = spawn(command, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'], ...options });
     child.stdout.pipe(log, { end: false });
     child.stderr.pipe(log, { end: false });
     let waited = false;
@@ -185,7 +189,7 @@ function runCommand(argv, cwd, log) {
       }
     });
     child.on('error', (error) => {
-      log.write(`\ncheck-changed: could not start ${command}: ${error.message}\n`);
+      log.write(`\ncheck-changed: could not start ${argv[0]}: ${error.message}\n`);
       resolve(1);
     });
     child.on('close', (code, signal) => resolve(code ?? signal ?? 1));

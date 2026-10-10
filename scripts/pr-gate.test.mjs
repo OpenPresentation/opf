@@ -399,6 +399,56 @@ test('RR-67: jobs with the same name in different workflows do not hide each oth
   assert.equal(evaluateChecks({ checks, required: null }).state, 'red');
 });
 
+const suite = (runId, status, conclusion = null, workflow = 'CI') => ({ status, conclusion: status === 'COMPLETED' ? conclusion : null, app: { slug: 'github-actions' }, workflowRun: { databaseId: runId, event: 'pull_request', workflow: { name: workflow } } });
+
+test('#526: a cancelled check of a superseded run is ignored when a newer run of the same workflow exists', async () => {
+  const required = summarizeRules(RULES).required;
+  // Two suites of one workflow on one head: the first cancelled by concurrency, the second green.
+  const green = [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })];
+  const suites = [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'SUCCESS')];
+  assert.equal(evaluateChecks({ checks: normalizeContexts(green, HEAD), required, suites }).state, 'green');
+  assert.equal(evaluateChecks({ checks: normalizeContexts(green, HEAD), required: null, suites }).state, 'green');
+  const done = fake({ polls: [poll(pr({ contexts: green, suites }))] });
+  assert.equal((await gate(['o/r#7'], done.deps)).code, EXIT.ok);
+  assert.ok(!has(done.state.lines, /RED/));
+  // The second run is still running: its jobs are in progress (pending), or it has not created them yet (not reported).
+  const running = [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 }), pending('packages', { runId: 905, id: 20 }), pending('Verify OPF packages', { runId: 905, id: 21 })];
+  const midway = evaluateChecks({ checks: normalizeContexts(running, HEAD), required, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
+  assert.equal(midway.state, 'pending');
+  assert.deepEqual(midway.pending.sort(), ['Verify OPF packages', 'packages']);
+  const queued = [run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 })];
+  const notYet = evaluateChecks({ checks: normalizeContexts([...queued, run('packages', 'CANCELLED', { runId: 900, id: 10 })], HEAD), required, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
+  assert.equal(notYet.state, 'pending');
+  assert.deepEqual(notYet.missing, ['Verify OPF packages']);
+  const lagging = fake({ polls: [poll(pr({ contexts: [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 })], suites: [suites[0], suite(905, 'QUEUED')] })), poll(pr({ contexts: green, suites }))] });
+  const outcome = await gate(['o/r#7'], lagging.deps);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.equal(lagging.state.queries.length, 2, 'pending, not red, while the newer run has not reported');
+  assert.ok(!has(lagging.state.lines, /RED/));
+  // Without a ruleset the in-progress suite of the newer run keeps the gate pending.
+  const open = evaluateChecks({ checks: normalizeContexts([run('measure (linux)', 'CANCELLED', { runId: 900, id: 10 })], HEAD), required: null, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
+  assert.equal(open.state, 'pending');
+});
+
+test('#526: a cancelled check that is the newest run, or has no newer run, still counts as not green', () => {
+  const required = summarizeRules(RULES).required;
+  const alone = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages')], HEAD);
+  assert.equal(evaluateChecks({ checks: alone, required, suites: [suite(900, 'COMPLETED', 'CANCELLED')] }).state, 'red');
+  // Newest run cancelled, older run cancelled too: neither hides the other.
+  const both = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('packages', 'CANCELLED', { runId: 905, id: 20 }), run('Verify OPF packages')], HEAD);
+  const verdict = evaluateChecks({ checks: both, required, suites: [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'CANCELLED')] });
+  assert.equal(verdict.state, 'red');
+  assert.deepEqual(verdict.failing.map((check) => check.runId), [905]);
+  // A newer run that was itself cancelled before creating any check run does not supersede the older cancellation.
+  const empty = evaluateChecks({ checks: normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages')], HEAD), required, suites: [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'CANCELLED')] });
+  assert.equal(empty.state, 'red');
+  // A newer run of a different workflow does not supersede it, and a real failure of an older run stays red.
+  const other = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('packages', 'SUCCESS', { runId: 950, id: 30, workflow: 'Other' }), run('Verify OPF packages')], HEAD);
+  assert.equal(evaluateChecks({ checks: other, required }).state, 'red');
+  const failed = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
+  assert.equal(evaluateChecks({ checks: failed, required, suites: [suite(900, 'COMPLETED', 'FAILURE'), suite(905, 'IN_PROGRESS')] }).state, 'red');
+});
+
 test('RR-67: a lagging head with --expect-head is re-read and proceeds once GitHub serves the new head', async () => {
   const fresh = (oid) => [run('packages', 'SUCCESS', { oid }), run('Verify OPF packages', 'SUCCESS', { oid })];
   const { deps, state } = fake({ polls: [poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: NEW, contexts: fresh(NEW) }))] });

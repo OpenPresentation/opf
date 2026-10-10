@@ -69,17 +69,8 @@ jobs:
           VERSION="${GITHUB_REF_NAME#cli-v}"
           NOTES_FILE="$(mktemp)"
 
-          # The section under "## VERSION" or "## VERSION (date)", without its blank edges.
-          awk -v ver="## ${VERSION}" '
-            $0 == ver || index($0, ver " ") == 1 { found = 1; next }
-            /^## / { if (found) exit }
-            found { lines[++n] = $0 }
-            END {
-              s = 1; while (s <= n && lines[s] ~ /^[[:space:]]*$/) s++
-              e = n; while (e >= s && lines[e] ~ /^[[:space:]]*$/) e--
-              for (i = s; i <= e; i++) print lines[i]
-            }
-          ' packages/cli/CHANGELOG.md > "${NOTES_FILE}"
+          # The section under "## VERSION" or "## VERSION (date)", without its blank edges (scripts/release-notes.mjs, shared with core).
+          node scripts/release-notes.mjs --version "${VERSION}" --changelog packages/cli/CHANGELOG.md --out "${NOTES_FILE}"
 
           if [ ! -s "${NOTES_FILE}" ]; then
             echo "packages/cli/CHANGELOG.md has no '## ${VERSION}' section (or it is empty); add it before publishing." >&2
