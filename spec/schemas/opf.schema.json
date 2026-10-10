@@ -735,36 +735,40 @@
         "titleAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.titleAlignment, then the engine default."
+          "description": "Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
         },
         "contentAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.contentAlignment, then the engine default. A cover's tag and subtitle follow titleAlignment unless the slide's own design sets contentAlignment."
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. A cover's tag and subtitle follow titleAlignment unless the slide's own design sets contentAlignment."
         },
         "contentBox": {
           "type": "boolean",
-          "description": "Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default."
+          "description": "Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox, then the engine default."
         },
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then the effective value (slide design, then deck design, then the layout record's design.contentDirection), then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout record's design.contentDirection. On a slide with a template layout (OPF 0.19) it turns every flowing region of the slide into one row or one column, below the slide's own composition.mode, columns and weights, which arrange its first primary flowing region. On an automatic slide (and a 0.18 record) it sets the root arrangement mode when no composition.mode is set on the slide or on its layout record. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
           "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. It is shorthand for a placeholder group (layout.schema.json PlaceholderGroup): the slide composes exactly as on a layout record whose root composition is that weighted row or column and whose placeholders are the chart and one automatic group of the other content, and while it applies it replaces the layout record's own placeholder groups as well."
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides (and 0.18 records) only; a template layout says the same with its regions (chart-beside). When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. It is shorthand for a placeholder group (layout.schema.json PlaceholderGroup): the slide composes exactly as on a layout record whose root composition is that weighted row or column and whose placeholders are the chart and one automatic group of the other content, and while it applies it replaces the layout record's own placeholder groups as well."
         },
         "imageFit": {
           "type": "string",
           "enum": ["cover", "contain", "stretch"],
-          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFit, then 'cover'. Backgrounds set their own fit."
+          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the theme's design.imageFit, then the layout record's design.imageFit, then 'cover'. Backgrounds set their own fit."
         },
         "listBullet": {
           "type": "string",
           "enum": ["character", "image"],
-          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
+          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
+        },
+        "mirror": {
+          "type": "boolean",
+          "description": "Draw the slide's template layout mirrored (OPF 0.19): each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it."
         }
       }
     },
@@ -1894,8 +1898,8 @@
         },
         "layout": {
           "$ref": "#/$defs/CatalogReference",
-          "description": "Optional layout: a layouts reference, a bare id ('title-subtitle') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply; there is no finding. A reference that resolves nowhere is the warning opf/unresolved-reference (and the 'unresolved-reference' diagnostic of resolveSlideContext), the slide composes automatically, and a strict export fails. A layout never changes what a slide contains, and engines never substitute a different layout.",
-          "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "blank", "acme:hero"]
+          "description": "Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply; there is no finding. 'auto' is reserved, so no catalog may define a layout of that id, and opf format drops it. A layout is a grid template (layout.schema.json): the slide's content stays flat and binds to the layout's regions by reading order, role and kind, a block may pin itself to a region with 'region', and an empty region collapses. A reference that resolves nowhere is the warning opf/unresolved-reference (and the 'unresolved-reference' diagnostic of resolveSlideContext), the slide composes automatically, and a strict export fails. A layout id of the 0.18 default catalog that 0.19 no longer has is such a reference: 0.19 has no migration path for layouts. A layout never changes what a slide contains, and engines never substitute a different layout.",
+          "examples": ["cover", "pillars", "chart-beside", "auto", "acme:hero"]
         },
         "title": {
           "oneOf": [
@@ -2191,6 +2195,12 @@
           "type": "object",
           "description": "Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips."
         },
+        "region": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name (OPF 0.19). The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a warning (opf/region-unknown, opf/region-kind or opf/region-full) and the block is placed by its kind. Blocks without a pin are bound by reading order, role and kind. A pin on a nested block, or on a slide without a template layout, has no effect.",
+          "examples": ["notes", "metrics"]
+        },
         "type": {
           "type": "string",
           "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline",
@@ -2238,6 +2248,20 @@
           "$ref": "#/$defs/NumberingSpec",
           "description": "Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entry per level (index = level, the last entry repeats for deeper levels). Counting follows PowerPoint: consecutive entries of one level count up from its start, and an entry of a shallower level restarts the deeper levels. Absent = bullets. Valid only with `items` or `bullets`. Native PowerPoint export writes a:buAutoNum with the matching scheme and startAt; the preview draws the same numbers at the same marker geometry.",
           "examples": ["arabic", "roman-lower", { "style": "alpha-upper", "start": 3, "suffix": "paren" }, ["arabic", "alpha-lower", { "style": "roman-lower", "suffix": "paren-both" }]]
+        },
+        "columns": {
+          "oneOf": [
+            {
+              "const": "auto"
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            }
+          ],
+          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, the largest allowed count shrinks towards minFontSize. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
+          "examples": ["auto", 2]
         },
         "image": {
           "$ref": "#/$defs/Asset",
@@ -2579,6 +2603,27 @@
                 }
               ]
             }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "columns"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "items"
+                ]
+              },
+              {
+                "required": [
+                  "bullets"
+                ]
+              }
+            ]
           }
         }
       ]

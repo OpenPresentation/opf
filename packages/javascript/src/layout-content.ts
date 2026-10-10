@@ -1,3 +1,5 @@
+import { isLayoutTemplate, layoutRegion } from './layout-template.js';
+
 /** Placeholder kinds that hold slide content (everything except the three heading kinds). */
 export const LAYOUT_BODY_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'] as const;
 export type LayoutBodyKind = typeof LAYOUT_BODY_KINDS[number];
@@ -78,6 +80,9 @@ export function layoutLeaves(layout: { placeholders?: unknown } | null | undefin
  * `title, column (text, text), chart`. Pickers and catalog pages show it where a flat list of kinds would hide the structure.
  */
 export function layoutStructure(layout: { placeholders?: unknown } | null | undefined): string {
+  // OPF 0.19: a template reads as its areas in reading order, each region with its flow and accepted kinds:
+  // `title, chart (none: chart), notes (column: text, list, metric, quote, chart)`.
+  if (isLayoutTemplate(layout)) return templateAreas(layout).map(entry => entry.region ? `${entry.name} (${entry.region.flow}: ${entry.region.accepts.join(', ')})` : entry.name).join(', ');
   const describe = (slots: LayoutSlot[]): string => slots.map(slot => {
     if (!slot.children) return slot.type;
     const mode = record(slot.placeholder.composition).mode;
@@ -97,6 +102,15 @@ export function hasPlaceholderGroups(layout: { placeholders?: unknown } | null |
  * through their leaves.
  */
 export function layoutContent(layout: { placeholders?: ReadonlyArray<unknown> } | null | undefined): LayoutContent {
+  // OPF 0.19: a template's content is its regions: `count` is the number of body regions, `kind` the first kind the first
+  // primary region accepts (else the first region's), and a title area holds the tag, title and subtitle.
+  if (isLayoutTemplate(layout)) {
+    const areas = templateAreas(layout), regions = areas.flatMap(entry => entry.region ? [entry.region] : []);
+    const lead = regions.find(region => region.role === 'primary') ?? regions[0];
+    const leadKind = lead?.accepts.find(kind => kind !== 'group');
+    const title = areas.some(entry => entry.name === 'title');
+    return { kind: leadKind ?? 'title', count: regions.length, heading: { title, subtitle: title || areas.some(entry => entry.name === 'subtitle'), tag: title } };
+  }
   const heading = { title: false, subtitle: false, tag: false };
   const counts = new Map<LayoutBodyKind, number>();
   let count = 0;
@@ -116,4 +130,17 @@ export function layoutContent(layout: { placeholders?: ReadonlyArray<unknown> } 
   // Map iteration follows first insertion, so a tie keeps the kind that appears first.
   for (const [candidate, total] of counts) if (total > best) { kind = candidate; best = total; }
   return { kind, count, heading };
+}
+
+/** The named areas of a template in reading order, with the region of each body area. Tolerates an invalid template. */
+function templateAreas(layout: unknown): { name: string; region?: ReturnType<typeof layoutRegion> }[] {
+  const value = record(layout), regions = record(value.regions);
+  const rows = Array.isArray(value.areas) ? value.areas.filter((row): row is string => typeof row === 'string') : [];
+  const seen = new Set<string>(), out: { name: string; region?: ReturnType<typeof layoutRegion> }[] = [];
+  for (const row of rows) for (const name of row.trim().split(/\s+/)) {
+    if (!name || name === '.' || seen.has(name)) continue;
+    seen.add(name);
+    out.push(name === 'title' || name === 'subtitle' || !Object.hasOwn(regions, name) ? { name } : { name, region: layoutRegion(name, regions[name]) });
+  }
+  return out;
 }

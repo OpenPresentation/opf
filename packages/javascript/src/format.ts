@@ -6,7 +6,8 @@
 // `allOf` and `then`/`else`). Keys the schema does not declare (extensions,
 // catalog records, custom colours, unknown fields) follow the declared ones
 // in their original relative order, so formatting never reorders user data
-// that has no canonical order. Array order and every value are untouched.
+// that has no canonical order. Array order and every value are untouched, with one exception: a slide's
+// `layout: "auto"` is dropped, since no layout is automatic composition (OPF 0.19).
 // Text layout is two-space indentation, LF line endings, no BOM, one trailing
 // newline. Formatting is idempotent: formatting formatted text changes nothing.
 import { presentation } from "./schemas.js";
@@ -102,7 +103,10 @@ export function format(input: unknown, options: FormatOptions = {}): string {
   const indent = options.indent ?? 2;
   if (!Number.isInteger(indent) || indent < 0 || indent > 8) throw new OPFFormatError("indent must be an integer from 0 to 8.");
   if (options.eol !== undefined && options.eol !== "lf" && options.eol !== "crlf") throw new OPFFormatError("eol must be lf or crlf.");
-  const text = JSON.stringify(sortPresentationKeys(document), null, indent);
+  const sorted = sortPresentationKeys(document) as unknown;
+  const slides = sorted !== null && typeof sorted === "object" && !Array.isArray(sorted) ? (sorted as { slides?: unknown }).slides : undefined;
+  if (Array.isArray(slides)) for (const slide of slides) if (slide !== null && typeof slide === "object" && (slide as { layout?: unknown }).layout === "auto") delete (slide as { layout?: unknown }).layout;
+  const text = JSON.stringify(sorted, null, indent);
   if (text === undefined) throw new OPFFormatError("Nothing to format.");
   return options.eol === "crlf" ? `${text.replaceAll("\n", "\r\n")}\r\n` : `${text}\n`;
 }

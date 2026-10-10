@@ -82,7 +82,8 @@ export function resolveSlideContext(presentation: unknown, index: number, option
 
   let layout: Rec | undefined;
   let layoutProvenance: RecordProvenance | undefined;
-  if (typeof slide.layout === 'string') {
+  // `layout: "auto"` is automatic composition (OPF 0.19): reserved, never looked up, never reported.
+  if (typeof slide.layout === 'string' && slide.layout !== 'auto') {
     const found = resolveReference(presentation, 'layouts', slide.layout, catalogs);
     if (found) {
       layout = { ...found.record };
@@ -102,6 +103,8 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     fontFamilies: resolveFontFamilies(fontScheme),
     darkBackground: resolveColorRoles(colorScheme, { background: decisionColor(design.background ?? theme.background, colorScheme, rec(deck.variables)) }).dark,
     ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
+    // OPF 0.19: a theme may carry the shared design keys (between the deck's design and the layout record's).
+    ...(theme.design !== undefined && rec(theme.design) === theme.design ? { themeDesign: theme.design } : {}),
     ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
     ...(options.date !== undefined ? { date: options.date } : {}),
   };

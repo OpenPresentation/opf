@@ -237,6 +237,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
 | [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
+| [`opf/layout-template`](#opflayout-template) | References | error | structure | A layout template's grid is malformed. |
+| [`opf/layout-region`](#opflayout-region) | References | error | structure | A layout template's regions do not match its areas. |
 | [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
 | [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
@@ -264,6 +266,10 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/unresolved-content`](#opfunresolved-content) | Layout | warning | composition | Content cannot be drawn as authored. |
 | [`opf/layout-failed`](#opflayout-failed) | Layout | warning | composition | The slide layout could not be computed. |
 | [`opf/min-font-size`](#opfmin-font-size) | Layout | warning | composition | Text is drawn smaller than the readable minimum. |
+| [`opf/region-unknown`](#opfregion-unknown) | Layout | warning | composition | A block is pinned to a region the layout does not have. |
+| [`opf/region-kind`](#opfregion-kind) | Layout | warning | composition | A block is pinned to a region that does not accept its kind. |
+| [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
+| [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
@@ -511,6 +517,24 @@ Default severity: **error**. Cost: structure. An embedded or registered catalog 
 
 **Basis.** spec/schemas/<kind>.schema.json
 
+### `opf/layout-template`
+
+Default severity: **error**. Cost: structure. A layout template's grid is malformed.
+
+**Why.** A layout (OPF 0.19) is a grid of named areas. Engines cannot compose a grid whose rows have different lengths, whose names do not form one filled rectangle each, whose column or row sizes do not match the grid, that is larger than 12 x 12, or that holds a word that is not a name or ".". composeSlide refuses such a record, so a slide that names it composes automatically.
+
+**Basis.** spec/schemas/layout.schema.json and the area rules of OPF 0.19 (docs/layout-templates.md)
+
+**Approximations.** Checked on every layout record the document embeds and every registered record it uses, once the record passes its schema.
+
+### `opf/layout-region`
+
+Default severity: **error**. Cost: structure. A layout template's regions do not match its areas.
+
+**Why.** Every body area of a layout needs a region that says what it accepts, and every region needs an area. Region names may not be title, subtitle, tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; a subtitle area needs a title area; a region with flow 'none' holds one block; overflowRegion must name a region. composeSlide refuses such a record.
+
+**Basis.** spec/schemas/layout.schema.json and the region rules of OPF 0.19 (docs/layout-templates.md)
+
 ### `opf/unresolved-reference`
 
 Default severity: **warning**. Cost: structure. A content reference resolves nowhere.
@@ -685,7 +709,7 @@ Default severity: **warning**. Cost: composition. The order content is read diff
 
 **Basis.** WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")
 
-**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed.
+**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
 
 ### `opf/link-text`
 
@@ -773,6 +797,30 @@ Default severity: **warning**. Cost: composition. Text is drawn smaller than the
 **Thresholds.** `minFontSizePt` (default 11)
 
 **Approximations.** Sizes are those composeSlide fitted, expressed on the 13.33 x 7.5 in reference slide (96 px per inch, so 1 px is 0.75 pt; a smaller canvas scales type down with it) and explicit run fontSize values in points. Per payload, the smallest part (a metric label or a quote attribution) is reported. Table cell text (default 11.25 pt), code and header/footer furniture are not checked.
+
+### `opf/region-unknown`
+
+Default severity: **warning**. Cost: composition. A block is pinned to a region the layout does not have.
+
+**Why.** A region pin (`region` on a root block) names a region of the slide's layout. A name the layout does not have is ignored: the block is placed by its kind, which may not be where the author meant.
+
+### `opf/region-kind`
+
+Default severity: **warning**. Cost: composition. A block is pinned to a region that does not accept its kind.
+
+**Why.** A region says which content kinds it takes. A pin to a region that does not take the block's kind is ignored and the block is placed by its kind.
+
+### `opf/region-full`
+
+Default severity: **warning**. Cost: composition. A block is pinned to a region that is already full.
+
+**Why.** A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.
+
+### `opf/layout-unplaced`
+
+Default severity: **warning**. Cost: composition. No region of the layout has room for a block.
+
+**Why.** Content is never dropped: a block no region has room for is drawn in the layout's overflow region beyond its max (or below the grid), where it crowds the others. Paginate moves it to a continuation slide with the same layout.
 
 ### `opf/font-outside-scheme`
 

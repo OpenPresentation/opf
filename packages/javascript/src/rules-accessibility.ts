@@ -430,7 +430,7 @@ const readingOrderRule = rule(
 		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
 		cost: 'composition',
 		approximations:
-			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed.',
+			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
 	},
 );
 
@@ -453,8 +453,15 @@ const readingOrderRules: ValidationRule[] = [
 					});
 				}
 				if (body.length < 2) continue;
-				const visual = visualOrder(body, slide.rtl);
-				const composed = body.map((item) => item.path);
+				// OPF 0.19: on a template slide the expected order is the binding order (the regions in reading order, then the
+				// blocks of each region, a grid row by row), not the visual order of the boxes: side-by-side regions and a
+				// group's picture over its caption read region by region and block by block. Placed images and the row below
+				// the grid are not in a region and are not compared.
+				const regions = composition.regions;
+				const ordered = regions ? body.filter((item) => item.region !== undefined) : body;
+				if (ordered.length < 2) continue;
+				const visual = regions ? bindingOrder(ordered, regions) : visualOrder(ordered, slide.rtl);
+				const composed = ordered.map((item) => item.path);
 				const index = composed.findIndex((path, i) => path !== visual[i]);
 				if (index < 0) continue;
 				const name = (path: string) => shortField(path);
@@ -470,6 +477,20 @@ const readingOrderRules: ValidationRule[] = [
 	},
 ];
 
+/** A template slide's items in binding order: by region (reading order), then by the block that holds them, then as composed. */
+function bindingOrder(items: readonly { path: string; region?: string }[], regions: readonly { name: string; content: readonly string[]; overflow?: readonly string[] }[]): string[] {
+	const rank = new Map(regions.map((region, index) => [region.name, index]));
+	const blockRank = (item: { path: string; region?: string }) => {
+		const region = regions.find((entry) => entry.name === item.region);
+		const blocks = region ? [...region.content, ...(region.overflow ?? [])] : [];
+		const found = blocks.findIndex((block) => item.path === block || item.path.startsWith(`${block}.`));
+		return found < 0 ? blocks.length : found;
+	};
+	return items
+		.map((item, index) => ({ item, index, region: rank.get(item.region ?? '') ?? regions.length, block: blockRank(item) }))
+		.sort((a, b) => a.region - b.region || a.block - b.block || a.index - b.index)
+		.map((entry) => entry.item.path);
+}
 function visualOrder(items: readonly { path: string; box: { x: number; y: number; width: number; height: number } }[], rtl: boolean): string[] {
 	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
 	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.

@@ -17,6 +17,7 @@ const KEYS = {
   chartPrimary: ['left', 'top'],
   imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
+  mirror: [true, false],
 };
 
 test('the shared key list; the helper is an engine name on the composition entry, not the root', () => {
