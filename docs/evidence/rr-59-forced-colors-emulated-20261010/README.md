@@ -19,7 +19,7 @@ Item: RR-59 follow-up [opf-render#170](https://github.com/OpenPresentation/opf-r
 | `@openpresentation/opf` | 0.18.1 (the renderer's dependency; the core checkout is `cf85102c`) |
 | Not involved | opf-pptx and opf-editor (no PPTX or editor code is exercised) |
 
-CI runs the same suite (`browser:forced-colors-browser`) in the pinned Playwright 1.63.0 Chromium container on Linux; its result is on [opf-render#216](https://github.com/OpenPresentation/opf-render/pull/216).
+CI runs the same suite (`browser:forced-colors-browser`) in the pinned Playwright 1.63.0 Chromium container on Linux, and it passed there on head `243a1e0f` of [opf-render#216](https://github.com/OpenPresentation/opf-render/pull/216) (4 of 4 checks green). The Linux Chromium is a second emulation with its own palette (see below), so the suite has seen two browsers.
 
 ## What was checked
 
@@ -49,9 +49,13 @@ Screenshots (not committed): per case a full-page deck, one image per focused co
 
 The first run failed on disabled controls only. A control with `aria-disabled="true"` (Previous on the first slide, Next on the last) keeps `opacity: 0.45` under forced colors, so its frame and its focus ring were blended 45% into `Canvas` instead of being drawn in a system colour: the ring was no longer the system `Highlight` colour (no exact ring pixels in the screenshot), and a disabled button looked like a faded enabled one rather than `GrayText`. The fix, in opf-render (`src/element.js` for the deck, `src/player.js` for the slideshow and the speaker view): inside `@media (forced-colors: active)`, `button[aria-disabled="true"] { opacity: 1; color: GrayText; border-color: GrayText; }`. Nothing changes outside forced colors. The suite fails on the old CSS and passes on the new.
 
+### Linux CI, and one test bug it exposed
+
+The first CI run failed only the focus-ring pixel check (every other check passed on Linux). Linux Chromium computes the focus outline as the system colour at alpha 0.8 (`rgba(5, 0, 73, 0.8)` in light, where Windows Edge gives the opaque `rgb(55, 0, 110)`), so the ring is drawn as that colour blended over Canvas (`rgb(55, 51, 109)` over white). The test compared the opaque colour; it now composites the ring over Canvas before comparing, and also requires 3:1 contrast between the drawn ring and Canvas. This was a test defect, not a product one: the ring was drawn in a system colour in both browsers. It also shows that the emulated palette differs between Chromium builds, which is why the suite asserts system colours and not values.
+
 ## Caveats
 
 - **Emulation, not the Windows contrast themes.** Chromium's emulation uses its own default forced palette for the emulated scheme (above). The real Windows themes (Aquatic, Desert, Dusk, Night sky, and custom ones) use other system colours; macOS Increase Contrast and other browsers (Firefox, Safari) were not run. The test asserts system colours, not values, so it does not depend on this palette, but it has only seen it.
 - **The slide drawing is not recoloured.** An inline SVG keeps its own fills, so slide content is not verified for contrast against any contrast theme; only its boundary and the surrounding controls are.
 - **No assistive technology.** See the owner decision above. This note says nothing about screen-reader behaviour, and the public copy says "not tested with assistive technology".
-- Edge 154 is the local browser; CI uses the Playwright Chromium of the pinned container.
+- Edge 154 on Windows is the local browser; CI uses the Playwright Chromium of the pinned Linux container. Neither is a Windows contrast theme.
