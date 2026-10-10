@@ -6,8 +6,8 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { validate } from "@openpresentation/opf";
 import { CONTENT_KINDS, DISPLAY_KINDS, readKind } from "../scripts/build.mjs";
+import { rendererCore } from "../scripts/stability.mjs";
 import { CATALOG_SCHEMA, GALLERY_SOURCE, catalogDisplay, catalogIndexes, catalogManifest, gallery } from "../dist/index.js";
 import { getLayoutPreview, hasLayoutPreview, layoutPreviewIndex, layoutPreviewSlugs, layoutPreviews } from "../dist/previews.js";
 
@@ -58,7 +58,9 @@ test("every kind matches the hashes its index and the manifest record", async ()
   }
 });
 
-test("core resolves gallery records when it is registered", () => {
+test("core resolves gallery records when it is registered", async () => {
+  // The core of the pinned renderer: the gallery has no direct core dependency (RR-78).
+  const { validate } = (await rendererCore()).module;
   const deck = { name: "t", design: { theme: "minimal" }, narrative: "scqa", slides: [{ layout: "two-column", title: "A", blocks: [{ items: ["x"] }, { items: ["y"] }] }] };
   const unresolved = (report) => report.findings.filter((finding) => finding.ruleId === "opf/unresolved-reference").map((finding) => finding.path);
   assert.ok(unresolved(validate(deck, { only: ["format", "references"], catalogs: [] })).length > 0, "nothing resolves without the gallery");

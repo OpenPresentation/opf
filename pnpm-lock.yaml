@@ -86,9 +86,6 @@ importers:
 
   packages/gallery:
     devDependencies:
-      '@openpresentation/opf':
-        specifier: 0.18.1
-        version: 0.18.1(@openpresentation/opf-render@0.18.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5))
       '@openpresentation/opf-render':
         specifier: 0.18.0
         version: 0.18.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5)

@@ -5,8 +5,15 @@
     "moduleResolution": "nodenext",
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": false,
-    "types": []
+    "skipLibCheck": true,
+    "types": [],
+    "paths": {
+      "@openpresentation/opf": [
+        "../../javascript/dist/index.d.ts"
+      ]
+    }
   },
-  "files": ["types.ts"]
+  "files": [
+    "types.ts"
+  ]
 }
