@@ -37,11 +37,11 @@ button[aria-disabled="true"] { opacity: 0.45; cursor: default; }
 .counter { min-width: 4.5em; text-align: center; font-variant-numeric: tabular-nums; }
 .thumbs-wrap { min-width: 0; }
 .thumbs { position: relative; display: flex; gap: 8px; margin: 0; padding: 4px 2px; list-style: none; overflow-x: auto; scroll-snap-type: x proximity; }
-.thumbs li { flex: 0 0 auto; width: 132px; scroll-snap-align: center; }
-.thumb { display: block; width: 100%; padding: 0; min-height: 0; overflow: hidden; background: var(--opf-deck-stage, #f1f1f1); }
+.thumbs li { position: relative; flex: 0 0 auto; width: 132px; scroll-snap-align: center; }
+.thumbs .frame { display: block; box-sizing: content-box; aspect-ratio: var(--ratio, 16 / 9); overflow: hidden; border: 1px solid transparent; border-radius: var(--opf-deck-radius, 6px); background: var(--opf-deck-stage, #f1f1f1); }
+.thumbs .frame svg.opf-slide { display: block; width: 100%; height: 100%; pointer-events: none; }
+.thumb, .thumbs .thumb:hover { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; min-height: 0; background: transparent; }
 .thumb[aria-current="true"] { outline: 3px solid var(--opf-deck-accent, Highlight); outline-offset: 0; }
-.thumb .frame { display: block; width: 100%; aspect-ratio: var(--ratio, 16 / 9); }
-.thumb svg.opf-slide { display: block; width: 100%; height: 100%; pointer-events: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .flip { display: inline-block; }
 .rtl .flip { transform: scaleX(-1); }
@@ -456,13 +456,15 @@ function createElementClass() {
         button.setAttribute("part", "thumbnail");
         button.setAttribute("aria-label", `Go to ${slideLabel(info, position + 1, sequence.length)}`);
         button.tabIndex = position === cursor.position ? 0 : -1;
+        // The drawing is a sibling under the button, not its content: the slide's own text is not the button's visible
+        // label (axe label-content-name-mismatch, WCAG 2.5.3), and the button's name is the slide's label. The button
+        // stays the first child (#markThumbnail) and covers the drawing (CSS), so it takes every click.
         const frame = doc.createElement("span");
         frame.className = "frame";
         frame.style.setProperty("--ratio", `${first.width} / ${first.height}`);
         frame.setAttribute("aria-hidden", "true");
-        button.append(frame);
         button.addEventListener("click", () => { this.#announce = true; this.#go(() => this.#cursor?.goto(position + 1)); });
-        li.append(button);
+        li.append(button, frame);
         li._frame = frame; li._index = index;
         return li;
       });

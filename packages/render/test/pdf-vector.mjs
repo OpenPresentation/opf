@@ -216,7 +216,7 @@ for (const { name, deck, expect } of roundTrips) {
   const pdf = await toPdf(svg, options);
   assert.deepEqual(pdf, await toPdf(svg, options));
   const digest = createHash("sha256").update(pdf).digest("hex");
-  assert.equal(digest, "8cbee56728ea77de126f11657140c90c6e23edfc5a98280b040104c4e61ca524", `fixture PDF bytes changed (${pdf.length} bytes, sha256 ${digest})`);
+  assert.equal(digest, "02feb9076249a0e498f1178de9173d440677f016915bebb52f824792b9347eb6", `fixture PDF bytes changed (${pdf.length} bytes, sha256 ${digest})`);
   const text = nfkc(await pageText(await openPdf(pdf), 1));
   for (const wanted of ["Résumé: final flow café", "日本語のテキストと漢字", "openpresentation.org", "Stretched to a measured width"]) assert.ok(compact(text).includes(compact(wanted)), `fixture text: ${wanted}`);
 }

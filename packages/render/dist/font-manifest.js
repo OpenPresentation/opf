@@ -1620,12 +1620,12 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-jp",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "pack": "scripts",
       "scripts": [
         "Jpan"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.3",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-jp/v/0.4.4",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
@@ -1640,25 +1640,25 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Sans JP",
           "weight": 400,
           "italic": false,
-          "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+          "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
         },
         {
           "file": "700Bold/NotoSansJP_700Bold.ttf",
           "family": "Noto Sans JP",
           "weight": 700,
           "italic": false,
-          "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+          "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
         }
       ]
     },
     {
       "name": "@expo-google-fonts/noto-sans-sc",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "pack": "scripts",
       "scripts": [
         "Hans"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.3",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sc/v/0.4.4",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
@@ -1686,12 +1686,12 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-tc",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "pack": "scripts",
       "scripts": [
         "Hant"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.3",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-tc/v/0.4.4",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
@@ -1719,12 +1719,12 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-kr",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "pack": "scripts",
       "scripts": [
         "Kore"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.3",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-kr/v/0.4.4",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
@@ -1739,14 +1739,14 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Sans KR",
           "weight": 400,
           "italic": false,
-          "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+          "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
         },
         {
           "file": "700Bold/NotoSansKR_700Bold.ttf",
           "family": "Noto Sans KR",
           "weight": 700,
           "italic": false,
-          "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+          "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
         }
       ]
     },
@@ -2551,7 +2551,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-color-emoji",
-      "version": "0.4.6",
+      "version": "0.4.7",
       "pack": "scripts",
       "scripts": [
         "Zsye"
@@ -2560,7 +2560,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
         "format": "COLRv1, SVG",
         "rasterFamily": "Noto Emoji"
       },
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.7",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "ac564676d10054a8445923dfc2dfb13c042d97888bd27c1b6ec6dfe89a9d8d62",
@@ -2573,18 +2573,18 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Color Emoji",
           "weight": 400,
           "italic": false,
-          "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+          "sha256": "ad4a3478943b88660a194d1434793bc02c8007819f2d1e7da9ede289e78f9ca7"
         }
       ]
     },
     {
       "name": "@expo-google-fonts/noto-emoji",
-      "version": "0.4.7",
+      "version": "0.4.8",
       "pack": "scripts",
       "scripts": [
         "Zsye"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.7",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.8",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",

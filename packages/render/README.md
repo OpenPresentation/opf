@@ -475,7 +475,7 @@ The replacement faces are an optional, hash-pinned font pack: 70 static faces fr
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { toSvg, toPng } from '@openpresentation/opf-render';
 
-// npm install @expo-google-fonts/noto-sans-jp@0.4.3 @expo-google-fonts/noto-naskh-arabic@0.4.5
+// npm install @expo-google-fonts/noto-sans-jp@0.4.4 @expo-google-fonts/noto-naskh-arabic@0.4.5
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: ['Jpan', 'Arab'] });
 const slides = toSvg(presentation, { fonts });
 const png = await toPng(slides[0], { fonts });
