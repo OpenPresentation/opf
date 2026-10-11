@@ -118,6 +118,58 @@ export function parseArgs(argv) {
 const CONTEXT_NODES =
   'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
 const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event workflow{name}}}}`;
+const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
+const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
+/** Actual check runs are authoritative when GitHub has not materialized a rollup. Never synthesize success from a suite. */
+export async function suiteContexts(graphql, owner, name, oid) {
+  const nodes = [], suites = [], seenSuites = new Set(), suiteCursors = new Set();
+  const fetch = async query => {const result = await graphql(query);if(result?.errors?.length) throw new Error('check-suite GraphQL response contains errors');return result;};
+  const validatePage = connection => {if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean') throw new Error('check-suite pagination is incomplete');};
+  const appendRuns = (runs, suiteId) => {
+    for (const run of runs.nodes ?? []) {
+      if (run.checkSuite?.id !== suiteId || run.checkSuite?.commit?.oid !== oid) throw new Error('check run belongs to a different or missing commit');
+      nodes.push(run);
+    }
+  };
+  let cursor = null;
+  do {
+    const after = cursor ? `,after:${JSON.stringify(cursor)}` : '';
+    const response = await fetch(`query{rateLimit{remaining resetAt cost} repository(owner:${JSON.stringify(owner)},name:${JSON.stringify(name)}){object(oid:${JSON.stringify(oid)}){... on Commit{oid status{contexts{context state targetUrl createdAt}} checkSuites(first:50${after}){pageInfo{hasNextPage endCursor} nodes{${SUITE_FIELDS}}}}}}}`);
+    const commit = response?.data?.repository?.object;
+    if (commit?.oid !== oid) throw new Error('check-suite fallback returned a different commit');
+    if (!cursor) for (const context of commit.status?.contexts ?? []) nodes.push({...context, __typename:'StatusContext', commit:{oid}});
+    const connection = commit.checkSuites;
+    validatePage(connection);
+    for (const suite of connection.nodes ?? []) {
+      if (typeof suite.id !== 'string' || !suite.id) throw new Error('check suite lacks identity');
+      if (suite.commit?.oid !== oid) throw new Error('check suite belongs to a different commit');
+      if (seenSuites.has(suite.id)) throw new Error('duplicate check suite in pagination');
+      seenSuites.add(suite.id);
+      suites.push(suite);
+      const firstRun = nodes.length;
+      let runs = suite.checkRuns;
+      validatePage(runs);
+      const runCursors = new Set();
+      appendRuns(runs, suite.id);
+      while (runs.pageInfo?.hasNextPage) {
+        if (typeof runs.pageInfo.endCursor !== 'string' || !runs.pageInfo.endCursor) throw new Error('check-run pagination lacks cursor');
+        if (runCursors.has(runs.pageInfo.endCursor)) throw new Error('repeated check-run cursor');
+        runCursors.add(runs.pageInfo.endCursor);
+        const next = await fetch(`query{rateLimit{remaining resetAt cost} node(id:${JSON.stringify(suite.id)}){... on CheckSuite{id commit{oid} checkRuns(first:100,after:${JSON.stringify(runs.pageInfo.endCursor)}){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}}}}`);
+        if (next?.data?.node?.id !== suite.id || next.data.node.commit?.oid !== oid) throw new Error('check-run pagination returned a different suite or commit');
+        runs = next.data.node.checkRuns;
+        validatePage(runs);
+        appendRuns(runs, suite.id);
+      }
+      if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !nodes.slice(firstRun).some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion))) throw new Error('failed check suite has no corresponding failed check run');
+    }
+    if (connection.pageInfo.hasNextPage && (typeof connection.pageInfo.endCursor !== 'string' || !connection.pageInfo.endCursor)) throw new Error('check-suite pagination lacks cursor');
+    cursor = connection.pageInfo.hasNextPage ? connection.pageInfo.endCursor : null;
+    if (cursor && suiteCursors.has(cursor)) throw new Error('repeated check-suite cursor');
+    if (cursor) suiteCursors.add(cursor);
+  } while (cursor);
+  return {nodes,suites};
+}
 const PR_FIELDS = `id number url state merged isDraft mergeCommit{oid} headRefOid baseRefName mergeable mergeStateStatus isInMergeQueue mergeQueueEntry{state position} timelineItems(last:1,itemTypes:[REMOVED_FROM_MERGE_QUEUE_EVENT]){nodes{... on RemovedFromMergeQueueEvent{reason createdAt}}} commits(last:1){nodes{commit{oid ${CHECKS}}}}`;
 const COMMIT_FIELDS = `... on Commit{oid ${CHECKS}}`;
 
@@ -407,6 +459,11 @@ export async function runGate(options, deps) {
 
   async function fullContexts(repo, commit) {
     const rollup = commit?.statusCheckRollup;
+    if (!rollup) {
+      const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
+      commit.checkSuites = {nodes:fallback.suites};
+      return fallback.nodes;
+    }
     const nodes = [...(rollup?.contexts?.nodes ?? [])];
     let page = rollup?.contexts?.pageInfo;
     while (page?.hasNextPage && page.endCursor) {
