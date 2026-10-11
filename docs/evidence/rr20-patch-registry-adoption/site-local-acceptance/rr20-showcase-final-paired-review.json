@@ -1,0 +1,15 @@
+{
+  "source": "unmodified pnpm build:showcase:registry",
+  "session": 57501,
+  "exitCode": 0,
+  "mappedSession": 30686,
+  "mappedExit": 0,
+  "matchesIndependentlyReviewedRehearsal": true,
+  "files": {
+    "example.pptx": "f9beb8e73f66a18c0e0f4ca2f80b8ef227ef512bca85da8feb3d03bb3e6200db",
+    "example.svg": "eb39cbf3fea28251e415259013acfea8e55d9f723ba1e115a73d0c3cecbda9d4",
+    "example.opf.json": "f9a7671f5b685f9ffb6ed53a62d61d984658220ee8aadb58c85a43becabd3b1c",
+    "manifest.json": "cf29209b55585d9fc31e29a76db4357ed7d0e16ded7ff3189254c1d06389721e"
+  },
+  "copiedTo": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/public/showcase"
+}
