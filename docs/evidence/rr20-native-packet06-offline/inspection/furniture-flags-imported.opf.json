@@ -1,0 +1,46 @@
+{
+  "slides": [
+    {
+      "design": {
+        "header": false,
+        "footer": {}
+      },
+      "title": "False and empty",
+      "text": "Scalar body false and empty."
+    },
+    {
+      "design": {
+        "header": {},
+        "footer": false
+      },
+      "title": "Empty and false",
+      "text": "Scalar body empty and false."
+    },
+    {
+      "design": {
+        "header": {
+          "left": {
+            "text": ""
+          },
+          "center": {
+            "date": false
+          }
+        },
+        "footer": {
+          "right": {
+            "text": ""
+          }
+        }
+      },
+      "title": "Inactive fields",
+      "text": "Scalar body inactive fields."
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

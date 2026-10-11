@@ -1,0 +1,35 @@
+{
+  "slides": [
+    {
+      "title": "histogram",
+      "chart": {
+        "type": "histogram",
+        "data": {
+          "columns": [
+            "Sample"
+          ],
+          "rows": [
+            [
+              3
+            ],
+            [
+              5
+            ],
+            [
+              8
+            ],
+            [
+              13
+            ],
+            [
+              5.5
+            ],
+            [
+              9
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}
