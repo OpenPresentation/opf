@@ -1,0 +1,466 @@
+{
+  "node": "v24.21.0",
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "53b5a95635ebeb1076a0364a5d5ec00d54c49573248b4169421ea8b1957b2d97",
+    "@openpresentation/opf/dist/chunk-ZPCKGGI6.js": "bc344abd2634e9d99bc049f161b99cb90f1c0c74b64282f90f40bbe96a66b7bd",
+    "@openpresentation/opf/dist/validator.js": "fe6381eeff49af4f73c3a212f57b3ce8009701c222eef156d11e30d3368e6985",
+    "@openpresentation/opf/dist/chunk-65GDO6TJ.js": "b2178fd8fb3bf52beb30409ff7c823d2373ba2500a346c6f9378ed951f60baef",
+    "@openpresentation/opf/dist/chunk-R5T4H4ZV.js": "58b52c08ddbe43a783a270dcf8d7e944f59e22e7e2aba8cf90508074b9d2655d",
+    "@openpresentation/opf/dist/index.js": "4813375b5e33b56747fccbc6a697805253ac7365e329219cc00516afb6200851",
+    "@openpresentation/opf/dist/chunk-OOT5AY4V.js": "b738e5cd5b01260b6d56812aabc3a877a897d36fa68a91b92c35f82eb2269c34",
+    "@openpresentation/opf/dist/chunk-V3RGXJJS.js": "3d69443d5220447616b388920f8aa9dfe175a5a496a77e7030199eda5ab4a797",
+    "@openpresentation/opf/dist/chunk-AK4UXIRP.js": "50c7291ffde3563562d1661184171aa462d62dbeabbae42c84ba0e682e5da8a9",
+    "@openpresentation/opf/dist/chunk-WHKFIFN7.js": "90ac3b89af2fc95f4f97f58677a76f2599a79883f8305c514874d579e6de92ca",
+    "@openpresentation/opf/dist/chunk-UJSAR6GF.js": "57eb2cf7b2398ddb590d27a021de6f7b8dd337d93f643868abbae4c70b23938d",
+    "@openpresentation/opf/dist/chunk-GRN3U5JT.js": "557048eaa4415adabe68bb94691fc58b94a75d59bcf039820876c0be5fff3a2a",
+    "@openpresentation/opf/dist/chunk-FGUQHD37.js": "3c12df62cc607a63ca1fddfc75c6998216927bb52fba487b72c7b303b49e24a6",
+    "@openpresentation/opf/dist/chunk-LRPSMQ62.js": "8359661e92cc783f33156d1452d8277726801cc864008095825f323e60d5ba33",
+    "@openpresentation/opf/dist/chunk-HBFRNOP4.js": "6d0013623e28a6117beee391773b976a1a634142e5f2f9f4e7b4540429387277",
+    "@openpresentation/opf/dist/chunk-YAHPQRVU.js": "e04f43f0112166b86aadf3cecb78ef6784cfc625bc7373f7b2897567f92d0af6",
+    "@openpresentation/opf/dist/chunk-SIQWYDFF.js": "b5c39993090cb0023fe7ab9633927b53d663dcab96138b2f20560f5c82275e21",
+    "@openpresentation/opf/dist/chunk-A6COIVTD.js": "a31a59881b55c53ec7539c280e850fa64aececf63221be96870e0b1ff9893034",
+    "@openpresentation/opf/dist/chunk-SEUJIS55.js": "79cebcccf8a37a6c47044a605dabd6e57b28e6782710394ba821159fde43823d",
+    "@openpresentation/opf/dist/chunk-OVBGGGKO.js": "81c1638f2895b83ce6c012eee89b17022c245c1a6fce2bf07ee4261a9a0b5cb2",
+    "@openpresentation/opf/dist/chunk-F7PLNWHQ.js": "ef122ad1185c83102a0436af5fb6dc474558719b6d8faef2a471b6574c875124",
+    "@openpresentation/opf/package.json": "f42e3236dda05bb120fb3024f39949b9b4a0abaf5d786ac1692a4e9aeecd14d4",
+    "@openpresentation/opf-render/dist/annotations.js": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738",
+    "@openpresentation/opf-render/dist/chart-options.js": "c383eaca8d6493f2619552693a3f556f240df22995a4721b8ee545312fa99f6e",
+    "@openpresentation/opf-render/dist/charts.js": "7b4356ffab4863fd09304a219015a51d366c02bb2a924b6f8ee870e50e1b96e4",
+    "@openpresentation/opf-render/dist/color-fonts.js": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468",
+    "@openpresentation/opf-render/dist/font-manifest.js": "16d0b4141054f42c66f3aa9a4f146362693825689c442c8ee693832b729fa699",
+    "@openpresentation/opf-render/dist/converters.js": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b",
+    "@openpresentation/opf-render/dist/svg.js": "2e1ad2e5e4db7f2d1fba8ba7a07f2bbef2f2b2c06a8edbfafb2d7a0d8311f32b",
+    "@openpresentation/opf-render/dist/script-fonts.js": "fb6258c314522a272965dd16748b29ac1b757f851e9652b47d80007b699782fb",
+    "@openpresentation/opf-render/dist/symbol-fonts.js": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a",
+    "@openpresentation/opf-render/dist/drawn-faces.js": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f",
+    "@openpresentation/opf-render/dist/font-fstype.js": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869",
+    "@openpresentation/opf-render/dist/slide-sources.js": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3",
+    "@openpresentation/opf-render/dist/deck-runtime.js": "d5352fcc2395cf5db62bcdbe46ac86170ed0a4b1b5a2d36521a49b52c7c54dc2",
+    "@openpresentation/opf-render/dist/element-define.js": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba",
+    "@openpresentation/opf-render/dist/element.js": "68857bd5cec1c20e8c7bddecc1fdf2b9af6b206905dd890ab02d28bf966c54b3",
+    "@openpresentation/opf-render/dist/preview-fonts.js": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "84980d17d47304ec4646830385f5daa94ac734113ded3139c796599c6f8ed659",
+    "@openpresentation/opf-render/dist/font-registry.js": "a15f6f44437436856171c03e19c0897272bf53be72122c281d6c3272f75b03c5",
+    "@openpresentation/opf-render/dist/sha256.js": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b",
+    "@openpresentation/opf-render/dist/lazy-font-list.js": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266",
+    "@openpresentation/opf-render/dist/lazy-fonts.js": "77f6f5c56d38ad3b8560a7668d267f46f1a79ab450c9aaba0d0d8e2a2f8936c5",
+    "@openpresentation/opf-render/dist/text-paths.js": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da",
+    "@openpresentation/opf-render/dist/pdf-fonts.js": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781",
+    "@openpresentation/opf-render/dist/pdf-subset.js": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1",
+    "@openpresentation/opf-render/dist/pdf-writer.js": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6",
+    "@openpresentation/opf-render/dist/pdf-text.js": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758",
+    "@openpresentation/opf-render/dist/pdf-xml.js": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669",
+    "@openpresentation/opf-render/dist/pdf-style.js": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041",
+    "@openpresentation/opf-render/dist/font-subset.js": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc",
+    "@openpresentation/opf-render/dist/hb-shape.js": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2",
+    "@openpresentation/opf-render/dist/script-font-pack.js": "bd9505c1c88d3d25fbda8fc07d39aef374e242c3a8e5f739c07c5199bbcf9b90",
+    "@openpresentation/opf-render/dist/export-browser.js": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8",
+    "@openpresentation/opf-render/dist/pdf-vector.js": "a0cd88ce4083410925569b361fd751907877ed1e003f1a33b693c0b0064c0e39",
+    "@openpresentation/opf-render/dist/fonts-node.js": "dee0a31e6086b7061582cea772f6331c091cbed49396eab1de1ebba94da1baab",
+    "@openpresentation/opf-render/dist/node-resolve.js": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f",
+    "@openpresentation/opf-render/dist/fonts.js": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b",
+    "@openpresentation/opf-render/dist/index.js": "571367765a59c7cffe60606b4a6de2358832a106332c199b4dc9b64859a2c459",
+    "@openpresentation/opf-render/dist/raster.js": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705",
+    "@openpresentation/opf-render/dist/raster-images.js": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303",
+    "@openpresentation/opf-render/dist/raster-text.js": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14",
+    "@openpresentation/opf-render/dist/pdf.js": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c",
+    "@openpresentation/opf-render/dist/player.js": "56434862f15805818bbda69b62a7cd46a26c1a09ce73b75c74e209ba63b96357",
+    "@openpresentation/opf-render/dist/png.js": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5",
+    "@openpresentation/opf-render/dist/preview-fonts-cli.js": "c8c3746309f8418af924b660cca9f525886917c3368054b268ac63961edd4698",
+    "@openpresentation/opf-render/dist/preview-fonts-node.js": "5863537db697ad38c5c772a013857ef4d62dc4e81e330764860035e0c2f314ae",
+    "@openpresentation/opf-render/package.json": "52087d2a16debd214a304744e969263e695397b5bd5a9980b8d93a3f2056456c",
+    "@openpresentation/opf-pptx/dist/annotation-export.js": "f45f743368b87e4c5f6f4b3c76d3f6cf3ed3fd2f78be13fce3c69c68b79e641e",
+    "@openpresentation/opf-pptx/dist/annotation-provenance.js": "c299b7a89e565dbd22fd3c1189ff2768eeb061630b2fc92bfe364d191c53c618",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "36b8756f5bc8cfd7125f532f8a5fb8c70471d2a169cd25a8294abeff5840f143",
+    "@openpresentation/opf-pptx/dist/numbered-list.js": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557",
+    "@openpresentation/opf-pptx/dist/text-provenance.js": "8f8c7f14ffbb568eadac9f010215cb619d48c2ab8515172b059dd51f2a816b46",
+    "@openpresentation/opf-pptx/dist/background-import.js": "37e771ca998dac3e681a858dad4e0ca6fd128a18181073e45e4607fa82fd228e",
+    "@openpresentation/opf-pptx/dist/background.js": "5e73919fde05f86e37cdcc3fc975e86a3b6175eec5131d2086cdc68a3b286b20",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e",
+    "@openpresentation/opf-pptx/dist/body-text-import.js": "53537d723583d413024c036eb3c86a7c9c9ef0abbf9be15962ec7bc032f01990",
+    "@openpresentation/opf-pptx/dist/native-text-style.js": "7c48d9554b04601c9721da64e432681cf26fde2f8744ad53955cd5f485ef24dd",
+    "@openpresentation/opf-pptx/dist/font-weights.js": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb",
+    "@openpresentation/opf-pptx/dist/chart-data.js": "a1f6ebc1c6086ae3b1146a6755f6c41f2e4c4b75235a2d59c650ba2a7dcb88d0",
+    "@openpresentation/opf-pptx/dist/chart-highlight.js": "3abf50a27a33ef821dd02933e27ffc9e57628349832ac7781abcc3ad3934bbac",
+    "@openpresentation/opf-pptx/dist/chart-options.js": "63f84b29e82298fd4bbd2ca8a203b86de04c2cb7f10d5936f46c8c2ffcbacc6d",
+    "@openpresentation/opf-pptx/dist/chart-order.js": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543",
+    "@openpresentation/opf-pptx/dist/chart-types.js": "8f243872a82f0d07d6615d83b388b38bd807d1a10e50f4f22ef9f9832df0d9dc",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "2bae0f778910bb433b022ec183b54e7bb69b4d022992492dc823e51003892b92",
+    "@openpresentation/opf-pptx/dist/chartex.js": "16f0b568162ce0f9871b6ebea16094c8bb2cbc0713864fb18a16c9edceb747e0",
+    "@openpresentation/opf-pptx/dist/color-ref.js": "1ddf95b4d23cf137e32eab8ab1d5ad83cd092adeca3d4c24b5342f8a27669e2f",
+    "@openpresentation/opf-pptx/dist/content-topology.js": "0eb4ba7260d7d35566abc622ed15235c0f9f43a421d8988914959818a88c7a23",
+    "@openpresentation/opf-pptx/dist/data-provenance.js": "0948a0a3101913d79a54f63657588de4f8a3d3975fecd24c68679ed2edcbe8fc",
+    "@openpresentation/opf-pptx/dist/format-check.js": "837d8668c11adc531a717d3499448e7cbb128f678e1116e745a02532ad4e4edb",
+    "@openpresentation/opf-pptx/dist/document-provenance.js": "112ac3649e6a4df95be5b48aea2d9b55173c2c0b83a58eab6d5329750bd9849c",
+    "@openpresentation/opf-pptx/dist/run-colors.js": "766277ef5d69c57a364816471c6feb938575ab053231d3b093943f67bd245a40",
+    "@openpresentation/opf-pptx/dist/frame-alt.js": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100",
+    "@openpresentation/opf-pptx/dist/furniture-fields.js": "63720cb612042a7fc5a52dd9858dfa6989921aee9153307091f764ce99dee1cf",
+    "@openpresentation/opf-pptx/dist/furniture-provenance.js": "d0d7af4a7b9349e11b064524c9333d902f29c106bb65ed991421420c6493bc40",
+    "@openpresentation/opf-pptx/dist/media-dedupe.js": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef",
+    "@openpresentation/opf-pptx/dist/native-furniture.js": "e203d240505ccf93b1372b59aa5244f98180d63920b7d3dcc8022dae05973bcb",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "d76910a273dc183cd7881182a3cb2c10ee6da3f9a90de43557f4064adfe6ff07",
+    "@openpresentation/opf-pptx/dist/rich-heading.js": "ff769ef5092907d68423b4f9e42f65112258ac3e6937be9664c530bca4982ded",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0",
+    "@openpresentation/opf-pptx/dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+    "@openpresentation/opf-pptx/dist/image-provenance.js": "66486be720fbc6dd5939f549ddd541c118f6bcb63ea7b208024cad2405de2353",
+    "@openpresentation/opf-pptx/dist/svg-image.js": "d9f27a1a17a868d2d9a40aac068b521f40806a2d467cb67d5f1edb5ac6d4a552",
+    "@openpresentation/opf-pptx/dist/import-signals.js": "efd03f841eedf52fc0c10f9c3e9fe9e0a3caaff2fef070d1feb8336993b15334",
+    "@openpresentation/opf-pptx/dist/theme-colors.js": "546905af1470b0306094baf6902ab7203b82778765b2bd1354b50fd405cb33b0",
+    "@openpresentation/opf-pptx/dist/index.js": "d3291335f8f4c0af33c89ff71901fd54f3fc6a4b10f3d3e931d2b4c022182553",
+    "@openpresentation/opf-pptx/dist/table-import.js": "b33f2678374ac8271941c79c4b703c3664d896a6d7f0b32cefd76dced29bae50",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "3e8fbbf7887d966b2f209eedeca3452fc6b29ad34c326492dc6769e31dd6ba0c",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+    "@openpresentation/opf-pptx/dist/package-fonts.js": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb",
+    "@openpresentation/opf-pptx/dist/typeface-inventory.js": "2026158b8ec502bfa3edd88f4f8eab28974c66630256f56deac34100a6e5fb5c",
+    "@openpresentation/opf-pptx/dist/master-themes.js": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426",
+    "@openpresentation/opf-pptx/dist/vendor-compat.js": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "28b7a84dc70c3877e73068919f43265de2b22066fe72df45109fa516e65fef86",
+    "@openpresentation/opf-pptx/dist/media-provenance.js": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7",
+    "@openpresentation/opf-pptx/dist/timeline-provenance.js": "c657ff56ee1706a3848978adf170c8ddbc06fe236ece712f83e53ae491a2e725",
+    "@openpresentation/opf-pptx/dist/quote-provenance.js": "b0f4e3a656477e9d9c88d7a1dd9f171e5c6f30d3798f413c9fc84570b86b59bf",
+    "@openpresentation/opf-pptx/dist/sections.js": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2",
+    "@openpresentation/opf-pptx/dist/master-furniture.js": "874762541dcfe6c762dfc8f79d30ed01cf94aadbf31627509bf46cc9279654ed",
+    "@openpresentation/opf-pptx/dist/template-layouts.js": "aa9868c645b0390ebb0e246aaa6b8594d59b37d17fbf363a0adadfe1a9267e30",
+    "@openpresentation/opf-pptx/dist/watermark-provenance.js": "80a06a4f815d227b7946126d43b80a63f966e404369486caea66c3fdcaecf33e",
+    "@openpresentation/opf-pptx/dist/logo-provenance.js": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac",
+    "@openpresentation/opf-pptx/dist/script-fonts.js": "f17c0ca8e54b81f69715871035d7216231fe7b0b362658de1b17b13d1a4a4fac",
+    "@openpresentation/opf-pptx/package.json": "7ecb20a0d84554932998f1e5f41d7bf762df50fa8913ebbea949e66668e4ab29",
+    "test/native-table-colors.mjs": "269dfff133bc6a4184e63582afc969eccf234994c8dc922c00924234ea31c950",
+    "test/native-table-colors.ps1": "04ae8767029de0e6ed4017daf3fa8420fd109264aa6300abb978dc95f5b0a81a",
+    "test/native-process.ps1": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+    "vendor/pptxgenjs/pptxgen.es.js": "71f89c1bea86cee3c89f9ec948da99ef1f7dacf38fab33a21b6857ca6fb20dd1",
+    "package-lock.json": "a14e933b0e6bc6286bcdc3a2b9ba9ec1deb1cfef9fbb1092ff0b433f356e5f79",
+    "packet/native-table-colors-staged.mjs": "29f12fdd2bec2bc554eb839ac3b769a54828b4a3e1c8cda958babc76cc494c57"
+  },
+  "sourceSha256": "ff2214eda3cb406ffe0ea1ad5bfe004819e294b34135f3c91b982fb1871adc7c",
+  "pptxSha256": "639b8026a6d1a67df4aa6f06f9c18929d73e3466ced6f08b7fbfd0d0f566332a",
+  "expected": [
+    {
+      "fill": "#F8FAFC",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#000000"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#0F172A",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#777777",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#000000"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#767676",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#FFFFFF80",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#F8FAFC",
+      "explicit": "#FFFFFF",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
