@@ -523,3 +523,5 @@ Append-only. One dated line per state change.
 - 2026-10-11 (RR-20): Reviewed core #585 and combined renderer #219 merged at `4387b0273aa64d4705910222c91298c1139c594e` and `dd6b520404d423fd4ddd59e81a9b47971e906be3`; [scope and qualification](../../evidence/rr20-held-patch-source-merged/README.md). T15/T17 close, progress 15/40. T16, generated lock repair, actual patch publication, final registry/site and native acceptance remain pending.
 
 - 2026-10-11 (RR-20): Generated source lock #619 merged at `d018f752119371fa2bbd2acb46ea91f473aeeab3`, gate 17418 terminal 0; editor host #155 merged at `39e62a61`. Progress remains 15/40: T13 final published records/site adoption and T16 gallery/core host integration remain open.
+
+- 2026-10-11 (RR-20): Renderer #217/#222/#229/#230 closed explicitly as superseded by combined #219 merge `dd6b520404d423fd4ddd59e81a9b47971e906be3`, after exact-head/path reconciliation; [receipt](../../evidence/rr20-held-patch-source-merged/supersession-receipt.json). No individual merge, publication or native acceptance claim; progress remains 15/40.
