@@ -76,6 +76,11 @@ export function candidateArtifacts(root){
  assert.equal(candidate.sha,report.gallery.sha,'artifact gallery differs from reviewed configuration');
  const workspace=path.dirname(root);
  const directories=[path.join(root,'packages/javascript'),path.join(workspace,'opf-render'),path.join(workspace,'opf-pptx'),path.join(workspace,'opf-editor'),path.join(root,'packages/cli'),path.join(workspace,'gallery-candidate')];
+ for(const item of report.artifacts){
+  assert.equal(item.version,item.originalManifest.version,'artifact version differs from original source version');
+  assert.equal(item.sourceVersion,item.originalManifest.version,'artifact sourceVersion differs from original source version');
+  assert.equal(item.stagedManifest.version,item.originalManifest.version,'staging must preserve the package own version');
+ }
  for(const [index,item] of report.artifacts.entries()){
   const directory=directories[index],sourceRoot=index===0||index===4?root:directory;
   assert.equal(execFileSync('git',['-C',sourceRoot,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),item.sourceSha,'artifact source SHA mismatch');
@@ -108,6 +113,10 @@ export function candidateArtifacts(root){
   assert.deepEqual(item.stagedManifest,stagedManifest(item.originalManifest,Object.fromEntries(report.artifacts.map(record=>[record.name,record.version])),Object.fromEntries(report.artifacts.map(record=>[record.name,path.join(root,'artifacts/npm',record.file)]))),'unexpected staged metadata change');
  }
  return report;
+}
+
+export function candidatePeerPreflight(root,defaultGate){
+ return candidateArtifacts(root)?assertCandidatePeerPreflight(root):defaultGate();
 }
 
 // Preflight only the explicitly staged artifact relationships. Original source ranges

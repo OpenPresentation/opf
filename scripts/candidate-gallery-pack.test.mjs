@@ -5,7 +5,7 @@ import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,exi
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
@@ -49,6 +49,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   assert.equal(report.artifacts.length,6);assert.equal(report.published,false);
   assert.deepEqual(candidateArtifacts(root),report);
   assert.equal(assertCandidatePeerPreflight(root).run,true,'mixed source versions qualify exact staged relationships, not original stable semver');
+  assert.equal(candidatePeerPreflight(root,()=>assert.fail('candidate must not invoke default source gate')).run,true);
   for(const name of ['@openpresentation/opf','@openpresentation/cli']){
    const item=report.artifacts.find(record=>record.name===name);
    assert.equal(item.originalManifest.peerDependencies['@openpresentation/opf-render'],'^0.19.0');
@@ -56,6 +57,8 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   }
   delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>assertCandidatePeerPreflight(root),/no published fallback/);process.env.CANDIDATE_GALLERY_REF=gallerySha;
   const preflightManifest=path.join(out,'manifest.json'),preflightBytes=readFileSync(preflightManifest),wrongPeer=structuredClone(report);
+  const wrongVersion=structuredClone(report);wrongVersion.artifacts.find(item=>item.name==='@openpresentation/opf-render').version='0.19.0';writeFileSync(preflightManifest,JSON.stringify(wrongVersion));assert.throws(()=>candidatePeerPreflight(root,()=>assert.fail('invalid candidate must not fall back')),/version differs from original source/);writeFileSync(preflightManifest,preflightBytes);
+  const wrongSourceVersion=structuredClone(report);wrongSourceVersion.artifacts.find(item=>item.name==='@openpresentation/opf-render').sourceVersion='0.19.0';writeFileSync(preflightManifest,JSON.stringify(wrongSourceVersion));assert.throws(()=>assertCandidatePeerPreflight(root),/sourceVersion differs/);writeFileSync(preflightManifest,preflightBytes);
   wrongPeer.artifacts.find(item=>item.name==='@openpresentation/cli').stagedManifest.peerDependencies['@openpresentation/opf-render']='^0.19.0';
   writeFileSync(preflightManifest,JSON.stringify(wrongPeer));assert.throws(()=>assertCandidatePeerPreflight(root),/staging metadata differs/);writeFileSync(preflightManifest,preflightBytes);
 
@@ -115,5 +118,6 @@ test('ordinary packed smoke still builds the CLI',async()=>{
   const marker=path.join(root,'built');
   assert.equal(await preparePackedSmokeCli({root,build:()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(marker)},'built')`])}),null);
   assert.equal(readFileSync(marker,'utf8'),'built');
+  const waiting={run:false,notice:'unchanged ordinary wait'};let calls=0;assert.equal(candidatePeerPreflight(root,()=>{calls++;return waiting;}),waiting);assert.equal(calls,1,'actual preflight entry preserves the ordinary gate result');
  } finally {if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(root,{recursive:true,force:true});}
 });
