@@ -552,3 +552,5 @@ Append-only. One dated line per state change.
 - 2026-10-11: RR-20 — Local renderer v0.19 published-main refresh is clean at `d4ab7a58`; [source review and supervisor byte proof](../../evidence/rr20-patch-train-publications/v019-render-published-refresh/README.md) preserve prior `12766980`. Build/type/validate and focused layout source checks pass with explicit core `b597dbe099166d62067ea1cc67696c45cc268177`/e0 gallery, not final registry/native acceptance. Sole PPTX gate 12145 remains pending; progress stays 15/40.
 
 - 2026-10-11 18:19:49 UTC: RR-20/T18 — PPTX #250 merged at `1954c9ce`, gate 12145 exit 0; [tree proof](../../evidence/rr20-patch-train-publications/pptx-0182-preparation/merged-tree-comparison.json) matches reviewed preparation. Sole exact-release-commit gate 24822 is pending. No tag/publication or checkpoint closure; progress remains 15/40.
+
+- 2026-10-11 18:21 UTC: RR-20 — Root-verified inventory after PPTX #250 merge records 27 open PRs and 45 issues, complete pagination, all eight clean defaults matching and no changed existing open heads. Historical snapshots retained; progress remains 15/40.
