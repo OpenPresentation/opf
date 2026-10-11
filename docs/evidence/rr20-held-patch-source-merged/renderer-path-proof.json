@@ -1,0 +1,92 @@
+[
+  {
+    "pr": 219,
+    "head": "ba9d3db4b2be5aab823af9fa43c8a25237422ea9",
+    "ancestor": true,
+    "branches": [
+      "origin/codex/ff-46-sizeadjust-rows"
+    ],
+    "paths": [
+      "changes/render-361-sizeadjust-rows.md",
+      "dist/script-fonts.js",
+      "src/script-fonts.js",
+      "test/arabic-size-adjust.mjs",
+      "test/script-corpora-slides-browser.mjs",
+      "test/script-fonts-browser.mjs"
+    ],
+    "combinedDifferent": []
+  },
+  {
+    "pr": 217,
+    "head": "01b0459546add78b5a69c5efce2cae2def98b376",
+    "ancestor": true,
+    "branches": [
+      "origin/codex/ff-46-script-name-hosts"
+    ],
+    "paths": [
+      "changes/ff-46-script-name-hosts.md",
+      "test/browser-suites.json",
+      "test/fixtures/script-name-families.json",
+      "test/script-name-hosts-browser.mjs",
+      "test/script-name-hosts.mjs"
+    ],
+    "combinedDifferent": [
+      "test/browser-suites.json"
+    ]
+  },
+  {
+    "pr": 222,
+    "head": "eac8366a10dabd523847b853bde10812918a526c",
+    "ancestor": true,
+    "branches": [
+      "origin/codex/render-189-sara-am"
+    ],
+    "paths": [
+      "README.md",
+      "changes/render-189-sara-am-harfbuzz-pens.md",
+      "dist/fonts.d.ts",
+      "dist/raster-text.js",
+      "dist/raster.js",
+      "src/fonts.d.ts",
+      "src/raster-text.js",
+      "src/raster.js",
+      "test/raster-cluster-context.mjs",
+      "test/script-corpora-raster.mjs"
+    ],
+    "combinedDifferent": []
+  },
+  {
+    "pr": 229,
+    "head": "33637275eaf472c7e82acd6b829a9e29aea6c8ce",
+    "ancestor": true,
+    "branches": [
+      "codex/rr-81-player-system-focus",
+      "origin/codex/rr-81-player-system-focus"
+    ],
+    "paths": [
+      "changes/rr-81-player-system-focus.md",
+      "dist/player.js",
+      "src/player.js"
+    ],
+    "combinedDifferent": []
+  },
+  {
+    "pr": 230,
+    "head": "012e448ba298a19ec79d690958f08d75e3893b26",
+    "ancestor": true,
+    "branches": [
+      "codex/rr-65-subset-reference-glyphs",
+      "origin/codex/rr-65-subset-reference-glyphs"
+    ],
+    "paths": [
+      "changes/rr-65-subset-reference-glyphs.md",
+      "dist/font-subset.js",
+      "docs/evidence/rr65-subset-reference-glyphs/README.md",
+      "docs/evidence/rr65-subset-reference-glyphs/reference-search.json",
+      "src/font-subset.js",
+      "test/font-subset-reference-glyphs.mjs",
+      "test/font-subsets-browser.mjs"
+    ],
+    "combinedDifferent": []
+  }
+]
