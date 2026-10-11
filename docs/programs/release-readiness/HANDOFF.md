@@ -203,3 +203,5 @@ The T31 packet remains preparation only. All nine fallback archives are unchange
 ## Held policy/raster source merged
 
 [Source qualification and merge identities](../../evidence/rr20-held-patch-source-merged/README.md) close only T15/T17: 15/40 including CLI T12. Core #585 is `4387b0273aa64d4705910222c91298c1139c594e`; combined renderer #219 is `dd6b520404d423fd4ddd59e81a9b47971e906be3`, prescribed gate 55383 terminal 0/eight checks. T16 remains pending. The old ecosystem renderer pin fails its Arabic-only multiplier assertion against the merged policy; supervisor roller session 20697 is qualifying the generated lock remedy. No lock completion or patch publication claimed; #616 geometry records remain separate until merged. CLI publication logs remain unchanged.
+
+- 2026-10-11: Generated ecosystem lock PR #619 merged at `d018f752119371fa2bbd2acb46ea91f473aeeab3`, prescribed gate 17418 terminal 0. The stale renderer-contract source lock is repaired; final published release-plan/site adoption (T13) remains open. Editor host #155 merged at `39e62a61`; gallery/core host integration and T16 remain open. Progress remains 15/40.
