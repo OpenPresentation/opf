@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.18.2 (2026-10-11)
+
+- FF-46 (opf#362; tests only): `test/font-gate-script-names.mjs` drives the editor's font gate with the 22 proprietary script, emoji, math and code-table names that pass the native visual comparison (`test/fixtures/script-name-families.json`, the table opf-render checks against core's policy and the FF-44 corpus). For each name the gate loads only the route's script packages, the registry resolves the name to its policy route with the policy `sizeAdjust`, and every sample draws in its route face with no other fallback (Sylfaen's Armenian and Georgian in their designated Noto faces; every mapped symbol code in the chain face that has it). It writes `artifacts/script-name-hosts/editor.json`, the evidence the core font tracker reads.
+
 ## 0.18.1 (2026-10-11)
 
 - opf-editor#141 (output-changing for SVG downloads made with a handle that has the HarfBuzz engines): `convert` now reads the fonts handle's `subsets` and `outlines`, which it dropped before. A handle created with `loadFonts({ subsetWasm })` (the Node handle always) makes an SVG embed each face cut to the glyphs its slide draws, and one with `shapeWasm` (the Node handle always) shapes `renderOptions: { text: "paths" }` outlines with HarfBuzz instead of fontkit; without them a browser handle behaves as before (whole faces, fontkit). In the playground an SVG slide falls from 431 KB to 45 KB with the Roboto scheme and from 2.05 MB to 24 KB with the default Aptos scheme. PDF and PNG output is unchanged (a PDF cuts its own subsets and always draws selectable text, so `text: "paths"` applies to SVG and PNG only). The playground serves `harfbuzz-subset.wasm` and `harfbuzz.wasm` (copied from the renderer's harfbuzzjs by `npm run build:playground`) and creates its handle with them; the README documents the two options for hosts. The live canvas still draws with `text: "system"`.
