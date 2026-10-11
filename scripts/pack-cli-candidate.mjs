@@ -25,7 +25,7 @@ export async function packCliCandidate({ cliDirectory, coreDirectory, destinatio
   if(graph){
     const item=name=>graph.artifacts.find(record=>record.name===name);
     const file=name=>path.join(path.resolve(coreDirectory,'../..'),'artifacts/npm',item(name).file);
-    return {core:item(CORE).npmPack,cli:item('@openpresentation/cli').npmPack,coreTarball:file(CORE),cliTarball:file('@openpresentation/cli'),range:item('@openpresentation/cli').originalManifest.dependencies[CORE],restaged:true,additionalTarballs:[file('@openpresentation/gallery')],candidateGraph:graph};
+    return {core:item(CORE).npmPack,cli:item('@openpresentation/cli').npmPack,gallery:item('@openpresentation/gallery').npmPack,galleryTarball:file('@openpresentation/gallery'),coreTarball:file(CORE),cliTarball:file('@openpresentation/cli'),range:item('@openpresentation/cli').originalManifest.dependencies[CORE],restaged:true,additionalTarballs:[file('@openpresentation/gallery')],candidateGraph:graph};
   }
   await mkdir(destination, { recursive: true });
   const manifest = JSON.parse(await readFile(path.join(cliDirectory, 'package.json'), 'utf8'));

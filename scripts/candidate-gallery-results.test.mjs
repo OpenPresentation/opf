@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {requireQualification} from './candidate-gallery-results.mjs';
+import {qualificationPeerGate,requireQualification} from './candidate-gallery-results.mjs';
 test('required status cannot turn missing, skipped, failed or mixed candidate/control checks green',()=>{
  for(const mode of ['core','ecosystem']){
   const normal=mode==='core'?['normal']:['ecosystem-render','ecosystem-pptx-editor','ecosystem-core'];
@@ -16,4 +16,14 @@ test('required status cannot turn missing, skipped, failed or mixed candidate/co
   assert.throws(()=>requireQualification({mode,sha:'a'.repeat(40),results:mixed}));
   assert.throws(()=>requireQualification({mode,sha:'main',results:candidate}));
  }
+});
+
+import {gate,report} from './unreleased-gate.mjs';
+test('default unpublished-peer waits retain their report while explicit candidate waits fail',()=>{
+ const waiting=gate({subject:'published peer',required:'0.19.0',installed:'0.18.1',met:false,event:'pull_request'});
+ const notices=[],original=console.log;console.log=value=>notices.push(value);
+ try{assert.equal(report(qualificationPeerGate(waiting,false)),false);}finally{console.log=original;}
+ assert.equal(notices.length,1);assert.match(notices[0],/Unreleased dependency/);
+ assert.throws(()=>qualificationPeerGate(waiting,true),/candidate peer contract must run completely/);
+ const ready={run:true};assert.equal(qualificationPeerGate(ready,false),ready);assert.equal(qualificationPeerGate(ready,true),ready);
 });

@@ -151,7 +151,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
     const candidate=galleryConfiguration(manifest,configuration);assert.ok(candidate,'link requires explicit candidate configuration');
     assert.equal(process.env.CANDIDATE_GALLERY_REF,candidate.sha,'resolved gallery SHA differs from reviewed configuration');
     const workspace=path.resolve(process.env.GITHUB_WORKSPACE??path.dirname(root));
-    const consumers=[root,path.join(root,'packages/javascript'),...REPOSITORIES.filter(name=>name!=='opf').map(name=>path.join(workspace,name)).filter(directory=>existsSync(directory))];
+    const consumers=[root,path.join(root,'packages/javascript'),path.join(root,'packages/cli'),...REPOSITORIES.filter(name=>name!=='opf').map(name=>path.join(workspace,name)).filter(directory=>existsSync(directory))];
     console.log(JSON.stringify(linkCandidateGallery({gallery:path.join(workspace,'gallery-candidate'),candidate,consumers}),null,2));
   }else if(command==='publication')assertPublishedGallery(manifest,configuration);
   else throw Error('expected resolve, link or publication');

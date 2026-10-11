@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+export function qualificationPeerGate(result,candidate=false){
+ if(candidate)assert.equal(result.run,true,'candidate peer contract must run completely; no unpublished-peer skip');
+ return result;
+}
 export function requireQualification({mode,sha,results}){
  assert.ok(['core','ecosystem'].includes(mode),'unknown qualification mode');
  assert.equal(results.gallery?.result,'success','candidate selection must succeed');
