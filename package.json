@@ -53,6 +53,7 @@
     "test:gallery-script-fonts": "node scripts/test-gallery-script-fonts.mjs",
     "test:gallery-base-fonts": "node scripts/test-gallery-base-fonts.mjs",
     "test:gallery-lazy-fonts": "node scripts/test-gallery-lazy-fonts.mjs",
+    "check:gallery-editor-wasm": "node --test scripts/gallery-editor-wasm.test.mjs",
     "prepare:gallery": "node scripts/prepare-gallery-editor.mjs",
     "build:spec-reference": "node scripts/build-spec-reference.mjs",
     "test:skills": "node scripts/test-skills.mjs",

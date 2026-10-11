@@ -1,0 +1,119 @@
+
+> @openpresentation/opf-pptx@0.18.1 test:packed
+> node test/packed-install.mjs && node test/provenance-interop.mjs
+
+
+> @openpresentation/opf-pptx@0.18.1 prepack
+> npm run build
+
+
+> @openpresentation/opf-pptx@0.18.1 build
+> node scripts/build.mjs
+
+Vendored upstream distribution and license match recorded hashes.
+Packed consumer: vendored licenses/hashes, absent unused dependencies, table/metric/quote/code/timeline export/reimport and schema validation pass.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Script fonts passed: 13 languages across Latin, Cyrillic, Greek, CJK (ja/zh-Hans/zh-Hant/ko), Arabic/Hebrew RTL, Indic and Thai; lang, rtl, theme and run ea/cs, supplements, import and diagnostics.
+Media placeholder passed: 37 groups; identity-only omissions, clickable surfaces, exact caption edits and linked fallback, privacy/current-frame authority, reorder/copy and untrusted tags. Native Office is a separate gate.
+Layout intent passed: 11 groups; OPF_SLIDE_V1 carries the layout record and its group, and import restores layout, type, composition, hints and records with and without document provenance, for pasted slides, conflicting records, tampering and edits.
+✔ barChart: reordered sparse caches keep holes, zero and empty labels aligned (17.721709ms)
+✔ lineChart: reordered sparse caches keep holes, zero and empty labels aligned (6.629ms)
+✔ areaChart: reordered sparse caches keep holes, zero and empty labels aligned (5.385583ms)
+✔ pieChart: reordered sparse caches keep holes, zero and empty labels aligned (4.98925ms)
+✔ doughnutChart: reordered sparse caches keep holes, zero and empty labels aligned (5.758917ms)
+✔ radarChart: reordered sparse caches keep holes, zero and empty labels aligned (5.022458ms)
+✔ scatterChart: reordered sparse xVal/yVal caches keep holes, zero and empty X values aligned (5.9ms)
+✔ scatterChart: a chart without c:xVal is plotted against 1..n (6.617334ms)
+✔ strRef: label indices retain explicit empty and absent values (5.384291ms)
+✔ strLit: label indices retain explicit empty and absent values (4.569667ms)
+✔ numRef: label indices retain explicit empty and absent values (4.761917ms)
+✔ numLit: label indices retain explicit empty and absent values (4.113292ms)
+✔ multiLvlStrRef: label indices retain explicit empty and absent values (4.152334ms)
+✔ empty series name is retained, missing series name still receives a fallback (9.272917ms)
+✔ numRef: empty numeric values and omitted c:v are missing, not zero (5.724208ms)
+✔ numLit: empty numeric values and omitted c:v are missing, not zero (4.353209ms)
+✔ absent ptCount infers extent from indices rather than point order (4.299625ms)
+✔ unsigned integer lexical forms retain their numeric indices (4.522625ms)
+✔ empty caches with a declared extent retain all-missing rows (4.709792ms)
+✔ category and numeric extents are aligned without manufacturing labels or zeros (5.130208ms)
+✔ malformed duplicate index rejects with chart part and cache location (3.819542ms)
+✔ malformed missing index rejects with chart part and cache location (3.373333ms)
+✔ malformed negative index rejects with chart part and cache location (3.6985ms)
+✔ malformed fractional index rejects with chart part and cache location (3.666417ms)
+✔ malformed exponent index rejects with chart part and cache location (3.580125ms)
+✔ malformed nonnumeric index rejects with chart part and cache location (4.247875ms)
+✔ malformed huge index rejects with chart part and cache location (3.641125ms)
+✔ malformed index outside declared extent rejects with chart part and cache location (3.550042ms)
+✔ malformed negative count rejects with chart part and cache location (3.547459ms)
+✔ malformed fractional count rejects with chart part and cache location (3.386875ms)
+✔ malformed huge count rejects with chart part and cache location (3.315625ms)
+✔ malformed duplicate count rejects with chart part and cache location (4.201625ms)
+✔ malformed category and name caches are checked too (6.872166ms)
+✔ unchanged dense caches still import ordinary chart values (4.3575ms)
+✔ multiple cache sources and multiple point values are rejected (10.773375ms)
+✔ hierarchical categories are refused instead of becoming extra data rows (3.48575ms)
+✔ largest supported sparse extent is retained without index truncation (128.62775ms)
+✔ combined cache and output-table budgets reject before oversized allocations (9.514792ms)
+✔ duplicate c:numRef containers reject instead of importing missing data (5.091708ms)
+✔ duplicate c:strRef containers reject instead of importing missing data (4.769708ms)
+✔ duplicate c:multiLvlStrRef containers reject instead of importing missing data (4.79925ms)
+✔ duplicate c:val containers reject instead of importing missing data (4.710584ms)
+✔ duplicate c:yVal containers reject instead of importing missing data (7.877459ms)
+✔ duplicate c:cat containers reject instead of importing missing data (7.862ms)
+✔ duplicate c:tx containers reject instead of importing missing data (5.087416ms)
+✔ ordinary numeric export/import/re-export retains scientific-notation cells (34.601542ms)
+✔ val/numRef: complete exponents preserve finite values, zeros and sparse labels (5.487958ms)
+✔ val/numRef: exponent overflow and nonzero underflow refuse the exact logical point (14.196833ms)
+✔ val/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.500625ms)
+✔ val/numLit: complete exponents preserve finite values, zeros and sparse labels (4.296333ms)
+✔ val/numLit: exponent overflow and nonzero underflow refuse the exact logical point (13.237ms)
+✔ val/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.287917ms)
+✔ yVal/numRef: complete exponents preserve finite values, zeros and sparse labels (6.275042ms)
+✔ yVal/numRef: exponent overflow and nonzero underflow refuse the exact logical point (14.053083ms)
+✔ yVal/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.39025ms)
+✔ yVal/numLit: complete exponents preserve finite values, zeros and sparse labels (4.287917ms)
+✔ yVal/numLit: exponent overflow and nonzero underflow refuse the exact logical point (13.414208ms)
+✔ yVal/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (5.825833ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 500.544958
+ZIP date public fixture: {"node":"v24.21.0","zones":["UTC","America/Los_Angeles","Pacific/Apia"],"validCasesPerZone":13,"invalidCasesPerZone":32,"exports":50,"explicitPostImportTimezoneChange":true,"recursiveLeafParts":38,"preservedDefaultAndUndefined":true,"equalAbsoluteRepresentations":true,"wholeFileTimezoneEquality":true,"nestedWorkbooks":true,"sourceOptionsPreserved":true,"reimport":true,"deterministicRepeat":true}
+ZIP date artifacts: /private<scratch>/release-train-pptx-i2UXZi/artifacts/zip-date/packed/run-m9f56e
+Native text whitespace: 123 passed, 0 failed.
+✔ body-root: true/false/absent, literal/scheme color, hyperlink defaults (136.333709ms)
+✔ body-block: true/false/absent, literal/scheme color, hyperlink defaults (16.049667ms)
+✔ body-region: true/false/absent, literal/scheme color, hyperlink defaults (15.5195ms)
+✔ list-body: true/false/absent, literal/scheme color, hyperlink defaults (17.556333ms)
+✔ list-description: true/false/absent, literal/scheme color, hyperlink defaults (13.802ms)
+✔ table-header: true/false/absent, literal/scheme color, hyperlink defaults (24.662166ms)
+✔ table-cell: true/false/absent, literal/scheme color, hyperlink defaults (17.810667ms)
+﹣ linked furniture retains explicit native underline none (0.043084ms) # Published core 0.11 does not emit linked social furniture; current candidate/source lane is mandatory.
+✔ ordinary false/absent underline and hyperlink export control (22.144792ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 266.753583
+{"passed":42,"failed":0,"output":"/private<scratch>/release-train-pptx-i2UXZi/artifacts/native-body-rich-text/packed"}
+Engine-generated text: unresolved image, quote photo, logo and background placeholders, captions, metric and timeline weights export under the default policy, measured at the drawn face; a missing weight names family, weight and style.
+audited 54 packages in 0s
+
+54 packages have verified registry signatures
+
+15 packages have verified attestations
+(use --json --include-attestations to view attestation details)
+
+Packed installation audit: zero known vulnerabilities; openpresentation-opf-pptx-0.18.1.tgz, sha512-fLDoivvSRkEAnzGPHPKC6YVmxCqP6LDyxTymRpM3JZ/YVKynlxyNQo6bPMNJaI02RvBPCEhAY4ndXCD1H85JbQ==
+Provenance interop passed: an export of this build imports with published opf-pptx 0.11.6 (design references, metadata, layout intent kept; supplement ignored; design-fields export keeps its provenance) and fully with this build.
