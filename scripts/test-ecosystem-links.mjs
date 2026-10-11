@@ -4,6 +4,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {existsSync} from 'node:fs';
+import {tar} from './archive-tar.mjs';
 
 const temp=await mkdtemp(path.join(tmpdir(),'opf-link-test-'));
 async function json(file,value){await mkdir(path.dirname(file),{recursive:true});await writeFile(file,JSON.stringify(value));}
@@ -12,6 +13,7 @@ try {
  await mkdir(path.dirname(script),{recursive:true});await copyFile(new URL('./link-ecosystem.mjs',import.meta.url),script);
  await copyFile(new URL('./package-manager.mjs',import.meta.url),path.join(root,'scripts/package-manager.mjs'));
  await copyFile(new URL('./check-one-core.mjs',import.meta.url),path.join(root,'scripts/check-one-core.mjs'));
+ await copyFile(new URL('./archive-tar.mjs',import.meta.url),path.join(root,'scripts/archive-tar.mjs'));
  await mkdir(path.join(core,'dist'),{recursive:true});await writeFile(path.join(core,'dist/composition.js'),'');
  await json(path.join(core,'package.json'),{name:'@openpresentation/opf'});
  for(const name of ['opf-render','opf-pptx','opf-editor','pptx-gallery']) {
@@ -27,8 +29,7 @@ try {
  const cache=path.join(temp,'font-cache'),packed=path.join(temp,'packed');
  await json(path.join(packed,'package/package.json'),{name:'@expo-google-fonts/noto-sans-jp',version:'0.4.4',marker:'pinned'});
  await mkdir(cache,{recursive:true});
- const tar=spawnSync('tar',['-czf',path.join(cache,'expo-google-fonts-noto-sans-jp-0.4.4.tgz'),'-C',packed,'package'],{encoding:'utf8'});
- assert.equal(tar.status,0,tar.stderr);
+ tar(path.join(cache,'expo-google-fonts-noto-sans-jp-0.4.4.tgz'),'-czf',['-C',packed,'package']);
  const run=()=>spawnSync(process.execPath,[script,'--packages-only'],{encoding:'utf8',timeout:30000,env:{...process.env,OPF_LINK_FONT_CACHE:cache}});
  for(let pass=0;pass<2;pass++) {
   const result=run();assert.equal(result.status,0,result.stderr||result.stdout);

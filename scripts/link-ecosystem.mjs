@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
 import {assertSingleCore} from './check-one-core.mjs';
+import {tar} from './archive-tar.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const opfPackage = path.join(root, 'packages/javascript');
 if (!existsSync(path.join(opfPackage, 'dist/composition.js'))) throw new Error('Build OPF first: pnpm build');
@@ -64,7 +65,7 @@ function alignFontPeers(directory) {
     if (installed === version) continue;
     const staging = mkdtempSync(path.join(path.dirname(target), '.opf-link-'));
     try {
-      run('tar', ['-xzf', fontTarball(name, version), '-C', staging]);
+      tar(fontTarball(name, version), '-xzf', ['-C', staging]);
       rmSync(target, { recursive: true, force: true });
       renameSync(path.join(staging, 'package'), target);
     } finally {
