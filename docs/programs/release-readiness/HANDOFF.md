@@ -180,7 +180,7 @@ WASM site-adoption prerequisite [core#600](https://github.com/OpenPresentation/o
 
 ## Supervisor follow-up: editor fixture and native packet
 
-Core#606 merged at `0f6ab6297681a91f3daa2bd9e9c297057f5e092e`. Editor [#158](https://github.com/OpenPresentation/opf-editor/pull/158), `5082d413`, repairs the macOS select-all test gesture and asserts the intended empty numeric edit. All 18 workflows pass against released dependencies and separately against the complete v0.19 source graph. Fresh editor0.18.1 metadata preparation must follow its merged/full-CI result. No editor tag has been created.
+Core#606 merged at `0f6ab6297681a91f3daa2bd9e9c297057f5e092e`. Editor [#158](https://github.com/OpenPresentation/opf-editor/pull/158), `5082d413`, repairs the macOS select-all test gesture and asserts the intended empty numeric edit. All 18 workflows pass against released dependencies and separately against the complete v0.19 source graph. The four-check gate passed and the fix merged at `9a1484bc2e78c67c2c9ef74cc7d8668a53039645`. Fresh editor0.18.1 metadata preparation is now in progress. No editor tag has been created.
 
 The held core585 integration `8d1bcad1` and renderer219/217/222/229/230 integration `84f4bea4` are reviewed local candidates, unpushed. Their full source suites and renderer strict browser checks pass; merged renderer233 is retained. They do not replace actual core0.18.4/renderer0.18.2 registry, OS, packed or release gates, and remain held until initial0.18.1 completion.
 
