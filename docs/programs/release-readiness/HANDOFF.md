@@ -1,162 +1,156 @@
-# Release readiness: handoff of 2026-10-06
+# Release readiness: handoff of 2026-10-11
 
-Written by the supervisor session, refreshed 2026-10-06 (first written 2026-10-03). It replaces the handoff of 2026-10-05. A new
-supervisor resumes from this file, [README.md](README.md) (goal, definition of done, invariants, decision log, resume protocol)
-and [burndown.md](burndown.md) (items, the **Now** work queue, progress log). Nothing in this file overrides the README's
-invariants.
+Written by the release supervisor session at about 00:40 UTC on 2026-10-11. It replaces the handoff of 2026-10-06. A new
+supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
+[burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
+overrides those invariants. Everything in flight is in a pull request or a published release. No work lives only on a
+local machine (the exceptions are listed under "Local-only state").
 
-## State
+## Rules that matter most
 
-- Tracker: `pnpm report:release` prints the item counts (46 of 54 closed at this handoff; the open items are RR-14, RR-17,
-  RR-19, RR-20, RR-48, RR-51, RR-53 and RR-54, which is in review). RR-03 and RR-05 closed on 2026-10-06 on the Windows
-  native evidence; RR-54 (chart and table data) is new. Run `pnpm report:release -- --live` for the live state of every pull
-  request a Now row links.
-- Published and verified (npm `latest`, `gitHead` = release merge commit, SLSA provenance, `npm audit signatures`):
-  `@openpresentation/opf` **0.12.2** (2026-10-05, `b66ea0c`), `opf-render` **0.12.2** (`de6d247`; 0.12.1 was tagged but never
-  published: its golden digest did not match core 0.12.2's examples, fixed by opf-render#128 and #130), `opf-pptx` **0.12.4**
-  (`03967a2`), `opf-editor` **0.11.3** (`1107fdd`). The Node `engines` range is open (`>=22`), so npm on Node 26 and 22 no
-  longer silently installs the old 0.7.0 / 0.9.0 releases. `@openpresentation/cli` 0.10.1: the release PR is merged
-  ([opf#391](https://github.com/OpenPresentation/opf/pull/391), `2a0f9b4`), tag, publish and verification were in progress when
-  this was written (npm `latest` was still 0.10.0). The patch releases up to opf-pptx 0.12.3 are described in the addendum of
-  [release-notes-0.12.0.md](release-notes-0.12.0.md) ([opf#349](https://github.com/OpenPresentation/opf/pull/349), merged);
-  the later patch set and the 0.13 train are not in the note yet.
-- Next release: the 0.13 minor train in dependency order: core 0.13.0, CLI 0.11.0, opf-render 0.13.0, opf-pptx 0.13.0 and
-  opf-editor 0.12.0. It carries the pptxgenjs-plus migration ([opf-pptx#165](https://github.com/OpenPresentation/opf-pptx/pull/165),
-  merged 2026-10-06; the Windows a/b gate passed 20 of 20, [opf#351](https://github.com/OpenPresentation/opf/pull/351)), per-slide
-  script fonts ([opf-pptx#170](https://github.com/OpenPresentation/opf-pptx/pull/170), merged 2026-10-06), zero chart values
-  ([opf-pptx#173](https://github.com/OpenPresentation/opf-pptx/pull/173), merged), the Ethiopic / Armenian / Georgian theme
-  supplement ([opf#377](https://github.com/OpenPresentation/opf/pull/377), merged) and RR-54, whose four pull requests
-  ([opf#376](https://github.com/OpenPresentation/opf/pull/376), [opf-render#127](https://github.com/OpenPresentation/opf-render/pull/127),
-  [opf-pptx#171](https://github.com/OpenPresentation/opf-pptx/pull/171), [opf-editor#92](https://github.com/OpenPresentation/opf-editor/pull/92))
-  are open with `Depends-On` trailers and merge after the CLI 0.10.1 tag. RR-54 behaviour changes for the release note:
-  non-strict chart text cells become gaps with a `chart-value-not-numeric` warning (they used to be stripped to a number), a
-  two-column scatter plots column 2 against the row numbers, and an unknown dataset or mapping column fails validation. The
-  contract is `docs/chart-table-data.md` (in opf#376). Native PowerPoint evidence for RR-54 is merged
-  ([opf#385](https://github.com/OpenPresentation/opf/pull/385), [opf#387](https://github.com/OpenPresentation/opf/pull/387),
-  [opf#388](https://github.com/OpenPresentation/opf/pull/388)): the first check had 3 FAIL (a save re-spelling the number-format
-  code, zero values missing from the workbook, and `0.0 m/s` read as a fraction bar), all fixed; the open
-  [opf#392](https://github.com/OpenPresentation/opf/pull/392) reads 25 PASS, 0 FAIL on the merged-main combination.
-- Hosting: all three sites serve production from Cloudflare Workers (cut over 2026-10-05, zero downtime). openpresentation.org
-  and pptx.gallery: rollback is `proxied=false` on the DNS records. pptx.dev: Worker custom domains for www, apex, api. and mcp.;
-  the `*.pptx.dev` wildcard is still on Vercel; rollback is detaching the four domains and restoring the four A records from the
-  backup. pptx.dev runs on the Clerk development instance and a dev Convex deployment for now (owner decision 2026-10-05).
-  Since the last handoff: the deploy-on-main workflows now exist for all three sites (CF-04 and, for pptx.dev,
-  [pptx-dev#100](https://github.com/Data-Advantage/pptx-dev/pull/100)) and stop at their gate until the Actions secrets exist; the
-  apex static-asset redirect on openpresentation.org is merged and live (CF-07); the pptx.dev signed-in e2e suite
-  ([pptx-dev#98](https://github.com/Data-Advantage/pptx-dev/pull/98)) is merged and not yet run; pptx-gallery no longer shows the
-  STORYD CTAs or the private repo link, serves its chart preview images from R2 (bucket `pptx-gallery-web`, `/media`), and the
-  three sites self-host their fonts (no build-time Google Fonts); pptx.dev hosted services SVC-01 to SVC-04 are merged (17 MCP
-  tools). See [docs/programs/cloudflare-hosting/](../cloudflare-hosting/README.md).
-- Open pull requests (core): [opf#376](https://github.com/OpenPresentation/opf/pull/376) (RR-54 core),
-  [opf#392](https://github.com/OpenPresentation/opf/pull/392) (RR-54 native evidence, ready) and
-  [opf#335](https://github.com/OpenPresentation/opf/pull/335) (RR-53 core contract tier, ready, parked). The siblings' RR-54 pull
-  requests are listed above. opf#308 (the old RR-17 placeholder) is closed; its plan was carried out by opf#357 and opf#382.
-- Native PowerPoint evidence is under `docs/evidence/`. Added on 2026-10-05 / 06 (Windows, PowerPoint 16.0 build 20430):
-  `rr-17-pptxgenjs-plus-native-20261005`, `rr-05-ff-12-native-20261005`, `ff-27-fields-slide-sizes-native-20261005`,
-  `ff-13-font-embed-native-20261005`, `opf-87-save-reopen-native-20261005`, `ff-46-documented-visual-native-20261005` and
-  `-fonts`, `ff-46-theme-supplement-native-20261005`, `ff-05-per-slide-script-fonts-native-20261005`, and the RR-54 runs
-  (`rr-54-chart-table-data-native-20261005`, `-recheck-20261005`, `rr-54-slash-native-20261005`). Earlier:
-  `ff-46-native-0.12-20261002`, `rr-42-native-20261002`, `rr-17-viet-supplement-native-20261002`, `ff-05-native-20261002`,
-  `rr-05-cjk-native-20261002`, `rr-05b-native-20261002`; Keynote evidence (opf#341) is under
-  `docs/evidence/mac-checks-20261002/keynote`.
-- CI speed (RR-45 follow-up, [opf#368](https://github.com/OpenPresentation/opf/issues/368), closed): six items merged
-  (opf#369 to opf#374): `ecosystem-core` runs as three parallel shards (13.4 min before, 4.1 / 4.4 / 5.4 min after), `Verify OPF
-  packages` 9.5 to 8.0 min, the Windows and macOS installed-candidate legs run only on main, nightly and PRs labelled
-  `ecosystem-full`. `ecosystem-render` (11 to 12.6 min) is now the critical path.
+- Merge and watch pull requests **only** with `node scripts/pr-gate.mjs <owner/repo#N>… --merge [--expect-head <sha>]…`.
+  Run it as **one** background task per batch. Never write a polling loop, and never loop REST calls; every agent on the
+  account shares a 5000/h GitHub quota.
+- Release **only** through `scripts/release-train.mjs` (`plan`, `prep`, `tag`, `verify`). It runs trusted publishing,
+  in dependency order: core, then render, then pptx, then editor, then CLI. Never move or re-push a tag. A publish that
+  fails on a real bug burns the version: fix it on `main` and release the next patch.
+- Agents never deploy, log in, change DNS, create secrets or create GitHub Apps. Those are owner actions (list below).
+- Pre-v1: breaking changes ship without migration tools, aliases or shims (the owner's decision of 2026-10-10). Convert
+  our own examples and docs instead.
+- Before tagging core, replay `npm-publish.yml` locally from clean `dist` folders, with `GITHUB_REF` set to the tag and
+  `NPM_CONFIG_USERCONFIG` pointing at an `.npmrc` that contains `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}`
+  (the token unset). Run `lint`, `typecheck`, `test`, `check:breaking`, `pack:dry-run`, `check:examples`, `test:skills`
+  and `packages/javascript/test/packed-install-smoke.mjs`. Also run `node scripts/build-gallery-tracker.mjs --check` and
+  `pnpm check:font-tracker` at the release commit. Before each sibling prep, run its `npm run test:packed` locally
+  against the published upstream.
+- A pull request that edits `burndown.md` also regenerates the gallery tracker (`node scripts/build-gallery-tracker.mjs`).
 
-## Open, and who it waits on
+## Published (npm `latest`; each verified with gitHead, SLSA provenance, `npm audit signatures` and a GitHub Release)
 
-Owner actions:
+| Package | Version | Notes |
+| --- | --- | --- |
+| `@openpresentation/opf` | **0.18.3** | Tag `opf-v0.18.3` at `d52fa6ce`, published 2026-10-11 00:26 UTC. **0.18.2 is burned** (tagged, publish failed, never on npm); fix in opf#588. |
+| `@openpresentation/opf-render` | 0.18.0 | 0.18.1 is next (below). |
+| `@openpresentation/opf-pptx` | 0.18.0 | 0.18.1 is next. |
+| `@openpresentation/opf-editor` | 0.18.0 | 0.18.1 is next. |
+| `@openpresentation/cli` | 0.18.0 | 0.18.1 is next. |
+| `@openpresentation/gallery` | none | 1.0.0 is blocked on the owner's npm trusted publisher (below). |
 
-- **Urgent:** raise the Data-Advantage GitHub Actions budget before about 2026-10-08, or limit `llmreference` CI (it was
-  53% of September's spend); otherwise site CI stops (RR-40 finding). The 2026-10-05 Actions incident also left some hosted
-  jobs unacquired.
-- Merge queue, [opf#297](https://github.com/OpenPresentation/opf/issues/297) (RR-48, then RR-53: the supervisor merges
-  [opf#335](https://github.com/OpenPresentation/opf/pull/335) and measures a queued run).
-- GitHub App, [opf#298](https://github.com/OpenPresentation/opf/issues/298) (RR-50 follow-up, RR-51 criterion a): App id
-  and key secrets, uncomment the ecosystem roller schedule, set `ECOSYSTEM_LOCK_GUARD=blocking`.
-- RR-14 enable: needs the owner's Clerk user id for `UNDERSTAND_DECK_ALLOWLIST`. The flags are Worker / build variables
-  (`UNDERSTAND_DECK_ENABLED`, `UNDERSTAND_DECK_ALLOWLIST` as Worker variables, `NEXT_PUBLIC_UNDERSTAND_DECK` as a build variable,
-  which needs a rebuild); `AI_GATEWAY_API_KEY` is already a Worker secret. Left: confirm the AI Gateway $50 per month limit and
-  rotate the old key if the removed `.env.example` value was real.
-- RR-49 is closed as `descoped` (owner, 2026-10-06: "we don't need Vercel only checks"; README, Open decisions 5): the Vercel-only checks are
-  removed in [openpresentation-site#83](https://github.com/Data-Advantage/openpresentation-site/pull/83), [pptx-gallery#103](https://github.com/Data-Advantage/pptx-gallery/pull/103) and [pptx-dev#107](https://github.com/Data-Advantage/pptx-dev/pull/107). Close-out: [opf#299](https://github.com/OpenPresentation/opf/issues/299) (the bypass secret) can be
-  closed, and no Vercel secret or `PREVIEW_SMOKE_ENABLED` variable is needed (delete them if they were ever set). Vercel still builds as a
-  warm rollback, so `vercel.json`, the Ignored Build Step and its test stay until the Vercel projects are removed (CF-08). The
-  CF-04 deploy secrets (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) are what makes the production checks run, and stay in the
-  Cloudflare program.
-- RR-19 leftovers: the 19 kept worktrees with uncommitted or unpushed work (the list is in the supervisor's scratchpad
-  `wt-kept.txt`; e.g. opf-pptx ff-32 rich-metadata, rich-source and extension worktrees, pptx-gallery gallery41/42/44-45
-  reviews, pptx-dev app58 with 266 modified files), and the `archive-*`, `shared-furniture-*` and `claude/*` branches.
-  `~/.codex/worktrees` is untouched. Deletion candidates from the RR-46 follow-up in opf-pptx: `compare-published.mjs`
-  (pinned to 0.5.0) and `native-furniture-fixtures.mjs`.
-- Optional, CF-04 and CF-05 secrets: `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit and Account Settings: Read) and
-  `CLOUDFLARE_ACCOUNT_ID` in openpresentation-site, pptx-gallery and pptx-dev (pptx-dev also `CONVEX_DEPLOY_KEY` and the
-  `NEXT_PUBLIC_*` repository variables), until then the deploy-on-main workflows skip or stop at their gate and production
-  checks do not run; a Clerk test user (a `+clerk_test` address) with `E2E_CLERK_USER_EMAIL`, `CLERK_SECRET_KEY` and
-  `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for the signed-in e2e.
-- Review of the release note [release-notes-0.12.0.md](release-notes-0.12.0.md) (addenda up to opf-pptx 0.12.3) and of the RR-54
-  behaviour changes before the 0.13 train (README, Open decisions 7).
-- FF-46 follow-ups (README, Open decisions 6): commission the `sizeAdjust` rows for the 24 findings
-  ([opf#361](https://github.com/OpenPresentation/opf/issues/361)) and the per-family host fixtures
-  ([opf#362](https://github.com/OpenPresentation/opf/issues/362)), or record them as wide look-alikes; the registry
-  measurement default ([opf#364](https://github.com/OpenPresentation/opf/issues/364)); the Didot reroute decision.
-- opf#87: accept the lost raster fallback after a PowerPoint save of an SVG picture, or track it (README, Open decisions 2);
-  opf#88's source-preservation box has no item.
-- Production Clerk and Convex for pptx.dev when real users arrive (it runs on the Clerk development instance and a dev Convex
-  deployment for now, owner decision 2026-10-05).
-- Cursor Bugbot quota (optional).
+## The 0.18.x patch train: exact next steps
 
-Windows host: the deferred work of [opf#323](https://github.com/OpenPresentation/opf/issues/323) was run on 2026-10-05 (every
-section; evidence merged, see State). What remains there is the re-run of the size-adjusted families once the `sizeAdjust` rows
-land ([opf#361](https://github.com/OpenPresentation/opf/issues/361)). New native checks for RR-54 follow-ups (for example the
-open opf#392 set) go through the supervisor as before.
+The versions for every `release-train.mjs` call:
+`--core 0.18.3 --render 0.18.1 --pptx 0.18.1 --editor 0.18.1 --cli 0.18.1 --item RR-20`.
 
-Mac mini: the Keynote checks are done (2026-10-05, opf#341): the 20-deck set on opf-pptx 0.12.2 lost 6 native category charts; the
-fixed decks (built from the fix branch before the release) have 0 failures. The Keynote m-set of the pptxgenjs-plus migration has
-20 WARN, 0 FAIL with every chart kept, and pptx-dev's own generator fix (pptx-dev#93) went from 0 of 7 charts kept to 7 of 7.
-The playground example decks were checked in Keynote on 2026-10-05 against the live site: full-feature-tour passes (11 of 11
-slides, its chart kept) and developer-conference-talk hung the Keynote export twice; the launch-quality rewrite
-([opf#367](https://github.com/OpenPresentation/opf/pull/367), merged) is the fix for what was found, and a Keynote re-check of the
-rewritten decks is not recorded in this repository. Keynote is opened read-only, never saved, only by the supervisor.
+1. **Lock roll** [opf#590](https://github.com/OpenPresentation/opf/pull/590) (head `0588403c`) was in the merge queue
+   with its checks green. Confirm it merged: `node scripts/pr-gate.mjs OpenPresentation/opf#590 --merge`. The renderer
+   prep needs it, because the lock's core must carry `LAZY_FONT_COUNTS['0.18.1']` (opf#579).
+2. **opf-render 0.18.1.** Run `release-train.mjs prep render …`, then use pr-gate to merge the prep PR, then run
+   `release-train.mjs tag render … --execute --checks-wait-minutes 30`. `tag` runs `verify`.
+   - `npm run test:packed` already passed locally at render main `443dbb98` against core 0.18.3: 204 byte-matched files,
+     signatures verified.
+   - Before prep, check that `golden-override: ''` is in both `ecosystem-refs` steps of render's `ci.yml`, and that
+     render's default baseline (`test/golden/opf-examples-png.cover-centering/_baseline.json` `source.sha256`) equals
+     core 0.18.3's examples digest `20da988227cb90ad9a1f04185981f83d24c0afee7c9070d7b84e55fe7895e71b`. Core's examples
+     did not change since 0.18.1.
+   - **Release notes:** the `render-191-deps.md` fragment (render#218) tells users to upgrade `@expo-google-fonts/
+     noto-sans-jp`, `-kr`, `-sc`, `-tc` to 0.4.4, `noto-color-emoji` to 0.4.7 and `noto-emoji` to 0.4.8 together with
+     the renderer. They are exact-pinned optional peers.
+   - Contents: render #203–#210, #212, #214, #216 (forced colours), #218 and #221 (Wingdings in list bodies).
+3. **Merge [opf-editor#154](https://github.com/OpenPresentation/opf-editor/pull/154)** (head `c8828f46`, the font pins
+   matching render 0.18.1) **only after render 0.18.1 is on npm**. Re-run its CI first; it is red against render 0.18.0
+   by design. The opf-pptx side (#243) is merged.
+4. **opf-pptx 0.18.1** (prep → merge → tag). Contents: pptx #231, #233–#237, #239, #242 (tables survive a PowerPoint
+   save), #243. Run `npm run test:packed` locally first.
+5. **opf-editor 0.18.1** (prep → merge → tag). Contents: editor #152, #153, #154. Run `npm run test:packed` locally first.
+6. **CLI 0.18.1**: `release-train.mjs prep cli …`, then tag. Before tagging, run `pnpm test:cli:packed:peers` with
+   `GITHUB_REF=refs/tags/cli-v0.18.1`.
+7. **Lock roll again** (dispatch `ecosystem-roll.yml` on `main`, open the PR from `ecosystem-roll/main`, merge it with
+   pr-gate). Then update `release-plan.json`, the compatibility matrix and the burndown rows in one records PR.
+8. **Sites adopt 0.18.1** (openpresentation-site, pptx-gallery, pptx-dev, on `master`). Each bumps render, pptx and
+   editor and **all six font packages above** together. pptx-gallery also regenerates `public/opf-editor/wasm.json`
+   (harfbuzzjs 1.6.3), and bumps `exampleRefs['opf-editor']` and runs `prepare:opf` (gallery#118 part 2).
 
-Parked: [opf#335](https://github.com/OpenPresentation/opf/pull/335) (ready, not merged) until the merge queue is enabled.
+## Held until render-v0.18.1 and editor-v0.18.1 are tagged (then they form render 0.18.2)
 
-## Supervisor tooling now in the repository
+All are green or nearly green. Each PR body has its status. Merge order in brackets.
 
-- `scripts/release-train.mjs` (`plan`, `prep`, `tag`, `verify`, `run`; `verify --wait`) and the plan-only
-  `release-train.yml` (RR-51); the release procedure stays in [docs/release-process.md](../../release-process.md).
-- `ecosystem.lock.json`, `scripts/ecosystem-lock.mjs` and `scripts/ecosystem-roll.mjs` (RR-50): the pins are bot-owned; roll
-  by dispatching the roller and open the PR yourself until the App exists (the latest rolls are opf#379 and opf#389);
-  `Depends-On:` trailers for cross-repository PRs.
-- `scripts/quarantine.mjs` and `test/QUARANTINE.md` (RR-47): flake quarantine with a supervisor approval note.
-- Changelog fragments: `changes/<slug>.md`, assembled by `node scripts/changelog-fragments.mjs assemble --version X.Y.Z` in
-  the release-prep PR (RR-46); test files are globbed by `scripts/run-tests.mjs`.
-- `pnpm report:release` and `pnpm check:release-report` for the tracker; `pnpm build:gallery-tracker` and
-  `pnpm build:font-tracker` regenerate the trackers (the burndown statuses are inputs; `tracker-refresh.yml` regenerates
-  after merges).
-- Merge watching stays REST-only (GraphQL hit secondary rate limits): per `owner/repo:N` poll every 5 minutes, take the
-  latest run per check name, ignore `Cursor Bugbot`, merge with `PUT /repos/{r}/pulls/{n}/merge` (`squash`) when every check
-  completed without failure, then delete the head branch unless an open PR uses it as base.
+- opf#361, the size-adjust policy: [opf#585](https://github.com/OpenPresentation/opf/pull/585) first, then
+  [opf-render#219](https://github.com/OpenPresentation/opf-render/pull/219). opf#585's `packages` aggregate was red only
+  from the font-pin drift, which opf#587 and the lock roll fix. Re-run its CI.
+- opf#362, documented-visual host fixtures:
+  - [opf-render#217](https://github.com/OpenPresentation/opf-render/pull/217);
+  - [opf-editor#155](https://github.com/OpenPresentation/opf-editor/pull/155);
+  - [pptx-gallery#125](https://github.com/Data-Advantage/pptx-gallery/pull/125);
+  - [opf#584](https://github.com/OpenPresentation/opf/pull/584).
+- [opf-render#222](https://github.com/OpenPresentation/opf-render/pull/222) (head `eac8366a`): HarfBuzz pens for raster
+  complex-script clusters. Default toPng output changes for Thai, Tamil, Telugu and Myanmar.
+- Then cut render 0.18.2, and an editor patch if #155 changed the editor.
 
-## Decisions taken on the owner's behalf
+## OPF 0.19: adaptive layouts (RR-79 to RR-84), all drafts
 
-All are vetoable and dated in the README decision log. The latest (2026-10-05 / 06): RR-49 descoped by the owner (Vercel-only checks removed; the Ignored Build Step stays while Vercel builds); RR-05 and FF-12 accepted as met on the
-12-deck sample (the stricter script rule's one FAIL is kept as evidence); FF-13 done on the corrected audit; FF-27 and RR-03
-closed on the native renumber observation (the missing `datetime*` gallery snippet is treated as a coverage observation);
-slide-size presets keep OPF's values; FF-46 findings go through `sizeAdjust` rows and per-family host fixtures; RR-54 added with
-status review. Earlier (2026-10-03): RR-50 done without the App; RR-51 tag gates on the release commit's checks; RR-53 no
-PR-tier reduction before the queue exists; core 0.12.1 without re-releasing the siblings; the 307 redirect for plural audience
-URLs; RR-19 leftovers go to the owner.
+The design is [0.19-layouts.md](0.19-layouts.md) (merged opf#565). The owner removed every migration path.
+- **RR-79 core** [opf#577](https://github.com/OpenPresentation/opf/pull/577) (draft, head `74eb3b94` or later, green).
+  - Contents: the `opf-layout/v2` schema, the template composer, `layout: "auto"`, list columns and `design.mirror`.
+  - 336 template goldens, 61 of them moved by review.
+  - No migrate.
+  - Decisions 1–14 are in §13 of the design doc; #2 and #5 are superseded.
+  - An unknown or former layout id stays a warning (`opf/unresolved-reference`).
+- **RR-81:**
+  - render [opf-render#215](https://github.com/OpenPresentation/opf-render/pull/215) (draft, green);
+  - pptx [opf-pptx#240](https://github.com/OpenPresentation/opf-pptx/pull/240) (draft, native re-check passed; rebase onto #242).
+- **RR-80** gallery 2.0.0, [OpenPresentation/gallery#5](https://github.com/OpenPresentation/gallery/pull/5) (draft).
+  - Contents: 28 intent templates, `CATALOG_SCHEMA` 2, SVG previews.
+  - CI turns green only after core and render 0.19 publish.
+  - It needs gallery 1.0.0 published first.
+  - Open point: from 2.x the gallery repo is the source, so pptx-gallery#121 (the sync from pptx.gallery to the gallery)
+    either becomes 1.x-only or closes.
+- **Still to do:**
+  - RR-82: the editor.
+  - RR-83: convert the 103 examples, docs, skills and site content to v2 with a throwaway script, then remove v1. The
+    278-row conversion table should be on a draft branch; check the walkthrough session's PR list.
+  - RR-84: the sites.
+  - Then the 0.19 lockstep train.
 
-## Native PowerPoint runs (Windows plus desktop PowerPoint only)
+## Owner actions (agents cannot do these)
 
-Only the supervisor runs Office (README invariants). Pattern: decks built by an agent with the published packages, a `RUN.md`,
-helpers `run-deck.ps1` (one deck per child `powershell.exe`, 90 s deadline, stops only its own child by PID) and
-`native-read-deck.ps1` (attaches to a running PowerPoint with `GetActiveObject`, opens read-only with
-`Presentations.Open(path, -1, 0, 0)`, never saves, quits or kills PowerPoint), then `compare.mjs` and committed evidence (no
-decks, no PNGs, no absolute paths). Run them with `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File …`.
-Where the owner allowed saving (2026-10-05: FF-13, opf#87, RR-54 C4), the run makes one `SaveAs` / `SaveCopyAs` of a copy into a
-fresh directory and never saves over a source. Never read `Series.Formula`: it crashes PowerPoint 16.0.20430. The decks and
-helpers of the 2026-10-02 runs are not in the repository; the evidence READMEs describe how each set was built, and the probe
-sets of 2026-10-05 live on the `codex/probe-sets-20261005` branch.
+1. **npm trusted publisher for `@openpresentation/gallery`** at https://www.npmjs.com/package/@openpresentation/gallery/access
+   (GitHub Actions, organization `OpenPresentation`, repository `gallery`, workflow `gallery-publish.yml`, no
+   environment). Then an agent tags `v1.0.0` in the gallery repo and runs `release-train.mjs verify gallery@1.0.0`. After
+   that, [opf#557](https://github.com/OpenPresentation/opf/pull/557) and the siblings move to `^1.0.0`.
+2. **One GitHub App for cross-repo pull requests** (covers opf#298 and pptx-gallery#121).
+   - Permissions: Contents read/write, Pull requests read/write, Metadata read.
+   - Install it on the five OpenPresentation repos.
+   - Set the variable `ECOSYSTEM_APP_ID` and the secret `ECOSYSTEM_APP_PRIVATE_KEY` in OpenPresentation and in
+     Data-Advantage/pptx-gallery.
+3. **Cloudflare Actions secrets** `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in openpresentation-site,
+   pptx-gallery and pptx-dev. Until they exist, production stays on the October 7 builds.
+4. Delete the 48 pre-0.18 GitHub Releases, keeping the tags (the agent's attempt was refused).
+5. Optional:
+   - two PowerPoint UI checks (Accessibility Checker on the pptx#236 deck, Edit Data on the pptx#233 charts);
+   - `npm deprecate @openpresentation/gallery@"<1.0.0"`;
+   - keep or rename the pptx-dev `/v1/data/import` and `import_data` names (recommendation: keep);
+   - CF-08 Vercel retirement;
+   - a veto window on the opf#577 decisions.
+
+## Follow-up issues (open, not started)
+
+- opf-pptx#238 (description classification by size).
+- opf#581 (per-script sizeAdjust, Traditional Arabic).
+- opf#582 (Nirmala UI Indic fallback overhang; a real fidelity bug).
+- opf-render#213 (HarfBuzz layout measurement, 0.19).
+- openpresentation-site#102 (fillJson for the other specs).
+- OpenPresentation/gallery#4 (from opf#317).
+- FF-46 findings on #323 (Microsoft YaHei ink 1.0118; a Segoe UI Emoji wrapped line; Ebrima/Nyala).
+
+## Lessons from this train (also in the agent memory)
+
+- A renderer font-pin bump deadlocks the train. The siblings' own tests need the published renderer's pins, and the
+  linked shards need main's pins. opf#587 makes `link-ecosystem` install the linked renderer's pins. Merge sibling pin
+  bumps after the renderer publishes.
+- `npm-publish.yml`'s `.npmrc` makes pnpm print a WARN line. Tests must not parse whole tool output (opf#588).
+
+## Local-only state
+
+The previous supervisor's helper scripts (`rel018-*.sh` and `pubrepro.sh`) lived in a session scratch directory. They
+only wrap the documented commands above and are not needed. The tracker artifact at
+https://claude.ai/artifact/SKE8TDCXAUE7dthS6EtuEM mirrors this file for the owner.
