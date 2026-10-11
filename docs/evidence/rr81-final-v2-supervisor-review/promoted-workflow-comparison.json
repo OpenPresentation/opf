@@ -1,0 +1,11 @@
+{
+  "coreCommit": "91a1c96df7b4bddf7144c71ea079220765b9360b",
+  "rendererCommit": "ab23a258b1199dc3ac8b700411eb952550a00ef8",
+  "examplesMatched": 807,
+  "rendererDeckFiles": 127,
+  "templateBytesMatched": true,
+  "examplesSha256": "8a19f5152853388583726b6df23d44071e73e481570fd237f0081ea43be6d0b0",
+  "templatesSha256": "cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759",
+  "onlyExpectedGeneratedPaths": true,
+  "workflowTerminalStatus": "pending shared gate verification"
+}
