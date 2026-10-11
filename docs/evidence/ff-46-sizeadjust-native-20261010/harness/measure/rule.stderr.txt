@@ -1,0 +1,8 @@
+Angsana New: rule 0.75 (exact 0.7401), worst 0.0164 at corpus-Thai/thai-digits regular
+DilleniaUPC: rule 0.68 (exact 0.6704), worst 0.0155 at corpus-Thai/thai-digits regular
+Sakkal Majalla: rule 0.89 (exact 0.8866), worst 0.0261 at corpus-Arab/arab-fa-digits regular
+Traditional Arabic: rule 1.02 (exact 1.0152), worst 0.0251 at corpus-Arab/arab-fa-digits bold
+Malgun Gothic: rule 1.07 (exact 1.0669), worst 0.027 at corpus-Kore/kore-jamo regular
+Nirmala UI: rule 1.07 (exact 1.0695), worst 0.0295 at corpus-Deva/deva-matras regular
+Ebrima: rule 0.99 (exact 0.9875), worst 0.0274 at corpus-Latn/latn-numerals bold
+MS Gothic: rule 1.33 (exact 1.3267), worst 0.0274 at corpus-Latn/latn-ligatures regular
