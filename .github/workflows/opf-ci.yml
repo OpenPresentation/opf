@@ -9,6 +9,11 @@ on:
   # RR-48: the merge queue's run. It has no pull_request payload (nothing here reads one), and it is never cancelled.
   merge_group:
   workflow_dispatch:
+    inputs:
+      candidate-gallery-ref:
+        description: Exact reviewed gallery SHA for explicit source/tarball qualification; empty preserves normal CI.
+        type: string
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,8 +23,32 @@ permissions:
   contents: read
 
 jobs:
-  verify:
-    name: Verify OPF packages
+  gallery:
+    name: Resolve explicit gallery qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      candidate_gallery: ${{ steps.resolve.outputs.candidate_gallery }}
+      published_opf: ${{ steps.resolve.outputs.published_opf }}
+      published_opf_render: ${{ steps.resolve.outputs.published_opf_render }}
+      published_opf_pptx: ${{ steps.resolve.outputs.published_opf_pptx }}
+      published_opf_editor: ${{ steps.resolve.outputs.published_opf_editor }}
+      published_cli: ${{ steps.resolve.outputs.published_cli }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: opf
+          persist-credentials: false
+      - id: resolve
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref }}
+        run: node scripts/candidate-gallery.mjs resolve
+  normal:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery == ''
+    name: Published dependency source checks
     # RR-40: a fixed image, so ubuntu-latest moving to Ubuntu 26 (from 2026-10-19) cannot change fonts, ICU or
     # system libraries under this required check; move to the next LTS in its own PR.
     runs-on: ubuntu-24.04
@@ -129,3 +158,40 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
+
+  candidate:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery != ''
+    uses: ./.github/workflows/candidate-gallery-qualification.yml
+    with:
+      mode: core
+      gallery-ref: ${{ needs.gallery.outputs.candidate_gallery }}
+  control:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery != ''
+    uses: ./.github/workflows/published-gallery-control.yml
+    with:
+      mode: core
+      opf-ref: ${{ needs.gallery.outputs.published_opf }}
+      render-ref: ${{ needs.gallery.outputs.published_opf_render }}
+      pptx-ref: ${{ needs.gallery.outputs.published_opf_pptx }}
+      editor-ref: ${{ needs.gallery.outputs.published_opf_editor }}
+      cli-ref: ${{ needs.gallery.outputs.published_cli }}
+  verify:
+    name: Verify OPF packages
+    needs: [gallery, normal, candidate, control]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: opf
+          persist-credentials: false
+      - name: Require the complete selected contracts
+        working-directory: opf
+        env:
+          MODE: core
+          CANDIDATE_SHA: ${{ needs.gallery.outputs.candidate_gallery }}
+          RESULTS: ${{ toJSON(needs) }}
+        run: node scripts/candidate-gallery-results.mjs

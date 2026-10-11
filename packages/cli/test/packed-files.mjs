@@ -12,24 +12,31 @@ import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
+import {candidateArtifacts,assertInstalledCandidatePeers,assertCandidateExecInstalls} from '../../../scripts/candidate-gallery-pack.mjs';
+import {qualificationPeerGate} from '../../../scripts/candidate-gallery-results.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cli');
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
-const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map(name => `${name}@${manifest.devDependencies[name]}`);
+const candidateGraph=candidateArtifacts(path.resolve(root));
+const requireCandidateGate=result=>qualificationPeerGate(result,!!candidateGraph);
+const stagedCli=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/cli')?.stagedManifest;
+const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map(name => candidateGraph?path.join(root,'artifacts/npm',candidateGraph.artifacts.find(item=>item.name===name).file):`${name}@${manifest.devDependencies[name]}`);
 // RR-63: the renderer's converters (pdf-lib, @resvg/resvg-js, sharp) and font packages are its optional peers; install the ones the CLI's outputs use beside it.
 // RR-59 (opf#476): and the Noto JP and SC script packages the installed-package regression draws Japanese and Chinese SVG with (opf-render pins them exactly as peers;
 // installed-regression.mjs checks the installed versions against the renderer's declared ones).
-const scriptFonts = ['@expo-google-fonts/noto-sans-jp@0.4.3', '@expo-google-fonts/noto-sans-sc@0.4.3'];
-const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`).concat(scriptFonts);
+const rendererPeers=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf-render')?.stagedManifest.peerDependencies;
+const scriptFonts = ['@expo-google-fonts/noto-sans-jp','@expo-google-fonts/noto-sans-sc'].map(name=>`${name}@${rendererPeers?.[name]??'0.4.3'}`);
+const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${rendererPeers?.[name]??manifest.devDependencies[name]}`).concat(scriptFonts);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
-if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
+if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
 // The candidate core declares the same peers (optional, for its Node build's file API; opf#498 raises them to the next train's line before
 // core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
-if (!report(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
+if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
-assert.deepEqual(Object.keys(manifest.dependencies ?? {}), ['@openpresentation/opf'], 'core is the only runtime dependency of the CLI');
+const expectedDependencies=Object.hasOwn(manifest.dependencies??{},'@openpresentation/gallery')?['@openpresentation/gallery','@openpresentation/opf']:['@openpresentation/opf'];
+assert.deepEqual(Object.keys(manifest.dependencies ?? {}).sort(), expectedDependencies, 'CLI runtime dependencies must match the core and explicit gallery contract');
 const temp = await mkdtemp(path.join(tmpdir(), 'opf-cli-peers-'));
 function run(command, args, cwd, env = {}) {
   if (process.platform === 'win32' && (command === 'npm' || command === 'pnpm')) {
@@ -64,14 +71,15 @@ try {
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
   // RR-66 (opf#466): in a folder of its own, so the npm exec runs below never resolve into it (scripts/global-prefix.mjs).
   const global = globalPrefixLayout(path.join(temp, 'global'));
-  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers, ...renderExtras], temp);
+  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...(candidate.additionalTarballs??[]), ...peers, ...renderExtras], temp);
   const modules = global.modules;
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
-  assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
+  if(stagedCli)assert.deepEqual(installed,stagedCli,'installed CLI differs from staged metadata');
+  assert.deepEqual(Object.keys(installed.dependencies ?? {}).sort(), expectedDependencies);
   // A new core minor is released before its siblings: until they publish, the published siblings' own core range does not
   // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
   // the core tag; the CLI release keeps the hard gate).
-  if (!report(peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version}))) process.exit(0);
+  if (!report(requireCandidateGate(candidateGraph ? assertInstalledCandidatePeers(root,modules,['@openpresentation/cli','@openpresentation/opf-render','@openpresentation/opf-pptx'],JSON.parse(await readFile(path.join(modules,'@openpresentation/opf/package.json'),'utf8')).version) : peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version})))) process.exit(0);
   // One core for the command, the application's @openpresentation/opf and both peers.
   await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);
@@ -96,7 +104,7 @@ try {
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   assertExecOutsideGlobal(work, global);
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...(candidate.additionalTarballs??[]), ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   // RR-75: `opf convert` replaces render, export and import; the output path names the files (a one-slide deck writes one file).
   const rendered = npx('convert', 'deck.opf.json', 'png/Npx.png');
   assert.equal(rendered.ok, true);
@@ -105,6 +113,7 @@ try {
   assert.ok((await readdir(work)).includes('Npx.pptx'));
   assert.equal(npx('convert', 'Npx.pptx', 'round.opf.json').ok, true);
   assert.ok((await readdir(work)).includes('round.opf.json'));
+  if(candidateGraph)assertCandidateExecInstalls(root,cache,['@openpresentation/opf-render','@openpresentation/opf-pptx']);
   console.log(`CLI plus optional peers passed (${peers.join(', ')}). Tarball: ${tarball}`);
 } finally {
   const actual = await realpath(temp), parent = await realpath(tmpdir());

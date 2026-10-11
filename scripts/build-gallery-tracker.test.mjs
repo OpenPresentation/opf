@@ -11,6 +11,7 @@ import {
   STATUS_DEFINITIONS,
   STATUSES,
   checkTracker,
+  buildTracker,
   linkState,
   matchRule,
   nativeEvidenceIndex,
@@ -40,6 +41,10 @@ function scratchCopy(mutateOverrides = (o) => o) {
   for (const file of [...Object.values(files).flat(), FILES.snapshots, FILES.json, FILES.markdown]) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
+  }
+  if (overrides.inputs.inputLimitations) for (const item of read(overrides.inputs.inputLimitations).records) {
+    mkdirSync(path.dirname(path.join(dir, item.evidence)), { recursive: true });
+    cpSync(path.join(ROOT, item.evidence), path.join(dir, item.evidence));
   }
   cpSync(path.join(ROOT, catalogs), path.join(dir, catalogs), { recursive: true });
   mkdirSync(path.join(dir, "docs/evidence-empty/native-none"), { recursive: true });
@@ -208,5 +213,49 @@ test("a stale tracker, an unused rule and an unknown RR link fail the build", ()
     assert.throws(() => checkTracker({ root: dir }), /unknown burndown item RR-98/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+
+test("Pareto limitation preserves measured verdicts and remains an open data-preservation gap", () => {
+  const dir = scratchCopy();
+  try {
+    const { tracker: current } = buildTracker({ root: dir });
+    const row = current.records.find((r) => r.type === "charts" && r.id === "pareto");
+    const config = read(FILES.overrides);
+    delete config.inputs.inputLimitations;
+    config.inputs.evidence = "docs/evidence-empty";
+    config.rules = config.rules.filter((r) => r.id !== "pareto-multi-series-loss");
+    writeFiles(dir, { [FILES.overrides]: config });
+    const historical = buildTracker({ root: dir }).tracker.records.find((r) => r.type === "charts" && r.id === "pareto");
+    assert.deepEqual(row.columns, historical.columns, "measured historical verdicts changed");
+    assert.match(row.evidenceScope, /single-series/);
+    const gap = row.gaps.find((g) => g.rule === "pareto-multi-series-loss");
+    assert.equal(gap.code, "missing-export");
+    assert.equal(gap.link, "https://github.com/OpenPresentation/opf-pptx/issues/246");
+    assert.equal(gap.addressed, false);
+    assert.equal(gap.descoped, undefined);
+    const proof = read("docs/evidence/rr-20-pareto-series-scope/reproduction.json");
+    assert.equal(proof.input.slides[0].chart.data.columns.length, 4);
+    assert.equal(proof.imported.slides[0].chart.data.columns.length, 2);
+    assert.ok(proof.export.diagnostics.some((d) => d.code === "chart-data-adapted" && d.adaptation === "series-dropped"));
+    assert.equal(proof.nativeExecution, false);
+    assert.equal(proof.historicalNativeInput.sampleData.rows.length, 1);
+    assert.equal(proof.historicalNativeInput.opfDataColumns.length, 2);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("input limitations reject unknown records, duplicate scopes and missing evidence", () => {
+  for (const [kind, pattern] of [["unknown", /names no active record/], ["duplicate", /duplicate input limitation/], ["missing", /missing input limitation evidence/]]) {
+    const dir = scratchCopy();
+    try {
+      const file = overrides.inputs.inputLimitations;
+      const data = read(file);
+      if (kind === "unknown") data.records[0].id = "does-not-exist";
+      if (kind === "duplicate") data.records.push(structuredClone(data.records[0]));
+      if (kind === "missing") data.records[0].evidence = "missing.json";
+      writeFiles(dir, { [file]: data });
+      assert.throws(() => buildTracker({ root: dir }), pattern);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
   }
 });
