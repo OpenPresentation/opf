@@ -1,0 +1,16 @@
+ .github/workflows/ci.yml                    |  6 ++++
+ CHANGELOG.md                                | 15 ++++++++
+ changes/fix-manual-harnesses.md             |  4 ---
+ changes/fix-packed-bundle-static-server.md  |  4 ---
+ changes/pptx-169-registry-glyph-fallback.md |  4 ---
+ changes/pptx-175-chart-series-order.md      |  4 ---
+ changes/pptx-212-list-runs.md               |  4 ---
+ changes/pptx-221-decorative-panel.md        |  4 ---
+ changes/pptx-221-placeholder-group.md       |  4 ---
+ changes/pptx-241-table-defaults.md          |  4 ---
+ changes/pptx-364-fonts-docs.md              |  4 ---
+ changes/pptx-font-pins-render-0181.md       |  4 ---
+ changes/rr-20-github-release.md             |  4 ---
+ package-lock.json                           | 53 +++++++++++++----------------
+ package.json                                |  8 ++---
+ 15 files changed, 48 insertions(+), 78 deletions(-)
