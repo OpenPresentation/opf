@@ -1,4 +1,0 @@
----
-type: fixed
----
-RR-59 (opf-render#170): forced colors. A disabled control of `<opf-deck>`, the slideshow and the speaker view (Previous on the first slide, Next on the last) is drawn in `GrayText` at full opacity when `forced-colors: active`, instead of at 45% opacity, which blended its frame and its focus ring into the page; nothing changes outside forced colors. `test/forced-colors-browser.mjs` verifies the element (the website-starter embed and a bare one), the slideshow and the speaker view with Chromium's forced-colors emulation in light and dark: the slide boundary, buttons, thumbnails and focus rings stay visible in system colors, as computed style and as screenshot pixels. The README states what was verified (emulation only, not the Windows contrast theme) and that the element and player are not tested with assistive technology (screen readers).
