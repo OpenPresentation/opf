@@ -25,6 +25,10 @@ on:
       - '.github/workflows/cli-windows.yml'
   merge_group:
   workflow_dispatch:
+    inputs:
+      candidate-gallery-ref:
+        type: string
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -78,19 +82,41 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+      - id: gallery
+        name: Resolve the explicit reviewed candidate boundary
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref || '' }}
+        run: node scripts/candidate-gallery.mjs resolve
+      - uses: ./.github/actions/candidate-gallery-stage
+        if: steps.gallery.outputs.candidate_gallery != ''
+        with:
+          gallery-ref: ${{ steps.gallery.outputs.candidate_gallery }}
       - run: pnpm install --frozen-lockfile
+        if: steps.gallery.outputs.candidate_gallery == ''
       - run: pnpm typecheck
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: pnpm --filter @openpresentation/opf test
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: node packages/javascript/test/packed-install-smoke.mjs
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: node scripts/test-ecosystem-links.mjs
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: pnpm test:cli
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: pnpm test:cli:packed
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       - run: pnpm test:cli:packed:peers
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
       # RR-66 (opf#466): the published CLI from the npm registry, installed globally and run through npm exec, as the
       # ecosystem registry shard checks it on Linux. Its command tests come from the CLI's release commit, which the shallow
       # checkout does not have: fetch that one commit.
       - name: Verify the published CLI from the npm registry
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         shell: bash
+        env:
+          CANDIDATE_GALLERY_REF: ''
         run: |
           git fetch --no-tags --depth=1 origin "$(node -p "require('./release-plan.json').verificationRefs.cli")"
           node packages/cli/test/packed.mjs --registry

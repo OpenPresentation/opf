@@ -20,7 +20,8 @@
       "docs/evidence/rr-42-native-20261002/values.json",
       "docs/evidence/rr-17-viet-supplement-native-20261002/values.json"
     ],
-    "burndown": "docs/programs/release-readiness/burndown.md"
+    "burndown": "docs/programs/release-readiness/burndown.md",
+    "inputLimitations": "docs/evidence/rr-20-pareto-series-scope/limitations.json"
   },
   "parityNote": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed.",
   "columns": {
@@ -36,6 +37,19 @@
     "fonts": "accepted when every family the value draws (its parity fontResolution families, else its catalog font scheme) is qualified or documented-visual in the font tracker; gap otherwise; n/a when it draws no chosen family. For fonts: the font tracker status."
   },
   "rules": [
+    {
+      "id": "pareto-multi-series-loss",
+      "gap": "missing-export",
+      "types": [
+        "charts"
+      ],
+      "ids": [
+        "pareto"
+      ],
+      "detail": "^Multi-series Pareto",
+      "link": "https://github.com/OpenPresentation/opf-pptx/issues/246",
+      "next": "Preserve all authored series or explicitly reject unsupported input before producing a lossy artifact; retain single-series evidence and add a multi-series preservation regression."
+    },
     {
       "id": "world-parked",
       "gap": "missing-export",
