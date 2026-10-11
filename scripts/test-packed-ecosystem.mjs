@@ -5,6 +5,8 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
+import {candidateArtifacts,assertInstalledCandidateGraph} from './candidate-gallery-pack.mjs';
+import {assertPublishedGallery} from './candidate-gallery.mjs';
 import {checkPackedTypes} from './check-packed-types.mjs';
 import {LAZY_FONT_COUNTS} from './lazy-font-counts.mjs';
 import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
@@ -12,6 +14,9 @@ const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
 const registry = process.argv.includes('--registry') || librariesOnly;
+if(registry){
+  if(process.env.CANDIDATE_GALLERY_REF)throw Error('candidate artifacts cannot be used for registry qualification');
+}
 const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")) : null;
 // While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
 const cliNotice = registry && !librariesOnly ? await cliSkipNotice(releasePlan) : null;
@@ -92,6 +97,7 @@ const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : 
 const manifest = registry
   ? { artifacts: await installablePackages(releasePlan) }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
+if(!registry&&process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(root));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 // RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). Each consumer
@@ -438,9 +444,12 @@ if (verifyTableLayout) {
   run(process.execPath, ['--test', 'table-layout.test.mjs']);
 }
 
+if(!registry&&process.env.CANDIDATE_GALLERY_REF)assertInstalledCandidateGraph(path.resolve(root),consumer);
+
 if (registry) {
   for (const item of manifest.artifacts) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
+    assertPublishedGallery(installed);
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
   if (!librariesOnly && !cliNotice) {

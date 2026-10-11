@@ -36,6 +36,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ancestry, githubApi, OWNER } from "./ecosystem-lock.mjs";
+import { assertPublishedGallery } from "./candidate-gallery.mjs";
 
 /** The five packages in lockstep order. `upstream` are the packages whose versions this one's floors may name. */
 export const PACKAGES = [
@@ -330,6 +331,19 @@ async function manifestAt(deps, pkg, ref) {
   const text = await fileAt(deps, pkg.repo, pkg.manifest, ref);
   if (text === null) throw new Error(`${pkg.repo}:${pkg.manifest} does not exist at ${ref}`);
   return JSON.parse(text);
+}
+
+// Independent gallery is outside PACKAGES: staging must be removed by a reviewed registry-adoption PR.
+export async function assertGalleryReleaseReady(deps, pkg, ref, manifest) {
+  const configuration = await fileAt(deps, pkg.repo, ".github/candidate-gallery.json", ref);
+  const core = pkg.repo === "opf" && pkg.manifest !== "packages/javascript/package.json"
+    ? await manifestAt(deps, packageOf("core"), ref) : manifest;
+  try {
+    assertPublishedGallery(core, configuration === null ? undefined : JSON.parse(configuration));
+    assertPublishedGallery(manifest);
+  } catch (error) {
+    throw new TrainStop(`${pkg.name}: ${error.message}; adopt the published gallery through a reviewed range/lock/config PR before release preparation or tagging`);
+  }
 }
 
 export async function mainSha(deps, repo) {
@@ -836,6 +850,7 @@ export async function tagRelease(deps, pkg, version, train, { execute = false, w
   const sha = state.release.sha;
   // Re-verify at the commit itself, right before tagging: the version, and that the commit is on main.
   const atCommit = await manifestAt(deps, pkg, sha);
+  await assertGalleryReleaseReady(deps, pkg, sha, atCommit);
   if (atCommit.version !== version) throw new TrainStop(`${pkg.manifest} at ${sha.slice(0, 12)} carries ${atCommit.version}, not ${version}`);
   const onMain = await ancestry(deps.api, pkg.repo, sha);
   if (!onMain.onBranch) throw new TrainStop(`${sha.slice(0, 12)} is not on ${pkg.repo} main (${onMain.status})`);
@@ -969,6 +984,7 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   if (!version) throw new Error(`name the version of ${pkg.key} (--${pkg.key} X.Y.Z)`);
   const head = await mainSha(deps, pkg.repo);
   const manifest = await manifestAt(deps, pkg, head);
+  await assertGalleryReleaseReady(deps, pkg, head, manifest);
   const order = compareVersions(manifest.version, version);
   if (order === 0) {
     deps.log(`${pkg.repo} main already carries ${pkg.name} ${version}: the release-prep PR is merged.`);

@@ -44,6 +44,9 @@ jobs:
       - name: Use a trusted-publishing capable npm
         run: npm install -g npm@11.16.0
 
+      - name: Reject unresolved candidate gallery publication
+        run: node scripts/candidate-gallery.mjs publication
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

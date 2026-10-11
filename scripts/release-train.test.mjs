@@ -7,6 +7,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  assertGalleryReleaseReady,
   allowedPrepFile,
   compareVersions,
   defaultBranch,
@@ -990,6 +991,25 @@ test("the gallery is an independent package: verify finds it, the train never do
 });
 
 
+test("independent gallery staging blocks prep before clone and release tagging readiness", async () => {
+  for (const configuration of [false, true]) {
+    const world = fakeWorld();
+    const manifest = { name: "@openpresentation/opf", version: "0.19.0-next.0", ...(configuration ? {} : { opf: { requiresUnreleasedGallery: "2.0.0" } }) };
+    const files = { "packages/javascript/package.json": JSON.stringify(manifest) };
+    if (configuration) files[".github/candidate-gallery.json"] = JSON.stringify({ version: 1 });
+    const head = world.commit("opf", "candidate", files);
+    let edits = 0;
+    world.deps.exec = () => { edits++; throw new Error("must not clone/edit"); };
+    await assert.rejects(prep(world.deps, packageOf("core"), { core: "0.19.0" }), /unresolved candidate gallery/);
+    await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest), /adopt the published gallery/);
+    assert.equal(edits, 0);
+  }
+  const world = fakeWorld();
+  const manifest = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^2.0.0" } };
+  const head = world.commit("opf", "registry adopted", { "packages/javascript/package.json": JSON.stringify(manifest) });
+  await assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest);
+});
+
 const cliPatchManifest = {
   name: "@openpresentation/cli", version: "0.18.0",
   dependencies: {"@openpresentation/opf": "^0.18.1"},
@@ -1051,14 +1071,14 @@ test("CLI prep clones the current patch train without changing core runtime file
   assert.equal(prepared.devDependencies["@openpresentation/opf-render"],"0.18.1");assert.equal(prepared.devDependencies["@openpresentation/opf-pptx"],"0.18.1");
   assert.deepEqual(prepared.peerDependencies,JSON.parse(files["packages/javascript/package.json"]).peerDependencies);
   for(const [key,version]of[["core","0.19.0"],["render","0.19.0"],["pptx","0.19.0"]]){
-    const pkg=packageOf(key);const commit=world.commit(pkg.repo,`${key}-minor`,{[pkg.manifest]:manifestText(pkg.name,version),...(key==="core"?{"packages/cli/package.json":files["packages/cli/package.json"]}:{})});world.publish(key,version,commit);
+    const pkg=packageOf(key);const commit=world.commit(pkg.repo,`${key}-minor`,{[pkg.manifest]:key==="core"?JSON.stringify({name:pkg.name,version,dependencies:{"@openpresentation/gallery":"^2.0.0"}}):manifestText(pkg.name,version),...(key==="core"?{"packages/cli/package.json":files["packages/cli/package.json"]}:{})});world.publish(key,version,commit);
   }
   const commandsBeforeRefusal = commands.length;
   await assert.rejects(prep(world.deps,packageOf("cli"),{core:"0.19.0",render:"0.19.0",pptx:"0.19.0",cli:"0.19.0"}),/reconcile and release core's peer floors first/);
   assert.equal(commands.length, commandsBeforeRefusal, "incompatible contract refuses before clone or edit");
   // A feature PR defines the new contract before release prep; prep must never infer it from a train version.
   const aligned = {...cliPatchManifest,peerDependencies:{"@openpresentation/opf-pptx":"^0.19.0","@openpresentation/opf-render":"^0.19.0"}};
-  const alignedCore = {...corePatchManifest,version:"0.19.0",peerDependencies:aligned.peerDependencies};
+  const alignedCore = {...corePatchManifest,version:"0.19.0",dependencies:{"@openpresentation/gallery":"^2.0.0"},peerDependencies:aligned.peerDependencies};
   const alignedHints=corePatchHints.replaceAll("^0.18.0","^0.19.0");
   for(const [file,value]of[["packages/cli/package.json",JSON.stringify(aligned,null,2)],["packages/javascript/package.json",JSON.stringify(alignedCore,null,2)],["packages/javascript/src/node/peers.ts",alignedHints]])writeFileSync(path.join(seed,file),value);
   git(seed,"add","-A");git(seed,"commit","-qm","Define reviewed 0.19 peer contract");git(seed,"push","-q",path.join(base,"origin.git"),"main");
@@ -1069,4 +1089,39 @@ test("CLI prep clones the current patch train without changing core runtime file
   assert.deepEqual(JSON.parse(readFileSync(path.join(minor.dir,"packages/cli/package.json"),"utf8")).peerDependencies,alignedCore.peerDependencies);
   assert.equal(readFileSync(path.join(minor.dir,"packages/javascript/package.json"),"utf8"),coreFiles["packages/javascript/package.json"]);
   assert.equal(readFileSync(path.join(minor.dir,"packages/javascript/src/node/peers.ts"),"utf8"),alignedHints);
+});
+
+test('untagged 0.19 metadata prep precedes gallery adoption but preliminary publication remains blocked', async t => {
+ const {world,base}=prepFixture();t.after(()=>rmSync(base,{recursive:true,force:true}));
+ const seed=path.join(base,'seed');
+ const original={name:'@openpresentation/opf',version:'0.18.4',dependencies:{'@openpresentation/gallery':'^1.0.0'}};
+ const files={
+  'packages/javascript/package.json':JSON.stringify(original,null,2)+'\n',
+  'package.json':JSON.stringify({name:'openpresentation-workspace',private:true,type:'module'}),
+  'CHANGELOG.md':'# Changelog\n\n## 0.18.4\n\nEarlier.\n',
+  'changes/config.json':JSON.stringify({default:'opf',targets:{opf:'CHANGELOG.md'},codePaths:[]}),
+  'changes/rr-99-fix.md':'---\ntype: changed\npackages: [opf]\n---\nPrepare the genuine 0.19 development version.\n',
+  'pnpm-lock.yaml':"lockfileVersion: '9.0'\n",
+ };
+ const seedFiles=entries=>{for(const [file,text]of Object.entries(entries)){mkdirSync(path.dirname(path.join(seed,file)),{recursive:true});writeFileSync(path.join(seed,file),text);}git(seed,'add','-A');git(seed,'commit','-qm','metadata fixture');git(seed,'push','-q',path.join(base,'origin.git'),'main');};
+ seedFiles(files);const published=world.commit('opf','published-18.4',files);world.publish('core','0.18.4',published);
+ const execute=world.deps.exec;world.deps.exec=(command,args,options)=>command==='pnpm'?{status:0,stdout:'',stderr:''}:execute(command,args,options);
+ const preliminary=await prep(world.deps,packageOf('core'),{core:'0.19.0-next.0'},{date:'2026-10-11'});
+ assert.equal(preliminary.status,'dry-run');
+ const prepared=JSON.parse(readFileSync(path.join(preliminary.dir,'packages/javascript/package.json'),'utf8'));
+ assert.equal(prepared.version,'0.19.0-next.0');assert.deepEqual(prepared.dependencies,original.dependencies);
+ assert.deepEqual(preliminary.changed.sort(),['CHANGELOG.md','changes/rr-99-fix.md','packages/javascript/package.json']);
+ const preliminaryFiles={...files,'packages/javascript/package.json':JSON.stringify(prepared),'CHANGELOG.md':readFileSync(path.join(preliminary.dir,'CHANGELOG.md'),'utf8')};
+ const next=world.commit('opf','merged preliminary metadata',preliminaryFiles,{pull:991});world.green('opf',next);
+ await assert.rejects(assertGalleryReleaseReady(world.deps,packageOf('core'),next,prepared),/actual gallery \^2 registry dependency/);
+ await assert.rejects(tagRelease(world.deps,packageOf('core'),'0.19.0-next.0',{core:'0.19.0-next.0'},{execute:true}),/actual gallery \^2 registry dependency/);
+ assert.ok(!world.calls.some(isWrite),'preliminary metadata never tags or publishes');
+ const adopted={...prepared,dependencies:{'@openpresentation/gallery':'^2.0.0'}};
+ const adoptedFiles={...preliminaryFiles,'packages/javascript/package.json':JSON.stringify(adopted,null,2)+'\n','changes/rr-99-fix.md':'---\ntype: changed\npackages: [opf]\n---\nAdopt the published gallery 2 contract.\n'};
+ seedFiles(adoptedFiles);world.commit('opf','reviewed registry adoption',adoptedFiles);
+ const stable=await prep(world.deps,packageOf('core'),{core:'0.19.0'},{date:'2026-10-11'});
+ assert.equal(stable.status,'dry-run');
+ const final=JSON.parse(readFileSync(path.join(stable.dir,'packages/javascript/package.json'),'utf8'));
+ assert.equal(final.version,'0.19.0');assert.deepEqual(final.dependencies,adopted.dependencies);
+ await assertGalleryReleaseReady(world.deps,packageOf('core'),world.repo('opf').head,final);
 });

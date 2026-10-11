@@ -1,0 +1,194 @@
+
+> installed:packed-browser: pnpm test:packed-browser
+
+> openpresentation-workspace@ test:packed-browser /private/tmp/rr78-v2-stage-replay/opf
+> node scripts/test-packed-browser.mjs
+
+PASS packed canvas: 34 assertions; 0 trusted interaction scenarios
+PASS packed rich-text: 49 assertions; 0 trusted interaction scenarios
+PASS packed rich-text-estimated: 49 assertions; 0 trusted interaction scenarios
+PASS packed layout: 26 assertions; 4 trusted interaction scenarios
+PASS packed block: 21 assertions; 1 trusted interaction scenarios
+PASS packed list: 19 assertions; 0 trusted interaction scenarios
+PASS packed create: 40 assertions; 0 trusted interaction scenarios
+PASS packed styled-table: 44 assertions; 3 trusted interaction scenarios
+
+> installed:code-guards: node scripts/test-installed-code-guards.mjs
+Installed code guards: runtime drift, wrong integrity, external modules and loader environment rejected; exact artifacts restored.
+
+> installed:rich-input-browser: node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
+measured: 14 rich input browser workflows passed.
+
+> installed:plain-whitespace-workflow: node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
+12 plain text browser workflows preserve source through edit, undo/redo, export and reimport.
+
+> installed:readability-browser: node scripts/test-readability-browser.mjs artifacts/readability-browser installed
+48 offline browser/PPTX cases honor selected glyph floors while preserving source metadata.
+
+> installed:timeline-workflow: node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+16 offline timeline workflows preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.
+
+> installed:furniture-workflow: node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+16 offline installed furniture workflows passed: geometry, readability, source editing, generated values, empty fields, undo/redo and PPTX reimport.
+
+> installed:furniture-fields-browser: node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
+Installed furniture fields passed: 4 browser workflows, shared host dates, final totals, actual source ranges, edit/undo, cached PPTX fields, static wrapped-date recovery and refusal/oracle controls.
+
+> installed:json-editor-browser: node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
+JSON editor: 8 offline browser workflows pass (installed).
+
+> installed:timeline-acceptance: node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
+[
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  }
+]
