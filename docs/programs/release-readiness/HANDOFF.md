@@ -1,6 +1,6 @@
 # Release readiness: handoff of 2026-10-11
 
-Updated by the release supervisor on 2026-10-11 after the initial 00:40 UTC handoff. Follow the live [0.19 execution checklist](0.19-execution.md), currently 6/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
+Updated by the release supervisor on 2026-10-11 after the initial 00:40 UTC handoff. Follow the live [0.19 execution checklist](0.19-execution.md), currently 7/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
 overrides those invariants. Everything in flight is in a pull request or a published release. No work lives only on a
@@ -8,11 +8,11 @@ local machine (the exceptions are listed under "Local-only state").
 
 ## Latest supervisor checkpoint
 
-Renderer release prep [#226](https://github.com/OpenPresentation/opf-render/pull/226) merged at `d4259333a1105ce54d136ced0635f086d0f750ee`; main is synced. Its exact-commit gate passed all six checks and the confirmation poll at04:33UTC. `release-train tag render ... --execute` created `opf-render-v0.18.1` at that commit; trusted publishing and registry/provenance verification are running (session96032, `/private/tmp/opf-supervisor-20261010/render-tag-execute.log`). Do not mark T08 complete until verification succeeds.
+Renderer 0.18.1 is published and independently verified. Release prep [#226](https://github.com/OpenPresentation/opf-render/pull/226) merged at `d4259333a1105ce54d136ced0635f086d0f750ee`; its exact-commit gate passed all six checks plus confirmation. Trusted publish run38112000992 and separate supervisor verification both passed npm integrity, tag/gitHead/main equality, SLSA provenance and npm signatures. [Durable evidence](../../evidence/rr20-render-0181-published/README.md). T08 is complete; publisher96032 and verification45877 exited0.
 
-The only pr-gate watcher is now core#595 (session20596, `core595-final-gate.log`), `--required all --merge --expect-head 0f94df8989bd0c180c88a4fa983e924ed590a385`. All15checks are green at the first observation; confirmation/merge queue remain. Its final fixtures cover the omitted helper and portable tar creation. After merge, retry PPTX#244/editor#157 via pr-gate with all checks; editor#154 still needs the published renderer artifact. Previous gate9817 exited0 and must not be restarted.
+Core#595 merged through the queue at `d12ad7e26aa0edfb52e4280dfe527053fe76f98e`; core main is synced, old gate20596 exited0. The single active PR gate is now session67346, `patch-prerequisites-final-gate.log`, gating PPTX#244 at9b747bcc, editor#157 at0c19b5cd and editor#154 atc8828f46 with `--required all --rerun-once --merge`. Failed/cancelled workflows were retried once. No duplicate watcher.
 
-Final PPTX#240 candidate `006e8a7d` passes all 130 package tests and browser build against explicit local v2 candidates; fresh native and published-dependency gates remain. Core script-width draft #593 is reviewed at `13e1c4dc`; schema/example audit #594 is frozen at `53925383` with independent regression checks passing. Gallery-site draft #126 at `13df6974` implements package ownership and canonical previews/redirects, but published dependency adoption and editor artifact regeneration remain merge blockers. Editor v1 cleanup #156 is frozen at `cef0bd18` with local package/browser acceptance. Main-site #103 at `ab0b0da5` passes 73 browser cases; registry gallery2 installation blocks one case and two serial dependents. pptx.dev #128 at `c83c995f` passes 970 unit tests and all 11 browser cases. All sites still require actual published dependency/lock adoption. Two GPT-6.1 Sol agents are qualifying combined renderer/core changes and gallery/editor integration. The bounded inventory is 28 open PRs and 46 issues; all eight clean default checkouts match their remote heads. The live checklist retains these distinctions and remains 6/40.
+Final PPTX#240 candidate `006e8a7d` passes all 130 package tests and browser build against explicit local v2 candidates; fresh native and published-dependency gates remain. Core script-width draft #593 is reviewed at `13e1c4dc`; schema/example audit #594 is frozen at `53925383` with independent regression checks passing. Gallery-site draft #126 at `88c7119f` implements package ownership and canonical previews/redirects, but published dependency adoption and editor artifact regeneration remain merge blockers. Editor v1 cleanup #156 is frozen at `cef0bd18` with local package/browser acceptance. Main-site #103 at `ab0b0da5` passes 73 browser cases; registry gallery2 installation blocks one case and two serial dependents. pptx.dev #128 at `c83c995f` passes 970 unit tests and all 11 browser cases. All sites still require actual published dependency/lock adoption. Two GPT-6.1 Sol agents are qualifying combined renderer/core changes and gallery/editor integration. The bounded inventory is 28 open PRs and 46 issues; all eight clean default checkouts match their remote heads. The live checklist retains these distinctions and remains 7/40.
 
 ## Rules that matter most
 
@@ -38,7 +38,7 @@ Final PPTX#240 candidate `006e8a7d` passes all 130 package tests and browser bui
 | Package | Version | Notes |
 | --- | --- | --- |
 | `@openpresentation/opf` | **0.18.3** | Tag `opf-v0.18.3` at `d52fa6ce`, published 2026-10-11 00:26 UTC. **0.18.2 is burned** (tagged, publish failed, never on npm); fix in opf#588. |
-| `@openpresentation/opf-render` | 0.18.0 | 0.18.1 is next (below). |
+| `@openpresentation/opf-render` | **0.18.1** | Tag `opf-render-v0.18.1`, commit `d4259333a110`; independently verified. |
 | `@openpresentation/opf-pptx` | 0.18.0 | 0.18.1 is next. |
 | `@openpresentation/opf-editor` | 0.18.0 | 0.18.1 is next. |
 | `@openpresentation/cli` | 0.18.0 | 0.18.1 is next. |
