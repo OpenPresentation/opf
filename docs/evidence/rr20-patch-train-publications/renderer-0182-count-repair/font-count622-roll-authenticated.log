@@ -1,0 +1,31 @@
+Waiting for ecosystem-ci.yml (queued), opf-ci.yml (not started)...
+Waiting for ecosystem-ci.yml (in_progress), opf-ci.yml (in_progress)...
+Waiting for ecosystem-ci.yml (in_progress), opf-ci.yml (in_progress)...
+Waiting for ecosystem-ci.yml (in_progress)...
+Waiting for ecosystem-ci.yml (in_progress)...
+Waiting for ecosystem-ci.yml (in_progress)...
+### Green: opened https://github.com/OpenPresentation/opf/pull/623
+
+Coordinated checks on the four mains (workflow_dispatch on `ecosystem-roll/main` at `ec68823fdba3`, the head of this pull request):
+
+| workflow | job | result | link |
+|---|---|---|---|
+| ecosystem-ci.yml | Resolve explicit gallery qualification | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501800680 |
+| ecosystem-ci.yml | Installed candidates (macos-latest) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837723 |
+| ecosystem-ci.yml | ecosystem-pptx-editor | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837771 |
+| ecosystem-ci.yml | ecosystem-core (installed) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837777 |
+| ecosystem-ci.yml | ecosystem-core (model) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837802 |
+| ecosystem-ci.yml | ecosystem-render | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837829 |
+| ecosystem-ci.yml | Installed candidates (windows-latest) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837846 |
+| ecosystem-ci.yml | ecosystem-core (registry) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501837862 |
+| ecosystem-ci.yml | candidate | skipped | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501838729 |
+| ecosystem-ci.yml | control | skipped | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114501839051 |
+| ecosystem-ci.yml | packages | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114505170789 |
+| ecosystem-ci.yml | main-status | skipped | https://github.com/OpenPresentation/opf/actions/runs/38150171588/job/114505209616 |
+| ecosystem-ci.yml | (run) | success | https://github.com/OpenPresentation/opf/actions/runs/38150171588 |
+| opf-ci.yml | Resolve explicit gallery qualification | success | https://github.com/OpenPresentation/opf/actions/runs/38150172975/job/114501804649 |
+| opf-ci.yml | Published dependency source checks | success | https://github.com/OpenPresentation/opf/actions/runs/38150172975/job/114501846020 |
+| opf-ci.yml | control | skipped | https://github.com/OpenPresentation/opf/actions/runs/38150172975/job/114501846782 |
+| opf-ci.yml | candidate | skipped | https://github.com/OpenPresentation/opf/actions/runs/38150172975/job/114501847039 |
+| opf-ci.yml | Verify OPF packages | success | https://github.com/OpenPresentation/opf/actions/runs/38150172975/job/114503322850 |
+| opf-ci.yml | (run) | success | https://github.com/OpenPresentation/opf/actions/runs/38150172975 |
