@@ -21,7 +21,7 @@
 //
 // Every command exits 1 with a message on a violated rule. `--github-output` appends step outputs to $GITHUB_OUTPUT.
 import { spawnSync } from "node:child_process";
-import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync, realpathSync, rmSync, symlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseLock } from "./ecosystem-lock.mjs";
@@ -32,6 +32,38 @@ export const FIXTURE_PATH = /^scripts\/fixtures\/[A-Za-z0-9._-]+\.sha256\.json$/
 export const RENDERER_REF_FILES = ["ecosystem.lock.json", "scripts/fixtures/README.md"];
 /** The name of a new fixture: scripts/fixtures/opf-examples-png.<name>.sha256.json. */
 export const FIXTURE_NAME = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/u;
+
+/** Gallery candidates require a separate renderer tree so the main guard is never relinked. */
+export function galleryCandidateErrors(ref, rendererRef) {
+  if (!ref) return [];
+  const errors = [];
+  if (!/^[0-9a-f]{40}$/u.test(ref)) errors.push("gallery-ref must be an exact 40-character lowercase commit SHA of OpenPresentation/gallery");
+  if (!rendererRef) errors.push("gallery-ref requires renderer-ref to isolate the main guard renderer");
+  return errors;
+}
+
+/** Link only candidate package trees, never opf-base or the locked guard renderer. */
+export function linkGalleryCandidate(workspace, ref) {
+  const errors = galleryCandidateErrors(ref, "separate-renderer");
+  if (errors.length) throw new Error(errors.join("; "));
+  const root = realpathSync(workspace), gallery = path.join(root, "gallery-candidate");
+  const head = spawnSync("git", ["-C", gallery, "rev-parse", "HEAD"], {encoding: "utf8"});
+  if (head.status !== 0 || head.stdout.trim() !== ref) throw new Error("gallery candidate HEAD differs from gallery-ref");
+  const metadata = JSON.parse(readFileSync(path.join(gallery, "package.json"), "utf8"));
+  if (metadata.name !== "@openpresentation/gallery" || metadata.opf?.catalogSchema !== 2) throw new Error("gallery candidate must be @openpresentation/gallery with catalogSchema 2");
+  for (const directory of ["opf", "opf/packages/javascript", "opf-render-branch"]) {
+    const candidate = path.join(root, directory);
+    mkdirSync(candidate, {recursive: true});
+    if (realpathSync(candidate) !== candidate) throw new Error("candidate checkout is aliased; refusing to relink a guard tree");
+    const target = path.join(candidate, "node_modules/@openpresentation/gallery");
+    mkdirSync(path.dirname(target), {recursive: true});
+    if (realpathSync(path.dirname(target)) !== path.dirname(target)) throw new Error("candidate package parent is aliased; refusing to relink a guard tree");
+    rmSync(target, {recursive: true, force: true});
+    symlinkSync(gallery, target, process.platform === "win32" ? "junction" : "dir");
+    if (realpathSync(target) !== gallery) throw new Error("gallery candidate link did not resolve to the selected checkout");
+  }
+  return metadata.version;
+}
 
 /** Paths whose change on main moves what a branch renders (or which fixture is selected). */
 export const GOLDEN_INPUT_PREFIXES = ["examples/", "packages/", "spec/", "scripts/fixtures/", "ecosystem.lock.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "package.json"];
@@ -274,7 +306,12 @@ function fail(message) { console.error(`::error title=regenerate-core-golden::${
 function main(argv) {
   const [command] = argv;
   const options = parseArguments(argv);
-  if (command === "check-branch") {
+  if (command === "check-gallery") {
+    const errors = galleryCandidateErrors(options["gallery-ref"], options["renderer-ref"]);
+    if (errors.length) fail(errors.join("; "));
+  } else if (command === "link-gallery") {
+    try { console.log(`gallery ${options["gallery-ref"]}: ${linkGalleryCandidate(options.workspace, options["gallery-ref"])}`); } catch (error) { fail(error.message); }
+  } else if (command === "check-branch") {
     const errors = branchErrors(options.branch, options["default-branch"] ?? "main");
     if (errors.length) fail(errors.join("; "));
     console.log(`branch ${options.branch} accepted`);

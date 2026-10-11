@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, realpathSync, rmSync, symlinkSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { RENDERER_REF_FILES, branchErrors, changedPaths, commitMessage, deckCount, diffManifests, fixturePathFor, goldenInputs, isFixturePath, lockWithGolden, manifestErrors, pathErrors, rendererPlan, rendererRefErrors, resolveLock, reviewRecord, slideCount, slideLines, splitKey, summaryMarkdown } from "./core-golden.mjs";
+import { galleryCandidateErrors, linkGalleryCandidate, RENDERER_REF_FILES, branchErrors, changedPaths, commitMessage, deckCount, diffManifests, fixturePathFor, goldenInputs, isFixturePath, lockWithGolden, manifestErrors, pathErrors, rendererPlan, rendererRefErrors, resolveLock, reviewRecord, slideCount, slideLines, splitKey, summaryMarkdown } from "./core-golden.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const script = path.join(root, "scripts/core-golden.mjs");
@@ -214,7 +214,7 @@ test("the workflow is valid YAML with the expected jobs", async () => {
   try { yaml = createRequire(path.join(root, "packages/javascript/package.json"))("yaml"); } catch { return; }
   const parsed = yaml.parse(workflowText);
   assert.deepEqual(Object.keys(parsed.jobs), ["regenerate", "push"]);
-  assert.deepEqual(Object.keys(parsed.on.workflow_dispatch.inputs), ["branch", "dry-run", "dispatch-ci", "renderer-ref", "fixture-name"]);
+  assert.deepEqual(Object.keys(parsed.on.workflow_dispatch.inputs), ["branch", "dry-run", "dispatch-ci", "renderer-ref", "gallery-ref", "fixture-name"]);
   for (const name of ["renderer-ref", "fixture-name"]) assert.equal(parsed.on.workflow_dispatch.inputs[name].required, false, name);
   assert.equal(parsed.jobs.push.needs, "regenerate");
   assert.deepEqual(parsed.jobs.push.permissions, { contents: "write", actions: "write" });
@@ -283,4 +283,44 @@ test("the plan command prints the override and the fixture path; the workflow pa
   assert.ok(workflowText.includes("set-lock-golden --lock branch/ecosystem.lock.json"));
   // The guard still renders main with the locked renderer (the default renderer dir).
   assert.ok(workflowText.includes('renderer="${3:-opf-render}"') && workflowText.includes("render opf-base out/main\n"));
+});
+
+
+test("gallery candidates require immutable identities and a separate renderer", () => {
+  assert.deepEqual(galleryCandidateErrors("", ""), []);
+  assert.deepEqual(galleryCandidateErrors("a".repeat(40), "candidate"), []);
+  for (const ref of ["main", "a".repeat(39), "A".repeat(40), "someone:branch", "$(id)"]) assert.notDeepEqual(galleryCandidateErrors(ref, "candidate"), []);
+  assert.match(galleryCandidateErrors("a".repeat(40), "").join(), /isolate/);
+});
+
+test("candidate links cannot relink the main reproducibility guard", () => {
+  const workspace = mkdtempSync(path.join(tmpdir(), "golden-gallery-"));
+  const gallery = path.join(workspace, "gallery-candidate"); mkdirSync(gallery);
+  writeFileSync(path.join(gallery, "package.json"), JSON.stringify({name: "@openpresentation/gallery", version: "2.0.0", opf: {catalogSchema: 2}}));
+  for (const args of [["init"], ["add", "."], ["-c", "user.name=Test", "-c", "user.email=test@example.test", "commit", "-m", "candidate"]]) assert.equal(spawnSync("git", args, {cwd: gallery}).status, 0);
+  const sha = spawnSync("git", ["rev-parse", "HEAD"], {cwd: gallery, encoding: "utf8"}).stdout.trim();
+  for (const dir of ["opf-base", "opf-render"]) {const target=path.join(workspace, dir, "node_modules/@openpresentation/gallery"); mkdirSync(target, {recursive: true}); writeFileSync(path.join(target, "sentinel"), "locked");}
+  assert.throws(() => linkGalleryCandidate(workspace, "0".repeat(40)), /HEAD differs/);
+  assert.equal(linkGalleryCandidate(workspace, sha), "2.0.0");
+  for (const dir of ["opf", "opf/packages/javascript", "opf-render-branch"]) assert.equal(realpathSync(path.join(workspace, dir, "node_modules/@openpresentation/gallery")), realpathSync(gallery));
+  for (const dir of ["opf-base", "opf-render"]) assert.equal(readFileSync(path.join(workspace, dir, "node_modules/@openpresentation/gallery/sentinel"), "utf8"), "locked");
+  rmSync(path.join(workspace, "opf-render-branch"), {recursive: true});
+  symlinkSync(path.join(workspace, "opf-render"), path.join(workspace, "opf-render-branch"), process.platform === "win32" ? "junction" : "dir");
+  assert.throws(() => linkGalleryCandidate(workspace, sha), /aliased/);
+  assert.equal(readFileSync(path.join(workspace, "opf-render/node_modules/@openpresentation/gallery/sentinel"), "utf8"), "locked");
+  writeFileSync(path.join(gallery, "package.json"), JSON.stringify({name: "unrelated", opf: {catalogSchema: 2}}));
+  assert.throws(() => linkGalleryCandidate(workspace, sha), /catalogSchema 2/);
+  const push = workflowText.slice(workflowText.indexOf("\n  push:"));
+  assert.doesNotMatch(push, /link-gallery|gallery-candidate|npm ci|npm run build/);
+  assert.ok(workflowText.indexOf("check-gallery") < workflowText.indexOf("repository: OpenPresentation/gallery"));
+});
+
+
+test("candidate installation precedes linking and linking precedes candidate build", () => {
+  const install = workflowText.indexOf("then npm ci --prefix opf-render-branch; fi");
+  const link = workflowText.indexOf("core-golden.mjs link-gallery");
+  assert.ok(install > 0 && install < link);
+  assert.ok(link < workflowText.indexOf("pnpm --dir opf build"));
+  assert.ok(link < workflowText.indexOf("npm run build --prefix opf-render-branch"));
+  assert.match(workflowText, /Candidate gallery-ref:.*main guard dependencies are unchanged/);
 });

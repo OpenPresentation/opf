@@ -46,10 +46,9 @@ export const PACKAGES = [
   { key: "editor", name: "@openpresentation/opf-editor", repo: "opf-editor", manifest: "package.json", tagPrefix: "opf-editor-v", workflow: "release.yml", githubRelease: true, changelog: { file: "CHANGELOG.md" }, lockfile: "npm", stage: 3, upstream: ["core", "render", "pptx"] },
   // The CLI depends on core (RR-62: a regular dependency whose Node engine the commands run; the pnpm workspace links it
   // through an override), so core is upstream and its floor is a `dependencies` range that `prep` raises like the others. The
-  // other floors name the renderer and PPTX (devDependencies pinned exactly, optional peers as ranges, and PEER_RANGES in core's
-  // src/node/peers.ts, which core's own peerDependencies equal; core raises its peers before its own release prep and the CLI's
-  // may lag them until the CLI's prep: scripts/unreleased-gate.test.mjs checks the three agree).
-  { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: true, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"], peersFile: "packages/javascript/src/node/peers.ts" },
+  // other floors name the renderer and PPTX: development pins advance, compatible patch peer ranges stay unchanged.
+  // Core owns the runtime peer hints; CLI prep must never edit them (scripts/unreleased-gate.test.mjs checks consistency).
+  { key: "cli", name: "@openpresentation/cli", repo: "opf", manifest: "packages/cli/package.json", tagPrefix: "cli-v", workflow: "cli-publish.yml", githubRelease: true, changelog: { file: "packages/cli/CHANGELOG.md", package: "cli" }, lockfile: "pnpm", stage: 3, upstream: ["core", "render", "pptx"] },
 ];
 export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
 /**
@@ -137,11 +136,19 @@ export function ecosystemDependencies(manifest) {
 }
 
 /** The floors `targets` ({ npm name: version }) raise in a manifest: [{ field, name, from, to }]. */
-export function floorChanges(manifest, targets) {
+export function floorChanges(manifest, targets, { preserveCompatiblePatchPeers = false } = {}) {
   const changes = [];
   for (const dependency of ecosystemDependencies(manifest)) {
     if (!(dependency.name in targets)) continue;
-    const to = raiseRange(dependency.spec, targets[dependency.name]);
+    const target = targets[dependency.name];
+    const floor = floorOf(dependency.spec);
+    // CLI patch preparation must not raise a compatible runtime contract or edit the published core's hints.
+    // Development pins still advance. Exact peers and a new dependency minor still require their ordinary floor change.
+    if (preserveCompatiblePatchPeers && dependency.field === "peerDependencies" && floor &&
+      ["^", "~", ">="].includes(floor.operator) && !floor.version.includes("-") && !target.includes("-") &&
+      floor.version.split(".").slice(0, 2).join(".") === target.split(".").slice(0, 2).join(".") &&
+      !(floor.operator === "^" && floor.version.startsWith("0.0.")) && compareVersions(target, floor.version) >= 0) continue;
+    const to = raiseRange(dependency.spec, target);
     if (to) changes.push({ field: dependency.field, name: dependency.name, from: dependency.spec, to });
   }
   return changes;
@@ -527,7 +534,7 @@ export async function packageState(deps, pkg, version, train) {
     state.pull = await openPrepPull(deps, pkg, version);
     state.step = state.pull ? "prep-open" : "prep-needed";
     const targets = upstreamTargets(pkg, train);
-    state.floorChanges = floorChanges(headManifest, targets);
+    state.floorChanges = floorChanges(headManifest, targets, { preserveCompatiblePatchPeers: pkg.key === "cli" });
     const pending = unreleasedCoreOf(headManifest);
     if (pending !== null) {
       const tooHigh = train.core && isVersion(pending) && compareVersions(pending, train.core) > 0;
@@ -556,7 +563,7 @@ export async function packageState(deps, pkg, version, train) {
   state.manifest = releaseManifest;
   const stillDeclared = unreleasedCoreOf(releaseManifest);
   if (stillDeclared !== null) state.problems.push(`the release commit keeps opf.requiresUnreleasedCore ${stillDeclared} in ${pkg.manifest}; the field is for pull requests and must be deleted before a release (\`prep\` removes it)`);
-  const lagging = floorChanges(releaseManifest, upstreamTargets(pkg, train));
+  const lagging = floorChanges(releaseManifest, upstreamTargets(pkg, train), { preserveCompatiblePatchPeers: pkg.key === "cli" });
   for (const change of lagging) state.problems.push(`the release commit keeps ${change.field} ${change.name} ${change.from}, below the train's ${change.to.replace(/^[^\d]*/, "")}`);
   state.step = state.tagCommit ? "tagged" : "ready-to-tag";
   return state;
@@ -992,7 +999,10 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   const missing = await missingUpstream(deps, pkg, train);
   if (missing.length) throw new TrainStop(`${pkg.name}@${version} waits for ${missing.join(", ")} on npm; prep it after the upstream is published`);
   const branchName = branch ?? defaultBranch(pkg, version);
-  const changes = floorChanges(manifest, upstreamTargets(pkg, train));
+  const changes = floorChanges(manifest, upstreamTargets(pkg, train), { preserveCompatiblePatchPeers: pkg.key === "cli" });
+  if (pkg.key === "cli" && changes.some(change => change.field === "peerDependencies")) {
+    throw new TrainStop("CLI preparation requires a new runtime peer contract; reconcile and release core's peer floors first rather than editing core runtime files in a CLI prep");
+  }
   const dir = cloneDir ?? mkdtempSync(path.join(deps.scratch ?? os.tmpdir(), `release-train-${pkg.key}-`));
   const git = (args, what = `git ${args[0]}`) => must(deps.exec("git", args, { cwd: dir, env: deps.env }), what);
   must(deps.exec("git", ["clone", "--depth", "1", "--branch", "main", deps.cloneUrl(pkg.repo), dir], { env: deps.env }), "git clone");

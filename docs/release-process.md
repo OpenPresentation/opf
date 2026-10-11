@@ -110,7 +110,8 @@ What each step checks:
   version, runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z --date <today>` (with `--package opf` or
   `--package cli` in core, `--summary` when given), raises the floors that name a package of the train (caret and
   tilde ranges keep their operator; exact devDependency pins move to the exact version; `workspace:*` is untouched;
-  for the CLI, `PEER_RANGES` in `packages/cli/src/peers.ts` follows its peer ranges) and refreshes the lockfile
+  for CLI preparation, already-compatible patch peer ranges stay unchanged while development pins advance;
+  core runtime files are never edited by CLI prep) and refreshes the lockfile
   (`npm install --package-lock-only` in the siblings, `pnpm install --lockfile-only` in core). It fails if a fragment
   for the package is left or if anything other than the manifest, changelog, fragments, lockfile and peers file
   changed. The PR body lists README lines that name the previous version for a person to review; prose is not
@@ -349,3 +350,12 @@ If npm publish fails with `ENEEDAUTH`, confirm:
 If npm publish fails after the version is already present on npm, do not retry
 the same publish. Verify the package and treat the failure as a duplicate
 publish attempt.
+
+### CLI peer contracts before a new minor train
+
+A CLI release prep advances development pins, but does not define a new runtime peer contract.
+Before a train crosses an incompatible peer minor (for example 0.18 to 0.19), the reviewed feature changes
+must align the CLI's peer metadata with core's peer manifest and `packages/javascript/src/node/peers.ts`.
+Release core's new contract first. Then CLI prep keeps those aligned ranges and advances its core dependency
+and development pins. If CLI metadata still names the old incompatible line, prep stops before cloning;
+make the contract change in its own reviewed PR, rather than editing core runtime files in release prep.

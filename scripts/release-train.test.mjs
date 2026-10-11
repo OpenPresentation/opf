@@ -8,6 +8,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
   assertGalleryReleaseReady,
+  allowedPrepFile,
   compareVersions,
   defaultBranch,
   editManifestText,
@@ -578,7 +579,7 @@ test("plan for a next patch reports every missing release-prep PR, the upstream 
   assert.deepEqual(result.states.find((s) => s.key === "pptx").waitsFor, ["@openpresentation/opf@0.12.1", "@openpresentation/opf-render@0.12.1"]);
   assert.deepEqual(
     result.states.find((s) => s.key === "cli").floorChanges.map((c) => `${c.field} ${c.name} ${c.to}`),
-    ["peerDependencies @openpresentation/opf-render ^0.12.1", "peerDependencies @openpresentation/opf-pptx ^0.12.3", "devDependencies @openpresentation/opf-render 0.12.1", "devDependencies @openpresentation/opf-pptx 0.12.3"],
+    ["devDependencies @openpresentation/opf-render 0.12.1", "devDependencies @openpresentation/opf-pptx 0.12.3"],
   );
   assert.deepEqual(result.flags, [], "every sibling raises its core floor in this train");
   assert.equal(nextStep(result), "node scripts/release-train.mjs prep core --core 0.12.1 --render 0.12.1 --pptx 0.12.3 --editor 0.11.3 --cli 0.10.1 --execute");
@@ -1007,4 +1008,85 @@ test("independent gallery staging blocks prep before clone and release tagging r
   const manifest = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^2.0.0" } };
   const head = world.commit("opf", "registry adopted", { "packages/javascript/package.json": JSON.stringify(manifest) });
   await assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest);
+});
+
+const cliPatchManifest = {
+  name: "@openpresentation/cli", version: "0.18.0",
+  dependencies: {"@openpresentation/opf": "^0.18.1"},
+  peerDependencies: {"@openpresentation/opf-pptx": "^0.18.0", "@openpresentation/opf-render": "^0.18.0"},
+  devDependencies: {"@openpresentation/opf-pptx": "0.18.0", "@openpresentation/opf-render": "0.18.0"},
+};
+const corePatchManifest = {name: "@openpresentation/opf", version: "0.18.3", peerDependencies: cliPatchManifest.peerDependencies};
+const corePatchHints = 'export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.18.0", [PPTX_PACKAGE]: "^0.18.0" } as const;\n';
+
+test("CLI 0.18.1 preparation keeps compatible runtime peers and advances its development pins", () => {
+  const manifest = cliPatchManifest;
+  const targets = { "@openpresentation/opf": "0.18.3", "@openpresentation/opf-render": "0.18.1", "@openpresentation/opf-pptx": "0.18.1" };
+  const changes = floorChanges(manifest, targets, { preserveCompatiblePatchPeers: true });
+  assert.deepEqual(changes.map(({field,name,to}) => [field,name,to]), [
+    ["dependencies", "@openpresentation/opf", "^0.18.3"],
+    ["devDependencies", "@openpresentation/opf-pptx", "0.18.1"],
+    ["devDependencies", "@openpresentation/opf-render", "0.18.1"],
+  ]);
+  const prepared = JSON.parse(editManifestText(JSON.stringify(manifest, null, 2), {version: "0.18.1", changes}));
+  const core = corePatchManifest;
+  assert.deepEqual(prepared.peerDependencies, core.peerDependencies);
+  const hints = corePatchHints;
+  assert.equal(editPeersText(hints, changes).text, hints);
+  assert.deepEqual(floorChanges(prepared, targets, {preserveCompatiblePatchPeers: true}), [], "tag planning accepts the unchanged compatible floors");
+  const incompatible = floorChanges(manifest, {...targets, "@openpresentation/opf-render": "0.19.0"}, {preserveCompatiblePatchPeers: true});
+  assert.ok(incompatible.some(change => change.field === "peerDependencies" && change.to === "^0.19.0"), "a new peer minor still requires a higher floor");
+  assert.ok(floorChanges({...manifest, peerDependencies: {"@openpresentation/opf-render": "0.18.0"}}, targets, {preserveCompatiblePatchPeers: true}).some(change => change.field === "peerDependencies"), "exact peers do not accept a patch upgrade");
+});
+
+test("CLI prep clones the current patch train without changing core runtime files", async (t) => {
+  const {world,base,commands} = prepFixture();
+  t.after(() => rmSync(base,{recursive:true,force:true}));
+  const seed = path.join(base,"seed");
+  const files = {
+    "packages/cli/package.json": JSON.stringify(cliPatchManifest,null,2),
+    "packages/javascript/package.json": JSON.stringify(corePatchManifest,null,2),
+    "packages/javascript/src/node/peers.ts": corePatchHints,
+    "packages/cli/CHANGELOG.md": "# Changelog\n\n## 0.18.0\n\nEarlier.\n",
+    "changes/config.json": JSON.stringify({default:"opf",targets:{opf:"CHANGELOG.md",cli:"packages/cli/CHANGELOG.md"},codePaths:[]}),
+    "changes/rr-99-fix.md": "---\ntype: fixed\npackages: [cli]\n---\nA CLI release fix.\n",
+    "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+  };
+  for(const [file,text] of Object.entries(files)){mkdirSync(path.dirname(path.join(seed,file)),{recursive:true});writeFileSync(path.join(seed,file),text);}
+  git(seed,"add","-A");git(seed,"commit","-qm","CLI seed");git(seed,"push","-q",path.join(base,"origin.git"),"main");
+  world.commit("opf","CLI-seed",files);
+  for(const [key,version]of[["core","0.18.3"],["render","0.18.1"],["pptx","0.18.1"]]){
+    const pkg=packageOf(key);const commit=world.commit(pkg.repo,`${key}-published`,{[pkg.manifest]:manifestText(pkg.name,version),...(key==="core"?files:{})});world.publish(key,version,commit);
+  }
+  const originalExec=world.deps.exec;
+  world.deps.exec=(command,args,options)=>command==="pnpm"?{status:0,stdout:"",stderr:""}:originalExec(command,args,options);
+  const result=await prep(world.deps,packageOf("cli"),{core:"0.18.3",render:"0.18.1",pptx:"0.18.1",cli:"0.18.1"},{date:"2026-10-11"});
+  assert.equal(result.status,"dry-run");
+  assert.equal(allowedPrepFile(packageOf("cli"), "packages/javascript/src/node/peers.ts"), false);
+  assert.equal(allowedPrepFile(packageOf("cli"), "packages/javascript/package.json"), false);
+  assert.deepEqual(result.changed.sort(),["changes/rr-99-fix.md","packages/cli/CHANGELOG.md","packages/cli/package.json"]);
+  for(const file of ["packages/javascript/package.json","packages/javascript/src/node/peers.ts"])assert.equal(readFileSync(path.join(result.dir,file),"utf8"),files[file]);
+  const prepared=JSON.parse(readFileSync(path.join(result.dir,"packages/cli/package.json"),"utf8"));
+  assert.equal(prepared.version,"0.18.1");assert.equal(prepared.dependencies["@openpresentation/opf"],"^0.18.3");
+  assert.equal(prepared.devDependencies["@openpresentation/opf-render"],"0.18.1");assert.equal(prepared.devDependencies["@openpresentation/opf-pptx"],"0.18.1");
+  assert.deepEqual(prepared.peerDependencies,JSON.parse(files["packages/javascript/package.json"]).peerDependencies);
+  for(const [key,version]of[["core","0.19.0"],["render","0.19.0"],["pptx","0.19.0"]]){
+    const pkg=packageOf(key);const commit=world.commit(pkg.repo,`${key}-minor`,{[pkg.manifest]:key==="core"?JSON.stringify({name:pkg.name,version,dependencies:{"@openpresentation/gallery":"^2.0.0"}}):manifestText(pkg.name,version),...(key==="core"?{"packages/cli/package.json":files["packages/cli/package.json"]}:{})});world.publish(key,version,commit);
+  }
+  const commandsBeforeRefusal = commands.length;
+  await assert.rejects(prep(world.deps,packageOf("cli"),{core:"0.19.0",render:"0.19.0",pptx:"0.19.0",cli:"0.19.0"}),/reconcile and release core's peer floors first/);
+  assert.equal(commands.length, commandsBeforeRefusal, "incompatible contract refuses before clone or edit");
+  // A feature PR defines the new contract before release prep; prep must never infer it from a train version.
+  const aligned = {...cliPatchManifest,peerDependencies:{"@openpresentation/opf-pptx":"^0.19.0","@openpresentation/opf-render":"^0.19.0"}};
+  const alignedCore = {...corePatchManifest,version:"0.19.0",dependencies:{"@openpresentation/gallery":"^2.0.0"},peerDependencies:aligned.peerDependencies};
+  const alignedHints=corePatchHints.replaceAll("^0.18.0","^0.19.0");
+  for(const [file,value]of[["packages/cli/package.json",JSON.stringify(aligned,null,2)],["packages/javascript/package.json",JSON.stringify(alignedCore,null,2)],["packages/javascript/src/node/peers.ts",alignedHints]])writeFileSync(path.join(seed,file),value);
+  git(seed,"add","-A");git(seed,"commit","-qm","Define reviewed 0.19 peer contract");git(seed,"push","-q",path.join(base,"origin.git"),"main");
+  const coreFiles={"packages/cli/package.json":JSON.stringify(aligned,null,2),"packages/javascript/package.json":JSON.stringify(alignedCore,null,2)};
+  const released=world.commit("opf","reviewed-core-contract",coreFiles);world.publish("core","0.19.0",released);
+  const minor=await prep(world.deps,packageOf("cli"),{core:"0.19.0",render:"0.19.0",pptx:"0.19.0",cli:"0.19.0"},{date:"2026-10-11"});
+  assert.equal(minor.status,"dry-run");
+  assert.deepEqual(JSON.parse(readFileSync(path.join(minor.dir,"packages/cli/package.json"),"utf8")).peerDependencies,alignedCore.peerDependencies);
+  assert.equal(readFileSync(path.join(minor.dir,"packages/javascript/package.json"),"utf8"),coreFiles["packages/javascript/package.json"]);
+  assert.equal(readFileSync(path.join(minor.dir,"packages/javascript/src/node/peers.ts"),"utf8"),alignedHints);
 });
