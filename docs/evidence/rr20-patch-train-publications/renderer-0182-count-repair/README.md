@@ -15,3 +15,11 @@ Required tasks remain open:
 - Before renderer 0.19.0 or any selected 0.19 prerelease qualification, qualify that exact version's manifest/vendor/peer face bytes and prepared lazy count, then add its explicit reviewed version record with unknown/prerelease/wrong-count refusal tests. #622 admits ONLY 0.18.2. Integrate #622 into the v2 core candidate; historical staged renderer 0.18.1 results do not qualify new version metadata.
 
 The bounded version-specific preflight found no analogous active PPTX/editor count map. Actual release-plan/verificationRefs/consumer locks still require genuine published graph adoption, and native packet identities/seals require a new reviewed packet for changed inputs. No stable metadata gate, breaking check, strict hash or native boundary is waived. Progress remains 15/40; T18 and final registry/site/native acceptance remain open.
+
+## Dated source selection update — 2026-10-11, 15:09 UTC
+
+Core #622 merged at `382ae0102335f536131a6e3659761f8a5240fe4d` after prescribed gate 44343 exited 0 at 15:09:13 UTC. Its three-file repair is byte-identical to the reviewed frozen source. This completes only the repair merge task; no renderer publication or checkpoint closes.
+
+Prescribed roller candidate `ec68823fdba3d9855f961a7f3b9bf0fee78f769c`, parent `382ae0102335f536131a6e3659761f8a5240fe4d`, changes only `ecosystem.lock.json`: core selects that merged repair and editor selects `39e62a61b323753b47a504621216754c14c78c86`; renderer remains `dd6b520404d423fd4ddd59e81a9b47971e906be3` and PPTX remains `95a2f22fc2ecbef2c359649ea4b308c649923fb4`. The generated lock and unchanged golden/source scope were independently and supervisor reviewed; coordinated CI remains pending under supervisor runner 88394. The roller is not yet claimed merged, so renderer #234 retry remains ordered after its successful gate/merge.
+
+The verified 14:47 UTC snapshot remains 29 open PRs and 45 issues. The known #622 merge reconciles that dated snapshot to 28 open PRs; this is not a new inventory query. Historical pending statements above describe their earlier snapshot. JSON receipts are unchanged.
