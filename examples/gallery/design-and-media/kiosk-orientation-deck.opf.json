@@ -304,7 +304,7 @@
     {
       "id": "s100-blocks",
       "section": "Evidence",
-      "layout": "dashboard",
+      "layout": "chart-beside",
       "title": "Evidence Pack",
       "blocks": [
         {
@@ -964,48 +964,47 @@
             "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
           }
         },
-        "dashboard": {
-          "name": "Dashboard",
-          "summary": "Headline numbers over charts.",
+        "chart-beside": {
+          "name": "Chart beside",
+          "summary": "A chart with the takeaway beside it.",
           "tags": [
-            "Mixed"
+            "Visuals"
           ],
-          "design": {
-            "contentBox": true
-          },
           "areas": [
-            "title",
-            "kpis",
-            "charts"
+            "title title",
+            "chart notes"
           ],
           "columns": [
-            1
+            3,
+            2
           ],
           "rows": [
             "auto",
-            2,
-            3
+            1
           ],
           "regions": {
-            "kpis": {
+            "chart": {
               "accepts": [
-                "metric"
-              ],
-              "role": "secondary",
-              "flow": "grid"
-            },
-            "charts": {
-              "accepts": [
-                "chart",
-                "table"
+                "chart"
               ],
               "role": "primary",
-              "flow": "grid"
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote",
+                "chart"
+              ],
+              "role": "supporting",
+              "flow": "column"
             }
           },
-          "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
+          "description": "Pair a chart with an explanation of its result. Keep the text focused on the pattern or decision supported by the data.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-beside.svg"
           }
         },
         "image-beside": {
