@@ -26,6 +26,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {inflateRawSync} from 'node:zlib';
 import {cliPeerGate, report as gateReport} from '../../../scripts/unreleased-gate.mjs';
+import {imagePlaceholderCount} from './helpers/image-placeholders.mjs';
 
 const executable = process.env.OPF_TEST_BIN;
 if (!executable) {
@@ -134,7 +135,7 @@ function zipEntry(bytes, wanted) {
 }
 const slideXml = async (file, number) => zipEntry(await readFile(path.join(temp, file)), `ppt/slides/slide${number}.xml`);
 const pictures = xml => (xml.match(/<p:pic>/g) ?? []).length;
-const placeholders = xml => (xml.match(/name="OPF image placeholder/g) ?? []).length;
+const placeholders = imagePlaceholderCount;
 const unresolved = report => report.findings.filter(item => item.ruleId === 'pptx/unresolved-asset');
 
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64');

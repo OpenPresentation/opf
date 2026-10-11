@@ -1,0 +1,39 @@
+NOTE golden SVG digests are for renderer 0.14.0/core 0.14.0; installed 0.18.1/0.18.3 skipped them.
+opf convert passed 77 drawing checks: SVG, PNG, PDF, PPTX, zip, .pptx input round trip, --fail-on, assets, determinism.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: slide 1 carries the image placeholder
+
+4 !== 1
+
+    at file:///private/tmp/rr78-v2-stage-replay/opf/packages/cli/test/installed-regression.mjs:227:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 4,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+
+1 !== 0
+
+    at run (file:///private/tmp/rr78-v2-stage-replay/opf/packages/cli/test/packed-files.mjs:51:10)
+    at file:///private/tmp/rr78-v2-stage-replay/opf/packages/cli/test/packed-files.mjs:101:15 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
