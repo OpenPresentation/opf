@@ -5,8 +5,14 @@ import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {stageGalleryGraph,candidateArtifacts} from './candidate-gallery-pack.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
+if(!process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'));
+if(process.env.CANDIDATE_GALLERY_REF){
+  console.log(JSON.stringify(stageGalleryGraph({coreRoot:path.resolve(root),workspace:path.resolve(root,'..'),out}),null,2));
+  process.exit(0);
+}
 const packages = [
   ["opf", "packages/javascript", "0.4.0-preview.11"],
   ["opf-render", "../opf-render", "0.1.0-preview.11"],

@@ -47,7 +47,7 @@ try {
   tarball=path.join(out,packed.filename);
  } else {
   const candidate=await packCliCandidate({cliDirectory:pkg,coreDirectory:path.join(root,'packages/javascript'),destination:out,run,npmArgs:['--cache',cache]});
-  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball];
+  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball,...(candidate.additionalTarballs??[])];
  }
  if(registry){
   // Install directly from npm as well as from the inspected tarball so npm can

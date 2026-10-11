@@ -11,6 +11,10 @@ on:
     types: [opened, synchronize, reopened, labeled]
   merge_group:
   workflow_dispatch:
+    inputs:
+      candidate-gallery-ref:
+        type: string
+        default: ''
 
 concurrency:
   group: engines-range-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'ignored' || 'run' }}
@@ -53,23 +57,39 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
+      - id: gallery
+        name: Resolve the explicit reviewed candidate boundary
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref || '' }}
+        run: node scripts/candidate-gallery.mjs resolve
+      - uses: ./.github/actions/candidate-gallery-stage
+        if: steps.gallery.outputs.candidate_gallery != ''
+        with:
+          gallery-ref: ${{ steps.gallery.outputs.candidate_gallery }}
       - name: Install dependencies
+        if: steps.gallery.outputs.candidate_gallery == ''
         run: |
           node -e "console.log('Node', process.version)"
           pnpm install --frozen-lockfile
 
       - name: Build
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         run: pnpm build
 
       - name: Test
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         run: pnpm test
         env:
           OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
 
       - name: Verify packed package install
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         run: node packages/javascript/test/packed-install-smoke.mjs
 
       - name: Verify packed CLI install
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         run: pnpm test:cli:packed
 
       - name: Restore the npm cache of the CLI's optional peers
@@ -79,6 +99,7 @@ jobs:
           key: opf-cli-peers-npm-${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('packages/cli/package.json') }}
 
       - name: Verify packed CLI with its optional render and PPTX peers
+        working-directory: ${{ steps.gallery.outputs.candidate_gallery != '' && 'opf' || '.' }}
         run: pnpm test:cli:packed:peers
         env:
           OPF_NPM_CACHE: ${{ runner.temp }}/opf-cli-peers-npm

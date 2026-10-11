@@ -9,6 +9,8 @@ import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {candidateArtifacts} from '../../../scripts/candidate-gallery-pack.mjs';
+import {assertPublishedGallery} from '../../../scripts/candidate-gallery.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {satisfies} from '../../../scripts/unreleased-gate.mjs';
 import {createRequire} from 'node:module';
@@ -17,6 +19,8 @@ const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
 const registry = process.argv.includes('--registry');
+const candidateGraph=candidateArtifacts(path.resolve(packageRoot,'../..'));
+if(registry){assert.ok(!candidateGraph,'candidate tarballs cannot qualify registry installs');assertPublishedGallery(manifest);}
 const require = createRequire(import.meta.url);
 const nodeTypesVersion = require('@types/node/package.json').version;
 const plan = JSON.parse(await readFile(new URL('../../../release-plan.json', import.meta.url), 'utf8'));
@@ -30,9 +34,9 @@ const siblings = plan.packages.filter(item => ['@openpresentation/opf-render', '
 // Core raises its optional peers (the renderer and PPTX of /node) to the next train's line before its own release prep
 // (opf#498); npm then refuses the plan's siblings next to it, so the same skip applies.
 const peersAhead = siblings.filter(item => manifest.peerDependencies?.[item.name] && !satisfies(item.version, manifest.peerDependencies[item.name]));
-const downstream = registry || !sameLine || peersAhead.length ? [] : siblings;
-if (!registry && !sameLine) process.stdout.write(`core ${manifest.version} is on a newer minor than the release plan's published siblings (${line(planCore)}.x): skipping their install until the ${line(manifest.version)} siblings publish (test:packed-ecosystem covers the candidate siblings).\n`);
-else if (!registry && peersAhead.length) process.stdout.write(`core ${manifest.version} declares optional peers ${peersAhead.map(item => `${item.name}@${manifest.peerDependencies[item.name]}`).join(' and ')}, which the release plan's ${peersAhead.map(item => item.version).join('/')} do not satisfy: skipping the published siblings' install until that line publishes (test:packed-ecosystem covers the candidate siblings).\n`);
+const downstream = candidateGraph ? candidateGraph.artifacts.filter(item => siblings.some(sibling => sibling.name === item.name)) : registry || !sameLine || peersAhead.length ? [] : siblings;
+if (!candidateGraph && !registry && !sameLine) process.stdout.write(`core ${manifest.version} is on a newer minor than the release plan's published siblings (${line(planCore)}.x): skipping their install until the ${line(manifest.version)} siblings publish (test:packed-ecosystem covers the candidate siblings).\n`);
+else if (!candidateGraph && !registry && peersAhead.length) process.stdout.write(`core ${manifest.version} declares optional peers ${peersAhead.map(item => `${item.name}@${manifest.peerDependencies[item.name]}`).join(' and ')}, which the release plan's ${peersAhead.map(item => item.version).join('/')} do not satisfy: skipping the published siblings' install until that line publishes (test:packed-ecosystem covers the candidate siblings).\n`);
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Standalone package verification must not use source loaders or module aliases');
 const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
@@ -66,7 +70,9 @@ try {
     `${JSON.stringify({ private: true, type: "module", overrides: {'@openpresentation/opf': '$@openpresentation/opf'} }, null, 2)}\n`,
   );
 
-  const packResult = await run("npm", ["pack", packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
+  const candidateCore=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf');
+  const candidateFile=candidateCore?path.join(packageRoot,'../../artifacts/npm',candidateCore.file):null;
+  const packResult = await run("npm", ["pack", candidateFile??packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
   const tgzName = packResult.stdout.trim().split(/\r?\n/).at(-1);
   assert.ok(tgzName?.endsWith(".tgz"), `npm pack did not return a tarball name: ${packResult.stdout}`);
 
@@ -110,7 +116,7 @@ try {
     };
     cliTarball = (await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync })).cliTarball;
   }
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), ...(candidateGraph?[path.join(packageRoot,'../../artifacts/npm',candidateGraph.artifacts.find(item=>item.name==='@openpresentation/gallery').file)]:[]), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => candidateGraph ? path.join(packageRoot,'../../artifacts/npm',item.file) : `${item.name}@${item.version}`)], { cwd: projectDir });
   await checkPackedTypes(projectDir, {downstream: downstream.length > 0, cli: !!cliTarball});
   if (cliTarball) {
     const one = await assertOneCore(path.join(projectDir, 'node_modules'));

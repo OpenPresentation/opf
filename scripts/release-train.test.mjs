@@ -7,6 +7,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  assertGalleryReleaseReady,
   compareVersions,
   defaultBranch,
   editManifestText,
@@ -986,4 +987,24 @@ test("the gallery is an independent package: verify finds it, the train never do
   const logs = [];
   assert.equal(await main(["verify", "gallery@1.0.0"], { ...world.deps, log: (line) => logs.push(line) }), 0, logs.join("\n"));
   await assert.rejects(main(["tag", "gallery@1.0.0"], { ...world.deps, log: () => {} }), /own version line/);
+});
+
+
+test("independent gallery staging blocks prep before clone and release tagging readiness", async () => {
+  for (const configuration of [false, true]) {
+    const world = fakeWorld();
+    const manifest = { name: "@openpresentation/opf", version: "0.19.0-next.0", ...(configuration ? {} : { opf: { requiresUnreleasedGallery: "2.0.0" } }) };
+    const files = { "packages/javascript/package.json": JSON.stringify(manifest) };
+    if (configuration) files[".github/candidate-gallery.json"] = JSON.stringify({ version: 1 });
+    const head = world.commit("opf", "candidate", files);
+    let edits = 0;
+    world.deps.exec = () => { edits++; throw new Error("must not clone/edit"); };
+    await assert.rejects(prep(world.deps, packageOf("core"), { core: "0.19.0" }), /unresolved candidate gallery/);
+    await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest), /adopt the published gallery/);
+    assert.equal(edits, 0);
+  }
+  const world = fakeWorld();
+  const manifest = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^2.0.0" } };
+  const head = world.commit("opf", "registry adopted", { "packages/javascript/package.json": JSON.stringify(manifest) });
+  await assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest);
 });
