@@ -139,7 +139,7 @@ export function assertInstalledCandidatePeers(root,modules,names,coreVersion){
  modules=realpathSync(modules);
  const core=graph.artifacts.find(item=>item.name==='@openpresentation/opf');
  assert.equal(coreVersion,core.version,'installed core version differs from the staged graph');
- for(const name of ['@openpresentation/opf',...names]){
+ for(const name of new Set(['@openpresentation/opf','@openpresentation/gallery',...names])){
   const item=graph.artifacts.find(record=>record.name===name);assert.ok(item,'unknown staged peer');
   const directory=path.join(modules,name);assert.equal(realpathSync(directory),directory,'installed peer is aliased');
   assert.deepEqual(readRegularJson(path.join(directory,'package.json')),item.stagedManifest,'installed peer metadata differs from the exact staged graph');
@@ -147,7 +147,21 @@ export function assertInstalledCandidatePeers(root,modules,names,coreVersion){
    const installed=path.join(directory,file.path);assert.equal(realpathSync(installed),installed,'installed peer runtime is aliased');
    assert.deepEqual(readFileSync(installed),readFileSync(path.join(root,'artifacts/npm/staging',name.split('/')[1],file.path)),'installed peer runtime differs from staged bytes');
   }
-  if(name!=='@openpresentation/opf')assert.equal(createRequire(path.join(directory,'package.json')).resolve('@openpresentation/opf/package.json'),path.join(modules,'@openpresentation/opf/package.json'),'installed peer resolves a different core');
+  if(name!=='@openpresentation/opf'&&name!=='@openpresentation/gallery')assert.equal(createRequire(path.join(directory,'package.json')).resolve('@openpresentation/opf/package.json'),path.join(modules,'@openpresentation/opf/package.json'),'installed peer resolves a different core');
+  if(name!=='@openpresentation/gallery')assert.equal(createRequire(path.join(directory,'package.json')).resolve('@openpresentation/gallery/package.json'),path.join(modules,'@openpresentation/gallery/package.json'),'installed peer resolves a different gallery');
  }
  return {run:true};
+}
+
+export function assertCandidateExecInstalls(root,cache,names){
+ const directory=path.join(realpathSync(cache),'_npx');
+ const graph=candidateArtifacts(root);assert.ok(graph,'npm exec qualification needs a staged graph');
+ const version=graph.artifacts.find(item=>item.name==='@openpresentation/opf').version;
+ let installs=0;
+ for(const entry of readdirSync(directory)){
+  const modules=path.join(directory,entry,'node_modules');
+  if(!optionalRegularJson(path.join(modules,'@openpresentation/cli/package.json')))continue;
+  assertInstalledCandidatePeers(root,modules,['@openpresentation/cli',...names],version);installs++;
+ }
+ assert.ok(installs>0,'npm exec did not create a qualified candidate installation');return installs;
 }

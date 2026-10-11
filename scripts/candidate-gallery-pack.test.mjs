@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {execFileSync} from 'node:child_process';
-import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,existsSync,symlinkSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,existsSync,symlinkSync,cpSync} from 'node:fs';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph,assertInstalledCandidatePeers} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
  const original={name:'@openpresentation/opf',version:'0.19.0-dev.0',dependencies:{'@openpresentation/gallery':'^1.0.0',other:'^3.0.0'},peerDependencies:{'@openpresentation/opf-render':'^0.18.0'},scripts:{build:'never execute'},devDependencies:{typescript:'5'},opf:{requiresUnreleasedGallery:'2.0.0',other:true}};
@@ -54,15 +54,21 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   const standalone=report.artifacts.filter(item=>['@openpresentation/cli','@openpresentation/opf','@openpresentation/gallery'].includes(item.name)).map(item=>path.join(out,item.file));
   run('npm',['install','--global','--prefix',global.prefix,'--offline','--cache',path.join(workspace,'cache'),'--ignore-scripts','--no-audit','--no-fund',...standalone],workspace);
   assert.equal(existsSync(path.join(global.modules,'@openpresentation/opf-render')),false,'optional renderer must remain absent');
+  assertInstalledCandidatePeers(root,global.modules,['@openpresentation/cli'],'0.19.0-next.0');
+  const globalGallery=path.join(global.modules,'@openpresentation/gallery/dist/index.js'),globalGalleryBytes=readFileSync(globalGallery);
+  writeFileSync(globalGallery,'tampered gallery');assert.throws(()=>assertInstalledCandidatePeers(root,global.modules,['@openpresentation/cli'],'0.19.0-next.0'),/peer runtime differs/);writeFileSync(globalGallery,globalGalleryBytes);
   const output=JSON.parse(run(process.execPath,[path.join(global.modules,'@openpresentation/cli/dist/index.js')],workspace));
   assert.equal(output.core,path.join(global.modules,'@openpresentation/opf/package.json'));assert.equal(output.gallery,path.join(global.modules,'@openpresentation/gallery/package.json'));
   const executed=JSON.parse(run('npm',['exec','--offline','--cache',path.join(workspace,'cache'),...standalone.map(file=>`--package=${file}`),'--','rr78'],workspace));
   assert.ok(executed.core.includes(`${path.sep}_npx${path.sep}`));assert.ok(!executed.core.startsWith(global.modules+path.sep),'npm exec must not borrow global install');
+  assert.equal(assertCandidateExecInstalls(root,path.join(workspace,'cache'),[]),1);
   const modules=path.join(consumer,'node_modules'),peerNames=['@openpresentation/opf-render','@openpresentation/opf-pptx'];
   assert.equal(assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0').run,true);
   const modulesAlias=path.join(workspace,'global-modules-alias');symlinkSync(modules,modulesAlias,process.platform==='win32'?'junction':'dir');
   assert.equal(assertInstalledCandidatePeers(root,modulesAlias,peerNames,'0.19.0-next.0').run,true,'canonical global root supports system tmpdir aliases');
   assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.18.3'),/core version differs/);
+  const nestedGallery=path.join(modules,peerNames[0],'node_modules/@openpresentation/gallery');mkdirSync(path.dirname(nestedGallery),{recursive:true});cpSync(path.join(modules,'@openpresentation/gallery'),nestedGallery,{recursive:true});
+  assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/different gallery/);rmSync(nestedGallery,{recursive:true,force:true});
   const peerManifest=path.join(modules,peerNames[0],'package.json'),peerBytes=readFileSync(peerManifest);
   writeFileSync(peerManifest,JSON.stringify({...JSON.parse(peerBytes),dependencies:{'@openpresentation/opf':'file:/unreviewed.tgz'}}));
   assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer metadata differs/);writeFileSync(peerManifest,peerBytes);
