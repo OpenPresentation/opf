@@ -43,11 +43,12 @@ async function install(name, { stubs = false, global = false, peerVersion = "0.1
 }
 
 describe("opf doctor", () => {
-  let missing, present, older, global;
+  let missing, present, older, prerelease, global;
   before(async () => {
     missing = await install("missing");
     present = await install("present", { stubs: true });
     older = await install("older", { stubs: true, peerVersion: "0.18.0" });
+    prerelease = await install("prerelease", { stubs: true, peerVersion: "0.19.0-next.0" });
     global = await install("global", { global: true });
   });
 
@@ -81,6 +82,17 @@ describe("opf doctor", () => {
       assert.ok(report.missing.includes(`@openpresentation/${name}@^0.19.0`));
     }
     for (const format of ["json", "yaml", "md"]) assert.deepEqual(report.formats[format], { ready: true, missing: [] });
+  });
+
+  test("installed prerelease engines do not satisfy stable 0.19 readiness", () => {
+    const report = JSON.parse(run(prerelease.bin, ["doctor"], { cwd: prerelease.root }).stdout);
+    for (const name of ["opf-render", "opf-pptx"]) {
+      const fact = report.packages.find(item => item.name === `@openpresentation/${name}`);
+      assert.deepEqual([fact.installed, fact.version, fact.ok], [true, "0.19.0-next.0", false]);
+      assert.ok(report.missing.includes(`@openpresentation/${name}@^0.19.0`));
+    }
+    assert.equal(report.formats["pptx-import"].ready, false);
+    for (const format of ["json", "yaml", "md"]) assert.equal(report.formats[format].ready, true);
   });
 
   test("with a deck: a PDF needs sharp only when the deck has pictures", () => {

@@ -102,6 +102,25 @@ export function satisfies(version: string, range: string): boolean {
 	const [wantMajor, wantMinor, wantPatch] = parse(range);
 	if ([major, minor, patch, wantMajor, wantMinor, wantPatch].some((value) => value === undefined || Number.isNaN(value))) return false;
 	if (!range.startsWith("^")) return version.replace(/^v/, "") === range.replace(/^[=v]/, "");
+	// Stable caret ranges exclude prereleases. An explicitly named prerelease admits
+	// only prereleases of that same numeric version, at or above its identifier.
+	const prerelease = (text: string) => /^[\^v]?(\d+\.\d+\.\d+)-([^+]+)(?:\+.*)?$/.exec(text);
+	const actualPre = prerelease(version), wantedPre = prerelease(range);
+	if (actualPre) {
+		if (!wantedPre || actualPre[1] !== wantedPre[1]) return false;
+		const actual = actualPre[2]!.split("."), wanted = wantedPre[2]!.split(".");
+		for (let index = 0; index < Math.max(actual.length, wanted.length); index++) {
+			const a = actual[index], b = wanted[index];
+			if (a === b) continue;
+			if (a === undefined) return false;
+			if (b === undefined) break;
+			const numericA = /^\d+$/.test(a), numericB = /^\d+$/.test(b);
+			if (numericA && numericB) { if (Number(a) < Number(b)) return false; }
+			else if (numericA !== numericB) { if (numericA) return false; }
+			else if (a < b) return false;
+			break;
+		}
+	}
 	if (major !== wantMajor) return false;
 	if (wantMajor === 0 && minor !== wantMinor) return false;
 	if ((minor as number) !== (wantMinor as number)) return (minor as number) > (wantMinor as number);
