@@ -9,3 +9,7 @@ Coordinated gate 12145 is pending. PR #250 is not merged or published. Editor 0.
 ## Release preparation merged — 2026-10-11 18:19:49 UTC
 
 PR #250 gate 12145 completed exit 0, merging `1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2`. [Supervisor tree comparison](merged-tree-comparison.json) matches reviewed `d07b6349` tree `879b93d`; clean default is synced. Sole exact-release-commit gate 24822 is pending at that merged SHA; its live external log is `/private/tmp/opf-supervisor-20261010/pptx0182-release-commit-gate.log`. No tag or publication has occurred. Earlier pending records above are historical.
+
+## Exact commit gate passed; tag created — 2026-10-11 18:53:20 UTC
+
+[Exact-release-commit gate 24822](release-commit-gate.log) completed exit 0, confirming all four checks at `1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2`. Supervisor trusted release-train process 88826 created `opf-pptx-v0.18.2` on that commit and awaits workflow startup; live external log `/private/tmp/opf-supervisor-20261010/pptx0182-publication.log`. Publication and independent verification are not complete. Editor pre-prep must wait for independent PPTX verification. T18 remains open.

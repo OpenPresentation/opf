@@ -33,3 +33,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## Local PPTX v0.19 current-main refresh — 2026-10-11
 
 [Metadata-only refresh and focused source evidence](v019-pptx-current-refresh/README.md) are retained at `f62dd05a`; prior `1fae5a9d` stays immutable. No fresh full-graph, registry 0.19 or native claim.
+
+## PPTX exact-commit gate and tag — 2026-10-11 18:53:20 UTC
+
+[Gate 24822 receipt](pptx-0182-preparation/release-commit-gate.log) confirms all four checks at `1954c9ce`. Tag `opf-pptx-v0.18.2` is created; supervisor process 88826 awaits trusted workflow startup. Publication/independent verification are pending; editor pre-prep waits. No T18 closure.

@@ -1,0 +1,6 @@
+18:20:13 OpenPresentation/opf-pptx main: no required checks: every check except neutral bots counts
+18:20:13 OpenPresentation/opf-pptx@1954c9ce3d2c checks pending (0/4 checks, no ruleset); running: package (ubuntu-latest), package (windows-latest), Node 22 (engines range), Node 26 (engines range); 1 workflow runs in progress
+18:32:15 OpenPresentation/opf-pptx@1954c9ce3d2c checks pending (2/4 checks, no ruleset); running: package (ubuntu-latest), package (windows-latest); 1 workflow runs in progress
+18:35:16 OpenPresentation/opf-pptx@1954c9ce3d2c checks pending (3/4 checks, no ruleset); running: package (windows-latest); 1 workflow runs in progress
+18:50:19 OpenPresentation/opf-pptx@1954c9ce3d2c checks green (4/4 checks, no ruleset); confirming at the next poll
+18:53:20 GREEN OpenPresentation/opf-pptx@1954c9ce3d2c 1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2 (checks green (4/4 checks, no ruleset))

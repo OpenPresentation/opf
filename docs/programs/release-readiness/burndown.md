@@ -556,3 +556,5 @@ Append-only. One dated line per state change.
 - 2026-10-11 18:21 UTC: RR-20 — Root-verified inventory after PPTX #250 merge records 27 open PRs and 45 issues, complete pagination, all eight clean defaults matching and no changed existing open heads. Historical snapshots retained; progress remains 15/40.
 
 - 2026-10-11: RR-20 — Local PPTX v0.19 refresh `f62dd05a` adopts current merged metadata, preserving all v2/Pareto runtime bytes and original `1fae5a9d`. [Proof and focused source results](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) do not establish full graph, registry 0.19 or native acceptance. Release gate 24822 remains pending; progress stays 15/40.
+
+- 2026-10-11 18:53:20 UTC: RR-20/T18 — PPTX exact-commit gate 24822 completed exit 0, all four checks confirmed at `1954c9ce`; [receipt](../../evidence/rr20-patch-train-publications/pptx-0182-preparation/release-commit-gate.log). Supervisor process 88826 created tag `opf-pptx-v0.18.2`; trusted workflow startup/publication and independent verification remain pending. Editor pre-prep waits for verification; progress stays 15/40.
