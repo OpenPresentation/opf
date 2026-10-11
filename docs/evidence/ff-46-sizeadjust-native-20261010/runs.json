@@ -1,0 +1,158 @@
+{
+ "attempt-2": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "host": {
+   "os": "Microsoft Windows NT 10.0.26200.0",
+   "powershell": "5.1.26100.9444",
+   "culture": "en-US"
+  },
+  "startedUtc": "2026-10-10T22:02:58.5691983Z",
+  "finishedUtc": "2026-10-10T22:03:26.0501552Z",
+  "decks": [
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-12-ko-malgun-gothic",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 2,
+    "sha256": "21f116853c4431246aaa8e9a37718f537b036669dd28e519bb1cfd2cce5b35cf"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-19-ar-sakkal-majalla",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 2.2,
+    "sha256": "433087db3dc69294011fe9e59acbcafb3bdf3ea1ec4781fe25c00cb1200dd32b"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-20-ur-sakkal-majalla",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 1.9,
+    "sha256": "50ac129e2134e0d26986bf97e588cfcc30b44ac96e81277b807543507598f19e"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-21-fa-sakkal-majalla",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 1.9,
+    "sha256": "27c09d2ad206cf6b9c32c5b537a445ee67658df015d4c9d55a9aa8b9144b8807"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-27-hi-nirmala-ui",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 2.1,
+    "sha256": "b6ec1577525bcf10c914aaca6ea821805ca292ad7a38adbce7bf7d637bc96885"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-37-th-angsana-new",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 2,
+    "sha256": "af95d0686c6d65d14509f78f3a1e3fbbf00748fd0df176d8a47583ec13451af5"
+   },
+   {
+    "set": "ff46sa",
+    "deck": "sa-scripts-38-th-dilleniaupc",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 1280,
+    "elapsedSeconds": 1.9,
+    "sha256": "2e050ad7db30008d145bd7daa017fe07268012b6e498cb0692a0e31919002c88"
+   },
+   {
+    "set": "probe38",
+    "deck": "probe38-controls",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2,
+    "sha256": "6d8a04a3afb5de0a68e842edfa7a5d3cd873d3230491cf7ae016a8babdf40850"
+   },
+   {
+    "set": "probe38",
+    "deck": "probe38-dilleniaupc",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2.3,
+    "sha256": "3ceab7f84c75bca938861a0ee0d4d79e334a7bc34692a1ac1cb4f3f8c044dae0"
+   },
+   {
+    "set": "probe38",
+    "deck": "probe38-malgun-gothic",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2.2,
+    "sha256": "06899350ae26b262f53345445db448fb726f791353c8b360e7e2f031229a5d66"
+   },
+   {
+    "set": "probe38",
+    "deck": "probe38-nirmala-ui",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2.2,
+    "sha256": "4e0a4039e9dba62800dbb5484990901b744ac338cb04f23c36acd9fc1e8e89c0"
+   }
+  ]
+ },
+ "attempt-3": {
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "host": {
+   "os": "Microsoft Windows NT 10.0.26200.0",
+   "powershell": "5.1.26100.9444",
+   "culture": "en-US"
+  },
+  "startedUtc": "2026-10-10T22:10:08.5435853Z",
+  "finishedUtc": "2026-10-10T22:10:16.3903544Z",
+  "decks": [
+   {
+    "set": "probe38b",
+    "deck": "probe38b-angsana-new",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 1.9,
+    "sha256": "df613d39042f9ad1df55c062845a909ab58e0f84ecad99377778c126ed674e9b"
+   },
+   {
+    "set": "probe38b",
+    "deck": "probe38b-arabic-typesetting",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2.2,
+    "sha256": "fbff77beafa19f13cacd7dc171319d4d1410dd1ac263688abd9f5a33bfd631ea"
+   },
+   {
+    "set": "probe38b",
+    "deck": "probe38b-sakkal-majalla",
+    "status": "completed",
+    "exitCode": 0,
+    "exportWidth": 2880,
+    "elapsedSeconds": 2.4,
+    "sha256": "8eddaab2f329c5652252e9d5aa8cd4f26cf5eecdcc44e5c1d676ef801ae4d5c1"
+   }
+  ]
+ }
+}
