@@ -275,9 +275,12 @@ try {
     const cell = 'slides.7.blocks.0.table.rows.0.1';
     const at1 = await point(cell, '12', 0, 'left');
     await page.mouse.click(at1.x, at1.y);
-    await page.keyboard.press('Control+a');
+    await page.keyboard.press('ControlOrMeta+a');
+    const selectedNumber = await state();
+    assert.deepEqual([selectedNumber.start, selectedNumber.end], [0, selectedNumber.value.length], 'select the whole number before testing an empty edit');
     await page.keyboard.press('Delete');
     await paint();
+    assert.equal((await state()).value, '', 'the refusal test submits an empty numeric edit');
     const other = await point('slides.7.blocks.0.table.rows.1.0', 'beta', 1, 'left');
     await page.mouse.click(other.x, other.y);
     assert.equal(await page.evaluate(() => cv.editingPath), cell, 'an invalid number edit refuses to commit and stays');
