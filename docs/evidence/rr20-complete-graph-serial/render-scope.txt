@@ -1,0 +1,18 @@
+ AGENTS.md                                         |   2 +-
+ README.md                                         |  10 +-
+ changes/ff-46-script-name-hosts.md                |   4 +
+ changes/rr-78-gallery-package.md                  |   4 +
+ dist/index.d.ts                                   |   2 +-
+ dist/svg.d.ts                                     |   2 +-
+ docs/evidence/rr20-corpus-pinned-faces/README.md  |  15 +
+ docs/evidence/rr20-corpus-pinned-faces/before.log |  15 +
+ docs/evidence/rr20-corpus-pinned-faces/held.json  | 125 +++
+ docs/evidence/rr20-corpus-pinned-faces/main.json  | 125 +++
+ src/index.d.ts                                    |   2 +-
+ src/svg.d.ts                                      |   2 +-
+ test/browser-suites.json                          |   4 +
+ test/fixtures/script-name-families.json           | 938 ++++++++++++++++++++++
+ test/script-corpora-browser.mjs                   |  25 +-
+ test/script-name-hosts-browser.mjs                | 201 +++++
+ test/script-name-hosts.mjs                        | 234 ++++++
+ 17 files changed, 1695 insertions(+), 15 deletions(-)

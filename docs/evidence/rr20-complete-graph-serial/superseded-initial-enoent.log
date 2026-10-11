@@ -1,0 +1,16 @@
+node:fs:2862
+      const stats = binding.lstat(base, true, undefined, true /* throwIfNoEntry */);
+                            ^
+
+Error: ENOENT: no such file or directory, lstat '/private/tmp/rr20-complete-stage/opf/packages/javascript/dist/catalog-refs-CSHevLn1.d.ts'
+    at realpathSync (node:fs:2862:29)
+    at candidateArtifacts (file:///private/tmp/rr20-complete-stage/opf/scripts/candidate-gallery-pack.mjs:101:64)
+    at packCliCandidate (file:///private/tmp/rr20-complete-stage/opf/scripts/pack-cli-candidate.mjs:29:15)
+    at file:///private/tmp/rr20-complete-stage/opf/packages/cli/test/packed.mjs:53:25 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'lstat',
+  path: '/private/tmp/rr20-complete-stage/opf/packages/javascript/dist/catalog-refs-CSHevLn1.d.ts'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,4 @@
+NOTE golden SVG digests are for renderer 0.14.0/core 0.14.0; installed 0.18.1/0.18.3 skipped them.
+opf convert passed 77 drawing checks: SVG, PNG, PDF, PPTX, zip, .pptx input round trip, --fail-on, assets, determinism.
+Installed CLI regression passed 16 checks (/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-cli-peers-TwT5VG/global/lib/node_modules/@openpresentation/cli/dist/index.js): script-font SVG (ja-JP, zh-CN, none, Latin-only), unresolved-asset warning and --fail-on warning gate (image blocks and quote photo), native pictures, zero fetches.
+CLI plus optional peers passed (/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-render-0.18.1.tgz, /private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-pptx-0.18.1.tgz). Tarball: /private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-cli-0.18.0.tgz
