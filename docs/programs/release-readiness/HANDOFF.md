@@ -141,7 +141,7 @@ acceptance must be rerun on the final dependency set.
 
 ## Local-only state and preservation
 
-Current reviewed local core `b597dbe0`, renderer `d4ab7a5861719fb366e50299ee0604b05eec444e` in `/private/tmp/opf-v019-render-published-refresh`, editor `d6481068`, staged graph and packet 06 must be preserved without in-place mutation. [Renderer refresh receipts](../../evidence/rr20-patch-train-publications/v019-render-published-refresh/README.md) record passed build/type/validate and 997-item, 152-page, 84-alignment source checks against explicit c6 core/e0 gallery. Previous renderer `12766980` remains immutable historical graph identity. Their proof does not establish publication or native acceptance.
+Current reviewed local core `b597dbe0`, renderer `d4ab7a5861719fb366e50299ee0604b05eec444e` in `/private/tmp/opf-v019-render-published-refresh`, editor `d6481068`, staged graph and packet 06 must be preserved without in-place mutation. [Renderer refresh receipts](../../evidence/rr20-patch-train-publications/v019-render-published-refresh/README.md) record passed build/type/validate and 997-item, 152-page, 84-alignment source checks against explicit core `b597dbe099166d62067ea1cc67696c45cc268177`/e0 gallery. Previous renderer `12766980` remains immutable historical graph identity. Their proof does not establish publication or native acceptance.
 
 The previous supervisor's helper scripts (`rel018-*.sh` and `pubrepro.sh`) lived in a session scratch directory. They
 only wrap the documented commands above and are not needed. The tracker artifact at
