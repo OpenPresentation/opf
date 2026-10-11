@@ -1,0 +1,37 @@
+{
+  "slides": [
+    {
+      "title": "pareto",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North"
+          ],
+          "rows": [
+            [
+              "Q1",
+              4
+            ],
+            [
+              "Q2",
+              5
+            ],
+            [
+              "Q3",
+              6
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

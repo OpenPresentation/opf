@@ -9,7 +9,9 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
-import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {createRequire} from 'node:module';
+import {selectedRendererScriptFonts} from './helpers/renderer-script-fonts.mjs';
+import {packCliCandidate, preparePackedSmokeCli} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
 import {candidateArtifacts,assertInstalledCandidatePeers,assertCandidateExecInstalls} from '../../../scripts/candidate-gallery-pack.mjs';
@@ -25,15 +27,20 @@ const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map
 // RR-63: the renderer's converters (pdf-lib, @resvg/resvg-js, sharp) and font packages are its optional peers; install the ones the CLI's outputs use beside it.
 // RR-59 (opf#476): and the Noto JP and SC script packages the installed-package regression draws Japanese and Chinese SVG with (opf-render pins them exactly as peers;
 // installed-regression.mjs checks the installed versions against the renderer's declared ones).
-const rendererPeers=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf-render')?.stagedManifest.peerDependencies;
-const scriptFonts = ['@expo-google-fonts/noto-sans-jp','@expo-google-fonts/noto-sans-sc'].map(name=>`${name}@${rendererPeers?.[name]??'0.4.3'}`);
-const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${rendererPeers?.[name]??manifest.devDependencies[name]}`).concat(scriptFonts);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
 // The candidate core declares the same peers (optional, for its Node build's file API; opf#498 raises them to the next train's line before
 // core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
 if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
+const stagedRenderer=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf-render');
+if(candidateGraph) assert.ok(stagedRenderer, 'validated candidate graph must include the selected renderer');
+const require = createRequire(path.join(pkg, 'package.json'));
+const rendererManifest = stagedRenderer ? undefined : JSON.parse(await readFile(require.resolve('@openpresentation/opf-render/package.json'), 'utf8'));
+const scriptFonts = selectedRendererScriptFonts({rendererManifest, rendererVersion: manifest.devDependencies['@openpresentation/opf-render'], stagedRenderer});
+const rendererPeers=stagedRenderer?.stagedManifest.peerDependencies;
+const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${rendererPeers?.[name]??manifest.devDependencies[name]}`).concat(scriptFonts);
+
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
 const expectedDependencies=Object.hasOwn(manifest.dependencies??{},'@openpresentation/gallery')?['@openpresentation/gallery','@openpresentation/opf']:['@openpresentation/opf'];
 assert.deepEqual(Object.keys(manifest.dependencies ?? {}).sort(), expectedDependencies, 'CLI runtime dependencies must match the core and explicit gallery contract');
@@ -53,7 +60,7 @@ function run(command, args, cwd, env = {}) {
 }
 try {
   await mkdir(out, {recursive: true});
-  run('pnpm', ['build'], pkg);
+  await preparePackedSmokeCli({root, build: () => run('pnpm', ['build'], pkg)});
   // RR-45 (opf#368, item 5): CI keeps the npm cache of the peers between runs (OPF_NPM_CACHE, restored by actions/cache) and
   // then prefers it to the registry's metadata; the versions are exact, and npm checks every tarball's integrity either way.
   const sharedCache = process.env.OPF_NPM_CACHE ? path.resolve(process.env.OPF_NPM_CACHE) : undefined;
@@ -63,6 +70,7 @@ try {
   // between runs, so a restored _npx could hold an earlier CLI. Only the content-addressed downloads are reused.
   if (sharedCache) await rm(path.join(sharedCache, '_npx'), {recursive: true, force: true});
   // RR-62: the CLI depends on core; the candidate core is packed with it and both are installed (scripts/pack-cli-candidate.mjs).
+  // RR-78: core and the CLI depend on @openpresentation/gallery; its candidate tarball is installed with them.
   const candidate = await packCliCandidate({cliDirectory: pkg, coreDirectory: path.join(root, 'packages/javascript'), destination: out, run, npmArgs: ['--cache', cache]});
   const packed = candidate.cli, tarball = candidate.cliTarball;
   // The published tarball stays small: no font packs, no native engines.
