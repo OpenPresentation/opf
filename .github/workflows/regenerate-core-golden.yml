@@ -47,6 +47,11 @@ on:
         required: false
         type: string
         default: ""
+      gallery-ref:
+        description: Optional exact 40-character OpenPresentation/gallery v2 commit SHA (candidate only; requires renderer-ref)
+        required: false
+        type: string
+        default: ""
       fixture-name:
         description: With renderer-ref, the new fixture scripts/fixtures/opf-examples-png.<name>.sha256.json the branch lock will select
         required: false
@@ -69,6 +74,7 @@ jobs:
       BRANCH: ${{ inputs.branch }}
       RENDERER_REF: ${{ inputs.renderer-ref }}
       FIXTURE_NAME: ${{ inputs.fixture-name }}
+      GALLERY_REF: ${{ inputs.gallery-ref }}
     outputs:
       head: ${{ steps.branch.outputs.head }}
       main-sha: ${{ steps.branch.outputs.main-sha }}
@@ -98,6 +104,15 @@ jobs:
         with:
           ref: ${{ github.sha }}
           path: tools
+          persist-credentials: false
+      - name: Validate candidate gallery identity before checkout
+        run: node tools/scripts/core-golden.mjs check-gallery --gallery-ref "$GALLERY_REF" --renderer-ref "$RENDERER_REF"
+      - if: ${{ inputs.gallery-ref != '' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/gallery
+          ref: ${{ inputs.gallery-ref }}
+          path: gallery-candidate
           persist-credentials: false
       # main: the baseline fixture and the baseline corpus (the dispatched commit when dispatched on main).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -193,11 +208,17 @@ jobs:
           pnpm --dir opf-base install --frozen-lockfile
           pnpm --dir opf install --frozen-lockfile
           npm ci --prefix opf-render
+          if [ -n "$RENDERER_REF" ]; then npm ci --prefix opf-render-branch; fi
           pnpm --dir opf-base build
+          if [ -n "$GALLERY_REF" ]; then
+            npm ci --prefix gallery-candidate
+            npm run build --prefix gallery-candidate
+            node tools/scripts/core-golden.mjs link-gallery --workspace "$GITHUB_WORKSPACE" --gallery-ref "$GALLERY_REF"
+            (cd opf && node scripts/materialize-gallery-catalog.mjs)
+          fi
           pnpm --dir opf build
           npm run build --prefix opf-render
           if [ -n "$RENDERER_REF" ]; then
-            npm ci --prefix opf-render-branch
             npm run build --prefix opf-render-branch
           fi
       # Step one, the reproducibility guard: main's corpus, main's core and the locked renderer must write main's committed
@@ -237,6 +258,7 @@ jobs:
             --renderer "$RENDERER" --renderer-ref "$RENDERER_REF" --image "$OPF_PLAYWRIGHT_IMAGE" \
             --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
             --note "Reproducibility guard passed: main @ $(printf '%.12s' "$MAIN_SHA") rendered with the locked renderer wrote $MAIN_GOLDEN byte for byte." \
+            --note "Candidate gallery-ref: ${GALLERY_REF:-locked dependency}; main guard dependencies are unchanged." \
             --note "Branch is $BEHIND commit(s) behind main (no golden-affecting change missing)." \
             --github-output
           cp out/branch/candidate.json out/report/fixture.json
