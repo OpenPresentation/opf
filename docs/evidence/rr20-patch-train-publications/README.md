@@ -25,3 +25,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## Local renderer v0.19 refresh — 2026-10-11
 
 [Reviewed source refresh](v019-render-published-refresh/README.md) is clean at `d4ab7a5861719fb366e50299ee0604b05eec444e`; focused source checks pass. Prior `12766980` graph/packet identities are retained; final registry/native acceptance remains separate. PPTX gate 12145 remains pending.
+
+## PPTX preparation merged — 2026-10-11 18:19:49 UTC
+
+#250 merged at `1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2`, gate 12145 exit 0; [merged tree proof](pptx-0182-preparation/merged-tree-comparison.json) equals reviewed preparation. Sole exact-commit gate 24822 is pending; no tag or publication yet. Prior pending prose is historical.
