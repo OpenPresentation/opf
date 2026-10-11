@@ -40,9 +40,9 @@ Accepted local v0.19 core refresh is `b597dbe099166d62067ea1cc67696c45cc268177`,
 | --- | --- | --- |
 | `@openpresentation/opf` | **0.18.4** | Tag `opf-v0.18.4` at `e09461624a64`, independently verified; prior 0.18.3 also published. **0.18.2 is burned** (tagged, publish failed, never on npm); fix in opf#588. |
 | `@openpresentation/opf-render` | **0.18.2** | Tag `opf-render-v0.18.2`, commit `de0a5034f49d`; independently verified. |
-| `@openpresentation/opf-pptx` | **0.18.1** | Independently verified; 0.18.2 remains pending for PPTX/editor, CLI remains 0.18.1. |
-| `@openpresentation/opf-editor` | **0.18.1** | Independently verified; 0.18.2 remains pending for PPTX/editor, CLI remains 0.18.1. |
-| `@openpresentation/cli` | **0.18.1** | Independently verified; 0.18.2 remains pending for PPTX/editor, CLI remains 0.18.1. |
+| `@openpresentation/opf-pptx` | **0.18.2** | Tag `opf-pptx-v0.18.2`, commit `1954c9ce3d2c`; trusted-published and independently verified. |
+| `@openpresentation/opf-editor` | **0.18.1** | Independently verified; 0.18.2 awaits source #160 integration and fresh release qualification. |
+| `@openpresentation/cli` | **0.18.1** | Independently verified; unchanged optional-peer policy. |
 | `@openpresentation/gallery` | **1.0.0** | Tag `v1.0.0`, commit `3458f50ca8fe`; independently verified. No GitHub Release is required by this lane. |
 
 ## The 0.18.x patch train: operative next steps
