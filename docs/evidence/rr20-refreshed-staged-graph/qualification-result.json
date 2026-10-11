@@ -1,0 +1,118 @@
+{
+  "sourceCore": "bf59164c9ba4f2a0787607f0efd0be626357b831",
+  "authorizationOverlay": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+  "artifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.18.3",
+      "sourceSha": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+      "file": "openpresentation-opf-0.18.3.tgz",
+      "sha256": "9b6da496d4c103ae40c6cae400b076f4af5cbd06dad4b2c7105e5be19efe0780",
+      "bytes": 3322325,
+      "originalManifestSha256": "87f14f0182d571fbaa06db8991b6a8dc064d1cd44e38ed7e46f66e6b0d57ea3b",
+      "stagedManifestSha256": "f42e3236dda05bb120fb3024f39949b9b4a0abaf5d786ac1692a4e9aeecd14d4"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.18.1",
+      "sourceSha": "127669807df12fbead5ea805c4d54a7c3fcbc03b",
+      "file": "openpresentation-opf-render-0.18.1.tgz",
+      "sha256": "28125929e8447db19b789504d4698300e103c9bdbf50b9b319145ebbe8bca31b",
+      "bytes": 13073927,
+      "originalManifestSha256": "ce5f5d9ceade6bd502f6eeec1f678601b26f43af3a795dd5823acdf46a476a5d",
+      "stagedManifestSha256": "52087d2a16debd214a304744e969263e695397b5bd5a9980b8d93a3f2056456c"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.18.1",
+      "sourceSha": "1fae5a9df400ea37954ad4bb4fca8c2d1b96588b",
+      "file": "openpresentation-opf-pptx-0.18.1.tgz",
+      "sha256": "324d524394e70304a72c13f036195966e58bf47e42ba23fea258451e96d51d03",
+      "bytes": 721965,
+      "originalManifestSha256": "0a956966b3c7c41072af6cc491264a91eccccbdd9fe72c745c3c97db6b5889ac",
+      "stagedManifestSha256": "7ecb20a0d84554932998f1e5f41d7bf762df50fa8913ebbea949e66668e4ab29"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.18.1",
+      "sourceSha": "d6481068f3500fc986a31e57bd8317da5882be4a",
+      "file": "openpresentation-opf-editor-0.18.1.tgz",
+      "sha256": "d7247bb28e37bd8d6b886309d876d79543bb9479bfae908fff7b355f40ccdb0b",
+      "bytes": 405128,
+      "originalManifestSha256": "87296e7a0a64560a77326a08db6462ed61fa99e12eb1ee24818e21782749ca43",
+      "stagedManifestSha256": "b492934a9e98fb603a37b8f6fa140d4efc58ea401e8d696f42f4b75f9cb2aa42"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.18.1",
+      "sourceSha": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+      "file": "openpresentation-cli-0.18.1.tgz",
+      "sha256": "4f7f2ec07a47c820d50221a242de33fcb79dd97f8dfac1e37128a0e49ffccf69",
+      "bytes": 196867,
+      "originalManifestSha256": "1ac8ebe116a35d4feb01690486da9dbfab649fc97238f717255dd045b1538915",
+      "stagedManifestSha256": "0cb26a5fd7409e99f7b6b7937274c6868cf5ab8d053f152dac680acf398382d5"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "2.0.0",
+      "sourceSha": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+      "file": "openpresentation-gallery-2.0.0.tgz",
+      "sha256": "6c6720115bc82021bbb810dcc4ea70e27cdaef8bb3d07b573ece64f738653ce4",
+      "bytes": 97319,
+      "originalManifestSha256": "cf2d68c86ae85d53ca5626b0ec5544a4639a9798c4ac045296b542444ea22681",
+      "stagedManifestSha256": "1d85bde55ec143af7d0fa33ae930270e0ecf19f621dd80bbd7f1fde0153bef88"
+    }
+  ],
+  "consumers": [
+    {
+      "name": "core-packed",
+      "command": [
+        "node",
+        "packages/javascript/test/packed-install-smoke.mjs"
+      ],
+      "exit": 0,
+      "seconds": 50.97200608253479
+    },
+    {
+      "name": "cli-standalone",
+      "command": [
+        "node",
+        "packages/cli/test/packed.mjs"
+      ],
+      "exit": 0,
+      "seconds": 65.25534105300903
+    },
+    {
+      "name": "cli-peers",
+      "command": [
+        "node",
+        "packages/cli/test/packed-files.mjs"
+      ],
+      "exit": 0,
+      "seconds": 123.89011716842651
+    },
+    {
+      "name": "installed-graph",
+      "command": [
+        "node",
+        "scripts/test-packed-ecosystem.mjs"
+      ],
+      "exit": 0,
+      "seconds": 59.654370069503784
+    },
+    {
+      "name": "installed-browser",
+      "command": [
+        "node",
+        "scripts/test-packed-browser.mjs"
+      ],
+      "exit": 0,
+      "seconds": 6.902837038040161
+    }
+  ],
+  "serialized": true,
+  "tarballPostConsumerIdentity": true,
+  "registryAcceptance": false,
+  "nativeAcceptance": false,
+  "breakingGateWaiver": false
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "core-packed",
+    "command": [
+      "node",
+      "packages/javascript/test/packed-install-smoke.mjs"
+    ],
+    "exit": 0,
+    "seconds": 50.97200608253479
+  },
+  {
+    "name": "cli-standalone",
+    "command": [
+      "node",
+      "packages/cli/test/packed.mjs"
+    ],
+    "exit": 0,
+    "seconds": 65.25534105300903
+  },
+  {
+    "name": "cli-peers",
+    "command": [
+      "node",
+      "packages/cli/test/packed-files.mjs"
+    ],
+    "exit": 0,
+    "seconds": 123.89011716842651
+  },
+  {
+    "name": "installed-graph",
+    "command": [
+      "node",
+      "scripts/test-packed-ecosystem.mjs"
+    ],
+    "exit": 0,
+    "seconds": 59.654370069503784
+  },
+  {
+    "name": "installed-browser",
+    "command": [
+      "node",
+      "scripts/test-packed-browser.mjs"
+    ],
+    "exit": 0,
+    "seconds": 6.902837038040161
+  }
+]
