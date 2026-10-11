@@ -1,6 +1,6 @@
 # RR-20: complete graph serial staged qualification
 
-This records local source and staged-package proof, not registry installability or native Windows acceptance. All five consumers ran serially after the corrected build and stage, exited zero, and consumed the same six-package artifact closure. Package versions, original dependency ranges and locks remain unchanged; the preliminary 0.19 metadata prerequisite is separate.
+This records local source and staged-package proof, not registry installability or native Windows acceptance. All five consumers ran serially after the corrected build and stage and exited zero against the common six-package staged graph. Individual consumers installed the subsets documented in their logs. Package versions, original dependency ranges and locks remain unchanged; the preliminary 0.19 metadata prerequisite is separate.
 
 ## Exact reviewed inputs
 
