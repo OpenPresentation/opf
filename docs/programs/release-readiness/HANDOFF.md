@@ -1,6 +1,6 @@
 # Release readiness: handoff of 2026-10-11
 
-Written by the release supervisor session at about 00:40 UTC on 2026-10-11. It replaces the handoff of 2026-10-06. A new
+Updated by the release supervisor on 2026-10-11 after the initial 00:40 UTC handoff. Follow the live [0.19 execution checklist](0.19-execution.md), currently 6/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
 overrides those invariants. Everything in flight is in a pull request or a published release. No work lives only on a
@@ -25,7 +25,7 @@ local machine (the exceptions are listed under "Local-only state").
   against the published upstream.
 - A pull request that edits `burndown.md` also regenerates the gallery tracker (`node scripts/build-gallery-tracker.mjs`).
 
-## Published (npm `latest`; each verified with gitHead, SLSA provenance, `npm audit signatures` and a GitHub Release)
+## Published (verified gitHead, SLSA provenance and npm signatures; GitHub Releases where the package lane creates them)
 
 | Package | Version | Notes |
 | --- | --- | --- |
@@ -34,18 +34,23 @@ local machine (the exceptions are listed under "Local-only state").
 | `@openpresentation/opf-pptx` | 0.18.0 | 0.18.1 is next. |
 | `@openpresentation/opf-editor` | 0.18.0 | 0.18.1 is next. |
 | `@openpresentation/cli` | 0.18.0 | 0.18.1 is next. |
-| `@openpresentation/gallery` | none | 1.0.0 is blocked on the owner's npm trusted publisher (below). |
+| `@openpresentation/gallery` | **1.0.0** | Tag `v1.0.0`, commit `3458f50ca8fe`; independently verified. No GitHub Release is required by this lane. |
 
 ## The 0.18.x patch train: exact next steps
 
 The versions for every `release-train.mjs` call:
 `--core 0.18.3 --render 0.18.1 --pptx 0.18.1 --editor 0.18.1 --cli 0.18.1 --item RR-20`.
 
-1. **Lock roll** [opf#590](https://github.com/OpenPresentation/opf/pull/590) (head `0588403c`) was in the merge queue
-   with its checks green. Confirm it merged: `node scripts/pr-gate.mjs OpenPresentation/opf#590 --merge`. The renderer
-   prep needs it, because the lock's core must carry `LAZY_FONT_COUNTS['0.18.1']` (opf#579).
-2. **opf-render 0.18.1.** Run `release-train.mjs prep render …`, then use pr-gate to merge the prep PR, then run
-   `release-train.mjs tag render … --execute --checks-wait-minutes 30`. `tag` runs `verify`.
+1. **Initial lock roll is complete.** Core main `09658e9c` includes the required lock and font counts.
+2. **opf-render 0.18.1.** Release prep [render#223](https://github.com/OpenPresentation/opf-render/pull/223)
+   merged as `6615ad54`, but its release-commit Node 22 gate failed before tagging: npm 10 rejects the coordinated
+   PPTX lock's emoji peers before source linking. Exact Node 22 experiments prove npm 11.16.0 installs the same lock
+   unchanged, matching trusted publishing. Reviewed repair [render#224](https://github.com/OpenPresentation/opf-render/pull/224)
+   at `021205bc` pins that npm version and mechanically cancels the untagged prep; its `full-ci` pr-gate is running.
+   After it merges and passes, rerun packed acceptance and create a fresh prep with
+   `--branch codex/release-render-0-18-1-retry`. Preserve the previous branch. `release-train` selects the commit that
+   first set the version, so merely adding a workflow fix after the failed prep cannot authorize tagging `6615ad54`.
+   Gate the new merged release commit with `pr-gate --commit`, then use `release-train tag render ... --execute`.
    - `npm run test:packed` already passed locally at render main `443dbb98` against core 0.18.3: 204 byte-matched files,
      signatures verified.
    - Before prep, check that `golden-override: ''` is in both `ecosystem-refs` steps of render's `ci.yml`, and that
@@ -66,7 +71,7 @@ The versions for every `release-train.mjs` call:
    `GITHUB_REF=refs/tags/cli-v0.18.1`.
 7. **Lock roll again** (dispatch `ecosystem-roll.yml` on `main`, open the PR from `ecosystem-roll/main`, merge it with
    pr-gate). Then update `release-plan.json`, the compatibility matrix and the burndown rows in one records PR.
-8. **Sites adopt 0.18.1** (openpresentation-site, pptx-gallery, pptx-dev, on `master`). Each bumps render, pptx and
+8. **Sites adopt 0.18.1** (openpresentation-site and pptx-gallery on `main`; pptx-dev on `master`). Each bumps render, pptx and
    editor and **all six font packages above** together. pptx-gallery also regenerates `public/opf-editor/wasm.json`
    (harfbuzzjs 1.6.3), and bumps `exampleRefs['opf-editor']` and runs `prepare:opf` (gallery#118 part 2).
 
@@ -86,38 +91,49 @@ All are green or nearly green. Each PR body has its status. Merge order in brack
   complex-script clusters. Default toPng output changes for Thai, Tamil, Telugu and Myanmar.
 - Then cut render 0.18.2, and an editor patch if #155 changed the editor.
 
-## OPF 0.19: adaptive layouts (RR-79 to RR-84), all drafts
+## Reviewed candidate checkpoints and 0.19 work
 
-The design is [0.19-layouts.md](0.19-layouts.md) (merged opf#565). The owner removed every migration path.
-- **RR-79 core** [opf#577](https://github.com/OpenPresentation/opf/pull/577) (draft, head `74eb3b94` or later, green).
-  - Contents: the `opf-layout/v2` schema, the template composer, `layout: "auto"`, list columns and `design.mirror`.
-  - 336 template goldens, 61 of them moved by review.
-  - No migrate.
-  - Decisions 1–14 are in §13 of the design doc; #2 and #5 are superseded.
-  - An unknown or former layout id stays a warning (`opf/unresolved-reference`).
-- **RR-81:**
-  - render [opf-render#215](https://github.com/OpenPresentation/opf-render/pull/215) (draft, green);
-  - pptx [opf-pptx#240](https://github.com/OpenPresentation/opf-pptx/pull/240) (draft, native re-check passed; rebase onto #242).
-- **RR-80** gallery 2.0.0, [OpenPresentation/gallery#5](https://github.com/OpenPresentation/gallery/pull/5) (draft).
-  - Contents: 28 intent templates, `CATALOG_SCHEMA` 2, SVG previews.
-  - CI turns green only after core and render 0.19 publish.
-  - It needs gallery 1.0.0 published first.
-  - Open point: from 2.x the gallery repo is the source, so pptx-gallery#121 (the sync from pptx.gallery to the gallery)
-    either becomes 1.x-only or closes.
-- **Still to do:**
-  - RR-82: the editor.
-  - RR-83: convert the 103 examples, docs, skills and site content to v2 with a throwaway script, then remove v1. The
-    278-row conversion table should be on a draft branch; check the walkthrough session's PR list.
-  - RR-84: the sites.
-  - Then the 0.19 lockstep train.
+The supervisor coordinates GPT-6.1 Sol implementation/review agents. Check current PR heads before merging:
+
+- RR-78 core#557 `b60c4786`, render#198 `bc81895e`, editor#148 `5ba0e4ff` are updated for published gallery 1;
+  PPTX#229's local rebased checkpoint `6b888222` waits for renderer 0.18.1 strict install. All remain held for patch tags.
+- Core#577 `fe9fe3fa` fixes zero-height maximum-gap grids; supervisor reproduced 12 non-overlapping rows.
+- Core#592 `e21c472d` integrates #557/#577 and removes v1 schema/composer/API support. Automatic chartPrimary
+  remains through direct content groups; its v1 record-builder API is removed. Local gallery 2 testing does not prove
+  registry installation: final `^2` range/lock, breaking release version and reviewed registry goldens remain gates.
+- Gallery#5 `e0a7eee2` restores metadata, converts 344 narrative layout references without other content changes,
+  and preserves image contain fitting. Its bootstrap requires immutable engine commits reachable from main;
+  full clean-source bootstrap awaits merged candidate pins. No committed local dependency ranges.
+- Editor#156 `54af6e31` implements the picker, region targets and grid editor with independently fixed keyboard/focus
+  behavior. Remaining v1 placeholder UI imports must be removed against final core before acceptance.
+- PPTX#240 is under review: native title bindings, automatic layouts, foreign mapping, prompt defaults and maximum-grid
+  placeholder collisions are being corrected. Whole-archive baseline changes require explicit evidence review; native
+  Windows PowerPoint acceptance is still outstanding.
+- Renderer#213 HarfBuzz measurement implementation is in progress; independent 140-sample review passes. Final
+  corrected candidate preserves all 807 example SVGs according to the agent report. Core#566 script-width estimates
+  also explicitly belong to 0.19 and remain required.
+
+### Final integration and dependency sequence
+
+The accepted design is [0.19-layouts.md](0.19-layouts.md), including section 13. There is no public migration path.
+Keep RR-78 and all 0.19 work out of the 0.18.1 patch artifacts. After patch publication, merge reviewed gallery split
+PRs, the v2-capable interim core and renderer candidates, and validate gallery 2 with those exact merged source pins.
+Publish and verify gallery 2 before final core 0.19, then switch final core to its actual registry range/lock. Remove v1
+completely from the final core, finish sibling integrations and site APIs, review visual/native evidence, and publish
+in dependency order. Do not publish final 0.19 with transitional v1 support to break the bootstrap cycle.
+
+Core #592 frozen acceptance: 2,259 core tests and six standalone suites, 169 CLI tests plus 95 command checks and the
+file/drawing suite, skills acceptance, and all 336 unchanged template goldens pass. `check:changed` is 21/23: the
+intentional breaking-change version gate awaits release prep; the registry golden awaits the supervisor's documented
+workflow and visual review. Those are real remaining gates, not waived failures. Cross-engine and published-consumer
+acceptance must be rerun on the final dependency set.
 
 ## Owner actions (agents cannot do these)
 
-1. **npm trusted publisher for `@openpresentation/gallery`** at https://www.npmjs.com/package/@openpresentation/gallery/access
+1. **Completed: npm trusted publisher for `@openpresentation/gallery`** at https://www.npmjs.com/package/@openpresentation/gallery/access
    (GitHub Actions, organization `OpenPresentation`, repository `gallery`, workflow `gallery-publish.yml`, no
-   environment). Then an agent tags `v1.0.0` in the gallery repo and runs `release-train.mjs verify gallery@1.0.0`. After
-   that, [opf#557](https://github.com/OpenPresentation/opf/pull/557) and the siblings move to `^1.0.0`.
-2. **One GitHub App for cross-repo pull requests** (covers opf#298 and pptx-gallery#121).
+   environment). Gallery 1.0.0 is now tagged, published and independently verified. Accordingly, [opf#557](https://github.com/OpenPresentation/opf/pull/557) and the siblings move to `^1.0.0`.
+2. **One GitHub App for cross-repo pull requests** (opf#298 only; pptx-gallery#121 is closed by owner decision).
    - Permissions: Contents read/write, Pull requests read/write, Metadata read.
    - Install it on the five OpenPresentation repos.
    - Set the variable `ECOSYSTEM_APP_ID` and the secret `ECOSYSTEM_APP_PRIVATE_KEY` in OpenPresentation and in
