@@ -47,7 +47,7 @@ try {
   tarball=path.join(out,packed.filename);
  } else {
   const candidate=await packCliCandidate({cliDirectory:pkg,coreDirectory:path.join(root,'packages/javascript'),destination:out,run,npmArgs:['--cache',cache]});
-  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball];
+  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball,candidate.galleryTarball];
  }
  if(registry){
   // Install directly from npm as well as from the inspected tarball so npm can
@@ -82,7 +82,8 @@ try {
  const versions=JSON.parse(run(process.execPath,[bin,'--version'],temp));
  assert.equal(versions.cli,expected.version);
  if(sourceManifest.dependencies?.['@openpresentation/opf']){
-  assert.deepEqual(Object.keys(manifest.dependencies),['@openpresentation/opf'],'core is the only runtime dependency of the CLI');
+  // RR-78: from 0.19 the CLI also depends on @openpresentation/gallery, the catalog it registers.
+  assert.deepEqual(Object.keys(manifest.dependencies).filter(name=>name!=='@openpresentation/gallery'),['@openpresentation/opf'],'core is the only engine dependency of the CLI');
   // RR-62: from 0.17 the CLI is the command only (applications use @openpresentation/opf); 0.16 shipped @openpresentation/cli/api.
   const library=sourceManifest.exports?.['./api'];
   assert.deepEqual(manifest.exports,sourceManifest.exports,'The installed CLI exports what its source exports');

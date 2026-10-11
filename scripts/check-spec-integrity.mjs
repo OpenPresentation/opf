@@ -3,7 +3,7 @@
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
 // HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
 // reduction (one record per Aspose.Slides ChartType), the default-catalog
-// snapshot's manifest hashes (spec/catalogs/manifest.json), layout-record design
+// snapshot's manifest hashes (packages/gallery/catalog/manifest.json), layout-record design
 // hints against the deck's Design, font-scheme languages against the engine's
 // language vocabulary, and the finding schema (the report format every OPF tool shares).
 //
@@ -17,14 +17,15 @@ import { fileURLToPath } from "node:url";
 import { verifySnapshot } from "./catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const catalogsRoot = path.join(repoRoot, "spec", "catalogs");
+// RR-78: the catalog records are the @openpresentation/gallery package's (packages/gallery/catalog).
+const catalogsRoot = path.join(repoRoot, "packages", "gallery", "catalog");
 const schemasRoot = path.join(repoRoot, "spec", "schemas");
-const previewsDir = path.join(repoRoot, "spec", "previews", "layouts");
+const previewsDir = path.join(repoRoot, "packages", "gallery", "previews", "layouts");
 
 const CATALOG_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-catalog-index/v1";
 const LAYOUT_PREVIEW_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-layout-preview-index/v1";
 
-// kind directory (spec/catalogs/<dir>) -> singular used for both the
+// kind directory (packages/gallery/catalog/<dir>) -> singular used for both the
 // companion schema filename (spec/schemas/<singular>.schema.json) and the
 // per-record $schema URI (https://openpresentation.org/schema/opf-<singular>/v1).
 //
@@ -390,9 +391,9 @@ async function checkChartTypesAsposeSupported() {
   notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}`);
 }
 
-// (g) spec/catalogs is a pinned snapshot of the default catalog published by
+// (g) packages/gallery/catalog is a pinned snapshot of the default catalog published by
 // pptx.gallery: each kind's records must still hash to the value recorded in
-// its index and in spec/catalogs/manifest.json. A mismatch means the snapshot
+// its index and in packages/gallery/catalog/manifest.json. A mismatch means the snapshot
 // was edited by hand instead of through scripts/sync-gallery-catalog.mjs.
 async function checkSnapshotManifest() {
   for (const problem of await verifySnapshot(catalogsRoot)) {

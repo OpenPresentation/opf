@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 import { OPFValidationError, assertValid, assertValidCatalogRecord, validate, validateCatalogRecord } from "../dist/validator.js";
 
 // The format and references findings of a presentation, split by severity: what the schema and semantic checks and the
@@ -845,7 +845,7 @@ describe("presentation shapes that must be rejected", () => {
 });
 
 describe("content-reference warning behavior (OPF 0.15)", () => {
-  const catalogs = [defaultCatalog];
+  const catalogs = [gallery];
   const withCatalog = (value) => checked(value, { catalogs });
 
   test("an unknown narrative warns opf/unresolved-reference but does not invalidate", () => {
@@ -939,7 +939,7 @@ describe("content-reference warning behavior (OPF 0.15)", () => {
     const document = { name: "Named Group", narrative: "acme:internal-arc", catalogs: { acme: { source: "https://catalogs.example.com" } }, slides: [{ title: "Slide Title" }] };
     assert.deepEqual(withCatalog(document).warnings.map((warning) => warning.ruleId), ["opf/unresolved-reference"]);
     const registered = { source: "https://catalogs.example.com", narratives: { "internal-arc": { name: "Internal arc", beats: [{ id: "a", name: "A" }] } } };
-    assert.equal(checked(document, { catalogs: [defaultCatalog, registered] }).warnings.length, 0);
+    assert.equal(checked(document, { catalogs: [gallery, registered] }).warnings.length, 0);
   });
 
   test("unknown audience ids warn like narratives; free-form audiences stay quiet", () => {

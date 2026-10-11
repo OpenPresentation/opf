@@ -367,8 +367,9 @@ assert.deepEqual(formatRichTextRange('Hello',0,5,{bold:true}),[{text:'Hello',bol
 assert.equal(richTextContent(replaceRichTextRange(['Hello'],1,4,'i')),'Hio');
 assert.ok(listSchemaFields().length>=604);assert.equal(typeof createSchemaInspector,'function');
 const fonts=await loadFonts();
-// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme); a 0.14 core has no /catalog and resolves it built in.
-const host=await import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({}));
+// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme): @openpresentation/gallery from 0.19 (RR-78),
+// core's /catalog from 0.15 to 0.18; a 0.14 core has neither and resolves it built in.
+const host=await import('@openpresentation/gallery').then(module=>({catalogs:[module.gallery]}),()=>import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({})));
 const editor=createEditorSession({design:{fontScheme:'roboto'},slides:[{title:'Packed consumer',composition:{mode:'row'},blocks:[{text:'One'},{text:'Two'}]}]},host);
 editor.set('slides.0.title','Installed consumer');
 editor.applyPatch(prepareTrackResize(editor.presentation,editor.composeSlide(0).flows[0],0,.6).patches);
@@ -517,10 +518,14 @@ console.log(
 // those records built in, so its host modules register nothing.
 {
   const installedCore = JSON.parse(await readFile(path.join(consumer, 'node_modules/@openpresentation/opf/package.json'), 'utf8'));
+  // RR-78: from 0.19 the catalog is the @openpresentation/gallery package (core's dependency) and core has no /catalog.
+  const hasGallery = existsSync(path.join(consumer, 'node_modules/@openpresentation/gallery/package.json'));
   const hasCatalog = Boolean(installedCore.exports?.['./catalog']);
-  await writeFile(path.join(consumer, 'host-catalogs.mjs'), hasCatalog
-    ? "import {defaultCatalog} from '@openpresentation/opf/catalog';\nexport const withCatalogs = (options = {}) => (options.catalogs === undefined ? {...options, catalogs: [defaultCatalog]} : options);\n"
-    : 'export const withCatalogs = (options = {}) => options;\n');
+  await writeFile(path.join(consumer, 'host-catalogs.mjs'), hasGallery
+    ? "import {gallery} from '@openpresentation/gallery';\nexport const withCatalogs = (options = {}) => (options.catalogs === undefined ? {...options, catalogs: [gallery]} : options);\n"
+    : hasCatalog
+      ? "import {defaultCatalog} from '@openpresentation/opf/catalog';\nexport const withCatalogs = (options = {}) => (options.catalogs === undefined ? {...options, catalogs: [defaultCatalog]} : options);\n"
+      : 'export const withCatalogs = (options = {}) => options;\n');
   await writeFile(path.join(consumer, 'host-editor.mjs'), "import * as editor from '@openpresentation/opf-editor';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor';\nexport const createEditorSession = (input, options) => editor.createEditorSession(input, withCatalogs(options));\n");
   await writeFile(path.join(consumer, 'host-editor-canvas.mjs'), "import * as canvas from '@openpresentation/opf-editor/canvas';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor/canvas';\nexport const createCanvasEditor = (host, options) => canvas.createCanvasEditor(host, withCatalogs(options));\n");
   for (const [file, entry] of [['host-render.mjs', '@openpresentation/opf-render'], ['host-render-svg.mjs', '@openpresentation/opf-render/svg']]) {

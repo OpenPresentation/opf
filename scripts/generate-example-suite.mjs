@@ -1,7 +1,7 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defaultCatalog } from "../packages/javascript/dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 import { colorContrast } from "../packages/javascript/dist/composition.js";
 import { embed } from "../packages/javascript/dist/index.js";
 import layoutTemplates from "../packages/javascript/test/fixtures/layout-templates-0.19.json" with { type: "json" };
@@ -10,7 +10,7 @@ import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = path.join(repoRoot, "examples", "gallery");
-const catalogRoot = path.join(repoRoot, "spec", "catalogs");
+const catalogRoot = path.join(repoRoot, "packages", "gallery", "catalog");
 
 const schemaId = "https://openpresentation.org/schema/opf/v1";
 
@@ -1030,7 +1030,7 @@ async function loadCatalogs() {
  */
 function embeddedDeckFor(spec, index, catalogs) {
   const { deck, folder, filename } = deckFor(spec, index, catalogs);
-  const { document, unresolved } = embed(deck, { catalogs: [{ ...defaultCatalog, layouts: layoutTemplates.layouts }] });
+  const { document, unresolved } = embed(deck, { catalogs: [{ ...gallery, layouts: layoutTemplates.layouts }] });
   if (unresolved.length) throw new Error(`${folder}/${filename}: ${unresolved.map((entry) => entry.message).join("; ")}`);
   // The 1.x narrative records embedded with the other catalog kinds still name old layouts.
   // This disappears when the gallery 2.x package provides all eight kinds.

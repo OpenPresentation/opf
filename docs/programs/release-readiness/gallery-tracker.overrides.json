@@ -2,7 +2,7 @@
   "$comment": "Authored input of scripts/build-gallery-tracker.mjs (RR-41). Every other field of the tracker is derived. A rule gives the matching gaps their next action and link (an RR id, a pull request URL, or an issue URL with descoped: true). The first rule whose gap, types, ids and detail (a regular expression) match wins; a rule that matches no gap fails the build.",
   "asOf": "2026-10-02",
   "inputs": {
-    "catalogs": "spec/catalogs",
+    "catalogs": "packages/gallery/catalog",
     "schema": "spec/schemas/opf.schema.json",
     "supportStatus": "docs/programs/font-fidelity-everywhere/gallery-support/support-status.json",
     "auditA": "docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json",
@@ -24,7 +24,7 @@
   },
   "parityNote": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed.",
   "columns": {
-    "spec": "catalog (bundled in core spec/catalogs), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
+    "spec": "catalog (bundled in @openpresentation/gallery, packages/gallery/catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
     "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped).",
     "preview": "pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled.",
     "export": "pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name.",

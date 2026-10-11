@@ -19,14 +19,14 @@
 // unless `date` is passed.
 //
 // RR-75: in Node the functions behind the CLI's verbs have the CLI's defaults, so `opf validate deck` and `validate(deck)` agree:
-// `validate`, `stats`, `paginate`, `embed` and `edit` resolve references in the default catalog (the pinned pptx.gallery
-// snapshot of `@openpresentation/opf/catalog`) when no `catalogs` option is given. The browser build registers none (FA-21).
+// `validate`, `stats`, `paginate`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
+// @openpresentation/gallery package, RR-78) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
-import { defaultCatalog } from "./catalog.js";
 import type { Catalog } from "./catalog-refs.js";
 import { edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck } from "./core.js";
 import { OPFApiError, asApiError } from "./api-errors.js";
 import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
+import { defaultCatalogs } from "./node/catalogs.js";
 import { OPFValidationError } from "./validator.js";
 
 export * from "./core.js";
@@ -34,26 +34,26 @@ export type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, Conver
 export type { ExportFormat } from "./node/export.js";
 export type { FontsHandle } from "./node/peers.js";
 
-const DEFAULT_CATALOGS: readonly Catalog[] = [defaultCatalog];
 /**
- * The options with the default catalog when they name no catalogs (an explicit `catalogs: []` registers none). Options that are
- * not an object are passed on as they are, so the function's own check rejects them.
+ * The options with the gallery registered when they name no catalogs (an explicit `catalogs: []` registers none). Options that
+ * are not an object are passed on as they are, so the function's own check rejects them. A gallery that targets another catalog
+ * schema than this core throws `gallery-schema-mismatch` (OPFApiError) here.
  */
 const withDefaultCatalog = <T extends { catalogs?: readonly Catalog[] }>(options: T | undefined): T => {
-	if (options === undefined) return { catalogs: DEFAULT_CATALOGS } as T;
+	if (options === undefined) return { catalogs: defaultCatalogs() } as T;
 	if (options === null || typeof options !== "object" || Array.isArray(options) || options.catalogs !== undefined) return options;
-	return { ...options, catalogs: DEFAULT_CATALOGS };
+	return { ...options, catalogs: defaultCatalogs() };
 };
 
-/** `validate` with the default catalog registered when `catalogs` is omitted, as `opf validate` does. */
+/** `validate` with the gallery registered when `catalogs` is omitted, as `opf validate` does. */
 export const validate: typeof validateDeck = (input, options) => validateDeck(input, withDefaultCatalog(options));
-/** `stats` with the default catalog registered when `catalogs` is omitted, as `opf stats` does. */
+/** `stats` with the gallery registered when `catalogs` is omitted, as `opf stats` does. */
 export const stats: typeof deckStats = (presentation, options) => deckStats(presentation, withDefaultCatalog(options));
-/** `paginate` with the default catalog registered when `catalogs` is omitted, as `opf paginate` does. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks. */
+/** `paginate` with the gallery registered when `catalogs` is omitted, as `opf paginate` does. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks. */
 export const paginate: typeof paginateDeck = (input, options) => paginateDeck(input, withDefaultCatalog(options));
-/** `embed` with the default catalog registered when `catalogs` is omitted, as `opf embed` does. */
+/** `embed` with the gallery registered when `catalogs` is omitted, as `opf embed` does. */
 export const embed: typeof embedRecords = (document, options) => embedRecords(document, withDefaultCatalog(options));
-/** `edit` with the default catalog registered for the check when `catalogs` is omitted, as `opf edit` does. */
+/** `edit` with the gallery registered for the check when `catalogs` is omitted, as `opf edit` does. */
 export const edit: typeof editDeck = (deck, patch, options) => editDeck(deck, patch, withDefaultCatalog(options));
 
 /** The Node engine, loaded on the first file call. */

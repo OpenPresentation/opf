@@ -24,7 +24,7 @@ const argv = process.argv.slice(2);
 const option = (name, fallback) => (argv.includes(name) ? argv[argv.indexOf(name) + 1] : fallback);
 const consumer = path.resolve(option('--consumer', path.join(core, 'artifacts', 'published-matrix', 'consumer')));
 const outDir = path.resolve(option('--out', path.join(core, 'artifacts', 'published-matrix', 'out')));
-const {loadFonts, toSvg, createScriptTextMeasurement, resolveScriptFonts, defaultCatalog} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
+const {loadFonts, toSvg, createScriptTextMeasurement, resolveScriptFonts, gallery} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
 const {chromium} = createRequire(path.join(consumer, 'package.json'))('playwright');
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
@@ -45,7 +45,7 @@ assert.ok(embedded.length >= 6, 'the registry holds the faces the schemes draw w
 function render(scheme) {
   const deck = deckFor(scheme);
   // OPF 0.15: the host registers the published default catalog (the deck names the minimal theme and gallery font schemes).
-  const catalogs = [defaultCatalog];
+  const catalogs = [gallery];
   return toSvg(deck, {catalogs, fonts: {embeddedFonts: embedded, textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck, {catalogs}))}});
 }
 const SCHEMES = ['calibri', 'georgia', 'consolas'];

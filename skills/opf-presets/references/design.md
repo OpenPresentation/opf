@@ -4,12 +4,12 @@ Direct local lookup:
 
 ```js
 import { embed, validate, validateCatalogRecord } from '@openpresentation/opf';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
-const options = Object.keys(defaultCatalog.layouts).filter(id => id.includes('text-2x'));
-const font = defaultCatalog.fontSchemes.roboto;
+import { gallery } from '@openpresentation/gallery';
+const options = Object.keys(gallery.layouts).filter(id => id.includes('text-2x'));
+const font = gallery.fontSchemes.roboto;
 const validation = validateCatalogRecord('layouts', publishedLayoutFile); // a record file with $schema and id
-const report = validate(document, { catalogs: [defaultCatalog] });
-const saved = embed(document, { catalogs: [defaultCatalog] }).document; // every record the deck uses, embedded
+const report = validate(document, { catalogs: [gallery] });
+const saved = embed(document, { catalogs: [gallery] }).document; // every record the deck uses, embedded
 ```
 
 Check the record before copying its ID. A bare id resolves in `catalogs.custom`, then in the records embedded under `catalogs.default`, then in the catalog the host registered for its source (the first registered catalog when the document omits `default`); `name:id` resolves in that group, then in the catalog registered for its source. Nothing is fetched: a host registers catalogs with `{ catalogs }`, and a saved deck embeds what it uses.

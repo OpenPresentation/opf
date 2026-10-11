@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-chart-type/v1",
   "title": "Chart Type",
-  "description": "Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/opf/catalog ships them as catalogDisplay.chartTypes.",
+  "description": "Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.chartTypes.",
   "type": "object",
   "additionalProperties": false,
   "patternProperties": {
     "^x-": {
-      "description": "Publisher extension member, such as the `x-gallery` presentation metadata that pptx.gallery adds to the records it publishes. Engines and validators ignore top-level `x-*` members, and the pinned snapshot in spec/catalogs never carries them."
+      "description": "Publisher extension member, such as the `x-gallery` presentation metadata that pptx.gallery adds to the records it publishes. Engines and validators ignore top-level `x-*` members, and the pinned snapshot in @openpresentation/gallery never carries them."
     }
   },
   "required": [

@@ -9,7 +9,8 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {toSvg, toPng} from '../../../opf-render/dist/index.js';
 export {checkTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
 export {createEditorSession} from '../../../opf-editor/dist/index.js';
-export {catalogDisplay, defaultCatalog} from '@openpresentation/opf/catalog';
+// RR-78: the pptx.gallery catalog is the @openpresentation/gallery package (this checkout's packages/gallery).
+export {catalogDisplay, gallery} from '@openpresentation/gallery';
 export {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {resolveFontScheme, resolveReference, validate} from '@openpresentation/opf';
 

@@ -1,11 +1,12 @@
-# Catalogs and the default catalog
+# Catalogs and the gallery package
 
 OPF 0.15 keeps catalogs out of the engine. A document embeds every record it uses, hosts register the catalogs they
-trust, and core ships no records in its main entry. pptx.gallery publishes the **default catalog**; core carries a
-pinned snapshot of it only as the opt-in subpath `@openpresentation/opf/catalog`.
+trust, and core ships no records. pptx.gallery publishes the **default catalog**; its pinned snapshot is the npm
+package **`@openpresentation/gallery`** ([source](https://github.com/OpenPresentation/gallery), RR-78), released on its own version line. Core and the CLI
+depend on it and register it in Node; core has no `/catalog` subpath (removed in 0.19, with no alias).
 
 This page is the contract: the document shape, the one resolution rule, how hosts register catalogs, the authoring
-helpers, the diagnostics, and how the snapshot stays tied to pptx.gallery. The design behind it is
+helpers, the diagnostics, and how the gallery package stays tied to pptx.gallery. The design behind it is
 [0.15-design.md](programs/format-audit/0.15-design.md).
 
 ## Catalogs in a document
@@ -71,15 +72,16 @@ matched by `source`.
 > **The host-default rule.** The first registered catalog is the default for documents that omit `catalogs.default`:
 > their bare ids resolve in `custom`, then in that catalog. A document whose `default` names a `source` uses the
 > registered catalog with that source, and nothing when the host did not register it, even if it registered others.
-> `"default": false` uses no catalog for bare ids. Without the `catalogs` option nothing is registered: core has no
-> fallback of its own, so only what the document embeds resolves. Hosts (the CLI, the editor app, the sites) register
-> `@openpresentation/opf/catalog`; libraries and engines pass the option through.
+> `"default": false` uses no catalog for bare ids. Without the `catalogs` option the browser build and every engine
+> register nothing, so only what the document embeds resolves; in Node, core's file API and `validate`, `stats`,
+> `paginate`, `embed` and `edit` register `gallery`, as the CLI does. Hosts (the CLI, the editor app, the sites)
+> register `@openpresentation/gallery`; libraries and engines pass the option through.
 
 ```js
 import { validate, resolveSlideContext, paginate, embed } from '@openpresentation/opf';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery } from '@openpresentation/gallery';
 
-const catalogs = [defaultCatalog, acmeCatalog]; // acmeCatalog = { source: 'pkg:@acme/opf-catalog', layouts: { hero: { … } } }
+const catalogs = [gallery, acmeCatalog]; // acmeCatalog = { source: 'pkg:@acme/opf-catalog', layouts: { hero: { … } } }
 validate(document, { catalogs });
 resolveSlideContext(document, 0, { catalogs, strictReferences: true }); // throws OPFUnresolvedReferenceError
 paginate(document, { catalogs });
@@ -96,18 +98,29 @@ resolves. A `catalogs` value that is not an array of registered catalogs throws 
 (`{ kind, reference, id, group, source?, origin }`, origin `document` or `host`), so engines record provenance without
 resolving again.
 
-`@openpresentation/opf/catalog` exports:
+`@openpresentation/gallery` exports:
 
 | Export | What it is |
 | --- | --- |
-| `defaultCatalog` | The snapshot's content records, keyed by kind and id, registered under `DEFAULT_CATALOG_SOURCE` |
-| `DEFAULT_CATALOG_SOURCE` | `https://www.pptx.gallery` |
+| `gallery` | The content records, keyed by kind and id, registered under `GALLERY_SOURCE` |
+| `GALLERY_SOURCE` | `https://www.pptx.gallery` |
+| `CATALOG_SCHEMA` | The version of core's catalog record schemas the records target (also `opf.catalogSchema` in its `package.json`) |
 | `catalogDisplay` | Display metadata for pickers: `chartTypes`, `languages` and `socialPlatforms` by id |
-| `catalogIndexes` | Each kind's `index.json` from the snapshot |
-| `layoutPreviews`, `layoutPreviewIndex`, `getLayoutPreview`, `hasLayoutPreview` | The static HTML layout previews |
+| `catalogIndexes` | Each kind's `index.json` |
+| `catalogManifest` | The pptx.gallery commit the records were synced from, and a content hash per kind |
 
-No other entry of the package imports catalog data; `pnpm check:catalog-free` holds that with an esbuild metafile
-budget.
+`@openpresentation/gallery/previews` exports the static HTML layout previews: `layoutPreviews`, `layoutPreviewIndex`,
+`layoutPreviewSlugs`, `getLayoutPreview` and `hasLayoutPreview`.
+
+Core reads catalog schema `CATALOG_SCHEMA` (exported from its root). When the installed gallery declares another one,
+core never registers it: the Node defaults throw `OPFApiError` `gallery-schema-mismatch` and the CLI stops with the same
+code, naming both versions. No browser entry of core imports catalog data; `pnpm check:catalog-free` holds that with an
+esbuild metafile budget.
+
+OPF 0.19 removed `@openpresentation/opf/catalog` (`defaultCatalog`, `DEFAULT_CATALOG_SOURCE`, `catalogDisplay`,
+`catalogIndexes` and the layout previews) and core's `spec/catalogs/` and `spec/previews/` files, with no alias: import
+the same records from `@openpresentation/gallery`, where `defaultCatalog` is `gallery` and `DEFAULT_CATALOG_SOURCE` is
+`GALLERY_SOURCE`.
 
 ## Authoring helpers
 
@@ -162,9 +175,7 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 
 - **pptx.gallery owns every catalog record** and publishes it; each id has one owner. Its display metadata lives under
   `x-*` members.
-- **`spec/catalogs/` is a pinned, one-way snapshot.** `spec/catalogs/manifest.json` records the gallery commit and a
-  content hash per kind. Records change in the gallery and reach core through the sync below; a record rewrite that the
-  0.15 spec itself requires lands in the snapshot and in the gallery in the same release train.
+- **The gallery repository owns the pinned snapshot.** Its manifest records the pptx.gallery commit and a content hash per kind. Core materializes ignored validation fixtures from the installed package during `pnpm install`.
 - **A catalog release never needs a core release.** Hosts register the catalog version they choose; documents carry
   the records they were saved with.
 
@@ -180,13 +191,13 @@ import { gallery } from '@openpresentation/gallery';
 validate(document, { catalogs: [gallery] });
 ```
 
-`gallery` is what `@openpresentation/opf/catalog`'s `defaultCatalog` is (`source` and the eight content kinds, records
+`gallery` replaces what `@openpresentation/opf/catalog` exported as `defaultCatalog` (`source` and the eight content kinds, records
 keyed by id without `$schema`, `id` or `x-*`); the package also exports `GALLERY_SOURCE`, `CATALOG_SCHEMA`,
 `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `/previews`. New records are a minor release; an id removed
 or renamed, a changed drawing or a record schema change is a major release, which that repository's pixel-stability
 check enforces against the previous published release. From OPF 0.19 core and the CLI depend on it
 (`@openpresentation/gallery@^1`), core's Node defaults register `gallery`, and core drops `/catalog` and
-`spec/catalogs/`. Until then this repository keeps its `spec/catalogs/` snapshot (below) for `/catalog`.
+`spec/catalogs/`.
 
 ## Endpoints
 
@@ -265,8 +276,8 @@ names a retired id gets `opf/unresolved-reference`.
 ```
 
 Every kind is `mirror`: the snapshot holds every record the gallery publishes (all 278 layouts, for example), so
-`@openpresentation/opf/catalog` is the full gallery catalog and a host registers it as is. It costs nothing in the
-engine bundles: only `/catalog` carries the snapshot, and `pnpm check:catalog-free` budgets it on its own.
+`gallery` is the full pptx.gallery catalog and a host registers it as is. It costs nothing in the engine bundles: no
+browser entry of core imports it (`pnpm check:catalog-free`).
 
 The snapshot never loses an id by accident: the sync refuses a publisher that stopped serving a held id. The one waiver
 is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) drops exactly those ids and deletes their
@@ -274,37 +285,7 @@ files.
 
 ### Updating it
 
-```sh
-# in the pptx-gallery checkout: edit data/, then
-pnpm build:opf-catalog            # regenerate and validate public/<kind>/
-git commit                        # the snapshot pins a commit
-
-# in this repository
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery          # writes spec/catalogs + manifest
-node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-kind counts
-```
-
-The sync validates every published index and record against the schemas in `spec/schemas/`, checks the published
-`contentSha256`, drops `x-*` members, and rewrites only the files whose content changed. Writes require a clean gallery
-checkout so the manifest commit identifies the actual catalog bytes. `--url https://www.pptx.gallery` reads the live
-site for inspection and requires `--check` or `--report`. Every kind takes every published record; there is no
-per-id selection.
-
-A record rewrite the spec itself requires (the 0.15 font-scheme `languages` tags, for example) is edited under
-`spec/catalogs/<kind>/` and rehashed, and the gallery publishes the same records in the same train:
-
-```sh
-node scripts/sync-gallery-catalog.mjs --rehash                  # index contentSha256, manifest records and contentSha256
-node scripts/sync-gallery-catalog.mjs --rehash --match-gallery  # also each kind's gallery block
-```
-
-### Checks
-
-- `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline that every kind's records still hash
-  to the value in its index and the manifest.
-- `pnpm check:catalog-free` fails when a catalog module reappears in the import graph of core's root or of any subpath
-  other than `/catalog`, or when their gzip size passes the recorded budget.
-- `sync-gallery-catalog.mjs --check` compares a local gallery checkout with the snapshot.
+Edit records in pptx.gallery, then synchronize and release them through [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery). This repository consumes that release through its `@openpresentation/gallery` dependency. `pnpm install` writes ignored files under `packages/gallery/` from the installed package; `pnpm check:spec` and `pnpm check:catalog` verify their indexes, manifest and records. Core's browser entries remain catalog-free (`pnpm check:catalog-free`).
 
 ## Reconciliation status
 

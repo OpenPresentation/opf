@@ -74,7 +74,7 @@ validate(presentation, {
   ignore: ['layout'],                             // do not run these
   severity: { 'opf/text-contrast': 'error', content: 'off' }, // per rule or category: error, warning, info or off
   ignorePaths: [{ rule: 'opf/text-contrast', path: '/slides/3' }], // an accepted exception, by JSON Pointer prefix
-  catalogs: [defaultCatalog, acmeCatalog],        // the catalogs the host registered (the first is the default); nothing is fetched
+  catalogs: [gallery, acmeCatalog],               // the catalogs the host registered (the first is the default); nothing is fetched
   contracts,                                      // host policy (below)
   thresholds: { contrastNormal: 7 },              // see DEFAULT_VALIDATION_THRESHOLDS
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement

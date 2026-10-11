@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "title": "Catalog Index",
-  "description": "Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (spec/catalogs is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `duration`). This schema describes catalog index files themselves, not OPF documents or individual catalog records — it is not part of the OPF document contract and is intentionally excluded from the package's published/typed schema surface.",
+  "description": "Generic shape shared by every `<kind>/index.json` file of the @openpresentation/gallery package (packages/gallery/catalog in the OPF repo) and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (the gallery package is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `duration`). This schema describes catalog index files themselves, not OPF documents or individual catalog records — it is not part of the OPF document contract and is intentionally excluded from the package's published/typed schema surface.",
   "type": "object",
   "required": ["$schema", "version", "description", "records"],
   "additionalProperties": false,
   "patternProperties": {
     "^x-": {
-      "description": "Publisher extension member, such as pptx.gallery's `x-gallery` reconciliation status. Consumers ignore top-level `x-*` members, and the pinned snapshot in spec/catalogs never carries them."
+      "description": "Publisher extension member, such as pptx.gallery's `x-gallery` reconciliation status. Consumers ignore top-level `x-*` members, and the pinned snapshot in @openpresentation/gallery never carries them."
     }
   },
   "properties": {
@@ -18,7 +18,7 @@
     },
     "kind": {
       "type": "string",
-      "description": "Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `spec/catalogs/<kind>` directory name.",
+      "description": "Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `packages/gallery/catalog/<kind>` directory name.",
       "enum": [
         "audiences",
         "chart-types",

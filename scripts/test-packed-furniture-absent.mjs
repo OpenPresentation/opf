@@ -47,7 +47,8 @@ try {
   await writeFile(path.join(copies, 'manifest.json'), manifestBytes);
   receipt.manifestSha256 = hash(manifestBytes);
   assert.equal(manifest.published, false, 'Require unpublished candidate archives, not a registry plan.');
-  const names = ['@openpresentation/opf', '@openpresentation/opf-pptx'];
+  // RR-78: core depends on @openpresentation/gallery, which the fixture also registers.
+  const names = ['@openpresentation/gallery', '@openpresentation/opf', '@openpresentation/opf-pptx'];
   const selected = names.map(name => {
     const matches = manifest.artifacts.filter(item => item.name === name);
     assert.equal(matches.length, 1, `Exactly one candidate artifact is required for ${name}`);

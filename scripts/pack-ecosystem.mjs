@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
+// RR-78: core consumes the independently published @openpresentation/gallery; it has no local prerelease stage.
 const packages = [
   ["opf", "packages/javascript", "0.4.0-preview.11"],
   ["opf-render", "../opf-render", "0.1.0-preview.11"],

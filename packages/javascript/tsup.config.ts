@@ -15,7 +15,6 @@ const entry = {
   composition: "src/composition.ts",
   index: "src/index.ts",
   schemas: "src/schemas.ts",
-  catalog: "src/catalog.ts",
   validator: "src/validator.ts",
   types: "src/types.ts",
   "spec-files": "src/spec-files.ts",

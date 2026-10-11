@@ -18,6 +18,9 @@ const installed = await installablePackages(plan);
 // RR-74: opf-render 0.18 names its engines toSvg, toPng and toPdf; the plan's renderer may still be a 0.17 release (renderSvg, svgToPng, svgToPdf).
 const renderer = plan.packages.find((item) => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number) ?? [0, 0, 0];
 const names = renderer[0] > 0 || renderer[1] >= 18 ? {svg: 'toSvg', png: 'toPng', pdf: 'toPdf'} : {svg: 'renderSvg', png: 'svgToPng', pdf: 'svgToPdf'};
+// RR-78: from core 0.19 the pptx.gallery catalog is the @openpresentation/gallery package (core's dependency); before, core's /catalog.
+const core = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version.split('.').map(Number) ?? [0, 0, 0];
+const catalogImport = core[0] > 0 || core[1] >= 19 ? "import { gallery } from '@openpresentation/gallery';" : "import { defaultCatalog as gallery } from '@openpresentation/opf/catalog';";
 const deckSource = path.join(root, 'docs/quickstart/developer-quickstart.opf.json');
 assert.ok(
   !path.relative(root, deckSource).split(path.sep).includes('examples'),
@@ -74,7 +77,7 @@ try {
 
   await writeFile(path.join(projectDir, 'workflow.mjs'), `import assert from 'node:assert/strict';
 import {readFile, writeFile} from 'node:fs/promises';
-import { validate, paginate, resolveSlideContext } from '@openpresentation/opf'; import { defaultCatalog } from '@openpresentation/opf/catalog'; import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
+import { validate, paginate, resolveSlideContext } from '@openpresentation/opf'; ${catalogImport} import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {${names.svg}, ${names.png}, ${names.pdf}} from '@openpresentation/opf-render';
@@ -83,16 +86,16 @@ import {toPptx} from '@openpresentation/opf-pptx';
 const source = await readFile('deck.opf.json', 'utf8');
 const document = JSON.parse(source);
 // One checker: a parsed document and its JSON text give the findings of every category (the text adds line and column).
-const validation = validate(document, {catalogs: [defaultCatalog]});
+const validation = validate(document, {catalogs: [gallery]});
 assert.equal(validation.valid, true, JSON.stringify(validation.findings, null, 2));
 const textValidation = validate(source);
 assert.equal(textValidation.valid, true, JSON.stringify(textValidation.findings, null, 2));
 
 const fonts = await loadFonts({pack: 'base'});
 assert.ok((fonts.registry.embeddedFonts?.length ?? 0) >= 1, 'bundled Roboto faces must be available offline');
-// OPF 0.15: the default catalog is the opt-in /catalog subpath; this host registers it with every call.
-const catalogs = [defaultCatalog];
-const families = resolveFontFamilies(defaultCatalog.fontSchemes.roboto);
+// OPF 0.15: the host registers the pptx.gallery catalog with every call (RR-78: the @openpresentation/gallery package).
+const catalogs = [gallery];
+const families = resolveFontFamilies(gallery.fontSchemes.roboto);
 assert.equal(families.body, 'Roboto');
 
 const {options} = resolveSlideContext(document, 0, {fonts, catalogs});

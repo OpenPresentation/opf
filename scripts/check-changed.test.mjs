@@ -36,8 +36,8 @@ test('selectChangedChecks maps changed paths to checks', () => {
   assert.deepEqual(docs, ['check:changes', 'check:text']);
   const schema = selectChangedChecks(['spec/schemas/opf.schema.json'], scripts, config);
   for (const name of ['check:schema-docs', 'check:core-golden', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
-  const catalog = selectChangedChecks(['spec/catalogs/layouts/index.json'], scripts, config);
-  assert.ok(catalog.includes('check:catalog'));
+  const catalog = selectChangedChecks(['spec/schemas/layout.schema.json'], scripts, config);
+  assert.ok(catalog.includes('check:spec'));
   // A check whose command names the changed file runs, with no rule needed.
   assert.ok(selectChangedChecks(['scripts/check-text-integrity.mjs'], scripts, config).includes('check:text'));
   assert.ok(selectChangedChecks(['scripts/quarantine.test.mjs'], scripts, config).includes('check:quarantine'));
@@ -111,7 +111,9 @@ test('#525: a step runs with a space in the executable, the script path, the arg
   assert.deepEqual(JSON.parse(printed.text), [realpathSync.native(dir), 'one arg', 'two']);
   const pnpm = await run(['pnpm', '--version']);
   assert.equal(pnpm.status, 0, pnpm.text);
-  assert.match(pnpm.text.trim(), /^\d+\.\d+\.\d+/);
+  // pnpm can print configuration warnings first (npm-publish.yml's setup-node writes an .npmrc with ${NODE_AUTH_TOKEN},
+  // which is unset before the publish step), so the version is the last line, not the whole output.
+  assert.match(pnpm.text.trim().split(/\r?\n/).at(-1), /^\d+\.\d+\.\d+$/);
   const missing = await run([path.join(dir, 'no such program')]);
   assert.notEqual(missing.status, 0);
 });
