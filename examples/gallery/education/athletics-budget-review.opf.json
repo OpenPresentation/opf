@@ -346,13 +346,13 @@
     {
       "id": "s59-image",
       "section": "Context",
+      "layout": "image",
       "title": "Field Context",
-      "design": {
-        "background": {
-          "type": "image",
-          "src": "asset:supporting-photo",
-          "alt": "College athletics context photo for Summit State Athletics"
-        }
+      "type": "image",
+      "image": {
+        "src": "asset:supporting-photo",
+        "alt": "College athletics context photo for Summit State Athletics",
+        "title": "College athletics context"
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -939,6 +939,35 @@
               ],
               "role": "primary",
               "flow": "grid"
+            }
+          }
+        },
+        "image": {
+          "name": "Image",
+          "summary": "One picture edge to edge under an optional title.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "media"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
           }
         },

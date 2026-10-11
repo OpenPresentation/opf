@@ -346,13 +346,13 @@
     {
       "id": "s99-image",
       "section": "Context",
+      "layout": "image",
       "title": "Field Context",
-      "design": {
-        "background": {
-          "type": "image",
-          "src": "asset:supporting-photo",
-          "alt": "Data storytelling context photo for Civic Data Lab"
-        }
+      "type": "image",
+      "image": {
+        "src": "asset:supporting-photo",
+        "alt": "Data storytelling context photo for Civic Data Lab",
+        "title": "Data storytelling context"
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -969,6 +969,35 @@
               ],
               "role": "primary",
               "flow": "grid"
+            }
+          }
+        },
+        "image": {
+          "name": "Image",
+          "summary": "One picture edge to edge under an optional title.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "media"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
           }
         },

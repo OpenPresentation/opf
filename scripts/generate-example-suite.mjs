@@ -531,7 +531,7 @@ function listLayout(index) {
 
 /** An image layout, or undefined for a full-bleed photo, which is the slide's background rather than a layout (FA-22). */
 function imageLayout(index) {
-  return pick(["image", undefined], index);
+  return pick(["image", "image", "image", undefined], index);
 }
 
 function promotedRegionSlide(spec, index, catalogs) {
