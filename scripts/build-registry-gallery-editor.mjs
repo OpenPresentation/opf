@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { registryToolchain } from './registry-toolchain.mjs';
+import { galleryEditorWasmManifest } from './gallery-editor-wasm.mjs';
 import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
 import { galleryLazyFontManifestForExample } from './gallery-lazy-fonts.mjs';
 import { exampleUsesBaseFonts, splitBaseFonts, verifyBaseFonts } from './gallery-base-fonts.mjs';
@@ -130,6 +131,8 @@ else await rm(path.join(out, 'script-fonts.json'), { force: true });
 // the hash-pinned manifest only. The faces are binaries the gallery build copies from the pinned renderer package's fonts/ directory
 // into an untracked path, verifying every hash (see gallery-lazy-fonts.mjs); fonts.json stays the renderer's eager faces.
 const rendererVersion = registry.packages.find(item => item.name === '@openpresentation/opf-render')?.version;
+const wasmManifest = galleryEditorWasmManifest({consumer: registry.consumer, rendererVersion});
+await writeFile(path.join(out, 'wasm.json'), JSON.stringify(wasmManifest, null, 2) + '\n');
 const lazyFontManifest = galleryLazyFontManifestForExample(await registry.import('@openpresentation/opf-render/fonts-node'), rendererVersion, await readFile(path.join(source, 'playground.js'), 'utf8'));
 if (lazyFontManifest) await writeFile(path.join(out, 'lazy-fonts.json'), `${JSON.stringify(lazyFontManifest, null, 2)}\n`);
 else await rm(path.join(out, 'lazy-fonts.json'), { force: true });
@@ -160,7 +163,7 @@ await writeFile(path.join(out, 'opf-spec.json'), JSON.stringify({
   schemaDigest: sha256(JSON.stringify(opfSchemas)), fieldCount: fields.length, schemas: opfSchemas, fields,
 }));
 const files = {};
-for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : []), ...(baseFonts ? ['base-fonts.json', ...baseFonts.base.map(face => face.file)] : [])]) {
+for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', 'wasm.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : []), ...(baseFonts ? ['base-fonts.json', ...baseFonts.base.map(face => face.file)] : [])]) {
   files[file] = sha256(await readFile(path.join(out, file)));
 }
 await writeFile(path.join(out, 'manifest.json'), JSON.stringify({

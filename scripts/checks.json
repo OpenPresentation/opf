@@ -15,6 +15,7 @@
   "changed": {
     "always": ["check:changes"],
     "rules": [
+      {"match": ["scripts/gallery-editor-wasm.mjs", "scripts/gallery-editor-wasm.test.mjs", "scripts/build-registry-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-wasm"]},
       {"match": ["scripts/archive-tar.mjs", "scripts/link-ecosystem.mjs"], "run": ["check:archive-tar"]},
       {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-docs", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
       {"match": ["spec/catalogs/"], "run": ["check:spec", "check:catalog", "check:catalog-free", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
