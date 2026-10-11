@@ -1,0 +1,56 @@
+[
+  {
+    "case": "treemap-category",
+    "bytes": 81342,
+    "sha256": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "histogram-single",
+    "bytes": 81357,
+    "sha256": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "histogram-category",
+    "bytes": 81343,
+    "sha256": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "pareto-multi",
+    "bytes": 81514,
+    "sha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "box-multi",
+    "bytes": 81513,
+    "sha256": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "waterfall-single",
+    "bytes": 81368,
+    "sha256": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "funnel-category",
+    "bytes": 81342,
+    "sha256": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "world-category",
+    "bytes": 80159,
+    "sha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+    "equalActualPriorCandidate": true
+  },
+  {
+    "case": "all-seven",
+    "bytes": 144302,
+    "sha256": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+    "equalActualPriorCandidate": true
+  }
+]
