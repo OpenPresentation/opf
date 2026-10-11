@@ -73,7 +73,8 @@ Source reviews and local evidence are recorded below. Refresh exact-head CI thro
   - [opf#584](https://github.com/OpenPresentation/opf/pull/584).
 - [opf-render#222](https://github.com/OpenPresentation/opf-render/pull/222) (head `eac8366a`): HarfBuzz pens for raster
   complex-script clusters. Default toPng output changes for Thai, Tamil, Telugu and Myanmar.
-- Then cut render 0.18.2, and an editor patch if #155 changed the editor.
+- Also include reviewed renderer#229 forced-colors focus and renderer#230 subset glyph coverage after the current train hold.
+- [Dependency audit](../../evidence/rr20-held-patch-order/README.md): publish core0.18.4, then renderer0.18.2 with core^0.18.4. Editor#155 is tests-only; no additional CLI/PPTX/editor release is forced by this set. Existing broad ranges admit the corrections but do not guarantee them for old locked installations. Adopt actual corrected producer versions in sites/consumer locks; deliberate minimum-guarantee changes require separate reviewed metadata patches. This patch set needs neither v2 nor renderer#225.
 
 ## Reviewed candidate checkpoints and 0.19 work
 
