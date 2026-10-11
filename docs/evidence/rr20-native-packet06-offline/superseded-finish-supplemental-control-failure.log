@@ -1,0 +1,15 @@
+node:internal/fs/promises:1345
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/private/tmp/rr81-final-gallery-review/pareto-single-candidate.pptx'
+    at async open (node:internal/fs/promises:1345:25)
+    at async readFile (node:internal/fs/promises:1996:14)
+    at async file:///private/tmp/rr20-t31-packet-tooling-v3/finish.mjs:6:248 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/private/tmp/rr81-final-gallery-review/pareto-single-candidate.pptx'
+}
+
+Node.js v24.21.0

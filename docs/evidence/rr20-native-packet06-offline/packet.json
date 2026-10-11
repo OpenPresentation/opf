@@ -1,0 +1,3468 @@
+{
+  "source": {
+    "source": {
+      "core": "bf59164c9ba4f2a0787607f0efd0be626357b831",
+      "renderer": "127669807df12fbead5ea805c4d54a7c3fcbc03b",
+      "editor": "d6481068f3500fc986a31e57bd8317da5882be4a",
+      "pptx": "1fae5a9df400ea37954ad4bb4fca8c2d1b96588b",
+      "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+    },
+    "authorizationOverlay": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+    "registryAcceptance": false,
+    "nativeAcceptance": false
+  },
+  "artifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "sourceSha": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+      "version": "0.18.3",
+      "sha256": "9b6da496d4c103ae40c6cae400b076f4af5cbd06dad4b2c7105e5be19efe0780",
+      "bytes": 3322325,
+      "originalManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.18.3",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "clean": "rm -rf dist src/generated",
+          "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
+          "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
+          "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+          "test": "pnpm run build && node ../../scripts/run-tests.mjs",
+          "test:packed": "node test/packed-install-smoke.mjs",
+          "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "^1.0.0",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "0.18.0",
+          "@openpresentation/opf-render": "0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "@types/node": "^24.13.4",
+          "json-schema-to-typescript": "^16.0.0",
+          "pdf-lib": "1.17.1",
+          "sharp": "0.35.5",
+          "tsup": "^8.5.1",
+          "typescript": "~5.9.3"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.0",
+          "@openpresentation/opf-render": "^0.18.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "opf": {
+          "requiresUnreleasedGallery": "2.0.0"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.18.3",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-gallery-2.0.0.tgz",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.1",
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "sourceSha": "127669807df12fbead5ea805c4d54a7c3fcbc03b",
+      "version": "0.18.1",
+      "sha256": "28125929e8447db19b789504d4698300e103c9bdbf50b9b319145ebbe8bca31b",
+      "bytes": 13073927,
+      "originalManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.18.1",
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts",
+          "validate": "node scripts/validate-package.mjs",
+          "test": "npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "check:fonts": "node test/font-licenses.mjs && npm run check:font-hotlinks",
+          "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+          "test:golden": "npm run build && node test/golden.mjs",
+          "test:packed": "node test/packed-install.mjs",
+          "test:next-bundle": "node scripts/check-next-bundle.mjs",
+          "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
+          "golden:update": "npm run build && node test/golden.mjs --update",
+          "golden:promote": "node scripts/golden-promote.mjs",
+          "bench:soak": "node scripts/soak.mjs",
+          "prepack": "npm run build",
+          "build:browser-check": "node scripts/build-browser-check.mjs",
+          "test:styled-table": "node test/styled-table.mjs",
+          "test:pdf-vector": "node test/pdf-vector.mjs && node test/pdf-vector-visual.mjs",
+          "test:export-browser": "node test/export-browser.mjs artifacts/export-browser",
+          "report:pdf-vector": "node test/pdf-vector-visual.mjs --all --report artifacts/pdf-vector-visual.json",
+          "test:code": "node test/shared-code.mjs",
+          "test:code-browser": "node test/shared-code-browser.mjs",
+          "test:metric": "node test/shared-metric.mjs",
+          "test:images-browser": "node test/image-placeholders-browser.mjs",
+          "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
+          "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+          "test:font-variants": "node test/font-variants.mjs",
+          "test:font-variants-browser": "node test/font-variants-browser.mjs",
+          "test:variable-font-gate": "node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
+          "test:aptos-preview-browser": "node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json",
+          "test:lazy-face-fallback-browser": "node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback",
+          "test:lazy-fonts-browser": "node test/lazy-fonts-browser.mjs artifacts/lazy-fonts",
+          "test:latin-family-hosts-browser": "node test/latin-family-hosts-browser.mjs artifacts/latin-family-hosts",
+          "test:script-family-hosts-browser": "node test/script-family-hosts-browser.mjs artifacts/script-family-hosts",
+          "test:extra-lazy-fonts-browser": "node test/extra-lazy-fonts-browser.mjs artifacts/extra-lazy-fonts",
+          "test:script-fonts-browser": "node test/script-fonts-browser.mjs artifacts/script-fonts-browser.json",
+          "test:script-corpora-browser": "node test/script-corpora-browser.mjs artifacts/script-corpora-browser.json && node test/script-corpora-slides-browser.mjs artifacts/script-corpora-slides-browser.json",
+          "test:script-fonts-auto-browser": "node test/script-fonts-auto-browser.mjs artifacts/script-fonts-auto",
+          "test:symbol-fonts-browser": "node test/symbol-fonts-browser.mjs artifacts/symbol-fonts-browser.json",
+          "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
+          "test:text-browser": "node test/accepted-text-browser.mjs",
+          "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs",
+          "test:rich-flow-browser": "node test/rich-flow-browser.mjs",
+          "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs",
+          "test:emoji-math-browser": "node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json",
+          "test:player": "node test/player-unit.mjs",
+          "test:player-browser": "node test/player-browser.mjs artifacts/player",
+          "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs",
+          "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
+        },
+        "dependencies": {
+          "@openpresentation/opf": "^0.18.3",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@hyzyla/pdfium": "2.1.13",
+          "@jspawn/qpdf-wasm": "0.0.2",
+          "@napi-rs/canvas": "1.0.10",
+          "@resvg/resvg-js": "2.6.2",
+          "axe-core": "4.14.0",
+          "esbuild": "0.28.2",
+          "pdf-lib": "1.17.1",
+          "pdfjs-dist": "6.4.299",
+          "playwright": "1.63.0",
+          "sharp": "0.35.5"
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.18.1",
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "dependencies": {
+          "@openpresentation/opf": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "sourceSha": "1fae5a9df400ea37954ad4bb4fca8c2d1b96588b",
+      "version": "0.18.1",
+      "sha256": "324d524394e70304a72c13f036195966e58bf47e42ba23fea258451e96d51d03",
+      "bytes": 721965,
+      "originalManifest": {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.18.1",
+        "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "vendor",
+          "DEPENDENCY-NOTES.md",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts",
+          "test": "npm run build && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "validate": "node scripts/validate-package.mjs",
+          "test:packed": "node test/packed-install.mjs && node test/provenance-interop.mjs",
+          "test:compare-published": "node test/compare-published.mjs",
+          "test:published-import": "node test/provenance-interop.mjs",
+          "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/packed-bundle-browser.mjs",
+          "prepack": "npm run build",
+          "build:browser-check": "node scripts/build-browser-check.mjs",
+          "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",
+          "test:code": "node test/shared-code.mjs && node test/code-provenance.mjs",
+          "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs",
+          "test:font-variants": "node test/font-variants.mjs",
+          "test:timeline": "node test/shared-timeline.mjs",
+          "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/slide-variables.mjs && node test/furniture-fields.mjs && node test/furniture-wrapped-date.mjs && node test/socials-furniture.mjs && node test/native-furniture.mjs",
+          "test:native-picture-edit-controls": "node test/compare-native-picture-edit-controls.mjs",
+          "test:native-font-embed-controls": "node test/native-font-embed-controls.mjs",
+          "test:native-mixed-edit-controls": "node test/native-mixed-edit-controls.mjs",
+          "test:native-font-inventory-controls": "node test/native-font-inventory-controls.mjs",
+          "test:zip-date": "node test/zip-date.mjs",
+          "test:native-text": "node test/native-text-whitespace.mjs",
+          "test:determinism": "node test/determinism.mjs"
+        },
+        "dependencies": {
+          "@node-projects/jszip": "4.3.0",
+          "@openpresentation/opf": "^0.18.3",
+          "@rgrove/parse-xml": "4.2.3",
+          "fast-xml-parser": "^5.8.0",
+          "fflate": "^0.8.3",
+          "pako": "3.0.2",
+          "sharp": "0.35.5"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/carlito": "0.4.1",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-render": "0.18.1",
+          "@resvg/resvg-js": "2.6.2",
+          "esbuild": "0.28.2",
+          "playwright": "1.63.0"
+        },
+        "imports": {
+          "#image-fallback": {
+            "browser": "./dist/image-fallback-browser.js",
+            "default": "./dist/image-fallback-node.js"
+          }
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.18.1",
+        "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "vendor",
+          "DEPENDENCY-NOTES.md",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "dependencies": {
+          "@node-projects/jszip": "4.3.0",
+          "@openpresentation/opf": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "@rgrove/parse-xml": "4.2.3",
+          "fast-xml-parser": "^5.8.0",
+          "fflate": "^0.8.3",
+          "pako": "3.0.2",
+          "sharp": "0.35.5"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "imports": {
+          "#image-fallback": {
+            "browser": "./dist/image-fallback-browser.js",
+            "default": "./dist/image-fallback-node.js"
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "sourceSha": "d6481068f3500fc986a31e57bd8317da5882be4a",
+      "version": "0.18.1",
+      "sha256": "d7247bb28e37bd8d6b886309d876d79543bb9479bfae908fff7b355f40ccdb0b",
+      "bytes": 405128,
+      "originalManifest": {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.18.1",
+        "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-editor/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./react": {
+            "types": "./dist/react.d.ts",
+            "default": "./dist/react.js"
+          },
+          "./svelte": {
+            "types": "./dist/svelte.d.ts",
+            "default": "./dist/svelte.js"
+          },
+          "./package.json": "./package.json",
+          "./canvas": {
+            "types": "./dist/canvas.d.ts",
+            "default": "./dist/canvas.js"
+          },
+          "./transfer": {
+            "types": "./dist/transfer.d.ts",
+            "default": "./dist/transfer.js"
+          },
+          "./galleries": {
+            "types": "./dist/galleries.d.ts",
+            "default": "./dist/galleries.js"
+          },
+          "./schema": {
+            "types": "./dist/schema.d.ts",
+            "default": "./dist/schema.js"
+          },
+          "./schema-inspector": {
+            "types": "./dist/schema-inspector.d.ts",
+            "default": "./dist/schema-inspector.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "default": "./dist/data.js"
+          },
+          "./rich-text": {
+            "types": "./dist/rich-text.d.ts",
+            "default": "./dist/rich-text.js"
+          },
+          "./layout": {
+            "types": "./dist/layout.d.ts",
+            "default": "./dist/layout.js"
+          },
+          "./json-editor": {
+            "types": "./dist/json-editor.d.ts",
+            "default": "./dist/json-editor.js"
+          },
+          "./json-options": {
+            "types": "./dist/json-options.d.ts",
+            "default": "./dist/json-options.js"
+          },
+          "./export": {
+            "types": "./dist/export.d.ts",
+            "default": "./dist/export.js"
+          },
+          "./switches": {
+            "types": "./dist/switches.d.ts",
+            "default": "./dist/switches.js"
+          },
+          "./block-convert": {
+            "types": "./dist/block-convert.d.ts",
+            "default": "./dist/block-convert.js"
+          },
+          "./design-options": {
+            "types": "./dist/design-options.d.ts",
+            "default": "./dist/design-options.js"
+          },
+          "./tables": {
+            "types": "./dist/table-options.d.ts",
+            "default": "./dist/table-options.js"
+          },
+          "./design-controls": {
+            "types": "./dist/design-controls.d.ts",
+            "default": "./dist/design-controls.js"
+          },
+          "./templates": {
+            "types": "./dist/templates.d.ts",
+            "default": "./dist/templates.js"
+          },
+          "./template-panel": {
+            "types": "./dist/template-panel.d.ts",
+            "default": "./dist/template-panel.js"
+          },
+          "./assets": {
+            "types": "./dist/assets.d.ts",
+            "default": "./dist/assets.js"
+          },
+          "./backgrounds": {
+            "types": "./dist/background-options.d.ts",
+            "default": "./dist/background-options.js"
+          },
+          "./image-options": {
+            "types": "./dist/image-options.d.ts",
+            "default": "./dist/image-options.js"
+          },
+          "./review": {
+            "types": "./dist/review.d.ts",
+            "default": "./dist/review.js"
+          },
+          "./review-panel": {
+            "types": "./dist/review-panel.d.ts",
+            "default": "./dist/review-panel.js"
+          },
+          "./content-actions": {
+            "types": "./dist/content-actions.d.ts",
+            "default": "./dist/content-actions.js"
+          },
+          "./image-crop": {
+            "types": "./dist/image-crop.d.ts",
+            "default": "./dist/image-crop.js"
+          },
+          "./image-cropper": {
+            "types": "./dist/image-cropper.d.ts",
+            "default": "./dist/image-cropper.js"
+          },
+          "./find": {
+            "types": "./dist/find-replace.d.ts",
+            "default": "./dist/find-replace.js"
+          },
+          "./find-panel": {
+            "types": "./dist/find-panel.d.ts",
+            "default": "./dist/find-panel.js"
+          },
+          "./data-grid": {
+            "types": "./dist/data-grid.d.ts",
+            "default": "./dist/data-grid.js"
+          },
+          "./chart-data": {
+            "types": "./dist/chart-data.d.ts",
+            "default": "./dist/chart-data.js"
+          },
+          "./grid-text": {
+            "types": "./dist/grid-text.d.ts",
+            "default": "./dist/grid-text.js"
+          },
+          "./slides": {
+            "types": "./dist/slides.d.ts",
+            "default": "./dist/slides.js"
+          },
+          "./outline": {
+            "types": "./dist/outline.d.ts",
+            "default": "./dist/outline.js"
+          },
+          "./slide-manager": {
+            "types": "./dist/slide-manager.d.ts",
+            "default": "./dist/slide-manager.js"
+          },
+          "./layout-templates": {
+            "types": "./dist/layout-templates.d.ts",
+            "default": "./dist/layout-templates.js"
+          },
+          "./custom-layout-editor": {
+            "types": "./dist/custom-layout-editor.d.ts",
+            "default": "./dist/custom-layout-editor.js"
+          },
+          "./outline-view": {
+            "types": "./dist/outline-view.d.ts",
+            "default": "./dist/outline-view.js"
+          },
+          "./persistence": {
+            "types": "./dist/persistence.d.ts",
+            "default": "./dist/persistence.js"
+          },
+          "./persistence-ui": {
+            "types": "./dist/persistence-ui.d.ts",
+            "default": "./dist/persistence-ui.js"
+          },
+          "./chart-options": {
+            "types": "./dist/chart-options.d.ts",
+            "default": "./dist/chart-options.js"
+          },
+          "./chart-options-panel": {
+            "types": "./dist/chart-options-panel.d.ts",
+            "default": "./dist/chart-options-panel.js"
+          },
+          "./numbering": {
+            "types": "./dist/numbering.d.ts",
+            "default": "./dist/numbering.js"
+          },
+          "./numbering-panel": {
+            "types": "./dist/numbering-panel.d.ts",
+            "default": "./dist/numbering-panel.js"
+          },
+          "./annotations": {
+            "types": "./dist/annotations.d.ts",
+            "default": "./dist/annotations.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
+          "test": "npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "validate": "node scripts/validate-package.mjs",
+          "test:packed": "node test/packed-install.mjs",
+          "prepack": "npm run build",
+          "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+          "check:font-hotlinks:built": "node scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
+          "build:playground": "node scripts/build-playground.mjs",
+          "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/layout-templates-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/playground-download.mjs artifacts/playground-download",
+          "test:code-browser": "node test/code-browser.mjs",
+          "test:selection-browser": "node test/selection-browser.mjs",
+          "test:click-entry-browser": "node test/click-entry-browser.mjs",
+          "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
+          "test:metric-browser": "node test/metric-browser.mjs",
+          "test:rich-input-browser": "node test/rich-input-browser.mjs",
+          "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+          "test:json-browser": "node test/json-editor-browser.mjs",
+          "test:design-controls-browser": "node test/design-controls-browser.mjs",
+          "test:template-panel-browser": "node test/template-panel-browser.mjs",
+          "test:design-gaps-browser": "node test/design-gaps-browser.mjs",
+          "test:data-grid-browser": "node test/data-grid-browser.mjs",
+          "test:data-grid-datasets-browser": "node test/data-grid-datasets-browser.mjs",
+          "test:data-import-dataset-browser": "node test/data-import-dataset-browser.mjs",
+          "test:slides-browser": "node test/slides-browser.mjs",
+          "test:persistence-browser": "node test/persistence-browser.mjs",
+          "test:find-browser": "node test/find-replace-browser.mjs",
+          "test:crop-browser": "node test/image-crop-browser.mjs",
+          "test:mobile-browser": "node test/mobile-browser.mjs",
+          "test:review-panel-browser": "node test/review-panel-browser.mjs",
+          "test:review-hook-browser": "node test/review-hook-browser.mjs",
+          "test:export-license-browser": "node test/export-license-browser.mjs",
+          "test:chart-options-browser": "node test/chart-options-browser.mjs",
+          "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs"
+        },
+        "dependencies": {
+          "@codemirror/autocomplete": "6.20.3",
+          "@codemirror/commands": "6.11.1",
+          "@codemirror/lang-json": "6.0.2",
+          "@codemirror/language": "6.12.4",
+          "@codemirror/lint": "6.9.7",
+          "@codemirror/search": "6.7.2",
+          "@codemirror/state": "6.7.6",
+          "@codemirror/view": "6.43.13",
+          "@lezer/highlight": "1.2.5",
+          "@openpresentation/opf": "^0.18.3",
+          "jsonc-parser": "3.3.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "^0.18.1",
+          "@openpresentation/opf-render": "^0.18.1",
+          "@resvg/resvg-js": "2.6.2",
+          "axe-core": "4.14.0",
+          "esbuild": "0.28.2",
+          "jszip": "3.10.2",
+          "pdf-lib": "1.17.1",
+          "pdfjs-dist": "6.4.299",
+          "playwright": "1.63.0"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.18.1",
+        "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-editor/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./react": {
+            "types": "./dist/react.d.ts",
+            "default": "./dist/react.js"
+          },
+          "./svelte": {
+            "types": "./dist/svelte.d.ts",
+            "default": "./dist/svelte.js"
+          },
+          "./package.json": "./package.json",
+          "./canvas": {
+            "types": "./dist/canvas.d.ts",
+            "default": "./dist/canvas.js"
+          },
+          "./transfer": {
+            "types": "./dist/transfer.d.ts",
+            "default": "./dist/transfer.js"
+          },
+          "./galleries": {
+            "types": "./dist/galleries.d.ts",
+            "default": "./dist/galleries.js"
+          },
+          "./schema": {
+            "types": "./dist/schema.d.ts",
+            "default": "./dist/schema.js"
+          },
+          "./schema-inspector": {
+            "types": "./dist/schema-inspector.d.ts",
+            "default": "./dist/schema-inspector.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "default": "./dist/data.js"
+          },
+          "./rich-text": {
+            "types": "./dist/rich-text.d.ts",
+            "default": "./dist/rich-text.js"
+          },
+          "./layout": {
+            "types": "./dist/layout.d.ts",
+            "default": "./dist/layout.js"
+          },
+          "./json-editor": {
+            "types": "./dist/json-editor.d.ts",
+            "default": "./dist/json-editor.js"
+          },
+          "./json-options": {
+            "types": "./dist/json-options.d.ts",
+            "default": "./dist/json-options.js"
+          },
+          "./export": {
+            "types": "./dist/export.d.ts",
+            "default": "./dist/export.js"
+          },
+          "./switches": {
+            "types": "./dist/switches.d.ts",
+            "default": "./dist/switches.js"
+          },
+          "./block-convert": {
+            "types": "./dist/block-convert.d.ts",
+            "default": "./dist/block-convert.js"
+          },
+          "./design-options": {
+            "types": "./dist/design-options.d.ts",
+            "default": "./dist/design-options.js"
+          },
+          "./tables": {
+            "types": "./dist/table-options.d.ts",
+            "default": "./dist/table-options.js"
+          },
+          "./design-controls": {
+            "types": "./dist/design-controls.d.ts",
+            "default": "./dist/design-controls.js"
+          },
+          "./templates": {
+            "types": "./dist/templates.d.ts",
+            "default": "./dist/templates.js"
+          },
+          "./template-panel": {
+            "types": "./dist/template-panel.d.ts",
+            "default": "./dist/template-panel.js"
+          },
+          "./assets": {
+            "types": "./dist/assets.d.ts",
+            "default": "./dist/assets.js"
+          },
+          "./backgrounds": {
+            "types": "./dist/background-options.d.ts",
+            "default": "./dist/background-options.js"
+          },
+          "./image-options": {
+            "types": "./dist/image-options.d.ts",
+            "default": "./dist/image-options.js"
+          },
+          "./review": {
+            "types": "./dist/review.d.ts",
+            "default": "./dist/review.js"
+          },
+          "./review-panel": {
+            "types": "./dist/review-panel.d.ts",
+            "default": "./dist/review-panel.js"
+          },
+          "./content-actions": {
+            "types": "./dist/content-actions.d.ts",
+            "default": "./dist/content-actions.js"
+          },
+          "./image-crop": {
+            "types": "./dist/image-crop.d.ts",
+            "default": "./dist/image-crop.js"
+          },
+          "./image-cropper": {
+            "types": "./dist/image-cropper.d.ts",
+            "default": "./dist/image-cropper.js"
+          },
+          "./find": {
+            "types": "./dist/find-replace.d.ts",
+            "default": "./dist/find-replace.js"
+          },
+          "./find-panel": {
+            "types": "./dist/find-panel.d.ts",
+            "default": "./dist/find-panel.js"
+          },
+          "./data-grid": {
+            "types": "./dist/data-grid.d.ts",
+            "default": "./dist/data-grid.js"
+          },
+          "./chart-data": {
+            "types": "./dist/chart-data.d.ts",
+            "default": "./dist/chart-data.js"
+          },
+          "./grid-text": {
+            "types": "./dist/grid-text.d.ts",
+            "default": "./dist/grid-text.js"
+          },
+          "./slides": {
+            "types": "./dist/slides.d.ts",
+            "default": "./dist/slides.js"
+          },
+          "./outline": {
+            "types": "./dist/outline.d.ts",
+            "default": "./dist/outline.js"
+          },
+          "./slide-manager": {
+            "types": "./dist/slide-manager.d.ts",
+            "default": "./dist/slide-manager.js"
+          },
+          "./layout-templates": {
+            "types": "./dist/layout-templates.d.ts",
+            "default": "./dist/layout-templates.js"
+          },
+          "./custom-layout-editor": {
+            "types": "./dist/custom-layout-editor.d.ts",
+            "default": "./dist/custom-layout-editor.js"
+          },
+          "./outline-view": {
+            "types": "./dist/outline-view.d.ts",
+            "default": "./dist/outline-view.js"
+          },
+          "./persistence": {
+            "types": "./dist/persistence.d.ts",
+            "default": "./dist/persistence.js"
+          },
+          "./persistence-ui": {
+            "types": "./dist/persistence-ui.d.ts",
+            "default": "./dist/persistence-ui.js"
+          },
+          "./chart-options": {
+            "types": "./dist/chart-options.d.ts",
+            "default": "./dist/chart-options.js"
+          },
+          "./chart-options-panel": {
+            "types": "./dist/chart-options-panel.d.ts",
+            "default": "./dist/chart-options-panel.js"
+          },
+          "./numbering": {
+            "types": "./dist/numbering.d.ts",
+            "default": "./dist/numbering.js"
+          },
+          "./numbering-panel": {
+            "types": "./dist/numbering-panel.d.ts",
+            "default": "./dist/numbering-panel.js"
+          },
+          "./annotations": {
+            "types": "./dist/annotations.d.ts",
+            "default": "./dist/annotations.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "dependencies": {
+          "@codemirror/autocomplete": "6.20.3",
+          "@codemirror/commands": "6.11.1",
+          "@codemirror/lang-json": "6.0.2",
+          "@codemirror/language": "6.12.4",
+          "@codemirror/lint": "6.9.7",
+          "@codemirror/search": "6.7.2",
+          "@codemirror/state": "6.7.6",
+          "@codemirror/view": "6.43.13",
+          "@lezer/highlight": "1.2.5",
+          "@openpresentation/opf": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "jsonc-parser": "3.3.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "sourceSha": "ed107a2093335d2af5d9fa44d152cf5da4f29fa1",
+      "version": "0.18.1",
+      "sha256": "4f7f2ec07a47c820d50221a242de33fcb79dd97f8dfac1e37128a0e49ffccf69",
+      "bytes": 196867,
+      "originalManifest": {
+        "name": "@openpresentation/cli",
+        "version": "0.18.1",
+        "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
+        "license": "MIT",
+        "type": "module",
+        "bin": {
+          "opf": "./dist/index.js"
+        },
+        "exports": {
+          "./package.json": "./package.json"
+        },
+        "scripts": {
+          "build": "pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))",
+          "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
+          "clean": "rm -rf dist",
+          "test": "pnpm build && node ../../scripts/run-tests.mjs",
+          "test:packed": "node test/packed.mjs",
+          "test:packed:peers": "node test/packed-files.mjs",
+          "prepack": "pnpm build"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "^1.0.0",
+          "@openpresentation/opf": "^0.18.3"
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "0.18.1",
+          "@openpresentation/opf-render": "0.18.1",
+          "@resvg/resvg-js": "2.6.2",
+          "@types/node": "^24.13.4",
+          "pdf-lib": "1.17.1",
+          "sharp": "0.35.5",
+          "tsup": "^8.5.1",
+          "typescript": "~5.9.3"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.0",
+          "@openpresentation/opf-render": "^0.18.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/cli"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/cli",
+        "version": "0.18.1",
+        "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
+        "license": "MIT",
+        "type": "module",
+        "bin": {
+          "opf": "./dist/index.js"
+        },
+        "exports": {
+          "./package.json": "./package.json"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-gallery-2.0.0.tgz",
+          "@openpresentation/opf": "file:/private/tmp/rr20-refreshed-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.1",
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/cli"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "sourceSha": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+      "version": "2.0.0",
+      "sha256": "6c6720115bc82021bbb810dcc4ea70e27cdaef8bb3d07b573ece64f738653ce4",
+      "bytes": 97319,
+      "originalManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "2.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 2
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "test": "node scripts/build.mjs && node --test test/*.test.mjs",
+          "typecheck": "node scripts/build.mjs && tsc -p test/tsconfig.json",
+          "verify": "node scripts/sync-gallery-catalog.mjs --verify",
+          "rehash": "node scripts/sync-gallery-catalog.mjs --rehash --match-gallery",
+          "previews": "node scripts/render-previews.mjs",
+          "check:license": "node scripts/check-license.mjs",
+          "check:previews": "node scripts/render-previews.mjs --check",
+          "check:stability": "node scripts/build.mjs && node scripts/stability.mjs",
+          "sync": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
+          "pack:dry-run": "npm pack --dry-run",
+          "prepack": "node scripts/build.mjs"
+        },
+        "devDependencies": {
+          "@openpresentation/opf": "0.18.1",
+          "@openpresentation/opf-render": "0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "typescript": "~5.9.3"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "2.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 2
+        },
+        "engines": {
+          "node": ">=22"
+        }
+      }
+    }
+  ],
+  "node": "v24.21.0",
+  "options": {
+    "catalogs": [
+      {
+        "source": "https://www.pptx.gallery",
+        "layoutsSha256": "5ed4625776e3eb98a061f9fa58f423dc491c38d4608694c3287e3cca81b0e7f1",
+        "layoutCount": 28
+      }
+    ],
+    "seed": 1,
+    "timestamp": "2026-01-01T00:00:00Z",
+    "date": "2026-10-10",
+    "provenance": "full"
+  },
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "8633f27a4df552b5f8b2dd7decfb51adcc46306333bb5bff272025b49b4c67c2",
+      "bytes": 2392
+    },
+    {
+      "file": "actions/furniture-inherited.json",
+      "sha256": "d27a96bea4513368205453999e9a2d53a50f27c029ad2d7b67dedfaaacc5fedd",
+      "bytes": 323
+    },
+    {
+      "file": "actions/layout-title-auto.json",
+      "sha256": "d3d06764f433a91c50ca5e08fa413e51e2412760d61989220a76d58e9997bfda",
+      "bytes": 153
+    },
+    {
+      "file": "chart-modes/all-seven-auto-imported.opf.json",
+      "sha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+      "bytes": 3552
+    },
+    {
+      "file": "chart-modes/all-seven-auto.pptx",
+      "sha256": "5ff9467587f1f31f483cbdf1b6fe629248e527d9620274db6584563683093502",
+      "bytes": 161680
+    },
+    {
+      "file": "chart-modes/all-seven-fallback-imported.opf.json",
+      "sha256": "5cb700ff78d45e5bdf7ab103e5bd6f0c05e69670abdd87c6a08026ecb33b2f19",
+      "bytes": 3536
+    },
+    {
+      "file": "chart-modes/all-seven-fallback.pptx",
+      "sha256": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+      "bytes": 144302
+    },
+    {
+      "file": "chart-modes/all-seven-native-imported.opf.json",
+      "sha256": "be89e7ee033b35b49c23830ec7013f6571dc2dc648b0f8f483b55c7bd9419913",
+      "bytes": 3551
+    },
+    {
+      "file": "chart-modes/all-seven-native.pptx",
+      "sha256": "5e1e39ffb6c5e69595101b9348f2351501cba505dec36ad0a7154a0deaa6024b",
+      "bytes": 164463
+    },
+    {
+      "file": "chart-modes/box-multi-auto-imported.opf.json",
+      "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+      "bytes": 592
+    },
+    {
+      "file": "chart-modes/box-multi-auto.pptx",
+      "sha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "bytes": 84634
+    },
+    {
+      "file": "chart-modes/box-multi-fallback-imported.opf.json",
+      "sha256": "1973b3b6d44f3b0f1d39de6b9cfd410b2a63148a97da7f432025160f99218810",
+      "bytes": 583
+    },
+    {
+      "file": "chart-modes/box-multi-fallback.pptx",
+      "sha256": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+      "bytes": 81513
+    },
+    {
+      "file": "chart-modes/box-multi-native-imported.opf.json",
+      "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+      "bytes": 592
+    },
+    {
+      "file": "chart-modes/box-multi-native.pptx",
+      "sha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "bytes": 84634
+    },
+    {
+      "file": "chart-modes/funnel-category-auto-imported.opf.json",
+      "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+      "bytes": 521
+    },
+    {
+      "file": "chart-modes/funnel-category-auto.pptx",
+      "sha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "bytes": 84203
+    },
+    {
+      "file": "chart-modes/funnel-category-fallback-imported.opf.json",
+      "sha256": "bd2a377f42d57e934d062d799d3197daece6db462502d0e53313200247e6f387",
+      "bytes": 521
+    },
+    {
+      "file": "chart-modes/funnel-category-fallback.pptx",
+      "sha256": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+      "bytes": 81342
+    },
+    {
+      "file": "chart-modes/funnel-category-native-imported.opf.json",
+      "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+      "bytes": 521
+    },
+    {
+      "file": "chart-modes/funnel-category-native.pptx",
+      "sha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "bytes": 84203
+    },
+    {
+      "file": "chart-modes/histogram-category-auto-imported.opf.json",
+      "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+      "bytes": 527
+    },
+    {
+      "file": "chart-modes/histogram-category-auto.pptx",
+      "sha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "bytes": 84224
+    },
+    {
+      "file": "chart-modes/histogram-category-fallback-imported.opf.json",
+      "sha256": "384f09a67cd2e32f28d11c8211e4e407002059b2704f81f46f8b2c51fccae3cf",
+      "bytes": 524
+    },
+    {
+      "file": "chart-modes/histogram-category-fallback.pptx",
+      "sha256": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+      "bytes": 81343
+    },
+    {
+      "file": "chart-modes/histogram-category-native-imported.opf.json",
+      "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+      "bytes": 527
+    },
+    {
+      "file": "chart-modes/histogram-category-native.pptx",
+      "sha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "bytes": 84224
+    },
+    {
+      "file": "chart-modes/histogram-single-auto-imported.opf.json",
+      "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+      "bytes": 505
+    },
+    {
+      "file": "chart-modes/histogram-single-auto.pptx",
+      "sha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "bytes": 84251
+    },
+    {
+      "file": "chart-modes/histogram-single-fallback-imported.opf.json",
+      "sha256": "ce6d9860837c82ab11589a0b25362d2bb8378bb4d10acaf5da063e96a939ed91",
+      "bytes": 534
+    },
+    {
+      "file": "chart-modes/histogram-single-fallback.pptx",
+      "sha256": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+      "bytes": 81357
+    },
+    {
+      "file": "chart-modes/histogram-single-native-imported.opf.json",
+      "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+      "bytes": 505
+    },
+    {
+      "file": "chart-modes/histogram-single-native.pptx",
+      "sha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "bytes": 84251
+    },
+    {
+      "file": "chart-modes/pareto-multi-auto-imported.opf.json",
+      "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "bytes": 586
+    },
+    {
+      "file": "chart-modes/pareto-multi-auto.pptx",
+      "sha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "bytes": 81514
+    },
+    {
+      "file": "chart-modes/pareto-multi-fallback-imported.opf.json",
+      "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "bytes": 586
+    },
+    {
+      "file": "chart-modes/pareto-multi-fallback.pptx",
+      "sha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "bytes": 81514
+    },
+    {
+      "file": "chart-modes/pareto-single-auto-imported.opf.json",
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "bytes": 402
+    },
+    {
+      "file": "chart-modes/pareto-single-auto.pptx",
+      "sha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "bytes": 84234
+    },
+    {
+      "file": "chart-modes/pareto-single-fallback-imported.opf.json",
+      "sha256": "e9494860d3d36a953584892e8f0be6e70b8c3e976e9db0e8f077b3508078ad98",
+      "bytes": 402
+    },
+    {
+      "file": "chart-modes/pareto-single-fallback.pptx",
+      "sha256": "067249c618d694332e596ff52f63fe89304d7003f7d4052569bca104f5062001",
+      "bytes": 81265
+    },
+    {
+      "file": "chart-modes/pareto-single-native-imported.opf.json",
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "bytes": 402
+    },
+    {
+      "file": "chart-modes/pareto-single-native.pptx",
+      "sha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "bytes": 84234
+    },
+    {
+      "file": "chart-modes/treemap-category-auto-imported.opf.json",
+      "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+      "bytes": 523
+    },
+    {
+      "file": "chart-modes/treemap-category-auto.pptx",
+      "sha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "bytes": 84222
+    },
+    {
+      "file": "chart-modes/treemap-category-fallback-imported.opf.json",
+      "sha256": "5b5c7d1499f3ad2fa5185daadac29bdccabdbafcf6f7e35294e86c9ab7a750ad",
+      "bytes": 522
+    },
+    {
+      "file": "chart-modes/treemap-category-fallback.pptx",
+      "sha256": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+      "bytes": 81342
+    },
+    {
+      "file": "chart-modes/treemap-category-native-imported.opf.json",
+      "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+      "bytes": 523
+    },
+    {
+      "file": "chart-modes/treemap-category-native.pptx",
+      "sha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "bytes": 84222
+    },
+    {
+      "file": "chart-modes/waterfall-single-auto-imported.opf.json",
+      "sha256": "437ce61c190e360005711496cdc382172d719da3815b9b95cf2f69380e83df9f",
+      "bytes": 638
+    },
+    {
+      "file": "chart-modes/waterfall-single-auto.pptx",
+      "sha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "bytes": 84307
+    },
+    {
+      "file": "chart-modes/waterfall-single-fallback-imported.opf.json",
+      "sha256": "490220093865d431fb9b3b7d0f97e3db22ec299c06bc374bf317b22cd40afaa6",
+      "bytes": 635
+    },
+    {
+      "file": "chart-modes/waterfall-single-fallback.pptx",
+      "sha256": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+      "bytes": 81368
+    },
+    {
+      "file": "chart-modes/waterfall-single-native-imported.opf.json",
+      "sha256": "437ce61c190e360005711496cdc382172d719da3815b9b95cf2f69380e83df9f",
+      "bytes": 638
+    },
+    {
+      "file": "chart-modes/waterfall-single-native.pptx",
+      "sha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "bytes": 84307
+    },
+    {
+      "file": "chart-modes/world-category-auto-imported.opf.json",
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "bytes": 573
+    },
+    {
+      "file": "chart-modes/world-category-auto.pptx",
+      "sha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "bytes": 80159
+    },
+    {
+      "file": "chart-modes/world-category-fallback-imported.opf.json",
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "bytes": 573
+    },
+    {
+      "file": "chart-modes/world-category-fallback.pptx",
+      "sha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "bytes": 80159
+    },
+    {
+      "file": "chart-modes/world-category-native-imported.opf.json",
+      "sha256": "fdf6f12efa0d8bbf903d9cef8e232930c0d9a29d74bdfdf049c294246684d395",
+      "bytes": 572
+    },
+    {
+      "file": "chart-modes/world-category-native.pptx",
+      "sha256": "ef65d95d1a5e4a70de9b9dfbe669f3c713e41b7750e9bb016bd40f0d773a3a9e",
+      "bytes": 82973
+    },
+    {
+      "file": "inputs/chart-all-seven.pptx",
+      "sha256": "71bdc5fd772ef83869e06deba63b362ea280c95b7f45c46fc48e9c97a82c56b3",
+      "bytes": 161656
+    },
+    {
+      "file": "inputs/chart-box-multi.pptx",
+      "sha256": "1fe05b3fdd6294c62f04b55535645b50005f4ebf642ac375c7ebe67260af9f44",
+      "bytes": 84661
+    },
+    {
+      "file": "inputs/chart-funnel-category.pptx",
+      "sha256": "60967e5768c3bec209d10325a6d5183705fce35575b287954645d3ab9aab18bc",
+      "bytes": 84224
+    },
+    {
+      "file": "inputs/chart-histogram-category.pptx",
+      "sha256": "896a445d77d8e05e9400e3202f255770e7382386856f30493d92fabf03bf034a",
+      "bytes": 84248
+    },
+    {
+      "file": "inputs/chart-histogram-single.pptx",
+      "sha256": "7c85973cd7816aca5ca5c91bdca0decdbe9e625b7dc79f637dc62dbb1bd891f8",
+      "bytes": 84282
+    },
+    {
+      "file": "inputs/chart-pareto-multi.pptx",
+      "sha256": "c4cb406e855d7da0681ab3a41b20827dc3bd16f8af1956c443b21c229daeaea3",
+      "bytes": 81540
+    },
+    {
+      "file": "inputs/chart-treemap-category.pptx",
+      "sha256": "ae80f07372780aaab7f06698665c603e1aea27bdd95e4f7b4d97e3c6c65bbfd8",
+      "bytes": 84244
+    },
+    {
+      "file": "inputs/chart-waterfall-single.pptx",
+      "sha256": "68c84fe30b0b614ce458625a285c43ddef2986503daf00963afd548e53c4403a",
+      "bytes": 84341
+    },
+    {
+      "file": "inputs/chart-world-category.pptx",
+      "sha256": "1a99700028eb53efaecee40c0961a968175411f35d5b090d4ff54bbb0b28af29",
+      "bytes": 80203
+    },
+    {
+      "file": "inputs/furniture-flags.pptx",
+      "sha256": "e316ec123959075f738f4014a9719ea152cc0e09083869300e34c00f7b481651",
+      "bytes": 83711
+    },
+    {
+      "file": "inputs/furniture-inherited.pptx",
+      "sha256": "246c1f643c31171f16dae2f71b7d1cd79443ce942e14d1766458b5a96ff3624e",
+      "bytes": 93832
+    },
+    {
+      "file": "inputs/layout-empty-custom.pptx",
+      "sha256": "c004383313f9732ef385545c866cae8a3106a55a5559c50559da192ba1ff049d",
+      "bytes": 91848
+    },
+    {
+      "file": "inputs/layout-media-regions.pptx",
+      "sha256": "0d41b9d6e7a26341f8c8667505dcccc2a00cf8ed45517c33c062eeb73dfbcd16",
+      "bytes": 89281
+    },
+    {
+      "file": "inputs/layout-title-auto.pptx",
+      "sha256": "906ed8a492e6ac05794e5aae5b3ea99cc9b91824632ecc0136590758dee309bf",
+      "bytes": 82407
+    },
+    {
+      "file": "inputs/picture-control.pptx",
+      "sha256": "354d864c2251d40fe361f464ae9f70decb69fb71b543d6ad7c37b46436580916",
+      "bytes": 75000
+    },
+    {
+      "file": "inputs/table-save.pptx",
+      "sha256": "6714654e33d9a4e8465aee3078fbef7019c0d7e3ff7f5bf9d980b49718538022",
+      "bytes": 84336
+    },
+    {
+      "file": "inspection/chart-all-seven-imported.opf.json",
+      "sha256": "cda7ccdcb48452457a35d73702dbc3cdbe6939536f970fd9a615f5e1d64566e7",
+      "bytes": 3683
+    },
+    {
+      "file": "inspection/chart-all-seven.json",
+      "sha256": "4f86f32ce5c647beab75e12c82101dad6ffff15d57ac5b8b93c59b98078dff26",
+      "bytes": 11690
+    },
+    {
+      "file": "inspection/chart-box-multi-imported.opf.json",
+      "sha256": "4145e6f567e3d62bb2c031fe137db43d4368dd90d8083f9cddd5086f88021e1a",
+      "bytes": 723
+    },
+    {
+      "file": "inspection/chart-box-multi.json",
+      "sha256": "f0bd26525389ddd10c509a2719778431ebe4fe70c927eafa8b4304c9c63206d5",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/chart-funnel-category-imported.opf.json",
+      "sha256": "6004041521d1dcc449575aa89c940350cad9a062a535d6bf53d8359249321d5b",
+      "bytes": 652
+    },
+    {
+      "file": "inspection/chart-funnel-category.json",
+      "sha256": "f0bd26525389ddd10c509a2719778431ebe4fe70c927eafa8b4304c9c63206d5",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/chart-histogram-category-imported.opf.json",
+      "sha256": "011175db7ebde4d39c17b956f894ba78cd7b566070d214b25ce4e04199d4a03d",
+      "bytes": 658
+    },
+    {
+      "file": "inspection/chart-histogram-category.json",
+      "sha256": "f0bd26525389ddd10c509a2719778431ebe4fe70c927eafa8b4304c9c63206d5",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/chart-histogram-single-imported.opf.json",
+      "sha256": "9a2f074634865c87c149490e73820ffe70f4c6731cb8db12abbacff071abdcb6",
+      "bytes": 636
+    },
+    {
+      "file": "inspection/chart-histogram-single.json",
+      "sha256": "f0bd26525389ddd10c509a2719778431ebe4fe70c927eafa8b4304c9c63206d5",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/chart-modes.json",
+      "sha256": "9a687415ebd909cb8c4e0bf65fde341c2a9c0837014f7ab3b22d1ed10ea1ba90",
+      "bytes": 20279
+    },
+    {
+      "file": "inspection/chart-pareto-multi-imported.opf.json",
+      "sha256": "16d80535f924b25b2da11a0f0b13282a04bc1a2648b01cb646b9692f55ad5dcb",
+      "bytes": 717
+    },
+    {
+      "file": "inspection/chart-pareto-multi.json",
+      "sha256": "80feee76f7c6698918cef8a6fb5460938e976c8823c569e5796c7b55f375cfd3",
+      "bytes": 11265
+    },
+    {
+      "file": "inspection/chart-treemap-category-imported.opf.json",
+      "sha256": "e89d66af7f2a86af9ab2298a8ca93d10b87ac450da7717a2c93952289758b01f",
+      "bytes": 654
+    },
+    {
+      "file": "inspection/chart-treemap-category.json",
+      "sha256": "f0bd26525389ddd10c509a2719778431ebe4fe70c927eafa8b4304c9c63206d5",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/chart-waterfall-single-imported.opf.json",
+      "sha256": "5558460370c6a56041aa682c2c5eab77f39f53e92ff82896866ad39436030a14",
+      "bytes": 769
+    },
+    {
+      "file": "inspection/chart-waterfall-single.json",
+      "sha256": "8fcbd939fdef46825d9db876869ceaab9dd0d6c952e6ada1f9eee689ebc0ca48",
+      "bytes": 11148
+    },
+    {
+      "file": "inspection/chart-world-category-imported.opf.json",
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "bytes": 573
+    },
+    {
+      "file": "inspection/chart-world-category.json",
+      "sha256": "5d51b488179a532cf4f9d07991cf736b55e70531b3e32e64e0683e79e95dd488",
+      "bytes": 10985
+    },
+    {
+      "file": "inspection/exact-nine-archive-comparison.json",
+      "sha256": "6aa501b50f49bb18fee97eda34e3be3db9fb95d2c938142642772ccb6b0a8a23",
+      "bytes": 2450
+    },
+    {
+      "file": "inspection/furniture-flags-imported.opf.json",
+      "sha256": "ea785c9cdf6918bcee185896f8c2d287e63244a268133d9cee6df99223e878c3",
+      "bytes": 834
+    },
+    {
+      "file": "inspection/furniture-flags.json",
+      "sha256": "5e3aba8baba61527ef84cea4719e1808fe39d94a0c11a2c2d68d9d56933483fb",
+      "bytes": 11030
+    },
+    {
+      "file": "inspection/furniture-inherited-imported.opf.json",
+      "sha256": "a6afad8014cdfd33f09d16b5094d89309a4c10d97813f4b6b6beaf5cfaaafcab",
+      "bytes": 2256
+    },
+    {
+      "file": "inspection/furniture-inherited.json",
+      "sha256": "188345386155fea061fd9bd32b6f1b5de996a684116efb2758313ea4bab503db",
+      "bytes": 11375
+    },
+    {
+      "file": "inspection/layout-empty-custom-imported.opf.json",
+      "sha256": "394de6a577e6c94d17422a374f79f34eff0ab502f2e37d8eb8d18a833f776cd8",
+      "bytes": 23284
+    },
+    {
+      "file": "inspection/layout-empty-custom.json",
+      "sha256": "7eb325c4b6434d137e133391bb6e301c3614a44fc9ebcbb826a6d52d0ccbdfb5",
+      "bytes": 17536
+    },
+    {
+      "file": "inspection/layout-media-regions-imported.opf.json",
+      "sha256": "0608772f15d80038af1461277bdf429daedc47eca1884abf22e37bed309e6b68",
+      "bytes": 1952
+    },
+    {
+      "file": "inspection/layout-media-regions.json",
+      "sha256": "b599eafbb1c06b8641ed382ee97e0018b5cf61a2d1858426b3efb0c49ed65c4d",
+      "bytes": 10741
+    },
+    {
+      "file": "inspection/layout-title-auto-imported.opf.json",
+      "sha256": "c800598f8fe9957ab2e33b88f51868602d8f89e30d1fa33090605f36dcf195ab",
+      "bytes": 566
+    },
+    {
+      "file": "inspection/layout-title-auto.json",
+      "sha256": "41f7374409461ebb5908852e0e2aa959cbabc44207744feade1c41627a241e48",
+      "bytes": 11032
+    },
+    {
+      "file": "inspection/picture-control-imported.opf.json",
+      "sha256": "4189902ce081ea6a334786a17d46710838718106461b81af9d1562db57b43f3a",
+      "bytes": 938
+    },
+    {
+      "file": "inspection/picture-control.json",
+      "sha256": "9727f1bbd347811a09c84efcb2bc0a03c7081dd38b12c4e126daa4fa597f311a",
+      "bytes": 10894
+    },
+    {
+      "file": "inspection/rich-title-probe.json",
+      "sha256": "c88cb6e9d6af9396dbb402a3d03ff16d387f33ed768314ebf5637a879dbc59fc",
+      "bytes": 17725
+    },
+    {
+      "file": "inspection/table-save-imported.opf.json",
+      "sha256": "cbe938612927a98ae39c9f3998b81121ec4108ee06aabdfeb5e4fb58289ec38d",
+      "bytes": 1155
+    },
+    {
+      "file": "inspection/table-save.json",
+      "sha256": "41f7374409461ebb5908852e0e2aa959cbabc44207744feade1c41627a241e48",
+      "bytes": 11032
+    },
+    {
+      "file": "previews/chart-all-seven-01.png",
+      "sha256": "8a939742be06942be37c7489e5aaa5f9b66964884c6623712f16968086913b36",
+      "bytes": 16446
+    },
+    {
+      "file": "previews/chart-all-seven-01.svg",
+      "sha256": "08fa230d5fd3aa775ecc6c531774511f14a8105f60f2fbd8005824efb6824112",
+      "bytes": 431690
+    },
+    {
+      "file": "previews/chart-all-seven-02.png",
+      "sha256": "4cf1c076847fd6c3ac578bf523f886cddda5c33e0881a20f17b7de48cf7cc7b5",
+      "bytes": 21119
+    },
+    {
+      "file": "previews/chart-all-seven-02.svg",
+      "sha256": "ab4d4eab734dc3aacdf41366895dcad927b60a64737c03d53d9be00fb4635407",
+      "bytes": 434823
+    },
+    {
+      "file": "previews/chart-all-seven-03.png",
+      "sha256": "c41958ae4ec21e3ae2ba0a9369a1be0941578100ac4ee7b86638ec433cfbaa2d",
+      "bytes": 32882
+    },
+    {
+      "file": "previews/chart-all-seven-03.svg",
+      "sha256": "e2f0b2d2ecaf58121937f7239a536d5fa651c198c277ab42e9991a6fd6f2cb58",
+      "bytes": 437661
+    },
+    {
+      "file": "previews/chart-all-seven-04.png",
+      "sha256": "7defd892b4b922df81b82c4d49ff484cd8f1b893d7d18619b8904dc063993952",
+      "bytes": 20628
+    },
+    {
+      "file": "previews/chart-all-seven-04.svg",
+      "sha256": "0978db7cd4a459c5e541f78cb91a90da8af052f4845e0ab03bb1af5b6e8b9098",
+      "bytes": 437311
+    },
+    {
+      "file": "previews/chart-all-seven-05.png",
+      "sha256": "5f3b3fe37a24d2c7cb10f7e8724d82ba7b3b4225fc5188be0d2df2a9210b19f6",
+      "bytes": 21473
+    },
+    {
+      "file": "previews/chart-all-seven-05.svg",
+      "sha256": "ce3548884a6e0cf7cc19a5d3c9177758bd883164d0ade813fa33d4270ddbf712",
+      "bytes": 435795
+    },
+    {
+      "file": "previews/chart-all-seven-06.png",
+      "sha256": "c4783cde199b980740a5fd54a341f47b9eb2d0b28cac3af83a953b2ec4ec242a",
+      "bytes": 15628
+    },
+    {
+      "file": "previews/chart-all-seven-06.svg",
+      "sha256": "b7d5b236db021b5b33c5487ef052dcdd53c0fb740b4c27f600e129dc52a0710f",
+      "bytes": 432496
+    },
+    {
+      "file": "previews/chart-all-seven-07.png",
+      "sha256": "363d8860f099f225c1e2ef222ad8c84a69333cb51fa205895c2540f0ca1b96cc",
+      "bytes": 16884
+    },
+    {
+      "file": "previews/chart-all-seven-07.svg",
+      "sha256": "6e37497cf18ff8ad20ff2c10a4efd96cc8c83f558ff35c1973c8194edfd8f858",
+      "bytes": 432915
+    },
+    {
+      "file": "previews/chart-box-multi-01.png",
+      "sha256": "aba80169c6a812d1604c50a6d7a4f96e68cee1d86322fc1d1203fa307b15f5e0",
+      "bytes": 17176
+    },
+    {
+      "file": "previews/chart-box-multi-01.svg",
+      "sha256": "05bd597284089cacf5cc783c17a76dda417482300f3f92231724c8bc528a37f5",
+      "bytes": 441347
+    },
+    {
+      "file": "previews/chart-funnel-category-01.png",
+      "sha256": "c4783cde199b980740a5fd54a341f47b9eb2d0b28cac3af83a953b2ec4ec242a",
+      "bytes": 15628
+    },
+    {
+      "file": "previews/chart-funnel-category-01.svg",
+      "sha256": "b7d5b236db021b5b33c5487ef052dcdd53c0fb740b4c27f600e129dc52a0710f",
+      "bytes": 432496
+    },
+    {
+      "file": "previews/chart-histogram-category-01.png",
+      "sha256": "4cf1c076847fd6c3ac578bf523f886cddda5c33e0881a20f17b7de48cf7cc7b5",
+      "bytes": 21119
+    },
+    {
+      "file": "previews/chart-histogram-category-01.svg",
+      "sha256": "ab4d4eab734dc3aacdf41366895dcad927b60a64737c03d53d9be00fb4635407",
+      "bytes": 434823
+    },
+    {
+      "file": "previews/chart-histogram-single-01.png",
+      "sha256": "63fcdba1f96de432c5b5d7627ee78df869f3b4ea096b9d0bc8b95d3e48d64ed9",
+      "bytes": 19528
+    },
+    {
+      "file": "previews/chart-histogram-single-01.svg",
+      "sha256": "02f7969e80ecdeb779c2de97cc0199e8cec33a16d9786ee169576ff781452b0a",
+      "bytes": 434886
+    },
+    {
+      "file": "previews/chart-pareto-multi-01.png",
+      "sha256": "7dd71a6a9162d1985f95b62edf9c1fe0284abd343cba95b9cbf514946a219f2b",
+      "bytes": 29295
+    },
+    {
+      "file": "previews/chart-pareto-multi-01.svg",
+      "sha256": "bf6b601da5509dd51d2e71bd0574d1666890727078e9dba7777392dd34c38ba7",
+      "bytes": 437311
+    },
+    {
+      "file": "previews/chart-treemap-category-01.png",
+      "sha256": "8a939742be06942be37c7489e5aaa5f9b66964884c6623712f16968086913b36",
+      "bytes": 16446
+    },
+    {
+      "file": "previews/chart-treemap-category-01.svg",
+      "sha256": "08fa230d5fd3aa775ecc6c531774511f14a8105f60f2fbd8005824efb6824112",
+      "bytes": 431690
+    },
+    {
+      "file": "previews/chart-waterfall-single-01.png",
+      "sha256": "4f24cdbccd57fe4366c14580d67d7bde81ab827d2ce50acebf9d5c717cb65a24",
+      "bytes": 19973
+    },
+    {
+      "file": "previews/chart-waterfall-single-01.svg",
+      "sha256": "fa97656319d86ff775423803daba4601bfe743ccb238e66af833a72816e5b24f",
+      "bytes": 436925
+    },
+    {
+      "file": "previews/chart-world-category-01.png",
+      "sha256": "577df65f0ea125855570f7038b9745db06b0d1dae4d9c56fc4c46750c7371150",
+      "bytes": 14882
+    },
+    {
+      "file": "previews/chart-world-category-01.svg",
+      "sha256": "f5bcbedeb48b21b88d16494de403f997e51f34f5b8fdcc7bd3a73386b324f516",
+      "bytes": 16125804
+    },
+    {
+      "file": "previews/furniture-flags-01.png",
+      "sha256": "d5a194cdfbce79dae188f57a8498ae5044692117484cd5eaaa4369e7063747bb",
+      "bytes": 15410
+    },
+    {
+      "file": "previews/furniture-flags-01.svg",
+      "sha256": "ac45f1b6e75913b8421ca78cfdf637518341c206ad48d0d3b80f7eff8c92b00e",
+      "bytes": 430864
+    },
+    {
+      "file": "previews/furniture-flags-02.png",
+      "sha256": "f76320852c3f0d64c18112e6271ff82c3fb5177f305e241a295cdda711098aa9",
+      "bytes": 15242
+    },
+    {
+      "file": "previews/furniture-flags-02.svg",
+      "sha256": "97c3e8ad3ddd27cefaf980f826f2285961d0698a54de16238a874e01e9b7da56",
+      "bytes": 430865
+    },
+    {
+      "file": "previews/furniture-flags-03.png",
+      "sha256": "90bf5f0a18036da3fe2dffdb597ac2240e7fbdc02a4988d7264bb916b053327d",
+      "bytes": 14841
+    },
+    {
+      "file": "previews/furniture-flags-03.svg",
+      "sha256": "ae584929c99bf094028cc21fab8b03c6a4fb5a822af3b7e39192937c674f3248",
+      "bytes": 431312
+    },
+    {
+      "file": "previews/furniture-inherited-01.png",
+      "sha256": "07294e43c1078562ae03c733b6d6780e9da6c619376c967b25a6563822148560",
+      "bytes": 23559
+    },
+    {
+      "file": "previews/furniture-inherited-01.svg",
+      "sha256": "0cf498386785de9ec9aecb556dd95a3dd3cda8cb45f87f682bc9ca64b3b40232",
+      "bytes": 433031
+    },
+    {
+      "file": "previews/furniture-inherited-02.png",
+      "sha256": "daa9b7014dbabcbef4f239ee9f6ccdb410842c06601c2c40fd23723c32af0865",
+      "bytes": 21383
+    },
+    {
+      "file": "previews/furniture-inherited-02.svg",
+      "sha256": "7b7ff789a0bf923cbe682962b4f9faa2e2f1700b435778c1d558de721b391d40",
+      "bytes": 433150
+    },
+    {
+      "file": "previews/furniture-inherited-03.png",
+      "sha256": "296651c796cb051b43ba92905c7d207da8860b29ba97a3963d8d60462b5b175d",
+      "bytes": 24011
+    },
+    {
+      "file": "previews/furniture-inherited-03.svg",
+      "sha256": "801911d2b9a3ef8b4e4799863f983bb52aaa62442396a8a64ee45c8cd90bfe1d",
+      "bytes": 433033
+    },
+    {
+      "file": "previews/layout-empty-custom-01.png",
+      "sha256": "9367248a99b5b8f5d7d711fbdd6b937da5d866282cbb625372311352ab09c095",
+      "bytes": 14322
+    },
+    {
+      "file": "previews/layout-empty-custom-01.svg",
+      "sha256": "ea0c78d678a99000ff451cb198be08d379fb2be4eda7fc5e073990bf3acc5175",
+      "bytes": 218320
+    },
+    {
+      "file": "previews/layout-empty-custom-02.png",
+      "sha256": "58c866171ba2e962bcd12334e5b58d971ad1c725a3544cfb4e92ac5991ad2a5c",
+      "bytes": 68333
+    },
+    {
+      "file": "previews/layout-empty-custom-02.svg",
+      "sha256": "c696825e68022242dfff58f380c231195bd69a99f3e0ea0a300a7242195aef1b",
+      "bytes": 431673
+    },
+    {
+      "file": "previews/layout-empty-custom-03.png",
+      "sha256": "459b12f4865a793a113e459a1b44ac5c3389ce5033340713ebfc78fb99cadc7a",
+      "bytes": 13933
+    },
+    {
+      "file": "previews/layout-empty-custom-03.svg",
+      "sha256": "8cb05c50ae9c087b7f9083568d7c7e1bbf8f35247d9b480d26afd33dc24f025b",
+      "bytes": 218318
+    },
+    {
+      "file": "previews/layout-media-regions-01.png",
+      "sha256": "cd986a34d825c6776dfc01f2ae9c151e04a1e9d783e4595eb6facd77b3b3e796",
+      "bytes": 36925
+    },
+    {
+      "file": "previews/layout-media-regions-01.svg",
+      "sha256": "ebfc60f030e9c936efddee5d4629b645b00bacdf8be45af6c9bb6b85a032b007",
+      "bytes": 431653
+    },
+    {
+      "file": "previews/layout-media-regions-02.png",
+      "sha256": "9ef0eb4efee4cf73cded3bf61f63372a68aa1c96b0698107fed669a9ab95edb8",
+      "bytes": 25283
+    },
+    {
+      "file": "previews/layout-media-regions-02.svg",
+      "sha256": "c82a2959c04dec2786a896022571aa994de98b7e6e91d46f341b983b5a357f0c",
+      "bytes": 433808
+    },
+    {
+      "file": "previews/layout-media-regions-03.png",
+      "sha256": "f89f6ada66de3b31c6605d6712213e819d6295f5a51eacbf87821cac2a97bf0e",
+      "bytes": 13115
+    },
+    {
+      "file": "previews/layout-media-regions-03.svg",
+      "sha256": "19943ae76c38356bfbb7d756ebdf5e43fac0334750bb7c681f684fb07c9c5bf4",
+      "bytes": 432631
+    },
+    {
+      "file": "previews/layout-title-auto-01.png",
+      "sha256": "0f82cdb415339687439adb29338926bc95f62fb18a07371a2a4b5fb5da96b8f5",
+      "bytes": 15003
+    },
+    {
+      "file": "previews/layout-title-auto-01.svg",
+      "sha256": "dd35f2a018cc832a1c420c28db483e14251852d57b902d0b3d5a0b7e72ecacea",
+      "bytes": 430855
+    },
+    {
+      "file": "previews/layout-title-auto-02.png",
+      "sha256": "a19acac6236198cf2e19692e7a656e768a7141ef8b9fdd87bc9298b223676fb8",
+      "bytes": 15276
+    },
+    {
+      "file": "previews/layout-title-auto-02.svg",
+      "sha256": "9d612c324a3b957b3b987384e6a46b74e8a84254785554416c427f5859c127c0",
+      "bytes": 430855
+    },
+    {
+      "file": "previews/layout-title-auto-03.png",
+      "sha256": "4de8777abc503f354b369105ed5ec27e93795938853f791af0791b8f8bb39e82",
+      "bytes": 13940
+    },
+    {
+      "file": "previews/layout-title-auto-03.svg",
+      "sha256": "9ff62036963b42abbf4d12d3cee09a008baecf1f51971fa3829a1f8b12d1c4b2",
+      "bytes": 431036
+    },
+    {
+      "file": "previews/picture-control-01.png",
+      "sha256": "f78aa236653f89fc050a1a1083b78ad1be4e814deda9c273289ec840d4e312bf",
+      "bytes": 75240
+    },
+    {
+      "file": "previews/picture-control-01.svg",
+      "sha256": "f4be4fa051ac984bbfa900dc904aeaa9138189133faa9aaf2939a23f21234b9d",
+      "bytes": 219129
+    },
+    {
+      "file": "previews/table-save-01.png",
+      "sha256": "4e809d56f534339fd3e0515f1ff328cc55451195e063835f6ece30a568bc7d50",
+      "bytes": 12999
+    },
+    {
+      "file": "previews/table-save-01.svg",
+      "sha256": "6582adfc423f79bfca46683c504751e51bde58c9a556684e7aef5ca8330b5227",
+      "bytes": 432621
+    },
+    {
+      "file": "previews/table-save-02.png",
+      "sha256": "ae5811f9c04e494331fa417a12f0e819cee05177f12bd97ddc331409db8db264",
+      "bytes": 15388
+    },
+    {
+      "file": "previews/table-save-02.svg",
+      "sha256": "c17f268cc487fc2ae60f5378c192395037ba48432fd7015f5269d4102980e892",
+      "bytes": 432730
+    },
+    {
+      "file": "previews/table-save-03.png",
+      "sha256": "1a6b72c35fe9624694b0c49eef1092169cb4cdd3200868cbdbc41ad491d1971f",
+      "bytes": 11610
+    },
+    {
+      "file": "previews/table-save-03.svg",
+      "sha256": "be9e35b03d3ea7bebf30473b9ae8d38185a8bbca6cc0c5a280ece34828d19cf5",
+      "bytes": 431925
+    },
+    {
+      "file": "reviewed-archive-pairs/all-seven-before.pptx",
+      "sha256": "c2fc6c4142cf68afecd0b8e07c4059f15f4027d1da23f22529087998a50dea89",
+      "bytes": 88799
+    },
+    {
+      "file": "reviewed-archive-pairs/all-seven-candidate.pptx",
+      "sha256": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+      "bytes": 144302
+    },
+    {
+      "file": "reviewed-archive-pairs/box-multi-before.pptx",
+      "sha256": "da878d19c03e5a1f6d0e3599ec79b4e9d6687bc3bde8bfc57b8cc19dfcf5aa13",
+      "bytes": 26028
+    },
+    {
+      "file": "reviewed-archive-pairs/box-multi-candidate.pptx",
+      "sha256": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+      "bytes": 81513
+    },
+    {
+      "file": "reviewed-archive-pairs/funnel-category-before.pptx",
+      "sha256": "687499dfcc7080023b319d4cd275c59ec78815f89106057032cd828771493479",
+      "bytes": 25857
+    },
+    {
+      "file": "reviewed-archive-pairs/funnel-category-candidate.pptx",
+      "sha256": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+      "bytes": 81342
+    },
+    {
+      "file": "reviewed-archive-pairs/histogram-category-before.pptx",
+      "sha256": "35b7a900b59fb295f472b794775a84f8cb36fdb3d48a1d653c433ce717ff8522",
+      "bytes": 25858
+    },
+    {
+      "file": "reviewed-archive-pairs/histogram-category-candidate.pptx",
+      "sha256": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+      "bytes": 81343
+    },
+    {
+      "file": "reviewed-archive-pairs/histogram-single-before.pptx",
+      "sha256": "9c2244c712ea12c4294a4d073fa374d7336cd3ab5d725dbe7fc11c9e21ea613a",
+      "bytes": 25872
+    },
+    {
+      "file": "reviewed-archive-pairs/histogram-single-candidate.pptx",
+      "sha256": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+      "bytes": 81357
+    },
+    {
+      "file": "reviewed-archive-pairs/pareto-multi-before.pptx",
+      "sha256": "1775befa54df08e3093911d4dbf067c916bdedb2945807ea1c466aa9e000054a",
+      "bytes": 26029
+    },
+    {
+      "file": "reviewed-archive-pairs/pareto-multi-candidate.pptx",
+      "sha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "bytes": 81514
+    },
+    {
+      "file": "reviewed-archive-pairs/treemap-category-before.pptx",
+      "sha256": "a558e7e3430f7fddc2a19c18a6293b0e52b6ae53b2e7b3c1734710998295861c",
+      "bytes": 25857
+    },
+    {
+      "file": "reviewed-archive-pairs/treemap-category-candidate.pptx",
+      "sha256": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+      "bytes": 81342
+    },
+    {
+      "file": "reviewed-archive-pairs/waterfall-single-before.pptx",
+      "sha256": "66165c76bcdc219b52a726205c046c29e4375722407bd8392caedf3c7789c81d",
+      "bytes": 25883
+    },
+    {
+      "file": "reviewed-archive-pairs/waterfall-single-candidate.pptx",
+      "sha256": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+      "bytes": 81368
+    },
+    {
+      "file": "reviewed-archive-pairs/world-category-before.pptx",
+      "sha256": "27f89d1e5acda73bd20bc870b3d65b3181b5bdd1e5333d44ee20ce04ab182655",
+      "bytes": 24510
+    },
+    {
+      "file": "reviewed-archive-pairs/world-category-candidate.pptx",
+      "sha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "bytes": 80159
+    },
+    {
+      "file": "sources/chart-all-seven.opf.json",
+      "sha256": "d5132b17c5ddece1445c800459de876ff3dd4ff57b1db6d786bff6adb8efc630",
+      "bytes": 3682
+    },
+    {
+      "file": "sources/chart-box-multi.opf.json",
+      "sha256": "06fdd5f22d8913e95045c18854cf96e20cea4ca619d430ee47c9d117dc6d6817",
+      "bytes": 723
+    },
+    {
+      "file": "sources/chart-funnel-category.opf.json",
+      "sha256": "849ab3203f136785e25d785c5eae22d48ba90d6fb1982f5b6ef01adccf13cbf3",
+      "bytes": 652
+    },
+    {
+      "file": "sources/chart-histogram-category.opf.json",
+      "sha256": "feacbc02309d0af1e0c9c9ddfc92465f1f6ac13e1359c0a4e4fb15bc5de70344",
+      "bytes": 658
+    },
+    {
+      "file": "sources/chart-histogram-single.opf.json",
+      "sha256": "3e69609acf2246bd89b07305c9fa07e678294f6cb91a8cd91ea0e1435ec0cf02",
+      "bytes": 636
+    },
+    {
+      "file": "sources/chart-pareto-multi.opf.json",
+      "sha256": "4db7470546a03356353197643d381292327af8de10650fe0b6b64c9d06906c82",
+      "bytes": 717
+    },
+    {
+      "file": "sources/chart-pareto-single.opf.json",
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "bytes": 402
+    },
+    {
+      "file": "sources/chart-treemap-category.opf.json",
+      "sha256": "e4d664cec9e3f30cf0d11d17cf99e14803c8906be3b25634a4c15b7f0cf776ff",
+      "bytes": 654
+    },
+    {
+      "file": "sources/chart-waterfall-single.opf.json",
+      "sha256": "5ec4195815120c895ceb27bc8fc9ba7b2ff4955cf2aeab346edc387ffaca404d",
+      "bytes": 636
+    },
+    {
+      "file": "sources/chart-world-category.opf.json",
+      "sha256": "8316c6aca2b0a6f7fee45a1384763999bbd265bf4ed19d1150f44eed1a2c1724",
+      "bytes": 572
+    },
+    {
+      "file": "sources/furniture-flags.opf.json",
+      "sha256": "83f770365ca96159af0cbbcab1a9e1b31ba870069c2744a032708f78504021dc",
+      "bytes": 1033
+    },
+    {
+      "file": "sources/furniture-inherited.opf.json",
+      "sha256": "25e65643b2a0ff228c4683f15e4fd7b600eeeb3cd00cb21c4e80176a2be672b0",
+      "bytes": 2256
+    },
+    {
+      "file": "sources/layout-empty-custom.opf.json",
+      "sha256": "35030eac99e7e2c8b01bc181754dd9848652c99da198bf4b418ff651eb162b68",
+      "bytes": 23284
+    },
+    {
+      "file": "sources/layout-media-regions.opf.json",
+      "sha256": "669ea76e92e0e6766042a722e4b2d014b1162b6f025776caa255636722a85174",
+      "bytes": 1952
+    },
+    {
+      "file": "sources/layout-title-auto.opf.json",
+      "sha256": "874555a8f30d571f4b65b8e9dd0ab211820069169e21711b42dbd8bf018c1859",
+      "bytes": 566
+    },
+    {
+      "file": "sources/picture-control.opf.json",
+      "sha256": "fe9d8b19add43083d1ed878d35af95fcf71c6812f007c5728aa096e484cc7340",
+      "bytes": 938
+    },
+    {
+      "file": "sources/table-save.opf.json",
+      "sha256": "93c11350b14c0e46f5256b037eb5dc12b3dddc6062bd6c5caf36ba86d72424af",
+      "bytes": 1155
+    },
+    {
+      "file": "table-colors/generation.json",
+      "sha256": "b4ca4b12bb61583c0f2288d7088a8dc6d2e826a15df5c11e605982e78049190d",
+      "bytes": 22799
+    },
+    {
+      "file": "table-colors/table-colors.pptx",
+      "sha256": "639b8026a6d1a67df4aa6f06f9c18929d73e3466ced6f08b7fbfd0d0f566332a",
+      "bytes": 39048
+    },
+    {
+      "file": "tooling/chart-modes.mjs",
+      "sha256": "6ddd6db15a8df400ca6ef41edc9dcb20269baa5d846c42aef0fdd47d837ad490",
+      "bytes": 3637
+    },
+    {
+      "file": "tooling/expected-graph.json",
+      "sha256": "114376eb1e194206d99d2686db441275df25fb284688917d22cdd6c541339288",
+      "bytes": 148933
+    },
+    {
+      "file": "tooling/finish.mjs",
+      "sha256": "d2410065817f2a5b1ac922f22e838614cc57e0770485d3a0c55c46f0a480fa3e",
+      "bytes": 4143
+    },
+    {
+      "file": "tooling/fonts.mjs",
+      "sha256": "820ece46ce9fa975e82038f647221b4992b9e8389199909b7514bea04311fec2",
+      "bytes": 1258
+    },
+    {
+      "file": "tooling/generate.mjs",
+      "sha256": "8b77e0d8b1a347ad54ba9ea621e194bac49318fc27aa32f8f25d9467eb8b1226",
+      "bytes": 7915
+    },
+    {
+      "file": "tooling/graph.mjs",
+      "sha256": "a3ccc0b95b6fb2d2b2ffe312522b988a42a5b205a9e0c58c119264d1fa81bb6b",
+      "bytes": 1659
+    },
+    {
+      "file": "tooling/inspect.mjs",
+      "sha256": "3c91b6d73890ea8af7b5b4d57cb5497140b8205ffd9ff214e130f2fcaaca0922",
+      "bytes": 7747
+    },
+    {
+      "file": "tooling/native-furniture-control.ps1",
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "bytes": 27761
+    },
+    {
+      "file": "tooling/native-furniture-harness-check.ps1",
+      "sha256": "2c14c170daa5e952da9879e69410624a5bde13c2b43581bc2b078a084ad2e6f4",
+      "bytes": 6623
+    },
+    {
+      "file": "tooling/native-picture-control.ps1",
+      "sha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "bytes": 21632
+    },
+    {
+      "file": "tooling/native-picture-harness-check.ps1",
+      "sha256": "0b88466e9ccd6bfb6a62f7f9fa52b987a11743047d495735fc2f5c256ed503d1",
+      "bytes": 2726
+    },
+    {
+      "file": "tooling/native-process.ps1",
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "bytes": 2341
+    },
+    {
+      "file": "tooling/native-table-colors-staged.mjs",
+      "sha256": "29f12fdd2bec2bc554eb839ac3b769a54828b4a3e1c8cda958babc76cc494c57",
+      "bytes": 7584
+    },
+    {
+      "file": "tooling/native-table-colors.mjs",
+      "sha256": "269dfff133bc6a4184e63582afc969eccf234994c8dc922c00924234ea31c950",
+      "bytes": 7245
+    },
+    {
+      "file": "tooling/native-table-colors.ps1",
+      "sha256": "04ae8767029de0e6ed4017daf3fa8420fd109264aa6300abb978dc95f5b0a81a",
+      "bytes": 5753
+    },
+    {
+      "file": "tooling/pareto-single-control.mjs",
+      "sha256": "7bac8d20f9fc20c37074b312e154ede1476fc7a0fea98e59d0b33e9af7aa92b8",
+      "bytes": 2146
+    },
+    {
+      "file": "tooling/rich-title-probe.mjs",
+      "sha256": "1a89fd5daac9aeaf2034fcde899f11ee1591a68dc765c90885ea7b3148cfddc6",
+      "bytes": 1870
+    },
+    {
+      "file": "tooling/test.mjs",
+      "sha256": "76d3b21684512fa28ad727e148e00c9971c04ebe81be7e0ec705846cffde0a6e",
+      "bytes": 3291
+    }
+  ],
+  "decks": [
+    {
+      "name": "layout-title-auto",
+      "roundTripEqual": true,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "layout-media-regions",
+      "roundTripEqual": true,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "layout-empty-custom",
+      "roundTripEqual": true,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "table-save",
+      "roundTripEqual": true,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "furniture-inherited",
+      "roundTripEqual": true,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "furniture-flags",
+      "roundTripEqual": false,
+      "slideCount": 3,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "picture-control",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "not-chart-fixture"
+    },
+    {
+      "name": "chart-treemap-category",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-histogram-single",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-histogram-category",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-pareto-multi",
+      "roundTripEqual": false,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-box-multi",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-waterfall-single",
+      "roundTripEqual": false,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-funnel-category",
+      "roundTripEqual": true,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-world-category",
+      "roundTripEqual": false,
+      "slideCount": 1,
+      "automaticControlEligible": true,
+      "chartex": "auto"
+    },
+    {
+      "name": "chart-all-seven",
+      "roundTripEqual": false,
+      "slideCount": 7,
+      "automaticControlEligible": false,
+      "chartex": "auto"
+    }
+  ],
+  "negativeControls": [],
+  "fontInventory": {
+    "name": "@expo-google-fonts/roboto",
+    "version": "0.4.3",
+    "pack": "base",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/roboto/v/0.4.3",
+    "license": "OFL-1.1",
+    "licenseFile": "LICENSE_FONT",
+    "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+    "reservedFontNames": [],
+    "upstream": "https://github.com/googlefonts/roboto-classic",
+    "copyright": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)",
+    "faces": [
+      {
+        "file": "400Regular/Roboto_400Regular.ttf",
+        "family": "Roboto",
+        "weight": 400,
+        "italic": false,
+        "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+      },
+      {
+        "file": "500Medium/Roboto_500Medium.ttf",
+        "family": "Roboto Medium",
+        "weight": 500,
+        "italic": false,
+        "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+      },
+      {
+        "file": "600SemiBold/Roboto_600SemiBold.ttf",
+        "family": "Roboto SemiBold",
+        "weight": 600,
+        "italic": false,
+        "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+      },
+      {
+        "file": "700Bold/Roboto_700Bold.ttf",
+        "family": "Roboto",
+        "weight": 700,
+        "italic": false,
+        "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+      },
+      {
+        "file": "800ExtraBold/Roboto_800ExtraBold.ttf",
+        "family": "Roboto ExtraBold",
+        "weight": 800,
+        "italic": false,
+        "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+      },
+      {
+        "file": "400Regular_Italic/Roboto_400Regular_Italic.ttf",
+        "family": "Roboto",
+        "weight": 400,
+        "italic": true,
+        "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+      },
+      {
+        "file": "700Bold_Italic/Roboto_700Bold_Italic.ttf",
+        "family": "Roboto",
+        "weight": 700,
+        "italic": true,
+        "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+      }
+    ],
+    "actualLicenseVerified": true,
+    "actualFaceHashesVerified": true,
+    "registeredByAgent": false
+  }
+}

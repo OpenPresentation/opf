@@ -1,0 +1,8 @@
+file:///private/tmp/rr20-t31-packet-tooling-v3/inspect.mjs:24
+for(const mode of ['auto','fallback']){const record=modes.find(r=>r.name==='pareto-multi'&&r.mode===mode);assert.ok(record&&!record.rejected);const exported=unzipSync(await readFile(path.join(output,record.file)));const chart=strFromU8(exported['ppt/charts/chart1.xml']);assert.equal([...chart.matchAll(/<c:ser>/g)].length,3);for(const key of Object.keys(exported))if(key.startsWith('ppt/tags/'))delete exported[key];const imported=await fromPptx(zipSync(exported),{catalogs:[gallery]});assert.deepEqual(imported.slides[0].chart.data,paretoSource.slides[0].chart.data);assert.ok(record.diagnostics.some(d=>d.code==='chart-data-adapted'&&d.adaptation==='chartex-fallback'));assert.ok(!record.diagnostics.some(d=>d.adaptation==='series-dropped'));}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^
+
+TypeError: Cannot read properties of undefined (reading 'data')
+    at file:///private/tmp/rr20-t31-packet-tooling-v3/inspect.mjs:24:530
+
+Node.js v24.21.0
