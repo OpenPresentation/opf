@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {execFileSync} from 'node:child_process';
-import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,existsSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,existsSync,symlinkSync} from 'node:fs';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph,assertInstalledCandidatePeers} from './candidate-gallery-pack.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
  const original={name:'@openpresentation/opf',version:'0.19.0-dev.0',dependencies:{'@openpresentation/gallery':'^1.0.0',other:'^3.0.0'},peerDependencies:{'@openpresentation/opf-render':'^0.18.0'},scripts:{build:'never execute'},devDependencies:{typescript:'5'},opf:{requiresUnreleasedGallery:'2.0.0',other:true}};
@@ -40,7 +40,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
   mkdirSync(path.join(root,'.github'));writeFileSync(path.join(root,'.github/candidate-gallery.json'),JSON.stringify({version:1,gallery:{repository:'OpenPresentation/gallery',version:'2.0.0',sha:gallerySha}}));
-  writeFileSync(path.join(root,'.gitignore'),'artifacts/\n');
+  writeFileSync(path.join(root,'.gitignore'),'artifacts/\npackages/*/dist/\n');
   for(const directory of roots.slice(0,4))commit(directory);
   delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>candidateArtifacts(root),/no published fallback/);
   process.env.CANDIDATE_GALLERY_REF=gallerySha;
@@ -58,12 +58,22 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   assert.equal(output.core,path.join(global.modules,'@openpresentation/opf/package.json'));assert.equal(output.gallery,path.join(global.modules,'@openpresentation/gallery/package.json'));
   const executed=JSON.parse(run('npm',['exec','--offline','--cache',path.join(workspace,'cache'),...standalone.map(file=>`--package=${file}`),'--','rr78'],workspace));
   assert.ok(executed.core.includes(`${path.sep}_npx${path.sep}`));assert.ok(!executed.core.startsWith(global.modules+path.sep),'npm exec must not borrow global install');
+  const modules=path.join(consumer,'node_modules'),peerNames=['@openpresentation/opf-render','@openpresentation/opf-pptx'];
+  assert.equal(assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0').run,true);
+  const modulesAlias=path.join(workspace,'global-modules-alias');symlinkSync(modules,modulesAlias,process.platform==='win32'?'junction':'dir');
+  assert.equal(assertInstalledCandidatePeers(root,modulesAlias,peerNames,'0.19.0-next.0').run,true,'canonical global root supports system tmpdir aliases');
+  assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.18.3'),/core version differs/);
+  const peerManifest=path.join(modules,peerNames[0],'package.json'),peerBytes=readFileSync(peerManifest);
+  writeFileSync(peerManifest,JSON.stringify({...JSON.parse(peerBytes),dependencies:{'@openpresentation/opf':'file:/unreviewed.tgz'}}));
+  assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer metadata differs/);writeFileSync(peerManifest,peerBytes);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf/dist/index.js');
-  writeFileSync(installed,'changed\n');assert.throws(()=>assertInstalledCandidateGraph(root,consumer),/installed runtime differs/);
+  writeFileSync(installed,'changed\n');assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer runtime differs/);assert.throws(()=>assertInstalledCandidateGraph(root,consumer),/installed runtime differs/);
   const file=path.join(out,report.artifacts[0].file),original=readFileSync(file);writeFileSync(file,'tampered');
   assert.throws(()=>candidateArtifacts(root),/tarball digest mismatch/);writeFileSync(file,original);
   const manifestFile=path.join(out,'manifest.json'),bytes=readFileSync(manifestFile);const altered=structuredClone(report);altered.artifacts[0].sourceSha='f'.repeat(40);writeFileSync(manifestFile,JSON.stringify(altered));
   assert.throws(()=>candidateArtifacts(root),/source SHA mismatch/);writeFileSync(manifestFile,bytes);
+  const built=path.join(root,'packages/javascript/dist/index.js'),builtBytes=readFileSync(built);
+  writeFileSync(built,'rebuilt after qualification\n');assert.throws(()=>candidateArtifacts(root),/runtime differs from built source/);writeFileSync(built,builtBytes);
   const staged=path.join(out,'staging/opf/package.json');writeFileSync(staged,'{}');assert.throws(()=>candidateArtifacts(root),/staging metadata differs/);
  }finally{if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(workspace,{recursive:true,force:true});}
 });

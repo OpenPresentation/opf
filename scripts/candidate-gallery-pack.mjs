@@ -131,3 +131,23 @@ export function assertInstalledCandidateGraph(root,consumer){
  assert.equal([...galleryPaths][0],path.join(consumer,'node_modules/@openpresentation/gallery/package.json'));
  return report;
 }
+
+// Local file dependency relationships are validated as artifacts, never interpreted as published semver.
+export function assertInstalledCandidatePeers(root,modules,names,coreVersion){
+ const graph=candidateArtifacts(root);assert.ok(graph,'candidate peers require an explicit staged graph');
+ // macOS tmpdir has a system /var -> /private/var alias; validate package leaves under its canonical root.
+ modules=realpathSync(modules);
+ const core=graph.artifacts.find(item=>item.name==='@openpresentation/opf');
+ assert.equal(coreVersion,core.version,'installed core version differs from the staged graph');
+ for(const name of ['@openpresentation/opf',...names]){
+  const item=graph.artifacts.find(record=>record.name===name);assert.ok(item,'unknown staged peer');
+  const directory=path.join(modules,name);assert.equal(realpathSync(directory),directory,'installed peer is aliased');
+  assert.deepEqual(readRegularJson(path.join(directory,'package.json')),item.stagedManifest,'installed peer metadata differs from the exact staged graph');
+  for(const file of item.npmPack.files){if(file.path==='package.json')continue;
+   const installed=path.join(directory,file.path);assert.equal(realpathSync(installed),installed,'installed peer runtime is aliased');
+   assert.deepEqual(readFileSync(installed),readFileSync(path.join(root,'artifacts/npm/staging',name.split('/')[1],file.path)),'installed peer runtime differs from staged bytes');
+  }
+  if(name!=='@openpresentation/opf')assert.equal(createRequire(path.join(directory,'package.json')).resolve('@openpresentation/opf/package.json'),path.join(modules,'@openpresentation/opf/package.json'),'installed peer resolves a different core');
+ }
+ return {run:true};
+}

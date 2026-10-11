@@ -12,7 +12,7 @@ import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
-import {candidateArtifacts} from '../../../scripts/candidate-gallery-pack.mjs';
+import {candidateArtifacts,assertInstalledCandidatePeers} from '../../../scripts/candidate-gallery-pack.mjs';
 import {qualificationPeerGate} from '../../../scripts/candidate-gallery-results.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
@@ -79,7 +79,7 @@ try {
   // A new core minor is released before its siblings: until they publish, the published siblings' own core range does not
   // accept the candidate core and npm nests another core under them (RR-55: wait on the core release prep, its queue run and
   // the core tag; the CLI release keeps the hard gate).
-  if (!report(requireCandidateGate(peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version})))) process.exit(0);
+  if (!report(requireCandidateGate(candidateGraph ? assertInstalledCandidatePeers(root,modules,['@openpresentation/opf-render','@openpresentation/opf-pptx'],JSON.parse(await readFile(path.join(modules,'@openpresentation/opf/package.json'),'utf8')).version) : peerCoreGate({modules, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], coreVersion: JSON.parse(await readFile(path.join(modules, '@openpresentation/opf/package.json'), 'utf8')).version})))) process.exit(0);
   // One core for the command, the application's @openpresentation/opf and both peers.
   await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);

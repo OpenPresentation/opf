@@ -6,6 +6,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {candidateArtifacts} from '../../../scripts/candidate-gallery-pack.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {satisfies} from '../../../scripts/unreleased-gate.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
@@ -37,7 +38,10 @@ function run(command,args,cwd,env={}) {
 }
 try {
  await mkdir(out,{recursive:true});
- if(!registry)run('pnpm',['build'],pkg);
+ // Candidate artifacts already bind every packed byte to the freshly built source graph.
+ // Rebuilding here would replace those qualified bytes; ordinary local packing still builds.
+ const candidateGraph=registry?undefined:candidateArtifacts(root);
+ if(!registry&&!candidateGraph)run('pnpm',['build'],pkg);
  const cache=path.join(temp,'npm-cache');
  // RR-62: the CLI depends on core (one core: the command runs its Node engine). A local run packs the candidate core
  // with it and installs both; a registry run installs the published CLI, which pulls the published core.
