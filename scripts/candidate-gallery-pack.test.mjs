@@ -6,6 +6,7 @@ import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
 import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
  const original={name:'@openpresentation/opf',version:'0.19.0-dev.0',dependencies:{'@openpresentation/gallery':'^1.0.0',other:'^3.0.0'},peerDependencies:{'@openpresentation/opf-render':'^0.18.0'},scripts:{build:'never execute'},devDependencies:{typescript:'5'},opf:{requiresUnreleasedGallery:'2.0.0',other:true}};
@@ -20,7 +21,7 @@ test('explicit staged metadata keeps source versions and records only candidate 
  for(const present of [null,false,0]){assert.throws(()=>assertPublishedGallery({},present),/unresolved/);assert.throws(()=>assertPublishedGallery({opf:{requiresUnreleasedGallery:present}}),/unresolved/);}
 });
 
-test('real six-package tarballs bind source, staged manifests, installed bytes and one gallery',()=>{
+test('real six-package tarballs bind source, staged manifests, installed bytes and one gallery',async()=>{
  const workspace=realpathSync(mkdtempSync(path.join(tmpdir(),'rr78-tarballs-'))),root=path.join(workspace,'opf');
  const previous=process.env.CANDIDATE_GALLERY_REF;
  const run=(command,args,cwd)=>execFileSync(command,args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
@@ -47,6 +48,15 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   const out=path.join(root,'artifacts/npm'),report=stageGalleryGraph({coreRoot:root,workspace,out,run});
   assert.equal(report.artifacts.length,6);assert.equal(report.published,false);
   assert.deepEqual(candidateArtifacts(root),report);
+  const qualifiedDist=path.join(root,'packages/javascript/dist/index.js'),qualifiedBytes=readFileSync(qualifiedDist);
+  const rebuild=()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(qualifiedDist)},'ordinary rebuild')`]);
+  assert.deepEqual(await preparePackedSmokeCli({root,build:rebuild}),report);
+  assert.deepEqual(readFileSync(qualifiedDist),qualifiedBytes,'candidate smoke must not rebuild validated dist');
+  writeFileSync(qualifiedDist,'unqualified runtime');
+  await assert.rejects(preparePackedSmokeCli({root,build:rebuild}),/runtime differs from built source/);
+  assert.equal(readFileSync(qualifiedDist,'utf8'),'unqualified runtime','invalid candidate must fail before build');
+  writeFileSync(qualifiedDist,qualifiedBytes);
+
   const consumer=path.join(workspace,'consumer');mkdirSync(consumer);writeFileSync(path.join(consumer,'package.json'),JSON.stringify({private:true,dependencies:Object.fromEntries(report.artifacts.map(item=>[item.name,`file:${path.join(out,item.file)}`]))}));
   run('npm',['install','--offline','--cache',path.join(workspace,'cache'),'--ignore-scripts','--no-audit','--no-fund'],consumer);
   assertInstalledCandidateGraph(root,consumer);
@@ -82,4 +92,17 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   writeFileSync(built,'rebuilt after qualification\n');assert.throws(()=>candidateArtifacts(root),/runtime differs from built source/);writeFileSync(built,builtBytes);
   const staged=path.join(out,'staging/opf/package.json');writeFileSync(staged,'{}');assert.throws(()=>candidateArtifacts(root),/staging metadata differs/);
  }finally{if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(workspace,{recursive:true,force:true});}
+});
+
+test('ordinary packed smoke still builds the CLI',async()=>{
+ const root=realpathSync(mkdtempSync(path.join(tmpdir(),'rr78-smoke-build-')));
+ const previous=process.env.CANDIDATE_GALLERY_REF;
+ try {
+  delete process.env.CANDIDATE_GALLERY_REF;
+  mkdirSync(path.join(root,'packages/javascript'),{recursive:true});
+  writeFileSync(path.join(root,'packages/javascript/package.json'),JSON.stringify({name:'@openpresentation/opf',version:'0.18.3'}));
+  const marker=path.join(root,'built');
+  assert.equal(await preparePackedSmokeCli({root,build:()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(marker)},'built')`])}),null);
+  assert.equal(readFileSync(marker,'utf8'),'built');
+ } finally {if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(root,{recursive:true,force:true});}
 });

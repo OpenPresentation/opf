@@ -8,7 +8,7 @@ import { promisify } from "node:util";
 import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
-import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {packCliCandidate,preparePackedSmokeCli} from '../../../scripts/pack-cli-candidate.mjs';
 import {candidateArtifacts} from '../../../scripts/candidate-gallery-pack.mjs';
 import {assertPublishedGallery} from '../../../scripts/candidate-gallery.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
@@ -107,7 +107,7 @@ try {
   // under test (one core: the override below points the CLI's dependency at the candidate core tarball).
   let cliTarball;
   if (!registry) {
-    await run('pnpm', ['--filter', '@openpresentation/cli', 'build'], { cwd: path.resolve(packageRoot, '../..') });
+    await preparePackedSmokeCli({ root: path.resolve(packageRoot, '../..'), build: () => run('pnpm', ['--filter', '@openpresentation/cli', 'build'], { cwd: path.resolve(packageRoot, '../..') }) });
     const runSync = (command, args, cwd) => {
       if (command === 'npm') ({command, args} = packageManagerInvocation(command, args));
       const result = spawnSync(command, args, { cwd, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });

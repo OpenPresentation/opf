@@ -13,6 +13,14 @@ import path from 'node:path';
 import {candidateArtifacts} from './candidate-gallery-pack.mjs';
 import { satisfies } from './unreleased-gate.mjs';
 
+// Validate staged source and runtime bytes before deciding whether a build is safe.
+// A candidate build would replace the very dist tree qualified by the artifact manifest.
+export async function preparePackedSmokeCli({ root, build }) {
+  const graph = candidateArtifacts(root);
+  if (!graph) await build();
+  return graph;
+}
+
 export const CORE = '@openpresentation/opf';
 
 /**
