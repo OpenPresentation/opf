@@ -61,6 +61,13 @@ try {
   page.on('console', message => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) errors.push(message.text()); });
   const button = name => page.getByRole('button', { name, exact: true });
   const dock = page.locator('#data-grid-dock');
+  const selectEditorText = async () => {
+    const editor = dock.getByRole('textbox');
+    const value = await editor.inputValue();
+    assert.equal(await editor.evaluate(node => node === document.activeElement), true, 'cell editor retains keyboard focus');
+    await page.keyboard.press('ControlOrMeta+A');
+    assert.deepEqual(await editor.evaluate(node => [node.selectionStart, node.selectionEnd]), [0, value.length], 'native cell editor selects all text');
+  };
   const grid = dock.getByRole('grid');
   const doc = async () => JSON.parse(await page.locator('#json').inputValue());
   const settle = () => page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent) && !document.querySelector('#preview')?.textContent.includes('Loading fonts'), undefined, { timeout: 60000 });
@@ -198,14 +205,14 @@ try {
     const editor = dock.getByRole('textbox', { name: 'Edit Row 1, column B' });
     await editor.waitFor();
     assert.equal(await editor.inputValue(), '12', 'F2 edits the current text');
-    await page.keyboard.press('Control+a');
+    await selectEditorText();
     await page.keyboard.type('33');
     await page.keyboard.press('Enter');
   }, current => chartData(current).rows[0][1] === 33);
   // The edit above was undone by step(); redo it to check where the cursor went.
   await cell(1, 1).focus();
   await page.keyboard.press('Enter');
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('33');
   await page.keyboard.press('Enter');
   await waitDoc(current => chartData(current).rows[0][1] === 33, 'Enter commits');
@@ -229,7 +236,7 @@ try {
   assert.equal((await doc()).slides[1].blocks[0].chart.data.rows[0][2], 5, 'Escape changes nothing');
   assert.match(await status(), /Edit cancelled/);
   await page.keyboard.press('F2');
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('6');
   await page.keyboard.press('Shift+Tab');
   await waitDoc(current => chartData(current).rows[0][2] === 6, 'Shift+Tab commits');
@@ -256,7 +263,7 @@ try {
   // Validation: text in a series cell is refused inline, nothing is written.
   await cell(1, 1).click();
   await page.keyboard.press('F2');
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('twelve');
   const editor = dock.getByRole('textbox');
   assert.equal(await editor.getAttribute('aria-invalid'), 'true', 'the editor is marked invalid as you type');
@@ -264,13 +271,13 @@ try {
   await page.keyboard.press('Enter');
   assert.equal(await dock.getByRole('textbox').count(), 1, 'Enter keeps the editor open while the text is invalid');
   assert.deepEqual(await doc(), source, 'nothing was written');
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('1,5');
   assert.match(await alert(), /1\.234,56 format/, 'the message names the format that reads it');
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('45%');
   assert.match(await alert(), /percent/i);
-  await page.keyboard.press('Control+a');
+  await selectEditorText();
   await page.keyboard.type('12');
   assert.equal(await editor.getAttribute('aria-invalid'), null, 'a valid number clears the mark');
   assert.equal(await alert(), '');
@@ -278,8 +285,8 @@ try {
   mark('invalid numbers are refused inline with the reason, never written as 0');
 
   // Headers and categories are text.
-  await step('rename a series', async () => { await cell(0, 1).click(); await page.keyboard.press('F2'); await page.keyboard.press('Control+a'); await page.keyboard.type('Sales'); await page.keyboard.press('Enter'); }, current => chartData(current).columns[1] === 'Sales');
-  await step('rename a category', async () => { await cell(2, 0).click(); await page.keyboard.press('F2'); await page.keyboard.press('Control+a'); await page.keyboard.type('Second quarter'); await page.keyboard.press('Enter'); }, current => chartData(current).rows[1][0] === 'Second quarter');
+  await step('rename a series', async () => { await cell(0, 1).click(); await page.keyboard.press('F2'); await selectEditorText(); await page.keyboard.type('Sales'); await page.keyboard.press('Enter'); }, current => chartData(current).columns[1] === 'Sales');
+  await step('rename a category', async () => { await cell(2, 0).click(); await page.keyboard.press('F2'); await selectEditorText(); await page.keyboard.type('Second quarter'); await page.keyboard.press('Enter'); }, current => chartData(current).rows[1][0] === 'Second quarter');
 
   // Ctrl+Z in the grid undoes the last edit, Ctrl+Y redoes it.
   await cell(1, 1).click();
@@ -335,15 +342,15 @@ try {
   assert.equal(copied.text, 'Q1\t12\t5\nQ2\t18\t', 'copy writes the selection as TSV, a gap as an empty cell');
   assert.equal(copied.prevented, true);
   assert.match(await status(), /Copied 2 rows by 3 columns/);
-  // The real keys use the real clipboard: Ctrl+C writes TSV, Ctrl+V reads it.
+  // Ctrl+C is handled by the grid; the platform paste shortcut dispatches the browser's real clipboard event.
   await page.evaluate(() => navigator.clipboard.writeText('stale'));
   await page.keyboard.press('Control+c');
   await page.waitForFunction(() => /Copied 2 rows/.test(document.querySelector('#data-grid-dock .opf-grid-status').textContent));
   assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n'), 'Q1\t12\t5\nQ2\t18\t', 'Ctrl+C puts the selection on the clipboard as TSV');
-  await step('Ctrl+V pastes the clipboard', async () => {
+  await step('platform paste shortcut pastes the clipboard', async () => {
     await cell(1, 1).click();
     await page.evaluate(() => navigator.clipboard.writeText('77\t88\n99\t\n'));
-    await page.keyboard.press('Control+v');
+    await page.keyboard.press('ControlOrMeta+V');
   }, current => JSON.stringify(chartData(current).rows.slice(0, 2).map(row => row.slice(1))) === '[[77,88],[99,null]]');
   assert.equal(await dock.locator('.opf-grid-error').textContent(), '');
   // Cut copies and clears in one step.
@@ -474,7 +481,7 @@ try {
   await page.keyboard.press('Shift+ArrowRight');
   assert.equal(await dock.locator('td[aria-selected="true"]').count(), 3, 'a selection that touches a merge takes the whole merge (the merged cell and the two cells beside it)');
   // Editing a rich cell keeps its runs.
-  await step('editing a rich cell keeps its formatting', async () => { await cell(3, 0).click(); await page.keyboard.press('F2'); await page.keyboard.press('Control+a'); await page.keyboard.type('East shore'); await page.keyboard.press('Enter'); }, current => JSON.stringify(current.slides[2].blocks[0].table.rows[2][0]) === '["East ",{"text":"shore","bold":true}]');
+  await step('editing a rich cell keeps its formatting', async () => { await cell(3, 0).click(); await page.keyboard.press('F2'); await selectEditorText(); await page.keyboard.type('East shore'); await page.keyboard.press('Enter'); }, current => JSON.stringify(current.slides[2].blocks[0].table.rows[2][0]) === '["East ",{"text":"shore","bold":true}]');
   // Operations keep merges whole.
   await step('a row inserted inside a merge grows it', async () => { await cell(1, 1).click(); await toolbarButton('Insert row below').click(); }, current => current.slides[2].blocks[0].table.rows[0][0].rowSpan === 3);
   await step('a row deleted from a merge shrinks it', async () => { await cell(2, 1).click(); await toolbarButton('Delete rows').click(); }, current => current.slides[2].blocks[0].table.rows[0][0] === 'North' && current.slides[2].blocks[0].table.rows.length === 3);

@@ -86,7 +86,11 @@ try {
 
   // A cell edit reaches the dataset's own column.
   await page.locator('td[data-line="2"][data-column="2"]').dblclick();
-  await page.keyboard.press('Control+a');
+  const cellEditor = page.getByRole('textbox', { name: /^Edit / });
+  assert.equal(await cellEditor.evaluate(node => node === document.activeElement), true, 'dataset cell editor retains keyboard focus');
+  const cellText = await cellEditor.inputValue();
+  await page.keyboard.press('ControlOrMeta+A');
+  assert.deepEqual(await cellEditor.evaluate(node => [node.selectionStart, node.selectionEnd]), [0, cellText.length], 'dataset cell editor selects all text');
   await page.keyboard.type('80');
   await page.keyboard.press('Enter');
   assert.equal((await datasetOf()).rows[1][2], 80);

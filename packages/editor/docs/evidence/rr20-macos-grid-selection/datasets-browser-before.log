@@ -1,0 +1,31 @@
+
+> browser:data-grid: npm run test:data-grid-browser
+
+> @openpresentation/opf-editor@0.18.1 test:data-grid-browser
+> node test/data-grid-browser.mjs
+
+Data grid (browser): 51 checks. selecting a chart shows its data, with the gap as a gap; the grid exposes grid, row, columnheader, rowheader and gridcell semantics with indexes and a status and alert region; arrows, Home, End, Ctrl+Home, Ctrl+End, PageUp and Shift+arrows move and select; F2 edit then Enter; typing, F2, Enter, Shift+Enter, Tab, Shift+Tab and Escape edit and move; Delete clears a cell to a gap; Delete clears a selection in one step; invalid numbers are refused inline with the reason, never written as 0; rename a series; rename a category; Ctrl+Z and Ctrl+Y undo and redo from the grid; paste TSV into a chart; paste Excel quoting and a header; paste decimal commas; one value fills a selection; the paste box; paste: TSV grows the grid, Excel quoting, decimal commas, refusal, fill, paste box; platform paste shortcut pastes the clipboard; cut clears the selection; copy writes TSV and cut clears in one step; insert a chart row; insert a row below; delete rows; move a row down; move a row up; insert a series; delete a column; move a column left; transpose; sort descending; sort ascending by a series with a gap; rows, columns, transpose and sort through the toolbar; row and column headers, Shift+click and dragging select; the number format decides how numbers are read and shown; edit a table cell; a canonical number becomes a number; table text stays text; insert a table row; delete a table row; move a table row; insert a table column; move a table column; delete a table column; sort a table by a number column; the header row off and on; table cells, rows, columns, sort and the header row; editing a rich cell keeps its formatting; a row inserted inside a merge grows it; a row deleted from a merge shrinks it; merged cells draw with spans, keyboard steps over them, and operations keep them whole or say why not; accessibility: names, one tab stop per toolbar, no keyboard trap, visible focus, contrast, forced colors, reflow.
+
+> browser:data-grid-datasets: npm run test:data-grid-datasets-browser
+
+> @openpresentation/opf-editor@0.18.1 test:data-grid-datasets-browser
+> node test/data-grid-datasets-browser.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+808 !== 80
+
+    at file:///private/tmp/opf-editor-grid-mac-test/test/data-grid-datasets-browser.mjs:92:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 808,
+  expected: 80,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
