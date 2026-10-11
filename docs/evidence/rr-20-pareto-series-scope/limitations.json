@@ -1,0 +1,12 @@
+{
+  "records": [
+    {
+      "type": "charts",
+      "id": "pareto",
+      "code": "missing-export",
+      "scope": "Existing roundTrip/parity/native verdicts cover the measured single-series Pareto input; they do not establish preservation of arbitrary multi-series source data.",
+      "detail": "Multi-series Pareto keeps only the first numeric series: the four-column North/South/West input re-imports as two columns, with chart-data-adapted / series-dropped. Data preservation remains open (issue 246); no failed native result is inferred.",
+      "evidence": "docs/evidence/rr-20-pareto-series-scope/reproduction.json"
+    }
+  ]
+}

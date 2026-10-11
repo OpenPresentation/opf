@@ -1,0 +1,159 @@
+{
+  "sourceHeads": {
+    "source": {
+      "core": "3e8cc60e9aef14b9caa325d2dfbf0a59fcabdaa0",
+      "renderer": "d57236802c8746fde430998bf2ddc9d16fe86712",
+      "pptx": "25ecc82dce8ac5018837924d5f559315fde5f9b0",
+      "editor": "569a83488fe0f833a97f08bba520513b276c38d5",
+      "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+    },
+    "replay": "d20895f2ba07a20fd870568ba424d6b66f679943",
+    "tooling": "7a768be4a44def7079579f05b689ca3120265fc0",
+    "oracle": "a9cd23ba803e38e9bb860d8a3522c45c2e9c380a",
+    "serialized": true,
+    "allExitCodes": 0,
+    "sixTarballDigestsUnchanged": true,
+    "registryAcceptance": false,
+    "nativeAcceptance": false
+  },
+  "packetSeal": {
+    "packetSha256": "7e7baaf52c217317898423ebc62095f858e59a3cc6f1305f537e30299bffedcf",
+    "offlineResultSha256": "edd6e4c3caa8f5d5dcbf99ab461cf3093427b5c0c1d5e110405cf7817202f2c6"
+  },
+  "input": {
+    "design": {
+      "fontScheme": "roboto",
+      "dimensions": {
+        "widthInches": 13.333333,
+        "heightInches": 7.5
+      }
+    },
+    "slides": [
+      {
+        "title": "pareto",
+        "chart": {
+          "type": "pareto",
+          "data": {
+            "columns": [
+              "Quarter",
+              "North",
+              "South",
+              "West"
+            ],
+            "rows": [
+              [
+                "Q1",
+                4,
+                3,
+                2
+              ],
+              [
+                "Q2",
+                5,
+                2,
+                3
+              ],
+              [
+                "Q3",
+                6,
+                4,
+                1
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "imported": {
+    "slides": [
+      {
+        "title": "pareto",
+        "chart": {
+          "type": "pareto",
+          "data": {
+            "columns": [
+              "Quarter",
+              "North"
+            ],
+            "rows": [
+              [
+                "Q1",
+                4
+              ],
+              [
+                "Q2",
+                5
+              ],
+              [
+                "Q3",
+                6
+              ]
+            ]
+          }
+        }
+      }
+    ],
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333,
+        "heightInches": 7.5
+      },
+      "fontScheme": "roboto"
+    }
+  },
+  "export": {
+    "file": "inputs/chart-pareto-multi.pptx",
+    "sha256": "0620278fbc4cb537b397987b1e1cb6a8539a01bcd816429b03aa099397dfa454",
+    "diagnostics": [
+      {
+        "code": "chart-data-adapted",
+        "path": "slides.0.chart",
+        "message": "The pareto chart plots one series, so its first series 'North' is exported and the other 2 ('South', 'West') are not.",
+        "adaptation": "series-dropped"
+      }
+    ],
+    "mode": "auto",
+    "inputFile": "sources/chart-pareto-multi.opf.json",
+    "importedFile": "inspection/chart-pareto-multi-imported.opf.json"
+  },
+  "nativeExecution": false,
+  "issue": "https://github.com/OpenPresentation/opf-pptx/issues/246",
+  "historicalNativeInput": {
+    "galleryCommit": "34e6656854216c0fdbfd79fddcc55686cd6df7c7",
+    "chartSampleSource": "data/charts.json",
+    "conversionSource": "lib/opf-snippets.ts:463",
+    "nativeResult": "docs/evidence/rr-42-native-20261002/values.json",
+    "deck": "charts-02-stacked-area-3x",
+    "slide": 9,
+    "sampleData": {
+      "headers": [
+        "Cause",
+        "Scratches",
+        "Dents",
+        "Misalignment",
+        "Paint defects",
+        "Cracks",
+        "Loose fittings",
+        "Other"
+      ],
+      "rows": [
+        [
+          "Defects",
+          52,
+          31,
+          24,
+          15,
+          9,
+          6,
+          4
+        ]
+      ]
+    },
+    "opfDataColumns": [
+      "Cause",
+      "Defects"
+    ],
+    "note": "Gallery conversion turns the one sample row into one numeric OPF series; historical native verdict measured this single-series input."
+  }
+}

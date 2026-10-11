@@ -277,6 +277,17 @@ export function linkState(link, burndown) {
 export function buildTracker({ root = ROOT } = {}) {
   const overrides = readJson(root, FILES.overrides);
   const inputs = overrides.inputs;
+  const limitations = inputs.inputLimitations ? readJson(root, inputs.inputLimitations).records : [];
+  const limitationsBy = new Map();
+  for (const item of limitations) {
+    const key = `${item.type}/${item.id}`;
+    if (limitationsBy.has(key)) throw new Error(`duplicate input limitation: ${key}`);
+    if (!item.scope || !item.detail || !item.evidence) throw new Error(`incomplete input limitation: ${key}`);
+    if (!GAP_CODES.includes(item.code)) throw new Error(`unknown input limitation gap: ${item.code}`);
+    if (!existsSync(path.join(root, item.evidence))) throw new Error(`missing input limitation evidence: ${item.evidence}`);
+    limitationsBy.set(key, item);
+  }
+  const usedLimitations = new Set();
   const snapshots = readJson(root, FILES.snapshots);
   const gallery = snapshots.gallery;
   const editor = snapshots.editor;
@@ -431,6 +442,12 @@ export function buildTracker({ root = ROOT } = {}) {
       else if (nativeValue === "unverified") gaps.push({ code: "works-unverified", detail: "no committed native PowerPoint evidence names this value" });
 
       record.columns = { spec, compose: pipe.compose, preview: pipe.preview, export: pipe.export, roundTrip: pipe.roundTrip, parity: parityValue, editor: editorValue, gallery: galleryColumn, native: nativeValue, fonts: fonts.value };
+      const limitation = limitationsBy.get(`${type}/${id}`);
+      if (limitation) {
+        usedLimitations.add(`${type}/${id}`);
+        record.evidenceScope = limitation.scope;
+        gaps.push({ code: limitation.code, detail: limitation.detail, evidence: limitation.evidence });
+      }
       record.pipeline = pipe.pipeline;
       if (fonts.families.length) record.fonts = fonts.families.map((f) => `${f.family}: ${f.status}`);
       if (nativeDirs.length) record.nativeEvidence = nativeDirs;
@@ -439,6 +456,8 @@ export function buildTracker({ root = ROOT } = {}) {
       push(record);
     }
   }
+
+  for (const key of limitationsBy.keys()) if (!usedLimitations.has(key)) throw new Error(`input limitation names no active record: ${key}`);
 
   // fonts: one record per font tracker family
   for (const r of [...fontTracker.records].sort((a, b) => a.family.localeCompare(b.family, "en"))) {
@@ -530,6 +549,7 @@ export function buildTracker({ root = ROOT } = {}) {
       audits: { supportStatus: inputs.supportStatus, auditA: { file: inputs.auditA, heads: support.audits.a.heads }, auditB: { file: inputs.auditB, heads: support.audits.b.heads }, auditBExtra: auditBExtra.map((x) => ({ file: x.file, heads: x.heads, values: x.results.length })) },
       parity: { file: inputs.parity, generatedAt: parity.meta.generatedAt, heads: Object.fromEntries(Object.entries(parity.meta.heads).map(([k, v]) => [k, v.slice(0, 7)])), values: parity.results.length, note: overrides.parityNote },
       parityExtra: parityExtra.map((x) => ({ file: x.file, generatedAt: x.meta.generatedAt, heads: Object.fromEntries(Object.entries(x.meta.heads).map(([k, v]) => [k, String(v).slice(0, 7)])), values: x.results.length })),
+      inputLimitations: { file: inputs.inputLimitations ?? null, records: limitations.length },
       fontTracker: { file: inputs.fontTracker, asOf: fontTracker.asOf, records: fontTracker.records.length },
       nativeEvidence: { dir: inputs.evidence, rule: "json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it", runs: (inputs.nativeRuns ?? []).map((file) => ({ file, values: readJson(root, file).values.length })) },
       burndown: { file: inputs.burndown, items: burndownItems.length },
@@ -587,6 +607,12 @@ export function renderMarkdown(tracker) {
   for (const status of STATUSES) push(`| \`${status}\` | ${s.byStatus[status]} | ${STATUS_DEFINITIONS[status].severity} | ${cell(STATUS_DEFINITIONS[status].meaning)} |`);
   push("", "## Columns", "", "| Column | Values and source |", "| --- | --- |");
   for (const [column, text] of Object.entries(tracker.columns)) push(`| ${column} | ${cell(text)} |`);
+
+  const scoped = tracker.records.filter((r) => r.evidenceScope);
+  if (scoped.length) {
+    push("", "## Evidence scope", "", "Historical measured verdicts below retain their original input scope; an additional unsupported-input gap does not constitute a failed native run or a descope.", "", "| Type | Id | Measured input scope |", "| --- | --- | --- |");
+    for (const r of scoped) push(`| ${r.type} | \`${r.id}\` | ${cell(r.evidenceScope)} |`);
+  }
 
   // gaps grouped by type, gap code, rule and link
   const groups = new Map();
