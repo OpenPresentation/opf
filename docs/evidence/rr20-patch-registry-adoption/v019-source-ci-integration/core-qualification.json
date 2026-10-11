@@ -1,0 +1,39 @@
+{
+  "sourceExit": 0,
+  "sourceGraph": {
+    "opf": "9750c1005ef42296e4ed3cf9b36887d53a21a228",
+    "opf-render": "ad85c9823fac26cce5da52a24e2f1f4c2e8380a8",
+    "opf-pptx": "f62dd05a8ef0712ca2a35a11857f9085de6fd7a1",
+    "opf-editor": "96a5e62cde258f74549a069e4972f125009d3ffd",
+    "gallery-candidate": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+  },
+  "cleanSources": true,
+  "logs": {
+    "transcript.log": {
+      "sha256": "1ac30981109ad53a8a76899ac259630b565cadd2c832f0af232fd6154cf15c30",
+      "bytes": 1063
+    },
+    "source-full.log": {
+      "sha256": "f290dc34b20546eab7aa594629544ffaa049ff5ec39dea2da557ce4109081088",
+      "bytes": 246430
+    },
+    "build-stage.log": {
+      "sha256": "a31d915ce6003af790a6a7191c768c3adda805422fb86d9a7a456cf1b14ac3d6",
+      "bytes": 169406
+    },
+    "artifact-integrity.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "counts": {
+    "core": 2306,
+    "cliUnit": 198,
+    "cliCommands": 95,
+    "drawing": 77,
+    "rootChecks": 39
+  },
+  "published": false,
+  "native": false,
+  "fiveConsumersRepeated": false
+}
