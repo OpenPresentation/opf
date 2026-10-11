@@ -47,3 +47,17 @@ test('sibling published control selects the core tools repository/ref with an un
  assert.match(control,/assert\.match\(process\.env\.TOOLS_REF,\/\^\[0-9a-f\]\{40\}\$\//);
  assert.match(control,/rev-parse','HEAD'/);
 });
+
+test('installed candidate staging primes gallery engines before strict source linking',()=>{
+ const workflow=read('.github/workflows/ecosystem-ci.yml');
+ const job=workflow.slice(workflow.indexOf('  installed-portability:'),workflow.indexOf('  # RR-53:',workflow.indexOf('  installed-portability:')));
+ for(const command of ['pnpm build','node scripts/link-ecosystem.mjs --packages-only']){
+  const step=job.slice(job.indexOf(`      - run: ${command}\n`)).split('\n      - ')[0];
+  assert.ok(step.includes("if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery == ''"),'ordinary build/link cannot run before candidate closure priming');
+ }
+ assert.match(job,/Stage and qualify the exact six-package candidate graph\n        if: steps\.scope\.outputs\.run == 'true' && needs\.gallery\.outputs\.candidate_gallery != ''\n        run: node scripts\/candidate-gallery-build\.mjs/);
+ const build=read('scripts/candidate-gallery-build.mjs');
+ assert.ok(build.indexOf("symlinkSync(source,target,process.platform")<build.indexOf("run('node',['scripts/link-ecosystem.mjs','--packages-only'])"));
+ assert.match(read('scripts/link-ecosystem.mjs'),/await assertSingleCore/,'strict one-core guard remains');
+ assert.match(job,/node scripts\/pack-ecosystem\.mjs/);assert.match(job,/node scripts\/test-packed-ecosystem\.mjs/);
+});
