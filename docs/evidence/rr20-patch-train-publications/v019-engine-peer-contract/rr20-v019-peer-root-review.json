@@ -1,0 +1,16 @@
+{
+  "base": "b597dbe099166d62067ea1cc67696c45cc268177",
+  "head": "1921a28c6d4eea090dc368c13c75ca1b359bdc39",
+  "clean": true,
+  "changedPaths": [
+    "changes/rr-83-v019-optional-engine-contract.md",
+    "packages/cli/package.json",
+    "packages/cli/test/convert.test.mjs",
+    "packages/cli/test/doctor.test.mjs",
+    "packages/javascript/package.json",
+    "packages/javascript/src/node/peers.ts"
+  ],
+  "manifestsOnlyTwoOptionalPeerRangesChanged": true,
+  "lockByteUnchanged": true,
+  "review": "root read six-path diff and test outcomes; expected strict unpublished-engine and minor-version failures retained; no release acceptance"
+}

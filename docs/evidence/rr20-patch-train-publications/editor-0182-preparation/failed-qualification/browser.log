@@ -1,0 +1,23 @@
+
+> browser:data-grid: npm run test:data-grid-browser
+
+> @openpresentation/opf-editor@0.18.2 test:data-grid-browser
+> node test/data-grid-browser.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: F2 edit then Enter: {"name":"Data grid","language":"en-US","narrative":"problem-solution","tone":"formal","audience":["executive"],"speaker":{"id":"alice","name":"Alice Chen"},"organization":{"id":"acme","name":"Acme"},"design":{"theme":"classic","fontScheme":"roboto"},"slides":[{"id":"cover","title":"Data grid","subtitle":"Edit the numbers behind the story"},{"id":"data","title":"Data","composition":{"mode":"column"
+    at waitDoc (file:///private/tmp/release-train-editor-xeB1Wl/test/data-grid-browser.mjs:73:47)
+    at async step (file:///private/tmp/release-train-editor-xeB1Wl/test/data-grid-browser.mjs:103:19)
+    at async file:///private/tmp/release-train-editor-xeB1Wl/test/data-grid-browser.mjs:195:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: undefined,
+  operator: 'fail',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

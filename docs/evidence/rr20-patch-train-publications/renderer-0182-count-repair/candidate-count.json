@@ -1,0 +1,113 @@
+{
+  "renderer": "0.18.2",
+  "source": "09325bddb475d1de2d4650373c0de007764ef167",
+  "packages": [
+    {
+      "name": "intos",
+      "pack": "office",
+      "faces": 16
+    },
+    {
+      "name": "@expo-google-fonts/open-sans",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/montserrat",
+      "pack": "open",
+      "faces": 5
+    },
+    {
+      "name": "@expo-google-fonts/poppins",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/bebas-neue",
+      "pack": "open",
+      "faces": 1
+    },
+    {
+      "name": "pt-serif",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "lora",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "merriweather-sans",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "source-sans-3",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/red-hat-display",
+      "pack": "open",
+      "faces": 8
+    },
+    {
+      "name": "@expo-google-fonts/red-hat-text",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "raleway",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "playfair-display",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "barlow",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "anton",
+      "pack": "open",
+      "faces": 1
+    },
+    {
+      "name": "@expo-google-fonts/figtree",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/work-sans",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/eb-garamond",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/archivo-narrow",
+      "pack": "open",
+      "faces": 4
+    },
+    {
+      "name": "@expo-google-fonts/libre-caslon-text",
+      "pack": "open",
+      "faces": 3
+    },
+    {
+      "name": "@expo-google-fonts/bitter",
+      "pack": "open",
+      "faces": 4
+    }
+  ],
+  "manifestTotal": 94,
+  "actual": 94
+}

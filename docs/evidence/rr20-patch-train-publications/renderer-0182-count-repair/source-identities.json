@@ -1,0 +1,22 @@
+{
+  "opf": {
+    "head": "7e0a71d8e7d6f244bcc77b77af152d20d4c09461",
+    "status": "",
+    "version": "0.18.4"
+  },
+  "opf-render": {
+    "head": "09325bddb475d1de2d4650373c0de007764ef167",
+    "status": "",
+    "version": "0.18.2"
+  },
+  "opf-pptx": {
+    "head": "95a2f22fc2ecbef2c359649ea4b308c649923fb4",
+    "status": "",
+    "version": "0.18.1"
+  },
+  "opf-editor": {
+    "head": "39e62a61b323753b47a504621216754c14c78c86",
+    "status": "",
+    "version": "0.18.1"
+  }
+}

@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-editor@0.18.1 typecheck
+> node scripts/check-syntax.mjs src test scripts examples
+
+205 files checked, 0 failed

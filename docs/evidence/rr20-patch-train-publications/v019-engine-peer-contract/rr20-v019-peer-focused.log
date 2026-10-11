@@ -1,0 +1,38 @@
+▶ opf convert, deck to deck
+  ✔ every pair of forms, by the output's name, with the report envelope (812.894875ms)
+  ✔ stdin and stdout: --from (or { and [ sniffed as JSON), --to for stdout, the report on stderr (481.114708ms)
+  ✔ --schema-comment and --to agree with the output's name or are refused (481.278125ms)
+  ✔ an existing output exits 1 without --force and is replaced with it (314.45775ms)
+  ✔ an invalid deck and a finding at --fail-on exit 1 with the findings and write nothing (441.431875ms)
+  ✔ names and files: exit 2 (504.055084ms)
+✔ opf convert, deck to deck (3035.934417ms)
+▶ opf convert, flags apply only where their format is involved
+  ✔ each flag outside its format is a usage error (exit 2, option-not-applicable) and nothing is read or written (647.589375ms)
+✔ opf convert, flags apply only where their format is involved (647.717459ms)
+▶ a missing peer
+  ✔ exits 2 with peer-not-installed and one exact install command for the format (832.664083ms)
+  ✔ the install command matches the package manager in npm_config_user_agent (608.1915ms)
+✔ a missing peer (1466.724084ms)
+▶ drawing, through stub peers
+  ✔ the output's extension names the format, so deck.png is PNG and never SVG (the render --out bug) (455.197375ms)
+  ✔ pdf, pptx and zip outputs, and their flags reach the engines (609.861459ms)
+  ✔ stdout carries one file: --to pdf, or one slide as png or svg (600.457209ms)
+  ✔ format flags outside their format: --text, --raster, --charts, --images and --scale (811.075708ms)
+  ✔ the 0.17 flags are usage errors that name their 0.18 replacement (514.023ms)
+✔ drawing, through stub peers (3014.492834ms)
+▶ opf doctor
+  ✔ with no peer: the deck forms are ready, every drawing format names what it misses, and one command installs it all (84.420458ms)
+  ✔ installed 0.18 engines do not satisfy the 0.19 contract (79.921916ms)
+  ✔ with a deck: a PDF needs sharp only when the deck has pictures (162.194917ms)
+  ✔ with the peers present: opf-pptx makes pptx-import ready, and what opf-render still needs is listed (83.711708ms)
+  ✔ the command follows the package manager and the install: global, pnpm, yarn, bun (403.172917ms)
+  ✔ --format text is for people; doctor exits 0 unless its arguments are wrong (319.659792ms)
+✔ opf doctor (1230.107042ms)
+ℹ tests 20
+ℹ suites 5
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8204.729833

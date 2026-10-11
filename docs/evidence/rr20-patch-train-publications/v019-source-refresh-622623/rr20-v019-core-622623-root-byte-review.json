@@ -1,0 +1,22 @@
+{
+  "head": "c6b81092862b1f414acec9b38bfb00ff78739f61",
+  "previous": "5adf19a2483ad6ced7b8f118b5eba3c0d488a1f7",
+  "main": "f2394d73ece195933c34a3dfffdcba8e14aefed5",
+  "changedPaths": 196,
+  "nonDocsPaths": [
+    "ecosystem.lock.json",
+    "package.json",
+    "scripts/lazy-font-counts.mjs",
+    "scripts/lazy-font-counts.test.mjs"
+  ],
+  "docsAndCountScriptsByteEqualMain": true,
+  "onlyRootManifestChange": "check:lazy-font-counts script",
+  "coreVersion": "0.18.4",
+  "sourceLock": "main roller data identical; prior reviewed v2 golden preserved",
+  "golden": {
+    "repository": "opf",
+    "path": "scripts/fixtures/opf-examples-png.rr83-v2-reviewed.sha256.json",
+    "note": "golden adopted from opf-render golden-override (core fixture)"
+  },
+  "runtimeSchemaExamplesUnchanged": true
+}

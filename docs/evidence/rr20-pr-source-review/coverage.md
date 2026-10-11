@@ -234,3 +234,20 @@ PR #604 merged at `080da598013328857f6c9478eabe84b5977c140d` after the review sn
 Latest PR #608 preparation: refreshed onto merged `080da598` at `a11af747`; full checks passed, including 36 root checks. Push and retarget onto current main are verified complete. The table retains its earlier exact snapshot head, not a claim that it is the latest remote head.
 
 Reviewed CLI font-pin repair [core #612](https://github.com/OpenPresentation/opf/pull/612) is open and attached at `7f7e1d` (verified abbreviated identity supplied by the supervisor). Registry and candidate peer tests pass; merge and release preparation remain pending.
+
+
+## Current-head reconciliation, 2026-10-11
+
+The bounded 13:50 UTC eight-repository inventory contains 28 open PRs and 45 issues, with complete pagination. Twenty-five open PR heads match the historical table above exactly. The three exceptions are reconciled below; the original rows remain historical. Two subsequent supervisor-created PRs are included separately, giving 30 open PRs before the next merge batch. This is source-review coverage, not merge, registry or native acceptance.
+
+| PR | Reviewed current head | Review and remaining boundary |
+|---|---|---|
+| [core #584](https://github.com/OpenPresentation/opf/pull/584) | `d4d879e3c1625c6040ccac0099b3e58e867c5ef7` | Refreshed host-tracker integration retains the 12 original docs/generator/override/evidence paths; supervisor reviewed the refresh and passing 37 tracker tests, mapped checks and full suite. Held for gallery host integration and final published-host acceptance. |
+| [PPTX #248](https://github.com/OpenPresentation/opf-pptx/pull/248) | `b8c5e5abb57e8aadb00201e440bf243aa4979dd5` | Exact identity and 130-path reconciliation were already reviewed in the prose above. No new source delta; remains held for the final gallery/runtime dependency graph. |
+| [core #620](https://github.com/OpenPresentation/opf/pull/620) | `05ab5227fbb52ac41a36bcf50aefa08129772a5d` | Supervisor compared the refresh from the inventory's `9b621e8a` onto main `222f8ce4`: all staged evidence bytes unchanged, append-only burndown note and 15/40 records preserved. Mapped checks pass. Source/staged qualification only. |
+| [core #621](https://github.com/OpenPresentation/opf/pull/621) | `abd7930eb5625fd7df154590bfb7335c07e68e77` | New after the snapshot. Supervisor compared all 167 retained packet files plus three manifest/seal records byte-for-byte to frozen packet06, reviewed explicit 68-preview omission, and passed storage, mapped and full pre-PR checks. Existing historical SVG golden skip remains explicit; Windows native acceptance remains pending. |
+| [renderer #234](https://github.com/OpenPresentation/opf-render/pull/234) | `09325bddb475d1de2d4650373c0de007764ef167` | New after the snapshot. Supervisor verified all nine metadata-only paths byte-identical to the dry preparation qualified by all 17 local commands, including 113 suites and packed registry-core 0.18.4 checks. Exact merged-commit CI and trusted publication remain required. |
+
+### Subsequent known merge state
+
+Core #620 merged at `9c60b45b26dab7012b905d8e7f005a41bbbb7f0a`; core #621 merged at `ace697059c2f9fcc0b85608f54185fc250ee6148`, with prescribed batch gate terminal 0. Reviewed source heads above remain historical provenance. The known current open-PR total is 28 after renderer #234 creation and the two evidence merges, reconciled from known events rather than a fresh API query. The dated 13:50 UTC inventory remains unchanged. No new checkpoint, registry or native acceptance is inferred.

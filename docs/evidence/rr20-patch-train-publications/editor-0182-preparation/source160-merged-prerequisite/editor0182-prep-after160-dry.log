@@ -1,0 +1,35 @@
+dry run: RR-20: release opf-editor 0.18.2
+branch codex/release-editor-0-18-2 in /private/tmp/release-train-editor-jwsrbK (not committed, not pushed)
+ CHANGELOG.md                       |  4 ++++
+ changes/ff-46-script-name-hosts.md |  4 ----
+ package-lock.json                  | 36 ++++++++++++++++++------------------
+ package.json                       | 10 +++++-----
+ 4 files changed, 27 insertions(+), 27 deletions(-)
+
+RR-20: release-prep PR for @openpresentation/opf-editor 0.18.2 (from 0.18.1), opened by `scripts/release-train.mjs prep` (RR-51).
+
+- `package.json`: version 0.18.1 -> 0.18.2.
+- `CHANGELOG.md`: `node scripts/changelog-fragments.mjs assemble --version 0.18.2` moved 1 fragment(s) into the release section.
+- Lockfile refreshed with `npm install --package-lock-only` against the registry.
+
+Dependency floors raised to the train's versions (each already on npm):
+
+| field | package | from | to |
+|---|---|---|---|
+| `dependencies` | `@openpresentation/opf` | `^0.18.3` | `^0.18.4` |
+| `peerDependencies` | `@openpresentation/opf-render` | `^0.18.1` | `^0.18.2` |
+| `devDependencies` | `@openpresentation/opf-pptx` | `^0.18.1` | `^0.18.2` |
+| `devDependencies` | `@openpresentation/opf-render` | `^0.18.1` | `^0.18.2` |
+
+
+Train: `--core 0.18.4 --render 0.18.2 --pptx 0.18.2 --editor 0.18.2`. Merge only after CI is green; the train then tags the merge commit:
+`node scripts/release-train.mjs tag editor --core 0.18.4 --render 0.18.2 --pptx 0.18.2 --editor 0.18.2 --execute` (or `run ... --execute`).
+
+## Resume
+
+- Done: the release-prep commit on this branch.
+- Left: CI green, review, merge (by a person), then the tag step above. If CI needs a fixture change caused by the new
+  dependency versions (for example the CLI's render hashes), add it to this PR.
+- Re-running `prep` finds this PR and changes nothing.
+
+Pass --execute to commit, push and open the PR.

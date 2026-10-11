@@ -1,0 +1,7 @@
+# Editor 0.18.2 prerequisite and dry preparation
+
+Mandatory pre-prep qualification 90777 completed exit 0. [Transcript](transcript.log), installed registry identities, packed evidence and tracked/prepared before/after receipts are retained byte-for-byte. Actual registry core 0.18.4 and renderer/PPTX 0.18.2 are used; no source aliases or staged dependency claim.
+
+Supervisor dry preparation 34999 completed exit 0; [dry receipt](prep-dry.log) and [independent four-path metadata review/frozen hashes](independent-prep-review.md) retain the genuine version/floor/lock/fragment assembly. Supervisor also inspected the complete diff and hashes.
+
+Qualification 22527 completed exit 1 at 19:14:29 UTC. Install/audit/type/validate/full tests and all 20 playground cases passed, but broader browser data-grid F2 edit failed at `test/data-grid-browser.mjs:195`. The remaining ten browser cases and later published-core/packed/pack-dry gates were not run. Source bytes remain frozen. A macOS selection-shortcut cause is suspected but unconfirmed; resolve and rerun applicable gates without weakening assertions. No release-prep PR or publication exists. [Failure report and original receipts](failed-qualification/status.md). Exact future prep comparison, PR/commit gates, trusted publication and independent verification remain required. T18 remains open for editor and final adoption, progress 15/40. No native acceptance claim.

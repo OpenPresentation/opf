@@ -1,0 +1,157 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-v019-engine-peer-contract
+> node scripts/check-changed.mjs --base b597dbe099166d62067ea1cc67696c45cc268177
+
+check-changed: 6 changed files since b597dbe09 (plus uncommitted and untracked)
+ok  biome (0.0 s)
+ok  pnpm run check:catalog-free (0.8 s)
+ok  pnpm run check:browser-safe (0.9 s)
+ok  pnpm run check:changes (0.3 s)
+ok  pnpm run check:engines-range (0.2 s)
+ok  pnpm run check:runners (0.3 s)
+ok  pnpm run check:text (1.6 s)
+ok  pnpm run check:font-hotlinks (2.7 s)
+ok  typecheck (6.7 s)
+FAILED  tests opf (19.2 s)
+FAILED  tests cli (43.5 s)
+
+--- tests opf failed (exit 1); last 60 lines of artifacts/check-changed/tests_opf.log:
+  ✔ keys, tags and numbers are still checked (0.155083ms)
+  ✔ an unresolved alias is an error (0.06475ms)
+✔ aliases: true (12.0215ms)
+▶ OPF findings are located in the YAML
+  ✔ a schema error points at the value that is wrong (0.335458ms)
+  ✔ a finding with no node of its own falls back to the nearest ancestor (0.149417ms)
+  ✔ findings are in source order and use the shared Finding shape (0.2515ms)
+  ✔ validate options pick the rules, and every finding of the full run is located (8.110292ms)
+✔ OPF findings are located in the YAML (8.907166ms)
+▶ OPF to YAML
+  ✔ writes canonical schema key order, two-space block style and no folding (0.368ms)
+  ✔ strings that would read as another type are quoted, and read back as the same text (2.070167ms)
+  ✔ keys that look like booleans are quoted too, and numbers stay numbers (0.545417ms)
+  ✔ an invalid deck throws OPFYamlError with code invalid-document (0.222417ms)
+  ✔ a value YAML cannot carry exactly is refused, never written wrongly (0.326709ms)
+  ✔ schemaComment prepends the editor modeline with the schema URL (0.56325ms)
+  ✔ scanYamlComments counts the comments a rewrite would lose (0.13225ms)
+  ✔ a read-write-read cycle is stable for hand-written YAML with comments, quotes and block scalars (0.828083ms)
+✔ OPF to YAML (5.1555ms)
+▶ the validate report of a YAML deck, and parseYamlData
+  ✔ fromYaml reports like validate does for JSON text, located in the YAML (0.323792ms)
+  ✔ parseYamlData reads any JSON-compatible root in the same dialect (0.1665ms)
+✔ the validate report of a YAML deck, and parseYamlData (0.524ms)
+▶ the guide
+  ✔ the example deck is valid, canonical and reads back as shown (1.080833ms)
+  ✔ the alias example expands as the guide says (0.372959ms)
+✔ the guide (1.492209ms)
+▶ no built-in records
+  ✔ a gallery id resolves only when the host registers the default catalog (1.510291ms)
+  ✔ validate reports what no catalog defines, and nothing once the records are embedded (169.652958ms)
+✔ no built-in records (171.595917ms)
+▶ engine defaults
+  ✔ the engine defaults are spec/reference/engine-defaults.json, compiled into code (0.099917ms)
+  ✔ they are the drawing fields of the gallery records minimal, cool-horizon and aptos (0.086875ms)
+  ✔ a deck that names nothing draws the same with and without the default catalog (0.174333ms)
+✔ engine defaults (0.464416ms)
+▶ the cover rule is a record rule
+  ✔ a template with only a title region centres a slide with no body, whatever its id (5.746125ms)
+  ✔ empty regions collapse while populated regions retain a content heading (1.260125ms)
+✔ the cover rule is a record rule (7.20675ms)
+▶ every default-catalog layout composed bare
+  ✔ validates and composes with a minimal document and no example additions (16.423792ms)
+✔ every default-catalog layout composed bare (16.529084ms)
+ℹ tests 2282
+ℹ suites 206
+ℹ pass 2281
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13972.814583
+
+✖ failing tests:
+
+test at test/node.test.mjs:1:1
+✖ test/node.test.mjs (124.869416ms)
+  'test failed'
+/private/tmp/opf-v019-engine-peer-contract/packages/javascript:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf@0.18.4 test: `pnpm run build && node ../../scripts/run-tests.mjs`
+Exit status 1
+
+--- tests cli failed (exit 1); last 60 lines of artifacts/check-changed/tests_cli.log:
+✔ merge refuses a --report that is the merged output under another name (588.434334ms)
+✔ format --output naming its input in another case rewrites it as the same file (129.73875ms)
+✔ a data file's extension names its format in any case (681.659417ms)
+▶ opf convert, YAML to JSON
+  ✔ converts YAML from stdin to an OPF document on stdout and reports on stderr (379.381583ms)
+  ✔ writes a file, refuses to replace it without --force and prints the report on stdout (753.054417ms)
+  ✔ a YAML error exits 2 and an OPF error exits 1, each with line and column, and nothing is written (329.322834ms)
+  ✔ anchors and aliases are refused unless --aliases expands them (423.586458ms)
+  ✔ --fail-on warning fails on a warning (592.164333ms)
+  ✔ usage errors exit 2 (626.579167ms)
+✔ opf convert, YAML to JSON (3104.998417ms)
+▶ opf convert, a deck to YAML
+  ✔ writes canonical YAML that reads back to the same deck (459.881625ms)
+  ✔ --schema-comment adds the editor modeline (223.351292ms)
+  ✔ a file output needs --force to be replaced; the report is on stdout (663.184125ms)
+  ✔ an invalid deck exits 1 and bad JSON exits 2 (308.175333ms)
+  ✔ format canonicalizes YAML input, keeps its modeline and warns that comments are lost (199.975334ms)
+✔ opf convert, a deck to YAML (1854.92425ms)
+▶ decks read from YAML by every command
+  ✔ a file ending .yaml or .yml is YAML; stdin and other names are JSON when they start with { or [, else --from says (1764.109125ms)
+  ✔ a YAML syntax error exits 2 with the line and column in the message; validate reports it as a finding (1021.752666ms)
+  ✔ convert copies a YAML deck, and create writes YAML for a .yaml output or --to yaml (1084.295916ms)
+  ✔ validate locates its findings in the YAML (775.342375ms)
+  ✔ edit applies a JSON patch or a YAML patch to a YAML deck and writes YAML in place, keeping the modeline (595.871083ms)
+  ✔ edit on a YAML deck prints YAML to stdout by default, and JSON with --to json (814.141083ms)
+  ✔ format rewrites YAML canonically and checks it; opf convert changes the form (1436.705208ms)
+  ✔ a rewrite keeps the file's own modeline verbatim (801.745833ms)
+  ✔ diff and merge read YAML; merge writes the ours format (573.510209ms)
+  ✔ ingest, paginate and embed read and write YAML (1208.708708ms)
+  ✔ fill reads a YAML template and data, and writes the form of the template, the pattern or --to (1005.204667ms)
+  ✔ convert writes YAML from Markdown and Markdown from YAML (900.523333ms)
+✔ decks read from YAML by every command (11982.3155ms)
+▶ help
+  ✔ the usage documents --from, --to and the YAML flags (221.025ms)
+✔ help (221.082ms)
+ℹ tests 182
+ℹ suites 42
+ℹ pass 182
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26530.712708
+[1/2] node test/cli.mjs
+CLI passed 95 command checks: file preservation, patch operations, validation findings/contracts, pipes, schema lookup, pagination.
+[2/2] node test/files.mjs
+file:///private/tmp/opf-v019-engine-peer-contract/scripts/unreleased-gate.mjs:53
+  if (!mayWait(event, ref)) throw new Error(`${unmet}, on a ${event || 'local'} run: only a pull request, merge-queue or roller-candidate run may skip ${what} (RR-55); publish ${required} first`);
+                                  ^
+
+Error: @openpresentation/cli needs @openpresentation/opf-render@^0.19.0 and @openpresentation/opf-pptx@^0.19.0, and the installed published version is @openpresentation/opf-render 0.18.1, @openpresentation/opf-pptx 0.18.1, on a local run: only a pull request, merge-queue or roller-candidate run may skip its render, export and import tests (they run through the published peers) (RR-55); publish @openpresentation/opf-render@^0.19.0 and @openpresentation/opf-pptx@^0.19.0 first
+    at gate (file:///private/tmp/opf-v019-engine-peer-contract/scripts/unreleased-gate.mjs:53:35)
+    at cliPeerGate (file:///private/tmp/opf-v019-engine-peer-contract/scripts/unreleased-gate.mjs:95:18)
+    at file:///private/tmp/opf-v019-engine-peer-contract/packages/cli/test/files.mjs:19:13
+
+Node.js v24.21.0
+run-tests: test/files.mjs failed (exit 1); 0 test(s) not run
+/private/tmp/opf-v019-engine-peer-contract/packages/cli:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/cli@0.18.1 test: `pnpm build && node ../../scripts/run-tests.mjs`
+Exit status 1
+
+step                          status    time
+biome                         passed   0.0 s  5 files
+pnpm run check:browser-safe   passed   0.9 s
+pnpm run check:catalog-free   passed   0.8 s
+pnpm run check:changes        passed   0.3 s
+pnpm run check:engines-range  passed   0.2 s
+pnpm run check:font-hotlinks  passed   2.7 s
+pnpm run check:runners        passed   0.3 s
+pnpm run check:text           passed   1.6 s
+typecheck                     passed   6.7 s
+tests opf                     FAILED  19.2 s
+tests cli                     FAILED  43.5 s
+total                                 73.2 s
+
+check-changed: 2 of 11 steps failed: tests opf, tests cli
+ ELIFECYCLE  Command failed with exit code 1.

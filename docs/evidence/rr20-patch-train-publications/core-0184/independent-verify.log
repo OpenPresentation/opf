@@ -1,0 +1,11 @@
+@openpresentation/opf@0.18.4: verified
+  ok   npm version: @openpresentation/opf@0.18.4, integrity sha512-Bs+oTI9Ub1IDhJ7yDR/eLot3NZ5PXQ4Di//0n8gkW+y0X88tSYCf7jD/sGYlKgme8LECKSTs/1a4jpfa3kWLpw==
+  ok   tag: OpenPresentation/opf opf-v0.18.4 -> e09461624a64fb58761c28475c2b354984deb165
+  ok   gitHead: gitHead e09461624a64fb58761c28475c2b354984deb165 = tag commit e09461624a64fb58761c28475c2b354984deb165
+  ok   tag on main: e09461624a64 is on opf main (identical)
+  ok   version at tag: packages/javascript/package.json at e09461624a64 carries 0.18.4
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.18.4)
+  ok   SLSA provenance: built by .github/workflows/npm-publish.yml on refs/tags/opf-v0.18.4 from e09461624a64 (https://github.com/OpenPresentation/opf/actions/runs/38143021019/attempts/1)
+  ok   npm audit signatures: 1 verified, 0 invalid, 0 missing; @openpresentation/opf@0.18.4 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf/releases/tag/opf-v0.18.4
+  info dist-tag: latest
