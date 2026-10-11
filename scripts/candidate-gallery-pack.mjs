@@ -76,6 +76,11 @@ export function candidateArtifacts(root){
  assert.equal(candidate.sha,report.gallery.sha,'artifact gallery differs from reviewed configuration');
  const workspace=path.dirname(root);
  const directories=[path.join(root,'packages/javascript'),path.join(workspace,'opf-render'),path.join(workspace,'opf-pptx'),path.join(workspace,'opf-editor'),path.join(root,'packages/cli'),path.join(workspace,'gallery-candidate')];
+ for(const item of report.artifacts){
+  assert.equal(item.version,item.originalManifest.version,'artifact version differs from original source version');
+  assert.equal(item.sourceVersion,item.originalManifest.version,'artifact sourceVersion differs from original source version');
+  assert.equal(item.stagedManifest.version,item.originalManifest.version,'staging must preserve the package own version');
+ }
  for(const [index,item] of report.artifacts.entries()){
   const directory=directories[index],sourceRoot=index===0||index===4?root:directory;
   assert.equal(execFileSync('git',['-C',sourceRoot,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),item.sourceSha,'artifact source SHA mismatch');
@@ -108,6 +113,61 @@ export function candidateArtifacts(root){
   assert.deepEqual(item.stagedManifest,stagedManifest(item.originalManifest,Object.fromEntries(report.artifacts.map(record=>[record.name,record.version])),Object.fromEntries(report.artifacts.map(record=>[record.name,path.join(root,'artifacts/npm',record.file)]))),'unexpected staged metadata change');
  }
  return report;
+}
+
+export function candidatePeerPreflight(root,defaultGate){
+ return candidateArtifacts(root)?assertCandidatePeerPreflight(root):defaultGate();
+}
+
+// Preflight only the explicitly staged artifact relationships. Original source ranges
+// remain unchanged and are still checked by ordinary source/registry/publication gates.
+export function assertCandidatePeerPreflight(root){
+ const graph=candidateArtifacts(root);assert.ok(graph,'candidate peer preflight requires an authorized staged graph');
+ for(const name of ['@openpresentation/opf','@openpresentation/cli']){
+  const consumer=graph.artifacts.find(item=>item.name===name);assert.ok(consumer,'missing staged peer consumer');
+  for(const peerName of ['@openpresentation/opf-render','@openpresentation/opf-pptx']){
+   const peer=graph.artifacts.find(item=>item.name===peerName);assert.ok(peer,'missing staged engine');
+   assert.equal(consumer.stagedManifest.peerDependencies?.[peerName],`^${peer.version}`,'staged peer relationship differs from selected artifact');
+  }
+ }
+ return {run:true};
+}
+
+export function normalizedCandidateBin(value){
+ assert.equal(typeof value,'string','candidate CLI bin must be a relative string');
+ const relative=value.startsWith('./')?value.slice(2):value;
+ assert.ok(/^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*$/.test(relative)&&relative.split('/').every(part=>part!=='.'&&part!=='..'),'unsafe candidate CLI bin path');
+ return relative;
+}
+
+// Installed drawing tests must exercise the exact selected binary, never a workspace
+// binary merely because candidate mode is enabled.
+export function installedCandidatePreflight(root,executable){
+ const graph=candidateArtifacts(root);if(!graph)return null;
+ assert.ok(executable,'installed candidate preflight requires OPF_TEST_BIN');
+ const bin=realpathSync(executable),cli=graph.artifacts.find(item=>item.name==='@openpresentation/cli');
+ const relative=normalizedCandidateBin(typeof cli.stagedManifest.bin==='string'?cli.stagedManifest.bin:cli.stagedManifest.bin?.opf);
+ const cliRoot=path.resolve(bin,...relative.split('/').map(()=> '..'));
+ const modules=path.dirname(path.dirname(cliRoot));
+ assert.equal(cliRoot,path.join(modules,'@openpresentation/cli'),'candidate binary is outside an installed CLI');
+ assert.equal(bin,path.join(cliRoot,relative),'candidate binary differs from the selected manifest');
+ assertInstalledCandidatePeers(root,modules,['@openpresentation/cli','@openpresentation/opf-render','@openpresentation/opf-pptx'],graph.artifacts.find(item=>item.name==='@openpresentation/opf').version);
+ assertCandidatePeerPreflight(root);
+ return {graph,bin,modules};
+}
+
+export function assertCandidateDoctor(context,doctor){
+ for(const name of ['@openpresentation/opf-render','@openpresentation/opf-pptx']){
+  const engine=context.graph.artifacts.find(item=>item.name===name);
+  const cli=context.graph.artifacts.find(item=>item.name==='@openpresentation/cli');
+  const wanted=cli.originalManifest.peerDependencies[name];
+  assert.equal(wanted,'^0.19.0','interim doctor oracle requires the unchanged stable 0.19 contract');
+  assert.ok(/^0\.18\./.test(engine.version),'interim doctor oracle requires selected 0.18 engines');
+  const fact=doctor.packages.find(item=>item.name===name);
+  assert.deepEqual([fact.installed,fact.version,fact.wanted,fact.ok],[true,engine.version,wanted,false]);
+ }
+ for(const format of ['json','yaml','md'])assert.equal(doctor.formats[format].ready,true);
+ for(const format of ['svg','pptx-import'])assert.equal(doctor.formats[format].ready,false);
 }
 
 export function assertInstalledCandidateGraph(root,consumer){
