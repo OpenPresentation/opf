@@ -195,3 +195,7 @@ The T31 packet remains preparation only. All nine fallback archives are unchange
 ## Editor 0.18.1 published
 
 [Publication and independent verification](../../evidence/rr20-editor-0181-published/README.md) close only T11: 12/40. Exact release identity is `7831a15b10b9b3e1120ed90789fc9429b1c4f846`; trusted run 38129138355, integrity/provenance and two signatures passed. CLI fresh dry preparation completed seven allowed files with independent metadata review passed; full, standalone and strict packed-peer gates passed (77 drawing and 16 installed checks); the breaking-gate baseline is being corrected for the shallow clone after merged PR612 `6eee0d598c3ea0a1e97871a4f966270daf687a42`; no CLI publication claimed. PR608 `e984` checks are pending; PR611 merged at `e71ed7eaa7f51beb5df598196f352a4c909c8b32` and PR613 merged at `f419506f6b287fd1fa467ae84c6ce6b9c7682e6c`. Native and final 0.19/site acceptance remain open.
+
+## CLI 0.18.1 published
+
+[Trusted publication and independent verification](../../evidence/rr20-cli-0181-published/README.md) close only T12: 13/40. Exact commit/tag/gitHead `ceb8a5a42269d9f1574c203adfd76b807e61a603`, run 38133658881; integrity, SLSA and two valid signatures passed with zero invalid/missing signatures. Fresh prep, full/standalone/strict packed peers and the actual `opf-v0.18.3` breaking baseline passed; the earlier shallow-clone diagnosis is resolved. Initial 0.18.1 publications are verified. Held geometry patches, final 0.19 integration, real gallery 2 registry/site adoption and native acceptance remain open.
