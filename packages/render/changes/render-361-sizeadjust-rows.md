@@ -1,0 +1,7 @@
+---
+type: changed
+---
+opf#361 (output changes only for size-adjusted families): the renderer applies `font-policy.json`'s `sizeAdjust` and `lineAscent` rows wherever they are, so with core's opf#361 rows the previews of Angsana New (0.75, line ascent 0.83 / 0.86), DilleniaUPC (0.68, 0.82 / 0.85), Sakkal Majalla (0.89, 0.76 / 0.81), Malgun Gothic (1.07) and Nirmala UI (1.07, 0.97 / 0.94) draw and measure their script text at the size PowerPoint draws it, and Arabic Typesetting lines move down 0.04 em (0.02 em on a line with a Latin run) for its corrected line ascent 0.74 / 0.80.
+    - White space that follows a size-adjusted run now stays in that run (`createScriptFonts().plan`), as PowerPoint keeps it in the script font: the space between two Hangul words of a Malgun Gothic title is measured and drawn at the run's adjusted size instead of a separate run at the composed size, which a browser drew wider than its measured advance (the FF-19 browser check caught it once Malgun Gothic carried a multiplier).
+    - `test/arabic-size-adjust.mjs`, `test/script-fonts-browser.mjs` and `test/script-corpora-slides-browser.mjs` read the multipliers and title sizes from the installed core's policy instead of hard-coding Arabic Typesetting's, and the first checks the five new rows exactly when they are present.
+    - No golden moves: the 807 example slides render identical SVG on the golden path with core's current policy and with the opf#361 rows.

@@ -11,7 +11,7 @@ import { loadPreviewFonts } from "./preview-fonts.js";
 export { DeckError } from "./deck-runtime.js";
 
 const AUDIENCE_CSS = `
-:host { all: initial; }
+:host { all: initial; color-scheme: inherit; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 .player { position: fixed; inset: 0; z-index: 2147483000; background: #000; color: #fff; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; outline: none; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
@@ -37,6 +37,7 @@ const AUDIENCE_CSS = `
 .msg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; }
 @media (forced-colors: active) {
   .hud button { border-color: ButtonText; }
+  .hud button:focus-visible { outline-color: Highlight; }
   .hud button[aria-disabled="true"] { opacity: 1; color: GrayText; border-color: GrayText; }
 }
 `;

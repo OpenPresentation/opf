@@ -61,7 +61,8 @@ export interface TextOutlines {
   outlineSlideText(content: string[], options: object): { content: string[]; defs: string };
   /**
    * HarfBuzz shaping of one run of a face (opf-render#188), present when the handle has the shaper (the Node handle always, a browser
-   * handle with `shapeWasm`). Read by `toPdf`, which then shapes the vector PDF's text as the browser shapes it; fontkit otherwise.
+   * handle with `shapeWasm`). Read by `toPdf`, which then shapes the vector PDF's text as the browser shapes it, and by `toPng` and
+   * the raster PDF, which pin complex-script clusters at its pens (opf-render#189); fontkit otherwise.
    */
   shape?(face: { hash: string; data: Uint8Array }, text: string, options?: { direction?: "ltr" | "rtl"; lang?: string; features?: Record<string, boolean> }): { gid: number; codePoints: number[]; advance: number; xOffset: number; yOffset: number }[];
 }

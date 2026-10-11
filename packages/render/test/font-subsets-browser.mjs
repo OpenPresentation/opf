@@ -18,6 +18,17 @@ try {
     await page.evaluate(() => document.fonts.ready);
     return page.screenshot({ clip: { x: 0, y: 0, width: 1280, height: 720 } });
   };
+  // Neither scaler reference character is authored here. Small regular text exposed the macOS regression;
+  // include fractional sizes, larger controls and all office weights/styles rather than relying on one cover slide.
+  const sample = 'Revenue 12% — affine';
+  assert.ok(!/[Xo]/.test(sample));
+  for (const face of fonts.embeddedFonts.filter(face => ['Intos', 'Intos Display'].includes(face.family))) {
+    const subset = fonts.subsets.subsetDataUrl(face, [...sample].map(character => character.codePointAt(0)));
+    for (const size of [12, 14.4, 16, 25, 54]) {
+      const svg = data => `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"><style>@font-face{font-family:"${face.family}";font-weight:${face.weight};font-style:${face.italic ? 'italic' : 'normal'};src:url("${data}")}</style><text x="31.25" y="80.5" font-family="${face.family}" font-weight="${face.weight}" font-style="${face.italic ? 'italic' : 'normal'}" font-size="${size}">${sample}</text></svg>`;
+      assert.ok((await shot(svg(subset))).equals(await shot(svg(face.dataUrl))), `${face.family} ${face.weight} ${face.italic ? 'italic' : 'normal'} ${size}px: unadjusted subset text matches the whole face`);
+    }
+  }
   for (const { file, deck } of decks) {
     const whole = toSvg(deck, { fonts, subsetFonts: false }), cut = toSvg(deck, { fonts });
     for (const [index, svg] of cut.entries()) {

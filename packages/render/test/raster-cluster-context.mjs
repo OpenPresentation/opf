@@ -4,11 +4,15 @@
 // place. Checked against HarfBuzz (harfbuzzjs, the browser's shaper): every pinned cluster of the issue's line and of the Thai, Lao,
 // Tamil and Telugu samples that showed it starts at HarfBuzz's pen, and toPng draws those lines like HarfBuzz's own outlines. Also
 // (opf-render#125) a pin does not depend on the outlines drawn before it.
+// With HarfBuzz in the conversion (the fonts handle's `outlines.shape`) the pens are HarfBuzz's own, which also places the lines
+// with a Thai sara am, where fontkit kerns the decomposed vowel differently (น้ำใจ: 0.7 px at 25 px); without it they stay fontkit's,
+// and a shaper that fails leaves the pins as they are without one.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as hb from 'harfbuzzjs';
 import {toPng} from '../dist/index.js';
 import {pinScriptClusters} from '../dist/raster-text.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces} from '../scripts/script-corpora.mjs';
 
 const corpora = await loadCorpora();
@@ -19,7 +23,21 @@ const sample = (script, id) => ({script, ...corpora.groups.find(group => group.s
 const lines = [
   {script: 'Thai', id: 'issue-189', lang: 'th', text: 'รายได้เติบโตในทุกภูมิภาค'},
   sample('Thai', 'thai-digits'), sample('Laoo', 'laoo-words'), sample('Taml', 'taml-pulli'), sample('Telu', 'telu-zwnj'),
+  // fontkit's pens are off after a sara am: these lines are checked with HarfBuzz only.
+  {...sample('Thai', 'thai-title'), harfBuzzOnly: true}, {...sample('Thai', 'thai-sara-am'), harfBuzzOnly: true},
+  {...sample('Thai', 'thai-no-spaces'), harfBuzzOnly: true},
 ];
+const {shape} = (await loadFonts()).outlines;
+assert.equal(typeof shape, 'function', 'the Node fonts handle has HarfBuzz');
+
+// Without a working shaper the pins are fontkit's: a shaper that throws changes nothing.
+{
+  const face = faceOf('Thai');
+  const svg = `<svg><text x="10" y="40" font-family="${face.family}" font-size="25" lang="th" xml:space="preserve">${sample('Thai', 'thai-sara-am').text}</text></svg>`;
+  const plain = await pinScriptClusters(svg, {fontFiles: [face.file]});
+  assert.equal(await pinScriptClusters(svg, {fontFiles: [face.file], shape: () => { throw new Error('no shaper'); }}), plain, 'a failing shaper leaves fontkit pens');
+  assert.notEqual(await pinScriptClusters(svg, {fontFiles: [face.file], shape}), plain, 'HarfBuzz moves the cluster after the sara am');
+}
 
 // opf-render#125: the raster path's own fontkit faces pin each glyph's code points. Drawing the outline of a Devanagari letter whose
 // component is the nukta glyph (ऱ, ऴ, ऩ, क़, ख़ are outlined clusters) cached the nukta with no code points, and a later text with a
@@ -51,15 +69,18 @@ function harfBuzz(face, text, lang, size, y) {
   return {starts, paths};
 }
 
+let drawnLines = 0;
 for (const size of [25, 60]) {
   const width = size * 30, height = Math.round(size * 2.4), y = Math.round(size * 1.6);
-  for (const line of lines) {
+  for (const line of lines) for (const shaper of line.harfBuzzOnly ? ['harfbuzz'] : ['fontkit', 'harfbuzz']) {
+    drawnLines++;
     const face = faceOf(line.script);
     const reference = harfBuzz(face, line.text, line.lang, size, y);
-    const label = `${line.script} ${line.id} at ${size} px`;
+    const label = `${line.script} ${line.id} at ${size} px (${shaper} pens)`;
+    const files = {fontFiles: [face.file], ...(shaper === 'harfbuzz' ? {shape} : {})};
     // Thai and Lao clusters are graphemes, HarfBuzz's clusters: each pinned piece starts at HarfBuzz's pen for its first character.
     if (line.script === 'Thai' || line.script === 'Laoo') {
-      const pinned = await pinScriptClusters(`<svg><text x="10" y="${y}" font-family="${face.family}" font-size="${size}" lang="${line.lang}" xml:space="preserve">${escape(line.text)}</text></svg>`, {fontFiles: [face.file]});
+      const pinned = await pinScriptClusters(`<svg><text x="10" y="${y}" font-family="${face.family}" font-size="${size}" lang="${line.lang}" xml:space="preserve">${escape(line.text)}</text></svg>`, files);
       let offset = 0, checked = 0;
       for (const [, x, piece] of pinned.matchAll(/<text x="(-?[\d.]+)" [^>]*>([^<]*)<\/text>/g)) {
         const expected = reference.starts.get(offset);
@@ -70,7 +91,7 @@ for (const size of [25, 60]) {
       assert.ok(checked >= 8, `${label}: ${checked} clusters checked`);
     }
     // The raster draws the line as HarfBuzz's outlines through the same resvg: no channel off by more than 64, mean under 0.01.
-    const options = {fonts: {fontFiles: [face.file], useBundledFonts: false}};
+    const options = {fonts: {fontFiles: [face.file], useBundledFonts: false, ...(shaper === 'harfbuzz' ? {outlines: {shape}} : {})}};
     const [drawn, outlines] = await Promise.all([
       toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#fff"/><text x="10" y="${y}" font-family="${face.family}" font-size="${size}" lang="${line.lang}" xml:space="preserve" fill="#000">${escape(line.text)}</text></svg>`, options),
       toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#fff"/><g fill="#000">${reference.paths}</g></svg>`, options),
@@ -81,4 +102,4 @@ for (const size of [25, 60]) {
     assert.ok(large === 0 && sum / a.length < 0.01, `${label}: the raster is HarfBuzz's (${large} values off by more than 64, mean ${(sum / a.length).toFixed(4)})`);
   }
 }
-console.log(`Raster cluster context: ${lines.length} lines at 25 and 60 px pinned at HarfBuzz's pens and drawn like HarfBuzz's outlines; a nukta pins alike after outlined nukta letters.`);
+console.log(`Raster cluster context: ${lines.length} lines (${drawnLines} drawings) at 25 and 60 px, with fontkit's and HarfBuzz's pens, pinned at HarfBuzz's pens and drawn like HarfBuzz's outlines; a nukta pins alike after outlined nukta letters.`);

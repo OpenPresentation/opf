@@ -12,10 +12,14 @@
 //     least one sample must still show it).
 // Browsers draw all of them correctly (test/script-corpora-browser.mjs); the emitted SVG is not affected.
 // Right-to-left samples with Latin, digits or punctuation are skipped: HarfBuzz shapes one directional run, not a bidirectional paragraph.
+// Every sample is drawn twice by toPng (opf-render#189): with a fonts handle that has HarfBuzz (`outlines.shape`, the Node handle's),
+// which pins the clusters at HarfBuzz's pens, and with plain font files, which pin them at fontkit's. Both must pass the gate; the
+// Thai sara am samples, where fontkit kerns differently, must equal HarfBuzz exactly with the shaper.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as hb from 'harfbuzzjs';
 import {toPng} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces} from '../scripts/script-corpora.mjs';
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
@@ -24,6 +28,9 @@ const corpora = await loadCorpora();
 const {faces} = await loadFaces();
 const limited = new Set(corpora.rasterLimits.scripts), languageDependent = new Set(corpora.rasterLimits.languageDependent.scripts);
 const SIZE = 60, WIDTH = 2400, HEIGHT = 140;
+const {shape} = (await loadFonts()).outlines;
+assert.equal(typeof shape, 'function', 'the Node fonts handle has HarfBuzz');
+const SHAPERS = ['harfbuzz', 'fontkit'];
 const escape = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 async function ink(png) {
@@ -56,39 +63,51 @@ for (const face of faces) {
       const startX = rtl ? x : 40;
       const reference = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><g fill="#000">${paths}</g></svg>`;
       const drawn = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><text x="${startX}" y="100" font-family="${face.family}" font-size="${SIZE}" ${rtl ? 'direction="rtl" ' : ''}xml:lang="${sample.lang}" xml:space="preserve" fill="#000">${escape(sample.text)}</text></svg>`;
-      const options = { fonts: {fontFiles: [face.file], useBundledFonts: false}};
-      const [a, b] = await Promise.all([toPng(reference, options), toPng(drawn, options)]);
-      const boxA = await ink(a), boxB = await ink(b);
-      assert.ok(boxA && boxB, `${face.family} ${sample.id}: both renderings have ink`);
-      const width = Math.max(boxA.width, boxB.width), height = Math.max(boxA.height, boxB.height);
-      const [pixelsA, pixelsB] = await Promise.all([crop(a, boxA, width, height), crop(b, boxB, width, height)]);
-      let sum = 0;
-      for (let index = 0; index < pixelsA.length; index++) sum += Math.abs(pixelsA[index] - pixelsB[index]);
-      rows.push({family: face.family, script: group.script, id: sample.id, referenceWidth: boxA.width, resvgWidth: boxB.width, ratio: Number((boxB.width / boxA.width).toFixed(4)), meanDiff: Number((sum / pixelsA.length).toFixed(2))});
+      const files = {fontFiles: [face.file], useBundledFonts: false};
+      const a = await toPng(reference, {fonts: files});
+      const boxA = await ink(a);
+      for (const shaper of SHAPERS) {
+        const b = await toPng(drawn, {fonts: shaper === 'harfbuzz' ? {...files, outlines: {shape}} : files});
+        const boxB = await ink(b);
+        assert.ok(boxA && boxB, `${face.family} ${sample.id}: both renderings have ink`);
+        const width = Math.max(boxA.width, boxB.width), height = Math.max(boxA.height, boxB.height);
+        const [pixelsA, pixelsB] = await Promise.all([crop(a, boxA, width, height), crop(b, boxB, width, height)]);
+        let sum = 0;
+        for (let index = 0; index < pixelsA.length; index++) sum += Math.abs(pixelsA[index] - pixelsB[index]);
+        rows.push({shaper, family: face.family, script: group.script, id: sample.id, referenceWidth: boxA.width, resvgWidth: boxB.width, ratio: Number((boxB.width / boxA.width).toFixed(4)), meanDiff: Number((sum / pixelsA.length).toFixed(2))});
+      }
     }
   }
 }
 const output = process.argv[2];
 if (output) { await mkdir(path.dirname(output), {recursive: true}); await writeFile(output, `${JSON.stringify({rows}, null, 2)}\n`); }
 
-let agreeing = 0, deviating = 0;
-const summary = [];
-for (const script of new Set(rows.map(row => row.script))) {
-  const group = rows.filter(row => row.script === script);
-  const bad = group.filter(row => Math.abs(row.ratio - 1) > 0.02 || row.meanDiff > 40);
-  summary.push(`${script} ${group.length} samples, ink width within ${(Math.max(...group.map(row => Math.abs(row.ratio - 1))) * 100).toFixed(2)}%, mean pixel difference at most ${Math.max(...group.map(row => row.meanDiff))}`);
-  if (limited.has(script)) {
-    assert.ok(bad.length > 0, `${script}: the raster now agrees with HarfBuzz; remove it from rasterLimits.scripts and update the docs`);
-    deviating += bad.length;
-  } else if (languageDependent.has(script)) {
-    assert.ok(group.every(row => Math.abs(row.ratio - 1) <= 0.005 && row.meanDiff <= 60), `${script}: clusters are placed at the language-system advances and only the punctuation forms differ: ${JSON.stringify(group)}`);
-    assert.ok(group.some(row => row.meanDiff > 20), `${script}: the recorded resvg lang limit (default punctuation forms) no longer shows; remove it from rasterLimits.languageDependent`);
-    deviating += group.filter(row => row.meanDiff > 20).length;
-    agreeing += group.filter(row => row.meanDiff <= 20).length;
-  } else {
-    assert.deepEqual(bad, [], `${script}: the raster disagrees with HarfBuzz where it was expected to agree`);
-    agreeing += group.length;
+const SARA_AM = ['thai-title', 'thai-sara-am', 'thai-no-spaces'];
+for (const shaper of SHAPERS) {
+  let agreeing = 0, deviating = 0;
+  const summary = [], ofShaper = rows.filter(row => row.shaper === shaper);
+  for (const script of new Set(ofShaper.map(row => row.script))) {
+    const group = ofShaper.filter(row => row.script === script);
+    const bad = group.filter(row => Math.abs(row.ratio - 1) > 0.02 || row.meanDiff > 40);
+    summary.push(`${script} ${group.length} samples, ink width within ${(Math.max(...group.map(row => Math.abs(row.ratio - 1))) * 100).toFixed(2)}%, mean pixel difference at most ${Math.max(...group.map(row => row.meanDiff))}`);
+    if (limited.has(script)) {
+      assert.ok(bad.length > 0, `${script}: the raster now agrees with HarfBuzz; remove it from rasterLimits.scripts and update the docs`);
+      deviating += bad.length;
+    } else if (languageDependent.has(script)) {
+      assert.ok(group.every(row => Math.abs(row.ratio - 1) <= 0.005 && row.meanDiff <= 60), `${script}: clusters are placed at the language-system advances and only the punctuation forms differ: ${JSON.stringify(group)}`);
+      assert.ok(group.some(row => row.meanDiff > 20), `${script}: the recorded resvg lang limit (default punctuation forms) no longer shows; remove it from rasterLimits.languageDependent`);
+      deviating += group.filter(row => row.meanDiff > 20).length;
+      agreeing += group.filter(row => row.meanDiff <= 20).length;
+    } else {
+      assert.deepEqual(bad, [], `${script}: the raster disagrees with HarfBuzz where it was expected to agree`);
+      agreeing += group.length;
+    }
   }
+  // opf-render#189: fontkit kerns after a decomposed sara am differently from HarfBuzz; HarfBuzz's pens draw these lines as HarfBuzz does.
+  if (shaper === 'harfbuzz') for (const id of SARA_AM) {
+    const row = ofShaper.find(item => item.id === id);
+    assert.ok(row && row.ratio === 1 && row.meanDiff === 0, `${id}: pinned at HarfBuzz's pens, the raster is HarfBuzz's: ${JSON.stringify(row)}`);
+  }
+  console.log(`[${shaper}]\n${summary.join('\n')}`);
+  console.log(`Script corpora raster (${shaper} pens): ${ofShaper.length} regular-weight samples through toPng; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ') || 'no script'} shaping; ${[...languageDependent].join(', ')} lang: punctuation forms).`);
 }
-console.log(summary.join('\n'));
-console.log(`Script corpora raster: ${rows.length} regular-weight samples through toPng; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ') || 'no script'} shaping; ${[...languageDependent].join(', ')} lang: punctuation forms).`);

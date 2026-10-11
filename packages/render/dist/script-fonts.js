@@ -615,6 +615,13 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     const push = (text, family, stack, sizeAdjust, ascent) => {
       const own = family === style.fontFamily && (!stack || stack.length === 1);
       const last = out.at(-1);
+      // opf#361: white space that follows a size-adjusted run (the space between two Hangul words of Malgun Gothic) stays in that run,
+      // as PowerPoint keeps it in the script font, so it is measured and drawn at the run's adjusted size. Left as its own run at the
+      // composed size between two adjusted runs, a browser drew it wider than its measured advance.
+      if (last?.sizeAdjust && !sizeAdjust) {
+        const space = /^\s+/u.exec(text)?.[0];
+        if (space) { last.text += space; text = text.slice(space.length); if (!text) return; }
+      }
       if (last && last.family === family && last.sizeAdjust === sizeAdjust && last.lineAscent === ascent?.lineAscent && JSON.stringify(last.stack) === JSON.stringify(stack)) last.text += text;
       else out.push({text, family, own, ...(stack && !own ? {stack} : {}), ...(sizeAdjust ? {sizeAdjust} : {}), ...(ascent ?? {})});
     };

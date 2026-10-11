@@ -1,0 +1,205 @@
+{
+  "required": "Xo",
+  "records": [
+    {
+      "chars": "",
+      "equal": false,
+      "bytes": [
+        41146,
+        62531
+      ]
+    },
+    {
+      "chars": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+      "equal": true,
+      "bytes": [
+        87546,
+        110179
+      ]
+    },
+    {
+      "chars": "PQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+      "equal": true,
+      "bytes": [
+        60706,
+        83959
+      ]
+    },
+    {
+      "chars": "",
+      "equal": false,
+      "bytes": [
+        41146,
+        62531
+      ]
+    },
+    {
+      "chars": "hijklmnopqrstuvwxyz{|}~",
+      "equal": false,
+      "bytes": [
+        48866,
+        71323
+      ]
+    },
+    {
+      "chars": "PQRSTUVWXYZ[\\]^_`abcdefg",
+      "equal": false,
+      "bytes": [
+        51902,
+        74035
+      ]
+    },
+    {
+      "chars": "\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+      "equal": false,
+      "bytes": [
+        54366,
+        76823
+      ]
+    },
+    {
+      "chars": "PQRSTUVWXYZ[hijklmnopqrstuvwxyz{|}~",
+      "equal": true,
+      "bytes": [
+        55490,
+        78731
+      ]
+    },
+    {
+      "chars": "PQRSTUVWXYZ[tuvwxyz{|}~",
+      "equal": false,
+      "bytes": [
+        52342,
+        74487
+      ]
+    },
+    {
+      "chars": "PQRSTUVWXYZ[hijklmnopqrs",
+      "equal": true,
+      "bytes": [
+        50534,
+        73739
+      ]
+    },
+    {
+      "chars": "VWXYZ[hijklmnopqrs",
+      "equal": true,
+      "bytes": [
+        47670,
+        70127
+      ]
+    },
+    {
+      "chars": "hijklmnopqrs",
+      "equal": false,
+      "bytes": [
+        44034,
+        66491
+      ]
+    },
+    {
+      "chars": "VWXYZ[nopqrs",
+      "equal": true,
+      "bytes": [
+        45874,
+        67923
+      ]
+    },
+    {
+      "chars": "VWXYZ[",
+      "equal": false,
+      "bytes": [
+        44666,
+        66027
+      ]
+    },
+    {
+      "chars": "YZ[nopqrs",
+      "equal": false,
+      "bytes": [
+        44034,
+        66087
+      ]
+    },
+    {
+      "chars": "VWXnopqrs",
+      "equal": true,
+      "bytes": [
+        44074,
+        66119
+      ]
+    },
+    {
+      "chars": "VWXqrs",
+      "equal": false,
+      "bytes": [
+        44074,
+        65547
+      ]
+    },
+    {
+      "chars": "VWXnop",
+      "equal": true,
+      "bytes": [
+        42878,
+        64815
+      ]
+    },
+    {
+      "chars": "WXnop",
+      "equal": true,
+      "bytes": [
+        42422,
+        64371
+      ]
+    },
+    {
+      "chars": "Xnop",
+      "equal": true,
+      "bytes": [
+        41766,
+        63715
+      ]
+    },
+    {
+      "chars": "nop",
+      "equal": false,
+      "bytes": [
+        41146,
+        63091
+      ]
+    },
+    {
+      "chars": "Xop",
+      "equal": true,
+      "bytes": [
+        41766,
+        63715
+      ]
+    },
+    {
+      "chars": "Xp",
+      "equal": false,
+      "bytes": [
+        41766,
+        63499
+      ]
+    },
+    {
+      "chars": "Xo",
+      "equal": true,
+      "bytes": [
+        41766,
+        63367
+      ]
+    },
+    {
+      "chars": "Xo",
+      "equal": true,
+      "bytes": [
+        41766,
+        63367
+      ]
+    }
+  ]
+}

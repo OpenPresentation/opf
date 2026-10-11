@@ -16,6 +16,7 @@ import { fsTypeOf, subsettingAllowed } from "./font-fstype.js";
 const SUBSET_LICENSES = new Set(["OFL-1.1", "Apache-2.0", "MIT", "UFL-1.0"]);
 const HB_MEMORY_MODE_READONLY = 1;
 const HB_SUBSET_SETS_LAYOUT_FEATURE_TAG = 6;
+const HB_SUBSET_FLAGS_GLYPH_NAMES = 0x80;
 const CACHE_LIMIT = 256;
 
 /** The manifest faces that may be subset, by sha256: permissive license, no Reserved Font Name in the family or file name. */
@@ -56,7 +57,7 @@ export function createSubsetter(wasm) {
   const exports = instance.exports;
   const required = ["memory", "malloc", "free", "hb_blob_create", "hb_blob_destroy", "hb_blob_get_length", "hb_blob_get_data", "hb_face_create", "hb_face_destroy",
     "hb_face_reference_blob", "hb_set_add", "hb_set_clear", "hb_set_invert", "hb_subset_input_create_or_fail", "hb_subset_input_destroy", "hb_subset_input_unicode_set",
-    "hb_subset_input_set", "hb_subset_or_fail"];
+    "hb_subset_input_set", "hb_subset_input_set_flags", "hb_subset_or_fail"];
   for (const name of required) if (!(name in exports)) throw new Error(`harfbuzz-subset.wasm has no export ${name}.`);
   return {
     subset(data, codePoints) {
@@ -69,7 +70,12 @@ export function createSubsetter(wasm) {
       let result = 0, output = null;
       try {
         if (!input) return null;
+        // macOS Chromium small-size rasterization changes when named X/o are absent, even when the text does not draw them.
+        // Keeping names alone or the outlines alone is insufficient: see the exact-pixel subset browser regression.
+        exports.hb_subset_input_set_flags(input, HB_SUBSET_FLAGS_GLYPH_NAMES);
         const unicodes = exports.hb_subset_input_unicode_set(input);
+        exports.hb_set_add(unicodes, 0x58); // X
+        exports.hb_set_add(unicodes, 0x6f); // o
         for (const codePoint of codePoints) exports.hb_set_add(unicodes, codePoint);
         // Every layout feature, not only HarfBuzz's default list: the browser shapes the subset like the whole face whatever
         // font-feature-settings the SVG asks for.

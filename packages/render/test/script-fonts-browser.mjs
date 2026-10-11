@@ -9,9 +9,13 @@ import {chromium} from 'playwright';
 // The decks name gallery font schemes (meiryo, david, ...): render with the host catalog registered.
 import {toSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
+import {FONT_POLICY, adjustedFontSize} from '../dist/fonts.js';
 
 const prepared = await loadFonts({pack:'base',scripts:'all'}), {registry} = prepared;
 const deck=(language,fontScheme,title)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text:'Body'}]});
+// RR-38, opf#361: a family whose policy row carries sizeAdjust draws its title at the adjusted size of the composed 54 px
+// (Arabic Typesetting 34.5; with core's opf#361 rows also Angsana New 40.5 and Malgun Gothic 57.75), read from the installed policy.
+const titleSizes=['54',...FONT_POLICY.families.filter(row=>typeof row.replacement?.sizeAdjust==='number').map(row=>String(adjustedFontSize(54,row.replacement.sizeAdjust)))];
 const cases=[
   ['cyrillic','ru','roboto','Квартальный обзор 12%'],
   ['greek','el','roboto','Τριμηνιαία ανασκόπηση 12%'],
@@ -52,10 +56,10 @@ try{
     for(const [url,face] of faces)document.fonts.add(await new FontFace(face.family,`url(${url})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());
     await document.fonts.ready;
   },[...served].map(([url,face])=>[url,{family:face.family,weight:face.weight,italic:face.italic}]));
-  const observed=await page.evaluate(cases=>cases.map(value=>{
+  const observed=await page.evaluate(([cases,titleSizes])=>cases.map(value=>{
     const host=document.querySelector('main');host.innerHTML=value.svg;
-    // RR-38: an Arabic Typesetting title is drawn at 0.64 of the composed size (54 px), so its advance is checked at 34.5.
-    const title=[...host.querySelectorAll('text')].find(text=>['54','34.5'].includes(text.getAttribute('font-size')));
+    // RR-38: a size-adjusted title is drawn at the adjusted size (titleSizes), and its advance is checked there.
+    const title=[...host.querySelectorAll('text')].find(text=>titleSizes.includes(text.getAttribute('font-size')));
     const spans=[...title.querySelectorAll('tspan[textLength]')];
     const elements=spans.length?spans:[title];
     const runs=elements.map(element=>{
@@ -72,7 +76,7 @@ try{
     const content=title.textContent,stop=content.lastIndexOf('.'),first=content.search(/[\u0590-\u08FF]/);
     const order=stop>=0&&first>=0?{stop:title.getStartPositionOfChar(stop).x,first:title.getStartPositionOfChar(first).x}:undefined;
     return {id:value.id,lang:host.querySelector('svg').getAttribute('lang'),runs,order};
-  }),cases.map(({id,svg})=>({id,svg})));
+  }),[cases.map(({id,svg})=>({id,svg})),titleSizes]);
   const output=path.resolve(process.argv[2]??'artifacts/script-fonts-browser.json');
   await mkdir(path.dirname(output),{recursive:true});
   await writeFile(output,JSON.stringify({node:process.version,browser:browser.version(),observed,errors,requests,scope:'Offline browser advances of pinned Noto script faces against accepted fontkit advances. Native PowerPoint rendering and HarfBuzz/fontkit shaping parity beyond these samples remain separate.'},null,2)+'\n');

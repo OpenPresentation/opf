@@ -22,15 +22,29 @@ assert.equal(row.replacement.family, 'Noto Naskh Arabic');
 assert.equal(row.replacement.compatibility, 'visual');
 assert.equal(row.replacement.sizeAdjust, ADJUST);
 assert.match(row.replacement.sizeAdjustBasis, /advances/);
-assert.deepEqual(FONT_POLICY.families.filter(item => item.replacement?.sizeAdjust !== undefined).map(item => item.family), ['Arabic Typesetting'], 'only Arabic Typesetting carries a multiplier');
+// opf#361 adds five rows (core after 0.18.1). The renderer reads whatever the installed core's policy says, so this accepts the policy of
+// either core and checks the opf#361 rows exactly when they are present.
+const adjustedFamilies = FONT_POLICY.families.filter(item => item.replacement?.sizeAdjust !== undefined).map(item => item.family).sort();
+const OPF361 = {'Angsana New': [0.75, 0.83, 0.86], DilleniaUPC: [0.68, 0.82, 0.85], 'Sakkal Majalla': [0.89, 0.76, 0.81], 'Malgun Gothic': [1.07, undefined, undefined], 'Nirmala UI': [1.07, 0.97, 0.94]};
+const opf361 = adjustedFamilies.length > 1;
+assert.deepEqual(adjustedFamilies, opf361 ? ['Angsana New', 'Arabic Typesetting', 'DilleniaUPC', 'Malgun Gothic', 'Nirmala UI', 'Sakkal Majalla'] : ['Arabic Typesetting'], 'the measured rows carry a multiplier, no other');
 assert.equal(sizeAdjustFor(row, 'Noto Naskh Arabic'), ADJUST);
 assert.equal(sizeAdjustFor('Arabic Typesetting', 'noto naskh arabic'), ADJUST, 'by family name, case-insensitive');
 assert.equal(sizeAdjustFor(row, 'Noto Sans Arabic'), undefined, 'the multiplier was measured on Noto Naskh Arabic only');
 assert.equal(sizeAdjustFor(fontPolicyFor('Aptos'), 'Intos'), undefined, 'a metric row has none');
 assert.equal(sizeAdjustFor(undefined, 'Noto Naskh Arabic'), undefined);
 
-// The native baseline (RR-38 probe): 0.70 em below the line top for a line in the real font, 0.78 with another font in the line.
-assert.deepEqual(lineAscentFor(row, 'Noto Naskh Arabic'), {lineAscent: 0.7, lineAscentMixed: 0.78});
+// The native baseline below the line top, for a line in the real font and for one with another font in it: RR-38 recorded 0.70 / 0.78,
+// opf#361 re-measured 0.74 / 0.80 (an earlier estimator read the RR-38 probe low).
+const ASCENT = opf361 ? [0.74, 0.8] : [0.7, 0.78];
+assert.deepEqual(lineAscentFor(row, 'Noto Naskh Arabic'), {lineAscent: ASCENT[0], lineAscentMixed: ASCENT[1]});
+// opf#361: each new row applies to its own replacement only, with the measured multiplier and line ascents (Malgun Gothic has none).
+if (opf361) for (const [family, [adjust, ascent, mixed]] of Object.entries(OPF361)) {
+  const policyRow = fontPolicyFor(family), replacement = policyRow.replacement.family;
+  assert.equal(sizeAdjustFor(policyRow, replacement), adjust, family);
+  assert.equal(sizeAdjustFor(policyRow, 'Noto Sans'), undefined, `${family}: not on another face`);
+  assert.deepEqual(lineAscentFor(policyRow, replacement), ascent === undefined ? undefined : {lineAscent: ascent, lineAscentMixed: mixed}, family);
+}
 assert.equal(lineAscentFor(row, 'Noto Sans Arabic'), undefined);
 assert.equal(lineAscentFor(fontPolicyFor('Aptos'), 'Intos'), undefined);
 assert.equal(baselineShift([]), 0);
@@ -170,7 +184,7 @@ const estimatedOptions = {fonts: estimatedFonts};
 }
 
 {
-  // Baselines: PowerPoint puts an Arabic Typesetting line's baseline 0.70 em below the line top (0.78 with a Latin run), core one em. The
+  // Baselines: PowerPoint puts an Arabic Typesetting line's baseline ASCENT[0] em below the line top (ASCENT[1] with a Latin run), core one em. The
   // control deck names the replacement itself, so its baselines are core's. Estimated and measured previews both move the line up.
   const baselines = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => /font-family="Noto Naskh Arabic|font-family="(?:Aptos|Intos)/.test(tag))
     .map(tag => ({size: Number(/font-size="([0-9.]+)"/.exec(tag)[1]), y: Number(/ y="([0-9.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1]}));
@@ -178,18 +192,19 @@ const estimatedOptions = {fonts: estimatedFonts};
   const arabic = baselines(toSvg(deck(undefined, 'ar'), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
   const control = baselines(toSvg(deck('noto-naksh-arabic', 'en-US'), estimated)[0]);
   assert.equal(arabic.length, control.length);
-  for (const [index, item] of arabic.entries()) near(control[index].y - item.y, 0.3 * control[index].size, 0.002, `estimated line ${index} moves up 0.30 em of the composed size`);
-  // Measured: the same shift on the line's baseline (core's placed baseline of the same ink, minus 0.30 em).
+  const up = 1 - ASCENT[0], upMixed = 1 - ASCENT[1];
+  for (const [index, item] of arabic.entries()) near(control[index].y - item.y, up * control[index].size, 0.002, `estimated line ${index} moves up ${up.toFixed(2)} em of the composed size`);
+  // Measured: the same shift on the line's baseline (core's placed baseline of the same ink, minus 1 - ASCENT[0] em).
   const measuredArabic = baselines(toSvg(deck(undefined, 'ar'), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
   assert.ok(measuredArabic.every(item => Number.isFinite(item.y)));
-  // A line holding a Latin run moves up 0.22 em of the composed size; a Latin-only line in the same deck does not move.
+  // A line holding a Latin run moves up 1 - ASCENT[1] em of the composed size; a Latin-only line in the same deck does not move.
   const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
   const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Title', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
   const mixedLine = baselines(toSvg(mixed, estimated)[0]).filter(item => item.size < 40), mixedBase = baselines(toSvg(mixedControl, estimated)[0]).filter(item => item.size < 40);
   const latinOnly = baselines(toSvg({name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   const latinControl = baselines(toSvg({name: 'RR-38', language: 'en-US', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   assert.deepEqual(latinOnly.map(item => item.y), latinControl.map(item => item.y), 'Latin-only lines keep core baselines');
-  near(mixedBase[0].y - mixedLine[0].y, 0.22 * mixedBase[0].size, 0.002, 'a mixed line moves up 0.22 em');
+  near(mixedBase[0].y - mixedLine[0].y, upMixed * mixedBase[0].size, 0.002, `a mixed line moves up ${upMixed.toFixed(2)} em`);
   for (const item of mixedLine) near(item.y, mixedLine[0].y, 1e-9, 'every fragment of the line shares the shifted baseline');
 }
 

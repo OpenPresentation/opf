@@ -74,6 +74,10 @@
           "command": "npm run test:script-family-hosts-browser"
         },
         {
+          "id": "browser:script-name-hosts-browser",
+          "command": "node test/script-name-hosts-browser.mjs artifacts/script-name-hosts"
+        },
+        {
           "id": "browser:lazy-face-fallback-browser",
           "command": "npm run test:lazy-face-fallback-browser"
         },

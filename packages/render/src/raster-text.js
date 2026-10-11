@@ -14,7 +14,9 @@
 //     where the run's glyphs do not map back to its characters, or the run has a kinzi), measured with the face resvg will pick for the run
 //     (fontdb's family, style and weight matching over the same font files, with the same glyph fallback order), the OpenType language
 //     of the SVG's lang and the policy features, scaled to the run's textLength when it has one; text-anchor middle and end are
-//     resolved into absolute starts, baseline-shift into the y;
+//     resolved into absolute starts, baseline-shift into the y. When the conversion has HarfBuzz (`shape`, the fonts handle's
+//     `outlines.shape`), the pens are HarfBuzz's, the browser's shaper (fontkit kerns after a decomposed Thai sara am differently);
+//     fontkit's otherwise;
 //   - a cluster of a script whose fontkit glyph runs equal HarfBuzz's in the corpus (Devanagari, Gujarati, Oriya, Tamil, Kannada,
 //     Sinhala) is drawn as fontkit's glyph outlines (<path> per glyph), so a conjunct under a pre-base vowel is the browser's;
 //   - any other cluster (Bengali, Gurmukhi, Telugu, Malayalam, Thai, Lao, Khmer and Myanmar, where fontkit orders marks differently
@@ -31,6 +33,7 @@ import { create } from "fontkit";
 import { disabledFeaturesFor } from "./font-compatibility.js";
 import { pinGlyphCodePoints } from "./font-registry.js";
 import { openTypeLanguage } from "./script-fonts.js";
+import { sha256Bytes } from "./sha256.js";
 
 const AFFECTED = /[\p{scx=Devanagari}\p{scx=Bengali}\p{scx=Gurmukhi}\p{scx=Gujarati}\p{scx=Oriya}\p{scx=Tamil}\p{scx=Telugu}\p{scx=Kannada}\p{scx=Malayalam}\p{scx=Sinhala}\p{scx=Thai}\p{scx=Lao}\p{scx=Khmer}\p{scx=Myanmar}]/u;
 // Scripts whose fontkit glyph runs equal HarfBuzz's for every corpus sample (glyph ids, order and advances, no retry): drawn as outlines.
@@ -56,8 +59,11 @@ const PAINT = new Set(["fill", "fill-opacity", "fill-rule", "opacity", "stroke",
 const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
 const faceCache = new Map();
 
-/** Rewrites complex-script text of `svg` into per-cluster positioned pieces for resvg (see the file comment). */
-export async function pinScriptClusters(svg, { fontFiles = [], defaultFontFamily = "Roboto", sansSerifFamily, serifFamily, monospaceFamily, cursiveFamily, fantasyFamily } = {}) {
+/**
+ * Rewrites complex-script text of `svg` into per-cluster positioned pieces for resvg (see the file comment). `shape` is the fonts
+ * handle's HarfBuzz shaper (`outlines.shape`): the clusters are then pinned at HarfBuzz's pens, else at fontkit's.
+ */
+export async function pinScriptClusters(svg, { fontFiles = [], defaultFontFamily = "Roboto", sansSerifFamily, serifFamily, monospaceFamily, cursiveFamily, fantasyFamily, shape } = {}) {
   if (!AFFECTED.test(svg) && !HANGUL.test(svg)) return svg;
   // resvg-js names for the generic families (its own defaults where rasterizeSvg sets none) and for text without a font-family.
   const generics = {
@@ -81,7 +87,7 @@ export async function pinScriptClusters(svg, { fontFiles = [], defaultFontFamily
     const inner = svg.slice(tokens.lastIndex, closeIndex);
     tokens.lastIndex = closeIndex + "</text>".length;
     if (!needsRewrite(inner, props)) continue;
-    const rewritten = rewriteText({ attrs, attributes, inner, props }, await database(), generics);
+    const rewritten = rewriteText({ attrs, attributes, inner, props }, await database(), generics, typeof shape === "function" ? shape : undefined);
     if (rewritten === null) continue;
     output += svg.slice(end, match.index) + rewritten;
     end = tokens.lastIndex;
@@ -218,7 +224,7 @@ export function clusterPieces(text, pinAll = false) {
   return pieces;
 }
 
-function rewriteText(text, db, generics) {
+function rewriteText(text, db, generics, shape) {
   const root = parseInner(text.inner);
   if (!root) return null;
   const rootProps = text.props;
@@ -263,7 +269,7 @@ function rewriteText(text, db, generics) {
     const base = selectFace(db, leaf.props, generics);
     if (!base) return null;
     leaf.runs = faceRuns(db, base, leaf.value);
-    const widths = measurePrefixes(leaf.runs, leaf.pieces.map(piece => piece.end), leaf.props);
+    const widths = measurePrefixes(leaf.runs, leaf.pieces.map(piece => piece.end), leaf.props, shape);
     if (!widths) return null;
     let previous = 0;
     for (const [index, piece] of leaf.pieces.entries()) { piece.width = widths[index] - previous; previous = widths[index]; }
@@ -362,7 +368,7 @@ async function readFace(file) {
   const names = Object.values(records.preferredFamily ?? {}).length ? Object.values(records.preferredFamily) : Object.values(records.fontFamily ?? {});
   const os2 = font["OS/2"], selection = os2?.fsSelection;
   return {
-    file, font, families: new Set(names.filter(name => typeof name === "string")), outlines: new Map(),
+    file, font, data, families: new Set(names.filter(name => typeof name === "string")), outlines: new Map(),
     weight: os2?.usWeightClass ?? 400, stretch: os2?.usWidthClass ?? 5,
     style: selection?.italic || (!os2 && font.head?.macStyle?.italic) ? "italic" : selection?.oblique ? "oblique" : "normal"
   };
@@ -428,8 +434,8 @@ function shapeRun(face, value, props) {
   catch { return { run: layout({ abvm: false, blwm: false, mark: false, mkmk: false }), retry: true }; }
 }
 
-/** Advance widths (px) of the prefixes of the runs' text ending at each offset of `ends`. */
-function measurePrefixes(runs, ends, props) {
+/** Advance widths (px) of the prefixes of the runs' text ending at each offset of `ends`, at HarfBuzz's pens when `shape` is given. */
+function measurePrefixes(runs, ends, props, shape) {
   const width = (face, value) => {
     if (!value) return 0;
     // The Myanmar kinzi is a zero-advance mark in HarfBuzz; fontkit's universal shaper keeps the nga's advance, so it is not measured.
@@ -441,13 +447,23 @@ function measurePrefixes(runs, ends, props) {
     const pens = new Map();
     // opf-render#189: the pen at a cluster boundary inside a run is read from the run shaped as a whole, so an advance its context
     // changes (a Thai leading vowel kerned to its consonant) is the one the browser draws; a prefix shaped alone ends without it.
+    // With the conversion's HarfBuzz (opf-render#189 follow-up), a run's pens are HarfBuzz's when it gives every boundary the run
+    // needs; a run it does not is measured with fontkit throughout, so no run mixes the two shapers.
+    const harfBuzz = new Map();
+    if (shape) for (const run of runs) {
+      const found = harfBuzzPens(run.face, run.text, props, shape);
+      if (found && ends.every(end => end <= run.start || end >= run.start + run.text.length || found.has(end - run.start))) harfBuzz.set(run, found);
+    }
     const prefix = (run, length) => {
+      const shaped = harfBuzz.get(run)?.get(length);
+      if (shaped !== undefined) return shaped;
       if (!pens.has(run)) pens.set(run, contextPens(run.face, run.text, props));
       return pens.get(run)?.get(length) ?? width(run.face, run.text.slice(0, length));
     };
+    const whole = run => harfBuzz.get(run)?.get(run.text.length) ?? width(run.face, run.text);
     let runIndex = 0, before = 0;
     for (const end of ends) {
-      while (runIndex < runs.length && runs[runIndex].start + runs[runIndex].text.length <= end) { before += width(runs[runIndex].face, runs[runIndex].text); runIndex++; }
+      while (runIndex < runs.length && runs[runIndex].start + runs[runIndex].text.length <= end) { before += whole(runs[runIndex]); runIndex++; }
       const run = runs[runIndex];
       widths.push(run && end > run.start ? before + prefix(run, end - run.start) : before);
     }
@@ -473,6 +489,49 @@ function contextPens(face, value, props) {
   }
   return consumed === value.length ? pens : null;
 }
+
+/**
+ * HarfBuzz's pen (px) at each character offset of `value`, shaped as one run by `shape` (the fonts handle's `outlines.shape`), where
+ * the glyphs before it carry exactly the characters before it (a syllable boundary, also when HarfBuzz reorders inside a syllable),
+ * and at the end of the run. Null when HarfBuzz cannot shape the run or its glyphs do not carry its characters.
+ */
+function harfBuzzPens(face, value, props, shape) {
+  let glyphs;
+  try {
+    face.harfBuzz ??= { hash: hexDigest(sha256Bytes(face.data)), data: face.data };
+    const off = disabledFeaturesFor([...face.families][0]);
+    glyphs = shape(face.harfBuzz, value, { direction: "ltr", lang: props.lang, ...(off ? { features: Object.fromEntries(off.map(tag => [tag, false])) } : {}) });
+  } catch { return null; }
+  if (!Array.isArray(glyphs)) return null;
+  const pens = new Map(), scale = props.fontSize / face.font.unitsPerEm;
+  // How many more times each character was carried by the glyphs so far than it occurs in the text before `consumed`; `unmatched`
+  // counts the characters where that is not zero, so it is zero exactly where the glyphs so far carry the text before `consumed`.
+  const balance = new Map();
+  let consumed = 0, unmatched = 0, pen = 0;
+  const count = (character, step) => {
+    const before = balance.get(character) ?? 0, after = before + step;
+    if (!before) unmatched++;
+    if (!after) { unmatched--; balance.delete(character); } else balance.set(character, after);
+  };
+  for (const glyph of glyphs) {
+    if (glyph.codePoints?.length) {
+      if (!unmatched && !pens.has(consumed)) pens.set(consumed, pen * scale);
+      for (const point of glyph.codePoints) {
+        if (consumed >= value.length) return null;
+        const own = String.fromCodePoint(value.codePointAt(consumed));
+        count(String.fromCodePoint(point), 1);
+        count(own, -1);
+        consumed += own.length;
+      }
+    }
+    pen += glyph.advance;
+  }
+  if (consumed !== value.length || unmatched) return null;
+  pens.set(value.length, pen * scale);
+  return pens;
+}
+
+const hexDigest = bytes => Array.from(bytes, byte => byte.toString(16).toUpperCase().padStart(2, "0")).join("");
 
 /** The glyph outlines of one cluster, or null when fontkit needed the mark retry (its glyph placement is then not the browser's). */
 function shapeOutlines(face, value, props) {
