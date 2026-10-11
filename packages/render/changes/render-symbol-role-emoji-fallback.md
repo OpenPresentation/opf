@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+A symbol-encoded family (Wingdings, Symbol, Webdings) named as a font-scheme role (heading, body, code or accent) now keeps its name when a slide is bound, so the script-font planner maps the private-use codes (U+F0FC and the like) through the symbol table and draws the open symbol glyphs, as it does for a symbol run; `toSvg` with `scripts: 'auto'` used to throw `missing-glyph` because the role resolved to the open symbol face and lost the encoding (opf-pptx#169). The emoji fallback now has a second designated face: `Zsye` names `Noto Emoji` (monochrome) after `Noto Color Emoji`, so a host with only `@expo-google-fonts/noto-emoji` installed previews and exports emoji instead of throwing `missing-glyph`; the colour face stays first where it is loaded, and `designatedFamilies('Zsye')` and the glyph fallback chain list both. Output for decks without a symbol-encoded role or an emoji is unchanged.
