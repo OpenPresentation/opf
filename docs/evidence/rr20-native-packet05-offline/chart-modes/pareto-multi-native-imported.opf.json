@@ -1,0 +1,30 @@
+{
+  "slides": [
+    {
+      "title": "pareto",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North"
+          ],
+          "rows": [
+            [
+              "Q1",
+              4
+            ],
+            [
+              "Q2",
+              5
+            ],
+            [
+              "Q3",
+              6
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}
