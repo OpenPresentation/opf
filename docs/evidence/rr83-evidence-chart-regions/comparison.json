@@ -1,0 +1,203 @@
+{
+  "inputs": {
+    "core": "6d3d4e12b5a1e8448139ad570a5e054330622fcf",
+    "renderer": "2377a136aebfb68559ef202dcb8f75d3fad6d0ad",
+    "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+  },
+  "affected": [
+    {
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "d0f180cda11841204277b9cfc9c95dfc9c40704ce80fe6dfc0e2bcf6e07c11ca",
+      "afterDocumentSha256": "ae8b2cc406ce8de972d5ea2ea0265284c91b148c7e0cd1180701c24731c30fca"
+    },
+    {
+      "key": "gallery/business-functions/investor-relations-update.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "2f7be8869206c54a3a98208db76fc4f91516bfde461f911bc3b822250cc24ca8",
+      "afterDocumentSha256": "b86673c4be65abe12868e77c8751b6bf0bafccfd7bd8e6d94332b42c17657e9a"
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "e2b64f1b97b5a9699e9251e05f70dbef73e6ac278922db63a7f9f094b767df36",
+      "afterDocumentSha256": "824623393b0f1c1d44924139b9626a617d8c123df1da847deeb46e71cc6bb0e9"
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "24329017147f637145b26607a54054887263bb0899e0f02a0f09d3a19f7688a3",
+      "afterDocumentSha256": "cf16ce5508c3a91b0f21ed1f2bee43d02ec40d6e2dfb351bced3bb7240c9d828"
+    },
+    {
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "583c47f4435f5bae89dd712847441bb11e6c4620dc2b1d62d8e2c1c805eb1922",
+      "afterDocumentSha256": "e7f930f320fc3f38fd59a0c9ac236b496b4df3355363ead52efbf823da49d6ac"
+    },
+    {
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "888d38fe8f739693472b2b5ffdf7cdbadd0a8ae0575618376d86f83e5ac175c4",
+      "afterDocumentSha256": "8e9b3e828bdd4cde30b230841392e8e7fa54047bee82bbd81d90e188e3a5c495"
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "2fa96b31e0dd3e18ae99473386576c6463e051f5fc75ff8edf3d6864d6def0f9",
+      "afterDocumentSha256": "310a99b7f1e7849c63664316c27bb20fdc1af668f322645b20422c91d1a7b2e1"
+    },
+    {
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "366f61c01b8868e4379053769a74f376dc27c66a5a986a692b8ff624da1e3e4f",
+      "afterDocumentSha256": "5e61a3e5656f3b74f6121094dd01973ad3b2f80f382e05e4dbd73753f71235ea"
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "3e0c5a3e7ff60735207f33ccf96627be05a5317d4906df2f938784d68da9c662",
+      "afterDocumentSha256": "d02a7e46c6e2b0c5faaebe6ed1387cc89dce27ca4252e1c1ec7c32d29ebeea8e"
+    },
+    {
+      "key": "gallery/education/library-modernization-roadmap.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "c7cbc731d74a127a1ecfd3aad5387dfab5a250c8969d5f36d98961ac7dd6e1c6",
+      "afterDocumentSha256": "a615a5d1535c13736c62aa0db38510e0969bd03273418df9ec19bb204bedeb98"
+    },
+    {
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "75b45caa3e4bb3ef5025bf8eabd3638120b0079dd0eadd7c029fb87bff4770aa",
+      "afterDocumentSha256": "acfa537eec22875f69ccd178c80d21240d12c91d2fd84e2f3278f7297ac4bec6"
+    },
+    {
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "91810e9809c0176d6f46410531133ab8769f9ee76256253eeae02d37c71e8e0a",
+      "afterDocumentSha256": "f5e5864828b9063cacf2a68a2e5ec03dc2724bc7742d175627a54bc22ab19922"
+    },
+    {
+      "key": "gallery/government/water-utility-capital-plan.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "5c6b5dd6efa02433027062d401bc86e3b2500df6732f1bc27c3065c90ea79d84",
+      "afterDocumentSha256": "532bb4ff9727c5b5265d2852fddac2c7e66f5a906e8fa8ba7365aaa4f64e9a2b"
+    },
+    {
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "ef5ba17925af60037e172632d93b80baf3daa012cc7faecc9656625e877e6303",
+      "afterDocumentSha256": "82bd630bb4d75051caac5ec438793529e22bf1d42af13dd754bd9b60ca379e5f"
+    },
+    {
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "f5c360f50de752cfb69186127e9325880b6d8ee33615438a2315b226996e60d5",
+      "afterDocumentSha256": "0540ccf35183a5e96b60723826e4afa147640839924fbb54479bb2032c38c784"
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "7e126f357db2dbba66b5dc21e93f6bb79c3c47215cd662fb3b7fc78bc2a0037a",
+      "afterDocumentSha256": "3dc82db8c6e50c534ecdc482fca44ab6f7ef2d230a4b5cd2302b852557b4fabd"
+    },
+    {
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "d404491df14ffcf4e680f5b0e73cd7c8eed565822449f933286a9bb700632865",
+      "afterDocumentSha256": "d65b514a8d7958ad6283ee6f74af2368ff09475411a5f9da485572204dc5102f"
+    },
+    {
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "135f6446b0a181477e8b65ff4e096f7a8534d33cd859ed7235bccc390cfdb7a3",
+      "afterDocumentSha256": "0c3b0562d6cb7ab2fe8d2d9189ffae2902d65e0d509988629692e2cac688be46"
+    },
+    {
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "22fa3635fb95b63650dfbbd73d9e97e8fbb763ac31058c6ae8face85de6bf78e",
+      "afterDocumentSha256": "f1bcaea9120a3a79cb187df6b753f6f8c3a5e833c7a56e30d1fefcec4640ba01"
+    },
+    {
+      "key": "gallery/presentation-types/research-findings-report.opf.json#6",
+      "oldLayout": "dashboard",
+      "newLayout": "chart-beside",
+      "contentAndOrderEqual": true,
+      "designEqual": true,
+      "beforeDocumentSha256": "a1a63230d3ab786d7600a803ffb3c9a07ee49cf96ac32852c40cde404f848d8b",
+      "afterDocumentSha256": "53c02ddfe8aedfa3d913a42fd52b2e1b995132cd349c5119942c8cb176906044"
+    }
+  ],
+  "imageSha256": {
+    "policy-briefing-for-advisors-after.png": "9216d57a350bdd51b5d40bd54b3363e76867cf3dd59ba3617387ae36cc8b3207",
+    "policy-briefing-for-advisors-after.svg": "f4b81cc164a075150da94918548cef09cfbaad56ef74c3eb440b2b016c10f118",
+    "policy-briefing-for-advisors-before.png": "f4237d6e05086ca7329e9f51f128e9194b3b5c19538e5d65e56a2fb99372a234",
+    "policy-briefing-for-advisors-before.svg": "f7a5ae6b422d79b9212332b0911bf2a2fd7f7a5c50f5c1ca7a944778e7a6c1ec",
+    "product-roadmap-decision-review-after.png": "555f10914ec02e00dafbff8a13b57d83ceadd47974bdd4a5468efdac331bae7e",
+    "product-roadmap-decision-review-after.svg": "e87ed85e95fb08f4c837b321939b640d3b246a10803f320f75612c6ed2575caf",
+    "product-roadmap-decision-review-before.png": "aedb075561ec1b3f020dc02da57c9fa262f78ad4d1395cd076a487b366249036",
+    "product-roadmap-decision-review-before.svg": "b0a00e907059e5abda6a7f2e4a9c613d17da4355a2737ca96245ba6532062ca3",
+    "research-findings-report-after.png": "4177a1bb8996d8aa6146be2793084929c9761db32d85e93ce446fefc1f8401c0",
+    "research-findings-report-after.svg": "e63fe0c7d5d19f14b2ad0fa41decef0bda5007bdd4cb65d53ebaaad16767bc38",
+    "research-findings-report-before.png": "7e98e90348dd2f9166ddcbce300aedb4cea52315e6b671c8a62b132fd69bf871",
+    "research-findings-report-before.svg": "6a7342e614d5cc009fbc136c53a9d21549e5c66ffd1c3e43dcdc219349bddcdf"
+  }
+}

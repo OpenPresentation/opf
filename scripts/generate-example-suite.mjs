@@ -566,7 +566,9 @@ function blocksSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-blocks`,
     section: "Evidence",
-    layout: "dashboard",
+    // Vertical dashboard packing would split the chart and quote into shallow strips.
+    // Keep a full-height chart beside its notes while horizontal decks retain the KPI overview.
+    layout: pick(["dashboard", "chart-beside"], index),
     title: "Evidence Pack",
     blocks: [
       {
