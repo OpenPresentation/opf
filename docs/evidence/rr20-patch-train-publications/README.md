@@ -44,4 +44,4 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 
 ## Editor 0.18.2 prerequisite and dry preparation
 
-[Pre-prep and reviewed metadata receipts](editor-0182-preparation/README.md) are retained. Prepared qualification 22527 is still running playground checks after install/audit/type/validate/full tests passed; no release PR or terminal full-run claim.
+[Pre-prep and reviewed metadata receipts](editor-0182-preparation/README.md) are retained. Prepared qualification 22527 failed the broader data-grid browser case after all 20 playground cases and preceding gates passed; remaining gates are unrun, source unchanged, diagnosis unconfirmed. [Failure receipts](editor-0182-preparation/failed-qualification/status.md). No release PR or acceptance claim.
