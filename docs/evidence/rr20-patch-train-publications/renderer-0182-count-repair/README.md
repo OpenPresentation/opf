@@ -35,3 +35,11 @@ The repair merge and source-lock merge tasks are complete. Renderer #234 retry i
 Renderer #234 merged at `de0a5034f49dbacfe190946ec7416a976981cf45` at 16:32:38 UTC, prescribed retry gate 74020 exit 0; [authentic retry transcript](render234-repaired-gate.log). Supervisor synced renderer main and verified its entire tree is identical to qualified release-prep `09325bddb475d1de2d4650373c0de007764ef167`. Source repair, lock selection and prep merge are complete. Exact release-commit gate 52003 is live for required Linux/macOS and Node 22/26 checks; publication has not occurred.
 
 The independently verified renderer-retry inventory snapshot has 28 PRs and 45 issues. The known #234 merge reconciles that snapshot to 27 open PRs; no fresh query or issue-count change is claimed. Required publication/independent verification, PPTX/editor patches, adoption and native acceptance remain pending; T18 stays open.
+
+## Dated release-commit gate and tag — 2026-10-11, 17:00 UTC
+
+Exact renderer commit gate 52003 completed exit 0 after all six required checks and mandated confirmation at 17:00:11 UTC, source `de0a5034f49dbacfe190946ec7416a976981cf45`; [authentic gate receipt](render0182-release-commit-gate.log). Supervisor release-train created `opf-render-v0.18.2` at that exact commit. [Pending publication snapshot](render0182-publication-pending.log) records only tag creation/waiting; supervisor process 85393 remains responsible for trusted publication and verification. Renderer 0.18.2 is NOT yet registry verified, and no publication completion is claimed.
+
+[Local v0.19 core refresh](../v019-source-refresh-622623/README.md) retains the source-only #622/#623 integration and 24/25 mapped result, with the real minor-version prerequisite still unmet. Historical packet identities and current 15/40 progress remain unchanged.
+
+- 2026-10-11, 17:02 UTC: Fresh supervisor-verified inventory is 27 PRs and 45 issues across eight clean, synced defaults, complete pagination; no new or changed open heads, renderer #234 the sole new closure. Source snapshots `inventory-render0182-publishing.json` and its sync receipt are retained by the supervisor. Trusted publish workflow [38157832669](https://github.com/OpenPresentation/opf-render/actions/runs/38157832669) is in progress under process 85393; registry verification remains pending.

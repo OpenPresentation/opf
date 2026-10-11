@@ -1,0 +1,11 @@
+# Independent local core integration review
+
+Reviewed clean local `c6b81092862b1f414acec9b38bfb00ff78739f61` at `/private/tmp/opf-v019-core-current-integration` against prior `5adf19a2483ad6ced7b8f118b5eba3c0d488a1f7` and actual main `f2394d73ece195933c34a3dfffdcba8e14aefed5`. Source-scope approval: no actionable defect found. No tests, edits, API or concurrent build executed by reviewer; mapped results remain implementing agent's separate gate.
+
+Outside docs/evidence, exactly four paths change: ecosystem.lock.json, root package.json, scripts/lazy-font-counts.mjs and its test. Strict count helper/test are byte-identical to actual main's reviewed #622. Root registration adds only check:lazy-font-counts. Unknown releases/prereleases and wrong counts remain rejected; no generic acceptance or staging guard change.
+
+Core/CLI runtime source, packages/cli, spec/schemas, examples, scripts/fixtures, original catalog-free budget and pnpm lock are byte-identical to prior 5adf. Genuine core0.18.4 manifest remains unchanged. No fake19 metadata or breaking override. Existing candidate-gallery guards/configuration are unchanged; no requiresUnreleasedGallery declaration or candidate configuration was silently added. Historical authorization overlayed107 remains a separate source identity.
+
+Lock source pins/provenance adopt authentic #623 main graph: core382ae0102335f536131a6e3659761f8a5240fe4d, rendererdd6b520404d423fd4ddd59e81a9b47971e906be3, PPTX95a2f22fc2ecbef2c359649ea4b308c649923fb4, editor39e62a61b323753b47a504621216754c14c78c86. Compared with actual main, only golden path differs: candidate intentionally preserves previously reviewed rr83-v2-reviewed fixture rather than replacing it with main's rr-71. All fixture bytes unchanged. This is local candidate selection, not a final source-lock roll qualifying unpublished v2 engines.
+
+Merged packet06/refreshed-stage durable evidence is byte-identical to main. Its old source/tar/seals remain historical; the merge does not rename those identities to c6b. No fresh packet, six-package staging, registry/native or golden rerender claim. Later genuine development-minor metadata, explicit reviewed candidate authorization, final coordinated source-lock adoption and new staged/runtime acceptance remain required.

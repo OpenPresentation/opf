@@ -1,0 +1,9 @@
+# Local v0.19 source refresh: #622/#623
+
+Local-only clean head `b597dbe099166d62067ea1cc67696c45cc268177` incorporates actual core main `f2394d73ece195933c34a3dfffdcba8e14aefed5` into accepted candidate `5adf19a2483ad6ced7b8f118b5eba3c0d488a1f7`. [Source review](rr20-v019-core-622623-refresh-review.md), [independent review](rr20-v019-core-622623-independent-review.md), [supervisor byte proof](rr20-v019-core-622623-root-byte-review.json) and [tracker preservation receipt](rr20-v019-core-622623-tracker-preservation.json) retain the precise scope.
+
+Core/CLI runtime, schema 2/catalog/adaptive layouts, examples, genuine 0.18.4 metadata, candidate fields and reviewed golden/budget inputs remain unchanged. Imported count record #622 and generated source pins #623 are preserved. The full integration changes tracker generators/overrides/tests, so prescribed font-then-gallery regeneration is related under CONTRIBUTING: only five offline packet06 evidence references are added; all other fields and statuses across 863 records remain unchanged. These references do not claim Office execution.
+
+Final mapped run 74093 completed exit 1: 24/25 steps pass, including strict tracker freshness, typecheck and complete core/CLI tests. The sole unmet gate is genuine minor-version acknowledgement for the intentional breaking v2 changes; no version invention or gate waiver. Original failed tracker run and its precise diagnosis remain in the source review. This local source refresh is unpushed and is not a new staged/registry/native qualification.
+
+Historical packet06 and refreshed-stage source/tar identities remain immutable. A later complete graph/new-version qualification must bind new artifacts and separately adopt exact renderer 0.19 lazy-face records. No checkpoint or public/native status changes.

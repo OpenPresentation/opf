@@ -1,0 +1,31 @@
+{
+  "records": 863,
+  "changes": [
+    {
+      "type": "layouts",
+      "id": "chart",
+      "addedEvidence": "docs/evidence/rr20-native-packet06-offline"
+    },
+    {
+      "type": "layouts",
+      "id": "chart-beside",
+      "addedEvidence": "docs/evidence/rr20-native-packet06-offline"
+    },
+    {
+      "type": "layouts",
+      "id": "image-beside",
+      "addedEvidence": "docs/evidence/rr20-native-packet06-offline"
+    },
+    {
+      "type": "layouts",
+      "id": "table",
+      "addedEvidence": "docs/evidence/rr20-native-packet06-offline"
+    },
+    {
+      "type": "layouts",
+      "id": "text",
+      "addedEvidence": "docs/evidence/rr20-native-packet06-offline"
+    }
+  ],
+  "allOtherFieldsUnchanged": true
+}
