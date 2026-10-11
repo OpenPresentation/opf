@@ -41,7 +41,7 @@ Accepted local v0.19 core refresh is `b597dbe099166d62067ea1cc67696c45cc268177`,
 | `@openpresentation/opf` | **0.18.4** | Tag `opf-v0.18.4` at `e09461624a64`, independently verified; prior 0.18.3 also published. **0.18.2 is burned** (tagged, publish failed, never on npm); fix in opf#588. |
 | `@openpresentation/opf-render` | **0.18.2** | Tag `opf-render-v0.18.2`, commit `de0a5034f49d`; independently verified. |
 | `@openpresentation/opf-pptx` | **0.18.2** | Tag `opf-pptx-v0.18.2`, commit `1954c9ce3d2c`; trusted-published and independently verified. |
-| `@openpresentation/opf-editor` | **0.18.1** | Independently verified; 0.18.2 awaits source #160 integration and fresh release qualification. |
+| `@openpresentation/opf-editor` | **0.18.1** | Independently verified; 0.18.2 awaits fresh prepared qualification and release gates; source #160 is merged. |
 | `@openpresentation/cli` | **0.18.1** | Independently verified; unchanged optional-peer policy. |
 | `@openpresentation/gallery` | **1.0.0** | Tag `v1.0.0`, commit `3458f50ca8fe`; independently verified. No GitHub Release is required by this lane. |
 
@@ -225,18 +225,8 @@ Isolated candidate `1921a28c6d4eea090dc368c13c75ca1b359bdc39` aligns core/CLI op
 
 Clean isolated `f62dd05a8ef0712ca2a35a11857f9085de6fd7a1` in `/private/tmp/opf-v019-pptx-current-refresh` adopts merged `1954c9ce` metadata only. [Receipts](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) preserve original `1fae5a9d` and source checks against actual core `1921a28c`, renderer `d4ab7a58`, gallery `e0a7eee2`. Full-graph/registry 0.19/native acceptance remains separate; sole release gate 24822 remains pending.
 
-## Editor 0.18.2 preparation status — 2026-10-11
+## Current editor 0.18.2 qualification
 
-Mandatory pre-prep 90777 and supervisor dry preparation 34999 completed exit 0. [Receipts and frozen independent metadata review](../../evidence/rr20-patch-train-publications/editor-0182-preparation/README.md) preserve actual registry identities and unchanged tracked/prepared source. Qualification 22527 completed exit 1 at 19:14:29 UTC. Install/audit/type/validate/full tests and all 20 playground cases passed, but broader browser data-grid F2 edit failed at `test/data-grid-browser.mjs:195`. The remaining ten browser cases and later published-core/packed/pack-dry gates were not run. Source bytes remain frozen. A macOS selection-shortcut cause is suspected but unconfirmed; resolve and rerun applicable gates without weakening assertions. No release-prep PR or publication exists. T18 stays open, 15/40 unchanged.
+Source #160 merged at `f35326ac`, exact tree equal to reviewed `44def286`; gate 91343 passed. [Merged source prerequisite and dry metadata receipts](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source160-merged-prerequisite/README.md) bind prerequisite 25008 and dry prep 78575, both passed. Fresh prepared qualification 39778 is running after dry prep 78575 passed with reviewed metadata bytes unchanged: install/audit/type/validate/full tests passed, playground checks are in progress. No release PR or terminal qualification claim.
 
-## Editor test repair awaiting integration
-
-[Independent proof and original/final receipts](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source-test-repair/independent-review.md) bind source PR #160 `44def286`. Final local all eleven browser/type 205/full 70 pass; gate 91343 is pending. No merge/publication claim; fresh pre-prep/dry full replay is next after integration. T18 stays open, 15/40 unchanged.
-
-## Editor source prerequisite merged — 2026-10-11 19:57:45 UTC
-
-[Gate, exact merged-tree and fresh source prerequisite receipts](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source160-merged-prerequisite/README.md) bind merged `f35326ac` to qualified `44def286`. Gate 91343 and prerequisite 25008 passed. New dry prep 78575 completed with byte-equal reviewed metadata; new prepared full replay remains pending. Earlier failed prep is retained; no publication/closure.
-
-## Current editor prepared replay status
-
-Dry preparation 78575 passed. Fresh full prepared qualification 39778 is running: install/audit/type/validate/full tests passed, playground checks are in progress. No release PR or completed qualification claim.
+Earlier prepared qualification 22527 failed the native keyboard harness after twenty playground cases passed; [original failures and source preservation](../../evidence/rr20-patch-train-publications/editor-0182-preparation/failed-qualification/status.md) remain historical. Confirmed diagnostics led to [reviewed repair with final local eleven-browser/type/full passes](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source-test-repair/independent-review.md). These local source passes do not replace the running prepared replay. T18 stays open, progress 15/40.

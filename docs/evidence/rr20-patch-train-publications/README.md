@@ -1,6 +1,6 @@
 # Patch-train publications and remaining qualification
 
-Core **0.18.4**, renderer **0.18.2** and PPTX **0.18.2** are trusted-published and independently verified. Editor source test repair [#160](https://github.com/OpenPresentation/opf-editor/pull/160), head `44def28661d14e2134206a7fca910d17f79a405f`, merged at `f35326ac` after gate 91343 exited 0; fresh source prerequisite passed by exact tree proof, and new prepared replay remains pending. Editor release preparation and final release-plan/site adoption remain incomplete. T18 stays open; progress remains **15/40**. Required order is core → renderer → PPTX → editor; CLI remains 0.18.1.
+Core **0.18.4**, renderer **0.18.2** and PPTX **0.18.2** are trusted-published and independently verified. Editor source test repair [#160](https://github.com/OpenPresentation/opf-editor/pull/160), head `44def28661d14e2134206a7fca910d17f79a405f`, merged at `f35326ac` after gate 91343 exited 0; fresh source prerequisite passed by exact tree proof, and fresh prepared replay 39778 is running. Editor release preparation and final release-plan/site adoption remain incomplete. T18 stays open; progress remains **15/40**. Required order is core → renderer → PPTX → editor; CLI remains 0.18.1.
 
 ## Verified publications
 
@@ -18,7 +18,7 @@ PPTX dependency-floor #249 merged, mandatory pre-prep packed qualification and f
 
 Editor mandatory pre-prep and reviewed dry metadata preparation passed. [Prerequisite receipts and frozen hashes](editor-0182-preparation/README.md) preserve actual registry upstreams. The first prepared qualification failed native textbox selection in the broader data-grid browser test after all twenty playground cases passed; remaining gates were not run. [Original failure and unchanged-source evidence](editor-0182-preparation/failed-qualification/status.md) is retained.
 
-Diagnostics then confirmed native keyboard test-harness shortcut mismatches. [Reviewed source repair and original/final receipts](editor-0182-preparation/source-test-repair/independent-review.md) preserve focus and selection assertions, application keyboard controls and strict expected values. Final local targeted dataset, all eleven registered browser suites, typecheck 205 and full seventy tests passed at `44def286`. PR #160's CI/merge remains pending. After integration, fresh pre-prep and dry full release replay are required before executing editor preparation; these source passes do not qualify a future release artifact.
+Diagnostics then confirmed native keyboard test-harness shortcut mismatches. [Reviewed source repair and original/final receipts](editor-0182-preparation/source-test-repair/independent-review.md) preserve focus and selection assertions, application keyboard controls and strict expected values. Final local targeted dataset, all eleven registered browser suites, typecheck 205 and full seventy tests passed at `44def286`. PR #160 merged at `f35326ac`; fresh prerequisite and dry prep passed. Fresh prepared qualification 39778 is running after dry prep 78575 passed with reviewed metadata bytes unchanged: install/audit/type/validate/full tests passed, playground checks are in progress. No release PR or terminal qualification claim. These source passes do not qualify a future release artifact.
 
 ## Local v0.19 source candidates
 
