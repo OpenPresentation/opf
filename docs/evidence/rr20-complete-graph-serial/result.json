@@ -1,0 +1,17 @@
+{
+  "source": {
+    "core": "3e8cc60e9aef14b9caa325d2dfbf0a59fcabdaa0",
+    "renderer": "d57236802c8746fde430998bf2ddc9d16fe86712",
+    "pptx": "25ecc82dce8ac5018837924d5f559315fde5f9b0",
+    "editor": "569a83488fe0f833a97f08bba520513b276c38d5",
+    "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+  },
+  "replay": "d20895f2ba07a20fd870568ba424d6b66f679943",
+  "tooling": "7a768be4a44def7079579f05b689ca3120265fc0",
+  "oracle": "a9cd23ba803e38e9bb860d8a3522c45c2e9c380a",
+  "serialized": true,
+  "allExitCodes": 0,
+  "sixTarballDigestsUnchanged": true,
+  "registryAcceptance": false,
+  "nativeAcceptance": false
+}

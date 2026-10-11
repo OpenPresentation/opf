@@ -1,0 +1,3 @@
+d81dc949150282450fb07b8577ea045bfd7a8252 RR-82: name the actual gallery export in host declarations
+a2febc70348e7cbbcf89e5e5752dc5ba18832133 RR-82: complete gallery registration declaration references
+6b9af429babc6714ab5baf5ff4a50f2e5e9ee614 FF-46: per-family host fixtures for proprietary script names (editor font gate)

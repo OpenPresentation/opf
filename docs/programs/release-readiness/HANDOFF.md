@@ -192,6 +192,10 @@ The T31 packet remains preparation only. All nine fallback archives are unchange
 
 - 2026-10-11: Candidate-gallery tooling PR #604 merged at `080da598013328857f6c9478eabe84b5977c140d`; source qualification remains distinct from actual gallery 2 registry adoption and publication. CLI font-pin follow-up remains unmerged. Progress remains 11/40.
 
+## Editor 0.18.1 published
+
+[Publication and independent verification](../../evidence/rr20-editor-0181-published/README.md) close only T11: 12/40. Exact release identity is `7831a15b10b9b3e1120ed90789fc9429b1c4f846`; trusted run 38129138355, integrity/provenance and two signatures passed. CLI fresh dry preparation completed seven allowed files with independent metadata review passed; full, standalone and strict packed-peer gates passed (77 drawing and 16 installed checks); the breaking-gate baseline is being corrected for the shallow clone after merged PR612 `6eee0d598c3ea0a1e97871a4f966270daf687a42`; no CLI publication claimed. PR608 `e984` checks are pending; PR611 merged at `e71ed7eaa7f51beb5df598196f352a4c909c8b32` and PR613 merged at `f419506f6b287fd1fa467ae84c6ce6b9c7682e6c`. Native and final 0.19/site acceptance remain open.
+
 ## Held patch train: required geometry floors
 
 The supervisor applies the geometry-moving lockstep rule to changed `sizeAdjust` and `lineAscent` policy data. Required order: core 0.18.4 → renderer 0.18.2 → PPTX 0.18.2 → editor 0.18.2. The [audit correction](../../evidence/rr20-held-patch-order/README.md#required-geometry-floors-supervisor-correction-2026-10-11) preserves the prior API-compatible finding while replacing its minimal two-package release recommendation. PPTX/editor receive reviewed metadata releases and real upstream floors/locks; no unrelated runtime feature is implied. CLI stays 0.18.1 initially, without optional-peer policy rewrites. Final release-plan, registry controls and sites must use all four required patch minima after actual publication. No checkpoint closes from this decision.
