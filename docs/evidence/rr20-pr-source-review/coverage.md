@@ -228,3 +228,5 @@ Core609 merged26df15c9; core610 merged5de488fc (this records branch base). Their
 The full130-path bounded reconciliation is durable in [PPTX248](https://github.com/OpenPresentation/opf-pptx/pull/248), `docs/evidence/rr81-import-catalog-defaults/{original-catalog-scope.json,reconciliation.md}` at b8c5e5abb57e8aadb00201e440bf243aa4979dd5. The truthful gallery-transition fragment was reviewed and pushed there.
 
 CLI font-pin source fix was reviewed: both actual registry and validated candidate peer paths pass77 drawing/16 installed checks. It remains unmerged; local staged results do not establish registry publication. Pareto247 preserves all plotted data via explicit clustered-column fallback and native refusal; docs248 separates foreign-layout and theme defaults. Fresh later graph/native packet required; packet05 remains immutable historical evidence.
+
+PR604 merged at `080da598013328857f6c9478eabe84b5977c140d` after the review snapshot and is integrated into this records branch. The separate CLI font-pin correction remains unmerged; final registry/native claims are unchanged.
