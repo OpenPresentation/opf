@@ -7,5 +7,6 @@
   "examplesSha256": "8a19f5152853388583726b6df23d44071e73e481570fd237f0081ea43be6d0b0",
   "templatesSha256": "cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759",
   "onlyExpectedGeneratedPaths": true,
-  "workflowTerminalStatus": "pending shared gate verification"
+  "workflowTerminalStatus": "Shared gate80911 confirmed core21/21 andrenderer7/7 at2026-10-11T07:17:30Z",
+  "rendererReviewNoteCommit": "8010a13"
 }
