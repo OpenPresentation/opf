@@ -1,0 +1,12 @@
+3e8cc60e9aef14b9caa325d2dfbf0a59fcabdaa0 RR-83: regenerate held fixture tracker and preserve single-slide convert contract
+a64b44d45abc6676cec8224551e634df3d1fbdb9 Merge remote-tracking branch 'origin/main' into codex/rr-83-complete-core-qualification
+b40f412bd894eb7aea1f456432e85142d33350f8 RR-83: retain clean-base final raster comparison evidence
+bdf4ba8db7a7fcd2c595f54491b1029d13c8d34a FF-46: per-family host fixtures for proprietary script names (core evidence and tracker)
+7bc71826de0e500f53052e7ca127de20b8334209 RR-77: slide file names: {n} output pattern and one zero-padding rule
+0f2b30f33eaf1906ee05ec4d62f289f3a108d9c6 RR-83: verify installed v2 catalog schema in packed smoke
+753ffa9f9b9eb8b1ef77668b5e4072da4f5f23b4 RR-81: Record verified baseline promotion artifacts (#602)
+4fd83083ddfbe8e4ae806a3c66b19c1c38e264ea RR-50: roll ecosystem.lock.json to the four main branches (#601)
+ed3c271409d4e9c2cfa3842a52621adbae0ff0a5 RR-20: Generate gallery WASM manifests from registry engines (#600)
+dfe47696e9006fefc040dddbcab226e86370fd72 RR-20: Track release execution and verified handoff evidence (#599)
+f0489ca7f55c4131223c4181585009a440eb430a RR-20: Preserve compatible CLI patch peer floors during prep (#598)
+b3a0561b993d577b3e792bd1d966e1f7a6148fc5 RR-83: Isolate gallery candidates in core golden regeneration (#597)

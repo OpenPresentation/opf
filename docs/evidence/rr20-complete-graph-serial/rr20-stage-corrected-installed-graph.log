@@ -1,0 +1,200 @@
+Renderer-absent furniture passed 6/6; evidence: /private/tmp/rr20-complete-stage/opf/artifacts/npm/renderer-absent-furniture/run-MZOtMN
+
+added 119 packages in 5s
+Color reference renderer passed: scheme slots, roles, variables, hex, and invalid run fallback.
+ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.
+✔ barChart: reordered sparse caches keep holes, zero and empty labels aligned (18.837291ms)
+✔ lineChart: reordered sparse caches keep holes, zero and empty labels aligned (6.424708ms)
+✔ areaChart: reordered sparse caches keep holes, zero and empty labels aligned (6.439459ms)
+✔ pieChart: reordered sparse caches keep holes, zero and empty labels aligned (5.427375ms)
+✔ doughnutChart: reordered sparse caches keep holes, zero and empty labels aligned (6.219875ms)
+✔ radarChart: reordered sparse caches keep holes, zero and empty labels aligned (5.480792ms)
+✔ scatterChart: reordered sparse xVal/yVal caches keep holes, zero and empty X values aligned (6.518583ms)
+✔ scatterChart: a chart without c:xVal is plotted against 1..n (6.669584ms)
+✔ strRef: label indices retain explicit empty and absent values (5.72925ms)
+✔ strLit: label indices retain explicit empty and absent values (5.133416ms)
+✔ numRef: label indices retain explicit empty and absent values (5.137916ms)
+✔ numLit: label indices retain explicit empty and absent values (4.452084ms)
+✔ multiLvlStrRef: label indices retain explicit empty and absent values (4.536ms)
+✔ empty series name is retained, missing series name still receives a fallback (11.012458ms)
+✔ numRef: empty numeric values and omitted c:v are missing, not zero (4.933167ms)
+✔ numLit: empty numeric values and omitted c:v are missing, not zero (4.836709ms)
+✔ absent ptCount infers extent from indices rather than point order (5.1315ms)
+✔ unsigned integer lexical forms retain their numeric indices (4.496833ms)
+✔ empty caches with a declared extent retain all-missing rows (4.997916ms)
+✔ category and numeric extents are aligned without manufacturing labels or zeros (5.030084ms)
+✔ malformed duplicate index rejects with chart part and cache location (4.486125ms)
+✔ malformed missing index rejects with chart part and cache location (4.790333ms)
+✔ malformed negative index rejects with chart part and cache location (4.024417ms)
+✔ malformed fractional index rejects with chart part and cache location (3.862125ms)
+✔ malformed exponent index rejects with chart part and cache location (3.722875ms)
+✔ malformed nonnumeric index rejects with chart part and cache location (3.62325ms)
+✔ malformed huge index rejects with chart part and cache location (3.60625ms)
+✔ malformed index outside declared extent rejects with chart part and cache location (4.340125ms)
+✔ malformed negative count rejects with chart part and cache location (3.612083ms)
+✔ malformed fractional count rejects with chart part and cache location (3.894042ms)
+✔ malformed huge count rejects with chart part and cache location (3.785792ms)
+✔ malformed duplicate count rejects with chart part and cache location (3.620917ms)
+✔ malformed category and name caches are checked too (8.032958ms)
+✔ unchanged dense caches still import ordinary chart values (4.753166ms)
+✔ multiple cache sources and multiple point values are rejected (10.9025ms)
+✔ hierarchical categories are refused instead of becoming extra data rows (4.437ms)
+✔ largest supported sparse extent is retained without index truncation (127.845833ms)
+✔ combined cache and output-table budgets reject before oversized allocations (10.111333ms)
+✔ duplicate c:numRef containers reject instead of importing missing data (6.168083ms)
+✔ duplicate c:strRef containers reject instead of importing missing data (5.2365ms)
+✔ duplicate c:multiLvlStrRef containers reject instead of importing missing data (5.121167ms)
+✔ duplicate c:val containers reject instead of importing missing data (5.1345ms)
+✔ duplicate c:yVal containers reject instead of importing missing data (5.637459ms)
+✔ duplicate c:cat containers reject instead of importing missing data (7.839584ms)
+✔ duplicate c:tx containers reject instead of importing missing data (5.52375ms)
+✔ ordinary numeric export/import/re-export retains scientific-notation cells (36.322125ms)
+✔ val/numRef: complete exponents preserve finite values, zeros and sparse labels (5.917625ms)
+✔ val/numRef: exponent overflow and nonzero underflow refuse the exact logical point (15.273583ms)
+✔ val/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.697875ms)
+✔ val/numLit: complete exponents preserve finite values, zeros and sparse labels (4.512625ms)
+✔ val/numLit: exponent overflow and nonzero underflow refuse the exact logical point (14.535875ms)
+✔ val/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (5.932875ms)
+✔ yVal/numRef: complete exponents preserve finite values, zeros and sparse labels (4.780958ms)
+✔ yVal/numRef: exponent overflow and nonzero underflow refuse the exact logical point (14.666709ms)
+✔ yVal/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.520792ms)
+✔ yVal/numLit: complete exponents preserve finite values, zeros and sparse labels (4.519084ms)
+✔ yVal/numLit: exponent overflow and nonzero underflow refuse the exact logical point (15.663792ms)
+✔ yVal/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.550709ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 522.157
+Chart axis passed: 15 public ordinary-range cases and 47 automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, top-sixth zero rule for line/column/bar/area, source preservation and deterministic bytes.
+ZIP date public fixture: {"node":"v24.21.0","zones":["UTC","America/Los_Angeles","Pacific/Apia"],"validCasesPerZone":13,"invalidCasesPerZone":32,"exports":50,"explicitPostImportTimezoneChange":true,"recursiveLeafParts":41,"preservedDefaultAndUndefined":true,"equalAbsoluteRepresentations":true,"wholeFileTimezoneEquality":true,"nestedWorkbooks":true,"sourceOptionsPreserved":true,"reimport":true,"deterministicRepeat":true}
+ZIP date artifacts: /private/tmp/rr20-complete-stage/opf/artifacts/npm/zip-date-candidate/installed-JHSCm0/run-BfV2eN
+Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (38 validated imports). Native Office is a separate gate.
+Furniture fields: live slide numbers, fixed {{deck.slideCount}}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.
+✔ measured wrapped baseline reports both static paths without native date fields or source mutation (27.423792ms)
+✔ unchanged full-mode wrapped dates recover generated source/format and use a new host date on reexport (99.530875ms)
+✔ same inputs have byte-identical output (30.357875ms)
+✔ references-only/off export no fallback marker and do not regain generated date intent (83.882875ms)
+✔ old or unmarked flattened dates stay literal (23.841041ms)
+✔ edited parseable date stays current literal text through reexport (62.845916ms)
+✔ typed words stays current literal text through reexport (65.131792ms)
+✔ cleared date stays current literal text through reexport (68.83975ms)
+✔ damaged marker version cannot restore generated intent (21.695375ms)
+✔ damaged marker reason cannot restore generated intent (26.635583ms)
+✔ damaged marker format cannot restore generated intent (27.396583ms)
+✔ damaged marker fingerprint cannot restore generated intent (21.672041ms)
+✔ damaged marker extra words cannot restore generated intent (24.513083ms)
+✔ damaged marker missing fingerprint cannot restore generated intent (20.674292ms)
+✔ missing boundary conservatively retains ordinary native text (26.048542ms)
+✔ damaged separator conservatively retains ordinary native text (21.344333ms)
+✔ duplicate line conservatively retains ordinary native text (25.663458ms)
+✔ missing date shape cannot restore old text (19.584583ms)
+✔ actual current native date field takes precedence over stale static evidence (21.969542ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 735.704125
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (2.342125ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.267667ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (8.030416ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.682542ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.371875ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.192334ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (10.523ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.204708ms)
+✔ font trials stay bounded independently of canvas scale (6.294834ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 85.873125
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (4.108583ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (23.430917ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (480.519333ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (26.138333ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (187.29325ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (390.902ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1206.919666
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.676208ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.627583ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (11.024125ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (180.869542ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.128125ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.126584ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.141458ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 246.473709
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (4.198166ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (12.490167ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (440.706291ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (275.537333ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (2835.715417ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (58.489416ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3703.884708
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. An unchanged quote re-imports as its quote payload (FF-57); earlier opf-pptx releases return native text lines.
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+✔ short table rows preserve baseline geometry and missing cells (1.6115ms)
+✔ wrapped and rich multiline rows grow into available space (3.341208ms)
+✔ constrained tables consume spare row height before reporting real overflow (0.313666ms)
+✔ readability settings and mixed-font metrics govern row fitting (0.243167ms)
+✔ pagination retains complete multiline rows and repeated headers (94.805333ms)
+✔ mixed-size table paragraphs reserve the native uniform line spacing (0.1705ms)
+✔ spare height in short rows is removed before any font shrinking (0.115708ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.326958
+Packed consumer: TypeScript declarations and browser bundle passed.
+Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+Packed TypeScript 5.9/7 consumers passed: 21 exports, NodeNext/Bundler, installed renderer/editor/PPTX, browser entries without Node types.
+Local tarball consumer passed; this is not a registry verification.

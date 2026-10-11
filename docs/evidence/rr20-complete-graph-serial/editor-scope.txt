@@ -1,0 +1,13 @@
+ changes/ff-46-script-name-hosts.md      |   4 +
+ changes/rr-78-gallery-package.md        |   4 +
+ dist/canvas.d.ts                        |   2 +-
+ dist/design-controls.d.ts               |   2 +-
+ dist/index.d.ts                         |   2 +-
+ dist/switches.d.ts                      |   2 +-
+ src/canvas.d.ts                         |   2 +-
+ src/design-controls.d.ts                |   2 +-
+ src/index.d.ts                          |   2 +-
+ src/switches.d.ts                       |   2 +-
+ test/fixtures/script-name-families.json | 938 ++++++++++++++++++++++++++++++++
+ test/font-gate-script-names.mjs         | 208 +++++++
+ 12 files changed, 1162 insertions(+), 8 deletions(-)

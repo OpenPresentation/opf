@@ -1,0 +1,4 @@
+d57236802c8746fde430998bf2ddc9d16fe86712 RR-81: correct final v2 layout and font estimate documentation
+d8e3737ad7dc6abcdbde015a80e7bbf953329bc1 RR-81: complete gallery registration docs and adapt held host fixtures
+6b8e522ee3c9254565fe6fafb04188f6dd6101c6 RR-20: require pinned faces in SVG corpus browser measurements
+992988bf85aebfa6a4e85fe273bca78d7dc7ce6c FF-46: per-family host fixtures for proprietary script names (Node and browser)
