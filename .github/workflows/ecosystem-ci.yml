@@ -12,6 +12,11 @@ on:
   schedule:
     - cron: '37 1 * * *'
   workflow_dispatch:
+    inputs:
+      candidate-gallery-ref:
+        description: Exact reviewed gallery SHA for explicit source/tarball qualification; empty preserves normal CI.
+        type: string
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -26,6 +31,28 @@ concurrency:
 # a change to this tiering and the label `ecosystem-full` also run the full suites. No tier skips a check: every sibling
 # step still runs, only its depth differs, and nothing about a docs-only or contract-only change lowers a non-PR run.
 jobs:
+  gallery:
+    name: Resolve explicit gallery qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      candidate_gallery: ${{ steps.resolve.outputs.candidate_gallery }}
+      published_opf: ${{ steps.resolve.outputs.published_opf }}
+      published_opf_render: ${{ steps.resolve.outputs.published_opf_render }}
+      published_opf_pptx: ${{ steps.resolve.outputs.published_opf_pptx }}
+      published_opf_editor: ${{ steps.resolve.outputs.published_opf_editor }}
+      published_cli: ${{ steps.resolve.outputs.published_cli }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: opf
+          persist-credentials: false
+      - id: resolve
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref }}
+        run: node scripts/candidate-gallery.mjs resolve
   # RR-45: the former single `packages` job is three parallel shards behind the `packages` aggregator, so the
   # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
   # scripts/package-ecosystem-plan.test.mjs proves the shards partition the unsharded list. Every shard keeps
@@ -36,23 +63,25 @@ jobs:
   # cancelled, and passes only when every shard succeeded. A shard that the docs-only gate skips step by step
   # still succeeds; a shard that did not run at all (skipped job) is a failure here, never a silent pass.
   packages:
-    needs: [ecosystem-render, ecosystem-pptx-editor, ecosystem-core]
+    needs: [gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require every ecosystem shard
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: opf
+          persist-credentials: false
+      - name: Require the complete selected contracts
+        working-directory: opf
         env:
+          MODE: ecosystem
+          CANDIDATE_SHA: ${{ needs.gallery.outputs.candidate_gallery }}
           RESULTS: ${{ toJSON(needs) }}
-        run: |
-          echo "$RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
-          if echo "$RESULTS" | jq -e 'to_entries | all(.value.result == "success")' >/dev/null; then
-            echo 'All ecosystem shards succeeded.'
-          else
-            echo '::error title=Ecosystem shard did not succeed::A shard failed, was cancelled or did not run; see the list above.'
-            exit 1
-          fi
+        run: node scripts/candidate-gallery-results.mjs
   ecosystem-render:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery == ''
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
@@ -152,6 +181,8 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
   ecosystem-pptx-editor:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery == ''
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
@@ -248,6 +279,8 @@ jobs:
   # scripts/ecosystem-scope.test.mjs pins the shard list). The `packages` aggregator needs `ecosystem-core`, whose result
   # is success only when every shard succeeded: a failed, cancelled or missing shard fails it.
   ecosystem-core:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery == ''
     name: ecosystem-core (${{ matrix.shard }})
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
@@ -491,11 +524,12 @@ jobs:
   # merge queue runs them in full before merge, and the nightly run again; main-status opens the main-red issue if the
   # nightly run fails.
   installed-portability:
+    needs: gallery
     name: Installed candidates (${{ matrix.os }})
-    runs-on: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
+    runs-on: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
     timeout-minutes: 25
     env:
-      PORTABILITY: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
+      PORTABILITY: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
     strategy:
       fail-fast: false
       matrix:
@@ -516,7 +550,7 @@ jobs:
         shell: bash
         run: |
           if [ "$PORTABILITY" = run ]; then
-            node scripts/ecosystem-scope.mjs
+            if [ -n '${{ needs.gallery.outputs.candidate_gallery }}' ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; else node scripts/ecosystem-scope.mjs; fi
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
             echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request (runner $RUNNER_OS). merge_group, the nightly run and pull requests labelled ecosystem-full or full-ci run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
@@ -565,6 +599,9 @@ jobs:
           node --input-type=module -e "import {execFileSync} from 'node:child_process'; import {mkdirSync,writeFileSync} from 'node:fs';
           const repos=['opf','opf-render','opf-editor','opf-pptx'].map(name=>({name,head:execFileSync('git',['-C','../'+name,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),tree:execFileSync('git',['-C','../'+name,'rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim()}));
           mkdirSync('artifacts/portability',{recursive:true}); writeFileSync('artifacts/portability/source.json',JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,repos},null,2)+'\n');"
+      - name: Pin npm for candidate locked installs
+        if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery != ''
+        run: npm install --global npm@11.16.0
       - run: pnpm install --frozen-lockfile
         if: steps.scope.outputs.run == 'true'
       - run: npm ci --prefix ../opf-render
@@ -573,10 +610,17 @@ jobs:
         if: steps.scope.outputs.run == 'true'
       - run: npm ci --prefix ../opf-pptx
         if: steps.scope.outputs.run == 'true'
+      - uses: ./opf/.github/actions/candidate-gallery
+        if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery != ''
+        with:
+          candidate-gallery-ref: ${{ needs.gallery.outputs.candidate_gallery }}
       - run: pnpm build
         if: steps.scope.outputs.run == 'true'
       - run: node scripts/link-ecosystem.mjs --packages-only
         if: steps.scope.outputs.run == 'true'
+      - name: Stage and qualify the exact six-package candidate graph
+        if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery != ''
+        run: node scripts/candidate-gallery-build.mjs
       - run: node scripts/pack-ecosystem.mjs
         if: steps.scope.outputs.run == 'true'
       - run: node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Review the pinned browser toolchain.');"
@@ -591,6 +635,24 @@ jobs:
         if: steps.scope.outputs.run == 'true'
       - run: node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
         if: steps.scope.outputs.run == 'true'
+      - name: Complete candidate CLI portability contracts
+        if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery != ''
+        run: |
+          pnpm typecheck
+          pnpm --filter @openpresentation/opf test
+          node packages/javascript/test/packed-install-smoke.mjs
+          node scripts/test-ecosystem-links.mjs
+          pnpm test:cli
+          pnpm test:cli:packed
+          pnpm test:cli:packed:peers
+      - name: Published CLI portability control
+        if: steps.scope.outputs.run == 'true' && needs.gallery.outputs.candidate_gallery != ''
+        shell: bash
+        env:
+          CANDIDATE_GALLERY_REF: ''
+        run: |
+          git fetch --no-tags --depth=1 origin "$(node -p "require('./release-plan.json').verificationRefs.cli")"
+          node packages/cli/test/packed.mjs --registry
       - name: Preserve installed portability evidence
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -651,3 +713,22 @@ jobs:
             gh api "repos/$REPO/issues/$open/comments" -f body="Green again on $EVENT at $SHA: $RUN_URL."
             gh api -X PATCH "repos/$REPO/issues/$open" -f state=closed
           fi
+
+  candidate:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery != ''
+    uses: ./.github/workflows/candidate-gallery-qualification.yml
+    with:
+      mode: ecosystem
+      gallery-ref: ${{ needs.gallery.outputs.candidate_gallery }}
+  control:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery != ''
+    uses: ./.github/workflows/published-gallery-control.yml
+    with:
+      mode: ecosystem
+      opf-ref: ${{ needs.gallery.outputs.published_opf }}
+      render-ref: ${{ needs.gallery.outputs.published_opf_render }}
+      pptx-ref: ${{ needs.gallery.outputs.published_opf_pptx }}
+      editor-ref: ${{ needs.gallery.outputs.published_opf_editor }}
+      cli-ref: ${{ needs.gallery.outputs.published_cli }}
