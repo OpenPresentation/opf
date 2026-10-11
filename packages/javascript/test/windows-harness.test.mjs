@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
+import {tar} from '../../../scripts/archive-tar.mjs';
 
 async function temporary(run) {
   const directory=await mkdtemp(path.join(tmpdir(),'opf-windows-harness-'));
@@ -44,14 +45,14 @@ test('local package links build through real npm and can replace existing juncti
   await writeFile(path.join(root,'packages/javascript/dist/composition.js'),'export {};');
   // The link step checks that each sibling resolves this one core (RR-62), so the stand-in core has a manifest.
   await writeFile(path.join(root,'packages/javascript/package.json'),JSON.stringify({name:'@openpresentation/opf',version:'0.0.0'}));
-  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs']) {
+  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs','archive-tar.mjs']) {
     await cp(new URL(`../../../scripts/${file}`,import.meta.url),path.join(root,'scripts',file));
   }
   const names=['opf-render','opf-pptx','opf-editor'];
   for (const name of names) {
     const repo=path.join(directory,name);
     await mkdir(repo,{recursive:true});
-    await writeFile(path.join(repo,'package.json'),JSON.stringify({name,private:true,scripts:{build:'node build.cjs'}}));
+    await writeFile(path.join(repo,'package.json'),JSON.stringify({name,private:true,scripts:{build:'node build.cjs'},...(name==='opf-render'?{peerDependencies:{'@expo-google-fonts/noto-color-emoji':'0.4.7'}}:{})}));
     await writeFile(path.join(repo,'build.cjs'),"require('node:fs').writeFileSync('built.json',JSON.stringify({node:process.version}))");
     for (const dep of name==='opf-render'?['opf']:name==='opf-editor'?['opf','opf-render','opf-pptx']:['opf','opf-render']) {
       const installed=path.join(repo,'node_modules/@openpresentation',dep);
@@ -59,14 +60,28 @@ test('local package links build through real npm and can replace existing juncti
       await writeFile(path.join(installed,'package.json'),JSON.stringify({name:`@openpresentation/${dep}`}));
     }
   }
+  const cache=path.join(directory,'font cache'),fontSource=path.join(directory,'font source');
+  await mkdir(cache,{recursive:true});await mkdir(path.join(fontSource,'package'),{recursive:true});
+  await writeFile(path.join(fontSource,'package/package.json'),JSON.stringify({name:'@expo-google-fonts/noto-color-emoji',version:'0.4.7'}));
+  await writeFile(path.join(fontSource,'package/font.ttf'),'exact font bytes');
+  tar(path.join(cache,'expo-google-fonts-noto-color-emoji-0.4.7.tgz'),'-czf',['-C',fontSource,'package']);
+  for(const name of ['opf-pptx','opf-editor']){
+    const installed=path.join(directory,name,'node_modules/@expo-google-fonts/noto-color-emoji');
+    await mkdir(installed,{recursive:true});await writeFile(path.join(installed,'package.json'),JSON.stringify({name:'@expo-google-fonts/noto-color-emoji',version:'0.4.6'}));
+  }
   for (let attempt=0;attempt<2;attempt++) {
-    const result=spawnSync(process.execPath,[path.join(root,'scripts/link-ecosystem.mjs'),'--packages-only'],{encoding:'utf8',timeout:30000});
+    const result=spawnSync(process.execPath,[path.join(root,'scripts/link-ecosystem.mjs'),'--packages-only'],{encoding:'utf8',timeout:30000,env:{...process.env,OPF_LINK_FONT_CACHE:cache}});
     assert.ifError(result.error);
     assert.equal(result.status,0,result.stderr||result.stdout);
     for (const name of names) {
       const repo=path.join(directory,name);
       assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf')),await realpath(path.join(root,'packages/javascript')));
       assert.equal(JSON.parse(await readFile(path.join(repo,'built.json'),'utf8')).node,process.version);
+      if(name!=='opf-render'){
+        const font=path.join(repo,'node_modules/@expo-google-fonts/noto-color-emoji');
+        assert.equal(JSON.parse(await readFile(path.join(font,'package.json'),'utf8')).version,'0.4.7');
+        assert.equal(await readFile(path.join(font,'font.ttf'),'utf8'),'exact font bytes');
+      }
       if (name!=='opf-render') assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf-render')),await realpath(path.join(directory,'opf-render')));
       if (name==='opf-editor') assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf-pptx')),await realpath(path.join(directory,'opf-pptx')));
     }
@@ -78,7 +93,7 @@ test('local linking refuses a node_modules parent that resolves outside its chec
   await mkdir(path.join(root,'scripts'),{recursive:true});
   await mkdir(path.join(root,'packages/javascript/dist'),{recursive:true});
   await writeFile(path.join(root,'packages/javascript/dist/composition.js'),'export {};');
-  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs']) {
+  for (const file of ['link-ecosystem.mjs','package-manager.mjs','check-one-core.mjs','archive-tar.mjs']) {
     await cp(new URL(`../../../scripts/${file}`,import.meta.url),path.join(root,'scripts',file));
   }
   await mkdir(repo,{recursive:true});

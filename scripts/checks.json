@@ -15,6 +15,7 @@
   "changed": {
     "always": ["check:changes"],
     "rules": [
+      {"match": ["scripts/archive-tar.mjs", "scripts/link-ecosystem.mjs"], "run": ["check:archive-tar"]},
       {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-docs", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
       {"match": ["spec/catalogs/"], "run": ["check:spec", "check:catalog", "check:catalog-free", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
       {"match": ["scripts/generate-example-suite.mjs", "scripts/check-generated-examples.mjs", "scripts/gallery-artwork.mjs"], "run": ["check:examples"]},
