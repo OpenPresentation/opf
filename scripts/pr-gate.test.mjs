@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, summarizeRules, UsageError } from './pr-gate.mjs';
+import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, UsageError } from './pr-gate.mjs';
 import { selectChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -584,4 +584,53 @@ test('check:pr-gate is a root check that run-checks picks up', () => {
   const config = JSON.parse(readFileSync(path.join(root, 'scripts', 'checks.json'), 'utf8'));
   assert.match(scripts['check:pr-gate'], /pr-gate\.test\.mjs/);
   assert.ok(selectChecks(scripts, config).includes('check:pr-gate'));
+});
+
+// Missing-rollup fallback retains actual individual jobs and the ordinary evaluator/confirmation path.
+const fallbackSuite = (id, runs, more = false) => ({id,commit:{oid:HEAD},app:{slug:'github-actions',databaseId:15368},status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900,workflow:{name:'CI'}},checkRuns:{nodes:runs.map(r=>({...r,checkSuite:{...r.checkSuite,id}})),pageInfo:{hasNextPage:more,endCursor:more?'runs-next':null}}});
+const suitePage = (suites, more = false, oid = HEAD) => ({data:{repository:{object:{oid,status:{contexts:[]},checkSuites:{nodes:suites,pageInfo:{hasNextPage:more,endCursor:more?'suites-next':null}}}}}});
+test('absent rollup pages actual suites/jobs, preserves workflow identity and legacy statuses',async()=>{
+ const responses=[suitePage([fallbackSuite('S1',[run('packages')],true)],true),{data:{node:{id:'S1',commit:{oid:HEAD},checkRuns:{nodes:[{...run('neutral','NEUTRAL'),checkSuite:{...run('neutral','NEUTRAL').checkSuite,id:'S1'}}],pageInfo:{hasNextPage:false}}}}},suitePage([fallbackSuite('S2',[run('Verify OPF packages'),run('same','FAILURE',{workflow:'Other'})])])];
+ responses[0].data.repository.object.status.contexts=[{context:'legacy',state:'FAILURE'}];
+ const queries=[];const result=await suiteContexts(async q=>{queries.push(q);return responses.shift();},'o','r',HEAD);
+ assert.equal(queries.length,3);assert.match(queries[1],/node\(id:"S1"\)/);assert.match(queries[2],/after:"suites-next"/);
+ const checks=normalizeContexts(result.nodes,HEAD);assert.equal(checks.length,5);
+ assert.equal(evaluateChecks({checks,required:null,suites:result.suites}).state,'red');
+ assert.equal(evaluateChecks({checks,required:RULES[0].parameters.required_status_checks.map(x=>({context:x.context,integrationId:x.integration_id}))}).state,'green');
+ assert.equal(evaluateChecks({checks,required:[{context:'neutral'}],allowSkipped:false}).state,'red');
+});
+test('suite fallback rejects missing/foreign identities and never synthesizes a suite success',async()=>{
+ await assert.rejects(suiteContexts(async()=>suitePage([],false,OLD),'o','r',HEAD),/different commit/);
+ const foreign=fallbackSuite('S1',[run('packages','SUCCESS',{oid:OLD})]);foreign.checkRuns.nodes=[run('packages','SUCCESS',{oid:OLD})];
+ await assert.rejects(suiteContexts(async()=>suitePage([foreign]),'o','r',HEAD),/check run belongs/);
+ const failed=fallbackSuite('S1',[]);failed.conclusion='FAILURE';
+ await assert.rejects(suiteContexts(async()=>suitePage([failed]),'o','r',HEAD),/failed check suite/);
+ const empty=await suiteContexts(async()=>suitePage([fallbackSuite('S1',[])]),'o','r',HEAD);
+ assert.equal(evaluateChecks({checks:normalizeContexts(empty.nodes,HEAD),required:null,suites:empty.suites}).state,'pending');
+});
+test('commit gate confirms missing-rollup actual jobs on a second poll',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:null,checkSuites:{nodes:[]}};
+ const original=fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});
+ const graphql=original.deps.graphql;let fallbackCalls=0;
+ original.deps.graphql=async(q,v)=>{if(q.includes('checkSuites(first:50')&&q.includes('status{contexts')){fallbackCalls++;return suitePage([fallbackSuite('S1',GREEN())]);}return graphql(q,v);};
+ const result=await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps);
+ assert.equal(result.code,EXIT.ok);assert.equal(fallbackCalls,2);assert.ok(has(original.state.lines,/confirming/));
+});
+
+test('fallback refuses partial GraphQL, missing pageInfo, repeated cursors and wrong run suite',async()=>{
+ const partial=suitePage([]);partial.errors=[{message:'partial'}];await assert.rejects(suiteContexts(async()=>partial,'o','r',HEAD),/contains errors/);
+ const truncated=suitePage([]);delete truncated.data.repository.object.checkSuites.pageInfo;await assert.rejects(suiteContexts(async()=>truncated,'o','r',HEAD),/incomplete/);
+ let i=0;await assert.rejects(suiteContexts(async()=>suitePage([fallbackSuite('S'+i++,[])],true),'o','r',HEAD),/repeated check-suite cursor/);
+ const wrong=fallbackSuite('S1',GREEN());wrong.checkRuns.nodes[0].checkSuite.id='OTHER';await assert.rejects(suiteContexts(async()=>suitePage([wrong]),'o','r',HEAD),/check run belongs/);
+ const pages=[suitePage([fallbackSuite('S1',[],true)]),{data:{node:{id:'S1',commit:{oid:HEAD},checkRuns:{nodes:[],pageInfo:{hasNextPage:true,endCursor:'runs-next'}}}}}];await assert.rejects(suiteContexts(async()=>pages.shift(),'o','r',HEAD),/repeated check-run cursor/);
+});
+
+test('cancelled/null/unknown completed empty suites cannot disappear beside successful jobs',async()=>{
+ for (const conclusion of ['CANCELLED',null,'UNRECOGNIZED']) {
+  const incomplete=fallbackSuite('S2',[]);incomplete.conclusion=conclusion;
+  await assert.rejects(suiteContexts(async()=>suitePage([fallbackSuite('S1',GREEN()),incomplete]),'o','r',HEAD),/failed check suite/);
+ }
+ const placeholder=fallbackSuite('PLACEHOLDER',[]);placeholder.status='QUEUED';placeholder.conclusion=null;placeholder.workflowRun=null;
+ const actual=await suiteContexts(async()=>suitePage([placeholder,fallbackSuite('S1',GREEN())]),'o','r',HEAD);
+ assert.equal(evaluateChecks({checks:normalizeContexts(actual.nodes,HEAD),required:null,suites:actual.suites}).state,'green');
 });
