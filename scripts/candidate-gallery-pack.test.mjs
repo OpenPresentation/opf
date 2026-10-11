@@ -5,7 +5,8 @@ import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,exi
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,installedCandidatePreflight,assertCandidateDoctor,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {installIsolatedInstalledCore} from './isolated-core.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
@@ -36,7 +37,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
    mkdirSync(path.join(directory,'dist'),{recursive:true});
    writeFileSync(path.join(directory,'dist/index.js'),index===4?`#!/usr/bin/env node\nimport {createRequire} from 'node:module';const require=createRequire(import.meta.url);console.log(JSON.stringify({core:require.resolve('@openpresentation/opf/package.json'),gallery:require.resolve('@openpresentation/gallery/package.json')}));\n`:'export const fixture = true;\n');
    for(const file of ['README.md','LICENSE'])writeFileSync(path.join(directory,file),'fixture\n');
-   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
+   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js',opf:'dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
   }
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
@@ -86,6 +87,18 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   const executed=JSON.parse(run('npm',['exec','--offline','--cache',path.join(workspace,'cache'),...standalone.map(file=>`--package=${file}`),'--','rr78'],workspace));
   assert.ok(executed.core.includes(`${path.sep}_npx${path.sep}`));assert.ok(!executed.core.startsWith(global.modules+path.sep),'npm exec must not borrow global install');
   assert.equal(assertCandidateExecInstalls(root,path.join(workspace,'cache'),[]),1);
+  const installedBin=path.join(consumer,'node_modules/@openpresentation/cli/dist/index.js');
+  assert.throws(()=>installedCandidatePreflight(root),/requires OPF_TEST_BIN/);
+  assert.throws(()=>installedCandidatePreflight(root,path.join(root,'packages/cli/dist/index.js')),/outside an installed CLI/);
+  assert.throws(()=>installedCandidatePreflight(root,path.join(consumer,'node_modules/@openpresentation/opf/dist/index.js')),/outside an installed CLI/);
+  const context=installedCandidatePreflight(root,installedBin);assert.equal(context.bin,installedBin);
+  const isolatedModules=path.join(workspace,'isolated/node_modules');await installIsolatedInstalledCore(isolatedModules,context.modules);
+  assert.deepEqual(readFileSync(path.join(isolatedModules,'@openpresentation/opf/package.json')),readFileSync(path.join(context.modules,'@openpresentation/opf/package.json')));
+  assert.deepEqual(readFileSync(path.join(isolatedModules,'@openpresentation/gallery/dist/index.js')),readFileSync(path.join(context.modules,'@openpresentation/gallery/dist/index.js')));
+  for(const name of ['opf-render','opf-pptx','opf-editor','cli'])assert.equal(existsSync(path.join(isolatedModules,'@openpresentation',name)),false);
+  const doctor={packages:['@openpresentation/opf-render','@openpresentation/opf-pptx'].map(name=>({name,installed:true,version:'0.18.2',wanted:'^0.19.0',ok:false})),formats:Object.fromEntries(['json','yaml','md','svg','pptx-import'].map(name=>[name,{ready:['json','yaml','md'].includes(name)}]))};
+  assertCandidateDoctor(context,doctor);doctor.formats.svg.ready=true;assert.throws(()=>assertCandidateDoctor(context,doctor));doctor.formats.svg.ready=false;
+  doctor.packages[0].ok=true;assert.throws(()=>assertCandidateDoctor(context,doctor));doctor.packages[0].ok=false;
   const modules=path.join(consumer,'node_modules'),peerNames=['@openpresentation/opf-render','@openpresentation/opf-pptx'];
   assert.equal(assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0').run,true);
   const modulesAlias=path.join(workspace,'global-modules-alias');symlinkSync(modules,modulesAlias,process.platform==='win32'?'junction':'dir');
@@ -97,7 +110,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   writeFileSync(peerManifest,JSON.stringify({...JSON.parse(peerBytes),dependencies:{'@openpresentation/opf':'file:/unreviewed.tgz'}}));
   assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer metadata differs/);writeFileSync(peerManifest,peerBytes);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf/dist/index.js');
-  writeFileSync(installed,'changed\n');assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer runtime differs/);assert.throws(()=>assertInstalledCandidateGraph(root,consumer),/installed runtime differs/);
+  writeFileSync(installed,'changed\n');assert.throws(()=>installedCandidatePreflight(root,installedBin),/peer runtime differs/);assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer runtime differs/);assert.throws(()=>assertInstalledCandidateGraph(root,consumer),/installed runtime differs/);
   const file=path.join(out,report.artifacts[0].file),original=readFileSync(file);writeFileSync(file,'tampered');
   assert.throws(()=>candidateArtifacts(root),/tarball digest mismatch/);assert.throws(()=>assertCandidatePeerPreflight(root),/tarball digest mismatch/);writeFileSync(file,original);
   const manifestFile=path.join(out,'manifest.json'),bytes=readFileSync(manifestFile);const altered=structuredClone(report);altered.artifacts[0].sourceSha='f'.repeat(40);writeFileSync(manifestFile,JSON.stringify(altered));
@@ -118,6 +131,7 @@ test('ordinary packed smoke still builds the CLI',async()=>{
   const marker=path.join(root,'built');
   assert.equal(await preparePackedSmokeCli({root,build:()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(marker)},'built')`])}),null);
   assert.equal(readFileSync(marker,'utf8'),'built');
+  assert.equal(installedCandidatePreflight(root),null,'ordinary execution needs no installed binary');
   const waiting={run:false,notice:'unchanged ordinary wait'};let calls=0;assert.equal(candidatePeerPreflight(root,()=>{calls++;return waiting;}),waiting);assert.equal(calls,1,'actual preflight entry preserves the ordinary gate result');
  } finally {if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(root,{recursive:true,force:true});}
 });

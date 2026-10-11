@@ -11,12 +11,14 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {inflateRawSync} from 'node:zlib';
 import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
-import {installIsolatedCore} from '../../../scripts/isolated-core.mjs';
-const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
+import {installedCandidatePreflight,assertCandidateDoctor} from '../../../scripts/candidate-gallery-pack.mjs';
+import {installIsolatedCore,installIsolatedInstalledCore} from '../../../scripts/isolated-core.mjs';
+const candidate=installedCandidatePreflight(fileURLToPath(new URL('../../..',import.meta.url)),process.env.OPF_TEST_BIN);
+const executable = candidate?.bin ?? process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
 // RR-55: every check here runs through the installed published opf-render and opf-pptx. While they do not satisfy the CLI's
 // peer ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips this file with a notice; any
 // other run fails (scripts/unreleased-gate.mjs).
-if (!report(cliPeerGate({cliRoot: fileURLToPath(new URL('..', import.meta.url)), executable, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
+if (!candidate && !report(cliPeerGate({cliRoot: fileURLToPath(new URL('..', import.meta.url)), executable, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const goldenFile = fileURLToPath(new URL('./fixtures/render-hashes.json', import.meta.url));
 // The real path: on macOS tmpdir() is a symlink (/var -> /private/var) and the CLI reports resolved paths (opf#547).
 const temp = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-files-test-')));
@@ -266,8 +268,11 @@ try {
 
   // opf doctor sees the installed peers.
   const doctor = run(['doctor']).report;
+  if(candidate)assertCandidateDoctor(candidate,doctor);
+  else {
   assert.equal(doctor.formats.svg.ready, true, JSON.stringify(doctor.formats.svg));
   assert.equal(doctor.formats['pptx-import'].ready, true);
+  }
 
   // Optional peers: without them the commands explain what to install and exit 2; everything else keeps working.
   const isolated = await mkdtemp(path.join(tmpdir(), 'opf-files-isolated-'));
@@ -276,7 +281,8 @@ try {
     const lone = path.join(isolated, 'dist', path.basename(executable));
     await cp(path.dirname(executable), path.join(isolated, 'dist'), {recursive: true});
     // A copy of core, not a link: the workspace core has the peers as devDependencies, and core loads them from its own location.
-    await installIsolatedCore(path.join(isolated, 'node_modules'));
+    if(candidate)await installIsolatedInstalledCore(path.join(isolated,'node_modules'),candidate.modules);
+    else await installIsolatedCore(path.join(isolated, 'node_modules'));
     for (const args of [['convert', path.join(temp, 'deck.opf.json'), 'x.svg'], ['convert', path.join(temp, 'deck.opf.json'), 'x.pdf'], ['convert', path.join(temp, 'deck.pptx'), 'x.opf.json']]) {
       const missing = run(args, {status: 2, cwd: isolated, bin: lone});
       assert.equal(missing.stderrJson.code, 'peer-not-installed'); assert.match(missing.stderrJson.install, /^npm install @openpresentation\/opf-(render|pptx)@/);

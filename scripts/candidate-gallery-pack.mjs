@@ -133,6 +133,37 @@ export function assertCandidatePeerPreflight(root){
  return {run:true};
 }
 
+// Installed drawing tests must exercise the exact selected binary, never a workspace
+// binary merely because candidate mode is enabled.
+export function installedCandidatePreflight(root,executable){
+ const graph=candidateArtifacts(root);if(!graph)return null;
+ assert.ok(executable,'installed candidate preflight requires OPF_TEST_BIN');
+ const bin=realpathSync(executable),cli=graph.artifacts.find(item=>item.name==='@openpresentation/cli');
+ const relative=typeof cli.stagedManifest.bin==='string'?cli.stagedManifest.bin:cli.stagedManifest.bin.opf;
+ assert.ok(relative,'candidate CLI has no opf binary');
+ const cliRoot=path.resolve(bin,...relative.split('/').map(()=> '..'));
+ const modules=path.dirname(path.dirname(cliRoot));
+ assert.equal(cliRoot,path.join(modules,'@openpresentation/cli'),'candidate binary is outside an installed CLI');
+ assert.equal(bin,path.join(cliRoot,relative),'candidate binary differs from the selected manifest');
+ assertInstalledCandidatePeers(root,modules,['@openpresentation/cli','@openpresentation/opf-render','@openpresentation/opf-pptx'],graph.artifacts.find(item=>item.name==='@openpresentation/opf').version);
+ assertCandidatePeerPreflight(root);
+ return {graph,bin,modules};
+}
+
+export function assertCandidateDoctor(context,doctor){
+ for(const name of ['@openpresentation/opf-render','@openpresentation/opf-pptx']){
+  const engine=context.graph.artifacts.find(item=>item.name===name);
+  const cli=context.graph.artifacts.find(item=>item.name==='@openpresentation/cli');
+  const wanted=cli.originalManifest.peerDependencies[name];
+  assert.equal(wanted,'^0.19.0','interim doctor oracle requires the unchanged stable 0.19 contract');
+  assert.ok(/^0\.18\./.test(engine.version),'interim doctor oracle requires selected 0.18 engines');
+  const fact=doctor.packages.find(item=>item.name===name);
+  assert.deepEqual([fact.installed,fact.version,fact.wanted,fact.ok],[true,engine.version,wanted,false]);
+ }
+ for(const format of ['json','yaml','md'])assert.equal(doctor.formats[format].ready,true);
+ for(const format of ['svg','pptx-import'])assert.equal(doctor.formats[format].ready,false);
+}
+
 export function assertInstalledCandidateGraph(root,consumer){
  const report=candidateArtifacts(root);assert.ok(report,'installed candidate graph needs explicit candidate mode');
  const galleryPaths=new Set();
