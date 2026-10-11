@@ -26,3 +26,10 @@ export async function installIsolatedCore(modules) {
   }
   return target;
 }
+
+/** Copy the previously validated installed runtime closure, excluding all optional engines. */
+export async function installIsolatedInstalledCore(modules,installedModules){
+ const omitted=['.bin','@openpresentation/opf-render','@openpresentation/opf-pptx','@openpresentation/opf-editor','@openpresentation/cli'];
+ await cp(installedModules,modules,{recursive:true,dereference:true,filter:source=>!omitted.some(name=>source===path.join(installedModules,name)||source.startsWith(path.join(installedModules,name)+path.sep))});
+ return path.join(modules,'@openpresentation/opf');
+}

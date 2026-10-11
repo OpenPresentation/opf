@@ -14,7 +14,7 @@ import {selectedRendererScriptFonts} from './helpers/renderer-script-fonts.mjs';
 import {packCliCandidate, preparePackedSmokeCli} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
-import {candidateArtifacts,assertInstalledCandidatePeers,assertCandidateExecInstalls} from '../../../scripts/candidate-gallery-pack.mjs';
+import {candidateArtifacts,candidatePeerPreflight,assertInstalledCandidatePeers,assertCandidateExecInstalls} from '../../../scripts/candidate-gallery-pack.mjs';
 import {qualificationPeerGate} from '../../../scripts/candidate-gallery-results.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
@@ -29,10 +29,14 @@ const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map
 // installed-regression.mjs checks the installed versions against the renderer's declared ones).
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
+const preflight=candidatePeerPreflight(root,()=>{
 if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
 // The candidate core declares the same peers (optional, for its Node build's file API; opf#498 raises them to the next train's line before
 // core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
 if (!report((candidateGraph ? requireCandidateGate : result=>result)(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: candidateGraph?Object.fromEntries(candidateGraph.artifacts.map(item=>[item.name,item.version])):manifest.devDependencies})))) process.exit(0);
+ return {run:true};
+});
+report(requireCandidateGate(preflight));
 const stagedRenderer=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf-render');
 if(candidateGraph) assert.ok(stagedRenderer, 'validated candidate graph must include the selected renderer');
 const require = createRequire(path.join(pkg, 'package.json'));
