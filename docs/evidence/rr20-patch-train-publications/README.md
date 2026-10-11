@@ -21,3 +21,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## PPTX 0.18.2 qualified preparation — 2026-10-11
 
 [Dependency-floor merge, fresh prerequisite, full dry qualification and byte-identical executed preparation](pptx-0182-preparation/README.md) are complete. Release-prep #250 at `d07b63491be294bc9a14c7aba04683036c1eb954` awaits gate 12145; no PPTX publication is claimed.
+
+## Local renderer v0.19 refresh — 2026-10-11
+
+[Reviewed source refresh](v019-render-published-refresh/README.md) is clean at `d4ab7a5861719fb366e50299ee0604b05eec444e`; focused source checks pass. Prior `12766980` graph/packet identities are retained; final registry/native acceptance remains separate. PPTX gate 12145 remains pending.

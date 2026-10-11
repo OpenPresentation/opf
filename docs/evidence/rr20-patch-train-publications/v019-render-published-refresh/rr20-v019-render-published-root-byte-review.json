@@ -1,0 +1,20 @@
+{
+  "oldCandidate": "127669807df12fbead5ea805c4d54a7c3fcbc03b",
+  "newCandidate": "d4ab7a5861719fb366e50299ee0604b05eec444e",
+  "publishedMain": "de0a5034f49dbacfe190946ec7416a976981cf45",
+  "changedPaths": [
+    "CHANGELOG.md",
+    "changes/ff-46-script-name-hosts.md",
+    "changes/render-189-sara-am-harfbuzz-pens.md",
+    "changes/render-361-sizeadjust-rows.md",
+    "changes/rr-65-subset-reference-glyphs.md",
+    "changes/rr-81-candidate-golden-workflow.md",
+    "changes/rr-81-player-system-focus.md",
+    "package-lock.json",
+    "package.json"
+  ],
+  "lockAndChangelogEqualPublishedMain": true,
+  "manifestOnlyPublishedVersionAndCoreFloorChanged": true,
+  "runtimeTestsToolsWorkflowsUnchanged": true,
+  "claim": "Byte/scope review only; source qualification pending, no registry or native acceptance"
+}
