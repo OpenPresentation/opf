@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.19.0-next.0 (2026-10-11)
+
+- Acknowledge the upcoming 0.19 breaking contract with the untagged development version `0.19.0-next.0`; this metadata preparation preserves the existing runtime and dependency contracts.
+
 ## 0.18.4 (2026-10-11)
 
 - Add explicit candidate-gallery source and local tarball qualification for coordinated unreleased catalogs, with immutable source authorization, recorded staging metadata, and publication refusal until real registry adoption.
