@@ -2,6 +2,31 @@
 
 ## Unreleased
 
+## 0.18.2 (2026-10-11)
+
+- FF-46 (opf#362; tests only): per-name host fixtures for the 22 proprietary script, emoji, math and code-table names that pass the native visual comparison. `test/script-name-hosts.mjs` (Node) and `test/script-name-hosts-browser.mjs` (Chromium, offline) take each name of `test/fixtures/script-name-families.json` (Aparajita, Arabic Typesetting, Cambria Math, David, FangSong, Gautami, Gisha, Kalinga, Microsoft JhengHei, Microsoft YaHei, MingLiU, Miriam, Nyala, PMingLiU, Segoe UI Emoji, SimHei, SimSun, Sylfaen, Symbol, Tunga, Webdings, Wingdings) and check that it resolves to its policy route with the policy `sizeAdjust`, that every script sample draws in its route face with no other fallback (Sylfaen's Armenian and Georgian in their designated Noto faces; every mapped symbol code in the chain face that has it) at the route file's own advances, and that the drawn face is the pinned file. Both write `artifacts/script-name-hosts/*.json`, the evidence the core font tracker reads.
+- opf#361 (output changes only for size-adjusted families): the renderer applies `font-policy.json`'s `sizeAdjust` and `lineAscent` rows wherever they are, so with core's opf#361 rows the previews of Angsana New (0.75, line ascent 0.83 / 0.86), DilleniaUPC (0.68, 0.82 / 0.85), Sakkal Majalla (0.89, 0.76 / 0.81), Malgun Gothic (1.07) and Nirmala UI (1.07, 0.97 / 0.94) draw and measure their script text at the size PowerPoint draws it, and Arabic Typesetting lines move down 0.04 em (0.02 em on a line with a Latin run) for its corrected line ascent 0.74 / 0.80.
+    - White space that follows a size-adjusted run now stays in that run (`createScriptFonts().plan`), as PowerPoint keeps it in the script font: the space between two Hangul words of a Malgun Gothic title is measured and drawn at the run's adjusted size instead of a separate run at the composed size, which a browser drew wider than its measured advance (the FF-19 browser check caught it once Malgun Gothic carried a multiplier).
+    - `test/arabic-size-adjust.mjs`, `test/script-fonts-browser.mjs` and `test/script-corpora-slides-browser.mjs` read the multipliers and title sizes from the installed core's policy instead of hard-coding Arabic Typesetting's, and the first checks the five new rows exactly when they are present.
+    - No golden moves: the 807 example slides render identical SVG on the golden path with core's current policy and with the opf#361 rows.
+- opf-render#189 changes the default output of PNG and raster PDF for Indic, Thai, Lao, Khmer and Myanmar text. The raster path now places each complex-script cluster at HarfBuzz's pen position (`fonts.outlines.shape`, the shaper browsers use) instead of fontkit's.
+    - **Who it affects:** conversions that have HarfBuzz, which the Node fonts handle and the bundled faces always have. The default `toPng` and raster PDF therefore change for this text.
+    - **Fallback to fontkit's pens:** without a shaper, output stays byte-identical. A run HarfBuzz cannot map back to its characters also falls back.
+    - **Why:** fontkit kerns after a decomposed Thai sara am differently from HarfBuzz, so a cluster after it (ใจ after น้ำ) was about 0.7 px off at 25 px.
+    - **Script corpora:** six samples change, measured as mean pixel difference against HarfBuzz's own outlines, before → after. All six now draw exactly like HarfBuzz's outlines, and no other sample changes:
+        - `thai-title`: 0.46 → 0
+        - `thai-sara-am`: 1.48 → 0
+        - `thai-no-spaces`: 0.47 → 0
+        - `taml-title`: 5.7 → 0
+        - `telu-title`: 2.79 → 0
+        - `mymr-medials`: 12.96 → 0
+    - **Against Chromium:** seven of eight Thai checks (three lines and the issue's own line, at 25 and 60 px) come closer. For example, `thai-sara-am` at 60 px drops from 266 channel values off by more than 64 to 43. What remains is the anti-aliasing difference that HarfBuzz's own outlines show too.
+    - **One regression:** `thai-no-spaces` at 25 px moves slightly away from Chromium (mean difference 1.298 → 1.329). The output there is exactly HarfBuzz's; fontkit's old offset happened to land nearer Chromium's pixels.
+    - **Raster goldens:** unchanged, because no golden deck has complex-script text.
+- Preserve named reference glyphs when subsetting embedded fonts so small text in macOS browser SVG previews draws like the whole face, while retaining compact, deterministic subsets.
+- RR-81: regenerate explicitly pinned v2 example and template candidates in the prescribed Playwright image, with separate read-only generation and guarded baseline-only writes.
+- Preserve the host color scheme across the slideshow player's CSS reset and use system Highlight for forced-colors focus outlines, so dark and light embeds retain the correct accessible system palette.
+
 ## 0.18.1 (2026-10-11)
 
 - render#171 (tooling and docs only, no change to the package): `npm run bench:soak` (`scripts/soak.mjs`) is a repeatable sustained-load benchmark for long-lived render and export workers. Each worker process holds one fonts handle (`loadFonts` with the office pack and `scripts: 'auto'`), blocks the network and repeats `ensure`, `toSvg`, `toPng` and, when `@openpresentation/opf-pptx` is installed, `toPptx` over core's example decks and a script-corpora deck, at concurrency 1 and 4 for 500 or more jobs per worker. It samples RSS and retained heap after a forced GC, reports p50 and p95 latency per operation, tests the steady-state window for monotonic memory growth (Mann-Kendall plus Theil-Sen, criterion in the script header), and compares the SVG, PNG and PPTX hashes of every repeat of a deck; the JSON report and Markdown summary go to the git-ignored `artifacts/soak/`. It is not part of `npm test`. The README section "Long-lived workers: measured memory and latency" publishes the first measurement with its hardware and Node version.
