@@ -2884,6 +2884,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
+  const requestedTemplateGap = gap;
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
     const binding = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 });
@@ -2911,6 +2912,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const implicitTitle = !plan.title && titleFields.length > 0;
     if (implicitTitle) { cells.unshift(Array.from({ length: columnCount }, () => 'title')); rowSizes.unshift('auto'); }
     if (belowUnits.length) { cells.push(Array.from({ length: columnCount }, () => BELOW)); rowSizes.push('auto'); }
+    // A valid 12 x 12 grid may request more gaps than fit. Keep the same physical gap on both axes and
+    // reserve at least half the frame for tracks, as flowCells does for a region's internal grid.
+    const gap = Math.max(0, Math.min(requestedTemplateGap, frame.width / (columnCount * 2), frame.height / (rowSizes.length * 2)));
     const regionOf = new Map<string, LayoutRegion>(plan.regions.map(region => [region.name, region]));
     // Empty areas collapse into a neighbour, per slide; the record never changes.
     const empty = new Set<string>();
