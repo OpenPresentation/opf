@@ -1,0 +1,6 @@
+19:24:31 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+19:24:31 OpenPresentation/opf-editor#160 head 44def286; checks pending (0/4 checks, no ruleset); running: package, Node 22 (engines range), Node 26 (engines range), macOS playground; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+19:30:33 OpenPresentation/opf-editor#160 head 44def286; checks pending (2/4 checks, no ruleset); running: package, macOS playground; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+19:45:37 OpenPresentation/opf-editor#160 head 44def286; checks pending (3/4 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+19:54:40 OpenPresentation/opf-editor#160 head 44def286; checks green (4/4 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+19:57:45 MERGED OpenPresentation/opf-editor#160 f35326ac0d0df72ba5c0168768851c1b3b37295d

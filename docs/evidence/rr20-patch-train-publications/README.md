@@ -1,6 +1,6 @@
 # Patch-train publications and remaining qualification
 
-Core **0.18.4**, renderer **0.18.2** and PPTX **0.18.2** are trusted-published and independently verified. Editor source test repair [#160](https://github.com/OpenPresentation/opf-editor/pull/160), head `44def28661d14e2134206a7fca910d17f79a405f`, awaits exact-head gate 91343. Editor release preparation and final release-plan/site adoption remain incomplete. T18 stays open; progress remains **15/40**. Required order is core → renderer → PPTX → editor; CLI remains 0.18.1.
+Core **0.18.4**, renderer **0.18.2** and PPTX **0.18.2** are trusted-published and independently verified. Editor source test repair [#160](https://github.com/OpenPresentation/opf-editor/pull/160), head `44def28661d14e2134206a7fca910d17f79a405f`, merged at `f35326ac` after gate 91343 exited 0; fresh source prerequisite passed by exact tree proof, and new prepared replay remains pending. Editor release preparation and final release-plan/site adoption remain incomplete. T18 stays open; progress remains **15/40**. Required order is core → renderer → PPTX → editor; CLI remains 0.18.1.
 
 ## Verified publications
 

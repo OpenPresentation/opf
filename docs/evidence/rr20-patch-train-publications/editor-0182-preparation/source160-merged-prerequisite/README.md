@@ -1,0 +1,7 @@
+# Editor source repair merged and prerequisite qualified
+
+PR #160 merged at `f35326ac0d0df72ba5c0168768851c1b3b37295d` on 2026-10-11 19:57:45 UTC, [gate 91343](editor160-source-gate.log) exit 0. Clean main tree `38b3aab3ea9986d9353089791d1c0475cdff2c78` equals reviewed `44def286`; [exact tree proof](editor160-merged-tree-comparison.json).
+
+Fresh source prerequisite 25008 completed exit 0; original transcript, registry identities, packed evidence and before/after preservation receipts are retained. Exact tree equality binds this source qualification to merged main. Supervisor new dry preparation 78575 is running; its external log is `/private/tmp/opf-supervisor-20261010/editor0182-prep-after160-dry.log`. New prepared full release replay remains pending. Earlier failed preparation and native keyboard diagnostics remain historical evidence; no editor release/publication or checkpoint closure is claimed.
+
+Supervisor dry prep 78575 completed at `/private/tmp/release-train-editor-jwsrbK`, base `f35326ac`. [Exact metadata/binary patch comparison](editor0182-after160-metadata-comparison.json) and [dry log](editor0182-prep-after160-dry.log) confirm reviewed metadata bytes remain equal; prior independent metadata review applies to those bytes. Fresh full prepared source replay is separately pending in `/private/tmp/rr20-editor0182-after160-release-results`. No release-prep PR exists yet.
