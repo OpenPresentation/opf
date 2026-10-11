@@ -219,11 +219,11 @@ The strict macOS font-subset fix renderer#230 remains held for the dependency-or
 
 ## Local v0.19 peer contract freeze — 2026-10-11
 
-Isolated candidate `1921a28c6d4eea090dc368c13c75ca1b359bdc39` aligns core/CLI optional engine manifests and shared hints. [Durable reviews and logs](../../evidence/rr20-patch-train-publications/v019-engine-peer-contract/README.md) show focused 20/20 and consistency 7/7 passes; mapped 9/11 retains strict absent 0.19 peers and genuine minor-version failure. No full acceptance, merge or publication is claimed. Original b597/staged/packet identities remain immutable. T34/T38 remain open; sole root PPTX gate 24822 remains pending.
+Isolated candidate `1921a28c6d4eea090dc368c13c75ca1b359bdc39` aligns core/CLI optional engine manifests and shared hints. [Durable reviews and logs](../../evidence/rr20-patch-train-publications/v019-engine-peer-contract/README.md) show focused 20/20 and consistency 7/7 passes; mapped 9/11 retains strict absent 0.19 peers and genuine minor-version failure. No full acceptance, merge or publication is claimed. Original b597/staged/packet identities remain immutable. T34/T38 remain open; PPTX gate 24822 completed exit 0 and PPTX 0.18.2 is independently verified; [publication receipts](../../evidence/rr20-patch-train-publications/pptx-0182/README.md).
 
 ## Local PPTX v0.19 current-main candidate — 2026-10-11
 
-Clean isolated `f62dd05a8ef0712ca2a35a11857f9085de6fd7a1` in `/private/tmp/opf-v019-pptx-current-refresh` adopts merged `1954c9ce` metadata only. [Receipts](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) preserve original `1fae5a9d` and source checks against actual core `1921a28c`, renderer `d4ab7a58`, gallery `e0a7eee2`. Full-graph/registry 0.19/native acceptance remains separate; sole release gate 24822 remains pending.
+Clean isolated `f62dd05a8ef0712ca2a35a11857f9085de6fd7a1` in `/private/tmp/opf-v019-pptx-current-refresh` adopts merged `1954c9ce` metadata only. [Receipts](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) preserve original `1fae5a9d` and source checks against actual core `1921a28c`, renderer `d4ab7a58`, gallery `e0a7eee2`. Full-graph/registry 0.19/native acceptance remains separate; PPTX gate 24822 completed exit 0 and PPTX 0.18.2 is independently verified; [publication receipts](../../evidence/rr20-patch-train-publications/pptx-0182/README.md).
 
 ## Current editor 0.18.2 qualification
 
