@@ -1,6 +1,6 @@
 # Required geometry patch-train publication evidence
 
-Core 0.18.4 and renderer 0.18.2 are published and independently verified. Required order remains core 0.18.4 → renderer 0.18.2 → PPTX 0.18.2 → editor 0.18.2. The remaining PPTX/editor publications and final release-plan/site adoption are pending. T18 stays open; this evidence closes no checkpoint and changes no progress count.
+Core 0.18.4, renderer 0.18.2 and PPTX 0.18.2 are published and independently verified. Required order remains core 0.18.4 → renderer 0.18.2 → PPTX 0.18.2 → editor 0.18.2. The remaining editor publication and final release-plan/site adoption are pending. T18 stays open; this evidence closes no checkpoint and changes no progress count.
 
 ## Core 0.18.4
 
@@ -37,3 +37,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## PPTX exact-commit gate and tag — 2026-10-11 18:53:20 UTC
 
 [Gate 24822 receipt](pptx-0182-preparation/release-commit-gate.log) confirms all four checks at `1954c9ce`. Tag `opf-pptx-v0.18.2` is created; supervisor process 88826 awaits trusted workflow startup. Publication/independent verification are pending; editor pre-prep waits. No T18 closure.
+
+## PPTX 0.18.2 published and verified
+
+[Exact receipts](pptx-0182/README.md) confirm publisher 88826/verifier 28020 exit 0 at `1954c9ce`, workflow 38165718768. Editor pre-prep is running; no editor prep yet. T18 remains open for editor and adoption. Earlier pending paragraphs are historical.
