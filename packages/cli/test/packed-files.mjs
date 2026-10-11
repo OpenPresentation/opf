@@ -101,7 +101,7 @@ try {
   // RR-75: `opf convert` replaces render, export and import; the output path names the files (a one-slide deck writes one file).
   const rendered = npx('convert', 'deck.opf.json', 'png/Npx.png');
   assert.equal(rendered.ok, true);
-  assert.deepEqual(await readdir(path.join(work, 'png')), ['Npx-1.png']);
+  assert.deepEqual(await readdir(path.join(work, 'png')), ['Npx.png']);
   assert.equal(npx('convert', 'deck.opf.json', 'Npx.pptx').ok, true);
   assert.ok((await readdir(work)).includes('Npx.pptx'));
   assert.equal(npx('convert', 'Npx.pptx', 'round.opf.json').ok, true);
