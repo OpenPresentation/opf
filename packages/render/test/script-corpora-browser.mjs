@@ -8,6 +8,7 @@
 // SVG block at the end proves that on real toSvg output. Right-to-left samples must display right to left (the first character is painted right of the last). Nothing else may load.
 // Usage: node test/script-corpora-browser.mjs [report.json]
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
@@ -36,6 +37,7 @@ for (const [index, face] of faces.entries()) {
 
 const prepared = await loadFonts({pack: 'office', scripts: 'all'});
 const served = new Map(faces.map((face, index) => [`https://fonts.test/${index}.ttf`, {index, file: face.file}]));
+const servedFonts = [];
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined}), errors = [], requests = [];
 try {
   const page = await browser.newPage();
@@ -43,13 +45,20 @@ try {
   await page.route(/^https?:/, async route => {
     const face = served.get(route.request().url());
     if (!face) { requests.push(route.request().url()); return route.abort(); }
-    return route.fulfill({status: 200, contentType: 'font/ttf', body: await readFile(face.file)});
+    const bytes = await readFile(face.file), selected = faces[face.index];
+    servedFonts.push({family: selected.family, weight: selected.weight, italic: selected.italic, file: face.file, sha256: createHash('sha256').update(bytes).digest('hex')});
+    return route.fulfill({status: 200, contentType: 'font/ttf', body: bytes});
   });
   await page.setContent('<main></main>');
   await page.evaluate(async list => {
-    for (const [url, face] of list) document.fonts.add(await new FontFace(`QF${face.index}`, `url(${url})`, {weight: String(face.weight), style: face.italic ? 'italic' : 'normal'}).load());
+    for (const [url, face] of list) {
+      const descriptors = {weight: String(face.weight), style: face.italic ? 'italic' : 'normal'};
+      document.fonts.add(await new FontFace(`QF${face.index}`, `url(${url})`, descriptors).load());
+      // text:system SVG uses real family names; its measurement must not use system fallback.
+      document.fonts.add(await new FontFace(face.family, `url(${url})`, descriptors).load());
+    }
     await document.fonts.ready;
-  }, [...served].map(([url, face]) => [url, {index: face.index, weight: faces[face.index].weight, italic: faces[face.index].italic}]));
+  }, [...served].map(([url, face]) => [url, {index: face.index, family: faces[face.index].family, weight: faces[face.index].weight, italic: faces[face.index].italic}]));
   const observed = await page.evaluate(list => {
     const host = document.querySelector('main');
     return list.map(item => {
@@ -94,12 +103,22 @@ try {
     const host = document.querySelector('main');
     host.innerHTML = svg;
     const title = [...host.querySelectorAll('text')].find(text => text.getAttribute('font-size') === '54');
+    const style = getComputedStyle(title), family = style.fontFamily.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+    const matchingFace = () => [...document.fonts].find(face => face.family.replace(/^['"]|['"]$/g, '') === family && face.weight === style.fontWeight && face.style === style.fontStyle && face.status === 'loaded');
+    const requireFace = () => { const face = matchingFace(); if (!face) throw new Error(`Missing pinned SVG face: ${family} ${style.fontWeight} ${style.fontStyle}`); return face; };
+    const pinned = requireFace();
+    document.fonts.delete(pinned);
+    let rejectedMissing = false;
+    try { requireFace(); } catch (error) { rejectedMissing = error.message.startsWith('Missing pinned SVG face:'); }
+    document.fonts.add(pinned);
+    if (!rejectedMissing) throw new Error('Removing the pinned face must reject system fallback');
+    requireFace();
     const accepted = Number(title.getAttribute('textLength'));
     title.removeAttribute('textLength');
     const natural = title.getComputedTextLength(), size = parseFloat(getComputedStyle(title).fontSize);
     // Diagnostics for a failure: the characters whose painted advance is not one em (fullwidth punctuation and ideographs are exactly one em).
     const odd = [...title.textContent].map((character, index) => [character, title.getSubStringLength(index, 1)]).filter(([character, width]) => !/[　-ヿ一-鿿＀-￯…]/.test(character) ? false : Math.abs(width - size) > 0.01);
-    return {style: host.querySelector('svg').getAttribute('style'), accepted, natural, size, family: getComputedStyle(title).fontFamily, odd};
+    return {style: host.querySelector('svg').getAttribute('style'), accepted, natural, size, family: getComputedStyle(title).fontFamily, pinnedFamily: family, pinnedWeight: pinned.weight, pinnedStyle: pinned.style, rejectedMissing, odd};
   }), slides);
   const observedPunctuation = [];
   for (const [index, value] of trimmed.entries()) {
@@ -108,12 +127,13 @@ try {
     // comes out about 10 percent NARROWER than accepted. The Linux Chromium of the pinned Playwright image does not behave like Edge on these lines
     // (hiragana inside fullwidth parentheses 1.27 px wider each, +0.4 percent of the line; the zh curly quotes narrower by one em, -5 percent), so there
     // the numbers are recorded in the report and only the style attribute is asserted (cause not identified; the Node test asserts the style too).
-    observedPunctuation.push({id: punctuation[index].id, natural: value.natural, accepted: value.accepted, odd: value.odd});
+    assert.ok(servedFonts.some(face => face.family === value.pinnedFamily && String(face.weight) === value.pinnedWeight && (face.italic ? 'italic' : 'normal') === value.pinnedStyle), 'the SVG face was served from the pinned font file');
+    observedPunctuation.push({id: punctuation[index].id, natural: value.natural, accepted: value.accepted, odd: value.odd, pinnedFamily: value.pinnedFamily, pinnedWeight: value.pinnedWeight, rejectedMissing: value.rejectedMissing});
     if (process.platform !== 'linux') assert.ok(Math.abs(value.natural - value.accepted) < 0.1, `${punctuation[index].id}: the browser draws ${value.natural}, the accepted advance is ${value.accepted} (font ${value.family} at ${value.size}; characters not one em wide: ${JSON.stringify(value.odd)})`);
   }
   const output = path.resolve(process.argv[2] ?? 'artifacts/script-corpora-browser.json');
   await mkdir(path.dirname(output), {recursive: true});
-  await writeFile(output, `${JSON.stringify({node: process.version, browser: browser.version(), cases: rows.length, errors, requests, hbMax, acceptedMax, platform: process.platform, observedPunctuation, rows}, null, 2)}\n`);
+  await writeFile(output, `${JSON.stringify({node: process.version, browser: browser.version(), cases: rows.length, errors, requests, hbMax, acceptedMax, platform: process.platform, observedPunctuation, servedFonts, rows}, null, 2)}\n`);
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);
   assert.ok(cases.length > 300, `${cases.length} cases`);

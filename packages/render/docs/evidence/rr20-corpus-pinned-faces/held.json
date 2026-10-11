@@ -1,0 +1,125 @@
+{
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "cases": 391,
+  "errors": [],
+  "requests": [],
+  "hbMax": 0.05625000000009095,
+  "acceptedMax": 0.05625000000009095,
+  "platform": "darwin",
+  "observedPunctuation": [
+    {
+      "id": "jpan-punctuation",
+      "natural": 972,
+      "accepted": 972,
+      "odd": [],
+      "pinnedFamily": "Noto Sans JP",
+      "pinnedWeight": "700",
+      "rejectedMissing": true
+    },
+    {
+      "id": "hans-punctuation",
+      "natural": 1026,
+      "accepted": 1026,
+      "odd": [],
+      "pinnedFamily": "Noto Sans SC",
+      "pinnedWeight": "700",
+      "rejectedMissing": true
+    },
+    {
+      "id": "hant-punctuation",
+      "natural": 1134,
+      "accepted": 1134,
+      "odd": [],
+      "pinnedFamily": "Noto Sans TC",
+      "pinnedWeight": "700",
+      "rejectedMissing": true
+    }
+  ],
+  "servedPunctuationFaces": [
+    {
+      "family": "Noto Sans JP",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
+    },
+    {
+      "family": "Noto Sans JP",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
+    },
+    {
+      "family": "Noto Sans JP",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf",
+      "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
+    },
+    {
+      "family": "Noto Sans JP",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf",
+      "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "sha256": "d45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "sha256": "d45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf",
+      "sha256": "9a38ae0ab28cd5a256f9ea8e00dedc688aac17f7915fcb000572990afa956b96"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf",
+      "sha256": "9a38ae0ab28cd5a256f9ea8e00dedc688aac17f7915fcb000572990afa956b96"
+    },
+    {
+      "family": "Noto Sans TC",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "sha256": "add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954"
+    },
+    {
+      "family": "Noto Sans TC",
+      "weight": 400,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "sha256": "add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954"
+    },
+    {
+      "family": "Noto Sans TC",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf",
+      "sha256": "ed4ae6ed781e34d0beee896e9be5d835a938ac7adabbcc1b6b6904290006f372"
+    },
+    {
+      "family": "Noto Sans TC",
+      "weight": 700,
+      "italic": false,
+      "file": "/private/tmp/rr20-held-rehearsal/opf-render/node_modules/@expo-google-fonts/noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf",
+      "sha256": "ed4ae6ed781e34d0beee896e9be5d835a938ac7adabbcc1b6b6904290006f372"
+    }
+  ]
+}
