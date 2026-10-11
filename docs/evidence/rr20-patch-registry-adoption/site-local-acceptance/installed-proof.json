@@ -1,0 +1,181 @@
+{
+  "pptx-gallery": {
+    "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+    "packageManager": "pnpm@10.33.2",
+    "coreDirs": [
+      "@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2"
+    ],
+    "installed": {
+      "@openpresentation/opf": {
+        "version": "0.18.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf"
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@openpresentation+opf-render@0.18.2_0e48ebc5cef729e698b131b7b4697338/node_modules/@openpresentation/opf-render"
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2_@types+node@24.13.4/node_modules/@openpresentation/opf-pptx"
+      },
+      "@expo-google-fonts/noto-color-emoji": {
+        "version": "0.4.7",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-color-emoji@0.4.7/node_modules/@expo-google-fonts/noto-color-emoji"
+      },
+      "@expo-google-fonts/noto-emoji": {
+        "version": "0.4.8",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-emoji@0.4.8/node_modules/@expo-google-fonts/noto-emoji"
+      },
+      "@expo-google-fonts/noto-sans-jp": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-sans-jp@0.4.4/node_modules/@expo-google-fonts/noto-sans-jp"
+      },
+      "@expo-google-fonts/noto-sans-kr": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-sans-kr@0.4.4/node_modules/@expo-google-fonts/noto-sans-kr"
+      },
+      "@expo-google-fonts/noto-sans-sc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-sans-sc@0.4.4/node_modules/@expo-google-fonts/noto-sans-sc"
+      },
+      "@expo-google-fonts/noto-sans-tc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-gallery/node_modules/.pnpm/@expo-google-fonts+noto-sans-tc@0.4.4/node_modules/@expo-google-fonts/noto-sans-tc"
+      }
+    },
+    "changedPaths": [
+      "data/opf-spec.json",
+      "data/preview-font-replacements.json",
+      "data/preview-fonts.json",
+      "package.json",
+      "pnpm-lock.yaml",
+      "public/opf-editor/index.html",
+      "public/opf-editor/lazy-fonts.json",
+      "public/opf-editor/manifest.json",
+      "public/opf-editor/opf-spec.json",
+      "public/opf-editor/playground.js",
+      "public/opf-editor/playground.js.LEGAL.txt",
+      "public/opf-editor/script-fonts.json",
+      "public/opf-editor/wasm.json",
+      "public/preview-fonts/LICENSES.txt",
+      "styles/preview-fonts/intos-display.css",
+      "styles/preview-fonts/intos.css"
+    ],
+    "lockSha256": "111424b2693ed58e6a0edbaf749e743e4a598092a402c54619e61d87a8891954"
+  },
+  "openpresentation-site": {
+    "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+    "packageManager": "pnpm@10.33.2",
+    "coreDirs": [
+      "@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2"
+    ],
+    "installed": {
+      "@openpresentation/opf": {
+        "version": "0.18.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf"
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-render@0.18.2_0e48ebc5cef729e698b131b7b4697338/node_modules/@openpresentation/opf-render"
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2_@types+node@24.13.4/node_modules/@openpresentation/opf-pptx"
+      },
+      "@openpresentation/opf-editor": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-editor@0.18.2_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf-editor"
+      },
+      "@openpresentation/cli": {
+        "version": "0.18.1",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+cli@0.18.1_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/cli"
+      },
+      "@expo-google-fonts/noto-color-emoji": {
+        "version": "0.4.7",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-color-emoji@0.4.7/node_modules/@expo-google-fonts/noto-color-emoji"
+      },
+      "@expo-google-fonts/noto-emoji": {
+        "version": "0.4.8",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-emoji@0.4.8/node_modules/@expo-google-fonts/noto-emoji"
+      },
+      "@expo-google-fonts/noto-sans-jp": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-sans-jp@0.4.4/node_modules/@expo-google-fonts/noto-sans-jp"
+      },
+      "@expo-google-fonts/noto-sans-kr": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-sans-kr@0.4.4/node_modules/@expo-google-fonts/noto-sans-kr"
+      },
+      "@expo-google-fonts/noto-sans-sc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-sans-sc@0.4.4/node_modules/@expo-google-fonts/noto-sans-sc"
+      },
+      "@expo-google-fonts/noto-sans-tc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@expo-google-fonts+noto-sans-tc@0.4.4/node_modules/@expo-google-fonts/noto-sans-tc"
+      }
+    },
+    "changedPaths": [
+      "package.json",
+      "pnpm-lock.yaml",
+      "starters/editor/package.json",
+      "starters/node/package.json",
+      "starters/website/package.json"
+    ],
+    "lockSha256": "7a1636d7b2a8bebe1051d257e0108cb7e93651b85a8025f5414a213c205aa5b9"
+  },
+  "pptx-dev": {
+    "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+    "packageManager": "pnpm@11.1.3+sha512.c85357fe17ca12dd23dd7071822666dfd7e3cb76fe214e3370b5ea2fb34f2a231185509b63e717f3cd0acb38dd3f8d82bcd5e8172400ae678b70ea4fbed0896d",
+    "coreDirs": [
+      "@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2"
+    ],
+    "installed": {
+      "@openpresentation/opf": {
+        "version": "0.18.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf"
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@openpresentation+opf-render@0.18.2_0e48ebc5cef729e698b131b7b4697338/node_modules/@openpresentation/opf-render"
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2_@types+node@24.13.4/node_modules/@openpresentation/opf-pptx"
+      },
+      "@openpresentation/opf-editor": {
+        "version": "0.18.2",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@openpresentation+opf-editor@0.18.2_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf-editor"
+      },
+      "@expo-google-fonts/noto-color-emoji": {
+        "version": "0.4.7",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-color-emoji@0.4.7/node_modules/@expo-google-fonts/noto-color-emoji"
+      },
+      "@expo-google-fonts/noto-emoji": {
+        "version": "0.4.8",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-emoji@0.4.8/node_modules/@expo-google-fonts/noto-emoji"
+      },
+      "@expo-google-fonts/noto-sans-jp": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-sans-jp@0.4.4/node_modules/@expo-google-fonts/noto-sans-jp"
+      },
+      "@expo-google-fonts/noto-sans-kr": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-sans-kr@0.4.4/node_modules/@expo-google-fonts/noto-sans-kr"
+      },
+      "@expo-google-fonts/noto-sans-sc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-sans-sc@0.4.4/node_modules/@expo-google-fonts/noto-sans-sc"
+      },
+      "@expo-google-fonts/noto-sans-tc": {
+        "version": "0.4.4",
+        "realpath": "/private/tmp/opf-patch-adoption-workspace/pptx-dev/node_modules/.pnpm/@expo-google-fonts+noto-sans-tc@0.4.4/node_modules/@expo-google-fonts/noto-sans-tc"
+      }
+    },
+    "changedPaths": [
+      "package.json",
+      "pnpm-lock.yaml"
+    ],
+    "lockSha256": "f10c3b19ebcfdd5dfdaf4daf91d9725ae7cd0d0a04820f7ebc241fd32e7ff0e4"
+  }
+}

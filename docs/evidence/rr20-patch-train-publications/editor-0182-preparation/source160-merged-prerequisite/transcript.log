@@ -1,0 +1,15 @@
+mode=preprep head=44def28661d14e2134206a7fca910d17f79a405f Node24.21.0 npm11.16.0 token_unset=true TMPDIR=/private/tmp
+2026-10-11T19:36:04Z START ci
+2026-10-11T19:36:06Z PASS ci
+2026-10-11T19:36:06Z START registry-targets
+2026-10-11T19:36:11Z PASS registry-targets
+2026-10-11T19:36:11Z START installed
+2026-10-11T19:36:11Z PASS installed
+2026-10-11T19:36:11Z START published-core
+2026-10-11T19:36:11Z PASS published-core
+2026-10-11T19:36:11Z START packed
+2026-10-11T19:36:48Z PASS packed
+2026-10-11T19:36:48Z START installed-final
+2026-10-11T19:36:48Z PASS installed-final
+ALL LOCAL QUALIFICATION GATES PASS; no publication performed
+terminal_exit=0

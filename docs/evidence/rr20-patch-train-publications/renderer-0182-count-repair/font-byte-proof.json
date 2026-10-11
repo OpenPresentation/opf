@@ -1,0 +1,10 @@
+{
+  "publishedBase": "d4259333a1105ce54d136ced0635f086d0f750ee",
+  "candidate": "09325bddb475d1de2d4650373c0de007764ef167",
+  "paths": [
+    "src/font-manifest.js",
+    "fonts"
+  ],
+  "filesCompared": 143,
+  "allBytesIdentical": true
+}

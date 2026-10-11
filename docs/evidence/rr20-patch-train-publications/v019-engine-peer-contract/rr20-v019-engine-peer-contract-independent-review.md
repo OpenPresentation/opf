@@ -1,0 +1,17 @@
+# Independent v0.19 optional-engine contract review
+
+Read-only inspection on 2026-10-11 of `/private/tmp/opf-v019-engine-peer-contract`, base `b597dbe099166d62067ea1cc67696c45cc268177`. Reviewed working diff; author owns tests and final freeze. No implementation edits or API calls by this reviewer. An accidental mapped-check invocation was interrupted with exit 130 and supplies no evidence; the final authorized author run occurred afterward.
+
+No blocking finding in the five-path delta. Both core and CLI optional renderer/PPTX peer ranges become `^0.19.0`; existing `peerDependenciesMeta.optional` fields are untouched. Shared `PEER_RANGES` names exactly the same versions, preserving package-name-based loading and feature-based runtime checks. Missing-engine and insufficient-feature install guidance consequently matches the manifests. Doctor tests retain exact readiness/missing-package/install assertions and update only the three expected version strings.
+
+The genuine changed fragment targets `[opf, cli]`, explicitly identifies the breaking v2 contract and preserves engine-free document reading/validation/editing. It makes no registry/publication claim. Authentic `pnpm-lock.yaml`, runtime loader/doctor behavior, candidate authorization, schemas, fixtures and golden baselines are unchanged. This is the separate reviewed source contract change required before later CLI release preparation, not a release-prep allowlist expansion or breaking-gate waiver. Actual version acknowledgment, future registry dependency reconciliation, optional engine publication and full qualification remain distinct gates.
+
+Held records now commit `c8695d1486434707fa4c0ee4068492b359af9d04`: #250 merge `1954c9ce` and tree identity are retained; sole release-commit gate 24822 remains pending, with no tag/publication claim. `check:changed` passed for that documentation update.
+
+## Expanded six-path review
+
+Reviewed the expanded working diff against b597: core/CLI manifests, shared ranges, doctor test, convert test and genuine fragment. Convert retains its exact complete missing-engine install-command assertion, changing only the engine range. Doctor locally adjusts only its two explicit fixture manifests to selected 0.19 metadata; the shared `installStubPeers` helper is untouched. Its existing positive assertions remain, and a separate 0.18 fixture must be installed but not satisfy the required range while JSON/YAML/Markdown remain ready. Production doctor semver/range checking is unchanged; production loading still uses existing feature checks, so this does not invent runtime semver refusal. Authentic lock is unchanged. No gate, tolerance or default stub behavior is weakened. No blocking finding in this expanded scope; author owns final freeze/results.
+
+## Final freeze and actual results
+
+Final clean isolated candidate is `1921a28c6d4eea090dc368c13c75ca1b359bdc39`, preserving base b597 and historical stage/packet identities. Supervisor root byte proof confirms six-path scope. Author focused 20/20 and consistency 7/7 pass; authorized mapped checks pass 9/11, with strict unavailable 0.19 engine refusal in core node/drawing gates. CLI 182 unit tests plus 95 commands pass. Genuine minor-version breaking gate remains failed against real 0.18.4. These unmet gates are retained, not waived or reported as full acceptance. Interrupted reviewer run is historical only and did not establish validation.

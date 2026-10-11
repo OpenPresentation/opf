@@ -1,0 +1,12 @@
+{
+  "checkout": "/private/tmp/release-train-pptx-jJ0n6n",
+  "head": "d07b63491be294bc9a14c7aba04683036c1eb954",
+  "base": "e19e1533401f49aa73f437d630a72b0362e1da9a",
+  "all4PathsByteEqualQualifiedDry": true,
+  "paths": [
+    "CHANGELOG.md",
+    "changes/rr-20-geometry-peer-floors.md",
+    "package-lock.json",
+    "package.json"
+  ]
+}

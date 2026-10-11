@@ -1,0 +1,5 @@
+17:29:37 OpenPresentation/opf-pptx main: no required checks: every check except neutral bots counts
+17:29:37 OpenPresentation/opf-pptx#249 head 35af55c3; checks pending (1/2 checks, no ruleset); running: package (ubuntu-latest); 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+17:44:41 heartbeat: OpenPresentation/opf-pptx#249 head 35af55c3; checks pending (1/2 checks, no ruleset)
+17:47:42 OpenPresentation/opf-pptx#249 head 35af55c3; checks green (2/2 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+17:50:47 MERGED OpenPresentation/opf-pptx#249 e19e1533401f49aa73f437d630a72b0362e1da9a

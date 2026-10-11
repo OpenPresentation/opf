@@ -1,0 +1,11 @@
+{
+  "base": "f35326ac0d0df72ba5c0168768851c1b3b37295d",
+  "checkout": "/private/tmp/release-train-editor-jwsrbK",
+  "metadataEqualPreviousReviewedDry": true,
+  "binaryPatchEqual": true,
+  "hashes": {
+    "CHANGELOG.md": "11074dd2947bbfbb29d5407221cf1aa85f82bdaebc805b6ce2ac3d0dc5291123",
+    "package-lock.json": "3824669130f17e43c602eb0b027c7a2c030f765fea4a56b83e90dddf972f613d",
+    "package.json": "8db8f0b51bedf023bc97280e92d505651b270e8516bd1cd8662734b52c07b5ed"
+  }
+}

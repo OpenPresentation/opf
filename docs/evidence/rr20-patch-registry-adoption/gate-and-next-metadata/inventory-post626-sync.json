@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-11T22:02:54.338411+00:00",
+  "repos": [
+    {
+      "repo": "OpenPresentation/opf",
+      "head": "06f4bbe1649b2676dd45bf855e5ead178b35ac35",
+      "clean": true
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "head": "de0a5034f49dbacfe190946ec7416a976981cf45",
+      "clean": true
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "head": "1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2",
+      "clean": true
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "head": "36d61ea27dd4677724dfec22006759139b7136ff",
+      "clean": true
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "head": "3458f50ca8fe081698cb5de13b94a459aa212aba",
+      "clean": true
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "clean": true
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "clean": true
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "clean": true
+    }
+  ],
+  "prs": 29,
+  "issues": 45,
+  "cleanSynced": true
+}

@@ -1,0 +1,95 @@
+
+> browser:data-grid: npm run test:data-grid-browser
+
+> @openpresentation/opf-editor@0.18.1 test:data-grid-browser
+> node test/data-grid-browser.mjs
+
+Data grid (browser): 51 checks. selecting a chart shows its data, with the gap as a gap; the grid exposes grid, row, columnheader, rowheader and gridcell semantics with indexes and a status and alert region; arrows, Home, End, Ctrl+Home, Ctrl+End, PageUp and Shift+arrows move and select; F2 edit then Enter; typing, F2, Enter, Shift+Enter, Tab, Shift+Tab and Escape edit and move; Delete clears a cell to a gap; Delete clears a selection in one step; invalid numbers are refused inline with the reason, never written as 0; rename a series; rename a category; Ctrl+Z and Ctrl+Y undo and redo from the grid; paste TSV into a chart; paste Excel quoting and a header; paste decimal commas; one value fills a selection; the paste box; paste: TSV grows the grid, Excel quoting, decimal commas, refusal, fill, paste box; platform paste shortcut pastes the clipboard; cut clears the selection; copy writes TSV and cut clears in one step; insert a chart row; insert a row below; delete rows; move a row down; move a row up; insert a series; delete a column; move a column left; transpose; sort descending; sort ascending by a series with a gap; rows, columns, transpose and sort through the toolbar; row and column headers, Shift+click and dragging select; the number format decides how numbers are read and shown; edit a table cell; a canonical number becomes a number; table text stays text; insert a table row; delete a table row; move a table row; insert a table column; move a table column; delete a table column; sort a table by a number column; the header row off and on; table cells, rows, columns, sort and the header row; editing a rich cell keeps its formatting; a row inserted inside a merge grows it; a row deleted from a merge shrinks it; merged cells draw with spans, keyboard steps over them, and operations keep them whole or say why not; accessibility: names, one tab stop per toolbar, no keyboard trap, visible focus, contrast, forced colors, reflow.
+
+> browser:data-grid-datasets: npm run test:data-grid-datasets-browser
+
+> @openpresentation/opf-editor@0.18.1 test:data-grid-datasets-browser
+> node test/data-grid-datasets-browser.mjs
+
+Data grid (RR-54): shared dataset status, edits through fields, column format, chart columns and use-a-copy, in a real browser.
+
+> browser:data-import-dataset: npm run test:data-import-dataset-browser
+
+> @openpresentation/opf-editor@0.18.1 test:data-import-dataset-browser
+> node test/data-import-dataset-browser.mjs
+
+Import data (RR-54): store as a shared dataset takes a free id, explains an invalid one and is one undo step, in a real browser.
+
+> browser:code: npm run test:code-browser
+
+> @openpresentation/opf-editor@0.18.1 test:code-browser
+> node test/code-browser.mjs
+
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+
+> browser:selection: npm run test:selection-browser
+
+> @openpresentation/opf-editor@0.18.1 test:selection-browser
+> node test/selection-browser.mjs
+
+Selection outlines: 8 placeholders across wide/portrait cover and content slides use allocated box bounds, not glyph ink.
+
+> browser:click-entry: npm run test:click-entry-browser
+
+> @openpresentation/opf-editor@0.18.1 test:click-entry-browser
+> node test/click-entry-browser.mjs
+
+Click entry: 18 browser workflows passed.
+ - title: one click puts a collapsed caret at the clicked glyph half (left and right halves, start, middle, end)
+ - wrapped subtitle: double spaces, tab, wrapped lines and clicks outside the glyphs map to exact source offsets
+ - bullets: a wrapped list item maps line by line
+ - centered and right-aligned titles
+ - footer furniture text
+ - CRLF source: LF input offsets, typing after a click keeps the original line endings
+ - rich text: caret at the click, no select-all, double-click selects a word
+ - press-drag selects a forward, backward and multi-line range without moving anything
+ - while editing: double-click selects a word, triple-click a paragraph, clicks move the caret
+ - clicking another text target commits then enters at the click; an invalid edit refuses
+ - Enter, Space and F2 select all; Escape keeps the box selected
+ - images and charts: click selects, double-click opens properties
+ - layout handles still drag and text beside them still edits
+ - textEntry "dblclick": click selects, double-click places the caret, Enter selects all
+ - untraced text falls back to the positioned textarea layout
+ - a secondary button does not enter editing
+ - reveal shows the slide and selects the nearest target
+ - touch: a tap enters at the tapped character
+
+> browser:canvas-a11y: npm run test:canvas-a11y-browser
+
+> @openpresentation/opf-editor@0.18.1 test:canvas-a11y-browser
+> node test/canvas-a11y-browser.mjs
+
+canvas a11y: 9 editing targets are focusable buttons outside hidden groups; the root is the Editable slide group.
+
+> browser:json-editor: npm run test:json-browser -- artifacts/json-editor-browser.json
+
+> @openpresentation/opf-editor@0.18.1 test:json-browser
+> node test/json-editor-browser.mjs artifacts/json-editor-browser.json
+
+JSON editor: 8 offline browser workflows pass (checkout).
+
+> browser:rich-input-measured: npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured
+
+> @openpresentation/opf-editor@0.18.1 test:rich-input-browser
+> node test/rich-input-browser.mjs artifacts/rich-input-browser.json measured
+
+measured: 14 rich input browser workflows passed.
+
+> browser:rich-input-estimated: npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated
+
+> @openpresentation/opf-editor@0.18.1 test:rich-input-browser
+> node test/rich-input-browser.mjs artifacts/rich-input-browser-estimated.json estimated
+
+estimated: 14 rich input browser workflows passed.
+
+> browser:export-license: npm run test:export-license-browser
+
+> @openpresentation/opf-editor@0.18.1 test:export-license-browser
+> node test/export-license-browser.mjs
+
+PDF license rule (browser): permissive faces embedded (); all dropped -> export-fonts-unlicensed; bold dropped -> PDF written, regular standing in; converter notes: ["fonts/export-font-license:warning","pdf/pdf-font-embedded:info"]

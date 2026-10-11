@@ -1,0 +1,11 @@
+# Patch registry adoption preparation
+
+Evidence-only isolated branch based on merged records #624 `06f4bbe1649b2676dd45bf855e5ead178b35ac35`. Core 0.18.4, renderer/PPTX 0.18.2 are verified. Editor PR #161 merged at `36d61ea27dd4677724dfec22006759139b7136ff`; gate 33993 completed. Exact release-commit gate 19522 is live; trusted publication and independent verification are still pending. No registry adoption is authorized until independent editor verification. Progress stays 15/40.
+
+[Final editor evidence](editor-prepared-final/README.md) retains terminal 39778 qualification and executed 86527 metadata comparison, with byte-exact original receipt manifest. All 20 playground cases, 11 browser suites and packed 123 files/23 model suites/135 signatures/24 attestations passed on genuine 18.4/18.2/18.2 upstreams. This is prepared artifact qualification, not publication.
+
+Local-only reviewed candidates are retained separately: editor c141 source integration, a892 genuine untagged developmental metadata (never tagged/published), d195 CLI prerelease correctness, and gallery428 combined source. Exact reports identify tests and remaining strict version/peer/asset failures; none is a complete final registry/native graph. Historical failures and frozen graph/packet identities remain intact.
+
+No release-plan, dependency/lock, generated assets, changelog/runtime or tracker-generator changes in this checkpoint. Later real registry adoption belongs on this branch after supervisor verification, followed by required full tests and registry/site gates. No deployment or milestone closure.
+
+[Current source follow-ups](source-followups/rr20-candidate-peer-preflight-independent-review.md): clean candidate preflight 3cb retains exact staged identity and default gates; focused 5 pass, mapped original unpublished ^0.19 refusal remains. Main-site 644 combines103/104 and the local CLI snapshot fix; prescribed fixed sync and all 27 snippets now include CLI command/flag checks without manual supplementation. Original skip warning and starter pin failure are retained. Latest supervisor post161 inventory is 27 open PRs/45 issues, complete pagination; compact receipt hashes identify the original snapshot. No source/registry/native checkpoint closes.

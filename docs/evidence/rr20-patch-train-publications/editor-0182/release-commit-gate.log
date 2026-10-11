@@ -1,0 +1,6 @@
+20:41:59 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+20:41:59 OpenPresentation/opf-editor@36d61ea27dd4 checks pending (1/4 checks, no ruleset); running: package, Node 22 (engines range), Node 26 (engines range); 1 workflow runs in progress
+20:48:00 OpenPresentation/opf-editor@36d61ea27dd4 checks pending (3/4 checks, no ruleset); running: package; 1 workflow runs in progress
+21:03:03 heartbeat: OpenPresentation/opf-editor@36d61ea27dd4 checks pending (3/4 checks, no ruleset); running: package
+21:09:05 OpenPresentation/opf-editor@36d61ea27dd4 checks green (4/4 checks, no ruleset); confirming at the next poll
+21:12:05 GREEN OpenPresentation/opf-editor@36d61ea27dd4 36d61ea27dd4677724dfec22006759139b7136ff (checks green (4/4 checks, no ruleset))

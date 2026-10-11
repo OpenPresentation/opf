@@ -1,0 +1,15 @@
+{
+  "base": "06f4bbe1649b2676dd45bf855e5ead178b35ac35",
+  "onlyPaths": [
+    "CHANGELOG.md",
+    "packages/javascript/package.json"
+  ],
+  "sha256": {
+    "CHANGELOG.md": "8e855c9815e1cbacc6b08d02dcf9732070114d1bcc940e913c913ce8e06ccc46",
+    "packages/javascript/package.json": "e229b65339f0cff123b9399cbc42ef96d763776c869d1288f2cfd3c5250bb21e"
+  },
+  "changelogGeneratedBy": "node scripts/changelog-fragments.mjs assemble --version 0.19.0-next.0 --package opf --date 2026-10-11",
+  "inputFragment": "/private/tmp/rr20-next-metadata-refresh-fragment.md",
+  "matchesPreviouslyReviewedMetadata": true,
+  "publicationAuthorizedByThisPreparation": false
+}

@@ -1,0 +1,12 @@
+{
+  "head": "bffbe1f2f2dbdc1489a005e81122f90524bd76be",
+  "base": "f35326ac0d0df72ba5c0168768851c1b3b37295d",
+  "checkout": "/private/tmp/release-train-editor-mCoUVK",
+  "qualifiedCheckout": "/private/tmp/release-train-editor-jwsrbK",
+  "binaryPatchEqual": true,
+  "metadataEqual": true,
+  "clean": true,
+  "pr": 161,
+  "qualificationSession": 39778,
+  "qualificationExit": 0
+}

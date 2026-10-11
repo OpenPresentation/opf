@@ -1,0 +1,15 @@
+✔ satisfies follows npm caret, tilde and exact rules, 0.x included (0.578042ms)
+✔ an unmet requirement skips only on a pull request or merge-queue run, and fails everywhere else (0.358916ms)
+✔ the roller's candidate dispatch waits like a pull request; any other dispatch or push does not (0.075291ms)
+✔ cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves (3.584041ms)
+✔ the CLI peer tests use the gate; the peer ranges of core equal PEER_RANGES, and the CLI ranges equal or lag them (0.262083ms)
+✔ a core release tag skips only the CLI peer tests; the CLI release and other tags keep the hard gate (0.05375ms)
+✔ peerCoreGate waits while a published sibling does not accept the candidate core, and only on the pre-publish runs (1.118209ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.917666

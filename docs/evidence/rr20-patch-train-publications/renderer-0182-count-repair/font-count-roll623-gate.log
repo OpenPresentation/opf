@@ -1,0 +1,10 @@
+15:28:51 OpenPresentation/opf main: no required checks: every check except neutral bots counts; merge queue
+15:28:51 OpenPresentation/opf#623 head ec68823f; checks pending (0/2 checks, no ruleset); running: Resolve explicit gallery qualification, Resolve explicit gallery qualification; 2 workflow runs in progress; mergeable MERGEABLE/BLOCKED
+15:31:52 OpenPresentation/opf#623 head ec68823f; checks pending (9/15 checks, no ruleset); running: ecosystem-render, Published dependency source checks, ecosystem-pptx-editor, ecosystem-core (model), ecosystem-core (installed), ecosystem-core (registry); 2 workflow runs in progress; mergeable MERGEABLE/BLOCKED
+15:34:52 OpenPresentation/opf#623 head ec68823f; checks pending (11/15 checks, no ruleset); running: ecosystem-render, Published dependency source checks, ecosystem-pptx-editor, ecosystem-core (registry); 2 workflow runs in progress; mergeable MERGEABLE/BLOCKED
+15:37:54 OpenPresentation/opf#623 head ec68823f; checks pending (14/16 checks, no ruleset); running: ecosystem-render, ecosystem-pptx-editor; 1 workflow runs in progress; mergeable MERGEABLE/BLOCKED
+15:43:55 OpenPresentation/opf#623 head ec68823f; checks pending (15/16 checks, no ruleset); running: ecosystem-render; 1 workflow runs in progress; mergeable MERGEABLE/BLOCKED
+15:46:56 OpenPresentation/opf#623 head ec68823f; checks green (18/18 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+15:49:58 OpenPresentation/opf#623: enqueued at ec68823f (QUEUED, position 1)
+15:52:59 OpenPresentation/opf#623 head ec68823f; checks green (18/18 checks, no ruleset); mergeable MERGEABLE/CLEAN; in the merge queue (AWAITING_CHECKS, position 1)
+16:02:02 MERGED OpenPresentation/opf#623 f2394d73ece195933c34a3dfffdcba8e14aefed5 (merged by the merge queue)

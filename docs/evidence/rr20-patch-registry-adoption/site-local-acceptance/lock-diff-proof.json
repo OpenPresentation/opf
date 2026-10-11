@@ -1,0 +1,91 @@
+{
+  "pptx-gallery": {
+    "added": [
+      "@expo-google-fonts/noto-color-emoji@0.4.7",
+      "@expo-google-fonts/noto-emoji@0.4.8",
+      "@expo-google-fonts/noto-sans-jp@0.4.4",
+      "@expo-google-fonts/noto-sans-kr@0.4.4",
+      "@expo-google-fonts/noto-sans-sc@0.4.4",
+      "@expo-google-fonts/noto-sans-tc@0.4.4",
+      "@openpresentation/opf-pptx@0.18.2",
+      "@openpresentation/opf-render@0.18.2",
+      "@openpresentation/opf@0.18.4",
+      "harfbuzzjs@1.6.3"
+    ],
+    "removed": [
+      "@expo-google-fonts/noto-color-emoji@0.4.6",
+      "@expo-google-fonts/noto-emoji@0.4.7",
+      "@expo-google-fonts/noto-sans-jp@0.4.3",
+      "@expo-google-fonts/noto-sans-kr@0.4.3",
+      "@expo-google-fonts/noto-sans-sc@0.4.3",
+      "@expo-google-fonts/noto-sans-tc@0.4.3",
+      "@openpresentation/opf-pptx@0.18.0",
+      "@openpresentation/opf-render@0.18.0",
+      "@openpresentation/opf@0.18.1",
+      "harfbuzzjs@1.6.2"
+    ],
+    "mutated": []
+  },
+  "openpresentation-site": {
+    "added": [
+      "@expo-google-fonts/noto-color-emoji@0.4.7",
+      "@expo-google-fonts/noto-emoji@0.4.8",
+      "@expo-google-fonts/noto-sans-jp@0.4.4",
+      "@expo-google-fonts/noto-sans-kr@0.4.4",
+      "@expo-google-fonts/noto-sans-sc@0.4.4",
+      "@expo-google-fonts/noto-sans-tc@0.4.4",
+      "@lezer/highlight@1.2.5",
+      "@openpresentation/cli@0.18.1",
+      "@openpresentation/opf-editor@0.18.2",
+      "@openpresentation/opf-pptx@0.18.2",
+      "@openpresentation/opf-render@0.18.2",
+      "@openpresentation/opf@0.18.4",
+      "harfbuzzjs@1.6.3"
+    ],
+    "removed": [
+      "@expo-google-fonts/noto-color-emoji@0.4.6",
+      "@expo-google-fonts/noto-emoji@0.4.7",
+      "@expo-google-fonts/noto-sans-jp@0.4.3",
+      "@expo-google-fonts/noto-sans-kr@0.4.3",
+      "@expo-google-fonts/noto-sans-sc@0.4.3",
+      "@expo-google-fonts/noto-sans-tc@0.4.3",
+      "@openpresentation/cli@0.18.0",
+      "@openpresentation/opf-editor@0.18.0",
+      "@openpresentation/opf-pptx@0.18.0",
+      "@openpresentation/opf-render@0.18.0",
+      "@openpresentation/opf@0.18.1",
+      "harfbuzzjs@1.6.2"
+    ],
+    "mutated": []
+  },
+  "pptx-dev": {
+    "added": [
+      "@expo-google-fonts/noto-color-emoji@0.4.7",
+      "@expo-google-fonts/noto-emoji@0.4.8",
+      "@expo-google-fonts/noto-sans-jp@0.4.4",
+      "@expo-google-fonts/noto-sans-kr@0.4.4",
+      "@expo-google-fonts/noto-sans-sc@0.4.4",
+      "@expo-google-fonts/noto-sans-tc@0.4.4",
+      "@lezer/highlight@1.2.5",
+      "@openpresentation/opf-editor@0.18.2",
+      "@openpresentation/opf-pptx@0.18.2",
+      "@openpresentation/opf-render@0.18.2",
+      "@openpresentation/opf@0.18.4",
+      "harfbuzzjs@1.6.3"
+    ],
+    "removed": [
+      "@expo-google-fonts/noto-color-emoji@0.4.6",
+      "@expo-google-fonts/noto-emoji@0.4.7",
+      "@expo-google-fonts/noto-sans-jp@0.4.3",
+      "@expo-google-fonts/noto-sans-kr@0.4.3",
+      "@expo-google-fonts/noto-sans-sc@0.4.3",
+      "@expo-google-fonts/noto-sans-tc@0.4.3",
+      "@openpresentation/opf-editor@0.18.0",
+      "@openpresentation/opf-pptx@0.18.0",
+      "@openpresentation/opf-render@0.18.0",
+      "@openpresentation/opf@0.18.1",
+      "harfbuzzjs@1.6.2"
+    ],
+    "mutated": []
+  }
+}

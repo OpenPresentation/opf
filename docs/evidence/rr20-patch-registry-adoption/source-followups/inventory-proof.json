@@ -1,0 +1,18 @@
+{
+  "openPRs": 27,
+  "openIssues": 45,
+  "paginationComplete": true,
+  "source": "supervisor-verified post161 snapshot",
+  "receipts": [
+    {
+      "source": "/private/tmp/opf-supervisor-20261010/inventory-post161.json",
+      "bytes": 215362,
+      "sha256": "09f0f7bdc9217fa90aeec0338533315dd7654fae93efeca4dfcbe7464d5db0d8"
+    },
+    {
+      "source": "/private/tmp/opf-supervisor-20261010/inventory-post161-sync.json",
+      "bytes": 2899,
+      "sha256": "ce654f332732480f13f8efef6da4ea4346b2309b0188cdffcf33eee164bae23d"
+    }
+  ]
+}

@@ -6,11 +6,11 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the published 0.18 set recorded in `release-plan.json` (RR-20, 9 October 2026). Immutable tag commits pin
+dated handoff as current. The pin set below matches the published 0.18 set recorded in `release-plan.json` (RR-20, 11 October 2026). Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
-accepted fixes and release prerequisites. Those source changes have not updated
-the versions below or established complete native compatibility.
+accepted fixes and release prerequisites. The versions below include the verified patch train; complete native compatibility
+remains a separate acceptance gate.
 
 ## Runtime
 
@@ -25,11 +25,11 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.18.1 | optional peers `@openpresentation/opf-render@^0.18.0` and `@openpresentation/opf-pptx@^0.18.0`, which the Node build loads for `convert`, `open` and `save` |
-| `@openpresentation/cli` | 0.18.0 | `@openpresentation/opf@^0.18.1` (a regular dependency, no bundled copy); optional peers `@openpresentation/opf-render@^0.18.0` and `@openpresentation/opf-pptx@^0.18.0` |
-| `@openpresentation/opf-render` | 0.18.0 | `@openpresentation/opf@^0.18.1`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
-| `@openpresentation/opf-editor` | 0.18.0 | `@openpresentation/opf@^0.18.1`; optional peer `@openpresentation/opf-render@^0.18.0` |
-| `@openpresentation/opf-pptx` | 0.18.0 | `@openpresentation/opf@^0.18.1`; optional peer `@openpresentation/opf-render@^0.18.0` |
+| `@openpresentation/opf` | 0.18.4 | optional peers `@openpresentation/opf-render@^0.18.0` and `@openpresentation/opf-pptx@^0.18.0`, which the Node build loads for `convert`, `open` and `save` |
+| `@openpresentation/cli` | 0.18.1 | `@openpresentation/opf@^0.18.3` (a regular dependency, no bundled copy); optional peers `@openpresentation/opf-render@^0.18.0` and `@openpresentation/opf-pptx@^0.18.0` |
+| `@openpresentation/opf-render` | 0.18.2 | `@openpresentation/opf@^0.18.4`; optional peers (RR-63): the converters `sharp`, `@resvg/resvg-js` and `pdf-lib` and the `@expo-google-fonts/*` font packages, which a host installs for the formats and fonts it uses |
+| `@openpresentation/opf-editor` | 0.18.2 | `@openpresentation/opf@^0.18.4`; optional peer `@openpresentation/opf-render@^0.18.2` |
+| `@openpresentation/opf-pptx` | 0.18.2 | `@openpresentation/opf@^0.18.4`; optional peer `@openpresentation/opf-render@^0.18.2` |
 
 The 0.18 set is the consistent-API release ([design](programs/release-readiness/0.18-consistent-api.md)), breaking:
 - **One import (RR-70).** `import * as opf from "@openpresentation/opf"` works in every runtime through conditional

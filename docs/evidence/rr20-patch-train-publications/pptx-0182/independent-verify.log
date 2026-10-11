@@ -1,0 +1,11 @@
+@openpresentation/opf-pptx@0.18.2: verified
+  ok   npm version: @openpresentation/opf-pptx@0.18.2, integrity sha512-LOFPKk660un1OXXOQ/v3f0hEOfuo3FLRwUjj3FR9+J7jyuWeAzQTMpl7QyJlMDtEIDpuorJ3YOus0veFUjq7Ow==
+  ok   tag: OpenPresentation/opf-pptx opf-pptx-v0.18.2 -> 1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2
+  ok   gitHead: gitHead 1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2 = tag commit 1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2
+  ok   tag on main: 1954c9ce3d2c is on opf-pptx main (identical)
+  ok   version at tag: package.json at 1954c9ce3d2c carries 0.18.2
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.18.2)
+  ok   SLSA provenance: built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.18.2 from 1954c9ce3d2c (https://github.com/OpenPresentation/opf-pptx/actions/runs/38165718768/attempts/1)
+  ok   npm audit signatures: 13 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.18.2 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.18.2
+  info dist-tag: latest

@@ -1,0 +1,134 @@
+[
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/audit.log",
+    "copy": "audit.log",
+    "bytes": 24,
+    "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/browser.log",
+    "copy": "browser.log",
+    "bytes": 6324,
+    "sha256": "c74ac30bbd4104e44448923dac383034c8eeafc6a21f2eae3014b4b0d1576554"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/ci.log",
+    "copy": "ci.log",
+    "bytes": 448,
+    "sha256": "c130473684b8e3b0302ae34a7b5d34ce5a280a306055c3277748c1aaefb2bdc3"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/full.log",
+    "copy": "full.log",
+    "bytes": 15082,
+    "sha256": "36d5267888663e8d4c6068fa94d12f7976a7a37d93e87714d6713b67157607fd"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/installed-final.log",
+    "copy": "installed-final.log",
+    "bytes": 339,
+    "sha256": "df105e77d343c4a0bbf5ed952d00af64d8aac14467359ea735739fb23dda139c"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/installed.log",
+    "copy": "installed.log",
+    "bytes": 339,
+    "sha256": "df105e77d343c4a0bbf5ed952d00af64d8aac14467359ea735739fb23dda139c"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/pack-dry.log",
+    "copy": "pack-dry.log",
+    "bytes": 5273,
+    "sha256": "56b2d6cf609a6563bf0773b249e4ccd80dc49b9e0c1e454ed4e98168bd7f526c"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/packed.log",
+    "copy": "packed.log",
+    "bytes": 5420,
+    "sha256": "611b151c0a57dba08641a537b94a5196df5fbd12268e635d1185a1d8b1504c4f"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/playground.log",
+    "copy": "playground.log",
+    "bytes": 13183,
+    "sha256": "0bc677fe45f596671c63a36db92b7cda020113d77437bc66c391be96fed4c5a3"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/playwright-version.log",
+    "copy": "playwright-version.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/prepared-after.patch",
+    "copy": "prepared-after.patch",
+    "bytes": 8481,
+    "sha256": "4cf92063a46854ea2a92c9f67e5186d2d871b1e9ebf48998114a94fc496fb597"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/prepared-before.patch",
+    "copy": "prepared-before.patch",
+    "bytes": 8481,
+    "sha256": "4cf92063a46854ea2a92c9f67e5186d2d871b1e9ebf48998114a94fc496fb597"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/published-core.log",
+    "copy": "published-core.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/quarantine-check.log",
+    "copy": "quarantine-check.log",
+    "bytes": 50,
+    "sha256": "1674e5ff1c365ac9aa6e330f45c91d6269cdf989574758259dca5e2f3ba1d6b3"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/tracked-after.sha256",
+    "copy": "tracked-after.sha256",
+    "bytes": 65,
+    "sha256": "b4ad50f8bdf640ec4a2c80830090be415bb038a4ffc104d19e0bdbbad24c4385"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/tracked-before.sha256",
+    "copy": "tracked-before.sha256",
+    "bytes": 65,
+    "sha256": "b4ad50f8bdf640ec4a2c80830090be415bb038a4ffc104d19e0bdbbad24c4385"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/transcript.log",
+    "copy": "transcript.log",
+    "bytes": 1229,
+    "sha256": "9034460dc939d7f54729db4312bc0c8b8e5d104988b56bc46b86a09565c7c85c"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/typecheck.log",
+    "copy": "typecheck.log",
+    "bytes": 136,
+    "sha256": "ca765e4f2b23e10bce7272dd375782b50e52b6bdd2a2ba9e901b9c5bb912999c"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-after160-release-results/validate.log",
+    "copy": "validate.log",
+    "bytes": 146,
+    "sha256": "2e8d2dcae105e9fbafdf44a5eaf8045fccf88b0136507ba489c4d63cd64dd02d"
+  },
+  {
+    "source": "/private/tmp/opf-supervisor-20261010/editor0182-prep-execute.log",
+    "copy": "prep-execute.log",
+    "bytes": 151,
+    "sha256": "c0b0e85ec6df4485dfd9fc0ff18d4718753115621e430bb7558bdfbf505cca26"
+  },
+  {
+    "source": "/private/tmp/opf-supervisor-20261010/editor0182-executed-prep-root-review.json",
+    "copy": "executed-prep-root-review.json",
+    "bytes": 378,
+    "sha256": "c99e143defb1a0cb07aaa6144fb0dabdeb39c230f057dd07085e1b0818b813d3"
+  },
+  {
+    "source": "/private/tmp/rr20-editor0182-executed-prep-independent-review.md",
+    "copy": "executed-prep-independent-review.md",
+    "bytes": 1581,
+    "sha256": "f8d0eba421562a81afee03f60508853860d5ce8d0b7c01808ad74573b22067f9"
+  }
+]

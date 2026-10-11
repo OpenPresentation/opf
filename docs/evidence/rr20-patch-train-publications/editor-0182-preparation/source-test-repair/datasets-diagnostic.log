@@ -1,0 +1,19 @@
+DATASET_SELECTION {"value":"8","start":0,"end":0}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+808 !== 80
+
+    at file:///private/tmp/opf-editor-grid-mac-test/test/rr20-datasets-diagnostic.mjs:93:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 808,
+  expected: 80,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
