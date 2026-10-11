@@ -16,7 +16,14 @@ try{
  const packed=JSON.parse(npm(['pack','--json','--pack-destination',temporary],root))[0];
  const consumer=path.join(temporary,'consumer');await mkdir(consumer);
  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
- npm(['install','--ignore-scripts','--no-audit','--no-fund',path.join(temporary,packed.filename),...Object.entries(manifest.devDependencies).map(([name,version])=>`${name}@${version}`)],consumer);
+ // The consumer installs the published renderer, so its font packages (exact-pinned optional peers of opf-render) are the versions
+ // that renderer declares, not the editor's own development pins (which follow the renderer source the ecosystem tests link).
+ const renderSpec=manifest.devDependencies['@openpresentation/opf-render'];
+ let published=JSON.parse(npm(['view',`@openpresentation/opf-render@${renderSpec}`,'version','peerDependencies','--json'],temporary));
+ if(Array.isArray(published))published=published.at(-1);
+ const fontPeers=Object.fromEntries(Object.entries(published.peerDependencies??{}).filter(([name])=>name.startsWith('@expo-google-fonts/')));
+ const installSpec=([name,version])=>`${name}@${fontPeers[name]??version}`;
+ npm(['install','--ignore-scripts','--no-audit','--no-fund',path.join(temporary,packed.filename),...Object.entries(manifest.devDependencies).map(installSpec)],consumer);
  const installed=path.join(consumer,'node_modules/@openpresentation/opf-editor'),files={};
  assert.ok((await realpath(installed)).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
  for(const {path:file} of packed.files){
@@ -31,6 +38,8 @@ try{
   assert.ok((await realpath(path.join(consumer,'node_modules',name))).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
   dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
  }
+ assert.equal(dependencies['@openpresentation/opf-render'].version,published.version,'the consumer resolved the renderer whose peers it installed');
+ for(const [name,version] of Object.entries(fontPeers))if(manifest.devDependencies[name])assert.equal(lock.packages['node_modules/'+name]?.version,version,`${name} is the version the published renderer pins`);
  const fixture=path.join(consumer,'verification');await mkdir(fixture);
  for(const directory of ['test','examples'])await cp(path.join(root,directory),path.join(fixture,directory),{recursive:true});
  await mkdir(path.join(fixture,'scripts'));await cp(path.join(root,'scripts/build-playground.mjs'),path.join(fixture,'scripts/build-playground.mjs'));
