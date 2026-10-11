@@ -88,14 +88,17 @@ test("a pull request that can change what the contract tier trusts runs the full
 test("the installed-candidate legs always report under their required names and run on their OS outside plain pull requests", () => {
   const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
   const job = workflow.slice(workflow.indexOf("\n  installed-portability:\n"), workflow.indexOf("\n  main-status:"));
-  const policy = "(github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci'))";
+  const policy = "(needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci'))";
   assert.ok(job.includes("    name: Installed candidates (${{ matrix.os }})\n"));
   assert.ok(job.includes(`    runs-on: \${{ ${policy} && matrix.os || 'ubuntu-24.04' }}\n`));
   assert.ok(job.includes(`      PORTABILITY: \${{ ${policy} && 'run' || 'policy-skip' }}\n`));
   assert.match(job, /os: \[windows-latest, macos-latest\]/);
   assert.doesNotMatch(job, /\n    if:/, "a skipped matrix job would not report the expanded required check names");
-  // A policy skip writes run=false and nothing else decides it; on the real runner the docs-only scope decides as before.
-  assert.match(job, /if \[ "\$PORTABILITY" = run \]; then\n            node scripts\/ecosystem-scope\.mjs\n          else\n            echo "run=false" >> "\$GITHUB_OUTPUT"/);
+  // Candidate mode must run; ordinary mode retains docs-only scope and policy skips still report.
+  assert.ok(job.includes(`if [ "$PORTABILITY" = run ]; then
+            if [ -n '\${{ needs.gallery.outputs.candidate_gallery }}' ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; else node scripts/ecosystem-scope.mjs; fi
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"`));
 });
 
 test("every tier-defining file exists, so a rename cannot silently lower the tier", () => {
@@ -111,12 +114,12 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   // The tier is decided by tierForEvent and handed to every sibling shard; a shard cannot hard-code a depth.
   assert.equal([...workflow.matchAll(/test-package-ecosystem\.mjs --siblings [^\n]*--tier \$\{\{ steps\.scope\.outputs\.tier \}\}/g)].length, 2);
   assert.doesNotMatch(workflow, /--tier (contract|full)\b/);
-  // The required names stay: `packages` aggregates exactly the three shards, and runs even when one fails.
-  assert.match(workflow, /\n  packages:\n    needs: \[ecosystem-render, ecosystem-pptx-editor, ecosystem-core\]\n    if: always\(\)/);
+  // The required name stays: packages aggregates both explicitly selected lanes and runs even when one fails.
+  assert.match(workflow, /\n  packages:\n    needs: \[gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability\]\n    if: always\(\)/);
   // RR-45 (opf#368, item 1): ecosystem-core runs as exactly these three shards, none of which can be dropped by fail-fast.
   const core = workflow.slice(workflow.indexOf("\n  ecosystem-core:\n"), workflow.indexOf("\n  installed-portability:\n"));
   assert.match(core, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[model, installed, registry\]\n/);
-  assert.doesNotMatch(core, /\n    if:/, "no job-level condition can skip the core shards");
+  assert.match(core, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''\n/, "only explicit candidate selection delegates the core contracts to the candidate lane");
   for (const shard of ["model", "installed", "registry"]) assert.ok(core.includes(`matrix.shard == '${shard}'`), shard);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core model\n/);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core packed\n/);
