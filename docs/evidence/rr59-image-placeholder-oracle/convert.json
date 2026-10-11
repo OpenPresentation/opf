@@ -1,0 +1,83 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/private/tmp/rr78-placeholder-xml-evidence/remote.json",
+    "sha256": "f771864197eee414181ac8d7184a8936c75fe55ac720448ad72affa45db02586",
+    "bytes": 82
+  },
+  "outputs": [
+    {
+      "file": "/private/tmp/rr78-placeholder-xml-evidence/remote.pptx",
+      "sha256": "2e0a7e88e7e242bafb000f3ef00cea7a8c2980b000ed3dbb7cb68334e9679bf3",
+      "bytes": 74996,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/unresolved-asset",
+      "severity": "warning",
+      "category": "pptx",
+      "path": "/slides/0/image",
+      "scope": "document",
+      "message": "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched.",
+      "help": "Embed the image as a data URI, or keep the file inside the deck folder (see --asset-dir). URLs are never fetched.",
+      "reason": "unresolved-source"
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 1,
+    "info": 0
+  },
+  "format": "pptx",
+  "opfVersion": "0.18.3",
+  "cli": "0.18.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.18.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.18.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "visual"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}
