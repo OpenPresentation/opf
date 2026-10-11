@@ -1,0 +1,11 @@
+# Missing status-rollup fallback repair
+
+Isolated main-based branch `codex/rr-20-check-suite-fallback`, /private/tmp/opf-pr-gate-suite-fallback. Three paths only: PR-gate helper, its existing tests, tooling fragment. No watcher execution, API queries, live gate mutation or status waiver.
+
+When statusCheckRollup is null, query the exact commit's actual suites and legacy status contexts. Page all suites (50/page) and all check runs within each suite (100/page). Bind response commit, suite id/commit and every run's containing suite id/commit. Partial GraphQL errors, absent node arrays/pageInfo booleans, missing IDs/cursors and repeated cursors fail closed. A completed failed suite with no corresponding failed individual check run also fails closed. Suite success never becomes a fabricated success context.
+
+Actual check runs feed unchanged normalization/newest-workflow selection/failed-skipped-neutral semantics/required-check integration identity and confirmation. Legacy statuses retain their state. Empty queued placeholder suites with no workflowRun do not fabricate jobs or supersede actual workflows; the existing evaluator treats a real incomplete workflow suite as pending. Empty completed-success suite alone remains pending because there are no actual verdicts. All-check green still requires two consecutive polls.
+
+Final focused 44/44 tests and mapped check passed. Regressions cover two-level pagination, status failures, workflow identity, neutral refusal when requested, foreign commit/suite identity, empty/failed suite controls, partial errors/truncated pageInfo/repeated suite and run cursors, and gate confirmation with absent rollup. Full suite 84190 terminal exit 0 (2262 core,175 CLI unit,95 command,77 drawing,37 root checks). Afterwards the narrow conclusion predicate was broadened to fail closed for CANCELLED/null/unknown completed suites with no failing actual job; final focused44/mapped67231 exit0. No full repeat for this reviewed one-predicate edge correction. Log rr20-pr-gate-suite-fallback-full.log. No push or PR before root review.
+
+Frozen clean commit `6054204232dc6194b7cb8dfa198a828e096d262d`, three paths,112+/1-. No push or live gate use. Final tests separately prove cancelled/null/unknown empty completed suites cannot disappear beside green jobs, while queued placeholders without workflowRun remain distinct.

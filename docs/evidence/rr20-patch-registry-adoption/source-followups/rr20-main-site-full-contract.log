@@ -1,0 +1,24 @@
+Configured JSON syntax highlighting preserves keys, strings and scalar values.
+Landing decks validate and all four AI guide layout vocabularies resolve to gallery 2.
+Get-started snippets: .opf-source is not synced (pnpm sync:opf), so CLI flags are not checked.
+Get-started snippets (core 0.18.4): ran 27 (deck, markdown-source, template, patch-source, validate, checks, compose, render, player (checked), pptx, pptx-import, editor, editor-dom (type-checked), data-deck, data-cli (flags checked), markdown, markdown-deck, template-code, patch, node-files, cli-install (flags checked), cli-start (flags checked), cli-text (flags checked), cli-git (flags checked), cli-output (flags checked), cli-convert (flags checked), cli-skills (flags checked)); not run: none.
+Prepared website, editor and Node source starters.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'0.18.4' !== '0.18.1'
+
+    at testDeveloperStarters (file:///private/tmp/openpresentation-site-v019-complete-source/scripts/test-developer-starters.mjs:37:56)
+    at async file:///private/tmp/openpresentation-site-v019-complete-source/scripts/test-review-regressions.mjs:40:1 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '0.18.4',
+  expected: '0.18.1',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

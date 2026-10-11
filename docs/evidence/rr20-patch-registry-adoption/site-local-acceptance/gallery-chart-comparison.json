@@ -1,0 +1,170 @@
+[
+  {
+    "path": "histogram.svg",
+    "before": "42c546b0836e01e4836409ca6a5544b0bd7dc9b466cc51cc8a9a442dc2ffcaa4",
+    "after": "42c546b0836e01e4836409ca6a5544b0bd7dc9b466cc51cc8a9a442dc2ffcaa4",
+    "changed": false
+  },
+  {
+    "path": "100pct-stacked-bar.svg",
+    "before": "c7e684972747f613c1ef8e6ad3c3789170798fdad0a1e4723f000955e7e80f27",
+    "after": "c7e684972747f613c1ef8e6ad3c3789170798fdad0a1e4723f000955e7e80f27",
+    "changed": false
+  },
+  {
+    "path": "100pct-stacked-column.svg",
+    "before": "8a8e42cd4b2952b145cd6acb4ec096c16130c18ad90a4413356cd283fdf8b275",
+    "after": "8a8e42cd4b2952b145cd6acb4ec096c16130c18ad90a4413356cd283fdf8b275",
+    "changed": false
+  },
+  {
+    "path": "radar-with-markers.svg",
+    "before": "de410b68ba5eed08cc6703de0b161b80231f54e818082345a0cbdec39d927fb1",
+    "after": "de410b68ba5eed08cc6703de0b161b80231f54e818082345a0cbdec39d927fb1",
+    "changed": false
+  },
+  {
+    "path": "stacked-area.svg",
+    "before": "26837bfe5bd9553ea8d60b32653d3d56f3abf3440f79a512bc6c686ac3212698",
+    "after": "26837bfe5bd9553ea8d60b32653d3d56f3abf3440f79a512bc6c686ac3212698",
+    "changed": false
+  },
+  {
+    "path": "radar.svg",
+    "before": "6b886ca14d447be0a14200c6e46da440fbe52c6115706313d977b1a537fe626b",
+    "after": "6b886ca14d447be0a14200c6e46da440fbe52c6115706313d977b1a537fe626b",
+    "changed": false
+  },
+  {
+    "path": "funnel.svg",
+    "before": "16559cf11f8f3b0950d94660bfe6eb7f662771ea2ec1d4906c6141f560c1f8ad",
+    "after": "16559cf11f8f3b0950d94660bfe6eb7f662771ea2ec1d4906c6141f560c1f8ad",
+    "changed": false
+  },
+  {
+    "path": "stacked-bar.svg",
+    "before": "357cd95df49d0d6370af1691b5c8af2337b89f583e912e4100a9798a5008137e",
+    "after": "357cd95df49d0d6370af1691b5c8af2337b89f583e912e4100a9798a5008137e",
+    "changed": false
+  },
+  {
+    "path": "combo.svg",
+    "before": "3827654c5efcf93010b91b524942d759cfc77ba0392d8a9452588c645df4211d",
+    "after": "3827654c5efcf93010b91b524942d759cfc77ba0392d8a9452588c645df4211d",
+    "changed": false
+  },
+  {
+    "path": "stacked-column.svg",
+    "before": "cedea967b97c2a9b1a667317426cc9bce70ac61932e5726460d5dd0efea2b57e",
+    "after": "cedea967b97c2a9b1a667317426cc9bce70ac61932e5726460d5dd0efea2b57e",
+    "changed": false
+  },
+  {
+    "path": "area.svg",
+    "before": "762a17adc7e02b410825bc7b963f9547403285d38b72e3712e75fea920bb86ea",
+    "after": "762a17adc7e02b410825bc7b963f9547403285d38b72e3712e75fea920bb86ea",
+    "changed": false
+  },
+  {
+    "path": "world.svg",
+    "before": "8e3730612709324c22ff05d3c4cafb3b320699049038e69d6e5e1baf3f91af8f",
+    "after": "8e3730612709324c22ff05d3c4cafb3b320699049038e69d6e5e1baf3f91af8f",
+    "changed": false
+  },
+  {
+    "path": "pie.svg",
+    "before": "06187cf3f189a4b1b9ed4ec56bd113b079f57e9dfcb2b7131f9fd194299c0745",
+    "after": "06187cf3f189a4b1b9ed4ec56bd113b079f57e9dfcb2b7131f9fd194299c0745",
+    "changed": false
+  },
+  {
+    "path": "treemap.svg",
+    "before": "c9da454f4ca167f79ce910b0789e8240cd1e1f7948634a2960b1a8a377ca254d",
+    "after": "c9da454f4ca167f79ce910b0789e8240cd1e1f7948634a2960b1a8a377ca254d",
+    "changed": false
+  },
+  {
+    "path": "100pct-stacked-area.svg",
+    "before": "1947a628a148809eb3537c8c36901967a6d4813dafe64e8fd4d52822970f49b9",
+    "after": "1947a628a148809eb3537c8c36901967a6d4813dafe64e8fd4d52822970f49b9",
+    "changed": false
+  },
+  {
+    "path": "bar.svg",
+    "before": "8af95de04aff94d402dc807c9b6c444e1eabeb0328a9ec5f614457f002a6af65",
+    "after": "8af95de04aff94d402dc807c9b6c444e1eabeb0328a9ec5f614457f002a6af65",
+    "changed": false
+  },
+  {
+    "path": "pareto.svg",
+    "before": "a8584c9b1024c34ac94b4fc65664058bf7ba4eb241956106960fadb0e0c60ae1",
+    "after": "a8584c9b1024c34ac94b4fc65664058bf7ba4eb241956106960fadb0e0c60ae1",
+    "changed": false
+  },
+  {
+    "path": "line.svg",
+    "before": "858256829acdee386c4f96adaee51bf113c239edfe77b585f08f3f17a92f3e1d",
+    "after": "858256829acdee386c4f96adaee51bf113c239edfe77b585f08f3f17a92f3e1d",
+    "changed": false
+  },
+  {
+    "path": "line-with-markers.svg",
+    "before": "f7fe55ded27ec83f2162898fda0bf77fedd5cc238aeb5e48956feee1d8b7b535",
+    "after": "f7fe55ded27ec83f2162898fda0bf77fedd5cc238aeb5e48956feee1d8b7b535",
+    "changed": false
+  },
+  {
+    "path": "column.svg",
+    "before": "928c65f49db6ccbdd1f864bfa45b31974906787134f30f08074aae49c3fc931f",
+    "after": "928c65f49db6ccbdd1f864bfa45b31974906787134f30f08074aae49c3fc931f",
+    "changed": false
+  },
+  {
+    "path": "box-and-whisker.svg",
+    "before": "1ca1773dcbdd4dee77738a208068d9a4df8a012111635e22f5d9b55737e6d7aa",
+    "after": "1ca1773dcbdd4dee77738a208068d9a4df8a012111635e22f5d9b55737e6d7aa",
+    "changed": false
+  },
+  {
+    "path": "manifest.json",
+    "before": "3850c20de405ead3a501f0af0bab6ef142e958378bc669d46524b3bd4a70b69c",
+    "after": "fc780004817d15219efd89302307ac38e60fdca3515b7c5c574f8bf7545e7368",
+    "changed": true
+  },
+  {
+    "path": "scatter.svg",
+    "before": "22e2ae20de410c014cb179dd7d056ab0cb82d4d3be10d359daceaa96d7bc56ab",
+    "after": "22e2ae20de410c014cb179dd7d056ab0cb82d4d3be10d359daceaa96d7bc56ab",
+    "changed": false
+  },
+  {
+    "path": "doughnut.svg",
+    "before": "eb6e84dc4a8a72999803e5c4d82534a21f0da0a661ebf825dc32d942b7a2558f",
+    "after": "eb6e84dc4a8a72999803e5c4d82534a21f0da0a661ebf825dc32d942b7a2558f",
+    "changed": false
+  },
+  {
+    "path": "waterfall.svg",
+    "before": "6c2706b51c357c1803a50c410a550f6c76a5b79d378a8840db3939c0d950bb21",
+    "after": "6c2706b51c357c1803a50c410a550f6c76a5b79d378a8840db3939c0d950bb21",
+    "changed": false
+  },
+  {
+    "path": "stacked-line.svg",
+    "before": "7a59f37c7f69c5a19eba2401e25f0929c06a2d9c2b169701325707b497a67f31",
+    "after": "7a59f37c7f69c5a19eba2401e25f0929c06a2d9c2b169701325707b497a67f31",
+    "changed": false
+  },
+  {
+    "path": "filled-radar.svg",
+    "before": "be81b9f13bcaeb80b8d92dd521cfb8c471fdc70941e668051156b0924190b9f9",
+    "after": "be81b9f13bcaeb80b8d92dd521cfb8c471fdc70941e668051156b0924190b9f9",
+    "changed": false
+  },
+  {
+    "path": "stacked-line-with-markers.svg",
+    "before": "96ce140592b6200c6d75fa918c78939332651057e62af95dfaed3b813521ba0a",
+    "after": "96ce140592b6200c6d75fa918c78939332651057e62af95dfaed3b813521ba0a",
+    "changed": false
+  }
+]

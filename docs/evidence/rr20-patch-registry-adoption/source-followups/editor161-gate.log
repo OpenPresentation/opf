@@ -1,0 +1,4 @@
+20:35:31 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+20:35:31 OpenPresentation/opf-editor#161 head bffbe1f2; checks pending (2/3 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+20:38:32 OpenPresentation/opf-editor#161 head bffbe1f2; checks green (3/3 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+20:41:35 MERGED OpenPresentation/opf-editor#161 36d61ea27dd4677724dfec22006759139b7136ff

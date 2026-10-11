@@ -1,0 +1,32 @@
+{
+  "versions": {
+    "opf": {
+      "version": "0.18.4",
+      "path": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf@0.18.4_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf/package.json"
+    },
+    "opf-render": {
+      "version": "0.18.2",
+      "path": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-render@0.18.2_0e48ebc5cef729e698b131b7b4697338/node_modules/@openpresentation/opf-render/package.json"
+    },
+    "opf-pptx": {
+      "version": "0.18.2",
+      "path": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2_@types+node@24.13.4/node_modules/@openpresentation/opf-pptx/package.json"
+    },
+    "opf-editor": {
+      "version": "0.18.2",
+      "path": "/private/tmp/opf-patch-adoption-workspace/openpresentation-site/node_modules/.pnpm/@openpresentation+opf-editor@0.18.2_@openpresentation+opf-pptx@0.18.2_@openpresentation+opf-render@0.18.2/node_modules/@openpresentation/opf-editor/package.json"
+    }
+  },
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "ref": "e09461624a64fb58761c28475c2b354984deb165",
+    "repoUrl": "https://github.com/OpenPresentation/opf.git",
+    "syncedAt": "2026-10-11T21:42:28.587Z"
+  },
+  "assets": {
+    "example.opf.json": "f9a7671f5b685f9ffb6ed53a62d61d984658220ee8aadb58c85a43becabd3b1c",
+    "example.svg": "eb39cbf3fea28251e415259013acfea8e55d9f723ba1e115a73d0c3cecbda9d4",
+    "example.pptx": "f9beb8e73f66a18c0e0f4ca2f80b8ef227ef512bca85da8feb3d03bb3e6200db",
+    "manifest.json": "cf29209b55585d9fc31e29a76db4357ed7d0e16ded7ff3189254c1d06389721e"
+  }
+}

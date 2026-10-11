@@ -1,0 +1,25 @@
+{
+  "head": "c1412e5646074711e6f535909aa8ccad99775fc1",
+  "old": "d6481068f3500fc986a31e57bd8317da5882be4a",
+  "mergedSource": "f35326ac0d0df72ba5c0168768851c1b3b37295d",
+  "paths": [
+    "docs/evidence/rr20-macos-grid-selection/README.md",
+    "docs/evidence/rr20-macos-grid-selection/after.log",
+    "docs/evidence/rr20-macos-grid-selection/before.log",
+    "docs/evidence/rr20-macos-grid-selection/browser-final.log",
+    "docs/evidence/rr20-macos-grid-selection/datasets-after.log",
+    "docs/evidence/rr20-macos-grid-selection/datasets-browser-before.log",
+    "docs/evidence/rr20-macos-grid-selection/datasets-diagnostic.log",
+    "docs/evidence/rr20-macos-grid-selection/full-final.log",
+    "docs/evidence/rr20-macos-grid-selection/full.log",
+    "docs/evidence/rr20-macos-grid-selection/intermediate-paste-failure.log",
+    "docs/evidence/rr20-macos-grid-selection/type-final.log",
+    "docs/evidence/rr20-macos-grid-selection/type.log",
+    "docs/evidence/rr20-macos-grid-selection/validate.log",
+    "test/data-grid-browser.mjs",
+    "test/data-grid-datasets-browser.mjs"
+  ],
+  "allImportedBytesEqualMain": true,
+  "runtimeExamplesMetadataUnchanged": true,
+  "clean": true
+}

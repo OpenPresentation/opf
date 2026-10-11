@@ -1,0 +1,8 @@
+{
+  "session": 70586,
+  "exitCode": 0,
+  "log": "/private/tmp/rr20-patch-adoption-full-with-render-deps.log",
+  "sha256": "2c7aa322a005f61f07dd887e4dd2b1ded733e8c9f90a3500e769fa197b2aa935",
+  "bytes": 239994,
+  "note": "Full source suite passed after installing frozen renderer test dependencies. Original failed89922 log preserved; no assertion or source gate changed."
+}

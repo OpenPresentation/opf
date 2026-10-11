@@ -1,0 +1,29 @@
+{
+  "corePR": 592,
+  "head": "9750c1005ef42296e4ed3cf9b36887d53a21a228",
+  "pushExit": 0,
+  "base": "main",
+  "draft": true,
+  "fullCiRequested": true,
+  "independentArtifactCheck": {
+    "session": 95041,
+    "exit": 0
+  },
+  "mergedPrerequisites": {
+    "625": "332e69fea7c10c68195bcca157dd339c7e58973d",
+    "626": "c357401d6d3ef99610dcf2b3123d072b5ea92423"
+  },
+  "mergedPathsEqualReviewed": true,
+  "remaining": [
+    "sibling CI final qualification and push",
+    "core627 and629 merge gate",
+    "records630 and next metadata628 merge",
+    "v019 source CI/merge",
+    "gallery2 bootstrap and publication",
+    "real gallery2 registry adoption",
+    "v019 trusted releases",
+    "native Windows acceptance",
+    "final site adoption and owner-controlled deployment"
+  ],
+  "progress": "15/40"
+}

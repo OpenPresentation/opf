@@ -1,0 +1,7 @@
+
+> openpresentation-workspace@ prepare:gallery:registry /private/tmp/opf-patch-adoption-workspace/opf
+> node scripts/prepare-gallery-editor.mjs --registry
+
+Gallery snapshot: 653 canonical OPF examples.
+Registry gallery editor built: 653 validated/rendered documents, 767 schema fields.
+Gallery editor and schema reference synchronized.

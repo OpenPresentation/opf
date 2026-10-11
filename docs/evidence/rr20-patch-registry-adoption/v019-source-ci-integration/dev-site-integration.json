@@ -1,0 +1,25 @@
+{
+  "qualifiedSource": "7fb3312de21729555ec09b1c62a1d6187c93b83a",
+  "integratedCommit": "40de8aaaf4c03e5cb8d78bcf6fb25b609cb25783",
+  "trackedFilesCompared": 2463,
+  "allTrackedBytesEqual": true,
+  "qualificationReused": {
+    "fullAndBuild": {
+      "agentSession": 74866,
+      "exit": 0
+    },
+    "browser": {
+      "agentSession": 95817,
+      "exit": 0,
+      "passed": 58
+    }
+  },
+  "boundary": "Local site candidate only; historical CJS lint errors remain; no deployment, v0.19 or native acceptance",
+  "logs": {
+    "rr20-dev-react-full-frozen.log": "4d821a63c0710b13402710d9c96c11dc3fbc7dcdacc2af3a7911b79346f38d4f",
+    "rr20-dev-react-build-frozen.log": "01c51c303c304d229d79b3b98b9d4b78a80605356c95ef3e62867ceeb56dcfa2",
+    "rr20-dev-react-browser-frozen.log": "f1e542de3e112742d2009a3ce68d6fc722d152071c27c2a805a6ff3ecaa7d291"
+  },
+  "finalAdoptionCommit": "cdf3a12565af71ee93a2ef86f354255f03a2fca6",
+  "finalCheckoutClean": true
+}

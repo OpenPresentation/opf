@@ -1,0 +1,10 @@
+{
+  "head": "374ed8bb8abadf3fc3ffee5519955981a0b22f84",
+  "exactQualifiedPackageLockAndTestBytes": {
+    "package.json": "e6fb911b795d4abcdd4ad087b23fb2a8d00f75b31efc060e48959db90538a45e",
+    "pnpm-lock.yaml": "f10c3b19ebcfdd5dfdaf4daf91d9725ae7cd0d0a04820f7ebc241fd32e7ff0e4",
+    "tests/e2e/click-caret-entry.spec.ts": "8b630927dbec08fb460c1dce50edfe2f1f5e627dbba1d7d0afaf682e65f74a81"
+  },
+  "browserResult": "58/58 qualified agent86414terminal0; integrated identicaltest+deps",
+  "siteAcceptance": "lint blocker remains"
+}
