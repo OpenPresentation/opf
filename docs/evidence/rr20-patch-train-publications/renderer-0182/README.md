@@ -1,0 +1,7 @@
+# Renderer 0.18.2 trusted publication and independent verification
+
+Supervisor publication process 85393 and separate independent verification 68261 both completed exit 0. Exact release commit/tag/gitHead `de0a5034f49dbacfe190946ec7416a976981cf45`, tag `opf-render-v0.18.2`, package `@openpresentation/opf-render@0.18.2`; npm latest points to this version. Trusted [workflow 38157832669](https://github.com/OpenPresentation/opf-render/actions/runs/38157832669/attempts/1) published with provenance and created the [GitHub release](https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.18.2).
+
+[Full publication receipt](publication.log) and [separate verification receipt](independent-verify.log) are retained byte-for-byte. Registry integrity is `sha512-7hUcJrMg68uke/TV16ipSIJ0lymC33Gj5qURPTl5ngN7RMc+6Irq/FQjhMAFfjYg5VfzRH9OAhrYp5C66ha0+Q==`; tag/main/package-version/gitHead identity and SLSA provenance bind `.github/workflows/npm-publish.yml` on the exact tag/source. Signature verification reports four verified, zero invalid and zero missing; renderer has a verified attestation.
+
+This completes only the renderer 0.18.2 publication/registry-verification step after core 0.18.4. Required PPTX 0.18.2, editor 0.18.2 and final release-plan/site adoption remain pending. T18 stays open and progress remains 15/40. Source/staged v0.19 graph and native PowerPoint acceptance are separate; no new native result or milestone closure is implied. Earlier pending logs and failed CI/setup records remain dated historical evidence.

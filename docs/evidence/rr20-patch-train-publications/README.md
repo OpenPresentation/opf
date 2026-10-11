@@ -1,6 +1,6 @@
 # Required geometry patch-train publication evidence
 
-Core 0.18.4 is published and independently verified. Required order remains core 0.18.4 → renderer 0.18.2 → PPTX 0.18.2 → editor 0.18.2. The remaining three publications and final release-plan/site adoption are pending. T18 stays open; this evidence closes no checkpoint and changes no progress count.
+Core 0.18.4 and renderer 0.18.2 are published and independently verified. Required order remains core 0.18.4 → renderer 0.18.2 → PPTX 0.18.2 → editor 0.18.2. The remaining PPTX/editor publications and final release-plan/site adoption are pending. T18 stays open; this evidence closes no checkpoint and changes no progress count.
 
 ## Core 0.18.4
 
@@ -13,3 +13,7 @@ This is verified core 0.18.4 registry evidence, not qualification of unpublished
 ## Renderer 0.18.2 retry prerequisite — 2026-10-11
 
 Release-prep #234 failed the coordinated font-count gate; [strict repair and remaining task list](renderer-0182-count-repair/README.md) retain the exact asset-derived 94-face proof and pending core #622 gate. Required order is repair merge → prescribed ecosystem lock roller/generated-PR gate → renderer #234 retry → trusted publication/independent verification. Future 0.19 renderer versions require their own reviewed exact count records; #622 is not blanket version acceptance. No additional publication, checkpoint or progress change is claimed.
+
+## Renderer 0.18.2 published and verified
+
+[Exact trusted publication and separate independent verification](renderer-0182/README.md) completed at `de0a5034f49dbacfe190946ec7416a976981cf45`, workflow 38157832669, with npm latest, registry integrity, SLSA provenance, four verified signatures and GitHub release checked. Prior pending records remain historical. PPTX/editor 0.18.2 and adoption are pending; T18 and 15/40 progress are unchanged.

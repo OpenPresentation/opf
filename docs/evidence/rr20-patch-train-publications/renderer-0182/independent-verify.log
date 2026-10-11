@@ -1,0 +1,11 @@
+@openpresentation/opf-render@0.18.2: verified
+  ok   npm version: @openpresentation/opf-render@0.18.2, integrity sha512-7hUcJrMg68uke/TV16ipSIJ0lymC33Gj5qURPTl5ngN7RMc+6Irq/FQjhMAFfjYg5VfzRH9OAhrYp5C66ha0+Q==
+  ok   tag: OpenPresentation/opf-render opf-render-v0.18.2 -> de0a5034f49dbacfe190946ec7416a976981cf45
+  ok   gitHead: gitHead de0a5034f49dbacfe190946ec7416a976981cf45 = tag commit de0a5034f49dbacfe190946ec7416a976981cf45
+  ok   tag on main: de0a5034f49d is on opf-render main (identical)
+  ok   version at tag: package.json at de0a5034f49d carries 0.18.2
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.18.2)
+  ok   SLSA provenance: built by .github/workflows/npm-publish.yml on refs/tags/opf-render-v0.18.2 from de0a5034f49d (https://github.com/OpenPresentation/opf-render/actions/runs/38157832669/attempts/1)
+  ok   npm audit signatures: 4 verified, 0 invalid, 0 missing; @openpresentation/opf-render@0.18.2 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.18.2
+  info dist-tag: latest
