@@ -9,6 +9,8 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+import {selectedRendererScriptFonts} from './helpers/renderer-script-fonts.mjs';
 import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, peerCoreGate, report} from '../../../scripts/unreleased-gate.mjs';
@@ -20,14 +22,17 @@ const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map
 // RR-63: the renderer's converters (pdf-lib, @resvg/resvg-js, sharp) and font packages are its optional peers; install the ones the CLI's outputs use beside it.
 // RR-59 (opf#476): and the Noto JP and SC script packages the installed-package regression draws Japanese and Chinese SVG with (opf-render pins them exactly as peers;
 // installed-regression.mjs checks the installed versions against the renderer's declared ones).
-const scriptFonts = ['@expo-google-fonts/noto-sans-jp@0.4.3', '@expo-google-fonts/noto-sans-sc@0.4.3'];
-const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`).concat(scriptFonts);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
 // The candidate core declares the same peers (optional, for its Node build's file API; opf#498 raises them to the next train's line before
 // core's release prep), and npm refuses to install it next to peers outside its ranges: the same wait applies.
 if (!report(cliPeerGate({cliRoot: path.join(root, 'packages/javascript'), subject: '@openpresentation/opf (optional peers of the Node build)', executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
+const require = createRequire(path.join(pkg, 'package.json'));
+const rendererManifest = JSON.parse(await readFile(require.resolve('@openpresentation/opf-render/package.json'), 'utf8'));
+const scriptFonts = selectedRendererScriptFonts({rendererManifest, rendererVersion: manifest.devDependencies['@openpresentation/opf-render']});
+const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`).concat(scriptFonts);
+
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
 assert.deepEqual(Object.keys(manifest.dependencies ?? {}), ['@openpresentation/opf'], 'core is the only runtime dependency of the CLI');
 const temp = await mkdtemp(path.join(tmpdir(), 'opf-cli-peers-'));
