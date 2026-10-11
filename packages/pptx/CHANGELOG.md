@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.18.2 (2026-10-11)
+
+- Require OPF core 0.18.4 and, when installed, renderer 0.18.2 so PPTX export uses the matching geometry policy for script-specific font size and line ascent adjustments.
+
 ## 0.18.1 (2026-10-11)
 
 - opf-pptx#221 (output-changing for images that cannot be embedded): the "Image unavailable" placeholder is one native group, `OPF image placeholder N group`, instead of three loose shapes, so PowerPoint moves or deletes it as one object. The group carries the accessible name (`Image unavailable: <alt>`) as its alt text (`descr`, moved from the panel) and holds the dashed panel `OPF image placeholder N` and its label lines (`OPF image placeholder N text line i`, previously unnamed) or cross strokes (`... icon i`), each still an editable shape with its own box; the group transform is the identity (`chOff`/`chExt` equal `off`/`ext`), and the group is in `CT_GroupShape` order (`nvGrpSpPr`, `grpSpPr`, members). Logo placeholders and header or footer image placeholders stay ungrouped (generated furniture is never grouped). In `full` provenance the panel of an image block carries `OPF_IMAGE_PLACEHOLDER_V1` (slide, block path, the authored image value and the block's own fields) and `fromPptx` restores that image block, so the round trip is deep-equal (it used to import as a "PowerPoint shape" text block plus the label lines); without the tag (`references-only`, `provenance: false`) or with a damaged one (`invalid-image-provenance`) the shapes import as ordinary content as before, and an exported placeholder group no longer triggers `grouped-text-reflow`.
