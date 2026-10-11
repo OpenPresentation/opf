@@ -1,0 +1,863 @@
+{
+ "schema": "opf323-compare/v1",
+ "generated": "2026-10-10T22:10:20.350Z",
+ "native": "native/attempt-3",
+ "packages": {
+  "@openpresentation/opf": "0.18.1",
+  "@openpresentation/opf-render": "0.18.0",
+  "@openpresentation/opf-pptx": "0.18.0",
+  "@openpresentation/opf-editor": "0.18.0",
+  "fontkit": "2.0.4"
+ },
+ "items": {
+  "probe38b": {
+   "item": "opf#361 lineAscent probe, attempt 3 (mixed lines)",
+   "criterion": "Baseline below the line-box top in em: the bottom edge of the last ink row with at least 35 % of the peak row (for a headline script such as Devanagari: the mode of the stem bottoms), median over 18, 24 and 32 pt (regular single lines = lineAscent, mixed line = lineAscentMixed). The controls (Angsana New 0.85, Sakkal Majalla 0.78, Arabic Typesetting 0.745 as re-derived from the RR-38 native PNGs) must reproduce within 0.03 em, or the probe values are not used.",
+   "controlsOk": true,
+   "families": [
+    {
+     "family": "Angsana New",
+     "perSize": {
+      "single": [
+       0.833,
+       0.833,
+       0.833
+      ],
+      "bold": [
+       0.836,
+       0.836,
+       0.832
+      ],
+      "mixed": [
+       0.856,
+       0.866,
+       0.862
+      ],
+      "singleModeBottom": [
+       0.833,
+       0.833,
+       0.833
+      ]
+     },
+     "lineAscent": 0.83,
+     "lineAscentMixed": 0.86,
+     "boldMedian": 0.836,
+     "control": {
+      "known": 0.833,
+      "reference": 0.833,
+      "referenceSource": "attempt-2 corrected single-line median",
+      "ok": true
+     }
+    },
+    {
+     "family": "Sakkal Majalla",
+     "perSize": {
+      "single": [
+       0.759,
+       0.764,
+       0.76
+      ],
+      "bold": [
+       0.761,
+       0.766,
+       0.759
+      ],
+      "mixed": [
+       0.819,
+       0.81,
+       0.81
+      ],
+      "singleModeBottom": [
+       0.759,
+       0.764,
+       0.76
+      ]
+     },
+     "lineAscent": 0.76,
+     "lineAscentMixed": 0.81,
+     "boldMedian": 0.761,
+     "control": {
+      "known": 0.761,
+      "reference": 0.761,
+      "referenceSource": "attempt-2 corrected single-line median",
+      "ok": true
+     }
+    },
+    {
+     "family": "Arabic Typesetting",
+     "perSize": {
+      "single": [
+       0.741,
+       0.736,
+       0.74
+      ],
+      "bold": [
+       0.743,
+       0.738,
+       0.738
+      ],
+      "mixed": [
+       0.801,
+       0.81,
+       0.8
+      ],
+      "singleModeBottom": [
+       0.741,
+       0.736,
+       0.74
+      ]
+     },
+     "lineAscent": 0.74,
+     "lineAscentMixed": 0.8,
+     "boldMedian": 0.738,
+     "control": {
+      "known": 0.741,
+      "reference": 0.741,
+      "referenceSource": "attempt-2 corrected single-line median",
+      "ok": true
+     }
+    }
+   ],
+   "rows": [
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|regular|single|18",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|bold|single|18",
+     "family": "Angsana New",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.836,
+     "baselineEmModeBottom": 0.836,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.836,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|mixed|mixed|18",
+     "family": "Angsana New",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.856,
+     "baselineEmModeBottom": 0.856,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.856,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Angsana New"
+      ],
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|regular|single|24",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|bold|single|24",
+     "family": "Angsana New",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.836,
+     "baselineEmModeBottom": 0.836,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.836,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|mixed|mixed|24",
+     "family": "Angsana New",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.866,
+     "baselineEmModeBottom": 0.866,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.866,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Angsana New"
+      ],
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|regular|single|32",
+     "family": "Angsana New",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.833,
+     "baselineEmModeBottom": 0.833,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.833,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|bold|single|32",
+     "family": "Angsana New",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.832,
+     "baselineEmModeBottom": 0.832,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.832,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-angsana-new",
+     "name": "probe38|Angsana New|mixed|mixed|32",
+     "family": "Angsana New",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.862,
+     "baselineEmModeBottom": 0.862,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.862,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Angsana New"
+      ],
+      [
+       "Angsana New",
+       "Angsana New",
+       "Angsana New"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|regular|single|18",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.759,
+     "baselineEmModeBottom": 0.759,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.759,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|bold|single|18",
+     "family": "Sakkal Majalla",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.761,
+     "baselineEmModeBottom": 0.761,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.761,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|mixed|mixed|18",
+     "family": "Sakkal Majalla",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.819,
+     "baselineEmModeBottom": 0.819,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.819,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Sakkal Majalla"
+      ],
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|regular|single|24",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.764,
+     "baselineEmModeBottom": 0.764,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.764,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|bold|single|24",
+     "family": "Sakkal Majalla",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.766,
+     "baselineEmModeBottom": 0.766,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.766,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|mixed|mixed|24",
+     "family": "Sakkal Majalla",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.81,
+     "baselineEmModeBottom": 0.81,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.81,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Sakkal Majalla"
+      ],
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|regular|single|32",
+     "family": "Sakkal Majalla",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.76,
+     "baselineEmModeBottom": 0.76,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.76,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|bold|single|32",
+     "family": "Sakkal Majalla",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.759,
+     "baselineEmModeBottom": 0.759,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.759,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-sakkal-majalla",
+     "name": "probe38|Sakkal Majalla|mixed|mixed|32",
+     "family": "Sakkal Majalla",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.81,
+     "baselineEmModeBottom": 0.81,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.81,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Sakkal Majalla"
+      ],
+      [
+       "Sakkal Majalla",
+       "Sakkal Majalla",
+       "Sakkal Majalla"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|regular|single|18",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.741,
+     "baselineEmModeBottom": 0.741,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.741,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|bold|single|18",
+     "family": "Arabic Typesetting",
+     "weight": "bold",
+     "kind": "single",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.743,
+     "baselineEmModeBottom": 0.743,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.743,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|mixed|mixed|18",
+     "family": "Arabic Typesetting",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 18,
+     "known": null,
+     "baselineEmPeak35": 0.801,
+     "baselineEmModeBottom": 0.801,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.801,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Arabic Typesetting"
+      ],
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|regular|single|24",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.736,
+     "baselineEmModeBottom": 0.736,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.736,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|bold|single|24",
+     "family": "Arabic Typesetting",
+     "weight": "bold",
+     "kind": "single",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.738,
+     "baselineEmModeBottom": 0.738,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.738,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|mixed|mixed|24",
+     "family": "Arabic Typesetting",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 24,
+     "known": null,
+     "baselineEmPeak35": 0.81,
+     "baselineEmModeBottom": 0.81,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.81,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Arabic Typesetting"
+      ],
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|regular|single|32",
+     "family": "Arabic Typesetting",
+     "weight": "regular",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.74,
+     "baselineEmModeBottom": 0.74,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.74,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|bold|single|32",
+     "family": "Arabic Typesetting",
+     "weight": "bold",
+     "kind": "single",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.738,
+     "baselineEmModeBottom": 0.738,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.738,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    },
+    {
+     "deck": "probe38b-arabic-typesetting",
+     "name": "probe38|Arabic Typesetting|mixed|mixed|32",
+     "family": "Arabic Typesetting",
+     "weight": "mixed",
+     "kind": "mixed",
+     "size": 32,
+     "known": null,
+     "baselineEmPeak35": 0.8,
+     "baselineEmModeBottom": 0.8,
+     "headlineScript": false,
+     "baselineEmStemBottom": null,
+     "baselineEm": 0.8,
+     "nativeLineCount": 1,
+     "boundTopPt": 0,
+     "boundHeightEm": 1.2,
+     "names": [
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ],
+      [
+       "Aptos",
+       "Aptos",
+       "Arabic Typesetting"
+      ],
+      [
+       "Arabic Typesetting",
+       "Arabic Typesetting",
+       "Arabic Typesetting"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

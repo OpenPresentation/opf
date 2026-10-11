@@ -7,7 +7,7 @@
     "data": 8688,
     "deck": 288060,
     "diff": 6223,
-    "font-policy": 15052,
+    "font-policy": 15955,
     "format": 47743,
     "markdown": 283568,
     "pagination": 237164,
@@ -53,8 +53,8 @@
       "gzip": 2106965
     },
     "font-policy": {
-      "minified": 115511,
-      "gzip": 14613
+      "minified": 119198,
+      "gzip": 15490
     },
     "format": {
       "minified": 168457,
