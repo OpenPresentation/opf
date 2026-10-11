@@ -5,7 +5,7 @@ import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,exi
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,installedCandidatePreflight,assertCandidateDoctor,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,normalizedCandidateBin,installedCandidatePreflight,assertCandidateDoctor,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
 import {installIsolatedInstalledCore} from './isolated-core.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
@@ -37,7 +37,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
    mkdirSync(path.join(directory,'dist'),{recursive:true});
    writeFileSync(path.join(directory,'dist/index.js'),index===4?`#!/usr/bin/env node\nimport {createRequire} from 'node:module';const require=createRequire(import.meta.url);console.log(JSON.stringify({core:require.resolve('@openpresentation/opf/package.json'),gallery:require.resolve('@openpresentation/gallery/package.json')}));\n`:'export const fixture = true;\n');
    for(const file of ['README.md','LICENSE'])writeFileSync(path.join(directory,file),'fixture\n');
-   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js',opf:'dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
+   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js',opf:'./dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
   }
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
@@ -91,6 +91,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   assert.throws(()=>installedCandidatePreflight(root),/requires OPF_TEST_BIN/);
   assert.throws(()=>installedCandidatePreflight(root,path.join(root,'packages/cli/dist/index.js')),/outside an installed CLI/);
   assert.throws(()=>installedCandidatePreflight(root,path.join(consumer,'node_modules/@openpresentation/opf/dist/index.js')),/outside an installed CLI/);
+  assert.equal(report.artifacts.find(item=>item.name==='@openpresentation/cli').stagedManifest.bin.opf,JSON.parse(readFileSync(new URL('../packages/cli/package.json',import.meta.url))).bin.opf,'fixture uses actual selected CLI bin spelling');
   const context=installedCandidatePreflight(root,installedBin);assert.equal(context.bin,installedBin);
   const isolatedModules=path.join(workspace,'isolated/node_modules');await installIsolatedInstalledCore(isolatedModules,context.modules);
   assert.deepEqual(readFileSync(path.join(isolatedModules,'@openpresentation/opf/package.json')),readFileSync(path.join(context.modules,'@openpresentation/opf/package.json')));
@@ -134,4 +135,10 @@ test('ordinary packed smoke still builds the CLI',async()=>{
   assert.equal(installedCandidatePreflight(root),null,'ordinary execution needs no installed binary');
   const waiting={run:false,notice:'unchanged ordinary wait'};let calls=0;assert.equal(candidatePeerPreflight(root,()=>{calls++;return waiting;}),waiting);assert.equal(calls,1,'actual preflight entry preserves the ordinary gate result');
  } finally {if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(root,{recursive:true,force:true});}
+});
+
+
+test('candidate binary normalization preserves valid spellings and rejects unsafe paths',()=>{
+ for(const spelling of ['./dist/index.js','dist/index.js'])assert.equal(normalizedCandidateBin(spelling),'dist/index.js');
+ for(const spelling of [undefined,null,'','/dist/index.js','C:/dist/index.js','../dist/index.js','./../dist/index.js','dist/../index.js','dist/./index.js','dist//index.js','dist\\index.js','././dist/index.js',' dist/index.js','dist/index.js\n','dist/index.js\0'])assert.throws(()=>normalizedCandidateBin(spelling));
 });

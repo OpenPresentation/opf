@@ -133,14 +133,20 @@ export function assertCandidatePeerPreflight(root){
  return {run:true};
 }
 
+export function normalizedCandidateBin(value){
+ assert.equal(typeof value,'string','candidate CLI bin must be a relative string');
+ const relative=value.startsWith('./')?value.slice(2):value;
+ assert.ok(/^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*$/.test(relative)&&relative.split('/').every(part=>part!=='.'&&part!=='..'),'unsafe candidate CLI bin path');
+ return relative;
+}
+
 // Installed drawing tests must exercise the exact selected binary, never a workspace
 // binary merely because candidate mode is enabled.
 export function installedCandidatePreflight(root,executable){
  const graph=candidateArtifacts(root);if(!graph)return null;
  assert.ok(executable,'installed candidate preflight requires OPF_TEST_BIN');
  const bin=realpathSync(executable),cli=graph.artifacts.find(item=>item.name==='@openpresentation/cli');
- const relative=typeof cli.stagedManifest.bin==='string'?cli.stagedManifest.bin:cli.stagedManifest.bin.opf;
- assert.ok(relative,'candidate CLI has no opf binary');
+ const relative=normalizedCandidateBin(typeof cli.stagedManifest.bin==='string'?cli.stagedManifest.bin:cli.stagedManifest.bin?.opf);
  const cliRoot=path.resolve(bin,...relative.split('/').map(()=> '..'));
  const modules=path.dirname(path.dirname(cliRoot));
  assert.equal(cliRoot,path.join(modules,'@openpresentation/cli'),'candidate binary is outside an installed CLI');
