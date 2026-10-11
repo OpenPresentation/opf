@@ -236,3 +236,7 @@ Mandatory pre-prep 90777 and supervisor dry preparation 34999 completed exit 0. 
 ## Editor source prerequisite merged — 2026-10-11 19:57:45 UTC
 
 [Gate, exact merged-tree and fresh source prerequisite receipts](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source160-merged-prerequisite/README.md) bind merged `f35326ac` to qualified `44def286`. Gate 91343 and prerequisite 25008 passed. New dry prep 78575 completed with byte-equal reviewed metadata; new prepared full replay remains pending. Earlier failed prep is retained; no publication/closure.
+
+## Current editor prepared replay status
+
+Dry preparation 78575 passed. Fresh full prepared qualification 39778 is running: install/audit/type/validate/full tests passed, playground checks are in progress. No release PR or completed qualification claim.

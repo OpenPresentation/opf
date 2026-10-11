@@ -28,3 +28,7 @@ Diagnostics then confirmed native keyboard test-harness shortcut mismatches. [Re
 - [PPTX metadata refresh](v019-pptx-current-refresh/README.md): `f62dd05a8ef0712ca2a35a11857f9085de6fd7a1`, preserves original 1fae runtime/Pareto bytes and passes focused source checks against core 1921/renderer d4ab/gallery e0.
 
 Historical staged graph and native packet identities remain unchanged. Source qualification, staged installed consumers, actual registry installation, native acceptance and site adoption are separate gates. None of these records closes a checkpoint or waives missing version, dependency, native or deployment requirements.
+
+## Current editor prepared replay status
+
+Dry preparation 78575 passed. Fresh full prepared qualification 39778 is running: install/audit/type/validate/full tests passed, playground checks are in progress. No release PR or completed qualification claim.
