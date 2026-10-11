@@ -12,6 +12,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, describe, test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { sourceCandidateCorePreflight, assertSourceCandidateIsolatedCore } from "../../../scripts/candidate-gallery-pack.mjs";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { installStubPeers } from "../../../scripts/stub-peers.mjs";
 import { cliPeerGate, report } from "../../../scripts/unreleased-gate.mjs";
@@ -41,7 +42,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 // for (toSvg, toPng, toPdf), they wait on a pull request and merge-queue run (scripts/unreleased-gate.mjs); every other run fails.
 // The tests with a stub renderer, the option checks and the missing-peer test always run.
 const coreRoot = path.join(here, "..");
-const skip = report(cliPeerGate({ cliRoot: coreRoot, executable: path.join(coreRoot, "dist", "index.js"), names: ["@openpresentation/opf-render"], subject: "@openpresentation/opf" })) ? false : "the optional renderer is not on npm at the version core asks for";
+const candidateContext = sourceCandidateCorePreflight(path.resolve(coreRoot, "../.."), path.join(coreRoot, "dist", "index.js"));
+const skip = candidateContext ? false : report(cliPeerGate({ cliRoot: coreRoot, executable: path.join(coreRoot, "dist", "index.js"), names: ["@openpresentation/opf-render"], subject: "@openpresentation/opf" })) ? false : "the optional renderer is not on npm at the version core asks for";
 const temp = await mkdtemp(path.join(tmpdir(), "opf-node-test-"));
 after(() => rm(temp, { recursive: true, force: true }));
 
@@ -268,7 +270,8 @@ describe("the renderer's 0.18 API, through stub peers", () => {
   /** Run every case in a copy of core whose opf-render and opf-pptx are the stubs; returns the calls each case made. */
   async function stubbed(cases) {
     const isolated = await mkdtemp(path.join(temp, "stub-"));
-    await installIsolatedCore(path.join(isolated, "node_modules"));
+    const isolatedCore = await installIsolatedCore(path.join(isolated, "node_modules"));
+    assertSourceCandidateIsolatedCore(candidateContext, isolatedCore);
     await installStubPeers(path.join(isolated, "node_modules"));
     await mkdir(path.join(isolated, "fonts"));
     await writeFile(path.join(isolated, "fonts", "a.ttf"), "not a font; the stub never reads it");
@@ -528,7 +531,8 @@ describe("fonts prepared once per process", () => {
 describe("a missing peer", () => {
   test("throws peer-not-installed with the install command, for export and import", async () => {
     const isolated = await mkdtemp(path.join(temp, "isolated-"));
-    await installIsolatedCore(path.join(isolated, "node_modules"));
+    const isolatedCore = await installIsolatedCore(path.join(isolated, "node_modules"));
+    assertSourceCandidateIsolatedCore(candidateContext, isolatedCore);
     await writeFile(path.join(isolated, "deck.opf.json"), JSON.stringify({ slides: [{ title: "x" }] }));
     await writeFile(
       path.join(isolated, "run.mjs"),

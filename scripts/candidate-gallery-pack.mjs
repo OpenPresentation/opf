@@ -115,6 +115,67 @@ export function candidateArtifacts(root){
  return report;
 }
 
+// Source Node tests use original manifests/runtime, but authenticate the exact staged
+// graph and its source resolutions before exercising selected unpublished engines.
+export function sourceCandidateCorePreflight(root,executable){
+ const graph=candidateArtifacts(root);if(!graph)return null;
+ const coreRoot=path.join(root,'packages/javascript');
+ assert.equal(realpathSync(executable),path.join(coreRoot,'dist/index.js'),'candidate Node executable differs from selected core');
+ assertCandidatePeerPreflight(root);
+ const workspace=path.dirname(root),directories={
+  '@openpresentation/opf':coreRoot,
+  '@openpresentation/opf-render':path.join(workspace,'opf-render'),
+  '@openpresentation/opf-pptx':path.join(workspace,'opf-pptx'),
+  '@openpresentation/gallery':path.join(workspace,'gallery-candidate'),
+ };
+ for(const [consumer,names] of [
+  [coreRoot,['@openpresentation/opf-render','@openpresentation/opf-pptx','@openpresentation/gallery']],
+  [directories['@openpresentation/opf-render'],['@openpresentation/opf','@openpresentation/gallery']],
+  [directories['@openpresentation/opf-pptx'],['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/gallery']],
+ ]){
+  const require=createRequire(path.join(consumer,'package.json'));
+  for(const name of names){
+   assert.equal(realpathSync(path.join(consumer,'node_modules',name,'package.json')),path.join(directories[name],'package.json'),'candidate Node source links a different selected package');
+   assert.equal(realpathSync(require.resolve(`${name}/package.json`)),path.join(directories[name],'package.json'),'candidate Node source resolves a different selected package');
+  }
+ }
+ return {graph,coreRoot,directories};
+}
+
+// A provided OPF_TEST_BIN always selects the strict installed path. Only its
+// deliberate absence selects authenticated source qualification; invalid bins
+// never become source-mode fallbacks.
+export function candidateCliContext(root,executable){
+ if(executable!==undefined)return installedCandidatePreflight(root,executable);
+ const context=sourceCandidateCorePreflight(root,path.join(root,'packages/javascript/dist/index.js'));if(!context)return null;
+ const cliRoot=path.join(root,'packages/cli'),require=createRequire(path.join(cliRoot,'package.json'));
+ for(const [name,directory] of Object.entries(context.directories)){
+  assert.equal(realpathSync(path.join(cliRoot,'node_modules',name,'package.json')),path.join(directory,'package.json'),'candidate CLI source links a different selected package');
+  assert.equal(realpathSync(require.resolve(`${name}/package.json`)),path.join(directory,'package.json'),'candidate CLI source resolves a different selected package');
+ }
+ const cli=context.graph.artifacts.find(item=>item.name==='@openpresentation/cli');
+ const relative=normalizedCandidateBin(typeof cli.originalManifest.bin==='string'?cli.originalManifest.bin:cli.originalManifest.bin?.opf);
+ const bin=path.join(cliRoot,relative);assert.equal(realpathSync(bin),bin,'candidate source binary is aliased');
+ return {...context,source:true,bin};
+}
+
+// The existing isolator deliberately copies original core bytes and links only its
+// runtime dependencies. Verify that closure before either missing-peer or stub tests.
+export function assertSourceCandidateIsolatedCore(context,directory){
+ if(!context)return;
+ assert.ok(!lstatSync(directory).isSymbolicLink(),'isolated candidate core is aliased');
+ directory=realpathSync(directory); // macOS tmpdir may have the system /var -> /private/var parent alias.
+ const core=context.graph.artifacts.find(item=>item.name==='@openpresentation/opf');
+ assert.deepEqual(readRegularJson(path.join(directory,'package.json')),core.originalManifest,'isolated core metadata differs from original source');
+ for(const file of core.npmPack.files.filter(item=>item.path.startsWith('dist/'))){
+  const copied=path.join(directory,file.path);assert.equal(realpathSync(copied),copied,'isolated runtime is aliased');
+  assert.deepEqual(readFileSync(copied),readFileSync(path.join(context.coreRoot,file.path)),'isolated core runtime differs from validated source');
+ }
+ const require=createRequire(path.join(directory,'package.json'));
+ assert.equal(realpathSync(require.resolve('@openpresentation/gallery/package.json')),path.join(context.directories['@openpresentation/gallery'],'package.json'),'isolated core resolves a different gallery');
+ for(const name of ['@openpresentation/opf-render','@openpresentation/opf-pptx'])assert.throws(()=>require.resolve(`${name}/package.json`),{code:'MODULE_NOT_FOUND'},'isolated core must have no optional engine');
+}
+
 export function candidatePeerPreflight(root,defaultGate){
  return candidateArtifacts(root)?assertCandidatePeerPreflight(root):defaultGate();
 }

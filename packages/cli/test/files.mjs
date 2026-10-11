@@ -11,9 +11,9 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {inflateRawSync} from 'node:zlib';
 import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
-import {installedCandidatePreflight,assertCandidateDoctor} from '../../../scripts/candidate-gallery-pack.mjs';
+import {candidateCliContext,assertSourceCandidateIsolatedCore,assertCandidateDoctor} from '../../../scripts/candidate-gallery-pack.mjs';
 import {installIsolatedCore,installIsolatedInstalledCore} from '../../../scripts/isolated-core.mjs';
-const candidate=installedCandidatePreflight(fileURLToPath(new URL('../../..',import.meta.url)),process.env.OPF_TEST_BIN);
+const candidate=candidateCliContext(fileURLToPath(new URL('../../..',import.meta.url)),process.env.OPF_TEST_BIN);
 const executable = candidate?.bin ?? process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
 // RR-55: every check here runs through the installed published opf-render and opf-pptx. While they do not satisfy the CLI's
 // peer ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips this file with a notice; any
@@ -281,8 +281,8 @@ try {
     const lone = path.join(isolated, 'dist', path.basename(executable));
     await cp(path.dirname(executable), path.join(isolated, 'dist'), {recursive: true});
     // A copy of core, not a link: the workspace core has the peers as devDependencies, and core loads them from its own location.
-    if(candidate)await installIsolatedInstalledCore(path.join(isolated,'node_modules'),candidate.modules);
-    else await installIsolatedCore(path.join(isolated, 'node_modules'));
+    if(candidate && !candidate.source)await installIsolatedInstalledCore(path.join(isolated,'node_modules'),candidate.modules);
+    else {const copied=await installIsolatedCore(path.join(isolated, 'node_modules'));assertSourceCandidateIsolatedCore(candidate,copied);}
     for (const args of [['convert', path.join(temp, 'deck.opf.json'), 'x.svg'], ['convert', path.join(temp, 'deck.opf.json'), 'x.pdf'], ['convert', path.join(temp, 'deck.pptx'), 'x.opf.json']]) {
       const missing = run(args, {status: 2, cwd: isolated, bin: lone});
       assert.equal(missing.stderrJson.code, 'peer-not-installed'); assert.match(missing.stderrJson.install, /^npm install @openpresentation\/opf-(render|pptx)@/);

@@ -5,7 +5,7 @@ import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,exi
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,normalizedCandidateBin,installedCandidatePreflight,assertCandidateDoctor,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflight,sourceCandidateCorePreflight,candidateCliContext,assertSourceCandidateIsolatedCore,normalizedCandidateBin,installedCandidatePreflight,assertCandidateDoctor,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
 import {installIsolatedInstalledCore} from './isolated-core.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
@@ -42,13 +42,28 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
   mkdirSync(path.join(root,'.github'));writeFileSync(path.join(root,'.github/candidate-gallery.json'),JSON.stringify({version:1,gallery:{repository:'OpenPresentation/gallery',version:'2.0.0',sha:gallerySha}}));
-  writeFileSync(path.join(root,'.gitignore'),'artifacts/\npackages/*/dist/\n');
+  writeFileSync(path.join(root,'.gitignore'),'artifacts/\nnode_modules/\npackages/*/node_modules/\npackages/*/dist/\n');
   for(const directory of roots.slice(0,4))commit(directory);
   delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>candidateArtifacts(root),/no published fallback/);
   process.env.CANDIDATE_GALLERY_REF=gallerySha;
   const out=path.join(root,'artifacts/npm'),report=stageGalleryGraph({coreRoot:root,workspace,out,run});
   assert.equal(report.artifacts.length,6);assert.equal(report.published,false);
   assert.deepEqual(candidateArtifacts(root),report);
+  // Authenticate actual selected source resolutions, not merely an environment flag.
+  const links=[[directories[0],['opf-render','opf-pptx','gallery']],[directories[1],['opf','gallery']],[directories[2],['opf','opf-render','gallery']],[directories[4],['opf','opf-render','opf-pptx','gallery']]];
+  for(const [consumer,names] of links)for(const name of names){const link=path.join(consumer,'node_modules/@openpresentation',name);mkdirSync(path.dirname(link),{recursive:true});symlinkSync(directories[['opf','opf-render','opf-pptx','opf-editor','cli','gallery'].indexOf(name)],link,'junction');}
+  const sourceContext=sourceCandidateCorePreflight(root,path.join(directories[0],'dist/index.js'));assert.ok(sourceContext);
+  const sourceCli=candidateCliContext(root);assert.equal(sourceCli.source,true);assert.equal(sourceCli.bin,path.join(directories[4],'dist/index.js'));
+  assert.throws(()=>candidateCliContext(root,''),/requires OPF_TEST_BIN/);
+  assert.throws(()=>candidateCliContext(root,path.join(directories[4],'dist/index.js')),/outside an installed CLI/);
+  assert.throws(()=>candidateCliContext(root,path.join(workspace,'missing-bin')),/ENOENT/);
+  delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>candidateCliContext(root),/no published fallback/);process.env.CANDIDATE_GALLERY_REF=gallerySha;
+  const runtime=path.join(directories[0],'dist/index.js'),runtimeBytes=readFileSync(runtime);writeFileSync(runtime,'tampered source runtime');assert.throws(()=>candidateCliContext(root),/runtime differs from built source/);writeFileSync(runtime,runtimeBytes);
+  assert.throws(()=>sourceCandidateCorePreflight(root,path.join(directories[1],'dist/index.js')),/executable differs/);
+  const renderLink=path.join(directories[0],'node_modules/@openpresentation/opf-render');rmSync(renderLink);symlinkSync(directories[2],renderLink,'junction');assert.throws(()=>sourceCandidateCorePreflight(root,path.join(directories[0],'dist/index.js')),/different selected package/);rmSync(renderLink);symlinkSync(directories[1],renderLink,'junction');
+  const isolated=path.join(workspace,'isolated/node_modules/@openpresentation/opf');mkdirSync(isolated,{recursive:true});cpSync(path.join(directories[0],'dist'),path.join(isolated,'dist'),{recursive:true});cpSync(path.join(directories[0],'package.json'),path.join(isolated,'package.json'));symlinkSync(directories[5],path.join(path.dirname(isolated),'gallery'),'junction');assertSourceCandidateIsolatedCore(sourceContext,isolated);
+  writeFileSync(path.join(isolated,'dist/index.js'),'tampered');assert.throws(()=>assertSourceCandidateIsolatedCore(sourceContext,isolated),/runtime differs/);
+
   assert.equal(assertCandidatePeerPreflight(root).run,true,'mixed source versions qualify exact staged relationships, not original stable semver');
   assert.equal(candidatePeerPreflight(root,()=>assert.fail('candidate must not invoke default source gate')).run,true);
   for(const name of ['@openpresentation/opf','@openpresentation/cli']){
@@ -133,6 +148,8 @@ test('ordinary packed smoke still builds the CLI',async()=>{
   assert.equal(await preparePackedSmokeCli({root,build:()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(marker)},'built')`])}),null);
   assert.equal(readFileSync(marker,'utf8'),'built');
   assert.equal(installedCandidatePreflight(root),null,'ordinary execution needs no installed binary');
+  assert.equal(sourceCandidateCorePreflight(root),null,'default source path keeps the original gate without a candidate');
+  assert.equal(candidateCliContext(root),null);assert.equal(candidateCliContext(root,'ordinary-explicit-bin'),null,'ordinary explicit binary behavior stays under the original gate');
   const waiting={run:false,notice:'unchanged ordinary wait'};let calls=0;assert.equal(candidatePeerPreflight(root,()=>{calls++;return waiting;}),waiting);assert.equal(calls,1,'actual preflight entry preserves the ordinary gate result');
  } finally {if(previous===undefined)delete process.env.CANDIDATE_GALLERY_REF;else process.env.CANDIDATE_GALLERY_REF=previous;rmSync(root,{recursive:true,force:true});}
 });
