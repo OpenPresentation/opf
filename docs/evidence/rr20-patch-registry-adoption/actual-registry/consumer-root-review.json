@@ -1,0 +1,31 @@
+{
+  "packages": [
+    {
+      "package": "@openpresentation/opf",
+      "version": "0.18.4",
+      "integrity": "sha512-Bs+oTI9Ub1IDhJ7yDR/eLot3NZ5PXQ4Di//0n8gkW+y0X88tSYCf7jD/sGYlKgme8LECKSTs/1a4jpfa3kWLpw==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.18.4.tgz"
+    },
+    {
+      "package": "@openpresentation/opf-render",
+      "version": "0.18.2",
+      "integrity": "sha512-7hUcJrMg68uke/TV16ipSIJ0lymC33Gj5qURPTl5ngN7RMc+6Irq/FQjhMAFfjYg5VfzRH9OAhrYp5C66ha0+Q==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.18.2.tgz"
+    },
+    {
+      "package": "@openpresentation/opf-editor",
+      "version": "0.18.2",
+      "integrity": "sha512-V6N15San6nyXy93jP3Dl9UjEZEWhpO6jfdQ8fb3t0dUt2fZc+M/xBJMJpMeDjUuh/5vMlDhg4pOYrZi2qTQ11A==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.18.2.tgz"
+    },
+    {
+      "package": "@openpresentation/opf-pptx",
+      "version": "0.18.2",
+      "integrity": "sha512-LOFPKk660un1OXXOQ/v3f0hEOfuo3FLRwUjj3FR9+J7jyuWeAzQTMpl7QyJlMDtEIDpuorJ3YOus0veFUjq7Ow==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.18.2.tgz"
+    }
+  ],
+  "consumerVerifyExit": 0,
+  "mappedExit": 0,
+  "scope": "exact frozen registry packages and NodeNext/Bundler type checks; broader ecosystem in progress"
+}
