@@ -1,7 +1,11 @@
-name: Published source and reviewed registry graph control
+name: Published runtime and reviewed registry graph control
 on:
   workflow_call:
     inputs:
+      tools-ref:
+        type: string
+        required: false
+        default: ''
       mode:
         type: string
         required: true
@@ -33,8 +37,21 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          repository: OpenPresentation/opf
+          ref: ${{ inputs.tools-ref || github.sha }}
+          fetch-depth: 0
           path: tools
           persist-credentials: false
+      - name: Verify exact selected core tools commit
+        env:
+          TOOLS_REF: ${{ inputs.tools-ref || github.sha }}
+        run: |
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          assert.match(process.env.TOOLS_REF,/^[0-9a-f]{40}$/);
+          assert.equal(execFileSync('git',['-C','tools','rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.TOOLS_REF);
+          JS
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: OpenPresentation/opf
@@ -97,7 +114,7 @@ jobs:
           cache-dependency-path: opf/pnpm-lock.yaml
       - name: Pin the reviewed package manager
         run: npm install --global npm@11.16.0
-      - name: Stage the reviewed registry plan with original metadata evidence
+      - name: Stage the reviewed registry plan and pinned test-tooling bridge with original evidence
         run: node tools/scripts/candidate-gallery-control.mjs stage tools opf
       - name: Original published source locks and builds
         run: |
@@ -105,7 +122,7 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do npm ci --prefix "$repo"; done
           cd opf
           pnpm build
-      - name: Original core source and packed contracts
+      - name: Published runtime and recorded test-tooling contracts
         if: inputs.mode == 'core'
         working-directory: opf
         run: |
@@ -121,7 +138,7 @@ jobs:
           node packages/cli/test/packed.mjs --registry
           pnpm test:cli:packed:peers
           pnpm test:developer-quickstart
-      - name: Original linked, installed and registry contracts
+      - name: Published linked runtime, installed and registry contracts
         if: inputs.mode == 'ecosystem'
         working-directory: opf
         run: |
@@ -145,7 +162,7 @@ jobs:
           node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
           node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
-      - name: Verify exact metadata boundary and unchanged published source
+      - name: Verify exact recorded metadata/tooling boundary and unchanged published runtime
         run: |
           node tools/scripts/candidate-gallery-control.mjs verify tools opf
           for repo in opf-render opf-pptx opf-editor cli-source; do git -C "$repo" diff --exit-code HEAD; done

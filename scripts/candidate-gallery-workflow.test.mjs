@@ -36,3 +36,14 @@ test('supported engines and CLI portability use fresh candidate staging and pres
   const source=read(`.github/workflows/${file}`);assert.ok(source.indexOf('candidate-gallery.mjs publication')<source.indexOf('pnpm install --frozen-lockfile'));
  }
 });
+
+test('sibling published control selects the core tools repository/ref with an unchanged core default',()=>{
+ const control=read('.github/workflows/published-gallery-control.yml');
+ assert.match(control,/tools-ref:\s+type: string\s+required: false\s+default: ''/);
+ const checkout=control.slice(control.indexOf('    steps:'),control.indexOf('          path: opf\n'));
+ assert.match(checkout,/repository: OpenPresentation\/opf\s+ref: \$\{\{ inputs\.tools-ref \|\| github\.sha \}\}\s+fetch-depth: 0\s+path: tools/);
+ assert.match(checkout,/persist-credentials: false/);
+ assert.match(control,/TOOLS_REF: \$\{\{ inputs\.tools-ref \|\| github\.sha \}\}/);
+ assert.match(control,/assert\.match\(process\.env\.TOOLS_REF,\/\^\[0-9a-f\]\{40\}\$\//);
+ assert.match(control,/rev-parse','HEAD'/);
+});
