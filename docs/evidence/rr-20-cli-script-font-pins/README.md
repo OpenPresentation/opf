@@ -4,7 +4,7 @@ The CLI 0.18.1 dry preparation on core main `f312773565c1663ee13a38442966b80a178
 
 The test now derives Japanese and Chinese pins from the selected installed renderer manifest after existing explicit skip gates. It checks renderer identity/version and exact font pins. The installed regression retains its exact-match assertion. This is test tooling only: no runtime behavior, release version, public status, tolerance or golden change.
 
-The selector also supports an explicit validated staged renderer manifest/version. This preserves the pending candidate-gallery CI path when it is integrated after PR604 merges; that path must select the staged artifact rather than compare it to registry development pins. The reviewed integration hunk is prepared against `63244a4228ee718343ab9cd659b4a263a4a51e96`. It has not been applied to PR604 or the frozen qualification graph.
+The selector also supports an explicit validated staged renderer manifest/version. The repair is refreshed onto merged PR604 at `080da598013328857f6c9478eabe84b5977c140d`, preserving its source/tar/runtime and installed byte/resolver guards. Candidate selection uses its staged artifact rather than registry development pins. Packed peers now reuse the tested `preparePackedSmokeCli` contract: validate staged bytes before refusing a candidate rebuild; ordinary registry tests still build.
 
 Validation before that integration:
 
@@ -19,4 +19,12 @@ Working evidence retained on the review host:
 - Actual prepared replay: `/private/tmp/rr20-cli-font-pins-prepared-packed-peers.log`, overlay SHA256 identities `/private/tmp/rr20-cli-prepared-font-overlay.json`.
 - Original dry tree: `/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/release-train-cli-eys3k1`; replay `/private/tmp/rr20-cli-prepared-font-replay`.
 
-The peer test reports the existing renderer 0.14/core 0.14 historical SVG digest skip explicitly; this is not new golden evidence. No Windows/Linux/native acceptance or publication is claimed. Before a PR, refresh onto merged PR604 and run mapped/full source checks plus both the registry 0.18.1 and real validated six-artifact candidate paths using disposable copies; frozen original graphs remain unchanged.
+The peer test reports the existing renderer 0.14/core 0.14 historical SVG digest skip explicitly; this is not new golden evidence. No Windows/Linux/native acceptance or publication is claimed. Final mapped checks passed in 119.3 seconds after the merged-main refresh; the complete source suite passed all 36 root checks, core tests and CLI command/file contracts; registry 0.18.1 and real validated six-artifact candidate paths were exercised in disposable copies. Frozen original graphs remain unchanged.
+
+## Fresh candidate replay
+
+A disposable source overlay `0151c87372ea2a5db56e4fc663f3cd8788caf6ac` over frozen d208 retained all six source versions and runtime bytes. The fresh six archives had identical entry sets and non-manifest bytes; five package manifests changed only relocated absolute staged dependency paths, while gallery was archive-identical. Honest fresh manifest identities were retained, not substituted into old expectations. Source-only negative-test dependency aliases were separate from installed global/npm-exec packages.
+
+The serial replay passed 77 drawing checks, 16 installed offline regressions and exact global/npm-exec byte/resolver checks. Existing helper regression passed three cases including candidate runtime tamper refusal before build, candidate dist preservation and ordinary build. Logs: `/private/tmp/rr20-cli-font-candidate-packed-peers-ready.log`, `/private/tmp/rr20-cli-font-buildguard-contract-tests.log`; actual tar/source comparison and result: `/private/tmp/rr20-cli-font-candidate-buildguard-comparison.json`, `/private/tmp/rr20-cli-font-candidate-replay-result.json`. Earlier failed attempts (unconditional candidate rebuild; missing scratch source dependency aliases) remain preserved. No frozen original graph was modified.
+
+Final refreshed validation logs: `/private/tmp/rr20-cli-font-pins-post604-mapped.log`, `/private/tmp/rr20-cli-font-pins-post604-full.log`. The candidate replay uses the same final packed-files body; its source overlay records the frozen source graph rather than claiming this main-based harness branch is the v2 runtime.
