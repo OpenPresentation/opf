@@ -243,14 +243,14 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-layout-preview-index/v1`
 - Type: `object`
 - Required fields: `$schema`, `version`, `description`, `records`
-- Purpose: Shape of `previews/layouts/index.json` of the @openpresentation/gallery package, the manifest for the vendored slide-archetype preview gallery under packages/gallery/previews/layouts/. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at packages/gallery/catalog/layouts/ (e.g. 'title', 'chart-2x') see spec/README.md. Th...
+- Purpose: Shape of previews/layouts/index.json in @openpresentation/gallery 2: one self-contained SVG preview per v2 intent layout, keyed by the matching catalog layout id. Each record names its SVG file and exact UTF-8 byte length. The gallery package owns the files; this checkout materializes ignored copies under packages/gallery/previews/layouts/. This internal index schema is excluded from the package's published/typed schema surface.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout-preview-index/v1"` |  |
-| `version` | yes | `string` | Index format version, as a string. |
+| `version` | yes | `const:"2"` | Index format version, as a string. |
 | `description` | yes | `string` | Human-readable description of the preview gallery and its rendering conventions. |
-| `records` | yes | `array<ref:PreviewRecord>` | One entry per vendored preview HTML file. |
+| `records` | yes | `array<ref:PreviewRecord>` | One entry per v2 layout and its SVG preview. |
 
 ### Nested Types
 
@@ -258,13 +258,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `id`, `file`, `bytes`
-- Purpose: Summary of one vendored preview HTML file.
+- Purpose: One layout template preview.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | yes | `string` | Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a layout record id. |
-| `file` | yes | `string` | HTML filename, relative to this index file's directory. |
-| `bytes` | yes | `integer` | Exact UTF-8 byte length of the referenced HTML file's contents. |
+| `id` | yes | `string` | The matching layout record id, such as cover, chart or two-column. |
+| `file` | yes | `string` | SVG filename, relative to this index directory, using the matching layout id. |
+| `bytes` | yes | `integer` | Exact UTF-8 byte length of the referenced SVG file. |
 
 ## Slide Layout
 
@@ -318,7 +318,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title placeholder. |
+| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title heading area. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and... |

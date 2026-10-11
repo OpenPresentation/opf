@@ -205,7 +205,7 @@ _No named properties._
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
-| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignm... |
+| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for the title heading area in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAl... |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox,... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
@@ -698,14 +698,14 @@ _No named properties._
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content... |
-| `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a ci... |
-| `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, b... |
-| `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link,... |
+| `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold,... |
+| `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. A v2 layout renders this in its subtitle area when present, otherwise in the title heading group. Use a string for plain text or TextRun[] for inline rich text (a colored word,... |
+| `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Use a string for plain text or TextRun[] for inline rich text (a colored word,... |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Full-slide text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Full-slide structured list payload. Presence of this field infers type 'list'. Entries are strings, TextRun[] or objects with `text`, optional `description` (supporting detail under the entry), `level` and `start`. Us... |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries are strings, TextRun[] or objects with `text`,... |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
-| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A layout's image placeholder may place it along an edge (placement). For f... |
+| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
@@ -1248,7 +1248,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | no | `ref:CatalogSource` |  |
-| `layouts` | no | `ref:CatalogRecords` | Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v1. Referenced from Slide.layout. |
+| `layouts` | no | `ref:CatalogRecords` | Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v2. Referenced from Slide.layout. |
 | `themes` | no | `ref:CatalogRecords` | Theme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-theme/v1. Referenced from design.theme. |
 | `colorSchemes` | no | `ref:CatalogRecords` | Colour-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme. |
 | `fontSchemes` | no | `ref:CatalogRecords` | Font-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-font-scheme/v1. Referenced from design.fontScheme, a theme's fontScheme and a language's font schemes. |
@@ -1298,7 +1298,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups (content groups here, placeholder groups in a layout record) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A v2 layout defines its grid through areas, tracks and regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

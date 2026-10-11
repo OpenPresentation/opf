@@ -173,7 +173,7 @@
           "format": "uri",
           "description": "Main preview image (PNG/JPG). Used as the primary visual in picker UIs and previews of the record.",
           "examples": [
-            "https://example.com/layouts/title-subtitle.png"
+            "https://example.com/layouts/cover.png"
           ]
         },
         "thumbnailSrc": {
@@ -181,7 +181,7 @@
           "format": "uri",
           "description": "Smaller thumbnail preview suited to dense grid views.",
           "examples": [
-            "https://example.com/layouts/title-subtitle.thumbnail.png"
+            "https://example.com/layouts/cover.thumbnail.png"
           ]
         },
         "vectorSrc": {
@@ -189,7 +189,7 @@
           "format": "uri",
           "description": "SVG / vector preview for crisp scaling at any size.",
           "examples": [
-            "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+            "https://www.pptx.gallery/layout-previews/cover.svg"
           ]
         }
       }
@@ -313,7 +313,7 @@
             "center",
             "right"
           ],
-          "description": "Horizontal alignment of the title placeholder."
+          "description": "Horizontal alignment of the title heading area."
         },
         "contentAlignment": {
           "type": "string",

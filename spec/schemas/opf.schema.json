@@ -735,7 +735,7 @@
         "titleAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
+          "description": "Default horizontal alignment for the title heading area in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
         },
         "contentAlignment": {
           "type": "string",
@@ -1909,7 +1909,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Quarterly Review", "Why Now", "Next Steps", ["Revenue grew ", { "text": "28%", "color": "accent1" }]]
         },
         "subtitle": {
@@ -1920,7 +1920,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Slide-level subtitle or supporting line. A v2 layout renders this in its subtitle area when present, otherwise in the title heading group. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Prepared for the board", "Three signals changed this quarter"]
         },
         "tag": {
@@ -1931,7 +1931,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Intro", "Confidential", "Appendix"]
         },
         "text": {
@@ -1961,7 +1961,7 @@
         },
         "image": {
           "$ref": "#/$defs/Asset",
-          "description": "Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A layout's image placeholder may place it along an edge (placement). For fit, focus, treatments or an explicit placement use an image block in blocks; for a full-slide picture behind the content use design.background. Presence of this field infers type 'image'."
+          "description": "Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting may extend its outer edges to the slide edge. For fit, focus, treatments or an explicit placement use an image block in blocks; for a full-slide picture behind the content use design.background. Presence of this field infers type 'image'."
         },
         "video": {
           "$ref": "#/$defs/Asset",
@@ -3767,7 +3767,7 @@
             {
               "source": "https://www.pptx.gallery",
               "layouts": {
-                "two-column": { "name": "Two column", "placeholders": [{ "type": "title" }, { "type": "text" }, { "type": "text" }] }
+                "two-column": { "name": "Two column", "areas": ["title title", "primary secondary"], "regions": { "primary": { "accepts": ["text"] }, "secondary": { "accepts": ["text"] } } }
               }
             },
             false
@@ -3794,10 +3794,10 @@
           },
           "acme": {
             "source": "pkg:@acme/opf-catalog",
-            "layouts": { "hero": { "name": "Hero", "placeholders": [{ "type": "title" }] } }
+            "layouts": { "hero": { "name": "Hero", "areas": ["title"] } }
           },
           "custom": {
-            "layouts": { "q4-special": { "name": "Q4 special", "placeholders": [{ "type": "title" }, { "type": "chart" }] } }
+            "layouts": { "q4-special": { "name": "Q4 special", "areas": ["title", "chart"], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } }
           }
         }
       ]
@@ -3810,7 +3810,7 @@
         "source": { "$ref": "#/$defs/CatalogSource" },
         "layouts": {
           "$ref": "#/$defs/CatalogRecords",
-          "description": "Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v1. Referenced from Slide.layout."
+          "description": "Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v2. Referenced from Slide.layout."
         },
         "themes": {
           "$ref": "#/$defs/CatalogRecords",
@@ -3873,7 +3873,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups (content groups here, placeholder groups in a layout record) arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
+      "description": "Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A v2 layout defines its grid through areas, tracks and regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.",
       "properties": {
         "mode": {
           "type": "string",

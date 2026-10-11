@@ -65,6 +65,7 @@
     "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
     "lint": "biome check .",
     "check:spec": "node scripts/check-spec-integrity.mjs",
+    "check:schema-examples": "node scripts/check-schema-examples.mjs && node --test scripts/check-schema-examples.test.mjs",
     "check:schema-docs": "node scripts/generate-schema-docs.mjs --check",
     "check:catalog": "node --test scripts/sync-gallery-catalog.test.mjs && node scripts/sync-gallery-catalog.mjs --verify",
     "check:catalog-free": "node scripts/check-catalog-free.mjs",

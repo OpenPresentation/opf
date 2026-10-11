@@ -296,19 +296,9 @@ No reference engine draws a speaker photo by itself: the schema has no speaker s
 
 ### `contentDirection`
 
-The effective value is `slides[i].design.contentDirection`, then `design.contentDirection`. It sets the root arrangement mode: `vertical` is `column`, `horizontal` is `row`. Precedence for the root mode:
+The effective value follows the normal design precedence: slide, deck, theme, layout, engine default. On automatic slides `vertical` sets the root arrangement to `column` and `horizontal` to `row`, unless the slide explicitly sets `composition.mode`. Promoted regions keep their geometry and nested content groups keep their own composition.
 
-```
-  1. composition.mode                            explicit: the slide's own, else the
-                                                 layout record's geometry contract
-  2. design.contentDirection                     slide design, then deck design
-  3. the layout record's design.contentDirection the layout's own direction
-  4. auto
-```
-
-Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `contentDirection` does not reinterpret them. Nested groups keep their own `composition`. The decision record keeps `reason: 'configured-mode'`. Reserved placeholder slots still count when only the hint sets the mode, as they do for the layout record's `design.contentDirection`.
-
-> **Decision, 2026-09-30 (agent decision, vetoable).** A layout record's `composition.mode` ranks above the design hint. pptx.gallery copies a layout record's `design.contentDirection` into the design of its examples, so a hint that overrode the layout's `composition.mode` would flatten the layout's own grid by construction: `chart-2x` (`design.contentDirection: horizontal`, `mode: grid, columns: 2`) would compose its four blocks as one row under the `horizontal` it derives for itself, and the renderer's gallery-layout fixtures (57 layouts whose preview must differ from the default only in alignment) fail. The hint therefore ranks with the layout record's `design.contentDirection`, above it, and acts where no composition contract exists: slides without a layout and the bundled layouts without `composition.mode` (62 of 100). Under this rule no bundled example slide changes geometry for `contentDirection` (101 decks set it; all of their blocks slides use layouts that carry a mode). The alternative, ranking the hint above the layout mode, would change 125 single-payload example slides and break the gallery's own layouts.
+On a v2 template, `contentDirection` changes every flowing region into a row or column without changing the template's areas. An atomic `flow: "none"` region remains atomic. Without the direction hint each region uses its declared flow. Layout records do not have `composition.mode`, `columns` or `weights`; their areas, tracks and regions define the grid.
 
 ### `titleAlignment` and `contentAlignment` in right-to-left decks
 
@@ -316,7 +306,7 @@ Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `conten
 
 ### `chartPrimary`
 
-The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimary`, then the layout record's `design.chartPrimary`. It applies to the root arrangement only when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
+The resolved `design.chartPrimary` applies on automatic slides only. It changes the root arrangement when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
 
 - `left` / `right`: the root is a two-track row with weights `[3, 2]` (chart first for `left`, last for `right`); the rest arrange in `auto` mode inside their track.
 - `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
@@ -324,9 +314,7 @@ The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimar
 
 Automatic composition builds the primary chart track and a direct content group for the other root nodes, preserving the 3:2 chart weight and source content order. A v2 template remains authoritative and does not apply this automatic hint. OPF 0.19 removes the v1 record-construction helper `chartPrimaryLayout`; authors use `chart-beside` or a custom v2 template for an authored grid.
 
-The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights`, from the slide or the layout record, are ignored while it applies, and reserved placeholder slots are not applied. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged.
-
-> **Decision, 2026-09-30 (agent decision, vetoable).** Unlike `contentDirection`, `chartPrimary` overrides the layout record's `composition.mode`, `columns` and `weights` (only the slide's own `composition.mode` blocks it). It is an author opt-in: no bundled layout record sets `design.chartPrimary`, so nothing derives it, while every bundled chart layout that mixes a chart with text carries a `composition.mode` (`chart-2x` grid, `data-visualization` row `[2, 1]`, ...). Ranking the layout mode above the hint would make the field inert on every bundled chart layout. 40 example slides (10 per side) change under this rule.
+The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights` are ignored while the automatic hint applies. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged. A slide using a v2 template follows that template instead.
 
 ### `listBullet` (vetoable)
 

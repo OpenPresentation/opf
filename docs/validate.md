@@ -143,15 +143,18 @@ Host policy comes from explicit options, never from the document: fields under `
 
 ```json
 {
-  "catalogs": {
-    "layouts": [
-      {"id":"partner-title","name":"Partner title","placeholders":[{"type":"title"}]}
-    ]
-  },
+  "catalogs": [
+    {
+      "source": "pkg:@partner/opf-catalog",
+      "layouts": {
+        "partner-title": {"name":"Partner title","areas":["title"]}
+      }
+    }
+  ],
   "contracts": [
     {
       "path":"/slides/*/layout",
-      "allowedValues":["partner-title","text-1x"],
+      "allowedValues":["partner-title","text"],
       "message":"Use the brand layouts {{allowed}} at {{path}}. See {{file}}.",
       "documentation":"brand-guide.md#layouts",
       "severity":"error"
