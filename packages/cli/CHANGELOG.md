@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.18.1 (2026-10-11)
+
+- opf#567: `validate` warns with the new format rule `opf/slide-size-out-of-range` when the deck's custom slide size (`design.dimensions`, or the resolved theme's `dimensions`) has a side outside PowerPoint's range of 1 to 56 inches. ECMA-376 / ISO/IEC 29500-1 §19.2.1.39 limits `p:sldSz` to 914400 to 51206400 EMU per side, and the schema accepts any positive size. Inches are converted to EMU as the PPTX exporter writes them, so exactly 1 in and 56 in pass, and presets never trigger it. It is a warning, so `valid` does not change, and `opf validate --list-rules` lists it (69 rules).
+- Add explicit candidate-gallery source and local tarball qualification for coordinated unreleased catalogs, with immutable source authorization, recorded staging metadata, and publication refusal until real registry adoption.
+- RR-20 (release workflow only): publishing `@openpresentation/cli` to npm now creates its GitHub Release. A `release` job in `cli-publish.yml` runs after the npm publish on a `cli-v*` tag push, takes the notes from this changelog's `## X.Y.Z` section (the job fails if the section is missing), and creates the release `cli-vX.Y.Z` titled `@openpresentation/cli X.Y.Z` with `--latest=false`, because the core release owns "Latest" in this repository. Only that job holds `contents: write`; the publish job keeps `id-token: write`. GitHub Releases start at 0.18; older versions get none.
+- CLI release preparation preserves runtime peer ranges that already accept the requested patch releases while advancing development pins. It no longer edits the published core's peer hints, and stops for a new peer contract that requires core reconciliation.
+
 ## 0.18.0 (2026-10-10)
 
 - RR-75 (OPF 0.18): `opf doctor`, a multi-file `opf validate`, examples, and errors that state the fix.

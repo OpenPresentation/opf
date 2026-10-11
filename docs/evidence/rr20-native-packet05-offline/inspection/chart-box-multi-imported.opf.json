@@ -1,0 +1,45 @@
+{
+  "slides": [
+    {
+      "title": "box",
+      "chart": {
+        "type": "box-and-whisker",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              4,
+              3,
+              2
+            ],
+            [
+              "Q2",
+              5,
+              2,
+              3
+            ],
+            [
+              "Q3",
+              6,
+              4,
+              1
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "slides": [
+    {
+      "title": "histogram",
+      "chart": {
+        "type": "histogram",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

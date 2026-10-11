@@ -14,7 +14,16 @@ import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {candidateArtifacts} from './candidate-gallery-pack.mjs';
 import { satisfies } from './unreleased-gate.mjs';
+
+// Validate staged source and runtime bytes before deciding whether a build is safe.
+// A candidate build would replace the very dist tree qualified by the artifact manifest.
+export async function preparePackedSmokeCli({ root, build }) {
+  const graph = candidateArtifacts(root);
+  if (!graph) await build();
+  return graph;
+}
 
 export const CORE = '@openpresentation/opf';
 export const GALLERY = '@openpresentation/gallery';
@@ -25,6 +34,12 @@ export const GALLERY = '@openpresentation/gallery';
  * where `core`, `cli` and `gallery` are the `npm pack --json` entries. The gallery is the installed registry package.
  */
 export async function packCliCandidate({ cliDirectory, coreDirectory, destination, run, npmArgs = [] }) {
+  const graph=candidateArtifacts(path.resolve(coreDirectory,'../..'));
+  if(graph){
+    const item=name=>graph.artifacts.find(record=>record.name===name);
+    const file=name=>path.join(path.resolve(coreDirectory,'../..'),'artifacts/npm',item(name).file);
+    return {core:item(CORE).npmPack,cli:item('@openpresentation/cli').npmPack,gallery:item('@openpresentation/gallery').npmPack,galleryTarball:file('@openpresentation/gallery'),coreTarball:file(CORE),cliTarball:file('@openpresentation/cli'),range:item('@openpresentation/cli').originalManifest.dependencies[CORE],restaged:true,additionalTarballs:[file('@openpresentation/gallery')],candidateGraph:graph};
+  }
   await mkdir(destination, { recursive: true });
   const manifest = JSON.parse(await readFile(path.join(cliDirectory, 'package.json'), 'utf8'));
   const coreManifest = JSON.parse(await readFile(path.join(coreDirectory, 'package.json'), 'utf8'));

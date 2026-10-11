@@ -1,0 +1,31 @@
+{
+  "slides": [
+    {
+      "title": "Implicit automatic",
+      "text": "Untouched implicit body."
+    },
+    {
+      "title": "Explicit automatic",
+      "text": "Untouched explicit body.",
+      "layout": "auto"
+    },
+    {
+      "title": [
+        {
+          "text": "Rich ",
+          "bold": false
+        },
+        "title"
+      ],
+      "text": "Rich titles remain authored line shapes.",
+      "layout": "text"
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

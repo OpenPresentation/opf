@@ -8,7 +8,7 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 ## Summary
 
-863 records; 557 addressed, 306 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+863 records; 556 addressed, 307 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
@@ -18,7 +18,7 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 | languages | 93 | done 66, parity-near 14, font-gap 13 | 93 | 0 |
 | backgrounds | 6 | done 6 | 6 | 0 |
 | narratives | 48 | done 48 | 48 | 0 |
-| charts | 27 | done 17, descoped 1, unknown 9 | 18 | 9 |
+| charts | 27 | done 16, descoped 1, unknown 9, missing-export 1 | 17 | 10 |
 | themes | 4 | done 1, parity-near 3 | 4 | 0 |
 | audiences | 16 | done 16 | 16 | 0 |
 | tones | 7 | done 7 | 7 | 0 |
@@ -33,7 +33,7 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 427 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 426 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 0 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 12 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
@@ -45,7 +45,7 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
 | `native-mismatch` | 0 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
-| `missing-export` | 0 | 4 | The PPTX export fails, is not native, or does not re-import to the same value. |
+| `missing-export` | 1 | 4 | The PPTX export fails, is not native, or does not re-import to the same value. |
 | `missing-preview` | 0 | 4 | The preview fails or does not change for this value. |
 | `broken` | 0 | 5 | The value does not validate or compose in core. |
 
@@ -64,10 +64,19 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 | native | verified or failed when the RR-42 native run (inputs.nativeRuns: per-value verdicts of the gated checks) covers the value; else exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence), or unverified. For fonts: the font tracker native verification. |
 | fonts | accepted when every family the value draws (its parity fontResolution families, else its catalog font scheme) is qualified or documented-visual in the font tracker; gap otherwise; n/a when it draws no chosen family. For fonts: the font tracker status. |
 
+## Evidence scope
+
+Historical measured verdicts below retain their original input scope; an additional unsupported-input gap does not constitute a failed native run or a descope.
+
+| Type | Id | Measured input scope |
+| --- | --- | --- |
+| charts | `pareto` | Existing roundTrip/parity/native verdicts cover the measured single-series Pareto input; they do not establish preservation of arbitrary multi-series source data. |
+
 ## Unaddressed gaps
 
 | Type | Gap | Records | Ids | Detail | Next action | Link |
 | --- | --- | ---: | --- | --- | --- | --- |
+| charts | `missing-export` | 1 | `pareto` | Multi-series Pareto keeps only the first numeric series: the four-column North/South/West input re-imports as two columns, with chart-data-adapted / series-dropped. Data preservation remains open (issue 246); no faile... | Preserve all authored series or explicitly reject unsupported input before producing a lossy artifact; retain single-series evidence and add a multi-series preservation regression. | [opf-pptx#246](https://github.com/OpenPresentation/opf-pptx/issues/246) |
 | layouts | `missing-spec` | 272 | `action-plan`, `appendix-index`, `architecture-stack`, `assumptions-dependencies`, `before-after`, `benchmark-target-table`, `blank`, `bullet-list`, `business-model-canvas`, `capability-map`, `case-study`, `chapter-recap` and 260 more | published by the pptx.gallery layouts catalog but not bundled in @openpresentation/gallery (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
 | layouts | `missing-gallery` | 22 | `chart`, `chart-beside`, `closing`, `code`, `cover`, `gallery`, `hero`, `image`, `image-beside`, `list`, `logos`, `metrics` and 10 more | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | slide-sizes | `missing-gallery` | 3 | `1:1`, `4:5`, `9:16` | pptx.gallery has no slide-size pages | Give the value a gallery page and card, or record that it stays catalog-only. | - |
@@ -107,5 +116,5 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
 | Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
 | Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
-| Links | `docs/programs/release-readiness/burndown.md` (84 items) and 7 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+| Links | `docs/programs/release-readiness/burndown.md` (84 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 
