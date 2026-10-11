@@ -9,6 +9,7 @@
     "typecheck:run": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
     "check:release-plan-cli": "node --test scripts/release-plan-cli.test.mjs",
+    "check:showcase": "node --test scripts/showcase-contract.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
     "check:changed": "node scripts/check-changed.mjs",
