@@ -1,0 +1,64 @@
+{
+ "what": "RR-38 probe (probe-arabic.pptx, 2026-10-02) native PNGs (2560 x 1440) re-read with the opf#361 baseline rule; shape tops from the RR-38 native read-out; box outlines and guide lines (rows inked across more than half the width) excluded. Script: native run folder measure/rr38-reproduce.mjs. Em below the line-box top at 18 / 24 / 32 pt.",
+ "arabicTypesettingRegular": {
+  "probeRuleBottomEdge": [
+   0.743,
+   0.745,
+   0.746
+  ],
+  "rr38ScriptTopEdge": [
+   0.722,
+   0.729,
+   0.734
+  ],
+  "recordedInPolicyBefore": [
+   0.68,
+   0.71,
+   0.72
+  ]
+ },
+ "arabicTypesettingBold": {
+  "probeRuleBottomEdge": [
+   0.724,
+   0.738,
+   0.741
+  ]
+ },
+ "arabicTypesettingMixed": {
+  "probeRuleBottomEdge": [
+   0.794,
+   0.797,
+   0.796
+  ],
+  "recordedInPolicyBefore": 0.78
+ },
+ "arial": {
+  "probeRuleBottomEdge": [
+   0.852,
+   0.826,
+   0.83
+  ]
+ },
+ "timesNewRoman": {
+  "probeRuleBottomEdge": [
+   0.812,
+   0.835,
+   0.824
+  ]
+ },
+ "newProbe": {
+  "attempt3ArabicTypesetting": {
+   "regular": [
+    0.741,
+    0.736,
+    0.74
+   ],
+   "bold": 0.738,
+   "mixed": [
+    0.801,
+    0.81,
+    0.8
+   ]
+  }
+ }
+}
