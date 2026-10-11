@@ -88,6 +88,10 @@
         "values": 62
       }
     ],
+    "inputLimitations": {
+      "file": "docs/evidence/rr-20-pareto-series-scope/limitations.json",
+      "records": 1
+    },
     "fontTracker": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.json",
       "asOf": "2026-10-02",
@@ -113,7 +117,7 @@
     },
     "overrides": {
       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
-      "rules": 7
+      "rules": 8
     }
   },
   "statusDefinitions": {
@@ -180,6 +184,18 @@
   },
   "nextActionDefinition": "A gap's next action is its own `next` (derived, for example the font tracker's next action for the family), else the `next` of the rule it names in `rules`, else `defaultNext` for its code.",
   "rules": {
+    "pareto-multi-series-loss": {
+      "gap": "missing-export",
+      "types": [
+        "charts"
+      ],
+      "ids": [
+        "pareto"
+      ],
+      "detail": "^Multi-series Pareto",
+      "link": "https://github.com/OpenPresentation/opf-pptx/issues/246",
+      "next": "Preserve all authored series or explicitly reject unsupported input before producing a lossy artifact; retain single-series evidence and add a multi-series preservation regression."
+    },
     "world-parked": {
       "gap": "missing-export",
       "types": [
@@ -286,10 +302,10 @@
   "addressedDefinition": "A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).",
   "summary": {
     "records": 841,
-    "addressed": 823,
-    "unaddressed": 18,
+    "addressed": 822,
+    "unaddressed": 19,
     "byStatus": {
-      "done": 671,
+      "done": 670,
       "deprecated": 0,
       "descoped": 12,
       "works-unverified": 0,
@@ -301,7 +317,7 @@
       "missing-editor": 0,
       "parity-mismatch": 0,
       "native-mismatch": 0,
-      "missing-export": 0,
+      "missing-export": 1,
       "missing-preview": 0,
       "broken": 0
     },
@@ -363,12 +379,13 @@
       "charts": {
         "records": 27,
         "byStatus": {
-          "done": 17,
+          "done": 16,
           "descoped": 1,
-          "unknown": 9
+          "unknown": 9,
+          "missing-export": 1
         },
-        "addressed": 18,
-        "unaddressed": 9
+        "addressed": 17,
+        "unaddressed": 10
       },
       "themes": {
         "records": 4,
@@ -466,6 +483,7 @@
     "unaddressedGaps": {
       "layouts unknown": 6,
       "charts unknown": 9,
+      "charts missing-export": 1,
       "slide-sizes missing-gallery": 3,
       "slide-sizes unknown": 3
     }
@@ -1017,7 +1035,7 @@
     {"type":"charts","id":"histogram","name":"Histogram","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"line","name":"Line","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"line-with-markers","name":"Line with Markers","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"charts","id":"pareto","name":"Pareto","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
+    {"type":"charts","id":"pareto","name":"Pareto","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"evidenceScope":"Existing roundTrip/parity/native verdicts cover the measured single-series Pareto input; they do not establish preservation of arbitrary multi-series source data.","pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-export","detail":"Multi-series Pareto keeps only the first numeric series: the four-column North/South/West input re-imports as two columns, with chart-data-adapted / series-dropped. Data preservation remains open (issue 246); no failed native result is inferred.","evidence":"docs/evidence/rr-20-pareto-series-scope/reproduction.json","rule":"pareto-multi-series-loss","link":"https://github.com/OpenPresentation/opf-pptx/issues/246","addressed":false}],"status":"missing-export","addressed":false},
     {"type":"charts","id":"pie","name":"Pie","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"radar","name":"Radar","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"radar-with-markers","name":"Radar with Markers","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
