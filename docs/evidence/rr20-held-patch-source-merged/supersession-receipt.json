@@ -1,0 +1,41 @@
+{
+  "source": "Supervisor live identity check and successful GraphQL close response; no comments or branch deletion",
+  "pullRequests": [
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 217,
+      "confirmedHead": "01b0459546add78b5a69c5efce2cae2def98b376",
+      "state": "CLOSED",
+      "closedAt": "2026-10-11T12:50:34Z",
+      "supersededBy": 219,
+      "combinedMerge": "dd6b520404d423fd4ddd59e81a9b47971e906be3"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 222,
+      "confirmedHead": "eac8366a10dabd523847b853bde10812918a526c",
+      "state": "CLOSED",
+      "closedAt": "2026-10-11T12:50:35Z",
+      "supersededBy": 219,
+      "combinedMerge": "dd6b520404d423fd4ddd59e81a9b47971e906be3"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 229,
+      "confirmedHead": "33637275eaf472c7e82acd6b829a9e29aea6c8ce",
+      "state": "CLOSED",
+      "closedAt": "2026-10-11T12:50:35Z",
+      "supersededBy": 219,
+      "combinedMerge": "dd6b520404d423fd4ddd59e81a9b47971e906be3"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 230,
+      "confirmedHead": "012e448ba298a19ec79d690958f08d75e3893b26",
+      "state": "CLOSED",
+      "closedAt": "2026-10-11T12:50:36Z",
+      "supersededBy": 219,
+      "combinedMerge": "dd6b520404d423fd4ddd59e81a9b47971e906be3"
+    }
+  ]
+}

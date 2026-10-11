@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.18.4 (2026-10-11)
+
+- Add explicit candidate-gallery source and local tarball qualification for coordinated unreleased catalogs, with immutable source authorization, recorded staging metadata, and publication refusal until real registry adoption.
+- opf#361 (FF-46; preview output changes for six script families, PPTX font names and sizes unchanged): `spec/reference/font-policy.json` gives five more proprietary script families a preview `sizeAdjust`, set by the release supervisor's rule (the smallest factor at which no line of the script corpus or of the scheme's Latin overhangs more than 3 percent natively): Angsana New 0.75, DilleniaUPC 0.68, Sakkal Majalla 0.89, Malgun Gothic 1.07 and Nirmala UI 1.07. Natively probed `lineAscent` / `lineAscentMixed` rows come with them: Angsana New 0.83 / 0.86, DilleniaUPC 0.82 / 0.85, Sakkal Majalla 0.76 / 0.81 and Nirmala UI 0.97 / 0.94 (Malgun Gothic's baseline sits below 1 em and has none). Renderers that read the policy (opf-render) draw and measure these families' replacements at the new size, so their preview lines, and the line breaks of an export that measures with the renderer's fonts, follow PowerPoint more closely; a native re-run of the FF-46 decks with the factors is in `docs/evidence/ff-46-sizeadjust-native-20261010/`. Traditional Arabic, Ebrima and MS Gothic keep no factor.
+    - **Arabic Typesetting's line ascent is corrected from 0.70 / 0.78 to 0.74 / 0.80.** The earlier values were read from the RR-38 probe with an earlier estimator; RR-38's own native PNGs and a new native probe both put the baseline at 0.74 em (0.80 em on a line with a Latin run). This moves the preview baseline of every shipped Arabic Typesetting deck, the default `arabic` language included, down by 0.04 em on Arabic-only lines and 0.02 em on mixed lines (about 0.7 pt and 0.4 pt at 18 pt). Its `sizeAdjust` 0.64 is unchanged.
+    - Decomposed conjoining Hangul jamo (U+1100 to U+11FF, U+A960 to U+A97F, U+D7B0 to U+D7FF) are documented as a limitation in `docs/font-fidelity.md`: PowerPoint draws them unshaped and up to 1.9 times wider, which no factor fixes.
+- RR-20: CLI packed-peer validation installs the exact Japanese and Chinese script font versions declared by the selected installed renderer, instead of fixed 0.18.0-era pins. The installed regression retains its exact manifest/version assertion; package runtime behavior is unchanged.
+- Extract coordinated font packages on Windows without treating the font-cache drive letter as a remote tar host, including caches and checkouts on different drives.
+- RR-83: allow core golden regeneration to link an explicitly pinned gallery2 candidate while preserving the isolated main reproducibility guard.
+
 ## 0.18.3 (2026-10-10)
 
 - RR-20: `scripts/link-ecosystem.mjs` now installs the linked renderer's exact script and emoji font pins (its `@expo-google-fonts/*` optional peers) in the opf-pptx and opf-editor checkouts, replacing only packages they already have, from `npm pack` tarballs and without re-running npm install. A renderer font bump on main (render#210) no longer makes the linked sibling load files the renderer's integrity check rejects, which had blocked the ecosystem lock roll for the 0.18.x patches.

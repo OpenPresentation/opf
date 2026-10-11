@@ -1,0 +1,17 @@
+created cli-v0.18.1 on OpenPresentation/opf@ceb8a5a42269
+waiting for opf cli-publish.yml on cli-v0.18.1 (not started)...
+waiting for opf cli-publish.yml on cli-v0.18.1 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38133658881)...
+waiting for opf cli-publish.yml on cli-v0.18.1 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38133658881)...
+waiting for opf cli-publish.yml on cli-v0.18.1 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38133658881)...
+waiting for opf cli-publish.yml on cli-v0.18.1 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38133658881)...
+@openpresentation/cli@0.18.1: verified
+  ok   npm version: @openpresentation/cli@0.18.1, integrity sha512-b4NkOXy+s8QBrNmrJ/N3Me/yo29sptAxHs4B+mz2FiIz7cAC7catsTCQvrO+DOI7EbSQsXC5zR5Lxq/8Jy28WQ==
+  ok   tag: OpenPresentation/opf cli-v0.18.1 -> ceb8a5a42269d9f1574c203adfd76b807e61a603
+  ok   gitHead: gitHead ceb8a5a42269d9f1574c203adfd76b807e61a603 = tag commit ceb8a5a42269d9f1574c203adfd76b807e61a603
+  ok   tag on main: ceb8a5a42269 is on opf main (identical)
+  ok   version at tag: packages/cli/package.json at ceb8a5a42269 carries 0.18.1
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.18.1)
+  ok   SLSA provenance: built by .github/workflows/cli-publish.yml on refs/tags/cli-v0.18.1 from ceb8a5a42269 (https://github.com/OpenPresentation/opf/actions/runs/38133658881/attempts/1)
+  ok   npm audit signatures: 2 verified, 0 invalid, 0 missing; @openpresentation/cli@0.18.1 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf/releases/tag/cli-v0.18.1
+  info dist-tag: latest
