@@ -554,3 +554,5 @@ Append-only. One dated line per state change.
 - 2026-10-11 18:19:49 UTC: RR-20/T18 — PPTX #250 merged at `1954c9ce`, gate 12145 exit 0; [tree proof](../../evidence/rr20-patch-train-publications/pptx-0182-preparation/merged-tree-comparison.json) matches reviewed preparation. Sole exact-release-commit gate 24822 is pending. No tag/publication or checkpoint closure; progress remains 15/40.
 
 - 2026-10-11 18:21 UTC: RR-20 — Root-verified inventory after PPTX #250 merge records 27 open PRs and 45 issues, complete pagination, all eight clean defaults matching and no changed existing open heads. Historical snapshots retained; progress remains 15/40.
+
+- 2026-10-11: RR-20 — Local PPTX v0.19 refresh `f62dd05a` adopts current merged metadata, preserving all v2/Pareto runtime bytes and original `1fae5a9d`. [Proof and focused source results](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) do not establish full graph, registry 0.19 or native acceptance. Release gate 24822 remains pending; progress stays 15/40.

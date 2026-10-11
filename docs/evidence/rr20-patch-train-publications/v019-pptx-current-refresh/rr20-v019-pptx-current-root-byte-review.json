@@ -1,0 +1,14 @@
+{
+  "base": "1fae5a9df400ea37954ad4bb4fca8c2d1b96588b",
+  "head": "f62dd05a8ef0712ca2a35a11857f9085de6fd7a1",
+  "mergedMain": "1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2",
+  "changedPaths": [
+    "CHANGELOG.md",
+    "package-lock.json",
+    "package.json"
+  ],
+  "lockAndChangelogEqualMergedMain": true,
+  "manifestOnlyVersionAndThreeDependencyFieldsChanged": true,
+  "allOtherTrackedPathsUnchanged": true,
+  "claim": "scope byte review only; main18.2 releasecommitgate pending; no published19/native claim"
+}

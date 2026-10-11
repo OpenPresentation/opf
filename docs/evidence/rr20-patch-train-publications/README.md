@@ -29,3 +29,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## PPTX preparation merged — 2026-10-11 18:19:49 UTC
 
 #250 merged at `1954c9ce3d2c54a69666b54acdc9fcc87dcb9ca2`, gate 12145 exit 0; [merged tree proof](pptx-0182-preparation/merged-tree-comparison.json) equals reviewed preparation. Sole exact-commit gate 24822 is pending; no tag or publication yet. Prior pending prose is historical.
+
+## Local PPTX v0.19 current-main refresh — 2026-10-11
+
+[Metadata-only refresh and focused source evidence](v019-pptx-current-refresh/README.md) are retained at `f62dd05a`; prior `1fae5a9d` stays immutable. No fresh full-graph, registry 0.19 or native claim.
