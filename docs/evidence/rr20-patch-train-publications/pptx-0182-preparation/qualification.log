@@ -1,0 +1,38 @@
+v24.21.0
+11.16.0
+NODE_AUTH_TOKEN unset; npmrc literal setup-node placeholder; GITHUB_REF=refs/tags/opf-pptx-v0.18.2
+2026-10-11T17:53:11Z START ci
+2026-10-11T17:53:12Z PASS ci
+2026-10-11T17:53:12Z START audit
+2026-10-11T17:53:13Z PASS audit
+2026-10-11T17:53:13Z START typecheck
+2026-10-11T17:53:14Z PASS typecheck
+2026-10-11T17:53:14Z START validate
+2026-10-11T17:53:14Z PASS validate
+2026-10-11T17:53:14Z START full
+2026-10-11T17:56:21Z PASS full
+2026-10-11T17:56:21Z START code
+2026-10-11T17:56:22Z PASS code
+2026-10-11T17:56:22Z START published-core
+2026-10-11T17:56:22Z PASS published-core
+2026-10-11T17:56:22Z START packed
+2026-10-11T17:56:45Z PASS packed
+2026-10-11T17:56:45Z START playwright-version
+2026-10-11T17:56:45Z PASS playwright-version
+2026-10-11T17:56:45Z START browser
+2026-10-11T17:57:03Z PASS browser
+2026-10-11T17:57:03Z START font-variants
+2026-10-11T17:57:03Z PASS font-variants
+2026-10-11T17:57:03Z START native-picture-edit-controls
+2026-10-11T17:57:03Z PASS native-picture-edit-controls
+2026-10-11T17:57:03Z START native-font-embed-controls
+2026-10-11T17:57:10Z PASS native-font-embed-controls
+2026-10-11T17:57:10Z START native-mixed-edit-controls
+2026-10-11T17:57:15Z PASS native-mixed-edit-controls
+2026-10-11T17:57:15Z START native-font-inventory-controls
+2026-10-11T17:57:32Z PASS native-font-inventory-controls
+2026-10-11T17:57:32Z START pack-dry
+2026-10-11T17:57:33Z PASS pack-dry
+2026-10-11T17:57:33Z START diff-check
+2026-10-11T17:57:33Z PASS diff-check
+ALL LOCAL RELEASE GATES PASS; no publication performed

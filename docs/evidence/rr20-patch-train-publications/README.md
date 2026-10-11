@@ -17,3 +17,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## Renderer 0.18.2 published and verified
 
 [Exact trusted publication and separate independent verification](renderer-0182/README.md) completed at `de0a5034f49dbacfe190946ec7416a976981cf45`, workflow 38157832669, with npm latest, registry integrity, SLSA provenance, four verified signatures and GitHub release checked. Prior pending records remain historical. PPTX/editor 0.18.2 and adoption are pending; T18 and 15/40 progress are unchanged.
+
+## PPTX 0.18.2 qualified preparation — 2026-10-11
+
+[Dependency-floor merge, fresh prerequisite, full dry qualification and byte-identical executed preparation](pptx-0182-preparation/README.md) are complete. Release-prep #250 at `d07b63491be294bc9a14c7aba04683036c1eb954` awaits gate 12145; no PPTX publication is claimed.
