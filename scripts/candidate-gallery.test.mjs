@@ -1,3 +1,4 @@
+import {publishedGalleryControl,optionalRegularJson} from './candidate-gallery.mjs';
 import assert from 'node:assert/strict';
 import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync,readFileSync,realpathSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -47,5 +48,19 @@ test('source linking verifies actual immutable package identity and preserves me
   const bad=path.join(gallery,'dist/dangling');symlinkSync(path.join(root,'missing'),bad);assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/symlink/);rmSync(bad);
   writeFileSync(path.join(gallery,'package.json'),'{}');assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/modified/);
   const alias=path.join(root,'alias.json');symlinkSync(path.join(gallery,'package-lock.json'),alias);assert.throws(()=>readRegularJson(alias),/aliased/);
+  const dangling=path.join(root,'candidate-gallery.json');symlinkSync(path.join(root,'missing.json'),dangling);assert.throws(()=>optionalRegularJson(dangling),/ENOENT/);
+  assert.equal(optionalRegularJson(path.join(root,'absent.json')),undefined);
  }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+
+test('pristine published control binds every immutable source to actual registry metadata', async()=>{
+ const plan={packages:['opf','opf-render','opf-pptx','opf-editor','cli'].map(name=>({name:`@openpresentation/${name}`,version:'0.18.1'})),verificationRefs:Object.fromEntries(['opf','opf-render','opf-pptx','opf-editor','cli'].map(name=>[name,'a'.repeat(40)]))};
+ plan.independentPackages=[{name:'@openpresentation/gallery',version:'0.18.1'}];
+ const registry=async(name,version)=>({name,version:version==='latest'?'0.18.1':version,gitHead:'a'.repeat(40)});
+ assert.deepEqual(await publishedGalleryControl(plan,registry),plan.verificationRefs);
+ await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.18.1':version,gitHead:'b'.repeat(40)})),/registry gitHead/);
+ await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.18.2':version,gitHead:'a'.repeat(40)})),/current reviewed stable/);
+ await assert.rejects(publishedGalleryControl({...plan,verificationRefs:{}},registry),/immutable/);
+ await assert.rejects(publishedGalleryControl(plan,async()=>{throw Error('registry unavailable');}),/registry unavailable/);
 });
