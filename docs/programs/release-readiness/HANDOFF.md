@@ -51,43 +51,17 @@ The strict macOS font-subset gap has a reviewed fix in renderer#230 at012e448b (
 The versions for every `release-train.mjs` call:
 `--core 0.18.3 --render 0.18.1 --pptx 0.18.1 --editor 0.18.1 --cli 0.18.1 --item RR-20`.
 
-1. **Initial lock roll is complete.** Core main `09658e9c` includes the required lock and font counts.
-2. **opf-render 0.18.1.** Release prep [render#223](https://github.com/OpenPresentation/opf-render/pull/223)
-   merged as `6615ad54`, but its release-commit Node 22 gate failed before tagging: npm 10 rejects the coordinated
-   PPTX lock's emoji peers before source linking. Exact Node 22 experiments prove npm 11.16.0 installs the same lock
-   unchanged, matching trusted publishing. Reviewed repair [render#224](https://github.com/OpenPresentation/opf-render/pull/224)
-   at `021205bc` pins that npm version and mechanically cancels the untagged prep; its `full-ci` pr-gate is running.
-   After it merges and passes, rerun packed acceptance and create a fresh prep with
-   `--branch codex/release-render-0-18-1-retry`. Preserve the previous branch. `release-train` selects the commit that
-   first set the version, so merely adding a workflow fix after the failed prep cannot authorize tagging `6615ad54`.
-   Gate the new merged release commit with `pr-gate --commit`, then use `release-train tag render ... --execute`.
-   - `npm run test:packed` already passed locally at render main `443dbb98` against core 0.18.3: 204 byte-matched files,
-     signatures verified.
-   - Before prep, check that `golden-override: ''` is in both `ecosystem-refs` steps of render's `ci.yml`, and that
-     render's default baseline (`test/golden/opf-examples-png.cover-centering/_baseline.json` `source.sha256`) equals
-     core 0.18.3's examples digest `20da988227cb90ad9a1f04185981f83d24c0afee7c9070d7b84e55fe7895e71b`. Core's examples
-     did not change since 0.18.1.
-   - **Release notes:** the `render-191-deps.md` fragment (render#218) tells users to upgrade `@expo-google-fonts/
-     noto-sans-jp`, `-kr`, `-sc`, `-tc` to 0.4.4, `noto-color-emoji` to 0.4.7 and `noto-emoji` to 0.4.8 together with
-     the renderer. They are exact-pinned optional peers.
-   - Contents: render #203–#210, #212, #214, #216 (forced colours), #218 and #221 (Wingdings in list bodies).
-3. **Merge [opf-editor#154](https://github.com/OpenPresentation/opf-editor/pull/154)** (head `c8828f46`, the font pins
-   matching render 0.18.1) **only after render 0.18.1 is on npm**. Re-run its CI first; it is red against render 0.18.0
-   by design. The opf-pptx side (#243) is merged.
-4. **opf-pptx 0.18.1** (prep → merge → tag). Contents: pptx #231, #233–#237, #239, #242 (tables survive a PowerPoint
-   save), #243. Run `npm run test:packed` locally first.
-5. **opf-editor 0.18.1** (prep → merge → tag). Contents: editor #152, #153, #154. Run `npm run test:packed` locally first.
-6. **CLI 0.18.1**: `release-train.mjs prep cli …`, then tag. Before tagging, run `pnpm test:cli:packed:peers` with
-   `GITHUB_REF=refs/tags/cli-v0.18.1`.
-7. **Lock roll again** (dispatch `ecosystem-roll.yml` on `main`, open the PR from `ecosystem-roll/main`, merge it with
-   pr-gate). Then update `release-plan.json`, the compatibility matrix and the burndown rows in one records PR.
-8. **Sites adopt 0.18.1** (openpresentation-site and pptx-gallery on `main`; pptx-dev on `master`). Each bumps render, pptx and
-   editor and **all six font packages above** together. pptx-gallery also regenerates `public/opf-editor/wasm.json`
-   (harfbuzzjs 1.6.3), and bumps `exampleRefs['opf-editor']` and runs `prepare:opf` (gallery#118 part 2).
+1. **Completed prerequisites.** Core 0.18.3 and renderer 0.18.1 are published and independently verified. Renderer release commit is `d4259333a1105ce54d136ced0635f086d0f750ee`; its failed initial prep was superseded without tagging. Editor font-pin PR #154 merged at `4c29be041bb3b4ea67b4b086e69c13395542377c`. Do not redo these steps.
+2. **Finish CI repairs and roll the lock before tagging.** Shared gate80227 owns PPTX#244, editor#157 and the two golden-workflow tooling PRs. Core#598 (CLI prep peer floors) is ready for the next batch. After the CI repairs merge, use the prescribed ecosystem roller to include core#595's Windows archive repair and the current engine mains. Never hand-pin the lock. The old locked core caused PPTX's Windows failure even after the repair merged.
+3. **PPTX 0.18.1: fresh prep → merge → release-commit gate → tag → independent verification.** The disposable rehearsal passed all128 test files and packed consumers against registry core0.18.3/render0.18.1; [evidence](../../evidence/rr20-patch-release-rehearsals/README.md). It predates CI repair244 and is not the final release prep. Run the prescribed packed gate at the actual source head, create a fresh prep with the train arguments above, review its metadata-only diff, merge through pr-gate and verify the exact release commit before tagging. Contents include PPTX#231,#233–#237,#239,#242 (PowerPoint-save table repair),#243 and the CI repair.
+4. **Editor 0.18.1: packed gate → prep → merge → release-commit gate → tag → independent verification.** Contents include #152,#153,#154 and CI repair157. The157 source packed rehearsal passes123 file hashes,23 model suites and offline browser workflow, but final registry adoption must include published PPTX0.18.1. Do not substitute the rehearsal for final release gates.
+5. **CLI 0.18.1.** Merge reviewed release-tool fix core#598 before prep. Preserve compatible runtime peer floors; advance the core dependency/development pins. Then use `release-train.mjs prep cli` with the train arguments above. Before tagging, run `pnpm test:cli:packed:peers` with `GITHUB_REF=refs/tags/cli-v0.18.1`, gate the merged release commit, publish through the trusted workflow and independently verify its artifact/provenance.
+6. **Final lock and release records.** Dispatch `ecosystem-roll.yml` on `main`, open the resulting green roller PR if the owner App is still absent, and merge with pr-gate. Reconcile `release-plan.json`, compatibility matrix, burndown and this handoff against actual verified versions.
+7. **Sites adopt the published0.18 set.** openpresentation-site and pptx-gallery use main; pptx-dev uses master. Update engine/editor dependencies and all six renderer font peers together: noto-sans-jp/kr/sc/tc0.4.4, noto-color-emoji0.4.7, noto-emoji0.4.8. pptx-gallery also updates editor exampleRefs, runs prepare:opf and regenerates wasm.json with the actual published artifacts (harfbuzzjs1.6.3). Run site gates; agents do not deploy.
 
 ## Held until render-v0.18.1 and editor-v0.18.1 are tagged (then they form render 0.18.2)
 
-All are green or nearly green. Each PR body has its status. Merge order in brackets.
+Source reviews and local evidence are recorded below. Refresh exact-head CI through the shared gate after the publication hold clears; historical green checks are not final integrated acceptance.
 
 - opf#361, the size-adjust policy: [opf#585](https://github.com/OpenPresentation/opf/pull/585) first, then
   [opf-render#219](https://github.com/OpenPresentation/opf-render/pull/219). opf#585's `packages` aggregate was red only
