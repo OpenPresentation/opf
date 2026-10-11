@@ -1,0 +1,10 @@
+{
+  "copiedFiles": 22,
+  "totalFiles": 25,
+  "allCopiesByteExact": true,
+  "sensitivePatternsFound": false,
+  "excluded": [
+    "npmrc",
+    "transient dependency/artifact directories"
+  ]
+}

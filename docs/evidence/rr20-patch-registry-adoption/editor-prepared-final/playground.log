@@ -1,0 +1,91 @@
+
+> setup: npm run build:playground
+
+> @openpresentation/opf-editor@0.18.2 build:playground
+> node scripts/build-playground.mjs
+
+Browser editor built in /private/tmp/release-train-editor-jwsrbK/artifacts/playground/ (70 lazy script faces, 94 lazy preview faces)
+
+> setup: npm run check:font-hotlinks:built
+
+> @openpresentation/opf-editor@0.18.2 check:font-hotlinks:built
+> node scripts/check-font-hotlinks.mjs --built dist artifacts/playground
+
+font hotlink check passed (tracked files + 2 build dir(s))
+
+> playground:playground-pptx: node test/playground-pptx.mjs
+{
+  "passed": true,
+  "browser": "153.0.8010.12",
+  "offlineAfterLoad": true,
+  "pptxBytes": 18774,
+  "nativeTable": true,
+  "mergedCells": true,
+  "exportCommitsDraft": true,
+  "importUndoRedo": true,
+  "expandedImageImport": true,
+  "quoteSourceEditingUndo": true,
+  "onePageReadabilityUndo": true,
+  "quoteTextReimportUndo": true,
+  "quoteSemanticsRestored": false,
+  "malformedInputPreservesDocument": true,
+  "networkWrites": 0
+}
+
+> playground:playground-script-fonts: node test/playground-script-fonts.mjs artifacts/playground-script-fonts
+Playground script fonts: Latin fetched 0 files; Japanese 2; Arabic 6; reload-free undo/redo fetched 0; missing file reported and recovered.
+
+> playground:playground-lazy-fonts: node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts
+Playground lazy fonts: fonts.json 12796015 bytes; the Aptos scheme fetched 3 Intos files (2311272 bytes); 5 runs painted in Intos at the measured advance.
+
+> playground:playground-base-fonts: node test/playground-base-fonts.mjs artifacts/playground-base-fonts
+Browser editor built in /private/tmp/release-train-editor-jwsrbK/artifacts/playground-split/ (eager faces split: Roboto Regular at start, the rest on demand; 70 lazy script faces, 94 lazy preview faces)
+Playground base fonts: fonts.json 216739 bytes, 32 base faces on demand; the Roboto deck's first load fetched 701692 font bytes (3 base files); Calibri fetched Carlito-400-normal, Carlito-700-normal.
+
+> playground:playground-source: node test/playground-source.mjs
+Playground source: escaped tokens and irregular whitespace survive Escape, Undo and Redo byte for byte.
+
+> playground:design-controls-browser: node test/design-controls-browser.mjs
+Design controls (browser): 91 checks. group summary and Tab order work from the keyboard; every design control is labelled; a select changes the theme from the keyboard; themes; color-schemes; font-schemes; languages; backgrounds (theme slot); backgrounds (hex); backgrounds (image); layouts; narratives; tones; audiences; socials; headers-footers; image fit default; slide-sizes; slide-sizes (A4); purposes; slide-scope font scheme; slide-scope title alignment; slide-scope footer keeps the deck zones; hide the footer on one slide; title alignment; content alignment; content direction; primary chart position; content box; accent font; an accent font survives font scheme changes; organization logo (one image for every shape); organization logo shape for a dark background; logo: a specific organization; logo: a shape of the primary organization; logo: none; watermark; watermark opacity; picture bullets; picture bullets warn when no logo is set; header zone: Insert logo; header zone: Insert logo, wordmark; footer slide number; the catalog section checks for updates and lists reference findings; invalid input is explained and not applied; one click on text still enters editing; block conversion text to list; block conversion works from the keyboard; block replacement; only meaningful conversions are offered; charts; chart to table conversion; table header style; table banded rows; table borders; table style reset; table alt text; table decorative; table merge; table split; table merge keeping text; a merge never hides text unless asked to keep it; list to table conversion; a list converts to a table in one undo step; list indent from the keyboard; list outdent; list levels move in and out, with the reason when they cannot; group with the next block; ungroup; blocks group and ungroup; metric group to table; a group of metrics converts to a table; image block fit; image block placement; image block shape; an image block sets its fit, shape and placement; image to background; background image back into the content; an image moves between the content and the slide background; blocks to regions; regions to blocks; blocks and regions convert both ways; the content controls are named and described; controls follow Undo and Redo; beta: one image for every shape; logo: another organization; logo: a shape of that organization; slide logo: the primary organization over the presentation setting; slide logo: none; Insert logo of another organization; several organizations: logo editing, the logo picker, Insert logo, and the artwork per slide background.
+
+> playground:design-gaps-browser: node test/design-gaps-browser.mjs
+Design gaps (browser): 53 checks. upload: organization logo; upload: organization logo all both; upload: organization logo full both; upload: organization logo full onLight; upload: organization logo full onDark; upload: organization logo stacked both; upload: organization logo stacked onLight; upload: organization logo stacked onDark; upload: organization logo icon both; upload: organization logo icon onLight; upload: organization logo icon onDark; upload: organization logo wordmark both; upload: organization logo wordmark onLight; upload: organization logo wordmark onDark; upload: watermark; upload: footer image; alt text: typed before an upload, edited after, each one undo step; alt text and background drafts do not leak across targets; uploads of the wrong type, mismatched contents, script, empty and oversized files are refused with an explanation; background: linear gradient with scheme slots; background: three stops, added and removed from the keyboard; invalid gradient stops are explained and the draft is kept; background: solid scheme color with opacity; background: image with fit tile; background: image from an uploaded file; the pattern list has all 54 presets in five labelled groups; background: pattern pct5; background: pattern zigZag; background: pattern wdUpDiag; background: theme slot; background: this slide only; background removal and slide scope; footer: text; footer: Insert logo; footer: Insert logo, stacked shape; footer: image by address; footer: a value into an empty zone; footer: a value after the text; footer: a value at the caret; footer: a value over a selection; footer: uncommitted typing commits with the value; footer: current date; footer: fixed date; footer: date format; every header and footer part (text with the six inserted values, logo, image, date and format) in its zone; footer: a two-line text; a zone text takes several lines; an unknown slide variable is refused and changes nothing; parts with nothing to show are explained; slide scope: a date part keeps the deck zones; slide scope: hide the header on this slide; header and footer parts follow the scope rules; every control and file input is labelled; file inputs take keyboard focus.
+
+> playground:chart-options-browser: node test/chart-options-browser.mjs
+Chart options (browser): 19 checks. hidden until a chart is selected; shown for a selected chart; category axis title; value axis title; legend position; legend off; data labels on; label position; label content; only supported label positions and contents are offered; highlight a series; highlight a category; the highlight lists series and categories; the panel follows the chart type; the panel follows Undo; secondary axis; secondary axis title; combo series lines and the secondary axis; hidden again for non-charts.
+
+> playground:persistence-browser: node test/persistence-browser.mjs
+RR-22 browser: 14 checks ok
+
+> playground:slides-browser: node test/slides-browser.mjs
+RR-21 browser: 49 checks ok
+
+> playground:template-panel-browser: node test/template-panel-browser.mjs
+Fill template panel passed 8 browser checks: canvas shows the template tokens; typed fields with unfilled state; built-in variables listed read-only; live preview: examples, then typed values; bad values are refused in place; list and image inputs; one undoable fill; token insertion with a new variable.
+
+> playground:numbering-panel-browser: node test/numbering-panel-browser.mjs
+List numbering panel passed 9 browser checks: bulleted list before numbering; dialog opens on the slide list, unnumbered; numbering the list writes numbering and the canvas draws numbers; style, start and suffix; a bad start is refused in place; numbering per level; restart at an entry; several lists on a slide; turning numbering off is one undoable edit.
+
+> playground:playground-ensure-fonts: node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts
+Playground ensure-fonts: Source Apply, gallery handoff, slide navigation, font scheme (Open Sans, Barlow), PPTX import (Arabic), undo/redo and retry all loaded their faces before rendering; 70 requests, all local.
+
+> playground:canvas-fonts-browser: node test/canvas-fonts-browser.mjs artifacts/canvas-fonts
+Canvas fonts: language and font-scheme switches, Aptos with Japanese, undo/redo to pending faces, retry and drafts all load faces before the canvas draws; 26 requests, all local.
+
+> playground:find-replace-browser: node test/find-replace-browser.mjs
+Find and replace (browser): 14 checks. Ctrl+F opens and Esc closes with focus restored; Ctrl+H opens find and replace; finds text in titles, notes, rich text, lists, tables and the presentation name (10 matches); match case, whole word and regex options; an invalid pattern is reported and disables replacing; variable tokens are not offered as matches; go to selects the slide and the canvas content, or focuses notes with the match selected; Enter, Shift+Enter and F3 step through matches; replace one: formatting kept, one undo step; replace all: one undo step restores every field; Ctrl+Alt+Enter replaces all; regex replacement with capture groups; Ctrl+F while editing text commits the edit and searches; panel controls are labelled; count is a polite live region; errors are alerts; a modal dialog keeps its own Ctrl+F.
+
+> playground:image-crop-browser: node test/image-crop-browser.mjs
+Image crop (browser): 9 checks. a selected picture offers Crop picture; the layer opens on the whole picture; dragging a handle crops; Apply is one undo step and the cropped pixels are exactly the chosen area; aspect lock keeps the ratio through corner drags; Reset and Cancel change nothing; keyboard: arrows move, Shift+arrows resize, Enter applies, Esc cancels; exact numbers; the focal point cuts the frame shape around the chosen point, with zoom, in one undo step; Restore original returns to the source asset in one undo step; a string picture and a placed image block crop the same way and keep their placement; preview and PPTX agree: the exported media is the cropped asset, placed like the preview (fit and crop); the crop layer is a labelled modal dialog; Tab stays inside; every control is named.
+
+> playground:mobile-browser: node test/mobile-browser.mjs
+Phone and tablet layout (browser): 30 checks on 6 emulated devices. no sideways scroll, bottom bar, the slide on the first screen; the inspector is a bottom sheet (Edit, Design, Done) that leaves the slide in view; tap enters text editing, typing commits, the page does not zoom while typing; find and replace works by touch (sheet, results, replace all, one Undo); crop by touch (the layer fills the screen, a finger drags a handle, Apply is one change).
+
+> playground:review-panel-browser: node test/review-panel-browser.mjs
+{"passed":true,"checks":["the Review tab lists findings and shows their number","the three tabs cycle with the arrow keys","findings carry severity words, slide numbers and rule ids","every Review control is named","Up, Down, Home and End move between findings","go to selects the slide and the content","the contrast fix is one undoable edit and the list follows Undo","alt text is typed in the panel, saved as one undoable edit, and cancelled with Escape","alt text for an asset reference is stored on the asset","marking a picture decorative is an explicit, undoable choice","the list updates live after an edit and after Undo","filters narrow the list and a check can be hidden and shown again","a clean deck shows no findings"]}
+
+> playground:review-hook-browser: node test/review-hook-browser.mjs
+Review hook (browser): 7 checks. findings are grouped by category in core's order; a burst of edits runs the full check once; the review hook's findings join core's, kept per source; a hosted fix applies as one undoable edit; hosted findings are marked out of date after an edit, and core's are re-checked; a failing hook reports itself and leaves core's findings; an edit during a hosted review drops that run.
+
+> playground:playground-download: node test/playground-download.mjs artifacts/playground-download
+{"passed":true,"browser":"153.0.8010.12","offline":true,"pdf":{"pages":2,"selectableText":true},"png":{"width":2560,"height":1440},"svg":"well-formed","zip":true,"cancel":true,"keyboard":true}

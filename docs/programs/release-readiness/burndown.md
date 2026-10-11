@@ -570,3 +570,5 @@ Append-only. One dated line per state change.
 - 2026-10-11 19:57:45 UTC: RR-20/T18 — Editor #160 merged `f35326ac`, gate 91343 exit 0, exact tree equal to reviewed `44def286`; fresh prerequisite 25008 passed. [Receipts](../../evidence/rr20-patch-train-publications/editor-0182-preparation/source160-merged-prerequisite/README.md). New dry prep 78575 running; new prepared full replay pending. Earlier failed prep preserved; progress stays 15/40.
 
 - 2026-10-11: RR-20/T18 — Update to the preceding 19:57 entry: dry prep 78575 completed exit 0, metadata bytes equal to reviewed preparation. Fresh prepared qualification 39778 is running; install/audit/type/validate/full tests passed, playground in progress. No release PR or terminal qualification claim; progress stays 15/40.
+
+- 2026-10-11: RR-20/T18 — Records #624 merged; new isolated adoption branch retains final editor #161 qualification and reviewed editor c141/development metadata a892/CLI d195/gallery428 source boundaries. [Evidence](../../evidence/rr20-patch-registry-adoption/README.md). Editor gate 33993 pending; no registry adoption or closure. Progress 15/40 unchanged.

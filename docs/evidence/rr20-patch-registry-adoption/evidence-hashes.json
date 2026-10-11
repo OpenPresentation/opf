@@ -1,0 +1,167 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1521,
+    "sha256": "956475c7b499fcd392e4d7c98c48387a3980611478def726a768a3086418f2bf"
+  },
+  {
+    "path": "editor-prepared-final/README.md",
+    "bytes": 1294,
+    "sha256": "1508dd66fab2dcd442157f3264b8a67e61eb52622be531dd9a1de9b2d495ffbf"
+  },
+  {
+    "path": "editor-prepared-final/audit.log",
+    "bytes": 24,
+    "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+  },
+  {
+    "path": "editor-prepared-final/browser.log",
+    "bytes": 6324,
+    "sha256": "c74ac30bbd4104e44448923dac383034c8eeafc6a21f2eae3014b4b0d1576554"
+  },
+  {
+    "path": "editor-prepared-final/ci.log",
+    "bytes": 448,
+    "sha256": "c130473684b8e3b0302ae34a7b5d34ce5a280a306055c3277748c1aaefb2bdc3"
+  },
+  {
+    "path": "editor-prepared-final/executed-prep-independent-review.md",
+    "bytes": 1581,
+    "sha256": "f8d0eba421562a81afee03f60508853860d5ce8d0b7c01808ad74573b22067f9"
+  },
+  {
+    "path": "editor-prepared-final/executed-prep-root-review.json",
+    "bytes": 378,
+    "sha256": "c99e143defb1a0cb07aaa6144fb0dabdeb39c230f057dd07085e1b0818b813d3"
+  },
+  {
+    "path": "editor-prepared-final/full.log",
+    "bytes": 15082,
+    "sha256": "36d5267888663e8d4c6068fa94d12f7976a7a37d93e87714d6713b67157607fd"
+  },
+  {
+    "path": "editor-prepared-final/installed-final.log",
+    "bytes": 339,
+    "sha256": "df105e77d343c4a0bbf5ed952d00af64d8aac14467359ea735739fb23dda139c"
+  },
+  {
+    "path": "editor-prepared-final/installed.log",
+    "bytes": 339,
+    "sha256": "df105e77d343c4a0bbf5ed952d00af64d8aac14467359ea735739fb23dda139c"
+  },
+  {
+    "path": "editor-prepared-final/manifest.json",
+    "bytes": 5009,
+    "sha256": "4dd2137a20edbd9b97654e7f97c1cecb3e030b74e657f9df87c3cb3990ef6571"
+  },
+  {
+    "path": "editor-prepared-final/pack-dry.log",
+    "bytes": 5273,
+    "sha256": "56b2d6cf609a6563bf0773b249e4ccd80dc49b9e0c1e454ed4e98168bd7f526c"
+  },
+  {
+    "path": "editor-prepared-final/packed.log",
+    "bytes": 5420,
+    "sha256": "611b151c0a57dba08641a537b94a5196df5fbd12268e635d1185a1d8b1504c4f"
+  },
+  {
+    "path": "editor-prepared-final/playground.log",
+    "bytes": 13183,
+    "sha256": "0bc677fe45f596671c63a36db92b7cda020113d77437bc66c391be96fed4c5a3"
+  },
+  {
+    "path": "editor-prepared-final/playwright-version.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "editor-prepared-final/prep-execute.log",
+    "bytes": 151,
+    "sha256": "c0b0e85ec6df4485dfd9fc0ff18d4718753115621e430bb7558bdfbf505cca26"
+  },
+  {
+    "path": "editor-prepared-final/prepared-after.patch",
+    "bytes": 8481,
+    "sha256": "4cf92063a46854ea2a92c9f67e5186d2d871b1e9ebf48998114a94fc496fb597"
+  },
+  {
+    "path": "editor-prepared-final/prepared-before.patch",
+    "bytes": 8481,
+    "sha256": "4cf92063a46854ea2a92c9f67e5186d2d871b1e9ebf48998114a94fc496fb597"
+  },
+  {
+    "path": "editor-prepared-final/published-core.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "editor-prepared-final/quarantine-check.log",
+    "bytes": 50,
+    "sha256": "1674e5ff1c365ac9aa6e330f45c91d6269cdf989574758259dca5e2f3ba1d6b3"
+  },
+  {
+    "path": "editor-prepared-final/tracked-after.sha256",
+    "bytes": 65,
+    "sha256": "b4ad50f8bdf640ec4a2c80830090be415bb038a4ffc104d19e0bdbbad24c4385"
+  },
+  {
+    "path": "editor-prepared-final/tracked-before.sha256",
+    "bytes": 65,
+    "sha256": "b4ad50f8bdf640ec4a2c80830090be415bb038a4ffc104d19e0bdbbad24c4385"
+  },
+  {
+    "path": "editor-prepared-final/transcript.log",
+    "bytes": 1229,
+    "sha256": "9034460dc939d7f54729db4312bc0c8b8e5d104988b56bc46b86a09565c7c85c"
+  },
+  {
+    "path": "editor-prepared-final/typecheck.log",
+    "bytes": 136,
+    "sha256": "ca765e4f2b23e10bce7272dd375782b50e52b6bdd2a2ba9e901b9c5bb912999c"
+  },
+  {
+    "path": "editor-prepared-final/validate.log",
+    "bytes": 146,
+    "sha256": "2e8d2dcae105e9fbafdf44a5eaf8045fccf88b0136507ba489c4d63cd64dd02d"
+  },
+  {
+    "path": "editor-prepared-final/verification.json",
+    "bytes": 191,
+    "sha256": "ac86e7900653feae1cff50cb1c87265cad041e41fc2079b963f8e6acf70585ed"
+  },
+  {
+    "path": "rr20-cli-prerelease-independent-review.md",
+    "bytes": 2647,
+    "sha256": "5c701065e9a05df17d75e6e7b07ad9726e834c1a7cfc73e0ef9d45a338ba8c4a"
+  },
+  {
+    "path": "rr20-cli-prerelease-readiness-review.md",
+    "bytes": 2605,
+    "sha256": "8aa845acd0659c0e82ef679e0a19f2b618aaaee1c8102172515a679c8d68a1da"
+  },
+  {
+    "path": "rr20-core019-next-metadata-review.md",
+    "bytes": 3507,
+    "sha256": "f7a92202d5dcee598eea7eaecba9d470030bb3cf1192bb3f54005debe89f1b2e"
+  },
+  {
+    "path": "rr20-gallery-v019-complete-source-review.md",
+    "bytes": 2196,
+    "sha256": "e0aecb3b14b7370f48ca19a5173b8d81e47d88e7668e72ed2e265649514f4e61"
+  },
+  {
+    "path": "rr20-v019-editor-source160-independent-review.md",
+    "bytes": 1756,
+    "sha256": "5650bcac1923c156934c45d3f418e4918e1168a5720e4f7a043156329266dde3"
+  },
+  {
+    "path": "rr20-v019-editor-source160-refresh-review.md",
+    "bytes": 2197,
+    "sha256": "9da98fd9c28edbbe6a8a9df02ed8ee59562ea187814a1933ef6ab0a68ac54a55"
+  },
+  {
+    "path": "rr20-v019-editor-source160-root-review.json",
+    "bytes": 1187,
+    "sha256": "ca53280d1b7549604b367b99e729166d45710ad9dcd0fe339d01ba4355ddbce3"
+  }
+]
