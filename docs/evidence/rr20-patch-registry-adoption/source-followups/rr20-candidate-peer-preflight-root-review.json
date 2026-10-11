@@ -1,0 +1,15 @@
+{
+  "head": "3cb4a9e7348d21b3e44b66383b8ce110d928a981",
+  "base": "6298186a2d6fed6ab5ebb2148b474344d7932618",
+  "clean": true,
+  "files": {
+    "changes/rr-78-candidate-peer-preflight.md": "5e9bd994096f44b7a2f69fe51edd1ecf614b9685752e728afc1604944d7e1571",
+    "packages/cli/test/packed-files.mjs": "22e9f8e9b2447298760337dd42a7dc2aa12c96008d0561169f7bc5fb225c534d",
+    "scripts/candidate-gallery-pack.mjs": "3abc9b9b5c7a651fb9ae888958c9917f884b0592505deb2445f355186f2d00f1",
+    "scripts/candidate-gallery-pack.test.mjs": "a8e6116a273a36632bbb149d7f82a1342670456ff3b419baae799ec280f57f9b"
+  },
+  "review": "original default preflight bodies preserved; explicit candidate validates staged exact peers and source own versions; unchanged installed runtime and doctor guards",
+  "focused": "5/5 pass",
+  "mapped": "fails original CLI source unpublished ^0.19 peer gate; not full acceptance",
+  "newGraphAuthorized": false
+}

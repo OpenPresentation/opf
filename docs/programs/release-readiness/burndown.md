@@ -572,3 +572,5 @@ Append-only. One dated line per state change.
 - 2026-10-11: RR-20/T18 — Update to the preceding 19:57 entry: dry prep 78575 completed exit 0, metadata bytes equal to reviewed preparation. Fresh prepared qualification 39778 is running; install/audit/type/validate/full tests passed, playground in progress. No release PR or terminal qualification claim; progress stays 15/40.
 
 - 2026-10-11: RR-20/T18 — Records #624 merged; new isolated adoption branch retains final editor #161 qualification and reviewed editor c141/development metadata a892/CLI d195/gallery428 source boundaries. [Evidence](../../evidence/rr20-patch-registry-adoption/README.md). Editor gate 33993 pending; no registry adoption or closure. Progress 15/40 unchanged.
+
+- 2026-10-11: Editor 161 merged at 36d61; exact release-commit gate 19522 is live, publication/verification pending. Reviewed source preflight 3cb and main-site 644/fixed 27 snippet CLI coverage are retained with original failures. Supervisor post161 inventory 27 PR/45 issues is complete. Real registry adoption remains held; progress 15/40 unchanged.

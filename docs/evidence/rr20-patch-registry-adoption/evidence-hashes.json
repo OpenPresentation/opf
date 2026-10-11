@@ -1,8 +1,8 @@
 [
   {
     "path": "README.md",
-    "bytes": 1521,
-    "sha256": "956475c7b499fcd392e4d7c98c48387a3980611478def726a768a3086418f2bf"
+    "bytes": 2256,
+    "sha256": "b89b4bc22822629bc14676bf7012c9bfaa7495598ec8fd0e238f2bb06117d44d"
   },
   {
     "path": "editor-prepared-final/README.md",
@@ -163,5 +163,60 @@
     "path": "rr20-v019-editor-source160-root-review.json",
     "bytes": 1187,
     "sha256": "ca53280d1b7549604b367b99e729166d45710ad9dcd0fe339d01ba4355ddbce3"
+  },
+  {
+    "path": "source-followups/editor161-gate.log",
+    "bytes": 514,
+    "sha256": "789a72e32a7207c0de4c6598c5d072e8f607a9600c0870b3a0b9f505eb29450f"
+  },
+  {
+    "path": "source-followups/inventory-proof.json",
+    "bytes": 541,
+    "sha256": "9b5e806257733271fc44100484e9347ec50df085ded5dfae084d3772c9b6b519"
+  },
+  {
+    "path": "source-followups/rr20-candidate-peer-preflight-independent-review.md",
+    "bytes": 3955,
+    "sha256": "fec2ee43fbebfed67fa34505bdfb55096152800577a77d5283e0a9233b4ece85"
+  },
+  {
+    "path": "source-followups/rr20-candidate-peer-preflight-root-review.json",
+    "bytes": 922,
+    "sha256": "b6a9eb8c18e7b4ecd8cca0b1eb1d326d18a3515b19d6559a59ebbaa4f00bd3a0"
+  },
+  {
+    "path": "source-followups/rr20-main-site-complete-source-review.md",
+    "bytes": 3944,
+    "sha256": "375ede15fb845adb1c63335582cb3f432807e0811664f8ee7d6838a327c0eabc"
+  },
+  {
+    "path": "source-followups/rr20-main-site-fixed-sync-snippets.log",
+    "bytes": 502,
+    "sha256": "6bd8699d0356c7e2c19998d0ec5ad71e16a8a124e53b4689b4c89e8759787714"
+  },
+  {
+    "path": "source-followups/rr20-main-site-fixed-sync.log",
+    "bytes": 111,
+    "sha256": "d2f110a7bbd775b67c775e7058451e9f99247882cb4da5ea5562e313b56eb4a0"
+  },
+  {
+    "path": "source-followups/rr20-main-site-full-contract.log",
+    "bytes": 1392,
+    "sha256": "6432c3eba52c51ec8416d344ea5f177af3c8b6aece1b86086f868b3c13dc46f9"
+  },
+  {
+    "path": "source-followups/rr20-main-site-registry-adoption-review.md",
+    "bytes": 4968,
+    "sha256": "018fa93af47982bb982a9ecdf4e824cdcd378a8056ae1050ab4033016488de24"
+  },
+  {
+    "path": "source-followups/rr20-main-site-snippets-final.log",
+    "bytes": 597,
+    "sha256": "45fe0d7253fc5f07cb90bafaab21c2d72cffdfda84db35b2a9ab3969bfca8837"
+  },
+  {
+    "path": "source-followups/rr20-site-cli-source-snapshot-review.md",
+    "bytes": 1785,
+    "sha256": "61a6da21225918d65ff1c0f1948c4856cc1da5470f793ca568ef2135e35f9b79"
   }
 ]
