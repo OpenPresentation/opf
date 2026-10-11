@@ -14,7 +14,7 @@ import {
 } from "./catalog-snapshot.mjs";
 import { applySnapshot, diffSnapshot, loadValidators, main, parseKindIds, planSnapshot, readCurrentSnapshot, rehashSnapshot } from "./sync-gallery-catalog.mjs";
 
-const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "spec", "catalogs");
+const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "packages", "gallery", "catalog");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
 
 let snapshot;

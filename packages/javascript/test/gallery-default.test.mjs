@@ -7,7 +7,7 @@ import { CATALOG_SCHEMA as GALLERY_CATALOG_SCHEMA, gallery } from "@openpresenta
 import { CATALOG_SCHEMA, validate } from "../dist/index.js";
 import { defaultCatalogs, galleryMismatch } from "../dist/node-engine.js";
 
-const galleryManifest = JSON.parse(readFileSync(new URL("../../gallery/package.json", import.meta.url), "utf8"));
+const galleryManifest = JSON.parse(readFileSync(new URL(import.meta.resolve("@openpresentation/gallery/package.json")), "utf8"));
 
 test("the default catalogs are the gallery package's own object", () => {
   assert.equal(defaultCatalogs().length, 1);
@@ -22,7 +22,7 @@ test("the default catalogs are the gallery package's own object", () => {
 test("core reads the catalog schema the gallery targets", () => {
   assert.equal(CATALOG_SCHEMA, 1);
   assert.equal(GALLERY_CATALOG_SCHEMA, CATALOG_SCHEMA);
-  assert.equal(galleryManifest.opf.catalogSchema, CATALOG_SCHEMA, "packages/gallery/package.json opf.catalogSchema");
+  assert.equal(galleryManifest.opf.catalogSchema, CATALOG_SCHEMA, "published gallery package opf.catalogSchema");
   assert.equal(galleryMismatch(1), undefined);
 });
 

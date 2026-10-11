@@ -7,7 +7,7 @@ Thanks for your interest in contributing to OpenPresentation (OPF). This project
 Before making changes, it helps to understand how the pieces fit together:
 
 - [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`) and the engine reference data (`spec/reference/`). If you are proposing a change to the format itself, this is where it lives.
-- [`packages/gallery/`](./packages/gallery) is `@openpresentation/gallery`, the pinned snapshot of the default catalog pptx.gallery publishes (`catalog/<kind>/`, one JSON file per record plus an `index.json` per kind, and the layout previews). It is released on its own version line (`gallery-publish.yml`); change records in pptx.gallery and sync them (`docs/default-catalog.md`).
+- [`OpenPresentation/gallery`](https://github.com/OpenPresentation/gallery) publishes `@openpresentation/gallery` on its own version line. It owns the default catalog snapshot and layout previews. This checkout generates ignored catalog fixtures from the installed package for validation; edit records in pptx.gallery and synchronize them through the gallery repository (`docs/default-catalog.md`).
 - [`packages/javascript`](./packages/javascript) publishes `@openpresentation/opf` to npm. Its TypeScript types, generated content, and layout previews are **generated from `spec/` at build time** by `packages/javascript/scripts/generate*.mjs`. Generated output (e.g. `src/generated/`) is never edited by hand — it is produced fresh on every build and would simply be overwritten.
 - [`packages/cli`](./packages/cli) is the local-only `@openpresentation/cli` package, published separately with the matching core bundled inside.
 - [`examples/`](./examples) contains `*.opf.json` decks that are validated against the schema in CI and, for the top-level `examples/` tree, bundled into the npm package.
@@ -54,7 +54,7 @@ Changes to `spec/schemas/*.schema.json` or the shape of catalog records affect e
 
 When a schema or catalog change is accepted:
 
-- Catalog records change in pptx.gallery and reach `packages/gallery/catalog/` through `scripts/sync-gallery-catalog.mjs`; a new record is a minor gallery release, a changed or removed one a major release (`pnpm check:gallery-stability`). Keep individual catalog record files and their directory's `index.json` in sync — adding, removing, or renaming a record without updating `index.json` will fail catalog checks.
+- Catalog records change in pptx.gallery and reach [`OpenPresentation/gallery`](https://github.com/OpenPresentation/gallery) through its sync workflow; a new record is a minor gallery release, a changed or removed one a major release. Keep individual records and their `index.json` in sync there.
 - Update any affected reference docs (`docs/schema-reference.md`, `docs/catalog-schema-reference.md`, `docs/content-payloads.md`, etc.) alongside the schema change.
 - Add or update an entry in `docs/migrations/` if the change is breaking.
 - Make sure `examples/**/*.opf.json` still validates, or update the affected examples.

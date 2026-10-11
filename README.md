@@ -53,7 +53,7 @@ Your deck can live in git from the first commit. After installing dependencies a
 The canonical JavaScript/TypeScript package is published at [`packages/javascript`](./packages/javascript) as [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). Its responsibility is local and format-level only:
 
 - export the canonical schemas from [`spec/`](./spec)
-- register the pptx.gallery catalog of [`@openpresentation/gallery`](./packages/gallery) (a dependency, released on its own version line) as the Node defaults, as the CLI does; a browser host registers it itself
+- register the pptx.gallery catalog of [`@openpresentation/gallery`](https://github.com/OpenPresentation/gallery) (a dependency, released on its own version line) as the Node defaults, as the CLI does; a browser host registers it itself
 - export a typed raw spec file manifest for package-addressable `spec/` content
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
@@ -171,7 +171,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
-| [`packages/gallery/catalog/<catalog-kind>/`](./packages/gallery/catalog) | The pinned snapshot of the default catalog pptx.gallery publishes (shipped as `@openpresentation/gallery`). |
+| [`@openpresentation/gallery`](https://github.com/OpenPresentation/gallery) | The independently published default catalog and layout previews. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |

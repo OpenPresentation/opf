@@ -47,7 +47,7 @@ import {
 } from "./catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const defaultCatalogsRoot = path.join(repoRoot, "spec", "catalogs");
+const defaultCatalogsRoot = path.join(repoRoot, "packages", "gallery", "catalog");
 const schemasRoot = path.join(repoRoot, "spec", "schemas");
 
 export const GALLERY_REPOSITORY = "https://github.com/Data-Advantage/pptx-gallery";

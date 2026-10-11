@@ -8,11 +8,12 @@
 // install both tarballs together, and the install holds exactly one core. The range the CLI publishes is the one in its
 // manifest, which the tests assert separately.
 //
-// RR-78: core and the CLI depend on @openpresentation/gallery@^1 (packages/gallery). The gallery is packed as well, so the
-// install resolves it from the candidate tarball while that version is not on npm, and holds the gallery under test.
+// RR-78: core and the CLI depend on the published @openpresentation/gallery@^1. Pack the installed
+// registry artifact beside the candidates so offline install tests exercise the locked gallery version.
 import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import { satisfies } from './unreleased-gate.mjs';
 
 export const CORE = '@openpresentation/opf';
@@ -21,8 +22,7 @@ export const GALLERY = '@openpresentation/gallery';
 /**
  * Pack core and the CLI into `destination`. `run(command, args, cwd)` runs a command and returns its stdout; `npmArgs` are extra
  * `npm pack` arguments (a cache directory). Returns { core, cli, gallery, coreTarball, cliTarball, galleryTarball, range, restaged },
- * where `core`, `cli` and `gallery` are the `npm pack --json` entries. The gallery is packed from packages/gallery beside the core
- * directory, after its build (its `prepack`, which --ignore-scripts skips).
+ * where `core`, `cli` and `gallery` are the `npm pack --json` entries. The gallery is the installed registry package.
  */
 export async function packCliCandidate({ cliDirectory, coreDirectory, destination, run, npmArgs = [] }) {
   await mkdir(destination, { recursive: true });
@@ -31,8 +31,7 @@ export async function packCliCandidate({ cliDirectory, coreDirectory, destinatio
   const range = manifest.dependencies?.[CORE];
   if (!range) throw new Error(`${manifest.name} declares no dependency on ${CORE}`);
   const pack = (directory) => JSON.parse(run('npm', ['pack', '--json', '--ignore-scripts', '--pack-destination', destination, ...npmArgs], directory))[0];
-  const galleryDirectory = path.join(path.dirname(coreDirectory), 'gallery');
-  run(process.execPath, ['scripts/build.mjs'], galleryDirectory);
+  const galleryDirectory = path.dirname(fileURLToPath(import.meta.resolve('@openpresentation/gallery/package.json')));
   const gallery = pack(galleryDirectory);
   const core = pack(coreDirectory);
   const restaged = !satisfies(coreManifest.version, range);

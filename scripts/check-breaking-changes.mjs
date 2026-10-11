@@ -164,6 +164,8 @@ async function checkRemovedCatalogRecords(tag) {
 
   for (const relPath of oldCatalogFiles) {
     const parts = relPath.split("/");
+    // Nested files such as layouts/extract/canonical.json are test inputs, not catalog records.
+    if (parts.length !== (relPath.startsWith(`${formerCatalogsSubpath}/`) ? formerCatalogsSubpath.split("/").length : catalogsSubpath.split("/").length) + 2) continue;
     const kind = parts[parts.length - 2];
     const id = parts[parts.length - 1].replace(/\.json$/, "");
     // The same file below the catalog root, wherever the tag had that root.

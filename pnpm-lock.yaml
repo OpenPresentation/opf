@@ -6,8 +6,6 @@ settings:
 
 overrides:
   '@openpresentation/cli>@openpresentation/opf': workspace:*
-  '@openpresentation/opf>@openpresentation/gallery': workspace:*
-  '@openpresentation/cli>@openpresentation/gallery': workspace:*
   esbuild@>=0.27.3 <0.28.1: 0.28.2
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
   sharp@<0.35.5: 0.35.5
@@ -20,8 +18,8 @@ importers:
         specifier: ^2.5.3
         version: 2.5.14
       '@openpresentation/gallery':
-        specifier: workspace:*
-        version: link:packages/gallery
+        specifier: ^1.0.0
+        version: 1.0.0
       '@typescript/native':
         specifier: npm:typescript@~7.0.2
         version: typescript@7.0.2
@@ -29,8 +27,8 @@ importers:
   packages/cli:
     dependencies:
       '@openpresentation/gallery':
-        specifier: workspace:*
-        version: link:../gallery
+        specifier: ^1.0.0
+        version: 1.0.0
       '@openpresentation/opf':
         specifier: workspace:*
         version: link:../javascript
@@ -87,8 +85,8 @@ importers:
   packages/javascript:
     dependencies:
       '@openpresentation/gallery':
-        specifier: workspace:*
-        version: link:../gallery
+        specifier: ^1.0.0
+        version: 1.0.0
       ajv:
         specifier: ^8.17.1
         version: 8.20.0
@@ -583,6 +581,10 @@ packages:
 
   '@node-projects/jszip@4.3.0':
     resolution: {integrity: sha512-0rO404bil+Y6h3dNY/d0hMJjVd5sR22Gt8AkqDk8c6h/n0qic4wFzIRYrlNyQ+bduCpyfOKY9NpRYkNLSPJSiA==}
+
+  '@openpresentation/gallery@1.0.0':
+    resolution: {integrity: sha512-ukKoYWKd5QfzMS7E3jzwXMSF7fXbMRIkuWFYJevg4uEKiTRFrLs18UA/OkzawbUafOTb6CQOKUqq6MJW4tpBVA==}
+    engines: {node: '>=22'}
 
   '@openpresentation/opf-pptx@0.18.0':
     resolution: {integrity: sha512-syJsYMM/+dFpmwYEfYQuHLcOxUht53a0TKVMp9agnr7V5p1ed1foZhGcOotifRt4RqpqYtk3J/d7XsRQIp9MwQ==}
@@ -1760,6 +1762,8 @@ snapshots:
     dependencies:
       '@types/node': 26.6.4
       pako: 3.0.2
+
+  '@openpresentation/gallery@1.0.0': {}
 
   '@openpresentation/opf-pptx@0.18.0(@openpresentation/opf-render@0.18.0)(@types/node@24.13.6)':
     dependencies:

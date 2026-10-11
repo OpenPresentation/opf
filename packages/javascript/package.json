@@ -134,7 +134,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
-    "generate": "pnpm --filter @openpresentation/gallery build && node scripts/generate.mjs && node scripts/generate-content.mjs",
+    "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
     "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build && node ../../scripts/run-tests.mjs",

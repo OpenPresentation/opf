@@ -128,7 +128,7 @@ export function LayoutThumbnail({ slug }: { slug: string }) {
 }
 ```
 
-The HTML source lives under `packages/gallery/previews/layouts/<slug>.html` in the OPF repository.
+The HTML source lives in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); this checkout materializes ignored copies from the installed package for checks.
 
 ### Example decks
 

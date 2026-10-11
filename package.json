@@ -4,6 +4,7 @@
   "description": "Workspace for OPF format packages and tooling.",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/materialize-gallery-catalog.mjs",
     "build": "pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build",
     "typecheck": "node scripts/agent-slot.mjs -- pnpm run typecheck:run",
     "typecheck:run": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
@@ -90,7 +91,7 @@
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
-    "@openpresentation/gallery": "workspace:*",
+    "@openpresentation/gallery": "^1.0.0",
     "@biomejs/biome": "^2.5.3",
     "@typescript/native": "npm:typescript@~7.0.2"
   }
