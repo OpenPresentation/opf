@@ -1,0 +1,10 @@
+{
+  "base": "5b6c793ba0f91bd5ac21c0c6eef0091ec3760fa1",
+  "version": "0.18.1",
+  "sha256": {
+    "package.json": "b38b2ac7fb55c967f67eb59f438ac949daaa730c966ff393a465cca0132774b2",
+    "package-lock.json": "a14e933b0e6bc6286bcdc3a2b9ba9ec1deb1cfef9fbb1092ff0b433f356e5f79",
+    "CHANGELOG.md": "6fc607507fe756dececad8ec6e70b28c0f25733cddc2012f60d082d748c56eae"
+  },
+  "published": false
+}
