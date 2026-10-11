@@ -1,0 +1,75 @@
+{
+  "slides": [
+    {
+      "title": "Plain numbers",
+      "table": {
+        "columns": [
+          "A",
+          "B"
+        ],
+        "rows": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Rich table",
+      "table": {
+        "columns": [
+          "Name",
+          "Note"
+        ],
+        "rows": [
+          [
+            "Alpha",
+            [
+              {
+                "text": "Bold",
+                "bold": true
+              },
+              " and plain"
+            ]
+          ],
+          [
+            "Beta",
+            [
+              {
+                "text": "Red",
+                "color": "#FF0000"
+              }
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Headerless",
+      "table": {
+        "rows": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ]
+      }
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

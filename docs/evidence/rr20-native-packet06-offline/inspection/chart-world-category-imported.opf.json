@@ -1,0 +1,35 @@
+{
+  "name": "Map deck",
+  "slides": [
+    {
+      "title": "地図",
+      "id": "a",
+      "text": "Body",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "国",
+            "値"
+          ],
+          "rows": [
+            [
+              "日本",
+              4
+            ],
+            [
+              "ドイツ",
+              3
+            ]
+          ]
+        }
+      },
+      "layout": "chart"
+    }
+  ],
+  "language": "ja-JP",
+  "design": {
+    "fontScheme": "calibri",
+    "contentAlignment": "center"
+  }
+}

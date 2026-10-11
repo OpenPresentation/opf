@@ -1,0 +1,42 @@
+{
+  "slides": [
+    {
+      "title": "histogram",
+      "chart": {
+        "type": "histogram",
+        "data": {
+          "columns": [
+            "Sample"
+          ],
+          "rows": [
+            [
+              3
+            ],
+            [
+              5
+            ],
+            [
+              8
+            ],
+            [
+              13
+            ],
+            [
+              5.5
+            ],
+            [
+              9
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "fontScheme": "roboto"
+  }
+}

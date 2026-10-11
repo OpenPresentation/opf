@@ -1,0 +1,214 @@
+{
+  "slides": [
+    {
+      "title": "treemap",
+      "chart": {
+        "type": "treemap",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "histogram",
+      "chart": {
+        "type": "histogram",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "pareto",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "box-and-whisker",
+      "chart": {
+        "type": "box-and-whisker",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "waterfall",
+      "chart": {
+        "type": "waterfall",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "funnel",
+      "chart": {
+        "type": "funnel",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "world",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

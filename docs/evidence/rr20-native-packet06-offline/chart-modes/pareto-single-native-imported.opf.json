@@ -1,0 +1,26 @@
+{
+  "slides": [
+    {
+      "title": "Supported single-series Pareto",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Category",
+            "Only"
+          ],
+          "rows": [
+            [
+              "A",
+              10
+            ],
+            [
+              "B",
+              20
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

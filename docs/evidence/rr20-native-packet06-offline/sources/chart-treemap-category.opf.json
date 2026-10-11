@@ -1,0 +1,41 @@
+{
+  "design": {
+    "fontScheme": "roboto",
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    }
+  },
+  "slides": [
+    {
+      "title": "treemap",
+      "chart": {
+        "type": "treemap",
+        "data": {
+          "columns": [
+            "Region",
+            "Value"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              31
+            ],
+            [
+              "East",
+              -8
+            ],
+            [
+              "West",
+              19
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}
