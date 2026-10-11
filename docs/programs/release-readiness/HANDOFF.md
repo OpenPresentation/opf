@@ -199,3 +199,7 @@ The T31 packet remains preparation only. All nine fallback archives are unchange
 ## CLI 0.18.1 published
 
 [Trusted publication and independent verification](../../evidence/rr20-cli-0181-published/README.md) close only T12: 13/40. Exact commit/tag/gitHead `ceb8a5a42269d9f1574c203adfd76b807e61a603`, run 38133658881; integrity, SLSA and two valid signatures passed with zero invalid/missing signatures. Fresh prep, full/standalone/strict packed peers and the actual `opf-v0.18.3` breaking baseline passed; the earlier shallow-clone diagnosis is resolved. Initial 0.18.1 publications are verified. Held geometry patches, final 0.19 integration, real gallery 2 registry/site adoption and native acceptance remain open.
+
+## Held policy/raster source merged
+
+[Source qualification and merge identities](../../evidence/rr20-held-patch-source-merged/README.md) close only T15/T17: 15/40 including CLI T12. Core #585 is `4387b0273aa64d4705910222c91298c1139c594e`; combined renderer #219 is `dd6b520404d423fd4ddd59e81a9b47971e906be3`, prescribed gate 55383 terminal 0/eight checks. T16 remains pending. The old ecosystem renderer pin fails its Arabic-only multiplier assertion against the merged policy; supervisor roller session 20697 is qualifying the generated lock remedy. No lock completion or patch publication claimed; #616 geometry records remain separate until merged. CLI publication logs remain unchanged.
