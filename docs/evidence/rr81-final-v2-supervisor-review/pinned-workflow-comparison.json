@@ -1,0 +1,27 @@
+{
+  "runs": {
+    "core": 38115772021,
+    "renderer": 38116271551
+  },
+  "graph": {
+    "renderer": "8c651e66ca995e790e0fd42d9822b34c4578be29",
+    "core": "37d96a28aeba2be28a9d4bde5f1aca73264c1a03",
+    "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+    "selection": "both",
+    "sources": {
+      "examples": "b05ed665d5e357e0453fbd4a20a5e0074a6bface26b5e9afa0a3a630827115bf",
+      "templates": "5be8cb1bbeef4c99909c61090b43cf022f60007bc726cc90a63fa12b94fa3856"
+    }
+  },
+  "examples": 807,
+  "templates": 498,
+  "exactJsonEquality": true,
+  "fileSha256": {
+    "core_examples": "8a19f5152853388583726b6df23d44071e73e481570fd237f0081ea43be6d0b0",
+    "renderer_examples": "8a19f5152853388583726b6df23d44071e73e481570fd237f0081ea43be6d0b0",
+    "reviewed_examples": "8a19f5152853388583726b6df23d44071e73e481570fd237f0081ea43be6d0b0",
+    "renderer_templates": "cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759",
+    "reviewed_templates": "cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759"
+  },
+  "promotion": false
+}

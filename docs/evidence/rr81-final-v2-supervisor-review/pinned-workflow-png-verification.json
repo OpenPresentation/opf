@@ -1,0 +1,17 @@
+[
+  {
+    "artifact": "core",
+    "actualPngFiles": 171,
+    "hashAndLengthMatch": true
+  },
+  {
+    "artifact": "renderer",
+    "actualPngFiles": 171,
+    "hashAndLengthMatch": true
+  },
+  {
+    "artifact": "templates",
+    "actualPngFiles": 26,
+    "hashAndLengthMatch": true
+  }
+]
