@@ -1,0 +1,306 @@
+{
+  "roundTripEqual": true,
+  "acceptance": "offline-source-preserved",
+  "validation": {
+    "valid": true,
+    "schemaValid": true,
+    "findings": [],
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "checks": {
+      "syntax": "not-applicable",
+      "schema": "checked",
+      "references": "checked",
+      "policy": "not-run",
+      "accessibility": "not-run",
+      "content": "not-run",
+      "layout": "not-run",
+      "backgroundPixels": "not-read",
+      "imageBytes": "embedded-only",
+      "nativeExport": "not-checked"
+    },
+    "template": false,
+    "unfilledVariables": []
+  },
+  "diagnostics": [],
+  "shapes": [
+    {
+      "file": "ppt/slides/slide1.xml",
+      "count": 5
+    },
+    {
+      "file": "ppt/slides/slide2.xml",
+      "count": 7
+    },
+    {
+      "file": "ppt/slides/slide3.xml",
+      "count": 5
+    }
+  ],
+  "layoutParts": [
+    "ppt/slideLayouts/slideLayout1.xml",
+    "ppt/slideLayouts/slideLayout10.xml",
+    "ppt/slideLayouts/slideLayout11.xml",
+    "ppt/slideLayouts/slideLayout12.xml",
+    "ppt/slideLayouts/slideLayout13.xml",
+    "ppt/slideLayouts/slideLayout14.xml",
+    "ppt/slideLayouts/slideLayout15.xml",
+    "ppt/slideLayouts/slideLayout16.xml",
+    "ppt/slideLayouts/slideLayout17.xml",
+    "ppt/slideLayouts/slideLayout18.xml",
+    "ppt/slideLayouts/slideLayout19.xml",
+    "ppt/slideLayouts/slideLayout2.xml",
+    "ppt/slideLayouts/slideLayout20.xml",
+    "ppt/slideLayouts/slideLayout21.xml",
+    "ppt/slideLayouts/slideLayout22.xml",
+    "ppt/slideLayouts/slideLayout23.xml",
+    "ppt/slideLayouts/slideLayout24.xml",
+    "ppt/slideLayouts/slideLayout25.xml",
+    "ppt/slideLayouts/slideLayout26.xml",
+    "ppt/slideLayouts/slideLayout27.xml",
+    "ppt/slideLayouts/slideLayout28.xml",
+    "ppt/slideLayouts/slideLayout29.xml",
+    "ppt/slideLayouts/slideLayout3.xml",
+    "ppt/slideLayouts/slideLayout30.xml",
+    "ppt/slideLayouts/slideLayout31.xml",
+    "ppt/slideLayouts/slideLayout4.xml",
+    "ppt/slideLayouts/slideLayout5.xml",
+    "ppt/slideLayouts/slideLayout6.xml",
+    "ppt/slideLayouts/slideLayout7.xml",
+    "ppt/slideLayouts/slideLayout8.xml",
+    "ppt/slideLayouts/slideLayout9.xml"
+  ],
+  "placeholderIndexes": {
+    "ppt/slideLayouts/slideLayout1.xml": [
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout10.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph idx=\"101\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout11.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout12.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph idx=\"101\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout13.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout14.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph idx=\"101\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout15.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout16.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout17.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout18.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"pic\" idx=\"500\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout19.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"pic\" idx=\"500\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout2.xml": [
+      "<p:ph type=\"ctrTitle\"/>",
+      "<p:ph type=\"subTitle\" idx=\"1\"/>",
+      "<p:ph type=\"pic\" idx=\"500\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout20.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"pic\" idx=\"500\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout21.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout22.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"chart\" idx=\"700\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout23.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"tbl\" idx=\"900\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout24.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"tbl\" idx=\"900\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout25.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout26.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"pic\" idx=\"500\"/>",
+      "<p:ph idx=\"101\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout27.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph idx=\"101\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout28.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout29.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout3.xml": [
+      "<p:ph type=\"ctrTitle\"/>",
+      "<p:ph type=\"subTitle\" idx=\"1\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout30.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout31.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout4.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph type=\"body\" idx=\"300\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout5.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout6.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout7.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout8.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ],
+    "ppt/slideLayouts/slideLayout9.xml": [
+      "<p:ph type=\"title\"/>",
+      "<p:ph idx=\"100\"/>",
+      "<p:ph type=\"dt\" sz=\"half\" idx=\"10\"/>",
+      "<p:ph type=\"ftr\" sz=\"quarter\" idx=\"11\"/>",
+      "<p:ph type=\"sldNum\" sz=\"quarter\" idx=\"12\"/>"
+    ]
+  }
+}

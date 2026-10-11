@@ -1,0 +1,19 @@
+[
+  {
+    "op": "set-text",
+    "slideIndex": 1,
+    "shapeName": "OPF furniture 0 part 3 line 0",
+    "text": ""
+  },
+  {
+    "op": "set-alt",
+    "slideIndex": 2,
+    "shapeName": "OPF image 1",
+    "alt": "Native edited furniture picture alt"
+  },
+  {
+    "op": "move-slide",
+    "slideIndex": 3,
+    "toIndex": 1
+  }
+]

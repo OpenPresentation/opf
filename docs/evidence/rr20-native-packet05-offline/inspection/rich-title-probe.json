@@ -1,0 +1,167 @@
+[
+  {
+    "source": {
+      "slides": [
+        {
+          "title": [
+            {
+              "text": "Rich title",
+              "bold": true
+            }
+          ],
+          "text": "Body"
+        }
+      ]
+    },
+    "imported": {
+      "slides": [
+        {
+          "title": "Rich title",
+          "text": "Body"
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.0"
+      },
+      {
+        "code": "text-import-reflow",
+        "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+        "path": "slides.0"
+      }
+    ],
+    "sourceStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "importedStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "effectiveNativeRunStylesEqual": true,
+    "slideXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"a14\"><p:cSld name=\"Slide 1\"><p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"tx2\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree><p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/><a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"0\" cy=\"0\"/></a:xfrm></p:grpSpPr><p:sp><p:nvSpPr><p:cNvPr id=\"2\" name=\"OPF heading slides.0.title line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfHeading1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"548640\"/><a:ext cx=\"11094720\" cy=\"627507\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Rich title</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"/></a:p></p:txBody></p:sp><p:sp><p:nvSpPr><p:cNvPr id=\"3\" name=\"OPF text slides.0.text line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfText1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"11094720\" cy=\"290513\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/><a:tabLst></a:tabLst></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Body</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"/></a:p></p:txBody></p:sp></p:spTree><p:custDataLst><p:tags r:id=\"rIdOpfSlide\"/></p:custDataLst></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>",
+    "headingTags": {
+      "ppt/tags/opfHeading1.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:tagLst xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:tag name=\"OPF_HEADING_V1\" val=\"7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C2262617365223A7B22626F6C64223A747275652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A34302E352C22666F6E7446616D696C79223A224170746F7320446973706C6179227D7D\"/></p:tagLst>"
+    }
+  },
+  {
+    "source": {
+      "slides": [
+        {
+          "title": [
+            {
+              "text": "Rich ",
+              "bold": false
+            },
+            {
+              "text": "title",
+              "bold": true
+            }
+          ],
+          "text": "Body"
+        }
+      ]
+    },
+    "imported": {
+      "slides": [
+        {
+          "title": [
+            {
+              "text": "Rich ",
+              "bold": false
+            },
+            "title"
+          ],
+          "text": "Body"
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.0"
+      },
+      {
+        "code": "text-import-reflow",
+        "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+        "path": "slides.0"
+      }
+    ],
+    "sourceStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "importedStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "effectiveNativeRunStylesEqual": true,
+    "slideXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"a14\"><p:cSld name=\"Slide 1\"><p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"tx2\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree><p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/><a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"0\" cy=\"0\"/></a:xfrm></p:grpSpPr><p:sp><p:nvSpPr><p:cNvPr id=\"2\" name=\"OPF heading slides.0.title line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfHeading1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"548640\"/><a:ext cx=\"11094720\" cy=\"627507\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Rich </a:t></a:r><a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>title</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"/></a:p></p:txBody></p:sp><p:sp><p:nvSpPr><p:cNvPr id=\"3\" name=\"OPF text slides.0.text line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfText1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"11094720\" cy=\"290513\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/><a:tabLst></a:tabLst></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Body</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"/></a:p></p:txBody></p:sp></p:spTree><p:custDataLst><p:tags r:id=\"rIdOpfSlide\"/></p:custDataLst></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>",
+    "headingTags": {
+      "ppt/tags/opfHeading1.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:tagLst xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:tag name=\"OPF_HEADING_V1\" val=\"7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C2262617365223A7B22626F6C64223A747275652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A34302E352C22666F6E7446616D696C79223A224170746F7320446973706C6179227D7D\"/></p:tagLst>"
+    }
+  },
+  {
+    "source": {
+      "slides": [
+        {
+          "title": [
+            {
+              "text": "Rich ",
+              "italic": true
+            },
+            "title"
+          ],
+          "text": "Body"
+        }
+      ]
+    },
+    "imported": {
+      "slides": [
+        {
+          "title": [
+            {
+              "text": "Rich ",
+              "italic": true
+            },
+            "title"
+          ],
+          "text": "Body"
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.0"
+      },
+      {
+        "code": "text-import-reflow",
+        "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+        "path": "slides.0"
+      }
+    ],
+    "sourceStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" i=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "importedStyles": [
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" i=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>",
+      "<a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr>"
+    ],
+    "effectiveNativeRunStylesEqual": true,
+    "slideXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"a14\"><p:cSld name=\"Slide 1\"><p:bg><p:bgPr><a:solidFill><a:schemeClr val=\"tx2\"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree><p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/><a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"0\" cy=\"0\"/></a:xfrm></p:grpSpPr><p:sp><p:nvSpPr><p:cNvPr id=\"2\" name=\"OPF heading slides.0.title line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfHeading1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"548640\"/><a:ext cx=\"11094720\" cy=\"627507\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" i=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Rich </a:t></a:r><a:r><a:rPr lang=\"en-US\" sz=\"4050\" b=\"1\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos Display\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>title</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"4050\" dirty=\"0\"/></a:p></p:txBody></p:sp><p:sp><p:nvSpPr><p:cNvPr id=\"3\" name=\"OPF text slides.0.text line 0\"/><p:cNvSpPr/><p:nvPr><p:custDataLst><p:tags r:id=\"rIdOpfText1\"/></p:custDataLst></p:nvPr></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"11094720\" cy=\"290513\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst></a:avLst></a:prstGeom><a:noFill/><a:ln></a:ln></p:spPr><p:txBody><a:bodyPr wrap=\"none\" lIns=\"0\" tIns=\"0\" rIns=\"0\" bIns=\"0\" rtlCol=\"0\" anchor=\"t\"></a:bodyPr><a:lstStyle/><a:p><a:pPr algn=\"l\" indent=\"0\" marL=\"0\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:buNone/><a:tabLst></a:tabLst></a:pPr><a:r><a:rPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"><a:solidFill><a:schemeClr val=\"bg1\"/></a:solidFill><a:latin typeface=\"Aptos\" pitchFamily=\"34\" charset=\"0\"/></a:rPr><a:t>Body</a:t></a:r><a:endParaRPr lang=\"en-US\" sz=\"1875\" dirty=\"0\"/></a:p></p:txBody></p:sp></p:spTree><p:custDataLst><p:tags r:id=\"rIdOpfSlide\"/></p:custDataLst></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>",
+    "headingTags": {
+      "ppt/tags/opfHeading1.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:tagLst xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:tag name=\"OPF_HEADING_V1\" val=\"7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C2262617365223A7B22626F6C64223A747275652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A34302E352C22666F6E7446616D696C79223A224170746F7320446973706C6179227D7D\"/></p:tagLst>"
+    }
+  }
+]

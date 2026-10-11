@@ -1,0 +1,2102 @@
+{
+  "replay": "d20895f2ba07a20fd870568ba424d6b66f679943",
+  "source": {
+    "source": {
+      "core": "3e8cc60e9aef14b9caa325d2dfbf0a59fcabdaa0",
+      "renderer": "d57236802c8746fde430998bf2ddc9d16fe86712",
+      "pptx": "25ecc82dce8ac5018837924d5f559315fde5f9b0",
+      "editor": "569a83488fe0f833a97f08bba520513b276c38d5",
+      "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99"
+    },
+    "replay": "d20895f2ba07a20fd870568ba424d6b66f679943",
+    "tooling": "7a768be4a44def7079579f05b689ca3120265fc0",
+    "oracle": "a9cd23ba803e38e9bb860d8a3522c45c2e9c380a",
+    "serialized": true,
+    "allExitCodes": 0,
+    "sixTarballDigestsUnchanged": true,
+    "registryAcceptance": false,
+    "nativeAcceptance": false
+  },
+  "artifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "sourceSha": "d20895f2ba07a20fd870568ba424d6b66f679943",
+      "version": "0.18.3",
+      "sha256": "d93b520eb4735d42038d258a71bf9f93b339e1de75090291e857f9a71a40579f",
+      "bytes": 3322325,
+      "originalManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.18.3",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "clean": "rm -rf dist src/generated",
+          "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
+          "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
+          "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+          "test": "pnpm run build && node ../../scripts/run-tests.mjs",
+          "test:packed": "node test/packed-install-smoke.mjs",
+          "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "^1.0.0",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "0.18.0",
+          "@openpresentation/opf-render": "0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "@types/node": "^24.13.4",
+          "json-schema-to-typescript": "^16.0.0",
+          "pdf-lib": "1.17.1",
+          "sharp": "0.35.5",
+          "tsup": "^8.5.1",
+          "typescript": "~5.9.3"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.0",
+          "@openpresentation/opf-render": "^0.18.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "opf": {
+          "requiresUnreleasedGallery": "2.0.0"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.18.3",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-gallery-2.0.0.tgz",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.1",
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "sourceSha": "d57236802c8746fde430998bf2ddc9d16fe86712",
+      "version": "0.18.1",
+      "sha256": "3b0836e2be7366498cd2cca8c13e9bd8f5c3268a5bc76c034bfd10a4aa5db8f0",
+      "bytes": 13073934,
+      "originalManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.18.1",
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts",
+          "validate": "node scripts/validate-package.mjs",
+          "test": "npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "check:fonts": "node test/font-licenses.mjs && npm run check:font-hotlinks",
+          "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+          "test:golden": "npm run build && node test/golden.mjs",
+          "test:packed": "node test/packed-install.mjs",
+          "test:next-bundle": "node scripts/check-next-bundle.mjs",
+          "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
+          "golden:update": "npm run build && node test/golden.mjs --update",
+          "golden:promote": "node scripts/golden-promote.mjs",
+          "bench:soak": "node scripts/soak.mjs",
+          "prepack": "npm run build",
+          "build:browser-check": "node scripts/build-browser-check.mjs",
+          "test:styled-table": "node test/styled-table.mjs",
+          "test:pdf-vector": "node test/pdf-vector.mjs && node test/pdf-vector-visual.mjs",
+          "test:export-browser": "node test/export-browser.mjs artifacts/export-browser",
+          "report:pdf-vector": "node test/pdf-vector-visual.mjs --all --report artifacts/pdf-vector-visual.json",
+          "test:code": "node test/shared-code.mjs",
+          "test:code-browser": "node test/shared-code-browser.mjs",
+          "test:metric": "node test/shared-metric.mjs",
+          "test:images-browser": "node test/image-placeholders-browser.mjs",
+          "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
+          "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+          "test:font-variants": "node test/font-variants.mjs",
+          "test:font-variants-browser": "node test/font-variants-browser.mjs",
+          "test:variable-font-gate": "node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
+          "test:aptos-preview-browser": "node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json",
+          "test:lazy-face-fallback-browser": "node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback",
+          "test:lazy-fonts-browser": "node test/lazy-fonts-browser.mjs artifacts/lazy-fonts",
+          "test:latin-family-hosts-browser": "node test/latin-family-hosts-browser.mjs artifacts/latin-family-hosts",
+          "test:script-family-hosts-browser": "node test/script-family-hosts-browser.mjs artifacts/script-family-hosts",
+          "test:extra-lazy-fonts-browser": "node test/extra-lazy-fonts-browser.mjs artifacts/extra-lazy-fonts",
+          "test:script-fonts-browser": "node test/script-fonts-browser.mjs artifacts/script-fonts-browser.json",
+          "test:script-corpora-browser": "node test/script-corpora-browser.mjs artifacts/script-corpora-browser.json && node test/script-corpora-slides-browser.mjs artifacts/script-corpora-slides-browser.json",
+          "test:script-fonts-auto-browser": "node test/script-fonts-auto-browser.mjs artifacts/script-fonts-auto",
+          "test:symbol-fonts-browser": "node test/symbol-fonts-browser.mjs artifacts/symbol-fonts-browser.json",
+          "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
+          "test:text-browser": "node test/accepted-text-browser.mjs",
+          "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs",
+          "test:rich-flow-browser": "node test/rich-flow-browser.mjs",
+          "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs",
+          "test:emoji-math-browser": "node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json",
+          "test:player": "node test/player-unit.mjs",
+          "test:player-browser": "node test/player-browser.mjs artifacts/player",
+          "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs",
+          "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
+        },
+        "dependencies": {
+          "@openpresentation/opf": "^0.18.3",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@hyzyla/pdfium": "2.1.13",
+          "@jspawn/qpdf-wasm": "0.0.2",
+          "@napi-rs/canvas": "1.0.10",
+          "@resvg/resvg-js": "2.6.2",
+          "axe-core": "4.14.0",
+          "esbuild": "0.28.2",
+          "pdf-lib": "1.17.1",
+          "pdfjs-dist": "6.4.299",
+          "playwright": "1.63.0",
+          "sharp": "0.35.5"
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.18.1",
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "dependencies": {
+          "@openpresentation/opf": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "sourceSha": "25ecc82dce8ac5018837924d5f559315fde5f9b0",
+      "version": "0.18.1",
+      "sha256": "16718a9e778db941424cb14eae620b024176431f88b3811b6eb836a9328c012f",
+      "bytes": 721501,
+      "originalManifest": {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.18.1",
+        "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "vendor",
+          "DEPENDENCY-NOTES.md",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts",
+          "test": "npm run build && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "validate": "node scripts/validate-package.mjs",
+          "test:packed": "node test/packed-install.mjs && node test/provenance-interop.mjs",
+          "test:compare-published": "node test/compare-published.mjs",
+          "test:published-import": "node test/provenance-interop.mjs",
+          "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/packed-bundle-browser.mjs",
+          "prepack": "npm run build",
+          "build:browser-check": "node scripts/build-browser-check.mjs",
+          "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",
+          "test:code": "node test/shared-code.mjs && node test/code-provenance.mjs",
+          "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs",
+          "test:font-variants": "node test/font-variants.mjs",
+          "test:timeline": "node test/shared-timeline.mjs",
+          "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/slide-variables.mjs && node test/furniture-fields.mjs && node test/furniture-wrapped-date.mjs && node test/socials-furniture.mjs && node test/native-furniture.mjs",
+          "test:native-picture-edit-controls": "node test/compare-native-picture-edit-controls.mjs",
+          "test:native-font-embed-controls": "node test/native-font-embed-controls.mjs",
+          "test:native-mixed-edit-controls": "node test/native-mixed-edit-controls.mjs",
+          "test:native-font-inventory-controls": "node test/native-font-inventory-controls.mjs",
+          "test:zip-date": "node test/zip-date.mjs",
+          "test:native-text": "node test/native-text-whitespace.mjs",
+          "test:determinism": "node test/determinism.mjs"
+        },
+        "dependencies": {
+          "@node-projects/jszip": "4.3.0",
+          "@openpresentation/opf": "^0.18.3",
+          "@rgrove/parse-xml": "4.2.3",
+          "fast-xml-parser": "^5.8.0",
+          "fflate": "^0.8.3",
+          "pako": "3.0.2",
+          "sharp": "0.35.5"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/carlito": "0.4.1",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-render": "0.18.1",
+          "@resvg/resvg-js": "2.6.2",
+          "esbuild": "0.28.2",
+          "playwright": "1.63.0"
+        },
+        "imports": {
+          "#image-fallback": {
+            "browser": "./dist/image-fallback-browser.js",
+            "default": "./dist/image-fallback-node.js"
+          }
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.18.1",
+        "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "vendor",
+          "DEPENDENCY-NOTES.md",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "dependencies": {
+          "@node-projects/jszip": "4.3.0",
+          "@openpresentation/opf": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "@rgrove/parse-xml": "4.2.3",
+          "fast-xml-parser": "^5.8.0",
+          "fflate": "^0.8.3",
+          "pako": "3.0.2",
+          "sharp": "0.35.5"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "imports": {
+          "#image-fallback": {
+            "browser": "./dist/image-fallback-browser.js",
+            "default": "./dist/image-fallback-node.js"
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "sourceSha": "569a83488fe0f833a97f08bba520513b276c38d5",
+      "version": "0.18.0",
+      "sha256": "0704890d9de87efa248320a9f3079dbb09774fdc452e2837548fa4f740a41ab4",
+      "bytes": 405121,
+      "originalManifest": {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.18.0",
+        "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-editor/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./react": {
+            "types": "./dist/react.d.ts",
+            "default": "./dist/react.js"
+          },
+          "./svelte": {
+            "types": "./dist/svelte.d.ts",
+            "default": "./dist/svelte.js"
+          },
+          "./package.json": "./package.json",
+          "./canvas": {
+            "types": "./dist/canvas.d.ts",
+            "default": "./dist/canvas.js"
+          },
+          "./transfer": {
+            "types": "./dist/transfer.d.ts",
+            "default": "./dist/transfer.js"
+          },
+          "./galleries": {
+            "types": "./dist/galleries.d.ts",
+            "default": "./dist/galleries.js"
+          },
+          "./schema": {
+            "types": "./dist/schema.d.ts",
+            "default": "./dist/schema.js"
+          },
+          "./schema-inspector": {
+            "types": "./dist/schema-inspector.d.ts",
+            "default": "./dist/schema-inspector.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "default": "./dist/data.js"
+          },
+          "./rich-text": {
+            "types": "./dist/rich-text.d.ts",
+            "default": "./dist/rich-text.js"
+          },
+          "./layout": {
+            "types": "./dist/layout.d.ts",
+            "default": "./dist/layout.js"
+          },
+          "./json-editor": {
+            "types": "./dist/json-editor.d.ts",
+            "default": "./dist/json-editor.js"
+          },
+          "./json-options": {
+            "types": "./dist/json-options.d.ts",
+            "default": "./dist/json-options.js"
+          },
+          "./export": {
+            "types": "./dist/export.d.ts",
+            "default": "./dist/export.js"
+          },
+          "./switches": {
+            "types": "./dist/switches.d.ts",
+            "default": "./dist/switches.js"
+          },
+          "./block-convert": {
+            "types": "./dist/block-convert.d.ts",
+            "default": "./dist/block-convert.js"
+          },
+          "./design-options": {
+            "types": "./dist/design-options.d.ts",
+            "default": "./dist/design-options.js"
+          },
+          "./tables": {
+            "types": "./dist/table-options.d.ts",
+            "default": "./dist/table-options.js"
+          },
+          "./design-controls": {
+            "types": "./dist/design-controls.d.ts",
+            "default": "./dist/design-controls.js"
+          },
+          "./templates": {
+            "types": "./dist/templates.d.ts",
+            "default": "./dist/templates.js"
+          },
+          "./template-panel": {
+            "types": "./dist/template-panel.d.ts",
+            "default": "./dist/template-panel.js"
+          },
+          "./assets": {
+            "types": "./dist/assets.d.ts",
+            "default": "./dist/assets.js"
+          },
+          "./backgrounds": {
+            "types": "./dist/background-options.d.ts",
+            "default": "./dist/background-options.js"
+          },
+          "./image-options": {
+            "types": "./dist/image-options.d.ts",
+            "default": "./dist/image-options.js"
+          },
+          "./review": {
+            "types": "./dist/review.d.ts",
+            "default": "./dist/review.js"
+          },
+          "./review-panel": {
+            "types": "./dist/review-panel.d.ts",
+            "default": "./dist/review-panel.js"
+          },
+          "./content-actions": {
+            "types": "./dist/content-actions.d.ts",
+            "default": "./dist/content-actions.js"
+          },
+          "./image-crop": {
+            "types": "./dist/image-crop.d.ts",
+            "default": "./dist/image-crop.js"
+          },
+          "./image-cropper": {
+            "types": "./dist/image-cropper.d.ts",
+            "default": "./dist/image-cropper.js"
+          },
+          "./find": {
+            "types": "./dist/find-replace.d.ts",
+            "default": "./dist/find-replace.js"
+          },
+          "./find-panel": {
+            "types": "./dist/find-panel.d.ts",
+            "default": "./dist/find-panel.js"
+          },
+          "./data-grid": {
+            "types": "./dist/data-grid.d.ts",
+            "default": "./dist/data-grid.js"
+          },
+          "./chart-data": {
+            "types": "./dist/chart-data.d.ts",
+            "default": "./dist/chart-data.js"
+          },
+          "./grid-text": {
+            "types": "./dist/grid-text.d.ts",
+            "default": "./dist/grid-text.js"
+          },
+          "./slides": {
+            "types": "./dist/slides.d.ts",
+            "default": "./dist/slides.js"
+          },
+          "./outline": {
+            "types": "./dist/outline.d.ts",
+            "default": "./dist/outline.js"
+          },
+          "./slide-manager": {
+            "types": "./dist/slide-manager.d.ts",
+            "default": "./dist/slide-manager.js"
+          },
+          "./layout-templates": {
+            "types": "./dist/layout-templates.d.ts",
+            "default": "./dist/layout-templates.js"
+          },
+          "./custom-layout-editor": {
+            "types": "./dist/custom-layout-editor.d.ts",
+            "default": "./dist/custom-layout-editor.js"
+          },
+          "./outline-view": {
+            "types": "./dist/outline-view.d.ts",
+            "default": "./dist/outline-view.js"
+          },
+          "./persistence": {
+            "types": "./dist/persistence.d.ts",
+            "default": "./dist/persistence.js"
+          },
+          "./persistence-ui": {
+            "types": "./dist/persistence-ui.d.ts",
+            "default": "./dist/persistence-ui.js"
+          },
+          "./chart-options": {
+            "types": "./dist/chart-options.d.ts",
+            "default": "./dist/chart-options.js"
+          },
+          "./chart-options-panel": {
+            "types": "./dist/chart-options-panel.d.ts",
+            "default": "./dist/chart-options-panel.js"
+          },
+          "./numbering": {
+            "types": "./dist/numbering.d.ts",
+            "default": "./dist/numbering.js"
+          },
+          "./numbering-panel": {
+            "types": "./dist/numbering-panel.d.ts",
+            "default": "./dist/numbering-panel.js"
+          },
+          "./annotations": {
+            "types": "./dist/annotations.d.ts",
+            "default": "./dist/annotations.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "opf": {
+          "requiresUnreleasedCore": "0.19.0"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
+          "test": "npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "validate": "node scripts/validate-package.mjs",
+          "test:packed": "node test/packed-install.mjs",
+          "prepack": "npm run build",
+          "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+          "check:font-hotlinks:built": "node scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
+          "build:playground": "node scripts/build-playground.mjs",
+          "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/layout-templates-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/playground-download.mjs artifacts/playground-download",
+          "test:code-browser": "node test/code-browser.mjs",
+          "test:selection-browser": "node test/selection-browser.mjs",
+          "test:click-entry-browser": "node test/click-entry-browser.mjs",
+          "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
+          "test:metric-browser": "node test/metric-browser.mjs",
+          "test:rich-input-browser": "node test/rich-input-browser.mjs",
+          "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+          "test:json-browser": "node test/json-editor-browser.mjs",
+          "test:design-controls-browser": "node test/design-controls-browser.mjs",
+          "test:template-panel-browser": "node test/template-panel-browser.mjs",
+          "test:design-gaps-browser": "node test/design-gaps-browser.mjs",
+          "test:data-grid-browser": "node test/data-grid-browser.mjs",
+          "test:data-grid-datasets-browser": "node test/data-grid-datasets-browser.mjs",
+          "test:data-import-dataset-browser": "node test/data-import-dataset-browser.mjs",
+          "test:slides-browser": "node test/slides-browser.mjs",
+          "test:persistence-browser": "node test/persistence-browser.mjs",
+          "test:find-browser": "node test/find-replace-browser.mjs",
+          "test:crop-browser": "node test/image-crop-browser.mjs",
+          "test:mobile-browser": "node test/mobile-browser.mjs",
+          "test:review-panel-browser": "node test/review-panel-browser.mjs",
+          "test:review-hook-browser": "node test/review-hook-browser.mjs",
+          "test:export-license-browser": "node test/export-license-browser.mjs",
+          "test:chart-options-browser": "node test/chart-options-browser.mjs",
+          "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs"
+        },
+        "dependencies": {
+          "@codemirror/autocomplete": "6.20.3",
+          "@codemirror/commands": "6.11.1",
+          "@codemirror/lang-json": "6.0.2",
+          "@codemirror/language": "6.12.4",
+          "@codemirror/lint": "6.9.7",
+          "@codemirror/search": "6.7.2",
+          "@codemirror/state": "6.7.6",
+          "@codemirror/view": "6.43.13",
+          "@lezer/highlight": "1.2.5",
+          "@openpresentation/opf": "^0.18.1",
+          "jsonc-parser": "3.3.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "^0.18.0",
+          "@openpresentation/opf-render": "^0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "axe-core": "4.14.0",
+          "esbuild": "0.28.2",
+          "jszip": "3.10.2",
+          "pdf-lib": "1.17.1",
+          "pdfjs-dist": "6.4.299",
+          "playwright": "1.63.0"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.18.0",
+        "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-editor/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./react": {
+            "types": "./dist/react.d.ts",
+            "default": "./dist/react.js"
+          },
+          "./svelte": {
+            "types": "./dist/svelte.d.ts",
+            "default": "./dist/svelte.js"
+          },
+          "./package.json": "./package.json",
+          "./canvas": {
+            "types": "./dist/canvas.d.ts",
+            "default": "./dist/canvas.js"
+          },
+          "./transfer": {
+            "types": "./dist/transfer.d.ts",
+            "default": "./dist/transfer.js"
+          },
+          "./galleries": {
+            "types": "./dist/galleries.d.ts",
+            "default": "./dist/galleries.js"
+          },
+          "./schema": {
+            "types": "./dist/schema.d.ts",
+            "default": "./dist/schema.js"
+          },
+          "./schema-inspector": {
+            "types": "./dist/schema-inspector.d.ts",
+            "default": "./dist/schema-inspector.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "default": "./dist/data.js"
+          },
+          "./rich-text": {
+            "types": "./dist/rich-text.d.ts",
+            "default": "./dist/rich-text.js"
+          },
+          "./layout": {
+            "types": "./dist/layout.d.ts",
+            "default": "./dist/layout.js"
+          },
+          "./json-editor": {
+            "types": "./dist/json-editor.d.ts",
+            "default": "./dist/json-editor.js"
+          },
+          "./json-options": {
+            "types": "./dist/json-options.d.ts",
+            "default": "./dist/json-options.js"
+          },
+          "./export": {
+            "types": "./dist/export.d.ts",
+            "default": "./dist/export.js"
+          },
+          "./switches": {
+            "types": "./dist/switches.d.ts",
+            "default": "./dist/switches.js"
+          },
+          "./block-convert": {
+            "types": "./dist/block-convert.d.ts",
+            "default": "./dist/block-convert.js"
+          },
+          "./design-options": {
+            "types": "./dist/design-options.d.ts",
+            "default": "./dist/design-options.js"
+          },
+          "./tables": {
+            "types": "./dist/table-options.d.ts",
+            "default": "./dist/table-options.js"
+          },
+          "./design-controls": {
+            "types": "./dist/design-controls.d.ts",
+            "default": "./dist/design-controls.js"
+          },
+          "./templates": {
+            "types": "./dist/templates.d.ts",
+            "default": "./dist/templates.js"
+          },
+          "./template-panel": {
+            "types": "./dist/template-panel.d.ts",
+            "default": "./dist/template-panel.js"
+          },
+          "./assets": {
+            "types": "./dist/assets.d.ts",
+            "default": "./dist/assets.js"
+          },
+          "./backgrounds": {
+            "types": "./dist/background-options.d.ts",
+            "default": "./dist/background-options.js"
+          },
+          "./image-options": {
+            "types": "./dist/image-options.d.ts",
+            "default": "./dist/image-options.js"
+          },
+          "./review": {
+            "types": "./dist/review.d.ts",
+            "default": "./dist/review.js"
+          },
+          "./review-panel": {
+            "types": "./dist/review-panel.d.ts",
+            "default": "./dist/review-panel.js"
+          },
+          "./content-actions": {
+            "types": "./dist/content-actions.d.ts",
+            "default": "./dist/content-actions.js"
+          },
+          "./image-crop": {
+            "types": "./dist/image-crop.d.ts",
+            "default": "./dist/image-crop.js"
+          },
+          "./image-cropper": {
+            "types": "./dist/image-cropper.d.ts",
+            "default": "./dist/image-cropper.js"
+          },
+          "./find": {
+            "types": "./dist/find-replace.d.ts",
+            "default": "./dist/find-replace.js"
+          },
+          "./find-panel": {
+            "types": "./dist/find-panel.d.ts",
+            "default": "./dist/find-panel.js"
+          },
+          "./data-grid": {
+            "types": "./dist/data-grid.d.ts",
+            "default": "./dist/data-grid.js"
+          },
+          "./chart-data": {
+            "types": "./dist/chart-data.d.ts",
+            "default": "./dist/chart-data.js"
+          },
+          "./grid-text": {
+            "types": "./dist/grid-text.d.ts",
+            "default": "./dist/grid-text.js"
+          },
+          "./slides": {
+            "types": "./dist/slides.d.ts",
+            "default": "./dist/slides.js"
+          },
+          "./outline": {
+            "types": "./dist/outline.d.ts",
+            "default": "./dist/outline.js"
+          },
+          "./slide-manager": {
+            "types": "./dist/slide-manager.d.ts",
+            "default": "./dist/slide-manager.js"
+          },
+          "./layout-templates": {
+            "types": "./dist/layout-templates.d.ts",
+            "default": "./dist/layout-templates.js"
+          },
+          "./custom-layout-editor": {
+            "types": "./dist/custom-layout-editor.d.ts",
+            "default": "./dist/custom-layout-editor.js"
+          },
+          "./outline-view": {
+            "types": "./dist/outline-view.d.ts",
+            "default": "./dist/outline-view.js"
+          },
+          "./persistence": {
+            "types": "./dist/persistence.d.ts",
+            "default": "./dist/persistence.js"
+          },
+          "./persistence-ui": {
+            "types": "./dist/persistence-ui.d.ts",
+            "default": "./dist/persistence-ui.js"
+          },
+          "./chart-options": {
+            "types": "./dist/chart-options.d.ts",
+            "default": "./dist/chart-options.js"
+          },
+          "./chart-options-panel": {
+            "types": "./dist/chart-options-panel.d.ts",
+            "default": "./dist/chart-options-panel.js"
+          },
+          "./numbering": {
+            "types": "./dist/numbering.d.ts",
+            "default": "./dist/numbering.js"
+          },
+          "./numbering-panel": {
+            "types": "./dist/numbering-panel.d.ts",
+            "default": "./dist/numbering-panel.js"
+          },
+          "./annotations": {
+            "types": "./dist/annotations.d.ts",
+            "default": "./dist/annotations.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": false,
+        "dependencies": {
+          "@codemirror/autocomplete": "6.20.3",
+          "@codemirror/commands": "6.11.1",
+          "@codemirror/lang-json": "6.0.2",
+          "@codemirror/language": "6.12.4",
+          "@codemirror/lint": "6.9.7",
+          "@codemirror/search": "6.7.2",
+          "@codemirror/state": "6.7.6",
+          "@codemirror/view": "6.43.13",
+          "@lezer/highlight": "1.2.5",
+          "@openpresentation/opf": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz",
+          "jsonc-parser": "3.3.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "sourceSha": "d20895f2ba07a20fd870568ba424d6b66f679943",
+      "version": "0.18.0",
+      "sha256": "d93d1c276772db445fff14c868f96ea71b6d4e39110df712a12339d972454c9a",
+      "bytes": 196859,
+      "originalManifest": {
+        "name": "@openpresentation/cli",
+        "version": "0.18.0",
+        "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
+        "license": "MIT",
+        "type": "module",
+        "bin": {
+          "opf": "./dist/index.js"
+        },
+        "exports": {
+          "./package.json": "./package.json"
+        },
+        "scripts": {
+          "build": "pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))",
+          "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
+          "clean": "rm -rf dist",
+          "test": "pnpm build && node ../../scripts/run-tests.mjs",
+          "test:packed": "node test/packed.mjs",
+          "test:packed:peers": "node test/packed-files.mjs",
+          "prepack": "pnpm build"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "^1.0.0",
+          "@openpresentation/opf": "^0.18.1"
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "0.18.0",
+          "@openpresentation/opf-render": "0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "@types/node": "^24.13.4",
+          "pdf-lib": "1.17.1",
+          "sharp": "0.35.5",
+          "tsup": "^8.5.1",
+          "typescript": "~5.9.3"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.0",
+          "@openpresentation/opf-render": "^0.18.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/cli"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/cli",
+        "version": "0.18.0",
+        "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
+        "license": "MIT",
+        "type": "module",
+        "bin": {
+          "opf": "./dist/index.js"
+        },
+        "exports": {
+          "./package.json": "./package.json"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-gallery-2.0.0.tgz",
+          "@openpresentation/opf": "file:/private/tmp/rr20-complete-stage/opf/artifacts/npm/openpresentation-opf-0.18.3.tgz"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+        ],
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.18.1",
+          "@openpresentation/opf-render": "^0.18.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/cli"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "sourceSha": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+      "version": "2.0.0",
+      "sha256": "6c6720115bc82021bbb810dcc4ea70e27cdaef8bb3d07b573ece64f738653ce4",
+      "bytes": 97319,
+      "originalManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "2.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 2
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "test": "node scripts/build.mjs && node --test test/*.test.mjs",
+          "typecheck": "node scripts/build.mjs && tsc -p test/tsconfig.json",
+          "verify": "node scripts/sync-gallery-catalog.mjs --verify",
+          "rehash": "node scripts/sync-gallery-catalog.mjs --rehash --match-gallery",
+          "previews": "node scripts/render-previews.mjs",
+          "check:license": "node scripts/check-license.mjs",
+          "check:previews": "node scripts/render-previews.mjs --check",
+          "check:stability": "node scripts/build.mjs && node scripts/stability.mjs",
+          "sync": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
+          "pack:dry-run": "npm pack --dry-run",
+          "prepack": "node scripts/build.mjs"
+        },
+        "devDependencies": {
+          "@openpresentation/opf": "0.18.1",
+          "@openpresentation/opf-render": "0.18.0",
+          "@resvg/resvg-js": "2.6.2",
+          "typescript": "~5.9.3"
+        }
+      },
+      "stagedManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "2.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 2
+        },
+        "engines": {
+          "node": ">=22"
+        }
+      }
+    }
+  ]
+}

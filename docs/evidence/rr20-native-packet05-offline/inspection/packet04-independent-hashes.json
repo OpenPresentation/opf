@@ -1,0 +1,15 @@
+{
+  "entries": 230,
+  "unique": 229,
+  "mismatches": [
+    {
+      "file": "tooling/generate.mjs",
+      "expected": "eb67ee00f27b6008357d367db8a4f92dbe95335bc9cada5dc4f3a37aeb6bd1e6",
+      "actual": "eb67ee00f27b6008357d367db8a4f92dbe95335bc9cada5dc4f3a37aeb6bd1e6",
+      "expectedBytes": 8379,
+      "actualBytes": 8379,
+      "duplicate": true
+    }
+  ],
+  "passed": false
+}
