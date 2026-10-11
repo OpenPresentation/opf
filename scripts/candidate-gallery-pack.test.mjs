@@ -5,7 +5,7 @@ import {mkdirSync,mkdtempSync,realpathSync,writeFileSync,readFileSync,rmSync,exi
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {globalPrefixLayout} from './global-prefix.mjs';
-import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
+import {stagedManifest,stageGalleryGraph,candidateArtifacts,assertCandidatePeerPreflight,assertInstalledCandidateGraph,assertInstalledCandidatePeers,assertCandidateExecInstalls} from './candidate-gallery-pack.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
@@ -36,7 +36,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
    mkdirSync(path.join(directory,'dist'),{recursive:true});
    writeFileSync(path.join(directory,'dist/index.js'),index===4?`#!/usr/bin/env node\nimport {createRequire} from 'node:module';const require=createRequire(import.meta.url);console.log(JSON.stringify({core:require.resolve('@openpresentation/opf/package.json'),gallery:require.resolve('@openpresentation/gallery/package.json')}));\n`:'export const fixture = true;\n');
    for(const file of ['README.md','LICENSE'])writeFileSync(path.join(directory,file),'fixture\n');
-   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':'0.19.0-next.0',type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js'},peerDependencies:{'@openpresentation/opf-render':'^0.18.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
+   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
   }
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
@@ -48,6 +48,17 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   const out=path.join(root,'artifacts/npm'),report=stageGalleryGraph({coreRoot:root,workspace,out,run});
   assert.equal(report.artifacts.length,6);assert.equal(report.published,false);
   assert.deepEqual(candidateArtifacts(root),report);
+  assert.equal(assertCandidatePeerPreflight(root).run,true,'mixed source versions qualify exact staged relationships, not original stable semver');
+  for(const name of ['@openpresentation/opf','@openpresentation/cli']){
+   const item=report.artifacts.find(record=>record.name===name);
+   assert.equal(item.originalManifest.peerDependencies['@openpresentation/opf-render'],'^0.19.0');
+   assert.equal(item.stagedManifest.peerDependencies['@openpresentation/opf-render'],'^0.18.2');
+  }
+  delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>assertCandidatePeerPreflight(root),/no published fallback/);process.env.CANDIDATE_GALLERY_REF=gallerySha;
+  const preflightManifest=path.join(out,'manifest.json'),preflightBytes=readFileSync(preflightManifest),wrongPeer=structuredClone(report);
+  wrongPeer.artifacts.find(item=>item.name==='@openpresentation/cli').stagedManifest.peerDependencies['@openpresentation/opf-render']='^0.19.0';
+  writeFileSync(preflightManifest,JSON.stringify(wrongPeer));assert.throws(()=>assertCandidatePeerPreflight(root),/staging metadata differs/);writeFileSync(preflightManifest,preflightBytes);
+
   const qualifiedDist=path.join(root,'packages/javascript/dist/index.js'),qualifiedBytes=readFileSync(qualifiedDist);
   const rebuild=()=>execFileSync(process.execPath,['-e',`require('node:fs').writeFileSync(${JSON.stringify(qualifiedDist)},'ordinary rebuild')`]);
   assert.deepEqual(await preparePackedSmokeCli({root,build:rebuild}),report);
@@ -85,7 +96,7 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
   const installed=path.join(consumer,'node_modules/@openpresentation/opf/dist/index.js');
   writeFileSync(installed,'changed\n');assert.throws(()=>assertInstalledCandidatePeers(root,modules,peerNames,'0.19.0-next.0'),/peer runtime differs/);assert.throws(()=>assertInstalledCandidateGraph(root,consumer),/installed runtime differs/);
   const file=path.join(out,report.artifacts[0].file),original=readFileSync(file);writeFileSync(file,'tampered');
-  assert.throws(()=>candidateArtifacts(root),/tarball digest mismatch/);writeFileSync(file,original);
+  assert.throws(()=>candidateArtifacts(root),/tarball digest mismatch/);assert.throws(()=>assertCandidatePeerPreflight(root),/tarball digest mismatch/);writeFileSync(file,original);
   const manifestFile=path.join(out,'manifest.json'),bytes=readFileSync(manifestFile);const altered=structuredClone(report);altered.artifacts[0].sourceSha='f'.repeat(40);writeFileSync(manifestFile,JSON.stringify(altered));
   assert.throws(()=>candidateArtifacts(root),/source SHA mismatch/);writeFileSync(manifestFile,bytes);
   const built=path.join(root,'packages/javascript/dist/index.js'),builtBytes=readFileSync(built);

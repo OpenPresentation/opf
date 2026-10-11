@@ -110,6 +110,20 @@ export function candidateArtifacts(root){
  return report;
 }
 
+// Preflight only the explicitly staged artifact relationships. Original source ranges
+// remain unchanged and are still checked by ordinary source/registry/publication gates.
+export function assertCandidatePeerPreflight(root){
+ const graph=candidateArtifacts(root);assert.ok(graph,'candidate peer preflight requires an authorized staged graph');
+ for(const name of ['@openpresentation/opf','@openpresentation/cli']){
+  const consumer=graph.artifacts.find(item=>item.name===name);assert.ok(consumer,'missing staged peer consumer');
+  for(const peerName of ['@openpresentation/opf-render','@openpresentation/opf-pptx']){
+   const peer=graph.artifacts.find(item=>item.name===peerName);assert.ok(peer,'missing staged engine');
+   assert.equal(consumer.stagedManifest.peerDependencies?.[peerName],`^${peer.version}`,'staged peer relationship differs from selected artifact');
+  }
+ }
+ return {run:true};
+}
+
 export function assertInstalledCandidateGraph(root,consumer){
  const report=candidateArtifacts(root);assert.ok(report,'installed candidate graph needs explicit candidate mode');
  const galleryPaths=new Set();
