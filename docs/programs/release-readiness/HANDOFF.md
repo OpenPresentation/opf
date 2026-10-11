@@ -6,6 +6,12 @@ supervisor or agent team resumes from this file, then [README.md](README.md) (go
 overrides those invariants. Everything in flight is in a pull request or a published release. No work lives only on a
 local machine (the exceptions are listed under "Local-only state").
 
+## Latest supervisor checkpoint
+
+Renderer repair #224 merged at `29181b28`; its merged-commit gate is the single active watcher. Fresh release prep [renderer#226](https://github.com/OpenPresentation/opf-render/pull/226) is open at `6470a9d980f2498c13ac405a0ff5f7e3f716b88c`. After the current gate exits successfully, gate that exact PR head with reviewed CI repairs [PPTX#244](https://github.com/OpenPresentation/opf-pptx/pull/244) (`9b747bccc72ada4a1b58a6a6d7e3bba04c9b363a`) and [editor#157](https://github.com/OpenPresentation/opf-editor/pull/157) (`0c19b5cd6a58b107fcebc90e0f37f28c2686d827`). Gate the release-prep merge commit before tagging; no renderer 0.18.1 tag exists yet.
+
+Final PPTX#240 candidate `006e8a7d` passes all 130 package tests and browser build against explicit local v2 candidates; fresh native and published-dependency gates remain. Core script-width draft #593 is reviewed at `13e1c4dc`; a separate schema/example audit is in progress. Gallery-site draft #126 at `13df6974` implements package ownership and canonical previews/redirects, but published dependency adoption and editor artifact regeneration remain merge blockers. Editor v1 cleanup and the other two site migrations remain in progress or pending. The live checklist retains these distinctions and remains 6/40.
+
 ## Rules that matter most
 
 - Merge and watch pull requests **only** with `node scripts/pr-gate.mjs <owner/repo#N>… --merge [--expect-head <sha>]…`.
