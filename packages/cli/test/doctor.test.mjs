@@ -4,7 +4,7 @@
 // install: the copy laid out as <prefix>/lib/node_modules/@openpresentation/cli.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cp, mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, realpath, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
@@ -22,24 +22,32 @@ const run = (bin, args, { status = 0, cwd, env } = {}) => {
   return result;
 };
 /** A copy of the CLI and core under `root`: `<root>/dist/index.js`, or with `global` the layout of a global npm install. */
-async function install(name, { stubs = false, global = false } = {}) {
+async function install(name, { stubs = false, global = false, peerVersion = "0.19.0" } = {}) {
   const root = path.join(temp, name);
   const modules = global ? path.join(root, "lib", "node_modules") : path.join(root, "node_modules");
   const cli = global ? path.join(modules, "@openpresentation", "cli") : root;
   await mkdir(cli, { recursive: true });
   await cp(path.dirname(executable), path.join(cli, "dist"), { recursive: true });
   await installIsolatedCore(modules);
-  if (stubs) await installStubPeers(modules);
+  if (stubs) {
+    await installStubPeers(modules);
+    for (const name of ["opf-render", "opf-pptx"]) {
+      const file = path.join(modules, "@openpresentation", name, "package.json");
+      const manifest = JSON.parse(await readFile(file, "utf8"));
+      await writeFile(file, JSON.stringify({ ...manifest, version: peerVersion }));
+    }
+  }
   await writeFile(path.join(root, "deck.opf.json"), JSON.stringify({ slides: [{ title: "Plain" }] }));
   await writeFile(path.join(root, "picture.opf.json"), JSON.stringify({ slides: [{ title: "Picture", image: "photo.png" }] }));
   return { root, bin: path.join(cli, "dist", path.basename(executable)) };
 }
 
 describe("opf doctor", () => {
-  let missing, present, global;
+  let missing, present, older, global;
   before(async () => {
     missing = await install("missing");
     present = await install("present", { stubs: true });
+    older = await install("older", { stubs: true, peerVersion: "0.18.0" });
     global = await install("global", { global: true });
   });
 
@@ -51,17 +59,28 @@ describe("opf doctor", () => {
     for (const format of ["json", "yaml", "md"]) assert.deepEqual(report.formats[format], { ready: true, missing: [] }, format);
     for (const format of ["svg", "png", "pdf", "pdf-raster", "pptx"]) {
       assert.equal(report.formats[format].ready, false, format);
-      assert.ok(report.formats[format].missing.includes("@openpresentation/opf-render@^0.18.0"), format);
+      assert.ok(report.formats[format].missing.includes("@openpresentation/opf-render@^0.19.0"), format);
     }
     assert.ok(report.formats.png.missing.includes("@resvg/resvg-js@^2.6.2"));
     assert.ok(report.formats["pdf-raster"].missing.includes("pdf-lib@^1.17.1"));
-    assert.deepEqual(report.formats["pptx-import"].missing, ["@openpresentation/opf-pptx@^0.18.0"]);
+    assert.deepEqual(report.formats["pptx-import"].missing, ["@openpresentation/opf-pptx@^0.19.0"]);
     assert.deepEqual(report.formats.pdf.forPictures, ["sharp@^0.35.5"], "without a deck, what pictures would add");
     assert.equal(report.installed, "project");
     assert.equal(report.packageManager, "npm");
-    assert.match(report.install, /^npm install @openpresentation\/opf-render@\^0\.18\.0 /);
+    assert.match(report.install, /^npm install @openpresentation\/opf-render@\^0\.19\.0 /);
     for (const name of report.missing) assert.ok(report.install.includes(name), name);
     assert.equal(report.packages.find((item) => item.name === "@openpresentation/opf-render").installed, false);
+  });
+
+  test("installed 0.18 engines do not satisfy the 0.19 contract", () => {
+    const report = JSON.parse(run(older.bin, ["doctor"], { cwd: older.root }).stdout);
+    for (const name of ["opf-render", "opf-pptx"]) {
+      const peer = report.packages.find(item => item.name === `@openpresentation/${name}`);
+      assert.equal(peer.installed, true);
+      assert.equal(peer.ok, false);
+      assert.ok(report.missing.includes(`@openpresentation/${name}@^0.19.0`));
+    }
+    for (const format of ["json", "yaml", "md"]) assert.deepEqual(report.formats[format], { ready: true, missing: [] });
   });
 
   test("with a deck: a PDF needs sharp only when the deck has pictures", () => {
@@ -78,7 +97,7 @@ describe("opf doctor", () => {
     const report = JSON.parse(run(present.bin, ["doctor"], { cwd: present.root }).stdout);
     assert.deepEqual(report.formats["pptx-import"], { ready: true, missing: [] });
     const render = report.packages.find((item) => item.name === "@openpresentation/opf-render");
-    assert.deepEqual([render.installed, render.version, render.ok], [true, "0.18.0", true]);
+    assert.deepEqual([render.installed, render.version, render.ok], [true, "0.19.0", true]);
     assert.equal(report.formats.svg.missing.some((name) => name.startsWith("@openpresentation/opf-render")), false);
     assert.ok(report.formats.svg.missing.every((name) => name.startsWith("@expo-google-fonts/")), JSON.stringify(report.formats.svg));
     assert.equal(report.install.includes("@openpresentation/opf-render"), false);
