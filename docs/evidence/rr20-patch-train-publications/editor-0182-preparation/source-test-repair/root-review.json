@@ -1,0 +1,17 @@
+{
+  "base": "39e62a61b323753b47a504621216754c14c78c86",
+  "testSHA256": "314f2c6e60b1237d3214dffc8ea3af63fc87c49593481cad08125263a81ebee5",
+  "review": "ten native textbox selections; pre-shortcut focus assertion and post-shortcut full selection; sole native clipboard paste corrected; application Ctrl shortcuts preserved",
+  "unchanged": [
+    "package.json",
+    "package-lock.json",
+    "src/data-grid.js"
+  ],
+  "focusedResult": "51 checks passed; agent confirmed22130 exit0",
+  "broaderChecks": "pending",
+  "evidence": {
+    "before.log": "7477141dea0ca773c66da765862ff2953ebefc343e43b512da9346fc11d09b78",
+    "intermediate-paste-failure.log": "5fee7e7cef34a996b6554d481f057d6e59d09f707fa5d07011f9384ace5f1fd7",
+    "after.log": "3381a87f737d1eeb7dcc3300a2b69db3bb0c35ae50ab46108dfe79215b0a1c24"
+  }
+}

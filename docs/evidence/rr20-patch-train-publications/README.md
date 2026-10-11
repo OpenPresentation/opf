@@ -45,3 +45,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## Editor 0.18.2 prerequisite and dry preparation
 
 [Pre-prep and reviewed metadata receipts](editor-0182-preparation/README.md) are retained. Prepared qualification 22527 failed the broader data-grid browser case after all 20 playground cases and preceding gates passed; remaining gates are unrun, source unchanged, diagnosis unconfirmed. [Failure receipts](editor-0182-preparation/failed-qualification/status.md). No release PR or acceptance claim.
+
+## Editor source test repair awaiting gate
+
+PR #160 at `44def286` passes final local eleven browser/type 205/full 70; [proof and retained failures](editor-0182-preparation/source-test-repair/independent-review.md). Exact-head gate 91343 is pending; merge and fresh release replay remain required.

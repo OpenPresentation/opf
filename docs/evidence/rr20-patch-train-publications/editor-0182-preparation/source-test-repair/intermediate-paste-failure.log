@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Ctrl+V pastes the clipboard: {"name":"Data grid","language":"en-US","narrative":"problem-solution","tone":"formal","audience":["executive"],"speaker":{"id":"alice","name":"Alice Chen"},"organization":{"id":"acme","name":"Acme"},"design":{"theme":"classic","fontScheme":"roboto"},"slides":[{"id":"cover","title":"Data grid","subtitle":"Edit the numbers behind the story"},{"id":"data","title":"Data","composition":{"mode":"column"
+    at waitDoc (file:///private/tmp/opf-editor-grid-mac-test/test/data-grid-browser.mjs:79:47)
+    at async step (file:///private/tmp/opf-editor-grid-mac-test/test/data-grid-browser.mjs:109:19)
+    at async file:///private/tmp/opf-editor-grid-mac-test/test/data-grid-browser.mjs:349:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: undefined,
+  operator: 'fail',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

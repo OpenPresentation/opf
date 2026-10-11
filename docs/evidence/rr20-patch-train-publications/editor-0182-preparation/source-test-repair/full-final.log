@@ -1,0 +1,221 @@
+
+> @openpresentation/opf-editor@0.18.1 test
+> npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes
+
+
+> @openpresentation/opf-editor@0.18.1 build
+> node scripts/build.mjs
+
+
+> @openpresentation/opf-editor@0.18.1 check:font-hotlinks
+> node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs
+
+✔ flags each kind of font CDN reference (1.2355ms)
+✔ does not flag bundled files, data URLs or provenance strings (0.269292ms)
+✔ allowlist is exact, needs a reason, and goes stale (1.557375ms)
+✔ build output is scanned and never allowlisted (0.594ms)
+✔ this repository has no font CDN references (53.461209ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.426125
+font hotlink check passed (tracked files)
+[1/70] node test/accepted-text.mjs
+Accepted text editor: 12 wide/portrait/alignment/card layouts match rendering across edit, undo/redo and explicit pagination.
+[2/70] node test/annotations.mjs
+Annotations passed: 14 caption, reference, citation and footnote checks.
+[3/70] node test/assets.mjs
+Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.
+[4/70] node test/background-options.mjs
+Backgrounds: 5 types with scheme-slot colors, gradient stop validation, 54 patterns round-tripped through PPTX, scope, removal, one undo step each.
+[5/70] node test/block-convert.mjs
+Block conversion: 9 source kinds, 9 fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, preview refresh.
+[6/70] node test/blocks.mjs
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+[7/70] node test/builtin-variables.mjs
+Editor built-in variables passed: listing (deck and slide scope), token insertion, header/footer variables and warnings.
+[8/70] node test/canvas-fields.mjs
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+[9/70] node test/catalog-optional-design.mjs
+Optional design catalog transactions and all three binding error paths passed.
+[10/70] node test/catalogs.mjs
+catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
+catalogs ok: not-in-source records move to custom with their references
+catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
+[11/70] node test/chart-alt.mjs
+chart alt: editor field, undo, review fix, find and replace
+[12/70] node test/chart-highlight.mjs
+Chart highlight (editor): series and categories edit as one undoable patch, follow core's support table and the chart's own names, redraw in the preview and survive the PPTX round trip.
+[13/70] node test/chart-options.mjs
+Chart options (editor): axis titles, legend position and data labels edit as one undoable patch, follow core's support table, redraw in the preview and survive the PPTX round trip.
+[14/70] node test/chart-table-data.mjs
+Chart and table data (editor): DataColumn headers, shared datasets through fields, column number formats, chart mapping and import as a dataset, each one undoable patch; documents without the new fields behave as before.
+[15/70] node test/combo-charts.mjs
+Combo charts (editor): picker, series lines and secondary axis, secondary title, refusals, switch-away cleanup, export.
+[16/70] node test/component-smoke.mjs
+opf-editor component smoke passed
+[17/70] node test/content-actions.mjs
+Content actions: list levels, group and ungroup, regions, image to design and back, slide split, merge, split on overflow and un-paginate: guarded patches, loss reports, refusals and one undo step each.
+[18/70] node test/convert-contract.mjs
+convert contract passed: ConvertResult and ConvertedFile members from core, findings against finding.schema.json, one-based selections, zip, raster, name.
+[19/70] node test/core-features.mjs
+Core features: 96 named imports from 13 sibling modules exist; no run-time feature detection remains.
+[20/70] node test/data-grid.mjs
+data grid model tests passed
+[21/70] node test/deck-stats.mjs
+Deck stats: core's stats over the session's document, following edits and undo, with no severities.
+[22/70] node test/declared-options.mjs
+declared options: canvas and design-controls types name every option the code reads
+[23/70] node test/default-font-scheme.mjs
+shared engine default font scheme (Aptos) passed
+unresolved font schemes: engine default base and one diagnostic, as in every engine
+[24/70] node test/design-options.mjs
+Design options: 10 options with patch, scope, undo/redo, preview and export; slide scope, shadowing, validation, accent font, watermark and slide image merging, organization logos, the logo choice, header/footer zones, Insert logo and logo warnings.
+[25/70] node test/exact-source.mjs
+Exact source: edited tokens only, Escape/Undo/Redo bytes, long drafts, chains, removals and bounds pass.
+[26/70] node test/export-subset.mjs
+Export subset passed: SVG faces cut with the handle's subset engine, whole without it, PDF and PNG unchanged, outlined text from the handle.
+[27/70] node test/export.mjs
+Export API passed: file names, slide choice, ZIP, SVG with embedded faces, license rule, converter hand-off, findings and cancel.
+[28/70] node test/fa-13-conveniences.mjs
+FA-13 editor: ten slide sizes, watermark text, inline code and run language, generic-form schema, code.highlight preview.
+[29/70] node test/find-replace.mjs
+find-replace: ok
+[30/70] node test/font-gate-latin-families.mjs
+Font gate Latin families: 87 families through the editor's gate, 348 family-styles resolved to their route, 94 vendored files fetched in total, each only when a family needed it.
+[31/70] node test/font-gate-registry.mjs
+Font gate registry: a catalog-only font scheme resolves, loading is face level, an italic edit loads one face, an unknown layout never fails the gate, script faces load.
+[32/70] node test/font-gate-script-families.mjs
+Font gate script families: 35 families through the editor's gate, 194 styles resolved to the family itself, 295 runs drawn strictly in it, 67 pinned files fetched in total, each only when a document needed it.
+[33/70] node test/font-gate-script-names.mjs
+Font gate script names: 22 proprietary names through the editor's gate, 174 resolutions to their policy routes, 1440 runs drawn in their route faces, 39 pinned files fetched in total.
+[34/70] node test/font-gate.mjs
+Font gate: gates on the fonts handle's pending and ensure, reports one failure without retrying, drops superseded results.
+[35/70] node test/gallery-font-roles.mjs
+gallery font-scheme roles passed
+[36/70] node test/gallery-layout-records.mjs
+Gallery layout records use the layout schema shape.
+[37/70] node test/image-crop.mjs
+image-crop: ok
+[38/70] node test/image-options.mjs
+image options ok: block fit, focus, treatments and placement; flat image backgrounds; the removed design keys are refused
+[39/70] node test/json-options.mjs
+JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass.
+Layout ranking: current first, exact/compatible groups, counted placeholders, document overrides, provenance and unknown layouts pass.
+Layout edits: blank metrics, repeated slots, rich text, zero values, nested blocks, regions, explicit types, local/app catalogs and atomic source edits pass.
+[40/70] node test/json-source.mjs
+JSON source: exact mixed endings through typing, multi-range edits, deletion, native history, explicit paste and external changes.
+[41/70] node test/layout-design-applied.mjs
+Editor layout design applied: layout, deck and slide alignment and content box resolve with one merge in the editor composition.
+[42/70] node test/layout.mjs
+Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.
+[43/70] node test/metric-sentiment.mjs
+FA-06 editor: Metric.sentiment is a schema-driven enum field, set, validated, undone and composed through the session.
+[44/70] node test/narrative-switch.mjs
+narrative switch: ok
+[45/70] node test/numbering.mjs
+Numbering model passed: lists found in roots, regions, blocks and groups, state and markers, the shortest value, number / change / restart / turn off as one undoable validated edit each.
+[46/70] node test/outline.mjs
+RR-21 outline: ok
+[47/70] node test/patch.mjs
+Editor patch: core RFC 6902 module, move/copy, 269 checks of undo/redo exactness, events, error codes, path helpers and guards pass.
+[48/70] node test/persistence.mjs
+RR-22 persistence: ok
+[49/70] node test/placeholder-groups.mjs
+placeholder groups: 10 slides compose the same leaf boxes in the editor as in core; the layout UI and Arrange show nested slots
+[50/70] node test/placeholder-selection.mjs
+PASS short headings use the allocated item box, not glyph ink
+PASS code and metric parts keep traced part boxes over the parent item
+PASS source-text traces and rich-line fallbacks still provide a selectable box
+[51/70] node test/presentation-ids.mjs
+presentation-ids and reference-layer editor guards passed.
+[52/70] node test/published-core-gate.mjs
+published-core-gate: ok
+[53/70] node test/quote-role-photo.mjs
+Quote role and photo: schema form, session edit/undo/validation, canvas fields and find/replace pass.
+[54/70] node test/review-logo-alt.mjs
+Review logo alt passed: a logo reference stays whole, its alt is written on the organization's light and dark assets (or the registry entry), and a reference with no logo is refused.
+[55/70] node test/review.mjs
+Review model passed 74 checks.
+[56/70] node test/rich-headings.mjs
+Rich headings: formatting, citations, outline and slide lists, find and replace.
+[57/70] node test/rich-text.mjs
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+Native rich input preserves mixed source line endings, cross-run CRLF, selection affinity, marks and metadata.
+[58/70] node test/schema.mjs
+Schema controls: 767 documented fields, nested paths, catalog records, background forms, required defaults passed.
+[59/70] node test/slide-context.mjs
+Slide context: composition, pagination and the renderer share core's resolved fonts, layout and theme; unknown ids fall back and report.
+[60/70] node test/slide-variables.mjs
+Slide variables (editor): composeSlide and the preview substitute {{slide.number}}, {{slide.section}} and {{deck.slideCount}}; pagination and edits keep the tokens.
+[61/70] node test/slides.mjs
+RR-21 slide management: ok
+[62/70] node test/smoke.mjs
+opf-editor smoke passed
+[63/70] node test/styled-table.mjs
+Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo.
+[64/70] node test/switches-export.mjs
+Exports after switches passed the FF-08 typeface check: 84 packages checked (84 built).
+[65/70] node test/switches-ui.mjs
+Switch pickers: options for every catalog dimension, chart types by data shape, and current values at deck and slide scope.
+[66/70] node test/switches.mjs
+Dimension switches passed: 16 dimensions (patch, one undo step, undo/redo, preview refresh; language preview checked).
+[67/70] node test/table-alt.mjs
+table alt: editor field, undo, dataset table, find and replace
+[68/70] node test/table-options.mjs
+Table options: merge, join, split, refusals, 5 style presets plus per-axis styles and Theme reset, cell styles, preview and PPTX export/reimport, one undo step each.
+[69/70] node test/templates.mjs
+Templates passed fields, previews, one undoable fill, partial fills, declarations and token insertion.
+[70/70] node test/transfer.mjs
+Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+run-tests: 70 tests passed
+
+> @openpresentation/opf-editor@0.18.1 check:runners
+> node --test scripts/run-tests.test.mjs
+
+✔ selectTests runs the glob in name order minus the excluded files and the browser suites (0.626542ms)
+✔ selectTests fails on a stale or contradictory suites.json instead of silently dropping a test (0.177666ms)
+✔ the browser pattern matches browser suites and not look-alikes (0.067459ms)
+✔ test/suites.json agrees with test/ and every excluded file is a real file (0.260917ms)
+✔ RR-53: the contract suite is the full suite minus contractExclude, and a stale or unexplained exclusion fails (0.154292ms)
+✔ RR-53: test/suites.json contract exclusions are real full-suite tests with reasons, and npm run test:contract runs the contract suite (0.351875ms)
+✔ run-tests stops at the first failing test and lists commands with --list (81.194125ms)
+✔ check-syntax lists sources in a stable order, skips fixtures and reports a syntax error (87.891125ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 201.778583
+
+> @openpresentation/opf-editor@0.18.1 check:changes
+> node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check
+
+✔ parseFragment reads type, packages and the entry text (0.747125ms)
+✔ parseFragment rejects what would silently corrupt the changelog (0.267542ms)
+✔ assembleChangelog adds a dated section under an empty Unreleased and keeps the older sections byte for byte (0.216833ms)
+✔ assembleChangelog follows a loose list and folds leftover Unreleased bullets in first (0.117167ms)
+✔ assembleChangelog keeps a multi-line entry together and refuses a duplicate or empty release (0.131708ms)
+✔ assembleChangelog adds the Unreleased heading when a changelog lacks one (0.043834ms)
+✔ assemble groups by type (added, changed, fixed) then slug, and deletes the fragments it used (1.159041ms)
+✔ assemble in a monorepo splits fragments by package and keeps a shared one until both changelogs have it (1.706292ms)
+✔ withoutPackage drops one package and reports when none remain (0.106375ms)
+✔ needsFragment warns only for package code without a fragment or a hand edit of the changelog (0.145667ms)
+✔ the command line validates fragments, assembles with --dry-run untouched, and fails on a bad fragment (63.403625ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.085416
+changes/: 1 fragment(s) valid
