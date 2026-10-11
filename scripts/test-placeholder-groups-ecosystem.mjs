@@ -1,4 +1,4 @@
-// FA-26 cross-engine check (the 0.15 design's Nesting test): layout records with nested placeholder groups, and
+// FA-26 cross-engine check (the 0.15 design's Nesting test): explicit nested content groups, and
 // design.chartPrimary as the group it stands for, place every leaf in the same box in core composition, the coordinated
 // renderer's SVG and the exporter's native shapes, within 0.5 pt. docs/fixtures/placeholder-groups.opf.json is
 // self-contained (catalogs.custom, "default": false), so no host catalog is registered. It checks the shared geometry
@@ -67,10 +67,10 @@ for (const [index, slide] of deck.slides.entries()) {
   const frames = nativeFrames(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
   const body = geometry.items.filter((item) => !['tag', 'title', 'subtitle'].includes(item.field));
   assert.ok(body.length > 0, slide.id);
-  if (slide.layout) assert.ok(geometry.slots?.length, `${slide.id}: composes through the record's groups`);
+  if (slide.blocks?.some(block => block.blocks)) assert.ok(geometry.groups.length, `${slide.id}: composes nested content groups`);
   // The renderer draws from the same composition.
   assert.deepEqual(rendered.items.map((item) => [item.path, item.box]), geometry.items.map((item) => [item.path, item.box]), `${slide.id}: renderer geometry`);
-  assert.deepEqual(rendered.slots ?? null, geometry.slots ?? null, `${slide.id}: renderer slots`);
+  assert.deepEqual(rendered.groups, geometry.groups, `${slide.id}: renderer content groups`);
   for (const item of body) {
     const box = Object.fromEntries(Object.entries(item.box).map(([key, value]) => [key, pt(value)]));
     const where = `${slide.id} ${item.path}`;
@@ -102,4 +102,4 @@ for (const [index, slide] of deck.slides.entries()) {
   }
 }
 assert.ok(leaves >= 30, `${leaves} leaves checked`);
-console.log(`Placeholder groups ecosystem: ${leaves} leaves of ${deck.slides.length} slides (nested records and chartPrimary) agree across core, SVG and native PPTX within ${TOLERANCE_PT} pt.`);
+console.log(`Placeholder groups ecosystem: ${leaves} leaves of ${deck.slides.length} slides (nested content groups and chartPrimary) agree across core, SVG and native PPTX within ${TOLERANCE_PT} pt.`);

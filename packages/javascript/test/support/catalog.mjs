@@ -10,7 +10,7 @@ const SCHEMAS = {
 
 /** The records of `kind` (a content or display kind), in snapshot order, each with its `$schema` and `id`. */
 export const records = (kind) =>
-  Object.entries(gallery[kind] ?? catalogDisplay[kind] ?? {}).map(([id, record]) => ({ $schema: `https://openpresentation.org/schema/opf-${SCHEMAS[kind]}/v1`, id, ...record }));
+  Object.entries(gallery[kind] ?? catalogDisplay[kind] ?? {}).map(([id, record]) => ({ $schema: `https://openpresentation.org/schema/opf-${SCHEMAS[kind]}/${kind === 'layouts' ? 'v2' : 'v1'}`, id, ...record }));
 
 export const layouts = records('layouts');
 export const themes = records('themes');

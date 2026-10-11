@@ -397,7 +397,7 @@ test('opf/text-overflow: a host text measurement replaces the estimate', () => {
 });
 
 test('opf/layout-failed: a composition error is a finding, and the rest of the rules still run', () => {
-	const catalogs = [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', placeholders: [{ type: 'title' }], composition: { padding: 5 } } } }];
+	const catalogs = [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', areas: ["title"], rows: [1], regions: {}, composition: { padding: 5 } } } }];
 	const found = only(deck([{ title: 'T', layout: 'broken', text: 'x' }, { title: 'U', text: 'y' }]), 'layout-failed', { catalogs });
 	assert.equal(found.length, 1);
 	assert.equal(found[0].path, '/slides/0');

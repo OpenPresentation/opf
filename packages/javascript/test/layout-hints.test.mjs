@@ -33,38 +33,17 @@ test('contentDirection sets the root mode for blocks and root payloads, slide de
   assert.deepEqual(boxes(single), boxes(composeSlide({title: 'Text', text: 'Body'})));
 });
 
-test('contentDirection precedence: an explicit composition.mode (slide or layout record) wins; the hint beats the layout direction', () => {
+test('explicit composition modes govern automatic content and templates preserve their grid', () => {
   const slide = {title: 'Blocks', blocks};
-  const vertical = {design: {contentDirection: 'vertical'}};
-  // An explicit slide composition.mode is authoritative.
-  const explicit = composeSlide({...slide, composition: {mode: 'row'}}, {presentation: vertical, explain: true});
-  assert.ok(isRow(explicit));
-  assert.deepEqual(boxes(explicit), boxes(composeSlide({...slide, composition: {mode: 'row'}})));
-  // So is the layout record's composition.mode: pptx.gallery derives contentDirection from the layout's
-  // own design.contentDirection, and the hint must never flatten the layout's grid (chart-2x stays 2x2).
-  const rowLayout = {id: 'row-layout', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, placeholders: [{type: 'title'}, {type: 'text'}, {type: 'text'}]};
-  const kept = composeSlide(slide, {layout: rowLayout, presentation: vertical, explain: true});
-  assert.ok(isRow(kept));
-  assert.deepEqual(boxes(kept), boxes(composeSlide(slide, {layout: rowLayout})));
-  assert.equal(kept.composition.gap, 0.06);
-  const gridLayout = {id: 'chart-2x', composition: {mode: 'grid', columns: 2}, placeholders: [{type: 'title'}, {type: 'chart'}, {type: 'text'}, {type: 'chart'}, {type: 'text'}]};
-  const four = {title: 'Grid', blocks: [chart, {text: 'a'}, chart, {text: 'b'}]};
-  for (const hint of ['horizontal', 'vertical']) {
-    const result = composeSlide({...four, design: {contentDirection: hint}}, {layout: gridLayout, explain: true});
-    assert.deepEqual(boxes(result), boxes(composeSlide(four, {layout: gridLayout})), `${hint} keeps the 2x2 grid`);
-    assert.equal(rootDecision(result).mode, 'grid');
-  }
-  // The layout's design.contentDirection is only a hint below the design value.
-  const directionLayout = {id: 'direction-layout', design: {contentDirection: 'horizontal'}, placeholders: [{type: 'title'}, {type: 'text'}]};
-  assert.ok(isRow(composeSlide(slide, {layout: directionLayout})));
-  assert.ok(isColumn(composeSlide(slide, {layout: directionLayout, presentation: vertical})));
-  // Without a hint the layout direction still applies, so existing decks are unchanged.
-  assert.ok(isColumn(composeSlide(slide, {layout: {...directionLayout, design: {contentDirection: 'vertical'}}, presentation: {design: {}}})));
+  assert.ok(isRow(composeSlide({...slide,composition:{mode:'row'}},{presentation:{design:{contentDirection:'vertical'}},explain:true})));
+  const template = {name:'Two columns',areas:['title title','a b'],rows:['auto',1],columns:[1,1],regions:{a:{accepts:['text'],flow:'none'},b:{accepts:['text'],flow:'none'}}};
+  const control=composeSlide(slide,{layout:template});
+  for(const direction of ['horizontal','vertical'])assert.deepEqual(boxes(composeSlide({...slide,design:{contentDirection:direction}},{layout:template})),boxes(control));
 });
 
 test('contentDirection leaves promoted regions and nested groups untouched', () => {
   const regions = {title: 'Regions', left: {text: 'L'}, right: {text: 'R'}};
-  const twoColumn = {id: 'two-column', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, placeholders: [{type: 'title'}, {type: 'list'}, {type: 'list'}]};
+  const twoColumn = {id: 'two-column', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, areas: ["title","body-1","body-2"], rows: ["auto",1,1], regions: {"body-1":{"accepts":["list"],"flow":"none"},"body-2":{"accepts":["list"],"flow":"none"}}};
   for (const layout of [twoColumn, undefined]) {
     const control = composeSlide(regions, {layout, explain: true});
     const hinted = composeSlide(regions, {layout, presentation: {design: {contentDirection: 'vertical'}}, explain: true});
@@ -91,7 +70,7 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
     ['top', {mode: 'column', columns: 1, chart: box => box.y === control.contentBox.y && Math.abs(box.height - (height - gap) * 3 / 5) < 1e-6}],
     ['bottom', {mode: 'column', columns: 1, chart: box => Math.abs(box.y + box.height - (control.contentBox.y + height)) < 1e-6 && Math.abs(box.height - (height - gap) * 3 / 5) < 1e-6}],
   ]) {
-    for (const [slideInput, options] of [[slide, {presentation: {design: {chartPrimary: side}}}], [{...slide, design: {chartPrimary: side}}, {presentation: {design: {chartPrimary: 'none'}}}], [slide, {layout: {id: 'chart-2x', design: {chartPrimary: side}, composition: {mode: 'grid', columns: 2}, placeholders: [{type: 'title'}, {type: 'chart'}, {type: 'text'}, {type: 'chart'}, {type: 'text'}]}}]]) {
+    for (const [slideInput, options] of [[slide, {presentation: {design: {chartPrimary: side}}}], [{...slide, design: {chartPrimary: side}}, {presentation: {design: {chartPrimary: 'none'}}}]]) {
       const result = composeSlide(slideInput, {...options, explain: true});
       const chartItem = result.items.find(item => item.field === 'chart');
       assert.ok(expect.chart(chartItem.box), `${side}: chart box ${JSON.stringify(chartItem.box)}`);
@@ -116,10 +95,6 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
   assert.deepEqual(none.items.map(item => item.box), control.items.map(item => item.box));
   assert.equal(rootDecision(none).reason, 'lowest-score');
   assert.deepEqual(composeSlide(slide, {presentation: {design: {chartPrimary: 'middle'}}}).items.map(item => item.box), control.items.map(item => item.box));
-  const layoutLeft = {id: 'chart-text', design: {chartPrimary: 'left'}, placeholders: [{type: 'title'}, {type: 'chart'}, {type: 'text'}]};
-  assert.equal(rootDecision(composeSlide(slide, {layout: layoutLeft, explain: true})).reason, 'chart-primary');
-  assert.equal(rootDecision(composeSlide(slide, {layout: layoutLeft, presentation: {design: {chartPrimary: 'none'}}, explain: true})).reason, 'lowest-score');
-  assert.equal(rootDecision(composeSlide(slide, {layout: {...layoutLeft, design: {chartPrimary: 'none'}}, explain: true})).reason, 'lowest-score');
   // A root chart payload beside nothing else is a single cell; two root blocks (chart and text) split 3:2.
   const pair = composeSlide({title: 'Pair', blocks: [chart, {text: 'Support'}]}, {presentation: {design: {chartPrimary: 'right'}}});
   const [chartBox, textBox] = [pair.items.find(item => item.field === 'chart').box, pair.items.find(item => item.field === 'text').box];

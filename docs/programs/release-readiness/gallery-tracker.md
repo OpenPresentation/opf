@@ -8,11 +8,11 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 ## Summary
 
-841 records; 823 addressed, 18 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+863 records; 557 addressed, 306 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
-| layouts | 278 | done 272, unknown 6 | 272 | 6 |
+| layouts | 300 | done 6, missing-gallery 22, missing-spec 272 | 6 | 294 |
 | color-schemes | 14 | done 14 | 14 | 0 |
 | font-schemes | 93 | done 35, descoped 3, parity-near 19, font-gap 36 | 93 | 0 |
 | languages | 93 | done 66, parity-near 2, font-gap 25 | 93 | 0 |
@@ -33,15 +33,15 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 671 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 405 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 0 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 12 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
-| `unknown` | 15 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
+| `unknown` | 9 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 32 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 108 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
-| `missing-gallery` | 3 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
-| `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
+| `missing-gallery` | 25 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
+| `missing-spec` | 272 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
 | `native-mismatch` | 0 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
@@ -68,9 +68,11 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 | Type | Gap | Records | Ids | Detail | Next action | Link |
 | --- | --- | ---: | --- | --- | --- | --- |
+| layouts | `missing-spec` | 272 | `action-plan`, `appendix-index`, `architecture-stack`, `assumptions-dependencies`, `before-after`, `benchmark-target-table`, `blank`, `bullet-list`, `business-model-canvas`, `capability-map`, `case-study`, `chapter-recap` and 260 more | published by the pptx.gallery layouts catalog but not bundled in @openpresentation/gallery (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
+| layouts | `missing-gallery` | 22 | `chart`, `chart-beside`, `closing`, `code`, `cover`, `gallery`, `hero`, `image`, `image-beside`, `list`, `logos`, `metrics` and 10 more | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | slide-sizes | `missing-gallery` | 3 | `1:1`, `4:5`, `9:16` | pptx.gallery has no slide-size pages | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
-| layouts | `unknown` | 6 | `title-center-image-bottom`, `title-center-image-top`, `title-left-image-bottom`, `title-left-image-left`, `title-left-image-right`, `title-left-image-top` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
+| layouts | `unknown` | 28 | `chart`, `chart-beside`, `closing`, `code`, `cover`, `gallery`, `hero`, `image`, `image-beside`, `list`, `logos`, `metrics` and 16 more | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
 
 ## Addressed gaps

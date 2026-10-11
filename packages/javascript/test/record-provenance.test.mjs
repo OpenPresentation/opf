@@ -14,7 +14,7 @@ test('resolveSlideContext reports the group, source and origin of every record i
   const deck = {
     name: 'Provenance',
     design: { theme: 'acme:brand', fontScheme: 'roboto' },
-    catalogs: { acme: { source: ACME }, custom: { layouts: { mine: { name: 'Mine', placeholders: [{ type: 'title' }] } } } },
+    catalogs: { acme: { source: ACME }, custom: { layouts: { mine: { name: 'Mine', areas: ["title"], rows: [1], regions: {} } } } },
     slides: [{ layout: 'mine', title: 'One' }, { layout: 'two-column', title: 'Two' }, { layout: 'nowhere', title: 'Three' }],
   };
   const catalogs = [gallery, acme];

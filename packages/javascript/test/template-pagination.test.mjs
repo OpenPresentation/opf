@@ -1,11 +1,12 @@
+import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { describe, test } from 'node:test';
 import { paginate } from '../dist/index.js';
 import { composeSlide } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79), design section 4: pagination continues on a new slide with the same layout and never drops content.
-const { layouts } = JSON.parse(readFileSync(new URL('./fixtures/layout-templates-0.19.json', import.meta.url), 'utf8'));
+const fixture = gallery;
+const { layouts } = fixture;
 const deck = (layout, slide) => ({ catalogs: { custom: { layouts: { [layout]: layouts[layout] } } }, slides: [{ layout, ...slide }] });
 const text = (value) => ({ text: value });
 

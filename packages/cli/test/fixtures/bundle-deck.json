@@ -7,7 +7,7 @@
   "slides": [
     {
       "id": "trend",
-      "layout": "chart-1x",
+      "layout": "chart",
       "title": "Trend",
       "chart": { "type": "line", "data": { "columns": ["Month", "Value"], "rows": [["Jan", 1]] } }
     },

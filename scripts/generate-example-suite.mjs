@@ -4,8 +4,6 @@ import { fileURLToPath } from "node:url";
 import { gallery } from "@openpresentation/gallery";
 import { colorContrast } from "../packages/javascript/dist/composition.js";
 import { embed } from "../packages/javascript/dist/index.js";
-import layoutTemplates from "../packages/javascript/test/fixtures/layout-templates-0.19.json" with { type: "json" };
-import layoutConversion from "../tools/rr83-conversion/layout-migration.json" with { type: "json" };
 import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -1025,27 +1023,12 @@ async function loadCatalogs() {
 
 /**
  * One finished gallery deck: deckFor's document with every record it references embedded under
- * catalogs.default by core `embed`, with the 0.19 layout fixtures and the other default records registered.
- * Replace the fixture catalog with @openpresentation/gallery@^2 when it is published.
+ * catalogs.default by core `embed`, with the gallery 2.x catalog registered.
  */
 function embeddedDeckFor(spec, index, catalogs) {
   const { deck, folder, filename } = deckFor(spec, index, catalogs);
-  const { document, unresolved } = embed(deck, { catalogs: [{ ...gallery, layouts: layoutTemplates.layouts }] });
+  const { document, unresolved } = embed(deck, { catalogs: [gallery] });
   if (unresolved.length) throw new Error(`${folder}/${filename}: ${unresolved.map((entry) => entry.message).join("; ")}`);
-  // The 1.x narrative records embedded with the other catalog kinds still name old layouts.
-  // This disappears when the gallery 2.x package provides all eight kinds.
-  const convertReferences = (value) => {
-    if (Array.isArray(value)) { for (const entry of value) convertReferences(entry); return; }
-    if (!value || typeof value !== "object") return;
-    if (typeof value.layout === "string") {
-      const prefix = value.layout.startsWith("default:") ? "default:" : "";
-      const id = value.layout.slice(prefix.length);
-      const row = layoutConversion.layouts[id];
-      if (row) value.layout = row.layout === "auto" ? "auto" : `${prefix}${row.layout}`;
-    }
-    for (const entry of Object.values(value)) convertReferences(entry);
-  };
-  convertReferences(document);
   return { deck: document, folder, filename };
 }
 

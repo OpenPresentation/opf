@@ -5,7 +5,7 @@ Direct local lookup:
 ```js
 import { embed, validate, validateCatalogRecord } from '@openpresentation/opf';
 import { gallery } from '@openpresentation/gallery';
-const options = Object.keys(gallery.layouts).filter(id => id.includes('text-2x'));
+const options = Object.keys(gallery.layouts).filter(id => id.includes('two-column'));
 const font = gallery.fontSchemes.roboto;
 const validation = validateCatalogRecord('layouts', publishedLayoutFile); // a record file with $schema and id
 const report = validate(document, { catalogs: [gallery] });

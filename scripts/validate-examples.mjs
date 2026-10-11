@@ -1,3 +1,4 @@
+import { gallery } from '@openpresentation/gallery';
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,8 +7,7 @@ import { validate } from "../packages/javascript/dist/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = path.join(repoRoot, "examples");
-const templateFixture = JSON.parse(await readFile(path.join(repoRoot, "packages/javascript/test/fixtures/layout-templates-0.19.json"), "utf8"));
-const builtInLayouts = new Set(Object.keys(templateFixture.layouts));
+const builtInLayouts = new Set(Object.keys(gallery.layouts));
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });

@@ -6,7 +6,7 @@ import { OPFMoveToCustomError, applyPatch, copySlides, moveToCustom, resolveRefe
 const GALLERY = 'https://gallery.example';
 const ACME = 'https://acme.example';
 const scheme = (accent1) => ({ name: `Scheme ${accent1}`, accent1, accent2: '#222222', accent3: '#333333', accent4: '#444444', accent5: '#555555', accent6: '#666666', dark1: '#000000', dark2: '#111111', light1: '#FFFFFF', light2: '#EEEEEE', hyperlink: '#0000EE', followedHyperlink: '#551A8B' });
-const layout = (name) => ({ name, placeholders: [{ type: 'title' }] });
+const layout = (name) => ({ name, areas: ["title"], rows: [1], regions: {} });
 const gallery = { source: GALLERY, layouts: { 'two-column': layout('Two column') } };
 const base = (catalogs, slides) => ({ $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Move', catalogs, slides });
 const notInSource = (document, catalogs) => validate(document, { only: ['references'], catalogs }).findings.filter((finding) => finding.ruleId === 'opf/catalog-record-not-in-source');

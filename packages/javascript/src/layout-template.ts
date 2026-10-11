@@ -5,7 +5,7 @@
  * geometry is `composeSlide`.
  *
  * A record is a template when it has `areas`. Until the default catalog moves to `@openpresentation/gallery` 2.0.0, the
- * 0.18 records (`placeholders`, `opf-layout/v1`) still compose as they did; RR-83 removes them.
+ * OPF 0.19 accepts only v2 grid templates; v1 placeholder records are removed.
  */
 
 /** The content kinds a region can accept: the body content kinds and `group` for a content group. */

@@ -101,8 +101,8 @@ describe("opf validate", () => {
     const raw = '﻿{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Target","layout":"pratner"}]\n}';
     const file = write("target.opf.json", raw);
     const loaded = write("brand.json", {
-      catalogs: [{ source: "pkg:@brand/catalog", layouts: { partner: { name: "Partner", placeholders: [{ type: "title" }] } } }],
-      contracts: [{ path: "/slides/*/layout", allowedValues: ["text-1x"], message: "Brand layouts: {{allowed}}." }],
+      catalogs: [{ source: "pkg:@brand/catalog", layouts: { partner: { name: "Partner", areas: ["title"], rows: [1], regions: {} } } }],
+      contracts: [{ path: "/slides/*/layout", allowedValues: ["text"], message: "Brand layouts: {{allowed}}." }],
     });
     const report = JSON.parse(run(["validate", file, "--only", "format,references,policy"]).stdout);
     assert.equal(report.valid, true);
@@ -111,7 +111,7 @@ describe("opf validate", () => {
     const policy = run(["validate", file, "--config", loaded, "--only", "policy"]);
     assert.equal(policy.status, 1);
     const found = JSON.parse(policy.stdout).findings;
-    assert.ok(found.some((item) => item.ruleId === "opf/contract" && item.category === "policy" && item.message.includes("text-1x")));
+    assert.ok(found.some((item) => item.ruleId === "opf/contract" && item.category === "policy" && item.message.includes("text")));
     assert.equal(readFileSync(path.join(dir, file), "utf8"), raw, "validate never rewrites source, including BOM and mixed line endings");
   });
 

@@ -69,20 +69,18 @@ describe('the cover rule is a record rule', () => {
   const titleY = (geometry) => geometry.items.find((item) => item.field === 'title').box.y;
   const compose = (slide, layout) => composeSlide(slide, { width: 1280, height: 720, ...(layout ? { layout } : {}) });
 
-  test('a layout whose placeholders are all headings centres a slide with no body, whatever its id', () => {
+  test('a template with only a title region centres a slide with no body, whatever its id', () => {
     const slide = { title: 'Cover', subtitle: 'Subtitle' };
-    const headings = { name: 'Opening', placeholders: [{ type: 'title' }, { type: 'subtitle' }] };
+    const headings = { name: 'Opening', areas: ["title"], rows: [1], regions: {} };
     const centred = titleY(compose(slide, headings));
     assert.ok(centred > 720 * 0.25, `${centred}`);
     assert.equal(titleY(compose(slide)), centred, 'no layout record: the same cover');
   });
 
-  test('a layout with a body placeholder is not a cover, even with the id title', () => {
-    const slide = { title: 'Not a cover' };
-    const body = { id: 'title', name: 'Title', placeholders: [{ type: 'title' }, { type: 'text' }] };
-    assert.ok(titleY(compose(slide, body)) < 720 * 0.2);
-    // An empty placeholder list is not a heading-only layout: the slide keeps the content origin.
-    assert.ok(titleY(compose(slide, { name: 'Blank', placeholders: [] })) < 720 * 0.2);
+  test('empty regions collapse while populated regions retain a content heading', () => {
+    const body = { id: 'title', name: 'Title', areas: ['title','body'], rows: ['auto',1], regions: {body:{accepts:['text'],flow:'none'}} };
+    assert.ok(titleY(compose({title:'Cover'},body)) > 720 * 0.25);
+    assert.ok(titleY(compose({title:'Content',text:'Body'},body)) < 720 * 0.2);
   });
 });
 

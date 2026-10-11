@@ -81,7 +81,7 @@ describe('mirrored arrangement', () => {
 
   it('mirrors cover logos', () => {
     const presentation = {language: 'ar', organization: {id: 'acme', name: 'Acme', logo: 'data:image/png;base64,AAAA'}, slides: [{layout: 'title', title: 'عنوان'}]};
-    const layout = {id: 'title', placeholders: [{type: 'title'}]};
+    const layout = {id: 'title', areas: ["title"], rows: [1], regions: {}};
     const composed = compose(presentation, presentation.slides[0], {layout});
     assert.equal(composed.logo.anchor, 'right');
     assert.ok(composed.logo.box.x + composed.logo.box.width > composed.width / 2);

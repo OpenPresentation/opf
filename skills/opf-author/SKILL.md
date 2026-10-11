@@ -10,7 +10,7 @@ Deliver ordinary `*.opf.json` that the user can edit, validate, preview, and exp
 
 ## Start from the actual format
 
-Find the host project's installed `@openpresentation/opf` version. In this repository, `spec/schemas/opf.schema.json` is authoritative, and the 0.19 built-in layout fixture is `packages/javascript/test/fixtures/layout-templates-0.19.json` until `@openpresentation/gallery` 2.0.0 publishes it. In an npm consumer, use the package's exported schemas and the installed gallery catalog. A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
+Find the host project's installed `@openpresentation/opf` version. Use the authoritative schemas in this checkout and the 28 v2 layout records from the installed `@openpresentation/gallery` 2 package. In an npm consumer, use the package's exported schemas and the installed gallery catalog. A repository checkout needs its normal package build before package APIs are available. Read only the definitions relevant to the task. Current source APIs can differ from older published releases.
 
 Use the [content guide](references/content.md) for payload shapes. [The starter](assets/decision-brief.opf.json) is a valid complete document; its example content is illustrative, not evidence for the user's presentation.
 

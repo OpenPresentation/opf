@@ -7,7 +7,7 @@ import {fromYaml, toYaml} from '../dist/yaml.js';
 // RR-71 (OPF 0.18): logos live on the organization, are placed through slide-scoped variable references, and a
 // header/footer zone lays its parts out in one row. Decisions: docs/programs/release-readiness/rr-71-logos.md.
 const asset = name => `./assets/${name}.svg`;
-const titleOnly = {id: 'title', placeholders: [{type: 'title'}]};
+const titleOnly = {id: 'title', areas: ["title"], rows: [1], regions: {}};
 const near = (actual, expected, message) => assert.ok(Math.abs(actual - expected) < 1e-9, `${message}: ${actual} vs ${expected}`);
 const deck = (organization, extra = {}) => ({$schema: 'https://openpresentation.org/schema/opf/v1', organization, slides: [{title: 'Cover'}], ...extra});
 const codes = report => report.findings.filter(finding => finding.ruleId.startsWith('opf/variable-')).map(finding => [finding.ruleId, finding.severity, finding.path]);

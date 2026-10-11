@@ -36,13 +36,13 @@ try{
  const version=run(['version']);assert.equal(version.package,'@openpresentation/opf');
  const schema=run(['schema','presentation','/$defs/Composition']);assert.ok(schema.value.properties.mode.enum.includes('grid'));
  const search=run(['find-schema','watermark']);assert.ok(search.matches.some(match=>match.path.endsWith('/properties/watermark')));
- const found=run(['catalog','layouts','text-2x']);assert.ok(found.records.some(record=>record.id==='text-2x'));
+ const found=run(['catalog','layouts','two-column']);assert.ok(found.records.some(record=>record.id==='two-column'));
  assert.equal(run(['record','fontSchemes','roboto']).record.id,'roboto');
  run(['record','layouts','does-not-exist'],{status:2});run(['schema','presentation','/__proto__'],{status:2});run(['schema','presentation','/bad~9'],{status:2});run(['catalog','constructor'],{status:2});
  const source=path.join(skills,'opf-author/assets/decision-brief.opf.json');assert.equal(run(['validate',source]).valid,true);
  const invalid=path.join(temp,'invalid.json');await writeFile(invalid,JSON.stringify({slides:'not-an-array'}));assert.equal(run(['validate',invalid],{status:1}).valid,false);
  const warning=path.join(temp,'warning.json');await writeFile(warning,JSON.stringify({design:{theme:'a-theme-no-catalog-defines'},slides:[{title:'Custom'}]}));assert.ok(run(['validate',warning]).findings.some(finding=>finding.ruleId==='opf/unresolved-reference'&&finding.severity==='warning'));
- const record=path.join(temp,'layout.json');{const [id,layout]=Object.entries(gallery.layouts)[0];await writeFile(record,JSON.stringify({$schema:'https://openpresentation.org/schema/opf-layout/v1',id,...layout}));}assert.equal(run(['validate',record,'layouts']).valid,true);
+ const record=path.join(temp,'layout.json');{const [id,layout]=Object.entries(gallery.layouts)[0];await writeFile(record,JSON.stringify({$schema:'https://openpresentation.org/schema/opf-layout/v2',id,...layout}));}assert.equal(run(['validate',record,'layouts']).valid,true);
  const broken=path.join(temp,'broken.json');await writeFile(broken,'{');assert.equal(run(['validate',broken],{status:1}).findings[0].ruleId,'opf/json-syntax');
  const copied=path.join(temp,'installed-skill');await cp(path.join(skills,'opf-inspect'),copied,{recursive:true});
  const portable=path.join(copied,'scripts/opf-inspect.mjs');assert.equal(run(['validate',source],{cwd:temp,script:portable,env:{OPF_ROOT:root}}).valid,true);

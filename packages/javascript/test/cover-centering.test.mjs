@@ -7,9 +7,9 @@ import {composeSlide} from '../dist/composition.js';
 // Re-cut of the cover half of OpenPresentation/opf#94 onto the image-safe area (FF-26),
 // explicit heading alignment (FF-29) and picture-slot removal.
 const photo = 'data:image/png;base64,iVBORw0KGgo=';
-const titleSubtitle = {id: 'title-subtitle', placeholders: [{type: 'title'}, {type: 'subtitle'}]};
-const titleOnly = {id: 'title', placeholders: [{type: 'title'}]};
-const text1x = {id: 'text-1x', placeholders: [{type: 'title'}, {type: 'text'}]};
+const titleSubtitle = {id: 'title-subtitle', areas: ["title"], rows: [1], regions: {}};
+const titleOnly = {id: 'title', areas: ["title"], rows: [1], regions: {}};
+const text1x = {id: 'text-1x', areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}};
 const byField = (result, field) => result.items.find(item => item.field === field);
 const headingGroup = result => {
   const headings = result.items.filter(item => ['tag', 'title', 'subtitle'].includes(item.field));
@@ -49,13 +49,14 @@ test('cover layouts vertically center the heading group', () => {
   }
 });
 
-test('a layout whose placeholders are all headings is a cover, a layout with content placeholders is not', () => {
-  const headingsOnly = {id: 'custom-cover', placeholders: [{type: 'tag'}, {type: 'title'}, {type: 'subtitle'}]};
+test('heading templates center and empty content regions collapse', () => {
+  const headingsOnly = {id: 'custom-cover', areas: ["title"], rows: [1], regions: {}};
   const cover = composeSlide({tag: 'Q1', title: 'Custom cover', subtitle: 'Line'}, {layout: headingsOnly});
   const {top, bottom} = headingGroup(cover);
   assert.ok(Math.abs((top + bottom) / 2 - 360) < 1e-6);
   const content = composeSlide({title: 'Only a title'}, {layout: text1x});
-  assert.ok(Math.abs(byField(content, 'title').box.y - 0.08 * 720) < 1e-6, 'content layouts stay top-aligned without a body');
+  const bounds = headingGroup(content);
+  assert.ok(Math.abs((bounds.top + bounds.bottom) / 2 - 360) < 1e-6, 'empty regions collapse into a centered cover');
 });
 
 test('wrapped cover headings recenter as a group and keep line and outline origins with the boxes', () => {
@@ -83,7 +84,7 @@ test('wrapped cover headings recenter as a group and keep line and outline origi
     }
   }
   // Placement lines are the same lines a top-anchored composition produces, translated by the shift.
-  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'text'}]}, textMeasurement: measurement});
+  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}}, textMeasurement: measurement});
   const dy = byField(short, 'title').box.y - byField(unshifted, 'title').box.y;
   assert.ok(dy > 0);
   const moved = byField(short, 'title').text.placement.lines, base = byField(unshifted, 'title').text.placement.lines;
@@ -167,16 +168,13 @@ test('placed image bands: the cover centers inside the free area', () => {
 });
 
 test('a flowed image is body and keeps the content origin; a placed image is not body', () => {
-  const layout = {...titleSubtitle, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'image'}]};
+  const layout = {...titleSubtitle, areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["image"],"flow":"none"}}};
   const padding = 0.08 * 720;
   const flowed = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {layout});
   assert.ok(Math.abs(byField(flowed, 'title').box.y - padding) < 1e-6);
-  // The same image placed along an edge by the layout leaves a cover beside it.
-  const placedLayout = {...layout, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'image', placement: {edge: 'left'}}]};
-  const placed = composeSlide({title: 'Image slide', subtitle: 'A cover beside it', image: {src: photo, alt: 'Harbor'}}, {layout: placedLayout});
+  const placed = composeSlide({title: 'Image slide', subtitle: 'A cover beside it', blocks: [{image: {src: photo, alt: 'Harbor'}, placement: {edge: 'left', size: 0.5}}]});
   assert.ok(byField(placed, 'title').box.y > padding + 1);
   assert.deepEqual(byField(placed, 'image').box, {x: 0, y: 0, width: 640, height: 720});
-  // The placed image's slot is not reserved in the flow, so no empty picture box remains.
   assert.equal(placed.items.filter(item => item.field === 'image').length, 1);
 });
 test('content and region slides keep the pre-centering geometry', () => {
@@ -190,9 +188,10 @@ test('content and region slides keep the pre-centering geometry', () => {
   assert.ok(Math.abs(byField(regions, 'title').box.y - padding) < 1e-6);
   const weighted = composeSlide({title: 'Keep weights', composition: {mode: 'row', weights: [2, 1]}, blocks: [{text: 'Wide'}, {text: 'Narrow'}]});
   assert.ok(Math.abs(weighted.items[1].box.width / weighted.items[2].box.width - 2) < 1e-5);
-  // A body payload on a heading-only layout is not a cover.
+  // Unclaimed content stays visible below a title-only template.
   const bodyOnCover = composeSlide({title: 'Has body', text: 'Body'}, {layout: titleSubtitle});
-  assert.ok(Math.abs(byField(bodyOnCover, 'title').box.y - padding) < 1e-6);
+  assert.equal(byField(bodyOnCover, 'text').value, 'Body');
+  assert.ok(byField(bodyOnCover, 'text').box.y >= byField(bodyOnCover, 'title').box.y + byField(bodyOnCover, 'title').box.height);
 });
 
 test('empty body payloads are not body: such title slides center too', () => {
@@ -206,7 +205,6 @@ test('empty body payloads are not body: such title slides center too', () => {
     'empty text': {text: ''},
     'empty rich text': {text: []},
     'empty items': {items: []},
-    'empty regions': {left: {}, bottom: {blocks: []}},
   };
   for (const [name, payload] of Object.entries(empties)) {
     for (const layout of [titleSubtitle, undefined]) {
@@ -216,12 +214,12 @@ test('empty body payloads are not body: such title slides center too', () => {
       assert.deepEqual(result.diagnostics, [], `${name} adds no diagnostics`);
     }
   }
-  // An empty region text or list still centers; its empty cell keeps its item in the smaller remaining area and may report small-cell.
-  const blankRegion = composeSlide({title: 'Empty payloads', subtitle: 'Still a cover', 'top:right': {text: ''}}, {layout: titleSubtitle});
-  assert.ok(centered(blankRegion));
-  // Any real payload, however small, still makes it a content slide.
-  for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {text: ' \n\t '}, {items: ['x']}, {image: photo}, {left: {text: 'x'}}, {blocks: [{}]}]) {
-    const result = composeSlide({title: 'Real payload', subtitle: 'Not a cover', ...payload}, {layout: titleSubtitle});
-    assert.ok(Math.abs(byField(result, 'title').box.y - 0.08 * 720) < 1e-6, `${JSON.stringify(payload).slice(0, 30)} keeps the top origin`);
+  // Promoted regions retain their separate geometry and never consume a template.
+  const promoted = {title: 'Regions', left: {text: 'x'}, right: {text: 'y'}};
+  assert.deepEqual(composeSlide(promoted, {layout: titleSubtitle}).items.map(item=>item.box),composeSlide(promoted).items.map(item=>item.box));
+  // Real automatic body payloads keep the heading origin.
+  for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}]) {
+    const result = composeSlide({title: 'Real payload', ...payload});
+    assert.ok(Math.abs(byField(result, 'title').box.y - 0.08 * 720) < 1e-6);
   }
 });

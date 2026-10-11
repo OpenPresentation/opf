@@ -180,7 +180,7 @@
               "id": "close-with-impact",
               "name": "Close With Impact",
               "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
-              "layout": "cover",
+              "layout": "closing",
               "instructions": "End on a motivational high",
               "type": "text"
             }
@@ -394,6 +394,10 @@
               "flow": "none",
               "bleed": true
             }
+          },
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
         "text": {
@@ -425,6 +429,10 @@
               "role": "primary",
               "flow": "auto"
             }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
           }
         },
         "chart": {
@@ -462,6 +470,10 @@
               "role": "supporting",
               "flow": "none"
             }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
           }
         },
         "list": {
@@ -492,6 +504,10 @@
               "flow": "auto",
               "listColumns": "auto"
             }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

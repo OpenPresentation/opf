@@ -786,6 +786,10 @@
               "flow": "none",
               "bleed": true
             }
+          },
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
         "text": {
@@ -817,6 +821,10 @@
               "role": "primary",
               "flow": "auto"
             }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
           }
         },
         "chart": {
@@ -854,6 +862,10 @@
               "role": "supporting",
               "flow": "none"
             }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
           }
         },
         "table-beside": {
@@ -892,6 +904,10 @@
               "role": "supporting",
               "flow": "column"
             }
+          },
+          "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
           }
         },
         "timeline": {
@@ -930,6 +946,10 @@
               "role": "supporting",
               "flow": "auto"
             }
+          },
+          "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
           }
         },
         "dashboard": {
@@ -970,6 +990,10 @@
               "role": "primary",
               "flow": "grid"
             }
+          },
+          "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
           }
         },
         "image-beside": {
@@ -1010,6 +1034,13 @@
               "role": "primary",
               "flow": "auto"
             }
+          },
+          "description": "Explain a visual alongside its supporting text. Use the text to direct attention to the meaningful parts of the image.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-beside.svg"
+          },
+          "design": {
+            "imageFit": "contain"
           }
         },
         "code": {
@@ -1046,6 +1077,10 @@
               "role": "supporting",
               "flow": "column"
             }
+          },
+          "description": "Show a code example or technical excerpt. Keep the excerpt focused and use the title or caption to explain its purpose.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code.svg"
           }
         },
         "list": {
@@ -1076,6 +1111,10 @@
               "flow": "auto",
               "listColumns": "auto"
             }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

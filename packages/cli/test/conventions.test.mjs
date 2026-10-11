@@ -32,7 +32,7 @@ const write = async (name, value) => {
   return name;
 };
 const read = (name) => readFile(path.join(temp, name), "utf8");
-const deck = { name: "Conventions", slides: [{ id: "a", title: "A", layout: "title-subtitle" }, { id: "b", title: "B", text: "body" }] };
+const deck = { name: "Conventions", slides: [{ id: "a", title: "A", layout: "cover" }, { id: "b", title: "B", text: "body" }] };
 const ENVELOPE = ["command", "ok", "input", "outputs", "findings", "counts"];
 const assertEnvelope = (report, command) => {
   assert.deepEqual(Object.keys(report).slice(0, 6), ENVELOPE, command);

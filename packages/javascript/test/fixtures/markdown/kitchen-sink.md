@@ -7,7 +7,7 @@ variables:
   risk: "#B42318"
 ---
 
-<!-- slide: id=one layout=title section="Part 1" -->
+<!-- slide: id=one layout=cover section="Part 1" -->
 # Title with a *styled* word ##
 
 ## Subtitle

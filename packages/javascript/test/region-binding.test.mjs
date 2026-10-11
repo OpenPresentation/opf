@@ -1,12 +1,13 @@
+import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { describe, test } from 'node:test';
 import { validate } from '../dist/index.js';
 import { bindRegions, composeSlide, regionRoleRank } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79), design section 3: slide content stays flat and binds to the layout's regions: pins, then role rank by
 // kind, then reading order; content no region takes goes to the overflow region, never dropped.
-const { layouts } = JSON.parse(readFileSync(new URL('./fixtures/layout-templates-0.19.json', import.meta.url), 'utf8'));
+const fixture = gallery;
+const { layouts } = fixture;
 const roadmap = {
   name: 'Roadmap split',
   areas: ['title title', 'timeline notes', 'timeline metrics'],

@@ -40,6 +40,9 @@ await writeFile(path.join(catalogRoot, 'manifest.json'), serializeJson(catalogMa
 const previewsRoot = path.join(root, 'packages/gallery/previews/layouts');
 await mkdir(previewsRoot, {recursive: true});
 await writeFile(path.join(previewsRoot, 'index.json'), serializeJson(layoutPreviewIndex));
-for (const [slug, html] of Object.entries(layoutPreviews)) {
-  await writeFile(path.join(previewsRoot, `${slug}.html`), `${html}\n`);
+for (const {id, file, bytes} of layoutPreviewIndex.records) {
+  const value = layoutPreviews[id];
+  const preview = typeof value === 'string' ? `${value}\n` : undefined;
+  if (typeof preview !== 'string' || Buffer.byteLength(preview, 'utf8') !== bytes) throw new Error(`Gallery preview ${id} does not match its index`);
+  await writeFile(path.join(previewsRoot, file), preview);
 }

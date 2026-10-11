@@ -70,10 +70,7 @@ test('fixed modes and promoted regions retain placement with no invented search'
   assert.equal(inherited.explanation.decisions[0].mode,'column');
 });
 
-test('reserved slots, candidate caps and empty slides are explicit', () => {
-  const reserved=composeSlide({blocks:blocks(1)},{explain:true,layout:{placeholders:Array.from({length:8},()=>({type:'text'}))}});
-  assert.equal(reserved.flows[0].slotCount,8);
-  assert.equal(reserved.explanation.decisions[0].candidates.length,6);
+test('candidate caps and empty slides are explicit', () => {
   const capped=composeSlide({blocks:blocks(13),composition:{columns:12}},{explain:true});
   assert.equal(capped.explanation.decisions[0].candidates.length,12);
   assert.deepEqual(composeSlide({}, {explain:true}).explanation.decisions,[]);

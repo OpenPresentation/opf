@@ -31,7 +31,7 @@ export const SNAPSHOT_KINDS = [
   { kind: "tones", catalogKey: "tones", schemaFile: "tone.schema.json" },
 ].map((entry) => ({
   ...entry,
-  recordSchemaId: `https://openpresentation.org/schema/opf-${entry.schemaFile.replace(/\.schema\.json$/, "")}/v1`,
+  recordSchemaId: `https://openpresentation.org/schema/opf-${entry.schemaFile.replace(/\.schema\.json$/, "")}/${entry.kind === "layouts" ? "v2" : "v1"}`,
 }));
 
 /**

@@ -6,8 +6,7 @@ import { layouts, sampleSlide } from './support/template-samples.mjs';
 
 // OPF 0.19 (RR-79): composition goldens of the 28 built-in templates, each with 1 to 6 blocks of short and of long
 // content, at the 1280 x 720 reference size with core's estimated measurement. The templates are the design doc's
-// (test/fixtures/layout-templates-0.19.json) until @openpresentation/gallery 2.0.0 (RR-80) ships them; replace the fixture
-// with the package then. A change to these goldens is a change to how every 0.19 slide draws: review the diff, and
+// published by @openpresentation/gallery 2.x. A change to these goldens is a change to how every 0.19 slide draws: review the diff, and
 // regenerate with OPF_UPDATE_GOLDENS=1 node --test test/template-goldens.test.mjs.
 const goldenUrl = new URL('./fixtures/template-goldens-0.19.json', import.meta.url);
 

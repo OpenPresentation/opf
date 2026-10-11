@@ -1,11 +1,12 @@
+import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { describe, test } from 'node:test';
 import { format, resolveSlideContext, validate } from '../dist/index.js';
 import { THEME_DESIGN_KEYS, composeSlide, gridFlowShape, listColumnBreaks, resolveDesignHints } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79), design sections 3 to 5: flows, tracks, collapse, bleed, list columns, mirror and the theme level.
-const { layouts } = JSON.parse(readFileSync(new URL('./fixtures/layout-templates-0.19.json', import.meta.url), 'utf8'));
+const fixture = gallery;
+const { layouts } = fixture;
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
 const text = (value) => ({ text: value });
 const short = (count) => Array.from({ length: count }, (_, index) => text(`Point ${index + 1}`));

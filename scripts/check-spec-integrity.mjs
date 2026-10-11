@@ -135,7 +135,7 @@ async function checkCatalogRecordParity() {
       fail(`[a] ${dir}: '${file}' exists on disk but is not listed in index.json records`);
     }
 
-    const expectedRecordSchema = `https://openpresentation.org/schema/opf-${singular}/v1`;
+    const expectedRecordSchema = `https://openpresentation.org/schema/opf-${singular}/v${singular === "layout" ? 2 : 1}`;
     for (const file of diskFiles) {
       const recordPath = path.join(catalogDir, file);
       const record = await readJson(recordPath);
@@ -290,7 +290,7 @@ async function checkPreviewIndex() {
 
   const entries = await readdir(previewsDir, { withFileTypes: true });
   const diskHtmlFiles = entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".html"))
+    .filter((entry) => entry.isFile() && /\.(?:html|svg)$/.test(entry.name))
     .map((entry) => entry.name)
     .sort();
 

@@ -151,20 +151,6 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // opf#485: measure script runs in the slide's script fonts, as the renderer and the exporter do.
   const textMeasurement = fonts?.textMeasurement && options.presentation !== undefined ? resolveSlideScriptMeasurement(options.presentation, sourceIndex, fonts.textMeasurement, {...(catalogs!==undefined?{catalogs}:{}),...(options.fontFamilies?{fontFamilies:options.fontFamilies}:{})}) : fonts?.textMeasurement;
   const composeOptions: ComposeSlideOptions = {...engineOptions,...(textMeasurement?{textMeasurement}:{})};
-  // FA-26: a layout record's placeholder groups carry compositions of their own, which the slide cannot reach. Evaluate
-  // them under the same readability policy as content groups: no group reads below the pagination floor, and no group's
-  // overflow: 'error' aborts the measurement that decides where to split.
-  const readableLayout = (layout: unknown): unknown => {
-    if (!isRecord(layout) || !Array.isArray(layout.placeholders) || !layout.placeholders.some(entry => isRecord(entry) && entry.type === 'group')) return layout;
-    // A group without its own minFontSize inherits the root's, which withReadability has already raised.
-    const visit = (entries: unknown[]): unknown[] => entries.map(entry => {
-      if (!isRecord(entry) || entry.type !== 'group') return entry;
-      const own = isRecord(entry.composition) ? entry.composition : {};
-      return {...entry, composition: {...own, ...(typeof own.minFontSize === 'number' ? {minFontSize: Math.max(minFontSize, own.minFontSize)} : {}), overflow: 'warn'}, placeholders: Array.isArray(entry.placeholders) ? visit(entry.placeholders) : entry.placeholders};
-    });
-    return {...layout, placeholders: visit(layout.placeholders)};
-  };
-  if (options.layout !== undefined) composeOptions.layout = readableLayout(options.layout) as ComposeSlideOptions['layout'];
   // FA-31: pages are measured with the slide-scoped built-ins substituted for their final number and the deck's slide
   // count, but returned with the tokens kept, so the output stays a source document.
   const presentationSlides = options.presentation?.slides;

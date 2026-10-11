@@ -1,9 +1,9 @@
+import { gallery } from '@openpresentation/gallery';
 // Sample content for the 0.19 layout templates, shared by the composition goldens and the geometry invariants. Not a test.
-import { readFileSync } from "node:fs";
 import { layoutTemplate } from "../../dist/composition.js";
 
 /** The 28 built-in templates (the design doc's, until @openpresentation/gallery 2.0.0 ships them). */
-export const { layouts } = JSON.parse(readFileSync(new URL("../fixtures/layout-templates-0.19.json", import.meta.url), "utf8"));
+export const { layouts } = gallery;
 
 const long = 'Customers told us onboarding took too long, so we rebuilt it around three steps, measured every one of them and removed the two that nobody needed; the flow now takes four minutes instead of twenty.';
 export const payload = (kind, index, size) => {

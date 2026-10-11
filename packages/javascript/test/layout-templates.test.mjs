@@ -1,13 +1,13 @@
+import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { describe, test } from 'node:test';
 import { validate } from '../dist/index.js';
 import { OPFLayoutTemplateError, composeSlide, isLayoutTemplate, layoutContent, layoutStructure, layoutTemplate, layoutTemplateIssues } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79): a layout is a grid template (areas, columns, rows, regions). The 28 built-in layouts of the design
 // doc are a test fixture until @openpresentation/gallery 2.0.0 ships them (RR-80); replace the fixture with the package then.
-const fixture = JSON.parse(readFileSync(new URL('./fixtures/layout-templates-0.19.json', import.meta.url), 'utf8'));
-const layouts = fixture.layouts;
+const fixture = gallery;
+const { layouts } = fixture;
 const deckWith = (record, slide = { layout: 'probe', title: 'Probe' }) => ({ slides: [slide], catalogs: { custom: { layouts: { probe: record } } } });
 const rulesOf = (report) => report.findings.map((entry) => entry.ruleId);
 const issues = (record) => layoutTemplateIssues(record).map((issue) => `${issue.code} ${issue.path}`);
@@ -49,8 +49,8 @@ describe('the 28 built-in templates (design section 6)', () => {
 describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   test('a valid template has no issue; a record without areas is not a template', () => {
     assert.deepEqual(issues(base), []);
-    assert.equal(isLayoutTemplate({ placeholders: [] }), false);
-    assert.deepEqual(layoutTemplateIssues({ placeholders: [] }), []);
+    assert.equal(isLayoutTemplate({ placeholders: [{type: "title"}] }), false);
+    assert.deepEqual(layoutTemplateIssues({ placeholders: [{type: "title"}] }), []);
   });
 
   test('the grid: ragged rows, rectangles, track lengths, size and words', () => {

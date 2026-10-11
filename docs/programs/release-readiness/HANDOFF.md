@@ -154,3 +154,7 @@ The design is [0.19-layouts.md](0.19-layouts.md) (merged opf#565). The owner rem
 The previous supervisor's helper scripts (`rel018-*.sh` and `pubrepro.sh`) lived in a session scratch directory. They
 only wrap the documented commands above and are not needed. The tracker artifact at
 https://claude.ai/artifact/SKE8TDCXAUE7dthS6EtuEM mirrors this file for the owner.
+
+### RR-83 integration candidate (2026-10-10)
+
+Core #592 integrates #557 and fixed #577, removes v1 layout records and placeholder APIs, and preserves automatic `design.chartPrimary` through direct content groups. The intended final dependency is `@openpresentation/gallery: ^2.0.0` in core, CLI, and repository build inputs. The committed manifests and lockfile retain their published registry dependency until gallery 2 is published; local acceptance uses the packed PR5 candidate only, with no committed file/link dependencies or fabricated registry resolutions. The intentional breaking gate remains pending the 0.19 release-prep version bump. Registry golden changes require the supervised golden workflow and visual review; no hashes were silently updated.

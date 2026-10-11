@@ -16,14 +16,14 @@ const recorder = () => {
 
 describe("resolveSlideContext", () => {
   test("resolves canvas, theme, colour scheme, font families and layout in one call", () => {
-    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "right", contentBox: true }, slides: [{ layout: "title", title: "Hi" }, { title: "Second" }] };
+    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "right", contentBox: true }, slides: [{ layout: "cover", title: "Hi" }, { title: "Second" }] };
     const { options, diagnostics, resolved } = context(deck, 0);
     assert.deepEqual(diagnostics, []);
     assert.equal(options.width, 960);
     assert.equal(options.height, 720);
     assert.equal(options.fontFamilies.body, "Roboto");
     assert.deepEqual(options.fontFamilies, families("roboto"));
-    assert.equal(options.layout.name, "Title");
+    assert.equal(options.layout.name, "Cover");
     assert.equal(options.presentation, deck);
     assert.equal(options.slideIndex, 0);
     assert.equal(options.slideNumber, 1);

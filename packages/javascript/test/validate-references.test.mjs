@@ -9,7 +9,7 @@ const checkAll = (input, options) => validate(input, { only: ['format', 'referen
 
 const layout = (name) => ({
 	name,
-	placeholders: [{ type: 'title' }, { type: 'text' }],
+	areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}},
 });
 const freeze = (value) => {
 	if (value && typeof value === 'object') {
@@ -21,7 +21,7 @@ const freeze = (value) => {
 
 test('text input is read, never rewritten, and the report separates what was not checked', () => {
 	const source =
-		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text-1x"}]\n}';
+		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text"}]\n}';
 	const before = Buffer.from(source),
 		result = checkAll(source, { catalogs: [gallery] });
 	assert.equal(result.valid, true);
@@ -157,15 +157,15 @@ test('reference sites cover the designs and slides; chart types are validated by
 });
 test('invalid catalog records stay visible and cannot silently fall back', () => {
 	const result = checkAll({
-		slides: [{ layout: 'text-1x' }],
-		catalogs: { custom: { layouts: { 'text-1x': { placeholders: 'invalid' } } } },
+		slides: [{ layout: 'text' }],
+		catalogs: { custom: { layouts: { 'text': { placeholders: 'invalid' } } } },
 	}, { catalogs: [gallery] });
 	assert.equal(result.valid, false);
 	assert.ok(
 		result.findings.some(
 			(issue) =>
 				issue.ruleId === 'opf/catalog-record' &&
-				issue.path.startsWith('/catalogs/custom/layouts/text-1x'),
+				issue.path.startsWith('/catalogs/custom/layouts/text'),
 		),
 	);
 	assert.ok(result.findings.some((issue) => issue.ruleId === 'opf/unresolved-reference' && issue.path === '/slides/0/layout'), 'the reference to an invalid record is reported too');
@@ -178,14 +178,14 @@ test('invalid catalog records stay visible and cannot silently fall back', () =>
 });
 test('explicit contracts provide policy fixes while metadata never supplies policy', () => {
 	const document = freeze({
-			slides: [{ layout: 'title-subtitle', title: 'Keep' }],
+			slides: [{ layout: 'cover', title: 'Keep' }],
 			extensions: { 'a/b~': 1 },
 		}),
 		options = freeze({
 			contracts: [
 				{
 					path: '/slides/*/layout',
-					allowedValues: ['text-1x'],
+					allowedValues: ['text'],
 					message: 'Use {{allowed}} at {{path}}; see {{file}}.',
 					documentation: 'brand.json#/layouts',
 				},
@@ -202,7 +202,7 @@ test('explicit contracts provide policy fixes while metadata never supplies poli
 	const layoutFinding = result.findings.find((entry) => entry.path === '/slides/0/layout');
 	assert.match(
 		layoutFinding.message,
-		/text-1x.*\/slides\/0\/layout.*brand.json/,
+		/text.*\/slides\/0\/layout.*brand.json/,
 	);
 	assert.equal(layoutFinding.suggestions[0].origin, 'contract');
 	assert.equal(layoutFinding.category, 'policy');
