@@ -21,7 +21,7 @@ node tooling/native-table-colors-staged.mjs "$CONSUMER" "$NEW_PACKET" "$CORE_GRA
 After the four generation commands above, copy the retained tooling (including expected-graph.json and the seven byte-identical harness files) and original README into the new packet, then seal using the retained archive directory explicitly:
 
 ```
-cp -R "$EVIDENCE/tooling" "$NEW_PACKET/tooling"
+cp -R "$EVIDENCE/tooling/." "$NEW_PACKET/tooling/"
 cp "$EVIDENCE/README.md" "$NEW_PACKET/README.md"
 node "$EVIDENCE/tooling/finish.mjs" "$CONSUMER" "$NEW_PACKET" "$CORE_GRAPH" "$PPTX_SOURCE" "$EXPECTED_GRAPH" "$EVIDENCE/reviewed-archive-pairs"
 node "$NEW_PACKET/tooling/inspect.mjs" "$CONSUMER" "$NEW_PACKET" "$CORE_GRAPH" "$PPTX_SOURCE" "$NEW_PACKET/tooling/expected-graph.json"
