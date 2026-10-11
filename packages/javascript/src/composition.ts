@@ -1012,12 +1012,24 @@ const WRAP_TOLERANCE = .01;
 /** Whitespace that can hang at a soft line break: every space except the no-break spaces and the zero-width no-break space. */
 const HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]/u;
 
-/** Deterministic estimate, not a font shaping engine. Preserves explicit line breaks. */
+/** Corpus-calibrated robust advances; see docs/evidence/script-width-estimates/README.md.
+ * Shared punctuation and Latin/CJK retain their original widths. These are estimates, not font metrics. */
+const SCRIPT_WIDTH_FACTORS: readonly (readonly [RegExp, number])[] = [
+  [/\p{Script=Tamil}/u, 1.53], [/\p{Script=Malayalam}/u, 1.76],
+  [/\p{Script=Sinhala}/u, 1.44], [/\p{Script=Myanmar}/u, 1.18],
+  [/\p{Script=Ethiopic}/u, 1.13], [/\p{Script=Georgian}/u, 1.28],
+];
+
+/** Deterministic estimate, not a font shaping engine. Spacing marks outside Latin/CJK contribute; nonspacing/enclosing marks do not. */
 export function measureText(text: string, fontSize: number): number {
   let units = 0;
   for (const character of text) {
-    if (/\p{Mark}|\u200d|\ufe0f/u.test(character)) continue;
-    units += character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+    if (/\p{Mn}|\p{Me}|\u200d|\ufe0f/u.test(character)) continue;
+    // Preserve the pre-0.19 Latin/CJK estimate, including their spacing tone/reading marks.
+    if (/\p{Mc}/u.test(character) && /\p{Script=Latin}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(character)) continue;
+    const base = character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+    const factor = SCRIPT_WIDTH_FACTORS.find(([script]) => script.test(character))?.[1] ?? 1;
+    units += base * factor;
   }
   return units * fontSize;
 }
