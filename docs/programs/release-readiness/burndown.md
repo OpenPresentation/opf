@@ -525,3 +525,5 @@ Append-only. One dated line per state change.
 - 2026-10-11 (RR-20): Generated source lock #619 merged at `d018f752119371fa2bbd2acb46ea91f473aeeab3`, gate 17418 terminal 0; editor host #155 merged at `39e62a61`. Progress remains 15/40: T13 final published records/site adoption and T16 gallery/core host integration remain open.
 
 - 2026-10-11 (RR-20): Renderer #217/#222/#229/#230 closed explicitly as superseded by combined #219 merge `dd6b520404d423fd4ddd59e81a9b47971e906be3`, after exact-head/path reconciliation; [receipt](../../evidence/rr20-held-patch-source-merged/supersession-receipt.json). No individual merge, publication or native acceptance claim; progress remains 15/40.
+
+- 2026-10-11 (RR-20): [Fresh coordinated staged graph qualification](../../evidence/rr20-refreshed-staged-graph/README.md) passed all five serial consumers with exact six-tar identity and unchanged pre/post manifests. This is source/staged evidence only; historical 0.14 goldens retain their existing skip, no fresh 807/498 or registry/native acceptance is claimed, and no checkpoint closes.
