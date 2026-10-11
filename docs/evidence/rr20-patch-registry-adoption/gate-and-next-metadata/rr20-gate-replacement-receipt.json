@@ -1,0 +1,12 @@
+{
+  "previousSession": 81469,
+  "previousExit": 143,
+  "previousLog": "/private/tmp/rr20-patch-roll-commit-gate.log",
+  "reason": "verified null statusCheckRollup while actual workflow suites contain completed jobs",
+  "reviewedRepair": "6054204232dc6194b7cb8dfa198a828e096d262d",
+  "rootFocusedTests": 44,
+  "replacementSession": 80395,
+  "replacementLog": "/private/tmp/rr20-patch-roll-repaired-commit-gate.log",
+  "sameTarget": "ba72efb1e9f240b58f642b98abcdf70fe6fb47a7",
+  "gateAcceptancePending": true
+}
