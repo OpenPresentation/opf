@@ -224,3 +224,7 @@ Isolated candidate `1921a28c6d4eea090dc368c13c75ca1b359bdc39` aligns core/CLI op
 ## Local PPTX v0.19 current-main candidate — 2026-10-11
 
 Clean isolated `f62dd05a8ef0712ca2a35a11857f9085de6fd7a1` in `/private/tmp/opf-v019-pptx-current-refresh` adopts merged `1954c9ce` metadata only. [Receipts](../../evidence/rr20-patch-train-publications/v019-pptx-current-refresh/README.md) preserve original `1fae5a9d` and source checks against actual core `1921a28c`, renderer `d4ab7a58`, gallery `e0a7eee2`. Full-graph/registry 0.19/native acceptance remains separate; sole release gate 24822 remains pending.
+
+## Editor 0.18.2 preparation status — 2026-10-11
+
+Mandatory pre-prep 90777 and supervisor dry preparation 34999 completed exit 0. [Receipts and frozen independent metadata review](../../evidence/rr20-patch-train-publications/editor-0182-preparation/README.md) preserve actual registry identities and unchanged tracked/prepared source. Qualification 22527 is live, playground checks in progress after install/audit/type/validate/full tests passed; no release PR exists yet. T18 stays open, 15/40 unchanged.

@@ -1,0 +1,71 @@
+
+> @openpresentation/opf-editor@0.18.1 test:packed
+> node test/packed-install.mjs
+
+
+> @openpresentation/opf-editor@0.18.1 prepack
+> npm run build
+
+
+> @openpresentation/opf-editor@0.18.1 build
+> node scripts/build.mjs
+
+JSON source: exact mixed endings through typing, multi-range edits, deletion, native history, explicit paste and external changes.
+JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass.
+Layout ranking: current first, exact/compatible groups, counted placeholders, document overrides, provenance and unknown layouts pass.
+Layout edits: blank metrics, repeated slots, rich text, zero values, nested blocks, regions, explicit types, local/app catalogs and atomic source edits pass.
+JSON editor: 8 offline browser workflows pass (installed).
+opf-editor smoke passed
+opf-editor component smoke passed
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+Schema controls: 767 documented fields, nested paths, catalog records, background forms, required defaults passed.
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+Native rich input preserves mixed source line endings, cross-run CRLF, selection affinity, marks and metadata.
+Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo.
+Dimension switches passed: 16 dimensions (patch, one undo step, undo/redo, preview refresh; language preview checked).
+Exports after switches passed the FF-08 typeface check: 84 packages checked (84 built).
+Block conversion: 9 source kinds, 9 fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, preview refresh.
+Content actions: list levels, group and ungroup, regions, image to design and back, slide split, merge, split on overflow and un-paginate: guarded patches, loss reports, refusals and one undo step each.
+Design options: 10 options with patch, scope, undo/redo, preview and export; slide scope, shadowing, validation, accent font, watermark and slide image merging, organization logos, the logo choice, header/footer zones, Insert logo and logo warnings.
+Table options: merge, join, split, refusals, 5 style presets plus per-axis styles and Theme reset, cell styles, preview and PPTX export/reimport, one undo step each.
+data grid model tests passed
+Switch pickers: options for every catalog dimension, chart types by data shape, and current values at deck and slide scope.
+Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.
+Backgrounds: 5 types with scheme-slot colors, gradient stop validation, 54 patterns round-tripped through PPTX, scope, removal, one undo step each.
+image options ok: block fit, focus, treatments and placement; flat image backgrounds; the removed design keys are refused
+catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
+catalogs ok: not-in-source records move to custom with their references
+catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
+Browser editor built in /private/tmp/opf-editor-packed-lzhgzo/consumer/verification/artifacts/playground/ (70 lazy script faces, 94 lazy preview faces)
+{
+  "passed": true,
+  "browser": "153.0.8010.12",
+  "offlineAfterLoad": true,
+  "pptxBytes": 18774,
+  "nativeTable": true,
+  "mergedCells": true,
+  "exportCommitsDraft": true,
+  "importUndoRedo": true,
+  "expandedImageImport": true,
+  "quoteSourceEditingUndo": true,
+  "onePageReadabilityUndo": true,
+  "quoteTextReimportUndo": true,
+  "quoteSemanticsRestored": false,
+  "malformedInputPreservesDocument": true,
+  "networkWrites": 0
+}
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+measured: 14 rich input browser workflows passed.
+audited 135 packages in 0s
+
+135 packages have verified registry signatures
+
+24 packages have verified attestations
+(use --json --include-attestations to view attestation details)
+
+Packed editor passed: 123 byte-matched files, 23 model suites, offline browser workflow; sha512-HTRH6/7q+RkOVspZcv/pQjcWWDBs46FQ65E4f6MoWJfxHMQ0IedqAquZnbO8nSFqQaeqC+eqmY0UeCqrX2JSxQ==

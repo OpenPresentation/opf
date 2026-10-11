@@ -41,3 +41,7 @@ Release-prep #234 failed the coordinated font-count gate; [strict repair and rem
 ## PPTX 0.18.2 published and verified
 
 [Exact receipts](pptx-0182/README.md) confirm publisher 88826/verifier 28020 exit 0 at `1954c9ce`, workflow 38165718768. Editor pre-prep is running; no editor prep yet. T18 remains open for editor and adoption. Earlier pending paragraphs are historical.
+
+## Editor 0.18.2 prerequisite and dry preparation
+
+[Pre-prep and reviewed metadata receipts](editor-0182-preparation/README.md) are retained. Prepared qualification 22527 is still running playground checks after install/audit/type/validate/full tests passed; no release PR or terminal full-run claim.
