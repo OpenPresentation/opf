@@ -9,3 +9,9 @@ The original main renderer with registry core0.18.3 reproduced all807 committed 
 Promotion must use the prescribed pinned-image workflow. Its output must reproduce the unchanged main control and account for every candidate difference. Gallery2 source setup requires the reviewed [core#597](https://github.com/OpenPresentation/opf/pull/597); supervisor independently passed all21 regression tests and verified all357 materialized catalog JSON files against the exact gallery candidate (28 layout records plus index, no stale v1 records). Renderer workflow support is being prepared separately. The separate font-subset fix must be replayed against the final corpus before this becomes a final integrated baseline.
 
 This checkpoint does not prove published-package consumers, production sites or fresh Windows PowerPoint behavior. Those checklist gates remain open.
+
+## Pinned workflow reproduction, 2026-10-11
+
+Supervisor downloaded the artifacts from core run [38115772021](https://github.com/OpenPresentation/opf/actions/runs/38115772021) and renderer run [38116271551](https://github.com/OpenPresentation/opf-render/actions/runs/38116271551). Both core and renderer example candidate files are byte-identical to the reviewed 807-entry candidate; the renderer template file is byte-identical to the reviewed 498-entry candidate. Exact immutable graph, source digests and artifact hashes are in [pinned-workflow-comparison.json](pinned-workflow-comparison.json). The core report independently reproduces unchanged main with its locked renderer and reports 171 changed slides in 90 decks, zero added or removed.
+
+This confirms reproduction of the previously reviewed visual changes. It does not promote a baseline, establish registry installation of gallery2, or replace native acceptance. The shared commit/PR gate is still running; artifact availability alone is not a completed workflow gate.
