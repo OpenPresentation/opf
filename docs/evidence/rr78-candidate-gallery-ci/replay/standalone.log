@@ -1,0 +1,2 @@
+CLI passed 95 command checks: file preservation, patch operations, validation findings/contracts, pipes, schema lookup, pagination.
+Standalone global and npx-style installation passed (local pack). Integrity: sha512-gUEyew9ig+euP/sedOqrVGO6yOq5IoQUi/4ide/z63G+CfcGoOAJ9vtG8KXbheaz5pCEd+/IE3kW+qwrzf7w+Q==. Tarball: /private/tmp/rr78-v2-stage-replay/opf/artifacts/npm/openpresentation-cli-0.18.0.tgz
