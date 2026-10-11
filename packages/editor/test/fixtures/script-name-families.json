@@ -1,0 +1,938 @@
+{
+ "schema": "opf-script-name-families/v1",
+ "description": "FF-46 (opf#362): the proprietary script, emoji, math and code-table names that pass the native visual comparison (FF-46 run of 2026-10-05 with the Windows supplemental fonts) and need their own fixture in every host before the font tracker makes them documented-visual. Per name: the route the font policy gives it (core fontPolicyFor(name).replacement.family; for a symbol-encoded name the first face of its code-table chain) and the policy sizeAdjust where there is one; per script the face that draws it (the policy route when it covers the script, otherwise the designated script face, as for Sylfaen's Armenian and Georgian) and samples: original FF-44 corpus text and FF-45 emoji and math samples that the face covers completely (test/script-family-fixture.mjs picks them for that face), or, for a code table, every code core's symbol-font encodings map to Unicode, with the chain face that draws each one. The samples make no claim of translation quality; they exist to exercise shaping. No proprietary font file is read.",
+ "families": {
+  "Aparajita": {
+   "kind": "script",
+   "route": "Noto Sans Devanagari",
+   "scripts": [
+    {
+     "script": "Deva",
+     "route": "Noto Sans Devanagari",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "deva-title",
+       "script": "Deva",
+       "text": "हिन्दी भाषा में तिमाही समीक्षा",
+       "lang": "hi",
+       "rtl": false,
+       "language": "hi"
+      },
+      {
+       "id": "deva-conjuncts",
+       "script": "Deva",
+       "text": "विज्ञान क्षत्रिय श्रीमान द्वार पुस्तक धर्म",
+       "lang": "hi",
+       "rtl": false,
+       "language": "hi"
+      },
+      {
+       "id": "deva-reph",
+       "script": "Deva",
+       "text": "कार्य सूर्य वर्ष दर्शन कर्म",
+       "lang": "hi",
+       "rtl": false,
+       "language": "hi"
+      }
+     ]
+    }
+   ]
+  },
+  "Arabic Typesetting": {
+   "kind": "script",
+   "route": "Noto Naskh Arabic",
+   "sizeAdjust": 0.64,
+   "scripts": [
+    {
+     "script": "Arab",
+     "route": "Noto Naskh Arabic",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "arab-joining",
+       "script": "Arab",
+       "text": "مراجعة ربع سنوية للمبيعات",
+       "lang": "ar",
+       "rtl": true,
+       "language": "ar"
+      },
+      {
+       "id": "arab-lam-alef",
+       "script": "Arab",
+       "text": "الإنسان لا يعيش بالخبز وحده",
+       "lang": "ar",
+       "rtl": true,
+       "language": "ar"
+      },
+      {
+       "id": "arab-harakat",
+       "script": "Arab",
+       "text": "مَرْحَبًا بِكُمْ فِي الْعَرْضِ",
+       "lang": "ar",
+       "rtl": true,
+       "language": "ar"
+      }
+     ]
+    }
+   ]
+  },
+  "David": {
+   "kind": "script",
+   "route": "Noto Serif Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Serif Hebrew",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hebr-words",
+       "script": "Hebr",
+       "text": "סקירה רבעונית של המכירות",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-final-forms",
+       "script": "Hebr",
+       "text": "ךםןףץ כמנפצ שלום לכולם",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-niqqud",
+       "script": "Hebr",
+       "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      }
+     ]
+    }
+   ]
+  },
+  "FangSong": {
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hans-mixed-latin",
+       "script": "Hans",
+       "text": "2026 年 Q3 报告 (OPF)",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-sentence",
+       "script": "Hans",
+       "text": "季度回顾：销售额同比增长百分之十二。",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-punctuation",
+       "script": "Hans",
+       "text": "，。！？；：“引号”（括号）《书名》、",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      }
+     ]
+    }
+   ]
+  },
+  "Gautami": {
+   "kind": "script",
+   "route": "Noto Sans Telugu",
+   "scripts": [
+    {
+     "script": "Telu",
+     "route": "Noto Sans Telugu",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "telu-title",
+       "script": "Telu",
+       "text": "తెలుగు భాషలో త్రైమాసిక సమీక్ష",
+       "lang": "te",
+       "rtl": false,
+       "language": "te"
+      },
+      {
+       "id": "telu-conjuncts",
+       "script": "Telu",
+       "text": "క్ష జ్ఞ స్త్ర క్త ప్ర శ్రీ",
+       "lang": "te",
+       "rtl": false,
+       "language": "te"
+      },
+      {
+       "id": "telu-vowels",
+       "script": "Telu",
+       "text": "కి కీ కు కూ కె కే కై కొ కో కౌ",
+       "lang": "te",
+       "rtl": false,
+       "language": "te"
+      }
+     ]
+    }
+   ]
+  },
+  "Gisha": {
+   "kind": "script",
+   "route": "Noto Sans Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Sans Hebrew",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hebr-words",
+       "script": "Hebr",
+       "text": "סקירה רבעונית של המכירות",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-final-forms",
+       "script": "Hebr",
+       "text": "ךםןףץ כמנפצ שלום לכולם",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-niqqud",
+       "script": "Hebr",
+       "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      }
+     ]
+    }
+   ]
+  },
+  "Kalinga": {
+   "kind": "script",
+   "route": "Noto Sans Oriya",
+   "scripts": [
+    {
+     "script": "Orya",
+     "route": "Noto Sans Oriya",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "orya-title",
+       "script": "Orya",
+       "text": "ଓଡ଼ିଆ ଭାଷାରେ ତ୍ରୈମାସିକ ସମୀକ୍ଷା",
+       "lang": "or",
+       "rtl": false,
+       "language": "or"
+      },
+      {
+       "id": "orya-conjuncts",
+       "script": "Orya",
+       "text": "କ୍ଷ ଜ୍ଞ ଶ୍ରୀ ପ୍ରଶ୍ନ ବିଦ୍ୟା",
+       "lang": "or",
+       "rtl": false,
+       "language": "or"
+      },
+      {
+       "id": "orya-nukta",
+       "script": "Orya",
+       "text": "ଡ଼ ଢ଼ ୟ କି କୀ କୁ କୂ କେ କୈ କୋ କୌ",
+       "lang": "or",
+       "rtl": false,
+       "language": "or"
+      }
+     ]
+    }
+   ]
+  },
+  "Microsoft JhengHei": {
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hant-bopomofo",
+       "script": "Hant",
+       "text": "ㄅㄆㄇㄈ ㄉㄊㄋㄌ ˊˇˋ˙ 注音符號",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-mixed-latin",
+       "script": "Hant",
+       "text": "2026 年 Q3 報告 (OPF)",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-sentence",
+       "script": "Hant",
+       "text": "季度回顧：銷售額年增百分之十二。",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      }
+     ]
+    }
+   ]
+  },
+  "Microsoft YaHei": {
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hans-mixed-latin",
+       "script": "Hans",
+       "text": "2026 年 Q3 报告 (OPF)",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-sentence",
+       "script": "Hans",
+       "text": "季度回顾：销售额同比增长百分之十二。",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-punctuation",
+       "script": "Hans",
+       "text": "，。！？；：“引号”（括号）《书名》、",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      }
+     ]
+    }
+   ]
+  },
+  "MingLiU": {
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hant-bopomofo",
+       "script": "Hant",
+       "text": "ㄅㄆㄇㄈ ㄉㄊㄋㄌ ˊˇˋ˙ 注音符號",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-mixed-latin",
+       "script": "Hant",
+       "text": "2026 年 Q3 報告 (OPF)",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-sentence",
+       "script": "Hant",
+       "text": "季度回顧：銷售額年增百分之十二。",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      }
+     ]
+    }
+   ]
+  },
+  "Miriam": {
+   "kind": "script",
+   "route": "Noto Sans Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Sans Hebrew",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hebr-words",
+       "script": "Hebr",
+       "text": "סקירה רבעונית של המכירות",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-final-forms",
+       "script": "Hebr",
+       "text": "ךםןףץ כמנפצ שלום לכולם",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      },
+      {
+       "id": "hebr-niqqud",
+       "script": "Hebr",
+       "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית",
+       "lang": "he",
+       "rtl": true,
+       "language": "he"
+      }
+     ]
+    }
+   ]
+  },
+  "Nyala": {
+   "kind": "script",
+   "route": "Noto Sans Ethiopic",
+   "scripts": [
+    {
+     "script": "Ethi",
+     "route": "Noto Sans Ethiopic",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "ethi-title",
+       "script": "Ethi",
+       "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+       "lang": "am",
+       "rtl": false,
+       "language": "am"
+      },
+      {
+       "id": "ethi-words",
+       "script": "Ethi",
+       "text": "ሰላም ለዓለም ኢትዮጵያ",
+       "lang": "am",
+       "rtl": false,
+       "language": "am"
+      },
+      {
+       "id": "ethi-punctuation",
+       "script": "Ethi",
+       "text": "አንድ፡ ሁለት፣ ሦስት። አራት፤ አምስት",
+       "lang": "am",
+       "rtl": false,
+       "language": "am"
+      }
+     ]
+    }
+   ]
+  },
+  "PMingLiU": {
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hant-bopomofo",
+       "script": "Hant",
+       "text": "ㄅㄆㄇㄈ ㄉㄊㄋㄌ ˊˇˋ˙ 注音符號",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-mixed-latin",
+       "script": "Hant",
+       "text": "2026 年 Q3 報告 (OPF)",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      },
+      {
+       "id": "hant-sentence",
+       "script": "Hant",
+       "text": "季度回顧：銷售額年增百分之十二。",
+       "lang": "zh-Hant",
+       "rtl": false,
+       "language": "zh-Hant"
+      }
+     ]
+    }
+   ]
+  },
+  "SimHei": {
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hans-mixed-latin",
+       "script": "Hans",
+       "text": "2026 年 Q3 报告 (OPF)",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-sentence",
+       "script": "Hans",
+       "text": "季度回顾：销售额同比增长百分之十二。",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-punctuation",
+       "script": "Hans",
+       "text": "，。！？；：“引号”（括号）《书名》、",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      }
+     ]
+    }
+   ]
+  },
+  "SimSun": {
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "hans-mixed-latin",
+       "script": "Hans",
+       "text": "2026 年 Q3 报告 (OPF)",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-sentence",
+       "script": "Hans",
+       "text": "季度回顾：销售额同比增长百分之十二。",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      },
+      {
+       "id": "hans-punctuation",
+       "script": "Hans",
+       "text": "，。！？；：“引号”（括号）《书名》、",
+       "lang": "zh-Hans",
+       "rtl": false,
+       "language": "zh-Hans"
+      }
+     ]
+    }
+   ]
+  },
+  "Sylfaen": {
+   "kind": "script",
+   "route": "Noto Sans",
+   "scripts": [
+    {
+     "script": "Latn",
+     "route": "Noto Sans",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "latn-vi",
+       "script": "Latn",
+       "text": "Tiếng Việt: Ăn quả nhớ kẻ trồng cây ướp ượt",
+       "lang": "vi",
+       "rtl": false,
+       "language": "vi-Latn"
+      }
+     ]
+    },
+    {
+     "script": "Armn",
+     "route": "Noto Sans Armenian",
+     "via": "script",
+     "samples": [
+      {
+       "id": "armn-title",
+       "script": "Armn",
+       "text": "Հայերեն լեզու Երեւան Բարեւ Ձեզ",
+       "lang": "hy",
+       "rtl": false,
+       "language": "hy"
+      },
+      {
+       "id": "armn-ligature",
+       "script": "Armn",
+       "text": "և ﬓ ﬔ եւ",
+       "lang": "hy",
+       "rtl": false,
+       "language": "hy"
+      },
+      {
+       "id": "armn-punctuation",
+       "script": "Armn",
+       "text": "Ինչպե՞ս եք։ Շնորհակալություն՝ շատ։",
+       "lang": "hy",
+       "rtl": false,
+       "language": "hy"
+      }
+     ]
+    },
+    {
+     "script": "Geor",
+     "route": "Noto Sans Georgian",
+     "via": "script",
+     "samples": [
+      {
+       "id": "geor-title",
+       "script": "Geor",
+       "text": "ქართული ენა გამარჯობა მადლობა",
+       "lang": "ka",
+       "rtl": false,
+       "language": "ka"
+      },
+      {
+       "id": "geor-mtavruli",
+       "script": "Geor",
+       "text": "ᲥᲐᲠᲗᲣᲚᲘ ᲔᲜᲐ ᲒᲐᲛᲐᲠᲯᲝᲑᲐ",
+       "lang": "ka",
+       "rtl": false,
+       "language": "ka"
+      }
+     ]
+    }
+   ]
+  },
+  "Tunga": {
+   "kind": "script",
+   "route": "Noto Sans Kannada",
+   "scripts": [
+    {
+     "script": "Knda",
+     "route": "Noto Sans Kannada",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "knda-title",
+       "script": "Knda",
+       "text": "ಕನ್ನಡ ಭಾಷೆಯಲ್ಲಿ ತ್ರೈಮಾಸಿಕ ವಿಮರ್ಶೆ",
+       "lang": "kn",
+       "rtl": false,
+       "language": "kn"
+      },
+      {
+       "id": "knda-conjuncts",
+       "script": "Knda",
+       "text": "ಕ್ಷ ಜ್ಞ ಸ್ತ್ರ ಪ್ರ ಶ್ರೀ ಕ್ತ",
+       "lang": "kn",
+       "rtl": false,
+       "language": "kn"
+      },
+      {
+       "id": "knda-vowels",
+       "script": "Knda",
+       "text": "ಕಿ ಕೀ ಕು ಕೂ ಕೆ ಕೇ ಕೈ ಕೊ ಕೋ ಕೌ",
+       "lang": "kn",
+       "rtl": false,
+       "language": "kn"
+      }
+     ]
+    }
+   ]
+  },
+  "Segoe UI Emoji": {
+   "kind": "emoji",
+   "route": "Noto Color Emoji",
+   "scripts": [
+    {
+     "script": "Zsye",
+     "route": "Noto Color Emoji",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "emoji-pictographs",
+       "text": "🚀👨‍👩‍👧‍👦🇩🇪👍🏽",
+       "script": "Zsye",
+       "lang": null,
+       "rtl": false,
+       "language": null
+      },
+      {
+       "id": "emoji-sequences",
+       "text": "1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿👩🏾‍💻🏳️‍🌈",
+       "script": "Zsye",
+       "lang": null,
+       "rtl": false,
+       "language": null
+      }
+     ]
+    }
+   ]
+  },
+  "Cambria Math": {
+   "kind": "math",
+   "route": "STIX Two Math",
+   "scripts": [
+    {
+     "script": "Zmth",
+     "route": "STIX Two Math",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "math-operators",
+       "text": "∑∫√≤∞≠≈",
+       "script": "Zmth",
+       "lang": null,
+       "rtl": false,
+       "language": null
+      },
+      {
+       "id": "math-alphanumerics",
+       "text": "𝑎𝑏𝑐ℝℕℤαβγ",
+       "script": "Zmth",
+       "lang": null,
+       "rtl": false,
+       "language": null
+      },
+      {
+       "id": "math-brackets",
+       "text": "⟨⟩⌈⌉⌊⌋〈〉",
+       "script": "Zmth",
+       "lang": null,
+       "rtl": false,
+       "language": null
+      }
+     ]
+    }
+   ]
+  },
+  "Symbol": {
+   "kind": "code-table",
+   "route": "Noto Sans",
+   "chain": [
+    "Noto Sans",
+    "Noto Sans Math",
+    "Noto Sans Symbols 2",
+    "Noto Sans Symbols"
+   ],
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans",
+      "Noto Sans Math",
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols"
+     ],
+     "via": "code-table",
+     "faces": {
+      "Noto Sans": "21 23 25 26 28 29 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 57 58 59 5A 5B 5D 5F 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D A0 A1 A2 A4 A6 B0 B1 B2 B4 B7 B8 BC C0 C1 C2 C3 D2 D3 D4 D8 E2 E3 E4",
+      "Noto Sans Math": "22 24 27 2A 40 5C 5E 60 7E A3 A5 A7 A8 A9 AA AB AC AD AE AF B3 B5 B6 B9 BA BB BD BE BF C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D5 D6 D7 D9 DA DB DC DD DE DF E0 E5 E6 E7 E8 E9 EA EB EC ED EE EF F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE",
+      "Noto Sans Symbols": "E1 F1"
+     },
+     "samples": [
+      {
+       "id": "symbol-codes-21-38",
+       "codes": "21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38"
+      },
+      {
+       "id": "symbol-codes-39-50",
+       "codes": "39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50"
+      },
+      {
+       "id": "symbol-codes-51-68",
+       "codes": "51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68"
+      },
+      {
+       "id": "symbol-codes-69-A1",
+       "codes": "69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E A0 A1"
+      },
+      {
+       "id": "symbol-codes-A2-B9",
+       "codes": "A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8 B9"
+      },
+      {
+       "id": "symbol-codes-BA-D1",
+       "codes": "BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1"
+      },
+      {
+       "id": "symbol-codes-D2-E9",
+       "codes": "D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7 E8 E9"
+      },
+      {
+       "id": "symbol-codes-EA-FE",
+       "codes": "EA EB EC ED EE EF F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE"
+      }
+     ]
+    }
+   ]
+  },
+  "Wingdings": {
+   "kind": "code-table",
+   "route": "Noto Sans Symbols 2",
+   "chain": [
+    "Noto Sans Symbols 2",
+    "Noto Sans Symbols",
+    "Noto Sans Math",
+    "Noto Sans"
+   ],
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+     ],
+     "via": "code-table",
+     "faces": {
+      "Noto Sans Symbols 2": "21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4D 4E 4F 50 51 52 53 54 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 96 97 98 99 9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE",
+      "Noto Sans Symbols": "4A 4B 4C 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68 69 80 81 82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95"
+     },
+     "samples": [
+      {
+       "id": "wingdings-codes-21-38",
+       "codes": "21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38"
+      },
+      {
+       "id": "wingdings-codes-39-50",
+       "codes": "39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50"
+      },
+      {
+       "id": "wingdings-codes-51-68",
+       "codes": "51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68"
+      },
+      {
+       "id": "wingdings-codes-69-81",
+       "codes": "69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 80 81"
+      },
+      {
+       "id": "wingdings-codes-82-99",
+       "codes": "82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99"
+      },
+      {
+       "id": "wingdings-codes-9A-B1",
+       "codes": "9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1"
+      },
+      {
+       "id": "wingdings-codes-B2-C9",
+       "codes": "B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9"
+      },
+      {
+       "id": "wingdings-codes-CA-E1",
+       "codes": "CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1"
+      },
+      {
+       "id": "wingdings-codes-E2-F9",
+       "codes": "E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9"
+      },
+      {
+       "id": "wingdings-codes-FA-FE",
+       "codes": "FA FB FC FD FE"
+      }
+     ]
+    }
+   ]
+  },
+  "Webdings": {
+   "kind": "code-table",
+   "route": "Noto Sans Symbols 2",
+   "chain": [
+    "Noto Sans Symbols 2",
+    "Noto Sans Symbols",
+    "Noto Sans Math",
+    "Noto Sans"
+   ],
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+     ],
+     "via": "code-table",
+     "faces": {
+      "Noto Sans Symbols 2": "21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 7A 7B 7D 7E 80 81 82 83 84 85 86 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE FF",
+      "Noto Sans Symbols": "77 7C 87 E8",
+      "Noto Sans Math": "78 79"
+     },
+     "samples": [
+      {
+       "id": "webdings-codes-21-38",
+       "codes": "21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F 30 31 32 33 34 35 36 37 38"
+      },
+      {
+       "id": "webdings-codes-39-50",
+       "codes": "39 3A 3B 3C 3D 3E 3F 40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50"
+      },
+      {
+       "id": "webdings-codes-51-68",
+       "codes": "51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F 60 61 62 63 64 65 66 67 68"
+      },
+      {
+       "id": "webdings-codes-69-81",
+       "codes": "69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 80 81"
+      },
+      {
+       "id": "webdings-codes-82-99",
+       "codes": "82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99"
+      },
+      {
+       "id": "webdings-codes-9A-B1",
+       "codes": "9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF B0 B1"
+      },
+      {
+       "id": "webdings-codes-B2-C9",
+       "codes": "B2 B3 B4 B5 B6 B7 B8 B9 BA BB BC BD BE BF C0 C1 C2 C3 C4 C5 C6 C7 C8 C9"
+      },
+      {
+       "id": "webdings-codes-CA-E1",
+       "codes": "CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1"
+      },
+      {
+       "id": "webdings-codes-E2-F9",
+       "codes": "E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE EF F0 F1 F2 F3 F4 F5 F6 F7 F8 F9"
+      },
+      {
+       "id": "webdings-codes-FA-FF",
+       "codes": "FA FB FC FD FE FF"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
