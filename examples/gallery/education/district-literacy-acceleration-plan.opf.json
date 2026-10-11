@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title-subtitle",
+      "layout": "cover",
       "tag": "K-12 education",
       "title": "District Literacy Acceleration Plan",
       "subtitle": "Riverbend Public Schools K-12 education",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-3x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Riverbend Public Schools should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-3x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-3x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for k-12 education.",
@@ -124,7 +124,7 @@
               "id": "logo",
               "name": "Logo",
               "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Identity & representation",
               "type": "text"
             },
@@ -134,7 +134,7 @@
               "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
               "instructions": "Meeting context & goals",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "review",
@@ -142,7 +142,7 @@
               "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
               "instructions": "Outline recent activities",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "successes",
@@ -150,7 +150,7 @@
               "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
               "instructions": "Recognize achievements",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "challenges",
@@ -158,7 +158,7 @@
               "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
               "instructions": "Address problems faced",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "solutions",
@@ -166,7 +166,7 @@
               "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
               "instructions": "Discuss implemented fixes",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "outcome",
@@ -174,7 +174,7 @@
               "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
               "instructions": "Display results achieved",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "insights",
@@ -182,7 +182,7 @@
               "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
               "instructions": "Highlight key learnings",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "future-strategy",
@@ -190,7 +190,7 @@
               "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
               "instructions": "Define next steps",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "feedback",
@@ -198,7 +198,7 @@
               "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
               "instructions": "Capture audience thoughts",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "next-review",
@@ -206,13 +206,13 @@
               "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
               "instructions": "Plan for follow-up",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "closing",
               "name": "Closing",
               "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Recap and express optimism",
               "type": "text"
             }
@@ -400,172 +400,134 @@
         }
       },
       "layouts": {
-        "title-subtitle": {
-          "name": "Title Subtitle",
-          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
-          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "subtitle"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Message"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
-          }
-        },
-        "text-3x": {
-          "name": "Text 3x",
-          "summary": "Reach for it when three parallel points each need a short passage of their own.",
-          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Triads",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
-          }
-        },
-        "chart-3x": {
-          "name": "Chart 3x",
-          "summary": "Reach for it when three charts tell one story, each with its own note.",
-          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 3
-          },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Triads"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
           }
         },
-        "list-3x": {
-          "name": "List 3x",
-          "summary": "Reach for it when three groups of points need their own lists.",
-          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Triads",
-            "Scannable"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
           }
         }
       }

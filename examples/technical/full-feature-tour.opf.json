@@ -396,108 +396,136 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-1x": {
-          "name": "Text 1x",
-          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
-          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "tags": [
-            "Text",
-            "Body Copy",
-            "Narrative"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
-          }
-        },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Charts",
-            "Data",
-            "Analytics"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
           }
         },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Comparison",
-            "Balance"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          }
+        },
+        "chart-beside": {
+          "name": "Chart beside",
+          "summary": "A chart with the takeaway beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title title",
+            "chart notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "chart": {
+              "accepts": [
+                "chart"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote",
+                "chart"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
           }
         }
       }
@@ -505,7 +533,7 @@
   },
   "slides": [
     {
-      "layout": "title",
+      "layout": "cover",
       "beat": "objectives",
       "title": "Full Feature Tour",
       "subtitle": "Q3 Business Review — Acme Corp",
@@ -514,7 +542,7 @@
       "section": "Overview"
     },
     {
-      "layout": "text-1x",
+      "layout": "text",
       "beat": "recap",
       "title": "Rich Text",
       "text": [
@@ -589,7 +617,7 @@
       "notes": "Promoted regions: a metric on the left, an inline-data line chart across center and right. Q3 active teams (712) are 2.1x Q2 (339)."
     },
     {
-      "layout": "chart-1x",
+      "layout": "chart-beside",
       "beat": "performance-detail",
       "section": "Performance",
       "title": "Revenue By Region",
@@ -619,6 +647,9 @@
             ]
           ]
         }
+      },
+      "design": {
+        "contentAlignment": "center"
       }
     },
     {
@@ -657,7 +688,7 @@
       ]
     },
     {
-      "layout": "list-2x",
+      "layout": "list",
       "beat": [
         "challenges",
         "risks"
@@ -675,7 +706,10 @@
           "text": "Vendor SLA renegotiation slips to Q1.",
           "level": 1
         }
-      ]
+      ],
+      "design": {
+        "contentAlignment": "center"
+      }
     },
     {
       "beat": "insights",

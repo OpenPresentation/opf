@@ -6,7 +6,7 @@ license: MIT
 
 # Inspect and validate OPF locally
 
-Read the actual schema/package version used by the project. Current source is authoritative for this repository; an installed package is authoritative for that consumer. Avoid using historical documentation or old gallery snippets as a competing schema.
+Read the actual schema/package version used by the project. Current source is authoritative for this repository; an installed package is authoritative for that consumer. In this 0.19 transition checkout, use `packages/javascript/test/fixtures/layout-templates-0.19.json` to inspect the 28 v2 built-in layouts until `@openpresentation/gallery` 2.0.0 publishes them. Avoid using historical documentation or old gallery snippets as a competing schema.
 
 The bundled [inspection helper](scripts/opf-inspect.mjs) reads schemas, catalogs, and documents locally. It does not fetch resources or modify files. Run it with Node 24 from a project that has `@openpresentation/opf` installed, from the OPF checkout after building, or set `OPF_ROOT` to that checkout. Replace the skill path below with the directory where this skill was installed.
 

@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { defaultCatalog } from "../packages/javascript/dist/catalog.js";
 import { colorContrast } from "../packages/javascript/dist/composition.js";
 import { embed } from "../packages/javascript/dist/index.js";
+import layoutTemplates from "../packages/javascript/test/fixtures/layout-templates-0.19.json" with { type: "json" };
+import layoutConversion from "../tools/rr83-conversion/layout-migration.json" with { type: "json" };
 import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -512,35 +514,30 @@ function richText(spec, index) {
 }
 
 function coverLayout(index) {
-  return index % 2 === 0 ? "title-subtitle" : "title";
+  return "cover";
 }
 
 function textLayout(index) {
-  return pick(["text-1x", "text-2x", "text-3x"], index);
+  return "text";
 }
 
 function chartLayout(index) {
-  return pick(["chart-1x", "chart-2x", "chart-3x"], index);
+  return "chart";
 }
 
 function listLayout(index) {
-  return pick(["list-1x", "list-2x", "list-3x", "list-4x", "list-5x", "list-6x"], index);
-}
-
-function numberLayout(index) {
-  return pick(["number-1x", "number-2x", "number-3x", "number-4x", "number-5x", "number-6x"], index);
+  return "list";
 }
 
 /** An image layout, or undefined for a full-bleed photo, which is the slide's background rather than a layout (FA-22). */
 function imageLayout(index) {
-  return pick(["image-1x", "image-2x", "image-3x", undefined], index);
+  return pick(["image", undefined], index);
 }
 
 function promotedRegionSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-regions`,
     section: "Operating model",
-    layout: numberLayout(index),
     title: "Operating Model",
     "top:left": {
       metric: {
@@ -571,7 +568,7 @@ function blocksSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-blocks`,
     section: "Evidence",
-    layout: pick(["blank", "list-4x", "number-4x", "text-3x"], index),
+    layout: "dashboard",
     title: "Evidence Pack",
     blocks: [
       {
@@ -595,7 +592,7 @@ function codeSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-code`,
     section: "Appendix",
-    layout: "code-1x",
+    layout: "code",
     title: "Decision Rule",
     code: {
       source: [
@@ -643,7 +640,7 @@ function mediaSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-video`,
     section: "Context",
-    layout: "media-1x",
+    layout: "image-beside",
     title: "Demo Moment",
     type: "video",
     video: {
@@ -701,14 +698,14 @@ function slidesFor(spec, index, catalogs, density) {
     {
       id: "s4",
       section: "Options",
-      layout: "table-1x",
+      layout: "table-beside",
       title: "Decision Options",
       table: tablePayload(spec, index),
     },
     {
       id: "s5",
       section: "Plan",
-      layout: index % 2 === 0 ? "text-2x" : "list-3x",
+      layout: "timeline",
       title: "Execution Timeline",
       type: "timeline",
       timeline: timelinePayload(spec, index),
@@ -764,9 +761,9 @@ function catalogOverrides(spec, index, catalogs) {
           summary: `A custom arc for ${spec.org}.`,
           description: `${spec.title} uses a compact evidence-to-decision arc for ${spec.org}.`,
           beats: [
-            { id: "context", name: "Context", type: "text", layout: "text-1x" },
-            { id: "evidence", name: "Evidence", type: "chart", layout: "chart-1x" },
-            { id: "decision", name: "Decision", type: "list", layout: "list-3x" },
+            { id: "context", name: "Context", type: "text", layout: "text" },
+            { id: "evidence", name: "Evidence", type: "chart", layout: "chart" },
+            { id: "decision", name: "Decision", type: "list", layout: "list" },
           ],
         },
       },
@@ -1027,13 +1024,28 @@ async function loadCatalogs() {
 }
 
 /**
- * One finished gallery deck (OPF 0.15): deckFor's document with every record it references embedded under
- * catalogs.default by core `embed`, with the default catalog registered. Throws when a reference resolves nowhere.
+ * One finished gallery deck: deckFor's document with every record it references embedded under
+ * catalogs.default by core `embed`, with the 0.19 layout fixtures and the other default records registered.
+ * Replace the fixture catalog with @openpresentation/gallery@^2 when it is published.
  */
 function embeddedDeckFor(spec, index, catalogs) {
   const { deck, folder, filename } = deckFor(spec, index, catalogs);
-  const { document, unresolved } = embed(deck, { catalogs: [defaultCatalog] });
+  const { document, unresolved } = embed(deck, { catalogs: [{ ...defaultCatalog, layouts: layoutTemplates.layouts }] });
   if (unresolved.length) throw new Error(`${folder}/${filename}: ${unresolved.map((entry) => entry.message).join("; ")}`);
+  // The 1.x narrative records embedded with the other catalog kinds still name old layouts.
+  // This disappears when the gallery 2.x package provides all eight kinds.
+  const convertReferences = (value) => {
+    if (Array.isArray(value)) { for (const entry of value) convertReferences(entry); return; }
+    if (!value || typeof value !== "object") return;
+    if (typeof value.layout === "string") {
+      const prefix = value.layout.startsWith("default:") ? "default:" : "";
+      const id = value.layout.slice(prefix.length);
+      const row = layoutConversion.layouts[id];
+      if (row) value.layout = row.layout === "auto" ? "auto" : `${prefix}${row.layout}`;
+    }
+    for (const entry of Object.values(value)) convertReferences(entry);
+  };
+  convertReferences(document);
   return { deck: document, folder, filename };
 }
 

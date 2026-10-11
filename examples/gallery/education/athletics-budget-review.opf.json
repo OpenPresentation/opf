@@ -96,7 +96,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title-subtitle",
+      "layout": "cover",
       "tag": "College athletics",
       "title": "Athletics Budget Review",
       "subtitle": "Summit State Athletics College athletics",
@@ -105,7 +105,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-2x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Summit State Athletics should focus the next cycle on ",
@@ -120,7 +120,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-2x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -159,7 +159,7 @@
     {
       "id": "s4",
       "section": "Options",
-      "layout": "table-1x",
+      "layout": "table-beside",
       "title": "Decision Options",
       "table": {
         "columns": [
@@ -193,7 +193,7 @@
     {
       "id": "s5",
       "section": "Plan",
-      "layout": "text-2x",
+      "layout": "timeline",
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
@@ -226,7 +226,6 @@
     {
       "id": "s59-regions",
       "section": "Operating model",
-      "layout": "number-5x",
       "title": "Operating Model",
       "top:left": {
         "metric": {
@@ -289,7 +288,7 @@
     {
       "id": "s59-blocks",
       "section": "Evidence",
-      "layout": "number-4x",
+      "layout": "dashboard",
       "title": "Evidence Pack",
       "blocks": [
         {
@@ -347,20 +346,20 @@
     {
       "id": "s59-image",
       "section": "Context",
-      "layout": "image-2x",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "College athletics context photo for Summit State Athletics",
-        "title": "College athletics context"
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "College athletics context photo for Summit State Athletics"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },
     {
       "id": "s59-code",
       "section": "Appendix",
-      "layout": "code-1x",
+      "layout": "code",
       "title": "Decision Rule",
       "code": {
         "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
@@ -372,7 +371,7 @@
     {
       "id": "s10",
       "section": "Close",
-      "layout": "list-2x",
+      "layout": "list",
       "title": "Decision and Follow Through",
       "items": [
         [
@@ -499,19 +498,19 @@
               "id": "context",
               "name": "Context",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "evidence",
               "name": "Evidence",
               "type": "chart",
-              "layout": "chart-1x"
+              "layout": "chart"
             },
             {
               "id": "decision",
               "name": "Decision",
               "type": "list",
-              "layout": "list-3x"
+              "layout": "list"
             }
           ]
         }
@@ -727,344 +726,286 @@
         }
       },
       "layouts": {
-        "title-subtitle": {
-          "name": "Title Subtitle",
-          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
-          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "subtitle"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Message"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
-          }
-        },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
-          }
-        },
-        "chart-2x": {
-          "name": "Chart 2x",
-          "summary": "Reach for it when two charts are read together, each with its own note.",
-          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Comparison"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
           }
         },
-        "table-1x": {
-          "name": "Table 1x",
-          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
-          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "table"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "Table",
-            "Reference",
-            "Data"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
           }
         },
-        "number-5x": {
-          "name": "Number 5x",
-          "summary": "Reach for it when five figures need to be read together.",
-          "description": "A title above five metrics in a three-column grid. Use it for a scorecard of five measures when none outranks the others.",
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          }
+        },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title title",
+            "table notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "table": {
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "areas": [
+            "title",
+            "timeline",
+            "notes"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "timeline": {
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          }
+        },
+        "dashboard": {
+          "name": "Dashboard",
+          "summary": "Headline numbers over charts.",
+          "tags": [
+            "Mixed"
+          ],
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "contentBox": true
           },
-          "placeholders": [
-            {
-              "type": "title"
+          "areas": [
+            "title",
+            "kpis",
+            "charts"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            2,
+            3
+          ],
+          "regions": {
+            "kpis": {
+              "accepts": [
+                "metric"
+              ],
+              "role": "secondary",
+              "flow": "grid"
             },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
+            "charts": {
+              "accepts": [
+                "chart",
+                "table"
+              ],
+              "role": "primary",
+              "flow": "grid"
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 3
-          },
-          "tags": [
-            "Numbers",
-            "KPIs",
-            "Grid"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-5x.svg"
           }
         },
-        "number-4x": {
-          "name": "Number 4x",
-          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
-          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
+        "code": {
+          "name": "Code",
+          "summary": "Source code with the explanation beside it.",
           "tags": [
-            "Numbers",
-            "KPIs",
-            "Matrix"
+            "Visuals"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          "areas": [
+            "title title",
+            "code notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "code": {
+              "accepts": [
+                "code"
+              ],
+              "role": "primary",
+              "flow": "column"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
           }
         },
-        "image-2x": {
-          "name": "Image 2x",
-          "summary": "Reach for it when two pictures are shown together, each with a note.",
-          "description": "A title above two images, each followed by a text block, in two columns. Use it for a before and after, two options or two views of the same thing.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "image"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "image"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
           "tags": [
-            "Visual",
-            "Gallery",
-            "Comparison"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-2x.svg"
-          },
-          "design": {
-            "imageFit": "contain"
-          }
-        },
-        "code-1x": {
-          "name": "Code 1x",
-          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
-          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "code"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Code",
-            "Demo",
-            "Technical"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
-          }
-        },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "List",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
           }
         }
       }

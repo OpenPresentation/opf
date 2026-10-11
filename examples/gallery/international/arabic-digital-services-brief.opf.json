@@ -111,7 +111,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title-subtitle",
+      "layout": "cover",
       "tag": "Public services",
       "title": "Arabic Digital Services Brief",
       "subtitle": "Crescent Public Services Public services",
@@ -120,7 +120,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-2x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Crescent Public Services should focus the next cycle on ",
@@ -135,7 +135,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-2x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -174,7 +174,7 @@
     {
       "id": "s4",
       "section": "Options",
-      "layout": "table-1x",
+      "layout": "table-beside",
       "title": "Decision Options",
       "table": {
         "columns": [
@@ -208,7 +208,7 @@
     {
       "id": "s5",
       "section": "Plan",
-      "layout": "text-2x",
+      "layout": "timeline",
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
@@ -241,7 +241,7 @@
     {
       "id": "s6",
       "section": "Close",
-      "layout": "list-1x",
+      "layout": "list",
       "title": "The Ask",
       "bullets": [
         {
@@ -376,7 +376,7 @@
               "id": "opening",
               "name": "Opening",
               "description": "Open with the initiative name, the date, and the one-line headline for the week. Frame the meeting in fifteen seconds so the rest of the time is content.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Initiative name & date",
               "type": "text"
             },
@@ -386,7 +386,7 @@
               "description": "State what the team set out to do this week. Specific, measurable. The audience should be able to read this slide alone and know what 'on track' would mean.",
               "instructions": "Set the expectations",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "achievements",
@@ -394,7 +394,7 @@
               "description": "Celebrate the week's wins. Concrete, attributable, dated. Brevity here — the meeting is for what's next, not a victory lap.",
               "instructions": "Celebrate success",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "overall-progress",
@@ -402,7 +402,7 @@
               "description": "Evaluate performance against the objectives. Use a simple status indicator (green/yellow/red) plus the leading metric. Help the audience scan the state in seconds.",
               "instructions": "Evaluate performance",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "challenges",
@@ -410,7 +410,7 @@
               "description": "Address what's hard right now: blockers, slipping items, surfaced risks. Tie each challenge to either an owner working it or a discussion you want this week.",
               "instructions": "Address difficulties",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "opportunities-for-improvement",
@@ -418,7 +418,7 @@
               "description": "Surface where the team can level up. Process tweaks, tooling needs, ways of working. Improvement opportunities should feel like seeds, not corrections.",
               "instructions": "Seek growth",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "highlights-recognition",
@@ -426,7 +426,7 @@
               "description": "Recognize specific contributions by name. Recognition belongs in the deck, not just in the meeting — written acknowledgment travels further than verbal.",
               "instructions": "Appreciate efforts",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "goals-next-week",
@@ -434,7 +434,7 @@
               "description": "Plan the week ahead with three to five specific goals. Each should be small enough to finish, large enough to matter, and clearly owned.",
               "instructions": "Plan ahead",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "discussion-feedback",
@@ -442,13 +442,13 @@
               "description": "Open the floor with two or three prompts — decisions you need, opinions you want, blockers you'd like cleared. End the recap actively.",
               "instructions": "Encourage input",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "conclusion",
               "name": "Conclusion",
               "description": "Close with one line that motivates the team into the next week. Echo the headline so the meeting feels closed.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Recap & motivate",
               "type": "text"
             }
@@ -673,169 +673,210 @@
         }
       },
       "layouts": {
-        "title-subtitle": {
-          "name": "Title Subtitle",
-          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
-          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "subtitle"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Message"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
-          }
-        },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
-          }
-        },
-        "chart-2x": {
-          "name": "Chart 2x",
-          "summary": "Reach for it when two charts are read together, each with its own note.",
-          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Comparison"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
           }
         },
-        "table-1x": {
-          "name": "Table 1x",
-          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
-          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "table"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "Table",
-            "Reference",
-            "Data"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
           }
         },
-        "list-1x": {
-          "name": "List 1x",
-          "summary": "Reach for it when one set of related points belongs together under a title.",
-          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            }
-          ],
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
           "tags": [
-            "List",
-            "Scannable",
-            "Structure"
+            "Visuals"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          }
+        },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title title",
+            "table notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "table": {
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "areas": [
+            "title",
+            "timeline",
+            "notes"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "timeline": {
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
           }
         }
       }

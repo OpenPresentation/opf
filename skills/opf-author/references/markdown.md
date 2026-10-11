@@ -35,7 +35,7 @@ name: Q3 Business Review
 language: en-US
 ---
 
-<!-- slide: id=cover layout=title section=Overview -->
+<!-- slide: id=cover layout=cover section=Overview -->
 # Q3 Business Review
 
 ## Operations and growth

@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Cybersecurity services",
       "title": "Managed Detection Market Update",
       "subtitle": "Sentinel Harbor Security Cybersecurity services",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-1x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Sentinel Harbor Security should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-1x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-4x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for cybersecurity services.",
@@ -124,7 +124,7 @@
               "id": "briefing",
               "name": "Briefing",
               "description": "Frame what this review covers: the period, the unit, the standard you're measuring against. One slide that lets the audience know exactly what they're being asked to evaluate.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Outline presentation objective",
               "type": "text"
             },
@@ -134,7 +134,7 @@
               "description": "Lead with the headline result. On track, ahead, or behind, and by how much. Resist softening — clear numbers up front earn credibility for the analysis that follows.",
               "instructions": "Summarize performance findings",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "key-metrics",
@@ -142,7 +142,7 @@
               "description": "Walk through the pivotal indicators. One chart per metric, clear comparison period, target or benchmark visible on the same frame. Help the audience see the data the way you do.",
               "instructions": "Review pivotal indicators",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "team-performance",
@@ -150,7 +150,7 @@
               "description": "Examine collective achievements and how the team contributed. Avoid generic praise; cite specific moves and the people behind them where the audience would expect it.",
               "instructions": "Examine collective achievements",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "highlight",
@@ -158,7 +158,7 @@
               "description": "Spotlight one standout contribution that defined the period. A landmark deal, a launch, a fix, a hire. One vivid example sticks longer than a list of accomplishments.",
               "instructions": "Show key contribution",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "analysis",
@@ -166,7 +166,7 @@
               "description": "Dig under the metrics. What drove the numbers, what held them back, what's signal versus noise. Analysis is where the audience learns whether you actually understand the system you're reporting on.",
               "instructions": "Uncover data insights",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "success",
@@ -174,7 +174,7 @@
               "description": "Reinforce the past triumphs that show the system works. Briefly — the audience came for what's next, not a victory lap. Wins earn permission for the harder slides ahead.",
               "instructions": "Reinforce past triumphs",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "challenges",
@@ -182,7 +182,7 @@
               "description": "Name the obstacles encountered honestly. What didn't move, what regressed, what the team is still wrestling with. Understated challenges read as missed signal, not modesty.",
               "instructions": "Highlight encountered obstacles",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "adjustments",
@@ -190,7 +190,7 @@
               "description": "Identify the changes you're making in response. New tactics, reallocations, sunsets. Each adjustment should map to a challenge above — adjustments without diagnosis feel arbitrary.",
               "instructions": "Identify necessary changes",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "strategy-evolution",
@@ -198,13 +198,13 @@
               "description": "Show how the strategy itself evolves heading into the next period. Refinements, sharpened bets, dropped initiatives. The audience should see continuity as well as change.",
               "instructions": "Plan for improvement",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "discussion",
               "name": "Discussion",
               "description": "Open the floor with two or three specific prompts. End the review actively — questions you want answered, decisions you want made — so the meeting yields more than the deck.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Promote active discourse",
               "type": "text"
             }
@@ -390,115 +390,134 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-1x": {
-          "name": "Text 1x",
-          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
-          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "tags": [
-            "Text",
-            "Body Copy",
-            "Narrative"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
-          }
-        },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Charts",
-            "Data",
-            "Analytics"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
           }
         },
-        "list-4x": {
-          "name": "List 4x",
-          "summary": "Reach for it when four groups of points fit a two-by-two grid.",
-          "description": "A title above four lists in a two-column grid. Use it for four quadrants, four workstreams or four categories that deserve equal space.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Matrix",
-            "Structure"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-4x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
           }
         }
       }

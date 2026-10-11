@@ -30,7 +30,7 @@ name: Q3 Business Review
 language: en-US
 ---
 
-<!-- slide: id=cover layout=title section=Overview -->
+<!-- slide: id=cover layout=cover section=Overview -->
 # Q3 Business Review
 
 ## Operations and growth
@@ -58,7 +58,7 @@ converts to
   "name": "Q3 Business Review",
   "language": "en-US",
   "slides": [
-    { "id": "cover", "layout": "title", "section": "Overview", "title": "Q3 Business Review", "subtitle": "Operations and growth", "notes": "Two minutes on the agenda, then straight into the numbers." },
+    { "id": "cover", "layout": "cover", "section": "Overview", "title": "Q3 Business Review", "subtitle": "Operations and growth", "notes": "Two minutes on the agenda, then straight into the numbers." },
     {
       "title": "Revenue grew every quarter",
       "blocks": [
@@ -88,7 +88,7 @@ A deck without front matter starts with its first slide, so a file never begins 
 
 | Part | Syntax | OPF |
 | --- | --- | --- |
-| Options | `<!-- slide: id=cover layout=title section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
+| Options | `<!-- slide: id=cover layout=cover section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
 | Title | `# Title` | `title`: a string, or `TextRun[]` when the line has [inline formatting](#inline-text). One per slide; closing `#` characters are dropped |
 | Subtitle | `## Subtitle` | `subtitle`, a string or `TextRun[]` like the title. One per slide |
 | Deeper headings | `### Text` | A bold paragraph, with a `heading-demoted` warning |

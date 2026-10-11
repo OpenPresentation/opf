@@ -38,7 +38,7 @@
               "name": "Contract",
               "description": "Describe the schema contract in one place.",
               "type": "text",
-              "layout": "text-1x",
+              "layout": "text",
               "thoughtCues": [
                 "What must remain stable?"
               ]
@@ -48,14 +48,14 @@
               "name": "Evidence",
               "description": "Show validation proof.",
               "type": "chart",
-              "layout": "chart-1x"
+              "layout": "chart-beside"
             },
             {
               "id": "adoption",
               "name": "Adoption",
               "description": "Close with the integration ask.",
               "type": "list",
-              "layout": "list-2x"
+              "layout": "list"
             }
           ],
           "duration": {

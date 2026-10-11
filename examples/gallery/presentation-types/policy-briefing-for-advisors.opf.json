@@ -104,7 +104,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Policy briefing",
       "title": "Policy Briefing for Advisors",
       "subtitle": "Civic Futures Lab Policy briefing",
@@ -113,7 +113,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-1x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Civic Futures Lab should focus the next cycle on ",
@@ -128,7 +128,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-1x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -167,7 +167,7 @@
     {
       "id": "s4",
       "section": "Options",
-      "layout": "table-1x",
+      "layout": "table-beside",
       "title": "Decision Options",
       "table": {
         "columns": [
@@ -201,7 +201,7 @@
     {
       "id": "s5",
       "section": "Plan",
-      "layout": "list-3x",
+      "layout": "timeline",
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
@@ -234,7 +234,6 @@
     {
       "id": "s88-regions",
       "section": "Operating model",
-      "layout": "number-4x",
       "title": "Operating Model",
       "top:left": {
         "metric": {
@@ -297,7 +296,7 @@
     {
       "id": "s88-blocks",
       "section": "Evidence",
-      "layout": "text-3x",
+      "layout": "dashboard",
       "title": "Evidence Pack",
       "blocks": [
         {
@@ -354,7 +353,7 @@
     {
       "id": "s88-video",
       "section": "Context",
-      "layout": "media-1x",
+      "layout": "image-beside",
       "title": "Demo Moment",
       "type": "video",
       "video": {
@@ -366,7 +365,7 @@
     {
       "id": "s88-code",
       "section": "Appendix",
-      "layout": "code-1x",
+      "layout": "code",
       "title": "Decision Rule",
       "code": {
         "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
@@ -378,7 +377,7 @@
     {
       "id": "s10",
       "section": "Close",
-      "layout": "list-1x",
+      "layout": "list",
       "title": "Decision and Follow Through",
       "items": [
         [
@@ -508,19 +507,19 @@
               "id": "context",
               "name": "Context",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "evidence",
               "name": "Evidence",
               "type": "chart",
-              "layout": "chart-1x"
+              "layout": "chart"
             },
             {
               "id": "decision",
               "name": "Decision",
               "type": "list",
-              "layout": "list-3x"
+              "layout": "list"
             }
           ]
         }
@@ -759,288 +758,326 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-1x": {
-          "name": "Text 1x",
-          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
-          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "tags": [
-            "Text",
-            "Body Copy",
-            "Narrative"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
-          }
-        },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Charts",
-            "Data",
-            "Analytics"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
           }
         },
-        "table-1x": {
-          "name": "Table 1x",
-          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
-          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "table"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "Table",
-            "Reference",
-            "Data"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
           }
         },
-        "list-3x": {
-          "name": "List 3x",
-          "summary": "Reach for it when three groups of points need their own lists.",
-          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          }
+        },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title title",
+            "table notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "table": {
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "areas": [
+            "title",
+            "timeline",
+            "notes"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "timeline": {
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          }
+        },
+        "dashboard": {
+          "name": "Dashboard",
+          "summary": "Headline numbers over charts.",
+          "tags": [
+            "Mixed"
+          ],
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
+            "contentBox": true
           },
-          "placeholders": [
-            {
-              "type": "title"
+          "areas": [
+            "title",
+            "kpis",
+            "charts"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            2,
+            3
+          ],
+          "regions": {
+            "kpis": {
+              "accepts": [
+                "metric"
+              ],
+              "role": "secondary",
+              "flow": "grid"
             },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
+            "charts": {
+              "accepts": [
+                "chart",
+                "table"
+              ],
+              "role": "primary",
+              "flow": "grid"
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "List",
-            "Triads",
-            "Scannable"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
           }
         },
-        "number-4x": {
-          "name": "Number 4x",
-          "summary": "Reach for it when four figures fit a two-by-two scorecard.",
-          "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            },
-            {
-              "type": "metric"
-            }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
-          },
+        "image-beside": {
+          "name": "Image beside",
+          "summary": "A picture or video beside text.",
           "tags": [
-            "Numbers",
-            "KPIs",
-            "Matrix"
+            "Visuals"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
+          "areas": [
+            "title title",
+            "media body"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none"
+            },
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
           }
         },
-        "text-3x": {
-          "name": "Text 3x",
-          "summary": "Reach for it when three parallel points each need a short passage of their own.",
-          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "code": {
+          "name": "Code",
+          "summary": "Source code with the explanation beside it.",
           "tags": [
-            "Text",
-            "Triads",
-            "Balance"
+            "Visuals"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
+          "areas": [
+            "title title",
+            "code notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "code": {
+              "accepts": [
+                "code"
+              ],
+              "role": "primary",
+              "flow": "column"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
           }
         },
-        "media-1x": {
-          "name": "Media 1x",
-          "summary": "Reach for it when a video is the content and a short note frames it.",
-          "description": "A title above one video with a text block beside it. Use it for a product demo, a customer clip or a recording the audience should watch.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "video"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
           "tags": [
-            "Video",
-            "Demo",
-            "Showcase"
+            "Text"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/media-1x.svg"
-          }
-        },
-        "code-1x": {
-          "name": "Code 1x",
-          "summary": "Reach for it when the slide shows a snippet of code and a note about it.",
-          "description": "A title above one code block with a text block beside it. Use it for an API call, a configuration or a short listing and the explanation that goes with it.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "code"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
             }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Code",
-            "Demo",
-            "Technical"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/code-1x.svg"
-          }
-        },
-        "list-1x": {
-          "name": "List 1x",
-          "summary": "Reach for it when one set of related points belongs together under a title.",
-          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "tags": [
-            "List",
-            "Scannable",
-            "Structure"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
           }
         }
       }

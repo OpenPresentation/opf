@@ -17,11 +17,11 @@ kind and then by id:
 "catalogs": {
   "default": {
     "source": "https://www.pptx.gallery",
-    "layouts": { "two-column": { "name": "Two column", "placeholders": [{ "type": "title" }, { "type": "text" }, { "type": "text" }] } },
+    "layouts": { "two-column": { "name": "Two column", "areas": ["title title", "first second"], "columns": [1, 1], "rows": ["auto", 1], "regions": { "first": { "accepts": ["text"], "flow": "auto" }, "second": { "accepts": ["text"], "flow": "auto" } } } },
     "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
   },
-  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "placeholders": [{ "type": "title" }] } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "placeholders": [{ "type": "title" }, { "type": "chart" }] } } }
+  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "areas": ["title", "media"], "rows": ["auto", 1], "regions": { "media": { "accepts": ["image"], "flow": "none" } } } } },
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": ["title", "chart"], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
 }
 ```
 
@@ -210,7 +210,7 @@ are not OPF records and link their catalog index with `Link: <…/<kind>/index.j
 | `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | mirror |
 | `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | content, `design.colorScheme` | mirror |
 | `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | content, `design.fontScheme` | mirror |
-| `layouts` | `layouts` | `opf-layout/v1` | content, `Slide.layout` | mirror |
+| `layouts` | `layouts` | `opf-layout/v2` in 0.19 | content, `Slide.layout` | authored in gallery 2.x |
 | `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | mirror |
 | `purposes` | `purposes` | `opf-purpose/v1` | content, `purpose` | mirror |
 | `themes` | `themes` | `opf-theme/v1` | content, `design.theme` | mirror |
