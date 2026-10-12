@@ -1,0 +1,16 @@
+{
+  "base": "2e75a8b95f6bc284417a9f84d0e5df30a6ab3742",
+  "dir": "/private/tmp/release-train-pptx-QETiUp",
+  "paths": [
+    "CHANGELOG.md",
+    "changes/rr-78-gallery-catalog-transition.md",
+    "changes/rr-81-candidate-gallery-ci.md",
+    "changes/rr-81-layout-review.md",
+    "changes/rr-81-pareto-preserve-series.md",
+    "changes/rr-81-template-layouts.md",
+    "package-lock.json",
+    "package.json"
+  ],
+  "exactMetadata": true,
+  "fragmentPatchedBeforeAssembly": true
+}

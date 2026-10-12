@@ -1,0 +1,189 @@
+{
+  "base": "2e75a8b95f6bc284417a9f84d0e5df30a6ab3742",
+  "metadata": {
+    "CHANGELOG.md": "54090c15ed04d9ace40d875fef3e6cb11ab8441bafbbe5e3fd5a5d6d5c1ab85b",
+    "changes/rr-78-gallery-catalog-transition.md": "deleted",
+    "changes/rr-81-candidate-gallery-ci.md": "deleted",
+    "changes/rr-81-layout-review.md": "deleted",
+    "changes/rr-81-pareto-preserve-series.md": "deleted",
+    "changes/rr-81-template-layouts.md": "deleted",
+    "package-lock.json": "164d2930446939c846d78b8480214393e5d1822ff62983d883df6883b4e32c9f",
+    "package.json": "32d4cb9ca83b20ddecab67314cc1e4897a525ab646c52913f5e42b9227b82208"
+  },
+  "results": [
+    {
+      "name": "install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exit": 0,
+      "seconds": 1.02
+    },
+    {
+      "name": "audit",
+      "command": [
+        "npm",
+        "audit"
+      ],
+      "exit": 0,
+      "seconds": 0.24
+    },
+    {
+      "name": "playwright",
+      "command": [
+        "node",
+        "-e",
+        "if(require('playwright/package.json').version!=='1.63.0')throw Error('Pinned Playwright mismatch')"
+      ],
+      "exit": 0,
+      "seconds": 0.02
+    },
+    {
+      "name": "type",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "seconds": 1.05
+    },
+    {
+      "name": "validate",
+      "command": [
+        "npm",
+        "run",
+        "validate"
+      ],
+      "exit": 0,
+      "seconds": 0.09
+    },
+    {
+      "name": "test:native-picture-edit-controls",
+      "command": [
+        "npm",
+        "run",
+        "test:native-picture-edit-controls"
+      ],
+      "exit": 0,
+      "seconds": 0.32
+    },
+    {
+      "name": "test:native-font-embed-controls",
+      "command": [
+        "npm",
+        "run",
+        "test:native-font-embed-controls"
+      ],
+      "exit": 0,
+      "seconds": 6.8
+    },
+    {
+      "name": "test:native-mixed-edit-controls",
+      "command": [
+        "npm",
+        "run",
+        "test:native-mixed-edit-controls"
+      ],
+      "exit": 0,
+      "seconds": 4.09
+    },
+    {
+      "name": "test:native-font-inventory-controls",
+      "command": [
+        "npm",
+        "run",
+        "test:native-font-inventory-controls"
+      ],
+      "exit": 0,
+      "seconds": 17.58
+    },
+    {
+      "name": "full",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit": 0,
+      "seconds": 248.8
+    },
+    {
+      "name": "published-import",
+      "command": [
+        "npm",
+        "run",
+        "test:published-import"
+      ],
+      "exit": 0,
+      "seconds": 9.15
+    },
+    {
+      "name": "font-variants",
+      "command": [
+        "npm",
+        "run",
+        "test:font-variants"
+      ],
+      "exit": 0,
+      "seconds": 0.52
+    },
+    {
+      "name": "code",
+      "command": [
+        "npm",
+        "run",
+        "test:code"
+      ],
+      "exit": 0,
+      "seconds": 1.2
+    },
+    {
+      "name": "published-core",
+      "command": [
+        "node",
+        "scripts/published-core-gate.mjs",
+        "--forbid"
+      ],
+      "exit": 0,
+      "seconds": 0.02
+    },
+    {
+      "name": "packed",
+      "command": [
+        "npm",
+        "run",
+        "test:packed"
+      ],
+      "exit": 0,
+      "seconds": 22.36
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/quarantine.mjs",
+        "run-suite",
+        "browser"
+      ],
+      "exit": 0,
+      "seconds": 16.72
+    },
+    {
+      "name": "pack-dry",
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run"
+      ],
+      "exit": 0,
+      "seconds": 0.31
+    }
+  ],
+  "all17GatesPass": true,
+  "protectedRuntimeDistTestsScriptsWorkflowsExactBase": true,
+  "npm": "11.16.0",
+  "node": "v24.21.0",
+  "context": "actual registry core0.19.0/render0.19.1/gallery2, no source/candidate/golden overrides",
+  "wrapperSha256": "cca0fb01d97db93e9ccdb77122a6bb91aee7eb7e3518f6f290abc15ef6e3c113"
+}
