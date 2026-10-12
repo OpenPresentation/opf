@@ -144,6 +144,7 @@ export function createCanvasEditor(container, options = {}) {
   });
   const layoutHandles = createLayoutHandles(root, {
     editor, enabled: options.layoutEditing, render: renderFor, beforeEdit: commit,
+    slideIndex: () => slideIndex,
     isTextEditing: () => !!active,
     clearError: clearNotice, onError: report,
     onDraft: value => options.onDraft?.(value),

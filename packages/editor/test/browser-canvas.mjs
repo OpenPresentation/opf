@@ -3,7 +3,7 @@ import { createEditorSession } from "../src/index.js";
 import { loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { toSvg } from "@openpresentation/opf-render";
 // OPF 0.15: the host registers its catalogs (the deck names the gallery's roboto scheme).
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 const output = document.querySelector("#results"),
   host = document.querySelector("#canvas");
 let checks = 0;

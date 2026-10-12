@@ -10,7 +10,7 @@ import {
   jsonPointerToOpfPath,
   opfPathToJsonPointer
 } from "../dist/index.js";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 
 const presentation = {
   name: "Editor smoke",

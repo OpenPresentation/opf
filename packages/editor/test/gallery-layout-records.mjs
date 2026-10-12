@@ -14,25 +14,13 @@ const apply = (source) =>
     },
   });
 
-const source = {
-  id: "fa-01-photo-pair",
-  name: "Photo pair",
-  placeholders: [{ type: "title" }, { type: "image" }, { type: "image" }, { type: "text" }],
-  design: { titleAlignment: "left", contentBox: false, imageFit: "cover" },
-  composition: { mode: "row", weights: [2, 2, 1] },
-};
-const document = await apply(source);
-const record = document.catalogs.custom.layouts["fa-01-photo-pair"];
-assert.deepEqual(record, {
-  name: "Photo pair",
-  design: source.design,
-  placeholders: source.placeholders,
-  composition: source.composition,
-});
-assert.equal(validate(document, { only: ["format"] }).valid, true);
-
-// Without placeholders the record falls back to a title and a text region.
-const bare = (await apply({ id: "fa-01-bare", name: "Bare" })).catalogs.custom.layouts["fa-01-bare"];
-assert.deepEqual(bare.placeholders, [{ type: "title" }, { type: "text" }]);
-for (const key of ["contentType", "contentMultiple", "slideTitle", "$schema", "id"]) assert.equal(key in record, false);
-console.log("Gallery layout records use the layout schema shape.");
+const source={id:'photo-pair',name:'Photo pair',areas:['title title','first second','note note'],columns:[1,1],rows:['auto',1,'auto'],regions:{first:{accepts:['image'],flow:'none'},second:{accepts:['image'],flow:'none'},note:{accepts:['text'],flow:'auto'}},design:{imageFit:'contain'}};
+const document=await apply(source);
+const record=document.catalogs.custom.layouts['photo-pair'];
+const {id,...expected}=source;
+assert.deepEqual(record,expected);
+assert.equal(validate(document,{only:['format']}).valid,true);
+const bare=await apply({id:'unsupported',name:'No template'});
+assert.equal(bare.catalogs.custom.layouts.unsupported,undefined,'no v1 fallback or invented template');
+assert.ok(!Object.hasOwn(record,'placeholders'));
+console.log('Gallery definitions preserve exact v2 region/grid/design records without migration fallback.');

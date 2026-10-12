@@ -34,7 +34,7 @@ export interface CanvasEditorOptions {
   editor?: EditorSession;
   presentation?: unknown;
   /**
-   * The host's catalogs (core `Catalog[]`, for example `[defaultCatalog]` from `@openpresentation/opf/catalog`) for the session the
+   * The host's catalogs (core `Catalog[]`, for example `[gallery]` from `@openpresentation/gallery`) for the session the
    * canvas creates from `presentation`. With `editor`, register them on that session instead (`createEditorSession(doc, { catalogs })`);
    * `renderOptions.catalogs` adds catalogs for drawing only, merged after the session's.
    */

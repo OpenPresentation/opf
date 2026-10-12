@@ -1,5 +1,5 @@
 // Catalogs (FA-23, OPF 0.15). The editor never ships or imports catalog data: the host registers its catalogs (`Catalog[]`,
-// the shape core's `CatalogOptions.catalogs` takes, for example `defaultCatalog` from `@openpresentation/opf/catalog`), on the
+// the shape core's `CatalogOptions.catalogs` takes, for example `gallery` from `@openpresentation/gallery`), on the
 // session (`createEditorSession(doc, { catalogs })`) or per call. `mergeCatalogs` is the one function that turns those into the
 // one list the editor hands to core (resolution, validation, embedding, copying, updates), to the renderer and to the exporter.
 // Pickers list core's `catalogRecords` and write the reference it gives (`id` or `name:id`); saving and exporting embed every
@@ -23,7 +23,7 @@ export function mergeCatalogs(...lists) {
     for (const catalog of Array.isArray(list) ? list : [list]) {
       if (catalog === undefined || catalog === null) continue;
       if (!isObject(catalog) || typeof catalog.source !== "string" || catalog.source === "")
-        throw new OPFEditorError("invalid-catalogs", "A registered catalog is an object with a non-empty source, such as defaultCatalog from @openpresentation/opf/catalog.", { catalog });
+        throw new OPFEditorError("invalid-catalogs", "A registered catalog is an object with a non-empty source, such as gallery from @openpresentation/gallery.", { catalog });
       if (sources.has(catalog.source)) continue;
       sources.add(catalog.source);
       merged.push(catalog);

@@ -1,7 +1,7 @@
 // RR-06 gaps: image upload. A local file becomes an `assets` entry (or goes to the host's onAddAsset)
 // and is used by an organization logo, watermark, slide image, background or header/footer zone in one undo step.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";

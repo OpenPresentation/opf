@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import { validate } from "@openpresentation/opf";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import {
   OPFEditorError,
   applyCatalogUpdate,
@@ -35,7 +35,7 @@ const acme = (revision = 1) => ({
     },
   },
   fontSchemes: { inter: { name: "Inter", major: "Inter", minor: "Inter" } },
-  layouts: { hero: { name: "Acme hero", placeholders: [{ type: "title" }, { type: "text" }] } },
+  layouts: { hero: { name: "Acme hero", areas: ["title", "body"], regions: {body: {accepts: ["text"], flow: "auto"}} } },
 });
 
 // --- mergeCatalogs: one list, the first catalog per source wins, the host default never moves --------------------
@@ -77,7 +77,7 @@ const acme = (revision = 1) => ({
 // --- pickers: embedded records first, then registered ones, each with the reference to write ------------------------
 {
   const editor = createEditorSession(
-    { catalogs: { acme: { source: ACME }, custom: { layouts: { mine: { name: "Mine", placeholders: [{ type: "title" }] } } } }, design: {}, slides: [{ title: "One" }] },
+    { catalogs: { acme: { source: ACME }, custom: { layouts: { mine: { name: "Mine", areas: ["title"] } } } }, design: {}, slides: [{ title: "One" }] },
     { catalogs: [defaultCatalog, acme()] },
   );
   const layouts = getCatalogOptions("layouts", { editor });
@@ -149,7 +149,7 @@ const acme = (revision = 1) => ({
 
 // --- save and copy embed every referenced record, so the file renders with no catalog --------------------------------
 {
-  const doc = { design: { theme: "classic" }, slides: [{ layout: "two-column", title: "A", blocks: [{ text: "1" }, { text: "2" }] }, { layout: "two-column", title: "B" }, { layout: "title", title: "C" }] };
+  const doc = { design: { theme: "classic" }, slides: [{ layout: "two-column", title: "A", blocks: [{ text: "1" }, { text: "2" }] }, { layout: "two-column", title: "B" }, { layout: "cover", title: "C" }] };
   const editor = createEditorSession(doc, { catalogs: [defaultCatalog] });
   const saved = saveDocument(editor);
   assert.deepEqual(editor.presentation, doc, "saving does not change the session");
@@ -165,12 +165,12 @@ const acme = (revision = 1) => ({
   assert.deepEqual(copied, saved.document, "copying the presentation hands on the embedded document");
   const slide = JSON.parse(serializeOpfTransfer(editor.presentation, { scope: "slide", slideIndex: 2, catalogs: editor.catalogs }));
   assert.equal(slide.slides.length, 1);
-  assert.ok(slide.catalogs.default.layouts.title);
+  assert.ok(slide.catalogs.default.layouts.cover);
 }
 
 // --- paste copies records with core's copySlides and reports renames -----------------------------------------------
 {
-  const record = (text) => ({ name: "Q4", placeholders: [{ type: "title" }, { type: text }] });
+  const record = (text) => ({ name: "Q4", areas: ["title", "body"], regions: {body: {accepts: [text], flow: "auto"}} });
   const target = { catalogs: { custom: { layouts: { q4: record("text") } } }, slides: [{ id: "own", layout: "q4", title: "Ours" }] };
   const incoming = { catalogs: { custom: { layouts: { q4: record("list") } } }, slides: [{ id: "theirs", layout: "q4", title: "Theirs" }] };
   const transfer = parseOpfTransfer(JSON.stringify(incoming));
@@ -211,11 +211,11 @@ const acme = (revision = 1) => ({
   for (const file of await readdir(new URL("../dist/", import.meta.url))) {
     if (!file.endsWith(".js")) continue;
     const text = await readFile(new URL(`../dist/${file}`, import.meta.url), "utf8");
-    assert.ok(!/(?:from\s*|import\s*\(\s*)["']@openpresentation\/opf\/catalog["']/.test(text), `${file} must not import @openpresentation/opf/catalog`);
+    assert.ok(!/(?:from\s*|import\s*\(\s*)["']@openpresentation\/gallery["']/.test(text), `${file} must not import @openpresentation/gallery`);
     assert.ok(!/\b(?:"|')(?:minimal|cool-horizon|title-subtitle)(?:"|')/.test(text), `${file} must not hard-code catalog ids`);
   }
   const playground = await readFile(new URL("../examples/playground.js", import.meta.url), "utf8");
-  assert.match(playground, /from '@openpresentation\/opf\/catalog'/, "the playground registers the default catalog");
+  assert.match(playground, /from '@openpresentation\/gallery'/, "the playground registers the default catalog");
 }
 
 console.log("catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings");
@@ -223,7 +223,7 @@ console.log("catalogs ok: one merged list, references from catalogRecords, embed
 // --- a record its catalog does not publish: the finding, and "move to custom" -------------------------------------------
 {
   const doc = {
-    catalogs: { acme: { source: ACME, layouts: { "q4-special": { name: "Q4", placeholders: [{ type: "title" }] } }, themes: { promo: { name: "Promo", colorScheme: "ocean" } } } },
+    catalogs: { acme: { source: ACME, layouts: { "q4-special": { name: "Q4", areas: ["title"] } }, themes: { promo: { name: "Promo", colorScheme: "ocean" } } } },
     design: { theme: "acme:promo" },
     slides: [{ layout: "acme:q4-special", title: "x" }],
   };
@@ -272,7 +272,7 @@ console.log("catalogs ok: not-in-source records move to custom with their refere
   editor.undo();
   assert.deepEqual(editor.presentation, embedded);
   // A custom record is edited in place.
-  const own = createEditorSession({ catalogs: { custom: { layouts: { mine: { name: "Mine", placeholders: [{ type: "title" }] } } } }, slides: [{ layout: "mine", title: "x" }] });
+  const own = createEditorSession({ catalogs: { custom: { layouts: { mine: { name: "Mine", areas: ["title"] } } } }, slides: [{ layout: "mine", title: "x" }] });
   const inPlace = own.set("catalogs.custom.layouts.mine.name", "Mine, renamed");
   assert.equal(inPlace.forked, undefined);
   assert.equal(own.get("slides.0.layout"), "mine");

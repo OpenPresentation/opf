@@ -12,7 +12,7 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
-  import { defaultCatalog } from '@openpresentation/opf/catalog';
+  import { gallery as defaultCatalog } from '@openpresentation/gallery';
   window.mountClickEntry = async ({deck, faces, options = {}}) => {
     window.cv?.destroy(); window.fonts?.dispose();
     window.events = {selects: [], errors: [], commits: [], cancels: []};

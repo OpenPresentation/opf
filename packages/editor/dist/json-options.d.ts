@@ -6,16 +6,12 @@ export interface JsonFieldOption {
   label: string;
   description?: string;
   source: 'Loaded catalog' | 'Document catalog' | 'Schema' | 'Current value';
-  suggested?: boolean;
   /** User-facing provenance; source remains stable for existing consumers. */
   sourceLabel?: string;
   sourceDescription?: string;
-  layoutGroup?: 'Current layout' | 'Same placeholders' | 'Compatible placeholders' | 'Different counts' | 'Other layouts' | 'Unspecified placeholders';
-  /** Declared placeholder types and counts, not a rendering guarantee. */
-  placeholders?: string;
-  /** Declared kinds in layout order, used to create missing blank content. */
-  placeholderTypes?: string[];
-  related?: boolean;
+  layoutGroup?: 'Current layout' | 'Openers and closers' | 'Text' | 'Groups of items' | 'Numbers' | 'Visuals' | 'Mixed' | 'Custom layouts';
+  /** Region names, accepted kinds and flow from the v2 template. */
+  regions?: string;
 }
 export interface JsonFieldContext {
   source: string;
@@ -31,7 +27,7 @@ export interface JsonFieldContext {
 }
 /** Null for invalid JSON or a field with no categorical choices. */
 export declare function getJsonFieldContext(source: string, position: number, loadedCatalogs?: JsonCatalogContext): JsonFieldContext | null;
-/** Replace the token and add missing layout payloads. Hosts must reject stale sources. */
+/** Replace only the selected reference token, preserving content. Hosts must reject stale sources. */
 export declare function replaceFieldOption(context: JsonFieldContext, value: JsonOptionValue): string;
 /** Minimal single replacement for atomic source-editor undo. */
 export declare function fieldOptionEdit(context: JsonFieldContext, value: JsonOptionValue): {from:number;to:number;insert:string};

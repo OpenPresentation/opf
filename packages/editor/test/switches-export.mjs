@@ -18,7 +18,7 @@ import JSZip from 'jszip';
 // The fixture plus a code slide, so the code font is exercised too.
 const deck = () => {
   const presentation = baseDeck();
-  presentation.slides.push({ id: "code", layout: "code-1x", title: "Rule", code: { source: "const score = urgency * confidence;", language: "ts" } });
+  presentation.slides.push({ id: "code", layout: "code", title: "Rule", code: { source: "const score = urgency * confidence;", language: "ts" } });
   return presentation;
 };
 const schemeRecord = (presentation, id) => (id ? resolveReference(presentation, "fontSchemes", id, { catalogs })?.record : undefined);

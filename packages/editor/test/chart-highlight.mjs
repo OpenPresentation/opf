@@ -2,7 +2,7 @@
 // highlight is offered or written; the choices come from the chart's resolved data (a dataset chart offers its dataset's columns and
 // rows); the preview draws the change and the PPTX export carries it.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
 

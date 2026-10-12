@@ -49,6 +49,10 @@
           "command": "node test/slides-browser.mjs"
         },
         {
+          "id": "playground:layout-templates-browser",
+          "command": "node test/layout-templates-browser.mjs"
+        },
+        {
           "id": "playground:template-panel-browser",
           "command": "node test/template-panel-browser.mjs"
         },

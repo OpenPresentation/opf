@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 import {
   BACKGROUND_TYPES,

@@ -1,7 +1,7 @@
 // FA-27: Table.alt in the editor. The table panel's alt field and "Decorative" box edit it as one validated, undoable patch (inline and
 // dataset-backed tables alike); find and replace reaches it; the preview names the table with it and the PPTX export carries it.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";

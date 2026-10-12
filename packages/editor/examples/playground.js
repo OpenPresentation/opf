@@ -11,7 +11,7 @@ import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession, saveDocument } from '../src/index.js';
 // FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog (the pptx.gallery
 // snapshot core publishes as an opt-in subpath) and hands the session's one list to every render, check, embed and export.
-import { catalogDisplay, defaultCatalog } from '@openpresentation/opf/catalog';
+import { catalogDisplay, gallery as defaultCatalog } from '@openpresentation/gallery';
 import {createCanvasEditor} from '../src/canvas.js';
 import { whenFontsReady } from '../src/font-gate.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
@@ -24,6 +24,8 @@ import { createDesignControls } from '../src/design-controls.js';
 import { createPersistence } from '../src/persistence.js';
 import { createPersistenceUi } from '../src/persistence-ui.js';
 import { createSlideManager } from '../src/slide-manager.js';
+import { openCustomLayoutEditor } from '../src/custom-layout-editor.js';
+import { prepareDimensionSwitch } from '../src/switches.js';
 import { createOutlineView } from '../src/outline-view.js';
 import { splitSlideByBlocks, mergeSlides } from '../src/content-actions.js';
 import { createDataGrid } from '../src/data-grid.js';
@@ -161,6 +163,10 @@ function thumbnailHtml(deck, index) {
 const slideManagerOptions = {
   editor, getSlideIndex: () => slideIndex, setSlideIndex: value => { slideIndex = value; refresh(); },
   renderThumbnail: thumbnailHtml, onStatus: message => status(message), onError: () => {}, autoRender: false,
+  renderLayoutPreview: (deck, index, choice) => {
+    const candidate = prepareDimensionSwitch(deck, 'layouts', choice.id, { slideIndex: index, catalogs: editor.catalogs }).presentation;
+    return toSvg(candidate, index + 1, { ...renderOptions(), fonts, text: 'system', trace: false });
+  },
   // RR-26: split a slide by its blocks and merge slides, from the slide menu.
   contentActions: { splitSlideByBlocks, mergeSlides },
 };
@@ -323,6 +329,8 @@ element('add').onclick = () => act(() => {
   editor.applyPatch([{ op: 'add', path: '/slides/-', value: { id: `slide-${index}`, title: 'New slide', text: 'Write your next idea here.' } }]);
 });
 element('add-layout').onclick = () => slideManager.openLayoutPicker();
+element('choose-layout').onclick = () => slideManager.openLayoutPicker('apply');
+element('custom-layout').onclick = () => openCustomLayoutEditor(editor, { onSave: layout => status(`Saved ${layout.record.name} in custom layouts`) });
 let applying = false;
 // Also the gallery handoff: it fills #json and clicks this button in the same tick, without waiting for the source preview.
 element('apply-json').onclick = async event => {

@@ -2,7 +2,7 @@
 // the registry's embedded faces, the permissive-license rule, cancellation, findings and the converter hand-off (the real PDF and
 // PNG conversion is checked in a browser by test/playground-download.mjs; the `convert` contract itself by test/convert-contract.mjs).
 import assert from 'node:assert/strict';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { EXPORT_FORMATS, convert, embeddableFonts, exportFileName, slidesToConvert } from '../src/export.js';
 import { crc32, createZip } from '../src/zip.js';

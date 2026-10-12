@@ -7,13 +7,12 @@
 // tones) resolve through core with the host's registered catalogs (`options.catalogs`, `Catalog[]`) and write the reference core
 // gives (`id` or `name:id`). Languages, chart types and social platforms are engine vocabularies, checked against core's
 // tables; their labels come from the host's display metadata (`options.vocabularies`, the shape of `catalogDisplay` from
-// `@openpresentation/opf/catalog`), never from data the editor ships.
+// `@openpresentation/gallery`), never from data the editor ships.
 import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS, isXYChartType, parseReference, resolveChartData, resolveReference } from "@openpresentation/opf";
 import { chartOptionTarget } from "@openpresentation/opf/composition";
 import { createValuePatch, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { createContentBlock, prepareBlockReplace } from "./blocks.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
-import { layoutSlotTypes, populateLayoutPlaceholders } from "./layout-placeholders.js";
 import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 import { checkFormat } from "./checks.js";
 import { listCatalogRecords, mergeCatalogs } from "./catalogs.js";
@@ -267,19 +266,11 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
     slideAt(presentation, slideIndex, "a layout switch");
     scope = "slide";
     const choice = catalogChoice(presentation, dimension, value, options);
-    const record = choice.record;
     patches = choice.patches;
     const withRecord = patches.length ? applyJsonPatch(presentation, patches) : presentation;
     if (withRecord.slides[slideIndex].layout !== choice.reference) {
       const layoutOps = createValuePatch(withRecord, ["slides", String(slideIndex), "layout"], choice.reference);
-      const swapped = applyJsonPatch(withRecord, layoutOps);
-      // FA-26: a record's placeholder groups contribute their leaf regions, in reading order.
-      const types = layoutSlotTypes(record);
-      // Add the blank payloads the layout declares, as the JSON editor's layout choice does.
-      const populated = types ? populateLayoutPlaceholders(swapped, slideIndex, types) : swapped;
-      patches = same(populated.slides[slideIndex], swapped.slides[slideIndex])
-        ? [...patches, ...layoutOps]
-        : [...patches, { op: "replace", path: `/slides/${slideIndex}`, value: populated.slides[slideIndex] }];
+      patches = [...patches, ...layoutOps];
     }
   } else if (dimension === "charts") {
     slideIndex = scopeIndex;

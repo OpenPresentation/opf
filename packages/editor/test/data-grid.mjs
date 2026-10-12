@@ -2,7 +2,7 @@
 // row, pasting TSV/CSV and number reading. Every operation is one validated patch and one undo step; none of them ever turns a gap
 // into 0 or hides text.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";

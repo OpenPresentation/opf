@@ -6,7 +6,7 @@ import {
 } from "../dist/index.js";
 import { createOPFReactComponents } from "../dist/react.js";
 import { opfCatalogSelect, opfTextInput } from "../dist/svelte.js";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 
 const documentRef = fakeDocument();
 const editor = createEditorSession({

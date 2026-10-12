@@ -27,7 +27,7 @@ const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
-  import { defaultCatalog } from '@openpresentation/opf/catalog';
+  import { gallery as defaultCatalog } from '@openpresentation/gallery';
   import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
   window.mountMetric=async({deck,faces})=>{
     window.metricCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;window.diagnostics=[];

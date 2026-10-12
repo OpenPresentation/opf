@@ -3,7 +3,7 @@
 // validated, undoable patch; switching to another type removes the combo-only fields. The preview and the PPTX export draw
 // the edited chart.
 import assert from "node:assert/strict";
-import { catalogDisplay } from "@openpresentation/opf/catalog";
+import { catalogDisplay } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 
 // `chart-option-adapted` (layout) and `chart-mapping-adapted` (content) are what core says when a combo option or mapping is dropped; `only: ["format"]` never reports them.

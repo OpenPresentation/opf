@@ -24,9 +24,57 @@ concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && '-ignored' || github.event_name == 'schedule' && '-schedule' || '' }}
   cancel-in-progress: ${{ github.event_name != 'merge_group' && github.event_name != 'schedule' }}
 jobs:
+  candidate-selection:
+    name: Resolve reviewed coordinated graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      opf: ${{ steps.refs.outputs.opf }}
+      opf_render: ${{ steps.refs.outputs.opf_render }}
+      opf_pptx: ${{ steps.refs.outputs.opf_pptx }}
+      opf_editor: ${{ steps.refs.outputs.opf_editor }}
+      golden: ${{ steps.refs.outputs.golden }}
+      candidate_gallery: ${{ steps.gallery.outputs.candidate_gallery }}
+      published_opf: ${{ steps.gallery.outputs.published_opf }}
+      published_opf_render: ${{ steps.gallery.outputs.published_opf_render }}
+      published_opf_pptx: ${{ steps.gallery.outputs.published_opf_pptx }}
+      published_opf_editor: ${{ steps.gallery.outputs.published_opf_editor }}
+      published_cli: ${{ steps.gallery.outputs.published_cli }}
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-editor
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ steps.refs.outputs.opf }}
+          path: opf
+          persist-credentials: false
+      - id: gallery
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/candidate-gallery.mjs resolve
+  published-control:
+    needs: candidate-selection
+    if: needs.candidate-selection.outputs.candidate_gallery != ''
+    uses: OpenPresentation/opf/.github/workflows/published-gallery-control.yml@9750c1005ef42296e4ed3cf9b36887d53a21a228
+    with:
+      mode: ecosystem
+      tools-ref: ${{ needs.candidate-selection.outputs.opf }}
+      opf-ref: ${{ needs.candidate-selection.outputs.published_opf }}
+      render-ref: ${{ needs.candidate-selection.outputs.published_opf_render }}
+      pptx-ref: ${{ needs.candidate-selection.outputs.published_opf_pptx }}
+      editor-ref: ${{ needs.candidate-selection.outputs.published_opf_editor }}
+      cli-ref: ${{ needs.candidate-selection.outputs.published_cli }}
   package:
+    needs: [candidate-selection, published-control]
     # An unrelated label starts nothing.
-    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
+    if: ${{ always() && (github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
     timeout-minutes: 35
@@ -34,6 +82,16 @@ jobs:
       run:
         working-directory: opf-editor
     steps:
+      - name: Require successful graph selection and published control
+        working-directory: .
+        shell: bash
+        env:
+          SELECTION: ${{ needs.candidate-selection.result }}
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          CONTROL: ${{ needs.published-control.result }}
+        run: |
+          test "$SELECTION" = success
+          if [ -n "$GALLERY" ]; then test "$CONTROL" = success; fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -50,31 +108,30 @@ jobs:
       # RR-50: no hand pins. The commits of the other OpenPresentation repositories (and OPF_GOLDEN_BASELINE, exported to
       # the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull
       # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).
-      - name: Resolve the coordinated commits from core's ecosystem.lock.json
-        id: refs
-        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
-        with:
-          consumer: opf-editor
-          export-golden: 'true'
+      - name: Export the selected reviewed golden
+        shell: bash
+        env:
+          GOLDEN: ${{ needs.candidate-selection.outputs.golden }}
+        run: echo "OPF_GOLDEN_BASELINE=$GITHUB_WORKSPACE/$GOLDEN" >> "$GITHUB_ENV"
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: ${{ steps.refs.outputs.opf }}
+          ref: ${{ needs.candidate-selection.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ steps.refs.outputs.opf_render }}
+          ref: ${{ needs.candidate-selection.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ steps.refs.outputs.opf_pptx }}
+          ref: ${{ needs.candidate-selection.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -103,11 +160,23 @@ jobs:
       - name: Verify editor with published dependencies
         if: steps.published-core.outputs.skip != 'true'
         run: npm run test:packed
+      - name: Resolve and link the explicitly authorized gallery
+        id: candidate-gallery
+        uses: ./opf/.github/actions/candidate-gallery
       - name: Build and link coordinated sources
         working-directory: opf
+        shell: bash
+        env:
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          LINKED_GALLERY: ${{ steps.candidate-gallery.outputs.sha }}
         run: |
-          pnpm build
-          node scripts/link-ecosystem.mjs --packages-only
+          test "$GALLERY" = "$LINKED_GALLERY"
+          if [ -n "$GALLERY" ]; then
+            node scripts/candidate-gallery-build.mjs
+          else
+            pnpm build
+            node scripts/link-ecosystem.mjs --packages-only
+          fi
       - run: npm audit
       - run: npm run typecheck
       - run: npm run validate
@@ -122,7 +191,11 @@ jobs:
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
-          pnpm pack:ecosystem
+          if [ -n "$CANDIDATE_GALLERY_REF" ]; then
+            node --input-type=module -e "import assert from 'node:assert/strict'; import {candidateArtifacts} from './scripts/candidate-gallery-pack.mjs'; assert.ok(candidateArtifacts(process.cwd()));"
+          else
+            pnpm pack:ecosystem
+          fi
           pnpm test:packed-ecosystem
           pnpm test:packed-browser
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
@@ -170,9 +243,10 @@ jobs:
   # development and evidence runtime) and this job repeats install, the published-dependency check, typecheck and the
   # unit suite on the oldest supported major and the current release. Browser, golden and native gates stay on Node 24.
   node-range:
+    needs: [candidate-selection, published-control]
     name: Node ${{ matrix.node }} (engines range)
     # Not on a plain pull request (see the header); an unrelated label starts nothing.
-    if: ${{ github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
+    if: ${{ always() && (github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
     # RR-57: about 2x the p90 (5 min), within the minimum of 15.
@@ -185,35 +259,44 @@ jobs:
       run:
         working-directory: opf-editor
     steps:
+      - name: Require successful graph selection and published control
+        working-directory: .
+        shell: bash
+        env:
+          SELECTION: ${{ needs.candidate-selection.result }}
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          CONTROL: ${{ needs.published-control.result }}
+        run: |
+          test "$SELECTION" = success
+          if [ -n "$GALLERY" ]; then test "$CONTROL" = success; fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      - name: Resolve the coordinated commits from core's ecosystem.lock.json
-        id: refs
-        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
-        with:
-          consumer: opf-editor
-          export-golden: 'true'
+      - name: Export the selected reviewed golden
+        shell: bash
+        env:
+          GOLDEN: ${{ needs.candidate-selection.outputs.golden }}
+        run: echo "OPF_GOLDEN_BASELINE=$GITHUB_WORKSPACE/$GOLDEN" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: ${{ steps.refs.outputs.opf }}
+          ref: ${{ needs.candidate-selection.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ steps.refs.outputs.opf_render }}
+          ref: ${{ needs.candidate-selection.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ steps.refs.outputs.opf_pptx }}
+          ref: ${{ needs.candidate-selection.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -243,11 +326,23 @@ jobs:
       - name: Verify editor with published dependencies
         if: steps.published-core.outputs.skip != 'true'
         run: npm run test:packed
+      - name: Resolve and link the explicitly authorized gallery
+        id: candidate-gallery
+        uses: ./opf/.github/actions/candidate-gallery
       - name: Build and link coordinated sources
         working-directory: opf
+        shell: bash
+        env:
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          LINKED_GALLERY: ${{ steps.candidate-gallery.outputs.sha }}
         run: |
-          pnpm build
-          node scripts/link-ecosystem.mjs --packages-only
+          test "$GALLERY" = "$LINKED_GALLERY"
+          if [ -n "$GALLERY" ]; then
+            node scripts/candidate-gallery-build.mjs
+          else
+            pnpm build
+            node scripts/link-ecosystem.mjs --packages-only
+          fi
       - run: npm run typecheck
       - run: npm test
 
@@ -256,8 +351,9 @@ jobs:
   # Linux-only gate (#117). Runs on the weekly schedule, manual runs and a pull request labelled `full-ci`; not on a plain
   # pull request, push or the merge queue (a macOS runner minute costs about ten Linux minutes).
   macos-playground:
+    needs: [candidate-selection, published-control]
     name: macOS playground
-    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
+    if: ${{ always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
     runs-on: macos-15
     # The suite takes about 8 minutes on an M4; a hosted runner is slower.
     timeout-minutes: 40
@@ -265,35 +361,44 @@ jobs:
       run:
         working-directory: opf-editor
     steps:
+      - name: Require successful graph selection and published control
+        working-directory: .
+        shell: bash
+        env:
+          SELECTION: ${{ needs.candidate-selection.result }}
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          CONTROL: ${{ needs.published-control.result }}
+        run: |
+          test "$SELECTION" = success
+          if [ -n "$GALLERY" ]; then test "$CONTROL" = success; fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      - name: Resolve the coordinated commits from core's ecosystem.lock.json
-        id: refs
-        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
-        with:
-          consumer: opf-editor
-          export-golden: 'true'
+      - name: Export the selected reviewed golden
+        shell: bash
+        env:
+          GOLDEN: ${{ needs.candidate-selection.outputs.golden }}
+        run: echo "OPF_GOLDEN_BASELINE=$GITHUB_WORKSPACE/$GOLDEN" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: ${{ steps.refs.outputs.opf }}
+          ref: ${{ needs.candidate-selection.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ steps.refs.outputs.opf_render }}
+          ref: ${{ needs.candidate-selection.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ steps.refs.outputs.opf_pptx }}
+          ref: ${{ needs.candidate-selection.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -319,11 +424,23 @@ jobs:
       # No Playwright container on macOS: install the Chromium build that the locked playwright version expects.
       - name: Install Playwright Chromium
         run: npx playwright install chromium
+      - name: Resolve and link the explicitly authorized gallery
+        id: candidate-gallery
+        uses: ./opf/.github/actions/candidate-gallery
       - name: Build and link coordinated sources
         working-directory: opf
+        shell: bash
+        env:
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          LINKED_GALLERY: ${{ steps.candidate-gallery.outputs.sha }}
         run: |
-          pnpm build
-          node scripts/link-ecosystem.mjs --packages-only
+          test "$GALLERY" = "$LINKED_GALLERY"
+          if [ -n "$GALLERY" ]; then
+            node scripts/candidate-gallery-build.mjs
+          else
+            pnpm build
+            node scripts/link-ecosystem.mjs --packages-only
+          fi
       - name: Playground browser suite
         run: node scripts/quarantine.mjs run-suite playground
       - name: Quarantined tests (non-blocking)

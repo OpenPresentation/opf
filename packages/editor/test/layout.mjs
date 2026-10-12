@@ -30,9 +30,10 @@ assert.ok(max.composition.weights.every(w=>w>0&&w<=100));
 const after=composeSlide(max.presentation.slides[0]).flows[0];assert.ok(Math.abs(after.columns[2].size-maxFlow.columns[2].size)<1e-7);
 assert.equal(prepareTrackResize(deck,flow,0,0).fraction,.05);
 for(const [boundary,fraction]of [[-1,.5],[2,.5],[0,NaN],[0,2]])assert.throws(()=>prepareTrackResize(deck,flow,boundary,fraction));
-const reserved=composeSlide(deck.slides[0],{layout:{placeholders:Array.from({length:6},()=>({type:'text'}))}}).flows[0];assert.equal(reserved.slotCount,3); // explicit row ignores slots
-const legacy={slides:[{blocks:[{text:'A'},{text:'B'}]}]};const legacyFlow=composeSlide(legacy.slides[0],{layout:{placeholders:Array.from({length:6},()=>({type:'text'}))}}).flows[0];
-assert.throws(()=>prepareTrackResize(legacy,legacyFlow,0,.6),/explicit arrangement/);
+// Content flow resizes are independent of retired layout slot counts.
+const automatic={slides:[{blocks:[{text:'A'},{text:'B'}]}]};
+const automaticFlow=composeSlide(automatic.slides[0]).flows[0];
+assert.equal(prepareTrackResize(automatic,automaticFlow,0,.6).fraction,.6);
 const promoted=composeSlide({left:{text:'Fixed'},right:{blocks:[{text:'Top'},{text:'Bottom'}],composition:{mode:'column'}}});
 assert.deepEqual(promoted.flows.map(f=>f.path),['slides.0.right']);
 const editor=createEditorSession(deck,{rejectInvalid:true});editor.applyPatch(prepared.patches);editor.undo();assert.deepEqual(editor.presentation,deck);assert.equal(editor.canUndo,false);

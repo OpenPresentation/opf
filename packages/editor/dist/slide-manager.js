@@ -7,7 +7,9 @@ import {
   addSection, addSlide, duplicateSlides, hasSections, listSections, moveSection, moveSlides, moveSlidesBy, removeSection, removeSlides, renameSection, setHidden, setSection, slideTitle,
 } from "./slides.js";
 import { listSwitchOptions } from "./switches.js";
-import { layoutSlotSummary } from "./layout-placeholders.js";
+import { layoutRegionSummary } from "./layout-templates.js";
+import { groupLayoutChoices } from "./layout-templates.js";
+import { switchDimension } from "./switches.js";
 
 let instances = 0;
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -490,7 +492,7 @@ export function createSlideManager(container, options) {
   function layoutChoices() {
     return options.layoutOptions ? options.layoutOptions(deck()) : listSwitchOptions(deck(), "layouts", { catalogs: editor.catalogs });
   }
-  function openLayoutPicker() {
+  function openLayoutPicker(mode = "add") {
     const choices = layoutChoices();
     if (!choices.length) { announce("No layouts are available"); return; }
     const opener = doc.activeElement;
@@ -498,28 +500,48 @@ export function createSlideManager(container, options) {
     const filter = el("input", { type: "search", id: `${id}-layout-filter`, placeholder: "Filter layouts", autocomplete: "off" });
     const select = el("select", { id: `${id}-layout-list`, size: "9", "aria-label": "Layouts" });
     const detail = el("p", { class: "field-help", id: `${id}-layout-detail`, "aria-live": "polite" });
+    const preview = el("div", { class: "opf-layout-preview" });
+    const template = el("div", { class: "opf-layout-template", role: "img", "aria-label": "Layout template" });
+    const currentPreview = el("div", { class: "opf-layout-current", role: "img", "aria-label": "Layout with the current slide content" });
+    preview.append(el("div", { class: "opf-layout-preview-item" }, el("strong", { text: "Template" }), template), el("div", { class: "opf-layout-preview-item" }, el("strong", { text: "Your slide" }), currentPreview));
     const where = el("select", { id: `${id}-layout-where` },
       el("option", { value: "after", text: "After the current slide" }), el("option", { value: "end", text: "At the end" }));
     const fill = () => {
       const needle = filter.value.trim().toLowerCase();
-      const shown = choices.filter((choice) => !needle || `${choice.label} ${choice.id}`.toLowerCase().includes(needle));
-      select.replaceChildren(...shown.map((choice) => el("option", { value: choice.id, text: choice.label })));
+      const shown = choices.filter((choice) => !needle || `${choice.label} ${choice.id} ${choice.record?.summary ?? ""}`.toLowerCase().includes(needle));
+      select.replaceChildren(...groupLayoutChoices(shown).map((group) => el("optgroup", { label: group.name }, ...group.choices.map((choice) => el("option", { value: choice.id, text: choice.label })))));
       if (shown.length) select.selectedIndex = 0;
       describe();
     };
     const describe = () => {
       const choice = choices.find((entry) => entry.id === select.value);
-      // FA-26: nested placeholder groups show with their mode, for example `title, column (text, text), chart`.
-      const slots = layoutSlotSummary(choice?.record);
-      detail.textContent = choice ? `${choice.record?.description ?? ""}${slots ? ` Slots: ${slots}.` : choice.record?.placeholders ? " An empty slide." : ""}`.trim() : "No layout matches.";
+      // Supported templates describe their region names, accepted kinds and flow.
+      const slots = layoutRegionSummary(choice?.record);
+      detail.textContent = choice ? `${choice.record?.summary ?? choice.record?.description ?? ""}${slots ? ` Regions: ${slots}.` : ""}`.trim() : "No layout matches.";
+      template.replaceChildren(); currentPreview.replaceChildren();
+      if (choice?.record?.preview && typeof choice.record.preview === "string") {
+        template.append(el("img", { src: choice.record.preview, alt: `${choice.label} template preview` }));
+      } else if (Array.isArray(choice?.record?.areas)) {
+        const diagram = el("div", { class: "opf-layout-diagram" });
+        diagram.style.gridTemplateAreas = choice.record.areas.map((row) => `"${row}"`).join(" ");
+        diagram.style.gridTemplateColumns = `repeat(${choice.record.areas[0]?.trim().split(/\s+/).length ?? 1}, 1fr)`;
+        const areas = [...new Set(choice.record.areas.flatMap((row) => row.trim().split(/\s+/)))].filter((area) => area !== ".");
+        for (const area of areas) { const part = el("span", { text: area }); part.style.gridArea = area; diagram.append(part); }
+        template.append(diagram);
+      }
+      if (choice && options.renderLayoutPreview) {
+        try { currentPreview.innerHTML = options.renderLayoutPreview(deck(), current(), choice) ?? ""; }
+        catch { currentPreview.textContent = "Preview unavailable for this content"; }
+        currentPreview.querySelectorAll("[tabindex]").forEach((node) => node.removeAttribute("tabindex"));
+      }
     };
     const form = el("form", { method: "dialog" },
-      el("h2", { id: `${id}-layout-title`, text: "Add slide with layout" }),
+      el("h2", { id: `${id}-layout-title`, text: mode === "apply" ? "Choose a layout for this slide" : "Add slide with layout" }),
       el("label", { for: filter.id, text: "Layout" }), filter,
-      select, detail,
-      el("label", { for: where.id, text: "Where" }), where,
+      select, detail, preview,
+      mode === "apply" ? null : el("label", { for: where.id, text: "Where" }), mode === "apply" ? null : where,
       el("p", { class: "opf-sm-error", role: "alert" }),
-      el("div", { class: "opf-sm-actions" }, el("button", { type: "button", class: "secondary", "data-cancel": "", text: "Cancel" }), el("button", { type: "submit", class: "primary", text: "Add slide" })));
+      el("div", { class: "opf-sm-actions" }, el("button", { type: "button", class: "secondary", "data-cancel": "", text: "Cancel" }), el("button", { type: "submit", class: "primary", text: mode === "apply" ? "Use layout" : "Add slide" })));
     dialog.append(form);
     doc.body.append(dialog);
     filter.addEventListener("input", fill);
@@ -531,9 +553,12 @@ export function createSlideManager(container, options) {
       if (!select.value) { form.querySelector(".opf-sm-error").textContent = "Choose a layout."; return; }
       try {
         const at = where.value === "end" ? count() : current() + 1;
-        const change = addSlide(editor, { layout: select.value, at });
+        const change = mode === "apply"
+          ? switchDimension(editor, "layouts", select.value, { slideIndex: current() })
+          : addSlide(editor, { layout: select.value, at });
         dialog.close();
-        show(change, `Added a slide with the ${choices.find((entry) => entry.id === select.value)?.label ?? select.value} layout at position ${change.index + 1}`);
+        if (mode === "apply") announce(`Layout changed to ${choices.find((entry) => entry.id === select.value)?.label ?? select.value}`);
+        else show(change, `Added a slide with the ${choices.find((entry) => entry.id === select.value)?.label ?? select.value} layout at position ${change.index + 1}`);
       } catch (error) { form.querySelector(".opf-sm-error").textContent = error.message; }
     });
     form.querySelector("[data-cancel]").addEventListener("click", () => dialog.close());

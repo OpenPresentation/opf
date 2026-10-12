@@ -313,9 +313,9 @@ try {
   await page.locator('#add-layout').click();
   const picker = page.locator('dialog.opf-layout-dialog[open]');
   await axe(['dialog.opf-layout-dialog'], 'layout dialog');
-  await picker.getByPlaceholder('Filter layouts').fill('list-2x');
+  await picker.getByPlaceholder('Filter layouts').fill('two-column');
   await oneStep('Add slide with layout inserts after the current slide', async () => { await picker.getByRole('button', { name: 'Add slide' }).click(); },
-    current => current.slides.length === 7 && current.slides[2].layout === 'list-2x' && current.slides[2].section === 'Intro',
+    current => current.slides.length === 7 && current.slides[2].layout === 'two-column' && current.slides[2].section === 'Intro',
     async () => { assert.equal(await card(2).getAttribute('aria-current'), 'true'); });
   await page.locator('#add').click();
   await waitDoc(current => current.slides.length === 8 && current.slides[7].title === 'New slide', 'Add slide still appends a starter slide');

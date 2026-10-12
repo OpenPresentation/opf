@@ -26,7 +26,7 @@ await build({
     contents: `
 import { convert } from ${JSON.stringify(path.join(repo, 'src/export.js').replace(/\\/g, '/'))};
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 window.run = async ({ faces, licenses = {} }) => {
   const fonts = await loadFonts({ faces: faces.map((face) => ({ ...face, ...(licenses[face.weight] ? { license: licenses[face.weight] } : {}), data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0)) })), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });
   const deck = { name: 'License', design: { fontScheme: 'roboto' }, slides: [{ id: 'a', title: 'Quarterly review', text: 'Revenue grew in every region.' }] };

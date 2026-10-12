@@ -13,13 +13,8 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   const heading=add('div',undefined,'json-field-heading');add('strong',context.label,undefined,heading);
   const closeButton=add('button','×',undefined,heading);closeButton.type='button';closeButton.setAttribute('aria-label','Close options');
   const search=add('input');search.type='search';search.placeholder='Search options…';search.autocomplete='off';search.setAttribute('role','combobox');search.setAttribute('aria-label',`Search ${context.label} options`);search.setAttribute('aria-expanded','true');
-  const isLayout=context.catalog==='layouts',relatedCount=context.options.filter(option=>option.related).length;
-  let similar=isLayout&&relatedCount>1;
-  const filters=isLayout?add('div',undefined,'json-field-filters'):null;
-  const similarButton=filters?add('button',`Similar (${relatedCount})`,undefined,filters):null;
-  const allButton=filters?add('button',`All layouts (${context.options.length})`,undefined,filters):null;
-  for(const button of [similarButton,allButton].filter(Boolean)){button.type='button';button.style.cssText='padding:6px;margin:4px 4px 4px 0';}
-  if(isLayout){search.placeholder='Search all layouts or placeholders…';add('p','Same types and counts first. Text and subtitle slots are compatible.','json-field-hint');}
+  const isLayout=context.catalog==='layouts';
+  if(isLayout){search.placeholder='Search layouts or regions…';add('p','Layouts are grouped by intent. Changing a layout preserves your content.','json-field-hint');}
   const list=add('div',undefined,'json-field-options');list.setAttribute('role','listbox');list.setAttribute('aria-label',`Available ${context.label} options`);
   let id;do{id=`opf-json-options-${++nextMenuId}`;}while(doc.getElementById(id));
   list.id=id;search.setAttribute('aria-controls',id);list.style.cssText='max-height:280px;overflow:auto;margin-top:8px';
@@ -46,27 +41,22 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   }
   function render(){
     const query=search.value.trim().toLowerCase();
-    choices=context.options.filter(option=>query?`${option.label} ${option.value} ${option.description??''} ${option.placeholders??''}`.toLowerCase().includes(query):!similar||option.related);
-    similarButton?.setAttribute('aria-pressed',String(similar&&!query));allButton?.setAttribute('aria-pressed',String(!similar||Boolean(query)));
-    for(const button of [similarButton,allButton].filter(Boolean))button.style.outline=button.getAttribute('aria-pressed')==='true'?'2px solid Highlight':'';
+    choices=context.options.filter(option=>query?`${option.label} ${option.value} ${option.description??''} ${option.regions??''}`.toLowerCase().includes(query):true);
     list.replaceChildren();let group,container=list;
     for(const [index,option] of choices.entries()){
       if(isLayout&&option.layoutGroup!==group){group=option.layoutGroup;container=add('div',undefined,undefined,list);container.setAttribute('role','group');container.setAttribute('aria-label',group);const label=add('div',group,'json-field-group',container);label.setAttribute('aria-hidden','true');label.style.cssText='font-size:11px;font-weight:600;padding:8px 8px 4px;color:GrayText';}
       const button=add('button',undefined,undefined,container);button.dataset.optionIndex=String(index);button.type='button';button.tabIndex=-1;button.id=`${id}-${index}`;button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.value===context.value));button.style.cssText='display:block;text-align:left;width:100%;padding:8px;border:0;background:transparent;color:inherit';
       const label=add('span',undefined,undefined,button);add('strong',option.label,undefined,label);if(option.value===context.value)add('span',' ✓',undefined,label);
-      if(option.placeholders){const summary=add('div',option.placeholders,'json-field-placeholders',button);summary.style.cssText='margin:4px 0';}
+      if(option.regions){const summary=add('div',option.regions,'json-field-regions',button);summary.style.cssText='margin:4px 0';}
       const meta=add('div',undefined,'json-field-meta',button);meta.style.cssText='display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap';
       add('code',String(option.value),undefined,meta);const origin=add('small',option.sourceLabel??option.source,undefined,meta);origin.title=option.sourceDescription??'';
       if(option.description)add('p',option.description,undefined,button);
       button.addEventListener('mouseenter',()=>{selected=index;highlight();});button.addEventListener('click',()=>choose(option));
     }
     if(!choices.length)add('p','No matching options. You can still type a custom value in the JSON.','json-field-empty',list);
-    if(similar&&!query&&relatedCount===1)add('p','No other available layouts share these placeholders. Try All layouts.','json-field-empty',list);
     highlight();
   }
   search.addEventListener('input',()=>{selected=0;render();});
-  similarButton?.addEventListener('click',()=>{similar=true;search.value='';selected=0;render();});
-  allButton?.addEventListener('click',()=>{similar=false;search.value='';selected=0;render();});
   root.addEventListener('keydown',event=>{
     if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close(true);}
     else if(event.target===search&&['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();selected=Math.max(0,Math.min(choices.length-1,selected+(event.key==='ArrowDown'?1:-1)));highlight();}

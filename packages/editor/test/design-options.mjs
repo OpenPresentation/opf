@@ -6,7 +6,7 @@ import { schemas, validate } from "@openpresentation/opf";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { resolveSlideContext } from "@openpresentation/opf";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 import { switchDimension } from "../dist/switches.js";
 import {
@@ -43,7 +43,7 @@ const deck = () => ({
   organization: { id: "acme", name: "Acme" },
   assets: { logo: PIXEL, mark: PIXEL, photo: PIXEL },
   slides: [
-    { id: "cover", layout: "title-subtitle", title: "Quarterly review", subtitle: "Design options" },
+    { id: "cover", layout: "cover", title: "Quarterly review", subtitle: "Design options" },
     { id: "list", title: "List", items: ["First point", "Second point", "Third point"] },
     { id: "data", title: "Data", blocks: [{ chart: { type: "column", data: { columns: ["Q", "V"], rows: [["Q1", 12], ["Q2", 18]] } } }, { text: "Supporting text" }] },
   ],
@@ -328,7 +328,7 @@ for (const entry of cases) {
     { id: "gamma", name: "Gamma" },
   ];
   // Three cover slides on a light background (only covers and sections draw the logo), so the onLight artwork is the one drawn.
-  const covers = ["One", "Two", "Three"].map((title) => ({ layout: "title-subtitle", title, subtitle: "Cover", design: { background: "#ffffff" } }));
+  const covers = ["One", "Two", "Three"].map((title) => ({ layout: "cover", title, subtitle: "Cover", design: { background: "#ffffff" } }));
   const editor = session({ ...deck(), organization, slides: covers });
   const drawn = (index = 0) => editor.composeSlide(index).logo;
   assert.deepEqual(readLogoChoice(editor.presentation), { mode: "primary", value: undefined, scope: "default", inherited: false });

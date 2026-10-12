@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { toSvg } from "@openpresentation/opf-render/svg";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 import { collectReservedPresentationIds } from "../dist/presentation-ids.js";
 import {
@@ -99,19 +99,19 @@ function oneStep(editor, run) {
   assert.deepEqual(editor.presentation.slides.at(-1).items, ["x"]);
 }
 
-// A layout choice adds the layout's placeholders, the way switching a slide's layout does.
+// New slides select a template and leave its regions empty for explicit insertion.
 {
   const editor = session();
-  const change = oneStep(editor, () => addSlide(editor, { layout: "title-subtitle", at: 1 }));
+  const change = oneStep(editor, () => addSlide(editor, { layout: "cover", at: 1 }));
   const slide = editor.presentation.slides[1];
-  assert.equal(slide.layout, "title-subtitle");
-  assert.equal(typeof slide.title, "string");
-  assert.equal(typeof slide.subtitle, "string");
-  assert.equal(change.layout, "title-subtitle");
-  oneStep(editor, () => addSlide(editor, { layout: "list-2x" }));
+  assert.equal(slide.layout, "cover");
+  assert.equal(slide.title, undefined);
+  assert.equal(slide.subtitle, undefined);
+  assert.equal(change.layout, "cover");
+  oneStep(editor, () => addSlide(editor, { layout: "two-column" }));
   const last = editor.presentation.slides.at(-1);
-  assert.equal(last.layout, "list-2x");
-  assert.ok(Array.isArray(last.blocks) || last.items, "list placeholders exist");
+  assert.equal(last.layout, "two-column");
+  assert.equal(last.blocks, undefined, "template choice does not invent content");
   assert.throws(() => addSlide(editor, { layout: "no-such-layout" }), { code: "unknown-catalog-id" });
   // The preview draws the new slide.
   assert.ok(toSvg(editor.presentation, 2).includes("<svg"));

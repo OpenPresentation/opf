@@ -13,6 +13,8 @@ export interface SlideManagerOptions {
   setSlideIndex: (index: number) => void;
   /** The thumbnail of one slide as an HTML string (usually the renderer's SVG). Cache it: it is called for every card on every render. */
   renderThumbnail?: (presentation: unknown, index: number) => string;
+  /** Traced SVG preview of the selected layout using the current slide's content. */
+  renderLayoutPreview?: (presentation: unknown, slideIndex: number, choice: { id: string; label: string; record?: Record<string, any> }) => string;
   /** `"navigator"` (a vertical list, the default) or `"sorter"` (a grid with arrow keys in both directions). */
   variant?: "navigator" | "sorter";
   /** An element to fill with the Duplicate, Delete, Hide and More buttons. */
@@ -34,7 +36,7 @@ export interface SlideManager {
   getSelection(): number[];
   setSelection(indices: number[]): void;
   focus(index: number): void;
-  openLayoutPicker(): void;
+  openLayoutPicker(mode?: "add" | "apply"): void;
   /** Collapse or expand a section (an index from `listSections`): view state only, nothing is written to the document. Returns false for an unknown section. */
   setSectionCollapsed(sectionIndex: number, collapsed?: boolean): boolean;
   /** Run an action on the selection: duplicate, delete, hide, move-up, move-down, move-start, move-end, split, merge, select-all. */

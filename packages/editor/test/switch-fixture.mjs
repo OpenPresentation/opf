@@ -1,7 +1,7 @@
 // Shared fixture for the FF-16 dimension-switch tests (switches.mjs, switches-export.mjs).
 // One case per pptx.gallery dimension, with the exact patch the switch must produce.
 // OPF 0.15 (FA-23): the deck's references resolve through the default catalog the tests register as the host.
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 
 /** The host catalogs every switch test registers: the pptx.gallery snapshot core publishes as `/catalog`. */
 export const catalogs = [defaultCatalog];
@@ -56,14 +56,14 @@ export const baseDeck = () => ({
   organization: { id: "acme", name: "Acme" },
   assets: { cover: PIXEL },
   slides: [
-    { id: "title", layout: "title-subtitle", title: "Quarterly review", subtitle: "Switch fixture" },
+    { id: "title", layout: "cover", title: "Quarterly review", subtitle: "Switch fixture" },
     {
       id: "chart",
-      layout: "chart-1x",
+      layout: "chart",
       title: "Revenue",
       chart: { type: "column", data: { columns: ["Series", "Q1", "Q2", "Q3"], rows: [["Revenue", 12, 19, 27]] } },
     },
-    { id: "blocks", layout: "text-1x", title: "Blocks", blocks: [{ text: "One" }, { items: ["First", "Second"] }, { image: "asset:cover" }] },
+    { id: "blocks", layout: "text", title: "Blocks", blocks: [{ text: "One" }, { items: ["First", "Second"] }, { image: "asset:cover" }] },
   ],
 });
 
@@ -77,17 +77,17 @@ const footer = { center: { text: "Confidential" } };
 export const cases = [
   {
     dimension: "layouts",
-    value: "text-2x",
+    value: "two-column",
     options: { slideIndex: 0 },
     slide: 0,
     preview: "svg",
-    // Populating the declared placeholders replaces the slide in one operation.
+    // A v2 template switch preserves all existing content.
     check: (presentation) => {
-      assertEqual(presentation.slides[0].layout, "text-2x");
+      assertEqual(presentation.slides[0].layout, "two-column");
       assertEqual(presentation.slides[0].title, "Quarterly review");
-      assertEqual(presentation.slides[0].blocks.length, 2);
+      assertEqual(presentation.slides[0].blocks, undefined);
     },
-    patchPaths: ["/slides/0"],
+    patchPaths: ["/slides/0/layout"],
   },
   {
     dimension: "color-schemes",

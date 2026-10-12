@@ -3,7 +3,7 @@
 // lets `renderOptions.text: "paths"` draw HarfBuzz-shaped outlines; a handle without them embeds whole faces and cannot outline. The browser
 // handle itself is exercised in a real browser by test/playground-download.mjs.
 import assert from 'node:assert/strict';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { convert } from '../src/export.js';
 

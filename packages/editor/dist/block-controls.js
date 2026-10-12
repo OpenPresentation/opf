@@ -122,6 +122,20 @@ export function createBlockControls(root, options) {
         node.ondragend=()=>{cancel();options.render();};layer.append(node);
       });
     }
+    // Core's template flows are region-local and do not expose a root flow handle. A compact grip on each
+    // top-level bound block lets the user drag it to another region without changing the flat block order.
+    for(const item of geometry.items??[]){
+      if(!item.region)continue;
+      const match=new RegExp(`^slides\\.${options.slideIndex()}\\.blocks\\.(\\d+)$`).exec(item.path);
+      if(!match)continue;
+      const index=Number(match[1]),path=`/slides/${options.slideIndex()}/blocks/${index}`;
+      const node=doc.createElement('button');node.type='button';node.draggable=true;node.dataset.blockPath=path;
+      node.textContent=`${index+1} ⋮⋮`;node.setAttribute('aria-label',`Move block ${index+1} from ${item.region} to another region`);
+      node.title='Drag to a region marked Drop content here';
+      node.style.cssText=`position:absolute;pointer-events:auto;cursor:grab;left:calc(${item.box.x/geometry.width*100}% + 3px);top:calc(${item.box.y/geometry.height*100}% + 3px);padding:2px 5px;background:#f6f3fc;color:#675394;border:1px solid #cfc4e7;border-radius:4px;font:11px system-ui`;
+      node.ondragstart=event=>{if(!options.beforeEdit()){event.preventDefault();return;}event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',path);};
+      layer.append(node);
+    }
   }
   function over(event){
     if(!drag)return;

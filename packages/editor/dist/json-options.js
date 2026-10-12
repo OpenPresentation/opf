@@ -1,8 +1,8 @@
 import { checkFormat, firstErrorMessage } from "./checks.js";
 import { listCatalogRecords } from "./catalogs.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
-import { applyEdits, findNodeAtLocation, findNodeAtOffset, getNodePath, modify, parseTree } from "jsonc-parser";
-import { layoutSlotSummary, layoutSlotTypes, populateLayoutPlaceholders } from "./layout-placeholders.js";
+import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
+import { LAYOUT_INTENT_GROUPS, layoutRegionSummary } from "./layout-templates.js";
 // The catalog kind a field references (OPF 0.15: every content kind is `id` or `name:id`), read from where the field sits.
 const ROOT_REFERENCES = { narrative: "narratives", audience: "audiences", purpose: "purposes", tone: "tones" };
 const DESIGN_REFERENCES = { theme: "themes", colorScheme: "colorSchemes", fontScheme: "fontSchemes" };
@@ -19,59 +19,25 @@ function catalogAtPath(path) {
     if (tail.length === 5 && tail[0] === "catalogs" && tail[2] === "themes" && (key === "colorScheme" || key === "fontScheme")) return DESIGN_REFERENCES[key];
     return undefined;
 }
-// Compare declared placeholders, including multiplicity. This describes a layout
-// contract, not a claim that arbitrary slide content will render without overflow.
-// FA-26: a record's placeholder groups compare by their leaf regions, the slots its content fills.
-function layoutTypes(record) {
-    return layoutSlotTypes(record)?.sort();
-}
-function placeholderSummary(types) {
-    if (!types)
-        return "Placeholders not specified";
-    if (!types.length)
-        return "No placeholders";
-    const labels = { title: "Title", subtitle: "Subtitle", tag: "Tag", text: "Text", list: "List", image: "Image", video: "Video", chart: "Chart", table: "Table", code: "Code", metric: "Metric", quote: "Quote", timeline: "Timeline" };
-    const order = ["title", "subtitle", "tag", "text", "list", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
-    return [...new Set(types)].sort((a, b) => order.indexOf(a) - order.indexOf(b)).map(type => {
-        const count = types.filter(value => value === type).length;
-        return `${labels[type] ?? type}${count > 1 ? ` × ${count}` : ""}`;
-    }).join(" + ");
-}
 const sourceDetails = {
     "Loaded catalog": ["Provided by app", "Records from a catalog this app registered; nothing is fetched from a URL. Saving embeds the record in the document."],
     "Document catalog": ["In this document", "Embedded in this document’s catalogs. Takes precedence over the app’s records with the same reference."],
     "Current value": ["Custom value", "The current value is not in the available catalogs."],
     "Schema": ["OPF option", "Allowed by the OPF schema."],
 };
-const layoutGroups = ["Current layout", "Same placeholders", "Compatible placeholders", "Different counts", "Other layouts", "Unspecified placeholders"];
+const layoutGroups = ["Current layout", ...LAYOUT_INTENT_GROUPS.map(group => group.name), "Custom layouts"];
 function describeOptions(choices, records, current, catalog) {
-    const currentRecord = records.get(String(current));
-    const currentTypes = layoutTypes(currentRecord);
-    const signature = (types) => JSON.stringify(types);
-    const compatible = (types) => types.map(type => type === "subtitle" ? "text" : type).sort();
     for (const option of choices) {
         const [label, description] = sourceDetails[option.source];
         option.sourceLabel = label;
         option.sourceDescription = description;
-        if (catalog !== "layouts")
-            continue;
-        const types = layoutTypes(option.value === current ? currentRecord : records.get(String(option.value)));
-        const record = records.get(String(option.value));
-        option.placeholderTypes = layoutSlotTypes(record);
-        // A record with placeholder groups also shows how its slots nest.
-        option.placeholders = placeholderSummary(types) + (record?.placeholders?.some?.(entry => entry?.type === "group") ? ` · ${layoutSlotSummary(record)}` : "");
-        const same = types && currentTypes && signature(types) === signature(currentTypes);
-        const equivalent = types && currentTypes && signature(compatible(types)) === signature(compatible(currentTypes));
-        const sameKinds = types && currentTypes && signature([...new Set(compatible(types))]) === signature([...new Set(compatible(currentTypes))]);
-        option.layoutGroup = option.value === current ? "Current layout" : !types ? "Unspecified placeholders"
-            : same ? "Same placeholders" : equivalent ? "Compatible placeholders" : sameKinds ? "Different counts" : "Other layouts";
-        option.related = option.value === current || Boolean(same || equivalent);
-        option.suggested = Boolean(same || equivalent);
+        if (catalog !== "layouts") continue;
+        const id = String(option.value).replace(/^default:/, "");
+        option.regions = layoutRegionSummary(records.get(String(option.value)));
+        option.layoutGroup = option.value === current ? "Current layout" : LAYOUT_INTENT_GROUPS.find(group => group.ids.includes(id))?.name ?? "Custom layouts";
     }
-    const priority = (option) => option.source === "Document catalog" ? 2 : option.source === "Loaded catalog" ? 1 : 0;
-    return choices.sort((a, b) => (catalog === "layouts"
-        ? layoutGroups.indexOf(a.layoutGroup) - layoutGroups.indexOf(b.layoutGroup)
-        : priority(b) - priority(a)) || a.label.localeCompare(b.label, "en", { numeric: true }) || String(a.value).localeCompare(String(b.value), "en"));
+    const priority = option => option.source === "Document catalog" ? 2 : option.source === "Loaded catalog" ? 1 : 0;
+    return choices.sort((a, b) => (catalog === "layouts" ? layoutGroups.indexOf(a.layoutGroup) - layoutGroups.indexOf(b.layoutGroup) : priority(b) - priority(a)) || a.label.localeCompare(b.label, "en", {numeric: true}) || String(a.value).localeCompare(String(b.value), "en"));
 }
 // The installed schema identifies fields; a document field merely named "layout"
 // inside arbitrary metadata is not mistaken for an OPF layout reference.
@@ -142,39 +108,13 @@ export function replaceFieldOption(context, value) {
     const presentation = JSON.parse(next);
     if (context.path.reduce((current, key) => current?.[key], presentation) !== value)
         throw new Error("This field has a duplicate key. Resolve it in the JSON before choosing an option.");
-    const types = context.options.find(option => option.value === value).placeholderTypes;
-    if (value !== context.value && types && context.catalog === 'layouts' && context.path.length === 3
-        && context.path[0] === 'slides' && context.path[2] === 'layout' && checkFormat(presentation).valid) {
-        const populated = populateLayoutPlaceholders(presentation, context.path[1], types);
-        next = updateSource(next, presentation, populated);
-    }
     const result = checkFormat(JSON.parse(next));
     if (!result.valid && checkFormat(JSON.parse(context.source)).valid)
         throw new Error(firstErrorMessage(result, "This option is not valid here."));
     return next;
 }
 
-// Keep existing scalar spellings and unrelated source bytes when adding slots.
-function updateSource(source, before, after) {
-    const indent = source.match(/^[\t ]+(?=\S)/m)?.[0] ?? '  ';
-    const formattingOptions = {insertSpaces: !indent.includes('\t'), tabSize: indent.length, eol: source.includes('\r\n') ? '\r\n' : '\n'};
-    function visit(a, b, path) {
-        if (JSON.stringify(a) === JSON.stringify(b)) return;
-        if (a && b && typeof a === 'object' && typeof b === 'object' && !Array.isArray(a) && !Array.isArray(b)) {
-            for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) visit(a[key], b[key], [...path, key]);
-        } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
-            b.forEach((value, index) => visit(a[index], value, [...path, index]));
-        } else {
-            const node = findNodeAtLocation(parseTree(source), path);
-            if (node && b !== undefined) source = source.slice(0, node.offset) + JSON.stringify(b) + source.slice(node.offset + node.length);
-            else source = applyEdits(source, modify(source, path, b, {formattingOptions}));
-        }
-    }
-    visit(before, after, []);
-    return source;
-}
-
-/** One source edit so layout changes and new slots share one undo step. */
+/** One source edit for an undoable reference change. */
 export function fieldOptionEdit(context, value) {
     const next = replaceFieldOption(context, value), source = context.source;
     let from = 0, to = source.length, end = next.length;

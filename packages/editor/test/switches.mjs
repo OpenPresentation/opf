@@ -169,7 +169,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   while (editor.canUndo) editor.undo();
   assert.deepEqual(editor.presentation, baseDeck());
   // A gallery-only layout arrives with its own record.
-  const layout = { id: "gallery-hero", name: "Gallery hero", placeholders: [{ type: "title" }, { type: "text" }] };
+  const layout = { id: "gallery-hero", name: "Gallery hero", areas: ["title", "body"], regions: {body: {accepts: ["text"], flow: "auto"}} };
   const hero = switchDimension(editor, "layouts", "gallery-hero", { slideIndex: 0, record: layout });
   assert.equal(hero.patches[0].path, "/catalogs");
   assert.equal(editor.get("slides.0.layout"), "gallery-hero");
@@ -177,15 +177,15 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.equal(editor.get("catalogs"), undefined);
 }
 
-// Layouts keep existing content and add the blank payloads the new layout declares.
+// V2 layouts preserve content without creating payloads.
 {
   const editor = session();
-  switchDimension(editor, "layouts", "number-2x", { slideIndex: 0 });
+  switchDimension(editor, "layouts", "metrics", { slideIndex: 0 });
   const slide = editor.get("slides.0");
-  assert.equal(slide.layout, "number-2x");
+  assert.equal(slide.layout, "metrics");
   assert.equal(slide.title, "Quarterly review");
   assert.equal(slide.subtitle, "Switch fixture");
-  assert.equal(JSON.stringify(slide).split('"metric"').length - 1, 2);
+  assert.equal(JSON.stringify(slide).split('"metric"').length - 1, 0);
 }
 
 // Charts: type switch keeps the data; the chart may sit inside a block.
@@ -415,8 +415,8 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("languages", { name: "No tag" }, {}, "invalid-switch-value");
   reject("tones", "sarcastic", {}, "unknown-catalog-id");
   reject("charts", "no-such-chart", { slideIndex: 1 }, "unknown-catalog-id");
-  reject("layouts", "text-2x", {}, "slide-index-out-of-range");
-  reject("layouts", "text-2x", { slideIndex: 9 }, "slide-index-out-of-range");
+  reject("layouts", "two-column", {}, "slide-index-out-of-range");
+  reject("layouts", "two-column", { slideIndex: 9 }, "slide-index-out-of-range");
   reject("layouts", "no-such-layout", { slideIndex: 0 }, "unknown-catalog-id");
   reject("backgrounds", { type: "nonsense" }, {}, "invalid-opf-edit");
   reject("backgrounds", "solid", {}, "invalid-opf-edit");

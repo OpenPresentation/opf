@@ -2,7 +2,7 @@
 // patch; the Review panel's quick fix for opf/chart-text-alternative writes it; find and replace reaches it; the preview names the
 // chart with it and the PPTX export carries it.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";

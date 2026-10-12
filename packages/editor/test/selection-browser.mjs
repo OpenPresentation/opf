@@ -11,7 +11,7 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
-  import { defaultCatalog } from '@openpresentation/opf/catalog';
+  import { gallery as defaultCatalog } from '@openpresentation/gallery';
   window.mountSelection = async ({deck, faces}) => {
     window.selectionCanvas?.destroy(); window.fonts?.dispose();
     window.fonts = await loadFonts({ faces: faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });

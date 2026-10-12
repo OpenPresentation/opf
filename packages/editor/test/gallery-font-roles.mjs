@@ -7,7 +7,7 @@ import { createEditorSession } from "../dist/index.js";
 
 const codeSlide = {
   id: "code",
-  layout: "code-1x",
+  layout: "code",
   title: "Rule",
   code: { source: "const score = urgency * confidence;", language: "ts" },
 };

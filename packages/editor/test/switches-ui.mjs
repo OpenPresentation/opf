@@ -2,7 +2,7 @@
 // chart types a chart's data can use, and the value a dimension has now.
 import assert from "node:assert/strict";
 import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS } from "@openpresentation/opf";
-import { catalogDisplay, defaultCatalog } from "@openpresentation/opf/catalog";
+import { catalogDisplay, gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 import { SLIDE_SIZE_PRESETS, SWITCH_DIMENSIONS, compatibleChartTypes, currentSwitchValue, listSwitchOptions, switchDimension } from "../dist/switches.js";
 import { baseDeck, catalogs } from "./switch-fixture.mjs";
@@ -90,7 +90,7 @@ assert.equal(listSwitchOptions({}, "languages", { vocabularies: catalogDisplay }
   presentation.speaker = { id: "alice", name: "Alice", socials: { linkedin: "alice" } };
   presentation.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { left: { text: "H" } } };
   const at = (dimension, options) => currentSwitchValue(presentation, dimension, { catalogs, ...options });
-  assert.deepEqual(at("layouts", { slideIndex: 1 }), { value: "chart-1x", scope: "slide" });
+  assert.deepEqual(at("layouts", { slideIndex: 1 }), { value: "chart", scope: "slide" });
   assert.deepEqual(at("color-schemes"), { value: "cool-horizon", scope: "deck" });
   assert.deepEqual(at("font-schemes"), { value: "aptos", scope: "deck" });
   assert.deepEqual(at("font-schemes", { slideIndex: 1 }), { value: "georgia", scope: "slide" }, "an object reads as its id");

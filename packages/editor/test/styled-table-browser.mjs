@@ -3,7 +3,7 @@ import {createEditorSession} from '../src/index.js';
 import {richTextContent} from '../src/rich-text.js';
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
 // OPF 0.15: the host registers its catalogs (the deck names the gallery's classic theme and roboto scheme).
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 const host=document.querySelector('#canvas'),output=document.querySelector('#results');
 const controls=document.createElement('div'),state=document.createElement('pre');
 state.id='state';host.after(controls,state);

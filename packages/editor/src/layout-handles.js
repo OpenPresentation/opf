@@ -1,5 +1,7 @@
 import {prepareTrackResize} from './layout.js';
 import {getValueAtPath} from './index.js';
+import {pinBlockToRegion} from './layout-templates.js';
+import {regionAccepts} from '@openpresentation/opf/composition';
 
 export function createLayoutHandles(root, options) {
   const doc=root.ownerDocument,win=doc.defaultView,editor=options.editor;
@@ -60,17 +62,48 @@ export function createLayoutHandles(root, options) {
     lastGeometry=geometry;
     layer.replaceChildren();
     if(!enabled||options.isTextEditing())return;
-    // FA-26: the slots of a layout record with placeholder groups, drawn under the handles while arranging: each group and
-    // region as a dashed outline at its cell, deeper groups inset, an empty region labelled with its kind. They are the
-    // record's, not the document's, so they are not editable here; the content in a slot keeps its own selection.
-    for(const slot of geometry.slots??[]){
+    // 0.19 template regions are drop targets even when core collapsed their empty cells.
+    // Source blocks remain flat; dropping writes only their region pin.
+    for(const region of geometry.regions??[]){
       const node=doc.createElement('div');
-      node.dataset.layoutSlot=slot.path;node.dataset.layoutSlotType=slot.type;node.setAttribute('aria-hidden','true');
-      const group=slot.type==='group',empty=!group&&!slot.content;
-      node.title=group?`Layout group (${slot.path})`:`${empty?'Empty ':''}${slot.type} slot (${slot.path})`;
-      const inset=group?Math.min(4,slot.depth*2):0;
-      node.style.cssText=`position:absolute;pointer-events:none;box-sizing:border-box;left:calc(${slot.box.x/geometry.width*100}% + ${inset}px);top:calc(${slot.box.y/geometry.height*100}% + ${inset}px);width:calc(${slot.box.width/geometry.width*100}% - ${2*inset}px);height:calc(${slot.box.height/geometry.height*100}% - ${2*inset}px);border:1px dashed ${group?'#8170d5':'#8a78d7aa'};border-radius:4px;${empty?'background:#8a78d714;':''}`;
-      if(empty){const label=doc.createElement('span');label.textContent=`Empty ${slot.type} slot`;label.style.cssText='position:absolute;left:6px;top:4px;font:11px system-ui;color:#675394';node.append(label);}
+      node.className='opf-region-drop';node.dataset.opfRegion=region.name;
+      node.tabIndex=0;node.setAttribute('role','button');
+      node.title=`${region.name}: ${region.accepts.join(', ')}`;
+      node.setAttribute('aria-label',`${region.name} region. Accepts ${region.accepts.join(', ')}. Drop content here.`);
+      const box=region.areaBox??region.box;
+      node.style.cssText=`position:absolute;pointer-events:auto;box-sizing:border-box;left:${box.x/geometry.width*100}%;top:${box.y/geometry.height*100}%;width:${box.width/geometry.width*100}%;height:${Math.max(box.height/geometry.height*100,4)}%;border:1px dashed #8170d5;border-radius:4px;background:#8170d510;z-index:1;`;
+      const label=doc.createElement('span');label.textContent=region.content.length?region.name:'Drop content here';
+      label.style.cssText='position:absolute;left:5px;top:3px;padding:2px 4px;background:#fff;color:#675394;font:11px system-ui;border-radius:3px;pointer-events:none';node.append(label);
+      node.addEventListener('dragover',event=>{
+        if(![...(event.dataTransfer?.types??[])].includes('text/plain'))return;
+        event.preventDefault();event.stopPropagation();event.dataTransfer.dropEffect='move';node.dataset.dropActive='true';
+      });
+      node.addEventListener('dragleave',()=>{delete node.dataset.dropActive;});
+      const place=(blockIndex)=>{
+        if(!options.beforeEdit())return;
+        try{
+          const block=editor.presentation.slides[options.slideIndex()]?.blocks?.[blockIndex];
+          if(!regionAccepts(region,block))throw new Error(`${region.name} does not accept this block.`);
+          pinBlockToRegion(editor,options.slideIndex(),blockIndex,region.name);
+          options.onCommit?.({path:`slides.${options.slideIndex()}.blocks.${blockIndex}`,editor});
+        }catch(error){options.onError(error);}
+      };
+      node.addEventListener('drop',event=>{
+        event.preventDefault();event.stopPropagation();delete node.dataset.dropActive;
+        const path=event.dataTransfer?.getData('text/plain')??'';
+        const match=/^\/slides\/(\d+)\/blocks\/(\d+)$/.exec(path);
+        if(match&&Number(match[1])===options.slideIndex())place(Number(match[2]));
+      });
+      const menu=()=>{
+        const old=node.querySelector('[data-region-menu]');if(old){old.remove();return;}
+        const panel=doc.createElement('div');panel.dataset.regionMenu='';
+        panel.style.cssText='position:absolute;left:4px;top:24px;min-width:130px;max-height:160px;overflow:auto;padding:4px;background:#fff;border:1px solid #8170d5;border-radius:4px;box-shadow:0 4px 12px #0002;z-index:9';
+        const blocks=editor.presentation.slides[options.slideIndex()]?.blocks??[];
+        blocks.forEach((block,index)=>{if(!regionAccepts(region,block))return;const choice=doc.createElement('button');choice.type='button';choice.textContent=`Block ${index+1}`;choice.style.cssText='display:block;width:100%;padding:4px;text-align:left;border:0;background:#fff;color:#473b66';choice.onclick=event=>{event.stopPropagation();place(index);};panel.append(choice);});
+        if(!panel.children.length)panel.textContent='No compatible blocks';node.append(panel);panel.querySelector('button')?.focus();
+      };
+      node.addEventListener('click',event=>{if(event.target===node||event.target===label)menu();});
+      node.addEventListener('keydown',event=>{if(event.key==='Escape'){node.querySelector('[data-region-menu]')?.remove();event.preventDefault();node.focus();}else if(event.target===node&&(event.key==='Enter'||event.key===' ')){event.preventDefault();menu();}});
       layer.append(node);
     }
     for(const flow of geometry.flows??[]){

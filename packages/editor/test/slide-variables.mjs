@@ -2,7 +2,7 @@
 // substituted, the way the renderer draws it and the exporter writes it, and keeps the tokens in the document it edits.
 import assert from "node:assert/strict";
 import { toSvg } from "@openpresentation/opf-render/svg";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 import { replaceAll } from "../dist/find-replace.js";
 import { setHeaderFooterZone } from "../dist/design-options.js";

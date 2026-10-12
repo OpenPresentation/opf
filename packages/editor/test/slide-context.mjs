@@ -6,7 +6,7 @@ import { resolveSlideContext } from "@openpresentation/opf";
 import { composeSlide } from "@openpresentation/opf/composition";
 import { resolvePresentation } from "@openpresentation/opf-render/svg";
 import * as editorEntry from "../dist/index.js";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { createEditorSession } from "../dist/index.js";
 
 // OPF 0.15 (FA-23): references resolve in the document, then in the catalogs the host registers.

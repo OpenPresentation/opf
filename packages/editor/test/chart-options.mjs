@@ -1,7 +1,7 @@
 // RR-35: chart options in the editor. Axis titles, legend position and data labels edit as one validated, undoable
 // patch; only what the chart type can show is offered or written; the preview draws the change and the PPTX export carries it.
 import assert from "node:assert/strict";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { validate } from "@openpresentation/opf";
 import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
 import { toSvg } from "@openpresentation/opf-render/svg";

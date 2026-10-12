@@ -183,7 +183,7 @@ try {
     // The source last: leaving it applies the image with the settings above (Apply then has nothing left to change).
     await field(design, 'Background image source').fill('asset:photo');
   }), current => JSON.stringify(current.design.background) === JSON.stringify({ type: 'image', src: 'asset:photo', alt: 'A pixel backdrop', fit: 'stretch', focus: { x: 0.5, y: 0.7 }, overlay: { color: 'dark1', opacity: 0.4 } }), { preview: true });
-  await step('layouts', () => field(design, 'Layout of this slide').selectOption('text-2x'), current => current.slides[0].layout === 'text-2x', { preview: true });
+  await step('layouts', () => field(design, 'Layout of this slide').selectOption('two-column'), current => current.slides[0].layout === 'two-column', { preview: true });
   await step('narratives', () => field(design, 'Narrative').selectOption('scqa'), current => current.narrative === 'scqa');
   await step('tones', () => field(design, 'Tone').selectOption('casual'), current => current.tone === 'casual');
   await step('audiences', () => field(design, 'Audience').selectOption(['executive', 'investor']), current => JSON.stringify(current.audience) === '["executive","investor"]');
@@ -569,8 +569,8 @@ try {
       ],
       design: { theme: 'classic', fontScheme: 'roboto' },
       slides: [
-        { id: 'light', layout: 'title-subtitle', title: 'Light slide', subtitle: 'Cover', design: { background: '#ffffff' } },
-        { id: 'dark', layout: 'title-subtitle', title: 'Dark slide', subtitle: 'Cover', design: { background: '#000000' } },
+        { id: 'light', layout: 'cover', title: 'Light slide', subtitle: 'Cover', design: { background: '#ffffff' } },
+        { id: 'dark', layout: 'cover', title: 'Dark slide', subtitle: 'Cover', design: { background: '#000000' } },
       ],
     };
     await button('Source').click();

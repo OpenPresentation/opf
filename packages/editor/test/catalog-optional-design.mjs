@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createEditorSession, setCatalogId, createCatalogSelect } from '../dist/index.js';
 import { createOPFReactComponents } from '../dist/react.js';
 import { opfCatalogSelect } from '../dist/svelte.js';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 
 // OPF 0.15: the host registers the catalog whose ids the controls offer (the editor library ships none).
 const catalogs = [defaultCatalog];

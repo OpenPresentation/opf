@@ -132,7 +132,7 @@ function newSlideId(presentation) {
 
 /**
  * Compute adding a slide. Options: `at` (the index the slide takes, default the end), `layout` (a layout
- * reference, `id` or `name:id`; the layout's placeholders are added as empty slots, exactly like switching a slide's layout),
+ * reference, `id` or `name:id`; existing content is preserved; empty regions remain available for explicit insertion),
  * `title`, `text`, `id`, `section` (default: the section of the slide before it), `slide` (a ready slide to
  * insert, for hosts that build their own), `catalogs`/`record`/`recordSource` for catalog lookup (as `prepareDimensionSwitch`).
  */

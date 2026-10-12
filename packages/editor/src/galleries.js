@@ -184,19 +184,10 @@ function attachDefinition(presentation, descriptor, gallerySource) {
   groups[group][kind] ??= {};
   let record;
   if (kind === "layouts") {
-    // A gallery layout item is a layout record: its placeholders, design hints and composition are the
-    // record's own. Only an item that declares no placeholders gets the default title and text.
-    const placeholders = Array.isArray(source.placeholders)
-      ? source.placeholders
-          .filter((placeholder) => typeof placeholder?.type === "string")
-          .map((placeholder) => structuredClone(placeholder))
-      : [{ type: "title" }, { type: "text" }];
-    record = {
-      name: source.label ?? source.name ?? id,
-      ...(isPlain(source.design) ? { design: structuredClone(source.design) } : {}),
-      placeholders,
-      ...(isPlain(source.composition) ? { composition: structuredClone(source.composition) } : {}),
-    };
+    if (!Array.isArray(source.areas)) return;
+    record = {name: source.label ?? source.name ?? id};
+    for (const key of ['summary', 'description', 'areas', 'columns', 'rows', 'regions', 'overflowRegion', 'design', 'composition', 'tags', 'preview'])
+      if (source[key] !== undefined) record[key] = structuredClone(source[key]);
   } else if (kind === "fontSchemes") record = fontSchemeRecord(source, id);
   else record = embeddedRecord(source);
   groups[group][kind][id] = record;

@@ -102,7 +102,7 @@ export interface EditorSession {
 export interface CreateEditorSessionOptions {
   /** Refuse every edit whose result has an error finding (the default per edit is `meta.rejectInvalid`). */
   rejectInvalid?: boolean;
-  /** The host's catalogs (for example `[defaultCatalog]` from `@openpresentation/opf/catalog`): resolution, validation, pickers, embedding. */
+  /** The host's catalogs (for example `[gallery]` from `@openpresentation/gallery`): resolution, validation, pickers, embedding. */
   catalogs?: readonly Catalog[];
 }
 

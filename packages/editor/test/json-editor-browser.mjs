@@ -19,9 +19,9 @@ if(process.env.OPF_CORE_ROOT){
 }
 const bundle=await build({alias,stdin:{resolveDir,contents:`
   import {mountJsonCodeEditor} from ${JSON.stringify(editorImport)};
-  import {defaultCatalog} from '@openpresentation/opf/catalog';
+  import {gallery as defaultCatalog} from '@openpresentation/gallery';
   // OPF 0.15: the host (this page) registers the default catalog; extra layouts join it as the app's own records.
-  window.layoutContracts={count:Object.keys(defaultCatalog.layouts).length,chart1x:Object.keys(defaultCatalog.layouts).filter(id=>id.includes('chart-1x')).length,metric:defaultCatalog.layouts['number-1x']?.placeholders.some(slot=>slot.type==='metric')};
+  window.layoutContracts={count:Object.keys(defaultCatalog.layouts).length,chart1x:Object.keys(defaultCatalog.layouts).filter(id=>id.includes('chart')).length,metric:Boolean(defaultCatalog.layouts.metrics?.regions)};
   window.changes=[];window.failures=[];
   window.mount=(code,extra)=>{
     const catalogs=[extra?{...defaultCatalog,layouts:{...defaultCatalog.layouts,...extra}}:defaultCatalog];
@@ -72,28 +72,19 @@ try{
   assert.equal(await read(),paste);await source.press(`${mod}+z`);assert.equal(await read(),external);await source.press(`${mod}+Shift+z`);assert.equal(await read(),paste);
   checks.push('Dispatched clipboard event preserves observed mixed endings through undo/redo (OS clipboard not claimed)');
 
-  const deck='{\r\n  "slides": [{"layout":"text-1x","title":"Keep title","text":"Keep  text"}]\n}';
-  await page.evaluate(code=>mount(code,{'partner-detail':{name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}}),deck);
+  const deck='{\r\n  "slides": [{"layout":"text","title":"Keep title","text":"Keep  text"}]\n}';
+  await page.evaluate(code=>mount(code,{'partner-detail':{name:'Partner detail',areas:['title','body'],regions:{body:{accepts:['text'],flow:'auto'}}}}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
-  // The suggested set is whatever the registered catalog makes compatible with this deck's layout, so it is read back from the
-  // menu (current, same and compatible groups) rather than hard-coded, then checked against the filtered view.
-  assert.ok((await menu.getByRole('option').first().innerText()).includes('Text 1x'));
-  const similarLabel=await menu.getByRole('button',{name:/^Similar \(\d+\)$/}).innerText(),similarCount=Number(similarLabel.match(/\d+/)[0]);
-  assert.equal(await menu.getByRole('option').count(),similarCount);
-  assert.ok(similarCount>=3,'the current layout, the app layout and at least one bundled layout are suggested');
-  assert.ok((await menu.getByRole('group',{name:'Same placeholders',exact:true}).innerText()).includes('Partner detail'));
-  await menu.getByRole('button',{name:`All layouts (${layoutCount})`,exact:true}).click();
+  assert.ok((await menu.getByRole('group',{name:'Current layout',exact:true}).innerText()).includes('Text'));
   assert.equal(await menu.getByRole('option').count(),layoutCount);
-  let grouped=0;for(const name of ['Current layout','Same placeholders','Compatible placeholders'])grouped+=await menu.getByRole('group',{name,exact:true}).getByRole('option').count();
-  assert.equal(grouped,similarCount,'Similar holds exactly the current, same and compatible groups');
-  assert.ok((await menu.getByRole('group',{name:'Different counts',exact:true}).innerText()).includes('Text × 3'));
-  await menu.getByRole('button',{name:`Similar (${similarCount})`,exact:true}).click();
-  await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),contracts.chart1x,'the search lists every registered layout matching chart-1x');
-  await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),similarCount);
+  assert.ok((await menu.getByRole('group',{name:'Custom layouts',exact:true}).innerText()).includes('Partner detail'));
+  assert.ok((await menu.getByRole('group',{name:'Visuals',exact:true}).innerText()).includes('Chart'));
+  await menu.getByRole('combobox').fill('chart');assert.ok(await menu.getByRole('option').count()>=contracts.chart1x);
+  await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),layoutCount);
   await menu.getByRole('combobox').press('ArrowDown');
   const active=await menu.getByRole('combobox').getAttribute('aria-activedescendant');
   assert.equal(await page.locator(`[id="${active}"]`).innerText(),await menu.getByRole('option').nth(1).innerText(),'ArrowDown from the first option activates the second');
-  await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text-1x','partner-detail'));
+  await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text','partner-detail'));
   await source.press(`${mod}+z`);assert.equal(await read(),deck);
   // A real click on the highlighted key opens the same menu.
   await page.locator('[data-field="slides[0].layout"]').click();await menu.waitFor();
@@ -102,21 +93,16 @@ try{
   checks.push('Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal');
 
   if(contracts.metric){
-    const cover=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
+    const cover=JSON.stringify({slides:[{layout:'cover',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
     await page.evaluate(code=>mount(code),cover);await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();
-    await menu.getByRole('combobox').fill('number-1x');
-    // The registered catalog has number-1x variants too; the exact id is listed first and highlighted.
-    assert.ok((await menu.getByRole('option').first().innerText()).includes('Title + Metric'));
+    await menu.getByRole('combobox').fill('metrics');
+    assert.ok((await menu.getByRole('option').first().innerText()).includes('metrics'));
     await menu.getByRole('combobox').press('Enter');
     const changed=await read();
-    assert.deepEqual(JSON.parse(changed).slides[0],{...JSON.parse(cover).slides[0],layout:'number-1x',metric:{value:'',label:''}});
+    assert.deepEqual(JSON.parse(changed).slides[0],{...JSON.parse(cover).slides[0],layout:'metrics'});
     await source.press(`${mod}+z`);assert.equal(await read(),cover);
     await source.press(`${mod}+Shift+z`);assert.equal(await read(),changed);
-    await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();
-    await menu.getByRole('combobox').fill('number-3x');await menu.getByRole('combobox').press('Enter');
-    assert.deepEqual(JSON.parse(await read()).slides[0].blocks,Array.from({length:3},()=>({metric:{value:'',label:''}})));
-    await source.press(`${mod}+z`);assert.equal(await read(),changed);
-    checks.push('Metric layout choices scaffold empty values and repeated blocks, preserve subtitle/notes, and undo/redo atomically');
+    checks.push('V2 metric layout reference preserves subtitle/notes/content and undo/redo atomically');
   }
 
   await page.evaluate(()=>mount('{"slides":['));await select(5);await source.press('Control+Space');await page.evaluate(()=>control.openOptions());assert.equal(await page.getByRole('dialog').count(),0);assert.equal(await page.evaluate(()=>control.api.format()),false);assert.equal(await read(),'{"slides":[');

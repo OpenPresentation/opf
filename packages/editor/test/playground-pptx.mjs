@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
 import { embed, validate } from '@openpresentation/opf';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 // RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
 import JSZip from 'jszip';
 

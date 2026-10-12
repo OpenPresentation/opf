@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { toPptx } from '@openpresentation/opf-pptx';
 import { toSvg } from '@openpresentation/opf-render/svg';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import { startPlayground } from './support/playground-harness.mjs';
 
 // RR-25 in a real browser, on the built playground: the in-canvas crop tool and the focal point picker. A 400 x 200 picture

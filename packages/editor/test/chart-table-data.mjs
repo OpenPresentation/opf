@@ -2,7 +2,7 @@
 // ({ name, format }), a chart or table that shows a shared top-level dataset (through its `fields` selection), a column's
 // number format and a chart's series mapping, each as one undoable patch. Documents without the new fields behave as before.
 import assert from "node:assert/strict";
-import { catalogDisplay } from "@openpresentation/opf/catalog";
+import { catalogDisplay } from "@openpresentation/gallery";
 import * as core from "@openpresentation/opf";
 import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";

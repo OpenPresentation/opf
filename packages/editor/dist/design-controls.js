@@ -99,7 +99,7 @@ const titleCase = (text) => text.charAt(0).toUpperCase() + text.slice(1);
  * slide and selection; call `refresh()` when they change), `sections` (default: all), `scope`
  * ("deck" or "slide", the initial "Applies to" choice), `catalogs` (host catalogs, `Catalog[]`, merged after the session's
  * registered ones), `vocabularies` (display metadata for languages, chart types and social platforms: `catalogDisplay`
- * from `@openpresentation/opf/catalog`), `onChange(change)`, `onStatus(message, { error })` and `onSelectPath(path)`, called
+ * from `@openpresentation/gallery`), `onChange(change)`, `onStatus(message, { error })` and `onSelectPath(path)`, called
  * after a content conversion or replacement with the path to keep selected (the block, or the inline
  * payload field), because the host's old selection path may no longer exist.
  */
@@ -471,7 +471,7 @@ export function createDesignControls(container, options = {}) {
     });
 
     const layout = selectField("layout", "Layout of this slide", {
-      help: "Adds the blank placeholders the layout declares and keeps your content.",
+      help: "Arranges this slide's content in the chosen layout's regions.",
       onChange: (value) => run(() => switchDimension(editor, "layouts", value, { slideIndex: getSlide(), ...catalogOptions() }), `Layout changed to ${layout.select.selectedOptions[0]?.textContent ?? value}.`),
     });
     body.append(layout.wrap);

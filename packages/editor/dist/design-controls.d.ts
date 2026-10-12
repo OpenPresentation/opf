@@ -22,7 +22,7 @@ export interface DesignControlsOptions {
   scope?: "deck" | "slide";
   /** Host catalogs for the pickers, merged after the session's registered ones. */
   catalogs?: readonly Catalog[];
-  /** Display metadata for the engine vocabularies (languages, chart types, social platforms): `catalogDisplay` from `@openpresentation/opf/catalog`. */
+  /** Display metadata for the engine vocabularies (languages, chart types, social platforms): `catalogDisplay` from `@openpresentation/gallery`. */
   vocabularies?: SwitchVocabularies;
   /** Called after every committed change (never for a refused one). */
   onChange?: (change: unknown) => void;

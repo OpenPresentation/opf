@@ -2,7 +2,7 @@ import type { ConvertOptions } from "@openpresentation/opf/convert";
 import type { Catalog } from "@openpresentation/opf";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
-/** Display metadata for the engine vocabularies, in the shape of `catalogDisplay` (`@openpresentation/opf/catalog`): records by id, or a list of records with `id` (`bcp47` for a language). */
+/** Display metadata for the engine vocabularies, in the shape of `catalogDisplay` (`@openpresentation/gallery`): records by id, or a list of records with `id` (`bcp47` for a language). */
 export interface SwitchVocabularies {
   languages?: unknown;
   chartTypes?: unknown;
