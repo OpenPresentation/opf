@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.19.0 (2026-10-12)
+
+- RR-82 (OPF 0.19): choose adaptive layouts by intent with a template diagram and a live preview of the current slide's content; draw custom grid layouts of up to 12 by 12 cells, set region kinds, roles and flows, and save them in `catalogs.custom.layouts`; place blocks in template regions through canvas drop targets. Each change is validated and undoable. The editor's script-font test packages now match the 0.19 renderer's reviewed font bytes.
+- RR-78 (OPF 0.19): public catalog registration documentation and declarations name `gallery` and `catalogDisplay` from `@openpresentation/gallery`; the removed core `/catalog` entry has no alias.
+- Use v2 region summaries and intent groups throughout the layout and JSON pickers. Layout changes preserve authored content and remain one validated undoable edit; empty regions use explicit insert/move controls instead of invented blank placeholder payloads. Remove the retired v1 layout slot UI and helpers, retain direct nested content groups, and preserve v2 grid, region, overflow and design definitions when applying gallery items.
+- The installed JSON editor verification recognizes the v2 content-preserving layout change and atomic undo/redo contract, replacing the retired v1 empty-scaffold expectation. Installed runtime, authored content, error, offline-request and byte-integrity checks remain strict.
+- Qualify explicitly authorized gallery 2 source and installed tarball graphs in coordinated CI while requiring a separate published-runtime control with recorded test tooling. Keep ordinary dependency checks and release rejection intact.
+- Keep focus on custom grid cells after keyboard painting, restore focus when the custom-layout dialog closes, and allow region-menu block choices to be activated with Enter or Space and dismissed with Escape.
+
 ## 0.18.2 (2026-10-11)
 
 - FF-46 (opf#362; tests only): `test/font-gate-script-names.mjs` drives the editor's font gate with the 22 proprietary script, emoji, math and code-table names that pass the native visual comparison (`test/fixtures/script-name-families.json`, the table opf-render checks against core's policy and the FF-44 corpus). For each name the gate loads only the route's script packages, the registry resolves the name to its policy route with the policy `sizeAdjust`, and every sample draws in its route face with no other fallback (Sylfaen's Armenian and Georgian in their designated Noto faces; every mapped symbol code in the chain face that has it). It writes `artifacts/script-name-hosts/editor.json`, the evidence the core font tracker reads.
