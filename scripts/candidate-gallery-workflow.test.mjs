@@ -61,3 +61,12 @@ test('installed candidate staging primes gallery engines before strict source li
  assert.match(read('scripts/link-ecosystem.mjs'),/await assertSingleCore/,'strict one-core guard remains');
  assert.match(job,/node scripts\/pack-ecosystem\.mjs/);assert.match(job,/node scripts\/test-packed-ecosystem\.mjs/);
 });
+
+test('engines range retains complete contracts within a bounded candidate graph budget',()=>{
+ const source=read('.github/workflows/engines-range.yml');
+ const node=source.slice(source.indexOf('  node-range:'));
+ assert.match(node,/timeout-minutes: 45/);
+ assert.match(node,/node: \[22, 26\]/);
+ for(const command of ['pnpm test','node packages/javascript/test/packed-install-smoke.mjs','pnpm test:cli:packed','pnpm test:cli:packed:peers'])assert.ok(node.includes(`run: ${command}\n`),command);
+ assert.match(read('packages/cli/test/packed-files.mjs'),/timeout: 600000/,'individual install/command hangs remain bounded');
+});

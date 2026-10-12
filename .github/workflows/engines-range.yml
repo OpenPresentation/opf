@@ -33,8 +33,11 @@ jobs:
     # else (merge_group, workflow_dispatch) runs it.
     if: ${{ github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
     runs-on: ubuntu-24.04
-    # RR-57: about 2x the p90 (8.3 min for Node 22, 6.9 for Node 26 over the last 21 runs).
-    timeout-minutes: 20
+    # RR-78: run 38185119692 spent 19m22s on Node 26 before the final packed-peer check,
+    # and Node 22 reached it after 14m34s; both were cut off at 20min without a test failure.
+    # The complete authenticated source/tarball graph needs the canonical candidate lane's 45min budget.
+    # Every assertion and the packed harness's 600s per-process timeout remain unchanged.
+    timeout-minutes: 45
     env:
       OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.node }}
     strategy:
