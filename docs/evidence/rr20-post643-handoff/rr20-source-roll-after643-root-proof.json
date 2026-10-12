@@ -1,0 +1,14 @@
+{
+  "pr": 644,
+  "head": "46c578367c35f3cf064b473c695ab7c0a930dc9e",
+  "parent": "85089bf359a41950e5887d782452dd3884805386",
+  "onlyChangedPath": "ecosystem.lock.json",
+  "candidateByteHash": "54075c8da9a6f0a7116ef3f9f87b59e74233d270e08aa35a62bb079301074631",
+  "matchesOfficialPlan": true,
+  "goldenUnchanged": true,
+  "priorPR": 642,
+  "priorPRClosedDuringOfficialBranchReset": true,
+  "wrapperExit": 1,
+  "wrapperExitReason": "post-mutation assertion expected existing PR642; official openPullRequest created644",
+  "retryPerformed": false
+}

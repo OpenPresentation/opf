@@ -1,0 +1,37 @@
+{
+  "artifactRoot": "/Users/michael/.codex/visualizations/2026/10/11/01a128c9-2f22-7603-b379-122474d66d34/opf-layout-showcase",
+  "htmlSha256": "205c6183ecc2d43bc389161b45a7549e333f5825cee11a9079d4c3f91de94b0b",
+  "positiveExamples": 78,
+  "renderedSlides": 80,
+  "catalogLayouts": 28,
+  "zipFiles": 83,
+  "zipOpfFiles": 82,
+  "intentionalNegativeFiles": 2,
+  "allSourceSVGBindings": true,
+  "zipSourceBytesEqual": true,
+  "geometryAssertions": 15,
+  "browser": {
+    "total": 78,
+    "catalogs": 28,
+    "filtered": 2,
+    "searchAfterAll": "",
+    "sourceCorrespondence": true,
+    "copyPayload": true,
+    "realDownloadBytes": true,
+    "mobileOverflow": {
+      "scroll": 390,
+      "viewport": 390
+    },
+    "errors": [],
+    "clipboardScope": "Payload handler tested with instrumented browser clipboard, not OS clipboard permission"
+  },
+  "native": "ZIP inventory only; Windows UNRUN",
+  "hashes": {
+    "build-evidence.json": "d9b009c23442ca7c0c284f7d6f188946037e0b31ca152905e34fa3fb5a8d0401",
+    "geometry-proof.json": "64076f456cca955762368ec4ecf4e941f82fd53df0a92931c68b1f549337bf39",
+    "diagnostic-controls.json": "afa7942c4b3df43885fd876552338297573c1a767473ea124212962a0110d206",
+    "native-inspection.json": "9626a940b4216e0749179e6a1a57f2879eda8231d2fd1ff9a3cc96c31c2ad816",
+    "all-examples.zip": "628059049b5b5ee86c14b4acbc1eb50d7bf1df7e3a049832684e8a8e9eb5f220",
+    "coverage.json": "44bc87884fd0e87d74dff81145593c25a2b650db6895be91b1d05f965d17c9c0"
+  }
+}

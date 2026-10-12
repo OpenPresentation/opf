@@ -4,6 +4,10 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
+## Current checkpoint — 2026-10-12 after #643
+
+All six final publications are independently verified: core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0. Final actual registry plan/consumer/guidance #643 merged at `85089bf`; official generated source #644 passed 18/18 PR checks plus confirmation and entered the merge queue at 17:27:53 UTC; actual queue/engines qualification remains unproven. Checklist progress is 31/40. Three site local qualifications pass, but remote writes/merges remain held because they may auto-deploy under the no-deploy boundary. The user deferred Windows testing until back and reconnected; native T24/T31 remain UNRUN. RR-78/RR-82 detailed criteria are complete without an extra checkpoint closure. [post-643 receipts](../../evidence/rr20-post643-handoff/README.md). Historical publication checkpoints below retain their original scope.
+
 ## Goal
 
 The owner's goal (2026-10-01), restated:
@@ -294,6 +298,6 @@ PR.
   (PowerPoint acceptance and native header/footer),
   [opf#88](https://github.com/OpenPresentation/opf/issues/88) (site adoption)
 
-Editor 0.19.0 is trusted-published and independently verified at tag/gitHead `ac25857cca8ce776dd23b5ca58b38a06af9d963f`, workflow `38270637388`. Publisher 75979 and verifier 61972 exited 0; all ten checks pass, including integrity, provenance, three valid signatures with zero invalid/missing, GitHub Release and latest. T37 closes; progress is 30/40. CLI publication, final six-package registry/site acceptance and native T24/T31 remain open. [Editor receipts](../../evidence/rr20-editor019-release-progress/README.md).
+Historical T37 publication checkpoint: Editor 0.19.0 is trusted-published and independently verified at tag/gitHead `ac25857cca8ce776dd23b5ca58b38a06af9d963f`, workflow `38270637388`. Publisher 75979 and verifier 61972 exited 0; all ten checks pass, including integrity, provenance, three valid signatures with zero invalid/missing, GitHub Release and latest. T37 closes; progress is 30/40. CLI publication, final six-package registry/site acceptance and native T24/T31 remain open. [Editor receipts](../../evidence/rr20-editor019-release-progress/README.md).
 
 CLI 0.19.0 is trusted-published and independently verified at tag/gitHead `9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5`. Publisher 96437 and verifier 31875 exited 0; all ten checks pass, including provenance, three valid signatures with zero invalid/missing and latest. The original pre-tag range failure is retained; merged tooling repair #641 correctly accepts published renderer 0.19.1 within the unchanged ^0.19.0 contract. T38 closes; progress is 31/40. Final registry/site acceptance and native T24/T31 remain open. [Receipts](../../evidence/rr20-cli019-release-progress/README.md).
