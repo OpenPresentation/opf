@@ -594,3 +594,5 @@ Append-only. One dated line per state change.
 - 2026-10-12 03:00 UTC: RR-77/RR-79/RR-83 core source accepted in actual #592 merge00022a4, tree-identical to reviewed e25, gate65175 terminal0. T20/T21/T26 source criteria close, progress21/40. RR-83 site/registry work and RR-81 native remain open; gallery2 is unpublished. [Actual merge and old-scope proof](../../evidence/rr20-v019-source-merged/README.md).
 
 - 2026-10-12: Core #550/#557/#577/#584/#594/#596/#605 supersession closures verified after actual core merge proof. Known open PR count is 8 from the full 03:01 snapshot 15 minus seven closures; 45 issues unchanged. Gallery #5 final 1c7 source qualification passes; merge/publication is pending, T22/T28 remain open, 21/40 unchanged.
+
+- 2026-10-12: Gallery #5 hosted bootstrap failed on missing nested pnpm PATH (gate 55535 terminal 1). Reviewed local qualification remains historical source evidence; task-local Corepack shim/no-ambient-pnpm correction is pending. No source/runtime defect or publication acceptance is inferred.
