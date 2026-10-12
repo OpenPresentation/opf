@@ -67,6 +67,7 @@
     "test:determinism": "node test/determinism.mjs"
   },
   "dependencies": {
+    "@openpresentation/gallery": "^2.0.0",
     "@node-projects/jszip": "4.3.0",
     "@openpresentation/opf": "^0.18.4",
     "@rgrove/parse-xml": "4.2.3",
