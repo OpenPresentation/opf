@@ -58,5 +58,9 @@
   "rr20-pptx240-actual-merge-proof.json": {
     "sha256": "ba6894c9fb9f3d575d76c4025f71a12319a906df4794bc4ccb1bc18a9b4d5a08",
     "bytes": 2181
+  },
+  "rr20-pptx-supersession-closure-receipt.json": {
+    "sha256": "4df91b66079a4657f6f154c14a10e48ef1c2fa1d52fcc486452fb0928538d308",
+    "bytes": 244
   }
 }

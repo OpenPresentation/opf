@@ -7,3 +7,5 @@ T23 and T25 SOURCE criteria are met. Renderer198/225/227/228 closure receipt rec
 Core integration, final registry/gallery2 dependencies, trusted v0.19 publication, site adoption and native Windows acceptance remain separate open gates. RR81 remains review while PPTX/native is pending. No stable0.19 publication or native success is inferred from these source merges. This local records branch is held unpushed until core592 merges.
 
 PPTX #240 source merged at `4af1107102d93aafdba2c225486396273d121304`, tree-identical to reviewed d82. Its source merge does not close T24/native. Core #592 remains pending at e25: retained repair reports describe seven stale font fixture references and the consumer-local registry import boundary, including actual positive/negative and subsequent registry/browser checks. No unmerged core claim is promoted to completion.
+
+Superseded PPTX #247/#248 were subsequently closed after exact-head and carried-scope verification; the actual closure receipt is retained. The last full inventory was 18 PRs/45 issues; these two known closures reconcile 16 open PRs, not a fresh inventory.
