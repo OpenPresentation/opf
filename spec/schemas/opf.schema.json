@@ -3767,7 +3767,7 @@
             {
               "source": "https://www.pptx.gallery",
               "layouts": {
-                "two-column": { "name": "Two column", "areas": ["title title", "primary secondary"], "regions": { "primary": { "accepts": ["text"] }, "secondary": { "accepts": ["text"] } } }
+                "two-column": { "name": "Two column", "areas": [["title", "title"], ["primary", "secondary"]], "regions": { "primary": { "accepts": ["text"] }, "secondary": { "accepts": ["text"] } } }
               }
             },
             false
@@ -3794,10 +3794,10 @@
           },
           "acme": {
             "source": "pkg:@acme/opf-catalog",
-            "layouts": { "hero": { "name": "Hero", "areas": ["title"] } }
+            "layouts": { "hero": { "name": "Hero", "areas": [["title"]] } }
           },
           "custom": {
-            "layouts": { "q4-special": { "name": "Q4 special", "areas": ["title", "chart"], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } }
+            "layouts": { "q4-special": { "name": "Q4 special", "areas": [["title"], ["chart"]], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } }
           }
         }
       ]

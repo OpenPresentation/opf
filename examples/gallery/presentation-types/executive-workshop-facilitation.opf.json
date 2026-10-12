@@ -652,7 +652,10 @@
             "contentAlignment": "center"
           },
           "areas": [
-            "title media"
+            [
+              "title",
+              "media"
+            ]
           ],
           "columns": [
             1,
@@ -684,8 +687,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1
@@ -719,9 +726,15 @@
             "Visuals"
           ],
           "areas": [
-            "title",
-            "charts",
-            "note"
+            [
+              "title"
+            ],
+            [
+              "charts"
+            ],
+            [
+              "note"
+            ]
           ],
           "columns": [
             1
@@ -760,8 +773,14 @@
             "Visuals"
           ],
           "areas": [
-            "title title",
-            "table notes"
+            [
+              "title",
+              "title"
+            ],
+            [
+              "table",
+              "notes"
+            ]
           ],
           "columns": [
             3,
@@ -802,9 +821,15 @@
             "Groups of items"
           ],
           "areas": [
-            "title",
-            "timeline",
-            "notes"
+            [
+              "title"
+            ],
+            [
+              "timeline"
+            ],
+            [
+              "notes"
+            ]
           ],
           "columns": [
             1
@@ -844,8 +869,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1

@@ -224,8 +224,8 @@
         "partner-cover": {
           "name": "Partner cover",
           "areas": [
-            "title",
-            "body"
+            ["title"],
+            ["body"]
           ],
           "regions": {
             "body": {

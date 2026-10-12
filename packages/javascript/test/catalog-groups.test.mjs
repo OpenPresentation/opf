@@ -20,7 +20,7 @@ import {
 
 const GALLERY = 'https://gallery.example';
 const ACME = 'pkg:@acme/opf-catalog';
-const layout = (name, ...types) => { const body = types.filter(type => !['title', 'subtitle'].includes(type)); const names = body.map((_, index) => `body-${index + 1}`); return { name, areas: ['title', ...names], rows: ['auto', ...names.map(() => 1)], regions: Object.fromEntries(body.map((type, index) => [names[index], { accepts: [type], flow: 'none' }])) }; };
+const layout = (name, ...types) => { const body = types.filter(type => !['title', 'subtitle'].includes(type)); const names = body.map((_, index) => `body-${index + 1}`); return { name, areas: [['title'], ...names.map(name => [name])], rows: ['auto', ...names.map(() => 1)], regions: Object.fromEntries(body.map((type, index) => [names[index], { accepts: [type], flow: 'none' }])) }; };
 const scheme = (accent1) => ({ name: `Scheme ${accent1}`, accent1, accent2: '#222222', accent3: '#333333', accent4: '#444444', accent5: '#555555', accent6: '#666666', dark1: '#000000', dark2: '#111111', light1: '#FFFFFF', light2: '#EEEEEE', hyperlink: '#0000EE', followedHyperlink: '#551A8B' });
 const fonts = (major) => ({ name: major, major, minor: major });
 

@@ -46,3 +46,14 @@ test('narrow and dense timelines preserve complete long fields and explicit floo
   assert.deepEqual(value,copy);
   assert.throws(()=>layoutTimeline(value,{x:0,y:0,width:100,height:100},{minFontSize:18,overflow:'error'}),OPFCompositionError);
 });
+
+
+test('seven narrow milestones prefer whole words over a fitted alternating grapheme wrap',()=>{
+  const value=Array.from({length:7},(_,index)=>({when:`Phase ${index+1}`,what:['Understand the user need','Test a focused prototype','Measure outcomes and learn'][index%3]}));
+  const result=layoutTimeline(value,{x:0,y:0,width:680,height:500});
+  assert.equal(result.overflow,false);assert.equal(result.arrangement,'vertical');
+  for(const part of result.parts)for(const line of part.fit.sourceLines){
+    if(line.boundary==='soft')assert.ok(!/[A-Za-z]$/.test(part.text.slice(0,line.nextStart))||!/[A-Za-z]/.test(part.text[line.nextStart]));
+  }
+  assert.deepEqual(result.parts.map(part=>part.text),value.flatMap(event=>[event.when,event.what]));
+});

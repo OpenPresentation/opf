@@ -10,10 +10,10 @@ import {OPFPaginationError, paginate, paginateSlide} from '../dist/pagination.js
 const asset = name => `data:image/png;base64,${name}`;
 // RR-71: logos live on the organization. A deck with one logo for every shape and background:
 const withLogo = (logo, extra = {}) => ({organization: {id: 'acme', name: 'Acme', logo}, ...extra});
-const titleOnly = {id: 'title', areas: ["title"], rows: [1], regions: {}};
-const titleSubtitle = {id: 'title-subtitle', areas: ["title"], rows: [1], regions: {}};
-const sectionDivider = {id: 'section-divider', areas: ["title"], rows: [1], regions: {}};
-const text1x = {id: 'text-1x', areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}};
+const titleOnly = {id: 'title', areas: [["title"]], rows: [1], regions: {}};
+const titleSubtitle = {id: 'title-subtitle', areas: [["title"]], rows: [1], regions: {}};
+const sectionDivider = {id: 'section-divider', areas: [["title"]], rows: [1], regions: {}};
+const text1x = {id: 'text-1x', areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}};
 const byField = (result, field) => result.items.find(item => item.field === field);
 
 test('resolveLogo is exported from the composition entry', () => {
@@ -76,7 +76,7 @@ test('content slides never get an automatic logo', () => {
     [{title: 'Content', text: 'Body'}, text1x],
     [{title: 'Blocks', blocks: [{text: 'a'}, {text: 'b'}]}, undefined],
     [{title: 'Regions', left: {text: 'a'}, right: {text: 'b'}}, undefined],
-    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["image"],"flow":"none"}}}],
+    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["image"],"flow":"none"}}}],
   ];
   for (const [slide, layout] of cases) {
     const result = composeSlide(slide, {layout, presentation});

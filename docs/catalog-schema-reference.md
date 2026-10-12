@@ -272,7 +272,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-layout/v2`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `areas`
-- Purpose: Schema for slide-layout records (OPF 0.19). A layout is a grid template: 'areas' names the cells of a grid in the notation of CSS grid-template-areas, 'columns' and 'rows' size its tracks, and 'regions' says, for every body area, which content kinds it takes and how several blocks share it. Slide content stays flat: engines bind a slide's blocks to the regions by reading order, role and kind (bindRegions in @openpresentation/opf), a block may pin itself to a region with 'region', and an empty...
+- Purpose: Schema for slide-layout records (OPF 0.19). A layout is a grid template: 'areas' names the cells of a grid using nested row arrays, 'columns' and 'rows' size its tracks, and 'regions' says, for every body area, which content kinds it takes and how several blocks share it. Slide content stays flat: engines bind a slide's blocks to the regions by reading order, role and kind (bindRegions in @openpresentation/opf), a block may pin itself to a region with 'region', and an empty region collapses i...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -282,7 +282,7 @@ _No named properties._
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `design` | no | `ref:DesignHints` | The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion.... |
-| `areas` | yes | `array<string>` | The grid, in the notation of CSS grid-template-areas: each string is a row, each word a cell, and a name repeated over adjacent cells spans them; '.' is an empty cell. Words are lowercase names ([a-z][a-z0-9-]*) or '.... |
+| `areas` | yes | `array<array<string>>` | The grid as nested arrays: each inner array is a row, each string is one cell, and a name repeated over adjacent cells spans them; '.' is an empty cell. Cells are lowercase names ([a-z][a-z0-9-]*) or '.', and every ro... |
 | `columns` | no | `array<number>` | Relative column widths, one per cell of a row; the columns share the content width in proportion, separated by the gap. Omitted: all 1. Columns are numbers only. |
 | `rows` | no | `array<oneOf:number / const:"auto">` | Relative row heights, one per string of 'areas'. 'auto' is the height the row's content needs at the starting text size (at most half the content box; areas that span several rows do not size it); the numeric rows sha... |
 | `regions` | no | `object` | One entry per body area, keyed by the area's name. Region names may not be 'title', 'subtitle', 'tag', 'auto' or one of the promoted-region words ('left', 'center', 'right', 'top', 'middle', 'bottom'), so a Markdown b... |

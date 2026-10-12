@@ -338,7 +338,10 @@
             "contentAlignment": "center"
           },
           "areas": [
-            "title media"
+            [
+              "title",
+              "media"
+            ]
           ],
           "columns": [
             1,
@@ -370,8 +373,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1
@@ -405,9 +412,15 @@
             "Visuals"
           ],
           "areas": [
-            "title",
-            "charts",
-            "note"
+            [
+              "title"
+            ],
+            [
+              "charts"
+            ],
+            [
+              "note"
+            ]
           ],
           "columns": [
             1
@@ -446,8 +459,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1

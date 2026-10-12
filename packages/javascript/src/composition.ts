@@ -1645,6 +1645,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
         const accepted={...part,box:area,alignment,fit};parts.push(accepted);
         if(fit.overflow)report(accepted,'text-fit','Timeline field exceeds its readable width; increase its space or split the timeline.');
+        if(breaksInsideWord(part.text,fit))report(accepted,'text-fit','Timeline field would split a word; use a wider vertical arrangement or paginate events.');
         if(area.x<box.x-.01||area.y<box.y-.01||area.x+area.width>box.x+box.width+.01||area.y+area.height>box.y+box.height+.01)report(accepted,'part-outside-cell','Timeline field extends outside its cell; increase the cell or paginate events.',Math.max(area.x+area.width-box.x-box.width,area.y+area.height-box.y-box.height));
         return accepted;
       };
@@ -1675,8 +1676,9 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         });
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
-        // A ring widens the rail, and the text keeps its usual distance from the marker's edge.
-        const lead=hasRing?ringRadius+strokeWidth/2:radius,gap=24*scale+(lead-radius);
+        // Reserve the entire marker/ring diameter plus twelve pixels of clear space before text.
+        const outlined=timeline.events.some(event=>event.status==='planned');
+        const lead=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0),gap=2*lead+12*scale;
         const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;

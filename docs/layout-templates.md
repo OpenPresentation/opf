@@ -14,7 +14,7 @@ built-in layouts and a deck's own layouts are records of this one schema; a cust
 ```yaml
 name: Roadmap split
 summary: A roadmap on the left, with notes over metrics beside it.
-areas: ["title title", "timeline notes", "timeline metrics"]
+areas: [["title", "title"], ["timeline", "notes"], ["timeline", "metrics"]]
 columns: [2, 1]
 rows: [auto, 1, 1]
 regions:
@@ -25,7 +25,7 @@ regions:
 
 | Field | Meaning |
 | --- | --- |
-| `areas` | 1 to 12 strings in the notation of CSS `grid-template-areas`: each string a row, each word a cell, a name repeated over adjacent cells spans them, `.` an empty cell. A name's cells form one filled rectangle. |
+| `areas` | 1 to 12 row arrays, each containing 1 to 12 area-name strings. Each string is one cell; a name repeated over adjacent cells spans them, `.` an empty cell. A name's cells form one filled rectangle. |
 | `columns` | Relative column widths, one per cell of a row. Omitted: all 1. |
 | `rows` | Relative row heights, or `auto` for the height the row's content needs (at most half the content box). Omitted: all 1. |
 | `regions` | One entry per body area, keyed by its name. |

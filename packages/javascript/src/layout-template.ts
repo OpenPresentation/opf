@@ -141,10 +141,16 @@ function parse(layout: unknown): Parsed {
   }
   if (areas.length > MAX_TEMPLATE_TRACKS) grid('layout-template', '/areas', `a template has at most ${MAX_TEMPLATE_TRACKS} rows; this one has ${areas.length}`);
   const cells: string[][] = areas.map((row, index) => {
-    if (typeof row !== 'string') { grid('layout-template', `/areas/${index}`, 'each row is a string of area names'); return []; }
-    const words = row.trim().split(/\s+/).filter(Boolean);
-    if (!words.length) grid('layout-template', `/areas/${index}`, 'a row needs at least one area name or "."');
-    for (const word of words) if (word !== '.' && !NAME.test(word)) grid('layout-template', `/areas/${index}`, `'${word}' is not an area name (lowercase letters, digits and hyphens, starting with a letter) or "."`);
+    if (!Array.isArray(row)) { grid('layout-template', `/areas/${index}`, 'each row is an array of area names; use nested arrays instead of space-separated strings'); return []; }
+    const words: string[] = [];
+    if (!row.length) grid('layout-template', `/areas/${index}`, 'a row needs at least one area name or "."');
+    row.forEach((cell, column) => {
+      if (typeof cell !== 'string') grid('layout-template', `/areas/${index}/${column}`, 'each cell is one area name or "."');
+      else {
+        words.push(cell);
+        if (cell !== '.' && !NAME.test(cell)) grid('layout-template', `/areas/${index}/${column}`, `'${cell}' is not an area name (lowercase letters, digits and hyphens, starting with a letter) or "."`);
+      }
+    });
     return words;
   });
   const width = cells[0]?.length ?? 0;

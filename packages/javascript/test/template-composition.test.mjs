@@ -31,7 +31,8 @@ describe('the grid flow by count', () => {
     const result = compose({ title: 'Five', blocks: short(5) }, layouts.pillars);
     const items = cells(result, 'pillars');
     assert.equal(rows(items), 2);
-    const [a, b, c, d, e] = items.map((item) => item.frameBox);
+    assert.ok(items.every(item => item.frameBox === undefined), 'pillars has no decorative cards by default');
+    const [a, b, c, d, e] = items.map((item) => item.box);
     assert.ok(near(d.width, a.width) && near(e.width, a.width));
     const box = region(result, 'pillars').box;
     assert.ok(near((d.x - box.x), (box.x + box.width) - (e.x + e.width)), 'centred');
@@ -122,14 +123,14 @@ describe('empty regions and headings', () => {
   });
 
   test('a template without a title area gets an implicit auto row on top', () => {
-    const record = { name: 'x', areas: ['body'], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', areas: [['body']], regions: { body: { accepts: ['text'] } } };
     const result = compose({ title: 'Heading', blocks: [text('a')] }, record);
     assert.deepEqual(result.headingAreas.map((area) => [area.name, area.implicit]), [['title', true]]);
     assert.ok(region(result, 'body').box.y > result.items[0].box.y + result.items[0].box.height);
   });
 
   test('a subtitle area takes the subtitle out of the title group', () => {
-    const record = { name: 'x', areas: ['title subtitle', 'body body'], columns: [1, 1], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', areas: [['title', 'subtitle'], ['body', 'body']], columns: [1, 1], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
     const result = compose({ title: 'T', subtitle: 'S', blocks: [text('a')] }, record);
     const subtitle = result.items.find((item) => item.field === 'subtitle');
     assert.ok(subtitle.box.x >= result.headingAreas.find((area) => area.name === 'subtitle').box.x - 1e-6);
@@ -310,7 +311,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
     assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
     const verdict = areas.find((area) => area.name === 'verdict').box;
-    assert.ok(near(verdict.height, 2 * 25 * 1.22 + 24), 'two body lines inside the card insets (comparison draws cards)');
+    assert.ok(near(verdict.height, 2 * 25 * 1.22), 'two body lines without decorative card insets');
     assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
     const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
     assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');
@@ -332,11 +333,11 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     }
     // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
-    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }] }, { layout: layouts.comparison });
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison });
     const verdictItem = filled.items.find((item) => item.region === 'verdict');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');
-    const placeholder = composeLayoutAreas(layouts.comparison).areas.find((area) => area.name === 'verdict').box;
+    const placeholder = composeLayoutAreas(layouts.comparison, {presentation: {design: {contentBox: true}}}).areas.find((area) => area.name === 'verdict').box;
     assert.ok(near(placeholder.height, filled.regions.find((region) => region.name === 'verdict').box.height, 0.5), `${placeholder.height} vs the filled verdict`);
     const image = composeLayoutAreas(layouts.image).areas.find((area) => area.name === 'media').box;
     assert.equal(image.x, 0, 'bled to the slide edge by default');

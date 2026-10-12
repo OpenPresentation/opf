@@ -284,7 +284,7 @@ assert.equal(rootValidate(twoColumn,{only:['references']}).counts.warning,0);
 assert.equal(validate(twoColumn,{only:['references']}).counts.warning,1);
 for(const gone of ['@openpresentation/opf/lint','@openpresentation/opf/audit'])await assert.rejects(import(gone));
 const source='{\\r\\n"slides":[{"layout":"partner","title":"Keep  spaces"}]\\n}';
-const options={catalogs:[{source:'pkg:@host/layouts',layouts:{partner:{name:'Partner',areas:['title'],rows:[1],regions:{}}}}]};
+const options={catalogs:[{source:'pkg:@host/layouts',layouts:{partner:{name:'Partner',areas:[['title']],rows:[1],regions:{}}}}]};
 assert.equal(validate(source,options).valid,true);
 assert.equal(validate(source,{only:['format','references']}).findings.find(issue=>issue.ruleId==='opf/unresolved-reference').location.offset,source.indexOf('"partner"'));
 assert.equal(validate('{"slides":[{"title":"First","title":"Second"}]}').valid,false);

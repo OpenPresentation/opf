@@ -33,9 +33,9 @@ export function layoutContent(layout: unknown): LayoutContent {
 
 function templateAreas(layout: unknown): { name: string; region?: ReturnType<typeof layoutRegion> }[] {
   const value = record(layout), regions = record(value.regions);
-  const rows = Array.isArray(value.areas) ? value.areas.filter((row): row is string => typeof row === 'string') : [];
+  const rows = Array.isArray(value.areas) ? value.areas.filter((row): row is string[] => Array.isArray(row) && row.every(cell => typeof cell === 'string')) : [];
   const seen = new Set<string>(), out: { name: string; region?: ReturnType<typeof layoutRegion> }[] = [];
-  for (const row of rows) for (const name of row.trim().split(/\s+/)) {
+  for (const row of rows) for (const name of row) {
     if (!name || name === '.' || seen.has(name)) continue;
     seen.add(name);
     out.push(name === 'title' || name === 'subtitle' || !Object.hasOwn(regions, name) ? { name } : { name, region: layoutRegion(name, regions[name]) });

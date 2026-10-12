@@ -779,7 +779,10 @@
             "contentAlignment": "center"
           },
           "areas": [
-            "title media"
+            [
+              "title",
+              "media"
+            ]
           ],
           "columns": [
             1,
@@ -811,8 +814,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1
@@ -846,9 +853,15 @@
             "Visuals"
           ],
           "areas": [
-            "title",
-            "charts",
-            "note"
+            [
+              "title"
+            ],
+            [
+              "charts"
+            ],
+            [
+              "note"
+            ]
           ],
           "columns": [
             1
@@ -887,8 +900,14 @@
             "Visuals"
           ],
           "areas": [
-            "title title",
-            "table notes"
+            [
+              "title",
+              "title"
+            ],
+            [
+              "table",
+              "notes"
+            ]
           ],
           "columns": [
             3,
@@ -929,9 +948,15 @@
             "Groups of items"
           ],
           "areas": [
-            "title",
-            "timeline",
-            "notes"
+            [
+              "title"
+            ],
+            [
+              "timeline"
+            ],
+            [
+              "notes"
+            ]
           ],
           "columns": [
             1
@@ -971,8 +996,14 @@
             "Visuals"
           ],
           "areas": [
-            "title title",
-            "chart notes"
+            [
+              "title",
+              "title"
+            ],
+            [
+              "chart",
+              "notes"
+            ]
           ],
           "columns": [
             3,
@@ -1014,8 +1045,14 @@
             "Visuals"
           ],
           "areas": [
-            "title title",
-            "media body"
+            [
+              "title",
+              "title"
+            ],
+            [
+              "media",
+              "body"
+            ]
           ],
           "columns": [
             1,
@@ -1043,7 +1080,8 @@
                 "group"
               ],
               "role": "primary",
-              "flow": "auto"
+              "flow": "auto",
+              "anchor": "middle"
             }
           },
           "description": "Explain a visual alongside its supporting text. Use the text to direct attention to the meaningful parts of the image.",
@@ -1061,8 +1099,14 @@
             "Visuals"
           ],
           "areas": [
-            "title title",
-            "code notes"
+            [
+              "title",
+              "title"
+            ],
+            [
+              "code",
+              "notes"
+            ]
           ],
           "columns": [
             3,
@@ -1101,8 +1145,12 @@
             "Text"
           ],
           "areas": [
-            "title",
-            "body"
+            [
+              "title"
+            ],
+            [
+              "body"
+            ]
           ],
           "columns": [
             1
