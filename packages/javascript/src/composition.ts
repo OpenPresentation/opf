@@ -1120,6 +1120,8 @@ export interface QuotePhoto {
   shape: ImageShape;
 }
 export interface QuoteLayout {
+  /** Measured vertical content envelope at the allocated width, including the photo. */
+  bounds: LayoutBox;
   algorithm: 'quote-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: QuoteTextPart[];
@@ -1263,6 +1265,18 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
       photoFits=selected.photoFits;
     }
   }
+  // A successful quote is one compact editorial unit, not a body at the top and attribution at the bottom.
+  // Keep failed allocations intact so readability-floor/overlap diagnostics retain their original evidence.
+  if (body.fit && !body.fit.overflow && photoFits && (!attribution || attribution.fit && !attribution.fit.overflow)) {
+    body.box.height = body.fit.placement?.height ?? heightOf(body.fit);
+    const footerTop = body.box.y + body.box.height + 18;
+    const previousTop = Math.min(attribution?.box.y ?? Infinity, photo?.box.y ?? Infinity);
+    if (Number.isFinite(previousTop)) {
+      const shift = footerTop - previousTop;
+      if (attribution) { attribution.box.y += shift; attribution.fit = translateTextFit(attribution.fit!, shift); }
+      if (photo) { photo.box.y += shift; photo.shape = imageShape('circle', photo.box); }
+    }
+  }
   if (hasPhoto && !photo) photoFits=false;
   for (const part of parts) {
     const area=part.box;
@@ -1285,7 +1299,11 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     report('part-overlap',path,['body','footer'],'Quote body and photo overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
+  const occupiedParts = parts.filter(part => part.fit).map(part => ({...part.box, height:part.fit!.placement?.height ?? heightOf(part.fit!)}));
+  if (photo) occupiedParts.push(photo.box);
+  const bottom = Math.max(box.y, ...occupiedParts.map(area => area.y + area.height));
+  const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface MetricContent {
@@ -1324,6 +1342,8 @@ export interface MetricLayoutDiagnostic extends LayoutDiagnostic {
   parts: MetricTextPart['role'][];
 }
 export interface MetricLayout {
+  /** Measured vertical value/metadata envelope at the allocated width. */
+  bounds: LayoutBox;
   algorithm: 'metric-flow-v1';
   alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
@@ -1511,7 +1531,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const bottom = Math.max(box.y, ...visible.map(part => part.box.y + occupied(part.fit!)));
+  const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
@@ -2709,7 +2731,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let regionTag: string | undefined, templateCell = false;
   // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
   // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1): void => {
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
@@ -2717,13 +2739,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       return;
     }
     const frameBox = cards ? acceptedBox(box) : undefined;
+    const metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
     box = payloadBox(box, cards);
     const caption = captionOf(node, box);
     if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
     const textValue = contentText(node.field, node.value);
     const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
     const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-    const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
+    const metricLayout = node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined;
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
@@ -2819,16 +2842,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
-  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean): number => {
+  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition): number => {
     const pad = cards ? 2 * Math.min(12 * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
     if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false), 0) + gap * Math.max(0, node.children.length - 1) + pad;
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
       const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, startSize, startSize, node.path, node.payload.numbering);
       content = 'height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight;
-    } else if (node.field === 'quote') content = estimatedLines(typeof node.value === 'string' ? node.value : record(node.value).text, inner, 32 * scale) * 32 * 1.22 * scale + 2 * 20 * 1.22 * scale;
+    } else if (node.field === 'quote') content = measureQuote(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings).bounds.height + 18;
     else if (node.field === 'code') content = String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length * 18 * 1.4 * scale + 24 * scale;
-    else if (node.field === 'metric') content = 150 * scale;
+    else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings).bounds.height;
     else if (node.field === 'timeline') content = 170 * scale;
     else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
     else content = inner / 1.6;
@@ -3001,20 +3024,37 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         }
         const arrangement = arrangementOf(region, units, cell);
         let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
-        // Anchor: a stack of text shorter than its region sits at its middle or bottom.
-        if (arrangement === 'column' && region.anchor !== 'top' && units.every(unit => !unit.children && (unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets'))) {
-          const naturals = units.map(unit => naturalHeight(unit, cell.width, cards) + 2 * rasterPadding + scale);
+        const referenceHeights = boxes.map(box => box.height);
+        // Anchor only leaves with measured compact heights; charts, tables and groups keep their existing allocation.
+        if (arrangement === 'column' && region.anchor !== 'top' && units.every(unit => !unit.children && (unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets' || !unit.caption && (unit.field === 'quote' || unit.field === 'metric')))) {
+          const naturals = units.map((unit,index) => naturalHeight(unit, cell.width, cards, referenceHeights[index], settings) + 2 * rasterPadding + scale);
           const used = naturals.reduce((a, b) => a + b, 0) + gap * (units.length - 1);
           if (used < cell.height) {
             let y = cell.y + (region.anchor === 'middle' ? (cell.height - used) / 2 : cell.height - used);
             boxes = naturals.map(size => { const next = { x: cell.x, y, width: cell.width, height: size }; y += size + gap; return next; });
           }
         }
+        if ((arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
+          const naturals = boxes.map((box,index) => {
+            const unit = units[index]!;
+            return unit.children || unit.caption || !['text','items','bullets','quote','metric'].includes(unit.field) ? undefined
+              : naturalHeight(unit,box.width,cards,referenceHeights[index],settings)+2*rasterPadding+scale;
+          });
+          // One vertical origin per grid row keeps related metric value/label baselines aligned,
+          // even when descriptions have different line counts. Individual bounds remain compact.
+          boxes = boxes.map((box,index) => {
+            const height = naturals[index];
+            if (height === undefined || height >= box.height) return box;
+            const rowHeight = Math.max(...boxes.flatMap((peer,peerIndex) => peer.y === box.y && naturals[peerIndex] !== undefined ? [naturals[peerIndex]!] : []));
+            const spare = Math.max(0,box.height-rowHeight);
+            return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height};
+          });
+        }
         // Right to left: the flow inside a region runs from the right (RR-05).
         if (rtl) boxes = boxes.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
-        units.forEach((unit, index) => { placeNode(unit, boxes[index]!, settings, cards, region.listColumns); });
+        units.forEach((unit, index) => { placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' ? undefined : referenceHeights[index]); });
         return arrangement;
       } finally { regionTag = undefined; templateCell = false; }
     };
