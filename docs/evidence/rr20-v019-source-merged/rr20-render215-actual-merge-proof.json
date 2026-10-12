@@ -1,0 +1,11 @@
+{
+  "reviewedHead": "9fe77f1287f2cbd667c169034c151607888d6199",
+  "actualMerge": "0e18fb532736248ff7c96a2a3c05cbf32a86b68c",
+  "reviewedTree": "4adcbf356b79e8e39225cd789ce57929d70263f2",
+  "actualMergedTree": "4adcbf356b79e8e39225cd789ce57929d70263f2",
+  "wholeTreeExact": true,
+  "primaryMain": "0e18fb532736248ff7c96a2a3c05cbf32a86b68c",
+  "clean": true,
+  "defaultContainsMerge": true,
+  "allFourPriorScopesRemainExact": "whole reviewed carrier tree equals actual merge; original per-path comparison retained unchanged"
+}

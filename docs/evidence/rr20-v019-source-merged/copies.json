@@ -1,0 +1,38 @@
+{
+  "rr20-render215-actual-merge-proof.json": {
+    "sha256": "f8b31e9ec213bef5776da34e4bb94b44be58f7142e7c95431d1dfcc6728ff50a",
+    "bytes": 525
+  },
+  "rr20-render215-actual-merge-review.md": {
+    "sha256": "163a99d8c62e01fd44ceced93e2818df64b929c80c3442cbfdcf0ac26d39b433",
+    "bytes": 2957
+  },
+  "rr20-render-old-scopes-actual-merge-proof.json": {
+    "sha256": "97d85b658c8849e522a1702e1531ebcebb7f253cffe4e26d53d41d0840b2066d",
+    "bytes": 1162
+  },
+  "rr20-render-supersession-closure-receipt.json": {
+    "sha256": "f4714afccd41cd0cdc42aa5009d728d040879a5a8cc7d83e808fcccf03b81655",
+    "bytes": 710
+  },
+  "rr20-editor156-actual-merge-proof.json": {
+    "sha256": "db16ff053ec75deb7b7a64e107a4d1b945c20aa7a73fc0e85baf561ef2973b57",
+    "bytes": 407
+  },
+  "rr20-editor156-actual-merge-review.md": {
+    "sha256": "2c9ffee497ef504518e47901aec2f8013eac2ad26fc1dde2ae2b8e163b681253",
+    "bytes": 2383
+  },
+  "rr20-old-feature-pr-reconciliation.md": {
+    "sha256": "5d47cd10b24c06a349c86e288536ba1a6ede128c7e808c7b3214d3196898c9eb",
+    "bytes": 3227
+  },
+  "rr20-old-feature-carrier-comparison.json": {
+    "sha256": "b384c5da65b3dd58344bd439b99dd1b455e77cf7782888bf51a44669a78612a6",
+    "bytes": 7434
+  },
+  "rr20-editor-supersession-closure-receipt.json": {
+    "sha256": "27a77b85cae76ba3909c5fb51e745be4b15b32bf0652a9322fa811e9625ac880",
+    "bytes": 197
+  }
+}
