@@ -11,6 +11,7 @@ import {spawnSync} from 'node:child_process';
 import {cp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {consumerDependencies, assertConsumerLock, assertInstalledConsumerPackage} from './consumer-dependencies.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
@@ -31,6 +32,8 @@ const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'ut
 const planned = Object.fromEntries(PACKAGES.map((name) => [name, plan.packages.find((entry) => entry.name === name)?.version]));
 for (const [name, version] of Object.entries(planned)) assert.match(version ?? '', /^\d+\.\d+\.\d+$/, `release-plan.json lists ${name}`);
 
+const consumerPlan = consumerDependencies(planned, plan.independentPackages);
+
 // The renderer's optional peers are its offline font packs and, from opf-render 0.16.0 (RR-63), its converters (sharp,
 // @resvg/resvg-js, pdf-lib): the matrix draws every script and rasterizes, so the consumer installs them all.
 const npmView = (spec) => {
@@ -44,7 +47,7 @@ const HELPERS = ['fflate', 'fast-xml-parser'];
 if (updateLock) {
   const manifest = JSON.parse(await readFile(path.join(template, 'package.json'), 'utf8'));
   const peers = npmView(`@openpresentation/opf-render@${planned['@openpresentation/opf-render']}`);
-  manifest.dependencies = Object.fromEntries(Object.entries({...planned, ...peers, ...Object.fromEntries(HELPERS.map((name) => [name, manifest.dependencies[name] ?? '*']))}).sort(([a], [b]) => a.localeCompare(b)));
+  manifest.dependencies = Object.fromEntries(Object.entries({...consumerPlan, ...peers, ...Object.fromEntries(HELPERS.map((name) => [name, manifest.dependencies[name] ?? '*']))}).sort(([a], [b]) => a.localeCompare(b)));
   await writeFile(path.join(template, 'package.json'), `${JSON.stringify(manifest, null, 2)}
 `);
   await rm(path.join(template, 'package-lock.json'), {force: true});
@@ -59,16 +62,11 @@ if (updateLock) {
 }
 
 const manifest = JSON.parse(await readFile(path.join(template, 'package.json'), 'utf8'));
-assert.deepEqual(Object.fromEntries(PACKAGES.map((name) => [name, manifest.dependencies[name]])), planned, 'scripts/published-matrix/consumer/package.json pins the versions in release-plan.json; run prepare-consumer.mjs --update-lock');
+assert.deepEqual(Object.fromEntries(Object.keys(consumerPlan).map((name) => [name, manifest.dependencies[name]])), consumerPlan, 'scripts/published-matrix/consumer/package.json pins the versions in release-plan.json; run prepare-consumer.mjs --update-lock');
 const lock = JSON.parse(await readFile(path.join(template, 'package-lock.json'), 'utf8'));
 const expectedPeers = lock.packages['node_modules/@openpresentation/opf-render'].peerDependencies ?? {};
 for (const [name, version] of Object.entries(expectedPeers)) assert.equal(manifest.dependencies[name], version, `the consumer installs the renderer peer ${name}@${version}; run prepare-consumer.mjs --update-lock`);
-for (const name of PACKAGES) {
-  const entry = lock.packages[`node_modules/${name}`];
-  assert.equal(entry?.version, planned[name], `package-lock.json pins ${name}@${planned[name]}; run prepare-consumer.mjs --update-lock`);
-  assert.match(entry.integrity ?? '', /^sha512-/, `${name} has a registry integrity hash`);
-  assert.match(entry.resolved ?? '', /^https:\/\/registry\.npmjs\.org\//, `${name} resolves from the npm registry`);
-}
+assertConsumerLock(consumerPlan, lock);
 
 await rm(target, {recursive: true, force: true});
 await mkdir(target, {recursive: true});
@@ -78,9 +76,9 @@ await cp(path.join(template, 'src'), path.join(target, 'src'), {recursive: true}
 run(npm, ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], target);
 
 const installed = {};
-for (const name of PACKAGES) {
+for (const name of Object.keys(consumerPlan)) {
   const installedManifest = JSON.parse(await readFile(path.join(target, 'node_modules', ...name.split('/'), 'package.json'), 'utf8'));
-  assert.equal(installedManifest.version, planned[name], `${name} installed at the planned version`);
+  assertInstalledConsumerPackage(name, installedManifest, consumerPlan);
   installed[name] = {version: installedManifest.version, integrity: lock.packages[`node_modules/${name}`].integrity, resolved: lock.packages[`node_modules/${name}`].resolved};
 }
 await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
