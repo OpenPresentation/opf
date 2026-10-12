@@ -27,6 +27,8 @@ Renderer release prep #237 merged at `c9631797a3968dc561b04f101049cbe55a99a63a`;
 
 Latest bounded inventory (2026-10-12 09:07:53 UTC): six open site PRs and 46 issues; eight clean synced defaults. Core #636 records the expected refusal of the stale patch registry graph against the new source contract. It requires actual completed publication and authentic registry adoption, not a relaxed guard.
 
+Renderer repair [#238](https://github.com/OpenPresentation/opf-render/pull/238), exact reviewed head `e74410f5`, now has all 17 ordinary qualification steps passing plus the final targeted selection checks. Core strict font-count prerequisite [#637](https://github.com/OpenPresentation/opf/pull/637), head `ac992eda`, is under the sole canonical merge gate. After both merge, use the normal generated source roll so renderer 0.19.1 preparation selects the reviewed count tooling. No second watcher, no manual source pins, no tag move. These are source repair PRs, not publication completion.
+
 ## Rules that matter most
 
 - Merge and watch pull requests **only** with `node scripts/pr-gate.mjs <owner/repo#N>… --merge [--expect-head <sha>]…`.
