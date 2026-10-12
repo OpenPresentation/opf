@@ -1,0 +1,19 @@
+{
+  "conditionalApproval": true,
+  "freshActualMergedPrepBindingRequired": true,
+  "all11MappingsMatchActualResults": true,
+  "all11LogHashesVerified": true,
+  "originalPackedFailurePreserved": true,
+  "bothInstallDependencyFilesVerified": 7044,
+  "nativeOrHostedWaiver": false,
+  "files": {
+    "execute-prep.mjs": "3b2ce5383464a34d757df7a1623e2ba5efbf07d0edfc90f8ad49ecccbe95fa71",
+    "dependency-bytes.json": "d554dd94b370fd09445ddc1f3a3e9f9eb7fbab0478b8e2783c374d2614096a18",
+    "SHA256SUMS.json": "154fc1ac7a92386233b741ac246aa6240dba52bc411bb24b8c2dba8af6f8d970",
+    "PLAN.md": "8c5b53624d34d63717c15869360def90338e2544118000f98db0e0578f50f104",
+    "bind-fresh.mjs": "efbf73d8df1f5113734543b8b3de39519afa86fbfde784706ff7120eb6dce9d1",
+    "qualified-tracked-bytes.json": "4dd7d1713bd29bbbb0e67fa8ee07f802866fd1c610b40d8ef7123c8bf7379246",
+    "gate-map.json": "826436b6e29a754731a6effa796fe65a13422366e8fb9faf128ee5ea7a60d86f"
+  },
+  "environmentGuardHardening": "NODE_PATH, NPM_TOKEN, OPF_CORE_ROOT refused; launcher clears all three"
+}
