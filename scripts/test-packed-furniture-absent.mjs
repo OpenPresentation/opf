@@ -6,6 +6,10 @@ import {spawnSync, execFileSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+import {createRequire} from 'node:module';
+import {candidateArtifacts} from './candidate-gallery-pack.mjs';
+import {satisfies} from './release-plan-cli.mjs';
+import {furnitureGallery} from './furniture-gallery.mjs';
 import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
 
@@ -48,12 +52,17 @@ try {
   receipt.manifestSha256 = hash(manifestBytes);
   assert.equal(manifest.published, false, 'Require unpublished candidate archives, not a registry plan.');
   // RR-78: core depends on @openpresentation/gallery, which the fixture also registers.
-  const names = ['@openpresentation/gallery', '@openpresentation/opf', '@openpresentation/opf-pptx'];
+  const candidate=process.env.CANDIDATE_GALLERY_REF?candidateArtifacts(root):null;
+  const names = ['@openpresentation/opf', '@openpresentation/opf-pptx'];
   const selected = names.map(name => {
     const matches = manifest.artifacts.filter(item => item.name === name);
     assert.equal(matches.length, 1, `Exactly one candidate artifact is required for ${name}`);
     return matches[0];
   });
+  const coreItem=selected.find(item=>item.name==='@openpresentation/opf');
+  const coreManifest=JSON.parse(tar(path.join(artifacts,coreItem.file),'-xOf',['package/package.json']));
+  const gallerySelection=furnitureGallery(manifest,candidate,coreManifest);
+  if(gallerySelection.artifact)selected.unshift(gallerySelection.artifact);
   for (const item of selected) {
     assert.equal(path.basename(item.file), item.file); assert.match(item.file, /\.tgz$/);
     const bytes = await readFile(path.join(artifacts, item.file));
@@ -62,7 +71,7 @@ try {
     await writeFile(path.join(copies, item.file), bytes);
   }
   await json(path.join(consumer, 'package.json'), {name: 'opf-renderer-absent-furniture-check', private: true, type: 'module',
-    dependencies: Object.fromEntries(selected.map(item => [item.name, `file:../artifacts/${item.file}`]))});
+    dependencies: {...Object.fromEntries(selected.map(item => [item.name, `file:../artifacts/${item.file}`])),...(gallerySelection.range?{'@openpresentation/gallery':gallerySelection.range}:{})}});
   const fixture = await readFile(new URL('./fixtures/renderer-absent-furniture.mjs', import.meta.url));
   await writeFile(path.join(consumer, 'probe.mjs'), fixture);
   receipt.fixtureSha256 = hash(fixture);
@@ -76,6 +85,16 @@ try {
   receipt.stage = 'bind-installed-files';
   const lockBytes = await readFile(path.join(consumer, 'package-lock.json'));
   const lock = JSON.parse(lockBytes), modules = await realpath(path.join(consumer, 'node_modules'));
+  if(gallerySelection.range){
+    const location=path.join(modules,'@openpresentation/gallery'),installed=await realpath(location),pkg=JSON.parse(await readFile(path.join(location,'package.json'))),locked=lock.packages['node_modules/@openpresentation/gallery'];
+    assert.ok(within(modules,installed));assert.equal((await lstat(location)).isSymbolicLink(),false);
+    assert.ok(satisfies(pkg.version,gallerySelection.range));assert.equal(locked.version,pkg.version);
+    assert.ok(!locked.link&&locked.resolved?.startsWith('https://registry.npmjs.org/')&&locked.integrity?.startsWith('sha512-'));
+    const invocation=packageManagerInvocation('npm',['pack',`@openpresentation/gallery@${pkg.version}`,'--ignore-scripts','--json','--pack-destination',copies]);
+    const packed=JSON.parse(execFileSync(invocation.command,invocation.args,{cwd:consumer,encoding:'utf8'}))[0];
+    const bytes=await readFile(path.join(copies,packed.filename));assert.equal(locked.integrity,'sha512-'+createHash('sha512').update(bytes).digest('base64'));
+    selected.unshift({name:pkg.name,version:pkg.version,file:packed.filename,bytes:bytes.length,sha256:hash(bytes),registry:true});
+  }
   receipt.lockSha256 = hash(lockBytes);
   assert.ok(within(consumer, modules));
   assert.ok(!Object.keys(lock.packages).some(file => /@openpresentation\/(opf-render|opf-editor)(?:\/|$)/.test(file)), 'Renderer/editor must remain absent from the complete lock.');
@@ -85,7 +104,7 @@ try {
     const pkg = JSON.parse(await readFile(path.join(installed, 'package.json')));
     const locked = lock.packages['node_modules/' + item.name];
     assert.equal(pkg.version, item.version); assert.equal(locked.version, item.version);
-    assert.ok(!locked.link && locked.resolved?.startsWith('file:'));
+    assert.ok(!locked.link && locked.resolved?.startsWith(item.registry?'https://registry.npmjs.org/':'file:'));
     const archive = path.join(copies, item.file), bytes = await readFile(archive);
     assert.equal(hash(bytes), item.sha256);
     assert.equal(locked.integrity, 'sha512-' + createHash('sha512').update(bytes).digest('base64'));
@@ -105,13 +124,15 @@ try {
     }
     receipt.packages.push({name: item.name, version: item.version, archiveSha256: item.sha256, integrity: locked.integrity, realpath: installed, files});
   }
+  const galleryPackage=path.join(modules,'@openpresentation/gallery/package.json');
+  for(const name of ['@openpresentation/opf','@openpresentation/opf-pptx'])assert.equal(createRequire(path.join(modules,name,'package.json')).resolve('@openpresentation/gallery/package.json'),galleryPackage,'Shared installed gallery identity');
   receipt.stage = 'six-groups';
   await run(process.execPath, ['probe.mjs'], 'probe-first.log');
   const outcomes = JSON.parse(await readFile(path.join(isolated, 'outcomes.json')));
   assert.equal(outcomes.total, 6); assert.equal(outcomes.passed, 6); assert.equal(outcomes.retries, 0);
   // Recheck accepted inputs after execution; neither package cache nor the source stage may replace them.
   for (const item of selected) {
-    assert.equal(hash(await readFile(path.join(artifacts, item.file))), item.sha256);
+    assert.equal(hash(await readFile(path.join(item.registry?copies:artifacts, item.file))), item.sha256);
     assert.equal(hash(await readFile(path.join(copies, item.file))), item.sha256);
     for (const file of receipt.packages.find(record => record.name === item.name).files)
       assert.equal(hash(await readFile(path.join(modules, item.name, file.path))), file.sha256);
