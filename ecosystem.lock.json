@@ -10,8 +10,8 @@
   },
   "golden": {
     "repository": "opf",
-    "path": "scripts/fixtures/opf-examples-png.rr83-v2-reviewed.sha256.json",
-    "note": "golden adopted from opf-render golden-override (core fixture)"
+    "path": "scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "note": "Reviewed official renderer baseline 5a419108bdd25e9970a1e88badb2e4ad1c5f1931; pinned workflow 38304214690; source core8f70/gallery146e"
   },
   "provenance": {
     "source": "roller",
