@@ -262,7 +262,6 @@ export interface ResolvedSlide {
     colors: Record<string, string>;
     fonts: Record<"heading" | "body" | "code", string>;
   };
-  titleBindings: RenderBinding[];
   contentItems: RenderBinding[];
   blocks: RenderBinding[];
 }
@@ -270,10 +269,8 @@ export interface ResolvedSlide {
 export interface RenderBinding {
   type: string;
   field?: string;
-  slot?: string;
   value: unknown;
   path: string;
-  placeholderIndex?: number;
   regionKey?: string;
 }
 

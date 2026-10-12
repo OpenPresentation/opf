@@ -132,7 +132,6 @@ const PROMOTED_REGION_KEYS = [
   "top+middle+bottom:left+center+right"
 ];
 
-const TITLE_PLACEHOLDERS = new Set(["title", "subtitle", "tag"]);
 
 const FIELD_TYPE = Object.freeze({
   text: "text",
@@ -457,9 +456,9 @@ function reportGlyphFallback(context, note) {
   });
 }
 
-function contentPayloadFromHost(host, path, slot) {
+function contentPayloadFromHost(host, path) {
   if (!isPlainObject(host)) {
-    return { type: "text", field: "text", value: host, slot: slot ?? "text", path };
+    return { type: "text", field: "text", value: host, path };
   }
 
   for (const field of ROOT_PAYLOAD_FIELDS) {
@@ -468,7 +467,6 @@ function contentPayloadFromHost(host, path, slot) {
         type: host.type ?? FIELD_TYPE[field],
         field,
         value: host[field],
-        slot: host.slot ?? slot ?? host.type ?? FIELD_TYPE[field],
         path: `${path}.${field}`
       };
     }
@@ -478,7 +476,6 @@ function contentPayloadFromHost(host, path, slot) {
     type: "text",
     field: "text",
     value: stableJson(host),
-    slot: slot ?? "text",
     path
   };
 }
@@ -491,7 +488,6 @@ function slideRootContent(slide, slidePath) {
         type: slide.type ?? FIELD_TYPE[field],
         field,
         value: slide[field],
-        slot: slide.type ?? FIELD_TYPE[field],
         path: `${slidePath}.${field}`
       });
     }
@@ -503,8 +499,8 @@ function promotedRegionContent(slide, slidePath) {
   const items = [];
   for (const key of PROMOTED_REGION_KEYS) {
     if (slide[key] !== undefined) {
-      const payload = contentPayloadFromHost(slide[key], `${slidePath}.${key}`, key);
-      items.push({ ...payload, slot: key, regionKey: key });
+      const payload = contentPayloadFromHost(slide[key], `${slidePath}.${key}`);
+      items.push({ ...payload, regionKey: key });
     }
   }
   return items;
@@ -512,15 +508,7 @@ function promotedRegionContent(slide, slidePath) {
 
 function blockContent(slide, slidePath) {
   if (!Array.isArray(slide.blocks)) return [];
-  return slide.blocks.map((block, index) => contentPayloadFromHost(block, `${slidePath}.blocks.${index}`, "body"));
-}
-
-function normalizeFutureContent(slide, slidePath) {
-  if (!Array.isArray(slide.content)) return [];
-  return slide.content.map((item, index) => {
-    const payload = contentPayloadFromHost(item, `${slidePath}.content.${index}`, item.slot);
-    return { ...payload, slot: item.slot ?? payload.slot, path: `${slidePath}.content.${index}` };
-  });
+  return slide.blocks.map((block, index) => contentPayloadFromHost(block, `${slidePath}.blocks.${index}`));
 }
 
 // The core catalog options every resolution takes: the host's catalogs, unchanged, and its strict reference policy.
@@ -556,27 +544,7 @@ function bindSlide(presentation, index, context) {
   // {{deck.slideCount}} hold this slide's number, its section and the deck's slide count, the same values the furniture draws. Core resolved them.
   const slide = slideContext.slide;
   const layout = slideContext.options.layout;
-  const placeholders = Array.isArray(layout?.placeholders) ? layout.placeholders : [];
-  const titleBindings = [];
-
-  for (let i = 0; i < placeholders.length; i += 1) {
-    const type = placeholders[i]?.type;
-    if (!TITLE_PLACEHOLDERS.has(type)) continue;
-    const value = slide[type] ?? presentation[type] ?? "";
-    if (value) {
-      titleBindings.push({
-        type: "text",
-        field: type,
-        slot: type,
-        value,
-        placeholderIndex: i,
-        path: `${slidePath}.${type}`
-      });
-    }
-  }
-
   const contentItems = [
-    ...normalizeFutureContent(slide, slidePath),
     ...slideRootContent(slide, slidePath),
     ...promotedRegionContent(slide, slidePath)
   ];
@@ -638,7 +606,6 @@ function bindSlide(presentation, index, context) {
     slide,
     layout,
     design,
-    titleBindings,
     contentItems,
     blocks
   };
