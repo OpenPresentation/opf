@@ -1,0 +1,57 @@
+{
+  "registry": "@openpresentation/gallery@2.0.0",
+  "source": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+  "reviewedQualificationHead": "4e87de36b327ce93efbf3c8e165081bda4f10059",
+  "integrity": "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw==",
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 1073,
+      "sha256": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "dist/index.js",
+      "bytes": 332216,
+      "sha256": "c9b960e2d84855cc0a5983c603fd3c0744a9ef6c007b0696226d37c59d866a2b",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "dist/previews.js",
+      "bytes": 168622,
+      "sha256": "7f4771fbf9c80a65942066055127036ecaaaacec18d04fa54c0e21650f2ef68e",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "package.json",
+      "bytes": 2184,
+      "sha256": "cf2d68c86ae85d53ca5626b0ec5544a4639a9798c4ac045296b542444ea22681",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 3774,
+      "sha256": "e0eadd533fa6ad9b4e214a586dda62278198b3ef416c0e97cca114efd9519caa",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "README.md",
+      "bytes": 9283,
+      "sha256": "a4ddc20567d4beb34131978d59ac643905f9b24d407af9eb318569df6b6e0a32",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "dist/index.d.ts",
+      "bytes": 4060,
+      "sha256": "c62d887699264e8f35d220c6410d1f2e494f3e5a70b01dcea9d3d12cd32c0f37",
+      "matchesReviewedQualification": true
+    },
+    {
+      "path": "dist/previews.d.ts",
+      "bytes": 1692,
+      "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364",
+      "matchesReviewedQualification": true
+    }
+  ],
+  "ok": true
+}

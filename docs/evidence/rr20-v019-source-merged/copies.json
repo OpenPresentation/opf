@@ -1,0 +1,94 @@
+{
+  "rr20-render215-actual-merge-proof.json": {
+    "sha256": "f8b31e9ec213bef5776da34e4bb94b44be58f7142e7c95431d1dfcc6728ff50a",
+    "bytes": 525
+  },
+  "rr20-render215-actual-merge-review.md": {
+    "sha256": "163a99d8c62e01fd44ceced93e2818df64b929c80c3442cbfdcf0ac26d39b433",
+    "bytes": 2957
+  },
+  "rr20-render-old-scopes-actual-merge-proof.json": {
+    "sha256": "97d85b658c8849e522a1702e1531ebcebb7f253cffe4e26d53d41d0840b2066d",
+    "bytes": 1162
+  },
+  "rr20-render-supersession-closure-receipt.json": {
+    "sha256": "f4714afccd41cd0cdc42aa5009d728d040879a5a8cc7d83e808fcccf03b81655",
+    "bytes": 710
+  },
+  "rr20-editor156-actual-merge-proof.json": {
+    "sha256": "db16ff053ec75deb7b7a64e107a4d1b945c20aa7a73fc0e85baf561ef2973b57",
+    "bytes": 407
+  },
+  "rr20-editor156-actual-merge-review.md": {
+    "sha256": "2c9ffee497ef504518e47901aec2f8013eac2ad26fc1dde2ae2b8e163b681253",
+    "bytes": 2383
+  },
+  "rr20-old-feature-pr-reconciliation.md": {
+    "sha256": "5d47cd10b24c06a349c86e288536ba1a6ede128c7e808c7b3214d3196898c9eb",
+    "bytes": 3227
+  },
+  "rr20-old-feature-carrier-comparison.json": {
+    "sha256": "b384c5da65b3dd58344bd439b99dd1b455e77cf7782888bf51a44669a78612a6",
+    "bytes": 7434
+  },
+  "rr20-editor-supersession-closure-receipt.json": {
+    "sha256": "27a77b85cae76ba3909c5fb51e745be4b15b32bf0652a9322fa811e9625ac880",
+    "bytes": 197
+  },
+  "rr20-core-font-matrix-v2-fixture-review.md": {
+    "sha256": "05352295c661484d3561033b387e2ed28294e8e477cb1026661d176ef2c7ca9f",
+    "bytes": 1895
+  },
+  "rr20-font-matrix-v2-actual.log": {
+    "sha256": "356d9b08dfc85fe6388937a17f6f83c94246e566055c25ec07b6981558f5e726",
+    "bytes": 415
+  },
+  "rr20-registry-toolchain-isolation-final-review.md": {
+    "sha256": "1662f109ba785ae7628c75ebbbdf77d5cdc1c60b5db50da595b41186d716bdad",
+    "bytes": 3595
+  },
+  "rr20-registry-recovery.log": {
+    "sha256": "e39fa62574b8b4c1eb7fc098515a8bc6cc9050fc3b7cb1e5f53c6760b7835f35",
+    "bytes": 716
+  },
+  "rr20-registry-toolchain-checkchanged-final.log": {
+    "sha256": "3fe66900e6d93dc6505e72ba22a7bdcaa9af4d2c69a33004b692ce1030d86826",
+    "bytes": 913
+  },
+  "rr20-pptx240-actual-merge-proof.json": {
+    "sha256": "ba6894c9fb9f3d575d76c4025f71a12319a906df4794bc4ccb1bc18a9b4d5a08",
+    "bytes": 2181
+  },
+  "rr20-pptx-supersession-closure-receipt.json": {
+    "sha256": "4df91b66079a4657f6f154c14a10e48ef1c2fa1d52fcc486452fb0928538d308",
+    "bytes": 244
+  },
+  "rr20-core592-actual-merge-proof.json": {
+    "sha256": "bc9b4c7792bd7dfb10817f8c873bd9ffe454519c929c5c2aa82eac72db76b4db",
+    "bytes": 406
+  },
+  "rr20-v019-core-queue-resumed-gate.log": {
+    "sha256": "32a7c9c1d89761d8e842ccbc7c50359f7a066ebdf47286eb17880ab06c285f5b",
+    "bytes": 384
+  },
+  "rr20-core-old-scopes-actual-merge-proof.json": {
+    "sha256": "da0f048b104fc5e14d1d7b5d188bc538176e265de8f3d3abe981063fe676661b",
+    "bytes": 3634
+  },
+  "rr20-old-pr-post-carrier-reconciliation.md": {
+    "sha256": "0cc31fc37ca6f81cb5c8f8de436cdaf9cb8031595bbeb6ea5aff2369b88f8cab",
+    "bytes": 5356
+  },
+  "rr20-core-supersession-closure-receipt.json": {
+    "sha256": "f820b4b340a74ef0dc9912b4c3d423d5a39496c23d09c6e940994a173fcdcdfa",
+    "bytes": 787
+  },
+  "rr20-core-supersession-preflight.json": {
+    "sha256": "0fe287109040c27575b166b8c226d3b4a0d3503c1469628da754b4d4bc726408",
+    "bytes": 5180
+  },
+  "rr20-gallery2-final-qualification-result.json": {
+    "sha256": "b2bfcab50c243ce3670f73e63d493e47a221af95c6d6eeac9bd728b5522a74f9",
+    "bytes": 430
+  }
+}

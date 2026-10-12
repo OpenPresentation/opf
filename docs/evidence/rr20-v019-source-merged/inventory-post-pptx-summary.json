@@ -1,0 +1,104 @@
+{
+  "at": "2026-10-12T01:21:43Z",
+  "source": "inventory-post-pptx240-merged.json",
+  "openPRs": 18,
+  "issues": 45,
+  "repositories": {
+    "OpenPresentation/opf": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "3a23a8d0939e479dfd8210b5b2d58525f97c8561"
+        }
+      },
+      "openPRs": 8,
+      "PRpaginationComplete": true,
+      "issues": 29,
+      "issuePaginationComplete": true
+    },
+    "OpenPresentation/opf-render": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "0e18fb532736248ff7c96a2a3c05cbf32a86b68c"
+        }
+      },
+      "openPRs": 0,
+      "PRpaginationComplete": true,
+      "issues": 4,
+      "issuePaginationComplete": true
+    },
+    "OpenPresentation/opf-pptx": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "4af1107102d93aafdba2c225486396273d121304"
+        }
+      },
+      "openPRs": 3,
+      "PRpaginationComplete": true,
+      "issues": 4,
+      "issuePaginationComplete": true
+    },
+    "OpenPresentation/opf-editor": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "030e68f5571d665f7a1c11c54adb3e9add723fc1"
+        }
+      },
+      "openPRs": 0,
+      "PRpaginationComplete": true,
+      "issues": 1,
+      "issuePaginationComplete": true
+    },
+    "OpenPresentation/gallery": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "3458f50ca8fe081698cb5de13b94a459aa212aba"
+        }
+      },
+      "openPRs": 1,
+      "PRpaginationComplete": true,
+      "issues": 2,
+      "issuePaginationComplete": true
+    },
+    "Data-Advantage/pptx-gallery": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "92e23ed5b432195de884a6be51f2415ce49f8924"
+        }
+      },
+      "openPRs": 3,
+      "PRpaginationComplete": true,
+      "issues": 1,
+      "issuePaginationComplete": true
+    },
+    "Data-Advantage/openpresentation-site": {
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+        }
+      },
+      "openPRs": 2,
+      "PRpaginationComplete": true,
+      "issues": 1,
+      "issuePaginationComplete": true
+    },
+    "Data-Advantage/pptx-dev": {
+      "default": {
+        "name": "master",
+        "target": {
+          "oid": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+        }
+      },
+      "openPRs": 1,
+      "PRpaginationComplete": true,
+      "issues": 3,
+      "issuePaginationComplete": true
+    }
+  }
+}

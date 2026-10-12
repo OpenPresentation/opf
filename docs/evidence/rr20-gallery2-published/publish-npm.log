@@ -1,0 +1,38 @@
+﻿2026-10-12T03:32:24.0578658Z ##[group]Run npm publish --access public --provenance
+2026-10-12T03:32:24.0579093Z [36;1mnpm publish --access public --provenance[0m
+2026-10-12T03:32:24.0640879Z shell: /usr/bin/bash -e {0}
+2026-10-12T03:32:24.0641151Z env:
+2026-10-12T03:32:24.0641425Z   NPM_CONFIG_USERCONFIG: /home/runner/work/_temp/.npmrc
+2026-10-12T03:32:24.0641962Z ##[endgroup]
+2026-10-12T03:32:24.3362827Z 
+2026-10-12T03:32:24.3363623Z > @openpresentation/gallery@2.0.0 prepack
+2026-10-12T03:32:24.3364295Z > node scripts/build.mjs
+2026-10-12T03:32:24.3364530Z 
+2026-10-12T03:32:24.4696290Z Built @openpresentation/gallery: 215 content records, 28 layout previews.
+2026-10-12T03:32:24.5646217Z npm notice
+2026-10-12T03:32:24.5649105Z npm notice 📦  @openpresentation/gallery@2.0.0
+2026-10-12T03:32:24.5650171Z npm notice Tarball Contents
+2026-10-12T03:32:24.5654017Z npm notice 3.8kB CHANGELOG.md
+2026-10-12T03:32:24.5654611Z npm notice 1.1kB LICENSE
+2026-10-12T03:32:24.5655139Z npm notice 9.3kB README.md
+2026-10-12T03:32:24.5655717Z npm notice 4.1kB dist/index.d.ts
+2026-10-12T03:32:24.5656433Z npm notice 332.2kB dist/index.js
+2026-10-12T03:32:24.5657068Z npm notice 1.7kB dist/previews.d.ts
+2026-10-12T03:32:24.5657703Z npm notice 168.6kB dist/previews.js
+2026-10-12T03:32:24.5658285Z npm notice 2.2kB package.json
+2026-10-12T03:32:24.5658823Z npm notice Tarball Details
+2026-10-12T03:32:24.5659739Z npm notice name: @openpresentation/gallery
+2026-10-12T03:32:24.5660375Z npm notice version: 2.0.0
+2026-10-12T03:32:24.5661112Z npm notice filename: openpresentation-gallery-2.0.0.tgz
+2026-10-12T03:32:24.5661885Z npm notice package size: 97.8 kB
+2026-10-12T03:32:24.5662525Z npm notice unpacked size: 522.9 kB
+2026-10-12T03:32:24.5663318Z npm notice shasum: 2326220f1adb22e444873e540f6b72f2a88eb80a
+2026-10-12T03:32:24.5664232Z npm notice integrity: sha512-RiCR0SUHQ8cDP[...]+Lkd1D3llZTYw==
+2026-10-12T03:32:24.5664910Z npm notice total files: 8
+2026-10-12T03:32:24.5665360Z npm notice
+2026-10-12T03:32:25.6686069Z npm notice npm tokens that bypass 2FA are being restricted for account changes and direct publishing. Learn how to prepare: https://gh.io/npm-gat-bypass2fa-deprecation
+2026-10-12T03:32:25.7208495Z npm notice Publishing to https://registry.npmjs.org/ with tag latest and public access
+2026-10-12T03:32:26.6961015Z npm notice publish Signed provenance statement with source and build information from GitHub Actions
+2026-10-12T03:32:26.6962827Z npm notice publish Provenance statement published to transparency log: https://search.sigstore.dev/?logIndex=3220144625
+2026-10-12T03:32:28.9257077Z npm notice Your package is being processed and may take a few minutes to become available.
+2026-10-12T03:32:28.9261027Z + @openpresentation/gallery@2.0.0

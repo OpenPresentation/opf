@@ -1,0 +1,9 @@
+# Hosted bootstrap nested-pnpm repair
+
+Final clean head `4e87de36b327ce93efbf3c8e165081bda4f10059` in closure; fresh exact checkout `/private/tmp/opf-gallery2-isolated-final-qualification`. Hosted original1c7 failure is retained at `/private/tmp/rr20-gallery5-1c7-hosted-failure.log`: Corepack install succeeded, nested `pnpm run generate` failed lookup. Prior local PATH accidentally supplied pnpm.
+
+Four paths versus1c7: bootstrap runner, small environment helper and two tests. `corepack enable --install-directory <temporary>/bin pnpm` writes only temporary shims. Only bootstrap child environment receives this PATH addition; global/parent PATH is unchanged. Existing signed Corepack source-packageManager equality remains, with an additional shim version equality. Finally restores local child environment and deletes temporary tree. No dependency version, source pin, lock, catalog, preview or runtime changes.
+
+The regression creates isolated node/Corepack entrypoints plus system tools (PATH casing respected), proves pnpm ENOENT before repair and launches real signed10.33.2 nested package script after repair. It cannot accidentally discover globally enabled pnpm beside the actual Node executable. Setup and execution are under cleanup finally; no Windows execution acceptance is claimed. Existing bootstrap verification negative tests remain. Focused3/3 passed.
+
+Original4e5 full10 gates passed in22758 and are retained. Final66997 **terminal0**: npmci, bootstrap, license, verify, npmtest (79), typecheck, all28 previews, major stability, packdry and final bootstrapverify passed with incoming PATH explicitly rejecting ambient pnpm. Final tracked checkout clean. Evidence `/private/tmp/rr20-gallery2-isolated-qualification-evidence` holds transcript, exact runner, manifest/result and hashes. Root review required before remote update; no push/tag/publication/native action occurred.

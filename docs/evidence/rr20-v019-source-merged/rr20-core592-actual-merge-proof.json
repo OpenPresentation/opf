@@ -1,0 +1,11 @@
+{
+  "actualCommit": "00022a4ed3d2576bd09c003aa38659ed5d014bc5",
+  "reviewedCommit": "e25d32f7d2465ef5dff2bd552a90832ab002a839",
+  "actualTree": "410746809d7e3fc46bb9df76a2c570a6c0d00484",
+  "reviewedTree": "410746809d7e3fc46bb9df76a2c570a6c0d00484",
+  "treesEqual": true,
+  "gate": 65175,
+  "terminalExit": 0,
+  "mergedAtUTC": "2026-10-12 03:00:37",
+  "evidence": "rr20-v019-core-queue-resumed-gate.log"
+}

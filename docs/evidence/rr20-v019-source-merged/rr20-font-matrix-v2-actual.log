@@ -1,0 +1,3 @@
+Pairwise covering array: 58 decks over 14 dimensions (8x2 4 14 10x3 8x3 15x4 4 2 5x2 6x2 2 2 2 2 classes and slots), seed 61659, every value-class pair covered (generated in 928 ms).
+Pairwise decks: 58 verified on 4 worker threads in 17.2 s.
+Font switch matrix passed: 58 of 58 pairwise decks and 18 fixed switches, 265 verified states, 27 chart paths, 37 recorded substitutions, 0 named expected failures, 24.7 s.
