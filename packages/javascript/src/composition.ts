@@ -2156,6 +2156,8 @@ function contentText(field: string, value: unknown): string | undefined {
   return undefined;
 }
 export interface TableLayoutOptions {
+  /** Explicit resolved design alignment; absent uses typed numeric right/text left defaults. Cell style.align wins. */
+  alignment?: 'left' | 'center' | 'right';
   scale?: number;
   minFontSize?: number;
   fontFamily?: string;
@@ -2172,6 +2174,8 @@ export interface TableLayoutOptions {
   direction?: TextDirection;
 }
 export interface TableCellLayout {
+  /** Logical alignment, shared by preview and native export. Numeric default resolves to the physical right even in RTL. */
+  alignment: 'left' | 'center' | 'right';
   value: unknown;
   input: unknown;
   sourcePath: string;
@@ -2202,6 +2206,12 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const inline = inlineTableData(value, options.presentation);
   const grid = tableGrid(inline,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
+  // Classify typed values before formatting (a numeric format may display a string). Never coerce authored numeric-looking strings.
+  const numeric = new Set(grid.rows.flat().filter(cell => !cell.header && typeof cell.value === 'number' && Number.isFinite(cell.value)));
+  const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
+    const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.value !== null && cell.value !== undefined);
+    return body.length > 0 && body.every(cell => cell.colSpan === 1 && numeric.has(cell));
+  }));
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
     if (cell.header) continue;
@@ -2213,7 +2223,9 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
     const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
-    return {...cell,padding,width,textStyle:style};
+    const numericDefault = numeric.has(cell) || (cell.header && cell.colSpan === 1 && numericColumns.has(cell.column));
+    const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
+    return {...cell,padding,width,textStyle:style,alignment};
   });
   const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
@@ -2259,7 +2271,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
   return {rows,columnCount,height:sum(heights),overflow};
 }

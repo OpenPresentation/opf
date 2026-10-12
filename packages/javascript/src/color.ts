@@ -151,6 +151,8 @@ export interface ResolvedColorRoles {
   hyperlink: string;
   /** Followed-hyperlink slot (OOXML folHlink). */
   followedHyperlink: string;
+  /** Quiet structural rules/cards: neutral slate on a light or dark slide, never a brand accent. Authored borders still resolve their own ColorRef. */
+  border: string;
   /** Whether the slide background is dark; text, surface and textSecondary defaults follow it. */
   dark: boolean;
 }
@@ -181,6 +183,7 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
     background,
     surface,
     surfaceAlt: surfaceAltColor(surface, text),
+    border: dark ? '#475569' : '#CBD5E1',
     text,
     textSecondary: keepAlpha(colorScheme.textSecondary) ?? (dark ? slot('light2', '#E2E8F0') : slot('dark2', '#334155')),
     hyperlink: readableLink(slot('hyperlink', DEFAULT_HYPERLINK), background, text),
