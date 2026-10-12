@@ -223,11 +223,11 @@ const CODE = 'const score = urgency * confidence;\nreturn score > 0.5;';
 const contentBlocks = {
   bullets: (text) => ({layout: 'list', blocks: [{bullets: text.items}]}),
   cards: (text) => ({layout: 'metrics', design: {contentBox: true}, blocks: [{metric: {value: 42, unit: '%', label: text.items[0]}}, {metric: {value: 7, label: text.items[1], delta: '+2'}}]}),
-  table: (text) => ({layout: 'table-1x', table: {columns: [text.cells[0], text.cells[1]], rows: [[text.cells[2], text.cells[3]], [text.cells[3], text.cells[2]]]}, text: text.body}),
-  timeline: (text) => ({layout: 'timeline-1x', timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}, {when: 'Q3', what: text.items[2]}]}}),
+  table: (text) => ({layout: 'table', table: {columns: [text.cells[0], text.cells[1]], rows: [[text.cells[2], text.cells[3]], [text.cells[3], text.cells[2]]]}, text: text.body}),
+  timeline: (text) => ({layout: 'timeline', timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}, {when: 'Q3', what: text.items[2]}]}}),
   metric: (text) => ({layout: 'metrics', metric: {value: 128, unit: 'ms', label: text.items[0], description: text.body, delta: '+4', trend: 'up'}}),
-  quote: (text) => ({layout: 'quote-1x', quote: {text: text.body, attribution: text.cells[0], source: text.cells[1]}}),
-  code: (text) => ({layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}),
+  quote: (text) => ({layout: 'quote', quote: {text: text.body, attribution: text.cells[0], source: text.cells[1]}}),
+  code: (text) => ({layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}),
   chart: (text) => ({layout: 'chart', chart: {type: 'column', data: CHART_DATA}, text: text.body}),
   text: (text) => ({layout: 'text', text: [text.body, text.body].join(' ')})
 };
@@ -889,7 +889,7 @@ if (FULL) {
     name: 'per-slide override', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'},
     slides: [
       {id: 'deck', title: text.title, notes: text.body, bullets: text.items},
-      {id: 'override', title: text.title, notes: text.body, design: {fontScheme: 'georgia'}, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body},
+      {id: 'override', title: text.title, notes: text.body, design: {fontScheme: 'georgia'}, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body},
       {id: 'deck-again', title: text.title, text: text.body}
     ]
   };
@@ -913,7 +913,7 @@ if (FULL) {
   const text = TEXT.english;
   const deck = {
     name: 'scheme overrides', language: tag('english'), design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
-    slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]
+    slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}]
   };
   await runSwitch('scheme-overrides', deck, [
     {label: 'id to verdana', apply: setScheme('design.fontScheme', 'verdana'), expectUsed: ['Georgia', 'Verdana', 'Courier New'], expectUnused: ['Calibri']},
@@ -942,7 +942,7 @@ if (FULL) {
 // Indirect switches: theme (through its bundled scheme) and language (through script slots).
 {
   const text = TEXT.english;
-  const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]};
+  const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}]};
   await runSwitch('theme', deck, [
     {label: 'classic', apply: setTheme('classic'), expectUsed: ['Tenorite Display', 'Tenorite'], expectUnused: ['Aptos']},
     {label: 'dark', apply: setTheme('dark'), expectUsed: ['Seaford Display', 'Seaford']},
