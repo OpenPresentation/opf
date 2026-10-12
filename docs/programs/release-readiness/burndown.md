@@ -600,3 +600,5 @@ Append-only. One dated line per state change.
 - 2026-10-12: RR-20/RR-78/RR-80 — Gallery2.0.0 is published and independently verified at48169a9, trusted run38199962362. Final bootstrap gates and eight-file registry content equality close T22/T28/T33:24/40. RR-78 authentic downstream adoption and RR-80 site-pipeline retirement remain in progress. [Publication evidence](../../evidence/rr20-gallery2-published/README.md).
 
 - 2026-10-12 (RR-20): Operative T18 and Now summaries reconciled with actual #629/#630 merges and verified gallery2 publication. Historical log entries are unchanged; current progress remains 24/40, with authentic downstream adoption, stable engine publication, native and site acceptance pending.
+
+- 2026-10-12 (RR-20): Core #632 registry adoption merged at `a9ad82414cd9ebcf4619d3d546898092fd2be55e`, exactly reviewed `910640b5`; [compact merge proof](../../evidence/rr20-v019-source-merged/rr20-core632-actual-merge-proof.json). Held records now use that actual core base without runtime or lock drift. Sibling adoption and final renderer #236 cleanup remain pending; T19/T27 and progress 24/40 are unchanged.
