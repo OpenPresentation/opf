@@ -1,0 +1,22 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-registry-toolchain-isolation
+> node scripts/check-changed.mjs
+
+check-changed: 4 changed files since HEAD (plus uncommitted and untracked)
+ok  biome (0.0 s)
+ok  pnpm run check:engines-range (0.2 s)
+ok  pnpm run check:changes (0.3 s)
+ok  pnpm run check:runners (0.3 s)
+ok  pnpm run check:registry-toolchain (0.5 s)
+-  typecheck
+
+step                               status    time
+biome                              passed   0.0 s  3 files
+pnpm run check:changes             passed   0.3 s
+pnpm run check:engines-range       passed   0.2 s
+pnpm run check:registry-toolchain  passed   0.5 s
+pnpm run check:runners             passed   0.3 s
+typecheck                          skipped      -  no .ts, .mts or tsconfig change
+total                                       0.7 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

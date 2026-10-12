@@ -1,0 +1,58 @@
+{
+  "merged": "4af1107102d93aafdba2c225486396273d121304",
+  "reviewed": "d82df28a77be8cb45cf9c79288df52ca8c749cca",
+  "tree": "ec69da2a130012f70ecc35a2f49e28c41b8f7595",
+  "wholeTreeEqual": true,
+  "primaryHead": "4af1107102d93aafdba2c225486396273d121304",
+  "clean": true,
+  "scopes": [
+    {
+      "original": "b6b367a69d1afd7d463e9e3618c90d73083166e9",
+      "scopedExactFiles": [
+        {
+          "path": "changes/rr-81-pareto-preserve-series.md",
+          "byteEqual": true,
+          "sha256": "c218b4de11b87b975a3655fde8a9db9093b80707a87fc1f27ef13b8cf6c06341"
+        },
+        {
+          "path": "docs/evidence/rr81-pareto-series-preservation/README.md",
+          "byteEqual": true,
+          "sha256": "fa8bb2cd0535fc80eb862db8985288d513287ca010f6a471dc32fa995dc8f75c"
+        },
+        {
+          "path": "docs/evidence/rr81-pareto-series-preservation/full-test.log",
+          "byteEqual": true,
+          "sha256": "61415ee7382768426985a4fed19667a07d9c9c01caaaae82c2fb260c1d15d296"
+        },
+        {
+          "path": "test/pareto-multi-series.mjs",
+          "byteEqual": true,
+          "sha256": "c431a73cd84a62ba67874fa46c69e12e19bebfdc6c8ee367751d5773f3aed2d3"
+        }
+      ]
+    },
+    {
+      "original": "b8c5e5abb57e8aadb00201e440bf243aa4979dd5",
+      "scopedExactFiles": [
+        {
+          "path": "changes/rr-78-gallery-catalog-transition.md",
+          "byteEqual": true,
+          "sha256": "db42e26975e214c50c82b8fce919a920c711e11482f2bd78133a6fa68c7126c0"
+        },
+        {
+          "path": "docs/evidence/rr81-import-catalog-defaults/original-catalog-scope.json",
+          "byteEqual": true,
+          "sha256": "a0b4a079631379fd5abc3ac1d108fb216b5a2cc4a2211efb309bdbc7eb963a5f"
+        },
+        {
+          "path": "docs/evidence/rr81-import-catalog-defaults/reconciliation.md",
+          "byteEqual": true,
+          "sha256": "8cb8a6b3cc6df1f582a4a1ae99cf8d31e240c3337327407e5203fa492252ecd9"
+        }
+      ]
+    }
+  ],
+  "priorSemanticProof": "/private/tmp/rr20-old-pr-post-carrier-reconciliation.md",
+  "pptx229": "preserve: direct gallery2 dependency/authentic lock adoption pending",
+  "nativeAcceptance": "pending"
+}

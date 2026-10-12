@@ -34,5 +34,29 @@
   "rr20-editor-supersession-closure-receipt.json": {
     "sha256": "27a77b85cae76ba3909c5fb51e745be4b15b32bf0652a9322fa811e9625ac880",
     "bytes": 197
+  },
+  "rr20-core-font-matrix-v2-fixture-review.md": {
+    "sha256": "05352295c661484d3561033b387e2ed28294e8e477cb1026661d176ef2c7ca9f",
+    "bytes": 1895
+  },
+  "rr20-font-matrix-v2-actual.log": {
+    "sha256": "356d9b08dfc85fe6388937a17f6f83c94246e566055c25ec07b6981558f5e726",
+    "bytes": 415
+  },
+  "rr20-registry-toolchain-isolation-final-review.md": {
+    "sha256": "1662f109ba785ae7628c75ebbbdf77d5cdc1c60b5db50da595b41186d716bdad",
+    "bytes": 3595
+  },
+  "rr20-registry-recovery.log": {
+    "sha256": "e39fa62574b8b4c1eb7fc098515a8bc6cc9050fc3b7cb1e5f53c6760b7835f35",
+    "bytes": 716
+  },
+  "rr20-registry-toolchain-checkchanged-final.log": {
+    "sha256": "3fe66900e6d93dc6505e72ba22a7bdcaa9af4d2c69a33004b692ce1030d86826",
+    "bytes": 913
+  },
+  "rr20-pptx240-actual-merge-proof.json": {
+    "sha256": "ba6894c9fb9f3d575d76c4025f71a12319a906df4794bc4ccb1bc18a9b4d5a08",
+    "bytes": 2181
   }
 }

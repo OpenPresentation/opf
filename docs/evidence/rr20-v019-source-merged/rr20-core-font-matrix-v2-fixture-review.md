@@ -1,0 +1,9 @@
+# Core font-switch v2 fixture repair
+
+Frozen `ff5d2bcd9d4a53c76d9e6a14914e5a23ec766aaa` at `/private/tmp/opf-font-matrix-v2-fixtures`, based exact b526. One file, seven literal layout references changed in core `scripts/test-font-switch-ecosystem.mjs`: table-1x→table, timeline-1x→timeline, quote-1x→quote, code-1x→code (four occurrences, including override/language/theme chains). Content, design, font expectations, all geometry/diagnostic/data/undo assertions and420-second internal budget unchanged. No runtime, manifest, lock, workflow, golden or alias changes.
+
+Actual CI failure log `/private/tmp/rr20-core-b526-candidate-source-failure.log` proves unresolved legacy refs in pairwise-01A at zero-diagnostics assertion. Selected CI test merges: core0871434f of b526 into3a23, rendererb7719e9 of9fe into de0, PPTX4cc0b62 of3a0 into1954, editor06d16b2 of73ce into36d, gallerye0. PPTX was indeed an older test snapshot before d82, but this observed failure is independent core fixture debt.
+
+Actual FULL affected matrix on reviewed r2 source graph (core9750/render9fe/PPTX3a/editor73/e0) passes:58/58 pairwise decks,18 fixed switches,265 verified states,27 chart paths,37 substitutions,0 expected failures,24.7seconds; log `/private/tmp/rr20-font-matrix-v2-actual.log`. Direct git proof shows b526 core runtime/src/spec/examples equal9750; later PPTX d82 changes only tests. Explicit temporary import map retained `/private/tmp/rr20-font-matrix-v2-engines-focused.mjs`, no shared source/dist mutation. Original registry font fixture semantics preserved.
+
+Mapped check passed (Biome and check:changes), log `/private/tmp/rr20-font-matrix-v2-checkchanged.log`; no duplicate full ecosystem run. New hosted source requalification must exercise remaining downstream suites and current dependency heads; source matrix pass alone is not final registry/native acceptance. No push or watcher.
