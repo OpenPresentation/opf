@@ -4,7 +4,7 @@ Supervisor gate56871 confirmed renderer #215 (8/8) at `0e18fb532736248ff7c96a2a3
 
 T23 and T25 SOURCE criteria are met. Renderer198/225/227/228 closure receipt records the four superseded PRs; their scopes survive semantically, not by full-head ancestry. Editor148 scope also survives; its exact-head verified closure receipt is retained.
 
-Final registry/gallery2 dependencies, trusted v0.19 publication, site adoption and native Windows acceptance remain separate open gates. RR81 remains review while PPTX/native is pending. No stable0.19 publication or native success is inferred from these source merges. This records integration remains local and unpushed for supervisor review.
+Final registry/gallery2 dependencies, trusted v0.19 publication, site adoption and native Windows acceptance remain separate open gates. RR81 remains review while PPTX/native is pending. No stable0.19 publication or native success is inferred from these source merges.
 
 PPTX #240 source merged at `4af1107102d93aafdba2c225486396273d121304`, tree-identical to reviewed d82. Its source merge does not close T24/native. Core #592 merged at `00022a4ed3d2576bd09c003aa38659ed5d014bc5`, tree-identical to reviewed e25, after gate65175 terminal 0. The retained log and proof bind the actual merge. T20/T21/T26 source criteria are met; T22 gallery bootstrap and T27 authentic gallery dependency adoption remain open. Prior old-PR scope review and the actual-core proof account for 550/557/577/584/594/596/605 without claiming squash-merge ancestry. Protected packages/spec/examples/skills are byte-identical between reviewed9750 and actual merged core; durable596 evidence is also tree-identical. Original 16 receipt bytes remain unchanged; four additional records are bound by copies.json.
 
