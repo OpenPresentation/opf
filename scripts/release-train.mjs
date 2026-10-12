@@ -37,6 +37,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ancestry, githubApi, OWNER } from "./ecosystem-lock.mjs";
 import { assertPublishedGallery } from "./candidate-gallery.mjs";
+import { satisfies } from "./release-plan-cli.mjs";
 
 /** The five packages in lockstep order. `upstream` are the packages whose versions this one's floors may name. */
 export const PACKAGES = [
@@ -287,6 +288,25 @@ export function npmRegistry({ registry = "https://registry.npmjs.org", fetchImpl
   }
   return {
     manifest: (name, version) => get(`${registry}/${encode(name)}/${version}`),
+    /** Resolve an actually published version satisfying the declared range, including a missing lower bound. */
+    async matchingManifest(name, range) {
+      const result = exec("npm", ["view", `${name}@${range}`, "version", "--json", "--registry", registry]);
+      if (result.status !== 0) {
+        if (/\b(?:E404|ETARGET)\b|No matching version/i.test(`${result.stderr}\n${result.stdout}`)) return null;
+        throw new Error(`npm range lookup failed for ${name}@${range}: ${(result.stderr || result.stdout).trim()}`);
+      }
+      const resolved = JSON.parse(result.stdout);
+      const versions = (Array.isArray(resolved) ? resolved : [resolved]).filter(version => isVersion(version) && satisfies(version, range));
+      if (!versions.length) return null;
+      versions.sort(compareVersions);
+      const version = versions.at(-1);
+      const manifest = await get(`${registry}/${encode(name)}/${version}`);
+      if (manifest === null) return null;
+      const integrity = manifest.dist?.integrity ?? "";
+      const decoded = Buffer.from(integrity.slice("sha512-".length), "base64");
+      if (manifest.name !== name || manifest.version !== version || !/^sha512-[A-Za-z0-9+/]+={0,2}$/.test(integrity) || decoded.length !== 64 || `sha512-${decoded.toString("base64")}` !== integrity) throw new Error(`Registry manifest identity mismatch for ${name}@${version}`);
+      return manifest;
+    },
     distTags: async (name) => (await get(`${registry}/-/package/${encode(name)}/dist-tags`)) ?? {},
     attestations: (url) => get(url),
     /** `npm audit signatures` on a scratch project that installs exactly name@version. */
@@ -585,7 +605,7 @@ async function missingUpstream(deps, pkg, train) {
 }
 
 /**
- * Every floor in a manifest that names a version npm does not have (it would publish an uninstallable package). An
+ * Every supported dependency range with no published matching version (it would publish an uninstallable package). An
  * optional peer on a later package of the same train, at the train's version, is not one: npm never installs an optional
  * peer, and the train publishes it next (core's Node build peers on the renderer and PPTX, opf#498).
  */
@@ -595,6 +615,7 @@ export async function unpublishedFloors(deps, manifest, pkg, train = {}) {
     if (dependency.field === "devDependencies") continue;
     const floor = floorOf(dependency.spec);
     if (!floor || (await deps.npm.manifest(dependency.name, floor.version))) continue;
+    if (await deps.npm.matchingManifest?.(dependency.name, dependency.spec)) continue;
     const peer = packageOf(dependency.name);
     const laterInTrain = pkg && peer.stage > pkg.stage && train[peer.key] === floor.version;
     if (dependency.field === "peerDependencies" && manifest.peerDependenciesMeta?.[dependency.name]?.optional === true && laterInTrain) continue;
