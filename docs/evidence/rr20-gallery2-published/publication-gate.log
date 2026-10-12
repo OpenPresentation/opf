@@ -1,0 +1,9 @@
+03:30:22 OpenPresentation/gallery main: no required checks: every check except neutral bots counts
+03:30:22 OpenPresentation/gallery@48169a9bb385 checks pending (1/2 checks, no ruleset); running: publish; 1 workflow runs in progress
+03:30:23 OpenPresentation/opf main: no required checks: every check except neutral bots counts; merge queue
+03:30:23 RED OpenPresentation/opf#631: required checks failed:
+  Installed candidates (windows-latest) (FAILURE) https://github.com/OpenPresentation/opf/actions/runs/38198788120/job/114648200877
+  Installed candidates (macos-latest) (FAILURE) https://github.com/OpenPresentation/opf/actions/runs/38198788120/job/114648200858
+  candidate / source (FAILURE) https://github.com/OpenPresentation/opf/actions/runs/38198788120/job/114648200943
+03:33:23 OpenPresentation/gallery@48169a9bb385 checks green (2/2 checks, no ruleset); confirming at the next poll
+03:36:24 GREEN OpenPresentation/gallery@48169a9bb385 48169a9bb38559b8385e6791e7b5e76c0f5a8792 (checks green (2/2 checks, no ruleset))
