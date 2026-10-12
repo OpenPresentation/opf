@@ -68,5 +68,17 @@
   {
     "file": "rr20-render0191-release-commit-gate.log",
     "sha256": "d83045bd31940d192e27916df4486153b14f947e5dac3677cd9644920f3a7101"
+  },
+  {
+    "source": "/private/tmp/rr20-render0191-registry-verified.json",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-render0191-registry-verified.json",
+    "bytes": 1754,
+    "sha256": "87aff7f3f30e12eb30b78e34ce7a0020316536f9e69fae651354c1e9f330ff40"
+  },
+  {
+    "source": "/private/tmp/rr20-render0191-trusted-publish.log",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-render0191-trusted-publish.log",
+    "bytes": 2220,
+    "sha256": "f5d22cd561d751b17139bcc2bec218d87b0a8c0b69bec28d9f4f08fb4455c3bb"
   }
 ]

@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-render@0.19.1, integrity sha512-Hn67Leg3rnALEEmY/0FWSB423vccf7m8jtnPA4QOQjFMuHofLMuN9r3t42gSF9ML4Cak1GiUdG8N5+vw23rSFQ=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-render opf-render-v0.19.1 -> 7980fea3b0095377cb5a28c22a3a963312f941e7"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead 7980fea3b0095377cb5a28c22a3a963312f941e7 = tag commit 7980fea3b0095377cb5a28c22a3a963312f941e7"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "7980fea3b009 is on opf-render main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at 7980fea3b009 carries 0.19.1"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.19.1)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/npm-publish.yml on refs/tags/opf-render-v0.19.1 from 7980fea3b009 (https://github.com/OpenPresentation/opf-render/actions/runs/38243692117/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "5 verified, 0 invalid, 0 missing; @openpresentation/opf-render@0.19.1 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.19.1"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}
