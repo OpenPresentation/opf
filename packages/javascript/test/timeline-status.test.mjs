@@ -41,7 +41,7 @@ test('markers and parts carry the event status; only current has a ring and only
   // The label of the current event is bold, and the line breaks were measured with that weight.
   const weights = layout.parts.filter((part) => part.eventIndex === 1).map((part) => [part.role, part.requestedStyle.fontWeight]);
   assert.deepEqual(weights, [['when', 500], ['what', 700]]);
-  assert.ok(layout.parts.filter((part) => part.eventIndex !== 1).every((part) => part.requestedStyle.fontWeight === 500 || part.eventIndex === undefined));
+  assert.ok(layout.parts.filter((part) => part.eventIndex !== 1).every((part) => part.eventIndex === undefined || part.requestedStyle.fontWeight === ({when:500,what:600,'event-description':400})[part.role]));
 });
 
 test('a done event has the geometry of an event without status', () => {

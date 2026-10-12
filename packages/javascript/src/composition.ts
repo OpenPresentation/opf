@@ -1607,7 +1607,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
-  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
+  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,18,500,index);add('what',event.what,`${eventPath(index)}.what`,22,600,index);add('event-description',event.description,`${eventPath(index)}.description`,18,400,index);});
   const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
   for(const part of source)if(part.eventIndex===undefined)metadata.push(part);else events[part.eventIndex]!.push(part);
   const cache=new Map<string,{fit:SourceTextFit;ink:TextLineInk[];height:number}>();
@@ -1660,11 +1660,18 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       };
       if(arrangement==='alternating'){
         const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
-        const lineY=y+Math.max(scale,available)*.46;
+        // Center the measured event envelope, not the empty halves of the cell.
+        // Upper labels end beside their marker; lower labels begin beside theirs.
+        const fieldGap=4*scale,clearance=24*scale;
+        const heights=events.map(fields=>fields.reduce((height,part)=>height+measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),width,'center').height,0)+Math.max(0,fields.length-1)*fieldGap);
+        const markerExtent=hasRing?ringRadius+strokeWidth/2:radius;
+        const upper=Math.max(markerExtent,...heights.filter((_,index)=>index%2===0).map(height=>height+clearance));
+        const lower=Math.max(markerExtent,...heights.filter((_,index)=>index%2===1).map(height=>height+clearance));
+        const lineY=y+Math.max(0,(available-upper-lower)/2)+upper;
         events.forEach((fields,index)=>{
-          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
+          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?lineY-clearance-heights[index]!:lineY+clearance,bottom=index%2===0?lineY-clearance:box.y+box.height;
           markers.push(marker(index,x,lineY));let cursor=top;
-          for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
+          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);if(fieldIndex<fields.length-1)cursor+=fieldGap;}
         });
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
@@ -1673,7 +1680,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
-          for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
+          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;if(fieldIndex<fields.length-1)y+=4*scale;}
           markers.push(marker(index,x,top+Math.min(first?.box.height??2*radius,2*radius)/2));
           y+=16*scale;
         });
