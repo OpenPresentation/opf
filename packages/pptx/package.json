@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.18.2",
+  "version": "0.19.0",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -35,9 +35,6 @@
   },
   "types": "./dist/index.d.ts",
   "sideEffects": false,
-  "opf": {
-    "requiresUnreleasedCore": "0.19.0"
-  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
@@ -69,7 +66,7 @@
   "dependencies": {
     "@openpresentation/gallery": "^2.0.0",
     "@node-projects/jszip": "4.3.0",
-    "@openpresentation/opf": "^0.18.4",
+    "@openpresentation/opf": "^0.19.0",
     "@rgrove/parse-xml": "4.2.3",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
@@ -77,7 +74,7 @@
     "sharp": "0.35.5"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.18.2"
+    "@openpresentation/opf-render": "^0.19.1"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -101,7 +98,7 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-render": "0.18.2",
+    "@openpresentation/opf-render": "0.19.1",
     "@resvg/resvg-js": "2.6.2",
     "esbuild": "0.28.2",
     "playwright": "1.63.0"
