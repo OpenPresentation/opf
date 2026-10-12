@@ -26,5 +26,9 @@
   {
     "file": "inventory-post-pptx252-20261012-summary.json",
     "sha256": "7c9b654aa0080d789eba0e28c88f32a1eda38dde61f3cde990ec6e195e6ff4b2"
+  },
+  {
+    "file": "rr20-pptx019-release-commit-gate.log",
+    "sha256": "d13775c5cd9bac6cc9a053f62c7268d84f05790f363292728d8ebafb1c39e66b"
   }
 ]
