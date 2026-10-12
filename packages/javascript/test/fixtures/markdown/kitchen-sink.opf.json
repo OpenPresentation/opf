@@ -11,7 +11,7 @@
   "slides": [
     {
       "id": "one",
-      "layout": "title",
+      "layout": "cover",
       "section": "Part 1",
       "title": [
         "Title with a ",

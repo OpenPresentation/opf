@@ -12,6 +12,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, describe, test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { sourceCandidateCorePreflight, assertSourceCandidateIsolatedCore } from "../../../scripts/candidate-gallery-pack.mjs";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { installStubPeers } from "../../../scripts/stub-peers.mjs";
 import { cliPeerGate, report } from "../../../scripts/unreleased-gate.mjs";
@@ -35,13 +36,14 @@ globalThis.fetch = async (input) => {
 // RR-70: the Node build is the root itself; `core` is the browser build, which shares every class and function but the file API.
 const opf = await import("../dist/index.js");
 const core = await import("../dist/browser.js");
-const { defaultCatalog } = await import("../dist/catalog.js");
+const { gallery } = await import("@openpresentation/gallery");
 const here = path.dirname(fileURLToPath(import.meta.url));
 // RR-74: the drawing tests run through the opf-render that core's devDependencies install. While that is not the 0.18 release core asks
 // for (toSvg, toPng, toPdf), they wait on a pull request and merge-queue run (scripts/unreleased-gate.mjs); every other run fails.
 // The tests with a stub renderer, the option checks and the missing-peer test always run.
 const coreRoot = path.join(here, "..");
-const skip = report(cliPeerGate({ cliRoot: coreRoot, executable: path.join(coreRoot, "dist", "index.js"), names: ["@openpresentation/opf-render"], subject: "@openpresentation/opf" })) ? false : "the optional renderer is not on npm at the version core asks for";
+const candidateContext = sourceCandidateCorePreflight(path.resolve(coreRoot, "../.."), path.join(coreRoot, "dist", "index.js"));
+const skip = candidateContext ? false : report(cliPeerGate({ cliRoot: coreRoot, executable: path.join(coreRoot, "dist", "index.js"), names: ["@openpresentation/opf-render"], subject: "@openpresentation/opf" })) ? false : "the optional renderer is not on npm at the version core asks for";
 const temp = await mkdtemp(path.join(tmpdir(), "opf-node-test-"));
 after(() => rm(temp, { recursive: true, force: true }));
 
@@ -88,7 +90,7 @@ describe("the entry", () => {
     assert.equal(opf.parse, core.parse);
     assert.equal(opf.OPFValidationError, core.OPFValidationError);
     assert.ok(new opf.OPFExportError("x", "y") instanceof opf.OPFApiError);
-    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck", "defaultCatalog"]) assert.equal(opf[gone], undefined, gone);
+    for (const gone of ["readDeck", "writeDeck", "exportDeck", "importDeck", "defaultCatalog", "gallery"]) assert.equal(opf[gone], undefined, gone);
   });
 });
 
@@ -107,14 +109,14 @@ describe("convert with an output path", () => {
     assert.ok(isZip(await readFile(path.join(dir, "deck.pptx"))));
 
     const png = await opf.convert(path.join(dir, "deck.opf.md"), path.join(dir, "slides", "deck.png"));
-    assert.deepEqual(png.files.map((file) => path.basename(file.path)), ["deck-001.png", "deck-002.png", "deck-003.png"]);
-    assert.deepEqual((await readdir(path.join(dir, "slides"))).sort(), ["deck-001.png", "deck-002.png", "deck-003.png"], "the parent folder is created");
+    assert.deepEqual(png.files.map((file) => path.basename(file.path)), ["deck-1.png", "deck-2.png", "deck-3.png"]);
+    assert.deepEqual((await readdir(path.join(dir, "slides"))).sort(), ["deck-1.png", "deck-2.png", "deck-3.png"], "the parent folder is created");
     assert.deepEqual(png.files.map((file) => file.slide), [1, 2, 3]);
     for (const file of png.files) assert.ok(isPng(await readFile(file.path)));
 
     const imported = await opf.convert(path.join(dir, "deck.pptx"), path.join(dir, "back.opf.yaml"));
     assert.equal(imported.files[0].type, "application/yaml");
-    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [defaultCatalog] });
+    const back = core.parse(await readFile(path.join(dir, "back.opf.yaml"), "utf8"), { filename: "back.opf.yaml", catalogs: [gallery] });
     assert.equal(back.slides.length, 4);
     assert.equal(back.slides[0].title, "Hello");
 
@@ -126,10 +128,10 @@ describe("convert with an output path", () => {
   test("rare options go in the third argument: slides and scale for PNG", { skip }, async () => {
     const dir = await folder();
     const out = await opf.convert(path.join(dir, "deck.opf.md"), path.join(dir, "deck.png"), { slides: "1-3", scale: 2 });
-    assert.deepEqual(out.files.map((file) => path.basename(file.path)), ["deck-001.png", "deck-002.png", "deck-003.png"]);
+    assert.deepEqual(out.files.map((file) => path.basename(file.path)), ["deck-1.png", "deck-2.png", "deck-3.png"]);
     assert.deepEqual([out.files[0].width, out.files[0].height], [2560, 1440]);
     const hidden = await opf.convert(path.join(dir, "deck.opf.md"), path.join(dir, "all.svg"), { includeHidden: true });
-    assert.deepEqual(hidden.files.map((file) => path.basename(file.path)), ["all-001.svg", "all-002.svg", "all-003.svg", "all-004.svg"]);
+    assert.deepEqual(hidden.files.map((file) => path.basename(file.path)), ["all-1.svg", "all-2.svg", "all-3.svg", "all-4.svg"]);
   });
 
   test("one selected slide, or a one-slide deck, is written to the output name itself", { skip }, async () => {
@@ -147,10 +149,10 @@ describe("convert with an output path", () => {
     const zip = await opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "slides.zip"));
     assert.equal(zip.files.length, 1);
     assert.equal(zip.files[0].type, "application/zip");
-    assert.deepEqual(zip.files[0].entries, ["slides-001.png", "slides-002.png", "slides-003.png"]);
+    assert.deepEqual(zip.files[0].entries, ["slides-1.png", "slides-2.png", "slides-3.png"]);
     assert.ok(isZip(await readFile(path.join(dir, "slides.zip"))));
     const svg = await opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "vector.zip"), { format: "svg" });
-    assert.deepEqual(svg.files[0].entries, ["vector-001.svg", "vector-002.svg", "vector-003.svg"]);
+    assert.deepEqual(svg.files[0].entries, ["vector-1.svg", "vector-2.svg", "vector-3.svg"]);
     await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "bad.zip"), { format: "pdf" }), opf.OPFApiError, "invalid-option");
     await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "bad.png"), { zip: true }), opf.OPFApiError, "invalid-option");
   });
@@ -212,10 +214,10 @@ describe("convert with an output path", () => {
   test("nothing is written when any output fails: one existing slide file stops all of them", { skip }, async () => {
     const dir = await folder();
     await mkdir(path.join(dir, "slides"));
-    await writeFile(path.join(dir, "slides", "deck-002.png"), "keep");
+    await writeFile(path.join(dir, "slides", "deck-2.png"), "keep");
     await fails(opf.convert(path.join(dir, "deck.opf.json"), path.join(dir, "slides", "deck.png"), { overwrite: false }), opf.OPFApiError, "output-exists");
-    assert.deepEqual(await readdir(path.join(dir, "slides")), ["deck-002.png"]);
-    assert.equal(await readFile(path.join(dir, "slides", "deck-002.png"), "utf8"), "keep");
+    assert.deepEqual(await readdir(path.join(dir, "slides")), ["deck-2.png"]);
+    assert.equal(await readFile(path.join(dir, "slides", "deck-2.png"), "utf8"), "keep");
     // An invalid deck writes nothing either.
     await writeFile(path.join(dir, "invalid.opf.json"), JSON.stringify({ slides: 42 }));
     const invalid = await fails(opf.convert(path.join(dir, "invalid.opf.json"), path.join(dir, "invalid.pdf")), opf.OPFExportError, "invalid-presentation");
@@ -268,7 +270,8 @@ describe("the renderer's 0.18 API, through stub peers", () => {
   /** Run every case in a copy of core whose opf-render and opf-pptx are the stubs; returns the calls each case made. */
   async function stubbed(cases) {
     const isolated = await mkdtemp(path.join(temp, "stub-"));
-    await installIsolatedCore(path.join(isolated, "node_modules"));
+    const isolatedCore = await installIsolatedCore(path.join(isolated, "node_modules"));
+    assertSourceCandidateIsolatedCore(candidateContext, isolatedCore);
     await installStubPeers(path.join(isolated, "node_modules"));
     await mkdir(path.join(isolated, "fonts"));
     await writeFile(path.join(isolated, "fonts", "a.ttf"), "not a font; the stub never reads it");
@@ -386,9 +389,9 @@ describe("convert without an output path", () => {
     const pptx = await opf.convert(deck, { format: "pptx" });
     assert.equal(pptx.files[0].name, "Node-deck.pptx");
     const png = await opf.convert(deck, { format: "png", slides: [1, 3] });
-    assert.deepEqual(png.files.map((file) => file.name), ["Node-deck-001.png", "Node-deck-003.png"]);
+    assert.deepEqual(png.files.map((file) => file.name), ["Node-deck-1.png", "Node-deck-3.png"]);
     const zip = await opf.convert(deck, { format: "svg", zip: true });
-    assert.deepEqual([zip.files[0].name, zip.files[0].entries], ["Node-deck.zip", ["Node-deck-001.svg", "Node-deck-002.svg", "Node-deck-003.svg"]]);
+    assert.deepEqual([zip.files[0].name, zip.files[0].entries], ["Node-deck.zip", ["Node-deck-1.svg", "Node-deck-2.svg", "Node-deck-3.svg"]]);
     const yaml = await opf.convert(pptx.files[0].bytes, { format: "yaml" });
     assert.equal(yaml.files[0].name, "Node-deck.opf.yaml");
     assert.equal(core.parse(Buffer.from(yaml.files[0].bytes).toString(), { format: "yaml" }).slides.length, 4);
@@ -479,7 +482,7 @@ describe("fonts prepared once per process", () => {
     // Concurrent calls share the handle one at a time and still agree.
     const [a, b] = await Promise.all([opf.convert(deck, { format: "png" }), opf.convert({ ...deck, name: "Other" }, { format: "png" })]);
     assert.deepEqual(b64(a.files), b64((await opf.convert(deck, { format: "png" })).files));
-    assert.equal(b.files[0].name, "Other-001.png");
+    assert.equal(b.files[0].name, "Other-1.png");
   });
 
   test("the pack is prepared once, concurrent callers share the one preparation, and a script deck gets its own", async () => {
@@ -528,7 +531,8 @@ describe("fonts prepared once per process", () => {
 describe("a missing peer", () => {
   test("throws peer-not-installed with the install command, for export and import", async () => {
     const isolated = await mkdtemp(path.join(temp, "isolated-"));
-    await installIsolatedCore(path.join(isolated, "node_modules"));
+    const isolatedCore = await installIsolatedCore(path.join(isolated, "node_modules"));
+    assertSourceCandidateIsolatedCore(candidateContext, isolatedCore);
     await writeFile(path.join(isolated, "deck.opf.json"), JSON.stringify({ slides: [{ title: "x" }] }));
     await writeFile(
       path.join(isolated, "run.mjs"),

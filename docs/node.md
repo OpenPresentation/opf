@@ -15,8 +15,9 @@ const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing
 ```
 
 The namespace is all of core (`validate`, `parse`, `stringify`, `paginate`, `parseSlideSelection`, the types and the error
-classes), so one import covers an application. The default catalog is exported only at `@openpresentation/opf/catalog`; in Node,
-`open`, `save` and `convert` use it when no `catalogs` are passed.
+classes), so one import covers an application. The pptx.gallery catalog is the package `@openpresentation/gallery` (`gallery`, a
+dependency of core, RR-78); in Node, `open`, `save` and `convert` register it when no `catalogs` are passed. A gallery that targets
+another catalog record schema than core reads (`CATALOG_SCHEMA`) is refused with `gallery-schema-mismatch`.
 
 ## The CLI's verbs, with the CLI's defaults
 
@@ -24,16 +25,16 @@ OPF 0.18 gives the Node build the verbs of the `opf` command, so a script calls 
 
 | Function | Command | In Node, when `catalogs` is omitted |
 | --- | --- | --- |
-| `validate(deck, options?)` | `opf validate` | the default catalog is registered, so `opf validate deck` and `validate(deck)` report the same findings |
-| `stats(deck, options?)` | `opf stats` | the default catalog |
-| `paginate(deck, options?)` | `opf paginate` | the default catalog. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
-| `embed(deck, options?)` | `opf embed` | the default catalog |
-| `edit(deck, patch, options?)` | `opf edit` | the default catalog for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
+| `validate(deck, options?)` | `opf validate` | the gallery is registered, so `opf validate deck` and `validate(deck)` report the same findings |
+| `stats(deck, options?)` | `opf stats` | the gallery |
+| `paginate(deck, options?)` | `opf paginate` | the gallery. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
+| `embed(deck, options?)` | `opf embed` | the gallery |
+| `edit(deck, patch, options?)` | `opf edit` | the gallery for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
 | `fill(template, data?, options?)` | `opf fill` | no catalog: `data` is CSV, TSV or JSON text, a record or a list of records; returns `{ decks, complete, unfilled, diagnostics }`, and `presentation` with `combine: true`. `fillRecords(text)` reads the records alone |
 | `diff(a, b)`, `merge(base, ours, theirs)` | `opf diff`, `opf merge` | no catalog |
 
 An explicit `catalogs: []` registers none. The browser build exports the same functions and registers no catalog (FA-21): a
-browser host passes `{ catalogs: [defaultCatalog] }` itself. Only `open`, `save` and `convert` are Node only.
+browser host passes `{ catalogs: [gallery] }` itself (`import { gallery } from "@openpresentation/gallery"`). Only `open`, `save` and `convert` are Node only.
 
 A shorter name is available as an npm alias, if you want one: `npm i opf@npm:@openpresentation/opf` installs the same package
 as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name.
@@ -41,7 +42,8 @@ as `opf`, so `import * as opf from "opf"` works too. The docs keep the full name
 ## One import for every runtime
 
 OPF 0.18 removed the `@openpresentation/opf/node` subpath of 0.17: import `@openpresentation/opf` instead, with the same names
-(but `defaultCatalog`, which stays at `@openpresentation/opf/catalog`).
+(OPF 0.19 removed `@openpresentation/opf/catalog` and `defaultCatalog`, with no alias: import `gallery` from
+`@openpresentation/gallery`).
 The package's conditional exports pick the build:
 
 | Condition | Build | `open`, `save`, `convert` |
@@ -64,8 +66,9 @@ The package's conditional exports pick the build:
 
 ## The stack
 
-OPF is five packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
-`stringify`, composition and pagination, and in Node the files. **The CLI** (`@openpresentation/cli`) is the `opf` command;
+OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
+`stringify`, composition and pagination, and in Node the files. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery
+catalog, a dependency of core released on its own version line. **The CLI** (`@openpresentation/cli`) is the `opf` command;
 its `convert`, `render`, `export` and `import` commands run core's Node engine (through `@openpresentation/opf/internal/engine`,
 which the package exports under the `node` condition for the CLI only; it is not an application API). **opf-render**,
 **opf-pptx** and **opf-editor** are the engines: drawing (SVG, PNG, PDF), PowerPoint (export and import) and the editor.
@@ -92,7 +95,8 @@ needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sh
 ```ts
 await opf.convert("deck.opf.md", "deck.pdf");
 await opf.convert("deck.opf.md", "deck.pptx");
-await opf.convert("deck.opf.md", "slides/deck.png");   // one PNG per slide: slides/deck-001.png, -002, ...
+await opf.convert("deck.opf.md", "slides/deck.png");   // one PNG per slide: slides/deck-1.png, -2, ...
+await opf.convert("deck.opf.md", "slides/slide-{n}.png");   // always numbered: slides/slide-1.png, slide-2.png, ...
 await opf.convert("deck.pptx", "deck.opf.yaml");       // import
 await opf.convert("deck.opf.json", "deck.opf.md");     // change the deck form
 await opf.convert("deck.opf.md", "deck.png", { slides: "1-3", scale: 2 });
@@ -111,8 +115,8 @@ await opf.convert("deck.opf.md", "slides.zip", { format: "svg" });
 | Output | Written as |
 | --- | --- |
 | `.pdf`, `.pptx` | one file |
-| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-001.png`, `-002`, ... (padded to three digits, or more for a longer deck; the numbers are the deck's slide numbers). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf convert deck.opf.json slide.png --slides 2` does. |
-| `.zip` | one archive of the slides, named as above inside it. The slides are PNG unless `format: "svg"`. |
+| `.png`, `.svg` | one file per slide, named after the output: `slides/deck.png` gives `slides/deck-1.png`, `-2`, ... (the numbers are the deck's slide numbers, padded with zeros to the width of the largest number written: `deck-01.png` from ten slides, `deck-001.png` from a hundred; `slides: "2,5"` gives `deck-2.png` and `deck-5.png`). When one slide is selected (or the deck has one), it is written to the output name itself, as `opf convert deck.opf.json slide.png --slides 2` does. With `{n}` in the output (`"slides/slide-{n}.png"`) the files are always numbered, even for one slide, and `{n}` is the slide number padded by the same rule. `{n}` is the only placeholder: any other `{key}`, and `{n}` in a `.pdf`, `.pptx`, `.zip` or deck-form output, rejects with `invalid-option`. |
+| `.zip` | one archive of the slides, its entries named as the plain `.png` and `.svg` files above (`slides.zip` holds `slides-1.png`, ...; always numbered; the archive's own name takes no `{n}`). The slides are PNG unless `format: "svg"`. |
 | `.opf.md`, `.yaml`, `.yml`, `.json` | the deck in that form |
 
 Any other extension, and a plain `.md` file, rejects with `invalid-option`, which names the supported extensions. A `format`
@@ -120,7 +124,7 @@ that disagrees with the output's extension is refused too; it is only needed for
 
 **Without an output path**, pass the format in the options: `convert(input, { format })` writes nothing and returns the files
 with their names and bytes. `name` sets the base name of the files; without it they follow the deck: its `filename`, else its
-slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-001.png`, `deck.opf.yaml`). `zip: true` returns one archive of
+slugified `name`, else the input file's stem (`Q4-Review.pdf`, `Q4-Review-1.png`; padded like the files above, `Q4-Review-01.png` from ten slides, `deck.opf.yaml`). `zip: true` returns one archive of
 the PNG or SVG slides; with an output path a `.zip` name makes the archive instead.
 
 **Options** are the flags of `opf convert` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`

@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { validate, validateCatalogRecord } from '../dist/index.js';
-import { defaultCatalog } from '../dist/catalog.js';
+import { gallery } from '@openpresentation/gallery';
 
 // The format, references and policy categories: syntax, schema, catalogs, assets and host contracts.
 const checkAll = (input, options) => validate(input, { only: ['format', 'references', 'policy'], ...options });
 
 const layout = (name) => ({
 	name,
-	placeholders: [{ type: 'title' }, { type: 'text' }],
+	areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}},
 });
 const freeze = (value) => {
 	if (value && typeof value === 'object') {
@@ -21,9 +21,9 @@ const freeze = (value) => {
 
 test('text input is read, never rewritten, and the report separates what was not checked', () => {
 	const source =
-		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text-1x"}]\n}';
+		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text"}]\n}';
 	const before = Buffer.from(source),
-		result = checkAll(source, { catalogs: [defaultCatalog] });
+		result = checkAll(source, { catalogs: [gallery] });
 	assert.equal(result.valid, true);
 	assert.equal(result.schemaValid, true);
 	assert.deepEqual(result.findings, []);
@@ -121,7 +121,7 @@ test('a layout must be a reference; free-form prose is never one, and extensions
 			design: { theme: 'fake' },
 			contracts: [{ path: '/slides/*/layout', allowedValues: [] }],
 		},
-	}, { catalogs: [defaultCatalog] });
+	}, { catalogs: [gallery] });
 	const references = result.findings.filter(
 		(issue) => issue.ruleId === 'opf/unresolved-reference',
 	);
@@ -147,7 +147,7 @@ test('reference sites cover the designs and slides; chart types are validated by
 				],
 			},
 		],
-	}, { catalogs: [defaultCatalog] });
+	}, { catalogs: [gallery] });
 	const paths = result.findings
 		.filter((issue) => issue.ruleId === 'opf/unresolved-reference')
 		.map((issue) => issue.path)
@@ -157,15 +157,15 @@ test('reference sites cover the designs and slides; chart types are validated by
 });
 test('invalid catalog records stay visible and cannot silently fall back', () => {
 	const result = checkAll({
-		slides: [{ layout: 'text-1x' }],
-		catalogs: { custom: { layouts: { 'text-1x': { placeholders: 'invalid' } } } },
-	}, { catalogs: [defaultCatalog] });
+		slides: [{ layout: 'text' }],
+		catalogs: { custom: { layouts: { 'text': { placeholders: 'invalid' } } } },
+	}, { catalogs: [gallery] });
 	assert.equal(result.valid, false);
 	assert.ok(
 		result.findings.some(
 			(issue) =>
 				issue.ruleId === 'opf/catalog-record' &&
-				issue.path.startsWith('/catalogs/custom/layouts/text-1x'),
+				issue.path.startsWith('/catalogs/custom/layouts/text'),
 		),
 	);
 	assert.ok(result.findings.some((issue) => issue.ruleId === 'opf/unresolved-reference' && issue.path === '/slides/0/layout'), 'the reference to an invalid record is reported too');
@@ -178,20 +178,20 @@ test('invalid catalog records stay visible and cannot silently fall back', () =>
 });
 test('explicit contracts provide policy fixes while metadata never supplies policy', () => {
 	const document = freeze({
-			slides: [{ layout: 'title-subtitle', title: 'Keep' }],
+			slides: [{ layout: 'cover', title: 'Keep' }],
 			extensions: { 'a/b~': 1 },
 		}),
 		options = freeze({
 			contracts: [
 				{
 					path: '/slides/*/layout',
-					allowedValues: ['text-1x'],
+					allowedValues: ['text'],
 					message: 'Use {{allowed}} at {{path}}; see {{file}}.',
 					documentation: 'brand.json#/layouts',
 				},
 				{ path: '/extensions/a~1b~0', allowedValues: [2], severity: 'warning' },
 			],
-			catalogs: [defaultCatalog],
+			catalogs: [gallery],
 		});
 	const result = checkAll(document, options);
 	assert.equal(result.valid, false);
@@ -202,13 +202,13 @@ test('explicit contracts provide policy fixes while metadata never supplies poli
 	const layoutFinding = result.findings.find((entry) => entry.path === '/slides/0/layout');
 	assert.match(
 		layoutFinding.message,
-		/text-1x.*\/slides\/0\/layout.*brand.json/,
+		/text.*\/slides\/0\/layout.*brand.json/,
 	);
 	assert.equal(layoutFinding.suggestions[0].origin, 'contract');
 	assert.equal(layoutFinding.category, 'policy');
 	assert.equal(layoutFinding.severity, 'error');
 	assert.equal(result.findings.find((entry) => entry.path === '/extensions/a~1b~0').severity, 'warning');
-	assert.equal(checkAll(document, { catalogs: [defaultCatalog] }).valid, true);
+	assert.equal(checkAll(document, { catalogs: [gallery] }).valid, true);
 });
 test('invalid options fail clearly instead of ignoring misspelled policies', () => {
 	for (const options of [
@@ -284,7 +284,7 @@ test('unknown bare-id audiences warn like narratives; gallery audience ids resol
 	const result = checkAll({
 		audience: ['no-such-audience', 'Series B investors', 'executive'],
 		slides: [{ title: 'Keep' }],
-	}, { catalogs: [defaultCatalog] });
+	}, { catalogs: [gallery] });
 	assert.equal(result.valid, true);
 	assert.deepEqual(
 		result.findings
@@ -293,7 +293,7 @@ test('unknown bare-id audiences warn like narratives; gallery audience ids resol
 		[['/audience/0', 'warning']],
 	);
 	assert.deepEqual(
-		checkAll({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] }, { catalogs: [defaultCatalog] })
+		checkAll({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] }, { catalogs: [gallery] })
 			.findings,
 		[],
 	);
@@ -393,7 +393,7 @@ test('language tags preserve regional, extended, private and grandfathered forms
 	const nested = checkAll({
 		language: { bcp47: 'en-US', fontScheme: 'missing-font' },
 		slides: [{ title: 'Keep' }],
-	}, { catalogs: [defaultCatalog] });
+	}, { catalogs: [gallery] });
 	assert.deepEqual(
 		nested.findings.map((issue) => issue.path),
 		['/language/fontScheme'],

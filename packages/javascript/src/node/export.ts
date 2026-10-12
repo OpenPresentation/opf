@@ -9,11 +9,11 @@ import { statSync } from "node:fs";
 import path from "node:path";
 import { type Catalog, type Fonts, paginate } from "../core.js";
 import { createImageResolver } from "./assets.js";
-import { DEFAULT_CATALOGS } from "./catalogs.js";
+import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
 import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
-import { deckStem } from "./files.js";
+import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./peers.js";
 import { Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
@@ -64,12 +64,12 @@ export interface ExportOptions {
 	assetDir?: string;
 	/** `svg` and `png`: one zip of the slides instead of one file per slide. */
 	zip?: boolean;
-	/** The base name of the files (`name-001.png` for slide 1, `name.pdf`). Omitted: the presentation's `filename`, else its slugified `name`, else `deck`. */
+	/** The base name of the files (`name-1.png` for slide 1, padded to the largest slide number written; `name.pdf`). Omitted: the presentation's `filename`, else its slugified `name`, else `deck`. */
 	name?: string;
 }
 
 export interface ExportFile {
-	/** The file name: `options.name`, else the presentation's `filename`, else its slugified `name`, else `deck`, then `-001.png` for slide 1 and so on. */
+	/** The file name: `options.name`, else the presentation's `filename`, else its slugified `name`, else `deck`, then `-1.png` for slide 1 and so on, padded to the largest slide number written. */
 	name: string;
 	/** The media type. */
 	type: string;
@@ -226,7 +226,7 @@ const MEDIA = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", 
 export async function runExport(presentation: unknown, options: ResolvedExportOptions, ctx: ExportContext): Promise<ExportRun> {
 	const { format, scale } = options;
 	const reporter = ctx.reporter;
-	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
+	const catalogs = options.catalogs ?? defaultCatalogs();
 	const date = checkDate(options.date);
 	const renderer = ctx.renderer ?? (await loadRenderer());
 	const pptx = format === "pptx" ? (ctx.pptx ?? (await loadPptx())) : undefined;
@@ -330,8 +330,9 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			const svg = renderer.render.module.toSvg(deck, number, svgOptions);
 			svgs.push({ slide: number, id: (deck as { slides: { id?: string }[] }).slides[number - 1]?.id, svg });
 		}
-		const width = Math.max(3, String(slideCount).length);
-		const name = (slide: number, extension: string) => `${stem}-${String(slide).padStart(width, "0")}.${extension}`;
+		// Padded to the width of the largest slide number written (`deck-1.png` for a short deck, `deck-01.png` from ten slides).
+		const largest = Math.max(...selected);
+		const name = (slide: number, extension: string) => `${stem}-${padNumber(slide, largest)}.${extension}`;
 
 		if (format === "pdf") {
 			const mode = options.raster ? "raster" : "vector";

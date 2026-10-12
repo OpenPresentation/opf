@@ -22,7 +22,8 @@ export { OPFApiError, OPFExportError, OPFImportError } from "./api-errors.js";
 export { parseSlideSelection } from "./slide-selection.js";
 export type { SlideSelection } from "./slide-selection.js";
 
-// OPF 0.15 (FA-21): the root imports no catalog data. The pinned default catalog is `@openpresentation/opf/catalog`.
+// OPF 0.15 (FA-21): the root imports no catalog data. RR-78: the pptx.gallery catalog is the package @openpresentation/gallery,
+// which only the Node build (index.ts) and the Node engine register by default.
 // RR-70: this module is what both builds of the root share; ./index.ts (Node) and ./browser.ts add `open`, `save` and `convert`.
 
 export {
@@ -122,7 +123,7 @@ export type {
   ResolvedReference,
   UnresolvedReferenceDiagnostic,
 } from "./catalog-refs.js";
-export { catalogDisplayKinds, catalogSchemaNames } from "./catalog-schemas.js";
+export { CATALOG_SCHEMA, catalogDisplayKinds, catalogSchemaNames } from "./catalog-schemas.js";
 export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
 export { copySlides, embed, moveToCustom, OPFMoveToCustomError, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
 export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord, MovedRecord, MoveToCustomErrorCode, MoveToCustomPatchOperation, MoveToCustomResult } from "./catalog-helpers.js";

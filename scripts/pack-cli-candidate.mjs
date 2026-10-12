@@ -7,9 +7,13 @@
 // CLI with that one range set to the candidate core's exact version (nothing else in the tarball changes). The tests then
 // install both tarballs together, and the install holds exactly one core. The range the CLI publishes is the one in its
 // manifest, which the tests assert separately.
+//
+// RR-78: core and the CLI depend on the published @openpresentation/gallery@^1. Pack the installed
+// registry artifact beside the candidates so offline install tests exercise the locked gallery version.
 import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {candidateArtifacts} from './candidate-gallery-pack.mjs';
 import { satisfies } from './unreleased-gate.mjs';
 
@@ -22,11 +26,12 @@ export async function preparePackedSmokeCli({ root, build }) {
 }
 
 export const CORE = '@openpresentation/opf';
+export const GALLERY = '@openpresentation/gallery';
 
 /**
  * Pack core and the CLI into `destination`. `run(command, args, cwd)` runs a command and returns its stdout; `npmArgs` are extra
- * `npm pack` arguments (a cache directory). Returns { core, cli, coreTarball, cliTarball, range, restaged }, where `core` and `cli`
- * are the `npm pack --json` entries.
+ * `npm pack` arguments (a cache directory). Returns { core, cli, gallery, coreTarball, cliTarball, galleryTarball, range, restaged },
+ * where `core`, `cli` and `gallery` are the `npm pack --json` entries. The gallery is the installed registry package.
  */
 export async function packCliCandidate({ cliDirectory, coreDirectory, destination, run, npmArgs = [] }) {
   const graph=candidateArtifacts(path.resolve(coreDirectory,'../..'));
@@ -41,6 +46,8 @@ export async function packCliCandidate({ cliDirectory, coreDirectory, destinatio
   const range = manifest.dependencies?.[CORE];
   if (!range) throw new Error(`${manifest.name} declares no dependency on ${CORE}`);
   const pack = (directory) => JSON.parse(run('npm', ['pack', '--json', '--ignore-scripts', '--pack-destination', destination, ...npmArgs], directory))[0];
+  const galleryDirectory = path.dirname(fileURLToPath(import.meta.resolve('@openpresentation/gallery/package.json')));
+  const gallery = pack(galleryDirectory);
   const core = pack(coreDirectory);
   const restaged = !satisfies(coreManifest.version, range);
   let cli;
@@ -56,5 +63,5 @@ export async function packCliCandidate({ cliDirectory, coreDirectory, destinatio
     }
     console.log(`${manifest.name} asks for ${CORE}@${range} and the candidate core is ${coreManifest.version}: the candidate CLI tarball depends on ${coreManifest.version} for this local-tarball install.`);
   }
-  return { core, cli, coreTarball: path.join(destination, core.filename), cliTarball: path.join(destination, cli.filename), range, restaged };
+  return { core, cli, gallery, coreTarball: path.join(destination, core.filename), cliTarball: path.join(destination, cli.filename), galleryTarball: path.join(destination, gallery.filename), range, restaged };
 }

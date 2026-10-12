@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Financial inclusion",
       "title": "India Rural Payments Pilot",
       "subtitle": "Sahyog Pay Financial inclusion",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-2x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Sahyog Pay should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-2x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-2x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for financial inclusion.",
@@ -126,7 +126,7 @@
               "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
               "instructions": "Establish opening scene",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "struggles",
@@ -134,7 +134,7 @@
               "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
               "instructions": "Highlight initial setbacks",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "determination",
@@ -142,7 +142,7 @@
               "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
               "instructions": "Showcase enduring passion",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "crisis",
@@ -150,7 +150,7 @@
               "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
               "instructions": "Identify lowest point",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "resolve",
@@ -158,7 +158,7 @@
               "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
               "instructions": "Articulate strong will",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "breakthrough",
@@ -166,7 +166,7 @@
               "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
               "instructions": "Reward of perseverance",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "triumph",
@@ -174,13 +174,13 @@
               "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
               "instructions": "Reveal ultimate success",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "legacy",
               "name": "Legacy",
               "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Share long-lasting impact",
               "type": "text"
             }
@@ -351,145 +351,150 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
-          }
-        },
-        "chart-2x": {
-          "name": "Chart 2x",
-          "summary": "Reach for it when two charts are read together, each with its own note.",
-          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
           },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Comparison"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Comparison",
-            "Balance"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

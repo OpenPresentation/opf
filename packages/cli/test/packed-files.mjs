@@ -83,7 +83,7 @@ try {
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
   // RR-66 (opf#466): in a folder of its own, so the npm exec runs below never resolve into it (scripts/global-prefix.mjs).
   const global = globalPrefixLayout(path.join(temp, 'global'));
-  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...(candidate.additionalTarballs??[]), ...peers, ...renderExtras], temp);
+  run('npm', ['install', '--global', '--prefix', global.prefix, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...(candidate.additionalTarballs??(candidate.galleryTarball?[candidate.galleryTarball]:[])), ...peers, ...renderExtras], temp);
   const modules = global.modules;
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
   if(stagedCli)assert.deepEqual(installed,stagedCli,'installed CLI differs from staged metadata');
@@ -116,7 +116,7 @@ try {
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   assertExecOutsideGlobal(work, global);
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...(candidate.additionalTarballs??[]), ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...(candidate.additionalTarballs??(candidate.galleryTarball?[candidate.galleryTarball]:[])), ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   // RR-75: `opf convert` replaces render, export and import; the output path names the files (a one-slide deck writes one file).
   const rendered = npx('convert', 'deck.opf.json', 'png/Npx.png');
   assert.equal(rendered.ok, true);

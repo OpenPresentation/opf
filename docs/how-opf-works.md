@@ -140,11 +140,11 @@ And the two-column shape from the grid above:
 }
 ```
 
-Region keys on one slide must not overlap, and regions cannot be mixed with a root payload. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the matching placeholders of the resolved layout.
+Region keys on one slide must not overlap, and regions cannot be mixed with a root payload. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the title area of the resolved template.
 
 ## Layouts are hints, not contracts
 
-`Slide.layout` optionally references a layout record. The layout's placeholders describe what the layout *exposes* (a title slot, chart regions, image treatment) — they do not constrain what the slide may contain. This loose coupling is intentional:
+`Slide.layout` optionally references a layout record. The layout's areas and regions describe what the template *exposes* (a title area, chart regions, image treatment) — they do not constrain what the slide may contain. This loose coupling is intentional:
 
 - A slide may use any region keys or payloads regardless of its declared layout. Validators do not error on a slide/layout mismatch.
 - When `layout` is omitted, engines compose the slide automatically from its payload or region keys; that is not a finding.
@@ -197,9 +197,9 @@ A reference is a bare id (`"two-column"`) or `name:id` (`"acme:hero"`), where th
 
 ```json
 "catalogs": {
-  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "placeholders": [{ "type": "title" }, { "type": "text" }, { "type": "text" }] } } },
+  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "areas": ["title title", "left right"], "rows": ["auto", 1], "columns": [1, 1], "regions": { "left": { "accepts": ["text"], "flow": "none" }, "right": { "accepts": ["text"], "flow": "none" } } } } },
   "acme": { "source": "pkg:@acme/opf-catalog", "themes": { "brand": { "name": "Brand", "colorScheme": "ocean", "fontScheme": "inter" } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "placeholders": [{ "type": "title" }, { "type": "chart" }] } } }
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": ["title", "chart"], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
 }
 ```
 
@@ -231,7 +231,7 @@ Every reference resolves the same way, first match wins:
 
 A reference written inside an embedded record resolves in that record's own group first: acme's `brand` theme finds acme's `ocean` colour scheme before the default catalog's. A reference that resolves nowhere is the warning `opf/unresolved-reference`, which names the reference and the catalog's source; the slide composes automatically and the design uses the [engine defaults](../spec/reference/engine-defaults.json). A strict export fails instead. A prefix that names no group is a validation error.
 
-Engines never fetch a catalog. Core ships no records in its main entry: a host registers the catalogs it trusts (`{ catalogs: [defaultCatalog, acmeCatalog] }`, where `defaultCatalog` comes from `@openpresentation/opf/catalog`), and authoring tools embed every record a document uses when they save it (`embed`), so a saved document renders the same anywhere, offline. See [the default catalog](default-catalog.md).
+Engines never fetch a catalog. Core ships no records in its main entry: a host registers the catalogs it trusts (`{ catalogs: [gallery, acmeCatalog] }`, where `gallery` comes from `@openpresentation/gallery`, the pptx.gallery catalog; in Node, core registers it when a call names none), and authoring tools embed every record a document uses when they save it (`embed`), so a saved document renders the same anywhere, offline. See [the default catalog](default-catalog.md).
 
 Two reference forms are accepted:
 
@@ -301,7 +301,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
   },
   "slides": [
     {
-      "layout": "title",
+      "layout": "cover",
       "beat": "objectives",
       "title": "Q3 Business Review",
       "subtitle": "Operations — October 2025"

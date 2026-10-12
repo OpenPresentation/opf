@@ -69,21 +69,11 @@ test('a right-to-left deck mirrors placement: left is the start side, drawn at t
   assert.deepEqual(image.box, { x: 768, y: 0, width: 512, height: 720 });
 });
 
-test('a layout image placeholder may carry the placement for the slide\'s image', () => {
-  const layout = { id: 'image-left', placeholders: [{ type: 'title' }, { type: 'image', placement: { edge: 'left', size: 0.4 } }, { type: 'text' }] };
-  const root = composeSlide({ title: 'Heading', image: photo, text: 'Body' }, { layout });
-  const image = root.items.find((item) => item.field === 'image');
-  assert.deepEqual(image.box, { x: 0, y: 0, width: 512, height: 720 });
-  assert.equal(image.path, 'slides.0.image');
-  assert.equal(image.image.placement.path, 'layout.placeholders.1.placement');
-  // A block's own placement wins over the placeholder's.
-  const own = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'right' }), { text: 'Body' }] }, { layout });
-  assert.equal(own.items.find((item) => item.field === 'image').image.placement.edge, 'right');
-  // The placed image's slot is not reserved in the flow: the text takes the whole content box.
-  const text = root.items.find((item) => item.field === 'text');
-  assert.equal(text.box.width, root.contentBox.width);
-  // Validation: placement only on image placeholders.
-  assert.equal(check({ $schema: 'https://openpresentation.org/schema/opf/v1', name: 'L', catalogs: { custom: { layouts: { 'image-left': { name: 'Image left', placeholders: layout.placeholders } } } }, slides: [{ layout: 'image-left', title: 'T', image: photo }] }).valid, true);
+test('v1 layout placement records are rejected; content block placement remains supported', () => {
+  const record = { name: 'Old placement', placeholders: [{type: 'image', placement: {edge: 'left', size: 0.4}}] };
+  assert.equal(check({catalogs: {custom: {layouts: {old: record}}}, slides: [{layout: 'old', image: photo}]}, {only:['format','references']}).valid, false);
+  const result = composeSlide({blocks: [placed({edge: 'left',size: 0.4}), {text: 'Body'}]});
+  assert.deepEqual(result.items.find(item=>item.field==='image').box,{x:0,y:0,width:512,height:720});
 });
 
 test('a slide whose only body is placed images is composed like a cover: its headings center in the free area', () => {

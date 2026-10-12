@@ -2,9 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-layout-preview-index/v1",
   "title": "Layout Preview Index",
-  "description": "Shape of `spec/previews/layouts/index.json`, the manifest for the vendored slide-archetype preview gallery under `spec/previews/layouts/`. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at spec/catalogs/layouts/ (e.g. 'title', 'chart-2x') — see spec/README.md. This schema describes a repo-internal index file, not an OPF document or a catalog record; it is intentionally excluded from the package's published/typed schema surface.",
+  "description": "Shape of previews/layouts/index.json in @openpresentation/gallery 2: one self-contained SVG preview per v2 intent layout, keyed by the matching catalog layout id. Each record names its SVG file and exact UTF-8 byte length. The gallery package owns the files; this checkout materializes ignored copies under packages/gallery/previews/layouts/. This internal index schema is excluded from the package's published/typed schema surface.",
   "type": "object",
-  "required": ["$schema", "version", "description", "records"],
+  "required": [
+    "$schema",
+    "version",
+    "description",
+    "records"
+  ],
   "additionalProperties": false,
   "properties": {
     "$schema": {
@@ -14,7 +19,10 @@
     "version": {
       "type": "string",
       "description": "Index format version, as a string.",
-      "examples": ["1"]
+      "examples": [
+        "2"
+      ],
+      "const": "2"
     },
     "description": {
       "type": "string",
@@ -22,31 +30,37 @@
     },
     "records": {
       "type": "array",
-      "description": "One entry per vendored preview HTML file.",
-      "items": { "$ref": "#/$defs/PreviewRecord" }
+      "description": "One entry per v2 layout and its SVG preview.",
+      "items": {
+        "$ref": "#/$defs/PreviewRecord"
+      }
     }
   },
   "$defs": {
     "PreviewRecord": {
       "type": "object",
-      "description": "Summary of one vendored preview HTML file.",
-      "required": ["id", "file", "bytes"],
+      "description": "One layout template preview.",
+      "required": [
+        "id",
+        "file",
+        "bytes"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",
-          "description": "Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a spec/catalogs/layouts/ record id.",
+          "description": "The matching layout record id, such as cover, chart or two-column.",
           "pattern": "^[a-z][a-z0-9-]*$"
         },
         "file": {
           "type": "string",
-          "description": "HTML filename, relative to this index file's directory.",
-          "pattern": "^[^/]+\\.html$"
+          "description": "SVG filename, relative to this index directory, using the matching layout id.",
+          "pattern": "^[a-z][a-z0-9-]*\\.svg$"
         },
         "bytes": {
           "type": "integer",
           "minimum": 0,
-          "description": "Exact UTF-8 byte length of the referenced HTML file's contents."
+          "description": "Exact UTF-8 byte length of the referenced SVG file."
         }
       }
     }

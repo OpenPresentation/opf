@@ -11,9 +11,26 @@ const usage = `OPF local inspection (Node 24)
   record <kind> <id>
   validate <file.opf.json> [catalogKind]
 Resolve @openpresentation/opf (0.15 or later) from the current project or OPF_ROOT checkout.
-Catalog records come from @openpresentation/opf/catalog, which validate registers.
+Catalog records come from @openpresentation/gallery (core's /catalog before 0.19), which validate registers.
 Exit codes: 0 success (warnings may exist), 1 invalid data, 2 usage/runtime error.`;
 const print = value => process.stdout.write(JSON.stringify(value, null, 2) + '\n');
+const exportTarget = (value) => (typeof value === 'string' ? value : value?.import ?? value?.default);
+/** The host's catalog of an installed core: { gallery, catalogDisplay }. */
+async function loadCatalog(manifest, manifestPath) {
+  const require = createRequire(manifestPath);
+  let galleryManifestPath;
+  try { galleryManifestPath = require.resolve('@openpresentation/gallery/package.json'); } catch { galleryManifestPath = undefined; }
+  if (galleryManifestPath) {
+    const galleryManifest = JSON.parse(await readFile(galleryManifestPath, 'utf8'));
+    const target = exportTarget(galleryManifest.exports?.['.']) ?? galleryManifest.main;
+    const module = await import(pathToFileURL(path.resolve(path.dirname(galleryManifestPath), target)));
+    return { gallery: module.gallery, catalogDisplay: module.catalogDisplay, source: `@openpresentation/gallery ${galleryManifest.version}` };
+  }
+  const target = exportTarget(manifest.exports?.['./catalog']);
+  if (typeof target !== 'string') throw new Error(`@openpresentation/opf ${manifest.version} has neither @openpresentation/gallery nor a /catalog subpath; this helper needs 0.15 or later.`);
+  const module = await import(pathToFileURL(path.resolve(path.dirname(manifestPath), target)));
+  return { gallery: module.defaultCatalog, catalogDisplay: module.catalogDisplay, source: '@openpresentation/opf/catalog' };
+}
 async function loadPackage() {
   const explicit = process.env.OPF_ROOT;
   const roots = explicit ? [path.resolve(explicit), path.resolve(explicit, 'packages/javascript')] : [process.cwd(), path.resolve(process.cwd(), 'packages/javascript'), fileURLToPath(new URL('../../../', import.meta.url)), fileURLToPath(new URL('../../../packages/javascript/', import.meta.url))];
@@ -29,13 +46,11 @@ async function loadPackage() {
     const entry = path.resolve(path.dirname(manifestPath), target);
     // Once a package resolves, surface a broken installation instead of silently switching versions.
     const api = await import(pathToFileURL(entry));
-    // OPF 0.15: the root carries no catalog records; the pinned default catalog is the opt-in /catalog subpath.
-    const catalogExport = manifest.exports?.['./catalog'];
-    const catalogTarget = typeof catalogExport === 'string' ? catalogExport : catalogExport?.import ?? catalogExport?.default;
-    if (typeof catalogTarget !== 'string') throw new Error(`@openpresentation/opf ${manifest.version} has no /catalog subpath; this helper needs 0.15 or later.`);
-    const catalog = await import(pathToFileURL(path.resolve(path.dirname(manifestPath), catalogTarget)));
-    // Records by kind, each with its id: the content kinds of the default catalog and the display kinds.
-    const catalogs = Object.fromEntries([...Object.entries(catalog.defaultCatalog).filter(([kind]) => kind !== 'source'), ...Object.entries(catalog.catalogDisplay)].map(([kind, records]) => [kind, Object.entries(records).map(([id, record]) => ({ id, ...record }))]));
+    // OPF 0.15: the root carries no catalog records. From 0.19 (RR-78) the pptx.gallery catalog is the @openpresentation/gallery
+    // package, core's dependency; from 0.15 to 0.18 it is core's /catalog subpath.
+    const catalog = await loadCatalog(manifest, manifestPath);
+    // Records by kind, each with its id: the content kinds of the gallery and the display kinds.
+    const catalogs = Object.fromEntries([...Object.entries(catalog.gallery).filter(([kind]) => kind !== 'source'), ...Object.entries(catalog.catalogDisplay)].map(([kind, records]) => [kind, Object.entries(records).map(([id, record]) => ({ id, ...record }))]));
     return { api, catalog, catalogs, version: manifest.version, entry };
   }
   throw new Error(`Cannot resolve @openpresentation/opf. Install it in your project, or build the OPF checkout and set OPF_ROOT. Searched: ${attempts.join(', ')}`);
@@ -68,7 +83,7 @@ async function main(args) {
   const arities={version:[0,0],schema:[0,2],'find-schema':[1,1],catalog:[1,2],record:[2,2],validate:[1,2]};
   if(!arities[command] || rest.length<arities[command][0] || rest.length>arities[command][1])throw new Error(usage);
   const {api,catalog,catalogs,version,entry}=await loadPackage();
-  if(command==='version'){print({package:'@openpresentation/opf',version,entry,schemas:Object.keys(api.schemas),catalogKinds:Object.keys(catalogs),defaultCatalog:catalog.defaultCatalog.source});return;}
+  if(command==='version'){print({package:'@openpresentation/opf',version,entry,schemas:Object.keys(api.schemas),catalogKinds:Object.keys(catalogs),catalog:{source:catalog.gallery.source,package:catalog.source}});return;}
   if(command==='schema'){
     const name=rest[0]??'presentation';
     if(!Object.prototype.hasOwnProperty.call(api.schemas,name))throw new Error(`Unknown schema: ${name}. Choose ${Object.keys(api.schemas).join(', ')}.`);
@@ -89,7 +104,7 @@ async function main(args) {
   if(typeof api.validationRules==='undefined')throw new Error(`validate needs @openpresentation/opf 0.14 or later (validate, one checker with findings); the resolved version is ${version}.`);
   // A presentation file is read as strict JSON text, so findings carry line and column and invalid JSON is an invalid document (exit 1).
   // References resolve in the records the deck embeds, then in the default catalog this helper registers.
-  const result=kind?api.validateCatalogRecord(kind,JSON.parse(raw.replace(/^\uFEFF/,''))):api.validate(raw,{catalogs:[catalog.defaultCatalog]});
+  const result=kind?api.validateCatalogRecord(kind,JSON.parse(raw.replace(/^\uFEFF/,''))):api.validate(raw,{catalogs:[catalog.gallery]});
   print({version,file,...result});if(!result.valid)process.exitCode=1;
 }
 main(process.argv.slice(2)).catch(error=>{process.stderr.write(`OPF inspection failed: ${error.message}\n`);process.exitCode=2;});

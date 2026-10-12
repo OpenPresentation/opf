@@ -12,7 +12,7 @@ variables:
   risk: "#B42318"
 ---
 
-<!-- slide: id=cover layout=title section=Overview tag=Q3 -->
+<!-- slide: id=cover layout=cover section=Overview tag=Q3 -->
 # Q3 Business Review
 
 ## Operations and growth

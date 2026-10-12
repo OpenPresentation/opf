@@ -105,7 +105,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title-subtitle",
+      "layout": "cover",
       "tag": "Student success",
       "title": "Advising Retention Review",
       "subtitle": "North Valley State Student success",
@@ -114,7 +114,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-1x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "North Valley State should focus the next cycle on ",
@@ -129,7 +129,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-1x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -168,7 +168,7 @@
     {
       "id": "s4",
       "section": "Options",
-      "layout": "table-1x",
+      "layout": "table-beside",
       "title": "Decision Options",
       "table": {
         "columns": [
@@ -202,7 +202,7 @@
     {
       "id": "s5",
       "section": "Plan",
-      "layout": "text-2x",
+      "layout": "timeline",
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
@@ -235,7 +235,7 @@
     {
       "id": "s6",
       "section": "Close",
-      "layout": "list-3x",
+      "layout": "list",
       "title": "The Ask",
       "bullets": [
         {
@@ -386,7 +386,7 @@
               "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble.",
               "instructions": "Capture audience attention",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "context",
@@ -394,7 +394,7 @@
               "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine.",
               "instructions": "Give background & importance",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "villain",
@@ -402,7 +402,7 @@
               "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out.",
               "instructions": "Introduce problem",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "despair",
@@ -410,7 +410,7 @@
               "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land.",
               "instructions": "Emphasize negative impact",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "hero",
@@ -418,7 +418,7 @@
               "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé.",
               "instructions": "Present solution",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "plan",
@@ -426,13 +426,13 @@
               "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable.",
               "instructions": "Detail implementation",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "closing",
               "name": "Closing",
               "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Inspire & conclude",
               "type": "text"
             }
@@ -639,168 +639,234 @@
         }
       },
       "layouts": {
-        "title-subtitle": {
-          "name": "Title Subtitle",
-          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
-          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "subtitle"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Message"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
-          }
-        },
-        "text-1x": {
-          "name": "Text 1x",
-          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
-          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "tags": [
-            "Text",
-            "Body Copy",
-            "Narrative"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
-          }
-        },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "row"
           },
-          "tags": [
-            "Charts",
-            "Data",
-            "Analytics"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "table-1x": {
-          "name": "Table 1x",
-          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
-          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "table"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "Table",
-            "Reference",
-            "Data"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
           }
         },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
           "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
+            "Visuals"
           ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
           }
         },
-        "list-3x": {
-          "name": "List 3x",
-          "summary": "Reach for it when three groups of points need their own lists.",
-          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
           "tags": [
-            "List",
-            "Triads",
-            "Scannable"
+            "Visuals"
           ],
+          "areas": [
+            "title title",
+            "table notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "table": {
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          },
+          "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "areas": [
+            "title",
+            "timeline",
+            "notes"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "timeline": {
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          },
+          "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

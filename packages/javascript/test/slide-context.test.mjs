@@ -3,10 +3,10 @@ import { describe, test } from "node:test";
 
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME, paginate, paginateSlide, resolveSlideContext, validate } from "../dist/index.js";
 import { composeSlide, resolveFontFamilies } from "../dist/composition.js";
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 
-const catalogs = [defaultCatalog];
-const families = (scheme) => resolveFontFamilies(scheme === undefined ? ENGINE_DEFAULT_FONT_SCHEME : defaultCatalog.fontSchemes[scheme]);
+const catalogs = [gallery];
+const families = (scheme) => resolveFontFamilies(scheme === undefined ? ENGINE_DEFAULT_FONT_SCHEME : gallery.fontSchemes[scheme]);
 const context = (deck, index, options = {}) => resolveSlideContext(deck, index, { catalogs, ...options });
 const brief = (diagnostic) => [diagnostic.code, diagnostic.kind, diagnostic.path, diagnostic.reference, diagnostic.fallback];
 const recorder = () => {
@@ -16,14 +16,14 @@ const recorder = () => {
 
 describe("resolveSlideContext", () => {
   test("resolves canvas, theme, colour scheme, font families and layout in one call", () => {
-    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "right", contentBox: true }, slides: [{ layout: "title", title: "Hi" }, { title: "Second" }] };
+    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "right", contentBox: true }, slides: [{ layout: "cover", title: "Hi" }, { title: "Second" }] };
     const { options, diagnostics, resolved } = context(deck, 0);
     assert.deepEqual(diagnostics, []);
     assert.equal(options.width, 960);
     assert.equal(options.height, 720);
     assert.equal(options.fontFamilies.body, "Roboto");
     assert.deepEqual(options.fontFamilies, families("roboto"));
-    assert.equal(options.layout.name, "Title");
+    assert.equal(options.layout.name, "Cover");
     assert.equal(options.presentation, deck);
     assert.equal(options.slideIndex, 0);
     assert.equal(options.slideNumber, 1);
@@ -36,10 +36,10 @@ describe("resolveSlideContext", () => {
     assert.deepEqual([design.sources.contentAlignment, design.sources.titleAlignment, design.sources.contentBox], ["deck", "deck", "deck"]);
     assert.equal("socialPlatforms" in options, false, "social platforms are an engine vocabulary");
     assert.equal("textMeasurement" in options, false);
-    assert.deepEqual(resolved.fontScheme, defaultCatalog.fontSchemes.roboto);
+    assert.deepEqual(resolved.fontScheme, gallery.fontSchemes.roboto);
     assert.equal(resolved.fontSchemePath, "design.fontScheme");
-    assert.deepEqual(resolved.theme, defaultCatalog.themes.minimal);
-    assert.deepEqual(resolved.colorScheme, defaultCatalog.colorSchemes[defaultCatalog.themes.minimal.colorScheme]);
+    assert.deepEqual(resolved.theme, gallery.themes.minimal);
+    assert.deepEqual(resolved.colorScheme, gallery.colorSchemes[gallery.themes.minimal.colorScheme]);
     assert.equal("layout" in context(deck, 1).options, false);
   });
 
@@ -55,7 +55,7 @@ describe("resolveSlideContext", () => {
     assert.equal(context(deck, 2).options.fontFamilies.body, "Roboto");
     const themed = { design: { theme: "classic" }, slides: [{ title: "x" }] };
     const theme = context(themed, 0);
-    assert.deepEqual(theme.resolved.fontScheme, defaultCatalog.fontSchemes[theme.resolved.theme.fontScheme]);
+    assert.deepEqual(theme.resolved.fontScheme, gallery.fontSchemes[theme.resolved.theme.fontScheme]);
     assert.equal(theme.resolved.fontSchemePath, "design.theme");
     // No theme and no scheme anywhere: the shared engine default.
     assert.equal(context({ slides: [{ title: "x" }] }, 0).options.fontFamilies.body, families().body);

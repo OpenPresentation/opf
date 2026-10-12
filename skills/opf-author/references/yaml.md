@@ -17,6 +17,7 @@ opf edit deck.opf.yaml --patch changes.json -i            # edits keep the file 
 name: Q3 Business Review
 slides:
   - title: Revenue grew every quarter
+    layout: list
     items:
       - Faster onboarding
       - "yes"            # quote text that looks like another type

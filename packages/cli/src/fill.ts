@@ -7,7 +7,7 @@ import { type FilledDeck, fill } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { DECK_MEDIA, deckFormatFlag, fenceWarning, outputFormatOf, serialize } from "./deck.js";
 import { CliError, usage } from "./errors.js";
-import { checkOutput, dataFormatOf, readText, saveText } from "./io.js";
+import { checkOutput, dataFormatOf, padNumber, readText, saveText } from "./io.js";
 import { type Host, type OutputFact, checked, destinationOf, envelope, failOnOf, inputFact, outputFact, printReport, readDeck, writeDeck } from "./runtime.js";
 
 export const spec: CommandSpec = {
@@ -36,14 +36,14 @@ Examples:
 
 /** File names for the decks: the pattern with `{n}` and `{column}` replaced, a repeated name numbered. */
 export function fileNames(decks: readonly FilledDeck[], pattern: string): string[] {
-	const width = String(decks.length).length;
+	const largest = Math.max(0, ...decks.map((deck) => deck.index));
 	const used = new Set<string>();
 	const extension = /\.opf\.(json|ya?ml|md)$|\.(json|ya?ml)$/i.exec(pattern)?.[0] ?? "";
 	return decks.map((deck) => {
 		const name = pattern.replace(/\{([^{}]+)\}/g, (_match, key: string) => {
-			if (key === "n") return String(deck.index).padStart(width, "0");
+			if (key === "n") return padNumber(deck.index, largest);
 			const value = deck.record[key];
-			return value === undefined || value === null || slug(String(value)) === "" ? String(deck.index).padStart(width, "0") : slug(String(value));
+			return value === undefined || value === null || slug(String(value)) === "" ? padNumber(deck.index, largest) : slug(String(value));
 		});
 		let file = name;
 		const key = (text: string) => (process.platform === "win32" || process.platform === "darwin" ? path.resolve(text).toLowerCase() : path.resolve(text));

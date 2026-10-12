@@ -28,11 +28,11 @@ try {
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   // The CLI registers the default catalog (OPF 0.15, FA-21): the full gallery catalog, so every layout id it lists resolves.
   // (Read from the CLI itself: this file also runs, copied, against an installed CLI with no checkout beside it.)
-  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.ok(layouts.length>100,'the full gallery catalog');
-   for(const id of ['title-slide','two-column','action-plan','swot-analysis','data-visualization','executive-summary'])assert.ok(layouts.includes(id),id);
-   const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
+  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.equal(layouts.length,28,'the full v2 gallery catalog');
+   for(const id of ['cover','two-column','process','comparison','dashboard','statement'])assert.ok(layouts.includes(id),id);
+   const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Template layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);
-   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'swot-analysis'}]})}).json.valid,true);
+   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'comparison'}]})}).json.valid,true);
    assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'two-column'}]})}).json.counts.warning,0);}
   // Invalid JSON is an invalid document (exit 1); a missing file or an unknown option is a usage error (exit 2).
   run(['validate','-'],{input:'{',status:1});run(['validate','missing.json'],{status:2});run(['validate','deck.opf.json','extra'],{status:2});run(['create','--oops'],{status:2});
@@ -43,11 +43,11 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
   assert.equal(run(['validate','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
   assert.ok(run(['validate','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.findings.some(issue=>issue.ruleId==='opf/duplicate-key'));
-  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',placeholders:[{type:'title'}]}}}]},configRaw=JSON.stringify(config);
+  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',areas: ["title"], rows: [1], regions: {}}}}]},configRaw=JSON.stringify(config);
   await writeFile(path.join(temp,'house-config.json'),configRaw);
   const configured=run(['validate','target.opf.json','--only','format,references','--config','house-config.json','--fail-on','warning']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
-  config.contracts=[{path:'/slides/*/layout',allowedValues:['text-1x'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));
-  const policy=run(['validate','target.opf.json','--config','house-config.json'],{status:1}).json;assert.ok(policy.findings.some(issue=>issue.ruleId==='opf/contract'&&issue.message.includes('text-1x')));
+  config.contracts=[{path:'/slides/*/layout',allowedValues:['text'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));
+  const policy=run(['validate','target.opf.json','--config','house-config.json'],{status:1}).json;assert.ok(policy.findings.some(issue=>issue.ruleId==='opf/contract'&&issue.message.includes('text')));
   await writeFile(path.join(temp,'bad-config.json'),'{"contract":[]}');run(['validate','target.opf.json','--config','bad-config.json'],{status:2});run(['validate','target.opf.json','--config','-'],{status:2});run(['validate','missing.opf.json'],{status:2});run(['validate','target.opf.json','--fix'],{status:2});run(['validate','target.opf.json','--strict'],{status:2});
   for(const gone of ['lint','audit','import-data'])run([gone,'target.opf.json'],{status:2});
   assert.equal(await readFile(path.join(temp,'target.opf.json'),'utf8'),lintRaw,'Validate never rewrites source, including BOM and mixed line endings');

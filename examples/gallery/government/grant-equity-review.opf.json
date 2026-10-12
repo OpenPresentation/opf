@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Grantmaking",
       "title": "Grant Equity Review",
       "subtitle": "Civic Arts Commission Grantmaking",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-3x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Civic Arts Commission should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-3x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-6x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for grantmaking.",
@@ -126,7 +126,7 @@
               "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
               "instructions": "Name & logo",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "big-change",
@@ -134,7 +134,7 @@
               "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
               "instructions": "Highlight market shift",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "response-to-change",
@@ -142,7 +142,7 @@
               "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
               "instructions": "Show winners & losers",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "benefits",
@@ -150,7 +150,7 @@
               "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
               "instructions": "Describe benefits, paint a vivid picture",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "capabilities",
@@ -158,7 +158,7 @@
               "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
               "instructions": "Present unique features as 'magic gifts' to the customer",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "evidence",
@@ -166,13 +166,13 @@
               "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
               "instructions": "Share testimonials",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "call-to-action",
               "name": "Call to Action",
               "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
-              "layout": "title",
+              "layout": "list",
               "instructions": "Encourage decision-making",
               "type": "text"
             },
@@ -180,7 +180,7 @@
               "id": "close",
               "name": "Close",
               "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Logo & contact info",
               "type": "text"
             }
@@ -366,179 +366,150 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-3x": {
-          "name": "Text 3x",
-          "summary": "Reach for it when three parallel points each need a short passage of their own.",
-          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Triads",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
-          }
-        },
-        "chart-3x": {
-          "name": "Chart 3x",
-          "summary": "Reach for it when three charts tell one story, each with its own note.",
-          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 3
           },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Triads"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "list-6x": {
-          "name": "List 6x",
-          "summary": "Reach for it when six groups of points need parallel lists on one slide.",
-          "description": "A title above six lists in a three-column grid. Use it for six categories or a full inventory in which every group has a few short bullets.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 3
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Grid",
-            "Collection"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-6x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

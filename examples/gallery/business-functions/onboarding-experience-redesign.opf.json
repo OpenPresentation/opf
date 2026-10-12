@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Human resources",
       "title": "Onboarding Experience Redesign",
       "subtitle": "Kindred Systems Human resources",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-2x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Kindred Systems should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-2x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-2x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for human resources.",
@@ -126,7 +126,7 @@
               "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
               "instructions": "Share personal experiences to connect with the audience",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "research-exposition",
@@ -134,7 +134,7 @@
               "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
               "instructions": "Unravel scientific data backing the premise",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "real-life-anecdote",
@@ -142,7 +142,7 @@
               "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
               "instructions": "Illustrate with stories to make the point relatable",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "critical-insights",
@@ -150,7 +150,7 @@
               "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
               "instructions": "Summarize key points",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "break-stereotypes",
@@ -158,7 +158,7 @@
               "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
               "instructions": "Question redundant norms and belief systems",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "empowering-advice",
@@ -166,7 +166,7 @@
               "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
               "instructions": "Motivational message to act upon",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "authenticity",
@@ -174,13 +174,13 @@
               "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
               "instructions": "Honest and real communication to demonstrate authenticity",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "close-with-impact",
               "name": "Close With Impact",
               "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "End on a motivational high",
               "type": "text"
             }
@@ -364,145 +364,150 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
-          }
-        },
-        "chart-2x": {
-          "name": "Chart 2x",
-          "summary": "Reach for it when two charts are read together, each with its own note.",
-          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
           },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Comparison"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Comparison",
-            "Balance"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

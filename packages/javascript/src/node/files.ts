@@ -29,6 +29,43 @@ export function deckStem(deck: unknown, input: string) {
 	return clean(text(root.filename).trim().replace(/\.(pptx|pdf|png|svg)$/i, "")) || slug(text(root.name)) || stemOf(input);
 }
 
+/**
+ * A number written with leading zeros to the width of the largest number written, so the names sort as text: 1 to 9 give `1` to
+ * `9`, 10 to 99 give `01` to `99`, 100 and up give `001`. One rule for `{n}` in an output pattern, for the numbered names of
+ * slide files and zip entries, and for `opf fill`'s record numbers.
+ */
+export function padNumber(value: number, largest: number): string {
+	return String(value).padStart(String(largest).length, "0");
+}
+
+const PLACEHOLDER = /\{([^{}]*)\}/g;
+
+/** The `{key}` placeholders in an output path, in order. */
+export function outputKeys(output: string): string[] {
+	return [...output.matchAll(PLACEHOLDER)].map((match) => match[1] as string);
+}
+
+/**
+ * Check the `{...}` placeholders of an output path. `perSlide` is true for a .png or .svg output (one file per slide), where `{n}`
+ * (the slide number) is the one placeholder and any other `{key}` is refused (`invalid-option`). A single-file output (.pdf,
+ * .pptx, .zip, a deck form) refuses `{n}`, since there is nothing to number. Returns whether the path is a pattern to expand.
+ */
+export function checkOutputPattern(output: string, perSlide: boolean): boolean {
+	const keys = outputKeys(output);
+	if (!perSlide) {
+		if (keys.includes("n")) throw new OPFApiError(`{n} numbers the files of a .png or .svg output, one per slide; ${output} is a single file. Name the file without {n}.`, "invalid-option", { details: { path: output } });
+		return false;
+	}
+	const unknown = keys.find((key) => key !== "n");
+	if (unknown !== undefined) throw new OPFApiError(`Unknown {${unknown}} in the output ${output}: the only placeholder is {n}, the slide number.`, "invalid-option", { details: { path: output, key: unknown } });
+	return keys.length > 0;
+}
+
+/** The output path with `{n}` replaced by the slide number, padded to the width of `largest`. */
+export function expandOutputPattern(output: string, slide: number, largest: number): string {
+	return output.replace(PLACEHOLDER, () => padNumber(slide, largest));
+}
+
 export interface PlannedFile {
 	file: string;
 	bytes: Uint8Array;

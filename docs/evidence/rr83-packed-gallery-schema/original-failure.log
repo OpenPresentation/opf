@@ -1,0 +1,86 @@
+Packed TypeScript 5.9/7 consumers passed: 21 exports, NodeNext/Bundler, installed renderer/editor/PPTX, @openpresentation/cli resolving it, browser entries without Node types.
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node smoke.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+2 !== 1
+
+    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-packed-smoke-ShMvZ6/project/smoke.mjs:25:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+stderr:
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+2 !== 1
+
+    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-packed-smoke-ShMvZ6/project/smoke.mjs:25:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at ChildProcess.exithandler (node:child_process:417:12)
+    at ChildProcess.emit (node:events:514:28)
+    at maybeClose (node:internal/child_process:1141:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:306:5) {
+  code: 1,
+  killed: false,
+  signal: null,
+  cmd: '/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node smoke.mjs',
+  stdout: '',
+  stderr: 'node:internal/modules/run_main:107\n' +
+    '    triggerUncaughtException(\n' +
+    '    ^\n' +
+    '\n' +
+    'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+    '\n' +
+    '2 !== 1\n' +
+    '\n' +
+    '    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-packed-smoke-ShMvZ6/project/smoke.mjs:25:8\n' +
+    '    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n' +
+    '    at async node:internal/modules/esm/loader:647:26\n' +
+    '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n' +
+    '  generatedMessage: true,\n' +
+    "  code: 'ERR_ASSERTION',\n" +
+    '  actual: 2,\n' +
+    '  expected: 1,\n' +
+    "  operator: 'strictEqual',\n" +
+    "  diff: 'simple'\n" +
+    '}\n' +
+    '\n' +
+    'Node.js v24.21.0\n'
+}
+
+Node.js v24.21.0

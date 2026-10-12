@@ -6,7 +6,7 @@ import * as root from '../dist/index.js';
 // FA-17: every shared design key resolves with one merge, per key: slide design, then deck design, then the
 // layout record's design, then the engine default. SlideComposition.design carries the result, so the render and
 // PPTX engines read the same values composition used.
-const layout = id => design => ({id, design, placeholders: [{type: 'title'}, {type: 'text'}]});
+const layout = id => design => ({id, design, areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text","list","chart"],"flow":"none"}}});
 const asset = name => `data:image/png;base64,${name}`;
 // One value per key that the engine default does not already produce, plus an opposing value to override with.
 const KEYS = {
@@ -17,6 +17,7 @@ const KEYS = {
   chartPrimary: ['left', 'top'],
   imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
+  mirror: [true, false],
 };
 
 test('the shared key list; the helper is an engine name on the composition entry, not the root', () => {
@@ -89,7 +90,7 @@ test('layout titleAlignment and contentAlignment align title and content; the de
 });
 
 test('a cover keeps tag, title and subtitle together under the layout titleAlignment', () => {
-  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'right'}, placeholders: [{type: 'title'}, {type: 'subtitle'}]};
+  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'right'}, areas: ["title"], rows: [1], regions: {}};
   const cover = {tag: 'Tag', title: 'Cover', subtitle: 'Sub', layout: 'title-subtitle'};
   assert.deepEqual(alignments(composeSlide(cover, {layout: record})), {tag: 'center', title: 'center', subtitle: 'center'});
   // Only the slide's own contentAlignment splits the group.
@@ -120,13 +121,14 @@ test('layout listBullet image attaches the organization icon logo, and reports a
   assert.deepEqual(unresolved.diagnostics.map(({code, path}) => ({code, path})), [{code: 'unresolved-content', path: 'slides.4.layout'}]);
 });
 
-test('layout contentDirection and chartPrimary rank below the deck and slide values, as the other keys do', () => {
-  const blocks = [{text: 'First'}, {text: 'Second'}, {text: 'Third'}];
-  const mode = (slide, options) => composeSlide(slide, {...options, explain: true}).explanation.decisions.find(decision => decision.path === 'slides.0').mode;
-  const record = layout('dir')({contentDirection: 'vertical'});
-  assert.equal(mode({title: 'T', blocks}, {layout: record}), 'column');
-  assert.equal(mode({title: 'T', blocks}, {layout: record, presentation: {design: {contentDirection: 'horizontal'}}}), 'row');
-  assert.equal(mode({title: 'T', blocks, design: {contentDirection: 'horizontal'}}, {layout: record, presentation: {design: {contentDirection: 'vertical'}}}), 'row');
+test('template geometry is authoritative while design hints retain their precedence', () => {
+  const record = layout('dir')({contentDirection: 'vertical', chartPrimary: 'left'});
+  const slide = {title: 'T', blocks: [{text: 'First'}, {text: 'Second'}]};
+  const control = composeSlide(slide, {layout: record});
+  const overridden = composeSlide({...slide, design: {contentDirection: 'horizontal', chartPrimary: 'top'}}, {layout: record});
+  assert.equal(overridden.design.contentDirection, 'horizontal');
+  assert.equal(overridden.design.chartPrimary, 'top');
+  assert.deepEqual(overridden.items.map(item=>item.box),control.items.map(item=>item.box));
 });
 
 test('the effective imageFit is the fit of every image item that sets none, cover by default', () => {

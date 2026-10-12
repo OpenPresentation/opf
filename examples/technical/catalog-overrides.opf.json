@@ -94,19 +94,19 @@
               "id": "contract",
               "name": "Contract",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "proof",
               "name": "Proof",
               "type": "chart",
-              "layout": "chart-1x"
+              "layout": "chart-beside"
             },
             {
               "id": "decision",
               "name": "Decision",
               "type": "list",
-              "layout": "list-2x"
+              "layout": "list"
             }
           ]
         }

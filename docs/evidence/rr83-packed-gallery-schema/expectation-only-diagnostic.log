@@ -1,0 +1,71 @@
+Packed TypeScript 5.9/7 consumers passed: 21 exports, NodeNext/Bundler, installed renderer/editor/PPTX, @openpresentation/cli resolving it, browser entries without Node types.
+Installed validate: root and subpath entrypoints, rule ids, categories, source ranges, loaded records, duplicate keys and contracts pass offline.
+Installed patch, diff, merge and format entrypoints pass offline.
+Installed conversions: pure converters, loss reports and refusals work offline.
+Installed Markdown: dialect conversion, round trip and located errors work offline.
+Installed YAML: strict dialect, canonical writer and located errors work offline.
+Installed parse/stringify: JSON, YAML and Markdown decks read and write offline.
+Installed root under Node: convert, open and save on files and in memory, one set of classes; /node is gone.
+Installed root in a browser and a worker bundle: the browser build, whose convert rejects with node-only.
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.643416ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.643458ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (10.086792ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (180.249041ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.150708ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.131ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.170083ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 243.627042
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (4.149375ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (12.072834ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (442.552959ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (283.551458ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (2911.745667ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (86.767333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3821.313666
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (3.89575ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.382333ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (9.70825ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (1.331333ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.655833ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.278333ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (12.650875ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.240958ms)
+✔ font trials stay bounded independently of canvas scale (6.115042ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 102.881208
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (4.808041ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (14.963042ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (420.893875ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (22.912333ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (119.173917ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (313.293625ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 976.819375
+Packed install smoke passed for openpresentation-opf-0.18.3.tgz (3320868 bytes).
+Packed tarball entries checked: 101.

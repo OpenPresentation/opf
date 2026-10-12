@@ -216,7 +216,7 @@ test('generated socials format the primary organization profiles through the eng
   // A key outside the vocabulary keeps the raw authored value (Socials engine fallback).
   assert.deepEqual(resolveSocialProfile('custom','acme'),{text:'acme',resolved:false});
   // Every platform of the vocabulary formats the example handle of its gallery display record.
-  const {catalogDisplay}=await import('../dist/catalog.js');
+  const {catalogDisplay}=await import('@openpresentation/gallery');
   const {SOCIAL_PLATFORMS}=await import('../dist/composition.js');
   assert.deepEqual(Object.keys(SOCIAL_PLATFORMS).sort(),Object.keys(catalogDisplay.socialPlatforms).sort());
   for(const [platform,display] of Object.entries(catalogDisplay.socialPlatforms)){

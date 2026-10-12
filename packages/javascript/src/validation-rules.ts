@@ -110,6 +110,22 @@ const referenceRules: ValidationRuleInfo[] = [
 		{ standard: 'spec/schemas/<kind>.schema.json' },
 	),
 	rule(
+		'layout-template',
+		'references',
+		'error',
+		"A layout template's grid is malformed.",
+		'A layout (OPF 0.19) is a grid of named areas. Engines cannot compose a grid whose rows have different lengths, whose names do not form one filled rectangle each, whose column or row sizes do not match the grid, that is larger than 12 x 12, or that holds a word that is not a name or ".". composeSlide refuses such a record, so a slide that names it composes automatically.',
+		{ standard: 'spec/schemas/layout.schema.json and the area rules of OPF 0.19 (docs/layout-templates.md)', approximations: 'Checked on every layout record the document embeds and every registered record it uses, once the record passes its schema.' },
+	),
+	rule(
+		'layout-region',
+		'references',
+		'error',
+		"A layout template's regions do not match its areas.",
+		"Every body area of a layout needs a region that says what it accepts, and every region needs an area. Region names may not be title, subtitle, tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; a subtitle area needs a title area; a region with flow 'none' holds one block; overflowRegion must name a region. composeSlide refuses such a record.",
+		{ standard: 'spec/schemas/layout.schema.json and the region rules of OPF 0.19 (docs/layout-templates.md)' },
+	),
+	rule(
 		'unresolved-reference',
 		'references',
 		'warning',

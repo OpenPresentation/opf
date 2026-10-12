@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { embed, normalizeLanguageFamily, validate, validateCatalogRecord } from '../dist/index.js';
-import { defaultCatalog } from '../dist/catalog.js';
+import { gallery } from '@openpresentation/gallery';
 import { resolveFontFamilies } from '../dist/composition.js';
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 // The format, references and policy findings: the checks that decide whether a deck is correct OPF.
-const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'policy'], catalogs: [defaultCatalog], ...options });
+const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'policy'], catalogs: [gallery], ...options });
 // The default catalog's records as published record files: with their $schema and id.
-const published = (kind, schema) => Object.entries(defaultCatalog[kind]).map(([id, record]) => ({ $schema: `https://openpresentation.org/schema/opf-${schema}/v1`, id, ...record }));
+const published = (kind, schema) => Object.entries(gallery[kind]).map(([id, record]) => ({ $schema: `https://openpresentation.org/schema/opf-${schema}/v1`, id, ...record }));
 const colorSchemes = published('colorSchemes', 'color-scheme');
 const fontSchemes = published('fontSchemes', 'font-scheme');
 
@@ -172,7 +172,7 @@ describe('root audience accepts one inline Audience object', () => {
     assert.deepEqual(unknown({ name: 'Custom' }), []);
   });
   test('embed embeds the record a single audience object names', () => {
-    const embedded = embed(deck({ audience: { id: 'executive' } }), { catalogs: [defaultCatalog] });
+    const embedded = embed(deck({ audience: { id: 'executive' } }), { catalogs: [gallery] });
     assert.ok(embedded.document.catalogs?.default?.audiences?.executive, JSON.stringify(embedded.added));
   });
 });

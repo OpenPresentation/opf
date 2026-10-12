@@ -89,7 +89,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Public health",
       "title": "Vaccination Outreach Briefing",
       "subtitle": "County Health Alliance Public health",
@@ -98,7 +98,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-3x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "County Health Alliance should focus the next cycle on ",
@@ -113,7 +113,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-3x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -152,7 +152,7 @@
     {
       "id": "s4",
       "section": "Options",
-      "layout": "table-1x",
+      "layout": "table-beside",
       "title": "Decision Options",
       "table": {
         "columns": [
@@ -186,7 +186,7 @@
     {
       "id": "s5",
       "section": "Plan",
-      "layout": "list-3x",
+      "layout": "timeline",
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
@@ -219,7 +219,7 @@
     {
       "id": "s6",
       "section": "Close",
-      "layout": "list-2x",
+      "layout": "list",
       "title": "The Ask",
       "bullets": [
         {
@@ -355,7 +355,7 @@
               "id": "opening",
               "name": "Opening",
               "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
-              "layout": "title",
+              "layout": "cover",
               "instructions": "Set the stage",
               "type": "text"
             },
@@ -365,7 +365,7 @@
               "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
               "instructions": "Announce product",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "demonstration",
@@ -373,7 +373,7 @@
               "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
               "instructions": "Showcase the product",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "wow-factor",
@@ -381,7 +381,7 @@
               "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
               "instructions": "Highlight cutting-edge features",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "differentiation",
@@ -389,7 +389,7 @@
               "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
               "instructions": "Distinctive factors",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "revolution",
@@ -397,7 +397,7 @@
               "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
               "instructions": "Change in the playing field",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "excitement",
@@ -405,7 +405,7 @@
               "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
               "instructions": "Build anticipation",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "call-to-action",
@@ -413,13 +413,13 @@
               "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
               "instructions": "Urge to explore",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "gratitude",
               "name": "Gratitude",
               "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Thank the audience",
               "type": "text"
             }
@@ -629,229 +629,234 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-3x": {
-          "name": "Text 3x",
-          "summary": "Reach for it when three parallel points each need a short passage of their own.",
-          "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Triads",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
-          }
-        },
-        "chart-3x": {
-          "name": "Chart 3x",
-          "summary": "Reach for it when three charts tell one story, each with its own note.",
-          "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 3
           },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Triads"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "table-1x": {
-          "name": "Table 1x",
-          "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
-          "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "table"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "Table",
-            "Reference",
-            "Data"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
           }
         },
-        "list-3x": {
-          "name": "List 3x",
-          "summary": "Reach for it when three groups of points need their own lists.",
-          "description": "A title above three lists in a row. Use it for three themes, three phases or three audiences, each with a few bullets.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
           "tags": [
-            "List",
-            "Triads",
-            "Scannable"
+            "Visuals"
           ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-3x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
           }
         },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
           "tags": [
-            "List",
-            "Comparison",
-            "Balance"
+            "Visuals"
           ],
+          "areas": [
+            "title title",
+            "table notes"
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "table": {
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          },
+          "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "areas": [
+            "title",
+            "timeline",
+            "notes"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "timeline": {
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          },
+          "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

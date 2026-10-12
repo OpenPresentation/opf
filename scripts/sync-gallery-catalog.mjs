@@ -7,7 +7,7 @@
 //   node scripts/sync-gallery-catalog.mjs --url https://www.pptx.gallery --check
 //                                                                       compare against the live site
 //   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
-//   node scripts/sync-gallery-catalog.mjs --rehash                     after a core-first edit of spec/catalogs: rewrite
+//   node scripts/sync-gallery-catalog.mjs --rehash                     after a spec-first edit of the records: rewrite
 //                                                                       the index and manifest hashes and counts
 //   node scripts/sync-gallery-catalog.mjs --rehash --match-gallery     the same, and set every kind's gallery block to the new hash (for a
 //                                                                       spec-required edit that the gallery PR publishes identically)
@@ -18,8 +18,8 @@
 // Every gallery record is validated against the companion schemas in
 // spec/schemas/ before anything is written. Publisher `x-*` members are
 // dropped. Every kind mirrors the gallery (OPF 0.15): the snapshot holds every
-// record the gallery publishes, which `@openpresentation/opf/catalog` exports
-// as the default catalog. The snapshot
+// record the gallery publishes, which `@openpresentation/gallery` exports as
+// `gallery`. The snapshot
 // never loses an id: removing a record is a breaking change, so a gallery that
 // stopped publishing a bundled id is refused. The one waiver is explicit and per
 // id: `--allow-removed <kind>:<id>` drops that id from the snapshot (and deletes
@@ -47,7 +47,7 @@ import {
 } from "./catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const defaultCatalogsRoot = path.join(repoRoot, "spec", "catalogs");
+const defaultCatalogsRoot = path.join(repoRoot, "packages", "gallery", "catalog");
 const schemasRoot = path.join(repoRoot, "spec", "schemas");
 
 export const GALLERY_REPOSITORY = "https://github.com/Data-Advantage/pptx-gallery";
@@ -218,7 +218,7 @@ export function planSnapshot({ gallery, current, manifest: _manifest, validators
   const nextManifest = {
     $schema: CATALOG_MANIFEST_SCHEMA_ID,
     description:
-      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. Only @openpresentation/opf/catalog carries it; no other entry of core imports catalog data (pnpm check:catalog-free).",
+      "Pinned snapshot of the default OPF catalog published by pptx.gallery: every record of every kind the gallery publishes (each kind mirrors the gallery). Written by scripts/sync-gallery-catalog.mjs; never edit it by hand. It is the data of @openpresentation/gallery (RR-78); core imports none of it (pnpm check:catalog-free).",
     publisher: DEFAULT_CATALOG_PUBLISHER,
     source,
     kinds: Object.fromEntries(SNAPSHOT_KINDS.map(({ kind }) => [kind, kinds[kind].manifestEntry])),
@@ -235,7 +235,7 @@ async function currentFileMatches(file, value) {
   return sameJson(JSON.parse(await readFile(file, "utf8")), value);
 }
 
-/** Lists the files the plan would change (relative to spec/catalogs). */
+/** Lists the files the plan would change (relative to the catalog directory). */
 export async function diffSnapshot(catalogsRoot, plan) {
   const changes = [];
   for (const [kind, planned] of Object.entries(plan.kinds)) {

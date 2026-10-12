@@ -56,10 +56,10 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, toPng, checkTypefaces, fromPptx, defaultCatalog, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
-// OPF 0.15: core registers no catalog. The matrix is a host: it registers the default catalog with every engine and core
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, toPng, checkTypefaces, fromPptx, gallery, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+// OPF 0.15: core registers no catalog. The matrix is a host: it registers the gallery (RR-78) with every engine and core
 // call, as the CLI does, so its decks name gallery records by id without embedding them.
-const CATALOGS = [defaultCatalog];
+const CATALOGS = [gallery];
 const withCatalogs = (options = {}) => ({catalogs: CATALOGS, ...options});
 const toSvg = (deck, options) => engines.toSvg(deck, withCatalogs(options));
 const toPptx = (deck, options) => engines.toPptx(deck, withCatalogs(options));
@@ -67,8 +67,8 @@ const createEditorSession = (deck, options) => engines.createEditorSession(deck,
 const resolveScriptFonts = (deck, options) => engines.resolveScriptFonts(deck, withCatalogs(options));
 const validate = (deck, options) => engines.validate(deck, withCatalogs(options));
 // The catalog records with their ids, by kind: the content kinds of the default catalog and the display kinds.
-const catalogs = Object.fromEntries([...Object.keys(defaultCatalog).filter((kind) => kind !== 'source'), ...Object.keys(catalogDisplay)]
-  .map((kind) => [kind, Object.entries(defaultCatalog[kind] ?? catalogDisplay[kind]).map(([id, record]) => ({id, ...record}))]));
+const catalogs = Object.fromEntries([...Object.keys(gallery).filter((kind) => kind !== 'source'), ...Object.keys(catalogDisplay)]
+  .map((kind) => [kind, Object.entries(gallery[kind] ?? catalogDisplay[kind]).map(([id, record]) => ({id, ...record}))]));
 // A deck's language is a BCP-47 tag; the matrix names languages by their catalog record ids.
 const tag = (id) => catalogDisplay.languages[id].bcp47;
 
@@ -221,33 +221,23 @@ const CODE = 'const score = urgency * confidence;\nreturn score > 0.5;';
 
 // Content blocks (slides of one content type).
 const contentBlocks = {
-  bullets: (text) => ({layout: 'list-1x', blocks: [{bullets: text.items}]}),
-  cards: (text) => ({layout: 'number-2x', design: {contentBox: true}, blocks: [{metric: {value: 42, unit: '%', label: text.items[0]}}, {metric: {value: 7, label: text.items[1], delta: '+2'}}]}),
-  table: (text) => ({layout: 'table-1x', table: {columns: [text.cells[0], text.cells[1]], rows: [[text.cells[2], text.cells[3]], [text.cells[3], text.cells[2]]]}, text: text.body}),
-  timeline: (text) => ({layout: 'timeline-1x', timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}, {when: 'Q3', what: text.items[2]}]}}),
-  metric: (text) => ({layout: 'number-1x', metric: {value: 128, unit: 'ms', label: text.items[0], description: text.body, delta: '+4', trend: 'up'}}),
-  quote: (text) => ({layout: 'quote-1x', quote: {text: text.body, attribution: text.cells[0], source: text.cells[1]}}),
-  code: (text) => ({layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}),
-  chart: (text) => ({layout: 'chart-1x', chart: {type: 'column', data: CHART_DATA}, text: text.body}),
-  text: (text) => ({layout: 'text-1x', text: [text.body, text.body].join(' ')})
+  bullets: (text) => ({layout: 'list', blocks: [{bullets: text.items}]}),
+  cards: (text) => ({layout: 'metrics', design: {contentBox: true}, blocks: [{metric: {value: 42, unit: '%', label: text.items[0]}}, {metric: {value: 7, label: text.items[1], delta: '+2'}}]}),
+  table: (text) => ({layout: 'table', table: {columns: [text.cells[0], text.cells[1]], rows: [[text.cells[2], text.cells[3]], [text.cells[3], text.cells[2]]]}, text: text.body}),
+  timeline: (text) => ({layout: 'timeline', timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}, {when: 'Q3', what: text.items[2]}]}}),
+  metric: (text) => ({layout: 'metrics', metric: {value: 128, unit: 'ms', label: text.items[0], description: text.body, delta: '+4', trend: 'up'}}),
+  quote: (text) => ({layout: 'quote', quote: {text: text.body, attribution: text.cells[0], source: text.cells[1]}}),
+  code: (text) => ({layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}),
+  chart: (text) => ({layout: 'chart', chart: {type: 'column', data: CHART_DATA}, text: text.body}),
+  text: (text) => ({layout: 'text', text: [text.body, text.body].join(' ')})
 };
-// Layout families and one slide builder that fills a layout record's placeholders.
-// A layout's family is its primary content kind, read from its placeholders, so the family list does not change when the
-// bundled catalog gains layouts (FF-55 bundles the 70 legacy gallery ids next to the structural ones): the first
-// placeholder that is not a heading names the family, a heading-only layout is a title, and no placeholder is blank.
-// FA-26: a placeholder group counts through its leaves, in reading order. Written here, not imported, so the published
-// matrix (OPF_MATRIX_ENGINES) runs against packages that predate layoutLeaves.
-const layoutLeaves = (record) => (record.placeholders ?? []).flatMap((entry) => (entry.type === 'group' ? layoutLeaves(entry) : [entry]));
-const layoutFamily = (record) => {
-  // FA-26: placeholder groups count through their leaves, in reading order.
-  const types = layoutLeaves(record).map((placeholder) => placeholder.type);
-  const body = types.find((type) => !['title', 'subtitle', 'tag'].includes(type));
-  if (body !== undefined) return body;
-  return types.length ? 'title' : 'blank';
-};
+// Layout families and one slide builder that fills a template's regions.
+// Read the primary body kind from v2 template regions. Heading-only templates form the title family.
+const layoutKinds = record => Object.values(record.regions ?? {}).map(region => region.accepts.find(kind => kind !== 'group')).filter(Boolean);
+const layoutFamily = record => layoutKinds(record)[0] ?? 'title';
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
 const layoutMembers = (family) => catalogs.layouts.filter((record) => layoutFamily(record) === family).map((record) => record.id);
-const placeholderBlock = {
+const templateBlock = {
   text: (text) => ({text: text.body}),
   list: (text) => ({bullets: text.items}),
   metric: (text) => ({metric: {value: 42, label: text.items[0], unit: 'ms'}}),
@@ -260,11 +250,13 @@ const placeholderBlock = {
   video: () => ({video: 'asset:clip'})
 };
 function layoutSlide(id, layoutId, text) {
-  const types = layoutLeaves(byId('layouts', layoutId)).map((placeholder) => placeholder.type);
-  const content = types.filter((type) => type !== 'title' && type !== 'subtitle');
-  return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => placeholderBlock[type](text))} : {})};
+  const record = byId('layouts', layoutId);
+  const content = layoutKinds(record);
+  const heading = record.areas.some(row => row.split(/\s+/).includes('title'));
+  const types = heading ? ['title', 'subtitle'] : [];
+  return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text))} : {})};
 }
-assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'title', 'video'], 'the catalog has the expected layout families');
+assert.deepEqual(LAYOUT_FAMILIES, ['chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'title'], 'the catalog has the expected layout families');
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
@@ -472,7 +464,7 @@ function buildDeck(name, row, index) {
     ...row.block.map((type, slot) => ({id: `block-${slot + 1}`, title: text.title, ...(slot === 0 ? {notes: text.body} : {}), ...contentBlocks[type](text)})),
     ...row.chart.map((level, slot) => {
       const record = byId('chartTypes', rotate(chartMembers.get(level), slot));
-      return {id: `chart-${slot + 1}`, layout: 'chart-1x', title: text.title, chart: {type: record.id, data: chartData(record)}, text: text.body};
+      return {id: `chart-${slot + 1}`, layout: 'chart', title: text.title, chart: {type: record.id, data: chartData(record)}, text: text.body};
     })
   ];
   // Second background and image slots ride on slide-level design; the first ride on the deck and the first slide.
@@ -897,7 +889,7 @@ if (FULL) {
     name: 'per-slide override', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'},
     slides: [
       {id: 'deck', title: text.title, notes: text.body, bullets: text.items},
-      {id: 'override', title: text.title, notes: text.body, design: {fontScheme: 'georgia'}, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body},
+      {id: 'override', title: text.title, notes: text.body, design: {fontScheme: 'georgia'}, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body},
       {id: 'deck-again', title: text.title, text: text.body}
     ]
   };
@@ -921,7 +913,7 @@ if (FULL) {
   const text = TEXT.english;
   const deck = {
     name: 'scheme overrides', language: tag('english'), design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
-    slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]
+    slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}]
   };
   await runSwitch('scheme-overrides', deck, [
     {label: 'id to verdana', apply: setScheme('design.fontScheme', 'verdana'), expectUsed: ['Georgia', 'Verdana', 'Courier New'], expectUnused: ['Calibri']},
@@ -950,7 +942,7 @@ if (FULL) {
 // Indirect switches: theme (through its bundled scheme) and language (through script slots).
 {
   const text = TEXT.english;
-  const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]};
+  const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}]};
   await runSwitch('theme', deck, [
     {label: 'classic', apply: setTheme('classic'), expectUsed: ['Tenorite Display', 'Tenorite'], expectUnused: ['Aptos']},
     {label: 'dark', apply: setTheme('dark'), expectUsed: ['Seaford Display', 'Seaford']},
@@ -1012,7 +1004,7 @@ const EXPORT_FALLBACK = {'box-and-whisker': 'barChart', funnel: 'barChart', hist
 const marks = (svg) => ({text: (svg.match(/<text\b/g) ?? []).length, shapes: (svg.match(/<(?:path|rect|circle|line|polygon|polyline)\b/g) ?? []).length});
 const chartPaths = [];
 for (const chart of catalogs.chartTypes) {
-  const slide = {id: 'chart', layout: 'chart-1x', title: 'Chart', chart: {type: chart.id, data: chartData(chart)}, text: 'Body'};
+  const slide = {id: 'chart', layout: 'chart', title: 'Chart', chart: {type: chart.id, data: chartData(chart)}, text: 'Body'};
   const deck = {name: chart.id, language: tag('english'), design: {fontScheme: 'calibri'}, slides: [slide]};
   const bare = {...deck, slides: [{...slide, chart: undefined}]};
   delete bare.slides[0].chart;
@@ -1154,7 +1146,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   const id = 'single-series-histogram-chart';
   const histogram = byId('chartTypes', 'histogram');
   assert.equal(histogram.series, 1, 'the catalog histogram expects one series');
-  const deck = {name: id, language: tag('english'), design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
+  const deck = {name: id, language: tag('english'), design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
   const exportDiagnostics = [];
   const bytes = await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)});
   const exported = unzipSync(bytes);

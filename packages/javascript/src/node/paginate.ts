@@ -3,7 +3,7 @@
 // packages the command still paginates with core's portable estimate and says so (`layout: "estimated"`, and the reason).
 import { type Catalog, type Fonts, type PresentationPaginationResult, paginate } from "../core.js";
 import { OPFApiError } from "../api-errors.js";
-import { DEFAULT_CATALOGS } from "./catalogs.js";
+import { defaultCatalogs } from "./catalogs.js";
 import { leaseSharedFonts, listFontDirectories, prepareFonts } from "./fonts.js";
 import { loadRenderer } from "./peers.js";
 import type { Reporter } from "./reporter.js";
@@ -29,7 +29,7 @@ export interface PaginatedDeck {
  * `fontFolders` the fonts are required, so a missing renderer throws. Throws `OPFPaginationError` when content cannot fit.
  */
 export async function paginateDeck(deck: unknown, options: PaginateDeckOptions): Promise<PaginatedDeck> {
-	const catalogs = options.catalogs ?? DEFAULT_CATALOGS;
+	const catalogs = options.catalogs ?? defaultCatalogs();
 	const folders = options.fontFolders ?? [];
 	let lease: Awaited<ReturnType<typeof leaseSharedFonts>> | undefined;
 	try {

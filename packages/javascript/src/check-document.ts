@@ -378,6 +378,8 @@ function fields(document: unknown): Field[] {
 	}
 	return result;
 }
+/** A record's issue is opf/catalog-record, except the template rules of a layout (opf/layout-template, opf/layout-region). */
+const recordRuleId = (issue: ValidationIssue): string => issue.keyword === 'opf' && (issue.params.code === 'layout-template' || issue.params.code === 'layout-region') ? `opf/${issue.params.code}` : 'opf/catalog-record';
 /** `group/kind/id` of the embedded records that fail their companion schema. */
 type InvalidRecords = Set<string>;
 const recordKey = (group: string, kind: CatalogKind, id: string) => `${group}/${kind}/${id}`;
@@ -397,7 +399,7 @@ function embeddedRecordFindings(document: unknown, options: CatalogOptions, find
 				const path = pointer(['catalogs', group, kind, id]);
 				if (object(record) && (Object.hasOwn(record, '$schema') || Object.hasOwn(record, 'id'))) continue; // the schema reports it
 				const validation = recordIssues(kind, id, record);
-				for (const issue of validation.errors) findings.push(issueFinding(issue, 'opf/catalog-record', catalogSchemaNames[kind], path, 'document'));
+				for (const issue of validation.errors) findings.push(issueFinding(issue, recordRuleId(issue), catalogSchemaNames[kind], path, 'document'));
 				if (!validation.valid) invalid.add(recordKey(group, kind, id));
 				// A catalog group claims its records come from its source; a registered copy of that source that lacks one says otherwise.
 				if (group === 'custom') continue;
@@ -615,7 +617,7 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 			// A registered record the document uses is checked like an embedded one, once.
 			registeredChecked.add(recordKey(found.group, site.kind, found.id));
 			for (const issue of recordIssues(site.kind, found.id, found.record).errors)
-				findings.push(issueFinding(issue, 'opf/catalog-record', catalogSchemaNames[site.kind], pointer(['catalogs', found.group, site.kind, found.id]), 'context'));
+				findings.push(issueFinding(issue, recordRuleId(issue), catalogSchemaNames[site.kind], pointer(['catalogs', found.group, site.kind, found.id]), 'context'));
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);

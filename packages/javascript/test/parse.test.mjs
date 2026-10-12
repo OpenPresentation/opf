@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { DECK_FORMATS, OPFMarkdownError, OPFValidationError, deckFormatOf, parse, stringify as writeDeck } from "../dist/index.js";
 import { readDeckReport as readDeck } from "../dist/node-engine.js";
 import * as deckModule from "../dist/deck.js";
-import { defaultCatalog } from "../dist/catalog.js";
+import { gallery } from "@openpresentation/gallery";
 import { OPFYamlError } from "../dist/yaml.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -108,7 +108,7 @@ describe("readDeck across the three formats", () => {
   });
 
   test("the Markdown example deck reads by its name and writes back to its own text", () => {
-    const result = readDeck(quarterly, { filename: "quarterly-review.opf.md", catalogs: [defaultCatalog] });
+    const result = readDeck(quarterly, { filename: "quarterly-review.opf.md", catalogs: [gallery] });
     assert.equal(result.format, "markdown");
     assert.equal(result.valid, true);
     assert.deepEqual(result.findings, []);
@@ -119,12 +119,12 @@ describe("readDeck across the three formats", () => {
     for (const format of DECK_FORMATS) {
       const text = writeDeck(readDeck(quarterly, { format: "markdown" }).presentation, { format });
       const without = readDeck(text, { format });
-      const withDefault = readDeck(text, { format, catalogs: [defaultCatalog] });
+      const withDefault = readDeck(text, { format, catalogs: [gallery] });
       assert.ok(without.counts.warning > 0, `${format}: references to a catalog nothing registered`);
       assert.equal(withDefault.counts.warning, 0, format);
       // `validate` options that name no catalogs get the option; ones that do keep their own.
-      assert.equal(readDeck(text, { format, catalogs: [defaultCatalog], validate: { only: ["references"] } }).counts.warning, 0, format);
-      assert.ok(readDeck(text, { format, catalogs: [defaultCatalog], validate: { only: ["references"], catalogs: [] } }).counts.warning > 0, format);
+      assert.equal(readDeck(text, { format, catalogs: [gallery], validate: { only: ["references"] } }).counts.warning, 0, format);
+      assert.ok(readDeck(text, { format, catalogs: [gallery], validate: { only: ["references"], catalogs: [] } }).counts.warning > 0, format);
     }
   });
 
@@ -246,7 +246,7 @@ describe("parse", () => {
       assert.deepEqual(parse(writeDeck(deck, { format }), { format }), deck, format);
       assert.deepEqual(parse(writeDeck(deck, { format }), { filename: `deck.opf.${format === "markdown" ? "md" : format}` }), deck, format);
     }
-    assert.equal(parse(quarterly, { filename: "quarterly-review.opf.md", catalogs: [defaultCatalog] }).name, readDeck(quarterly, { format: "markdown" }).presentation.name);
+    assert.equal(parse(quarterly, { filename: "quarterly-review.opf.md", catalogs: [gallery] }).name, readDeck(quarterly, { format: "markdown" }).presentation.name);
   });
 
   test("throws OPFValidationError for syntax, schema and reference errors, with findings located by line and column", () => {

@@ -235,12 +235,15 @@ interface BlockSpec {
   value: unknown;
   id?: unknown;
   type?: unknown;
+  /** A promoted region key: the block is that region of the slide. */
   region?: string;
+  /** OPF 0.19: a block's pin to a region of the slide's layout template, written as region=<name>. */
+  pin?: string;
 }
 
 function blockOptionsLine(spec: BlockSpec, as: string | undefined): string | undefined {
   const parts: string[] = [];
-  for (const [key, value] of [["id", spec.id], ["type", spec.type], ["as", as], ["region", spec.region]] as const) {
+  for (const [key, value] of [["id", spec.id], ["type", spec.type], ["as", as], ["region", spec.region ?? spec.pin]] as const) {
     if (value === undefined) continue;
     const text = typeof value === "string" ? optionValue(value) : undefined;
     if (text === undefined) return undefined;
@@ -261,7 +264,7 @@ function nativeBlock(spec: BlockSpec, marker: string): string[] | undefined {
     const all = options ? [options, ...lines] : lines;
     const { slide, clean } = parseSlideText(all.join("\n"));
     if (!slide || !clean) continue;
-    const target = spec.region !== undefined ? (slide[spec.region] as Obj | undefined) : spec.id !== undefined || spec.type !== undefined ? (slide.blocks as Obj[] | undefined)?.[0] : slide;
+    const target = spec.region !== undefined ? (slide[spec.region] as Obj | undefined) : spec.id !== undefined || spec.type !== undefined || spec.pin !== undefined ? (slide.blocks as Obj[] | undefined)?.[0] : slide;
     if (target && same(target[spec.key], canon)) return all;
   }
   return undefined;
@@ -354,9 +357,10 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
     slide.blocks.forEach((block: unknown, i: number) => {
       const where = `${path}/blocks/${i}`;
       if (!isRecord(block)) return;
-      const keys = Object.keys(block).filter((key) => key !== "id" && key !== "type");
+      const pin = typeof block.region === "string" ? block.region : undefined;
+      const keys = Object.keys(block).filter((key) => key !== "id" && key !== "type" && !(key === "region" && pin !== undefined));
       const only = keys.length === 1 && isContent(keys[0]!) ? keys[0]! : undefined;
-      specs.push({ spec: { key: only ?? "", value: only ? block[only] : undefined, id: block.id, type: block.type }, where, payload: block });
+      specs.push({ spec: { key: only ?? "", value: only ? block[only] : undefined, id: block.id, type: block.type, ...(pin !== undefined ? { pin } : {}) }, where, payload: block });
     });
     for (const key of CONTENT) if (slide[key] !== undefined) extras[key] = slide[key];
   } else {
@@ -375,7 +379,7 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
     const lines = spec.key ? nativeBlock(spec, marker) : undefined;
     if (lines) {
       sections.push({ lines });
-      const written = { ...(spec.id !== undefined ? { id: spec.id } : {}), ...(spec.type !== undefined ? { type: spec.type } : {}), [spec.key]: canonContent(spec.key, spec.value) };
+      const written = { ...(spec.id !== undefined ? { id: spec.id } : {}), ...(spec.type !== undefined ? { type: spec.type } : {}), ...(spec.pin !== undefined ? { region: spec.pin } : {}), [spec.key]: canonContent(spec.key, spec.value) };
       if (spec.region !== undefined) exp[spec.region] = written;
       else expBlocks.push(written);
       const list = spec.key === "items" || spec.key === "bullets";

@@ -98,7 +98,8 @@ thresholds, chartPalette }`. Validation is read-only, fetches nothing and never 
 
 ```sh
 opf convert deck.opf.md deck.pdf
-opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2   # slides/deck-001.png, -003, -004, -005
+opf convert deck.opf.md slides/deck.png --slides 1,3-5 --scale 2   # slides/deck-1.png, -3, -4, -5
+opf convert deck.opf.md "slides/slide-{n}.png"                  # slides/slide-1.png, slide-2.png, ... (always numbered)
 opf convert deck.pptx deck.opf.md --signals signals.json
 opf convert outline.md deck.opf.yaml                                 # a plain .md input is OPF Markdown
 opf convert deck.opf.json deck.opf.yaml --schema-comment
@@ -106,7 +107,7 @@ opf convert deck.opf.md - --to pdf > deck.pdf
 ```
 
 Inputs: `.json`, `.opf.yaml`/`.yml`, `.opf.md` and a plain `.md`, `.pptx`, or `-`. Outputs: a deck form, `.pdf`, `.pptx`, `.png` or
-`.svg` (one file per slide beside the output; one selected slide is written to the output itself), `.zip` (the slides as PNG, or
+`.svg` (one file per slide beside the output, `slides/deck.png` giving `slides/deck-1.png`, ... padded to the width of the largest slide number written, `-01` from ten slides; one selected slide is written to the output itself; `{n}` in the output is the slide number, so `slides/slide-{n}.png` always numbers its files, and any other `{key}`, or `{n}` in a single-file output, is a usage error), `.zip` (the slides as PNG, or
 SVG with `--to svg`), or `-` with `--to`. A flag applies only where its format is involved, else it is a usage error: `--split` and
 `--title` for a Markdown input, `--aliases` for YAML, `--signals` for a `.pptx` input, `--schema-comment` for a YAML output,
 `--drop-unsupported` for a Markdown output, and `--slides`, `--include-hidden`, `--scale`, `--raster`, `--text`, `--charts`,
@@ -186,7 +187,7 @@ opf ingest revenue.csv --as chart --category Quarter --series '["Revenue","Costs
 ```
 
 `fill`'s second argument is always the data, whatever its name (`-` reads it from stdin), and the third is the output: a deck name,
-or a file name pattern where `{n}` is the record number and `{column}` a slug of that column's value. A blank
+or a file name pattern where `{n}` is the record number (padded to the width of the largest, as `opf convert` pads slide numbers) and `{column}` a slug of that column's value. A blank
 cell keeps the declared value; an unfilled required variable fails unless `--partial`. `ingest` turns CSV, TSV or JSON rows into a
 table or chart, alone or added `--into` a deck (`--path` replaces one); `--dataset <id>` stores the rows in the deck's datasets. The
 same inputs give the same slide id and bytes. See [templates and variables](../../docs/templates-and-variables.md) and

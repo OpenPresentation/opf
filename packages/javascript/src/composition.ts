@@ -3,7 +3,9 @@ import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,t
 import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
-import {layoutLeaves,layoutSlots,type LayoutSlot} from './layout-content.js';
+import {isLayoutTemplate,layoutTemplate,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
+import {bindRegions,type BoundBlock} from './bind-regions.js';
+import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,listColumnBreaks,type CellRect,type RowDemand} from './template-geometry.js';
 import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 /** The pixel size and aspect (width / height) of an embedded picture (a data URI, or an `asset:<id>` that names one), the reading composeSlide uses, for engines that place host-resolved pictures. */
@@ -14,7 +16,7 @@ import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
-import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
+import {listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
@@ -54,9 +56,19 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted";
+  /**
+   * OPF 0.19 adds the content-binding codes of template layouts: `region-unknown`, `region-kind` and `region-full` for an
+   * ignored `region` pin, and `layout-unplaced` for a block no region had room for (drawn anyway; `paginate` moves it).
+   */
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced";
   path: string;
   message: string;
+  /**
+   * OPF 0.19, `layout-unplaced`: the overflow region the block was drawn in beyond its `max` (`paginate` moves it to a
+   * continuation slide). Absent when the layout has no overflow region and the block is drawn below the grid, which a
+   * continuation cannot change. The pin codes name the pinned region.
+   */
+  region?: string;
 }
 /** Physical legacy-family selection supplied by a font provider, independently of its numeric weight. */
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
@@ -236,6 +248,79 @@ export interface ComposedItem {
    * then left). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
+  /**
+   * OPF 0.19: the layout template region the item was drawn in (`SlideComposition.regions[].name`); absent on headings,
+   * placed images and slides without a template layout. The PPTX exporter tags the shape with it.
+   */
+  region?: string;
+  /**
+   * OPF 0.19: a list laid out in columns (a lone list in a region with `listColumns: "auto"`, or a list payload with
+   * `columns`): one entry per column, in reading order, each with its cell, the half-open range of the payload's items it
+   * holds and its own fit at the shared font size. Numbering continues across columns. The item's `text` is the whole list:
+   * every entry of every column at its column's position (one ListFit, `overflow` when any column overflows), so a consumer
+   * that ignores `listColumns` still draws every item; `box` is the whole list's cell.
+   */
+  listColumns?: ComposedListColumn[];
+}
+/** One column of a list laid out in columns (`ComposedItem.listColumns`). */
+export interface ComposedListColumn {
+  box: LayoutBox;
+  /** First item of the payload in this column. */
+  start: number;
+  /** One past the last item. */
+  end: number;
+  text: ListFit;
+}
+/**
+ * OPF 0.19: one body region of the slide's layout template, as composed for this slide (`SlideComposition.regions`), so
+ * editors can draw drop targets and exporters can place layout placeholders and tag shapes. Every region of the template
+ * is listed, in reading order, filled or not.
+ */
+export interface ComposedRegion {
+  /** The region's name (its key in the record's `regions`). */
+  name: string;
+  /**
+   * The region's cell on this slide, after mirroring and bleed: a bled region's outer edges that lie on the content box
+   * reach the slide edge. A collapsed region keeps the cell of its own area (possibly zero high), which another area
+   * has taken over.
+   */
+  box: LayoutBox;
+  accepts: RegionKind[];
+  role: RegionRole;
+  /** The record's `flow`. */
+  flow: RegionFlow;
+  max: number;
+  anchor: RegionAnchor;
+  /**
+   * How the blocks were arranged: `grid` (the grid sequence by count), `row`, `column`, or `composition` when the
+   * slide's own `composition.mode`, `columns` or `weights` arranged its first primary flowing region. Absent when empty.
+   */
+  arrangement?: 'grid' | 'row' | 'column' | 'composition';
+  /** OPF paths of the content bound to the region within `max`, in source order: root blocks (`slides.N.blocks.I`) or root payload fields (`slides.N.text`). */
+  content: string[];
+  /** Content no region had room for, drawn here beyond `max` (`opf/layout-unplaced`; `paginate` moves it to a continuation slide). */
+  overflow?: string[];
+  /** The region received no content and its cells joined a neighbour on this slide. */
+  collapsed?: true;
+  bleed?: true;
+  /** A bled region's cell inside the content box, before bleed. */
+  areaBox?: LayoutBox;
+}
+/** OPF 0.19: a heading area of the slide's layout template (`title`, or `subtitle` when the template has one). */
+export interface ComposedHeadingArea {
+  name: 'title' | 'subtitle';
+  box: LayoutBox;
+  /** The slide has no heading for it and its cells joined a neighbour. */
+  collapsed?: true;
+  /** The template has no `title` area: an `auto` row on top that holds the slide's headings. */
+  implicit?: true;
+  /**
+   * The title area of a template without a `subtitle` area, split where the stacked heading group puts the subtitle: `title`
+   * runs from the area's top to the bottom of the title (with the tag above it), `subtitle` from the subtitle's top (where it
+   * would start, half a gap under the title, when the slide has none) to the area's bottom. PowerPoint's ctrTitle and
+   * subTitle placeholders use these boxes. Absent when the slide has no headings in the area.
+   */
+  parts?: { title: LayoutBox; subtitle: LayoutBox };
 }
 /** How a picture fills its frame: cover crops around the focus, contain shows all of it, stretch scales it to the frame. */
 export type ImageFit = 'cover' | 'contain' | 'stretch';
@@ -283,7 +368,7 @@ export interface ComposedPlacement {
   size: number;
   /** True when the frame sits inside the slide padding instead of edge to edge. */
   inset: boolean;
-  /** Where the placement is written: `slides.N.blocks.I.placement`, or `layout.placeholders.P.placement` for a layout image placeholder's. */
+  /** Where the placement is written: `slides.N.blocks.I.placement`. */
   path: string;
 }
 /**
@@ -348,36 +433,6 @@ export interface ComposedLogo { box: LayoutBox; shape: LogoShape; path: string; 
 /** Picture bullet source for list markers: the deck's icon logo and the OPF path it was read from. */
 export interface ListBulletImage { source: unknown; path: string }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
-/**
- * FA-26: one body placeholder of a layout record that has placeholder groups, as composed: its cell and, for a filled
- * region, the slide content in it. Groups and empty regions are listed too, so an editor can draw every slot. Only
- * slides that compose through a record's placeholder groups carry slots.
- */
-export interface ComposedSlot {
-  /** The placeholder: `layout.placeholders.2`, or `layout.placeholders.2.placeholders.0` inside a group. */
-  path: string;
-  /** The region's content kind, or `group`. */
-  type: string;
-  /** 0 at the record's top level, else the level of the group that holds it (1 to 3). */
-  depth: number;
-  /** The slot's cell (before any card inset or caption band). */
-  box: LayoutBox;
-  /** The OPF path of the content that fills a region; absent for a group and for an empty region. */
-  content?: string;
-}
-/** The placeholder kind a slide payload field fills (`items` a list region, `bullets` a text region). */
-const FIELD_KINDS: Readonly<Record<string, string>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', timeline: 'timeline' };
-/**
- * FA-26: design.chartPrimary is sugar for a placeholder group. The layout record a slide composes as while chartPrimary
- * applies: the primary chart and one automatic placeholder group of the other root content (`kinds`, in source order),
- * in a row (left, right) or a column (top, bottom) weighted 3:2 toward the chart. composeSlide builds exactly this record
- * and fills it like any record with groups, except that the first chart, wherever it is, fills the chart region.
- */
-export function chartPrimaryLayout(side: 'left' | 'right' | 'top' | 'bottom', kinds: readonly string[]): { composition: Composition; placeholders: Record<string, unknown>[] } {
-  const first = side === 'left' || side === 'top';
-  const group = { type: 'group', composition: {}, placeholders: kinds.map(type => ({ type })) };
-  return { composition: { mode: side === 'left' || side === 'right' ? 'row' : 'column', weights: first ? [3, 2] : [2, 3] }, placeholders: first ? [{ type: 'chart' }, group] : [group, { type: 'chart' }] };
-}
 export interface CompositionTrack { offset: number; size: number }
 /** Resolved flow geometry, including empty reserved slots. Promoted regions are not flows. */
 export interface ComposedFlow {
@@ -429,12 +484,19 @@ export interface CompositionExplanation {
 export interface SlideComposition {
   width: number;
   height: number;
+  /**
+   * The body's frame: the canvas minus padding, header and footer bands, the footnote area and placed-image bands, below
+   * the headings on an automatic slide. For a template layout (OPF 0.19) it is the whole template frame, the title area
+   * included (`headingAreas` and `regions` lie inside it, except where a bled region reaches the slide edge).
+   */
   contentBox: LayoutBox;
   items: ComposedItem[];
   groups: ComposedGroup[];
   flows: ComposedFlow[];
-  /** FA-26: the layout record's body placeholders with their cells, when the slide composes through placeholder groups. */
-  slots?: ComposedSlot[];
+  /** OPF 0.19: every body region of the slide's layout template, in reading order; present only for a template layout. */
+  regions?: ComposedRegion[];
+  /** OPF 0.19: the template's heading areas (`title`, `subtitle`) with their boxes; present only for a template layout. */
+  headingAreas?: ComposedHeadingArea[];
   diagnostics: LayoutDiagnostic[];
   composition: Composition;
   /** Repeated furniture is measured separately from body pagination leaves. */
@@ -460,7 +522,12 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown; mirror?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  /**
+   * OPF 0.19: the resolved theme record's `design` (titleAlignment, contentAlignment, contentBox, contentDirection,
+   * imageFit, listBullet). It ranks below the deck's design and above the layout record's. `resolveSlideContext` passes it.
+   */
+  themeDesign?: unknown;
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects each logo's
    * `onDark` value (cover logo, `var:organization.logo.*` in zone images, picture bullets). Core never inspects colors.
@@ -945,12 +1012,24 @@ const WRAP_TOLERANCE = .01;
 /** Whitespace that can hang at a soft line break: every space except the no-break spaces and the zero-width no-break space. */
 const HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]/u;
 
-/** Deterministic estimate, not a font shaping engine. Preserves explicit line breaks. */
+/** Corpus-calibrated robust advances; see docs/evidence/script-width-estimates/README.md.
+ * Shared punctuation and Latin/CJK retain their original widths. These are estimates, not font metrics. */
+const SCRIPT_WIDTH_FACTORS: readonly (readonly [RegExp, number])[] = [
+  [/\p{Script=Tamil}/u, 1.53], [/\p{Script=Malayalam}/u, 1.76],
+  [/\p{Script=Sinhala}/u, 1.44], [/\p{Script=Myanmar}/u, 1.18],
+  [/\p{Script=Ethiopic}/u, 1.13], [/\p{Script=Georgian}/u, 1.28],
+];
+
+/** Deterministic estimate, not a font shaping engine. Spacing marks outside Latin/CJK contribute; nonspacing/enclosing marks do not. */
 export function measureText(text: string, fontSize: number): number {
   let units = 0;
   for (const character of text) {
-    if (/\p{Mark}|\u200d|\ufe0f/u.test(character)) continue;
-    units += character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+    if (/\p{Mn}|\p{Me}|\u200d|\ufe0f/u.test(character)) continue;
+    // Preserve the pre-0.19 Latin/CJK estimate, including their spacing tone/reading marks.
+    if (/\p{Mc}/u.test(character) && /\p{Script=Latin}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(character)) continue;
+    const base = character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+    const factor = SCRIPT_WIDTH_FACTORS.find(([script]) => script.test(character))?.[1] ?? 1;
+    units += base * factor;
   }
   return units * fontSize;
 }
@@ -2219,6 +2298,59 @@ function assertComposition(value: Composition) {
   if (value.weights !== undefined && (!Array.isArray(value.weights) || !value.weights.length || value.weights.length > 12 || value.weights.some(weight => !Number.isFinite(weight) || weight <= 0 || weight > 100))) throw new RangeError("Invalid composition.weights.");
   if (value.overflow !== undefined && !["warn", "error"].includes(value.overflow)) throw new RangeError("Invalid composition.overflow.");
 }
+/** composeLayoutAreas composes the empty layout through composeSlide with this flag: a layout master has no cover logo. */
+const LAYOUT_MASTER = Symbol('opf.layoutMaster');
+/** One ListFit of every entry of a list laid out in columns, each at its column's position (ComposedItem.text). */
+function mergeListColumns(columns: readonly ComposedListColumn[]): ListFit {
+  const fits = columns.map(column => column.text), first = fits[0]!;
+  const directions = fits.flatMap(fit => fit.directions ?? []);
+  return { ...first, listEntries: fits.flatMap(fit => fit.listEntries), lines: fits.flatMap(fit => fit.lines), height: Math.max(...fits.map(fit => fit.height)), overflow: fits.some(fit => fit.overflow), ...(first.directions ? { directions } : {}) };
+}
+/** Options of `composeLayoutAreas`: those of composeSlide (canvas, deck, theme, direction, ...) plus the layout's own. */
+export interface LayoutAreasOptions extends Omit<ComposeSlideOptions, 'layout' | 'explain'> {
+  /** Draw the layout mirrored (design.mirror). Default: the deck's design.mirror, then the layout's. */
+  mirror?: boolean;
+  /** A bled region reaches the slide edge, as on a composed slide. Default true; false gives its cell inside the content box. */
+  bleed?: boolean;
+  /** Placed-image bands the slide layout reserves, as image blocks with these placements would. */
+  placements?: readonly { edge: ImageEdge; size?: number; inset?: boolean }[];
+}
+/** One area of a template on the empty layout. */
+export interface ComposedLayoutArea {
+  name: string;
+  /** `title` or `subtitle`. */
+  heading: boolean;
+  box: LayoutBox;
+  /** On the `title` area of a template without a `subtitle` area: the ctrTitle and subTitle sub-boxes (ComposedHeadingArea.parts). */
+  parts?: { title: LayoutBox; subtitle: LayoutBox };
+}
+/**
+ * The areas of a template composed for an empty slide, nothing collapsed: where a PowerPoint slide layout puts a
+ * placeholder per area (design section 8). It is composeSlide's own geometry for a slide with a one-line title and
+ * subtitle and every region kept (`empty: "keep"`, so an empty auto row holds two lines of body text), with the deck's
+ * header and footer (`presentation`), the given placed-image bands and bleed, so the placeholders land on the boxes a
+ * slide composes to wherever its content does not resize an auto row.
+ */
+export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions = {}): { contentBox: LayoutBox; areas: ComposedLayoutArea[] } {
+  const template = layoutTemplate(layout), source = record(layout);
+  const kept = { ...source, regions: Object.fromEntries(Object.entries(record(source.regions)).map(([name, value]) => [name, { ...record(value), empty: 'keep' }])) };
+  const { mirror, bleed = true, placements = [], ...compose } = options;
+  const slide: Record<string, unknown> = {
+    ...(template.title ? { title: 'Title', subtitle: 'Subtitle' } : {}),
+    ...(placements.length ? { blocks: placements.map(placement => ({ image: 'https://example.invalid/placeholder.png', placement: { ...placement } })) } : {}),
+    ...(mirror !== undefined ? { design: { mirror } } : {}),
+  };
+  const result = composeSlide(slide, { ...compose, layout: kept, [LAYOUT_MASTER]: true } as ComposeSlideOptions);
+  const areas = template.areas.map((area): ComposedLayoutArea => {
+    if (area.heading) {
+      const found = result.headingAreas?.find(entry => entry.name === area.name);
+      return { name: area.name, heading: true, box: found ? { ...found.box } : { x: 0, y: 0, width: 0, height: 0 }, ...(found?.parts ? { parts: found.parts } : {}) };
+    }
+    const region = result.regions!.find(entry => entry.name === area.name)!;
+    return { name: area.name, heading: false, box: { ...(!bleed && region.areaBox ? region.areaBox : region.box) } };
+  });
+  return { contentBox: { ...result.contentBox }, areas };
+}
 /** Compose a validated Slide. Layout resolution remains the caller's responsibility. */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
@@ -2227,8 +2359,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const scale = Math.min(width, height) / 720;
   const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
-  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the layout record's design.
-  const hints = resolveDesignHints({ slide, layout, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
+  // OPF 0.19: a template record (areas and regions) composes through its regions; it is checked first, so an invalid
+  // template is refused (OPFLayoutTemplateError) as validate reports it (opf/layout-template, opf/layout-region).
+  const template: LayoutTemplate | undefined = isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
+  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
+  const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
@@ -2321,16 +2456,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // share of the slide along its axis and the free area across it, in block order, at most one per edge (a second
   // block on a used edge flows). Headings and the body compose in the free area that remains.
   const area = { left: 0, top: 0, right: width, bottom: height };
-  const imagePlaceholders = layoutLeaves(layout).flatMap(leaf => leaf.type === 'image' ? [{ placeholder: leaf.placeholder, path: leaf.path, depth: leaf.depth }] : []);
   const topImages: { host: Record<string, any>; hostPath: string; block?: number }[] = regions.length ? []
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => !Array.isArray(record(block).blocks) && record(block).image !== undefined ? [{ host: record(block), hostPath: `${path}.blocks.${index}`, block: index }] : [])
     : slide.image !== undefined ? [{ host: { type: 'image', image: slide.image }, hostPath: path }] : [];
-  type Placed = { host: Record<string, any>; hostPath: string; block?: number; placement: ComposedPlacement; region: LayoutBox; slot: number };
+  type Placed = { host: Record<string, any>; hostPath: string; block?: number; placement: ComposedPlacement; region: LayoutBox };
   const placed: Placed[] = [], usedEdges = new Set<string>();
-  topImages.forEach((node, order) => {
-    const slot = imagePlaceholders[order];
+  topImages.forEach((node) => {
     const own = node.block !== undefined && node.host.placement !== undefined ? record(node.host.placement) : undefined;
-    const value = own ?? (slot?.depth === 0 && slot.placeholder.placement !== undefined ? record(slot.placeholder.placement) : undefined);
+    const value = own;
     if (!value || !(IMAGE_EDGES as readonly unknown[]).includes(value.edge)) return;
     const edge = mirrorSide(value.edge) as ImageEdge;
     if (usedEdges.has(edge)) return;
@@ -2343,8 +2476,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       : edge === 'top' ? { x: area.left, y: area.top, width: area.right - area.left, height: band }
       : { x: area.left, y: round(area.bottom - band), width: area.right - area.left, height: band };
     if (edge === 'left') area.left += band; else if (edge === 'right') area.right = region.x; else if (edge === 'top') area.top += band; else area.bottom = region.y;
-    const placement: ComposedPlacement = { edge, size, inset: value.inset === true, path: own ? `${node.hostPath}.placement` : `${slot!.path}.placement` };
-    placed.push({ ...node, placement, region, slot: order });
+    const placement: ComposedPlacement = { edge, size, inset: value.inset === true, path: `${node.hostPath}.placement` };
+    placed.push({ ...node, placement, region });
   });
   const placedBlocks = new Set(placed.flatMap(entry => entry.block !== undefined ? [entry.block] : []));
   const placedRoot = placed.some(entry => entry.block === undefined);
@@ -2362,15 +2495,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     diagnostics.push(...footnotes.diagnostics);
     bodyBottom = footnotes.box.y - gap * .5;
   }
-  // Cover detection reads the layout's raw placeholders and the slide payload only, so it is
-  // independent of the picture-slot removal applied to the content placeholders below.
-  const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
-  // The cover rule is a record rule, never a list of ids: a layout whose placeholders are all headings (title,
-  // subtitle, tag) or placed images (an image placeholder with a placement takes no flow space) is a heading-only
-  // layout, and a slide without a layout record has no placeholders at all.
   const hasLayoutRecord = options.layout !== undefined && options.layout !== null && typeof options.layout === "object";
-  const headingOnlyLayout = layoutPlaceholders.length > 0
-    && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "") || (placeholder.type === "image" && typeof (placeholder as {placement?: unknown}).placement === "object" && (placeholder as {placement?: unknown}).placement !== null));
   // Empty payloads (`blocks: []`, `text: ""`, empty lists, regions with nothing in them) draw nothing, so they are not body.
   // Whitespace-only text stays body: callers that infer a layout from it (the renderer picks a text layout) must agree with callers that do not (the editor).
   const emptyPayload = (value: unknown) => value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0);
@@ -2378,12 +2503,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // Placed images are not body: a slide whose only body is placed images centers its headings in the free area like a cover.
   const flowBlocks = Array.isArray(slide.blocks) ? slide.blocks.filter((_: unknown, index: number) => !placedBlocks.has(index)) : slide.blocks;
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(flowBlocks) || fields.some(field => !(placedRoot && field === 'image') && !emptyPayload(slide[field]));
-  const isCover = !hasBodyPayload && (headingOnlyLayout || !hasLayoutRecord);
+  // OPF 0.19: a template slide with promoted regions composes them as in 0.18 (headings on top, regions below); the
+  // template's body regions are not used. Any other template slide composes through its regions.
+  const useTemplate = template !== undefined && !regions.length;
+  // A template slide with no body content is a cover: its regions collapse and the template places the headings.
+  const isCover = !hasBodyPayload && (useTemplate || !hasLayoutRecord);
   coverGroup = isCover;
   // Cover and section slides draw the primary organization's full logo (or the design.logo override) at the top-left of the free area, below any header
   // furniture; the heading group then centers in the remaining span. Content slides never get one.
   let logo: ComposedLogo | undefined;
-  if (isCover) {
+  if (isCover && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true) {
     const resolved = resolveLogo(options.presentation, slide, { shape: 'full', onDark: options.darkBackground, slideIndex: options.slideIndex });
     if (resolved) {
       const logoHeight = 56 * scale;
@@ -2394,7 +2523,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
   const headingItems: ComposedItem[] = [];
-  for (const field of ["tag", "title", "subtitle"]) {
+  // A template places its headings in its title (and subtitle) area: composeTemplate below.
+  for (const field of useTemplate ? [] : ["tag", "title", "subtitle"]) {
     if (!slide[field] || (Array.isArray(slide[field]) && !annotationText(slide[field]))) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
@@ -2434,10 +2564,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       textStyle: styleFor('image', `${hostPath}.image`), composition, alignment: alignmentFor('image'), ...(caption ? { caption } : {}) });
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
-  // A synthetic container (a layout record's placeholder group, or the group design.chartPrimary stands for) holds slide
-  // content without an OPF path of its own: it records no group, flow or decision. `reserved` keeps its unfilled regions'
-  // cells, `slot` is the record placeholder a node fills and `slots` the placeholders of a record group (FA-26).
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; reserved?: number; slot?: LayoutSlot; slots?: LayoutSlot[]; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string };
+  // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -2450,7 +2578,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -2478,8 +2606,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const acceptedBox = (box: LayoutBox): LayoutBox => ({x:round(box.x),y:round(box.y),width:round(box.width),height:round(box.height)});
   // Keep the allocation/explicit region intact. All scoring and final measurement
   // use the same rounded interior, including strict overflow and pagination.
-  const payloadBox = (box: LayoutBox): LayoutBox => {
-    if (!hasCards) return box;
+  const payloadBox = (box: LayoutBox, cards = hasCards): LayoutBox => {
+    if (!cards) return box;
     const frame = acceptedBox(box), padding = Math.min(12 * scale, frame.width / 4, frame.height / 4);
     return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
   };
@@ -2538,25 +2666,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // O(nodes * nesting depth * candidate columns), rather than exponential search.
   const scoreNode = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     if (!node.children) return leafScore(node, box, settings, penalties);
-    const own = inheritedSettings(settings, node.composition), area = inset(box, own), slotCount = Math.max(node.children.length, node.reserved ?? 0);
+    const own = inheritedSettings(settings, node.composition), area = inset(box, own), slotCount = Math.max(node.children.length, 0);
     const cols = defaultColumns(slotCount, area, own);
     const boxes = gridBoxes(slotCount, area, cols, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
     return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own, penalties), 0);
   };
-  const slots: ComposedSlot[] = [];
-  // FA-26: the cells of a record's placeholders that no content fills. A group lays its regions out as if each were
-  // reserved, so an editor can show every empty slot; a region beyond the cells its container reserves has no box.
-  const emptySlots = (entries: LayoutSlot[], boxes: LayoutBox[], settings: Composition) => entries.forEach((entry, index) => {
-    const box = boxes[index];
-    if (!box) return;
-    slots.push({ path: entry.path, type: entry.type, depth: entry.depth, box: acceptedBox(box) });
-    if (!entry.children) return;
-    const own = inheritedSettings(settings, record(entry.placeholder.composition) as Composition), inner = inset(box, own);
-    const cols = defaultColumns(entry.children.length, inner, own);
-    const mirror = (cell: LayoutBox): LayoutBox => rtl ? { ...cell, x: inner.x + inner.width - (cell.x - inner.x) - cell.width } : cell;
-    emptySlots(entry.children, gridBoxes(entry.children.length, inner, cols, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === 'column').map(mirror), own);
-  });
-  const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true, template?: LayoutSlot[]): void => {
+  const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
     const mode = modeFor(settings), localGap = (settings.gap ?? 1 / 30) * Math.min(area.width, area.height);
@@ -2584,95 +2699,363 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // weights and the scoring above are unchanged; only each box moves to its mirrored place within the container.
     const mirrored = (box: LayoutBox): LayoutBox => rtl ? { ...box, x: area.x + area.width - (box.x - area.x) - box.width } : box;
     const boxes = grid.boxes.map(mirrored);
-    if (template) emptySlots(template.slice(nodes.length), boxes.slice(nodes.length), settings);
     if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: rtl ? grid.columns.map(track => ({offset: area.width - track.offset - track.size, size: track.size})) : grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     nodes.forEach((node, index) => {
-      let box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
-      if (node.slot) slots.push({ path: node.slot.path, type: node.slot.type, depth: node.slot.depth, box: acceptedBox(box), ...(node.slot.children ? {} : { content: node.path }) });
-      if (node.children) {
-        const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
-        if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
-        arrange(node.children, inner, own, node.reserved ?? 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic, node.slots);
-      } else {
-        const frameBox = hasCards ? acceptedBox(box) : undefined;
-        box = payloadBox(box);
-        const caption = captionOf(node, box);
-        if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
-        const textValue = contentText(node.field, node.value);
-        const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
-        const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-        const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
-        const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
-        const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
-        const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
-        const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
-        items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
-          ...(frameBox ? {frameBox} : {}),
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
-          ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}) });
-        if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
-      }
+      const box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
+      placeNode(node, box, settings);
     });
   };
-  const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
-  // A placed image no longer needs its content slot: the image placeholder it corresponds to is not reserved in the flow.
-  const placedSlots = new Set(placed.flatMap(entry => imagePlaceholders[entry.slot] ? [imagePlaceholders[entry.slot]!.placeholder] : []));
-  if (placedSlots.size) for (let index = placeholders.length - 1; index >= 0; index--) if (placedSlots.has(placeholders[index])) placeholders.splice(index, 1);
-  // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
-  // geometry contract), then the effective design.contentDirection (slide, then deck, then the layout record's
-  // own), then auto. The hint ranks with the layout's own direction, so it never flattens a layout's own grid.
+  // OPF 0.19: the template region the next items are drawn in (ComposedItem.region), set while a region is composed.
+  let regionTag: string | undefined, templateCell = false;
+  // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
+  // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1): void => {
+    if (node.children) {
+      const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
+      if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+      arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
+      return;
+    }
+    const frameBox = cards ? acceptedBox(box) : undefined;
+    box = payloadBox(box, cards);
+    const caption = captionOf(node, box);
+    if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
+    const textValue = contentText(node.field, node.value);
+    const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
+    const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
+    const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
+    const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
+    const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
+    const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
+    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
+    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
+    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
+      ...(frameBox ? {frameBox} : {}),
+      text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
+      ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}) });
+    // A template's auto row is as tall as its content needs, so only its width can make a cell too small.
+    if (box.width < 100 * scale || (!templateCell && box.height < 60 * scale)) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
+  };
+  // OPF 0.19, one long list: 1, 2 then 3 equal columns at the starting size, and the first count at which it fits, as
+  // long as a column stays a quarter of the slide wide. Breaks fall between items (a nested item stays with its parent)
+  // and keep the columns as even as possible; numbering continues across them. A payload's fixed `columns` count is
+  // used as written. When the largest allowed count does not fit, every column shrinks to one shared size. Undefined:
+  // one column, fitted as any list.
+  const listColumnsFor = (node: Pending, box: LayoutBox, settings: Composition, regionMode?: 'auto' | 1): ComposedListColumn[] | undefined => {
+    if (node.field !== 'items' && node.field !== 'bullets') return undefined;
+    const values = node.value as ListValue[];
+    if (!Array.isArray(values) || values.length < 2) return undefined;
+    const own = node.payload.columns;
+    const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
+    if (mode === undefined || mode === 1) return undefined;
+    const start = 25 * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+    const numbering = node.payload.numbering as NumberingInput | undefined;
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : {}) };
+    const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
+    const columnBoxes = (count: number): LayoutBox[] => {
+      const between = columnGap(count), columnWidth = (box.width - between * (count - 1)) / count;
+      const ordered = Array.from({ length: count }, (_, index) => ({ x: box.x + index * (columnWidth + between), y: box.y, width: columnWidth, height: box.height }));
+      return rtl ? ordered.map(cell => ({ ...cell, x: box.x + box.width - (cell.x - box.x) - cell.width })) : ordered;
+    };
+    const chunk = (from: number, to: number): ListValue[] => numbering !== undefined ? sliceNumberedItems(values, numbering, from, to) : values.slice(from, to);
+    // A column's entries keep the indexes and the source paths of the whole payload: a column's first item can be a string
+    // that sliceNumberedItems turned into { text, start } to carry its number, and its path is still `<list>.<n>`.
+    // The paths are those fitList gives a one-column list: `<list>.<n>` for a string, `<list>.<n>.text` for an object.
+    const sourcePaths = (index: number) => {
+      const source = values[index], object = source !== null && typeof source === 'object' && !Array.isArray(source);
+      return { textPath: `${node.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${node.path}.${index}.description` };
+    };
+    const renumber = (fit: ListFit, from: number): ListFit => ({ ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, index: entry.index + from, ...sourcePaths(entry.index + from) })) });
+    const split = (count: number, size: number, minimum: number): ComposedListColumn[] => {
+      const boxes = columnBoxes(count);
+      const whole = fitList(values, { ...boxes[0]!, height: 1e6 }, start, start, listOptions);
+      const first = whole.listEntries[0]!.textBox.y;
+      const heights = whole.listEntries.map((entry, index) => (whole.listEntries[index + 1]?.textBox.y ?? first + whole.height) - entry.textBox.y);
+      const breaks = [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
+      return boxes.slice(0, breaks.length - 1).map((cell, index) => ({ box: cell, start: breaks[index]!, end: breaks[index + 1]!, text: renumber(fitList(chunk(breaks[index]!, breaks[index + 1]!), cell, size, minimum, listOptions), breaks[index]!) }));
+    };
+    const quarter = width / 4;
+    const counts = typeof mode === 'number' ? [mode] : [2, 3].filter(count => (box.width - columnGap(count) * (count - 1)) / count >= quarter);
+    if (mode === 'auto') {
+      // One column first: a list that fits at the starting size stays one column.
+      if (!fitList(values, box, start, start, listOptions).overflow) return undefined;
+      for (const count of counts) {
+        const columns = split(count, start, start);
+        if (columns.every(column => !column.text.overflow)) return columns;
+      }
+    }
+    const count = counts.at(-1);
+    if (count === undefined) return undefined;
+    const shrunk = split(count, start, floor);
+    const size = Math.min(...shrunk.map(column => column.text.fontSize));
+    return shrunk.map(column => ({ ...column, text: renumber(fitList(chunk(column.start, column.end), column.box, size, size, listOptions), column.start) }));
+  };
+  // OPF 0.19, "long" for `flow: auto`: more than 6 lines at the starting body size in the cell the grid would give the
+  // block, counted with core's own estimate (never the host's measurement), so every engine picks the same arrangement.
+  const LONG_LINES = 6, LONG_CODE_LINES = 12, startSize = 25 * scale;
+  const estimatedLines = (value: unknown, cellWidth: number, size: number): number =>
+    flatten(value).split('\n').reduce((sum, paragraph) => sum + Math.max(1, wrapText(paragraph, Math.max(1, cellWidth), size).length), 0);
+  const isLong = (node: Pending, cellWidth: number): boolean => {
+    if (node.children) return node.children.some(child => isLong(child, cellWidth));
+    if (node.field === 'text') return estimatedLines(node.value, cellWidth, startSize) > LONG_LINES;
+    if (node.field === 'items' || node.field === 'bullets') {
+      let lines = 0;
+      for (const entry of Array.isArray(node.value) ? node.value : []) {
+        const object = entry !== null && typeof entry === 'object' && !Array.isArray(entry) ? entry as Record<string, unknown> : undefined;
+        const indent = startSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
+        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, startSize);
+        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, startSize * .82);
+      }
+      return lines > LONG_LINES;
+    }
+    if (node.field === 'quote') return estimatedLines(typeof node.value === 'string' ? node.value : record(node.value).text, cellWidth, startSize) > LONG_LINES;
+    if (node.field === 'table') {
+      const value = record(node.value);
+      return (Array.isArray(value.rows) ? value.rows.length + (Array.isArray(value.columns) ? 1 : 0) : 0) > LONG_LINES;
+    }
+    if (node.field === 'code') return String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length > LONG_CODE_LINES;
+    return false;
+  };
+  // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
+  // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
+  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean): number => {
+    const pad = cards ? 2 * Math.min(12 * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
+    if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false), 0) + gap * Math.max(0, node.children.length - 1) + pad;
+    let content: number;
+    if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
+      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, startSize, startSize, node.path, node.payload.numbering);
+      content = 'height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight;
+    } else if (node.field === 'quote') content = estimatedLines(typeof node.value === 'string' ? node.value : record(node.value).text, inner, 32 * scale) * 32 * 1.22 * scale + 2 * 20 * 1.22 * scale;
+    else if (node.field === 'code') content = String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length * 18 * 1.4 * scale + 24 * scale;
+    else if (node.field === 'metric') content = 150 * scale;
+    else if (node.field === 'timeline') content = 170 * scale;
+    else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
+    else content = inner / 1.6;
+    return content + (node.caption !== undefined ? 32 * scale : 0) + pad;
+  };
+  const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
+  // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
+  const requestedTemplateGap = gap;
+  const composeTemplate = (): void => {
+    const plan = template!, frame = contentBox;
+    const binding = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 });
+    for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
+    // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
+    const unitOf = (bound: BoundBlock): Pending => {
+      const host = bound.block !== undefined ? record(slide.blocks[bound.block])
+        : { ...Object.fromEntries((bound.fields ?? []).map(field => [field, slide[field]])), ...Object.fromEntries(['type', 'caption', 'numbering'].filter(key => slide[key] !== undefined).map(key => [key, slide[key]])) };
+      const parts = collect(host, bound.block !== undefined ? `${path}.blocks.${bound.block}` : path);
+      return parts.length === 1 ? parts[0]! : { field: 'blocks', type: 'group', value: parts.map(part => part.payload), path: bound.path, payload: {}, children: parts, composition: { mode: 'column' }, synthetic: true };
+    };
+    const contents = new Map<string, Pending[]>(binding.regions.map(entry => [entry.name, [...entry.blocks, ...entry.overflow].map(unitOf)]));
+    // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
+    const BELOW = '(below)';
+    const belowUnits = binding.below.map(unitOf);
+    const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
+    const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
+    const shown = (field: string) => !!slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field]));
+    const titleFields = ['tag', 'title', ...(plan.subtitle ? [] : ['subtitle'])].filter(shown);
+    const subtitleFields = plan.subtitle && shown('subtitle') ? ['subtitle'] : [];
+    const columnCount = plan.columns.length;
+    const cells = plan.grid.map(row => [...row]);
+    const rowSizes: (number | 'auto')[] = [...plan.rows];
+    // A layout with no title area gets an implicit auto row on top for a slide that has headings.
+    const implicitTitle = !plan.title && titleFields.length > 0;
+    if (implicitTitle) { cells.unshift(Array.from({ length: columnCount }, () => 'title')); rowSizes.unshift('auto'); }
+    if (belowUnits.length) { cells.push(Array.from({ length: columnCount }, () => BELOW)); rowSizes.push('auto'); }
+    // A valid 12 x 12 grid may request more gaps than fit. Keep the same physical gap on both axes and
+    // reserve at least half the frame for tracks, as flowCells does for a region's internal grid.
+    const gap = Math.max(0, Math.min(requestedTemplateGap, frame.width / (columnCount * 2), frame.height / (rowSizes.length * 2)));
+    const regionOf = new Map<string, LayoutRegion>(plan.regions.map(region => [region.name, region]));
+    // Empty areas collapse into a neighbour, per slide; the record never changes.
+    const empty = new Set<string>();
+    for (const region of plan.regions) if (!unitsOf(region.name).length && region.empty !== 'keep') empty.add(region.name);
+    if (plan.title && !titleFields.length) empty.add('title');
+    if (plan.subtitle && !subtitleFields.length) empty.add('subtitle');
+    // The implicit row below the grid holds what no region took; nothing collapses into it.
+    const collapsed = collapseAreas(cells, empty, name => name === 'title' || name === 'subtitle', name => name !== BELOW);
+    const rects = areaRects(collapsed.grid), ownRects = areaRects(cells);
+    const widths = columnWidths(plan.columns, frame.width, gap);
+    const columnX: number[] = [];
+    widths.reduce((x, size) => { columnX.push(x); return x + size + gap; }, 0);
+    const spanWidth = (rect: CellRect) => widths.slice(rect.column, rect.column + rect.columnSpan).reduce((a, b) => a + b, 0) + gap * (rect.columnSpan - 1);
+    // The heading group (tag, title, subtitle stacked as in 0.18), measured at an area's width.
+    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => {
+      const list: ComposedItem[] = [];
+      let top = y;
+      for (const field of fields) {
+        const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : 25) * scale;
+        const maxHeight = Math.max(height * (field === 'title' ? 0.26 : field === 'subtitle' ? 0.12 : 0.045), minSize * 1.22 + 2 * rasterPadding);
+        const box = { x, y: top, width: areaWidth, height: maxHeight };
+        const text = fitPlacedText(field, slide[field], annotationText(slide[field]), box, requested, minSize, `${path}.${field}`);
+        box.height = Math.min(maxHeight, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0));
+        list.push({ path: `${path}.${field}`, field, type: 'text', value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field, `${path}.${field}`), composition, alignment: alignmentFor(field) });
+        top += box.height + gap * 0.5;
+      }
+      return list;
+    };
+    const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - list[0]!.box.y : 0;
+    // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
+    // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
+    const arrangementOf = (region: LayoutRegion, units: Pending[], cell: LayoutBox): 'grid' | 'row' | 'column' => {
+      if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
+      const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
+      if (flow === 'none' || flow === 'column') return 'column';
+      if (flow === 'grid') return 'grid';
+      const shape = gridFlowShape(units.length, cell.width >= cell.height);
+      const cards = hasCards && !region.bleed;
+      const cellWidth = (cell.width - gap * (shape.columns - 1)) / shape.columns - (cards ? 2 * Math.min(12 * scale, cell.width / 4) : 0);
+      return units.some(unit => isLong(unit, cellWidth)) ? 'column' : 'grid';
+    };
+    // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
+    const regionNeed = (name: string, areaWidth: number): number => {
+      const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
+      // A kept empty region holds its place: two lines of body text in an auto row, inside a card's insets when the slide
+      // draws cards, as a filled region's text would be (naturalHeight).
+      if (!units.length) return region.empty === 'keep' ? 2 * startSize * 1.22 + (hasCards && !region.bleed ? 2 * Math.min(12 * scale, areaWidth / 4) : 0) : 0;
+      const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
+      const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
+      let total = 0, index = 0;
+      for (const count of shape.perRow) {
+        let row = 0;
+        for (let k = 0; k < count; k++) row = Math.max(row, naturalHeight(units[index++]!, cellWidth, cards));
+        total += row;
+      }
+      return total + gap * Math.max(0, shape.rows - 1);
+    };
+    // Tracks: an auto row is as tall as the areas that lie in it alone need (at most half the content box); areas that
+    // span several rows do not size it, and an auto row whose areas are all empty has no height and no gap.
+    // A numeric row needs what its areas need (an area spanning several numeric rows, its share), so that auto rows below
+    // or above it never squeeze it to nothing (allocateRows).
+    const areaNeed = (name: string, rect: CellRect) => name === 'title' ? groupHeight(headingItemsAt(titleFields, 0, 0, spanWidth(rect))) : name === 'subtitle' ? groupHeight(headingItemsAt(subtitleFields, 0, 0, spanWidth(rect))) : regionNeed(name, spanWidth(rect));
+    const demands = rowSizes.map((size, row): RowDemand => {
+      let need = 0, heading = false, below = false;
+      for (const [name, rect] of rects) {
+        if (size === 'auto' ? rect.row !== row || rect.rowSpan !== 1 : row < rect.row || row >= rect.row + rect.rowSpan) continue;
+        if (size !== 'auto' && rect.rowSpan > 1 && rowSizes.slice(rect.row, rect.row + rect.rowSpan).some(entry => entry === 'auto')) continue;
+        const value = areaNeed(name, rect) / rect.rowSpan;
+        if (value > need) { need = value; heading = name === 'title' || name === 'subtitle'; below = name === BELOW; }
+      }
+      return { size, need, kind: heading ? 'heading' : below ? 'below' : 'body' };
+    });
+    const heights = allocateRows(demands, frame.height, gap);
+    const rowY: number[] = [];
+    // A row with no height sits at the end of the row above it, not after its gap.
+    heights.reduce((y, size, row) => { rowY.push(size > 0 || !heights.slice(0, row).some(above => above > 0) ? y : y - gap); return size > 0 ? y + size + gap : y; }, 0);
+    const logical = (rect: CellRect): LayoutBox => {
+      const last = rect.row + rect.rowSpan - 1, y = frame.y + rowY[rect.row]!;
+      return { x: frame.x + columnX[rect.column]!, y, width: spanWidth(rect), height: Math.max(0, frame.y + rowY[last]! + heights[last]! - y) };
+    };
+    // design.mirror reverses each row's cells and the column sizes; a right-to-left deck mirrors the drawing on top.
+    const flip = (hints.mirror === true) !== rtl;
+    const physical = (cell: LayoutBox): LayoutBox => flip ? { ...cell, x: frame.x + frame.width - (cell.x - frame.x) - cell.width } : cell;
+    // A bled region's outer edges that lie on the content box's edge reach the slide edge (the free area beside placed images).
+    const bleed = (cell: LayoutBox): LayoutBox => {
+      const near = (a: number, b: number) => Math.abs(a - b) < .01;
+      const left = near(cell.x, frame.x) ? area.left : cell.x, top = near(cell.y, frame.y) ? area.top : cell.y;
+      const right = near(cell.x + cell.width, frame.x + frame.width) ? area.right : cell.x + cell.width;
+      const bottom = near(cell.y + cell.height, frame.y + frame.height) ? area.bottom : cell.y + cell.height;
+      return { x: left, y: top, width: right - left, height: bottom - top };
+    };
+    // Headings: centred vertically in their area unless every row the area spans is auto.
+    const placeHeadings = (name: 'title' | 'subtitle', fields: string[]) => {
+      const rect = rects.get(name), original = ownRects.get(name);
+      if (!rect) { if (original) headingAreas.push({ name, box: roundBox(physical(logical(original))), collapsed: true }); return; }
+      const cell = physical(logical(rect));
+      const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
+      const centred = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto');
+      const shift = centred ? Math.max(0, (cell.height - groupHeight(list)) / 2) : 0;
+      for (const item of list) {
+        if (shift) { item.box.y += shift; if (item.text) item.text = translateTextFit(item.text, shift); }
+        if (furniture && item.box.y + item.box.height > bodyBottom + .01) diagnostics.push({ code: 'text-overflow', path: item.path, message: 'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.' });
+        items.push(item);
+      }
+      // A template without a subtitle area: the title area split where the group puts the subtitle (RR-81 review).
+      let parts: ComposedHeadingArea['parts'];
+      const upper = list.filter(item => item.field !== 'subtitle'), lower = list.find(item => item.field === 'subtitle');
+      if (name === 'title' && !plan.subtitle && list.length) {
+        const bottom = cell.y + cell.height, last = upper.at(-1);
+        const split = Math.min(bottom, lower ? lower.box.y : last!.box.y + last!.box.height + gap * 0.5);
+        const titleBottom = Math.max(cell.y, last ? last.box.y + last.box.height : split - gap * 0.5);
+        parts = { title: roundBox({ x: cell.x, y: cell.y, width: cell.width, height: titleBottom - cell.y }), subtitle: roundBox({ x: cell.x, y: split, width: cell.width, height: Math.max(0, bottom - split) }) };
+      }
+      headingAreas.push({ name, box: roundBox(cell), ...(name === 'title' && implicitTitle ? { implicit: true as const } : {}), ...(parts ? { parts } : {}) });
+    };
+    placeHeadings('title', titleFields);
+    if (plan.subtitle) placeHeadings('subtitle', subtitleFields);
+    // A slide's own composition.mode, columns or weights arrange its first primary flowing region (the 0.18 modes).
+    const slideComposition = record(slide.composition);
+    const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && region.flow !== 'none')?.name : undefined;
+    const settings: Composition = { ...composition };
+    const placeRegion = (region: LayoutRegion, units: Pending[], area: LayoutBox): NonNullable<ComposedRegion['arrangement']> => {
+      regionTag = region.name === BELOW ? undefined : region.name;
+      // A region squeezed to nothing (auto rows took the content box) still gets a drawable cell; its content overflows.
+      const cell = { ...area, width: Math.max(scale, area.width), height: Math.max(scale, area.height) };
+      templateCell = true;
+      try {
+        const cards = hasCards && !region.bleed;
+        if (region.name === overridden) {
+          arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
+          return 'composition';
+        }
+        const arrangement = arrangementOf(region, units, cell);
+        let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
+        // Anchor: a stack of text shorter than its region sits at its middle or bottom.
+        if (arrangement === 'column' && region.anchor !== 'top' && units.every(unit => !unit.children && (unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets'))) {
+          const naturals = units.map(unit => naturalHeight(unit, cell.width, cards) + 2 * rasterPadding + scale);
+          const used = naturals.reduce((a, b) => a + b, 0) + gap * (units.length - 1);
+          if (used < cell.height) {
+            let y = cell.y + (region.anchor === 'middle' ? (cell.height - used) / 2 : cell.height - used);
+            boxes = naturals.map(size => { const next = { x: cell.x, y, width: cell.width, height: size }; y += size + gap; return next; });
+          }
+        }
+        // Right to left: the flow inside a region runs from the right (RR-05).
+        if (rtl) boxes = boxes.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
+        // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
+        // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
+        units.forEach((unit, index) => { placeNode(unit, boxes[index]!, settings, cards, region.listColumns); });
+        return arrangement;
+      } finally { regionTag = undefined; templateCell = false; }
+    };
+    for (const region of plan.regions) {
+      const units = unitsOf(region.name), bound = binding.regions.find(entry => entry.name === region.name)!;
+      const rect = rects.get(region.name);
+      let cell = physical(logical(rect ?? ownRects.get(region.name)!));
+      const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
+      if (region.bleed && rect) cell = bleed(cell);
+      const arrangement = units.length && rect ? placeRegion(region, units, cell) : undefined;
+      templateRegions.push({
+        name: region.name, box: roundBox(cell), accepts: [...region.accepts], role: region.role, flow: region.flow, max: region.max, anchor: region.anchor,
+        ...(arrangement ? { arrangement } : {}), content: bound.blocks.map(block => block.path),
+        ...(bound.overflow.length ? { overflow: bound.overflow.map(block => block.path) } : {}),
+        ...(collapsed.joined.has(region.name) ? { collapsed: true as const } : {}), ...(region.bleed ? { bleed: true as const } : {}),
+        ...(areaBox ? { areaBox } : {}),
+      });
+    }
+    if (belowUnits.length) placeRegion(belowRegion, belowUnits, physical(logical(rects.get(BELOW)!)));
+  };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
   // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
-  // Unlike contentDirection it is an author opt-in, so it overrides the layout record's composition, including its
-  // columns, weights and placeholder groups. It is sugar for a placeholder group (FA-26): chartPrimaryLayout() states the
-  // record it stands for, and the slide composes through that record's group like any other.
+  // This automatic hint preserves its 3:2 track geometry; a template remains authoritative.
   const chartHint = hints.chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
-  const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
-  const kindOf = (node: Pending): string => node.children ? (node.children[0] ? kindOf(node.children[0]) : 'text') : FIELD_KINDS[node.field] ?? 'text';
-  const sugar = chartPrimary ? chartPrimaryLayout(chartPrimary, pending.filter((_, index) => index !== chartIndex).map(kindOf)) : undefined;
-  const rootSettings: Composition = sugar
-    ? { ...composition, ...sugar.composition, columns: undefined }
+  const chartPrimary = chartSide !== undefined && !useTemplate && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
+  const firstChart = chartPrimary === 'left' || chartPrimary === 'top';
+  const rootSettings: Composition = chartPrimary
+    ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: firstChart ? [3, 2] : [2, 3], columns: undefined }
     : { ...composition, mode: composition.mode ?? directionMode };
-  // FA-26: a record's placeholder groups. Slide content stays flat: its root nodes fill the record's leaf regions in reading
-  // order (depth first), each group arranges the content that fills it by its own composition, and content beyond the
-  // last leaf flows at the root. Promoted regions keep their positions, and a slide that brings its own content groups
-  // keeps its own structure (the record's root composition still applies). A group keeps the cells of its unfilled regions
-  // unless its composition sets a mode, as the root does with the record's top-level placeholders.
-  const recordSlots = sugar ? [] : layoutSlots(layout).filter(slot => !headings.has(slot.type) && !placedSlots.has(slot.placeholder));
-  const templated = !sugar && !regions.length && recordSlots.some(slot => slot.children) && pending.every(node => !node.children);
-  const fillSlots = (entries: LayoutSlot[], queue: Pending[], cursor: { next: number }, recordSlot: boolean): Pending[] => {
-    const nodes: Pending[] = [];
-    for (const entry of entries) {
-      if (cursor.next >= queue.length) break;
-      if (!entry.children) { nodes.push({ ...queue[cursor.next++]!, ...(recordSlot ? { slot: entry } : {}) }); continue; }
-      const own = record(entry.placeholder.composition) as Composition;
-      assertComposition(own);
-      const children = fillSlots(entry.children, queue, cursor, recordSlot);
-      nodes.push({ field: 'blocks', type: 'group', value: children.map(child => child.payload), path, payload: {}, children, composition: own, synthetic: true,
-        reserved: own.mode ? 0 : entry.children.length, ...(recordSlot ? { slot: entry, slots: entry.children } : {}) });
-    }
-    return nodes;
-  };
-  if (sugar) {
+  if (useTemplate) composeTemplate();
+  else if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
-    const queue = chartPrimary === 'left' || chartPrimary === 'top' ? [primary, ...rest] : [...rest, primary];
-    arrange(fillSlots(layoutSlots(sugar, 'design.chartPrimary'), queue, { next: 0 }, false), contentBox, rootSettings, 0);
-  } else if (templated) {
-    const cursor = { next: 0 };
-    const nodes = fillSlots(recordSlots, pending, cursor, true);
-    arrange([...nodes, ...pending.slice(cursor.next)], contentBox, rootSettings, composition.mode ? 0 : placeholders.length, undefined, path, true, recordSlots);
-    // Slots are listed in the record's reading order (depth first), whatever order the cells were laid out in.
-    const order = new Map<string, number>();
-    const number = (entries: LayoutSlot[]): void => entries.forEach(entry => { order.set(entry.path, order.size); if (entry.children) number(entry.children); });
-    number(recordSlots);
-    slots.sort((a, b) => order.get(a.path)! - order.get(b.path)!);
-  } else arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
+    const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
+    arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
+  } else arrange(pending, contentBox, rootSettings, 0);
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
@@ -2710,8 +3093,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
-  for (const slot of slots) for (const key of ["x", "y", "width", "height"] as const) slot.box[key] = round(slot.box[key]);
-  return { width, height, contentBox, items, groups, flows, ...(slots.length ? { slots } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
@@ -2734,4 +3116,9 @@ export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromE
 export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 
 export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
-export { layoutContent, layoutLeaves, layoutSlots, layoutStructure, hasPlaceholderGroups, isPlaceholderGroup, LAYOUT_BODY_KINDS, MAX_PLACEHOLDER_GROUP_DEPTH, type LayoutContent, type LayoutBodyKind, type LayoutLeaf, type LayoutSlot } from './layout-content.js';
+export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
+// OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
+export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
+export { allocateRows, gridFlowShape, listColumnBreaks, type FlowShape, type RowDemand } from './template-geometry.js';
+export { THEME_DESIGN_KEYS } from './design-hints.js';

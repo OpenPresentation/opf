@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { findValidationRule, validate } from '../dist/index.js';
-import { defaultCatalog } from '../dist/catalog.js';
+import { gallery } from '@openpresentation/gallery';
 
 // opf#567: ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 limits each side of p:sldSz to 914400 to 51206400 EMU (1 to 56 inches).
 // The schema accepts any positive custom size, so `validate` warns (format, never an error) for a size outside the range.
 const RULE = 'opf/slide-size-out-of-range';
 const deck = (design, extra = {}) => ({ name: 'Slide size', slides: [{ title: 'One' }], ...(design === undefined ? {} : { design }), ...extra });
-const report = (document, options = {}) => validate(document, { only: ['format', 'references'], catalogs: [defaultCatalog], ...options });
+const report = (document, options = {}) => validate(document, { only: ['format', 'references'], catalogs: [gallery], ...options });
 const sizeFindings = (document, options) => report(document, options).findings.filter((finding) => finding.ruleId === RULE);
 
 describe('opf/slide-size-out-of-range', () => {

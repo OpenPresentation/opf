@@ -1,0 +1,29 @@
+{
+  "correctionChangedSlides": [
+    "gallery/business-functions/data-platform-migration-plan.opf.json#6",
+    "gallery/business-functions/investor-relations-update.opf.json#6",
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+    "gallery/business-functions/s-and-op-exception-review.opf.json#6",
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#6",
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#6",
+    "gallery/education/curriculum-approval-brief.opf.json#6",
+    "gallery/education/library-modernization-roadmap.opf.json#6",
+    "gallery/government/broadband-public-hearing-deck.opf.json#6",
+    "gallery/government/transit-corridor-alternatives.opf.json#6",
+    "gallery/government/water-utility-capital-plan.opf.json#6",
+    "gallery/government/workforce-reskilling-initiative.opf.json#6",
+    "gallery/industries/construction-safety-stand-down.opf.json#6",
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#6",
+    "gallery/industries/water-stewardship-grower-brief.opf.json#6",
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6",
+    "gallery/presentation-types/research-findings-report.opf.json#6"
+  ],
+  "migrationChangedSlidesCount": 171,
+  "strictBaselinesUnchanged": true,
+  "before": "2377a136+6d3d4e12",
+  "after": "2377a136+this correction",
+  "baseline": "d425933+registry core0.18.3"
+}

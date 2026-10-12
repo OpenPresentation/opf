@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title-subtitle",
+      "layout": "cover",
       "tag": "Finance",
       "title": "FY27 Budget Tradeoff Deck",
       "subtitle": "Morrow Labs Finance",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-1x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Morrow Labs should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-1x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-1x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for finance.",
@@ -127,7 +127,7 @@
               "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows.",
               "instructions": "Humble beginning",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "inspiration",
@@ -135,7 +135,7 @@
               "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill.",
               "instructions": "Discover true calling",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "opportunity",
@@ -143,7 +143,7 @@
               "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them.",
               "instructions": "Spot golden chance",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "adversity",
@@ -151,7 +151,7 @@
               "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real.",
               "instructions": "Face hardest struggles",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "overcoming",
@@ -159,7 +159,7 @@
               "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted.",
               "instructions": "Surmount tough obstacles",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "impactful-change",
@@ -167,13 +167,13 @@
               "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage.",
               "instructions": "Alter the status quo",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "lasting-legacy",
               "name": "Lasting Legacy",
               "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Create enduring effect",
               "type": "text"
             }
@@ -333,105 +333,150 @@
         }
       },
       "layouts": {
-        "title-subtitle": {
-          "name": "Title Subtitle",
-          "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
-          "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "subtitle"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Message"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
-          }
-        },
-        "text-1x": {
-          "name": "Text 1x",
-          "summary": "Reach for it when one idea is best explained in a block of prose under a title.",
-          "description": "A title above one text block. The default body slide: a paragraph or two of explanation, a definition, or a short narrative.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "tags": [
-            "Text",
-            "Body Copy",
-            "Narrative"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-1x.svg"
-          }
-        },
-        "chart-1x": {
-          "name": "Chart 1x",
-          "summary": "Reach for it when one chart carries the argument and a note explains what to see in it.",
-          "description": "A title above one chart with a text block beside it. Use it for a single trend, comparison or distribution plus the sentence that says what it means.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "text"
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "row"
           },
-          "tags": [
-            "Charts",
-            "Data",
-            "Analytics"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "list-1x": {
-          "name": "List 1x",
-          "summary": "Reach for it when one set of related points belongs together under a title.",
-          "description": "A title above a single list. Use it for the standard bulleted slide: key points, requirements, agenda items or next steps that read top to bottom.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            }
-          ],
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Scannable",
-            "Structure"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-1x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

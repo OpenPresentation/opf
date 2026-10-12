@@ -379,17 +379,22 @@ function parityUsage(parity) {
 }
 
 /**
- * The per-family fixture evidence of every host as one lookup: the Latin families' and the script, emoji and math families'. A family in
- * both files is an error (each family has one fixture model). Only a family a host's fixture passed for appears under that host.
+ * The per-family fixture evidence of every host as one lookup: the Latin families', the open script, emoji and math families' and (FF-46)
+ * the proprietary script, emoji, math and code-table names'. A family in two files is an error (each family has one fixture model). Only
+ * a family a host's fixture passed for appears under that host.
  */
-function mergeHostEvidence(latin, script) {
+export function mergeHostEvidence(latin, script, scriptName) {
   const hosts = {};
-  for (const [host, entry] of Object.entries(latin.hosts ?? {})) hosts[host] = { families: { ...entry.families } };
-  for (const [host, entry] of Object.entries(script?.hosts ?? {})) {
-    hosts[host] ??= { families: {} };
-    for (const [family, value] of Object.entries(entry.families)) {
-      if (hosts[host].families[family]) throw new Error(`${family} is in both the Latin and the script host fixture evidence (${host})`);
-      hosts[host].families[family] = value;
+  const owner = new Map();
+  for (const [label, evidence] of [["Latin", latin], ["script", script], ["script name", scriptName]]) {
+    for (const [host, entry] of Object.entries(evidence?.hosts ?? {})) {
+      hosts[host] ??= { families: {} };
+      for (const [family, value] of Object.entries(entry.families)) {
+        const key = `${host}|${family}`;
+        if (owner.has(key)) throw new Error(`${family} is in both the ${owner.get(key)} and the ${label} host fixture evidence (${host})`);
+        owner.set(key, label);
+        hosts[host].families[family] = value;
+      }
     }
   }
   return { hosts };
@@ -562,7 +567,10 @@ export function buildTracker({ root = ROOT } = {}) {
   const scriptEvidence = overrides.scriptHostFixtureEvidence ? readJson(root, overrides.scriptHostFixtureEvidence) : null;
   const scriptRules = overrides.scriptAcceptance ?? null;
   if (scriptEvidence && !scriptRules) throw new Error("overrides.scriptHostFixtureEvidence needs overrides.scriptAcceptance");
-  const hostFixtureView = mergeHostEvidence(hostEvidence, scriptEvidence);
+  // FF-46 (opf#362): the proprietary script, emoji, math and code-table names have their own per-host fixtures, keyed by the name (the
+  // script evidence is keyed by the open route face and does not transfer).
+  const scriptNameEvidence = overrides.scriptNameHostFixtureEvidence ? readJson(root, overrides.scriptNameHostFixtureEvidence) : null;
+  const hostFixtureView = mergeHostEvidence(hostEvidence, scriptEvidence, scriptNameEvidence);
   const symbolSnapshot = readJson(root, overrides.symbolFontsSnapshot);
   const symbolEncodings = loadSymbolEncodings(root, overrides.symbolEncodings);
   const nativeEvidence = loadNativeEvidence(root, overrides.nativeEvidence);
@@ -841,7 +849,8 @@ export function buildTracker({ root = ROOT } = {}) {
         statusReason = "documented visual look-alike: fixtures in every host and the native visual comparison (FF-46) against the real font";
         status = "documented-visual";
       } else if (!accepted && visual.outcome === "pass") {
-        acceptance = { ...acceptance, note: `Not accepted yet: the native visual comparison (${visual.run}) passed (${measured}), but the family's own host fixture is missing in ${missingHosts.join(", ")} (the script host fixtures cover the open route face, which does not transfer).` };
+        const nameFindings = missingHosts.filter((host) => scriptNameEvidence?.hosts?.[host]?.findings?.[family]).map((host) => `${host}: ${scriptNameEvidence.hosts[host].findings[family].reason}`);
+        acceptance = { ...acceptance, note: `Not accepted yet: the native visual comparison (${visual.run}) passed (${measured}), but the family's own host fixture is missing in ${missingHosts.join(", ")} (the script host fixtures cover the open route face, which does not transfer).${nameFindings.length ? ` The name's own fixture recorded a finding, and the check stays strict: ${nameFindings.join(" ")}` : ""}` };
       } else if (!accepted && visual.outcome === "unmeasured") {
         acceptance = { ...acceptance, note: `Not accepted: the real font is not installed on the native host of ${visual.run}, so PowerPoint drew a substitute and the real face was not compared (${visual.reasons.join("; ")}). It needs a native host with the font installed.` };
       } else if (!accepted) {
@@ -998,6 +1007,7 @@ export function buildTracker({ root = ROOT } = {}) {
       qualification: { file: overrides.qualificationReport, corpusStrings: qualReport.corpus.strings, lineBreakCases: acceptRules.lineBreakCases },
       ...(visualRules ? { nativeVisual: { id: visualRules.id, label: visualRules.label, file: visualRules.file, readme: visualRules.readme, date: visualRules.date, hosts: visualRules.hosts, statuses: visualRules.statuses, families: visualByFamily.size, pass: [...visualByFamily.values()].filter((entry) => entry.outcome === "pass").length, finding: [...visualByFamily.values()].filter((entry) => entry.outcome === "finding").length, unmeasured: [...visualByFamily.values()].filter((entry) => entry.outcome === "unmeasured").length } } : {}),
       ...(scriptEvidence ? { scriptHostFixtures: { file: overrides.scriptHostFixtureEvidence, date: scriptEvidence.date, hosts: Object.fromEntries(Object.entries(scriptEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length, findings: Object.keys(entry.findings ?? {}).length }])), lazyBudget: scriptEvidence.lazyBudget } } : {}),
+      ...(scriptNameEvidence ? { scriptNameHostFixtures: { file: overrides.scriptNameHostFixtureEvidence, date: scriptNameEvidence.date, hosts: Object.fromEntries(Object.entries(scriptNameEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length, findings: Object.keys(entry.findings ?? {}).length }])), names: [...new Set(Object.values(scriptNameEvidence.hosts).flatMap((entry) => Object.keys(entry.families)))].sort(), lazyBudget: scriptNameEvidence.lazyBudget } } : {}),
       hostFixtures: { file: overrides.hostFixtureEvidence, date: hostEvidence.date, hosts: Object.fromEntries(Object.entries(hostEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length }])), lazyBudget: hostEvidence.lazyBudget },
       overrides: { file: FILES.overrides },
     },
@@ -1249,6 +1259,12 @@ export function renderMarkdown(tracker) {
       for (const rec of found) for (const [host, finding] of Object.entries(rec.hostFixtureFindings)) push(`| ${cell(rec.family)} | ${host} | ${cell(finding.reason)} |`);
       push("");
     }
+  }
+  const nameHosts = tracker.inputs.scriptNameHostFixtures;
+  if (nameHosts) {
+    push("### Proprietary script, emoji, math and code-table names (FF-46)", "", `Per name fixtures (${nameHosts.file.split("/").pop()}) for the proprietary names that pass the native visual comparison: in each host the name resolves to its policy route (a code table to the first face of its chain) with the policy size adjustment, and every sample of each of its scripts is drawn in that script's route face (the designated script face where the policy route lacks the script) with no other glyph fallback, from the route's pinned file. The fixtures of the open route faces do not transfer to a name, so a name that passes natively is documented-visual only with its own fixture in every host. ${nameHosts.names.length} names: ${nameHosts.names.join(", ")}.`, "", "| Host | Repository and test | Commit | Names passed | Findings |", "| --- | --- | --- | ---: | ---: |");
+    for (const [host, entry] of Object.entries(nameHosts.hosts)) push(`| ${host} | ${entry.repository} \`${entry.test}\` | \`${entry.commit.slice(0, 12)}\` | ${entry.families} | ${entry.findings} |`);
+    push("");
   }
 
   push(

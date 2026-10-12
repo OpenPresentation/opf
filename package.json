@@ -4,12 +4,14 @@
   "description": "Workspace for OPF format packages and tooling.",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/materialize-gallery-catalog.mjs",
     "build": "pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build",
     "typecheck": "node scripts/agent-slot.mjs -- pnpm run typecheck:run",
     "typecheck:run": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
     "check:release-plan-cli": "node --test scripts/release-plan-cli.test.mjs",
     "check:showcase": "node --test scripts/showcase-contract.test.mjs",
+    "check:registry-toolchain": "node --test scripts/registry-toolchain.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
     "check:changed": "node scripts/check-changed.mjs",
@@ -69,6 +71,7 @@
     "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
     "lint": "biome check .",
     "check:spec": "node scripts/check-spec-integrity.mjs",
+    "check:schema-examples": "node scripts/check-schema-examples.mjs && node --test scripts/check-schema-examples.test.mjs",
     "check:schema-docs": "node scripts/generate-schema-docs.mjs --check",
     "check:catalog": "node --test scripts/sync-gallery-catalog.test.mjs && node scripts/sync-gallery-catalog.mjs --verify",
     "check:catalog-free": "node scripts/check-catalog-free.mjs",
@@ -95,6 +98,7 @@
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
+    "@openpresentation/gallery": "^1.0.0",
     "@biomejs/biome": "^2.5.3",
     "@typescript/native": "npm:typescript@~7.0.2"
   }

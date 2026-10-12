@@ -3,6 +3,7 @@ import { type Obj, type Run, isRecord } from "../convert/shared.js";
 import { levelsFromIndents, parseCodeFence, parseQuoteLines, splitWhen } from "../convert/text-lines.js";
 import { type InlineIssue, matchBracket, parseAttributes, parseInline, parsePlainInline, readDestination, unescapeInline } from "./inline.js";
 import { Ctx, DECIMAL, type Line, type Range, lineRange, readCsv, readYamlMapping, splitLines } from "./support.js";
+import { PROMOTED_REGION_KEY } from "../bind-regions.js";
 
 export interface ParseOptions {
   /**
@@ -734,11 +735,13 @@ class SlideParser {
     set("tag", options.tag);
     set("title", this.title);
     set("subtitle", this.subtitle);
-    // A block with region=... is a promoted region of the slide; the others are its content.
-    const content = this.blocks.filter((block) => block.options?.region === undefined);
-    const regions = this.blocks.filter((block) => block.options?.region !== undefined);
+    // A block with region=<promoted key> (top, left, top:left, ...) is a promoted region of the slide. Any other region
+    // name pins the block to that region of the slide's layout template (OPF 0.19); region names are never promoted keys.
+    const promoted = (block: { options?: Obj }) => typeof block.options?.region === "string" && PROMOTED_REGION_KEY.test(block.options.region);
+    const content = this.blocks.filter((block) => !promoted(block));
+    const regions = this.blocks.filter(promoted);
     const [only] = content;
-    if (content.length === 1 && only?.key !== undefined && only.options?.id === undefined && only.options?.type === undefined && isContentKey(only.key) && Object.keys(only.payload).length === 1) {
+    if (content.length === 1 && only?.key !== undefined && only.options?.id === undefined && only.options?.type === undefined && only.options?.region === undefined && isContentKey(only.key) && Object.keys(only.payload).length === 1) {
       slide[only.key] = only.payload[only.key];
       ctx.ranges.set(`${path}/${only.key}`, only.range);
     } else if (content.length) {
@@ -747,6 +750,7 @@ class SlideParser {
         const out: Obj = {};
         if (block.options?.id !== undefined) out.id = block.options.id;
         if (block.options?.type !== undefined) out.type = block.options.type;
+        if (block.options?.region !== undefined) out.region = block.options.region;
         return Object.assign(out, block.payload);
       });
     }

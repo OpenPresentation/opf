@@ -25,7 +25,7 @@
     {
       "id": "s1",
       "section": "Opening",
-      "layout": "title",
+      "layout": "cover",
       "tag": "Financial services",
       "title": "Branch Modernization Investment Case",
       "subtitle": "Harborline Bank Financial services",
@@ -34,7 +34,7 @@
     {
       "id": "s2",
       "section": "Context",
-      "layout": "text-2x",
+      "layout": "text",
       "title": "Why This Matters",
       "text": [
         "Harborline Bank should focus the next cycle on ",
@@ -49,7 +49,7 @@
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-2x",
+      "layout": "chart",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
@@ -88,7 +88,7 @@
     {
       "id": "s4",
       "section": "Next",
-      "layout": "list-2x",
+      "layout": "list",
       "title": "Next Steps",
       "items": [
         "Agree on the owner for financial services.",
@@ -126,7 +126,7 @@
               "description": "Engage the audience and set expectations for the next twenty minutes. Tell them you're going to tell them a story — and then start telling it. Avoid a separate agenda slide; the introduction is the first scene.",
               "instructions": "Engage and set expectations",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "setting",
@@ -134,7 +134,7 @@
               "description": "Establish the world the story takes place in: the team, the market, the moment. Just enough context that the challenge will feel meaningful when it arrives.",
               "instructions": "Establish the environment",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "challenge",
@@ -142,7 +142,7 @@
               "description": "Identify the issue at hand. Concrete, specific, attributable. The challenge is the inciting incident — the thing that pulled the rest of the story into motion.",
               "instructions": "Identify the issue at hand",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "tension",
@@ -150,7 +150,7 @@
               "description": "Raise the stakes. What happens if the challenge isn't met? Quantify the cost, name the people affected, surface the trade-offs that make the choice hard. Tension is what makes the audience lean in.",
               "instructions": "Emphasize the stakes",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "solution",
@@ -158,7 +158,7 @@
               "description": "Reveal the strategy or hero of the story. Lead with what changes for the audience or customer when the solution is in place. This is the turn from problem to promise.",
               "instructions": "Present the hero/strategy",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "implementation",
@@ -166,7 +166,7 @@
               "description": "Describe the path to success. Phases, owners, milestones, key bets. Show the audience that the solution has weight behind it — not just intent.",
               "instructions": "Describe the path to success",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "recap",
@@ -174,13 +174,13 @@
               "description": "Bring the audience back to the surface with a clear summary of what was said and decided. Echo the language from the opening so the story feels closed.",
               "instructions": "Review key points and insights",
               "type": "text",
-              "layout": "text-1x"
+              "layout": "text"
             },
             {
               "id": "conclusion",
               "name": "Conclusion",
               "description": "Reinforce the key message and the call to action. End on the line you most want repeated in tomorrow's hallway conversations.",
-              "layout": "title",
+              "layout": "closing",
               "instructions": "Reinforce takeaways and call to action",
               "type": "text"
             }
@@ -369,145 +369,150 @@
         }
       },
       "layouts": {
-        "title": {
-          "name": "Title",
-          "summary": "Reach for it when the slide is a single headline: a cover, a divider or a one-line statement.",
-          "description": "A title and nothing else. The slide carries one headline with no subtitle or body, so the message is the whole slide.",
-          "placeholders": [
-            {
-              "type": "title"
-            }
-          ],
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
           "tags": [
-            "Opening",
-            "Headline",
-            "Minimal"
+            "Openers and closers"
           ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/title.svg"
-          }
-        },
-        "text-2x": {
-          "name": "Text 2x",
-          "summary": "Reach for it when two blocks of prose sit side by side, such as a before and an after or a pro and a con.",
-          "description": "A title above two text blocks in a row. Use it to pair two explanations, set a problem next to its answer, or compare two options in sentences.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "text"
-            },
-            {
-              "type": "text"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
-          "tags": [
-            "Text",
-            "Comparison",
-            "Balance"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/text-2x.svg"
-          }
-        },
-        "chart-2x": {
-          "name": "Chart 2x",
-          "summary": "Reach for it when two charts are read together, each with its own note.",
-          "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
           "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "titleAlignment": "center",
+            "contentAlignment": "center"
           },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+          "areas": [
+            "title media"
+          ],
+          "columns": [
+            1,
+            1
+          ],
+          "rows": [
+            1
+          ],
+          "regions": {
+            "media": {
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
             }
-          ],
-          "composition": {
-            "mode": "grid",
-            "columns": 2
           },
-          "tags": [
-            "Charts",
-            "Multi-chart",
-            "Comparison"
-          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
           }
         },
-        "list-2x": {
-          "name": "List 2x",
-          "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
-          "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
-          "design": {
-            "contentAlignment": "center",
-            "contentBox": false,
-            "contentDirection": "horizontal",
-            "listBullet": "character"
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "list"
-            },
-            {
-              "type": "list"
-            }
-          ],
-          "composition": {
-            "mode": "row"
-          },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
           "tags": [
-            "List",
-            "Comparison",
-            "Balance"
+            "Text"
           ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          },
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "areas": [
+            "title",
+            "charts",
+            "note"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "charts": {
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            "note": {
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            "title",
+            "body"
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "body": {
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          },
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
           }
         }
       }

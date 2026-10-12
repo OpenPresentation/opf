@@ -2882,6 +2882,24 @@
         "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
       }
     ],
+    "scriptNameHostFixtures": [
+      {
+        "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
+        "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+      },
+      {
+        "label": "opf-render#217 (Node and browser script name fixtures)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/217"
+      },
+      {
+        "label": "opf-editor#155 (editor font gate script name fixture)",
+        "url": "https://github.com/OpenPresentation/opf-editor/pull/155"
+      },
+      {
+        "label": "pptx-gallery#125 (gallery editor script name fixture)",
+        "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125"
+      }
+    ],
     "ff46DocumentedVisual": [
       {
         "label": "FF-46 / RR-17 native visual comparison: script, visual and code-table families (2026-10-05)",
@@ -3023,6 +3041,7 @@
   "qualificationReport": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
   "hostFixtureEvidence": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
   "scriptHostFixtureEvidence": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json",
+  "scriptNameHostFixtureEvidence": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json",
   "latinAcceptance": {
     "date": "2026-10-01",
     "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
@@ -3082,6 +3101,7 @@
     "fixture": "The family's own fixture in every host (node, browser, editor, gallery editor; host evidence keyed by the family's name) plus the native visual comparison of opf#323 section 3: names read back, every exported line box reads one native line, no native overflow where the preview fits, the real font not wider than the replacement (native / preview ink width at most 1.01 on lines of at least 200 pt) and no gap of 20 % or more without a preview size adjustment, with the real font installed on the native host.",
     "evidence": [
       "ff46DocumentedVisual",
+      "scriptNameHostFixtures",
       "scriptCorpora",
       "scriptCorporaEvidence"
     ],

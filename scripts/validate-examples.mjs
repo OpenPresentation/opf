@@ -1,3 +1,4 @@
+import { gallery } from '@openpresentation/gallery';
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,6 +7,7 @@ import { validate } from "../packages/javascript/dist/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = path.join(repoRoot, "examples");
+const builtInLayouts = new Set(Object.keys(gallery.layouts));
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -35,6 +37,26 @@ async function main() {
     if (!result.valid) {
       failures.push({ file, errors: result.findings.filter((finding) => finding.severity === "error") });
     }
+    const available = new Set(builtInLayouts);
+    for (const group of Object.values(data.catalogs ?? {})) {
+      for (const [id, record] of Object.entries(group?.layouts ?? {})) {
+        available.add(id);
+        if (!Array.isArray(record.areas)) failures.push({ file, errors: [`Embedded layout '${id}' is not a v2 template`] });
+      }
+    }
+    const inspect = (value, location = "") => {
+      if (Array.isArray(value)) {
+        value.forEach((entry, index) => { inspect(entry, `${location}/${index}`); });
+        return;
+      }
+      if (!value || typeof value !== "object") return;
+      if (typeof value.layout === "string") {
+        const id = value.layout.replace(/^[a-z][a-z0-9-]*:/, "");
+        if (id !== "auto" && !available.has(id)) failures.push({ file, errors: [`${location}/layout names former or unknown layout '${value.layout}'`] });
+      }
+      for (const [key, entry] of Object.entries(value)) inspect(entry, `${location}/${key}`);
+    };
+    inspect(data);
   }
 
   if (failures.length > 0) {

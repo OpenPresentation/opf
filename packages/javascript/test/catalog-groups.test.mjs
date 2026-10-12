@@ -20,7 +20,7 @@ import {
 
 const GALLERY = 'https://gallery.example';
 const ACME = 'pkg:@acme/opf-catalog';
-const layout = (name, ...types) => ({ name, placeholders: types.map((type) => ({ type })) });
+const layout = (name, ...types) => { const body = types.filter(type => !['title', 'subtitle'].includes(type)); const names = body.map((_, index) => `body-${index + 1}`); return { name, areas: ['title', ...names], rows: ['auto', ...names.map(() => 1)], regions: Object.fromEntries(body.map((type, index) => [names[index], { accepts: [type], flow: 'none' }])) }; };
 const scheme = (accent1) => ({ name: `Scheme ${accent1}`, accent1, accent2: '#222222', accent3: '#333333', accent4: '#444444', accent5: '#555555', accent6: '#666666', dark1: '#000000', dark2: '#111111', light1: '#FFFFFF', light2: '#EEEEEE', hyperlink: '#0000EE', followedHyperlink: '#551A8B' });
 const fonts = (major) => ({ name: major, major, minor: major });
 
@@ -28,7 +28,7 @@ const fonts = (major) => ({ name: major, major, minor: major });
 const gallery = {
   source: GALLERY,
   layouts: {
-    'two-column': { ...layout('Two column', 'title', 'text', 'text'), composition: { mode: 'row', weights: [1, 1] }, design: { contentBox: true }, 'x-gallery': { category: 'Text' } },
+    'two-column': { ...layout('Two column', 'title', 'text', 'text'), design: { contentBox: true }, 'x-gallery': { category: 'Text' } },
     'chart-left': layout('Chart left', 'title', 'chart', 'text'),
     'title-only': layout('Title', 'title'),
   },
@@ -338,16 +338,16 @@ describe('copySlides', () => {
 });
 
 describe('updateFromCatalog', () => {
-  const published = { ...gallery, layouts: { ...gallery.layouts, 'two-column': { ...gallery.layouts['two-column'], composition: { mode: 'row', weights: [2, 1] } } } };
+  const published = { ...gallery, layouts: { ...gallery.layouts, 'two-column': { ...gallery.layouts['two-column'], rows: ['auto',2,1] } } };
   const saved = embed(deck({ slides: [{ layout: 'two-column', title: 'x' }, { layout: 'chart-left', title: 'y' }] }), { catalogs: [gallery] }).document;
 
   test('the catalog publishes a new revision: the embedded record is unchanged on reopening, and an update check lists the difference', () => {
     const context = resolveSlideContext(saved, 0, { catalogs: [published] });
-    assert.deepEqual(context.options.layout.composition, { mode: 'row', weights: [1, 1] }, 'engines never replace an embedded record');
+    assert.deepEqual(context.options.layout.rows, ['auto',1,1], 'engines never replace an embedded record');
     const update = updateFromCatalog(saved, [published]);
     assert.deepEqual(update.changes.map(({ kind, reference, group, source }) => ({ kind, reference, group, source })), [{ kind: 'layouts', reference: 'two-column', group: 'default', source: GALLERY }]);
-    assert.deepEqual(update.changes[0].current.composition, { mode: 'row', weights: [2, 1] });
-    assert.deepEqual(saved.catalogs.default.layouts['two-column'].composition, { mode: 'row', weights: [1, 1] }, 'nothing is applied');
+    assert.deepEqual(update.changes[0].current.rows, ['auto',2,1]);
+    assert.deepEqual(saved.catalogs.default.layouts['two-column'].rows, ['auto',1,1], 'nothing is applied');
   });
 
   test('the author runs update from catalog for one reference: only that record changes, after approval', () => {
@@ -356,7 +356,7 @@ describe('updateFromCatalog', () => {
     const update = updateFromCatalog(saved, [twice], [{ kind: 'layouts', reference: 'two-column' }]);
     assert.deepEqual(update.changes.map((change) => change.id), ['two-column']);
     const presentation = applyPatch(saved, update.patch);
-    assert.deepEqual(presentation.catalogs.default.layouts['two-column'].composition, { mode: 'row', weights: [2, 1] });
+    assert.deepEqual(presentation.catalogs.default.layouts['two-column'].rows, ['auto',2,1]);
     assert.equal(presentation.catalogs.default.layouts['chart-left'].name, 'Chart left');
     assert.equal(/"x-/.test(JSON.stringify(presentation.catalogs)), false, 'the update embeds without display metadata');
   });

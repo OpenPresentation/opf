@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { readFile, realpath, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
@@ -6,6 +6,18 @@ import { installablePackages } from './release-plan-cli.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source', '@openpresentation/opf-editor/font-gate'];
+
+
+/** Every registry entry must be a real file within this consumer, never an ancestor or escaped link. */
+export function registryFile(modules, url) {
+  const file = realpathSync(fileURLToPath(url));
+  const relative = path.relative(modules, file);
+  if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+    throw new Error(`Registry package resolves outside the installed consumer: ${file}`);
+  }
+  return file;
+}
+export const registryImport = async (modules, resolve, specifier) => import(pathToFileURL(registryFile(modules, resolve(specifier))).href);
 
 // Consume the clean installation produced by test:registry-ecosystem, with no
 // sibling source aliases or file dependencies. Keep its registry evidence.
@@ -30,19 +42,23 @@ export async function registryToolchain() {
   const resolver = path.join(consumer, 'asset-resolver.mjs');
   await writeFile(resolver, 'export const resolve = specifier => import.meta.resolve(specifier);\n');
   const { resolve } = await import(pathToFileURL(resolver).href);
+  return {consumer, packages, verificationRefs: plan.verificationRefs, exampleRefs: plan.exampleRefs, ...registryBindings(modules, resolve)};
+}
+
+export function registryBindings(modules, resolve) {
   // RR-20 (core 0.18): core's root export is conditional (node: the full build, browser: dist/browser.js). import.meta.resolve takes
   // the node condition, so a browser bundle takes the subpath's `browser` entry instead, as a browser host's bundler does.
   const browserEntry = (specifier) => {
     const match = /^(@openpresentation\/[a-z-]+)(\/.*)?$/.exec(specifier);
     if (!match) return null;
     let manifestPath;
-    try { manifestPath = fileURLToPath(resolve(`${match[1]}/package.json`)); } catch { return null; }
+    // A boundary failure must propagate; it must not fall back to an ancestor entry.
+    manifestPath = registryFile(modules, resolve(`${match[1]}/package.json`));
     const entry = JSON.parse(readFileSync(manifestPath, 'utf8')).exports?.[`.${match[2] ?? ''}`];
-    return entry && typeof entry === 'object' && typeof entry.browser === 'string' ? path.join(path.dirname(manifestPath), entry.browser) : null;
+    return entry && typeof entry === 'object' && typeof entry.browser === 'string' ? registryFile(modules, pathToFileURL(path.join(path.dirname(manifestPath), entry.browser))) : null;
   };
   return {
-    consumer, packages, verificationRefs: plan.verificationRefs, exampleRefs: plan.exampleRefs,
-    import: (specifier) => import(resolve(specifier)),
+    import: (specifier) => registryImport(modules, resolve, specifier),
     plugin: (browser = false) => ({
       name: 'published-opf-packages',
       setup(build) {
@@ -51,10 +67,10 @@ export async function registryToolchain() {
           // ../src/exact-source.js) but does not list it in package.json "exports". Bundle the published file by its path
           // inside the installed package; the bytes are still the registry's. Remove this when a release exports it.
           if (UNEXPORTED_EDITOR_MODULES.includes(specifier)) {
-            return { path: path.join(path.dirname(fileURLToPath(resolve('@openpresentation/opf-editor'))), `${specifier.split('/').pop()}.js`) };
+            return { path: registryFile(modules, pathToFileURL(path.join(path.dirname(registryFile(modules, resolve('@openpresentation/opf-editor'))), `${specifier.split('/').pop()}.js`))) };
           }
-          if (browser && specifier === '@openpresentation/opf-render') return { path: fileURLToPath(resolve('@openpresentation/opf-render/svg')) };
-          return { path: (browser && browserEntry(specifier)) || fileURLToPath(resolve(specifier)) };
+          if (browser && specifier === '@openpresentation/opf-render') return { path: registryFile(modules, resolve('@openpresentation/opf-render/svg')) };
+          return { path: (browser && browserEntry(specifier)) || registryFile(modules, resolve(specifier)) };
         });
       },
     }),
