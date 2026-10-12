@@ -527,7 +527,9 @@ jobs:
     needs: gallery
     name: Installed candidates (${{ matrix.os }})
     runs-on: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
-    timeout-minutes: 25
+    # RR-78: Windows job 114605791682 exhausted 25min during standalone CLI verification;
+    # macOS completed in about 21min. Retain all candidate and published controls within 45min.
+    timeout-minutes: 45
     env:
       PORTABILITY: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
     strategy:

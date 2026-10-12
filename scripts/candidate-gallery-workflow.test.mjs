@@ -70,3 +70,14 @@ test('engines range retains complete contracts within a bounded candidate graph 
  for(const command of ['pnpm test','node packages/javascript/test/packed-install-smoke.mjs','pnpm test:cli:packed','pnpm test:cli:packed:peers'])assert.ok(node.includes(`run: ${command}\n`),command);
  assert.match(read('packages/cli/test/packed-files.mjs'),/timeout: 600000/,'individual install/command hangs remain bounded');
 });
+
+test('installed and CLI portability retain registry controls within their bounded graph budget',()=>{
+ const ecosystem=read('.github/workflows/ecosystem-ci.yml');
+ const installed=ecosystem.slice(ecosystem.indexOf('  installed-portability:'),ecosystem.indexOf('  # RR-53:',ecosystem.indexOf('  installed-portability:')));
+ const cli=read('.github/workflows/cli-windows.yml').slice(read('.github/workflows/cli-windows.yml').indexOf('  cli:'));
+ for(const job of [installed,cli]){
+  assert.match(job,/timeout-minutes: 45/);assert.match(job,/os: \[windows-latest, macos-latest\]/);
+  for(const command of ['pnpm test:cli:packed','pnpm test:cli:packed:peers','node packages/cli/test/packed.mjs --registry'])assert.ok(job.includes(command),command);
+  assert.match(job,/CANDIDATE_GALLERY_REF: ''/,'actual published control remains distinct');
+ }
+});

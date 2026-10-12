@@ -67,8 +67,10 @@ jobs:
     needs: scope
     if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || (github.event_name == 'merge_group' && needs.scope.outputs.run == 'true') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
     runs-on: ${{ matrix.os }}
-    # RR-57: about 2x the p90 (13.4 min on Windows, 9.0 on macOS over the last 10 runs); the old limit of 15 was 1.1x.
-    timeout-minutes: 25
+    # RR-78: Windows job 114605756533 reached packed peers after 20m and was cut off at 25min;
+    # macOS completed the candidate contracts in 22m39s. Keep the full registry control and
+    # use the canonical candidate lane's bounded 45min budget, without changing assertions.
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
