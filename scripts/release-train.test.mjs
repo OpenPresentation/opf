@@ -1125,3 +1125,47 @@ test('untagged 0.19 metadata prep precedes gallery adoption but preliminary publ
  assert.equal(final.version,'0.19.0');assert.deepEqual(final.dependencies,adopted.dependencies);
  await assertGalleryReleaseReady(world.deps,packageOf('core'),world.repo('opf').head,final);
 });
+
+test("a published patch satisfies a stable range whose lower bound was burned", async () => {
+  const requests = [];
+  const npm = npmRegistry({
+    exec: (command, args) => { assert.equal(command, "npm"); assert.deepEqual(args.slice(0, 4), ["view", "@openpresentation/opf-render@^0.19.0", "version", "--json"]); return {status: 0, stdout: JSON.stringify(["0.19.1"]), stderr: ""}; },
+    fetchImpl: async url => { requests.push(url); return {status: url.endsWith("/0.19.0") ? 404 : 200, ok: true, json: async () => ({name: "@openpresentation/opf-render", version: "0.19.1", dist: {integrity: "sha512-" + Buffer.alloc(64).toString("base64")}})}; },
+  });
+  const cli = {peerDependencies: {"@openpresentation/opf-render": "^0.19.0"}};
+  assert.deepEqual(await unpublishedFloors({npm}, cli, packageOf("cli")), []);
+  assert.equal(requests.length, 2);
+  assert.ok(requests[1].endsWith("/0.19.1"));
+});
+
+test("range lookup refuses wrong minor, prerelease, absent registry versions and wrong manifest identity", async () => {
+  const name = "@openpresentation/opf-render";
+  for (const version of ["0.18.2", "0.20.0", "0.19.1-next.0"]) {
+    const npm = npmRegistry({exec: () => ({status: 0, stdout: JSON.stringify(version), stderr: ""}), fetchImpl: async () => { throw Error("nonmatching version must not be fetched"); }});
+    assert.equal(await npm.matchingManifest(name, "^0.19.0"), null);
+  }
+  const absent = npmRegistry({exec: () => ({status: 1, stdout: "", stderr: "npm error code ETARGET"})});
+  assert.equal(await absent.matchingManifest(name, "^0.19.0"), null);
+  const failed = npmRegistry({exec: () => ({status: 1, stdout: "", stderr: "npm error code EACCES"})});
+  await assert.rejects(() => failed.matchingManifest(name, "^0.19.0"), /range lookup failed/);
+  const mismatch = npmRegistry({exec: () => ({status: 0, stdout: '"0.19.1"', stderr: ""}), fetchImpl: async () => ({status: 200, ok: true, json: async () => ({name, version: "0.19.0", dist: {integrity: "sha512-" + Buffer.alloc(64).toString("base64")}})})});
+  await assert.rejects(() => mismatch.matchingManifest(name, "^0.19.0"), /identity mismatch/);
+});
+
+
+test("range fallback preserves exact, zero-caret, tilde and minimum boundaries", async () => {
+  const name = "@openpresentation/opf-render";
+  for (const [range, version, allowed] of [["0.19.0", "0.19.1", false], ["=0.19.0", "0.19.1", false], ["^0.0.1", "0.0.2", false], ["^0.19.0", "0.19.1", true], ["~0.19.0", "0.20.0", false], [">=0.19.0", "0.19.1", true], [">=0.19.0", "0.18.9", false]]) {
+    const npm = npmRegistry({exec: () => ({status: 0, stdout: JSON.stringify(version), stderr: ""}), fetchImpl: async () => ({status: 200, ok: true, json: async () => ({name, version, dist: {integrity: "sha512-" + Buffer.alloc(64).toString("base64")}})})});
+    assert.equal(Boolean(await npm.matchingManifest(name, range)), allowed, `${range} / ${version}`);
+  }
+});
+
+
+test("matching registry manifests require exact name and canonical SHA512 integrity", async () => {
+  const name = "@openpresentation/opf-render", version = "0.19.1";
+  for (const manifest of [{name: "@openpresentation/opf-pptx", version, dist: {integrity: "sha512-" + Buffer.alloc(64).toString("base64")}}, {name, version}, {name, version, dist: {integrity: "sha512-AA"}}, {name, version, dist: {integrity: "sha512-" + Buffer.alloc(64).toString("base64").replace(/=+$/, "")}}]) {
+    const npm = npmRegistry({exec: () => ({status: 0, stdout: JSON.stringify(version), stderr: ""}), fetchImpl: async () => ({status: 200, ok: true, json: async () => manifest})});
+    await assert.rejects(() => npm.matchingManifest(name, "^0.19.0"), /identity mismatch/);
+  }
+});
