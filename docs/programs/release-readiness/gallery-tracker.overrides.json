@@ -2,7 +2,7 @@
   "$comment": "Authored input of scripts/build-gallery-tracker.mjs (RR-41). Every other field of the tracker is derived. A rule gives the matching gaps their next action and link (an RR id, a pull request URL, or an issue URL with descoped: true). The first rule whose gap, types, ids and detail (a regular expression) match wins; a rule that matches no gap fails the build.",
   "asOf": "2026-10-02",
   "inputs": {
-    "catalogs": "packages/gallery/catalog",
+    "catalogs": "docs/programs/release-readiness/tracker-catalog",
     "schema": "spec/schemas/opf.schema.json",
     "supportStatus": "docs/programs/font-fidelity-everywhere/gallery-support/support-status.json",
     "auditA": "docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json",
@@ -25,14 +25,14 @@
   },
   "parityNote": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed.",
   "columns": {
-    "spec": "catalog (bundled in @openpresentation/gallery, packages/gallery/catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
+    "spec": "catalog (bundled in @openpresentation/gallery, docs/programs/release-readiness/tracker-catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
     "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped).",
     "preview": "pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled.",
     "export": "pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name.",
     "roundTrip": "pass or fail: the export re-imports to the same value (audit A re-import check; audit B has no re-import reason and charts re-import as the same type).",
     "parity": "perfect, near or mismatch: the worst variant of the value in the latest parity run (inputs.parity); unmeasured when the run has no config for it. The catalog-only records and the slide-size presets come from the later run in inputs.parityExtra (RR-43).",
-    "editor": "switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise.",
-    "gallery": "shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser).",
+    "editor": "switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise; unknown for schema2 layouts when only historical v1 editor evidence exists.",
+    "gallery": "unknown for schema2 layouts without identity-bound current site evidence; shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser).",
     "native": "verified or failed when the RR-42 native run (inputs.nativeRuns: per-value verdicts of the gated checks) covers the value; else exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence), or unverified. For fonts: the font tracker native verification.",
     "fonts": "accepted when every family the value draws (its parity fontResolution families, else its catalog font scheme) is qualified or documented-visual in the font tracker; gap otherwise; n/a when it draws no chosen family. For fonts: the font tracker status."
   },

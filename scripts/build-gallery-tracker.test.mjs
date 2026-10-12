@@ -47,6 +47,10 @@ function scratchCopy(mutateOverrides = (o) => o) {
     cpSync(path.join(ROOT, item.evidence), path.join(dir, item.evidence));
   }
   cpSync(path.join(ROOT, catalogs), path.join(dir, catalogs), { recursive: true });
+  const proof = read(`${catalogs}/proof.json`);
+  mkdirSync(path.dirname(path.join(dir, proof.verification)), {recursive:true});
+  cpSync(path.join(ROOT, proof.verification), path.join(dir, proof.verification));
+  cpSync(path.join(ROOT, proof.publishedContent), path.join(dir, proof.publishedContent));
   mkdirSync(path.join(dir, "docs/evidence-empty/native-none"), { recursive: true });
   const copy = mutateOverrides(structuredClone(overrides));
   copy.inputs.evidence = "docs/evidence-empty";
@@ -58,9 +62,10 @@ test("every catalog record and every gallery item is exactly one record", () => 
   const keys = committed.records.map((r) => `${r.type}/${r.id}`);
   assert.equal(new Set(keys).size, keys.length, "duplicate records");
   const has = new Set(keys);
-  const manifest = read(`${overrides.inputs.catalogs}/manifest.json`);
+  const snapshot = read(`${overrides.inputs.catalogs}/snapshot.json`);
+  const manifest = snapshot.files["manifest.json"];
   for (const kind of Object.keys(manifest.kinds)) {
-    const index = read(`${overrides.inputs.catalogs}/${kind}/index.json`);
+    const index = snapshot.files[`${kind}/index.json`];
     for (const entry of index.records) assert.ok(has.has(`${ALIASES[kind] ?? kind}/${entry.id}`), `no record for catalog ${kind}/${entry.id}`);
   }
   for (const [kind, g] of Object.entries(snapshots.gallery.kinds))
@@ -105,8 +110,8 @@ test("columns use their documented values and unknown where nothing measured", (
     export: ["pass", "fail", "unknown", "n/a"],
     roundTrip: ["pass", "fail", "unknown", "n/a"],
     parity: ["perfect", "near", "mismatch", "unmeasured", "n/a"],
-    editor: ["switch", "none", "n/a"],
-    gallery: ["shown", "shown-no-preview", "json-only", "not-shown", "not-shown-deprecated", "coming", "n/a"],
+    editor: ["switch", "none", "unknown", "n/a"],
+    gallery: ["unknown", "shown", "shown-no-preview", "json-only", "not-shown", "not-shown-deprecated", "coming", "n/a"],
     native: ["verified", "failed", "exercised", "unverified", "n/a"],
   };
   for (const r of committed.records) for (const [column, values] of Object.entries(allowed)) assert.ok(values.includes(r.columns[column]), `${r.type}/${r.id}: ${column} ${r.columns[column]}`);
@@ -257,5 +262,62 @@ test("input limitations reject unknown records, duplicate scopes and missing evi
       writeFiles(dir, { [file]: data });
       assert.throws(() => buildTracker({ root: dir }), pattern);
     } finally { rmSync(dir, { recursive: true, force: true }); }
+  }
+});
+
+test("offline catalog snapshot rejects missing and modified evidence", () => {
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, overrides.inputs.catalogs, 'snapshot.json');
+    writeFileSync(file, readFileSync(file, 'utf8').replace('Agenda', 'Tampered'));
+    assert.throws(() => buildTracker({root:dir}), /snapshot identity or bytes mismatch/);
+    rmSync(file);
+    assert.throws(() => buildTracker({root:dir}), /ENOENT/);
+  } finally { rmSync(dir, {recursive:true, force:true}); }
+});
+
+test("v2 layout identity never inherits historical same-name measurements", () => {
+  const {tracker} = buildTracker({root:ROOT});
+  for (const id of ['agenda','comparison','dashboard','faq','timeline','two-column']) {
+    const record = tracker.records.find(r => r.type === 'layouts' && r.id === id);
+    assert.match(record.evidenceScope, /historical v1/);
+    for (const column of ['compose','preview','export','roundTrip','editor','gallery']) assert.equal(record.columns[column], 'unknown', `${id}/${column}`);
+    assert.equal(record.columns.parity, 'unmeasured');
+    assert.equal(record.columns.native, 'unverified');
+    assert.equal(record.nativeEvidence, undefined);
+  }
+});
+
+ test("offline snapshot rejects wrong integrity, version and gitHead", () => {
+  for (const [field, value] of [['integrity','sha512-wrong'],['version','2.0.1'],['gitHead','0'.repeat(40)]]) {
+    const dir = scratchCopy();
+    try {
+      const file = path.join(dir, overrides.inputs.catalogs, 'proof.json');
+      const proof = JSON.parse(readFileSync(file,'utf8')); proof[field] = value;
+      writeFileSync(file,JSON.stringify(proof));
+      assert.throws(() => buildTracker({root:dir}), /snapshot identity or bytes mismatch/);
+    } finally {rmSync(dir,{recursive:true,force:true});}
+  }
+});
+
+test("old passing and failing audit/native channels cannot certify any schema2 layout", () => {
+  const baseline = buildTracker().tracker;
+  const ids = baseline.records.filter(r => r.type === 'layouts' && r.evidenceScope?.startsWith('opf-layout/v2')).map(r=>r.id);
+  assert.equal(ids.length,28);
+  for (const pass of [true,false]) {
+    const dir = scratchCopy(o=>{o.inputs.nativeRuns=['docs/evidence-empty/native-old/values.json'];return o;});
+    try {
+      for (const key of ['auditA','auditB','parity']) {
+        const file=path.join(dir,overrides.inputs[key]);const data=JSON.parse(readFileSync(file,'utf8'));
+        data.results=data.results.filter(r=>r.dimension!=='layouts');
+        for (const id of ids) data.results.push(key==='auditA'?{dimension:'layouts',id,class:pass?'works':'fails',checks:{schema:{pass},render:{pass},export:{pass},reimport:{pass}}}:key==='auditB'?{dimension:'layouts',id,schemaValid:pass,catalogResolves:pass,preview:{hostFonts:pass},export:{default:pass},classification:pass?'works':'fails',reasons:pass?[]:['reimport failed']}:{dimension:'layouts',id,variant:'published',class:pass?'perfect':'mismatch',checks:{text:pass?'pass':'fail'},fontResolution:{Roboto:{}}});
+        writeFileSync(file,JSON.stringify(data));
+      }
+      writeFiles(dir,{'docs/evidence-empty/native-old/values.json':{values:ids.map(id=>({type:'layouts',id,pass,failingChecks:['old'],failing:[{detail:'old v1'}]}))},'docs/evidence-empty/native-old/offline.json':{slides:ids.map(layout=>({layout}))}});
+      const after=buildTracker({root:dir}).tracker;
+      for(const id of ids){const r=after.records.find(r=>r.type==='layouts'&&r.id===id);for(const key of ['compose','preview','export','roundTrip','editor','gallery'])assert.equal(r.columns[key],'unknown');assert.equal(r.columns.parity,'unmeasured');assert.equal(r.columns.native,'unverified');assert.equal(r.columns.fonts,'n/a');assert.equal(r.nativeEvidence,undefined);}
+      // Native evidence was intentionally replaced in this scratch tree; other pipeline/parity/font columns remain exact.
+      for(const r of baseline.records.filter(r=>['charts','font-schemes'].includes(r.type))){const actual=after.records.find(a=>a.type===r.type&&a.id===r.id);for(const key of ['compose','preview','export','roundTrip','parity','fonts'])assert.equal(actual.columns[key],r.columns[key],`${r.type}/${r.id}/${key}`);}
+    } finally {rmSync(dir,{recursive:true,force:true});}
   }
 });

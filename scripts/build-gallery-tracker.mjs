@@ -8,13 +8,14 @@
 //   node scripts/build-gallery-tracker.mjs --snapshot-editor <opf-editor checkout> --commit <sha>
 //                                                     refresh the pinned opf-editor switch snapshot, then rebuild
 //
-// Derived data (never hand edited): packages/gallery/catalog, the opf schema, the gallery support audits A and B, the latest
+// Derived data (never hand edited): the committed tracker-only catalog snapshot, the opf schema, the gallery support audits A and B, the latest
 // committed parity run, the font tracker, the committed native evidence under docs/evidence, the RR burndown and the
 // two pinned snapshots (pptx.gallery data and pages, opf-editor switch dimensions). Authored data:
 // docs/programs/release-readiness/gallery-tracker.overrides.json (the rules that give each gap its next action and its
 // link: an RR item, a pull request, or an issue for a descoped gap). Internal tracking only; never shown on a site.
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { parseBurndown } from "../docs/programs/release-readiness/report.mjs";
 import { reportStale } from "./tracker-staleness.mjs";
@@ -132,13 +133,24 @@ export function snapshotEditor(dir, { commit, capturedAt }) {
 // ---- inputs ----------------------------------------------------------------------------------------------------
 
 function readCatalogs(root, dir) {
-  const manifest = readJson(root, `${dir}/manifest.json`);
+  const proof = readJson(root, `${dir}/proof.json`);
+  const bytes = readFileSync(path.join(root, dir, "snapshot.json"));
+  const digest = value => createHash("sha256").update(value).digest("hex");
+  if (proof.package !== "@openpresentation/gallery" || proof.version !== "2.0.0" || proof.gitHead !== "48169a9bb38559b8385e6791e7b5e76c0f5a8792" || proof.integrity !== "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw==" || digest(bytes) !== proof.snapshotSha256 || digest(readFileSync(path.join(root, proof.verification))) !== proof.verificationSha256) throw new Error("Tracker catalog snapshot identity or bytes mismatch");
+  if (digest(readFileSync(path.join(root, proof.publishedContent))) !== proof.publishedContentSha256) throw new Error("Tracker published content evidence mismatch");
+  const verification = readJson(root, proof.verification);
+  const comparison = readJson(root, proof.publishedContent);
+  if (!verification.ok || verification.checks.some(check => !check.ok) || !verification.checks.some(check => check.name === "npm version" && check.detail.includes(proof.integrity)) || !verification.checks.some(check => check.name === "gitHead" && check.detail.includes(proof.gitHead)) || comparison.registry !== `${proof.package}@${proof.version}` || comparison.source !== proof.gitHead || comparison.integrity !== proof.integrity) throw new Error("Tracker catalog verified source identity mismatch");
+  const snapshot = JSON.parse(bytes);
+  if (snapshot.schema !== 1 || Object.keys(snapshot.files).length !== proof.files) throw new Error("Tracker catalog snapshot shape mismatch");
+  const read = file => { if (!Object.hasOwn(snapshot.files, file)) throw new Error(`Missing tracker catalog input ${file}`); return snapshot.files[file]; };
+  const manifest = read("manifest.json");
   const kinds = {};
   for (const kind of Object.keys(manifest.kinds).sort()) {
-    const index = readJson(root, `${dir}/${kind}/index.json`);
+    const index = read(`${kind}/index.json`);
     kinds[kind] = Object.fromEntries(
       index.records.map((entry) => {
-        const record = readJson(root, `${dir}/${kind}/${entry.file ?? `${entry.id}.json`}`);
+        const record = read(`${kind}/${entry.file ?? `${entry.id}.json`}`);
         return [entry.id, { name: record.name ?? entry.name ?? entry.id, deprecated: Boolean(entry.deprecated || record.deprecation), replacedBy: entry.replacedBy ?? record.deprecation?.replacedBy ?? null, record }];
       }),
     );
@@ -372,11 +384,14 @@ export function buildTracker({ root = ROOT } = {}) {
     const ids = uniq([...Object.keys(catalogRecords), ...(g?.items ?? []), ...(g?.legacyItems ?? [])]).sort();
     for (const id of ids) {
       const cat = catalogRecords[id];
-      const audit = audits.get(`${type}/${id}`);
-      const par = parityBy.get(`${type}/${id}`);
-      const supportItem = supportBy.get(`${type}/${id}`);
+      const v2Layout = type === "layouts" && cat?.record.$schema?.endsWith("opf-layout/v2");
+      const audit = v2Layout ? undefined : audits.get(`${type}/${id}`);
+      const par = v2Layout ? undefined : parityBy.get(`${type}/${id}`);
+      const supportItem = v2Layout ? undefined : supportBy.get(`${type}/${id}`);
       const gaps = [];
       const record = { type, id, name: cat?.name ?? id };
+      if (type === "layouts" && !cat) record.evidenceScope = "historical v1 gallery layout; not a current gallery2 catalog record";
+      if (v2Layout) record.evidenceScope = "opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id";
 
       // spec
       let spec;
@@ -393,6 +408,7 @@ export function buildTracker({ root = ROOT } = {}) {
       else if (spec === "catalog-deprecated") galleryColumn = "not-shown-deprecated";
       else if (published.has(id)) galleryColumn = "json-only";
       else galleryColumn = "not-shown";
+      if (v2Layout) galleryColumn = "unknown";
       if (galleryColumn === "shown-no-preview") gaps.push({ code: "missing-gallery", detail: `gallery page has no card preview in ${g.previewAssets}` });
       if (galleryColumn === "json-only") gaps.push({ code: "missing-gallery", detail: g?.page ? "served as catalog JSON only; the gallery has no page for this id" : `served as catalog JSON only; the gallery has no ${type} pages` });
       if (galleryColumn === "not-shown") gaps.push({ code: "missing-gallery", detail: "not shown on pptx.gallery" });
@@ -418,7 +434,7 @@ export function buildTracker({ root = ROOT } = {}) {
       if (parityValue === "mismatch") gaps.push({ code: "parity-mismatch", detail: parityDetail });
 
       // editor
-      const editorValue = switchable.has(type) ? "switch" : "none";
+      const editorValue = v2Layout ? "unknown" : switchable.has(type) ? "switch" : "none";
       if (editorValue === "none") gaps.push({ code: "missing-editor", detail: `opf-editor ${editor.source.version} has no ${type} switch (SWITCH_DIMENSIONS)` });
 
       // fonts: the families the value's parity preview drew, else the catalog's font scheme
@@ -431,7 +447,7 @@ export function buildTracker({ root = ROOT } = {}) {
       if (parityValue === "near") gaps.push({ code: "parity-near", detail: parityDetail });
 
       // native evidence
-      const nativeInfo = nativeOf(type, id);
+      const nativeInfo = v2Layout ? {value: "unverified", evidence: [], gaps: []} : nativeOf(type, id);
       const nativeDirs = nativeInfo.evidence;
       const nativeValue = nativeInfo.value;
       gaps.push(...nativeInfo.gaps);
@@ -593,7 +609,7 @@ export function renderMarkdown(tracker) {
     "",
     `As of ${tracker.asOf}. Machine-readable source: [gallery-tracker.json](gallery-tracker.json). Authored rules: [gallery-tracker.overrides.json](gallery-tracker.overrides.json). Program: [burndown.md](burndown.md). Rebuild with \`pnpm build:gallery-tracker\`; \`pnpm check:gallery-tracker\` fails when this file is stale. Internal tracking only: nothing here is shown on a site.`,
     "",
-    "One record per item type and value: every catalog record in `packages/gallery/catalog` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.",
+    "One record per item type and value: every catalog record in `the committed tracker-only catalog snapshot` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.",
     "",
     "## Summary",
     "",
@@ -644,7 +660,7 @@ export function renderMarkdown(tracker) {
   push("", "## Inputs", "", "| Input | Source |", "| --- | --- |");
   const inp = tracker.inputs;
   push(
-    `| Catalogs | \`${inp.catalogs.dir}\` (${inp.catalogs.kinds} kinds, pinned to pptx-gallery \`${inp.catalogs.gallery}\`) |`,
+    `| Catalogs | \`${inp.catalogs.dir}\` (${inp.catalogs.kinds} kinds, tracker snapshot of Gallery2; original records from pptx-gallery \`${inp.catalogs.gallery}\`) |`,
     `| pptx.gallery pages | \`${inp.gallery.file}\` (${inp.gallery.repository} \`${inp.gallery.commit.slice(0, 7)}\`, captured ${inp.gallery.capturedAt}) |`,
     `| Editor switches | \`${inp.editor.file}\` (${inp.editor.repository} ${inp.editor.version} \`${inp.editor.commit.slice(0, 7)}\`, \`${inp.editor.switches}\` SWITCH_DIMENSIONS, tested by \`${inp.editor.test}\`) |`,
     `| Audits A and B | \`${inp.audits.auditA.file}\`, \`${inp.audits.auditB.file}\` (opf \`${inp.audits.auditA.heads.opf}\`, opf-render \`${inp.audits.auditA.heads["opf-render"]}\`, opf-pptx \`${inp.audits.auditA.heads["opf-pptx"]}\`, opf-editor \`${inp.audits.auditB.heads["opf-editor"]}\`, pptx-gallery \`${inp.audits.auditA.heads["pptx-gallery"]}\`) |`,
