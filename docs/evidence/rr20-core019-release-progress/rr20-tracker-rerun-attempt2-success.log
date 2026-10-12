@@ -1,0 +1,489 @@
+﻿2026-10-12T07:43:00.2491751Z Current runner version: '2.337.0'
+2026-10-12T07:43:00.2516879Z ##[group]Runner Image Provisioner
+2026-10-12T07:43:00.2517683Z Hosted Compute Agent
+2026-10-12T07:43:00.2518287Z Version: 20261002.596
+2026-10-12T07:43:00.2518883Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-12T07:43:00.2519547Z Build Date: 2026-10-02T22:28:27Z
+2026-10-12T07:43:00.2520211Z Worker ID: {232e26ac-4af3-4013-8a4a-b120ed850445}
+2026-10-12T07:43:00.2520863Z Region: westus3
+2026-10-12T07:43:00.2521402Z Cloud: Azure
+2026-10-12T07:43:00.2521901Z ##[endgroup]
+2026-10-12T07:43:00.2523295Z ##[group]Operating System
+2026-10-12T07:43:00.2524299Z Ubuntu
+2026-10-12T07:43:00.2524789Z 24.04.5
+2026-10-12T07:43:00.2525235Z LTS
+2026-10-12T07:43:00.2525748Z ##[endgroup]
+2026-10-12T07:43:00.2526258Z ##[group]Runner Image
+2026-10-12T07:43:00.2527192Z Image: ubuntu-24.04
+2026-10-12T07:43:00.2527728Z Version: 20261004.327.1
+2026-10-12T07:43:00.2528923Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-12T07:43:00.2530306Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-12T07:43:00.2531186Z ##[endgroup]
+2026-10-12T07:43:00.2532336Z ##[group]GITHUB_TOKEN Permissions
+2026-10-12T07:43:00.2534649Z Contents: write
+2026-10-12T07:43:00.2535206Z Metadata: read
+2026-10-12T07:43:00.2535725Z PullRequests: write
+2026-10-12T07:43:00.2536274Z ##[endgroup]
+2026-10-12T07:43:00.2538357Z Secret source: Actions
+2026-10-12T07:43:00.2539269Z Cache mode: write
+2026-10-12T07:43:00.2539899Z Prepare workflow directory
+2026-10-12T07:43:00.2875673Z Prepare all required actions
+2026-10-12T07:43:00.2924400Z Getting action download info
+2026-10-12T07:43:00.6045542Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-12T07:43:00.6828168Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-12T07:43:00.8474222Z Complete job name: Regenerate the trackers
+2026-10-12T07:43:00.9197729Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-12T07:43:00.9198941Z with:
+2026-10-12T07:43:00.9199427Z   ref: main
+2026-10-12T07:43:00.9199928Z   fetch-depth: 0
+2026-10-12T07:43:00.9200454Z   repository: OpenPresentation/opf
+2026-10-12T07:43:00.9204471Z   token: ***
+2026-10-12T07:43:00.9204990Z   ssh-strict: true
+2026-10-12T07:43:00.9205465Z   ssh-user: git
+2026-10-12T07:43:00.9206001Z   persist-credentials: true
+2026-10-12T07:43:00.9206542Z   clean: true
+2026-10-12T07:43:00.9207090Z   sparse-checkout-cone-mode: true
+2026-10-12T07:43:00.9207668Z   fetch-tags: false
+2026-10-12T07:43:00.9208145Z   show-progress: true
+2026-10-12T07:43:00.9208613Z   lfs: false
+2026-10-12T07:43:00.9209105Z   submodules: false
+2026-10-12T07:43:00.9209596Z   set-safe-directory: true
+2026-10-12T07:43:00.9210160Z   allow-unsafe-pr-checkout: false
+2026-10-12T07:43:00.9211075Z ##[endgroup]
+2026-10-12T07:43:01.0348979Z Syncing repository: OpenPresentation/opf
+2026-10-12T07:43:01.0351909Z ##[group]Getting Git version info
+2026-10-12T07:43:01.0352786Z Working directory is '/home/runner/work/opf/opf'
+2026-10-12T07:43:01.0354141Z [command]/usr/bin/git version
+2026-10-12T07:43:01.0354664Z git version 2.55.0
+2026-10-12T07:43:01.0356616Z ##[endgroup]
+2026-10-12T07:43:01.0367893Z Temporarily overriding HOME='/home/runner/work/_temp/254f5ae6-c2a2-4393-8194-1ce0ab212d5f' before making global git config changes
+2026-10-12T07:43:01.0376536Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T07:43:01.0378083Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/opf/opf
+2026-10-12T07:43:01.0425929Z Deleting the contents of '/home/runner/work/opf/opf'
+2026-10-12T07:43:01.0428228Z ##[group]Determining repository object format
+2026-10-12T07:43:01.3976375Z ##[endgroup]
+2026-10-12T07:43:01.3977886Z ##[group]Initializing the repository
+2026-10-12T07:43:01.3985353Z [command]/usr/bin/git init /home/runner/work/opf/opf
+2026-10-12T07:43:01.4165353Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T07:43:01.4167450Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T07:43:01.4169393Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T07:43:01.4170747Z hint: call:
+2026-10-12T07:43:01.4171412Z hint:
+2026-10-12T07:43:01.4172112Z hint: 	git config --global init.defaultBranch <name>
+2026-10-12T07:43:01.4172903Z hint:
+2026-10-12T07:43:01.4173675Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T07:43:01.4175883Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T07:43:01.4177047Z hint:
+2026-10-12T07:43:01.4178050Z hint: 	git branch -m <name>
+2026-10-12T07:43:01.4179053Z hint:
+2026-10-12T07:43:01.4180438Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T07:43:01.4182843Z Initialized empty Git repository in /home/runner/work/opf/opf/.git/
+2026-10-12T07:43:01.4188132Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf
+2026-10-12T07:43:01.4237712Z ##[endgroup]
+2026-10-12T07:43:01.4238736Z ##[group]Disabling automatic garbage collection
+2026-10-12T07:43:01.4243012Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-12T07:43:01.4280323Z ##[endgroup]
+2026-10-12T07:43:01.4281205Z ##[group]Setting up auth
+2026-10-12T07:43:01.4281843Z Removing SSH command configuration
+2026-10-12T07:43:01.4288226Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T07:43:01.4326478Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T07:43:01.4653574Z Removing HTTP extra header
+2026-10-12T07:43:01.4659289Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T07:43:01.4693259Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T07:43:01.4877511Z Removing includeIf entries pointing to credentials config files
+2026-10-12T07:43:01.4882667Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T07:43:01.4914858Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T07:43:01.5110152Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-12T07:43:01.5147992Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/opf/opf/.git.path /home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:01.5178679Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:01.5218631Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:01.5256054Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:01.5285784Z ##[endgroup]
+2026-10-12T07:43:01.5286677Z ##[group]Fetching the repository
+2026-10-12T07:43:01.5292050Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-12T07:43:05.2968248Z From https://github.com/OpenPresentation/opf
+2026-10-12T07:43:05.2971001Z  * [new branch]        bot/tracker-refresh     -> origin/bot/tracker-refresh
+2026-10-12T07:43:05.2973127Z  * [new branch]        codex/archive-shaping-20260915 -> origin/codex/archive-shaping-20260915
+2026-10-12T07:43:05.2975626Z  * [new branch]        codex/cf-00-program     -> origin/codex/cf-00-program
+2026-10-12T07:43:05.2977688Z  * [new branch]        codex/fa-0-14-golden-reset -> origin/codex/fa-0-14-golden-reset
+2026-10-12T07:43:05.2979716Z  * [new branch]        codex/fa-0-14-integration -> origin/codex/fa-0-14-integration
+2026-10-12T07:43:05.2981657Z  * [new branch]        codex/fa-00-burndown-2  -> origin/codex/fa-00-burndown-2
+2026-10-12T07:43:05.2984475Z  * [new branch]        codex/fa-00c-golden-workflow-sh -> origin/codex/fa-00c-golden-workflow-sh
+2026-10-12T07:43:05.2987009Z  * [new branch]        codex/fa-17-layout-design-applied -> origin/codex/fa-17-layout-design-applied
+2026-10-12T07:43:05.2989564Z  * [new branch]        codex/fa-18-scalar-negative-case -> origin/codex/fa-18-scalar-negative-case
+2026-10-12T07:43:05.2991978Z  * [new branch]        codex/fa-20-0.15-design -> origin/codex/fa-20-0.15-design
+2026-10-12T07:43:05.2994031Z  * [new branch]        codex/fa-20-catalog-groups -> origin/codex/fa-20-catalog-groups
+2026-10-12T07:43:05.2996150Z  * [new branch]        codex/fa-21-zero-builtins -> origin/codex/fa-21-zero-builtins
+2026-10-12T07:43:05.2998459Z  * [new branch]        codex/fa-22-backgrounds-images -> origin/codex/fa-22-backgrounds-images
+2026-10-12T07:43:05.3000908Z  * [new branch]        codex/fa-26-nested-groups -> origin/codex/fa-26-nested-groups
+2026-10-12T07:43:05.3003084Z  * [new branch]        codex/fa-27-table-alt   -> origin/codex/fa-27-table-alt
+2026-10-12T07:43:05.3005624Z  * [new branch]        codex/fa-28-items-vs-bullets -> origin/codex/fa-28-items-vs-bullets
+2026-10-12T07:43:05.3008324Z  * [new branch]        codex/fa-29-language-tag-lint -> origin/codex/fa-29-language-tag-lint
+2026-10-12T07:43:05.3010845Z  * [new branch]        codex/fa-30-preview-a11y -> origin/codex/fa-30-preview-a11y
+2026-10-12T07:43:05.3013554Z  * [new branch]        codex/fa-31-slide-variables -> origin/codex/fa-31-slide-variables
+2026-10-12T07:43:05.3015984Z  * [new branch]        codex/fa-wave-c-core    -> origin/codex/fa-wave-c-core
+2026-10-12T07:43:05.3018973Z  * [new branch]        codex/ff-05-per-slide-script-fonts-native -> origin/codex/ff-05-per-slide-script-fonts-native
+2026-10-12T07:43:05.3022376Z  * [new branch]        codex/ff-46-ethiopic-supplement -> origin/codex/ff-46-ethiopic-supplement
+2026-10-12T07:43:05.3025810Z  * [new branch]        codex/ff-46-script-name-hosts -> origin/codex/ff-46-script-name-hosts
+2026-10-12T07:43:05.3028825Z  * [new branch]        codex/ff-46-sizeadjust-rows -> origin/codex/ff-46-sizeadjust-rows
+2026-10-12T07:43:05.3031860Z  * [new branch]        codex/ff-46-theme-supplement-native -> origin/codex/ff-46-theme-supplement-native
+2026-10-12T07:43:05.3035079Z  * [new branch]        codex/opf-364-fonts-docs -> origin/codex/opf-364-fonts-docs
+2026-10-12T07:43:05.3037740Z  * [new branch]        codex/opf-365-slide-size-docs -> origin/codex/opf-365-slide-size-docs
+2026-10-12T07:43:05.3040619Z  * [new branch]        codex/opf-523-arabic-widths -> origin/codex/opf-523-arabic-widths
+2026-10-12T07:43:05.3043595Z  * [new branch]        codex/opf-524-no-legacy-peer-deps -> origin/codex/opf-524-no-legacy-peer-deps
+2026-10-12T07:43:05.3047062Z  * [new branch]        codex/opf-525-windows-spawn -> origin/codex/opf-525-windows-spawn
+2026-10-12T07:43:05.3049726Z  * [new branch]        codex/opf-526-pr-gate-cancelled -> origin/codex/opf-526-pr-gate-cancelled
+2026-10-12T07:43:05.3052543Z  * [new branch]        codex/opf-567-slide-size-range -> origin/codex/opf-567-slide-size-range
+2026-10-12T07:43:05.3055429Z  * [new branch]        codex/opf-87-save-reopen-native -> origin/codex/opf-87-save-reopen-native
+2026-10-12T07:43:05.3058185Z  * [new branch]        codex/opf-cli-release-notes -> origin/codex/opf-cli-release-notes
+2026-10-12T07:43:05.3061163Z  * [new branch]        codex/opf-published-matrix-018 -> origin/codex/opf-published-matrix-018
+2026-10-12T07:43:05.3064107Z  * [new branch]        codex/opf-release-notes-heading -> origin/codex/opf-release-notes-heading
+2026-10-12T07:43:05.3066993Z  * [new branch]        codex/probe-sets-20261005 -> origin/codex/probe-sets-20261005
+2026-10-12T07:43:05.3069635Z  * [new branch]        codex/release-cli-0-10-1 -> origin/codex/release-cli-0-10-1
+2026-10-12T07:43:05.3072292Z  * [new branch]        codex/release-cli-0-11-0 -> origin/codex/release-cli-0-11-0
+2026-10-12T07:43:05.3075159Z  * [new branch]        codex/release-cli-0-14-0 -> origin/codex/release-cli-0-14-0
+2026-10-12T07:43:05.3077599Z  * [new branch]        codex/release-cli-0-15-0 -> origin/codex/release-cli-0-15-0
+2026-10-12T07:43:05.3080465Z  * [new branch]        codex/release-cli-0-16-0 -> origin/codex/release-cli-0-16-0
+2026-10-12T07:43:05.3082789Z  * [new branch]        codex/release-cli-0-17-0 -> origin/codex/release-cli-0-17-0
+2026-10-12T07:43:05.3085291Z  * [new branch]        codex/release-cli-0-17-1 -> origin/codex/release-cli-0-17-1
+2026-10-12T07:43:05.3087763Z  * [new branch]        codex/release-cli-0-18-0 -> origin/codex/release-cli-0-18-0
+2026-10-12T07:43:05.3090011Z  * [new branch]        codex/release-cli-0-18-1 -> origin/codex/release-cli-0-18-1
+2026-10-12T07:43:05.3092314Z  * [new branch]        codex/release-core-0-12-1 -> origin/codex/release-core-0-12-1
+2026-10-12T07:43:05.3094895Z  * [new branch]        codex/release-core-0-12-2 -> origin/codex/release-core-0-12-2
+2026-10-12T07:43:05.3097791Z  * [new branch]        codex/release-core-0-13-0 -> origin/codex/release-core-0-13-0
+2026-10-12T07:43:05.3100442Z  * [new branch]        codex/release-core-0-14-0 -> origin/codex/release-core-0-14-0
+2026-10-12T07:43:05.3102763Z  * [new branch]        codex/release-core-0-15-0 -> origin/codex/release-core-0-15-0
+2026-10-12T07:43:05.3105151Z  * [new branch]        codex/release-core-0-15-1 -> origin/codex/release-core-0-15-1
+2026-10-12T07:43:05.3107911Z  * [new branch]        codex/release-core-0-16-0 -> origin/codex/release-core-0-16-0
+2026-10-12T07:43:05.3110450Z  * [new branch]        codex/release-core-0-17-0 -> origin/codex/release-core-0-17-0
+2026-10-12T07:43:05.3112914Z  * [new branch]        codex/release-core-0-18-0 -> origin/codex/release-core-0-18-0
+2026-10-12T07:43:05.3115860Z  * [new branch]        codex/release-core-0-18-1 -> origin/codex/release-core-0-18-1
+2026-10-12T07:43:05.3118209Z  * [new branch]        codex/release-core-0-18-2 -> origin/codex/release-core-0-18-2
+2026-10-12T07:43:05.3120684Z  * [new branch]        codex/release-core-0-18-3 -> origin/codex/release-core-0-18-3
+2026-10-12T07:43:05.3123088Z  * [new branch]        codex/release-core-0-18-4 -> origin/codex/release-core-0-18-4
+2026-10-12T07:43:05.3125603Z  * [new branch]        codex/release-core-0-19-0 -> origin/codex/release-core-0-19-0
+2026-10-12T07:43:05.3127972Z  * [new branch]        codex/rr-0-19-layouts-design -> origin/codex/rr-0-19-layouts-design
+2026-10-12T07:43:05.3130529Z  * [new branch]        codex/rr-00-burndown-20261005 -> origin/codex/rr-00-burndown-20261005
+2026-10-12T07:43:05.3133059Z  * [new branch]        codex/rr-00-burndown-20261005b -> origin/codex/rr-00-burndown-20261005b
+2026-10-12T07:43:05.3135827Z  * [new branch]        codex/rr-00-burndown-20261006 -> origin/codex/rr-00-burndown-20261006
+2026-10-12T07:43:05.3138670Z  * [new branch]        codex/rr-00-tracker-refresh-20261003-b -> origin/codex/rr-00-tracker-refresh-20261003-b
+2026-10-12T07:43:05.3141625Z  * [new branch]        codex/rr-03-ff-27-fields-native -> origin/codex/rr-03-ff-27-fields-native
+2026-10-12T07:43:05.3144433Z  * [new branch]        codex/rr-05-ff-12-native-sample -> origin/codex/rr-05-ff-12-native-sample
+2026-10-12T07:43:05.3147164Z  * [new branch]        codex/rr-17-ff-13-font-embed-native -> origin/codex/rr-17-ff-13-font-embed-native
+2026-10-12T07:43:05.3149940Z  * [new branch]        codex/rr-17-ff-46-fonts-installed -> origin/codex/rr-17-ff-46-fonts-installed
+2026-10-12T07:43:05.3152763Z  * [new branch]        codex/rr-17-keynote-evidence -> origin/codex/rr-17-keynote-evidence
+2026-10-12T07:43:05.3155542Z  * [new branch]        codex/rr-17-pptxgenjs-plus-native -> origin/codex/rr-17-pptxgenjs-plus-native
+2026-10-12T07:43:05.3158105Z  * [new branch]        codex/rr-17-scripts-1-ff46 -> origin/codex/rr-17-scripts-1-ff46
+2026-10-12T07:43:05.3160570Z  * [new branch]        codex/rr-20-014-prep-lazy-count -> origin/codex/rr-20-014-prep-lazy-count
+2026-10-12T07:43:05.3163385Z  * [new branch]        codex/rr-20-014-prep-tag-waits-checks -> origin/codex/rr-20-014-prep-tag-waits-checks
+2026-10-12T07:43:05.3166406Z  * [new branch]        codex/rr-20-check-suite-fallback -> origin/codex/rr-20-check-suite-fallback
+2026-10-12T07:43:05.3168956Z  * [new branch]        codex/rr-20-cli-0-18-peers -> origin/codex/rr-20-cli-0-18-peers
+2026-10-12T07:43:05.3171512Z  * [new branch]        codex/rr-20-cli-prep-peer-floors -> origin/codex/rr-20-cli-prep-peer-floors
+2026-10-12T07:43:05.3174463Z  * [new branch]        codex/rr-20-cli-publication-records -> origin/codex/rr-20-cli-publication-records
+2026-10-12T07:43:05.3177282Z  * [new branch]        codex/rr-20-cli-script-font-pins -> origin/codex/rr-20-cli-script-font-pins
+2026-10-12T07:43:05.3180373Z  * [new branch]        codex/rr-20-complete-graph-serial-evidence -> origin/codex/rr-20-complete-graph-serial-evidence
+2026-10-12T07:43:05.3183506Z  * [new branch]        codex/rr-20-complete-source-records -> origin/codex/rr-20-complete-source-records
+2026-10-12T07:43:05.3186104Z  * [new branch]        codex/rr-20-core-0-18-1 -> origin/codex/rr-20-core-0-18-1
+2026-10-12T07:43:05.3188372Z  * [new branch]        codex/rr-20-core-peers-0-17 -> origin/codex/rr-20-core-peers-0-17
+2026-10-12T07:43:05.3190724Z  * [new branch]        codex/rr-20-docs-dead-links -> origin/codex/rr-20-docs-dead-links
+2026-10-12T07:43:05.3193438Z  * [new branch]        codex/rr-20-editor-publication-records -> origin/codex/rr-20-editor-publication-records
+2026-10-12T07:43:05.3196293Z  * [new branch]        codex/rr-20-engines-range -> origin/codex/rr-20-engines-range
+2026-10-12T07:43:05.3198444Z  * [new branch]        codex/rr-20-example-decks -> origin/codex/rr-20-example-decks
+2026-10-12T07:43:05.3200999Z  * [new branch]        codex/rr-20-final-records-integration -> origin/codex/rr-20-final-records-integration
+2026-10-12T07:43:05.3203925Z  * [new branch]        codex/rr-20-gallery-wasm-manifest -> origin/codex/rr-20-gallery-wasm-manifest
+2026-10-12T07:43:05.3206763Z  * [new branch]        codex/rr-20-geometry-lockstep-records -> origin/codex/rr-20-geometry-lockstep-records
+2026-10-12T07:43:05.3209310Z  * [new branch]        codex/rr-20-github-releases -> origin/codex/rr-20-github-releases
+2026-10-12T07:43:05.3211408Z  * [new branch]        codex/rr-20-lazy-0-15   -> origin/codex/rr-20-lazy-0-15
+2026-10-12T07:43:05.3213364Z  * [new branch]        codex/rr-20-lazy-0-16   -> origin/codex/rr-20-lazy-0-16
+2026-10-12T07:43:05.3215399Z  * [new branch]        codex/rr-20-lazy-0-17   -> origin/codex/rr-20-lazy-0-17
+2026-10-12T07:43:05.3217399Z  * [new branch]        codex/rr-20-lazy-0-17-1 -> origin/codex/rr-20-lazy-0-17-1
+2026-10-12T07:43:05.3219357Z  * [new branch]        codex/rr-20-lazy-0-18   -> origin/codex/rr-20-lazy-0-18
+2026-10-12T07:43:05.3221498Z  * [new branch]        codex/rr-20-lazy-count-0-12-1 -> origin/codex/rr-20-lazy-count-0-12-1
+2026-10-12T07:43:05.3223890Z  * [new branch]        codex/rr-20-lazy-count-0-12-2 -> origin/codex/rr-20-lazy-count-0-12-2
+2026-10-12T07:43:05.3226180Z  * [new branch]        codex/rr-20-lazy-count-0-13-0 -> origin/codex/rr-20-lazy-count-0-13-0
+2026-10-12T07:43:05.3228480Z  * [new branch]        codex/rr-20-lazy-count-0-13-1 -> origin/codex/rr-20-lazy-count-0-13-1
+2026-10-12T07:43:05.3230704Z  * [new branch]        codex/rr-20-link-font-peers -> origin/codex/rr-20-link-font-peers
+2026-10-12T07:43:05.3232987Z  * [new branch]        codex/rr-20-matrix-pptx-0-16-1 -> origin/codex/rr-20-matrix-pptx-0-16-1
+2026-10-12T07:43:05.3235661Z  * [new branch]        codex/rr-20-native-packet-evidence -> origin/codex/rr-20-native-packet-evidence
+2026-10-12T07:43:05.3238453Z  * [new branch]        codex/rr-20-native-packet-handoff -> origin/codex/rr-20-native-packet-handoff
+2026-10-12T07:43:05.3241152Z  * [new branch]        codex/rr-20-native-packet06-evidence -> origin/codex/rr-20-native-packet06-evidence
+2026-10-12T07:43:05.3243948Z  * [new branch]        codex/rr-20-next-metadata-refresh -> origin/codex/rr-20-next-metadata-refresh
+2026-10-12T07:43:05.3246270Z  * [new branch]        codex/rr-20-notes-0-12-3 -> origin/codex/rr-20-notes-0-12-3
+2026-10-12T07:43:05.3248551Z  * [new branch]        codex/rr-20-packed-npx-convert -> origin/codex/rr-20-packed-npx-convert
+2026-10-12T07:43:05.3251832Z  * [new branch]        codex/rr-20-paired-core-adoption -> origin/codex/rr-20-paired-core-adoption
+2026-10-12T07:43:05.3255973Z  * [new branch]        codex/rr-20-pareto-evidence-scope -> origin/codex/rr-20-pareto-evidence-scope
+2026-10-12T07:43:05.3259749Z  * [new branch]        codex/rr-20-patch-release-records -> origin/codex/rr-20-patch-release-records
+2026-10-12T07:43:05.3264211Z  * [new branch]        codex/rr-20-patch-train-publications -> origin/codex/rr-20-patch-train-publications
+2026-10-12T07:43:05.3267479Z  * [new branch]        codex/rr-20-plan-pptx-0-16-1 -> origin/codex/rr-20-plan-pptx-0-16-1
+2026-10-12T07:43:05.3269858Z  * [new branch]        codex/rr-20-pnpm-version-warning -> origin/codex/rr-20-pnpm-version-warning
+2026-10-12T07:43:05.3272247Z  * [new branch]        codex/rr-20-promotion-records -> origin/codex/rr-20-promotion-records
+2026-10-12T07:43:05.3274805Z  * [new branch]        codex/rr-20-published-013-native -> origin/codex/rr-20-published-013-native
+2026-10-12T07:43:05.3277009Z  * [new branch]        codex/rr-20-records-0-13 -> origin/codex/rr-20-records-0-13
+2026-10-12T07:43:05.3279002Z  * [new branch]        codex/rr-20-records-0-15 -> origin/codex/rr-20-records-0-15
+2026-10-12T07:43:05.3281366Z  * [new branch]        codex/rr-20-records-0-16 -> origin/codex/rr-20-records-0-16
+2026-10-12T07:43:05.3283601Z  * [new branch]        codex/rr-20-records-0-17 -> origin/codex/rr-20-records-0-17
+2026-10-12T07:43:05.3285794Z  * [new branch]        codex/rr-20-records-0-18 -> origin/codex/rr-20-records-0-18
+2026-10-12T07:43:05.3288034Z  * [new branch]        codex/rr-20-records-render-0-17-1 -> origin/codex/rr-20-records-render-0-17-1
+2026-10-12T07:43:05.3290627Z  * [new branch]        codex/rr-20-refreshed-graph-evidence -> origin/codex/rr-20-refreshed-graph-evidence
+2026-10-12T07:43:05.3293213Z  * [new branch]        codex/rr-20-registry-browser-core -> origin/codex/rr-20-registry-browser-core
+2026-10-12T07:43:05.3295696Z  * [new branch]        codex/rr-20-release-acceptance -> origin/codex/rr-20-release-acceptance
+2026-10-12T07:43:05.3298062Z  * [new branch]        codex/rr-20-release-notes-0-13-0 -> origin/codex/rr-20-release-notes-0-13-0
+2026-10-12T07:43:05.3300437Z  * [new branch]        codex/rr-20-release-plan-0-12-2 -> origin/codex/rr-20-release-plan-0-12-2
+2026-10-12T07:43:05.3302954Z  * [new branch]        codex/rr-20-release-plan-pptx-0-12-3 -> origin/codex/rr-20-release-plan-pptx-0-12-3
+2026-10-12T07:43:05.3305576Z  * [new branch]        codex/rr-20-render0182-font-count -> origin/codex/rr-20-render0182-font-count
+2026-10-12T07:43:05.3307912Z  * [new branch]        codex/rr-20-schema-docs-drift -> origin/codex/rr-20-schema-docs-drift
+2026-10-12T07:43:05.3310275Z  * [new branch]        codex/rr-20-showcase-font-context -> origin/codex/rr-20-showcase-font-context
+2026-10-12T07:43:05.3312715Z  * [new branch]        codex/rr-20-source-review-records -> origin/codex/rr-20-source-review-records
+2026-10-12T07:43:05.3315356Z  * [new branch]        codex/rr-20-sync-gallery-catalog -> origin/codex/rr-20-sync-gallery-catalog
+2026-10-12T07:43:05.3317681Z  * [new branch]        codex/rr-20-tracker-cli-0-17-1 -> origin/codex/rr-20-tracker-cli-0-17-1
+2026-10-12T07:43:05.3320168Z  * [new branch]        codex/rr-20-tracker-gallery2-snapshot -> origin/codex/rr-20-tracker-gallery2-snapshot
+2026-10-12T07:43:05.3323052Z  * [new branch]        codex/rr-20-train-dependabot-advisory -> origin/codex/rr-20-train-dependabot-advisory
+2026-10-12T07:43:05.3325829Z  * [new branch]        codex/rr-20-train-optional-peers -> origin/codex/rr-20-train-optional-peers
+2026-10-12T07:43:05.3328238Z  * [new branch]        codex/rr-20-windows-font-archive -> origin/codex/rr-20-windows-font-archive
+2026-10-12T07:43:05.3330688Z  * [new branch]        codex/rr-45-ci-speed-1-core-shards -> origin/codex/rr-45-ci-speed-1-core-shards
+2026-10-12T07:43:05.3333275Z  * [new branch]        codex/rr-45-ci-speed-2-metric-outline -> origin/codex/rr-45-ci-speed-2-metric-outline
+2026-10-12T07:43:05.3335998Z  * [new branch]        codex/rr-45-ci-speed-3-registry-scope -> origin/codex/rr-45-ci-speed-3-registry-scope
+2026-10-12T07:43:05.3338660Z  * [new branch]        codex/rr-45-ci-speed-4-covering-array -> origin/codex/rr-45-ci-speed-4-covering-array
+2026-10-12T07:43:05.3341093Z  * [new branch]        codex/rr-45-ci-speed-5-verify -> origin/codex/rr-45-ci-speed-5-verify
+2026-10-12T07:43:05.3343515Z  * [new branch]        codex/rr-45-ci-speed-6-os-candidates -> origin/codex/rr-45-ci-speed-6-os-candidates
+2026-10-12T07:43:05.3345789Z  * [new branch]        codex/rr-49-descope     -> origin/codex/rr-49-descope
+2026-10-12T07:43:05.3347722Z  * [new branch]        codex/rr-50-core-reads-lock -> origin/codex/rr-50-core-reads-lock
+2026-10-12T07:43:05.3349708Z  * [new branch]        codex/rr-50-depends-on  -> origin/codex/rr-50-depends-on
+2026-10-12T07:43:05.3351500Z  * [new branch]        codex/rr-50-lock        -> origin/codex/rr-50-lock
+2026-10-12T07:43:05.3353236Z  * [new branch]        codex/rr-50-roller      -> origin/codex/rr-50-roller
+2026-10-12T07:43:05.3355168Z  * [new branch]        codex/rr-51-release-train -> origin/codex/rr-51-release-train
+2026-10-12T07:43:05.3357367Z  * [new branch]        codex/rr-51-wait-for-attestations -> origin/codex/rr-51-wait-for-attestations
+2026-10-12T07:43:05.3359603Z  * [new branch]        codex/rr-53-contract-suites -> origin/codex/rr-53-contract-suites
+2026-10-12T07:43:05.3361834Z  * [new branch]        codex/rr-54-chart-table-data -> origin/codex/rr-54-chart-table-data
+2026-10-12T07:43:05.3364301Z  * [new branch]        codex/rr-54-chart-table-data-native -> origin/codex/rr-54-chart-table-data-native
+2026-10-12T07:43:05.3367048Z  * [new branch]        codex/rr-54-chart-table-data-native-recheck -> origin/codex/rr-54-chart-table-data-native-recheck
+2026-10-12T07:43:05.3369505Z  * [new branch]        codex/rr-54-native-ee4941b -> origin/codex/rr-54-native-ee4941b
+2026-10-12T07:43:05.3371457Z  * [new branch]        codex/rr-54-slash-native -> origin/codex/rr-54-slash-native
+2026-10-12T07:43:05.3373342Z  * [new branch]        codex/rr-55-a1-validate -> origin/codex/rr-55-a1-validate
+2026-10-12T07:43:05.3375381Z  * [new branch]        codex/rr-55-a3-stats-context -> origin/codex/rr-55-a3-stats-context
+2026-10-12T07:43:05.3377618Z  * [new branch]        codex/rr-55-cli-gate-core-release -> origin/codex/rr-55-cli-gate-core-release
+2026-10-12T07:43:05.3379744Z  * [new branch]        codex/rr-55-cli-peers   -> origin/codex/rr-55-cli-peers
+2026-10-12T07:43:05.3381844Z  * [new branch]        codex/rr-55-gate-roller-candidate -> origin/codex/rr-55-gate-roller-candidate
+2026-10-12T07:43:05.3384374Z  * [new branch]        codex/rr-55-gate-tests-explicit-ref -> origin/codex/rr-55-gate-tests-explicit-ref
+2026-10-12T07:43:05.3386796Z  * [new branch]        codex/rr-55-gate-unreleased-core -> origin/codex/rr-55-gate-unreleased-core
+2026-10-12T07:43:05.3388991Z  * [new branch]        codex/rr-55-peer-core-gate -> origin/codex/rr-55-peer-core-gate
+2026-10-12T07:43:05.3390976Z  * [new branch]        codex/rr-55-short-verb-api -> origin/codex/rr-55-short-verb-api
+2026-10-12T07:43:05.3392894Z  * [new branch]        codex/rr-56-yaml-format -> origin/codex/rr-56-yaml-format
+2026-10-12T07:43:05.3394851Z  * [new branch]        codex/rr-57-agent-loop  -> origin/codex/rr-57-agent-loop
+2026-10-12T07:43:05.3396801Z  * [new branch]        codex/rr-57-parallel-verify -> origin/codex/rr-57-parallel-verify
+2026-10-12T07:43:05.3398879Z  * [new branch]        codex/rr-57-pr-gate     -> origin/codex/rr-57-pr-gate
+2026-10-12T07:43:05.3400870Z  * [new branch]        codex/rr-58-golden-commit-path -> origin/codex/rr-58-golden-commit-path
+2026-10-12T07:43:05.3403023Z  * [new branch]        codex/rr-58-layout-ownership -> origin/codex/rr-58-layout-ownership
+2026-10-12T07:43:05.3405057Z  * [new branch]        codex/rr-59-core-cli    -> origin/codex/rr-59-core-cli
+2026-10-12T07:43:05.3406920Z  * [new branch]        codex/rr-59-docs-followups -> origin/codex/rr-59-docs-followups
+2026-10-12T07:43:05.3408876Z  * [new branch]        codex/rr-59-forced-colors -> origin/codex/rr-59-forced-colors
+2026-10-12T07:43:05.3411131Z  * [new branch]        codex/rr-59-image-placeholder-oracle -> origin/codex/rr-59-image-placeholder-oracle
+2026-10-12T07:43:05.3413677Z  * [new branch]        codex/rr-59-installed-cli-regression -> origin/codex/rr-59-installed-cli-regression
+2026-10-12T07:43:05.3416043Z  * [new branch]        codex/rr-59-native-evidence -> origin/codex/rr-59-native-evidence
+2026-10-12T07:43:05.3418228Z  * [new branch]        codex/rr-59-validate-script-fonts -> origin/codex/rr-59-validate-script-fonts
+2026-10-12T07:43:05.3420384Z  * [new branch]        codex/rr-60-markdown-decks -> origin/codex/rr-60-markdown-decks
+2026-10-12T07:43:05.3422235Z  * [new branch]        codex/rr-61-burndown    -> origin/codex/rr-61-burndown
+2026-10-12T07:43:05.3424056Z  * [new branch]        codex/rr-62-cli-api     -> origin/codex/rr-62-cli-api
+2026-10-12T07:43:05.3425777Z  * [new branch]        codex/rr-62-convert     -> origin/codex/rr-62-convert
+2026-10-12T07:43:05.3427872Z  * [new branch]        codex/rr-62-import-data-determinism -> origin/codex/rr-62-import-data-determinism
+2026-10-12T07:43:05.3430051Z  * [new branch]        codex/rr-63-packed-peers -> origin/codex/rr-63-packed-peers
+2026-10-12T07:43:05.3431866Z  * [new branch]        codex/rr-64-burndown    -> origin/codex/rr-64-burndown
+2026-10-12T07:43:05.3433981Z  * [new branch]        codex/rr-65-69-burndown-rows -> origin/codex/rr-65-69-burndown-rows
+2026-10-12T07:43:05.3435937Z  * [new branch]        codex/rr-66-windows-cli -> origin/codex/rr-66-windows-cli
+2026-10-12T07:43:05.3437828Z  * [new branch]        codex/rr-67-pr-gate-fixes -> origin/codex/rr-67-pr-gate-fixes
+2026-10-12T07:43:05.3439886Z  * [new branch]        codex/rr-70-0-18-consistent-api -> origin/codex/rr-70-0-18-consistent-api
+2026-10-12T07:43:05.3441904Z  * [new branch]        codex/rr-70-one-import  -> origin/codex/rr-70-one-import
+2026-10-12T07:43:05.3443679Z  * [new branch]        codex/rr-70-open-0-18   -> origin/codex/rr-70-open-0-18
+2026-10-12T07:43:05.3445553Z  * [new branch]        codex/rr-71-org-logos   -> origin/codex/rr-71-org-logos
+2026-10-12T07:43:05.3447432Z  * [new branch]        codex/rr-71-owner-decisions -> origin/codex/rr-71-owner-decisions
+2026-10-12T07:43:05.3449474Z  * [new branch]        codex/rr-72-master-furniture -> origin/codex/rr-72-master-furniture
+2026-10-12T07:43:05.3451372Z  * [new branch]        codex/rr-73-ingest      -> origin/codex/rr-73-ingest
+2026-10-12T07:43:05.3453112Z  * [new branch]        codex/rr-74-core-engine -> origin/codex/rr-74-core-engine
+2026-10-12T07:43:05.3454915Z  * [new branch]        codex/rr-75-cli         -> origin/codex/rr-75-cli
+2026-10-12T07:43:05.3456770Z  * [new branch]        codex/rr-77-slide-file-names -> origin/codex/rr-77-slide-file-names
+2026-10-12T07:43:05.3458937Z  * [new branch]        codex/rr-78-candidate-gallery-ci -> origin/codex/rr-78-candidate-gallery-ci
+2026-10-12T07:43:05.3461639Z  * [new branch]        codex/rr-78-candidate-harness-main-integration -> origin/codex/rr-78-candidate-harness-main-integration
+2026-10-12T07:43:05.3464247Z  * [new branch]        codex/rr-78-core-uses-gallery -> origin/codex/rr-78-core-uses-gallery
+2026-10-12T07:43:05.3466294Z  * [new branch]        codex/rr-78-gallery-package -> origin/codex/rr-78-gallery-package
+2026-10-12T07:43:05.3468516Z  * [new branch]        codex/rr-78-gallery-repo-move -> origin/codex/rr-78-gallery-repo-move
+2026-10-12T07:43:05.3470843Z  * [new branch]        codex/rr-78-gallery2-merged-adoption -> origin/codex/rr-78-gallery2-merged-adoption
+2026-10-12T07:43:05.3473002Z  * [new branch]        codex/rr-79-layouts-core -> origin/codex/rr-79-layouts-core
+2026-10-12T07:43:05.3475206Z  * [new branch]        codex/rr-79-script-width-estimates -> origin/codex/rr-79-script-width-estimates
+2026-10-12T07:43:05.3477429Z  * [new branch]        codex/rr-83-convert-examples -> origin/codex/rr-83-convert-examples
+2026-10-12T07:43:05.3479655Z  * [new branch]        codex/rr-83-evidence-chart-regions -> origin/codex/rr-83-evidence-chart-regions
+2026-10-12T07:43:05.3482089Z  * [new branch]        codex/rr-83-golden-gallery-candidate -> origin/codex/rr-83-golden-gallery-candidate
+2026-10-12T07:43:05.3484587Z  * [new branch]        codex/rr-83-packed-gallery-schema -> origin/codex/rr-83-packed-gallery-schema
+2026-10-12T07:43:05.3486763Z  * [new branch]        codex/rr-83-schema-examples -> origin/codex/rr-83-schema-examples
+2026-10-12T07:43:05.3488793Z  * [new branch]        codex/rr-83-v2-qualification -> origin/codex/rr-83-v2-qualification
+2026-10-12T07:43:05.3490893Z  * [new branch]        codex/rr-agents-windows-paths -> origin/codex/rr-agents-windows-paths
+2026-10-12T07:43:05.3493130Z  * [new branch]        codex/rr-font-tracker-render-0181 -> origin/codex/rr-font-tracker-render-0181
+2026-10-12T07:43:05.3495351Z  * [new branch]        codex/rr-handoff-2026-10-11 -> origin/codex/rr-handoff-2026-10-11
+2026-10-12T07:43:05.3497220Z  * [new branch]        codex/rr-native-0-18    -> origin/codex/rr-native-0-18
+2026-10-12T07:43:05.3499218Z  * [new branch]        codex/shared-furniture-20260910 -> origin/codex/shared-furniture-20260910
+2026-10-12T07:43:05.3501206Z  * [new branch]        ecosystem-roll/main     -> origin/ecosystem-roll/main
+2026-10-12T07:43:05.3502777Z  * [new branch]        main                    -> origin/main
+2026-10-12T07:43:05.3504234Z  * [new tag]           cli-v0.1.1              -> cli-v0.1.1
+2026-10-12T07:43:05.3505729Z  * [new tag]           cli-v0.10.0             -> cli-v0.10.0
+2026-10-12T07:43:05.3507096Z  * [new tag]           cli-v0.10.1             -> cli-v0.10.1
+2026-10-12T07:43:05.3508465Z  * [new tag]           cli-v0.11.0             -> cli-v0.11.0
+2026-10-12T07:43:05.3509827Z  * [new tag]           cli-v0.14.0             -> cli-v0.14.0
+2026-10-12T07:43:05.3511208Z  * [new tag]           cli-v0.15.0             -> cli-v0.15.0
+2026-10-12T07:43:05.3512576Z  * [new tag]           cli-v0.16.0             -> cli-v0.16.0
+2026-10-12T07:43:05.3514048Z  * [new tag]           cli-v0.17.0             -> cli-v0.17.0
+2026-10-12T07:43:05.3515422Z  * [new tag]           cli-v0.17.1             -> cli-v0.17.1
+2026-10-12T07:43:05.3516783Z  * [new tag]           cli-v0.18.0             -> cli-v0.18.0
+2026-10-12T07:43:05.3518153Z  * [new tag]           cli-v0.18.1             -> cli-v0.18.1
+2026-10-12T07:43:05.3519520Z  * [new tag]           cli-v0.2.0              -> cli-v0.2.0
+2026-10-12T07:43:05.3520884Z  * [new tag]           cli-v0.3.0              -> cli-v0.3.0
+2026-10-12T07:43:05.3522230Z  * [new tag]           cli-v0.4.0              -> cli-v0.4.0
+2026-10-12T07:43:05.3523566Z  * [new tag]           cli-v0.5.0              -> cli-v0.5.0
+2026-10-12T07:43:05.3525002Z  * [new tag]           cli-v0.6.0              -> cli-v0.6.0
+2026-10-12T07:43:05.3526382Z  * [new tag]           cli-v0.7.0              -> cli-v0.7.0
+2026-10-12T07:43:05.3527743Z  * [new tag]           cli-v0.8.0              -> cli-v0.8.0
+2026-10-12T07:43:05.3529098Z  * [new tag]           cli-v0.8.1              -> cli-v0.8.1
+2026-10-12T07:43:05.3530461Z  * [new tag]           cli-v0.9.0              -> cli-v0.9.0
+2026-10-12T07:43:05.3531816Z  * [new tag]           cli-v0.9.1              -> cli-v0.9.1
+2026-10-12T07:43:05.3533162Z  * [new tag]           cli-v0.9.2              -> cli-v0.9.2
+2026-10-12T07:43:05.3534556Z  * [new tag]           go/v0.1.0               -> go/v0.1.0
+2026-10-12T07:43:05.3536049Z  * [new tag]           js/v0.2.1               -> js/v0.2.1
+2026-10-12T07:43:05.3537388Z  * [new tag]           opf-v0.10.0             -> opf-v0.10.0
+2026-10-12T07:43:05.3538766Z  * [new tag]           opf-v0.10.1             -> opf-v0.10.1
+2026-10-12T07:43:05.3540145Z  * [new tag]           opf-v0.11.0             -> opf-v0.11.0
+2026-10-12T07:43:05.3541507Z  * [new tag]           opf-v0.11.1             -> opf-v0.11.1
+2026-10-12T07:43:05.3542888Z  * [new tag]           opf-v0.11.2             -> opf-v0.11.2
+2026-10-12T07:43:05.3544326Z  * [new tag]           opf-v0.11.3             -> opf-v0.11.3
+2026-10-12T07:43:05.3545678Z  * [new tag]           opf-v0.11.4             -> opf-v0.11.4
+2026-10-12T07:43:05.3547032Z  * [new tag]           opf-v0.12.0             -> opf-v0.12.0
+2026-10-12T07:43:05.3548372Z  * [new tag]           opf-v0.12.1             -> opf-v0.12.1
+2026-10-12T07:43:05.3549739Z  * [new tag]           opf-v0.12.2             -> opf-v0.12.2
+2026-10-12T07:43:05.3551124Z  * [new tag]           opf-v0.13.0             -> opf-v0.13.0
+2026-10-12T07:43:05.3552504Z  * [new tag]           opf-v0.14.0             -> opf-v0.14.0
+2026-10-12T07:43:05.3553950Z  * [new tag]           opf-v0.15.0             -> opf-v0.15.0
+2026-10-12T07:43:05.3555314Z  * [new tag]           opf-v0.15.1             -> opf-v0.15.1
+2026-10-12T07:43:05.3556683Z  * [new tag]           opf-v0.16.0             -> opf-v0.16.0
+2026-10-12T07:43:05.3558090Z  * [new tag]           opf-v0.17.0             -> opf-v0.17.0
+2026-10-12T07:43:05.3559455Z  * [new tag]           opf-v0.18.0             -> opf-v0.18.0
+2026-10-12T07:43:05.3560804Z  * [new tag]           opf-v0.18.1             -> opf-v0.18.1
+2026-10-12T07:43:05.3562155Z  * [new tag]           opf-v0.18.2             -> opf-v0.18.2
+2026-10-12T07:43:05.3563531Z  * [new tag]           opf-v0.18.3             -> opf-v0.18.3
+2026-10-12T07:43:05.3564983Z  * [new tag]           opf-v0.18.4             -> opf-v0.18.4
+2026-10-12T07:43:05.3566345Z  * [new tag]           opf-v0.2.2              -> opf-v0.2.2
+2026-10-12T07:43:05.3567835Z  * [new tag]           opf-v0.3.0              -> opf-v0.3.0
+2026-10-12T07:43:05.3569196Z  * [new tag]           opf-v0.4.0              -> opf-v0.4.0
+2026-10-12T07:43:05.3570551Z  * [new tag]           opf-v0.4.1              -> opf-v0.4.1
+2026-10-12T07:43:05.3571902Z  * [new tag]           opf-v0.5.0              -> opf-v0.5.0
+2026-10-12T07:43:05.3573257Z  * [new tag]           opf-v0.6.0              -> opf-v0.6.0
+2026-10-12T07:43:05.3574683Z  * [new tag]           opf-v0.7.0              -> opf-v0.7.0
+2026-10-12T07:43:05.3576031Z  * [new tag]           opf-v0.8.0              -> opf-v0.8.0
+2026-10-12T07:43:05.3577376Z  * [new tag]           opf-v0.9.0              -> opf-v0.9.0
+2026-10-12T07:43:05.3580851Z ##[endgroup]
+2026-10-12T07:43:05.3582327Z ##[group]Determining the checkout info
+2026-10-12T07:43:05.3583624Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-12T07:43:05.3584920Z   origin/main
+2026-10-12T07:43:05.3587434Z ##[endgroup]
+2026-10-12T07:43:05.3588405Z [command]/usr/bin/git sparse-checkout disable
+2026-10-12T07:43:05.3591113Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-12T07:43:05.3594380Z ##[group]Checking out the ref
+2026-10-12T07:43:05.3595883Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-12T07:43:06.3343569Z Updating files:  89% (12840/14380)
+2026-10-12T07:43:06.3604773Z Updating files:  90% (12942/14380)
+2026-10-12T07:43:06.3722407Z Updating files:  91% (13086/14380)
+2026-10-12T07:43:06.3852758Z Updating files:  92% (13230/14380)
+2026-10-12T07:43:06.4531647Z Updating files:  93% (13374/14380)
+2026-10-12T07:43:06.4849543Z Updating files:  94% (13518/14380)
+2026-10-12T07:43:06.4957935Z Updating files:  95% (13661/14380)
+2026-10-12T07:43:06.5076453Z Updating files:  96% (13805/14380)
+2026-10-12T07:43:06.5171353Z Updating files:  97% (13949/14380)
+2026-10-12T07:43:06.5292124Z Updating files:  98% (14093/14380)
+2026-10-12T07:43:06.5389901Z Updating files:  99% (14237/14380)
+2026-10-12T07:43:06.5390404Z Updating files: 100% (14380/14380)
+2026-10-12T07:43:06.5390773Z Updating files: 100% (14380/14380), done.
+2026-10-12T07:43:06.5558203Z Switched to a new branch 'main'
+2026-10-12T07:43:06.5561915Z branch 'main' set up to track 'origin/main'.
+2026-10-12T07:43:06.5610485Z ##[endgroup]
+2026-10-12T07:43:06.5653332Z [command]/usr/bin/git log -1 --format=%H
+2026-10-12T07:43:06.5678836Z 969392e28af3f694a23f7a371ba5771873e87b78
+2026-10-12T07:43:06.5931643Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-12T07:43:06.5932014Z with:
+2026-10-12T07:43:06.5932213Z   node-version: 24
+2026-10-12T07:43:06.5932425Z   check-latest: false
+2026-10-12T07:43:06.5935197Z   token: ***
+2026-10-12T07:43:06.5935415Z   package-manager-cache: true
+2026-10-12T07:43:06.5935661Z ##[endgroup]
+2026-10-12T07:43:06.7190060Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-12T07:43:06.7192139Z ##[group]Environment details
+2026-10-12T07:43:07.1238081Z node: v24.21.0
+2026-10-12T07:43:07.1238339Z npm: 11.19.0
+2026-10-12T07:43:07.1245299Z yarn: 1.22.22
+2026-10-12T07:43:07.1245861Z ##[endgroup]
+2026-10-12T07:43:07.1350097Z ##[group]Run node scripts/build-font-tracker.mjs
+2026-10-12T07:43:07.1350620Z [36;1mnode scripts/build-font-tracker.mjs[0m
+2026-10-12T07:43:07.1351005Z [36;1mnode scripts/build-gallery-tracker.mjs[0m
+2026-10-12T07:43:07.1533696Z shell: /usr/bin/bash -e {0}
+2026-10-12T07:43:07.1534236Z ##[endgroup]
+2026-10-12T07:43:07.3245871Z Wrote docs/programs/font-fidelity-everywhere/font-tracker.json and docs/programs/font-fidelity-everywhere/font-tracker.md.
+2026-10-12T07:43:07.7962415Z Wrote docs/programs/release-readiness/gallery-tracker.json and docs/programs/release-readiness/gallery-tracker.md: 863 records, 550 addressed, 313 unaddressed.
+2026-10-12T07:43:07.8155112Z ##[group]Run set -euo pipefail
+2026-10-12T07:43:07.8155453Z [36;1mset -euo pipefail[0m
+2026-10-12T07:43:07.8155702Z [36;1mif git diff --quiet; then[0m
+2026-10-12T07:43:07.8156204Z [36;1m  echo "The trackers are current at $(git rev-parse --short HEAD)." | tee -a "$GITHUB_STEP_SUMMARY"[0m
+2026-10-12T07:43:07.8156658Z [36;1m  exit 0[0m
+2026-10-12T07:43:07.8156862Z [36;1mfi[0m
+2026-10-12T07:43:07.8157108Z [36;1mgit diff --stat | tee -a "$GITHUB_STEP_SUMMARY"[0m
+2026-10-12T07:43:07.8157436Z [36;1mbranch=bot/tracker-refresh[0m
+2026-10-12T07:43:07.8157731Z [36;1mgit config user.name "github-actions[bot]"[0m
+2026-10-12T07:43:07.8158165Z [36;1mgit config user.email "41898282+github-actions[bot]@users.noreply.github.com"[0m
+2026-10-12T07:43:07.8158574Z [36;1mgit checkout -B "$branch"[0m
+2026-10-12T07:43:07.8158854Z [36;1mgit add -u[0m
+2026-10-12T07:43:07.8159304Z [36;1mgit commit -m "Regenerate the gallery and font trackers ($(git rev-parse --short origin/main))"[0m
+2026-10-12T07:43:07.8159779Z [36;1mgit push --force origin "$branch"[0m
+2026-10-12T07:43:07.8160105Z [36;1mtitle="Regenerate the gallery and font trackers"[0m
+2026-10-12T07:43:07.8161042Z [36;1mbody="Generated by tracker-refresh.yml from main $(git rev-parse --short origin/main): \`node scripts/build-font-tracker.mjs && node scripts/build-gallery-tracker.mjs\`. No hand edits; see CONTRIBUTING.md, Generated trackers."[0m
+2026-10-12T07:43:07.8162084Z [36;1mif [ -n "$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')" ]; then[0m
+2026-10-12T07:43:07.8162783Z [36;1m  echo "A refresh pull request is already open; its branch now holds the latest regeneration." | tee -a "$GITHUB_STEP_SUMMARY"[0m
+2026-10-12T07:43:07.8163465Z [36;1melif gh pr create --base main --head "$branch" --title "$title" --body "$body"; then[0m
+2026-10-12T07:43:07.8164300Z [36;1m  echo "Opened the refresh pull request." | tee -a "$GITHUB_STEP_SUMMARY"[0m
+2026-10-12T07:43:07.8164673Z [36;1melse[0m
+2026-10-12T07:43:07.8165051Z [36;1m  link="https://github.com/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"[0m
+2026-10-12T07:43:07.8165866Z [36;1m  echo "::notice title=Tracker refresh needs a pull request::main's generated trackers are stale. The regenerated files are on ${branch}; open the pull request: ${link}"[0m
+2026-10-12T07:43:07.8166944Z [36;1m  echo "Actions cannot open the pull request here (opf#298). Open it from: ${link}" | tee -a "$GITHUB_STEP_SUMMARY"[0m
+2026-10-12T07:43:07.8167428Z [36;1mfi[0m
+2026-10-12T07:43:07.8204582Z shell: /usr/bin/bash -e {0}
+2026-10-12T07:43:07.8204867Z env:
+2026-10-12T07:43:07.8207423Z   GH_TOKEN: ***
+2026-10-12T07:43:07.8207635Z ##[endgroup]
+2026-10-12T07:43:09.6667070Z The trackers are current at 969392e2.
+2026-10-12T07:43:09.6784402Z Post job cleanup.
+2026-10-12T07:43:09.8095200Z Post job cleanup.
+2026-10-12T07:43:09.8957271Z [command]/usr/bin/git version
+2026-10-12T07:43:09.9006229Z git version 2.55.0
+2026-10-12T07:43:09.9054827Z Temporarily overriding HOME='/home/runner/work/_temp/99b2b0d1-9a8e-4840-b984-897a071facf2' before making global git config changes
+2026-10-12T07:43:09.9055645Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T07:43:09.9061639Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/opf/opf
+2026-10-12T07:43:09.9095388Z Removing SSH command configuration
+2026-10-12T07:43:09.9104329Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T07:43:09.9138615Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T07:43:09.9351606Z Removing HTTP extra header
+2026-10-12T07:43:09.9359818Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T07:43:09.9389236Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T07:43:09.9603462Z Removing includeIf entries pointing to credentials config files
+2026-10-12T07:43:09.9611696Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T07:43:09.9632120Z includeif.gitdir:/home/runner/work/opf/opf/.git.path
+2026-10-12T07:43:09.9633280Z includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path
+2026-10-12T07:43:09.9634541Z includeif.gitdir:/github/workspace/.git.path
+2026-10-12T07:43:09.9635847Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-12T07:43:09.9640922Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/opf/opf/.git.path
+2026-10-12T07:43:09.9661350Z /home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:09.9675097Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/opf/opf/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-9b647cb2\-05f3\-4a20\-bf8a\-a4c00c26df53\.config
+2026-10-12T07:43:09.9714544Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path
+2026-10-12T07:43:09.9739723Z /home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:09.9751015Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-9b647cb2\-05f3\-4a20\-bf8a\-a4c00c26df53\.config
+2026-10-12T07:43:09.9796728Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-12T07:43:09.9820884Z /github/runner_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:09.9828927Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-9b647cb2\-05f3\-4a20\-bf8a\-a4c00c26df53\.config
+2026-10-12T07:43:09.9862502Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-12T07:43:09.9884817Z /github/runner_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config
+2026-10-12T07:43:09.9902873Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-9b647cb2\-05f3\-4a20\-bf8a\-a4c00c26df53\.config
+2026-10-12T07:43:09.9930964Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T07:43:10.0121555Z Removing credentials config '/home/runner/work/_temp/git-credentials-9b647cb2-05f3-4a20-bf8a-a4c00c26df53.config'
+2026-10-12T07:43:10.0246428Z Cleaning up orphan processes

@@ -1,0 +1,23 @@
+{
+  "prs": 7,
+  "issues": 45,
+  "openHeads": {
+    "OpenPresentation/opf#634": "72719bc97f2a8f02dc37e71f95e8fbbbe26f81e8",
+    "Data-Advantage/pptx-gallery#125": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+    "Data-Advantage/pptx-gallery#126": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+    "Data-Advantage/pptx-gallery#127": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+    "Data-Advantage/openpresentation-site#103": "ab0b0da532e553416a05d7164a331d994e312ef4",
+    "Data-Advantage/openpresentation-site#104": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+    "Data-Advantage/pptx-dev#128": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a"
+  },
+  "new": {
+    "OpenPresentation/opf#634": "72719bc97f2a8f02dc37e71f95e8fbbbe26f81e8"
+  },
+  "changed": {},
+  "removed": [
+    "OpenPresentation/opf#631"
+  ],
+  "allClean": true,
+  "allDefaultBranches": true,
+  "allSynced": true
+}

@@ -1,0 +1,57 @@
+{
+  "sourceMerges": {
+    "core632": {
+      "pr": 632,
+      "reviewedHead": "910640b5124a35228c7e2b74b9cc97b452d18284",
+      "mergedCommit": "a9ad82414cd9ebcf4619d3d546898092fd2be55e",
+      "reviewedTree": "8d582d95514c806f53c511a0d8b97f4d5b03cc6d",
+      "mergedTree": "8d582d95514c806f53c511a0d8b97f4d5b03cc6d",
+      "exactTreeEqual": true,
+      "gate": "/private/tmp/rr20-gallery2-repaired-adoption-gate.log"
+    },
+    "render235": {
+      "pr": 235,
+      "reviewedHead": "52599d6c6546b2cea8aa13c4dcfc58e7f7225643",
+      "mergedCommit": "ffb80aa4a62f55814da21d22be2b024be4ac34ed",
+      "reviewedTree": "3422ceeec615b4a6d19e4eaa75ca51f881192de3",
+      "mergedTree": "3422ceeec615b4a6d19e4eaa75ca51f881192de3",
+      "exactTreeEqual": true,
+      "gate": "/private/tmp/rr20-gallery2-fresh-selection-gate.log"
+    },
+    "pptx251": {
+      "pr": 251,
+      "reviewedHead": "d5ed02aff39976b24a7ae97492f9d0da4239f83e",
+      "mergedCommit": "2e75a8b95f6bc284417a9f84d0e5df30a6ab3742",
+      "reviewedTree": "d298a4d2d190fd9132116eb512122982531121d9",
+      "mergedTree": "d298a4d2d190fd9132116eb512122982531121d9",
+      "exactTreeEqual": true,
+      "gate": "/private/tmp/rr20-gallery2-fresh-selection-gate.log"
+    },
+    "editor162": {
+      "pr": 162,
+      "reviewedHead": "ceb37a3d43d8e03791d28c5fd1f8230afdcb3861",
+      "mergedCommit": "a4ea9d4b6accfadf9534b223a1106ed2b1b446fd",
+      "reviewedTree": "3431b2fd49d9ed93015d6de19d81654235d943be",
+      "mergedTree": "3431b2fd49d9ed93015d6de19d81654235d943be",
+      "exactTreeEqual": true,
+      "gate": "/private/tmp/rr20-gallery2-fresh-selection-gate.log"
+    },
+    "render236": {
+      "pr": 236,
+      "reviewedHead": "2679a706c67e0a43c5f0b8292e3fbdd839cc0716",
+      "mergedCommit": "761063d38f36605ebe97d9b9fbc00c472cac1820",
+      "reviewedTree": "b3ebf4391f188064e62f88bdd44fe2113c8c20a2",
+      "mergedTree": "b3ebf4391f188064e62f88bdd44fe2113c8c20a2",
+      "exactTreeEqual": true
+    }
+  },
+  "coreSchema": "opf-layout/v2; removed v1 fields absent",
+  "coreCatalogExportRemoved": true,
+  "rendererV1MetadataRemovedFromSrcAndDist": true,
+  "ordinaryCorePackedArchive": "/private/tmp/opf-core-gallery2-merged-adoption/artifacts/cli/openpresentation-opf-0.19.0-next.0.tgz",
+  "archiveSha256": "2faf2b9646a320e3f264e3af926c321dd5a2041f728d70a9abea97ba304d83a1",
+  "archiveEntries": 101,
+  "archiveSurface": "no catalog subpath or temporary migration tool; only layout schema2",
+  "limits": "source/ordinary next-version packed proof, not stable19 publication/native/integratedroll acceptance",
+  "supportingOutputEquality": "28 layout SVG plus11 rich/nested source/geometry/SVG exact before/after"
+}

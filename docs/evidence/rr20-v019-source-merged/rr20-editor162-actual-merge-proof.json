@@ -1,0 +1,9 @@
+{
+  "pr": 162,
+  "reviewedHead": "ceb37a3d43d8e03791d28c5fd1f8230afdcb3861",
+  "mergedCommit": "a4ea9d4b6accfadf9534b223a1106ed2b1b446fd",
+  "reviewedTree": "3431b2fd49d9ed93015d6de19d81654235d943be",
+  "mergedTree": "3431b2fd49d9ed93015d6de19d81654235d943be",
+  "exactTreeEqual": true,
+  "gate": "/private/tmp/rr20-gallery2-fresh-selection-gate.log"
+}
