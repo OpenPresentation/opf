@@ -24,10 +24,10 @@ Core #592 is merged at `00022a4ed3d2576bd09c003aa38659ed5d014bc5`, exact reviewe
 
 The minimal remaining sequence is:
 
-1. Finish the canonical merge queue gate for reviewed core release-prep #634 at `72719bc9`, now based on main. No merge or publication is inferred.
-2. Retain the qualified normal source lock from merged #633 (`564e0d08`); authentic gallery2 adoption and candidate-declaration removal are already merged.
-3. Publish and independently verify the stable train in dependency order after its required release gates, with real 0.19 peer floors and all ordinary packed/release checks.
-4. All three local source integrations are completed: main-site `f5a`, pptx.dev `689d9f5` and gallery-site `4c9adda`; dev/gallery preservation was independently approved. Adopt actual registry dependencies and locks, regenerate authoritative editor/schema/font/WASM/preview assets from the published graph, and pass full site build/browser checks. Local source passes and existing patch assets do not establish final registry adoption.
+1. Core release-prep #634 is merged at `b3e306d005d3cd0563964d541a834a8a50469536`; core 0.19.0 is published and independently verified. Preserve its receipt and do not repeat publication.
+2. Merge reviewed renderer publishing repair #238 and strict font-count prerequisite core #637 through their gates. Renderer 0.19.0 failed before npm because its ordinary tests selected the old baseline; its tag stays fixed. Generate the normal source roll for the repairs; authentic Gallery 2 adoption is already merged.
+3. Prepare, publish and independently verify renderer 0.19.1, then PPTX 0.19.0. Editor 0.19.0 and the source prerequisite/CLI 0.19.0 path can proceed independently once their upstream artifacts are verified. Use authentic dependency locks and the ordinary no-override publication path; an explicit CI baseline override is not publication qualification.
+4. All three local source integrations are completed: main-site `6feb2f49`, pptx.dev `836fede4` and gallery-site `e7c6b070`; dev/gallery preservation was independently approved. Adopt actual registry dependencies and locks, regenerate authoritative editor/schema/font/WASM/preview assets from the published graph, and pass full site build/browser checks. Local source passes and existing patch assets do not establish final registry adoption.
 5. Run the bounded T31 Windows PowerPoint packet: Change Layout/Reset/New Slide, picture changes, title and list styles, tables, furniture, chart modes, controls, save/reimport and raster checks. Offline packet06 hashes, archives, round-trips and pixels are evidence of preparation only; no fresh native run is claimed.
 
 ## Scope and owner actions

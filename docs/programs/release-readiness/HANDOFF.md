@@ -52,7 +52,7 @@ Renderer repair [#238](https://github.com/OpenPresentation/opf-render/pull/238),
 
 | Package | Version | Notes |
 | --- | --- | --- |
-| `@openpresentation/opf` | **0.18.4** | Tag `opf-v0.18.4` at `e09461624a64`, independently verified; prior 0.18.3 also published. **0.18.2 is burned** (tagged, publish failed, never on npm); fix in opf#588. |
+| `@openpresentation/opf` | **0.19.0** | Tag `opf-v0.19.0` at `b3e306d005d3`, independently verified with all ten registry checks; prior patch 0.18.4 remains in its historical receipts. **0.18.2 is burned** and never published. |
 | `@openpresentation/opf-render` | **0.18.2** | Tag `opf-render-v0.18.2`, commit `de0a5034f49d`; independently verified. |
 | `@openpresentation/opf-pptx` | **0.18.2** | Tag `opf-pptx-v0.18.2`, commit `1954c9ce3d2c`; trusted-published and independently verified. |
 | `@openpresentation/opf-editor` | **0.18.2** | Tag/release at `36d61ea27dd4677724dfec22006759139b7136ff`, trusted-published and independently verified; source #160 is merged. |
@@ -63,9 +63,9 @@ Renderer repair [#238](https://github.com/OpenPresentation/opf-render/pull/238),
 
 The patch package train, prescribed source-lock roll and actual registry release-plan/compatibility/consumer adoption are complete. Preserve receipts; do not repeat publication. The three qualified local patch site trees and their v2 source integrations still need actual final registry dependencies/assets and full site adoption gates. No agent deployment.
 
-Core #592 and renderer/editor/PPTX source merges are complete with exact-tree proofs. Gallery2 is published and independently verified. Finish separate reviewed registry-adoption PRs: genuine gallery ^2 ranges/locks, PPTX direct runtime dependency and temporary candidate configuration removal. Qualify through explicit peer references, then run one normal generated ecosystem roll over adopted mains before stable release preparation. Do not put arbitrary source/config cleanup into metadata-only release preparation.
+Core #592 and renderer/editor/PPTX source merges are complete with exact-tree proofs. Gallery2 publication, genuine gallery ^2 registry adoption, candidate-configuration removal and the normal source roll #633 are complete. Core 0.19.0 is published and independently verified. Finish the renderer publishing repair #238 and strict font-count prerequisite #637, then generate the normal roll over their merged sources. Keep source repairs separate from metadata-only release preparation.
 
-Prepare and publish stable 0.19 in dependency order core, renderer, PPTX, editor; CLI follows verified core/render/PPTX. Required upstream registry and packed gates remain strict. CLI stable ^19 readiness correctly rejects 18 engines/prereleases. Each new renderer version needs an asset-derived explicit font-count record, not blanket acceptance. Pending LF/CRLF test-only repairs should be retained in reviewed adoption source, not silently added to prep.
+Next prepare and publish renderer 0.19.1, followed by PPTX 0.19.0. Editor 0.19.0 and the separate core dev-pin prerequisite/CLI 0.19.0 path can then proceed independently against verified upstream artifacts. Do not republish core 0.19.0. Required upstream registry and packed gates remain strict; stable ^19 readiness rejects 18 engines and prereleases. The failed renderer 0.19.0 tag stays fixed.
 
 T31 supervisor Windows/native acceptance, T32 complete integrated gates, final published site acceptance and the owner-facing readiness note remain open. The native packet is offline evidence only. No aliases, shims or public migration tooling. Follow current AGENTS tracker rules; no unrelated regeneration.
 
