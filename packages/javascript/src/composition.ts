@@ -2094,8 +2094,11 @@ export interface ListFitOptions extends RichTextOptions {
   bulletImage?:ListBulletImage;
 }
 
+/** Reference-pixel starting size; explicit rich runs retain their authored sizes. */
+function contentNominalSize(field:string):number { return field==='items'||field==='bullets'?32:25; }
+
 /** Shared hanging indents, mixed-run fitting and description spacing for list payloads. */
-export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=25,minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
+export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=contentNominalSize('items'),minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
   if(!Array.isArray(input)||![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('List content, dimensions and font sizes must be valid.');
   const source=input.map((value,index)=>{
     const object=typeof value==='object'&&!Array.isArray(value)?value as {text:ListText;description?:ListText;level?:number}:undefined;
@@ -2684,8 +2687,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
-      const fit = fitContent(node.field,node.value,text,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
-      const reduction = Math.max(0,snapFontSizeDown(25 * scale) - fit.fontSize) / scale;
+      const fit = fitContent(node.field,node.value,text,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
+      const reduction = Math.max(0,snapFontSizeDown(contentNominalSize(node.field) * scale) - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
@@ -2771,7 +2774,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
-    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
+    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
     const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
       ...(frameBox ? {frameBox} : {}),
@@ -2793,7 +2796,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const own = node.payload.columns;
     const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
     if (mode === undefined || mode === 1) return undefined;
-    const start = 25 * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+    const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     const numbering = node.payload.numbering as NumberingInput | undefined;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
@@ -2844,12 +2847,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.children) return node.children.some(child => isLong(child, cellWidth));
     if (node.field === 'text') return estimatedLines(node.value, cellWidth, startSize) > LONG_LINES;
     if (node.field === 'items' || node.field === 'bullets') {
+      const listSize=contentNominalSize(node.field)*scale;
       let lines = 0;
       for (const entry of Array.isArray(node.value) ? node.value : []) {
         const object = entry !== null && typeof entry === 'object' && !Array.isArray(entry) ? entry as Record<string, unknown> : undefined;
-        const indent = startSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
-        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, startSize);
-        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, startSize * .82);
+        const indent = listSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
+        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, listSize);
+        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, listSize * .82);
       }
       return lines > LONG_LINES;
     }
@@ -2868,7 +2872,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false), 0) + gap * Math.max(0, node.children.length - 1) + pad;
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
-      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, startSize, startSize, node.path, node.payload.numbering);
+      const size=contentNominalSize(node.field)*scale;
+      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, size, size, node.path, node.payload.numbering);
       content = 'height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight;
     } else if (node.field === 'quote') content = measureQuote(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings).bounds.height + 18;
     else if (node.field === 'code') content = String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length * 18 * 1.4 * scale + 24 * scale;

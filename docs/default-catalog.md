@@ -112,6 +112,11 @@ resolving again.
 `@openpresentation/gallery/previews` exports the static HTML layout previews: `layoutPreviews`, `layoutPreviewIndex`,
 `layoutPreviewSlugs`, `getLayoutPreview` and `hasLayoutPreview`.
 
+The nested-area-array source contract reads catalog record generation `CATALOG_SCHEMA = 3` (exported from core).
+This package compatibility generation is separate from the layout schema URI: layout records retain
+`https://openpresentation.org/schema/opf-layout/v2` and per-kind `schemaVersion: 2`. Generation 3 refuses
+generation-2 Gallery records because string area rows no longer validate; it does not introduce a `/v3` schema URI.
+
 Core reads catalog schema `CATALOG_SCHEMA` (exported from its root). When the installed gallery declares another one,
 core never registers it: the Node defaults throw `OPFApiError` `gallery-schema-mismatch` and the CLI stops with the same
 code, naming both versions. No browser entry of core imports catalog data; `pnpm check:catalog-free` holds that with an

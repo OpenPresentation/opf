@@ -202,13 +202,14 @@ describe('one long list in columns', () => {
   test('a lone list in a listColumns: auto region flows into the first column count that fits', () => {
     const result = compose({ title: 'Agenda', items }, layouts.agenda);
     const list = result.items.find((item) => item.field === 'items');
-    assert.equal(list.listColumns.length, 2);
-    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 7], [7, 14]]);
-    assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 25)));
+    assert.equal(list.listColumns.length, 3);
+    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 4], [4, 9], [9, 14]]);
+    assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 32)));
     // The item's text is the whole list, every column's entries at their columns (RR-81 review).
     assert.equal(list.text.listEntries.length, 14);
     assert.deepEqual(list.text.listEntries.map((entry) => entry.index), Array.from({ length: 14 }, (_, index) => index));
-    assert.deepEqual(list.text.listEntries.slice(7), list.listColumns[1].text.listEntries);
+    assert.deepEqual(list.text.listEntries, list.listColumns.flatMap((column) => column.text.listEntries));
+    assert.deepEqual(list.text.listEntries.map((entry) => entry.value), items);
     assert.equal(list.text.overflow, false);
     assert.ok(list.listColumns[1].box.x > list.listColumns[0].box.x, 'reading order runs column by column');
   });
@@ -232,7 +233,9 @@ describe('one long list in columns', () => {
     const fixed = compose({ title: 'x', blocks: [{ items: items.slice(0, 6), columns: 3 }] }, layouts.text).items.find((item) => item.field === 'items');
     assert.equal(fixed.listColumns.length, 3);
     const automatic = composeSlide({ title: 'x', blocks: [{ items, columns: 'auto' }] }).items.find((item) => item.field === 'items');
-    assert.equal(automatic.listColumns.length, 2);
+    assert.equal(automatic.listColumns.length, 3);
+    assert.deepEqual(automatic.listColumns.flatMap((column) => column.text.listEntries).map((entry) => entry.value), items);
+    assert.equal(automatic.text.overflow, false);
   });
 
   test('breaks keep the columns as even as possible', () => {
