@@ -6,8 +6,8 @@ built-in layouts and a deck's own layouts are records of this one schema; a cust
 `catalogs.custom.layouts` (or a named catalog group) and referenced by id like any other. The design is
 [0.19-layouts.md](programs/release-readiness/0.19-layouts.md); this page is the reference for what core implements.
 
-> The 28 built-in templates are published by `@openpresentation/gallery` 2.x. OPF 0.19 rejects v1 layout records,
-> including `placeholders` and placeholder groups; there are no aliases or migration API.
+> The 28 built-in templates come from the matching `@openpresentation/gallery` package. Published core 0.19 and gallery 2 use string rows; the next format uses the nested row arrays documented below. Use coordinated core and gallery versions.
+> V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or migration API.
 
 ## A record
 
