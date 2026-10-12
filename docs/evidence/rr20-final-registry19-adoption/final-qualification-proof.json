@@ -1,0 +1,53 @@
+{
+  "base": "2de2889ddfb8ff1219352324400b01feecceeaab",
+  "fullSession": 57079,
+  "fullExit": 0,
+  "matrixSession": 64949,
+  "matrixExit": 0,
+  "fullCounts": {
+    "core": 2306,
+    "cliUnit": 198,
+    "commands": 95,
+    "drawing": 77,
+    "rootChecks": 44
+  },
+  "logHashes": {
+    "mapped.log": "0554a221ad7cbeb7efa29f9c6d5e8b82d7afca54a8e5bd40fe40dc8a0f79e8ed",
+    "browser.log": "bfeebf0281c7f310620e6a7f28744dc9b6baeb9607400268a1c23af058467b6b",
+    "libraries-browser.log": "f985b38641923a0c932aaea0d8e1c3c1a25ad2417e2993ac64658ceaaec51678",
+    "registry-browser.log": "5b463ef9dc8a00ca627d914b54b1329c74608c0ba2f1037fe70fbc6518ace157",
+    "full.log": "2b7a1baa425c85b3f189e33e7243f97a01d28a9e824bcb48621e6752c45fe1f7",
+    "fidelity.log": "3703e11206ecfc101c6f2684bcdfdbd312ca9e7a299b3ea724cf78be9da2bf50",
+    "layout.log": "c22b9b37c4a748c2f5f907c8360ed2d45212d58e2d638c95ca3e60ab4983c87f",
+    "registry-topology.log": "b576ec492bebd504c969959a1142473e4890e764b0ee499561f1d705dc845438",
+    "consumer-runtime.log": "3e40c2b4a1e16c7676f99d29bc7c05be94ed01bd95003d2b3aa321bff8784e1d",
+    "registry-final.log": "99a137e0458d3a352dba7770c7052f84a521280d56d264f934ff4bb2d9793612",
+    "registry-rebuilt.log": "7e2a7dbac40e898b8ba516a002794b67ba237e4191749b364f480af8186193ac",
+    "quickstart.log": "c7dc6dbc3eb14c64b8886d291dc0ea919951f16fbf3246e7af9acd9b49cc21a0",
+    "registry.log": "98a0b6cea05c1b8cba8225bababf98d00024fb6f584db9e6d954e33ae09222c3",
+    "pairwise.log": "3bc36e5139e2837e920f1f269d982b73368b56c8a3040a378a833aa7a2d72fb6",
+    "libraries.log": "1a1e7c810fa76bc6aec98287e205fd089a16b5afcf8f34320c3e832dd3600e8c",
+    "cli-packed.log": "d1f49c0320ed89ffa20003c69cb9929f3b7e7b6bb34964c8a22c8ab05f7efcdc",
+    "matrix-browser.log": "e1f3aa209e27c5358da910b83c5017b567442eb55314674cf685072fc4bc3aeb",
+    "determinism.log": "38e972a40a80428b0d133f3625f7cd1c7e11c5e04de3777845eb0fea3d31e6d6",
+    "consumer.log": "673f75f3570fd8b567e36aabe6d2d908b64ffa325d1f878a803a3c0b2b36ebe4",
+    "build.log": "25dfa63b5a289172351f200bf4c77e8605ce7f34f9b3a92ffea4bcc234bb5e13"
+  },
+  "currentFileHashes": {
+    "release-plan.json": "28215332b35799efc3654af544826d50c457e73e8fb3519a36bd059569a40a4f",
+    "scripts/published-matrix/consumer/package.json": "b38ac1fb2e30c5afcf1b863abfc85219a928670c6fbba37eab95ecbf660b58a6",
+    "scripts/published-matrix/consumer/package-lock.json": "3751ed0ec0508561a64adb46da266fb2d4b50b0ef28fad4644ebabd22b9757f2",
+    "scripts/published-matrix/consumer/src/consumer.ts": "23b559a7d43acc5c48a3044504f6fc8f8bdc6f14c681afe47f717b762eb746aa",
+    "scripts/published-matrix/consumer-dependencies.mjs": "ddd2d85a4e09c18bf56f484c336aeafb3c47fed33361ba37890ec917c57457ae",
+    "scripts/published-matrix/prepare-consumer.mjs": "421d634abc9aaa0c4ca7630eda36c5371998bf28697d0267e244e0886f8fbaf7",
+    "scripts/published-matrix/consumer-dependencies.test.mjs": "370bdb64f2193852fc7c2633fffd0b543a9751edc802093362ce337e822e6667"
+  },
+  "protectedRuntimeTreesEqual": true,
+  "postDocsMapped": {
+    "session": 74451,
+    "exit": 0,
+    "logSha256": "50c58efa1a107259742ae0af845afe3b6341797b9fe0c8e17b2ca3bc63b65db3"
+  },
+  "workspaceAndEcosystemLocksUnchanged": true,
+  "qualifiedCodeAndConsumerHashesUnchanged": true
+}

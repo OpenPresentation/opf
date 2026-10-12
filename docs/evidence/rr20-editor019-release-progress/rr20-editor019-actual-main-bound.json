@@ -1,0 +1,22 @@
+{
+  "state": "BOUND actual merged-source canonical prep to existing qualification evidence; not a new all-green run",
+  "actualMain": "a735865d6f0b9a446b4d78665c6b8837f38f432f",
+  "checkout": "/private/tmp/release-train-editor-5tlwSf",
+  "gateMapSha256": "826436b6e29a754731a6effa796fe65a13422366e8fb9faf128ee5ea7a60d86f",
+  "trackedMapSha256": "4dd7d1713bd29bbbb0e67fa8ee07f802866fd1c610b40d8ef7123c8bf7379246",
+  "dependencyMapSha256": "d554dd94b370fd09445ddc1f3a3e9f9eb7fbab0478b8e2783c374d2614096a18",
+  "expectedPreparedMetadata": {
+    "CHANGELOG.md": "ee3b5298a82c4b0f045fffb73dec91aa86d433d3df8b3cf9cea6eaec2d191077",
+    "changes/rr-20-packed-v2-json-contract.md": "deleted",
+    "changes/rr-78-gallery-package.md": "deleted",
+    "changes/rr-81-candidate-gallery-ci.md": "deleted",
+    "changes/rr-82-adaptive-layout-editor.md": "deleted",
+    "changes/rr-82-layout-keyboard.md": "deleted",
+    "changes/rr-82-v2-integration.md": "deleted",
+    "package-lock.json": "fb1326e5a28e7579de1687f29c9ded23e34d1392063308dc61fdb413563422cd",
+    "package.json": "35714f2cac2072e7ed8d0d4b87ba8c36316abad790abf95d9cbdd73881e42469"
+  },
+  "sourceTree": "aa0367191db5a2743fc61ea7a4fbb6f285bf183f",
+  "all11ComposedActualGatesPass": true,
+  "originalPackedFailureRetained": true
+}

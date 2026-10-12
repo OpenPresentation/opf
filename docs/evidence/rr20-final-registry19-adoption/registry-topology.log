@@ -1,0 +1,116 @@
+
+> openpresentation-workspace@ test:registry-ecosystem /private/tmp/opf-final-registry19-adoption
+> node scripts/test-packed-ecosystem.mjs --registry
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+added 117 packages in 14s
+npm notice
+npm notice New major version of npm available! 11.16.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+Color reference renderer passed: scheme slots, roles, variables, hex, and invalid run fallback.
+ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.
+Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (38 validated imports). Native Office is a separate gate.
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (2.006708ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.239ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (6.085875ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.626208ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.3295ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.223917ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (8.583959ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.140916ms)
+✔ font trials stay bounded independently of canvas scale (4.066917ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.928667
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (3.371583ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (12.469125ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (380.578167ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (20.658709ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (123.645833ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (285.032083ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 886.520875
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+node:internal/modules/cjs/loader:1564
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module 'playwright'
+Require stack:
+- /private/tmp/opf-editor/package.json
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at require.resolve (node:internal/modules/helpers:175:31)
+    at toolUrl (file:///private/tmp/opf-final-registry19-adoption/scripts/test-installed-code.mjs:79:43)
+    at file:///private/tmp/opf-final-registry19-adoption/scripts/test-installed-code.mjs:101:91 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [ '/private/tmp/opf-editor/package.json' ]
+}
+
+Node.js v24.21.0
+file:///private/tmp/opf-final-registry19-adoption/scripts/test-packed-ecosystem.mjs:160
+    throw new Error(`${command} exited ${result.status}`);
+          ^
+
+Error: /Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node exited 1
+    at run (file:///private/tmp/opf-final-registry19-adoption/scripts/test-packed-ecosystem.mjs:160:11)
+    at file:///private/tmp/opf-final-registry19-adoption/scripts/test-packed-ecosystem.mjs:408:23
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

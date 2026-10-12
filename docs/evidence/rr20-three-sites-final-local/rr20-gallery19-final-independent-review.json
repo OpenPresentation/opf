@@ -1,0 +1,98 @@
+{
+  "base": "27d61e9185e95de2399281db31090b2ea7661e99",
+  "paths": {
+    "data/opf-spec.json": "50c1be18deec34377fb1de35a9a9b5cfad0f7f4e9b931416f73655c68d29f008",
+    "public/opf-editor/gallery.json": "c008b4641df33ce80177569835e24eeb84e2b7f9a5a949847967477ecacdf54d",
+    "public/opf-editor/index.html": "3e6e41db33fc91c0f8e0bf638e3c56265402cda8fe6e502bde53eab1249b304e",
+    "public/opf-editor/lazy-fonts.json": "779f93b4f19750e96f150d8010f3105cb630cd89b2f28715d3ea5ac1c3b8fa11",
+    "public/opf-editor/manifest.json": "8bbce0dcfca3d0c82430d7a740f4c4dba4d822c4fc4f0dbca58ffca87edaeab2",
+    "public/opf-editor/opf-spec.json": "50c1be18deec34377fb1de35a9a9b5cfad0f7f4e9b931416f73655c68d29f008",
+    "public/opf-editor/playground.css": "647abe059ba70753667d7d16a6efa5d7db66f71d815491e56622381e96f2ad9f",
+    "public/opf-editor/playground.js": "2769fc41b79910b22bb10183f4cf0bc76394d34e0298a7fdbe4b1ce4c8aa9872",
+    "public/opf-editor/playground.js.LEGAL.txt": "7deb335ca12b5871d1d5d452e50fa096f7d0d1744d13faaef4c848fb784510c4",
+    "public/opf-editor/wasm.json": "395c9ccae887e204d8f00a68a485932a78f3948e3ecb999827b79a73ddf33d9f"
+  },
+  "canonicalFilesExact": [
+    "index.html",
+    "playground.js",
+    "playground.js.LEGAL.txt",
+    "playground.css",
+    "fonts.json",
+    "galleries.json",
+    "gallery.json",
+    "opf-spec.json",
+    "wasm.json",
+    "script-fonts.json",
+    "lazy-fonts.json",
+    "base-fonts.json",
+    "Carlito-400-normal-f6418f708bae.ttf",
+    "Carlito-400-italic-0b019225e58d.ttf",
+    "Carlito-700-normal-bb5d20f79b82.ttf",
+    "Carlito-700-italic-b32928186c11.ttf",
+    "Caladea-400-normal-59faf27a90de.ttf",
+    "Caladea-400-italic-669e65b265d4.ttf",
+    "Caladea-700-normal-11d1e1dc461d.ttf",
+    "Caladea-700-italic-93d7c2003fe3.ttf",
+    "Arimo-400-normal-88cc899855d3.ttf",
+    "Arimo-400-italic-6bd2c6a6fa87.ttf",
+    "Arimo-700-normal-ec96ac9fdd94.ttf",
+    "Arimo-700-italic-b42b19c10bf5.ttf",
+    "Tinos-400-normal-924ef269e73d.ttf",
+    "Tinos-400-italic-4a52de5bcf70.ttf",
+    "Tinos-700-normal-576a19b5dc02.ttf",
+    "Tinos-700-italic-10c90ef7896d.ttf",
+    "Cousine-400-normal-ca2264d6750d.ttf",
+    "Cousine-400-italic-f1626b7287db.ttf",
+    "Cousine-700-normal-f03c46c4bc5c.ttf",
+    "Cousine-700-italic-acb798f3629c.ttf",
+    "Gelasio-400-normal-44aae47442ad.ttf",
+    "Gelasio-400-italic-2b24b3d41c06.ttf",
+    "Gelasio-700-normal-fade86eca522.ttf",
+    "Gelasio-700-italic-24f1cb5cf5f7.ttf",
+    "Roboto-Medium-500-normal-79343dc641a2.ttf",
+    "Roboto-SemiBold-600-normal-32fe2086b0e5.ttf",
+    "Roboto-700-normal-4aaf8c5b661a.ttf",
+    "Roboto-ExtraBold-800-normal-43d5ce98c583.ttf",
+    "Roboto-400-italic-6a372c348dc2.ttf",
+    "Roboto-700-italic-c6a5e7c224d3.ttf",
+    "Roboto-Mono-400-normal-e4bf45837847.ttf",
+    "Roboto-Mono-700-normal-92649d819cc4.ttf"
+  ],
+  "htmlNormalizationOnly": "http://localhost:3101/spec -> /spec",
+  "editorSource": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+  "sourceExampleFilesVerified": 15,
+  "galleryDocuments": 403,
+  "schemaFields": 772,
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.19.0.tgz",
+      "integrity": "sha512-glzhH9ZWG0RmYQA4k7+SNtCmx4m5moZl+3eXdEMU+GS/ex7uNTF0NchdS5sPUUGpXX3kAY9Au74t7xOribVycg=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.19.1.tgz",
+      "integrity": "sha512-Hn67Leg3rnALEEmY/0FWSB423vccf7m8jtnPA4QOQjFMuHofLMuN9r3t42gSF9ML4Cak1GiUdG8N5+vw23rSFQ=="
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.19.0.tgz",
+      "integrity": "sha512-7nnUzD5tAMQEIrOdRnkgvbZPHrm1O0z4C6/iOd6yQEk4xmK8k2zwwsmLDHK1ZUspIcNb9xdI4E7EaMNL/R2itQ=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.19.0.tgz",
+      "integrity": "sha512-mwV19g5bt0hjV9n0gin51Z736DNzrzCagFEQQHJErDgzkf8xOpEy37Y6/Oh9+rvHwSXrzQu73w3UW5bRdWDRCg=="
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.19.0.tgz",
+      "integrity": "sha512-3kM63NZkgyZfSmhnw8hgTwe6VJnA1/SevHqPM4a6N+txFCwTCf7n5QGMzTWPqHujTAyCI6Mz9TrbJnPXL4i4ew=="
+    }
+  ]
+}

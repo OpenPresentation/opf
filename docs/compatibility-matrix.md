@@ -6,11 +6,26 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the published 0.18 set recorded in `release-plan.json` (RR-20, 11 October 2026). Immutable tag commits pin
+dated handoff as current. The current plan selects core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0; the older 0.18 matrix below is historical evidence. Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
 accepted fixes and release prerequisites. The versions below include the verified patch train; complete native compatibility
 remains a separate acceptance gate.
+
+## Published 0.19 contract
+
+Core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0 are independently published and verified. The final v2 catalog has 28 intent layouts, schema 2 and no v1 API/record aliases; its owner is `@openpresentation/gallery@^2.0.0`. The recorded 0.18 matrix below is historical evidence. Registry/source and offline archive checks do not certify Windows PowerPoint or deployment.
+
+## Current published package contracts
+
+| Package | Version | Dependency contract |
+| --- | --- | --- |
+| Core | 0.19.0 | Gallery ^2.0.0; optional renderer/PPTX ^0.19.0 |
+| CLI | 0.19.0 | Core ^0.19.0; optional renderer/PPTX ^0.19.0 |
+| Renderer | 0.19.1 | Core ^0.19.0; optional pinned font/converter peers |
+| PPTX | 0.19.0 | Core ^0.19.0, Gallery ^2.0.0; optional renderer ^0.19.1 |
+| Editor | 0.19.0 | Core ^0.19.0; optional renderer ^0.19.1 |
+| Gallery | 2.0.0 | Independent catalog owner, 28 schema-2 layouts |
 
 ## Runtime
 
@@ -21,7 +36,7 @@ remains a separate acceptance gate.
 | Account / model / hosted API | Not required |
 | Operating systems | macOS, Linux, Windows for Node APIs; browser entrypoints are separate |
 
-## Coordinated published packages
+## Historical coordinated 0.18 published packages
 
 | Package | Version | Depends on |
 | --- | --- | --- |
@@ -176,13 +191,13 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 0.0.1 (a placeholder; 1.0.0 is the first release from [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery)) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
+| `@openpresentation/gallery` | 2.0.0 (independently verified at `48169a9bb385`; prior 1.0.0 remains historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
 a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). From OPF 0.19 core and the
-CLI depend on `@openpresentation/gallery@^1` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
+CLI depend on `@openpresentation/gallery@^2.0.0` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 
 ## Supported in this set

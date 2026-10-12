@@ -1,0 +1,83 @@
+{
+  "entriesEqual": false,
+  "changedEntries": [
+    "[Content_Types].xml",
+    "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+    "ppt/slideMasters/slideMaster1.xml",
+    "ppt/slides/_rels/slide1.xml.rels",
+    "ppt/slides/slide1.xml"
+  ],
+  "added": [
+    "ppt/slideLayouts/_rels/slideLayout2.xml.rels",
+    "ppt/slideLayouts/slideLayout2.xml",
+    "ppt/tags/opfLayout1.xml"
+  ],
+  "removed": [],
+  "xmlDiffs": {
+    "[Content_Types].xml": [
+      "--- [Content_Types].xml\n",
+      "+++ [Content_Types].xml\n",
+      "@@ -23,6 +23,8 @@\n",
+      " <Override PartName=\"/ppt/notesSlides/notesSlide1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml\"/> <Override PartName=\"/docProps/core.xml\" ContentType=\"application/vnd.openxmlformats-package.core-properties+xml\"/> <Override PartName=\"/docProps/app.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.extended-properties+xml\"/>",
+      " <Override PartName=\"/ppt/tags/opfHeading1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.tags+xml\"/>",
+      " <Override PartName=\"/ppt/theme/theme2.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.theme+xml\"/>",
+      "+<Override PartName=\"/ppt/slideLayouts/slideLayout2.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml\"/>",
+      "+<Override PartName=\"/ppt/tags/opfLayout1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.tags+xml\"/>",
+      " <Override PartName=\"/ppt/tags/opfDocument.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.tags+xml\"/>",
+      " <Override PartName=\"/ppt/tags/opfSlide1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.tags+xml\"/>",
+      " </Types>"
+    ],
+    "ppt/slideMasters/_rels/slideMaster1.xml.rels": [
+      "--- ppt/slideMasters/_rels/slideMaster1.xml.rels\n",
+      "+++ ppt/slideMasters/_rels/slideMaster1.xml.rels\n",
+      "@@ -2,4 +2,5 @@\n",
+      " <Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">",
+      " <Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout1.xml\"/>",
+      " <Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme\" Target=\"../theme/theme1.xml\"/>",
+      "+<Relationship Id=\"rId3\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout2.xml\"/>",
+      " </Relationships>"
+    ],
+    "ppt/slideMasters/slideMaster1.xml": [
+      "--- ppt/slideMasters/slideMaster1.xml\n",
+      "+++ ppt/slideMasters/slideMaster1.xml\n",
+      "@@ -124,6 +124,7 @@\n",
+      " <p:clrMap bg1=\"lt1\" tx1=\"dk1\" bg2=\"lt2\" tx2=\"dk2\" accent1=\"accent1\" accent2=\"accent2\" accent3=\"accent3\" accent4=\"accent4\" accent5=\"accent5\" accent6=\"accent6\" hlink=\"hlink\" folHlink=\"folHlink\"/>",
+      " <p:sldLayoutIdLst>",
+      " <p:sldLayoutId id=\"2147483649\" r:id=\"rId1\"/>",
+      "+<p:sldLayoutId id=\"2147483650\" r:id=\"rId3\"/>",
+      " </p:sldLayoutIdLst>",
+      " <p:hf sldNum=\"0\" hdr=\"0\" ftr=\"0\" dt=\"0\"/>",
+      " <p:txStyles> <p:titleStyle>  <a:lvl1pPr algn=\"ctr\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\">"
+    ],
+    "ppt/slides/_rels/slide1.xml.rels": [
+      "--- ppt/slides/_rels/slide1.xml.rels\n",
+      "+++ ppt/slides/_rels/slide1.xml.rels\n",
+      "@@ -1,6 +1,6 @@\n",
+      " <?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>",
+      " <Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">",
+      "-<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout1.xml\"/>",
+      "+<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout2.xml\"/>",
+      " <Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide\" Target=\"../notesSlides/notesSlide1.xml\"/>",
+      " <Relationship Id=\"rIdOpfHeading1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags\" Target=\"../tags/opfHeading1.xml\"/>",
+      " <Relationship Id=\"rIdOpfSlide\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags\" Target=\"../tags/opfSlide1.xml\"/>"
+    ],
+    "ppt/slides/slide1.xml": [
+      "--- ppt/slides/slide1.xml\n",
+      "+++ ppt/slides/slide1.xml\n",
+      "@@ -26,8 +26,11 @@\n",
+      " <p:sp>",
+      " <p:nvSpPr>",
+      " <p:cNvPr id=\"2\" name=\"OPF heading slides.0.title line 0\"/>",
+      "-<p:cNvSpPr/>",
+      "-<p:nvPr>",
+      "+<p:cNvSpPr>",
+      "+<a:spLocks noGrp=\"1\"/>",
+      "+</p:cNvSpPr>",
+      "+<p:nvPr>",
+      "+<p:ph type=\"title\"/>",
+      " <p:custDataLst>",
+      " <p:tags r:id=\"rIdOpfHeading1\"/>",
+      " </p:custDataLst>"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "name": "cf-populate-local",
+    "command": [
+      "pnpm",
+      "exec",
+      "opennextjs-cloudflare",
+      "populateCache",
+      "local"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "cf-limits-populated",
+    "command": [
+      "node",
+      "scripts/cf-check-limits.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "cf-headers",
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import {statSync} from 'node:fs'; if (!statSync('.open-next/assets/_headers').size) throw Error('Missing generated headers')"
+    ],
+    "exitCode": 0
+  }
+]

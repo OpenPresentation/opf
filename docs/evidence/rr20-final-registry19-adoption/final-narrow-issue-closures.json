@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-12T16:28:05.434207+00:00",
+  "apiCalls": 6,
+  "budget": 6,
+  "results": [
+    {
+      "url": "https://github.com/OpenPresentation/opf/issues/566",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-10-12T16:28:01Z",
+      "title": "0.19: core's text estimate is too narrow for Indic, Myanmar, Sinhala, Ethiopic and Georgian text"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-render/issues/213",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-10-12T16:28:03Z",
+      "title": "Layout measurement with HarfBuzz instead of fontkit (0.19)"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/246",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-10-12T16:28:04Z",
+      "title": "RR-20: track multi-series Pareto data loss on export and re-import"
+    }
+  ],
+  "review": "/private/tmp/rr20-final-issue-reconciliation.md",
+  "scope": "Only shipped estimate, HarfBuzz measurement and preserve-or-reject Pareto fixes; no native/site acceptance closure"
+}

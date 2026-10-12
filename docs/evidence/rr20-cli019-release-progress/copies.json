@@ -1,0 +1,22 @@
+[
+  {
+    "file": "rr20-cli019-registry-verified.json",
+    "sha256": "8d9d4d328c15cb3d5a5b73bae913c8ede19004d7bad6469a6fcdc5b893023fb7"
+  },
+  {
+    "file": "rr20-cli019-trusted-publish.log",
+    "sha256": "7b1e789d8d806940187ecd9d7fe156ec75cb1d0d0640edca86e154a3906660a1"
+  },
+  {
+    "file": "rr20-cli019-independent-verify.log",
+    "sha256": "8d9d4d328c15cb3d5a5b73bae913c8ede19004d7bad6469a6fcdc5b893023fb7"
+  },
+  {
+    "file": "rr20-cli019-independent-api-count.json",
+    "sha256": "e61de218be93bd3c293ea3f15d31d4e21cea53e23238b33feda48af9827d3e0b"
+  },
+  {
+    "file": "rr20-cli019-trusted-publish-attempt2.log",
+    "sha256": "1a09870761beeb0ff5c13bdece8bb6e6ab3d21b70566e27349fc1109717db4b3"
+  }
+]

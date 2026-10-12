@@ -1,0 +1,1 @@
+STOP: @openpresentation/cli@0.19.0: peerDependencies @openpresentation/opf-render ^0.19.0 names a version npm does not have

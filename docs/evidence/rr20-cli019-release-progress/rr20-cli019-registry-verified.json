@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/cli@0.19.0, integrity sha512-3kM63NZkgyZfSmhnw8hgTwe6VJnA1/SevHqPM4a6N+txFCwTCf7n5QGMzTWPqHujTAyCI6Mz9TrbJnPXL4i4ew=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf cli-v0.19.0 -> 9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead 9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5 = tag commit 9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "9d72bc020e4b is on opf main (ahead)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "packages/cli/package.json at 9d72bc020e4b carries 0.19.0"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.19.0)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/cli-publish.yml on refs/tags/cli-v0.19.0 from 9d72bc020e4b (https://github.com/OpenPresentation/opf/actions/runs/38273968192/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/cli@0.19.0 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf/releases/tag/cli-v0.19.0"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}

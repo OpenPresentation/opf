@@ -1,0 +1,193 @@
+{
+  "base": "27d61e9185e95de2399281db31090b2ea7661e99",
+  "paths": {
+    "data/opf-spec.json": "50c1be18deec34377fb1de35a9a9b5cfad0f7f4e9b931416f73655c68d29f008",
+    "public/opf-editor/gallery.json": "c008b4641df33ce80177569835e24eeb84e2b7f9a5a949847967477ecacdf54d",
+    "public/opf-editor/index.html": "3e6e41db33fc91c0f8e0bf638e3c56265402cda8fe6e502bde53eab1249b304e",
+    "public/opf-editor/lazy-fonts.json": "779f93b4f19750e96f150d8010f3105cb630cd89b2f28715d3ea5ac1c3b8fa11",
+    "public/opf-editor/manifest.json": "8bbce0dcfca3d0c82430d7a740f4c4dba4d822c4fc4f0dbca58ffca87edaeab2",
+    "public/opf-editor/opf-spec.json": "50c1be18deec34377fb1de35a9a9b5cfad0f7f4e9b931416f73655c68d29f008",
+    "public/opf-editor/playground.css": "647abe059ba70753667d7d16a6efa5d7db66f71d815491e56622381e96f2ad9f",
+    "public/opf-editor/playground.js": "2769fc41b79910b22bb10183f4cf0bc76394d34e0298a7fdbe4b1ce4c8aa9872",
+    "public/opf-editor/playground.js.LEGAL.txt": "7deb335ca12b5871d1d5d452e50fa096f7d0d1744d13faaef4c848fb784510c4",
+    "public/opf-editor/wasm.json": "395c9ccae887e204d8f00a68a485932a78f3948e3ecb999827b79a73ddf33d9f"
+  },
+  "gates": [
+    {
+      "name": "script-fonts",
+      "command": [
+        "pnpm",
+        "prepare:script-fonts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "lazy-fonts",
+      "command": [
+        "pnpm",
+        "prepare:lazy-fonts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "pnpm",
+        "prepare:editor-wasm"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "published-editor",
+      "command": [
+        "pnpm",
+        "verify:published-editor"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "preview-fonts",
+      "command": [
+        "pnpm",
+        "verify:preview-fonts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "font-replacements",
+      "command": [
+        "pnpm",
+        "verify:font-replacements"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "editor-entry",
+      "command": [
+        "pnpm",
+        "verify:editor-entry"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "lint",
+      "command": [
+        "pnpm",
+        "lint"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "full",
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "browser-list",
+      "command": [
+        "pnpm",
+        "exec",
+        "playwright",
+        "test",
+        "--list"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "browser",
+      "command": [
+        "pnpm",
+        "test:e2e"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "cf-build",
+      "command": [
+        "pnpm",
+        "cf:build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "cf-limits",
+      "command": [
+        "node",
+        "scripts/cf-check-limits.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "logSHA256": {
+    "script-fonts": "4e0551908878d9d84888e1432798dd234957f784d044c71112f641b33f0576a9",
+    "lazy-fonts": "e4fea62870fe2c7d91e20bd20e7b05529008b2aea95741b94403491f8e56d60a",
+    "wasm": "358ace5b19b3f77ed2ec197aa7e034745f4d4570361911209bd43eb9cf9dc29c",
+    "published-editor": "35fe3439da045aa2ca265a92c9a9d2f4b78581778d27a1286131c92c7b139869",
+    "preview-fonts": "c952215e3899aecd2d07afde0a58e84383c944b6df47a0611e2b74af16ac0b15",
+    "font-replacements": "a524a9d707c58ebe6aaee0087c722bd8ea7fe8af06ccde75acad8e5eaef1912e",
+    "editor-entry": "2ebda04f101a6297f187e33d805aecd552218dc2a0244e07b40d4b9235d5e390",
+    "lint": "31791a7ba5f6d6814c19bc84ea1557e6c55bd6de77137503dbb769d4ad696606",
+    "full": "0ae57bd86b422bdaf0d88e778754b2203c8af8623885b83386b8aaee6e5947c8",
+    "build": "2941c3375c3bb6aa457384b513aff2fd92c8426651f929202db8913bbdb596ce",
+    "browser-list": "2f8b5eded073c3784a149abfbb8a1af27c8b390e8c6811ebc3738d9d9df279e7",
+    "browser": "4b8b1781e2555ce8b1c31a35833effb3e26aea2317c500c3d1b2a92f1c97dd3c",
+    "cf-build": "baa74ceeeb9304593c90e72820604ab61b8e91461f4469bb74a231ff754aadf8",
+    "cf-limits": "7c60ed4e957a239d44354b64391fa65efafb46abce5b4dbeee88df9a257bacec"
+  },
+  "browser": "124 passed (9.0m)",
+  "cfPopulatedFollowup": {
+    "session": 99364,
+    "exitCode": 0,
+    "gates": [
+      {
+        "name": "cf-populate-local",
+        "command": [
+          "pnpm",
+          "exec",
+          "opennextjs-cloudflare",
+          "populateCache",
+          "local"
+        ],
+        "exitCode": 0
+      },
+      {
+        "name": "cf-limits-populated",
+        "command": [
+          "node",
+          "scripts/cf-check-limits.mjs"
+        ],
+        "exitCode": 0
+      },
+      {
+        "name": "cf-headers",
+        "command": [
+          "node",
+          "--input-type=module",
+          "-e",
+          "import {statSync} from 'node:fs'; if (!statSync('.open-next/assets/_headers').size) throw Error('Missing generated headers')"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "logSHA256": {
+      "cf-populate-local": "3e1e26a301e5a3d9e8b97c63c1a363c8dea0d5515bb9eba0ea0446c6e04bb580",
+      "cf-limits-populated": "c853866329ba8d46911f2fc538c35127786d3a89e4289a060a666efe51fc2eae",
+      "cf-headers": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "priorSandboxFailure": "/private/tmp/rr20-gallery19-cf-post-results/cf-populate-local.log"
+  },
+  "independentReview": "/private/tmp/rr20-gallery19-final-independent-review.json",
+  "head": "73f74ae4aca62d4da7b2f3c77fc65ccb82fd1614",
+  "clean": true
+}

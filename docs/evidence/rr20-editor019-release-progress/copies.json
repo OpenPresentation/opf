@@ -1,0 +1,30 @@
+[
+  {
+    "file": "rr20-editor019-registry-verified.json",
+    "sha256": "f98a424b7e54753d78ff4164418a6564e91381754ffe6dbf514287eb33699eed"
+  },
+  {
+    "file": "rr20-editor019-trusted-publish.log",
+    "sha256": "cf61e8a3f8b96972a8fa038bd5521453b980117c1bce75b6403f705b8d058495"
+  },
+  {
+    "file": "rr20-editor019-independent-verify.log",
+    "sha256": "f98a424b7e54753d78ff4164418a6564e91381754ffe6dbf514287eb33699eed"
+  },
+  {
+    "file": "rr20-editor019-independent-api-count.json",
+    "sha256": "2512accef447b0593c462823775b4466527bb8b1485fb7fa4d2fdac12de0fe12"
+  },
+  {
+    "file": "rr20-opf-editor164-actual-merge-proof.json",
+    "sha256": "66e9950aea6da08d739d38b1cf0ee78d30e9de015b7bea1954a785ada4c92fae"
+  },
+  {
+    "file": "rr20-editor019-actual-main-bound.json",
+    "sha256": "94453026306100a5c10b4a55f0e7221f3634e2ef5210217cf891ca20d7641a13"
+  },
+  {
+    "file": "rr20-editor019-composed-qualification-root-review.json",
+    "sha256": "67344f5f413afc55fc2a053374be4f44b05cf73b6dcff6e4720117c5e9033ca7"
+  }
+]

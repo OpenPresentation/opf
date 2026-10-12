@@ -1,0 +1,26 @@
+
+> openpresentation-workspace@ test:packed-browser /private/tmp/opf-final-registry19-adoption
+> node scripts/test-packed-browser.mjs registry
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Rebuild the requested installed-package harness before testing it
++ actual - expected
+
++ 'registry-libraries'
+- 'registry'
+           ^
+
+    at file:///private/tmp/opf-final-registry19-adoption/scripts/test-packed-browser.mjs:14:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'registry-libraries',
+  expected: 'registry',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

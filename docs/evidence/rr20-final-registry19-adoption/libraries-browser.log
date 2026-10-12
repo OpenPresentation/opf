@@ -1,0 +1,12 @@
+
+> openpresentation-workspace@ test:packed-browser /private/tmp/opf-final-registry19-adoption
+> node scripts/test-packed-browser.mjs registry-libraries
+
+PASS registry-libraries canvas: 34 assertions; 0 trusted interaction scenarios
+PASS registry-libraries rich-text: 49 assertions; 0 trusted interaction scenarios
+PASS registry-libraries rich-text-estimated: 49 assertions; 0 trusted interaction scenarios
+PASS registry-libraries layout: 26 assertions; 4 trusted interaction scenarios
+PASS registry-libraries block: 21 assertions; 1 trusted interaction scenarios
+PASS registry-libraries list: 19 assertions; 0 trusted interaction scenarios
+PASS registry-libraries create: 40 assertions; 0 trusted interaction scenarios
+PASS registry-libraries styled-table: 44 assertions; 3 trusted interaction scenarios

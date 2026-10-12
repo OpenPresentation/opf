@@ -1,0 +1,9 @@
+# Independent main-site final adoption review
+
+No blocker found in the eight-path delta from `6feb2f49b9a05f4f6c0be8f9b14610a3cd2691a8`. Manifest/registry lock adopt the genuine final five-package train plus existing direct Gallery2; six Noto pins remain unchanged. Three starters use the final registry versions. Source snapshot is explicitly pinned to actual merged core2de288; no runtime implementation change. Releases are dated actual artifacts and retain prior history.
+
+All eight current hashes and all qualification log hashes independently match the author proof. Every other tracked source/font/asset/test file compares byte-exact with the reviewed base; proof `/private/tmp/rr20-main19-adoption-independent-proof.json`. Author36974 terminal0 proves strict actual registry, type/full, all76 browser cases and local Next/Cloudflare build checks. This is local acceptance, not deployment/native acceptance.
+
+Showcase regeneration used the canonical genuine registry builder after root's gallery generation; three image artifacts retain their reviewed bytes. PPTX changed structurally, not merely by package metadata: native heading placeholders, a registered slide layout and layout provenance tag are added, while seven authored texts and Roboto remain. The archive-entry comparison records five changed XML entries, three additions and no removals; this agrees with final PPTX v2 export behavior and does not claim Windows visual proof. `/private/tmp/rr20-main19-showcase-pptx-entry-proof.json` preserves the exact entry differences.
+
+Reviewed package hash af760798019de5dd24abd6da8500b8fae3e0105faf277a79aa5db2e05b524a09; lock4a28236ea928ff34bfd29470edbc945eb901e597fd286cdfbd17a21bd1cfe801. Ready for author/root local commit of these exact eight hashes. No tests rerun or files edited by this reviewer.

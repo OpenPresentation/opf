@@ -1,0 +1,90 @@
+[
+  {
+    "file": "rr20-final-registry19-plan-consumer-proof.json",
+    "sha256": "7c5ed357202aed894c94920cd2862d74b6c719f27b95798164f277ffbf1a20aa"
+  },
+  {
+    "file": "remaining-results.json",
+    "sha256": "dbabc5fda7dc0601711aa7bf2ec745aa9f954f07ea2de90528259a12f918e0f4"
+  },
+  {
+    "file": "matrix-results.json",
+    "sha256": "f0d7a26aa9cda0591acba94552a7a70cfe6df6dcfb7a9629e717f3c230251f4f"
+  },
+  {
+    "file": "rr20-final-registry19-remaining-qualification.log",
+    "sha256": "52efdfc8168266ada6e70837d14273e7087703dd5d6771ff4a41487951d1894a"
+  },
+  {
+    "file": "rr20-final-registry19-matrix-qualification.log",
+    "sha256": "29d781c0b5a3b6a07868f4adc1add91f9b52b45ca14866071d858b9f36869386"
+  },
+  {
+    "file": "final-narrow-issue-closures.json",
+    "sha256": "790a6b4856a6467f74a74a54d92b32d8cad34108f7773205a875c2ad2394917a"
+  },
+  {
+    "file": "inventory-final-registry19-20261012-summary.json",
+    "sha256": "6eaaf697b0bb6f8fc223817cf6fa1c52785ccb51ceddf8ba8976b6dc2d1de7bc"
+  },
+  {
+    "file": "consumer.log",
+    "sha256": "673f75f3570fd8b567e36aabe6d2d908b64ffa325d1f878a803a3c0b2b36ebe4"
+  },
+  {
+    "file": "consumer-runtime.log",
+    "sha256": "3e40c2b4a1e16c7676f99d29bc7c05be94ed01bd95003d2b3aa321bff8784e1d"
+  },
+  {
+    "file": "registry-rebuilt.log",
+    "sha256": "7e2a7dbac40e898b8ba516a002794b67ba237e4191749b364f480af8186193ac"
+  },
+  {
+    "file": "registry-browser.log",
+    "sha256": "5b463ef9dc8a00ca627d914b54b1329c74608c0ba2f1037fe70fbc6518ace157"
+  },
+  {
+    "file": "libraries-browser.log",
+    "sha256": "f985b38641923a0c932aaea0d8e1c3c1a25ad2417e2993ac64658ceaaec51678"
+  },
+  {
+    "file": "fidelity.log",
+    "sha256": "3703e11206ecfc101c6f2684bcdfdbd312ca9e7a299b3ea724cf78be9da2bf50"
+  },
+  {
+    "file": "quickstart.log",
+    "sha256": "c7dc6dbc3eb14c64b8886d291dc0ea919951f16fbf3246e7af9acd9b49cc21a0"
+  },
+  {
+    "file": "cli-packed.log",
+    "sha256": "d1f49c0320ed89ffa20003c69cb9929f3b7e7b6bb34964c8a22c8ab05f7efcdc"
+  },
+  {
+    "file": "pairwise.log",
+    "sha256": "3bc36e5139e2837e920f1f269d982b73368b56c8a3040a378a833aa7a2d72fb6"
+  },
+  {
+    "file": "matrix-browser.log",
+    "sha256": "e1f3aa209e27c5358da910b83c5017b567442eb55314674cf685072fc4bc3aeb"
+  },
+  {
+    "file": "determinism.log",
+    "sha256": "38e972a40a80428b0d133f3625f7cd1c7e11c5e04de3777845eb0fea3d31e6d6"
+  },
+  {
+    "file": "browser.log",
+    "sha256": "bfeebf0281c7f310620e6a7f28744dc9b6baeb9607400268a1c23af058467b6b"
+  },
+  {
+    "file": "registry-topology.log",
+    "sha256": "b576ec492bebd504c969959a1142473e4890e764b0ee499561f1d705dc845438"
+  },
+  {
+    "file": "rr20-final-registry19-postdocs-mapped.log",
+    "sha256": "50c58efa1a107259742ae0af845afe3b6341797b9fe0c8e17b2ca3bc63b65db3"
+  },
+  {
+    "file": "final-qualification-proof.json",
+    "sha256": "b4c8caa06b2009ea4a3c2d5c089e0b68bffd74e4a475bdbc2a008ba0d2768cb6"
+  }
+]

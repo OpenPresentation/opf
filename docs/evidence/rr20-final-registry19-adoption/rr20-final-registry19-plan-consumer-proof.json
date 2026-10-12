@@ -1,0 +1,33 @@
+{
+  "versions": {
+    "@openpresentation/opf": "0.19.0",
+    "@openpresentation/opf-render": "0.19.1",
+    "@openpresentation/opf-editor": "0.19.0",
+    "@openpresentation/opf-pptx": "0.19.0",
+    "@openpresentation/cli": "0.19.0",
+    "@openpresentation/gallery": "2.0.0"
+  },
+  "verificationRefs": {
+    "opf": "b3e306d005d3cd0563964d541a834a8a50469536",
+    "cli": "9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5",
+    "opf-render": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+    "opf-editor": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+    "opf-pptx": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+  },
+  "exampleRefs": {
+    "opf-editor": "ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+  },
+  "consumerIntegrities": {
+    "@openpresentation/opf": "sha512-glzhH9ZWG0RmYQA4k7+SNtCmx4m5moZl+3eXdEMU+GS/ex7uNTF0NchdS5sPUUGpXX3kAY9Au74t7xOribVycg==",
+    "@openpresentation/opf-render": "sha512-Hn67Leg3rnALEEmY/0FWSB423vccf7m8jtnPA4QOQjFMuHofLMuN9r3t42gSF9ML4Cak1GiUdG8N5+vw23rSFQ==",
+    "@openpresentation/opf-pptx": "sha512-mwV19g5bt0hjV9n0gin51Z736DNzrzCagFEQQHJErDgzkf8xOpEy37Y6/Oh9+rvHwSXrzQu73w3UW5bRdWDRCg==",
+    "@openpresentation/opf-editor": "sha512-7nnUzD5tAMQEIrOdRnkgvbZPHrm1O0z4C6/iOd6yQEk4xmK8k2zwwsmLDHK1ZUspIcNb9xdI4E7EaMNL/R2itQ==",
+    "@openpresentation/gallery": "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw=="
+  },
+  "hashes": {
+    "release-plan.json": "28215332b35799efc3654af544826d50c457e73e8fb3519a36bd059569a40a4f",
+    "scripts/published-matrix/consumer/package.json": "b38ac1fb2e30c5afcf1b863abfc85219a928670c6fbba37eab95ecbf660b58a6",
+    "scripts/published-matrix/consumer/package-lock.json": "3751ed0ec0508561a64adb46da266fb2d4b50b0ef28fad4644ebabd22b9757f2",
+    "scripts/published-matrix/consumer/src/consumer.ts": "23b559a7d43acc5c48a3044504f6fc8f8bdc6f14c681afe47f717b762eb746aa"
+  }
+}

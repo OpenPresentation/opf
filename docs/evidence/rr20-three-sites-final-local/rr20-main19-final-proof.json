@@ -1,0 +1,37 @@
+{
+  "base": "6feb2f49b9a05f4f6c0be8f9b14610a3cd2691a8",
+  "changedPaths": {
+    "data/releases.json": "aa1d8ba79f2f662b1da133df071d0ec6469e6e3d323b356877539be70352f9d3",
+    "package.json": "af760798019de5dd24abd6da8500b8fae3e0105faf277a79aa5db2e05b524a09",
+    "pnpm-lock.yaml": "4a28236ea928ff34bfd29470edbc945eb901e597fd286cdfbd17a21bd1cfe801",
+    "public/showcase/example.pptx": "e59e09ee6c277b2598f75292d3d9db18f5db1ff5eb07ebfe6d3289600e12da05",
+    "public/showcase/manifest.json": "74a851955be02ccc8ff0f23e42017059ece78987a82e8d9f850a33a438628297",
+    "starters/editor/package.json": "168df3cae8bd8cccf91acae655468bdd121a86e81210ecae813d8f7409dd9e14",
+    "starters/node/package.json": "1deccea3830322e6a8e1540ceca41094a4000f85629d1d751e320150315252de",
+    "starters/website/package.json": "a82ed1c25ee675458628c7ee3a1abe67df836ed2e5eb97c79c4fcb983b84b891"
+  },
+  "terminalExit": 0,
+  "session": 36974,
+  "toolchain": {
+    "node": "24.21.0",
+    "npm": "11.16.0",
+    "pnpm": "10.33.2"
+  },
+  "logs": {
+    "browser.log": "b1d2377ef1fbb777d576907210e7898c7ddb265dbcecceed6ae8784c6621a4f8",
+    "full.log": "4758802241fe504f0afcc99d615745a6b214684f3361ef0cb2e4bd65bfee4ef3",
+    "fonts.log": "6d92f9ae1bf65ed149ce3d38c71be6293e7ed5a4346a8afe80c3d9a9e89e25f7",
+    "cf-build.log": "1d60fd18902e76d93afb70d183b6331803874356b88b687017f7a0ece1d88e10",
+    "registry.log": "4146184ad3ddd25666f78e022d2bc41299b451f959f2eca0e009962154903ed5",
+    "cf-check.log": "6d275242618bd244e4b0a190feb86fc6db60d26fd92e513fb9e2d770e76a8637",
+    "type.log": "bfa7d0bcf2dd2869dd8f08dfa1e771854e0252eb703f4a05366be85b3c6acb89",
+    "build.log": "676aa9fb9fbfae314fa0ee941d2730affd8486e18fe8c6a126db7c8ab9fde63a"
+  },
+  "sourceSnapshot": {
+    "repository": "OpenPresentation/opf",
+    "ref": "2de2889ddfb8ff1219352324400b01feecceeaab",
+    "repoUrl": "https://github.com/OpenPresentation/opf.git",
+    "syncedAt": "2026-10-12T16:12:01.422Z"
+  },
+  "transcriptSha256": "7d8a9551809cca57b0b645d00c3f85a0b441b65c54068e95eb923d84ff588070"
+}

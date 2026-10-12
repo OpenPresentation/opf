@@ -1,0 +1,18 @@
+{
+  "base": "6feb2f49b9a05f4f6c0be8f9b14610a3cd2691a8",
+  "hashes": {
+    "data/releases.json": "aa1d8ba79f2f662b1da133df071d0ec6469e6e3d323b356877539be70352f9d3",
+    "package.json": "af760798019de5dd24abd6da8500b8fae3e0105faf277a79aa5db2e05b524a09",
+    "pnpm-lock.yaml": "4a28236ea928ff34bfd29470edbc945eb901e597fd286cdfbd17a21bd1cfe801",
+    "public/showcase/example.pptx": "e59e09ee6c277b2598f75292d3d9db18f5db1ff5eb07ebfe6d3289600e12da05",
+    "public/showcase/manifest.json": "74a851955be02ccc8ff0f23e42017059ece78987a82e8d9f850a33a438628297",
+    "starters/editor/package.json": "168df3cae8bd8cccf91acae655468bdd121a86e81210ecae813d8f7409dd9e14",
+    "starters/node/package.json": "1deccea3830322e6a8e1540ceca41094a4000f85629d1d751e320150315252de",
+    "starters/website/package.json": "a82ed1c25ee675458628c7ee3a1abe67df836ed2e5eb97c79c4fcb983b84b891"
+  },
+  "protectedFilesEqual": 238,
+  "allLogHashesEqual": true,
+  "terminal": 0,
+  "noFontPinsChanged": true,
+  "directGallery": "^2.0.0"
+}
