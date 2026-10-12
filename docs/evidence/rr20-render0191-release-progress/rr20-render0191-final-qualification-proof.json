@@ -1,0 +1,146 @@
+{
+  "checkout": "/private/tmp/release-train-render-yjSNAK",
+  "base": "832f873b93da58443a8d316dfd706df4f0ee3e83",
+  "metadata": {
+    "CHANGELOG.md": "d590c1c4b2a820d300d079f9f32f5a23ae4cf0b48adf3ca2327f9771550e1589",
+    "changes/rr-20-publish-v2-golden.md": "deleted",
+    "package-lock.json": "cf35e0560aeb386904d6ed9752b3d9815b2bf6b0cd13dad31c0aa7b118cde598",
+    "package.json": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba"
+  },
+  "18GatesAllPass": true,
+  "results": [
+    {
+      "name": "install",
+      "command": "npm ci",
+      "exit": 0,
+      "seconds": 2.19,
+      "log": "/private/tmp/rr20-render0191-final-install.log"
+    },
+    {
+      "name": "playwright",
+      "command": "node -e \"if(require('playwright/package.json').version!=='1.63.0')throw Error('Pinned browser mismatch')\"",
+      "exit": 0,
+      "seconds": 0.03,
+      "log": "/private/tmp/rr20-render0191-final-playwright.log"
+    },
+    {
+      "name": "audit",
+      "command": "npm audit",
+      "exit": 0,
+      "seconds": 0.22,
+      "log": "/private/tmp/rr20-render0191-final-audit.log"
+    },
+    {
+      "name": "type",
+      "command": "npm run typecheck",
+      "exit": 0,
+      "seconds": 1.0,
+      "log": "/private/tmp/rr20-render0191-final-type.log"
+    },
+    {
+      "name": "validate",
+      "command": "npm run validate",
+      "exit": 0,
+      "seconds": 0.17,
+      "log": "/private/tmp/rr20-render0191-final-validate.log"
+    },
+    {
+      "name": "font-preparation",
+      "command": "npm run test:font-preparation",
+      "exit": 0,
+      "seconds": 2.31,
+      "log": "/private/tmp/rr20-render0191-final-font-preparation.log"
+    },
+    {
+      "name": "font-variants",
+      "command": "npm run test:font-variants",
+      "exit": 0,
+      "seconds": 0.27,
+      "log": "/private/tmp/rr20-render0191-final-font-variants.log"
+    },
+    {
+      "name": "full",
+      "command": "npm test",
+      "exit": 0,
+      "seconds": 348.73,
+      "log": "/private/tmp/rr20-render0191-final-full.log"
+    },
+    {
+      "name": "code",
+      "command": "npm run test:code",
+      "exit": 0,
+      "seconds": 0.43,
+      "log": "/private/tmp/rr20-render0191-final-code.log"
+    },
+    {
+      "name": "published-core",
+      "command": "node scripts/published-core-gate.mjs --forbid",
+      "exit": 0,
+      "seconds": 0.02,
+      "log": "/private/tmp/rr20-render0191-final-published-core.log"
+    },
+    {
+      "name": "packed",
+      "command": "npm run test:packed",
+      "exit": 0,
+      "seconds": 27.06,
+      "log": "/private/tmp/rr20-render0191-final-packed.log"
+    },
+    {
+      "name": "browser-build",
+      "command": "npm run build:browser-check",
+      "exit": 0,
+      "seconds": 1.06,
+      "log": "/private/tmp/rr20-render0191-final-browser-build.log"
+    },
+    {
+      "name": "browser",
+      "command": "node scripts/quarantine.mjs run-suite browser",
+      "exit": 0,
+      "seconds": 82.98,
+      "log": "/private/tmp/rr20-render0191-final-browser.log"
+    },
+    {
+      "name": "variable",
+      "command": "npm run test:variable-font-gate",
+      "exit": 0,
+      "seconds": 0.66,
+      "log": "/private/tmp/rr20-render0191-final-variable.log"
+    },
+    {
+      "name": "browser-fonts",
+      "command": "node scripts/quarantine.mjs run-suite browser-fonts",
+      "exit": 0,
+      "seconds": 35.94,
+      "log": "/private/tmp/rr20-render0191-final-browser-fonts.log"
+    },
+    {
+      "name": "rich",
+      "command": "node scripts/quarantine.mjs run-suite rich",
+      "exit": 0,
+      "seconds": 2.43,
+      "log": "/private/tmp/rr20-render0191-final-rich.log"
+    },
+    {
+      "name": "code-browser",
+      "command": "npm run test:code-browser",
+      "exit": 0,
+      "seconds": 0.82,
+      "log": "/private/tmp/rr20-render0191-final-code-browser.log"
+    },
+    {
+      "name": "pack-dry",
+      "command": "npm pack --dry-run",
+      "exit": 0,
+      "seconds": 1.06,
+      "log": "/private/tmp/rr20-render0191-final-pack-dry.log"
+    }
+  ],
+  "protectedRuntimeTestsScriptsWorkflowsExactBase": true,
+  "runtimeFiles": 201,
+  "runtimeDigest": "ef4cf461eb60448464a916d1066fcb9d47b8935b212afd4b9afa1beb0ef2d726",
+  "npm": "11.16.0",
+  "node": "v24.21.0",
+  "defaultGoldenNoOverride": true,
+  "packedFiles": 204
+}
