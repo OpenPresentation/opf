@@ -1,6 +1,6 @@
 # DRAFT — NOT PUBLISHED: 0.19 release-readiness note
 
-Updated 2026-10-12 for the owner (RR-20/T40). This is internal repository documentation, not a public support claim or completed release. The [execution checklist](0.19-execution.md) and [burndown](burndown.md) remain authoritative. Verified progress is 26/40 after the source lock, patch registry records, engine source, T19 normal Gallery 2 qualification and T27 v1-removal checkpoints landed; v0.19 publication, final site adoption and fresh native acceptance are still pending.
+Updated 2026-10-12 for the owner (RR-20/T40). This is internal repository documentation, not a public support claim or completed release. The [execution checklist](0.19-execution.md) and [burndown](burndown.md) remain authoritative. Verified progress is 27/40 after the source lock, patch registry records, engine source, T19 normal Gallery 2 qualification and T27 v1-removal checkpoints landed; core 0.19 is now independently published and verified; downstream 0.19 publication, final site adoption and fresh native acceptance remain pending.
 
 ## Historical gallery publication update — 2026-10-12 03:40 UTC
 

@@ -39,5 +39,19 @@
     "copy": "docs/evidence/rr20-core019-release-progress/downstream-fragment-preflight.md",
     "bytes": 3296,
     "sha256": "ea9b02ca3b8de3bf527fff844e5aef07c99a83a38dc71771ee03fa3f7ba7e5b4"
+  },
+  {
+    "source": "/private/tmp/rr20-core019-trusted-publish.log",
+    "copy": "docs/evidence/rr20-core019-release-progress/trusted-publish-complete.log",
+    "bytes": 2105,
+    "sha256": "558b5c2f5d2ef20fcaea4c3d5584bc4051b9667b85c5bbc16e0e92407494ebff",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-core019-registry-verified.json",
+    "copy": "docs/evidence/rr20-core019-release-progress/registry-verified.json",
+    "bytes": 1700,
+    "sha256": "86e830204122f6bd0d101e23c849dfe290b81055d4fbdaf0b2c02471a9f1b52e",
+    "partialLiveSnapshot": false
   }
 ]
