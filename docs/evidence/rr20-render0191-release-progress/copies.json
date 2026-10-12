@@ -22,5 +22,47 @@
   {
     "file": "rr20-render0191-executed-prep.json",
     "sha256": "91294bcbec497aafea14c631b9abeb47778bc6096153aa0dcd3a92e1fe5d71cb"
+  },
+  {
+    "source": "/private/tmp/rr20-opf638-actual-merge-proof.json",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-opf638-actual-merge-proof.json",
+    "bytes": 367,
+    "sha256": "fbd0342dd01cfc203905c53787e5a909130891629feec405cfd2bda1c3a71cf6"
+  },
+  {
+    "source": "/private/tmp/rr20-opf-render239-actual-merge-proof.json",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-opf-render239-actual-merge-proof.json",
+    "bytes": 381,
+    "sha256": "bbdd039371948969d9d80e88e6005f67a6c363ee3fa8d3152ba8477da8d3f57b"
+  },
+  {
+    "source": "/private/tmp/rr20-core638-ordered-merge-gate.log",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-core638-ordered-merge-gate.log",
+    "bytes": 384,
+    "sha256": "5c8f92dbdc726e821c5c9e4d4b436515a85599ec7d856ef6f0e13937b199ecb2"
+  },
+  {
+    "source": "/private/tmp/rr20-render239-ordered-merge-gate.log",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-render239-ordered-merge-gate.log",
+    "bytes": 341,
+    "sha256": "e2690f9135a0032dbc7097d969d248d5dc64951cac5d17f533fb8e9bf16f29c1"
+  },
+  {
+    "source": "/private/tmp/rr20-render0191-merge-order-review.md",
+    "copy": "docs/evidence/rr20-render0191-release-progress/rr20-render0191-merge-order-review.md",
+    "bytes": 2770,
+    "sha256": "81a144192c0768ca316e176ad1335e0b4432bbbc572c8a02d3b50a4adad9ee78"
+  },
+  {
+    "source": "/private/tmp/opf-supervisor-20261010/inventory-post-render239-20261012-summary.json",
+    "copy": "docs/evidence/rr20-render0191-release-progress/inventory-post-render239-20261012-summary.json",
+    "bytes": 1037,
+    "sha256": "92a47a4f3cd03c4ad0c32055a5430e5035ba0ddcd4baddce5543f935cecaf780"
+  },
+  {
+    "source": "/private/tmp/opf-supervisor-20261010/inventory-post-render239-20261012-sync.json",
+    "copy": "docs/evidence/rr20-render0191-release-progress/inventory-post-render239-20261012-sync.json",
+    "bytes": 3373,
+    "sha256": "e0715955c37cc14efe5d491c416d022088ca8013e7c85b922b9592c238f62644"
   }
 ]

@@ -1,0 +1,13 @@
+# Bounded release merge-order source review
+
+Actual coremain8a578's pre-638 lock selects corea9ad and renderer761. The a9ad lazy-font table records19.0 but not19.1. ecosystem-refs reads main's lock; ecosystem-lock.mjs264–275 reads Depends-On only on PR/merge_group, not push/tag. Therefore renderer239 PR/queue can pass using638, while merging239 first makes renderer main push select oldcorea9ad; test-gallery-lazy-fonts.mjs61 reads actual sibling19.1 and refuses undefined expectedcount. Hold239 merge until638 actual merge; do not merely holdtag. Root prevented this by stopping shared mergegate before239, preserving CI runs, and gating638 alone.
+
+## Next PPTX/editor analogous case
+
+Not the same hard count defect. Core638 locks renderer832 source with own19.0; current source and19.1 differ only release metadata (source repair already832). Normal pack-ecosystem.mjs40–52 rewrites all four own package versions AND interpackage dependency/peer ranges to fixed preview versions, retaining sourceVersion. Thus a future PPTX^19.1 peer is not left conflicting with a preview renderer19.0 package; no ERESOLVE edge can be inferred from that source version alone. Existing sourceVersion lazyfont guard recognizes both19.0 and19.1 through reviewed637.
+
+link-ecosystem.mjs80–105 uses source aliases and strict one-core resolution, but does not claim registry semver qualification or rewrite source ownversions. PPTXci's published packed step runs before that link and resolves genuine registry renderer19.1; editorci166–173 likewise runs published packed before linking. Their real final floor proof remains mandatory in that earlier registry lane. Normal preview packages are explicitly staged source proof, not registry installability.
+
+Minimal PR source selection after actual renderer239 merge: direct Depends-On renderer#239 (and core#638 if main lock has not merged yet) selects exact reviewed release metadata for PPTX prep CI. Once PPTX prep merges, editor prep may directly select actual PPTX release PR and renderer239 for current source alignment. No recursive peer trailer propagation. These direct dependencies are source-proof edges, not permission to tag before upstream independent registry verification.
+
+No additional mandatory official roll-before-PPTX/editor merge identified solely from renderer19.1 floor versus832source19.0. A final prescribed generated roll over actual release mains remains required for T32/T40 and any final normalmain source graph; avoid inventing one extra expensive roll per metadata-only sibling when current runtime bytes are identical and authentic registry packed controls pass. If a specific source contract reports semver refusal, preserve and diagnose it; this audit does not waive it. No APIs/tests/mutations.

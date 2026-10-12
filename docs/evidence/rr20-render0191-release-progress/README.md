@@ -6,6 +6,8 @@ The actual renderer 0.19.1 metadata passed all 18 local qualification steps agai
 
 [Release preparation #239](https://github.com/OpenPresentation/opf-render/pull/239), head `02ddd3bdd1c0042be6465b4c469ed4491de4fbff`, was opened through the canonical release-train helper. Before staging, its exact base, four changed paths and metadata bytes were compared with the independently reviewed and tested preparation. No runtime, baseline, font or workflow changes are in the preparation.
 
-The direct dependency trailer selects [official ecosystem roll #638](https://github.com/OpenPresentation/opf/pull/638). Both PRs are under one all-check merge gate. Actual merges, release-commit checks, trusted publishing and independent registry/provenance verification are still required. T35 remains open; execution progress remains 27/40.
+Official core roll #638 merged at `0b6b8c1e4dcca4a9c472aa00373316312635906f` at 11:00:10 UTC after gate 4390 passed. Renderer prep #239 then merged at `7980fea3b0095377cb5a28c22a3a963312f941e7` at 11:05:10 UTC after gate 61871 passed; exact reviewed trees are preserved. The ordered merges ensure normal push/tag CI selects the 0.19.1 count record without a Depends-On override. The sole exact renderer release-commit gate 13063 is running; renderer 0.19.1 is not published or independently verified. T35 remains open and progress remains 27/40. [Merge-order source proof](rr20-render0191-merge-order-review.md).
 
 The copied JSON files contain the executed commands, exit codes and identity proofs. Their scratch-log paths locate the original supervisor session output; those paths are not portable deliverables. `copies.json` records the copied evidence hashes.
+
+Latest complete inventory at 11:05:59 UTC records six site PRs and 46 issues, eight clean synced defaults and no changed existing open heads; summary and sync receipts are retained.
