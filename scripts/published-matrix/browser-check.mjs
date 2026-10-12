@@ -1,3 +1,4 @@
+import {browserFixture,BROWSER_TEXT} from './browser-fixture.mjs';
 // FF-10: headless-browser preview re-render of the published packages, on every OS (RR-04).
 //
 //   node scripts/published-matrix/browser-check.mjs [--consumer dir] [--out dir]
@@ -24,21 +25,13 @@ const argv = process.argv.slice(2);
 const option = (name, fallback) => (argv.includes(name) ? argv[argv.indexOf(name) + 1] : fallback);
 const consumer = path.resolve(option('--consumer', path.join(core, 'artifacts', 'published-matrix', 'consumer')));
 const outDir = path.resolve(option('--out', path.join(core, 'artifacts', 'published-matrix', 'out')));
-const {loadFonts, toSvg, createScriptTextMeasurement, resolveScriptFonts, gallery} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
+const {loadFonts, toSvg, createScriptTextMeasurement, resolveScriptFonts, gallery, catalogSchema, validate} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
 const {chromium} = createRequire(path.join(consumer, 'package.json'))('playwright');
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
-const TEXT = {title: 'Quarterly review', body: 'Revenue grew while costs stayed flat across every region', code: 'const score = urgency * confidence;'};
-const deckFor = (scheme) => ({
-  name: `browser ${scheme}`,
-  language: 'en',
-  design: {theme: 'minimal', fontScheme: scheme},
-  slides: [
-    {id: 'a', title: TEXT.title, text: TEXT.body},
-    {id: 'b', layout: 'code-1x', title: TEXT.title, code: {source: TEXT.code, language: 'ts'}, text: TEXT.body}
-  ]
-});
+const TEXT=BROWSER_TEXT;
+const deckFor=scheme=>browserFixture(scheme,{catalogSchema,gallery,validate});
 // Only the faces the three schemes draw with are embedded (the registry holds 33, 12 MB of base64 per slide).
 const embedded = fonts.registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine', 'Roboto Mono'].includes(face.family));
 assert.ok(embedded.length >= 6, 'the registry holds the faces the schemes draw with');

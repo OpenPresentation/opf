@@ -1,0 +1,57 @@
+[
+  {
+    "source": "/private/tmp/rr20-core634-actual-merge-proof.json",
+    "copy": "docs/evidence/rr20-core019-release-progress/rr20-core634-actual-merge-proof.json",
+    "bytes": 1582,
+    "sha256": "35c615d14b3b11847ccbd4483a747e780e877bb41d7c9c301403e72a41e60282",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-tracker635-actual-merge-proof.json",
+    "copy": "docs/evidence/rr20-core019-release-progress/rr20-tracker635-actual-merge-proof.json",
+    "bytes": 873,
+    "sha256": "e2d6611b00e8e079998847701f070cb739e1e081ff650ea7fba60e2657003154",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-core019-release-commit-repaired-gate.log",
+    "copy": "docs/evidence/rr20-core019-release-progress/rr20-core019-release-commit-repaired-gate.log",
+    "bytes": 500,
+    "sha256": "ead9c393c2fc79beacab9d444edc599ec97a04f83ce349672e0b21f322481435",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-tracker-rerun-attempt2-success.log",
+    "copy": "docs/evidence/rr20-core019-release-progress/rr20-tracker-rerun-attempt2-success.log",
+    "bytes": 49860,
+    "sha256": "bab2b1633c312f9229830d3e238604158ceb2d1e9944204a25f003979df0f32b",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-core019-trusted-publish.log",
+    "copy": "docs/evidence/rr20-core019-release-progress/rr20-core019-trusted-publish.log",
+    "bytes": 251,
+    "sha256": "2e6b2a23f6adefbd49f659839c813efe4bab93da82d77d731b4b0ac4ea4bb4ad",
+    "partialLiveSnapshot": true
+  },
+  {
+    "source": "/private/tmp/rr20-downstream019-reviewer-preflight.md",
+    "copy": "docs/evidence/rr20-core019-release-progress/downstream-fragment-preflight.md",
+    "bytes": 3296,
+    "sha256": "ea9b02ca3b8de3bf527fff844e5aef07c99a83a38dc71771ee03fa3f7ba7e5b4"
+  },
+  {
+    "source": "/private/tmp/rr20-core019-trusted-publish.log",
+    "copy": "docs/evidence/rr20-core019-release-progress/trusted-publish-complete.log",
+    "bytes": 2105,
+    "sha256": "558b5c2f5d2ef20fcaea4c3d5584bc4051b9667b85c5bbc16e0e92407494ebff",
+    "partialLiveSnapshot": false
+  },
+  {
+    "source": "/private/tmp/rr20-core019-registry-verified.json",
+    "copy": "docs/evidence/rr20-core019-release-progress/registry-verified.json",
+    "bytes": 1700,
+    "sha256": "86e830204122f6bd0d101e23c849dfe290b81055d4fbdaf0b2c02471a9f1b52e",
+    "partialLiveSnapshot": false
+  }
+]

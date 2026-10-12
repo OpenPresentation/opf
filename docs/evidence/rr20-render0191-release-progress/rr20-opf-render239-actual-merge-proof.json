@@ -1,0 +1,10 @@
+{
+  "repository": "opf-render",
+  "pullRequest": "https://github.com/OpenPresentation/opf-render/pull/239",
+  "reviewedHead": "02ddd3bdd1c0042be6465b4c469ed4491de4fbff",
+  "merged": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+  "tree": "640bbdb0d27824ea9e9ac5143bc1c01d0ffdbfff",
+  "mergedAt": "2026-10-12T11:05:10Z",
+  "reviewedContentExact": true,
+  "primarySyncedClean": true
+}

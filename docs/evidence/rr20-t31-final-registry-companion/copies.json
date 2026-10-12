@@ -1,0 +1,32 @@
+[
+  {
+    "file": "rr20-t31-final-registry-companion-root-review.json",
+    "source": "/private/tmp/rr20-t31-final-registry-companion-root-review.json",
+    "bytes": 2264,
+    "sha256": "ac1ad6d558dc510eb923c6e42fee909027a96181b1dd4c01373dc9be88ed599e"
+  },
+  {
+    "file": "comparison.json",
+    "source": "/private/tmp/rr20-t31-final-registry-companion/comparison/comparison.json",
+    "bytes": 25182,
+    "sha256": "01a4c7ff8f728c4072cc579342e02202374264eaf3dda0babc1499dac1557bef"
+  },
+  {
+    "file": "table-comparison.json",
+    "source": "/private/tmp/rr20-t31-final-registry-companion/comparison/table-comparison.json",
+    "bytes": 218,
+    "sha256": "8cbbb7ac589aa61f05cbf4e4c5814e449d80293f895b242f9864eb006000e43c"
+  },
+  {
+    "file": "registry-identities.json",
+    "source": "/private/tmp/rr20-t31-final-registry-companion/registry-identities.json",
+    "bytes": 95074,
+    "sha256": "a80b13241c9769656e99ae4dc59b7efce0b37138d12195ebed7f3b3e4d33ec72"
+  },
+  {
+    "file": "rr20-t31-final-registry-companion.log",
+    "source": "/private/tmp/rr20-t31-final-registry-companion.log",
+    "bytes": 378,
+    "sha256": "2d4ab3d675da90064770419d6c80dbc63dd784eda56121e766454cab9e372e18"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "file": "rr20-pptx019-final-qualification-proof.json",
+    "sha256": "48ea4ed1f12d08841828ad16d778675e6a64f7d2ed4aff229981934961bb1840"
+  },
+  {
+    "file": "rr20-pptx019-prep-independent-review.md",
+    "sha256": "51c38ea1f6b04e5f7a7e4596356f30c77dbcddc24614fc0eb7ec395a7f248da2"
+  },
+  {
+    "file": "rr20-pptx019-root-metadata-review.json",
+    "sha256": "c4366fd2a26238f959a59d9a8f9ab94d8d8678a00d48139c64b2666b9c64994c"
+  },
+  {
+    "file": "rr20-pptx019-executed-prep-guard.json",
+    "sha256": "0f89151982cb71fc6ffdd0301fbddf1c6ba156c5cce06292324ad9f676dc2ca8"
+  },
+  {
+    "file": "rr20-opf-pptx252-actual-merge-proof.json",
+    "sha256": "2f7fe1079c217da55c8f26d8eee6f37ee7d874f1cc7af9a867afda9b8e491e1c"
+  },
+  {
+    "file": "rr20-pptx252-merge-gate.log",
+    "sha256": "6fafae15d1481e20ca5f19e7335fbb66faa6c2fcc4f05e407e137f299d3fc3bc"
+  },
+  {
+    "file": "inventory-post-pptx252-20261012-summary.json",
+    "sha256": "7c9b654aa0080d789eba0e28c88f32a1eda38dde61f3cde990ec6e195e6ff4b2"
+  },
+  {
+    "file": "rr20-pptx019-release-commit-gate.log",
+    "sha256": "d13775c5cd9bac6cc9a053f62c7268d84f05790f363292728d8ebafb1c39e66b"
+  },
+  {
+    "file": "rr20-pptx019-registry-verified.json",
+    "sha256": "58e6d66d3cf9fc174493e4ef62027b8897b8ff378bf9b5789fe516ab1f3f622d"
+  },
+  {
+    "file": "rr20-pptx019-trusted-publish.log",
+    "sha256": "f68de6d46873c10af10261c793c85c28b3b0498880b922f52682eb05b957a273"
+  },
+  {
+    "file": "rr20-pptx019-independent-api-count.json",
+    "sha256": "4a7bbb66a726ac1cab9272df611f80a7301ad386e6e3c760a10d1b02dc1c9d3c"
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "mergedCommit": "969392e28af3f694a23f7a371ba5771873e87b78",
+  "reviewedHead": "96be5c15acf6f36e98f96b5a2390ef485d690a07",
+  "tree": "f22d5b6fe0d2299a50cbf8fa89dc56304cac329a",
+  "exactReviewedTree": true,
+  "releaseCommit": "b3e306d005d3cd0563964d541a834a8a50469536",
+  "runtimeReleaseMetadataLocksWorkflowsUnchanged": true,
+  "changedPaths": [
+    "docs/programs/release-readiness/gallery-tracker.json",
+    "docs/programs/release-readiness/gallery-tracker.md",
+    "docs/programs/release-readiness/gallery-tracker.overrides.json",
+    "docs/programs/release-readiness/tracker-catalog/README.md",
+    "docs/programs/release-readiness/tracker-catalog/proof.json",
+    "docs/programs/release-readiness/tracker-catalog/snapshot.json",
+    "scripts/build-gallery-tracker.mjs",
+    "scripts/build-gallery-tracker.test.mjs",
+    "scripts/snapshot-tracker-catalog.mjs"
+  ]
+}

@@ -1,0 +1,6 @@
+
+added 99 packages in 2s
+{"archives":45,"exact":45,"differing":[],"refusals":1}
+{"byteEqual":true,"changedEntries":[]}
+{"filesChecked":235,"negativeControls":9,"roundTripFailures":["furniture-flags","chart-pareto-multi","chart-waterfall-single","chart-world-category","chart-all-seven"],"readOnly":true}
+46 exact registry-bound archives; native Windows acceptance remains UNRUN

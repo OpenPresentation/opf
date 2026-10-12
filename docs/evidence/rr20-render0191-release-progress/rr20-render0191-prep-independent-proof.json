@@ -1,0 +1,27 @@
+{
+  "base": "832f873b93da58443a8d316dfd706df4f0ee3e83",
+  "paths": [
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 174907,
+      "sha256": "d590c1c4b2a820d300d079f9f32f5a23ae4cf0b48adf3ca2327f9771550e1589"
+    },
+    {
+      "path": "changes/rr-20-publish-v2-golden.md",
+      "deleted": true
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 91616,
+      "sha256": "cf35e0560aeb386904d6ed9752b3d9815b2bf6b0cd13dad31c0aa7b118cde598"
+    },
+    {
+      "path": "package.json",
+      "bytes": 15389,
+      "sha256": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba"
+    }
+  ],
+  "ownVersionOnlyManifestLockDelta": true,
+  "coreGalleryAuthenticIntegritiesPreserved": true,
+  "runtimeBaselineFontWorkflowUnchanged": true
+}

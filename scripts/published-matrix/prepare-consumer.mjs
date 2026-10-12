@@ -91,9 +91,9 @@ const renderer = planned['@openpresentation/opf-render'].split('.').map(Number);
 // RR-78: core 0.19 drops /catalog; the pptx.gallery catalog is then the @openpresentation/gallery package (core's dependency).
 const core = planned['@openpresentation/opf'].split('.').map(Number);
 const catalogEngines = core[0] > 0 || core[1] >= 19
-  ? "export {catalogDisplay, gallery} from '@openpresentation/gallery';"
+  ? "export {catalogDisplay, gallery, CATALOG_SCHEMA as catalogSchema} from '@openpresentation/gallery';"
   // The harness of the plan core's release tag (before 0.19) reads `defaultCatalog`; the current harness reads `gallery`.
-  : "export {catalogDisplay, defaultCatalog, defaultCatalog as gallery} from '@openpresentation/opf/catalog';";
+  : "export {catalogDisplay, defaultCatalog, defaultCatalog as gallery} from '@openpresentation/opf/catalog'; export const catalogSchema = 1;";
 const rendererEngines = renderer[0] > 0 || renderer[1] >= 18
   ? "export {toSvg, toPng} from '@openpresentation/opf-render';"
   : ["import {renderSvg, svgToPng} from '@openpresentation/opf-render';", 'export {renderSvg, svgToPng};', 'export const toSvg = renderSvg;', 'export const toPng = svgToPng;'].join('\n');

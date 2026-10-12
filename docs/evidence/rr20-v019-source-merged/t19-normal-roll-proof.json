@@ -1,0 +1,142 @@
+{
+  "head": "22dd4b6f145646c0881c74c83f771f90b4c07aef",
+  "workflowProof": {
+    "head": "22dd4b6f145646c0881c74c83f771f90b4c07aef",
+    "runs": [
+      {
+        "workflow": "ecosystem-ci.yml",
+        "id": 38207578131,
+        "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131",
+        "head": "22dd4b6f145646c0881c74c83f771f90b4c07aef",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "name": "Resolve explicit gallery qualification",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674374614"
+          },
+          {
+            "name": "ecosystem-core (model)",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410246"
+          },
+          {
+            "name": "ecosystem-render",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410282"
+          },
+          {
+            "name": "Installed candidates (windows-latest)",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410295"
+          },
+          {
+            "name": "Installed candidates (macos-latest)",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410297"
+          },
+          {
+            "name": "ecosystem-pptx-editor",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410328"
+          },
+          {
+            "name": "ecosystem-core (registry)",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410336"
+          },
+          {
+            "name": "ecosystem-core (installed)",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674410383"
+          },
+          {
+            "name": "control",
+            "conclusion": "skipped",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674411304"
+          },
+          {
+            "name": "candidate",
+            "conclusion": "skipped",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114674411656"
+          },
+          {
+            "name": "packages",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114678371086"
+          },
+          {
+            "name": "main-status",
+            "conclusion": "skipped",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207578131/job/114678427309"
+          }
+        ]
+      },
+      {
+        "workflow": "opf-ci.yml",
+        "id": 38207579832,
+        "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832",
+        "head": "22dd4b6f145646c0881c74c83f771f90b4c07aef",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "name": "Resolve explicit gallery qualification",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832/job/114674380620"
+          },
+          {
+            "name": "Published dependency source checks",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832/job/114674416759"
+          },
+          {
+            "name": "candidate",
+            "conclusion": "skipped",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832/job/114674418030"
+          },
+          {
+            "name": "control",
+            "conclusion": "skipped",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832/job/114674418128"
+          },
+          {
+            "name": "Verify OPF packages",
+            "conclusion": "success",
+            "url": "https://github.com/OpenPresentation/opf/actions/runs/38207579832/job/114675465189"
+          }
+        ]
+      }
+    ],
+    "apiCalls": 6,
+    "lockBlob": "98905da9120156cc318c32cb89fde5de68b17ab7"
+  },
+  "logs": {
+    "installed": {
+      "sourceLog": "/private/tmp/rr20-normal-roll-installed-job.log",
+      "sha256": "49ec9e935d2c83c509337783faeb5120ee3e65aa1cf5ff8839f9721e70b88cea",
+      "bytes": 214537,
+      "excerpts": [
+        "2026-10-12T05:22:24.7955705Z + @openpresentation/gallery 2.0.0",
+        "2026-10-12T05:23:20.3565693Z > node scripts/test-packed-ecosystem.mjs",
+        "2026-10-12T05:23:25.5429369Z Renderer-absent furniture passed 6/6; evidence: /__w/opf/opf/opf/artifacts/npm/renderer-absent-furniture/run-hKHLPC",
+        "2026-10-12T05:24:38.7836382Z Packed consumer: TypeScript declarations and browser bundle passed.",
+        "2026-10-12T05:24:49.8199505Z Packed TypeScript 5.9/7 consumers passed: 21 exports, NodeNext/Bundler, installed renderer/editor/PPTX, browser entries without Node types.",
+        "2026-10-12T05:24:49.8236617Z Local tarball consumer passed; this is not a registry verification.",
+        "2026-10-12T05:25:09.2743084Z PASS packed layout: 26 assertions; 4 trusted interaction scenarios",
+        "2026-10-12T05:26:06.6837812Z 16 offline installed furniture workflows passed: geometry, readability, source editing, generated values, empty fields, undo/redo and PPTX reimport."
+      ]
+    },
+    "pptx-editor": {
+      "sourceLog": "/private/tmp/rr20-normal-roll-pptx-editor-job.log",
+      "sha256": "4e4fb81f8cd0886596b52818ddb958f0f9d13b89e0c0dfa0aee57083b901878d",
+      "bytes": 265000,
+      "excerpts": [
+        "2026-10-12T05:22:43.1962838Z + @openpresentation/gallery 2.0.0",
+        "2026-10-12T05:34:50.8855662Z Template layout review: 144 region identities, native plain titles, prompt typography and foreign layout mapping passed. Native Office acceptance remains pending.",
+        "2026-10-12T05:36:10.4771607Z run-tests: 132 tests passed"
+      ]
+    }
+  },
+  "scope": "Normal source-built engine tarballs with authentic registry Gallery 2.0.0; not stable registry19 engine verification or native Office acceptance. Candidate qualification/control jobs were skipped because candidate staging was not selected; ordinary packed/installed jobs actually ran.",
+  "sourceAssertions": "test-packed-furniture-absent authenticates normal declared gallery range, registry lock resolved/integrity, exact fetched tarball and installed file bytes/shared gallery resolution; renderer/editor absence retained."
+}

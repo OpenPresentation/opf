@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "base": "2e75a8b95f6bc284417a9f84d0e5df30a6ab3742",
+  "metadataPaths": {
+    "CHANGELOG.md": "54090c15ed04d9ace40d875fef3e6cb11ab8441bafbbe5e3fd5a5d6d5c1ab85b",
+    "changes/rr-78-gallery-catalog-transition.md": "deleted",
+    "changes/rr-81-candidate-gallery-ci.md": "deleted",
+    "changes/rr-81-layout-review.md": "deleted",
+    "changes/rr-81-pareto-preserve-series.md": "deleted",
+    "changes/rr-81-template-layouts.md": "deleted",
+    "package-lock.json": "164d2930446939c846d78b8480214393e5d1822ff62983d883df6883b4e32c9f",
+    "package.json": "32d4cb9ca83b20ddecab67314cc1e4897a525ab646c52913f5e42b9227b82208"
+  },
+  "changedLockRecords": [
+    "",
+    "node_modules/@openpresentation/opf-render",
+    "node_modules/@openpresentation/opf"
+  ],
+  "sourceRuntimeDiff": false,
+  "registryIntegritiesMatchIndependentReceipts": true,
+  "qualification": "in progress; no PR/publish authorization until all17 pass"
+}

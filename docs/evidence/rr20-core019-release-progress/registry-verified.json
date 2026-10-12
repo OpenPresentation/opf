@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf@0.19.0, integrity sha512-glzhH9ZWG0RmYQA4k7+SNtCmx4m5moZl+3eXdEMU+GS/ex7uNTF0NchdS5sPUUGpXX3kAY9Au74t7xOribVycg=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf opf-v0.19.0 -> b3e306d005d3cd0563964d541a834a8a50469536"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead b3e306d005d3cd0563964d541a834a8a50469536 = tag commit b3e306d005d3cd0563964d541a834a8a50469536"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "b3e306d005d3 is on opf main (ahead)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "packages/javascript/package.json at b3e306d005d3 carries 0.19.0"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.19.0)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/npm-publish.yml on refs/tags/opf-v0.19.0 from b3e306d005d3 (https://github.com/OpenPresentation/opf/actions/runs/38220097111/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "2 verified, 0 invalid, 0 missing; @openpresentation/opf@0.19.0 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf/releases/tag/opf-v0.19.0"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}
