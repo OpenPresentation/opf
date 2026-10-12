@@ -196,8 +196,10 @@ keyed by id without `$schema`, `id` or `x-*`); the package also exports `GALLERY
 `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `/previews`. New records are a minor release; an id removed
 or renamed, a changed drawing or a record schema change is a major release, which that repository's pixel-stability
 check enforces against the previous published release. From OPF 0.19 core and the CLI depend on it
-(`@openpresentation/gallery@^1`), core's Node defaults register `gallery`, and core drops `/catalog` and
-`spec/catalogs/`.
+(`@openpresentation/gallery@^2.0.0`), core's Node defaults register `gallery`, and core drops `/catalog` and
+`spec/catalogs/`. The registry transition requires published, independently verified gallery 2.0.0 and a reviewed
+range/lock adoption; explicit candidate staging before that is development qualification only (see
+[the gallery release lane](release-process.md#the-gallery-lane-rr-78)).
 
 ## Endpoints
 

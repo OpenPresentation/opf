@@ -185,11 +185,17 @@ train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES` (repository `gallery
 - **First release.** `1.0.0` is the first version published from OpenPresentation/gallery; `0.0.1` was a placeholder
   published by hand. Against 0.0.1 the stability check runs as a major release and reports no changed record.
 
-Core and the CLI depend on `@openpresentation/gallery@^1` (OPF 0.19: their Node defaults register `gallery`, and core has no
-`/catalog` subpath). A core or CLI release needs a gallery version its range accepts on npm first, as for any
-dependency; the first core that depends on it is released after gallery 1.0.0 is on npm. The packed tests install the
-candidate gallery tarball beside the candidate core (`scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`),
-so pull requests do not wait for it. Core's tests pin the exact gallery of the workspace through the lockfile.
+From OPF 0.19, core and the CLI declare `@openpresentation/gallery@^2.0.0`: their Node defaults register
+`gallery`, and core has no `/catalog` subpath. A core or CLI release needs a gallery version its range accepts
+on npm first. After gallery 2.0.0 is published and independently verified, a reviewed registry-adoption PR updates
+those ranges and the authentic lockfile and removes the temporary candidate-gallery configuration and declaration.
+Stable release preparation follows that adoption; it does not perform the source configuration transition.
+
+Before registry adoption, explicit authenticated candidate CI can stage reviewed gallery and engine tarballs
+(`scripts/candidate-gallery-build.mjs`, `scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`). Its recorded
+original/staged metadata and runtime checks qualify development consumers; they do not prove the declared source
+ranges are registry-installable or authorize publication. Ordinary registry and publication gates stay unchanged.
+Core's registry tests use the exact gallery version and integrity recorded in the workspace lockfile.
 
 ## Geometry-moving core releases: lockstep floors
 
