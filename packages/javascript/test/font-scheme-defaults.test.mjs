@@ -15,8 +15,11 @@ import { check } from './support/validation.mjs';
 const catalogs=[gallery];
 const record=id=>gallery.fontSchemes[id];
 const fontSchemes=Object.entries(gallery.fontSchemes).map(([id,scheme])=>({id,...scheme}));
-const codeSlide={id:'code',layout:'code-1x',title:'Rule',code:{source:'const score = urgency * confidence;',language:'ts'}};
+const codeSlide={id:'code',layout:'text',title:'Rule',code:{source:'const score = urgency * confidence;',language:'ts'}};
 function measuredFamilies(presentation){
+  assert.ok(gallery.layouts.text,'the code fixture uses the current gallery2 text layout');
+  const references=check(presentation,{only:['references'],catalogs});
+  assert.equal(references.valid,true,JSON.stringify(references.findings));
   const families=new Set();
   paginate(structuredClone(presentation),{catalogs,fonts:{textMeasurement:{measure:(text,size,style)=>{families.add(style.fontFamily);return text.length*size*.5;}}}});
   return families;
