@@ -14,6 +14,7 @@ export function verifyV2LayoutChoices({gallery,previews,validate,editor}) {
  for(const id of ids){
   const option=owned.find(o=>o.value===id);assert.equal(option.label,gallery.layouts[id].name,id);
   assert.equal(option.sourceLabel,'Provided by app',id);assert.ok(option.regions?.length,id+' region summary');
+  assert.equal(previews.getLayoutPreview(id),previews.layoutPreviews[id],id+' accessor must return canonical preview bytes');
   assert.match(previews.getLayoutPreview(id),/^<svg\b/,id+' actual preview');assert.equal(previews.hasLayoutPreview(id),true,id);
   assert.equal(Buffer.byteLength(previews.getLayoutPreview(id)+'\n'),previews.layoutPreviewIndex.records.find(r=>r.id===id).bytes,id+' preview bytes');
   const result=editor.replaceFieldOption(context,id),edit=editor.fieldOptionEdit(context,id);

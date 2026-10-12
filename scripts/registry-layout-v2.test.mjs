@@ -14,6 +14,7 @@ test('reject missing choices, preview drift, ownership drift, content loss and i
   f=>delete f.gallery.layouts.text,
   f=>delete f.previews.layoutPreviews.text,
   f=>f.previews.layoutPreviewIndex.records[0].bytes++,
+  f=>{f.previews.getLayoutPreview=()=>'<svg >';},
   f=>{const original=f.editor.getJsonFieldContext;f.editor.getJsonFieldContext=(...a)=>{const c=original(...a);c.options[0].source='Document catalog';return c;};},
   f=>{f.editor.replaceFieldOption=()=>JSON.stringify({slides:[{layout:'cover'}]});},
   f=>{f.validate=()=>({valid:false,findings:['invalid references']});}
