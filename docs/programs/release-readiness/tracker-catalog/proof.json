@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "package": "@openpresentation/gallery",
+  "version": "2.0.0",
+  "gitHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+  "integrity": "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw==",
+  "publishedContent": "docs/evidence/rr20-gallery2-published/package-content-comparison.json",
+  "publishedContentSha256": "5c45beb64e98312c971fc9cddbf73bf604cbed23df5c4507ab9f2dfb413b1682",
+  "verification": "docs/evidence/rr20-gallery2-published/registry-verification.json",
+  "verificationSha256": "c34a58f2191fa6745659e48fd4f3fe55ae636ee893db960a6159c7fbdf35757a",
+  "snapshotSha256": "06b7bd85bc4ab512723cca03b7eaa59347e0433a2df254c15f23b2a6c124abfd",
+  "files": 357
+}

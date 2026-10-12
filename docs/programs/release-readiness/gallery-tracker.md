@@ -4,15 +4,15 @@
 
 As of 2026-10-02. Machine-readable source: [gallery-tracker.json](gallery-tracker.json). Authored rules: [gallery-tracker.overrides.json](gallery-tracker.overrides.json). Program: [burndown.md](burndown.md). Rebuild with `pnpm build:gallery-tracker`; `pnpm check:gallery-tracker` fails when this file is stale. Internal tracking only: nothing here is shown on a site.
 
-One record per item type and value: every catalog record in `packages/gallery/catalog` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.
+One record per item type and value: every catalog record in `the committed tracker-only catalog snapshot` (@openpresentation/gallery), every item pptx.gallery has a page for, every font tracker family, every slide-size preset of the schema and the gallery's coming teasers. Each record carries its lifecycle columns, its gaps and, per gap, the next action and the link that addresses it.
 
 ## Summary
 
-863 records; 556 addressed, 307 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+863 records; 550 addressed, 313 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
-| layouts | 300 | done 6, missing-gallery 22, missing-spec 272 | 6 | 294 |
+| layouts | 300 | unknown 28, missing-spec 272 | 0 | 300 |
 | color-schemes | 14 | done 14 | 14 | 0 |
 | font-schemes | 93 | done 35, descoped 3, parity-near 35, font-gap 20 | 93 | 0 |
 | languages | 93 | done 66, parity-near 14, font-gap 13 | 93 | 0 |
@@ -33,14 +33,14 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 426 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 420 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 0 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 12 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
-| `unknown` | 9 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
+| `unknown` | 37 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 60 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 58 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
-| `missing-gallery` | 25 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
+| `missing-gallery` | 3 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
 | `missing-spec` | 272 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
@@ -53,14 +53,14 @@ One record per item type and value: every catalog record in `packages/gallery/ca
 
 | Column | Values and source |
 | --- | --- |
-| spec | catalog (bundled in @openpresentation/gallery, packages/gallery/catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none. |
+| spec | catalog (bundled in @openpresentation/gallery, docs/programs/release-readiness/tracker-catalog), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none. |
 | compose | pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped). |
 | preview | pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled. |
 | export | pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name. |
 | roundTrip | pass or fail: the export re-imports to the same value (audit A re-import check; audit B has no re-import reason and charts re-import as the same type). |
 | parity | perfect, near or mismatch: the worst variant of the value in the latest parity run (inputs.parity); unmeasured when the run has no config for it. The catalog-only records and the slide-size presets come from the later run in inputs.parityExtra (RR-43). |
-| editor | switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise. |
-| gallery | shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser). |
+| editor | switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise; unknown for schema2 layouts when only historical v1 editor evidence exists. |
+| gallery | unknown for schema2 layouts without identity-bound current site evidence; shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser). |
 | native | verified or failed when the RR-42 native run (inputs.nativeRuns: per-value verdicts of the gated checks) covers the value; else exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence), or unverified. For fonts: the font tracker native verification. |
 | fonts | accepted when every family the value draws (its parity fontResolution families, else its catalog font scheme) is qualified or documented-visual in the font tracker; gap otherwise; n/a when it draws no chosen family. For fonts: the font tracker status. |
 
@@ -70,6 +70,306 @@ Historical measured verdicts below retain their original input scope; an additio
 
 | Type | Id | Measured input scope |
 | --- | --- | --- |
+| layouts | `action-plan` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `agenda` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `appendix-index` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `architecture-stack` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `assumptions-dependencies` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `before-after` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `benchmark-target-table` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `blank` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `bullet-list` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `business-model-canvas` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `capability-map` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `case-study` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chapter-recap` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `chart-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-1x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-2x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-2x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-2x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-bottom-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-left-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-right` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-right-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-3x-top-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `chart-beside` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `circular-lifecycle` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `closing` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `code` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `code-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `comparison` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `competitive-landscape` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `cover` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `customer-journey` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `customer-logos` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `dashboard` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `data-visualization` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `decision-tree` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `detailed-data-table` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `ecosystem-map` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `executive-decision` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `executive-summary` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `faq` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `feature-comparison-matrix` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `forecast-scenario` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `funnel-pyramid` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `gallery` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `gantt-project-plan` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `geographic-map` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `heatmap-cohort` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `hero` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `hub-and-spoke` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `icon-grid` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `image-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-1x-crop` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-1x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-1x-crop-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-1x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-crop` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-crop-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-crop-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-fit-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-2x-fit-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-crop` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-crop-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-crop-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-fit` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-fit-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-3x-fit-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-beside` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `image-focus` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-1x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-1x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-crop-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-crop-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-fit-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-2x-fit-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-crop` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-crop-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-crop-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-crop-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-fit` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-fit-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-fit-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `image-only-3x-fit-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `key-takeaway` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `kpi-scorecard` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `list-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-1x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-itemimage-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-itemimage-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-2x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-itemimage` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-itemimage-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-itemimage-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-3x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-itemimage-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-itemimage-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-4x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-itemimage-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-itemimage-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-5x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-box-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-box-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-itemimage-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-itemimage-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-itemimage-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-itemimage-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-vertical` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-vertical-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `list-6x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `logic-tree` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `logos` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `market-size` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `matrix-quadrant` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `media-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `metrics` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `network-dependency-map` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-1x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-1x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-1x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-2x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-2x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-2x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-2x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-3x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-3x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-3x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-3x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-4x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-4x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-4x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-4x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-5x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-5x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-5x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-5x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-6x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-6x-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-6x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `number-6x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `one-column-explainer` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `org-chart` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `persona-grid` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `photo-grid` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `pillars` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `pricing-table` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `process` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `process-flow` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `product-feature` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `pros-cons` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `qa-discussion` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `quote` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `quote-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `quote-highlight` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `raci-matrix` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `risk-heatmap` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `roadmap` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `scorecard` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `screenshot-walkthrough` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `section` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `section-divider` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `single-message-statement` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `statement` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `stats-metrics` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `status-rag` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `swimlane-process` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `swot-analysis` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `table` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `table-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `table-beside` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `team` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `team-bio` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `testimonial-grid` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `text-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-box-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center-box-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-center-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-left-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-1x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-center-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-left-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-2x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center-box-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center-box-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-center-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-left-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `text-3x-vertical-title-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `thank-you-cta` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `three-column` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `timeline` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `timeline-1x` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-center` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-center-box` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-center-image-bottom` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-center-image-top` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-left-image-bottom` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-left-image-left` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-left-image-right` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-left-image-top` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-slide` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `title-subtitle` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `two-column` | opf-layout/v2; historical v1 audits, parity and native evidence do not transfer by id |
+| layouts | `venn-overlap` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `waterfall-bridge` | historical v1 gallery layout; not a current gallery2 catalog record |
+| layouts | `wheel-radial` | historical v1 gallery layout; not a current gallery2 catalog record |
 | charts | `pareto` | Existing roundTrip/parity/native verdicts cover the measured single-series Pareto input; they do not establish preservation of arbitrary multi-series source data. |
 
 ## Unaddressed gaps
@@ -78,10 +378,9 @@ Historical measured verdicts below retain their original input scope; an additio
 | --- | --- | ---: | --- | --- | --- | --- |
 | charts | `missing-export` | 1 | `pareto` | Multi-series Pareto keeps only the first numeric series: the four-column North/South/West input re-imports as two columns, with chart-data-adapted / series-dropped. Data preservation remains open (issue 246); no faile... | Preserve all authored series or explicitly reject unsupported input before producing a lossy artifact; retain single-series evidence and add a multi-series preservation regression. | [opf-pptx#246](https://github.com/OpenPresentation/opf-pptx/issues/246) |
 | layouts | `missing-spec` | 272 | `action-plan`, `appendix-index`, `architecture-stack`, `assumptions-dependencies`, `before-after`, `benchmark-target-table`, `blank`, `bullet-list`, `business-model-canvas`, `capability-map`, `case-study`, `chapter-recap` and 260 more | published by the pptx.gallery layouts catalog but not bundled in @openpresentation/gallery (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
-| layouts | `missing-gallery` | 22 | `chart`, `chart-beside`, `closing`, `code`, `cover`, `gallery`, `hero`, `image`, `image-beside`, `list`, `logos`, `metrics` and 10 more | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | slide-sizes | `missing-gallery` | 3 | `1:1`, `4:5`, `9:16` | pptx.gallery has no slide-size pages | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
-| layouts | `unknown` | 28 | `chart`, `chart-beside`, `closing`, `code`, `cover`, `gallery`, `hero`, `image`, `image-beside`, `list`, `logos`, `metrics` and 16 more | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
+| layouts | `unknown` | 34 | `agenda`, `chart`, `chart-beside`, `closing`, `code`, `comparison`, `cover`, `dashboard`, `faq`, `gallery`, `hero`, `image` and 22 more | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
 
 ## Addressed gaps
@@ -105,7 +404,7 @@ Historical measured verdicts below retain their original input scope; an additio
 
 | Input | Source |
 | --- | --- |
-| Catalogs | `packages/gallery/catalog` (11 kinds, pinned to pptx-gallery `cce9b8e`) |
+| Catalogs | `docs/programs/release-readiness/tracker-catalog` (11 kinds, tracker snapshot of Gallery2; original records from pptx-gallery `cce9b8e`) |
 | pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `5645db8`, captured 2026-10-08) |
 | Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.14.2 `09f4ce2`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
 | Audits A and B | `docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json`, `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json` (opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, pptx-gallery `c349a61`) |
