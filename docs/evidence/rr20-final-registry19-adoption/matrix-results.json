@@ -1,0 +1,37 @@
+[
+  {
+    "step": "pairwise",
+    "command": [
+      "node",
+      "scripts/agent-slot.mjs",
+      "--",
+      "node",
+      "/private/tmp/rr20-final-published-harness/scripts/test-font-switch-ecosystem.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "matrix-browser",
+    "command": [
+      "node",
+      "scripts/agent-slot.mjs",
+      "--",
+      "node",
+      "scripts/published-matrix/browser-check.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "determinism",
+    "command": [
+      "node",
+      "scripts/agent-slot.mjs",
+      "--",
+      "node",
+      "scripts/published-matrix/determinism.mjs",
+      "--concurrency",
+      "2"
+    ],
+    "exit": 0
+  }
+]

@@ -1,0 +1,6 @@
+START pairwise ["node", "scripts/agent-slot.mjs", "--", "node", "/private/tmp/rr20-final-published-harness/scripts/test-font-switch-ecosystem.mjs"]
+EXIT pairwise 0
+START matrix-browser ["node", "scripts/agent-slot.mjs", "--", "node", "scripts/published-matrix/browser-check.mjs"]
+EXIT matrix-browser 0
+START determinism ["node", "scripts/agent-slot.mjs", "--", "node", "scripts/published-matrix/determinism.mjs", "--concurrency", "2"]
+EXIT determinism 0

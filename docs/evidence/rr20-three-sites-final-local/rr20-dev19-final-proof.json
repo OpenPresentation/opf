@@ -1,0 +1,41 @@
+{
+  "base": "836fede4dd2c117ece557908ccf4d768c2be25a1",
+  "changedPaths": [
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  "changedHashes": {
+    "package.json": "4e0dced51cdc8d49075c0a1c57ea390de31851a9a7f1efe86907c52a31eaeab2",
+    "pnpm-lock.yaml": "3ac6531193f4ba2a46eadda10b52acdcb972a8752fe59377f19be1dd0cb31c2d"
+  },
+  "protectedTrackedFiles": 2462,
+  "protectedTrackedFilesEqual": true,
+  "toolchain": {
+    "node": "24.21.0",
+    "npm": "11.16.0",
+    "pnpm": "11.1.3"
+  },
+  "logs": {
+    "browser.log": "4ebb66f075ae03acff26d9957ff18808105e2146ac184cdc339e91623bf4d016",
+    "browser-assets.log": "27cd2e4937e16e5197cf779e9a7daeaf0b528497356a882d79d12bc83e4a7991",
+    "sdk-build.log": "9fa93bc0a556d806cce929ba7e173a1f4c7f84adf69003e1c15ab0ff3796b60b",
+    "cli-bundle.log": "219ab800374b3ba9c75e2fee4b8a8b2c020d1b4642cfa8ccdbec4e65888a1f06",
+    "full.log": "ee94f4d095a1b98cfa2811d1f5b0695d04ff4240d249f5142f0b7a8d853222a1",
+    "lint.log": "ce1f4ffc4d8cb863b3e9ecf7a15d600c2abefdb57bc85852341f608afd2c934d",
+    "sdk-type.log": "365a7ec1da68ca3e65df4964a986d42b3f6128374796f08ad6246f97b4c4fd67",
+    "cli-smoke.log": "8b86e2f0cb7921c0281b2dae3dd1fb015f2c87cc815cf495d0c9633d49f8a789",
+    "cf-size.log": "1a76f8651f84174017197925fe5771f2d556789aafbf24a6915929147a0ee090",
+    "audit.log": "3feed9b66d9d01c5be7e5b49d80768f68aeb9ff2638ccf27f246fdace8e312bb",
+    "cf-build.log": "52c27868574c5859fca5083ce4249d907441e927b3575310571136a7422c742b",
+    "browser-list.log": "f4c93dc4f97ef00d70f47438b851d422484e3d927409a2e831cec116b136e2c8",
+    "quarantine.log": "1674e5ff1c365ac9aa6e330f45c91d6269cdf989574758259dca5e2f3ba1d6b3",
+    "cli-build.log": "63237ed8b69fd3ef0b4a1571c51e7fff8c059b3cc5f39b68e7934b914de8b683",
+    "spec-assets.log": "78076a0f2401ec82976038fdd3c5c4911e815c3410285934ceb1d23ba7ff7a17",
+    "type.log": "4fc08444d3693577176bc86837270693edbf833708a174efa20d06df769bb90d",
+    "cli-type.log": "365a7ec1da68ca3e65df4964a986d42b3f6128374796f08ad6246f97b4c4fd67",
+    "build.log": "3802a70ca325cf9d59e85855aa12e0fa968fa4a6c8d1fb7c35d7f9df2670bfe9"
+  },
+  "transcriptSha256": "dcadb4a55abec524aae44f9be4c7adcb1c6675755c5ce9ca12ffb16829b6a11e",
+  "terminalExit": 0,
+  "trackedSymlinksComparedAsLinkTargets": true
+}

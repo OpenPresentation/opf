@@ -1,0 +1,77 @@
+[
+  {
+    "step": "libraries-browser",
+    "command": [
+      "pnpm",
+      "test:packed-browser",
+      "registry-libraries"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "registry-rebuilt",
+    "command": [
+      "pnpm",
+      "test:registry-ecosystem"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "registry-browser",
+    "command": [
+      "pnpm",
+      "test:packed-browser",
+      "registry"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "fidelity",
+    "command": [
+      "pnpm",
+      "test:registry-fidelity"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "quickstart",
+    "command": [
+      "node",
+      "scripts/test-developer-quickstart.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "cli-packed",
+    "command": [
+      "node",
+      "packages/cli/test/packed.mjs",
+      "--registry"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "mapped",
+    "command": [
+      "pnpm",
+      "check:changed"
+    ],
+    "exit": 0
+  },
+  {
+    "step": "full",
+    "command": [
+      "pnpm",
+      "test"
+    ],
+    "exit": 0
+  }
+]

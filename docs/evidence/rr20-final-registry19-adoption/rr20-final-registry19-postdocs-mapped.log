@@ -1,0 +1,30 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-final-registry19-adoption
+> node scripts/check-changed.mjs
+
+check-changed: 74 changed files since 9d72bc020 (plus uncommitted and untracked)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.3 s)
+ok  pnpm run check:engines-range (0.2 s)
+ok  pnpm run check:published-matrix-consumer (0.2 s)
+ok  pnpm run check:release-report (0.2 s)
+ok  pnpm run check:gallery-tracker (1.7 s)
+ok  pnpm run check:runners (0.3 s)
+ok  pnpm run check:release-train (2.7 s)
+ok  pnpm run check:text (2.2 s)
+ok  typecheck (6.8 s)
+
+step                                      status   time
+biome                                     passed  0.1 s  36 files
+pnpm run check:changes                    passed  0.3 s
+pnpm run check:engines-range              passed  0.2 s
+pnpm run check:gallery-tracker            passed  1.7 s
+pnpm run check:published-matrix-consumer  passed  0.2 s
+pnpm run check:release-report             passed  0.2 s
+pnpm run check:release-train              passed  2.7 s
+pnpm run check:runners                    passed  0.3 s
+pnpm run check:text                       passed  2.2 s
+typecheck                                 passed  6.8 s
+total                                             11.2 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

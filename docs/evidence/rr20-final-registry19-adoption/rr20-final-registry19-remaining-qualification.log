@@ -1,0 +1,18 @@
+START libraries-browser ["pnpm", "test:packed-browser", "registry-libraries"]
+EXIT libraries-browser 0
+START registry-rebuilt ["pnpm", "test:registry-ecosystem"]
+EXIT registry-rebuilt 0
+START registry-browser ["pnpm", "test:packed-browser", "registry"]
+EXIT registry-browser 0
+START fidelity ["pnpm", "test:registry-fidelity"]
+EXIT fidelity 0
+START quickstart ["node", "scripts/test-developer-quickstart.mjs"]
+EXIT quickstart 0
+START cli-packed ["node", "packages/cli/test/packed.mjs", "--registry"]
+EXIT cli-packed 0
+START build ["pnpm", "build"]
+EXIT build 0
+START mapped ["pnpm", "check:changed"]
+EXIT mapped 0
+START full ["pnpm", "test"]
+EXIT full 0

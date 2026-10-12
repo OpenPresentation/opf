@@ -1,0 +1,117 @@
+[
+  {
+    "name": "script-fonts",
+    "command": [
+      "pnpm",
+      "prepare:script-fonts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "lazy-fonts",
+    "command": [
+      "pnpm",
+      "prepare:lazy-fonts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "wasm",
+    "command": [
+      "pnpm",
+      "prepare:editor-wasm"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "published-editor",
+    "command": [
+      "pnpm",
+      "verify:published-editor"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "preview-fonts",
+    "command": [
+      "pnpm",
+      "verify:preview-fonts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "font-replacements",
+    "command": [
+      "pnpm",
+      "verify:font-replacements"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "editor-entry",
+    "command": [
+      "pnpm",
+      "verify:editor-entry"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "lint",
+    "command": [
+      "pnpm",
+      "lint"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "full",
+    "command": [
+      "pnpm",
+      "test"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "browser-list",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "--list"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "browser",
+    "command": [
+      "pnpm",
+      "test:e2e"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "cf-build",
+    "command": [
+      "pnpm",
+      "cf:build"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "cf-limits",
+    "command": [
+      "node",
+      "scripts/cf-check-limits.mjs"
+    ],
+    "exitCode": 0
+  }
+]

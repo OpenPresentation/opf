@@ -1,0 +1,7 @@
+$ npm ci --ignore-scripts --no-audit --no-fund
+
+added 121 packages in 2s
+$ tsc --noEmit (NodeNext)
+$ tsc --noEmit (Bundler)
+$ tsc (emit)
+Published consumer ready in /private/tmp/opf-final-registry19-adoption/artifacts/published-matrix/consumer

@@ -1,0 +1,12 @@
+{
+  "base": "836fede4dd2c117ece557908ccf4d768c2be25a1",
+  "changedHashes": {
+    "package.json": "4e0dced51cdc8d49075c0a1c57ea390de31851a9a7f1efe86907c52a31eaeab2",
+    "pnpm-lock.yaml": "3ac6531193f4ba2a46eadda10b52acdcb972a8752fe59377f19be1dd0cb31c2d"
+  },
+  "protectedFilesIndependentlyEqual": 2462,
+  "verifiedRegistryPackages": 5,
+  "allLogHashesEqual": true,
+  "sharedCoreGallery": true,
+  "authorTerminal": 0
+}

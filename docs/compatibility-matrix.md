@@ -6,15 +6,26 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the published 0.18 set recorded in `release-plan.json` (RR-20, 11 October 2026). Immutable tag commits pin
+dated handoff as current. The current plan selects core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0; the older 0.18 matrix below is historical evidence. Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
 accepted fixes and release prerequisites. The versions below include the verified patch train; complete native compatibility
 remains a separate acceptance gate.
 
-## Pending final 0.19 registry adoption
+## Published 0.19 contract
 
-Core 0.19.0, renderer 0.19.1, PPTX 0.19.0 and Gallery 2.0.0 are independently published and verified. Final editor/CLI 0.19.0 receipts, the six-package registry consumer and site/native acceptance are pending. The recorded patch matrix below remains historical verified evidence until final adoption updates the plan and consumer lock. The final v2 catalog has 28 intent layouts, schema 2 and no v1 API/record aliases; its catalog owner is `@openpresentation/gallery@^2.0.0`. Source and offline archive evidence do not certify Windows PowerPoint.
+Core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0 are independently published and verified. The final v2 catalog has 28 intent layouts, schema 2 and no v1 API/record aliases; its owner is `@openpresentation/gallery@^2.0.0`. The recorded 0.18 matrix below is historical evidence. Registry/source and offline archive checks do not certify Windows PowerPoint or deployment.
+
+## Current published package contracts
+
+| Package | Version | Dependency contract |
+| --- | --- | --- |
+| Core | 0.19.0 | Gallery ^2.0.0; optional renderer/PPTX ^0.19.0 |
+| CLI | 0.19.0 | Core ^0.19.0; optional renderer/PPTX ^0.19.0 |
+| Renderer | 0.19.1 | Core ^0.19.0; optional pinned font/converter peers |
+| PPTX | 0.19.0 | Core ^0.19.0, Gallery ^2.0.0; optional renderer ^0.19.1 |
+| Editor | 0.19.0 | Core ^0.19.0; optional renderer ^0.19.1 |
+| Gallery | 2.0.0 | Independent catalog owner, 28 schema-2 layouts |
 
 ## Runtime
 
@@ -25,7 +36,7 @@ Core 0.19.0, renderer 0.19.1, PPTX 0.19.0 and Gallery 2.0.0 are independently pu
 | Account / model / hosted API | Not required |
 | Operating systems | macOS, Linux, Windows for Node APIs; browser entrypoints are separate |
 
-## Coordinated published packages
+## Historical coordinated 0.18 published packages
 
 | Package | Version | Depends on |
 | --- | --- | --- |

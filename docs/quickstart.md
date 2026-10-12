@@ -9,24 +9,21 @@ This is a documented supported subset, not universal Office or all-feature
 parity. See the [compatibility matrix](compatibility-matrix.md) for what is
 shipped versus deferred.
 
-## Pending final 0.19 adoption
-
-The target set is core 0.19.0, renderer 0.19.1, PPTX/editor/CLI 0.19.0 and Gallery 2.0.0. Core, renderer, PPTX and Gallery have independent publication receipts; editor and CLI receipts and final installed-consumer acceptance are still pending. The commands below retain the registry plan's verified patch set until that adoption is complete. Do not treat source qualification as final registry or native acceptance.
-
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.18.4**,
-CLI **0.18.1**, renderer **0.18.2**, PPTX **0.18.2**, editor **0.18.2**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.19.0**,
+CLI **0.19.0**, renderer **0.19.1**, PPTX **0.19.0**, editor **0.19.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.18.4 \
-  @openpresentation/opf-render@0.18.2 \
-  @openpresentation/opf-editor@0.18.2 \
-  @openpresentation/opf-pptx@0.18.2 \
-  @openpresentation/cli@0.18.1
-# opf-render 0.18 keeps its converters and font packages as optional peers: install the ones you use
+npm install @openpresentation/opf@0.19.0 \
+  @openpresentation/opf-render@0.19.1 \
+  @openpresentation/opf-editor@0.19.0 \
+  @openpresentation/opf-pptx@0.19.0 \
+  @openpresentation/cli@0.19.0 \
+  @openpresentation/gallery@2.0.0
+# opf-render 0.19 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5

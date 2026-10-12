@@ -1,0 +1,8 @@
+audited 11 packages in 0s
+
+11 packages have verified registry signatures
+
+3 packages have verified attestations
+(use --json --include-attestations to view attestation details)
+CLI passed 95 command checks: file preservation, patch operations, validation findings/contracts, pipes, schema lookup, pagination.
+Standalone global and npx-style installation passed (npm registry). Integrity: sha512-3kM63NZkgyZfSmhnw8hgTwe6VJnA1/SevHqPM4a6N+txFCwTCf7n5QGMzTWPqHujTAyCI6Mz9TrbJnPXL4i4ew==. Tarball: /private/tmp/opf-final-registry19-adoption/artifacts/cli/openpresentation-cli-0.19.0.tgz
