@@ -52,7 +52,7 @@ try {
   receipt.manifestSha256 = hash(manifestBytes);
   assert.equal(manifest.published, false, 'Require unpublished candidate archives, not a registry plan.');
   // RR-78: core depends on @openpresentation/gallery, which the fixture also registers.
-  const candidate=process.env.CANDIDATE_GALLERY_REF?candidateArtifacts(path.resolve(root)):null;
+  const candidate=candidateArtifacts(path.resolve(root));
   const names = ['@openpresentation/opf', '@openpresentation/opf-pptx'];
   const selected = names.map(name => {
     const matches = manifest.artifacts.filter(item => item.name === name);
@@ -60,6 +60,8 @@ try {
     return matches[0];
   });
   const coreItem=selected.find(item=>item.name==='@openpresentation/opf');
+  assert.equal(path.basename(coreItem.file),coreItem.file);assert.match(coreItem.file,/\.tgz$/);
+  const coreBytes=await readFile(path.join(artifacts,coreItem.file));assert.equal(hash(coreBytes),coreItem.sha256,'Core tarball changed before manifest extraction');assert.equal(coreBytes.length,coreItem.bytes);
   const coreManifest=JSON.parse(tar(path.join(artifacts,coreItem.file),'-xOf',['package/package.json']));
   const gallerySelection=furnitureGallery(manifest,candidate,coreManifest);
   if(gallerySelection.artifact)selected.unshift(gallerySelection.artifact);
