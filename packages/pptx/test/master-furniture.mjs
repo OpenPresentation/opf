@@ -7,7 +7,7 @@ import {readFile} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
+import {toPptx, fromPptx, defaultCatalog} from './helpers/default-catalog.mjs';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 import {lifted, relationshipPath, shownFurniture, shownFurnitureParts, slideParts} from './helpers/master-furniture.mjs';
 
@@ -40,10 +40,12 @@ const pictures = xml => [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(match
 const embedOf = picture => picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
 const pictureBytes = (entries, path, picture) => entries[relationshipPath(entries, path, embedOf(picture))];
 const placeholders = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]).filter(shape => /<p:ph type="(?:dt|ftr|sldNum)"/.test(shape));
-const phTypes = xml => placeholders(xml).map(shape => shape.match(/<p:ph type="(\w+)"/)[1]);
+const phTypes = xml => placeholders(xml).map(shape => shape.match(/<p:ph type="(\w+)"/)[1]).filter(type => type !== 'title');
 const tagData = (entries, path) => JSON.parse(Buffer.from(text(entries, path).match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
 const manifestOf = (entries, index) => tagData(entries, `ppt/tags/opfFurnitureSlide${index}.xml`);
 const layouts = entries => Object.keys(entries).filter(path => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).sort();
+const automaticLayout = entries => layouts(entries).find(path => /<p:cSld[^>]*name="OPF auto"/.test(text(entries, path)));
+const catalogLayoutCount = Object.keys(defaultCatalog.layouts).length;
 const showMasterSp = xml => xml.match(/<p:sldLayout\b[^>]*\bshowMasterSp="([^"]*)"/)?.[1];
 const mutate = (entries, edits) => {
   const copy = {...entries};
@@ -66,7 +68,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   assert.match(masterPictures[0], /name="OPF furniture footer left image"/);
   assert.ok(same(pictureBytes(entries, 'ppt/slideMasters/slideMaster1.xml', masterPictures[0]), bytes.square), 'the onLight icon');
   assert.deepEqual(lifted(master).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header right text line 0', 'OPF furniture footer left image']);
-  assert.deepEqual(layouts(entries), ['ppt/slideLayouts/slideLayout1.xml'], 'no extra layout: every slide shows the same furniture');
+  assert.equal(layouts(entries).length, catalogLayoutCount + 2, 'default, all reachable gallery templates and automatic layout share the master');
   assert.equal(lifted(text(entries, 'ppt/slideLayouts/slideLayout1.xml')).length, 0);
   for (let number = 1; number <= 3; number++) {
     const xml = text(entries, `ppt/slides/slide${number}.xml`);
@@ -190,11 +192,11 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   }
   assert.equal(new Set(byTone.get(1)).size, 1, 'the light slides share one layout');
   assert.equal(new Set(byTone.get(0)).size, 1, 'the dark slides share one layout');
-  assert.equal(layouts(entries).length, 3);
+  assert.equal(layouts(entries).length, catalogLayoutCount + 4);
   // Every layout is listed on the master with a unique id, and has its content type.
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml'), types = text(entries, '[Content_Types].xml');
   const ids = [...master.matchAll(/<p:sldLayoutId id="(\d+)"/g)].map(match => match[1]);
-  assert.equal(ids.length, 3); assert.equal(new Set(ids).size, 3);
+  assert.equal(ids.length, catalogLayoutCount + 4); assert.equal(new Set(ids).size, ids.length);
   for (const layout of layouts(entries)) assert.ok(types.includes(`PartName="/${layout}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"`));
   for (let index = 0; index < 4; index++) assert.equal(manifestOf(entries, index).shared['footer.left.image'].on, 'layout');
   // The reference returns on every slide.
@@ -227,16 +229,16 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 // only the footer keeps the master header and draws no footer.
 {
   const deck = {organization, design: {background: light, header: {left: {text: 'Board review'}}, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}}, slides: [
-    {title: 'Cover', layout: 'title', design: {header: false, footer: false}},
+    {title: 'Cover', layout: 'cover', design: {header: false, footer: false}},
     {title: 'Two', text: 'Body.'}, {title: 'Three', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   const cover = slideParts(entries, 1);
   assert.equal(showMasterSp(text(entries, cover.layout)), '0', 'the cover layout hides the master furniture');
   assert.equal(lifted(text(entries, cover.layout)).length, 0, 'and draws none of its own');
-  assert.match(text(entries, cover.layout), /<p:cSld name="OPF no furniture">/);
+  assert.match(text(entries, cover.layout), /<p:cSld name="Cover \(no furniture\)">/);
   assert.deepEqual(shownFurniture(entries, 1), [], 'the cover shows no furniture');
   assert.deepEqual(phTypes(text(entries, cover.layout)), ['dt', 'ftr', 'sldNum'], 'Insert > Header & Footer still works on it');
-  for (const number of [2, 3]) assert.equal(slideParts(entries, number).layout, 'ppt/slideLayouts/slideLayout1.xml');
+  for (const number of [2, 3]) assert.equal(slideParts(entries, number).layout, automaticLayout(entries));
   assert.equal(lifted(text(entries, 'ppt/slideMasters/slideMaster1.xml')).length, 2);
   const {imported, invalid} = await read(output);
   assert.deepEqual(invalid, []);
@@ -247,7 +249,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const footerOnly = {...deck, slides: [{title: 'Footer hidden', text: 'Body.', design: {footer: false}}, ...deck.slides.slice(1)]};
   const result = await exportDeck(footerOnly);
   // The header is on all three slides (master); the logo on two (a layout), so the first slide uses the master's own layout.
-  assert.equal(slideParts(result.entries, 1).layout, 'ppt/slideLayouts/slideLayout1.xml');
+  assert.equal(slideParts(result.entries, 1).layout, automaticLayout(result.entries));
   assert.deepEqual(shownFurniture(result.entries, 1).map(shape => shape.on), ['master']);
   assert.deepEqual(shownFurniture(result.entries, 2).map(shape => shape.on).sort(), ['layout', 'master', 'slide'], 'its slide number stays a placeholder on the slide');
   const back = await read(result.bytes);
@@ -265,9 +267,9 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const {entries, bytes: output} = await exportDeck(deck);
   assert.equal(pictures(text(entries, 'ppt/slideMasters/slideMaster1.xml')).length, 1);
   assert.match(text(entries, 'ppt/slides/slide3.xml'), /<a:t>Appendix<\/a:t>/, 'the override stays on its slide');
-  assert.equal(slideParts(entries, 3).layout, 'ppt/slideLayouts/slideLayout1.xml');
+  assert.equal(slideParts(entries, 3).layout, automaticLayout(entries));
   const shared = slideParts(entries, 1).layout;
-  assert.notEqual(shared, 'ppt/slideLayouts/slideLayout1.xml');
+  assert.notEqual(shared, automaticLayout(entries));
   for (const number of [1, 2, 4]) assert.equal(slideParts(entries, number).layout, shared);
   assert.match(text(entries, shared), /<a:t>Board review<\/a:t>/);
   assert.equal(manifestOf(entries, 2).shared['footer.left.image'].on, 'master');

@@ -1,0 +1,1004 @@
+{
+  "$comment": "The 28 built-in layouts of OPF 0.19 as written in docs/programs/release-readiness/0.19-layouts.md (section 6), embedded-record form keyed by id. A test fixture only: replace it with @openpresentation/gallery@^2 once gallery 2.0.0 (RR-80) is published.",
+  "source": "https://www.pptx.gallery",
+  "layouts": {
+    "cover": {
+      "name": "Cover",
+      "summary": "The opening slide: title, subtitle and an optional picture.",
+      "tags": [
+        "Openers and closers"
+      ],
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      },
+      "areas": [
+        "title media"
+      ],
+      "columns": [
+        1,
+        1
+      ],
+      "rows": [
+        1
+      ],
+      "regions": {
+        "media": {
+          "accepts": [
+            "image",
+            "video"
+          ],
+          "role": "media",
+          "flow": "none",
+          "bleed": true
+        }
+      }
+    },
+    "section": {
+      "name": "Section",
+      "summary": "A divider between parts: the section title and an optional subtitle.",
+      "tags": [
+        "Openers and closers"
+      ],
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      },
+      "areas": [
+        "title"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        1
+      ],
+      "regions": {}
+    },
+    "agenda": {
+      "name": "Agenda",
+      "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
+      "tags": [
+        "Openers and closers"
+      ],
+      "areas": [
+        "title",
+        "items"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "items": {
+          "accepts": [
+            "list",
+            "text"
+          ],
+          "role": "primary",
+          "flow": "column",
+          "listColumns": "auto"
+        }
+      }
+    },
+    "statement": {
+      "name": "Statement",
+      "summary": "One message, large and alone.",
+      "tags": [
+        "Openers and closers"
+      ],
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      },
+      "areas": [
+        "title",
+        "message"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "message": {
+          "accepts": [
+            "text",
+            "quote",
+            "metric"
+          ],
+          "role": "primary",
+          "flow": "none",
+          "anchor": "middle"
+        }
+      }
+    },
+    "closing": {
+      "name": "Closing",
+      "summary": "The last slide: thanks, the call to action and contact details.",
+      "tags": [
+        "Openers and closers"
+      ],
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      },
+      "areas": [
+        "title",
+        "details"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        1,
+        "auto"
+      ],
+      "regions": {
+        "details": {
+          "accepts": [
+            "text",
+            "list",
+            "image"
+          ],
+          "role": "supporting",
+          "flow": "auto"
+        }
+      }
+    },
+    "text": {
+      "name": "Text",
+      "summary": "Prose. Several blocks sit side by side when short and stack when long.",
+      "tags": [
+        "Text"
+      ],
+      "areas": [
+        "title",
+        "body"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "body": {
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "auto"
+        }
+      }
+    },
+    "list": {
+      "name": "List",
+      "summary": "Bulleted or numbered points; one long list flows into columns.",
+      "tags": [
+        "Text"
+      ],
+      "areas": [
+        "title",
+        "body"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "body": {
+          "accepts": [
+            "list",
+            "text",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "auto",
+          "listColumns": "auto"
+        }
+      }
+    },
+    "quote": {
+      "name": "Quote",
+      "summary": "One or more quotations with attribution and photo.",
+      "tags": [
+        "Text"
+      ],
+      "areas": [
+        "title",
+        "quotes"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "quotes": {
+          "accepts": [
+            "quote",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "two-column": {
+      "name": "Two columns",
+      "summary": "Two independent columns of any content.",
+      "tags": [
+        "Text"
+      ],
+      "areas": [
+        "title title",
+        "first second"
+      ],
+      "columns": [
+        1,
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "first": {
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "second": {
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      }
+    },
+    "pillars": {
+      "name": "Pillars",
+      "summary": "Two to six ideas of equal weight, as cards.",
+      "tags": [
+        "Groups of items"
+      ],
+      "design": {
+        "contentBox": true
+      },
+      "areas": [
+        "title",
+        "pillars"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "pillars": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "comparison": {
+      "name": "Comparison",
+      "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
+      "tags": [
+        "Groups of items"
+      ],
+      "design": {
+        "contentBox": true
+      },
+      "areas": [
+        "title title",
+        "first second",
+        "verdict verdict"
+      ],
+      "columns": [
+        1,
+        1
+      ],
+      "rows": [
+        "auto",
+        1,
+        "auto"
+      ],
+      "regions": {
+        "first": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "second": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "verdict": {
+          "accepts": [
+            "text"
+          ],
+          "role": "supporting",
+          "flow": "none"
+        }
+      }
+    },
+    "process": {
+      "name": "Process",
+      "summary": "Steps in order, in one row.",
+      "tags": [
+        "Groups of items"
+      ],
+      "design": {
+        "contentBox": true,
+        "contentDirection": "horizontal"
+      },
+      "areas": [
+        "title",
+        "steps"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "steps": {
+          "accepts": [
+            "timeline",
+            "list",
+            "text",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "timeline": {
+      "name": "Timeline",
+      "summary": "Dated events or a roadmap along one axis, with optional notes.",
+      "tags": [
+        "Groups of items"
+      ],
+      "areas": [
+        "title",
+        "timeline",
+        "notes"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1,
+        "auto"
+      ],
+      "regions": {
+        "timeline": {
+          "accepts": [
+            "timeline"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "notes": {
+          "accepts": [
+            "text",
+            "list",
+            "metric"
+          ],
+          "role": "supporting",
+          "flow": "auto"
+        }
+      }
+    },
+    "faq": {
+      "name": "FAQ",
+      "summary": "Questions with their answers.",
+      "tags": [
+        "Groups of items"
+      ],
+      "design": {
+        "contentBox": true
+      },
+      "areas": [
+        "title",
+        "questions"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "questions": {
+          "accepts": [
+            "list",
+            "text",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "column",
+          "listColumns": "auto"
+        }
+      }
+    },
+    "metrics": {
+      "name": "Metrics",
+      "summary": "One to six headline numbers, with an optional note.",
+      "tags": [
+        "Numbers"
+      ],
+      "design": {
+        "contentAlignment": "center"
+      },
+      "areas": [
+        "title",
+        "metrics",
+        "note"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1,
+        "auto"
+      ],
+      "regions": {
+        "metrics": {
+          "accepts": [
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        },
+        "note": {
+          "accepts": [
+            "text",
+            "list"
+          ],
+          "role": "supporting",
+          "flow": "none"
+        }
+      }
+    },
+    "scorecard": {
+      "name": "Scorecard",
+      "summary": "Metrics with commentary or status, as cards.",
+      "tags": [
+        "Numbers"
+      ],
+      "design": {
+        "contentBox": true
+      },
+      "areas": [
+        "title",
+        "cards"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "cards": {
+          "accepts": [
+            "metric",
+            "text",
+            "list",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "image": {
+      "name": "Image",
+      "summary": "One picture edge to edge under an optional title.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title",
+        "media"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "media": {
+          "accepts": [
+            "image",
+            "video"
+          ],
+          "role": "media",
+          "flow": "none",
+          "bleed": true
+        }
+      }
+    },
+    "image-beside": {
+      "name": "Image beside",
+      "summary": "A picture or video beside text.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title title",
+        "media body"
+      ],
+      "columns": [
+        1,
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "media": {
+          "accepts": [
+            "image",
+            "video"
+          ],
+          "role": "media",
+          "flow": "none"
+        },
+        "body": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "quote",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "auto"
+        }
+      }
+    },
+    "gallery": {
+      "name": "Gallery",
+      "summary": "One to six framed pictures: a screenshot, a diagram, a photo set.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title",
+        "pictures"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "pictures": {
+          "accepts": [
+            "image",
+            "video",
+            "group"
+          ],
+          "role": "media",
+          "flow": "grid"
+        }
+      }
+    },
+    "chart": {
+      "name": "Chart",
+      "summary": "One to six charts, with an optional note.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title",
+        "charts",
+        "note"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1,
+        "auto"
+      ],
+      "regions": {
+        "charts": {
+          "accepts": [
+            "chart",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        },
+        "note": {
+          "accepts": [
+            "text"
+          ],
+          "role": "supporting",
+          "flow": "none"
+        }
+      }
+    },
+    "chart-beside": {
+      "name": "Chart beside",
+      "summary": "A chart with the takeaway beside it.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title title",
+        "chart notes"
+      ],
+      "columns": [
+        3,
+        2
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "chart": {
+          "accepts": [
+            "chart"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "notes": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "quote",
+            "chart"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      }
+    },
+    "table": {
+      "name": "Table",
+      "summary": "A table across the slide, with an optional note.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title",
+        "table",
+        "note"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1,
+        "auto"
+      ],
+      "regions": {
+        "table": {
+          "accepts": [
+            "table"
+          ],
+          "role": "primary",
+          "flow": "column"
+        },
+        "note": {
+          "accepts": [
+            "text"
+          ],
+          "role": "supporting",
+          "flow": "none"
+        }
+      }
+    },
+    "table-beside": {
+      "name": "Table beside",
+      "summary": "A table with commentary beside it.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title title",
+        "table notes"
+      ],
+      "columns": [
+        3,
+        2
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "table": {
+          "accepts": [
+            "table"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "notes": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "quote"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      }
+    },
+    "code": {
+      "name": "Code",
+      "summary": "Source code with the explanation beside it.",
+      "tags": [
+        "Visuals"
+      ],
+      "areas": [
+        "title title",
+        "code notes"
+      ],
+      "columns": [
+        3,
+        2
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "code": {
+          "accepts": [
+            "code"
+          ],
+          "role": "primary",
+          "flow": "column"
+        },
+        "notes": {
+          "accepts": [
+            "text",
+            "list"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      }
+    },
+    "hero": {
+      "name": "Hero",
+      "summary": "A lead message with a picture and supporting points.",
+      "tags": [
+        "Mixed"
+      ],
+      "areas": [
+        "title title",
+        "lead media",
+        "support support"
+      ],
+      "columns": [
+        1,
+        1
+      ],
+      "rows": [
+        "auto",
+        2,
+        1
+      ],
+      "regions": {
+        "lead": {
+          "accepts": [
+            "text",
+            "quote",
+            "metric"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        "media": {
+          "accepts": [
+            "image",
+            "video"
+          ],
+          "role": "media",
+          "flow": "none"
+        },
+        "support": {
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "group"
+          ],
+          "role": "supporting",
+          "flow": "grid"
+        }
+      }
+    },
+    "dashboard": {
+      "name": "Dashboard",
+      "summary": "Headline numbers over charts.",
+      "tags": [
+        "Mixed"
+      ],
+      "design": {
+        "contentBox": true
+      },
+      "areas": [
+        "title",
+        "kpis",
+        "charts"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        2,
+        3
+      ],
+      "regions": {
+        "kpis": {
+          "accepts": [
+            "metric"
+          ],
+          "role": "secondary",
+          "flow": "grid"
+        },
+        "charts": {
+          "accepts": [
+            "chart",
+            "table"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "team": {
+      "name": "Team",
+      "summary": "People: photo, name and role cards.",
+      "tags": [
+        "Mixed"
+      ],
+      "areas": [
+        "title",
+        "people"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "people": {
+          "accepts": [
+            "group",
+            "image",
+            "text",
+            "quote"
+          ],
+          "role": "primary",
+          "flow": "grid"
+        }
+      }
+    },
+    "logos": {
+      "name": "Logos",
+      "summary": "Customer, partner or sponsor logos in a grid of up to 12.",
+      "tags": [
+        "Mixed"
+      ],
+      "areas": [
+        "title",
+        "logos"
+      ],
+      "columns": [
+        1
+      ],
+      "rows": [
+        "auto",
+        1
+      ],
+      "regions": {
+        "logos": {
+          "accepts": [
+            "image",
+            "text",
+            "group"
+          ],
+          "role": "media",
+          "flow": "grid",
+          "max": 12
+        }
+      }
+    }
+  }
+}

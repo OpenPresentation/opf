@@ -54,8 +54,8 @@ let checked = 0;
 // ---- Cover and section logos: placement, order, parity with the preview, provenance, re-import.
 {
   const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light, watermark: tall}, slides: [
-    {title: 'Quarterly review', subtitle: 'Results', layout: 'title-subtitle'},
-    {title: 'Part one', layout: 'section-divider'},
+    {title: 'Quarterly review', subtitle: 'Results', layout: 'cover'},
+    {title: 'Part one', layout: 'section'},
     {title: 'Content', text: 'Body copy stays logo free.'},
     {title: 'Items', items: ['One', 'Two']},
   ]};
@@ -108,9 +108,9 @@ let checked = 0;
 {
   const organization = [{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: square, onDark: tall}, icon: wide}}, {id: 'beta', name: 'Beta', logo: jpg}];
   const deck = {organization, design: {background: light}, slides: [
-    {title: 'On light', layout: 'title'},
-    {title: 'On dark', layout: 'title', design: {background: dark}},
-    {title: 'Partner logo', layout: 'title', design: {logo: 'var:organization.beta.logo'}},
+    {title: 'On light', layout: 'cover'},
+    {title: 'On dark', layout: 'cover', design: {background: dark}},
+    {title: 'Partner logo', layout: 'cover', design: {logo: 'var:organization.beta.logo'}},
   ]};
   const {entries} = await open(deck);
   const expected = [square, tall, jpg];
@@ -131,7 +131,7 @@ let checked = 0;
   assert.equal(imported.design?.logo, undefined);
   for (const slide of imported.slides) assert.ok(!slide.image && !slide.blocks, 'logo pictures are not content');
   // A single asset is one logo for every shape; design.logo: false draws none.
-  const single = await open({organization: {id: 'acme', name: 'Acme', logo: tall}, design: {background: light}, slides: [{title: 'Org', layout: 'title'}]});
+  const single = await open({organization: {id: 'acme', name: 'Acme', logo: tall}, design: {background: light}, slides: [{title: 'Org', layout: 'cover'}]});
   const [singleLogo] = pictures(slideXml(single.entries, 0)).filter(picture => picture.name === 'OPF logo');
   assert.ok(singleLogo && sameBytes(mediaFor(single.entries, 0, singleLogo.embed), tallBytes), 'organization.logo is drawn on the cover');
   checked++;
@@ -139,7 +139,7 @@ let checked = 0;
 
 // ---- Unresolved and unsupported logos: the preview's placeholder panel and one unresolved-asset diagnostic.
 {
-  const missing = {organization: {id: 'acme', name: 'Acme', logo: 'asset:missing'}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]};
+  const missing = {organization: {id: 'acme', name: 'Acme', logo: 'asset:missing'}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}]};
   const diagnostics = [];
   const {entries} = await open(missing, {onDiagnostic: item => diagnostics.push(item)});
   assert.ok(!/name="OPF logo"/.test(slideXml(entries, 0)));
@@ -156,7 +156,7 @@ let checked = 0;
   const icon = jpg;
   const organization = {id: 'acme', name: 'Acme', logo: {full: wide, icon}};
   const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}, header: {right: {image: 'var:organization.logo.icon', text: 'Confidential'}}},
-    slides: [{title: 'Content', text: 'Body copy.'}, {title: 'Cover', layout: 'title'}]};
+    slides: [{title: 'Content', text: 'Body copy.'}, {title: 'Cover', layout: 'cover'}]};
   const {entries, bytes} = await open(deck);
   const geometry = resolvePresentation(deck).slides[0].geometry;
   const parts = geometry.furniture.parts.filter(part => part.reference === 'var:organization.logo.icon');
@@ -297,7 +297,7 @@ let checked = 0;
 
 // ---- Provenance: edited and damaged logo pictures, no provenance, and a plain PPTX.
 {
-  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}]};
   const {bytes, entries} = await open(deck);
   const repack = edit => zipSync(Object.fromEntries(Object.entries(unzipSync(bytes)).map(([path, data]) => [path, edit(path, data) ?? data])));
   const text = value => new TextEncoder().encode(value);
@@ -372,8 +372,8 @@ const powerpointSave = bytes => {
   const organization = [{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: square, onDark: tall}, icon: jpg}}, {id: 'beta', name: 'Beta', logo: wide}];
   const deck = {organization, design: {listBullet: 'image', background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}},
     slides: [
-      {title: 'Cover', subtitle: 'On light', layout: 'title-subtitle'},
-      {title: 'Own', layout: 'title', design: {logo: 'var:organization.beta.logo'}},
+      {title: 'Cover', subtitle: 'On light', layout: 'cover'},
+      {title: 'Own', layout: 'cover', design: {logo: 'var:organization.beta.logo'}},
       {title: 'Items', items: ['Alpha', {text: 'Beta wraps ' + 'word '.repeat(40)}, {text: 'Gamma', description: 'A description line'}, {text: 'Nested', level: 1}]},
     ]};
   const original = await open(deck);
@@ -403,7 +403,7 @@ const powerpointSave = bytes => {
 // ---- Logo fallback without document provenance: the cover picture restores the organization's logo (the primary one, else a new one).
 {
   for (const provenance of [false, 'references-only']) {
-    const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Deck', layout: 'title'}, {title: 'Own', layout: 'title', design: {logo: 'var:organization.acme.logo'}}]};
+    const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Deck', layout: 'cover'}, {title: 'Own', layout: 'cover', design: {logo: 'var:organization.acme.logo'}}]};
     const {bytes} = await open(deck, {provenance});
     const imported = await fromPptx(bytes);
     assert.equal(imported.organization?.logo?.src, wide, `${provenance}: the organization's logo restores from the first logo picture`);
@@ -416,7 +416,7 @@ const powerpointSave = bytes => {
 // ---- An unresolvable logo (a malformed SVG: no xmlns) draws the "Image unavailable" panel; the tagged panel is not content on import.
 {
   const svg = `data:image/svg+xml;base64,${Buffer.from('<svg width="10" height="10"/>').toString('base64')}`;
-  const deck = {organization: {id: 'acme', name: 'Acme', logo: svg}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', text: 'Copy.'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: svg}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}, {title: 'Body', text: 'Copy.'}]};
   for (const provenance of ['full', false]) {
     const diagnostics = [];
     const {bytes, entries} = await open(deck, {provenance, onDiagnostic: item => diagnostics.push(item)});

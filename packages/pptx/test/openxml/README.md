@@ -28,7 +28,7 @@ image controls, empty/disabled furniture, and a two-slide speaker-notes control.
 The relationship probe checks only target existence, unique IDs and content-type
 override targets; it is not a complete OPC validator.
 
-Every export and import the generator makes passes `catalogs: [defaultCatalog]` (`@openpresentation/opf/catalog`),
+Every export and import the generator makes passes `catalogs: [defaultCatalog]` (`@openpresentation/gallery`),
 because `strictAssets` implies `strictReferences` and the `roboto` font scheme resolves only through a registered
 catalog. `npm test` runs `test/manual-harness-smoke.mjs`, which runs the generator from source and reads every part
 back as XML, so the harness cannot go stale unnoticed (no .NET, Office or network).

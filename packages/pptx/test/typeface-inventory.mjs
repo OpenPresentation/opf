@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {resolveSlideContext} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {examples} from '@openpresentation/opf/examples';
 import {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {writeWorkbookFonts} from '../src/package-fonts.js';
@@ -67,7 +67,7 @@ const data = {columns: ['Quarter', 'North', 'South'], rows: [['Q1', 4, 6], ['Q2'
 const chartSlides = ['bar', 'column', 'line', 'area', 'pie', 'doughnut', 'scatter'].map(type => ({title: `${type} chart`, chart: {type, data}, notes: 'Speaker notes'}));
 const deck = {name: 'Charts', design: {fontScheme: 'consolas'}, slides: [
   ...chartSlides,
-  {title: 'Code', layout: 'code-1x', code: {source: 'const score = urgency * confidence;', language: 'ts'}},
+  {title: 'Code', layout: 'code', code: {source: 'const score = urgency * confidence;', language: 'ts'}},
   {title: 'Table', table: {columns: ['Name', 'Value'], rows: [['A', '1'], ['B', '2']]}},
   {title: 'Serif override', design: {fontScheme: 'georgia'}, chart: {type: 'bar', data}},
 ]};
@@ -126,7 +126,7 @@ for (const entry of result.inventory.typefaces) if (entry.pitchFamily !== undefi
 assert.deepEqual([...pitches.get(consolas.body)], [49]);
 assert.deepEqual([...pitches.get(georgia.body)], [18]);
 if (pitches.has(consolas.code)) assert.deepEqual([...pitches.get(consolas.code)], [49]);
-const aptos = parts(await toPptx({slides: [{title: 'Rule', layout: 'code-1x', code: {source: 'let x = 1;', language: 'ts'}}]}, {strictAssets: true}));
+const aptos = parts(await toPptx({slides: [{title: 'Rule', layout: 'code', code: {source: 'let x = 1;', language: 'ts'}}]}, {strictAssets: true}));
 const aptosCheck = checkTypefaces(aptos, {families: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']});
 assert.deepEqual(aptosCheck.violations, []);
 assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Aptos Display' && entry.pitchFamily === 34));

@@ -1,7 +1,7 @@
 import * as pptx from '@openpresentation/opf-pptx';
 import * as render from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {nativeTableBytes} from './table-values.js';
 // OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
 const host = options => ({catalogs: [defaultCatalog], ...options});

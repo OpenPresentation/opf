@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx, fromPptx} from '../dist/index.js';
 
 // FF-24 (font-fidelity-everywhere): the exported theme carries the deck color

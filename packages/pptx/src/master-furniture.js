@@ -157,7 +157,7 @@ export function liftMasterFurniture(output, slides, report = () => {}) {
       const showsMaster = plan.candidates.size ? common.every(slot => free(plan, slot)) : !common.length;
       const extras = [...plan.candidates.keys()].filter(slot => free(plan, slot) && (showsMaster ? !common.includes(slot) && counts.get(id(slot, value(plan, slot))) >= 2
         : common.includes(slot) || counts.get(id(slot, value(plan, slot))) >= 2)).sort();
-      const key = `${showsMaster ? 1 : 0}\u0001${extras.map(slot => id(slot, value(plan, slot))).join('\u0001')}`;
+      const key = `${plan.layout}\u0002${showsMaster ? 1 : 0}\u0001${extras.map(slot => id(slot, value(plan, slot))).join('\u0001')}`;
       plan.extras = extras;
       plan.lifted = new Map([...(showsMaster ? common.map(slot => [slot, 'master']) : []), ...extras.map(slot => [slot, 'layout'])]);
       plan.layoutKey = showsMaster && !extras.length ? undefined : key;
@@ -228,20 +228,38 @@ export function liftMasterFurniture(output, slides, report = () => {}) {
   for (const {master, group, common, layouts} of assignments) {
     const showing = group.find(plan => common.every(slot => free(plan, slot)) && plan.candidates.size);
     for (const slot of common) transplant(master, showing, slot);
-    // The layout the slides use now (each master has one), copied once per layout key.
-    const base = group[0].layout;
+    // The layout a slide uses now, copied once per layout key: the master's one layout, or the slide's 0.19 template layout (RR-81),
+    // whose variant keeps its placeholders and its OPF_LAYOUT_V1 tag (`Pillars (no furniture)`).
     let masterXml = partXml(master), masterRels = partRels(master);
     let number = 0;
+    const templateNumbers = new Map();
     for (const layout of layouts.values()) {
+      const base = layout.source.layout;
       const path = `ppt/slideLayouts/slideLayout${nextLayout++}.xml`;
-      const name = layout.source.extras.length ? `OPF furniture ${++number}` : 'OPF no furniture';
+      const baseRels = has(relsOf(base)) ? read(relsOf(base)) : '';
+      const tagRels = relationships(baseRels).filter(rel => rel.type === `${REL}/tags` && !rel.external);
+      const baseName = unescapeAttribute(read(base).match(/<p:cSld\b[^>]*\bname="([^"]*)"/)?.[1] ?? '');
+      let name;
+      if (tagRels.length) {
+        const count = (templateNumbers.get(base) ?? 0) + (layout.source.extras.length ? 1 : 0);
+        templateNumbers.set(base, count);
+        name = layout.source.extras.length ? `${baseName} (furniture ${count})` : `${baseName} (no furniture)`;
+      } else name = layout.source.extras.length ? `OPF furniture ${++number}` : 'OPF no furniture';
       let xml = read(base).replace(/(<p:cSld\b[^>]*?\bname=")[^"]*(")/, `$1${escapeAttribute(name)}$2`);
       if (!layout.showsMaster) xml = xml.replace(/<p:sldLayout\b[^>]*>/, open => `${open.slice(0, -1).replace(/\s+showMasterSp="[^"]*"/, '')} showMasterSp="0">`);
-      const baseRels = has(relsOf(base)) ? read(relsOf(base)) : '';
-      // A copied layout keeps only its master relationship; the furniture brings its own.
+      // A copied layout keeps only its master relationship and its own tags (a copy of each tag part); the furniture brings its own.
       const masterRel = relationships(baseRels).find(rel => rel.type === `${REL}/slideMaster`);
       if (!masterRel) throw new Error(`${base} has no slide master relationship.`);
-      stage(path, xml, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${masterRel.node}</Relationships>`);
+      let copiedRels = masterRel.node;
+      for (const rel of tagRels) {
+        const source = resolvePart(base, rel.target);
+        let n = 0, copy;
+        do copy = `ppt/tags/opfLayoutVariant${++n}.xml`; while (has(copy));
+        output[copy] = [output[source][0], options];
+        types = types.replace('</Types>', `<Override PartName="/${copy}" ContentType="${TAGS_TYPE}"/></Types>`);
+        copiedRels += `<Relationship Id="${rel.id}" Type="${REL}/tags" Target="${escapeAttribute(relativeTarget(path, copy))}"/>`;
+      }
+      stage(path, xml, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${copiedRels}</Relationships>`);
       types = types.replace('</Types>', `<Override PartName="/${path}" ContentType="${LAYOUT_TYPE}"/></Types>`);
       for (const slot of layout.source.extras) transplant(path, layout.source, slot);
       const result = relationshipId(masterRels, `${REL}/slideLayout`, relativeTarget(master, path), false);

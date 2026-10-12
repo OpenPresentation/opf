@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {LANGUAGES, paragraphDirection, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
@@ -19,7 +19,7 @@ const deck = (language, extra = {}, text = 'Heading') => ({name: 'Script fonts',
   {title: 'List', items: [text, {text: 'Two', level: 1}], notes: text},
   {title: 'Table', table: {columns: ['Name', text], rows: [['A', '1']]}},
   {title: 'Chart', chart: {type: 'column', data: {columns: ['Label', 'A', 'B'], rows: [['One', 1, 2], ['Two', 3, 4]]}}},
-  {id: 'code', layout: 'code-1x', title: 'Code', code: {source: 'const x = 1;', language: 'ts'}},
+  {id: 'code', layout: 'code', title: 'Code', code: {source: 'const x = 1;', language: 'ts'}},
 ]});
 const read = async (presentation, options = {}) => {
   const diagnostics = [];

@@ -27,7 +27,7 @@ try {
   const deck = {name: 'Interop', filename: 'interop-deck', extensions: {'x-vendor': {a: 1}}, tone: 'formal', purpose: 'inform',
     organization: {id: 'acme', name: 'Acme', logo: png}, assets: {spare: png},
     design: {fontScheme: 'arial', logo: 'var:organization.acme.logo', contentAlignment: 'center'},
-    slides: [{id: 'one', layout: 'title-subtitle', title: 'One', subtitle: 'Two', section: 'Intro', extensions: {'x-s': true}, design: {logo: false, titleAlignment: 'center'}},
+    slides: [{id: 'one', layout: 'cover', title: 'One', subtitle: 'Two', section: 'Intro', extensions: {'x-s': true}, design: {logo: false, titleAlignment: 'center'}},
       {title: 'Two', section: 'Intro', blocks: [{type: 'group', id: 'g', blocks: [{type: 'text', text: 'a'}, {type: 'text', text: 'b'}]}]}]};
   const bytes = await toPptx(deck, {timestamp: '2026-01-01T00:00:00Z', seed: 1});
   const entries = unzipSync(bytes);
@@ -40,18 +40,24 @@ try {
   assert.equal(document.design.logo, undefined); assert.equal(document.metadata.filename, undefined);
   assert.deepEqual(Object.keys(slide.supplement), ['design']); assert.equal(slide.supplement.design.logo, false, 'the slide logo is stored'); assert.equal(slide.design.logo, undefined);
 
-  // The published importer keeps every value it knows; it ignores the rest without a diagnostic.
+  // The published importer keeps known provenance; v2 cover has no v1 alias and is reported once.
   const issues = [];
   const old = await published.fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.deepEqual(issues.filter(issue => /provenance|reference/.test(issue.code)), [], `published ${PUBLISHED} accepts the tags: ${JSON.stringify(issues.map(issue => issue.code))}`);
+  const layoutIssue=issues.filter(issue=>issue.code==='unresolved-layout-reference');
+  assert.equal(layoutIssue.length,1,'0.11.6 reports the unsupported v2 layout exactly once');
+  assert.equal(layoutIssue[0].path,'slides.0.layout');
+  assert.equal(layoutIssue[0].message,"Layout 'cover' is not a bundled layout and the PPTX carries no inline record for it, so slides.0.layout was not restored; the imported slide keeps its observed arrangement.");
+  assert.deepEqual(issues.filter(issue => /provenance|reference/.test(issue.code)&&issue.code!=='unresolved-layout-reference'), [], `published ${PUBLISHED} accepts the tags: ${JSON.stringify(issues.map(issue => issue.code))}`);
+  assert.equal(old.slides[0].title,'One'); assert.equal(old.slides[0].subtitle,'Two');
   assert.equal(old.tone, 'formal'); assert.equal(old.purpose, 'inform');
   assert.deepEqual(old.organization, {id: 'acme', name: 'Acme', logo: png});
   assert.equal(old.design.contentAlignment, 'center'); assert.equal(old.design.fontScheme, 'arial');
-  assert.deepEqual(old.slides.map(item => [item.id, item.layout, item.design?.titleAlignment]), [['one', 'title-subtitle', 'center'], [undefined, undefined, undefined]]);
+  assert.deepEqual(old.slides.map(item => [item.id, item.layout, item.design?.titleAlignment]), [['one', undefined, 'center'], [undefined, undefined, undefined]]);
   assert.equal(old.filename, undefined); assert.equal(old.design.logo, undefined); assert.equal(old.slides[1].blocks[0].type, 'text', 'older importers keep flat blocks');
 
   // This build restores everything.
   const current = await fromPptx(bytes);
+  assert.equal(current.slides[0].layout,'cover','current importer restores the v2 layout identity');
   assert.equal(current.filename, 'interop-deck'); assert.deepEqual(current.extensions, {'x-vendor': {a: 1}});
   assert.equal(current.design.logo, 'var:organization.acme.logo'); assert.equal(current.slides[0].design.logo, false);
   assert.deepEqual(current.organization, {id: 'acme', name: 'Acme', logo: png});
@@ -72,8 +78,8 @@ try {
       organization: {id: 'acme', name: 'Acme', role: 'primary', logo: square},
       design: {fontScheme: {id: 'aptos'}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
         header: {right: {image: 'var:organization.logo.icon'}}, footer: {left: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
-      slides: [{tag: 'Eyebrow', title: 'Cover', subtitle: 'Subtitle', layout: 'title-subtitle'},
-        {title: 'Section', layout: 'section-divider', section: 'Part one'},
+      slides: [{tag: 'Eyebrow', title: 'Cover', subtitle: 'Subtitle', layout: 'cover'},
+        {title: 'Section', layout: 'section', section: 'Part one'},
         {title: 'Items', items: ['Alpha', 'Beta', 'Gamma']},
         {title: 'Quote', quote: {text: 'Design is how it works.', attribution: 'Someone'}}]};
     const exported = await toPptx(p2, {timestamp: '2026-01-01T00:00:00Z', seed: 1});
@@ -124,7 +130,7 @@ try {
     assert.ok(older.slides.every(slide => !JSON.stringify({...slide, design: undefined}).includes('Native footer')), 'placeholder text is not slide content');
     assert.deepEqual((await fromPptx(exported)).design.footer, nativeFooter.design.footer);
   }
-  console.log(`Provenance interop passed: an export of this build imports with published opf-pptx ${PUBLISHED} (design references, metadata, layout intent kept; supplement ignored; design-fields export keeps its provenance) and fully with this build.`);
+  console.log(`Provenance interop passed: an export of this build imports with published opf-pptx ${PUBLISHED} (design references and metadata kept; unsupported v2 cover reported; supplement ignored; design-fields export keeps its provenance) and fully with this build.`);
 } finally {
   await rm(consumer, {recursive: true, force: true});
 }

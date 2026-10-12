@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx as exportPptx,fromPptx as importPptx} from '../dist/index.js';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {decodeTextTag} from '../dist/code-provenance.js';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
@@ -61,9 +61,9 @@ assert.equal(manyImported.imported.slides[0].blocks.length,5,'no loose text bloc
 
 // 3. Layouts whose example carries a quote.
 const layoutDeck=id=>({slides:[{layout:id,title:'Layout',quote:{text:'Make the important point easy to understand.',attribution:'Example speaker'}}]});
-const layoutImported=await importBytes(await exportSource(layoutDeck('quote-1x')));
+const layoutImported=await importBytes(await exportSource(layoutDeck('quote')));
 assert.deepEqual(quoteBlocks(layoutImported.imported.slides[0]).map(block=>block.quote),[{text:'Make the important point easy to understand.',attribution:'Example speaker'}]);
-assert.equal(layoutImported.imported.slides[0].layout,'quote-1x');
+assert.equal(layoutImported.imported.slides[0].layout,'quote');
 
 // 4. Determinism: the same document exports the same bytes, and re-exporting the import keeps the same quote payload.
 const twice=[await exportSource(many),await exportSource(many)];

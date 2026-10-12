@@ -1,171 +1,34 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
-  "name": "Placeholder groups",
-  "description": "FA-26 cross-engine fixture: layout records with nested placeholder groups, and design.chartPrimary as the group it stands for. Self-contained (no host catalog); preview, editor and PPTX must place every leaf in the same box.",
+  "name": "Nested content groups",
+  "description": "RR-83 cross-engine fixture: explicit nested content groups and automatic design.chartPrimary preserve every leaf across core, SVG and native PPTX. Self-contained with no host catalog.",
   "language": "en",
   "catalogs": {
-    "default": false,
-    "custom": {
-      "layouts": {
-        "stacked-text-chart-right": {
-          "name": "Stacked text, chart right",
-          "placeholders": [
+    "default": false
+  },
+  "slides": [
+    {
+      "id": "nested-example",
+      "title": "Revenue grew 18% on two drivers",
+      "blocks": [
+        {
+          "blocks": [
             {
-              "type": "title"
+              "type": "text",
+              "text": "Enterprise seats up 31%"
             },
             {
-              "type": "group",
-              "composition": {
-                "mode": "column",
-                "weights": [
-                  1,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "text"
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "chart"
-            }
-          ],
-          "composition": {
-            "mode": "row",
-            "weights": [
-              2,
-              3
-            ]
-          }
-        },
-        "chart-left-stacked": {
-          "name": "Chart left, two stacked",
-          "summary": "A primary chart beside two stacked charts: chartPrimary left, written as a group.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "chart"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "column"
-              },
-              "placeholders": [
-                {
-                  "type": "chart"
-                },
-                {
-                  "type": "chart"
-                }
-              ]
-            }
-          ],
-          "composition": {
-            "mode": "row",
-            "weights": [
-              3,
-              2
-            ]
-          }
-        },
-        "three-level": {
-          "name": "Three levels",
-          "summary": "A canvas: a top band of three columns, the middle one split twice, over a bottom band of two cells.",
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "row",
-                "weights": [
-                  1,
-                  2,
-                  1
-                ]
-              },
-              "placeholders": [
-                {
-                  "type": "text"
-                },
-                {
-                  "type": "group",
-                  "composition": {
-                    "mode": "column"
-                  },
-                  "placeholders": [
-                    {
-                      "type": "text"
-                    },
-                    {
-                      "type": "group",
-                      "composition": {
-                        "mode": "row"
-                      },
-                      "placeholders": [
-                        {
-                          "type": "metric"
-                        },
-                        {
-                          "type": "metric"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "text"
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "composition": {
-                "mode": "row"
-              },
-              "placeholders": [
-                {
-                  "type": "text"
-                },
-                {
-                  "type": "text"
-                }
-              ]
+              "type": "text",
+              "text": "Churn down to 2.1%"
             }
           ],
           "composition": {
             "mode": "column",
             "weights": [
-              3,
+              1,
               1
             ]
           }
-        }
-      }
-    }
-  },
-  "slides": [
-    {
-      "id": "nested-example",
-      "layout": "stacked-text-chart-right",
-      "title": "Revenue grew 18% on two drivers",
-      "blocks": [
-        {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "text",
-          "text": "Churn down to 2.1%"
         },
         {
           "type": "chart",
@@ -194,31 +57,65 @@
             }
           }
         }
-      ]
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
     },
     {
       "id": "nested-fewer",
-      "layout": "stacked-text-chart-right",
       "title": "One driver so far",
       "blocks": [
         {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
         }
-      ]
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
     },
     {
       "id": "nested-more",
-      "layout": "stacked-text-chart-right",
       "title": "More content than regions",
       "blocks": [
         {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "text",
-          "text": "Churn down to 2.1%"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "text",
+              "text": "Churn down to 2.1%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
         },
         {
           "type": "chart",
@@ -251,13 +148,20 @@
           "type": "text",
           "text": "Pipeline is the next lever"
         }
-      ]
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
     },
     {
       "id": "nested-override",
-      "layout": "stacked-text-chart-right",
       "title": "The slide overrides the root weights",
       "composition": {
+        "mode": "row",
         "weights": [
           1,
           1
@@ -265,12 +169,23 @@
       },
       "blocks": [
         {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "text",
-          "text": "Churn down to 2.1%"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "text",
+              "text": "Churn down to 2.1%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
         },
         {
           "type": "chart",
@@ -303,48 +218,86 @@
     },
     {
       "id": "three-level",
-      "layout": "three-level",
       "title": "Business model on one page",
       "blocks": [
         {
-          "type": "text",
-          "text": "Partners"
-        },
-        {
-          "type": "text",
-          "text": "Value proposition"
-        },
-        {
-          "type": "metric",
-          "metric": {
-            "value": 42,
-            "label": "Segments"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Partners"
+            },
+            {
+              "blocks": [
+                {
+                  "type": "text",
+                  "text": "Value proposition"
+                },
+                {
+                  "blocks": [
+                    {
+                      "type": "metric",
+                      "metric": {
+                        "value": 42,
+                        "label": "Segments"
+                      }
+                    },
+                    {
+                      "type": "metric",
+                      "metric": {
+                        "value": 7,
+                        "label": "Channels"
+                      }
+                    }
+                  ],
+                  "composition": {
+                    "mode": "row"
+                  }
+                }
+              ],
+              "composition": {
+                "mode": "column"
+              }
+            },
+            {
+              "type": "text",
+              "text": "Customers"
+            }
+          ],
+          "composition": {
+            "mode": "row",
+            "weights": [
+              1,
+              2,
+              1
+            ]
           }
         },
         {
-          "type": "metric",
-          "metric": {
-            "value": 7,
-            "label": "Channels"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Costs"
+            },
+            {
+              "type": "text",
+              "text": "Revenue"
+            }
+          ],
+          "composition": {
+            "mode": "row"
           }
-        },
-        {
-          "type": "text",
-          "text": "Customers"
-        },
-        {
-          "type": "text",
-          "text": "Costs"
-        },
-        {
-          "type": "text",
-          "text": "Revenue"
         }
-      ]
+      ],
+      "composition": {
+        "mode": "column",
+        "weights": [
+          3,
+          1
+        ]
+      }
     },
     {
       "id": "chart-left-stacked",
-      "layout": "chart-left-stacked",
       "title": "Three charts, one primary",
       "blocks": [
         {
@@ -375,60 +328,74 @@
           }
         },
         {
-          "type": "chart",
-          "chart": {
-            "type": "column",
-            "alt": "Margin by quarter",
-            "data": {
-              "columns": [
-                "Quarter",
-                "Margin"
-              ],
-              "rows": [
-                [
-                  "Q1",
-                  31
-                ],
-                [
-                  "Q2",
-                  33
-                ],
-                [
-                  "Q3",
-                  34
-                ]
-              ]
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "alt": "Margin by quarter",
+                "data": {
+                  "columns": [
+                    "Quarter",
+                    "Margin"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      31
+                    ],
+                    [
+                      "Q2",
+                      33
+                    ],
+                    [
+                      "Q3",
+                      34
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "alt": "Seats by quarter",
+                "data": {
+                  "columns": [
+                    "Quarter",
+                    "Seats"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      120
+                    ],
+                    [
+                      "Q2",
+                      135
+                    ],
+                    [
+                      "Q3",
+                      160
+                    ]
+                  ]
+                }
+              }
             }
-          }
-        },
-        {
-          "type": "chart",
-          "chart": {
-            "type": "column",
-            "alt": "Seats by quarter",
-            "data": {
-              "columns": [
-                "Quarter",
-                "Seats"
-              ],
-              "rows": [
-                [
-                  "Q1",
-                  120
-                ],
-                [
-                  "Q2",
-                  135
-                ],
-                [
-                  "Q3",
-                  160
-                ]
-              ]
-            }
+          ],
+          "composition": {
+            "mode": "column"
           }
         }
-      ]
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      }
     },
     {
       "id": "chart-primary-left",

@@ -113,8 +113,8 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 {
   const partner = {id: 'beta', name: 'Beta', role: 'partner', logo: {full: tall, wordmark: jpg}};
   const deck = {organization: [organization, partner], design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {image: 'var:organization.beta.logo.wordmark'}}}, slides: [
-    {title: 'Cover', layout: 'title'},
-    {title: 'Cover for the partner', layout: 'title', design: {logo: 'var:organization.beta.logo'}},
+    {title: 'Cover', layout: 'cover'},
+    {title: 'Cover for the partner', layout: 'cover', design: {logo: 'var:organization.beta.logo'}},
     {title: 'Body', text: 'Copy.'},
   ]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
@@ -139,8 +139,8 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 // ---- design.logo: false draws no cover or section logo and round-trips, as a deck default and as a slide override.
 {
   const deck = {organization, design: {background: light, logo: false}, slides: [
-    {title: 'Cover', layout: 'title'},
-    {title: 'Section', layout: 'section-divider', design: {logo: 'var:organization.logo'}},
+    {title: 'Cover', layout: 'cover'},
+    {title: 'Section', layout: 'section', design: {logo: 'var:organization.logo'}},
   ]};
   const {entries, bytes: output} = await exportDeck(deck);
   assert.equal(pictures(slideXml(entries, 0)).filter(picture => picture.name === 'OPF logo').length, 0, 'the deck default draws no cover logo');
@@ -152,7 +152,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   assert.deepEqual(imported.organization, organization);
   noContentPictures(imported, 'design.logo false');
   assert.deepEqual(codes(reports, ...PROBLEMS), []);
-  const slideFalse = await exportDeck({organization, design: {background: light}, slides: [{title: 'Cover', layout: 'title', design: {logo: false}}, {title: 'Cover', layout: 'title'}]});
+  const slideFalse = await exportDeck({organization, design: {background: light}, slides: [{title: 'Cover', layout: 'cover', design: {logo: false}}, {title: 'Cover', layout: 'cover'}]});
   assert.equal(pictures(slideXml(slideFalse.entries, 0)).filter(picture => picture.name === 'OPF logo').length, 0, 'a slide can turn the logo off');
   assert.equal((await fromPptx(slideFalse.bytes)).slides[0].design.logo, false);
   checked++;
@@ -161,9 +161,9 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 // ---- The cover's full logo: the onLight/onDark tone follows the slide, a shape reference picks another shape.
 {
   const deck = {organization, design: {background: light}, slides: [
-    {title: 'Cover on light', layout: 'title'},
-    {title: 'Section on dark', layout: 'section-divider', design: {background: dark}},
-    {title: 'Wordmark cover', layout: 'title', design: {logo: 'var:organization.logo.icon'}},
+    {title: 'Cover on light', layout: 'cover'},
+    {title: 'Section on dark', layout: 'section', design: {background: dark}},
+    {title: 'Wordmark cover', layout: 'cover', design: {logo: 'var:organization.logo.icon'}},
     {title: 'Body', text: 'No cover logo here.'},
   ]};
   const {entries, bytes: output} = await exportDeck(deck);

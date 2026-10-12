@@ -7,7 +7,7 @@ import {CHART_TYPES as CORE_CHART_TYPES} from '@openpresentation/opf/composition
 import {fromPptx, toPptx} from '../dist/index.js';
 import {resolveChartType} from '../dist/chart-types.js';
 
-const deck = (type, data) => ({name: 'single column chart', language: 'en', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Chart', chart: {type, data}, text: 'Body'}]});
+const deck = (type, data) => ({name: 'single column chart', language: 'en', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart', title: 'Chart', chart: {type, data}, text: 'Body'}]});
 async function exported(type, data) {
   const diagnostics = [];
   const bytes = await toPptx(deck(type, data), {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});

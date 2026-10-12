@@ -1,8 +1,8 @@
-// OPF 0.15 (FA-23): core ships no built-in catalog records, so a document's bare gallery ids ('classic', 'title-subtitle',
+// OPF 0.15 (FA-23): core ships no built-in catalog records, so a document's bare gallery ids ('classic', 'cover',
 // 'roboto', 'cool-horizon', ...) resolve only from the catalogs the host registers. Tests whose documents name gallery ids
 // import these wrappers instead of the bare functions: each registers the default catalog (the pinned gallery snapshot)
 // unless the call passes its own `catalogs`.
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {resolveScriptFonts as coreResolveScriptFonts} from '@openpresentation/opf/composition';
 import * as render from '@openpresentation/opf-render/svg';
 import * as pptx from '../../dist/index.js';

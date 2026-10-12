@@ -15,14 +15,14 @@ try { await access(output); throw new Error(`Preserve the prior attempt and sele
 
 const resolve=createRequire(path.join(consumer,'package.json'));
 const sha=value=>createHash('sha256').update(value).digest('hex');
-const publicSpecifiers=['@openpresentation/opf','@openpresentation/opf/catalog','@openpresentation/opf-pptx','@openpresentation/opf-render/svg'];
+const publicSpecifiers=['@openpresentation/opf','@openpresentation/gallery','@openpresentation/opf-pptx','@openpresentation/opf-render/svg'];
 const esmProbe=spawnSync(process.execPath,['--input-type=module','--eval',
   `console.log(JSON.stringify(Object.fromEntries(${JSON.stringify(publicSpecifiers)}.map(name=>[name,import.meta.resolve(name)]))))`],
 {cwd:consumer,encoding:'utf8',timeout:10000,windowsHide:true});
 assert.equal(esmProbe.status,0,esmProbe.error?.message??esmProbe.stderr);
 const publicEntries=JSON.parse(esmProbe.stdout);
-const [{validate},{defaultCatalog},{toPptx:exportPptx,fromPptx:importPptx},{resolvePresentation}]=await Promise.all([
-  import(publicEntries['@openpresentation/opf']),import(publicEntries['@openpresentation/opf/catalog']),import(publicEntries['@openpresentation/opf-pptx']),import(publicEntries['@openpresentation/opf-render/svg']),
+const [{validate},{gallery: defaultCatalog},{toPptx:exportPptx,fromPptx:importPptx},{resolvePresentation}]=await Promise.all([
+  import(publicEntries['@openpresentation/opf']),import(publicEntries['@openpresentation/gallery']),import(publicEntries['@openpresentation/opf-pptx']),import(publicEntries['@openpresentation/opf-render/svg']),
 ]);
 // Since FA-23 strictAssets implies strictReferences, and the font scheme 'roboto' resolves only through a registered catalog (opf-pptx#222).
 const catalogs=[defaultCatalog];

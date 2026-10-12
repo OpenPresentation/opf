@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
 
 const before = JSON.parse(await readFile(new URL('fixtures/image-treatments-0.14.json', import.meta.url), 'utf8'));

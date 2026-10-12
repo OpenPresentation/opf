@@ -128,7 +128,8 @@ try {
       // from this deliberately native-only control before testing placeholders.
       let count=0;
       entries[part]=strToU8(strFromU8(entries[part]).replace(/<p:sp\b[^>]*>[\s\S]*?<\/p:sp>/g,shape=>{
-        shape=shape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'');
+        shape=shape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'').replace(/<p:ph type="title"\/>/g, '');
+        // The control promotes exactly one body shape, replacing the exported native title role.
         if(!shape.includes('PROMOTED'))return shape;count++;return shape.replace('<p:nvPr>','<p:nvPr><p:ph type="title"/>');
       }));
       assert.equal(count,1);

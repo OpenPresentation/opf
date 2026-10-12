@@ -7,7 +7,7 @@ import {mkdtemp, rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {strFromU8, unzipSync} from 'fflate';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
 
 const light = {type: 'solid', color: '#FFFFFF'};
@@ -19,7 +19,7 @@ const paths = src => [
   ['slides.0.design.background', {slides: [{title: 'Background', design: {background: {type: 'image', src, alt: 'A harbour at dawn'}}}]}, 'no picture'],
   ['design.background', {design: {background: {type: 'image', src}}, slides: [{title: 'Background'}]}, 'no picture'],
   ['design.watermark', {design: {watermark: {src, opacity: 0.2}}, slides: [{title: 'Watermark'}]}, 'no picture'],
-  ['organization.logo', {organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}]}, 'placeholder'],
+  ['organization.logo', {organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}]}, 'placeholder'],
   ['design.footer.left.image', {design: {footer: {left: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
   ['organization.logo.icon', {organization: {id: 'acme', name: 'Acme', logo: {full: 'logo.png', icon: src}}, design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', logo: src}, design: {listBullet: 'image', background: light}, slides: [{title: 'List', items: ['Alpha', 'Beta']}]}, 'character bullets'],

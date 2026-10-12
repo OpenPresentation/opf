@@ -1,0 +1,17 @@
+# RR-81 independent layout review
+
+The archive comparison preserves the accepted pre-review converter (`991023c`, rebased on main `5b6c793`, including the table-save fix) and the reviewed candidate using the same Node 24.21.0 runtime, fonts and locally packed dependencies: core `fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5` and renderer `9fbddcb78dbebcb87355922ca92af7d26c24c48d`.
+
+Nine chartex fixtures use their actual test helper's registered default catalog; the 21 RR-54 fixtures use the bare converter, matching their tests. The archives are preserved at `/private/tmp/rr81-archive-review-exact/`. The initial bare-catalog chartex comparison at `/private/tmp/rr81-archive-review/` is superseded: it omitted the test helper's catalog and its world-category mismatch was not a product regression. The exact comparison shows world-category unchanged and passing its historical hash.
+
+All chart parts, their relationships, embedded workbooks, media and themes remain byte-identical. Every changed slide XML differs only in the accepted one-line title's native title placeholder and its no-group lock. Automatic slides add the OPF auto `titleOnly` layout, its relationship/tag and corresponding content types, master layout registration and slide relationship changes. The coordinator independently reviewed all 30 pairs and authorized the explicit hash updates for the approved 0.19 design section 8 behavior. Strict whole-archive, diagnostics, mode and native-slide hash checks remain enforced; historical hashes are retained where recorded.
+
+This review establishes archive structure and content preservation. It does not establish native PowerPoint raster, Reset Slide, Change Layout, Header/Footer dialog or Slide Master behavior after these changes. Earlier COM observations remain historical; a fresh Windows native recheck is pending.
+
+## Final core and gallery integration
+
+The final candidate implementation is `b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1`. The final comparison uses core `e21c472d88057d9d90cfa507fe91b89063f3f29a`, gallery `e0a7eee2dfe996e680b34a907cabfe41905e6d99`, renderer `9fbddcb78dbebcb87355922ca92af7d26c24c48d` and Node 24.21.0. The before archives are the exact reviewed `b954ddd` checkpoint outputs in the previous comparison; all 18 before/candidate archives are preserved at `/private/tmp/rr81-final-gallery-review/`. `final-gallery-comparison.json` lists every added, removed and changed ZIP part, exact candidate archive hashes and diagnostics.
+
+Every chartex archive now exposes the 28 reachable gallery 2 templates, adding 84 layout/relationship/tag parts. Charts, chart relationships, embeddings and themes remain byte-identical. Eight fixtures' slide XML is unchanged. The ninth, world-category, explicitly migrates `chart-1x` to `chart`, retaining its prior centered paragraph alignment with `design.contentAlignment:center`. The title box and exact text remain unchanged. Its chart box becomes `[548640,1404747,11094720,4385501]` EMU and the supporting note becomes `[548640,6018848,11094720,290513]`; both are within the slide and do not overlap. This is intentional v2 chart primary/note placement, not geometry equivalence.
+
+The coordinator independently inspected all nine ZIP pairs and the map's geometry and authorized explicit rebaselining. Whole-archive hashes, mode/diagnostic assertions and chart payload guarantees remain strict. Fresh native PowerPoint acceptance is still pending.

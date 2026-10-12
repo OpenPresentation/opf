@@ -176,7 +176,7 @@ for (const measured of [false, true]) {
   const source = {organization: {id: 'acme', name: 'Acme', socials: {linkedin: 'acme'}}, design: {fontScheme: 'roboto', header: {right: {socials: true}}, footer: {left: {text: '{{organization.name}}'}, center: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}]};
   const {entries} = await exportDeck(source);
   assert.match(text(entries, slidePath(1)), /<a:hlinkClick\b/, 'The header socials are linked.');
-  assert.doesNotMatch(text(entries, 'ppt/slideMasters/slideMaster1.xml'), /hlinkClick|r:id="rId[3-9]/);
+  assert.doesNotMatch(text(entries, 'ppt/slideMasters/slideMaster1.xml'), /hlinkClick/);
   assert.deepEqual(placeholderShapes(text(entries, slidePath(1))).map(phType), ['ftr', 'sldNum']);
 }
 {

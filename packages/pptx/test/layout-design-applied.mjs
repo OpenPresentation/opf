@@ -4,7 +4,7 @@ import {unzipSync} from 'fflate';
 import {toSvg as renderToSvg} from '@openpresentation/opf-render';
 import {resolvePresentation as resolveForPreview} from '@openpresentation/opf-render/svg';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 
 // OPF 0.15: the deck's font scheme (roboto) is the gallery snapshot's, which the host registers for preview, export and
 // import alike; the layout under test is embedded in catalogs.custom.
@@ -22,7 +22,7 @@ const embedLayout = record => ({custom: {layouts: {'design-layout': record}}});
 const decoder = new TextDecoder();
 const native = {left: 'l', center: 'ctr', right: 'r'}, anchor = {start: 'l', middle: 'ctr', end: 'r'};
 const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
-const layout = design => ({name: 'Design layout', design, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'text'}]});
+const layout = design => ({name: 'Design layout', design, areas: ['title', 'body'], regions: {body: {accepts: ['text']}}});
 const deckOf = (design, slide, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout(layout(design)), slides: [{layout: 'design-layout', title: 'Layout title', subtitle: 'Layout subtitle', text: 'Layout body text', ...slide}]});
 const slideXml = async deck => decoder.decode(unzipSync(await toPptx(deck, {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'}))['ppt/slides/slide1.xml']);
 
@@ -70,7 +70,7 @@ const fill = async deck => {
   const output = unzipSync(await toPptx(deck, {imageFormat: 'preserve', strictAssets: true}));
   return {preview: attr(preview, 'preserveAspectRatio'), cropped: /<a:srcRect\b/.test(decoder.decode(output['ppt/slides/slide1.xml']))};
 };
-const imageDeck = (design, slide = {}, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout({...layout(design), placeholders: [{type: 'title'}, {type: 'image'}]}), slides: [{layout: 'design-layout', title: 'Image', image, ...slide}]});
+const imageDeck = (design, slide = {}, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout({...layout(design), areas: ['title', 'media'], regions: {media: {accepts: ['image'], flow: 'none'}}}), slides: [{layout: 'design-layout', title: 'Image', image, ...slide}]});
 assert.deepEqual(await fill(imageDeck({imageFit: 'cover'})), {preview: 'xMidYMid slice', cropped: true}, 'layout cover');
 assert.deepEqual(await fill(imageDeck({imageFit: 'cover'}, {}, {imageFit: 'contain'})), {preview: 'xMidYMid meet', cropped: false}, 'deck contain over layout cover');
 assert.deepEqual(await fill(imageDeck({imageFit: 'contain'}, {design: {imageFit: 'cover'}})), {preview: 'xMidYMid slice', cropped: true}, 'slide cover over layout contain');

@@ -4,7 +4,7 @@ import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {readFile} from 'node:fs/promises';
 import {examples} from '@openpresentation/opf/examples';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../src/index.js';
 
 // FF-05 (font-fidelity-everywhere). PowerPoint reads a package whose notes master shares the slide master's theme part

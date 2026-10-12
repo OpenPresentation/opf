@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readdirSync, readFileSync} from 'node:fs';
 import {strFromU8, unzipSync} from 'fflate';
 import {OPFCatalogsOptionError, resolveSlideContext} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 // FA-23 (format audit, OPF 0.15), catalogs half: the exporter and the importer resolve every reference through core with the
@@ -34,7 +34,7 @@ const collect = async (deck, options = {}) => {
 const brief = ({kind, reference, path, group, source, fallback}) => ({kind, reference, path, group, ...(source !== undefined ? {source} : {}), fallback});
 
 // 2. A layout that only a registered catalog holds resolves in export exactly like the same record embedded in the document.
-const hero = {name: 'Hero', placeholders: [{type: 'title'}, {type: 'text'}, {type: 'text'}], composition: {mode: 'row', weights: [2, 1]}};
+const hero = {name: 'Hero', areas: ['title title', 'primary secondary'], columns: [2, 1], rows: ['auto', 1], regions: {primary: {accepts: ['text']}, secondary: {accepts: ['text']}}};
 const ACME = 'pkg:@acme/opf-catalog';
 const acmeCatalog = {source: ACME, layouts: {hero}};
 const slides = [{layout: 'acme:hero', title: 'Two drivers', blocks: [{type: 'text', text: 'Enterprise seats up 31%'}, {type: 'text', text: 'Churn down to 2.1%'}]}];
@@ -54,7 +54,7 @@ const hostDeck = {name: 'Catalogs', catalogs: {acme: {source: ACME}}, slides};
   assert.deepEqual(withHost.catalogs, {acme: {source: ACME}}, 'the group declaration returns; no record is embedded');
   assert.ok(!restored.includes('unresolved-reference'));
   const withoutHost = await fromPptx(hosted.bytes, {onDiagnostic: diagnostic => missing.push(diagnostic)});
-  assert.equal(withoutHost.slides[0].layout, undefined);
+  assert.equal(withoutHost.slides[0].layout, 'acme:hero', 'Native layout identity remains observable without the host record');
   assert.deepEqual(missing.filter(diagnostic => diagnostic.code === 'unresolved-reference').map(diagnostic => diagnostic.path), ['slides.0.layout']);
   // The embedded record travels in the package and restores with no host catalog at all.
   const own = await fromPptx(embedded.bytes);
@@ -70,7 +70,8 @@ const hostDeck = {name: 'Catalogs', catalogs: {acme: {source: ACME}}, slides};
     const result = await collect(hostDeck, catalogs === undefined ? {} : {catalogs});
     assert.deepEqual(result.unresolved.map(brief), [{kind: 'layouts', reference: 'acme:hero', path: 'slides.0.layout', group: 'acme', source: ACME, fallback: 'automatic'}]);
     assert.match(result.unresolved[0].message, /acme:hero/);
-    assert.equal(result.xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), automatic.xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), 'the slide composes automatically');
+    const withoutTitleBinding = xml => xml.replace(/<a:spLocks noGrp="1"\/>/g, '').replace(/<p:cNvSpPr><\/p:cNvSpPr>/g, '<p:cNvSpPr/>').replace(/<p:ph type="title"\/>/g, '');
+    assert.equal(withoutTitleBinding(result.xml).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), withoutTitleBinding(automatic.xml).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), 'the slide composes automatically');
   }
   const strict = error => {
     assert.equal(error.name, 'OPFPptxError');

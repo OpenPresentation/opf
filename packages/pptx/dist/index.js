@@ -32,6 +32,8 @@ import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './section
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {liftMasterFurniture} from './master-furniture.js';
+import {gallery} from '@openpresentation/gallery';
+import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
@@ -290,6 +292,10 @@ export async function toPptx(input, options = {}) {
   context.nativeFurnitureBands = new Map();
   // RR-72: each slide's furniture parts and the object names of their shapes, for the slide master and layouts.
   context.furnitureParts = [];
+  // RR-81: the 0.19 template each slide uses (its native slide layout) and the objects bound to a region placeholder.
+  context.templateSlides = [];
+  context.automaticSlides = [];
+  context.placeholderBindings = new Map();
   context.hostDate = options.date;
   context.authored = authored;
   context.codeTags = new Map();
@@ -343,6 +349,22 @@ export async function toPptx(input, options = {}) {
 
   for (let index = 0; index < presentation.slides.length; index += 1) {
     await addSlide(pptx, presentation, presentation.slides[index], index, context, options);
+  }
+
+  // RR-81: when a slide uses a template, every template the deck reaches gets its native layout (registered catalogs, then embedded).
+  // A template's placeholders are composed with the options of the first slide that uses it; a template no slide uses, with the
+  // options of a slide that would (the deck's header and footer, the template's own design) and no placed-image band.
+  const reachableTemplates = deckTemplates(presentation, options.catalogs, reference => resolveReference(presentation, 'layouts', reference, options.catalogs !== undefined ? {catalogs: options.catalogs} : {}));
+  if (context.templateSlides.some(Boolean) || reachableTemplates.length || context.automaticSlides.some(Boolean)) {
+    const plans = context.templateSlides.filter(Boolean), first = plans[0] ?? context.automaticSlides.find(Boolean) ?? {areaOptions: context.firstSlideOptions};
+    const reachable = reachableTemplates;
+    for (const plan of plans) if (!reachable.some(template => template.key === plan.template.key)) reachable.push(plan.template);
+    context.deckTemplates = reachable.map(template => {
+      const used = plans.find(plan => plan.template.key === template.key);
+      if (used) return {...template, areaOptions: used.areaOptions};
+      const core = coreContext({...presentation, slides: [{layout: template.reference}]}, 0, options).options;
+      return {...template, areaOptions: {...core, fontFamilies: first.areaOptions.fontFamilies, textRasterPadding: options.textRasterPadding, placements: []}};
+    });
   }
 
   // FF-08: pitchFamily per exported family, from each slide's resolved scheme, then the font schemes the document embeds
@@ -429,11 +451,26 @@ export async function fromPptx(input, options = {}) {
     return inheritedParts.get(path);
   };
   const relatedPath = (path, type) => path ? [...cachedRelationships(path).values()].find(rel => rel.type === `http://schemas.openxmlformats.org/officeDocument/2006/relationships/${type}` && rel.targetMode !== 'External' && entries[rel.path])?.path : undefined;
+  // RR-81: the OPF_LAYOUT_V1 tag of each slide's layout (a 0.19 template layout), read once per layout part.
+  const layoutTags = new Map();
+  const layoutTagOf = (layoutPath, index) => {
+    if (!layoutPath) return undefined;
+    if (!layoutTags.has(layoutPath)) layoutTags.set(layoutPath, readLayoutTag(entries, layoutPath, message => options.onDiagnostic?.({code: 'invalid-layout-provenance', path: `slides.${index}.layout`, message})));
+    return layoutTags.get(layoutPath);
+  };
   const furnitureContexts = slidePaths.map((slidePath, index) => {
     const root = parseRequiredXml(entries, slidePath)['p:sld'];
     if (!root) throw new OPFPptxError('invalid-pptx', `PPTX slide is not a PresentationML slide: ${slidePath}.`, {path: slidePath});
     const tree = root['p:cSld']?.['p:spTree'], relationships = parseRelationships(entries, slidePath);
-    return {root, relationships, shapes: nativeTextShapes(tree), pictures: nativePictures(tree),
+    const layoutPath = relatedPath(slidePath, 'slideLayout'), layoutTag = layoutTagOf(layoutPath, index);
+    return {root, relationships, shapes: nativeTextShapes(tree), pictures: nativePictures(tree), layoutTag, foreignLayout: layoutTag ? undefined : foreignLayoutReference(cachedPart(layoutPath)?.['p:sldLayout'], options.catalogs),
+      // RR-81: a region placeholder typed into in PowerPoint has no xfrm of its own; it sits where the template layout puts it.
+      layoutBounds: layoutTag ? shape => {
+        const ph = shape?.['p:nvSpPr']?.['p:nvPr']?.['p:ph'];
+        if (ph?.idx === undefined) return undefined;
+        const match = asArray(cachedPart(layoutPath)?.['p:sldLayout']?.['p:cSld']?.['p:spTree']?.['p:sp']).find(candidate => candidate?.['p:nvSpPr']?.['p:nvPr']?.['p:ph']?.idx === ph.idx);
+        return match ? shapeBounds(match['p:spPr']?.['a:xfrm']) ?? undefined : undefined;
+      } : undefined,
       // RR-11: native footer placeholders resolve their position through the layout and master.
       path: slidePath, slideWidth: Number(presentationRoot['p:sldSz']?.cx), relationshipsOf: cachedRelationships, readPart: cachedPart,
       paragraphs: nativeShapeParagraphs(decodeText(entries[slidePath])),
@@ -512,6 +549,28 @@ export async function fromPptx(input, options = {}) {
     report({code: "invalid-document-provenance", path: "", message: `${errorMessage(error)} Ordinary import keeps the values observed in the PPTX.`});
   }
   if (slideProvenance.length !== imported.slides.length) throw new OPFPptxError("invalid-import-opf", "Slide provenance does not match the imported slides.");
+  // RR-81: a slide on a 0.19 template layout takes that layout's reference (a slide added in PowerPoint, Change Layout), and a
+  // block read from a region placeholder keeps its region with a pin where plain binding would move it (src/template-layouts.js).
+  // Every tagged layout of the package, used or not: an embedded template no slide uses comes back from its tag.
+  const packageLayoutTags = Object.keys(entries).filter(path => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+    .map(path => layoutTagOf(path, 0)).filter(Boolean);
+  if (packageLayoutTags.length) {
+    const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
+    applyTemplateLayouts(imported, furnitureContexts.map((context, index) => ({tag: context.layoutTag, blockRegions: context.blockRegions, restored: restoredContent.has(index), preservedAutomatic: slideProvenance[index]?.structure !== 'untagged', storedLayout: slideProvenance[index]?.layout})),
+      index => resolveCoreSlideContext(imported, index, options.catalogs !== undefined ? {catalogs: options.catalogs} : {}).resolved.layout, report, packageLayoutTags);
+  }
+  for (const [index, context] of furnitureContexts.entries()) {
+    if (!context.layoutTag && slideProvenance[index]?.structure === 'untagged' && context.foreignLayout !== undefined && imported.slides[index].layout === undefined)
+      {
+        if (context.foreignLayout.startsWith('default:')) {
+          const found = resolveReference({}, 'layouts', context.foreignLayout, {catalogs: options.catalogs ?? [gallery]});
+          const existing = imported.catalogs?.default;
+          if (existing === false || (existing?.source !== undefined && existing.source !== found?.source)) continue;
+          if (found?.source) imported.catalogs = {...imported.catalogs, default: {...imported.catalogs?.default, source: found.source}};
+        }
+        imported.slides[index].layout = context.foreignLayout;
+      }
+  }
   // RR-34: marker runs become cite/footnote on the runs before them, and the references list is rebuilt
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
@@ -824,6 +883,18 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
+  // RR-81: the region of each block read from one region placeholder of the slide's 0.19 template layout (its p:ph idx).
+  if (nativeContext.layoutTag) {
+    const frames = asArray(slideRoot['p:cSld']?.['p:spTree']?.['p:graphicFrame']);
+    const nodeOf = source => {
+      const [kind, position] = source.split(':');
+      return kind === 'sp' ? nativeContext.shapes[position] : kind === 'pic' ? nativeContext.pictures[position] : kind === 'frame' ? frames[position] : undefined;
+    };
+    nativeContext.blockRegions = content.map(entry => {
+      const regions = new Set(entry.sources.map(source => placeholderRegion(nodeOf(source), nativeContext.layoutTag)));
+      return regions.size === 1 ? [...regions][0] : undefined;
+    });
+  }
   // RR-34: a tagged caption re-attaches to the block whose native media shape it names (never by position).
   const annotations = nativeContext.annotations;
   if (annotations?.captions.size) {
@@ -932,9 +1003,13 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
+    // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
+    // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
+    if (shape['p:nvSpPr']?.['p:nvPr']?.['p:ph'] !== undefined && !(paragraphs[index] ?? []).some(paragraph => paragraph.text)) { roles.set(shapeKeys.get(shape), 'prompt'); continue; }
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
     if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
+    if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
     if (item && (furniture.taggedText.has(index) || media.captionShapes.has(shape))) item.sourceText = true;
@@ -2002,6 +2077,17 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // Core resolves every shared design key once (slide design, deck design, then the layout record's design): the text alignment of
   // each item (item.alignment), and each image item's own fit and treatment (item.image).
   const geometry = composeSlide(opfSlide, composeOptions);
+  if (slideIndex === 0) context.firstSlideOptions = composeOptions;
+  // RR-81: a list core broke into columns (listColumns) is drawn as one measured list whose lines sit in their columns: each line
+  // is its own shape at core's geometry, as in every list, and line names, numbering and provenance run across the columns.
+  // Core's item.text is the whole list (every entry at its column's position); the lines are taken from listColumns, which replace
+  // the entries rather than add to them, so each entry is drawn once.
+  for (const item of geometry.items) if (item.listColumns?.length > 1 && item.text?.listEntries) item.text = {...item.text, listEntries: item.listColumns.flatMap(column => column.text?.listEntries ?? [])};
+  // RR-81: a slide on a 0.19 template uses that template's native slide layout (src/template-layouts.js), whose placeholders
+  // core composes with this slide's options (canvas, the deck's header and footer, direction) and its placed-image bands.
+  const template = slideTemplate(slideContext.core);
+  if (template) context.templateSlides[slideIndex] = {template, areaOptions: {...composeOptions, placements: placedImageBands(opfSlide)}};
+  else if (opfSlide.layout === undefined || opfSlide.layout === 'auto') context.automaticSlides[slideIndex] = {areaOptions: composeOptions, title: geometry.items.find(item => item.field === 'title')};
   // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
   if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
   slideContext.zoneBand = zoneBands(composeOptions);
@@ -2035,6 +2121,13 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
   for (const item of geometry.items) {
+    // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
+    // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
+    const boundRegion = template && item.region !== undefined && ['image', 'chart', 'table'].includes(item.field) && !item.caption && !item.frameBox
+      ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
+    if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && item.text?.lines?.length === 1 && !item.text.overflow && !item.text.richLines)
+      context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
+    const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
     const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText} : slideContext;
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
@@ -2091,6 +2184,12 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
       }
     }
+    if (drawnBefore) {
+      const added = (map, size) => [...map.keys()].slice(size);
+      const names = item.field === 'image' ? (context.imagePlaceholders.size === drawnBefore.placeholders ? added(context.images, drawnBefore.images) : [])
+        : item.field === 'chart' ? added(context.chartHeadings, drawnBefore.charts).filter(name => !context.chartex.has(name)) : added(context.tableHeaders, drawnBefore.tables);
+      if (names.length === 1) context.placeholderBindings.set(names[0], {slide: slideIndex, region: boundRegion.name, object: item.field === 'image' ? 'picture' : item.field});
+    }
   }
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
   addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
@@ -2104,6 +2203,13 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     slide.addNotes(notes);
     if (notes.includes('\r')) context.notesWithCarriageReturns.set(`ppt/notesSlides/notesSlide${slideIndex + 1}.xml`, notes);
   }
+}
+
+// RR-81: the placed-image bands of a slide (its image blocks with a `placement`), which a template layout reserves as the slide does.
+function placedImageBands(slide) {
+  return (Array.isArray(slide?.blocks) ? slide.blocks : [])
+    .filter(block => isPlainObject(block) && isPlainObject(block.placement) && typeof block.placement.edge === 'string' && (block.image !== undefined || block.type === 'image'))
+    .map(({placement}) => ({edge: placement.edge, ...(placement.size !== undefined ? {size: placement.size} : {}), ...(placement.inset !== undefined ? {inset: placement.inset} : {})}));
 }
 
 // One slide's export context: core's resolveSlideContext (`core`: composeSlide's options, the records and the diagnostics) and
@@ -2536,7 +2642,7 @@ function applyChartTextSize(xml, size) {
 }
 
 function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation) {
-  const chartData = toPptxChartData(chart, context.chartexMode, presentation);
+  const chartData = toPptxChartData(chart, context.chartexMode, presentation, path);
   if (!chartData.series) {
     // Never lose a chart silently: the placeholder frame stands in for it, and a diagnostic names the reason.
     options.onDiagnostic?.({code: "chart-data-unplottable", path, message: chartData.message, reason: chartData.reason});
@@ -3454,7 +3560,7 @@ function textRuns(value, context, fallbackFontSize) {
  * goes through core's strict `chartNumber` (a string that is not a plain decimal is a gap, reported once per chart as
  * `chart-value-not-numeric`). `formats` holds the Excel codes of the columns' number formats per exported series.
  */
-function toPptxChartData(chart, chartexMode = 'auto', presentation) {
+function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'chart') {
   const unplottable = (reason, summary, message) => ({reason, summary, message: `${message} No native chart was exported; a placeholder frame stands in for it.`});
   // A dataset reference is inlined from the document first (composition normally hands over the inline copy already).
   const source = isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart;
@@ -3473,19 +3579,25 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation) {
   const columnCodes = (resolvedData.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
-  const resolved = resolveChartType(chart.type).spec;
+  const {id: chartId, spec: resolved} = resolveChartType(chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
   // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
   // reported as chartex-fallback, never silent.
-  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed);
+  const multiSeriesPareto = chartId === 'pareto' && data.columns.length > 2;
+  if (multiSeriesPareto && chartexMode === 'native') {
+    throw new OPFPptxError('unsupported-chart-data', 'Native Pareto supports one value series. Use chartex auto or fallback to export every series as an editable clustered column chart.', {path, series: data.columns.slice(1)});
+  }
+  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed && !multiSeriesPareto);
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
   if (resolved.family === 'chartex' && !native) {
-    const reason = chartexMode === 'fallback'
+    const reason = multiSeriesPareto && chartexMode === 'auto'
+      ? 'that cannot represent multiple value series natively; all authored series are preserved in the fallback'
+      : chartexMode === 'fallback'
       ? 'that this exporter does not write'
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
     adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
@@ -4058,6 +4170,16 @@ async function normalizePptxZip(raw, context) {
       throw new OPFPptxError('packaging-failed', 'Slide masters for per-slide script fonts could not be written.', {cause: errorMessage(error)});
     }
     reportPerSlideNotesScriptFonts(context.scriptFonts, slideThemes);
+  }
+  // RR-81: one native slide layout per 0.19 template the slides use, under each slide's master, and the objects bound to its
+  // placeholders (src/template-layouts.js). Before RR-72, which copies a slide's own layout for a furniture variant.
+  if (context.templateSlides.some(Boolean) || context.deckTemplates?.length || context.automaticSlides.some(Boolean)) {
+    try {
+      writeTemplateLayouts(output, context.templateSlides, context.deckTemplates ?? [], context.placeholderBindings,
+        (path, xml) => context.scriptFonts ? partScriptFonts(path, xml, context.scriptFonts, 0) : xml, {records: context.provenanceMode === 'full', automaticSlides: context.automaticSlides});
+    } catch (error) {
+      throw new OPFPptxError('packaging-failed', 'Native slide layouts for the layout templates could not be written.', {cause: errorMessage(error)});
+    }
   }
   // RR-72: furniture drawn the same on several slides moves to the slide master or a layout (src/master-furniture.js).
   try {

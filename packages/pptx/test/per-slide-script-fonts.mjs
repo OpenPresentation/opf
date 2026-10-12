@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {resolvePresentation, resolveScriptFonts, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {resolvePresentation, resolveScriptFonts, fromPptx, toPptx, defaultCatalog} from './helpers/default-catalog.mjs';
 import {checkTypefaces, inventoryTypefaces} from '../dist/index.js';
 
 // opf-pptx#168 (FF-05). A slide may select its own script fonts (slides[].design.fontScheme, a slide theme, or an
@@ -171,7 +171,7 @@ for (const [label, presentation] of [
 ]) {
   const result = await exported(presentation);
   const parts = Object.keys(result.xml).filter(name => /^ppt\/(?:slideMasters|slideLayouts|theme)\/[^/]+\.xml$/.test(name)).sort();
-  assert.deepEqual(parts, ['ppt/slideLayouts/slideLayout1.xml', 'ppt/slideMasters/slideMaster1.xml', 'ppt/theme/theme1.xml', 'ppt/theme/theme2.xml'], `${label}: one master`);
+  assert.deepEqual(parts, [...Array.from({length: Object.keys(defaultCatalog.layouts).length + 2}, (_, index) => `ppt/slideLayouts/slideLayout${index + 1}.xml`), 'ppt/slideMasters/slideMaster1.xml', 'ppt/theme/theme1.xml', 'ppt/theme/theme2.xml'].sort(), `${label}: one master`);
   assert.deepEqual(result.diagnostics.filter(diagnostic => /script-font/.test(diagnostic.code)), [], `${label}: not reported`);
   assertProfiles(label, presentation, result);
 }

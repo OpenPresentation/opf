@@ -89,7 +89,7 @@ async function assertNative(entries, index, picture, svgText, label, ours = true
 // ---- 1. A content image: the same frame as the raster path (the preview's box and fit), contain and crop.
 for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', tall, tallPng, .5], ['square', square, squarePng, 1]]) {
   for (const fill of ['contain', 'cover']) {
-    const deck = {design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: svg, alt: `${name} drawing`}}]};
+    const deck = {design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image', image: {src: svg, alt: `${name} drawing`}}]};
     const reference = {...deck, slides: [{...deck.slides[0], image: {src: raster, alt: `${name} drawing`}}]};
     const {entries, diagnostics} = await open(deck, {strictAssets: true});
     const {entries: rasterEntries} = await open(reference, {strictAssets: true});
@@ -122,7 +122,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 // ---- 3. Every place an image appears.
 {
   const logoDeck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {left: {image: 'var:organization.logo'}}},
-    slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'right'}}]}]};
+    slides: [{title: 'Cover', layout: 'cover'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'right'}}]}]};
   const {entries, diagnostics, bytes} = await open(logoDeck);
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   const cover = pictures(slideXml(entries, 0)), body = pictures(slideXml(entries, 1));
@@ -223,10 +223,10 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 6. Determinism: two exports, other time zones and locales, and a pinned fallback raster.
 {
-  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', image: {src: tall, alt: 'Tall'}}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}, {title: 'Body', image: {src: tall, alt: 'Tall'}}]};
   const first = await toPptx(deck, FIXED), second = await toPptx(deck, FIXED);
   assert.equal(sha(first), sha(second), 'two exports are byte-identical');
-  const script = `import {toPptx} from ${JSON.stringify(new URL('../dist/index.js', import.meta.url).href)};
+  const script = `import {toPptx} from ${JSON.stringify(new URL('./helpers/default-catalog.mjs', import.meta.url).href)};
     process.stdout.write(Buffer.from(await toPptx(${JSON.stringify(deck)}, ${JSON.stringify(FIXED)})).toString('base64'));`;
   for (const env of [{TZ: 'Asia/Kolkata', LANG: 'tr_TR.UTF-8', LC_ALL: 'tr_TR.UTF-8'}, {TZ: 'America/Los_Angeles', LANG: 'de_DE.UTF-8', LC_ALL: 'de_DE.UTF-8'}]) {
     const child = spawnSync(process.execPath, ['--input-type=module', '-e', script], {encoding: 'utf8', env: {...process.env, ...env}, maxBuffer: 64 * 1024 * 1024});
@@ -349,7 +349,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   }
   const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {watermark: {src: square, opacity: 1}, header: {right: {image: {src: tall, alt: 'Icon'}}}, footer: {left: {image: 'var:organization.logo'}}, background: light},
     slides: [
-      {title: 'Cover', layout: 'title'},
+      {title: 'Cover', layout: 'cover'},
       {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, fit: 'contain', placement: {edge: 'right'}}]},
       {title: 'Placed image cover', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: wide, fit: 'cover', placement: {edge: 'left'}}]},
       {title: 'Blocks', blocks: [{image: {src: square, alt: 'Square'}}, {text: 'Beside'}]},
@@ -392,7 +392,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   // The preview draws an SVG data URI as an image in the content box (preserveAspectRatio meet, or slice for cover) once the
   // renderer supports it; the raster of the same proportions is the control either way.
   for (const fill of ['contain', 'cover']) {
-    const make = source => ({design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
+    const make = source => ({design: {imageFit: fill, background: light}, slides: [{title: 'Picture', layout: 'image', image: {src: source, alt: 'x'}}]});
     const preview = toSvg(make(wide), 1, {trace: true}), control = toSvg(make(widePng), 1, {trace: true});
     const draws = /<image\b/.test(preview);
     const {entries} = await open(make(wide));

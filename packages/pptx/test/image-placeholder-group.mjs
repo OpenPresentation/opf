@@ -139,7 +139,7 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
 // 5. Logo and furniture placeholders are not grouped; a quote photo placeholder is.
 {
   const src = 'https://example.invalid/missing.png';
-  const logo = slideXml(await toPptx({organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, slides: [{title: 'Cover', layout: 'title'}]}));
+  const logo = slideXml(await toPptx({organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, slides: [{title: 'Cover', layout: 'cover'}]}));
   assert.equal(groups(logo).length, 0, 'the logo placeholder keeps its tagged panel ungrouped');
   assert.match(logo, /name="OPF image placeholder 1" descr="Image unavailable: /);
   const footer = slideXml(await toPptx({design: {footer: {left: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}, {title: 'Two', text: 'Body'}]}));

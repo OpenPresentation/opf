@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {nativeTableBytes} from './table-values.js';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {themeSlotColors, writeThemeColors} from '../dist/theme-colors.js';

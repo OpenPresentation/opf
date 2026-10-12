@@ -2,7 +2,7 @@
 import {createHash} from 'node:crypto';
 import {writeFileSync} from 'node:fs';
 import {execSync} from 'node:child_process';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
 const region = {columns: ['Region', 'Value'], rows: [['North', 42], ['South', 31], ['East', -8], ['West', 19]]};
 const multi = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
@@ -15,7 +15,7 @@ const decks = {
   'box-multi': {slides: [{title: 'box', chart: {type: 'box-and-whisker', data: multi}}]},
   'waterfall-single': {slides: [{title: 'waterfall', chart: {type: 'waterfall', data: single}}]},
   'funnel-category': {slides: [{title: 'funnel', chart: {type: 'funnel', data: region}}]},
-  'world-category': {name: 'Map deck', language: 'ja-JP', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: '地図', chart: {type: 'world', data: {columns: ['国', '値'], rows: [['日本', 4], ['ドイツ', 3]]}}, text: 'Body'}]},
+  'world-category': {name: 'Map deck', language: 'ja-JP', design: {fontScheme: 'calibri', contentAlignment: 'center'}, slides: [{id: 'a', layout: 'chart', title: '地図', chart: {type: 'world', data: {columns: ['国', '値'], rows: [['日本', 4], ['ドイツ', 3]]}}, text: 'Body'}]},
   'all-seven': {slides: ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world'].map((type) => ({title: type, chart: {type, data: region}}))},
 };
 const entries = {};

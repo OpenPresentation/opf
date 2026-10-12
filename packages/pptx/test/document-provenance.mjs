@@ -6,7 +6,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {restoreDocumentProvenance} from '../dist/document-provenance.js';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 
 // OPF 0.15 (FA-23): the gallery records the deck names (theme, schemes, title-subtitle) come from the snapshot, which the
 // host registers for export and import; the deck embeds its own layout under catalogs.custom.
@@ -21,7 +21,7 @@ const enc = new TextEncoder(), dec = new TextDecoder();
 const png = await readFile(new URL('fixtures/images/wide.png', import.meta.url));
 const pngUri = `data:image/png;base64,${png.toString('base64')}`;
 const logo = 'https://example.com/acme-logo.png';
-const layoutRecord = {...structuredClone(defaultCatalog.layouts['title-subtitle']), name: 'Hero Title'};
+const layoutRecord = {...structuredClone(defaultCatalog.layouts['cover']), name: 'Hero Title'};
 for (const key of Object.keys(layoutRecord)) if (key.startsWith('x-')) delete layoutRecord[key];
 const unused = {...structuredClone(layoutRecord), name: 'Never used'};
 const embedded = {custom: {layouts: {'hero-title': layoutRecord}}};
@@ -38,8 +38,8 @@ const source = {
   catalogs: {custom: {layouts: {'hero-title': layoutRecord, 'never-used': unused}}},
   slides: [
     {id: 'intro', beat: 'problem', layout: 'hero-title', title: 'Hello', subtitle: 'World', design: {titleAlignment: 'center', contentBox: false}},
-    {id: 'body', layout: 'title-subtitle', title: 'Second', subtitle: 'Slide', design: {background: {type: 'solid', color: '#102030'}}},
-    {layout: 'title-subtitle', title: 'Third', subtitle: 'Inherits'}
+    {id: 'body', layout: 'cover', title: 'Second', subtitle: 'Slide', design: {background: {type: 'solid', color: '#102030'}}},
+    {layout: 'cover', title: 'Third', subtitle: 'Inherits'}
   ]
 };
 assert.equal(validate(source, {only: ['format']}).valid, true, JSON.stringify(validate(source, {only: ['format']}).findings));
@@ -94,15 +94,15 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(deck.design, source.design);
   for (const key of ['organization', 'speaker', 'audience', 'purpose', 'language', 'tone', 'narrative', 'takeaway', 'duration', 'tags', 'variables']) assert.deepEqual(deck[key], source[key], key);
   assert.deepEqual(deck.assets, source.assets, 'Unreferenced assets return as authored.');
-  assert.deepEqual(deck.catalogs, embedded);
-  assert.deepEqual(deck.slides.map(slide => [slide.id, slide.beat, slide.layout]), [['intro', 'problem', 'hero-title'], ['body', undefined, 'title-subtitle'], [undefined, undefined, 'title-subtitle']]);
+  assert.deepEqual(deck.catalogs, source.catalogs, 'Native layout tags retain all reachable custom layouts');
+  assert.deepEqual(deck.slides.map(slide => [slide.id, slide.beat, slide.layout]), [['intro', 'problem', 'hero-title'], ['body', undefined, 'cover'], [undefined, undefined, 'cover']]);
   assert.deepEqual(deck.slides.map(slide => slide.design), [{titleAlignment: 'center', contentBox: false}, {background: {type: 'solid', color: '#102030'}}, undefined],
     'Inherited backgrounds are not repeated as slide overrides; local ones return as authored.');
   // The reimported document exports again and keeps its references.
   const again = await read(await toPptx(deck));
   assert.deepEqual(again.provenance, []);
   assert.deepEqual(again.deck.design, source.design);
-  assert.deepEqual(again.deck.slides.map(slide => slide.layout), ['hero-title', 'title-subtitle', 'title-subtitle']);
+  assert.deepEqual(again.deck.slides.map(slide => slide.layout), ['hero-title', 'cover', 'cover']);
   // The stored slide record names its group, so a pasted slide keeps its record.
   const record = tagValue(dec.decode(unzipSync(exported)['ppt/tags/opfSlide1.xml']));
   assert.deepEqual(record.layoutRecord, {group: 'custom', id: 'hero-title', record: layoutRecord});
@@ -113,7 +113,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 {
   const issues = [];
   const deck = await importPptx(exported, {onDiagnostic: issue => issues.push(issue)});
-  assert.deepEqual(deck.slides.map(slide => slide.layout), ['hero-title', undefined, undefined]);
+  assert.deepEqual(deck.slides.map(slide => slide.layout), ['hero-title', 'cover', 'cover']);
   assert.deepEqual(issues.filter(issue => issue.code === 'unresolved-reference').map(issue => issue.path), ['slides.1.layout', 'slides.2.layout']);
 }
 
@@ -160,14 +160,14 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // A moved object changes that slide's layout structure only.
 {
   const {deck, provenance} = await read(modify(exported, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace(/(<p:sp>[\s\S]*?<a:off x=")(\d+)"/, (_, before, x) => `${before}${Number(x) + 12700}"`))));
-  assert.deepEqual(deck.slides.map(slide => slide.layout), [undefined, 'title-subtitle', 'title-subtitle']);
+  assert.deepEqual(deck.slides.map(slide => slide.layout), ['hero-title', 'cover', 'cover']);
   assert.equal(deck.slides[0].id, 'intro', 'Identity and beat do not depend on arrangement.');
   assert.equal(deck.slides[0].beat, 'problem');
   assert.equal(deck.design.contentAlignment, undefined, 'Deck composition defaults need every slide unchanged.');
   assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [
     ['layout-reference-changed', 'slides.0.layout'], ['design-reference-changed', 'slides.0.design.titleAlignment'],
     ['design-reference-changed', 'slides.0.design.contentBox'], ['design-reference-changed', 'design.contentAlignment']]);
-  assert.deepEqual(deck.catalogs, undefined, 'An unrestored layout id does not keep its inline record.');
+  assert.deepEqual(deck.catalogs, source.catalogs, 'Native template metadata preserves reachable embedded records after a geometry edit.');
 }
 
 // Background edits: an edited inheriting slide keeps a local override; editing
@@ -196,7 +196,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
     text(entries, 'ppt/presentation.xml', xml => xml.replace('</p:sldIdLst>', '<p:sldId id="400" r:id="rIdCopy"/></p:sldIdLst>'));
   });
   const {deck, provenance} = await read(duplicated);
-  assert.deepEqual(deck.slides.map(slide => [slide.id, slide.layout]), [['intro', 'hero-title'], ['body', 'title-subtitle'], [undefined, 'title-subtitle'], [undefined, 'hero-title']]);
+  assert.deepEqual(deck.slides.map(slide => [slide.id, slide.layout]), [['intro', 'hero-title'], ['body', 'cover'], [undefined, 'cover'], [undefined, 'hero-title']]);
   assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['duplicate-slide-id', 'slides.3.id'], ['design-reference-changed', 'design.contentAlignment']]);
 }
 
@@ -207,16 +207,16 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const stripped = await read(modify(exported, entries => text(entries, 'ppt/presentation.xml', xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''))));
   assert.deepEqual(stripped.provenance, []);
   assert.equal(stripped.deck.narrative, undefined);
-  assert.deepEqual(stripped.deck.slides.map(slide => [slide.id, slide.layout]), [[undefined, 'hero-title'], [undefined, 'title-subtitle'], [undefined, 'title-subtitle']]);
+  assert.deepEqual(stripped.deck.slides.map(slide => [slide.id, slide.layout]), [[undefined, 'hero-title'], [undefined, 'cover'], [undefined, 'cover']]);
   assert.deepEqual([stripped.deck.slides[0].design.titleAlignment, stripped.deck.slides[0].design.contentBox], ['center', false]);
-  assert.deepEqual(stripped.deck.catalogs, embedded);
+  assert.deepEqual(stripped.deck.catalogs, source.catalogs);
   // With no customer data at all it is an ordinary foreign deck.
   const foreign = await read(modify(exported, entries => {
-    for (const path of Object.keys(entries).filter(path => /^ppt\/(presentation|slides\/slide\d+)\.xml$/.test(path))) text(entries, path, xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, ''));
+    for (const path of Object.keys(entries).filter(path => /^ppt\/(presentation|slides\/slide\d+|slideLayouts\/slideLayout\d+)\.xml$/.test(path))) text(entries, path, xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, ''));
   }));
   assert.deepEqual(foreign.provenance, []);
-  assert.equal(foreign.deck.slides[0].layout, undefined);
-  assert.equal(foreign.deck.catalogs, undefined);
+  assert.equal(foreign.deck.slides[0].layout, 'auto', 'Foreign blank layouts map to automatic composition');
+  assert.deepEqual(foreign.deck.catalogs, {default: {source: defaultCatalog.source}});
 
   const damaged = await read(modify(exported, entries => text(entries, 'ppt/tags/opfDocument.xml', xml => xml.replace(/val="[0-9A-F]{8}/, 'val="ZZZZZZZZ'))));
   assert.deepEqual(damaged.provenance.map(issue => [issue.code, issue.path]), [['invalid-document-provenance', '']]);
@@ -239,7 +239,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   })));
   assert.deepEqual(invalidSlide.provenance.map(issue => [issue.code, issue.path]), [['invalid-document-provenance', 'slides.0.layout']]);
-  assert.equal(invalidSlide.deck.slides[0].layout, undefined);
+  assert.equal(invalidSlide.deck.slides[0].layout, 'hero-title');
   assert.equal(invalidSlide.deck.slides[0].id, 'intro');
   assert.equal(invalidSlide.deck.narrative, 'problem-solution');
 
@@ -256,7 +256,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // Furniture already owns a slide tag list; both records share it.
 {
   const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {left: {text: '{{organization.name}}'}, right: {text: '{{slide.number}}'}}},
-    slides: [{layout: 'title-subtitle', title: 'One', subtitle: 'Two'}]};
+    slides: [{layout: 'cover', title: 'One', subtitle: 'Two'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
   const tags = dec.decode(entries['ppt/tags/opfFurnitureSlide0.xml']);
@@ -268,7 +268,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   // FA-31: the footer drew the organization's name; the stored footer text and record return {{organization.name}} and the organization.
   assert.deepEqual(imported.design.footer, deck.design.footer);
   assert.deepEqual(imported.organization, deck.organization);
-  assert.equal(imported.slides[0].layout, 'title-subtitle');
+  assert.equal(imported.slides[0].layout, 'cover');
   // The footer is only words: a retyped name changes the footer text and leaves the stored organization.
   const renamed = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('>Acme<', '>Acme Corp<'))));
   assert.deepEqual(renamed.deck.organization, deck.organization);
@@ -293,7 +293,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // of copying the bytes, and the restored asset re-exports the same picture.
 {
   const deck = {name: 'Asset background', assets: {bg: {src: pngUri, alt: 'Backdrop'}}, design: {fontScheme: 'arial', background: {type: 'image', src: 'asset:bg'}},
-    slides: [{layout: 'title-subtitle', title: 'One', subtitle: 'Two'}, {layout: 'title-subtitle', title: 'Three', subtitle: 'Four'}]};
+    slides: [{layout: 'cover', title: 'One', subtitle: 'Two'}, {layout: 'cover', title: 'Three', subtitle: 'Four'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
   const documentXml = dec.decode(entries['ppt/tags/opfDocument.xml']);
@@ -346,7 +346,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 {
   const issues = [];
   const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'boost', name: 'x'.repeat(300 * 1024)}},
-    slides: [{layout: 'title-subtitle', beat: ['y'.repeat(300 * 1024)], title: 'One', subtitle: 'Two'}]}, {onDiagnostic: issue => issues.push(issue)});
+    slides: [{layout: 'cover', beat: ['y'.repeat(300 * 1024)], title: 'One', subtitle: 'Two'}]}, {onDiagnostic: issue => issues.push(issue)});
   assert.deepEqual(issues.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['design.colorScheme', 'slides.0.beat']);
   const entries = unzipSync(bytes);
   assert.deepEqual(tagValue(dec.decode(entries['ppt/tags/opfDocument.xml'])).omitted, ['design.colorScheme']);
@@ -354,7 +354,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const {deck, provenance} = await read(bytes);
   assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['document-provenance-omitted', 'design.colorScheme'], ['document-provenance-omitted', 'slides.0.beat']]);
   assert.equal(deck.design.fontScheme, 'arial');
-  assert.equal(deck.slides[0].layout, 'title-subtitle');
+  assert.equal(deck.slides[0].layout, 'cover');
   // Many referenced assets would exceed the import limit: they are shed with a warning, never silently.
   const many = Object.fromEntries(Array.from({length: 48}, (_, index) => [`a${index}`, `https://example.com/${'z'.repeat(200 * 1024)}/${index}.png`]));
   const shedIssues = [];
@@ -380,7 +380,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const slide = tagValue(dec.decode(refs['ppt/tags/opfSlide1.xml']));
   assert.deepEqual({id: slide.id, beat: slide.beat, layout: slide.layout}, {id: undefined, beat: 'problem', layout: 'hero-title'});
   for (const secret of ['Alice', 'Acme', 'Ship it', 'Series B']) assert.ok(!JSON.stringify([document, slide]).includes(secret), secret);
-  const imageOnly = unzipSync(await toPptx({slides: [{title: 'One', layout: 'title', design: {background: {type: 'image', src: pngUri}}}]}, {provenance: 'references-only'}));
+  const imageOnly = unzipSync(await toPptx({slides: [{title: 'One', layout: 'cover', design: {background: {type: 'image', src: pngUri}}}]}, {provenance: 'references-only'}));
   assert.equal(tagValue(dec.decode(imageOnly['ppt/tags/opfSlide1.xml'])).design, undefined, 'references-only stores no image sources');
   await assert.rejects(toPptx(structuredClone(source), {provenance: 'everything'}), {code: 'invalid-provenance-option'});
 }
@@ -404,7 +404,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const before = structuredClone(imported);
   const result = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels: rels('ppt/presentation.xml'), slides, catalogs}, () => {});
   assert.deepEqual(imported, before, 'Reading provenance does not modify the document.');
-  assert.deepEqual(result.slides.map(slide => [slide.layout, slide.structure]), [['hero-title', 'match'], ['title-subtitle', 'match'], ['title-subtitle', 'match']]);
+  assert.deepEqual(result.slides.map(slide => [slide.layout, slide.structure]), [['hero-title', 'match'], ['cover', 'match'], ['cover', 'match']]);
   assert.deepEqual(result.slides[0].record.design, {titleAlignment: 'center', contentBox: false});
   assert.equal(result.slides[0].record.native, undefined);
   assert.deepEqual(result.slides[0].catalogRecord, layoutRecord);

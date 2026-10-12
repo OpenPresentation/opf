@@ -114,10 +114,10 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
 
 // A layout's image placeholder places the slide's image: the placement is the layout's, not the block's.
 {
-  const deck = { catalogs: { custom: { layouts: { 'hero-left': { name: 'Hero left', placeholders: [{ type: 'title' }, { type: 'image', placement: { edge: 'left', size: 0.45 } }, { type: 'text' }] } } } },
+  const deck = { catalogs: { custom: { layouts: { 'hero-left': { name: 'Hero left', areas: ['title title', 'media body'], columns: [0.45, 0.55], rows: ['auto', 1], regions: {media: {accepts: ['image'], flow: 'none', bleed: true}, body: {accepts: ['text']}} } } } },
     slides: [{ layout: 'hero-left', title: 'Layout kept', text: 'Body', image: { src: uri(wide), alt: 'Wide' } }] };
   const item = imageItem(deck);
-  assert.equal(item.image.placement.path, 'layout.placeholders.1.placement');
+  assert.equal(item.region, 'media', 'The image binds to the layout media region');
   const { bytes, pictures } = await exported(deck);
   assert.equal(Number(pictures[0]['p:spPr']['a:xfrm']['a:off'].x), 0);
   const diagnostics = [];
@@ -130,7 +130,7 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
   entries[path] = new TextEncoder().encode(decode(entries[path]).replace(/(<p:pic>[\s\S]*?<a:off x=")(\d+)/, (_, head, x) => `${head}${Number(x) + 9525}`));
   const moved = [];
   const edited = await fromPptx(zipSync(entries), { onDiagnostic: d => moved.push(d) });
-  assert.equal(edited.slides[0].layout, undefined);
+  assert.equal(edited.slides[0].layout, 'hero-left', 'An edited image keeps its observed native layout relationship');
   assert.ok(moved.some(d => d.code === 'layout-reference-changed' && d.path === 'slides.0.layout'));
   checked++;
 }

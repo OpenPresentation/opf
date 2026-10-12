@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {LANGUAGES, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
 import {resolvePresentation} from '@openpresentation/opf-render';

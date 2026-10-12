@@ -10,7 +10,7 @@ const dec = new TextDecoder();
 const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
 const record = {
   name: 'Proof Arc', duration: {min: 8, max: 20},
-  beats: [{id: 'contract', name: 'Contract', type: 'text', layout: 'title-subtitle'}, {id: 'evidence', name: 'Evidence', type: 'chart'}, {id: 'ask', name: 'Ask', type: 'list'}]
+  beats: [{id: 'contract', name: 'Contract', type: 'text', layout: 'cover'}, {id: 'evidence', name: 'Evidence', type: 'chart'}, {id: 'ask', name: 'Ask', type: 'list'}]
 };
 const unrelated = {...structuredClone(record), name: 'Unused'};
 const deck = narrative => ({

@@ -2,7 +2,7 @@
 // surface, text, textSecondary) and the hyperlink slot to the same colors, through core resolveColorRoles.
 import assert from "node:assert/strict";
 import { unzipSync } from "fflate";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { resolveColorRoles } from "@openpresentation/opf/composition";
 import { toSvg as renderToSvg } from "@openpresentation/opf-render";
 import {fromPptx as importPptx, toPptx as exportPptx} from "../dist/index.js";

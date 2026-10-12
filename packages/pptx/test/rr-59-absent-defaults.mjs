@@ -4,7 +4,7 @@
 // them absent while the native value is still the default export wrote. A value edited in PowerPoint is imported as observed.
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const SCHEMA = 'https://openpresentation.org/schema/opf/v1';

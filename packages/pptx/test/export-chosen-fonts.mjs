@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx} from '../src/index.js';
 
 // OPF 0.15: the named font schemes are the gallery snapshot's, which the host registers explicitly; strict export
@@ -29,7 +29,7 @@ const slides = [
   {id: 'text', title: 'Quarterly review', text: 'Body copy that wraps across the text region to exercise measurement.'},
   {id: 'rich', title: 'Rich', text: [{text: 'Bold ', bold: true}, {text: 'italic ', italic: true}, {text: 'plain'}]},
   {id: 'bullets', title: 'List', bullets: ['First point', 'Second point', 'Third point']},
-  {id: 'code', layout: 'code-1x', title: 'Rule', code: {source: 'const score = urgency * confidence;', language: 'ts'}},
+  {id: 'code', layout: 'code', title: 'Rule', code: {source: 'const score = urgency * confidence;', language: 'ts'}},
   {id: 'table', table: {columns: [['Header ', {text: 'bold', bold: true}]], rows: [[['Cell ', {text: 'emphasis', italic: true}]]]}},
   {id: 'quote', quote: {text: 'Quote body', attribution: 'Quote author', source: 'Original source'}},
   {id: 'metric', metric: {value: 123, label: 'Weight label', description: 'Regular description', delta: '+2'}},

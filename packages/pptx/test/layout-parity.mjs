@@ -87,8 +87,8 @@ assert.equal(metricLines, 30);
 // contentAlignment keeps them apart, and slides with body content keep the title/content split.
 const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
 const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
-  {layout: 'title-subtitle', ...coverText},
-  {layout: 'title-subtitle', ...coverText, design: {contentAlignment: 'right'}},
+  {layout: 'cover', ...coverText},
+  {layout: 'cover', ...coverText, design: {contentAlignment: 'right'}},
   {...coverText, text: 'Body copy'},
 ]};
 const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['ctr', 'l', 'ctr']];

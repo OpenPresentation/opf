@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {resolveSlideContext as coreResolveSlideContext} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx} from '../dist/index.js';
 
 // OPF 0.15: the font schemes this deck names come from the gallery snapshot, which a host registers explicitly; the
@@ -22,7 +22,7 @@ const deck = {
   slides: [
     {id: 'inherits', ...textSlide},
     {id: 'own-scheme', ...textSlide, design: {fontScheme: 'georgia'}},
-    {id: 'code', layout: 'code-1x', title: 'Code', code: {source: 'const x = 1;', language: 'ts'}},
+    {id: 'code', layout: 'code', title: 'Code', code: {source: 'const x = 1;', language: 'ts'}},
   ],
 };
 

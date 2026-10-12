@@ -5,7 +5,7 @@
 // native rule opf-pptx#211 applies to document defaults). Without the record (provenance false) runs are read as before.
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {validateListRuns} from '../dist/content-topology.js';
 

@@ -66,7 +66,7 @@ let checks = 0;
 for (const config of configs) {
   for (const type of types) {
     const label = `${config.name}, ${type}`;
-    const deck = {design: {fontScheme: 'roboto', ...config.design}, slides: [{layout: 'chart-1x', title: type, ...(config.composition ? {composition: config.composition} : {}), chart: {type, data}}]};
+    const deck = {design: {fontScheme: 'roboto', ...config.design}, slides: [{layout: 'chart', title: type, ...(config.composition ? {composition: config.composition} : {}), chart: {type, data}}]};
     const preview = await previewSizes(deck, type);
     const parts = unzipSync(await toPptx(structuredClone(deck)));
     const chartParts = Object.keys(parts).filter((name) => /^ppt\/charts\/(?:chart|chartEx|style)\d+\.xml$/.test(name));
@@ -94,7 +94,7 @@ for (const config of configs) {
 
 // Determinism: the size comes from the deck alone, so the same deck exports the same bytes.
 {
-  const deck = {design: {fontScheme: 'roboto'}, slides: types.map((type) => ({layout: 'chart-1x', title: type, composition: {minFontSize: 18}, chart: {type, data}}))};
+  const deck = {design: {fontScheme: 'roboto'}, slides: types.map((type) => ({layout: 'chart', title: type, composition: {minFontSize: 18}, chart: {type, data}}))};
   const digest = async () => createHash('sha256').update(await toPptx(structuredClone(deck))).digest('hex');
   assert.equal(await digest(), await digest(), 'two exports of one chart deck are byte-identical');
   checks++;
@@ -102,7 +102,7 @@ for (const config of configs) {
 
 // The chart size follows the slide it is on: two slides with different minimum font sizes write different sizes.
 {
-  const deck = {design: {fontScheme: 'roboto'}, slides: [{layout: 'chart-1x', title: 'a', chart: {type: 'column', data}}, {layout: 'chart-1x', title: 'b', composition: {minFontSize: 24}, chart: {type: 'column', data}}]};
+  const deck = {design: {fontScheme: 'roboto'}, slides: [{layout: 'chart', title: 'a', chart: {type: 'column', data}}, {layout: 'chart', title: 'b', composition: {minFontSize: 24}, chart: {type: 'column', data}}]};
   const parts = unzipSync(await toPptx(deck));
   assert.deepEqual(unique(sizesIn(strFromU8(parts['ppt/charts/chart1.xml']))), [12]);
   assert.deepEqual(unique(sizesIn(strFromU8(parts['ppt/charts/chart2.xml']))), [18]);

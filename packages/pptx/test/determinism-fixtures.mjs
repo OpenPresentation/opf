@@ -56,7 +56,7 @@ function scriptDeck(key) {
       {title: s.categories[1], chart: {type: 'pie', data: {columns: [s.categories[1], s.categories[2]], rows: s.categories.map((category, i) => [category, Math.abs(numbers[i])])}}},
       {title: s.categories[2], table: {columns: [s.cells[0], s.cells[1]], rows: [[s.cells[2], s.cells[3]], [s.cells[0], s.cells[1]], [`${numbers[0]}`, `${numbers[3]}`]]}},
       {title: s.categories[3], image: 'asset:photo', notes: s.notes},
-      {title: 'Code', layout: 'code-1x', code: {source: `const key = '${s.categories[0]}'; // ${s.header}`, language: 'ts'}},
+      {title: 'Code', layout: 'code', code: {source: `const key = '${s.categories[0]}'; // ${s.header}`, language: 'ts'}},
       {title: 'Metric', metric: {value: numbers[0], label: s.categories[1], description: s.text, delta: '+1,5'}},
       {title: 'Quote', quote: {text: s.text, attribution: s.categories[0], source: s.header}},
       {title: 'Timeline', timeline: {events: s.categories.slice(0, 3).map((category, i) => ({when: `Q${i + 1}`, what: category}))}}

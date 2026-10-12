@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 
 // OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly

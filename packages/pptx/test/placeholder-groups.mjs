@@ -31,7 +31,7 @@ const entries = unzipSync(bytes);
 let leaves = 0;
 for (const [index, slide] of deck.slides.entries()) {
   const geometry = composeSlide(slide, resolveSlideContext(deck, index).options);
-  if (slide.layout) assert.ok(geometry.slots?.length, `${slide.id}: composes through the record's placeholder groups`);
+  assert.ok(geometry.items.length, `${slide.id}: explicit nested content groups retain their composed leaves`);
   const shapes = frames(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
   for (const item of geometry.items.filter((entry) => !headings.has(entry.field))) {
     const box = Object.fromEntries(Object.entries(item.box).map(([key, value]) => [key, pt(value)]));

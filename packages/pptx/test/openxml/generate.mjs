@@ -12,8 +12,8 @@ const fontModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/
 const {toPptx, fromPptx} = await import(converterModule);
 const {loadFonts} = await import(fontModule);
 // Since FA-23 strictAssets implies strictReferences and nothing resolves without a registered catalog, so every call passes the default catalog (opf-pptx#222).
-const catalogModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/opf/catalog')).href : '@openpresentation/opf/catalog';
-const {defaultCatalog} = await import(catalogModule);
+const catalogModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/gallery')).href : '@openpresentation/gallery';
+const {gallery: defaultCatalog} = await import(catalogModule);
 const catalogs = [defaultCatalog];
 const root = path.resolve(process.argv[2]);
 await mkdir(root, {recursive: false});

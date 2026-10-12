@@ -18,8 +18,10 @@
 //            | {form: 'root', fields: [{field, box?}]}     // root shorthand with several payloads
 //            | {form: 'blocks', blocks: Node[]}
 //            | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key
-//   Node     = {t: 'group', id?, ext?, comp?, typed?, blocks: Node[]}
-//            | {t: 'leaf', k, id?, ext?, typed?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
+//   Node     = {t: 'group', id?, ext?, comp?, typed?, pin?, in?, blocks: Node[]}
+//            | {t: 'leaf', k, id?, ext?, typed?, pin?, in?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
+//   pin = the block's authored `region` pin (OPF 0.19 layout templates, RR-81), restored onto the block
+//   in  = the template region a root block was drawn in (RR-81): where its shapes are, for editors and diagnostics; never restored
 //   typed = true when the authored block spelled out its `type`
 //   bullets = true when the authored list block used the `bullets` key (import names every list `items`), also under `type: 'text'`
 //   lines = N (>= 2) when a rich-text `text` payload exported as N native line
@@ -62,6 +64,8 @@ export const MAX_NODES = 256;
 export const MAX_ID_LENGTH = 256;
 // Native bounds may sit this far outside a stored leaf box (reference px).
 export const BOX_TOLERANCE = 3;
+// A template region name (OPF 0.19), as a `region` pin or the region a block was drawn in.
+const REGION_NAME = /^[a-z][a-z0-9-]{0,63}$/;
 
 const kindOfField = field => field === 'items' || field === 'bullets' ? 'list' : field;
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
@@ -240,6 +244,12 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     if (lines) wrapped.set(item.path, wrapRecord(lines));
   }
   const base = `slides.${slideIndex}`;
+  // RR-81: the template region each root block was drawn in (core's items[].region).
+  const regionOf = new Map();
+  for (const item of items ?? []) {
+    const root = typeof item?.path === 'string' && typeof item.region === 'string' ? /^(slides\.\d+\.blocks\.\d+)(?:\.|$)/.exec(item.path)?.[1] : undefined;
+    if (root && REGION_NAME.test(item.region) && !regionOf.has(root)) regionOf.set(root, item.region);
+  }
   let nodes = 0;
   const fail = reason => { throw new TopologyError(reason); };
   const leafBox = path => {
@@ -256,6 +266,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     }
     if (object(block.extensions)) node.ext = clone(block.extensions);
     if (typeof block.type === 'string') node.typed = true;
+    if (typeof block.region === 'string' && REGION_NAME.test(block.region)) node.pin = block.region;
+    if (regionOf.has(path)) node.in = regionOf.get(path);
     return node;
   };
   const node = (block, path, depth) => {
@@ -431,6 +443,7 @@ export function validateTopology(value) {
     if (!validId(item.id)) throw Error('Invalid content node id.');
     if (item.ext !== undefined && !object(item.ext)) throw Error('Invalid content node extensions.');
     if (item.typed !== undefined && item.typed !== true) throw Error('Invalid content node type flag.');
+    if ((item.pin !== undefined && !REGION_NAME.test(item.pin ?? '')) || (item.in !== undefined && !REGION_NAME.test(item.in ?? ''))) throw Error('Invalid content node region.');
     if (item.t === 'group') {
       if (depth >= MAX_GROUP_DEPTH) throw Error(`Content groups nest deeper than ${MAX_GROUP_DEPTH} levels.`);
       if (item.comp !== undefined && !object(item.comp)) throw Error('Invalid group composition.');
@@ -564,6 +577,7 @@ export function rebuildContent(topology, blocks, bounds, placed) {
     if (leaf.node.bullets === true) bulletsKey(payload, leaf.node.typed);
     if (leaf.node.id !== undefined) { payload.id = leaf.node.id; ids.push(leaf.node.id); }
     if (leaf.node.ext !== undefined) payload.extensions = clone(leaf.node.ext);
+    if (leaf.node.pin !== undefined) payload.region = leaf.node.pin;
     return payload;
   };
   const build = item => {
@@ -577,6 +591,7 @@ export function rebuildContent(topology, blocks, bounds, placed) {
     if (item.id !== undefined) { group.id = item.id; ids.push(item.id); }
     if (item.ext !== undefined) group.extensions = clone(item.ext);
     if (item.comp !== undefined) group.composition = clone(item.comp);
+    if (item.pin !== undefined) group.region = item.pin;
     group.blocks = children;
     return group;
   };

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {ENGINE_DEFAULT_FONT_SCHEME, resolveFontFamilies} from '@openpresentation/opf/composition';
 import {paginate} from '@openpresentation/opf';
 import {toPptx} from '../src/index.js';
@@ -28,7 +28,7 @@ const slideFaces = entries => new Set(Object.entries(entries)
   .flatMap(([, value]) => [...strFromU8(value).matchAll(/<a:latin typeface="([^"]*)"/g)].map(match => match[1])));
 
 const textSlide = {id: 'text', title: 'Title', text: 'Body copy'};
-const codeSlide = {id: 'code', layout: 'code-1x', title: 'Rule', code: {source: 'const score = urgency * confidence;', language: 'ts'}};
+const codeSlide = {id: 'code', layout: 'code', title: 'Rule', code: {source: 'const score = urgency * confidence;', language: 'ts'}};
 const bareThemes = {custom: {themes: {bare: {name: 'Bare'}}}};
 
 // A custom theme without a font scheme reaches the last resort: the engine default.

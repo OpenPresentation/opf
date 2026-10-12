@@ -345,7 +345,7 @@ const SOURCE_PREFIX = /^(asset:|data:|https?:|file:|\.\.?\/)/i;
 // Metadata fields that hold content references (OPF 0.15: `id` or `name:id`; for audience and purpose a string that is not
 // a reference is free text). `language` is an engine vocabulary (a BCP-47 tag), not a catalog reference.
 const METADATA_REFERENCES = Object.freeze(['narrative', 'tone', 'purpose', 'audience']);
-const LAYOUT_SCHEMA = 'https://openpresentation.org/schema/opf-layout/v1';
+const LAYOUT_SCHEMA = 'https://openpresentation.org/schema/opf-layout/v2';
 const GROUP_NAME = /^[a-z][a-z0-9-]*$/;
 
 function collectStrings(value, into = new Set()) {
@@ -1328,7 +1328,7 @@ export function layoutIntent(storedCatalogs, slideRecords, entries, group, repor
     if (structureMatch && problem === 'source') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `slides.${index}.layoutRecord belongs to catalogs.${stated.group}${stated.source ? ` (${stated.source})` : ''}, which the document declares with another source, so the slide's stored layout record was not restored.`});
     const target = layout === undefined ? undefined : resolved.get(layout);
     let restoreLayout = structureMatch;
-    if (structureMatch && layout !== undefined) {
+    if (structureMatch && layout !== undefined && layout !== 'auto') {
       if (!target) {
         restoreLayout = false;
         report({code: 'unresolved-reference', path: `slides.${index}.layout`, message: `Layout '${layout}' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.${index}.layout was not restored; the imported slide keeps its observed arrangement.`});
