@@ -78,5 +78,17 @@
   "rr20-old-pr-post-carrier-reconciliation.md": {
     "sha256": "0cc31fc37ca6f81cb5c8f8de436cdaf9cb8031595bbeb6ea5aff2369b88f8cab",
     "bytes": 5356
+  },
+  "rr20-core-supersession-closure-receipt.json": {
+    "sha256": "f820b4b340a74ef0dc9912b4c3d423d5a39496c23d09c6e940994a173fcdcdfa",
+    "bytes": 787
+  },
+  "rr20-core-supersession-preflight.json": {
+    "sha256": "0fe287109040c27575b166b8c226d3b4a0d3503c1469628da754b4d4bc726408",
+    "bytes": 5180
+  },
+  "rr20-gallery2-final-qualification-result.json": {
+    "sha256": "b2bfcab50c243ce3670f73e63d493e47a221af95c6d6eeac9bd728b5522a74f9",
+    "bytes": 430
   }
 }
