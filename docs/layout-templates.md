@@ -51,6 +51,23 @@ slide that has headings. Region names may not be `title`, `subtitle`, `tag`, `au
 | `anchor` | `top`, `middle`, `bottom` | `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
+### Choosing an anchor
+
+A block's `region` selects a named area; that area's `anchor` controls vertical placement inside it. Region names such
+as `main` and `aside` have no special positioning behavior. Declare the names in the layout's grid and regions.
+
+Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
+substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. The title
+remains in its own heading area. Anchoring does not enlarge short text to fill unused space.
+
+The measured-content implementation supports text/list leaves and uncaptioned quote/metric leaves. A quote keeps
+its body, attribution and photo together. A metric keeps its value and metadata together without reducing the
+nominal font size merely because its placement box becomes shorter. Grid and horizontal rows share an origin
+based on their tallest measured content, so differing description lengths do not stagger headline numbers.
+Content that does not fit retains its allocation and overflow diagnostics. Nested groups, captioned quotes/metrics,
+charts, tables and explicit slide composition overrides keep their existing allocation behavior; an anchor is not
+a promise to measure arbitrary content.
+
 ### Validation
 
 The schema checks types, enums and ranges; an embedded record that fails it is `opf/catalog-record`. `validate` adds:

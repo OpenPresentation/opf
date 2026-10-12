@@ -68,6 +68,14 @@ Code pagination preserves exact body fragments and repeats filename/language, re
 
 ## Resizing tracks
 
+For a v2 region, `anchor: "middle"` or `"bottom"` positions a compact measured content envelope inside the region;
+it does not move the named region or change a pin's meaning. The measured-content implementation includes plain
+and list text and uncaptioned quote/metric leaves. Quote attribution/photo stays next to the quotation, and metric
+value/metadata stays together. A grid row shares an origin based on its tallest measured content; retain the
+original nominal metric font size when placing the compact result. Dense text and analytical regions normally
+stay top-aligned. Groups, captioned quotes/metrics and explicit slide composition overrides retain their existing
+allocation rules. Check the installed engine: the first 0.19 release anchored text/list stacks only.
+
 Published core 0.10.0 introduced [shared vector-outline placement](https://github.com/OpenPresentation/opf/blob/main/docs/plans/text-placement.md). Current core 0.13.0 reports `grid-score-v9` and shared `furniture-flow-v2`. Optional `textMeasurement.outlineBounds` and `textRasterPadding` determine accepted heading/scalar/rich line origins; pass identical options to pagination, preview, editing and export. Explanations report outline availability and effective padding. This does not measure every payload's ink or establish native raster equivalence.
 
 Each composed item carries a resolved `alignment`: `titleAlignment` for the title and `contentAlignment` for every other item (slide design, then the deck's design or the host option, then the layout record's `design`, then `left`). Consumers anchor text to it instead of re-resolving design; the title never inherits `contentAlignment`. On a cover (no body payload, heading-only layout) the tag and subtitle follow `titleAlignment` too, unless the slide's own `design.contentAlignment` says otherwise.
