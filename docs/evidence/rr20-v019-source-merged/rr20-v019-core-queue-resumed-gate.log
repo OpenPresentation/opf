@@ -1,0 +1,3 @@
+02:57:36 OpenPresentation/opf main: no required checks: every check except neutral bots counts; merge queue
+02:57:36 OpenPresentation/opf#592 head e25d32f7; checks green (33/33 checks, no ruleset); mergeable MERGEABLE/CLEAN; in the merge queue (AWAITING_CHECKS, position 1)
+03:00:37 MERGED OpenPresentation/opf#592 00022a4ed3d2576bd09c003aa38659ed5d014bc5 (merged by the merge queue)

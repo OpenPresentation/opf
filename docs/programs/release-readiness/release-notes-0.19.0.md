@@ -1,6 +1,6 @@
 # DRAFT — NOT PUBLISHED: 0.19 release-readiness note
 
-Updated 2026-10-12 for the owner (RR-20/T40). This is internal repository documentation, not a public support claim or completed release. The [execution checklist](0.19-execution.md) and [burndown](burndown.md) remain authoritative. Verified progress is 18/40 after the source lock, patch registry records and renderer/editor source checkpoints landed; v0.19 publication, final site adoption and fresh native acceptance are still pending.
+Updated 2026-10-12 for the owner (RR-20/T40). This is internal repository documentation, not a public support claim or completed release. The [execution checklist](0.19-execution.md) and [burndown](burndown.md) remain authoritative. Verified progress is 21/40 after the source lock, patch registry records and renderer/editor source checkpoints landed; v0.19 publication, final site adoption and fresh native acceptance are still pending.
 
 ## What is intended to ship
 
@@ -16,7 +16,7 @@ The independently verified patch train is core **0.18.4**, renderer/PPTX/editor 
 
 Renderer #215 is merged at `0e18fb532736248ff7c96a2a3c05cbf32a86b68c`, editor #156 at `030e68f5571d665f7a1c11c54adb3e9add723fc1`, and PPTX #240 at `4af1107102d93aafdba2c225486396273d121304`. Exact merged trees preserve the reviewed source carriers and superseded feature scopes; [source merge receipts](../../evidence/rr20-v019-source-merged/README.md). T23/T25 source criteria are complete. **T24 and T31 remain open: fresh native Windows acceptance is UNRUN.**
 
-Core #592 at `e25d32f7d2465ef5dff2bd552a90832ab002a839` is queued after 33/33 checks and confirmation (supervisor snapshot: enqueued 2026-10-12 02:14:45 UTC). It is **not merged**; queue and release gates remain required. Its reviewed font-fixture and registry-isolation repairs pass local contracts; that is not a core merge or publication. [Earlier exact source qualification](../../evidence/rr20-patch-registry-adoption/v019-source-ci-integration/core-qualification.json) records its own historical graph. Local sibling qualification passed 117/132/72 test files, strict 807-example and 498-template goldens and 84 alignment cases. Reviewed visual migration and offline packet checks do not establish native PowerPoint rendering. Gallery2 remains unpublished; authentic adoption locks remain incomplete.
+Core #592 is merged at `00022a4ed3d2576bd09c003aa38659ed5d014bc5`, exact reviewed e25 tree, after 33/33 checks and queue confirmation at 2026-10-12 03:00:37 UTC. T20/T21/T26 source criteria are complete; gallery bootstrap, authentic registry adoption, stable release and native gates remain pending. [Earlier exact source qualification](../../evidence/rr20-patch-registry-adoption/v019-source-ci-integration/core-qualification.json) records its own historical graph. Local sibling qualification passed 117/132/72 test files, strict 807-example and 498-template goldens and 84 alignment cases. Reviewed visual migration and offline packet checks do not establish native PowerPoint rendering. Gallery2 remains unpublished; authentic adoption locks remain incomplete.
 
 The minimal remaining sequence is:
 

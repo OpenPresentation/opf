@@ -62,5 +62,21 @@
   "rr20-pptx-supersession-closure-receipt.json": {
     "sha256": "4df91b66079a4657f6f154c14a10e48ef1c2fa1d52fcc486452fb0928538d308",
     "bytes": 244
+  },
+  "rr20-core592-actual-merge-proof.json": {
+    "sha256": "bc9b4c7792bd7dfb10817f8c873bd9ffe454519c929c5c2aa82eac72db76b4db",
+    "bytes": 406
+  },
+  "rr20-v019-core-queue-resumed-gate.log": {
+    "sha256": "32a7c9c1d89761d8e842ccbc7c50359f7a066ebdf47286eb17880ab06c285f5b",
+    "bytes": 384
+  },
+  "rr20-core-old-scopes-actual-merge-proof.json": {
+    "sha256": "da0f048b104fc5e14d1d7b5d188bc538176e265de8f3d3abe981063fe676661b",
+    "bytes": 3634
+  },
+  "rr20-old-pr-post-carrier-reconciliation.md": {
+    "sha256": "0cc31fc37ca6f81cb5c8f8de436cdaf9cb8031595bbeb6ea5aff2369b88f8cab",
+    "bytes": 5356
   }
 }
