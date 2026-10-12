@@ -1,8 +1,14 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
-const read=file=>readFileSync(new URL(`../${file}`,import.meta.url),'utf8');
-test('candidate and control lanes keep exact metadata, immutable browser, and required status boundaries',()=>{
+// Apply the same strict contracts to both LF and Windows CRLF checkout bytes.
+for(const ending of ['LF','CRLF']){
+const read=file=>{
+ const original=readFileSync(new URL(`../${file}`,import.meta.url),'utf8').replaceAll('\r\n','\n');
+ const checkedOut=ending==='CRLF'?original.replaceAll('\n','\r\n'):original;
+ return checkedOut.replaceAll('\r\n','\n');
+};
+test(ending+': '+'candidate and control lanes keep exact metadata, immutable browser, and required status boundaries',()=>{
  const candidate=read('.github/workflows/candidate-gallery-qualification.yml'),control=read('.github/workflows/published-gallery-control.yml');
  for(const source of [candidate,control]){
   assert.match(source,/playwright:v1\.63\.0-noble@sha256:[0-9a-f]{64}/);
@@ -21,7 +27,7 @@ test('candidate and control lanes keep exact metadata, immutable browser, and re
  assert.match(portability,/candidate-gallery-build\.mjs/);assert.match(portability,/test-packed-ecosystem\.mjs/);
  assert.match(ecosystem,/needs: \[gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability\]/);
 });
-test('supported engines and CLI portability use fresh candidate staging and preserve original contracts',()=>{
+test(ending+': '+'supported engines and CLI portability use fresh candidate staging and preserve original contracts',()=>{
  for(const file of ['engines-range.yml','cli-windows.yml']){
   const source=read(`.github/workflows/${file}`);
   assert.match(source,/candidate-gallery\.mjs resolve/);assert.match(source,/uses: \.\/\.github\/actions\/candidate-gallery-stage/);
@@ -37,7 +43,7 @@ test('supported engines and CLI portability use fresh candidate staging and pres
  }
 });
 
-test('sibling published control selects the core tools repository/ref with an unchanged core default',()=>{
+test(ending+': '+'sibling published control selects the core tools repository/ref with an unchanged core default',()=>{
  const control=read('.github/workflows/published-gallery-control.yml');
  assert.match(control,/tools-ref:\s+type: string\s+required: false\s+default: ''/);
  const checkout=control.slice(control.indexOf('    steps:'),control.indexOf('          path: opf\n'));
@@ -48,7 +54,7 @@ test('sibling published control selects the core tools repository/ref with an un
  assert.match(control,/rev-parse','HEAD'/);
 });
 
-test('installed candidate staging primes gallery engines before strict source linking',()=>{
+test(ending+': '+'installed candidate staging primes gallery engines before strict source linking',()=>{
  const workflow=read('.github/workflows/ecosystem-ci.yml');
  const job=workflow.slice(workflow.indexOf('  installed-portability:'),workflow.indexOf('  # RR-53:',workflow.indexOf('  installed-portability:')));
  for(const command of ['pnpm build','node scripts/link-ecosystem.mjs --packages-only']){
@@ -62,7 +68,7 @@ test('installed candidate staging primes gallery engines before strict source li
  assert.match(job,/node scripts\/pack-ecosystem\.mjs/);assert.match(job,/node scripts\/test-packed-ecosystem\.mjs/);
 });
 
-test('engines range retains complete contracts within a bounded candidate graph budget',()=>{
+test(ending+': '+'engines range retains complete contracts within a bounded candidate graph budget',()=>{
  const source=read('.github/workflows/engines-range.yml');
  const node=source.slice(source.indexOf('  node-range:'));
  assert.match(node,/timeout-minutes: 45/);
@@ -71,7 +77,7 @@ test('engines range retains complete contracts within a bounded candidate graph 
  assert.match(read('packages/cli/test/packed-files.mjs'),/timeout: 600000/,'individual install/command hangs remain bounded');
 });
 
-test('installed and CLI portability retain registry controls within their bounded graph budget',()=>{
+test(ending+': '+'installed and CLI portability retain registry controls within their bounded graph budget',()=>{
  const ecosystem=read('.github/workflows/ecosystem-ci.yml');
  const installed=ecosystem.slice(ecosystem.indexOf('  installed-portability:'),ecosystem.indexOf('  # RR-53:',ecosystem.indexOf('  installed-portability:')));
  const cli=read('.github/workflows/cli-windows.yml').slice(read('.github/workflows/cli-windows.yml').indexOf('  cli:'));
@@ -81,3 +87,5 @@ test('installed and CLI portability retain registry controls within their bounde
   assert.match(job,/CANDIDATE_GALLERY_REF: ''/,'actual published control remains distinct');
  }
 });
+
+}

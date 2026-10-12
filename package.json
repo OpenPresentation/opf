@@ -11,6 +11,7 @@
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
     "check:release-plan-cli": "node --test scripts/release-plan-cli.test.mjs",
     "check:showcase": "node --test scripts/showcase-contract.test.mjs",
+    "check:furniture-gallery": "node --test scripts/furniture-gallery.test.mjs",
     "check:registry-toolchain": "node --test scripts/registry-toolchain.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
@@ -98,7 +99,7 @@
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
-    "@openpresentation/gallery": "^1.0.0",
+    "@openpresentation/gallery": "^2.0.0",
     "@biomejs/biome": "^2.5.3",
     "@typescript/native": "npm:typescript@~7.0.2"
   }

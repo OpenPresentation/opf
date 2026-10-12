@@ -113,7 +113,7 @@ try {
       if (result.error || result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed: ${result.error?.message ?? result.stderr}`);
       return result.stdout;
     };
-    // RR-78: core depends on @openpresentation/gallery@^1; its candidate tarball (packed with the CLI's) joins the install.
+    // RR-78: core depends on @openpresentation/gallery@^2; its candidate tarball (packed with the CLI's) joins the install.
     ({ cliTarball, galleryTarball } = await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync }));
   }
   await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), ...(galleryTarball?[galleryTarball]:[]), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => candidateGraph ? path.join(packageRoot,'../../artifacts/npm',item.file) : `${item.name}@${item.version}`)], { cwd: projectDir });
