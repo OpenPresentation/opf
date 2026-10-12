@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.19.1 (2026-10-12)
+
+The 0.19 renderer train uses 0.19.1 after the 0.19.0 publisher stopped before npm publication. It includes the adaptive v2 layout renderer and the corrected ordinary release checks.
+
+- Ordinary renderer release tests select the existing reviewed v2 example baseline, matching installed core 0.19 examples. Explicit historical baseline overrides and all source, raster, missing-baseline and empty-corpus guards remain strict; no golden bytes or tolerances change.
+
 ## 0.19.0 (2026-10-12)
 
 - RR-81 (OPF 0.19 layout templates; needs core 0.19): the renderer draws template layouts (`opf-layout/v2`: `areas`, `rows`, `columns` and `regions`) from core's composed geometry. A list core lays out in columns (`item.listColumns`: a lone list in a region with `listColumns: "auto"`, or a list payload with `columns`) draws every column in its own box at one shared size, with numbering continuing across the columns; before, only the first column was drawn. Cards are core's `item.frameBox` and a region with `bleed` reaches the slide edge with no card, as core composes them. With `trace: true` everything an item of a region draws is grouped in `<g data-opf-region="<name>">`, and each list column is a group with `data-opf-list-column`, `data-opf-list-start`, `data-opf-list-end` and its `data-opf-box-*`. New SVG and PNG goldens cover the 28 built-in templates with 1 to 6 short and long blocks, lists in two and three columns, bled regions beside cards, mirrored templates, and the 152 pages core's `paginate` makes of the 42 sample slides that overflow (each page free of `text-overflow` and drawn inside its region boxes) (`test/layout-template-goldens.mjs`). The 0.19 contract removes `opf-layout/v1` records and the old placeholder/slot APIs without aliases. The reviewed v2 example corpus intentionally updates 171 slides; its frozen baseline and the 498 template cases remain strict.
