@@ -5,7 +5,7 @@
 //   - load the family's package (and, for the Arabic and Hebrew families, only packages of that script),
 //   - resolve each style to the family itself, as `exact` (the weight the family has nearest the request; bold takes the regular face
 //     of a family with one weight), never to a substitute,
-//   - shape every sample at the advance the face's own file gives (fontkit with the OpenType language system of the sample), within 0.1 px,
+//   - shape every sample at the advance the face's own file gives (independent HarfBuzz with the sample's language), within 0.1 px,
 //   - draw every run of the deck in the family, strictly (`glyphFallback: 'none'`: a missing glyph raises, and no fallback note is made),
 //     with textLength equal to the file's advance of that run within 0.1 px, and
 //   - paint through resvg with that file: the same pixels with only the family's file loaded as with every face, different pixels without
@@ -13,15 +13,16 @@
 //     draws its monochrome stand-in Noto Emoji, and the fixture checks that route instead.
 // It writes artifacts/script-family-hosts/node.json (per family: package, files, bytes, samples) for the evidence behind the tracker.
 import assert from 'node:assert/strict';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import * as hb from 'harfbuzzjs';
 import * as core from '@openpresentation/opf/composition';
 import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptTextMeasurement} from '../dist/fonts.js';
 import {monochromeColorFonts, rasterFontFiles} from '../dist/color-fonts.js';
-import {PROBE_SIZE, directAdvance, drawnRuns, expectedWeight, packageBytes, root, scriptDeck, scriptFamilies} from './script-family-fixture.mjs';
+import {PROBE_SIZE, drawnRuns, expectedWeight, packageBytes, root, scriptDeck, scriptFamilies} from './script-family-fixture.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const slash = file => file.split(String.fromCharCode(92)).join('/');
@@ -67,11 +68,22 @@ for (const entry of families) {
     styleChecks += 1;
   }
   // Samples: advances from the file, and the deck drawn strictly in the family.
-  const fontOf = weight => entry.fonts[entry.faces.findIndex(face => face.weight === weight && !face.italic)];
+  const references = await Promise.all(entry.faces.map(async face => {
+    const hbFace = new hb.Face(new hb.Blob(await readFile(face.file)));
+    return {face, hbFace, hbFont: new hb.Font(hbFace)};
+  }));
+  const directAdvance = (weight, text, size, lang) => {
+    const reference = references.find(row => row.face.weight === weight && !row.face.italic);
+    const buffer = new hb.Buffer();
+    buffer.addText(text); buffer.guessSegmentProperties();
+    if (lang) buffer.setLanguage(lang);
+    hb.shape(reference.hbFont, buffer);
+    return buffer.getGlyphPositions().reduce((sum, position) => sum + position.xAdvance, 0) / reference.hbFace.upem * size;
+  };
   for (const {sample, deck} of decks) {
     for (const weight of entry.weights) {
       const measured = registry.textMeasurement.measure(sample.text, PROBE_SIZE, {fontFamily: entry.family, fontWeight: weight, italic: false, ...(sample.lang ? {lang: sample.lang} : {})});
-      const want = directAdvance(fontOf(weight), sample.text, PROBE_SIZE, sample.lang);
+      const want = directAdvance(weight, sample.text, PROBE_SIZE, sample.lang);
       assert.ok(Math.abs(measured - want) < 0.1, `${where} ${weight} ${sample.id}: measures ${measured}, the face gives ${want}`);
     }
     const notes = [];
@@ -85,7 +97,7 @@ for (const entry of families) {
       assert.equal(run.family, entry.family, `${where} ${sample.id}: "${[...run.text].slice(0, 12).join('')}" is drawn in ${entry.family}, not ${run.family}`);
       assert.ok(entry.weights.includes(run.weight), `${where} ${sample.id}: weight ${run.weight} is one of the family's`);
       drawnWeights.add(run.weight);
-      const direct = directAdvance(fontOf(run.weight), run.text, run.size, sample.lang);
+      const direct = directAdvance(run.weight, run.text, run.size, sample.lang);
       assert.ok(Math.abs(run.length - direct) < 0.1, `${where} ${sample.id}: textLength ${run.length} equals the advance of ${path.basename(entry.faces.find(face => face.weight === run.weight).file)} (${direct})`);
       runChecks += 1;
     }

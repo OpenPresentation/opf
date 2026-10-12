@@ -2,8 +2,7 @@
 // is set in it at 100 px with its lang. For each face and sample whose characters the face covers, the browser's natural advance is compared
 //   - with HarfBuzz's (harfbuzzjs) advance, which must agree within 0.1 px: Chromium and HarfBuzz are one shaper, so this validates the
 //     reference the Node qualification (test/script-corpora.mjs) holds fontkit to; and
-//   - with the renderer's accepted (fontkit) advance, which must agree within 0.1 px except the recorded fontkit limits in the fixture
-//     (Myanmar, one Syriac word, Nastaliq vowel marks), whose deviation is bounded.
+//   - with the loaded renderer's HarfBuzz advance, which must agree within 0.1 px without fontkit width exceptions.
 // The span carries `text-rendering: geometricPrecision` (the renderer's SVG sets it; without it Chromium on Linux rounds advances to whole pixels) and `text-spacing-trim: space-all`, as the renderer's SVG does for slides that draw fullwidth punctuation (src/svg.js); the
 // SVG block at the end proves that on real toSvg output. Right-to-left samples must display right to left (the first character is painted right of the last). Nothing else may load.
 // Usage: node test/script-corpora-browser.mjs [report.json]
@@ -19,7 +18,7 @@ import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
 const corpora = await loadCorpora();
 const {faces, registry} = await loadFaces();
 const report = await qualify({faces, registry, corpora});
-const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
+const limits = new Map(); // Loaded HarfBuzz handles have no fontkit width exceptions.
 
 // One case per face and sample the face covers completely (Latin and digits missing from a script face fall to another face in a browser).
 const cases = [];

@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import { toSvg, resolvePresentation, engineDefaults, OPFRenderError } from '../dist/index.js';
 import { presentationFamilies } from '../dist/fonts-browser.js';
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME } from '@openpresentation/opf/composition';
@@ -17,6 +17,7 @@ for (const directory of ['../src/', '../dist/']) {
     // Code lines only: the JSDoc that tells hosts how to register a catalog may name the subpath.
     const text = readFileSync(new URL(name, url), 'utf8').split('\n').filter(line => !/^\s*(?:\*|\/\/|\/\*)/.test(line)).join('\n');
     assert.doesNotMatch(text, /(?:\bfrom\s*|\bimport\s*\(\s*)["']@openpresentation\/opf\/catalogs?["']/, `${directory}${name} imports a catalog`);
+    assert.doesNotMatch(text, /(?:\bfrom\s*|\bimport\s*\(\s*)["']@openpresentation\/gallery(?:\/[^"']*)?["']/, `${directory}${name} imports gallery data`);
     assert.doesNotMatch(text, /catalogSources/, `${directory}${name} still reads catalogSources`);
   }
   checked++;

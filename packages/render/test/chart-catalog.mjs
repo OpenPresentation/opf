@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { catalogDisplay } from "@openpresentation/opf/catalog";
+import { catalogDisplay } from "@openpresentation/gallery";
 import { CHART_TYPES as CORE_CHART_TYPES, ENGINE_DEFAULT_CHART_TYPES } from "@openpresentation/opf/composition";
 import { CHART_TYPES, resolveChartType } from "../dist/charts.js";
 import { engineDefaults } from "../dist/index.js";

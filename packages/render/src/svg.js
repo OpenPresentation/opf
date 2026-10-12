@@ -9,7 +9,7 @@ import {
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
-// example `defaultCatalog` from `@openpresentation/opf/catalog`) and core resolves every reference against them.
+// example `defaultCatalog` from `@openpresentation/gallery`) and core resolves every reference against them.
 import {
   hasContentVariables,
   isTemplate,
@@ -911,10 +911,15 @@ function imageRecolorMatrix(recolor, bound) {
 function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
+    // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
+    // region's flow cell; core never gives an item of a bled region a card).
     const frame=item.frameBox;
     const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
-    return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
+    const drawn=surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
+    // OPF 0.19 (RR-81): with trace, everything an item of a layout template region draws (card, payload, caption) is
+    // grouped under data-opf-region, the region's name (ComposedItem.region). Items outside a template are unchanged.
+    return options.trace && item.region !== undefined && drawn ? tag('g',{'data-opf-region':item.region},drawn) : drawn;
   });
 }
 // Draw helpers injected into src/annotations.js (captions and footnote areas).
@@ -985,8 +990,26 @@ function renderTextPayload(item, box, bound, options) {
 }
 
 function renderList(item, box, bound, options) {
+  // OPF 0.19 (RR-81): a list core laid out in columns (item.listColumns) draws every column's own fit in its own box, and
+  // only those: item.text is then the whole list's fit and is never drawn, or the list would draw twice. Core renumbers each
+  // column's entries (indexes, paths and markers), so numbering continues across columns. With trace, each column is a
+  // group carrying its index, its box and the half-open item range it holds.
+  if (Array.isArray(item.listColumns) && item.listColumns.length > 1) {
+    const columns=item.listColumns.map((column,index)=>{
+      const entries=listEntriesSvg(item,column.text,bound,options).join('\n');
+      return options.trace?tag('g',{'data-opf-list-column':index,'data-opf-list-start':column.start,'data-opf-list-end':column.end,
+        'data-opf-box-x':column.box.x,'data-opf-box-y':column.box.y,'data-opf-box-width':column.box.width,'data-opf-box-height':column.box.height,
+        ...(column.text.overflow?{'data-opf-overflow':'true'}:{})},entries):entries;
+    });
+    return tag('g',{...traceAttrs(options,item.path),...(item.listColumns.some(column=>column.text.overflow)?{'data-opf-overflow':'true'}:{})},columns.join('\n'));
+  }
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:options.textMeasurement,...(item.payload?.numbering!==undefined?{numbering:item.payload.numbering}:{})});
+  return tag('g',{...traceAttrs(options,item.path),...(fit.overflow?{'data-opf-overflow':'true'}:{})},listEntriesSvg(item,fit,bound,options).join('\n'));
+}
+
+// The markers, item text and descriptions of one list fit: a whole list, or one column of a list in columns.
+function listEntriesSvg(item, fit, bound, options) {
   const children=[];
   // design.listBullet=image: core attaches the icon logo as item.bulletImage and its box (entry.bulletBox: 0.65 em, as PowerPoint draws a:buBlip). An icon that cannot be drawn keeps the glyph marker.
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
@@ -997,7 +1020,7 @@ function renderList(item, box, bound, options) {
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
   }
-  return tag('g',{...traceAttrs(options,item.path),...(fit.overflow?{'data-opf-overflow':'true'}:{})},children.join('\n'));
+  return children;
 }
 
 // A numbered list's marker (numbering) draws the number with the weight and slant core measured it at: PowerPoint draws an

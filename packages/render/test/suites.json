@@ -14,6 +14,7 @@
     "furniture-review.mjs",
     "golden-store.mjs",
     "latin-family-fixture.mjs",
+    "layout-template-fixture.mjs",
     "packed-install.mjs",
     "pdf-helpers.mjs",
     "platform-residual-probe.mjs",

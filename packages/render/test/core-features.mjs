@@ -4,7 +4,7 @@
 // export (`typeof core.x === "function"`, `"x" in core`), which is how right-to-left text, script fonts, pattern fills, code colours,
 // chart options, citations and numbered lists used to disappear silently when a name moved between core entries.
 // OPF 0.15 (FA-21/23): the renderer registers no catalog of its own (hosts pass core `Catalog[]`), so it needs no catalog export
-// and no source file imports `@openpresentation/opf/catalog`; what it falls back to is core's engine defaults.
+// and no source file imports `@openpresentation/gallery`; what it falls back to is core's engine defaults.
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';

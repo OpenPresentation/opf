@@ -35,7 +35,9 @@ const workflow = readFileSync(path.join(root, '.github/workflows/regenerate-gold
 assert.ok(workflow.includes(`image: ${pins.image}`), 'regenerate-goldens.yml must run in the image ci.yml pins');
 assert.ok(workflow.includes(`OPF_PLAYWRIGHT_IMAGE: ${pins.image}`), 'The job env repeats the image the guard compares with ci.yml');
 assert.ok(workflow.indexOf('golden-pinned-image.mjs') < workflow.indexOf('npm ci'), 'The guard runs before any install');
-assert.equal(/runs-on:\s*(\S+)/.exec(workflow)[1], /runs-on:\s*(\S+)/.exec(ci)[1], 'The workflow uses the runner label of the ci.yml package job');
+const packageStart = ci.indexOf('\n  package:\n');
+assert.ok(packageStart >= 0, 'ci.yml retains the required package job');
+assert.equal(/runs-on:\s*(\S+)/.exec(workflow)[1], /runs-on:\s*(\S+)/.exec(ci.slice(packageStart))[1], 'The workflow uses the runner label of the ci.yml package job');
 // RR-50: ci.yml pins no sibling and no golden by hand; its golden-override is empty (the lock's golden), a renderer
 // baseline directory (legacy .sha256.json name accepted), or, for a coordinated release, a reviewed core fixture
 // (opf/scripts/fixtures/<name>.sha256.json; core's roller adopts it as the lock's golden).

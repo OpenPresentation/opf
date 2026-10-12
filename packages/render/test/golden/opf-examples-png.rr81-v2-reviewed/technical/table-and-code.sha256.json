@@ -1,0 +1,13 @@
+{
+  "deck": "technical/table-and-code.opf.json",
+  "entries": {
+    "technical/table-and-code.opf.json#0": {
+      "sha256": "1b4977f6105b17cbf8e82572e3bbef313df237d81ad80515abb8c2927cd65d11",
+      "bytes": 6018
+    },
+    "technical/table-and-code.opf.json#1": {
+      "sha256": "54f4dfc4e560609eb4216cc5ca36c33d2fed8118a8af1cf6ba5c2fc5a6b0ff08",
+      "bytes": 6542
+    }
+  }
+}

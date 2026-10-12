@@ -53,7 +53,7 @@ const script = bundle.outputFiles[0].text;
 const eager = (await loadFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 assert.equal(eager.length, 33, 'the eager list is the 33 office and base faces');
 const corpora = await loadCorpora();
-const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
+const limits = new Map(corpora.fontkitFallbackLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
 const ORIGIN = 'https://app.test', PACK = `${ORIGIN}/pack/`;
 const packRequests = [], unexpected = [], errors = [], notGatedOnLinux = [];
 

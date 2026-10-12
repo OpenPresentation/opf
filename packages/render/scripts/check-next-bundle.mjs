@@ -24,7 +24,7 @@ const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'
 const npm = (args, cwd) => execFileSync(process.execPath, [npmCli, ...args], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 
 const RENDER = `import { createHash } from "node:crypto";
-import { defaultCatalog } from "@openpresentation/opf/catalog";
+import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { toSvg } from "@openpresentation/opf-render";
 import { loadFonts } from "@openpresentation/opf-render/fonts-node";
 

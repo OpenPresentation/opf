@@ -2,8 +2,7 @@
 // face that serves each script and records, per face and sample:
 //   - coverage: characters of the sample the face has no glyph for (split into the group's own script and common/Latin characters,
 //     which the glyph-fallback chain covers with Noto Sans);
-//   - the renderer's width: `registry.textMeasurement` (fontkit as the renderer uses it, including the Mongolian lookup guard, the mark
-//     retry and the OpenType language system of the sample's `lang`);
+//   - the renderer's width: `registry.textMeasurement` (the loaded handle's HarfBuzz shaper, with the sample's language and direction);
 //   - HarfBuzz's width and glyph count for the same text, language and face (harfbuzzjs, the same shaper Chromium and resvg use), as the
 //     independent shaping reference; and fontkit's own glyph run, to tell whether shaping applied (ligatures, conjuncts, marks).
 // Per face it also records the line metrics and the coverage of the face's own script and, for CJK faces, of the national charsets.
@@ -176,6 +175,7 @@ export function qualifySample(face, group, sample, registry) {
     codePoints: [...text].length, missing: missing.join(''), missingOwn: missingOwn.join(''),
     rendererWidth: rendererWidth === null ? null : round(rendererWidth), rendererError,
     retry: shaped.retry ?? null, shapingError: shaped.error ?? null,
+    fontkitWidthDelta: run ? round(run.positions.reduce((total, position) => total + position.xAdvance, 0) / face.font.unitsPerEm * 100 - hbWidth) : null,
     hbWidth: round(hbWidth), widthDelta: rendererWidth === null ? null : round(rendererWidth - hbWidth),
     fontkitGlyphs: fkGlyphs.length, hbGlyphs: hbGlyphs.length, glyphSequenceEqual: comparable,
     shapingApplied: fkGlyphs.length !== nominal.length || !eq(fkGlyphs, nominal) || hbGlyphs.length !== nominal.length,

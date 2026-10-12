@@ -13,7 +13,7 @@ import {toHtml} from '../dist/element.js';
 import {toSvg} from '../dist/svg.js';
 import {copyPreviewFonts} from '../dist/preview-fonts-node.js';
 import {embed} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 // A module specifier in generated code: forward slashes and a quoted literal, so a Windows path is not read as escapes.

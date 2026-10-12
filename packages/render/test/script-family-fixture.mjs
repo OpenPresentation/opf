@@ -57,7 +57,7 @@ export const covers = (fonts, text) => fonts.every(font => [...text].every(chara
  */
 export async function scriptFamilies({packagesRoot = root, limits = true} = {}) {
   const corpora = await loadCorpora();
-  const limited = new Set(corpora.knownShapingLimits.flatMap(limit => Object.keys(limit.samples).map(id => `${limit.family}|${id}`)));
+  const limited = new Set(corpora.fontkitFallbackLimits.flatMap(limit => Object.keys(limit.samples).map(id => `${limit.family}|${id}`)));
   const rows = [];
   for (const pkg of BUNDLED_FONT_MANIFEST.packages) {
     if (pkg.pack !== 'scripts' || pkg.scripts.every(script => SYMBOL_ONLY.includes(script))) continue;

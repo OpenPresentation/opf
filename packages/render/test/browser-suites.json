@@ -104,6 +104,10 @@
         {
           "id": "browser:plain-whitespace-browser",
           "command": "npm run test:plain-whitespace-browser"
+        },
+        {
+          "id": "browser:harfbuzz-measurement-browser",
+          "command": "node test/harfbuzz-measurement-browser.mjs"
         }
       ]
     },

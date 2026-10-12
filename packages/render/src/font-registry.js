@@ -1,3 +1,5 @@
+import { sha256Bytes } from "./sha256.js";
+import bidiFactory from "bidi-js";
 import { create } from "fontkit";
 import { FONT_COMPATIBILITY, disabledFeaturesFor } from "./font-compatibility.js";
 import { adjustedFontSize, createScriptFonts, openTypeLanguage, scriptFontAliases, sizeAdjustFor } from "./script-fonts.js";
@@ -11,6 +13,7 @@ import { SYMBOL_SCRIPT, isSymbolEncodedFamily, symbolEncodingFamily, symbolPrevi
 export class OPFFontError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = "OPFFontError"; this.code = code; this.details = details; }
 }
+const bidi = bidiFactory();
 const key = (family, weight, italic) => `${family.toLowerCase()}:${weight}:${!!italic}`;
 function base64(data) {
   let binary = "";
@@ -190,8 +193,15 @@ export function createFontRegistry(entries, options = {}) {
     if (entry.embed !== undefined && entry.embed !== "always" && entry.embed !== "used") throw new OPFFontError("invalid-font-embed", "Font embed must be 'always' or 'used'.");
     // A fallback-only face (the default Noto Sans) serves glyph fallback and explicit requests by its own name,
     // but never stands in for another family, so loading it does not change what any other font previews with.
-    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,embed:entry.embed,scripts,fallbackOnly:entry.fallbackOnly===true,cache:new Map()};
+    return {family,familyGroup,fontFace,weight,italic,font,data,format,
+      // The Node shaper is shared across handles: reuse its immutable font by content, never by a new byte-array identity.
+      get hash() {
+        const hash = Array.from(sha256Bytes(data), byte => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+        Object.defineProperty(this, "hash", {value: hash});
+        return hash;
+      },license:entry.license,embed:entry.embed,scripts,fallbackOnly:entry.fallbackOnly===true,cache:new Map()};
   };
+  let shaper;
   const faces = [], duplicates = new Set(), familySlots = new Map();
   // Adds faces atomically: every check runs before any face is registered.
   const register = added => {
@@ -265,7 +275,9 @@ export function createFontRegistry(entries, options = {}) {
     const {face,resolution}=resolve(style);
     // A BCP-47 `lang` selects the font's OpenType language system, as a browser
     // does for an element's lang (FF-19). Without it, shaping is unchanged.
-    const language=openTypeLanguage(style.lang),key=language?`${language}\u0000${text}`:text;
+    const language=openTypeLanguage(style.lang);
+    const direction = style.direction ?? (bidi.getEmbeddingLevels(text).paragraphs[0]?.level % 2 ? "rtl" : "ltr");
+    const key = `${direction}\u0000${style.lang ?? ""}\u0000${text}`;
     let value=face.cache.get(key);
     if (value===undefined) {
       if (options.strictGlyphs!==false) for(const character of text) {
@@ -284,7 +296,27 @@ export function createFontRegistry(entries, options = {}) {
       const off=disabledFeaturesFor(face.family),policyFeatures=off&&Object.fromEntries(off.map(tag=>[tag,false]));
       const shape=extra=>{const features=policyFeatures||extra?{...policyFeatures,...extra}:undefined;return language?face.font.layout(text,features,undefined,language):features?face.font.layout(text,features):face.font.layout(text);};
       let run;
-      try { run=shape(); }
+      if (shaper) {
+        try {
+          const glyphs = shaper.shape(face, text, {direction, lang: style.lang, features: policyFeatures});
+          let pen = 0, bounds = null;
+          for (const glyph of glyphs) {
+            if (includeOutline) {
+              // Colour/bitmap glyphs may have no fontkit outline (the em-box fallback below still applies).
+              let box;
+              try { box = face.font.getGlyph(glyph.gid).bbox; } catch { box = null; }
+              if (box && [box.minX, box.minY, box.maxX, box.maxY].every(Number.isFinite) && box.width > 0 && box.height > 0) {
+                const next = {minX: pen + glyph.xOffset + box.minX, maxX: pen + glyph.xOffset + box.maxX, minY: glyph.yOffset + box.minY, maxY: glyph.yOffset + box.maxY};
+                bounds = bounds ? {minX: Math.min(bounds.minX, next.minX), maxX: Math.max(bounds.maxX, next.maxX), minY: Math.min(bounds.minY, next.minY), maxY: Math.max(bounds.maxY, next.maxY)} : next;
+              }
+            }
+            pen += glyph.advance;
+          }
+          run = {positions: [{xAdvance: pen}], bbox: bounds && {...bounds, width: bounds.maxX - bounds.minX, height: bounds.maxY - bounds.minY}};
+        } catch (error) {
+          throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text with HarfBuzz.`, {path:style.path,fontFamily:face.family,cause:error?.message});
+        }
+      } else try { run=shape(); }
       catch (error) {
         // A lookup fontkit cannot decode (GSUB type 8 in Noto Sans Mongolian) applies nothing; shape again with the rest (FF-44).
         if (skipUndecodableLookups(face.font)) { try { run=shape(); } catch { /* the mark retry below */ } }
@@ -326,6 +358,11 @@ export function createFontRegistry(entries, options = {}) {
   textMeasurement.forScripts=profile=>createScriptFonts(profile,textMeasurement).textMeasurement;
   return {
     textMeasurement,
+    // Attach the handle's outline shaper after its WASM loads. Earlier measurements must not survive the engine switch.
+    setShaper(engine) {
+      shaper = engine;
+      for (const face of faces) face.cache.clear();
+    },
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },

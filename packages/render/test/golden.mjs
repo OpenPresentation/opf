@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { examples } from '@openpresentation/opf/examples';
 // FA-23: the renderer registers no catalog. The examples embed the records they use; the harness registers the gallery
 // snapshot as a host does, which changes nothing for a self-contained deck.
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import {toPng, toSvg} from '../dist/index.js';
 import { diffManifests, readBaseline } from './golden-store.mjs';
 

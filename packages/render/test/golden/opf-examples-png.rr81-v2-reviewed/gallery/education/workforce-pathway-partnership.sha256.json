@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/education/workforce-pathway-partnership.opf.json",
+  "entries": {
+    "gallery/education/workforce-pathway-partnership.opf.json#0": {
+      "sha256": "2798600ade96244236f2e3997671c7d8a89eacf0f97068eb349a8483809441fa",
+      "bytes": 5432
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#1": {
+      "sha256": "6051d6cd88ee412aa06d9bab50109ee9cd95c65312ac68c16a21b70347db0039",
+      "bytes": 7070
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#2": {
+      "sha256": "d6b414e32e36f84025508dd2b99527a2ddef6fbe2bbb45662e4ac7956b44e4f9",
+      "bytes": 6453
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#3": {
+      "sha256": "0a1fe9cd4ef20fd01fce5eb319e259ebed221a76c7af66a653b3e7338ac4094f",
+      "bytes": 6235
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#4": {
+      "sha256": "24a4ce32b7b556f4a0d7595c9ea36ba04169afe01761ceff3a5596643f7b6be8",
+      "bytes": 6691
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#5": {
+      "sha256": "23c3d6b6e151eb045a1a8ca0a9b184b74814134af41c810547d0f8b360ddda68",
+      "bytes": 13912
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#6": {
+      "sha256": "5f56bbd70a8ffede52568d3b95a585f7b3e0e22281ec31da70c68f14f056538d",
+      "bytes": 8633
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#7": {
+      "sha256": "60c39e88a90848c2449ce62616fe1f46a6319a4314e9bdd201906ee9499f1a63",
+      "bytes": 4743
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#8": {
+      "sha256": "c62567d1f7b9f8b1a4b3d53986233122a50899574fdd132aa255192c552b0de1",
+      "bytes": 5270
+    },
+    "gallery/education/workforce-pathway-partnership.opf.json#9": {
+      "sha256": "a3db2864ee8ac0794a5d5bdd4d37895cb92ab1b3bac3bc0f37ed5318cf3018d1",
+      "bytes": 8935
+    }
+  }
+}

@@ -5,10 +5,10 @@
 // sample runs through every bundled open face that serves its script (regular and bold, all 63 script and Noto Sans faces) and is checked for
 //   1. coverage: the face has a glyph for every letter of the group's own script (Latin, digits and punctuation in mixed samples are the
 //      glyph-fallback chain's job: some loaded face must have them);
-//   2. shaping: fontkit, as the renderer uses it (opf-render's own measurement, with its Mongolian lookup guard, its mark-positioning retry
+//   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with its Mongolian lookup guard, its mark-positioning retry
 //      and the OpenType language system of the sample's lang), shapes the text;
-//   3. agreement with HarfBuzz (harfbuzzjs, the shaper Chromium and resvg use) on the advance width at 100 px, to 0.011 px, except the
-//      recorded `knownShapingLimits` (fontkit 2.0.4 has no Myanmar shaper, mis-joins one Syriac word and cannot position Nastaliq marks), whose
+//   3. loaded-handle advances agree with independent HarfBuzz within 0.011 px, with no exceptions; fallback fontkit widths have only the
+//      recorded `fontkitFallbackLimits` (fontkit 2.0.4 has no Myanmar shaper, mis-joins one Syriac word and cannot position Nastaliq marks), whose
 //      deviations are bounded and must still exist (a limit that no longer deviates must be removed from the fixture);
 //   4. shaping really applied where the category says so (joining, conjuncts, vowel placement, tone marks change the glyph run).
 // It also checks that the corpus covers every script of the 93 languages of core's engine language vocabulary (`LANGUAGES`) and every script
@@ -18,7 +18,7 @@ import assert from 'node:assert/strict';
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {LANGUAGES} from '@openpresentation/opf/composition';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, itemizeScripts} from '../dist/script-fonts.js';
@@ -51,7 +51,7 @@ for (const group of corpora.groups) assert.ok(faces.some(face => face.scripts.in
 assert.equal(report.faces.length, faces.length);
 assert.ok(faces.length >= 63, `${faces.length} script faces`);
 
-const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
+const limits = new Map(corpora.fontkitFallbackLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
 const seenLimit = new Set();
 const shapedCategories = new Set(['joining', 'conjunct', 'vowel-placement', 'tone-marks']);
 const complexGroups = new Set(['Arab', 'Hebr', 'Deva', 'Beng', 'Guru', 'Gujr', 'Orya', 'Taml', 'Telu', 'Knda', 'Mlym', 'Sinh', 'Thai', 'Laoo', 'Khmr', 'Mymr', 'Tibt', 'Mong', 'Syrc', 'Thaa']);
@@ -67,12 +67,13 @@ for (const entry of report.faces) {
       assert.equal(sample.shapingError, null, `${where}: fontkit cannot shape`);
       assert.equal(sample.rendererError, null, `${where}: the renderer's measurement fails (${sample.rendererError})`);
       assert.ok(sample.rendererWidth > 0, where);
+      assert.ok(Math.abs(sample.widthDelta) <= 0.011, `${where}: loaded HarfBuzz measurement ${sample.rendererWidth} differs from reference ${sample.hbWidth}`);
       const bound = limits.get(`${entry.family}|${sample.id}`);
       if (bound !== undefined) {
         seenLimit.add(`${entry.family}|${sample.id}`);
-        assert.ok(Math.abs(sample.widthDelta) <= bound, `${where}: the recorded limit ${bound} no longer bounds the deviation ${sample.widthDelta}`);
+        assert.ok(Math.abs(sample.fontkitWidthDelta) <= bound, `${where}: the recorded limit ${bound} no longer bounds the deviation ${sample.widthDelta}`);
       } else {
-        assert.ok(Math.abs(sample.widthDelta) <= 0.011, `${where}: fontkit measures ${sample.rendererWidth} px at 100 px, HarfBuzz ${sample.hbWidth}`);
+        assert.ok(Math.abs(sample.fontkitWidthDelta) <= 0.011, `${where}: fallback fontkit advance differs from HarfBuzz by ${sample.fontkitWidthDelta} px at 100 px`);
         exact++;
       }
       if (shapedCategories.has(sample.category) && complexGroups.has(group.script)) assert.ok(sample.shapingApplied, `${where}: shaping did not change the glyph run (${sample.category})`);
@@ -89,8 +90,8 @@ for (const entry of report.faces) {
 }
 for (const key of limits.keys()) assert.ok(seenLimit.has(key), `known limit ${key} matched no sample`);
 // A limit that no longer deviates is stale: every limit family must still deviate in at least one weight and sample.
-for (const limit of corpora.knownShapingLimits) {
-  const deviating = report.faces.filter(face => face.family === limit.family).flatMap(face => face.groups.flatMap(group => group.samples)).filter(sample => limit.samples[sample.id] !== undefined && Math.abs(sample.widthDelta) > 0.05);
+for (const limit of corpora.fontkitFallbackLimits) {
+  const deviating = report.faces.filter(face => face.family === limit.family).flatMap(face => face.groups.flatMap(group => group.samples)).filter(sample => limit.samples[sample.id] !== undefined && Math.abs(sample.fontkitWidthDelta) > 0.05);
   assert.ok(deviating.length > 0, `${limit.family}: its recorded shaping limit no longer deviates, remove it from the fixture`);
 }
 
@@ -191,4 +192,4 @@ if (process.argv[2]) {
   await mkdir(path.dirname(process.argv[2]), {recursive: true});
   await writeFile(process.argv[2], `${JSON.stringify(report, null, 2)}\n`);
 }
-console.log(`Script corpora passed: ${corpora.groups.length} scripts, ${samples} face-samples over ${report.faces.length} faces (${exact} within 0.011 px of HarfBuzz, ${samples - exact} recorded fontkit limits), own-script coverage complete, ${schemeSamples} catalog scheme samples covered.`);
+console.log(`Script corpora passed: ${corpora.groups.length} scripts, ${samples} face-samples over ${report.faces.length} faces (${samples} loaded-handle widths within 0.011 px of HarfBuzz; ${samples - exact} bounded fontkit fallback samples), own-script coverage complete, ${schemeSamples} catalog scheme samples covered.`);

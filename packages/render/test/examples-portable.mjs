@@ -2,7 +2,7 @@
 // offline, without an unresolved-reference diagnostic, and exactly as they do with the gallery snapshot registered.
 import assert from 'node:assert/strict';
 import { examples } from '@openpresentation/opf/examples';
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import { toSvg } from '../dist/index.js';
 
 let slides = 0;

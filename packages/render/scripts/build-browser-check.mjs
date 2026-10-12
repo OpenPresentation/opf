@@ -17,7 +17,7 @@ console.log('Browser bundle passed: no native raster modules. Serve /artifacts/j
 const {loadFonts}=await import('../dist/fonts-node.js');
 const {toSvg,resolvePresentation}=await import('../dist/svg.js');
 // FA-23: the deck names the gallery font scheme 'roboto'; register the gallery snapshot as a host does.
-const {defaultCatalog}=await import('@openpresentation/opf/catalog');
+const {gallery:defaultCatalog}=await import('@openpresentation/gallery');
 const catalogs=[defaultCatalog];
 const fonts=await loadFonts();
 const quoteDirectory=new URL('../artifacts/quote-footer/browser/',import.meta.url);

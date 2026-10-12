@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {toSvg} from '../src/svg.js';
 // The alignment decks below name the gallery's roboto font scheme, so they pass the host catalog (core Catalog[]) explicitly.
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 const catalogs=[defaultCatalog];
 const deck={organization:{id:'acme',name:'Acme'},design:{header:{left:{text:'Confidential'},center:{text:'{{slide.section}}'},right:{text:'{{organization.name}}'}},footer:{left:{text:'{{slide.number}}'},center:{date:'2026-09-07'},right:{text:'Review'}}},slides:[{title:'Slide',section:'Results'}]};
 const svg=toSvg(deck, 1,{trace:true});for(const text of ['Confidential','Results','Acme','2026-09-07','Review','design.header.left'])assert.ok(svg.includes(text),text);

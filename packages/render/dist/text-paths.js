@@ -320,6 +320,8 @@ function precise(value) { return String(Number(Number(value).toPrecision(6))); }
  * slide's text with it. The faces are read from the handle when a slide is outlined, so faces it loads later are used too.
  */
 export function textOutlines(fonts) {
+  const shape = fonts.shaper ? harfBuzzShape(fonts.shaper, { clusterLevel: 2 }) : undefined;
+  fonts.registry?.setShaper?.(shape ? { shape } : undefined);
   return Object.freeze({
     outlineSlideText: (content, options) => {
       const library = outlineLibrary(fonts);
@@ -329,7 +331,7 @@ export function textOutlines(fonts) {
     // opf-render#188: the vector PDF shapes its runs with the same HarfBuzz. Each character stays with the glyph it became (cluster
     // level 2: a mark, a reordered vowel sign), so the PDF's glyph-to-Unicode map and /ActualText spans give the text as before;
     // the glyphs and positions are the outlines'.
-    ...(fonts.shaper ? { shape: harfBuzzShape(fonts.shaper, { clusterLevel: 2 }) } : {}),
+    ...(shape ? { shape } : {}),
   });
 }
 

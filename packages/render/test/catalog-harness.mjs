@@ -2,7 +2,7 @@
 // (themes such as `classic`, layouts such as `image-1x`, colour and font schemes) import the renderer from here, which
 // registers the gallery snapshot explicitly, the way a host does. Tests of what happens without a catalog import
 // ../dist/index.js directly. A call's own `catalogs` replaces the default.
-import { defaultCatalog } from '@openpresentation/opf/catalog';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import * as renderer from '../dist/index.js';
 
 export * from '../dist/index.js';

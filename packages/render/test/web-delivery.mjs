@@ -4,7 +4,7 @@ import {loadFonts} from '../dist/fonts-node.js';
 import {toSvg} from '../dist/svg.js';
 import {toHtml} from '../dist/element.js';
 import {embed} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 
 // OPF 0.15: the renderer registers no catalog, so each deck embeds the font scheme it names (core embed), as a saved
 // document does; every delivery mode then resolves the same records with no host catalog.

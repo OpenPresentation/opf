@@ -9,7 +9,7 @@
 //   - every style resolves to the family itself, as `exact`, never to a substitute or the generic fallback,
 //   - the document holds the faces the registry holds, and a loaded FontFace backs every drawn run,
 //   - every run of the deck is drawn in the family, and its natural advance in the browser (the pin removed) equals the registry's
-//     accepted advance within 0.1 px (the recorded fontkit limits of Myanmar, one Syriac word and Nastaliq vowel marks stay bounded),
+//     accepted advance within 0.1 px (these browser handles omit shapeWasm, so the fontkit fallback limits of Myanmar, one Syriac word and Nastaliq vowel marks stay bounded),
 //   - right-to-left samples display right to left, and the glyphs paint: the family's runs have ink, and the colour emoji face paints
 //     saturated pixels (its COLRv1 glyphs), which a fallback face could not.
 // It writes artifacts/script-family-hosts/browser.json (per family: files fetched, bytes, runs). Offline: every other request is aborted.
@@ -33,7 +33,7 @@ const script = bundle.outputFiles[0].text;
 const eager = (await loadFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 assert.equal(eager.length, 33, 'the eager list is the 33 office and base faces');
 const corpora = await loadCorpora();
-const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
+const limits = new Map(corpora.fontkitFallbackLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
 const families = await scriptFamilies();
 assert.equal(families.length, 35, `the fixture covers ${families.length} script families`);
 const ORIGIN = 'https://app.test', PACK = `${ORIGIN}/pack/`;

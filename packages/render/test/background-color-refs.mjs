@@ -2,7 +2,7 @@
 // slot or role. The colour scheme comes from the gallery snapshot, which the test registers as a host does (FA-23).
 import assert from 'node:assert/strict';
 import {toSvg as render} from '../dist/svg.js';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
 
 const toSvg = (deck, index, options = {}) => render(deck, index, {catalogs: [defaultCatalog], ...options});
 // --- SolidBackground / GradientBackground / PatternBackground accept ColorRef ---

@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/engineering-capacity-planning.opf.json",
+  "entries": {
+    "gallery/business-functions/engineering-capacity-planning.opf.json#0": {
+      "sha256": "dd11a06f0a8abcd4b455e602e7e64f6b1851fac7fd2e04f17609ef8a8afb4a46",
+      "bytes": 6416
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#1": {
+      "sha256": "da46a79332e7a86565327a1ef82de35a6955c8e9761e4fa5e88c3aab0c38a67f",
+      "bytes": 8643
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#2": {
+      "sha256": "6fd6a779aeedea4e3a3239ed7cb2ff484be0231382684688194a5b8a8ba697ac",
+      "bytes": 6606
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#3": {
+      "sha256": "bf9d1aa7a4842f7cb3971b30a13425d2b06ef6454463088f775f9f97a306bd3f",
+      "bytes": 7435
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#4": {
+      "sha256": "235b9a5b6183038ed93033a388bc8cddf8c3217f9a11c98fbafaebddf82e1d32",
+      "bytes": 8703
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#5": {
+      "sha256": "2f8a281f09a73f6c54bc62aaa5fda7917f36cf106e570036982713793a00211b",
+      "bytes": 16433
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#6": {
+      "sha256": "4ef38d12828b610c46519a07c158f70e2311e70cab1b2026f5b5f847803d2bb6",
+      "bytes": 10330
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#7": {
+      "sha256": "f1c33bd1eab2eb46531835a6273cf13d5d777c8de72cd1e4542fb1be5e67f645",
+      "bytes": 4620
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#8": {
+      "sha256": "6aef379e1ff136173e7a1a65c5e6d114ee821f0d4f568dae2e69bfabbc649dbb",
+      "bytes": 6229
+    },
+    "gallery/business-functions/engineering-capacity-planning.opf.json#9": {
+      "sha256": "b554d0c98dd5cf408cecb3ae7d366295aefe432975d98951e92ce258087c9be0",
+      "bytes": 11835
+    }
+  }
+}

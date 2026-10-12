@@ -1174,7 +1174,7 @@
       ]
     }
   ],
-  "knownShapingLimits": [
+  "fontkitFallbackLimits": [
     {
       "family": "Noto Sans Myanmar",
       "samples": {
