@@ -52,7 +52,7 @@ try {
   receipt.manifestSha256 = hash(manifestBytes);
   assert.equal(manifest.published, false, 'Require unpublished candidate archives, not a registry plan.');
   // RR-78: core depends on @openpresentation/gallery, which the fixture also registers.
-  const candidate=process.env.CANDIDATE_GALLERY_REF?candidateArtifacts(root):null;
+  const candidate=process.env.CANDIDATE_GALLERY_REF?candidateArtifacts(path.resolve(root)):null;
   const names = ['@openpresentation/opf', '@openpresentation/opf-pptx'];
   const selected = names.map(name => {
     const matches = manifest.artifacts.filter(item => item.name === name);
@@ -88,7 +88,7 @@ try {
   if(gallerySelection.range){
     const location=path.join(modules,'@openpresentation/gallery'),installed=await realpath(location),pkg=JSON.parse(await readFile(path.join(location,'package.json'))),locked=lock.packages['node_modules/@openpresentation/gallery'];
     assert.ok(within(modules,installed));assert.equal((await lstat(location)).isSymbolicLink(),false);
-    assert.ok(satisfies(pkg.version,gallerySelection.range));assert.equal(locked.version,pkg.version);
+    assert.equal(pkg.name,'@openpresentation/gallery');assert.ok(satisfies(pkg.version,gallerySelection.range));assert.equal(locked.version,pkg.version);
     assert.ok(!locked.link&&locked.resolved?.startsWith('https://registry.npmjs.org/')&&locked.integrity?.startsWith('sha512-'));
     const invocation=packageManagerInvocation('npm',['pack',`@openpresentation/gallery@${pkg.version}`,'--ignore-scripts','--json','--pack-destination',copies]);
     const packed=JSON.parse(execFileSync(invocation.command,invocation.args,{cwd:consumer,encoding:'utf8'}))[0];
