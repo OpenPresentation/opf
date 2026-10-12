@@ -2,7 +2,7 @@
 // and then run, so it proves the packages install, resolve, type-check and execute as a downstream project would use them.
 import {createHash} from 'node:crypto';
 import {validate} from '@openpresentation/opf';
-import {defaultCatalog} from '@openpresentation/opf/catalog';
+import {gallery} from '@openpresentation/gallery';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import type {Presentation} from '@openpresentation/opf/types';
 import {createEditorSession} from '@openpresentation/opf-editor';
@@ -19,20 +19,20 @@ const deck: Presentation = {
   design: {theme: 'minimal', fontScheme: 'calibri'},
   slides: [
     {id: 'title', title: 'Quarterly review', subtitle: 'Results and next steps'},
-    {id: 'chart', layout: 'chart-1x', title: 'Revenue', chart: {type: 'column', data: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 4], ['Q2', 7], ['Q3', 9]]}}}
+    {id: 'chart', layout: 'chart', title: 'Revenue', chart: {type: 'column', data: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 4], ['Q2', 7], ['Q3', 9]]}}}
   ]
 };
 // @ts-expect-error slides must stay an array: the published declarations reject it
 const broken: Presentation = {slides: 42};
 void broken;
 
-if (!validate(deck, {only: ['format']}).valid) throw new Error('the consumer deck is not valid OPF');
-if (Object.keys(defaultCatalog.fontSchemes ?? {}).length === 0) throw new Error('the published default catalog is empty');
+const catalogs = [gallery];
+if (!validate(deck, {only: ['format', 'references'], catalogs}).valid) throw new Error('the consumer deck is not valid OPF');
+if (Object.keys(gallery.fontSchemes ?? {}).length === 0) throw new Error('the published default catalog is empty');
 
 // The registry holds only the renderer's bundled faces: no host font is read.
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
-// OPF 0.15: this host registers the published default catalog with every call (the deck names gallery records by id).
-const catalogs = [defaultCatalog];
+// OPF 0.19: this host explicitly registers the gallery-owned v2 records with every call.
 const measured = {catalogs, fonts: {textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck, {catalogs}))}};
 const svgs: string[] = toSvg(deck, measured);
 if (svgs.length !== deck.slides.length) throw new Error('one preview per slide expected');

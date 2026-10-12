@@ -12,6 +12,10 @@ The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records late
 accepted fixes and release prerequisites. The versions below include the verified patch train; complete native compatibility
 remains a separate acceptance gate.
 
+## Pending final 0.19 registry adoption
+
+Core 0.19.0, renderer 0.19.1, PPTX 0.19.0 and Gallery 2.0.0 are independently published and verified. Final editor/CLI 0.19.0 receipts, the six-package registry consumer and site/native acceptance are pending. The recorded patch matrix below remains historical verified evidence until final adoption updates the plan and consumer lock. The final v2 catalog has 28 intent layouts, schema 2 and no v1 API/record aliases; its catalog owner is `@openpresentation/gallery@^2.0.0`. Source and offline archive evidence do not certify Windows PowerPoint.
+
 ## Runtime
 
 | Requirement | Status |
@@ -176,13 +180,13 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 0.0.1 (a placeholder; 1.0.0 is the first release from [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery)) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
+| `@openpresentation/gallery` | 2.0.0 (independently verified at `48169a9bb385`; prior 1.0.0 remains historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
 a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). From OPF 0.19 core and the
-CLI depend on `@openpresentation/gallery@^1` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
+CLI depend on `@openpresentation/gallery@^2.0.0` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 
 ## Supported in this set
