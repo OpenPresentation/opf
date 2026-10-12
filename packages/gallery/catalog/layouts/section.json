@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "section",
+  "name": "Section",
+  "summary": "A divider between parts: the section title and an optional subtitle.",
+  "tags": [
+    "Openers and closers"
+  ],
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center"
+  },
+  "areas": [
+    "title"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    1
+  ],
+  "regions": {},
+  "description": "Introduce the next part of a presentation. Use the subtitle to connect the new section to the overall argument.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/section.svg"
+  }
+}

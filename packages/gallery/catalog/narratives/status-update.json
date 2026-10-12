@@ -23,8 +23,8 @@
     {
       "id": "headline",
       "name": "Headline",
-      "description": "Open with the single most important sentence the audience needs to know — on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
-      "layout": "title",
+      "description": "Open with the single most important sentence the audience needs to know \u2014 on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
+      "layout": "cover",
       "instructions": "Title & date",
       "type": "text"
     },
@@ -34,23 +34,23 @@
       "description": "State the objective for the period and what was promised. One slide, three lines. Frames the rest of the update so progress is read against a clear bar.",
       "instructions": "Summary/objectives",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "progress",
       "name": "Progress",
-      "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater — list outcomes and material moves, not activity for its own sake.",
+      "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater \u2014 list outcomes and material moves, not activity for its own sake.",
       "instructions": "Explain actions taken",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "results",
       "name": "Results",
-      "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp — versus plan, versus last period, versus benchmark.",
+      "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp \u2014 versus plan, versus last period, versus benchmark.",
       "instructions": "Show outcomes",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "action-plan",
@@ -58,13 +58,13 @@
       "description": "Outline the next steps and who owns them. Be specific about the next decision point and what would have to happen to slip the schedule.",
       "instructions": "Outline next steps",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "feedback",
       "name": "Feedback",
       "description": "Invite the audience to weigh in: where you'd like input, where you need a decision, where help would unblock you. End the update with an open hand, not a closed file.",
-      "layout": "title",
+      "layout": "text",
       "instructions": "Ask for response",
       "type": "text"
     }

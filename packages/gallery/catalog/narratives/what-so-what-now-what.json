@@ -26,7 +26,7 @@
       "description": "Present the facts, data, or findings objectively and clearly.",
       "instructions": "Present the facts, data, or findings objectively and clearly.",
       "type": "chart",
-      "layout": "chart-1x"
+      "layout": "chart"
     },
     {
       "id": "so-what",
@@ -34,7 +34,7 @@
       "description": "Explain the significance. Why should your audience care about this information?",
       "instructions": "Explain the significance. Why should your audience care about this information?",
       "type": "metric",
-      "layout": "number-2x"
+      "layout": "metrics"
     },
     {
       "id": "now-what",
@@ -42,7 +42,7 @@
       "description": "Define the action required. What decisions or next steps follow from this?",
       "instructions": "Define the action required. What decisions or next steps follow from this?",
       "type": "text",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

@@ -27,7 +27,7 @@
       "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
       "instructions": "Paint the future state clearly.",
       "type": "text",
-      "layout": "title-subtitle"
+      "layout": "cover"
     },
     {
       "id": "current-state-gap",
@@ -35,7 +35,7 @@
       "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
       "instructions": "Define the gap between today and the vision.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "strategic-pillars",
@@ -43,7 +43,7 @@
       "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
       "instructions": "Name the strategic pillars that close the gap.",
       "type": "text",
-      "layout": "text-3x"
+      "layout": "pillars"
     },
     {
       "id": "roadmap",
@@ -51,7 +51,7 @@
       "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
       "instructions": "Sequence the initiatives over time.",
       "type": "timeline",
-      "layout": "timeline-1x"
+      "layout": "timeline"
     },
     {
       "id": "first-steps",
@@ -59,7 +59,7 @@
       "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
       "instructions": "Identify the immediate moves that start execution.",
       "type": "text",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

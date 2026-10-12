@@ -1,0 +1,43 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "chart",
+  "name": "Chart",
+  "summary": "One to six charts, with an optional note.",
+  "tags": [
+    "Visuals"
+  ],
+  "areas": [
+    "title",
+    "charts",
+    "note"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1,
+    "auto"
+  ],
+  "regions": {
+    "charts": {
+      "accepts": [
+        "chart",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    },
+    "note": {
+      "accepts": [
+        "text"
+      ],
+      "role": "supporting",
+      "flow": "none"
+    }
+  },
+  "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+  }
+}

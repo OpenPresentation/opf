@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
   "id": "scqa",
-  "name": "SCQA (Situation–Complication–Question–Answer)",
+  "name": "SCQA (Situation\u2013Complication\u2013Question\u2013Answer)",
   "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
   "audienceFit": [
     "executives",
@@ -23,7 +23,7 @@
     {
       "id": "situation",
       "name": "Situation",
-      "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
+      "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion \u2014 you are setting the stage."
     },
     {
       "id": "complication",
@@ -33,13 +33,13 @@
     {
       "id": "question",
       "name": "Key Question",
-      "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
+      "description": "Surface the question the complication forces the audience to answer. Frame it explicitly \u2014 'Should we\u2026?', 'How do we\u2026?', 'What changes if\u2026?'. The question should feel inevitable given the complication."
     },
     {
       "id": "answer",
       "name": "Answer",
-      "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
-      "layout": "title"
+      "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats \u2014 just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
+      "layout": "statement"
     },
     {
       "id": "key-arguments",

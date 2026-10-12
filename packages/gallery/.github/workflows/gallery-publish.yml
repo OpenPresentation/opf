@@ -17,7 +17,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
       contents: read
       id-token: write
@@ -32,6 +32,8 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm install -g npm@11.16.0
       - run: npm ci
+      - name: Bootstrap gallery 2.0.0 build engines from merged immutable sources
+        run: node scripts/bootstrap-engines.mjs
       - name: Verify the tag, the version and the repository
         run: |
           VERSION="$(node -p "require('./package.json').version")"
@@ -52,9 +54,20 @@ jobs:
       - run: npm run verify
       - run: npm test
       - run: npm run typecheck
+      - run: npm run check:previews
       - name: Pixel stability against the previous published release
         run: npm run check:stability
       - run: npm run pack:dry-run
+      - name: Verify engine resolution and unchanged release manifests
+        run: node scripts/bootstrap-engines.mjs --verify
+      - name: Retain development bootstrap identities
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: gallery-bootstrap-closure
+          path: node_modules/.gallery-bootstrap-evidence
+          include-hidden-files: true
+          if-no-files-found: warn
       - name: Publish to npm
         if: startsWith(github.ref, 'refs/tags/v')
         run: npm publish --access public --provenance

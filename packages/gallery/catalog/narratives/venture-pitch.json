@@ -26,84 +26,84 @@
       "name": "Opening",
       "instructions": "Establish identity",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "purpose",
       "name": "Purpose",
       "instructions": "State your mission",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "problem",
       "name": "Problem",
       "instructions": "Present the challenge",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "solution",
       "name": "Solution",
       "instructions": "Propose your idea",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "why-now",
       "name": "Why Now",
       "instructions": "Explain timing importance",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "market-size",
       "name": "Market Size",
       "instructions": "Demonstrate potential",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "competition",
       "name": "Competition",
       "instructions": "Analyze competitive landscape",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "product",
       "name": "Product",
       "instructions": "Showcase features/benefits",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "business-model",
       "name": "Business Model",
       "instructions": "Detail revenue streams",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "team",
       "name": "Team",
       "instructions": "Highlight key members",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "financials",
       "name": "Financials",
       "instructions": "Show projections/needs",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "closing",
       "name": "Closing",
       "instructions": "Reinforce brand",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     }
   ]
 }

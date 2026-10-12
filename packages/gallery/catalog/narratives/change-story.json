@@ -26,7 +26,7 @@
       "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
       "instructions": "Explain why the current state cannot continue.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "why-now",
@@ -34,7 +34,7 @@
       "description": "Explain the urgency. What changes if we wait? What window is closing?",
       "instructions": "Make the timing urgent and concrete.",
       "type": "metric",
-      "layout": "number-1x"
+      "layout": "metrics"
     },
     {
       "id": "why-this-way",
@@ -42,7 +42,7 @@
       "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
       "instructions": "Describe the proposed path and why it fits.",
       "type": "timeline",
-      "layout": "timeline-1x"
+      "layout": "timeline"
     },
     {
       "id": "whats-at-stake",
@@ -50,7 +50,7 @@
       "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
       "instructions": "Show the risks and rewards attached to the choice.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "how-we-win-together",
@@ -58,7 +58,7 @@
       "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
       "instructions": "Close with shared ownership and first commitments.",
       "type": "text",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

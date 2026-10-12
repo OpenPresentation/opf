@@ -74,3 +74,16 @@ test("the layout previews are exported from /previews", () => {
   assert.equal(getLayoutPreview("no-such-preview"), undefined);
   assert.equal(hasLayoutPreview("toString"), false);
 });
+
+test("every layout has one SVG preview, keyed by its id, in catalog order", () => {
+  assert.deepEqual(layoutPreviewIndex.records.map((record) => record.id), Object.keys(gallery.layouts));
+  for (const id of Object.keys(gallery.layouts)) {
+    assert.match(getLayoutPreview(id), /^<svg [^>]*viewBox="0 0 \d+ \d+"[\s\S]*<\/svg>$/, `${id}: an <svg> element`);
+  }
+});
+
+test("a deck that names a 1.x layout id 2.0.0 does not have finds no layout: there is no alias", () => {
+  const deck = { name: "t", slides: [{ layout: "chart-1x", title: "A" }, { layout: "two-column", title: "B" }] };
+  const unresolved = validate(deck, { only: ["format", "references"], catalogs: [gallery] }).findings.filter((finding) => finding.ruleId === "opf/unresolved-reference").map((finding) => finding.path);
+  assert.deepEqual(unresolved, ["/slides/0/layout"]);
+});

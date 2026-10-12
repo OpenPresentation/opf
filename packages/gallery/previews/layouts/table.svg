@@ -1,0 +1,78 @@
+<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
+<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
+<g><rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="189.98"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="213.98">Workstream</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="189.98"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="213.98">Owner</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="189.98"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="213.98">Status</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="220.807"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="244.807">Compliance</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="220.807"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="244.807">Program lead</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="220.807"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="244.807">On track</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="251.633"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="275.633">Reporting</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="251.633"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="275.633">Analytics</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="251.633"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="275.633">Watch</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="282.46"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="306.46">Adoption</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="282.46"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="306.46">Operations</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="282.46"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="306.46">At risk</text></g></g>
+<g><rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="337.287"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="361.287">Workstream</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="337.287"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="361.287">Owner</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="337.287"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="361.287">Status</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="368.113"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="392.113">Compliance</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="368.113"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="392.113">Program lead</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="368.113"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="392.113">On track</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="398.94"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="422.94">Reporting</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="398.94"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="422.94">Analytics</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="398.94"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="422.94">Watch</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="429.767"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="453.767">Adoption</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="429.767"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="453.767">Operations</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="429.767"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="453.767">At risk</text></g></g>
+<g><rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="484.593"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="508.593">Workstream</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="484.593"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="508.593">Owner</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="484.593"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="700" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="508.593">Status</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="515.42"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="539.42">Compliance</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="515.42"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="539.42">Program lead</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="515.42"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="539.42">On track</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="546.247"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="570.247">Reporting</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="546.247"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="570.247">Analytics</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="546.247"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="570.247">Watch</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="57.6" y="577.073"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="601.073">Adoption</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="445.867" y="577.073"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="455.867" xml:space="preserve" y="601.073">Operations</text></g>
+<rect aria-hidden="true" fill="#011842" height="30.827" stroke="#3AC67A" stroke-width="1" width="388.267" x="834.133" y="577.073"/>
+<g data-opf-overflow="true"><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="844.133" xml:space="preserve" y="601.073">At risk</text></g></g>
+<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="656.9">Revenue grew 18% on new accounts while churn held flat.</text></g>
+</svg>

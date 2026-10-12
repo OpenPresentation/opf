@@ -26,7 +26,7 @@
       "description": "Lead with your main point or recommendation. Don't make executives wait for it.",
       "instructions": "Lead with the conclusion or recommendation.",
       "type": "text",
-      "layout": "title"
+      "layout": "statement"
     },
     {
       "id": "key-arguments",
@@ -34,7 +34,7 @@
       "description": "Provide 3-4 supporting reasons that logically support your answer.",
       "instructions": "Group the main reasons supporting the answer.",
       "type": "text",
-      "layout": "text-3x"
+      "layout": "pillars"
     },
     {
       "id": "supporting-evidence",
@@ -42,7 +42,7 @@
       "description": "Back each argument with data, examples, or proof points.",
       "instructions": "Back each argument with verifiable proof.",
       "type": "chart",
-      "layout": "chart-1x"
+      "layout": "chart"
     }
   ]
 }

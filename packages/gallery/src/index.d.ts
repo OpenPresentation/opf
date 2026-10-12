@@ -10,8 +10,11 @@
 /** The source the gallery is registered under, and the `source` of a document's `catalogs.default`. */
 export declare const GALLERY_SOURCE: "https://www.pptx.gallery";
 
-/** The version of core's catalog record schemas these records target (package.json `opf.catalogSchema`). */
-export declare const CATALOG_SCHEMA: 1;
+/**
+ * The version of core's catalog record schemas these records target (package.json `opf.catalogSchema`). 2: the layouts
+ * are OPF 0.19 grid templates (`opf-layout/v2`); every other kind is unchanged from 1.
+ */
+export declare const CATALOG_SCHEMA: 2;
 
 /** Records of one kind, keyed by id (core's `CatalogRecordMap`). */
 export type GalleryRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;

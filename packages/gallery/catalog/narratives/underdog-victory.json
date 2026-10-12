@@ -25,7 +25,7 @@
       "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
       "instructions": "Establish opening scene",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "struggles",
@@ -33,7 +33,7 @@
       "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
       "instructions": "Highlight initial setbacks",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "determination",
@@ -41,15 +41,15 @@
       "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
       "instructions": "Showcase enduring passion",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "crisis",
       "name": "Crisis",
-      "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+      "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften \u2014 the contrast with the triumph ahead depends on the depth of this slide.",
       "instructions": "Identify lowest point",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "resolve",
@@ -57,7 +57,7 @@
       "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
       "instructions": "Articulate strong will",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "breakthrough",
@@ -65,21 +65,21 @@
       "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
       "instructions": "Reward of perseverance",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "triumph",
       "name": "Triumph",
-      "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+      "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff \u2014 let it land.",
       "instructions": "Reveal ultimate success",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "legacy",
       "name": "Legacy",
       "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
-      "layout": "title",
+      "layout": "closing",
       "instructions": "Share long-lasting impact",
       "type": "text"
     }

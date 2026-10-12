@@ -26,7 +26,7 @@
       "description": "Establish the starting point. What was normal life like before the challenge?",
       "instructions": "Establish the starting world before change.",
       "type": "image",
-      "layout": "image-focus"
+      "layout": "image"
     },
     {
       "id": "challenge",
@@ -34,7 +34,7 @@
       "description": "Introduce the disruption or opportunity that demanded change.",
       "instructions": "Introduce the disruption that makes change necessary.",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "journey",
@@ -42,7 +42,7 @@
       "description": "Walk through the process of transformation. Include obstacles overcome.",
       "instructions": "Walk through the path, obstacles, and choices.",
       "type": "timeline",
-      "layout": "timeline-1x"
+      "layout": "timeline"
     },
     {
       "id": "transformation",
@@ -50,7 +50,7 @@
       "description": "Show the pivotal moment or insight that changed everything.",
       "instructions": "Show the turning point that changes the outcome.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "new-reality",
@@ -58,7 +58,7 @@
       "description": "Reveal the improved state and the lessons that will benefit your audience.",
       "instructions": "Reveal the improved state and lesson learned.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     }
   ]
 }

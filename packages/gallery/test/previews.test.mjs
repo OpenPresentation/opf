@@ -37,7 +37,7 @@ describe("layoutPreviewIndex export", () => {
     // whenever the source file ends with a trailing newline.
     test(`preview record '${record.id}' bytes match its source file's UTF-8 byte length`, () => {
       const html = layoutPreviews[record.id];
-      assert.equal(typeof html, "string", `expected an HTML preview for ${record.id}`);
+      assert.equal(typeof html, "string", `expected a preview for ${record.id}`);
       const rawFile = readFileSync(
         new URL(`../previews/layouts/${record.file}`, import.meta.url),
         "utf8",

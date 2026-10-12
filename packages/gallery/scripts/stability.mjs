@@ -18,6 +18,12 @@
 // A difference in an existing record's drawing, or a removed id of any kind, fails unless the candidate's major version
 // is above the previous one. New ids always pass. The narratives, audiences, purposes and tones draw nothing: their
 // content changes are listed for the release notes, and their removals follow the same rule.
+//
+// A record schema change (CATALOG_SCHEMA, package.json opf.catalogSchema) also needs a major release, and that major
+// release is a new baseline: 2.0.0 (CATALOG_SCHEMA 2, the OPF 0.19 grid templates) replaced every 1.x layout, so it is
+// compared with 1.x only for the record (removed ids and changed drawings are listed, never failed), and every 2.x minor
+// or patch is then held to the published 2.x release below it with the template fixtures (two slides per layout: every
+// region filled, then every region empty).
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -57,6 +63,11 @@ export function previousVersion(published, candidate) {
 /** Whether the bump from `previous` to `candidate` may change existing records (a major release). */
 export function allowsChanges(previous, candidate) {
   return parseVersion(candidate).major > parseVersion(previous).major;
+}
+
+/** A release's record schema generation (its `CATALOG_SCHEMA` export; 1 for a release from before the export). */
+export function catalogSchemaOf(module) {
+  return Number.isInteger(module?.CATALOG_SCHEMA) ? module.CATALOG_SCHEMA : 1;
 }
 
 const sha256 = (text) => createHash("sha256").update(text).digest("hex");
@@ -163,7 +174,13 @@ export async function compareReleases(previous, candidate, engines) {
   const before = previous.module.gallery;
   const after = candidate.module.gallery;
   const major = allowsChanges(previous.version, candidate.version);
-  const result = { previous: previous.version, candidate: candidate.version, major, engines: engines.versions, kinds: {}, content: {}, problems: [], renders: 0 };
+  const schema = { previous: catalogSchemaOf(previous.module), candidate: catalogSchemaOf(candidate.module) };
+  // A major release that changes the record schema is a new baseline: the previous release is listed for the record only.
+  const baseline = major && schema.candidate !== schema.previous;
+  const result = { previous: previous.version, candidate: candidate.version, major, schema, baseline, engines: engines.versions, kinds: {}, content: {}, problems: [], renders: 0 };
+  if (!major && schema.candidate !== schema.previous) {
+    result.problems.push(`CATALOG_SCHEMA ${schema.previous} -> ${schema.candidate}: a record schema change needs a major release`);
+  }
   for (const { kind, deck } of VISUAL_KINDS) {
     const old = before[kind] ?? {};
     const next = after[kind] ?? {};
@@ -220,6 +237,7 @@ export async function compareReleases(previous, candidate, engines) {
 
 export function formatResult(result) {
   const lines = [`${PACKAGE} ${result.candidate} against ${result.previous} (${result.major ? "major: existing records may change" : "minor or patch: existing records must draw the same"}), core ${result.engines.core}, opf-render ${result.engines.render}`];
+  if (result.baseline) lines.push(`  new baseline: CATALOG_SCHEMA ${result.schema.previous} -> ${result.schema.candidate}; ${result.previous} is compared for the record only, and the next minor releases are held to ${result.candidate}`);
   for (const [kind, entry] of Object.entries(result.kinds)) {
     const parts = [];
     if (entry.compared) parts.push(`${entry.compared} drawn, ${entry.changed.length} changed`);

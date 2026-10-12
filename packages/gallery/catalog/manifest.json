@@ -55,20 +55,20 @@
     },
     "layouts": {
       "mode": "mirror",
-      "records": 278,
-      "contentSha256": "877c1cd335cbbb8258a5b93e78e112d740906c33c9910586c8b12c63482b5adb",
+      "records": 28,
+      "contentSha256": "b88052b72bb8cc5780fefdece83e09ad9bae6738ebeb43a8d9a3e93a7e5c17d8",
       "gallery": {
-        "records": 278,
-        "contentSha256": "877c1cd335cbbb8258a5b93e78e112d740906c33c9910586c8b12c63482b5adb"
+        "records": 28,
+        "contentSha256": "b88052b72bb8cc5780fefdece83e09ad9bae6738ebeb43a8d9a3e93a7e5c17d8"
       }
     },
     "narratives": {
       "mode": "mirror",
       "records": 48,
-      "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220",
+      "contentSha256": "437fa62f13b45cf1f0525339f217ec6178457ae58d8b03458ed126c1222f9e80",
       "gallery": {
         "records": 48,
-        "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220"
+        "contentSha256": "437fa62f13b45cf1f0525339f217ec6178457ae58d8b03458ed126c1222f9e80"
       }
     },
     "purposes": {

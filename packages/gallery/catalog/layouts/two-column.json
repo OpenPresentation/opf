@@ -1,36 +1,59 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "two-column",
-  "name": "Two_Column",
-  "summary": "Content split into two equal columns for comparing concepts or showing related information side by side.",
-  "description": "Content split into two equal columns for comparing concepts or showing related information side by side.",
-  "design": {
-    "titleAlignment": "left",
-    "contentAlignment": "left",
-    "contentBox": false,
-    "contentDirection": "horizontal"
-  },
-  "placeholders": [
-    {
-      "type": "title"
-    },
-    {
-      "type": "list"
-    },
-    {
-      "type": "list"
-    }
-  ],
+  "name": "Two columns",
+  "summary": "Two independent columns of any content.",
   "tags": [
-    "Comparison",
-    "Balance",
-    "Content"
+    "Text"
   ],
+  "areas": [
+    "title title",
+    "first second"
+  ],
+  "columns": [
+    1,
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "first": {
+      "accepts": [
+        "text",
+        "list",
+        "quote",
+        "code",
+        "image",
+        "video",
+        "chart",
+        "table",
+        "metric",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "second": {
+      "accepts": [
+        "text",
+        "list",
+        "quote",
+        "code",
+        "image",
+        "video",
+        "chart",
+        "table",
+        "metric",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "none"
+    }
+  },
+  "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
-  },
-  "composition": {
-    "mode": "row",
-    "gap": 0.06
   }
 }

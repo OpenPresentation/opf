@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "logos",
+  "name": "Logos",
+  "summary": "Customer, partner or sponsor logos in a grid of up to 12.",
+  "tags": [
+    "Mixed"
+  ],
+  "areas": [
+    "title",
+    "logos"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "logos": {
+      "accepts": [
+        "image",
+        "text",
+        "group"
+      ],
+      "role": "media",
+      "flow": "grid",
+      "max": 12
+    }
+  },
+  "description": "Present organizations, partners or customers as a group. Use a consistent visual scale and add context when the relationship is not obvious.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/logos.svg"
+  }
+}

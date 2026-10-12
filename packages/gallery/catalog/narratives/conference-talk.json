@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
   "id": "conference-talk",
   "name": "Conference Talk",
-  "summary": "Stage-talk arc for a 15–45 minute conference or industry-event session: hook the room, promise a payoff, deliver evidence, expose the underlying mechanism, show how to apply it, and end with a memorable recap. Engineered for audiences that came to learn something they can use Monday.",
+  "summary": "Stage-talk arc for a 15\u201345 minute conference or industry-event session: hook the room, promise a payoff, deliver evidence, expose the underlying mechanism, show how to apply it, and end with a memorable recap. Engineered for audiences that came to learn something they can use Monday.",
   "audienceFit": [
     "practitioners",
     "general-audience",
@@ -22,7 +22,7 @@
     {
       "id": "hook",
       "name": "Hook",
-      "description": "Earn the first sixty seconds with a story, surprising claim, or vivid moment. Make the audience curious enough to put their phones down. Avoid agendas, bios, and 'today I'm going to talk about' openings — those are filler that competes with your real opening."
+      "description": "Earn the first sixty seconds with a story, surprising claim, or vivid moment. Make the audience curious enough to put their phones down. Avoid agendas, bios, and 'today I'm going to talk about' openings \u2014 those are filler that competes with your real opening."
     },
     {
       "id": "promise",
@@ -32,23 +32,23 @@
     {
       "id": "evidence",
       "name": "Evidence",
-      "description": "Deliver the substantive case for your promise. Data, examples, demonstrations, or strong stories — whatever a skeptical attendee would need to update their beliefs. This is the densest section of the talk; pace and visualize accordingly."
+      "description": "Deliver the substantive case for your promise. Data, examples, demonstrations, or strong stories \u2014 whatever a skeptical attendee would need to update their beliefs. This is the densest section of the talk; pace and visualize accordingly."
     },
     {
       "id": "mechanism",
       "name": "Mechanism",
-      "description": "Reveal the underlying principle or framework that explains why the evidence holds. The mechanism is what audiences quote later — the moment of 'oh, that's why.' Keep it crisp and namable."
+      "description": "Reveal the underlying principle or framework that explains why the evidence holds. The mechanism is what audiences quote later \u2014 the moment of 'oh, that's why.' Keep it crisp and namable."
     },
     {
       "id": "application",
       "name": "Application",
-      "description": "Show the audience how to use the mechanism in their own work. Concrete, specific, low-friction first steps. The talk earns its keep here — abstract insight without an applied path is forgotten by lunch."
+      "description": "Show the audience how to use the mechanism in their own work. Concrete, specific, low-friction first steps. The talk earns its keep here \u2014 abstract insight without an applied path is forgotten by lunch."
     },
     {
       "id": "recap",
       "name": "Recap",
       "description": "Restate the promise, the mechanism, and the call to action in a single short slide. Give the audience the line they'll repeat to a colleague and the one image that will stick with them after the lights come up.",
-      "layout": "title"
+      "layout": "closing"
     }
   ]
 }

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "statement",
+  "name": "Statement",
+  "summary": "One message, large and alone.",
+  "tags": [
+    "Openers and closers"
+  ],
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center"
+  },
+  "areas": [
+    "title",
+    "message"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "message": {
+      "accepts": [
+        "text",
+        "quote",
+        "metric"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "anchor": "middle"
+    }
+  },
+  "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/statement.svg"
+  }
+}

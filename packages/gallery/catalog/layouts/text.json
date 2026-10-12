@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "text",
+  "name": "Text",
+  "summary": "Prose. Several blocks sit side by side when short and stack when long.",
+  "tags": [
+    "Text"
+  ],
+  "areas": [
+    "title",
+    "body"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "body": {
+      "accepts": [
+        "text",
+        "list",
+        "quote",
+        "code",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "auto"
+    }
+  },
+  "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+  }
+}

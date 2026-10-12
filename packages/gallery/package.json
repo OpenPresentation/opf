@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/gallery",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
   "license": "MIT",
   "author": "Open Presentation",
@@ -47,7 +47,7 @@
     "package.json"
   ],
   "opf": {
-    "catalogSchema": 1
+    "catalogSchema": 2
   },
   "engines": {
     "node": ">=22"
@@ -57,7 +57,10 @@
     "test": "node scripts/build.mjs && node --test test/*.test.mjs",
     "typecheck": "node scripts/build.mjs && tsc -p test/tsconfig.json",
     "verify": "node scripts/sync-gallery-catalog.mjs --verify",
+    "rehash": "node scripts/sync-gallery-catalog.mjs --rehash --match-gallery",
+    "previews": "node scripts/render-previews.mjs",
     "check:license": "node scripts/check-license.mjs",
+    "check:previews": "node scripts/render-previews.mjs --check",
     "check:stability": "node scripts/build.mjs && node scripts/stability.mjs",
     "sync": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
     "pack:dry-run": "npm pack --dry-run",

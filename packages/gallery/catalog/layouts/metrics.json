@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "metrics",
+  "name": "Metrics",
+  "summary": "One to six headline numbers, with an optional note.",
+  "tags": [
+    "Numbers"
+  ],
+  "design": {
+    "contentAlignment": "center"
+  },
+  "areas": [
+    "title",
+    "metrics",
+    "note"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1,
+    "auto"
+  ],
+  "regions": {
+    "metrics": {
+      "accepts": [
+        "metric",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    },
+    "note": {
+      "accepts": [
+        "text",
+        "list"
+      ],
+      "role": "supporting",
+      "flow": "none"
+    }
+  },
+  "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+  }
+}

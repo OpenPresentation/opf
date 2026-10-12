@@ -1,67 +1,46 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "dashboard",
   "name": "Dashboard",
-  "summary": "Headline metrics above a row of small charts for an at-a-glance overview. Bird's-eye view of a business or function.",
-  "description": "Headline metrics above a row of small charts for an at-a-glance overview. Bird's-eye view of a business or function.",
-  "design": {
-    "titleAlignment": "left",
-    "contentAlignment": "left",
-    "contentBox": true,
-    "contentDirection": "horizontal"
-  },
-  "placeholders": [
-    {
-      "type": "title"
-    },
-    {
-      "type": "group",
-      "composition": {
-        "mode": "row"
-      },
-      "placeholders": [
-        {
-          "type": "metric"
-        },
-        {
-          "type": "metric"
-        },
-        {
-          "type": "metric"
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "composition": {
-        "mode": "row"
-      },
-      "placeholders": [
-        {
-          "type": "chart"
-        },
-        {
-          "type": "chart"
-        },
-        {
-          "type": "chart"
-        }
-      ]
-    }
-  ],
+  "summary": "Headline numbers over charts.",
   "tags": [
-    "Overview",
-    "Multi-chart",
-    "Monitoring"
+    "Mixed"
   ],
+  "design": {
+    "contentBox": true
+  },
+  "areas": [
+    "title",
+    "kpis",
+    "charts"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    2,
+    3
+  ],
+  "regions": {
+    "kpis": {
+      "accepts": [
+        "metric"
+      ],
+      "role": "secondary",
+      "flow": "grid"
+    },
+    "charts": {
+      "accepts": [
+        "chart",
+        "table"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  },
+  "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
-  },
-  "composition": {
-    "mode": "column",
-    "weights": [
-      2,
-      3
-    ]
   }
 }

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "image",
+  "name": "Image",
+  "summary": "One picture edge to edge under an optional title.",
+  "tags": [
+    "Visuals"
+  ],
+  "areas": [
+    "title",
+    "media"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "media": {
+      "accepts": [
+        "image",
+        "video"
+      ],
+      "role": "media",
+      "flow": "none",
+      "bleed": true
+    }
+  },
+  "description": "Let one image carry the message. Add a short title or caption to explain what the audience should notice.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+  },
+  "design": {
+    "imageFit": "contain"
+  }
+}

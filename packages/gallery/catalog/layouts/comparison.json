@@ -1,35 +1,65 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "comparison",
   "name": "Comparison",
-  "summary": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
-  "description": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
-  "design": {
-    "titleAlignment": "left",
-    "contentAlignment": "left",
-    "contentBox": true,
-    "contentDirection": "horizontal"
-  },
-  "placeholders": [
-    {
-      "type": "title"
-    },
-    {
-      "type": "list"
-    },
-    {
-      "type": "list"
-    }
-  ],
+  "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
   "tags": [
-    "Versus",
-    "Evaluation",
-    "Decision"
+    "Groups of items"
   ],
+  "design": {
+    "contentBox": true
+  },
+  "areas": [
+    "title title",
+    "first second",
+    "verdict verdict"
+  ],
+  "columns": [
+    1,
+    1
+  ],
+  "rows": [
+    "auto",
+    1,
+    "auto"
+  ],
+  "regions": {
+    "first": {
+      "accepts": [
+        "text",
+        "list",
+        "metric",
+        "image",
+        "chart",
+        "table",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "second": {
+      "accepts": [
+        "text",
+        "list",
+        "metric",
+        "image",
+        "chart",
+        "table",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "verdict": {
+      "accepts": [
+        "text"
+      ],
+      "role": "supporting",
+      "flow": "none"
+    }
+  },
+  "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/comparison.svg"
-  },
-  "composition": {
-    "mode": "row"
   }
 }

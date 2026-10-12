@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "process",
+  "name": "Process",
+  "summary": "Steps in order, in one row.",
+  "tags": [
+    "Groups of items"
+  ],
+  "design": {
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
+  "areas": [
+    "title",
+    "steps"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "steps": {
+      "accepts": [
+        "timeline",
+        "list",
+        "text",
+        "metric",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  },
+  "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
+  }
+}

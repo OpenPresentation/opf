@@ -27,7 +27,7 @@
       "description": "Frame why this analysis matters now. What question is this data answering?",
       "instructions": "Set up the business question and data scope.",
       "type": "list",
-      "layout": "list-1x"
+      "layout": "list"
     },
     {
       "id": "key-finding",
@@ -35,7 +35,7 @@
       "description": "State the single most important thing the data shows. One slide, one insight.",
       "instructions": "State the one finding the audience must remember.",
       "type": "metric",
-      "layout": "number-1x"
+      "layout": "metrics"
     },
     {
       "id": "analysis",
@@ -43,7 +43,7 @@
       "description": "Unpack the data rigorously. Show sources, methodology, and supporting charts.",
       "instructions": "Explain the drivers behind the finding.",
       "type": "chart",
-      "layout": "chart-1x"
+      "layout": "chart"
     },
     {
       "id": "implications",
@@ -51,7 +51,7 @@
       "description": "Translate findings into business language. What does this mean for strategy, operations, or customers?",
       "instructions": "Translate the analysis into business consequences.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "recommendation",
@@ -59,7 +59,7 @@
       "description": "Make an explicit, actionable recommendation backed by the data. Include confidence level and assumptions.",
       "instructions": "Recommend the next decision or action.",
       "type": "text",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

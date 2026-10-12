@@ -1,27 +1,34 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "agenda",
   "name": "Agenda",
-  "summary": "Numbered list of topics with timing or section markers. Sets expectations and gives your audience a roadmap.",
-  "description": "Numbered list of topics with timing or section markers. Sets expectations and gives your audience a roadmap.",
-  "design": {
-    "titleAlignment": "center",
-    "contentAlignment": "center",
-    "contentBox": false
-  },
-  "placeholders": [
-    {
-      "type": "title"
-    },
-    {
-      "type": "subtitle"
-    }
-  ],
+  "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
   "tags": [
-    "Structure",
-    "Planning",
-    "Navigation"
+    "Openers and closers"
   ],
+  "areas": [
+    "title",
+    "items"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "items": {
+      "accepts": [
+        "list",
+        "text"
+      ],
+      "role": "primary",
+      "flow": "column",
+      "listColumns": "auto"
+    }
+  },
+  "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
   }

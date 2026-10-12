@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "table",
+  "name": "Table",
+  "summary": "A table across the slide, with an optional note.",
+  "tags": [
+    "Visuals"
+  ],
+  "areas": [
+    "title",
+    "table",
+    "note"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1,
+    "auto"
+  ],
+  "regions": {
+    "table": {
+      "accepts": [
+        "table"
+      ],
+      "role": "primary",
+      "flow": "column"
+    },
+    "note": {
+      "accepts": [
+        "text"
+      ],
+      "role": "supporting",
+      "flow": "none"
+    }
+  },
+  "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/table.svg"
+  }
+}

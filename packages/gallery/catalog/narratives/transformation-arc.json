@@ -28,7 +28,7 @@
     {
       "id": "after",
       "name": "After",
-      "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
+      "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists \u2014 what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
     },
     {
       "id": "bridge",
@@ -44,7 +44,7 @@
       "id": "ask",
       "name": "Ask",
       "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
   "id": "pitch-deck",
   "name": "Startup Pitch Deck",
-  "summary": "The canonical investor-pitch arc, drawn from Sequoia and Y Combinator's templates. Optimized for 10–20 minute meetings with VCs and angels. Each beat answers the question an investor will ask next.",
+  "summary": "The canonical investor-pitch arc, drawn from Sequoia and Y Combinator's templates. Optimized for 10\u201320 minute meetings with VCs and angels. Each beat answers the question an investor will ask next.",
   "audienceFit": [
     "investors",
     "venture-capitalists",
@@ -23,8 +23,8 @@
     {
       "id": "opening",
       "name": "Opening",
-      "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered — this is the cover.",
-      "layout": "title"
+      "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered \u2014 this is the cover.",
+      "layout": "cover"
     },
     {
       "id": "purpose",
@@ -44,12 +44,12 @@
     {
       "id": "market",
       "name": "Market Size",
-      "description": "Size the opportunity. Top-down (TAM/SAM/SOM) or bottom-up (units × price). Show how big the prize is if you win, and why this market is attractive to a venture-scale outcome."
+      "description": "Size the opportunity. Top-down (TAM/SAM/SOM) or bottom-up (units \u00d7 price). Show how big the prize is if you win, and why this market is attractive to a venture-scale outcome."
     },
     {
       "id": "competition",
       "name": "Competition",
-      "description": "Map the competitive landscape honestly. A 2x2 matrix or feature-comparison grid is fine; what matters is showing you understand the alternatives and where you uniquely fit. Naïve 'no competition' answers tank credibility."
+      "description": "Map the competitive landscape honestly. A 2x2 matrix or feature-comparison grid is fine; what matters is showing you understand the alternatives and where you uniquely fit. Na\u00efve 'no competition' answers tank credibility."
     },
     {
       "id": "solution",
@@ -64,17 +64,17 @@
     {
       "id": "demo",
       "name": "Demo",
-      "description": "Walk through the core user flow end-to-end. Show real software solving a real problem in a real workflow — not a marketing reel. If a live demo is too risky, use a tightly edited recording with narration."
+      "description": "Walk through the core user flow end-to-end. Show real software solving a real problem in a real workflow \u2014 not a marketing reel. If a live demo is too risky, use a tightly edited recording with narration."
     },
     {
       "id": "traction",
       "name": "Traction",
-      "description": "Prove momentum with one credible headline metric. Revenue, users, growth rate, customer logos — whatever best shows the business is working. One strong chart beats five vanity numbers."
+      "description": "Prove momentum with one credible headline metric. Revenue, users, growth rate, customer logos \u2014 whatever best shows the business is working. One strong chart beats five vanity numbers."
     },
     {
       "id": "growth",
       "name": "Growth Drivers",
-      "description": "Show how the headline metric got there and where it's going. Cohorts, retention, expansion, channel mix — whatever explains the engine behind the number. Investors back the trajectory, not the snapshot."
+      "description": "Show how the headline metric got there and where it's going. Cohorts, retention, expansion, channel mix \u2014 whatever explains the engine behind the number. Investors back the trajectory, not the snapshot."
     },
     {
       "id": "business-model",
@@ -89,19 +89,19 @@
     {
       "id": "financials",
       "name": "Financials",
-      "description": "Show the financial picture: historical revenue, burn, runway, and forward projection. Be conservative-but-credible — investors will discount aggressive numbers and reward defensible ones."
+      "description": "Show the financial picture: historical revenue, burn, runway, and forward projection. Be conservative-but-credible \u2014 investors will discount aggressive numbers and reward defensible ones."
     },
     {
       "id": "ask",
       "name": "The Ask",
-      "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific — investors should leave knowing exactly what you want and what they get.",
-      "layout": "title"
+      "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific \u2014 investors should leave knowing exactly what you want and what they get.",
+      "layout": "list"
     },
     {
       "id": "closing",
       "name": "Closing",
       "description": "Close on a strong final image: logo, contact info, and the one line you most want the investor to remember. Leave space for the conversation that follows.",
-      "layout": "title"
+      "layout": "closing"
     }
   ]
 }

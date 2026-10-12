@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "scorecard",
+  "name": "Scorecard",
+  "summary": "Metrics with commentary or status, as cards.",
+  "tags": [
+    "Numbers"
+  ],
+  "design": {
+    "contentBox": true
+  },
+  "areas": [
+    "title",
+    "cards"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "cards": {
+      "accepts": [
+        "metric",
+        "text",
+        "list",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  },
+  "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/scorecard.svg"
+  }
+}

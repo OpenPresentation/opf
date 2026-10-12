@@ -26,7 +26,7 @@
       "description": "Make the current pain or limitation vivid with numbers, stories, or visuals that make the problem real.",
       "instructions": "Make the current pain or limitation vivid.",
       "type": "text",
-      "layout": "text-2x"
+      "layout": "two-column"
     },
     {
       "id": "contrast-moment",
@@ -34,7 +34,7 @@
       "description": "Introduce the change agent, product, or decision that shifts the trajectory.",
       "instructions": "Introduce the decision, product, or event that changes the trajectory.",
       "type": "text",
-      "layout": "title"
+      "layout": "statement"
     },
     {
       "id": "after-state",
@@ -42,7 +42,7 @@
       "description": "Show the improved reality. Make it concrete and specific instead of relying on vague benefit language.",
       "instructions": "Show the new reality created by the change.",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "proof",
@@ -50,7 +50,7 @@
       "description": "Validate the after state with metrics, testimonials, or third-party evidence.",
       "instructions": "Validate the change with evidence.",
       "type": "metric",
-      "layout": "number-1x"
+      "layout": "metrics"
     }
   ]
 }

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "hero",
+  "name": "Hero",
+  "summary": "A lead message with a picture and supporting points.",
+  "tags": [
+    "Mixed"
+  ],
+  "areas": [
+    "title title",
+    "lead media",
+    "support support"
+  ],
+  "columns": [
+    1,
+    1
+  ],
+  "rows": [
+    "auto",
+    2,
+    1
+  ],
+  "regions": {
+    "lead": {
+      "accepts": [
+        "text",
+        "quote",
+        "metric"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "media": {
+      "accepts": [
+        "image",
+        "video"
+      ],
+      "role": "media",
+      "flow": "none"
+    },
+    "support": {
+      "accepts": [
+        "text",
+        "list",
+        "metric",
+        "group"
+      ],
+      "role": "supporting",
+      "flow": "grid"
+    }
+  },
+  "description": "Combine a prominent visual or message with supporting content. Use it when one element should lead the audience into the details.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/hero.svg"
+  }
+}

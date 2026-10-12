@@ -26,7 +26,7 @@
       "description": "Describe the context and background of the scenario.",
       "instructions": "Describe the relevant context and constraints.",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "task",
@@ -34,7 +34,7 @@
       "description": "Explain your specific role and responsibilities in this situation.",
       "instructions": "Explain the responsibility or target outcome.",
       "type": "list",
-      "layout": "list-2x"
+      "layout": "two-column"
     },
     {
       "id": "action",
@@ -42,7 +42,7 @@
       "description": "Detail the specific steps you took to address the challenge.",
       "instructions": "Detail the actions taken and choices made.",
       "type": "timeline",
-      "layout": "timeline-1x"
+      "layout": "timeline"
     },
     {
       "id": "result",
@@ -50,7 +50,7 @@
       "description": "Share the measurable outcomes and impact of your actions.",
       "instructions": "Show measurable impact and proof.",
       "type": "metric",
-      "layout": "number-1x"
+      "layout": "metrics"
     }
   ]
 }

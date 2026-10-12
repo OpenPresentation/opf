@@ -17,21 +17,23 @@ export const DEFAULT_CATALOG_PUBLISHER = "https://www.pptx.gallery";
 // URL segment and catalog/<kind> directory -> OPF `catalogs.<key>`,
 // companion schema file, and record $schema id. The URL segment is the one the
 // OPF schema names as each kind's default source (https://www.pptx.gallery/<kind>).
+// `schemaVersion` is the kind's record schema generation (default 1). CATALOG_SCHEMA 2 (gallery 2.0.0): the layouts
+// are OPF 0.19 grid templates, `opf-layout/v2`, written in this repository; every other kind is still v1.
 export const SNAPSHOT_KINDS = [
   { kind: "audiences", catalogKey: "audiences", schemaFile: "audience.schema.json" },
   { kind: "chart-types", catalogKey: "chartTypes", schemaFile: "chart-type.schema.json" },
   { kind: "color-schemes", catalogKey: "colorSchemes", schemaFile: "color-scheme.schema.json" },
   { kind: "font-schemes", catalogKey: "fontSchemes", schemaFile: "font-scheme.schema.json" },
   { kind: "languages", catalogKey: "languages", schemaFile: "language.schema.json" },
-  { kind: "layouts", catalogKey: "layouts", schemaFile: "layout.schema.json" },
+  { kind: "layouts", catalogKey: "layouts", schemaFile: "layout.schema.json", schemaVersion: 2 },
   { kind: "narratives", catalogKey: "narratives", schemaFile: "narrative.schema.json" },
   { kind: "purposes", catalogKey: "purposes", schemaFile: "purpose.schema.json" },
   { kind: "social-platforms", catalogKey: "socialPlatforms", schemaFile: "social-platform.schema.json" },
   { kind: "themes", catalogKey: "themes", schemaFile: "theme.schema.json" },
   { kind: "tones", catalogKey: "tones", schemaFile: "tone.schema.json" },
-].map((entry) => ({
+].map(({ schemaVersion = 1, ...entry }) => ({
   ...entry,
-  recordSchemaId: `https://openpresentation.org/schema/opf-${entry.schemaFile.replace(/\.schema\.json$/, "")}/v1`,
+  recordSchemaId: `https://openpresentation.org/schema/opf-${entry.schemaFile.replace(/\.schema\.json$/, "")}/v${schemaVersion}`,
 }));
 
 /**

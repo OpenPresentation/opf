@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "pillars",
+  "name": "Pillars",
+  "summary": "Two to six ideas of equal weight, as cards.",
+  "tags": [
+    "Groups of items"
+  ],
+  "design": {
+    "contentBox": true
+  },
+  "areas": [
+    "title",
+    "pillars"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "pillars": {
+      "accepts": [
+        "text",
+        "list",
+        "metric",
+        "image",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  },
+  "description": "Show the main themes or principles behind an idea. Give each item a short heading and a comparable amount of detail.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/pillars.svg"
+  }
+}

@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
   "id": "early-startup-pitch",
   "name": "Early-Stage Startup Pitch",
-  "summary": "Seed and pre-seed pitch arc tuned for vision-heavy stories where revenue and traction are still thin. Anchors the narrative in market change, founder insight, and credible early signal — not metrics yet.",
+  "summary": "Seed and pre-seed pitch arc tuned for vision-heavy stories where revenue and traction are still thin. Anchors the narrative in market change, founder insight, and credible early signal \u2014 not metrics yet.",
   "audienceFit": [
     "seed-investors",
     "angels",
@@ -23,17 +23,17 @@
       "id": "logo",
       "name": "Logo",
       "description": "Cover slide with the company name, logo, and one-line positioning. Simple, branded, confident.",
-      "layout": "title",
+      "layout": "cover",
       "instructions": "Establish presence",
       "type": "text"
     },
     {
       "id": "monumental-change",
       "name": "Monumental Change",
-      "description": "Open by naming a large, undeniable shift in the world. Tech, regulatory, behavioral. The shift is the reason this company exists — investors should feel its weight before they hear about the product.",
+      "description": "Open by naming a large, undeniable shift in the world. Tech, regulatory, behavioral. The shift is the reason this company exists \u2014 investors should feel its weight before they hear about the product.",
       "instructions": "Highlight market transformation",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "past-struggle",
@@ -41,15 +41,15 @@
       "description": "Show what the world tried to do about the problem before the shift, and why those approaches fell short. Honest credit to predecessors makes the new game more credible.",
       "instructions": "Emphasize previous challenges",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "innovative-breakthrough",
       "name": "Innovative Breakthrough",
-      "description": "Present the founding insight or breakthrough that makes a new approach possible. This is the 'secret' the company is built on — name it plainly.",
+      "description": "Present the founding insight or breakthrough that makes a new approach possible. This is the 'secret' the company is built on \u2014 name it plainly.",
       "instructions": "Present innovative solution",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "unique-offering",
@@ -57,7 +57,7 @@
       "description": "Detail the product or service. Lead with the customer-visible thing they touch; the architecture can wait. Show why this offering is structurally different from the past struggle.",
       "instructions": "Detail product or service",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "costly-issues",
@@ -65,7 +65,7 @@
       "description": "Quantify the pain customers experience without your offering. Time, dollars, opportunity cost. Specific numbers convert sympathy into urgency.",
       "instructions": "Quantify problems faced",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "effective-solutions",
@@ -73,31 +73,31 @@
       "description": "Demonstrate the customer outcome your offering produces. Before/after numbers from early users, even small N. Early-stage pitches are won by leading indicators, not by trailing ones.",
       "instructions": "Demonstrate benefits",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "unit-economics",
       "name": "Unit Economics",
-      "description": "Explain the financial model. Cost to acquire, gross margin, payback. Investors don't expect maturity — they expect that you've thought about it.",
+      "description": "Explain the financial model. Cost to acquire, gross margin, payback. Investors don't expect maturity \u2014 they expect that you've thought about it.",
       "instructions": "Explain financial model",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "talented-team",
       "name": "Talented Team",
-      "description": "Introduce the founders and key early hires. Show why this team uniquely sees and can execute on this opportunity. Insight beats résumé at the seed stage.",
+      "description": "Introduce the founders and key early hires. Show why this team uniquely sees and can execute on this opportunity. Insight beats r\u00e9sum\u00e9 at the seed stage.",
       "instructions": "Introduce key players",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "traction",
       "name": "Traction",
-      "description": "Showcase the early signal: pilots, design partners, waitlist, retention data, anything credible. Frame it honestly — investors at this stage discount inflation aggressively.",
+      "description": "Showcase the early signal: pilots, design partners, waitlist, retention data, anything credible. Frame it honestly \u2014 investors at this stage discount inflation aggressively.",
       "instructions": "Showcase accomplishments",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "investment-opportunity",
@@ -105,13 +105,13 @@
       "description": "Detail the round size, structure, and use of funds. Tie the raise to specific milestones it takes the company to. Specificity here signals operational maturity.",
       "instructions": "Detail funding needs",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "closing-logo",
       "name": "Closing Logo",
       "description": "Close on the brand and contact info. Leave the room with the line you most want repeated when the partner pitches you to the rest of the firm.",
-      "layout": "title",
+      "layout": "closing",
       "instructions": "Leave a lasting impression",
       "type": "text"
     }

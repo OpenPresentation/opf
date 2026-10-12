@@ -23,7 +23,7 @@
     {
       "id": "why",
       "name": "Why",
-      "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+      "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally \u2014 the why is meant to be felt before it is understood."
     },
     {
       "id": "how",
@@ -33,7 +33,7 @@
     {
       "id": "what",
       "name": "What",
-      "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+      "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief \u2014 proof that the why is more than rhetoric."
     },
     {
       "id": "proof",
@@ -43,8 +43,8 @@
     {
       "id": "invitation",
       "name": "Invitation",
-      "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-      "layout": "title"
+      "description": "Close by inviting the audience to share the belief \u2014 to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
+      "layout": "statement"
     }
   ]
 }

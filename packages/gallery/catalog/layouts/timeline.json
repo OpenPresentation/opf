@@ -1,32 +1,44 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "timeline",
   "name": "Timeline",
-  "summary": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
-  "description": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
-  "design": {
-    "titleAlignment": "left",
-    "contentAlignment": "left",
-    "contentBox": false,
-    "contentDirection": "horizontal"
-  },
-  "placeholders": [
-    {
-      "type": "title"
-    },
-    {
-      "type": "timeline"
-    }
-  ],
+  "summary": "Dated events or a roadmap along one axis, with optional notes.",
   "tags": [
-    "Chronology",
-    "Progress",
-    "Milestones"
+    "Groups of items"
   ],
+  "areas": [
+    "title",
+    "timeline",
+    "notes"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1,
+    "auto"
+  ],
+  "regions": {
+    "timeline": {
+      "accepts": [
+        "timeline"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "notes": {
+      "accepts": [
+        "text",
+        "list",
+        "metric"
+      ],
+      "role": "supporting",
+      "flow": "auto"
+    }
+  },
+  "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
-  },
-  "composition": {
-    "padding": 0.04
   }
 }

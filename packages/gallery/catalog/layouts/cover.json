@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "cover",
+  "name": "Cover",
+  "summary": "The opening slide: title, subtitle and an optional picture.",
+  "tags": [
+    "Openers and closers"
+  ],
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center"
+  },
+  "areas": [
+    "title media"
+  ],
+  "columns": [
+    1,
+    1
+  ],
+  "rows": [
+    1
+  ],
+  "regions": {
+    "media": {
+      "accepts": [
+        "image",
+        "video"
+      ],
+      "role": "media",
+      "flow": "none",
+      "bleed": true
+    }
+  },
+  "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
+  }
+}

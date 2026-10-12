@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "list",
+  "name": "List",
+  "summary": "Bulleted or numbered points; one long list flows into columns.",
+  "tags": [
+    "Text"
+  ],
+  "areas": [
+    "title",
+    "body"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "body": {
+      "accepts": [
+        "list",
+        "text",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "auto",
+      "listColumns": "auto"
+    }
+  },
+  "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
+  }
+}

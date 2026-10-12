@@ -1,18 +1,29 @@
 // Every record of catalog/ is valid against the companion schema of the PUBLISHED @openpresentation/opf this repository pins
 // (devDependencies), every index against the catalog index schema, and every kind hashes to its index and the manifest. No
-// workspace build of core is involved.
+// Gallery 2.0.0 CI injects immutable merged v2 engine tarballs before these same gates run.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { validateCatalogRecord } from "@openpresentation/opf";
+import { isLayoutTemplate, layoutTemplateIssues } from "@openpresentation/opf/composition";
 import { SNAPSHOT_KINDS, readSnapshotKind, stripExtensions, verifySnapshot } from "../scripts/catalog-snapshot.mjs";
 import { licenseProblems } from "../scripts/check-license.mjs";
 import { loadValidators } from "../scripts/sync-gallery-catalog.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogRoot = path.join(root, "catalog");
+
+/** The built-in layouts of OPF 0.19 (the 0.19 layouts design, section 6), in picker order. */
+const LAYOUT_IDS = [
+  "cover", "section", "agenda", "statement", "closing",
+  "text", "list", "quote", "two-column",
+  "pillars", "comparison", "process", "timeline", "faq",
+  "metrics", "scorecard",
+  "image", "image-beside", "gallery", "chart", "chart-beside", "table", "table-beside", "code",
+  "hero", "dashboard", "team", "logos",
+];
 
 test("every record is valid against the published core's companion schema", async () => {
   let count = 0;
@@ -25,7 +36,25 @@ test("every record is valid against the published core's companion schema", asyn
       count += 1;
     }
   }
-  assert.ok(count > 500, `${count} records`);
+  assert.ok(count > 300, `${count} records`);
+});
+
+test("the layouts are the 28 OPF 0.19 intent templates, in six groups, each passing core's template rules", async () => {
+  const { index, records } = await readSnapshotKind(catalogRoot, "layouts");
+  assert.deepEqual(records.map((record) => record.id), LAYOUT_IDS);
+  for (const record of records) {
+    assert.ok(record.description?.trim(), `${record.id}: usage description`);
+    assert.equal(record.preview?.vectorSrc, `https://www.pptx.gallery/layout-previews/${record.id}.svg`, `${record.id}: published SVG preview`);
+  }
+  assert.deepEqual([...new Set(index.records.map((entry) => entry.group))], ["Openers and closers", "Text", "Groups of items", "Numbers", "Visuals", "Mixed"]);
+  for (const record of records) {
+    const entry = index.records.find((candidate) => candidate.id === record.id);
+    assert.deepEqual([entry.name, entry.summary, entry.group], [record.name, record.summary, record.tags[0]], `${record.id}: index entry`);
+    assert.ok(isLayoutTemplate(record), `${record.id} is a grid template`);
+    assert.deepEqual(layoutTemplateIssues(record), [], `${record.id}: opf/layout-template and opf/layout-region`);
+    assert.ok(record.areas.some((row) => row.split(/\s+/).includes("title")), `${record.id} has a title area`);
+    assert.equal(record.placeholders, undefined, `${record.id} carries no 0.18 placeholders`);
+  }
 });
 
 test("every index is valid against the catalog index schema, and the manifest against its schema", async () => {

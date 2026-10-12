@@ -23,14 +23,14 @@
       "id": "objectives",
       "name": "Objectives",
       "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
-      "layout": "title",
+      "layout": "cover",
       "instructions": "Set the expectations",
       "type": "text"
     },
     {
       "id": "recap",
       "name": "Recap",
-      "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse — this grounds the review in prior context, but the meat is ahead."
+      "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse \u2014 this grounds the review in prior context, but the meat is ahead."
     },
     {
       "id": "performance-headline",
@@ -45,7 +45,7 @@
     {
       "id": "wins",
       "name": "Wins",
-      "description": "Highlight the quarter's biggest wins and who drove them. Be specific — name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
+      "description": "Highlight the quarter's biggest wins and who drove them. Be specific \u2014 name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
     },
     {
       "id": "challenges",
@@ -53,7 +53,7 @@
       "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't.",
       "instructions": "Address difficulties",
       "type": "text",
-      "layout": "text-1x"
+      "layout": "text"
     },
     {
       "id": "insights",
@@ -63,7 +63,7 @@
     {
       "id": "priorities",
       "name": "Next-Quarter Priorities",
-      "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max — laundry lists are a tell that the team hasn't decided what matters most."
+      "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max \u2014 laundry lists are a tell that the team hasn't decided what matters most."
     },
     {
       "id": "sequencing",
@@ -79,7 +79,7 @@
       "id": "asks",
       "name": "Asks",
       "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
-      "layout": "title"
+      "layout": "list"
     }
   ]
 }

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "gallery",
+  "name": "Gallery",
+  "summary": "One to six framed pictures: a screenshot, a diagram, a photo set.",
+  "tags": [
+    "Visuals"
+  ],
+  "areas": [
+    "title",
+    "pictures"
+  ],
+  "columns": [
+    1
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "pictures": {
+      "accepts": [
+        "image",
+        "video",
+        "group"
+      ],
+      "role": "media",
+      "flow": "grid"
+    }
+  },
+  "description": "Show several related visuals together. Use consistent captions and ordering to make the relationship between them clear.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/gallery.svg"
+  }
+}

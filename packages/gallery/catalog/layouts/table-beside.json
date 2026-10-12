@@ -1,0 +1,44 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "table-beside",
+  "name": "Table beside",
+  "summary": "A table with commentary beside it.",
+  "tags": [
+    "Visuals"
+  ],
+  "areas": [
+    "title title",
+    "table notes"
+  ],
+  "columns": [
+    3,
+    2
+  ],
+  "rows": [
+    "auto",
+    1
+  ],
+  "regions": {
+    "table": {
+      "accepts": [
+        "table"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    "notes": {
+      "accepts": [
+        "text",
+        "list",
+        "metric",
+        "quote"
+      ],
+      "role": "supporting",
+      "flow": "column"
+    }
+  },
+  "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
+  }
+}
