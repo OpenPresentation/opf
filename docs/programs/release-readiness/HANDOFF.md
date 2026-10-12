@@ -21,6 +21,12 @@ Latest bounded [post-633 inventory](../../evidence/rr20-v019-source-merged/post6
 
 Authentic gallery2 adoption is merged through core #632, renderer #235, PPTX #251 and editor #162; qualified normal roll #633 merged at `564e0d08`. Core #634 merged at `b3e306d005d3cd0563964d541a834a8a50469536`. Tracker #635 merged at `969392e28af3f694a23f7a371ba5771873e87b78`; the original historical workflow rerun job `114711380380` passed using the authenticated committed snapshot. Exact release-commit gate passed 29/29 with terminal exit 0 at 07:49:13 UTC. Tag `opf-v0.19.0` is created at b3e306; Core 0.19.0 is trusted-published and independently verified at tag/gitHead `b3e306d005d3cd0563964d541a834a8a50469536`, workflow `38220097111`; publisher 82563 and verifier 85466 both exited 0. All ten registry/provenance/signature/release checks pass. T34 closes; progress is 27/40. Renderer, PPTX, editor and CLI 0.19 publication, final registry/site acceptance and native T24/T31 remain open. [Release progress](../../evidence/rr20-core019-release-progress/README.md).
 
+## Current release blocker — renderer publication
+
+Renderer release prep #237 merged at `c9631797a3968dc561b04f101049cbe55a99a63a`; its eight release-commit checks passed, but trusted publish [38229202777](https://github.com/OpenPresentation/opf-render/actions/runs/38229202777) failed before npm at the ordinary golden baseline selection. The v2 corpus was reviewed and passed under an explicit override; the bare publish path still selected the historical v1 baseline. Fix that default without regenerating hashes or changing tolerances. The tag `opf-render-v0.19.0` is burned and immutable; the next renderer version is **0.19.1**, in a separate release-prep PR after the source repair. Core remains verified 0.19.0; PPTX/editor/CLI remain intended 0.19.0. Check the strict renderer-version font-count record before 0.19.1 preparation. T35 remains open and total progress remains 27/40.
+
+Latest bounded inventory (2026-10-12 09:07:53 UTC): six open site PRs and 46 issues; eight clean synced defaults. Core #636 records the expected refusal of the stale patch registry graph against the new source contract. It requires actual completed publication and authentic registry adoption, not a relaxed guard.
+
 ## Rules that matter most
 
 - Merge and watch pull requests **only** with `node scripts/pr-gate.mjs <owner/repo#N>… --merge [--expect-head <sha>]…`.
