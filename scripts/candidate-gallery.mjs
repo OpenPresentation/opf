@@ -25,15 +25,17 @@ export function candidateGalleryTrailer(body) {
 export function galleryConfiguration(manifest,configuration){
   const required=manifest.opf?.requiresUnreleasedGallery;
   if(configuration===undefined&&!Object.hasOwn(manifest.opf??{},'requiresUnreleasedGallery'))return null;
-  assert.equal(required,'2.0.0','candidate source must explicitly declare requiresUnreleasedGallery 2.0.0');
   assert.ok(configuration,'missing reviewed candidate-gallery configuration');
   assert.deepEqual(Object.keys(configuration).sort(),['gallery','version']);
-  assert.equal(configuration.version,1);
-  assert.deepEqual(Object.keys(configuration.gallery).sort(),['repository','sha','version']);
+  assert.ok(configuration.version===1||configuration.version===2,'unsupported candidate configuration version');
+  const current=configuration.version===2;
+  assert.equal(required,current?'3.0.0':'2.0.0','candidate source must explicitly declare the reviewed Gallery version');
+  assert.deepEqual(Object.keys(configuration.gallery).sort(),current?['catalogSchema','repository','sha','version']:['repository','sha','version']);
   assert.equal(configuration.gallery.repository,'OpenPresentation/gallery');
   assert.equal(configuration.gallery.version,required);
+  if(current)assert.equal(configuration.gallery.catalogSchema,3,'candidate configuration version 2 requires catalog contract 3');
   assert.match(configuration.gallery.sha,/^[0-9a-f]{40}$/,'gallery SHA must be immutable');
-  return {...configuration.gallery,catalogSchema:2};
+  return {...configuration.gallery,catalogSchema:current?3:2};
 }
 
 export async function resolveCandidateGallery({manifest,configuration,event,ref='',input='',pullRequest,eventRepository,api}){

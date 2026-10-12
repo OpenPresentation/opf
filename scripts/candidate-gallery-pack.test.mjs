@@ -22,7 +22,8 @@ test('explicit staged metadata keeps source versions and records only candidate 
  for(const present of [null,false,0]){assert.throws(()=>assertPublishedGallery({},present),/unresolved/);assert.throws(()=>assertPublishedGallery({opf:{requiresUnreleasedGallery:present}}),/unresolved/);}
 });
 
-test('real six-package tarballs bind source, staged manifests, installed bytes and one gallery',async()=>{
+for(const catalogSchema of [2,3])test(`real contract${catalogSchema} six-package tarballs bind source, staged manifests, installed bytes and one gallery`,async()=>{
+ const galleryVersion=`${catalogSchema}.0.0`;
  const workspace=realpathSync(mkdtempSync(path.join(tmpdir(),'rr78-tarballs-'))),root=path.join(workspace,'opf');
  const previous=process.env.CANDIDATE_GALLERY_REF;
  const run=(command,args,cwd)=>execFileSync(command,args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
@@ -37,11 +38,11 @@ test('real six-package tarballs bind source, staged manifests, installed bytes a
    mkdirSync(path.join(directory,'dist'),{recursive:true});
    writeFileSync(path.join(directory,'dist/index.js'),index===4?`#!/usr/bin/env node\nimport {createRequire} from 'node:module';const require=createRequire(import.meta.url);console.log(JSON.stringify({core:require.resolve('@openpresentation/opf/package.json'),gallery:require.resolve('@openpresentation/gallery/package.json')}));\n`:'export const fixture = true;\n');
    for(const file of ['README.md','LICENSE'])writeFileSync(path.join(directory,file),'fixture\n');
-   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?'2.0.0':(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js',opf:'./dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema:2}}),...(index===0?{opf:{requiresUnreleasedGallery:'2.0.0'}}:{})},null,2)+'\n');
+   writeFileSync(path.join(directory,'package.json'),JSON.stringify({name:`@openpresentation/${names[index]}`,version:index===5?galleryVersion:(index===1||index===2?'0.18.2':'0.19.0-next.0'),type:'module',exports:{'.':'./dist/index.js','./package.json':'./package.json'},files:['dist'],...(index===4?{bin:{rr78:'dist/index.js',opf:'./dist/index.js'}}:{}),...([0,4].includes(index)?{peerDependencies:{'@openpresentation/opf-render':'^0.19.0','@openpresentation/opf-pptx':'^0.19.0'},peerDependenciesMeta:{'@openpresentation/opf-render':{optional:true},'@openpresentation/opf-pptx':{optional:true}}}:{}),...(index!==5?{dependencies:index===4?{'@openpresentation/opf':'^0.18.0'}:{'@openpresentation/gallery':'^1.0.0',...(index>0?{'@openpresentation/opf':'^0.18.0'}:{})}}:{opf:{catalogSchema}}),...(index===0?{opf:{requiresUnreleasedGallery:galleryVersion}}:{})},null,2)+'\n');
   }
   writeFileSync(path.join(roots[4],'package-lock.json'),'{}\n');
   const gallerySha=commit(roots[4]);
-  mkdirSync(path.join(root,'.github'));writeFileSync(path.join(root,'.github/candidate-gallery.json'),JSON.stringify({version:1,gallery:{repository:'OpenPresentation/gallery',version:'2.0.0',sha:gallerySha}}));
+  mkdirSync(path.join(root,'.github'));writeFileSync(path.join(root,'.github/candidate-gallery.json'),JSON.stringify({version:catalogSchema===3?2:1,gallery:{repository:'OpenPresentation/gallery',version:galleryVersion,sha:gallerySha,...(catalogSchema===3?{catalogSchema:3}:{})}}));
   writeFileSync(path.join(root,'.gitignore'),'artifacts/\nnode_modules/\npackages/*/node_modules/\npackages/*/dist/\n');
   for(const directory of roots.slice(0,4))commit(directory);
   delete process.env.CANDIDATE_GALLERY_REF;assert.throws(()=>candidateArtifacts(root),/no published fallback/);
