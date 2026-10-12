@@ -1,0 +1,329 @@
+{
+  "kind": "read-only held-release remaining acceptance audit",
+  "authoritativeChecklist": "/Users/michael/Source/opf/docs/programs/release-readiness/0.19-execution.md",
+  "recordedProgress": "32/40 after supervisor/independent T32 closure for original published19; eight specified checkpoints remain open; no closure performed by this audit",
+  "ownerHold": "No broad tests, merges or release cycle until queued work is finished; tutorials launch with matching format release; Windows later when back/reconnected",
+  "published19Baseline": {
+    "core": "0.19.0",
+    "renderer": "0.19.1",
+    "PPTX": "0.19.0",
+    "editor": "0.19.0",
+    "CLI": "0.19.0",
+    "Gallery": "2.0.0",
+    "adoptionMerge": "85089bf359a41950e5887d782452dd3884805386",
+    "officialSourceRollMerge": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+    "T32": "Closed for original published19 train only"
+  },
+  "evidence": [
+    "/Users/michael/Source/opf/docs/evidence/rr20-final-registry19-adoption/",
+    "/Users/michael/Source/opf/docs/evidence/rr20-three-sites-final-local/",
+    "/Users/michael/Source/opf/docs/evidence/rr20-t31-final-registry-companion/",
+    "/private/tmp/rr20-final-remaining-acceptance-audit.md",
+    "/private/tmp/rr20-progressive-lessons-final-review.json",
+    "/private/tmp/rr20-gallery-layout-examples-final-proof.json",
+    "/private/tmp/rr20-gallery-layout-explorer-framework-review.json",
+    "/private/tmp/rr20-three-sites-version-drift-review.json",
+    "/private/tmp/rr20-site-guard-independent-review.json",
+    "/private/tmp/rr20-design-archive-review/entry-review.json",
+    "/private/tmp/rr20-t32-final-check-rollup.json"
+  ],
+  "sites": {
+    "main": {
+      "path": "/private/tmp/opf-areas-array-main-site",
+      "head": "26c94b080371e0932488afd0dcb559207aba1fa3",
+      "dirtyPaths": [
+        " M .github/workflows/cloudflare-deploy.yml",
+        " M README.md",
+        " M app/globals.css",
+        " M app/sitemap.ts",
+        " M components/playground.tsx",
+        " M lib/opf-version.ts",
+        " M lib/routes.ts",
+        "?? app/learn/",
+        "?? components/learn-lesson.tsx",
+        "?? docs/tutorial-authoring.md",
+        "?? public/learn/",
+        "?? scripts/check-learn-content.mjs"
+      ],
+      "registryManifestPins": {
+        "@openpresentation/gallery": "^2.0.0",
+        "@openpresentation/opf": "0.19.0",
+        "@openpresentation/opf-editor": "0.19.0",
+        "@openpresentation/opf-pptx": "0.19.0",
+        "@openpresentation/opf-render": "0.19.1"
+      },
+      "mode": "held local source candidate, not production acceptance"
+    },
+    "gallery": {
+      "path": "/private/tmp/opf-areas-array-gallery-site",
+      "head": "e411f6deb855f0b0d263437df1e6796e823634d6",
+      "dirtyPaths": [
+        " M .github/workflows/production-checks.yml",
+        " M AGENTS.md",
+        " M PRODUCT.md",
+        " M README.md",
+        " M app/layouts/[slug]/page.tsx",
+        " M app/llms.txt/route.ts",
+        " M components/layouts-grid.tsx",
+        " M data/layouts.json",
+        " M data/opf-spec.json",
+        " M lib/layout-contracts.ts",
+        " M lib/opf-snippets.ts",
+        " M lib/reference-data.ts",
+        " M next-env.d.ts",
+        " M public/layout-previews/agenda.svg",
+        " M public/layout-previews/chart-beside.svg",
+        " M public/layout-previews/chart.svg",
+        " M public/layout-previews/closing.svg",
+        " M public/layout-previews/code.svg",
+        " M public/layout-previews/comparison.svg",
+        " M public/layout-previews/cover.svg",
+        " M public/layout-previews/dashboard.svg",
+        " M public/layout-previews/faq.svg",
+        " M public/layout-previews/gallery.svg",
+        " M public/layout-previews/hero.svg",
+        " M public/layout-previews/image-beside.svg",
+        " M public/layout-previews/image.svg",
+        " M public/layout-previews/list.svg",
+        " M public/layout-previews/logos.svg",
+        " M public/layout-previews/manifest.json",
+        " M public/layout-previews/metrics.svg",
+        " M public/layout-previews/pillars.svg",
+        " M public/layout-previews/process.svg",
+        " M public/layout-previews/quote.svg",
+        " M public/layout-previews/scorecard.svg",
+        " M public/layout-previews/section.svg",
+        " M public/layout-previews/statement.svg",
+        " M public/layout-previews/table-beside.svg",
+        " M public/layout-previews/table.svg",
+        " M public/layout-previews/team.svg",
+        " M public/layout-previews/text.svg",
+        " M public/layout-previews/timeline.svg",
+        " M public/layout-previews/two-column.svg",
+        " M public/layouts/agenda.json",
+        " M public/layouts/chart-beside.json",
+        " M public/layouts/chart.json",
+        " M public/layouts/closing.json",
+        " M public/layouts/code.json",
+        " M public/layouts/comparison.json",
+        " M public/layouts/cover.json",
+        " M public/layouts/dashboard.json",
+        " M public/layouts/faq.json",
+        " M public/layouts/gallery.json",
+        " M public/layouts/hero.json",
+        " M public/layouts/image-beside.json",
+        " M public/layouts/image.json",
+        " M public/layouts/index.json",
+        " M public/layouts/list.json",
+        " M public/layouts/logos.json",
+        " M public/layouts/metrics.json",
+        " M public/layouts/pillars.json",
+        " M public/layouts/process.json",
+        " M public/layouts/quote.json",
+        " M public/layouts/scorecard.json",
+        " M public/layouts/section.json",
+        " M public/layouts/statement.json",
+        " M public/layouts/table-beside.json",
+        " M public/layouts/table.json",
+        " M public/layouts/team.json",
+        " M public/layouts/text.json",
+        " M public/layouts/timeline.json",
+        " M public/layouts/two-column.json",
+        " D public/opf-editor/base-fonts.json",
+        " M public/opf-editor/fonts.json",
+        " M public/opf-editor/gallery.json",
+        " M public/opf-editor/index.html",
+        " D public/opf-editor/manifest.json",
+        " M public/opf-editor/playground.js",
+        " D public/opf-editor/script-fonts.json",
+        " M scripts/package-catalog.test.mjs",
+        " M scripts/verify-published-editor.mjs",
+        "?? app/api/layout-examples.json/",
+        "?? artifacts/",
+        "?? components/layout-explorer.tsx",
+        "?? data/layout-example-guidance.json",
+        "?? data/layout-examples.json",
+        "?? docs/layout-explorer.md",
+        "?? lib/layout-examples.ts",
+        "?? public/layout-examples/",
+        "?? scripts/deployed-editor-fetch.mjs",
+        "?? scripts/deployed-editor-fetch.test.mjs",
+        "?? scripts/sync-layout-examples.mjs",
+        "?? tests/layout-examples.test.ts"
+      ],
+      "registryManifestPins": {
+        "@openpresentation/gallery": "^2.0.0",
+        "@openpresentation/opf": "0.19.0"
+      },
+      "mode": "held local source candidate, not production acceptance"
+    },
+    "dev": {
+      "path": "/private/tmp/opf-areas-array-dev-site",
+      "head": "fa25c51f9f938134498094189d44828b44e4996c",
+      "dirtyPaths": [
+        " M app/docs/opf/reference-layer/page.tsx",
+        " M lib/author/__tests__/gallery-registry.test.ts",
+        " M lib/author/gallery-registry.ts"
+      ],
+      "registryManifestPins": {
+        "@openpresentation/gallery": "^2.0.0",
+        "@openpresentation/opf": "0.19.0",
+        "@openpresentation/opf-editor": "0.19.0",
+        "@openpresentation/opf-pptx": "0.19.0",
+        "@openpresentation/opf-render": "0.19.1"
+      },
+      "mode": "held local source candidate, not production acceptance"
+    }
+  },
+  "checkpoints": [
+    {
+      "id": "T14",
+      "criterion": "Three sites adopt verified patch set at explicit T18 minima, six Noto pins/editor examples/WASM, local and CI acceptance; no agent deployment.",
+      "proven": "Required patch packages verified. Final genuine19 local site adoptions satisfy higher declared minima and retain patch scope; main11c136b9/dev a99849cb/gallery73f74ae4 local qualification exists.",
+      "blockers": [
+        "Site default/hosted integration not established.",
+        "Newer source candidate sites now contain unpublished array/design/list/tutorial changes and cannot inherit old registry19 full-site qualification."
+      ],
+      "safeNow": [
+        "Preserve old patch/final19 receipts and exact scope mapping; keep new candidate source/assets separately identified.",
+        "Freeze current reviewed local edits and generated identity proofs without modifying locks or publishing."
+      ],
+      "afterHold": "Use actual matching published feature train, genuine locks and normal site CI/default integration; do not republish obsolete patch artifacts or invent a supersession waiver."
+    },
+    {
+      "id": "T16",
+      "criterion": "Review and merge host fixtures in literal order render217 \u2192 editor155/gallery125 \u2192 core584, retain evidence and strict acceptance.",
+      "proven": "Actual final renderer/editor/gallery host fixture replay and original fixture scope preservation exist; no need to rerun unchanged host fixtures now.",
+      "blockers": [
+        "Historical ordered default integration cannot be reconstructed: core584 already merged before held gallery125 scope.",
+        "Qualified gallery host scope remains outside actual default integration."
+      ],
+      "safeNow": [
+        "Keep exact fixture identities and actual historical order explicit.",
+        "Prepare semantic-carried scope proof for held gallery source; do not fabricate past merge ordering."
+      ],
+      "afterHold": "Supervisor reconcile the ordering gap against the unchanged explicit criterion and finish genuine hosted/default integration; this audit does not mark T16 done or introduce a waiver."
+    },
+    {
+      "id": "T18",
+      "criterion": "Publish and adopt required patch set; combined operative criterion retains site default/CI, registry/native and production acceptance.",
+      "proven": "Patch publication, official629lock and630records verified; final19 plan/standalone consumer merged643 and registry qualification also exists.",
+      "blockers": [
+        "Site default/public adoption remains incomplete.",
+        "Native acceptance remains unrun.",
+        "New feature train is held and unpublished."
+      ],
+      "safeNow": [
+        "Retain patch publication and patch-to-final19 preservation receipts; preserve independent original versions/provenance."
+      ],
+      "afterHold": "Complete actual site/CI/native/production conditions; publication or local passes alone cannot close combined T18."
+    },
+    {
+      "id": "T24",
+      "criterion": "RR81 PPTX source, geometry/archive/content fidelity and fresh native acceptance.",
+      "proven": "Merged240/251/252 and verifiedPPTX19; published19 registry/archive/fidelity controls pass, including explicit multi-series Pareto refusal.",
+      "blockers": [
+        "Fresh Windows native acceptance expressly required and UNRUN; user deferred until back/reconnected.",
+        "New shared geometry/neutral axes/timeline/list/area changes are separate unpublished candidate behavior."
+      ],
+      "safeNow": [
+        "Preserve accepted19 archive/native-input scope and candidate deterministic changes separately.",
+        "Keep exact source/fixture mapping for future native packet; do not imply old archive equality proves new geometry."
+      ],
+      "afterHold": "Freeze and qualify changed final train, then prepare identity-bound native inputs without mutating historical packet; supervisor runs bounded native protocol when Windows is available."
+    },
+    {
+      "id": "T29",
+      "criterion": "RR84 site source migration, package ownership/pipeline retirement and actual hosted/default integration.",
+      "proven": "Original19 local source/locks/assets at main11c136b9/dev a99849cb/gallery73f74ae4 qualified76/58/124 browser cases. New held tutorials19steps, gallery28 exact canonical examples/editor handoff, source-label repairs and strict rollout guards have focused evidence.",
+      "blockers": [
+        "Current dirty candidate trees exceed original19 qualified source.",
+        "Locks still genuine registry19/Gallery2 while local source aliases use unpublished array/design engines and Gallery3.",
+        "Remote integration held due automatic deployment risk and owner release-cycle hold."
+      ],
+      "safeNow": [
+        "Preserve separate UI/data/schema/asset ownership and hash proofs; focused fixes only if a concrete queued-task defect appears.",
+        "Maintain canonical example\u2194SVG\u2194editor identity; retain source-mode missingregistrymanifest boundary."
+      ],
+      "afterHold": "Publish matching packages/catalog through unchanged gates, then authentic site pins/locks/registry-generated assets, required local/hosted/default checks; old passes are historical, not current candidate full acceptance."
+    },
+    {
+      "id": "T31",
+      "criterion": "Supervisor Windows PowerPoint layouts/placeholders/save/reimport/tables/furniture and required controls.",
+      "proven": "Sealed packet06/final published19 registry companion:46 exact archives/ZIPs,235 preserved files/nine controls; five historical round-trip failures retained.",
+      "blockers": [
+        "Native Office/raster/save-reimport execution UNRUN and explicitly deferred by user.",
+        "Old immutable packet binds published19 export graph, not newer changed array/design geometry."
+      ],
+      "safeNow": [
+        "Maintain existing immutable packet and bounded runner/limits; record exact future source/input delta map without exporting or changing seal.",
+        "Do not repeat unavailable-host access attempts or gratuitous unchanged archive exports."
+      ],
+      "afterHold": "After final source freeze, create a separately bound companion only for changed final runtime inputs, then native supervisor execution on available Windows; no static/ZIP proof substitutes for it."
+    },
+    {
+      "id": "T39",
+      "criterion": "All three sites merge and publicly serve final published train, public workflow checks; no agent deployment/secrets/DNS.",
+      "proven": "Original19 local builds/Workers limits/browser proof retained. New rollout guards require exactbuilt fontmanifestHTTP200 and exactcheckout editor manifest/hash identity; redirects refused.",
+      "blockers": [
+        "No current public/default acceptance for held site candidates.",
+        "Current source-mode gallery editor intentionally has no npm registrymanifest; normal deployed verifier requires genuine registry-generated manifest.",
+        "Owner holds release/merge/deploy cycle and launch is with matching format release, not early tutorial deployment."
+      ],
+      "safeNow": [
+        "Keep reviewed guards and internal handoff ready, without running deployment or remote probes."
+      ],
+      "afterHold": "Root controls safe hosted/default integration; owner handles deployment prerequisites/actions. Verify actual public outputs after authorized rollout with exact matching generated manifests; agents do not create secrets or deploy."
+    },
+    {
+      "id": "T40",
+      "criterion": "Final official lock, plan/compatibility/checklist/burndown, all in-scope reconciliation, published consumers and owner note; all40 required.",
+      "proven": "Six verified19 publications; actual plan/consumer/directGallery host and registry flows merged643; narrow566/213/246 closures retained. Owner draft exists. Official644 is actually merged atbdbadd7980891c4f85e6aa04ca75f94d9c19a63b; root/independent T32original19 closure with actualNode22/26 success is retained.",
+      "blockers": [
+        "Eight specified checkpoints remain open at32/40. Official644 is merged and T32originalpublished19 is complete; this does not qualify newer source candidate features.",
+        "Broad507/636, actual nightly/default/site/native and owner conditions remain.",
+        "New held format changes require new genuine release/adoption identities after queue completion.",
+        "New candidate currently requires canonical strictgolden/sourcecorpus reconciliation after queued work freezes; prior full59478 stopped only at registry-golden sourcecorpus digest. No baseline waiver or promotion inferred."
+      ],
+      "safeNow": [
+        "Prepare concise exact remaining-action handoff and preserve old/current candidate evidence separately.",
+        "Do not edit checkpoint criteria/counts, overwrite historical receipts or transfer original19 roll acceptance to the new candidate."
+      ],
+      "afterHold": "Complete unchanged release/roll/registry/site/native gates in dependency order, reconcile actual PR/issues and deliver final truthful owner note;100% only after each explicit criterion."
+    }
+  ],
+  "noNewImplementationGapFoundBeyondQueuedCandidateQualification": true,
+  "noNewTestsRemoteQueriesOrMutations": true,
+  "notClaimed": [
+    "sites deployed",
+    "native completed",
+    "newcandidatepublished",
+    "checkpointdone",
+    "historicalorderedmergesreconstructed",
+    "original T32 acceptance transfers to newarray/design/list/tutorial train"
+  ],
+  "currentProgressAuthority": "/private/tmp/opf-area-arrays/docs/programs/release-readiness/0.19-execution.md",
+  "T32Evidence": {
+    "path": "/private/tmp/rr20-t32-final-check-rollup.json",
+    "exactHead": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+    "rollup": "SUCCESS",
+    "completePagination": true,
+    "engines": [
+      {
+        "name": "Node 22 (engines range)",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/38284404473/job/114929197000",
+        "completedAt": "2026-10-12T17:40:42Z"
+      },
+      {
+        "name": "Node 26 (engines range)",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/38284404473/job/114929196099",
+        "completedAt": "2026-10-12T17:38:46Z"
+      }
+    ],
+    "scope": "Root/independent queue evidence and completed actual Node22/26 support originalpublished19, not newcandidate"
+  }
+}

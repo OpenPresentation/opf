@@ -1,0 +1,110 @@
+{
+  "scope": "Read-only visualinspection all11assigned sheets10\u201320; actualgeometry diagnostic inspection for suspiciouscases, no rerender/baseline edits/nativeclaim",
+  "verdict": "No unexpected visual regression established. Intentional unpaginated overflow cases must retain explicit diagnostics and must not be described as clean readable examples.",
+  "sheets": [
+    {
+      "sheet": 10,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-10.png",
+      "sha256": "b40026e08f758ccb255b8feaf9b3f52dbfa1683350e95fadc61c80b7e533981d",
+      "viewed": true,
+      "assessment": "Chart-beside clear hierarchy; dense table4\u20136long cells overlap at floors. Treat as explicit diagnosed overflow, not readable finalpresentation."
+    },
+    {
+      "sheet": 11,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-11.png",
+      "sha256": "adb8d557b818891b0e03846c03ca3085180cb06fea79fea26450bd6ab26c794f",
+      "viewed": true,
+      "assessment": "Table-beside mostly legible; code3\u20136long crosses cells/bottom, explicitly text-overflow. Code pagination counterparts on19\u201320 restore readable complete fragments."
+    },
+    {
+      "sheet": 12,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-12.png",
+      "sha256": "56085d44b169ed785d3e3e55a502c6077ec8573223045d6608cd0d0613accf0f",
+      "viewed": true,
+      "assessment": "Hero/media cropping intentional cover fit; dashboard data scaffolding visible and quieter. Dense KPI labels small at sheet scale; no unexpected overlap."
+    },
+    {
+      "sheet": 13,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-13.png",
+      "sha256": "d215e5234000d7ae85d80925b575a466d1fa418596936cd8ecb312a383c15d23",
+      "viewed": true,
+      "assessment": "Team/logo grids preserve images; varied cover-fit crop intentional. No text or image losses observed beyond authored crop."
+    },
+    {
+      "sheet": 14,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-14.png",
+      "sha256": "01acd122bbd8db07813d0a3977eb3262b68ae14b8893ce6306562eae9541a085",
+      "viewed": true,
+      "assessment": "Numbered/roman lists readable; feature FAQ10 last answer clips lowercanvas. Verified actual text-overflow; featureDecks lacks paginatedFAQ companion because paginatedDecks iterates templateDeck only. Flag explicitoverflow, not clean finalexample."
+    },
+    {
+      "sheet": 15,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-15.png",
+      "sha256": "88f5eec40423bb9b724cfeba32d89ada13110dd1cf7fb6f20dd547ba215c9a6d",
+      "viewed": true,
+      "assessment": "Paginated text/list/statement/closing pages have clear headings and bounded blocks; repeated headings intentional. Lists split into multiple sparse pages but no unexpected visual loss."
+    },
+    {
+      "sheet": 16,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-16.png",
+      "sha256": "2e4980866f8a493e511973bb9ba3b7121b74aa9d6e6220b6f3fbc61744639a24",
+      "viewed": true,
+      "assessment": "Paginated quote/comparison/process pages retain readable structure; timelines markerlabels separated; repeating sixevents acrossdifferentsource blocks intentional fixtures."
+    },
+    {
+      "sheet": 17,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-17.png",
+      "sha256": "388ffb76cd853cbd2a1df7518c98afed669e462055d6cc8b765bbf3e8a28f216",
+      "viewed": true,
+      "assessment": "Timeline paginated views show labels close to rail without overlap; text-only continuation pages sparse but valid provenance split. FAQ paginatedtemplate pages readable."
+    },
+    {
+      "sheet": 18,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-18.png",
+      "sha256": "926a0cfe73e36600c6d0b89bbf284bc0edfd7b4a276c581f288eb207ce50aba8",
+      "viewed": true,
+      "assessment": "Image/chart/table pagination readable; chartbeside secondpage shallow chart is constrained allocation, labels still visible; no unexpected loss."
+    },
+    {
+      "sheet": 19,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-19.png",
+      "sha256": "fca1a49bee4f5b4c622f044a35f8d74868a788b2dc2bb0c98c80c18fe4f3c190",
+      "viewed": true,
+      "assessment": "Table repeatedheaders and code continuation labels visible; numeric samplecells are strings and leftalignment deliberate authored fixture, not typednumeric default regression."
+    },
+    {
+      "sheet": 20,
+      "path": "/private/tmp/rr20-pinned-goldens-dry-run/template-goldens/sheet-20.png",
+      "sha256": "7257a6526a283a670b27661096ea33e8574fdc9bddaf28bd9b9eb72ba0ff1389",
+      "viewed": true,
+      "assessment": "Code continuation parts legible and hero continuation retains twoimages/text; no unexpected overlaps."
+    }
+  ],
+  "suspiciousButDiagnosed": [
+    {
+      "case": "feature faq described-10",
+      "sheet": 14,
+      "diagnostic": "text-overflow slides.3.blocks.0.items",
+      "note": "FAQfeature10 clipping is genuine overflow; no feature-specific pagination companion in currentfixture loop."
+    },
+    {
+      "cases": [
+        "code3long",
+        "code6long"
+      ],
+      "sheet": 11,
+      "diagnostic": "text-overflow code.source body text-fit",
+      "note": "Complete paginated counterparts viewed on19\u201320."
+    },
+    {
+      "cases": [
+        "table4long",
+        "table6long"
+      ],
+      "sheet": 10,
+      "diagnostic": "text-overflow table cells and dense text",
+      "note": "Readable split counterparts reviewed on18\u201319."
+    }
+  ],
+  "hashApproval": "Visual evidence only; root must bind exact candidate source/diff and officialpromotion process before accepting hashes."
+}

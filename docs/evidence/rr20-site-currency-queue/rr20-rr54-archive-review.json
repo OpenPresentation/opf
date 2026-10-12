@@ -1,0 +1,157 @@
+{
+  "area": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "ef9da7269e0e68f18f4551c032e9f56e0c54fce8679a3747915b49357cfdf1ac"
+  },
+  "bar": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "56cc21ccafca09b84a4e94914aadd4fc198cdf5baf8242e9c636663f12f2c3b6"
+  },
+  "chartex-native-map": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "a86fe9a1868c5f5baa6458b910e64f13239ea857650d24f8b63f2edfe4e4f0a2"
+  },
+  "column-labels": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "b5b9b4ed5e9eba7f524bc1e79d09e6911a9977677aca425cf36ae75d5a1e5466"
+  },
+  "column": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "1e560fbcdf1df60a94b7adc2241e6e6f4615fe3706a5ba6eeae0bb492337e34b"
+  },
+  "doughnut": {
+    "parts": 30,
+    "changed": [],
+    "sha256": "0e62b593b240a14d6e8f9dcec3a41d148594215a2e7b01174a04db37d8fdd177"
+  },
+  "histogram": {
+    "parts": 34,
+    "changed": [
+      "ppt/charts/chart1.xml",
+      "ppt/charts/chartEx1.xml",
+      "ppt/charts/style1.xml"
+    ],
+    "sha256": "9c5eaf31976591354a65ae3c18d0eb8d0d317b246bc8f55490d925055d7b5d0b"
+  },
+  "line": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "a2e1a876afcb6edfe7ec96e487601c4f2b6c3166f51c04d075a927674b10fdd2"
+  },
+  "mixed-blocks": {
+    "parts": 31,
+    "changed": [
+      "ppt/charts/chart1.xml",
+      "ppt/slides/slide1.xml",
+      "ppt/tags/opfData1.xml",
+      "ppt/tags/opfSlide1.xml"
+    ],
+    "sha256": "2e74592c13f2a91d0eb24baa770af01213da748de9230f43b353377c7ae8148c"
+  },
+  "percent-stacked": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "7a840b6466b2405a17ced4a03038aec4ab4493fd16f272ac6a1d3ff5fde8a4ff"
+  },
+  "pie": {
+    "parts": 30,
+    "changed": [],
+    "sha256": "669b7fb335ad4c9f19fc08a161241aac35db3624026c0251dd48d93ce0689d3b"
+  },
+  "radar": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "90450341b61f01309021205470011fccd473dd4349851111e9eb17560f7696c4"
+  },
+  "scatter-labels": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "023f4dbd0b332a793dbd2d58d61d3a99205f07ab3cbcaecc91389ed55678b8dc"
+  },
+  "scatter-two-columns": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "2cd775c0dec5752981a1f4f2ab1e938051933755ab5b35fbe1599a12ff8b2105"
+  },
+  "scatter": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "410881392d4538917b6267bcf9a17033bf9d40c2ca52777e47482fe6ffdcff3b"
+  },
+  "single-column": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0"
+  },
+  "stacked-column": {
+    "parts": 30,
+    "changed": [
+      "ppt/charts/chart1.xml"
+    ],
+    "sha256": "69f4a49e18dabcc1f60425e829c4d14a119dd81d4c81b7100e9af07016a82b99"
+  },
+  "styled-table": {
+    "parts": 28,
+    "changed": [
+      "ppt/slides/slide1.xml",
+      "ppt/tags/opfData1.xml",
+      "ppt/tags/opfSlide1.xml"
+    ],
+    "sha256": "c268481a41455583c501b1486405c4997d1ea80333771949d42ffc4976723917"
+  },
+  "table": {
+    "parts": 28,
+    "changed": [
+      "ppt/slides/slide1.xml",
+      "ppt/tags/opfData1.xml",
+      "ppt/tags/opfSlide1.xml"
+    ],
+    "sha256": "ae6dc6091451e8644b41b4169ffcc086e278eb81984f1bc83e40375b1666611d"
+  },
+  "treemap": {
+    "parts": 34,
+    "changed": [
+      "ppt/charts/chart1.xml",
+      "ppt/charts/style1.xml"
+    ],
+    "sha256": "74b7ffeb54e09ad04aadfeff1d3bb33f9d486b160d3185e039608c64d1ea3164"
+  },
+  "waterfall": {
+    "parts": 34,
+    "changed": [
+      "ppt/charts/chart1.xml",
+      "ppt/charts/chartEx1.xml",
+      "ppt/charts/style1.xml"
+    ],
+    "sha256": "f5c5461d35e6b5fec76bab978ac33261a921861a287a64b82cd2be403d1e011d"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "sourceEdits": [],
+  "preservedDirtyFiles": {
+    "app/docs/opf/reference-layer/page.tsx": {
+      "original": "e05ca43ee4fa0b48d61afb7e800155a0fc84241cdd264f5146da9f69d6cd915e",
+      "qualificationCopy": "e05ca43ee4fa0b48d61afb7e800155a0fc84241cdd264f5146da9f69d6cd915e"
+    },
+    "lib/author/__tests__/gallery-registry.test.ts": {
+      "original": "dc320da915f58d620ac90ff4e6e3f41ab24503010b37e35f8f6dd151ed92a4d6",
+      "qualificationCopy": "dc320da915f58d620ac90ff4e6e3f41ab24503010b37e35f8f6dd151ed92a4d6"
+    },
+    "lib/author/gallery-registry.ts": {
+      "original": "ab8d110948d5795886831d5c5f9c24da65312ad34c2de9d4eeeeea4ac529d943",
+      "qualificationCopy": "ab8d110948d5795886831d5c5f9c24da65312ad34c2de9d4eeeeea4ac529d943"
+    }
+  },
+  "dependencies": {
+    "opf": {
+      "path": "/private/tmp/opf-final-qualification-sites/dev/node_modules/.pnpm/@openpresentation+opf@0.19.0_@openpresentation+opf-pptx@0.19.0_@openpresentation+opf-render@0.19.1/node_modules/@openpresentation/opf",
+      "version": "0.19.0",
+      "catalogSchema": null,
+      "manifestSha256": "631d3906cf09c764806caa322f225482c1853d48ac9dd9f0ab060cc7372c1458"
+    },
+    "opf-render": {
+      "path": "/private/tmp/opf-final-qualification-sites/dev/node_modules/.pnpm/@openpresentation+opf-render@0.19.1_52132e7f6f171a6973fe63c085aed6d2/node_modules/@openpresentation/opf-render",
+      "version": "0.19.1",
+      "catalogSchema": null,
+      "manifestSha256": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba"
+    },
+    "opf-pptx": {
+      "path": "/private/tmp/opf-final-qualification-sites/dev/node_modules/.pnpm/@openpresentation+opf-pptx@0.19.0_@openpresentation+opf-render@0.19.1_@types+node@24.13.4/node_modules/@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "catalogSchema": null,
+      "manifestSha256": "32d4cb9ca83b20ddecab67314cc1e4897a525ab646c52913f5e42b9227b82208"
+    },
+    "opf-editor": {
+      "path": "/private/tmp/opf-final-qualification-sites/dev/node_modules/.pnpm/@openpresentation+opf-editor@0.19.0_@openpresentation+opf-pptx@0.19.0_@openpresentation+opf-render@0.19.1/node_modules/@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "catalogSchema": null,
+      "manifestSha256": "35714f2cac2072e7ed8d0d4b87ba8c36316abad790abf95d9cbdd73881e42469"
+    },
+    "gallery": {
+      "path": "/private/tmp/opf-final-qualification-sites/dev/node_modules/.pnpm/@openpresentation+gallery@2.0.0/node_modules/@openpresentation/gallery",
+      "version": "3.0.0",
+      "catalogSchema": 3,
+      "manifestSha256": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c"
+    }
+  },
+  "coreAll98DistFilesMatchFrozenProof": true,
+  "scope": "Explicit unpublished source candidate physical install; package versions are unchanged labels, not a registry acceptance claim.",
+  "sourceCoreCommit": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+  "qualification": {
+    "originalSession": 10848,
+    "originalResults": [
+      {
+        "name": "tests",
+        "command": [
+          "pnpm",
+          "test"
+        ],
+        "exit": 0,
+        "log": "/private/tmp/opf-final-qualification-sites/results/dev-tests.log"
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "pnpm",
+          "typecheck"
+        ],
+        "exit": 1,
+        "log": "/private/tmp/opf-final-qualification-sites/results/dev-typecheck.log"
+      },
+      {
+        "name": "build",
+        "command": [
+          "pnpm",
+          "build"
+        ],
+        "exit": 143,
+        "log": "/private/tmp/opf-final-qualification-sites/results/dev-build.log"
+      }
+    ],
+    "normalCleanReplaySession": 43065,
+    "normalCleanReplayExit": 0,
+    "normalCleanReplayResults": [
+      {
+        "name": "typecheck",
+        "exit": 0,
+        "command": [
+          "pnpm",
+          "typecheck"
+        ],
+        "log": "/private/tmp/rr20-dev-clean-qualification/typecheck.log"
+      },
+      {
+        "name": "build",
+        "exit": 0,
+        "command": [
+          "pnpm",
+          "build"
+        ],
+        "log": "/private/tmp/rr20-dev-clean-qualification/build.log"
+      }
+    ],
+    "browserSession": 94261,
+    "browserExit": 0,
+    "browserTests": 58,
+    "unitTestsPassed": 976,
+    "existingSkipped": 1,
+    "standaloneTestsPassed": 20,
+    "quarantineControlsPassed": 16
+  },
+  "setupFailuresRetained": {
+    "type": "Inherited incrementalcache; unchangedsource passes nativecompiler --incrementalfalse and normaltype after cachepreserved",
+    "build": "Original sandboxTurbopack stalled; rootterminatedexactprocess after11min CPU0, exit143; clean elevatednormalbuild succeeded",
+    "priorCacheDirectory": "/private/tmp/rr20-dev-clean-qualification/"
+  },
+  "logs": {
+    "/private/tmp/opf-final-qualification-sites/results/dev-tests.log": "827320d971b6d091f63412d6d2d6a4d159b194f37c733d9a19eb0798bf077c65",
+    "/private/tmp/opf-final-qualification-sites/results/dev-typecheck.log": "f76dde066465e237227363c7e86ab81a22bd8c6aec1587245e38ce942b233694",
+    "/private/tmp/opf-final-qualification-sites/results/dev-build.log": "4f1568bc1b184e07c7ca2bb3ac818cd3f5c03bdc5b1cb6964f125f262711ca10",
+    "/private/tmp/rr20-dev-clean-qualification/typecheck.log": "4fc08444d3693577176bc86837270693edbf833708a174efa20d06df769bb90d",
+    "/private/tmp/rr20-dev-clean-qualification/build.log": "f410c3a7fa2f9bf0169e0e5b2e9b6a6ad45609923e94a1885cd100434d8964af",
+    "/private/tmp/rr20-dev-clean-browser.log": "d6593245195ce1eaf16800097df8a90b402a56b82efffd570ffa2d751ab686a2"
+  },
+  "deployment": "Not performed or authorized",
+  "convex": "No commands executed"
+}

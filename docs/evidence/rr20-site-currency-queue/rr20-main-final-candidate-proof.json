@@ -1,0 +1,39 @@
+{
+  "scope": "Local source candidate; not registry, native or production acceptance",
+  "sourceCommit": "4e5c4fc706e215c7bc5c54692070dfc9769c65a6",
+  "sourceDirectory": "/private/tmp/opf-areas-array-main-site",
+  "qualificationDirectory": "/private/tmp/opf-final-qualification-sites/main",
+  "sourceSyncTestsContentType": "passed",
+  "cleanBuild": {
+    "session": 31330,
+    "exit": 0
+  },
+  "postAnchorFixBuild": {
+    "session": 20926,
+    "exit": 0
+  },
+  "initialFullBrowser": {
+    "session": 25899,
+    "exit": 1,
+    "passed": 73,
+    "failed": 2
+  },
+  "targetedReplay": {
+    "session": 70050,
+    "exit": 0,
+    "passed": 2,
+    "coverage": "All 19 steps across four lessons, source/preview/deep links/reload/previous navigation; 650 pages, 58023 references, 1260 targets"
+  },
+  "fixedDefect": "Tutorial step fragment IDs were absent; IDs and regression coverage added",
+  "remainingBlocker": "Registry-install docs example requires unpublished Gallery 3.0.0",
+  "logs": {
+    "/private/tmp/opf-final-qualification-sites/results/main-source-sync.log": "13e4d79b9e752af2f3408ca1f50e534fafb27b1ac1711e044cc4550232e4656c",
+    "/private/tmp/opf-final-qualification-sites/results/main-tests.log": "327361abd71ec424fa3fbe967bf7ac4deacfedaa528729e69811457ed387fffb",
+    "/private/tmp/opf-final-qualification-sites/results/main-tutorial-content.log": "03124b3d3dda1d3cebffc14a3807202dfbcd489e197e78913ea912e77c238712",
+    "/private/tmp/opf-final-qualification-sites/results/main-typecheck.log": "4eaf382474687eeeddcb8c7b7e1e0b7ee0b5c012f370101b76f4ad6a59ae3c4e",
+    "/private/tmp/opf-final-qualification-sites/results/main-build-clean-local-access.log": "3d10539356ec1400eb3db70d6330e1f3fd94c621b30cb0520a270e381df5c0b8",
+    "/private/tmp/opf-final-qualification-sites/results/main-build-tutorial-anchors.log": "bce09edff9f2ef3589e3d08b8f09a1df50b60433739ddb9a579e7d54a0072971",
+    "/private/tmp/opf-final-qualification-sites/results/main-e2e.log": "41b719b9f6c36958fd93f8adceb651f9b0d204a91854cbe123efa5d667dbca6e",
+    "/private/tmp/opf-final-qualification-sites/results/main-tutorial-links.log": "c364fe986a55df1a15e4b6f4efb2bf1ebfc044556f7816e2900cb067b61262f9"
+  }
+}

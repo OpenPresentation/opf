@@ -1,0 +1,32 @@
+{
+  "scope": "Frozen local source graph; native Windows and other-OS acceptance excluded",
+  "renderer": {
+    "commit": "0be8f764c98b1c681606d28dc80e10734a562fe9",
+    "tests": 119,
+    "typecheckedFiles": 257,
+    "validate": "passed",
+    "browser": "passed",
+    "runtimeAndBaselinesUnchangedSinceTarballCommit": "13a3ab0efd1e201428aea0cd647ff750efa283f4",
+    "testOnlyChanges": [
+      "test/rtl-mixed-runs.mjs",
+      "test/timeline-status.mjs",
+      "test/timeline.mjs"
+    ],
+    "testCommand": "OPF_EXAMPLES_DIR=/private/tmp/opf-area-arrays/examples npm test",
+    "corpusNote": "Explicit frozen corpus avoids an old sibling opf symlink"
+  },
+  "pptx": {
+    "commit": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+    "tests": 133,
+    "typecheckedFiles": 275,
+    "buildTypeValidate": "passed",
+    "independentlyReviewedArchives": 30
+  },
+  "logs": {
+    "/private/tmp/rr20-render-final-full-2.log": "3180308f57bbff23f5a5998b6f3db793c8184f285eba974dafa331e445be0958",
+    "/private/tmp/rr20-render-final-typecheck.log": "f84db1730afd50601b3e23e00c7ad00dac051317b9c90cfb2f5024ee757a2b44",
+    "/private/tmp/rr20-render-final-validate.log": "dce446edababae434e1d3cb8d450ee1917d490be3d81d19364fff97de2f5edff",
+    "/private/tmp/rr20-render-final-browser.log": "de686dc0b90c3eb7d6eb64f6a4ec7503d555abfcd2aa5cc5da52c1cbb2af5518",
+    "/private/tmp/rr20-pptx-final-full.log": "bade0b8c4036aa17dff18eb215c0f6a975556f2e6a378aef4ee8fb9b8b722c34"
+  }
+}

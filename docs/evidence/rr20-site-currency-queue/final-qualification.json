@@ -1,0 +1,138 @@
+{
+  "updatedAt": "2026-10-12T20:49:38.727892+00:00",
+  "authorization": "Start final qualification; no deployment",
+  "scope": "Unpublished array/design/list/tutorial/gallery feature graph; source qualification separate from registry/native/deployment acceptance",
+  "deploymentPerformed": false,
+  "nativeWindows": "deferred",
+  "sourceCommits": {
+    "core": "fb1c2ee65bd45c8b5e8182f034f7fceee1dbb505",
+    "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+    "renderer": "0be8f764c98b1c681606d28dc80e10734a562fe9",
+    "editor": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a",
+    "pptx": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+    "coreRuntime": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+    "mainSite": "4e5c4fc706e215c7bc5c54692070dfc9769c65a6",
+    "devSite": "0d65b99a78f7f1a2ca94471c42ca26938fa40b99",
+    "gallerySite": "df08ef13b50b442de82d04a850ddb8f9aa568c0c"
+  },
+  "core": {
+    "packageTests": 2327,
+    "cliTests": 198,
+    "commandChecks": 95,
+    "conversionChecks": 77,
+    "rootChecksPassed": 44,
+    "rootChecksTotal": 44,
+    "remaining": "No remaining local core source checks; separate integration, registry and native acceptance remain",
+    "goldenReplay": "27/27 core and registry golden checks pass after official baseline adoption",
+    "changedChecks": "passed"
+  },
+  "galleryPackage": {
+    "tests": 110,
+    "previews": 28,
+    "typeBuildVerifyLicenseStabilityPack": "passed"
+  },
+  "mainSite": {
+    "sourceSyncTestsTutorialContentTypeBuild": "passed",
+    "browserInitial": {
+      "passed": 73,
+      "failed": 2
+    },
+    "fix": "Tutorial step links now have matching fragment IDs",
+    "targetedBrowserReplay": {
+      "passed": 2,
+      "coverage": "All19 lesson steps/deep links/source/preview navigation and650 pages/58023 internal references/1260 targets"
+    },
+    "remaining": "Docs registry-install example requires unpublished gallery3.0.0; no registry acceptance claimed"
+  },
+  "devSite": {
+    "tests": {
+      "passed": 976,
+      "existingSkipped": 1,
+      "standalone": 20,
+      "quarantine": 16
+    },
+    "cleanTypeBuild": "passed",
+    "browser": {
+      "passed": 58
+    },
+    "setup": "Stale incremental cache and stalled sandbox build preserved; clean normal commands pass with local permissions"
+  },
+  "gallerySite": {
+    "typecheck": "passed",
+    "fetchContract": "passed",
+    "tests": {
+      "passed": 606,
+      "files": 47
+    },
+    "releaseBuild": "not qualified: source editor bundle must be replaced with genuine published manifest after release",
+    "sourceOnlyNextBuild": "passed; release prebuild remains blocked on matching registry editor bundle",
+    "browser": {
+      "passed": 123,
+      "failed": 1,
+      "failure": "Published-editor manifest identity; source bundle intentionally differs from genuine registry control",
+      "terminalRunLog": "/private/tmp/rr20-gallery-site-split-source-browser-final.log"
+    },
+    "focusedFontsAndLayouts": {
+      "passed": 12
+    }
+  },
+  "rendererGolden": {
+    "workflow": "https://github.com/OpenPresentation/opf-render/actions/runs/38303250315",
+    "mode": "dry-run, selection=both",
+    "status": "Official baseline commit exists; both manifests exactly match reviewed dry-run manifests",
+    "toolingRef": "codex/rr-20-golden-tools",
+    "rendererBranch": "codex/rr-20-array-areas",
+    "review": {
+      "examples": 807,
+      "changedExamples": 586,
+      "templates": 495,
+      "changedTemplates": 409,
+      "templateSheetsReviewed": 21,
+      "artifactImageHashesVerified": true,
+      "stressLimitations": "Unpaginated timeline/table/code/FAQ overflow is explicitly diagnosed; baseline is regression evidence, not universal readability or native parity"
+    },
+    "writeWorkflow": "https://github.com/OpenPresentation/opf-render/actions/runs/38304214690",
+    "baselineCommit": "5a419108bdd25e9970a1e88badb2e4ad1c5f1931"
+  },
+  "editor": {
+    "sourceTests": 72,
+    "playgroundSuites": 21,
+    "browserSuites": 11,
+    "allPassed": true
+  },
+  "pptx": {
+    "commit": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+    "sourceTestFiles": 133,
+    "typecheckFiles": 275,
+    "buildValidate": "passed",
+    "archiveReview": "30 archives independently verified; approved neutral rules, numeric alignment and magnitude axes only",
+    "nativeWindows": "deferred"
+  },
+  "coordinatedTarballs": {
+    "status": "passed locally",
+    "packages": 6,
+    "consumer": "passed",
+    "browserSuites": 8,
+    "browserAssertions": 282,
+    "trustedInteractions": 8,
+    "authorizationOverlay": "Isolated catalog 3 configuration and manifest authorization; exact sources and package hashes retained in proof",
+    "proof": "rr20-final-packed-qualification-proof.json",
+    "registryNativeOtherOSAcceptance": false
+  },
+  "renderer": {
+    "sourceTestFiles": 119,
+    "typecheckedFiles": 257,
+    "buildValidateBrowser": "passed",
+    "finalCommitChanges": "Three reviewed tests only; runtime and official baselines unchanged from packed candidate",
+    "proof": "rr20-render-pptx-final-candidate-proof.json"
+  },
+  "status": "Local qualification complete with explicit registry-dependent site blockers; not release-ready",
+  "remainingAcceptance": [
+    "Exact integrated candidate CI, engines and cross-platform gates",
+    "Matching package publication and genuine registry-generated site assets",
+    "Main site registry-install example for Gallery 3",
+    "Gallery site release build and published-editor manifest acceptance",
+    "Deferred native Windows PowerPoint acceptance",
+    "Deferred deployment and production acceptance"
+  ]
+}

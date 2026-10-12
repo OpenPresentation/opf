@@ -1,0 +1,129 @@
+{
+  "criterion": "T32 integrated release gates, including clean-dist publish environment replay",
+  "scope": "Published 0.19 graph only; newer array/design/list/timeline candidates excluded",
+  "status": "T32 published0.19 scope complete",
+  "doneFacts": {
+    "publishReplay": "All13commands exit0, exact log digests verified; final85089 source, tagref0.19.0, Node24/npm11.16/pnpm10.33.2, literal unresolved-token npmrc, clean initial dist, actual registry19 dependencies.",
+    "source644Merge": {
+      "pr": 644,
+      "url": "https://github.com/OpenPresentation/opf/pull/644",
+      "reviewedHead": "46c578367c35f3cf064b473c695ab7c0a930dc9e",
+      "mergedCommit": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+      "mergedAt": "2026-10-12T17:46:44Z",
+      "reviewedTree": "5351e90e28ec3c9b3f3edb0853a9c911d2276414",
+      "mergedTree": "5351e90e28ec3c9b3f3edb0853a9c911d2276414",
+      "exactTreeEqual": true,
+      "currentMain": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+      "apiCalls": 1
+    },
+    "finalCoordinatedJobs": [
+      {
+        "name": "Resolve explicit gallery qualification",
+        "conclusion": "success",
+        "steps": 5
+      },
+      {
+        "name": "ecosystem-core (model)",
+        "conclusion": "success",
+        "steps": 36
+      },
+      {
+        "name": "ecosystem-render",
+        "conclusion": "success",
+        "steps": 24
+      },
+      {
+        "name": "Installed candidates (windows-latest)",
+        "conclusion": "success",
+        "steps": 36
+      },
+      {
+        "name": "ecosystem-core (installed)",
+        "conclusion": "success",
+        "steps": 36
+      },
+      {
+        "name": "ecosystem-pptx-editor",
+        "conclusion": "success",
+        "steps": 22
+      },
+      {
+        "name": "Installed candidates (macos-latest)",
+        "conclusion": "success",
+        "steps": 36
+      },
+      {
+        "name": "ecosystem-core (registry)",
+        "conclusion": "success",
+        "steps": 36
+      },
+      {
+        "name": "candidate",
+        "conclusion": "skipped",
+        "steps": 0
+      },
+      {
+        "name": "control",
+        "conclusion": "skipped",
+        "steps": 0
+      },
+      {
+        "name": "packages",
+        "conclusion": "success",
+        "steps": 5
+      },
+      {
+        "name": "main-status",
+        "conclusion": "skipped",
+        "steps": 0
+      }
+    ],
+    "crossPlatform643": "Actual parity and published matrix Ubuntu/Windows/macOS jobs, comparisons, and CLI Windows/macOS succeeded; retained exact job receipts38279998734/719/707.",
+    "canonicalGate": "644 terminal MERGED17:49:01; queued17:27:53. No outstanding queue status remains.",
+    "terminalEngines": [
+      {
+        "name": "Node 22 (engines range)",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/38284404473/job/114929197000",
+        "completedAt": "2026-10-12T17:40:42Z"
+      },
+      {
+        "name": "Node 26 (engines range)",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/38284404473/job/114929196099",
+        "completedAt": "2026-10-12T17:38:46Z"
+      }
+    ]
+  },
+  "remainingEvidence": [],
+  "nextSafeAction": "Root may update T32 checklist with these exact evidence bindings; no further tests/network needed.",
+  "autoReviewBlock": "Attempted authorized bounded completed-run jobs read for engines38284404473 rejected as conflicting with AGENTS CI monitoring method. No workaround/retry performed. Parallel coordinated read succeeded.",
+  "remoteReadsAttempted": 2,
+  "testsRun": false,
+  "trackerEdited": false,
+  "evidence": [
+    "/private/tmp/rr20-t32-publish-env-replay.json",
+    "/private/tmp/rr20-opf644-actual-merge-proof.json",
+    "/private/tmp/rr20-source644-merge-gate.log",
+    "/private/tmp/rr20-t32-final-jobs-38284404530.json",
+    "/private/tmp/rr20-t32-final-check-rollup.json",
+    "/private/tmp/rr20-t32-jobs-38279998734.json",
+    "/private/tmp/rr20-t32-jobs-38279998719.json",
+    "/private/tmp/rr20-t32-jobs-38279998707.json"
+  ],
+  "nativeWindows": "UNRUN/deferred; separateT24/T31",
+  "sites": "No deployment acceptance inferred",
+  "closureAssessment": "Original published0.19 T32 criterion is satisfied by actual643 cross-platform parity/published matrix/CLI jobs, exact644 merged tree and final coordinated package/installed/registry jobs plus Node22/26 terminal success, and genuine13-command clean-dist publish-environment replay. Scoped skips on644 parity/matrix/CLI are not counted as passes; those scopes are proven by643 actual jobs. No qualification of newer nested-array/design/list/timeline train.",
+  "evidenceSha256": {
+    "/private/tmp/rr20-t32-publish-env-replay.json": "4ed1d72a078e9ec2cbbe3d293ba37230b8820bbaf6e8a40f280aa4ed7d49d330",
+    "/private/tmp/rr20-opf644-actual-merge-proof.json": "19d02c385acc5a08fa4c4bc9e0c63985f970052eb39ae5862ae9e3247f3e0cf0",
+    "/private/tmp/rr20-source644-merge-gate.log": "d87f24b910ac50ebfd9faedee4523b09c402d6f96a9c19e78e20fd35bc467c06",
+    "/private/tmp/rr20-t32-final-jobs-38284404530.json": "1d34964ce74944c174e2ecda43424076d7d09cd8726e354b7054af3542f89ced",
+    "/private/tmp/rr20-t32-final-check-rollup.json": "677ef26175d46f87794b74887d04ba24f4e64d47c48de1fa511d457a509e70cb",
+    "/private/tmp/rr20-t32-jobs-38279998734.json": "f512f8da150892226ade0ddef4e04116732c3b6bc59ba98b4c4e5f6972484996",
+    "/private/tmp/rr20-t32-jobs-38279998719.json": "5630ef66e1fcd8b5a00ce6b1a1c8def4596acd692afb306e85321798d8672413",
+    "/private/tmp/rr20-t32-jobs-38279998707.json": "4bf1681df5a4bf7ba1304ed3108fdb6ff0c5f4f491d8832d733078c09d971f89"
+  }
+}

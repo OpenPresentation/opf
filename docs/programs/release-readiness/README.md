@@ -4,6 +4,29 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
+## Current checkpoint — 2026-10-12 published graph and feature qualification
+
+The published 0.19 graph's integrated release gates are verified, including actual #644 merge `bdbadd7980891c4f85e6aa04ca75f94d9c19a63b`, Node 22/26, coordinated installed Windows/macOS, actual #643 cross-platform receipts and clean-dist publication replay. [T32 evidence](../../evidence/rr20-site-currency-queue/rr20-t32-completion-audit.json) closes that checkpoint; progress is **32/40 (80%)**. All six publications remain independently verified. [Live-site evidence](../../evidence/rr20-site-currency-queue/live-versions.json) confirms production still serves 0.14-era assets. Site adoption and native Windows acceptance remain open. The owner authorized final qualification on 2026-10-12: “Start final qualification; no deployment.” Tutorials launch with the matching format release. The newer array/design/list/tutorial/gallery-explorer candidates have completed local qualification, with registry-dependent site checks explicitly blocked; historical published-graph qualification does not apply to them. Deployment and native Windows acceptance remain deferred.
+
+## Current feature qualification checklist
+
+The [qualification record](../../evidence/rr20-site-currency-queue/final-qualification.json)
+tracks the unpublished feature graph separately from the published 32/40 checklist.
+No production deployment or native Windows acceptance is included below.
+
+| Component | State | Evidence or remaining check |
+| --- | --- | --- |
+| Core and CLI | Passed locally | 2,327 core and 198 CLI tests; all 44 root checks pass after official baseline adoption |
+| Gallery package | Passed locally | 110 tests, 28 exact previews, type/build/stability/pack checks |
+| Renderer | Passed locally | All 119 tests, type/validation/browser checks; reviewed official 807-example and 495-template baselines |
+| PPTX | Passed locally | All 133 test files, build, type check and validation pass; 30 archive fixtures independently reviewed |
+| Editor | Passed locally | 72 source tests, 21 playground and 11 registered browser suites |
+| Main site | Conditional | Local build/navigation pass, including all 19 tutorial steps and 650 pages; registry-install docs example awaits matching Gallery 3 publication |
+| Dev site | Passed locally | 976 tests, normal type/build and 58 browser cases; one existing test skip |
+| Gallery site | Conditional | 606 tests, source-only build, 12 focused cases and 123 full browser cases pass; one browser check and release build await genuine matching registry editor assets |
+| Coordinated tarballs | Passed locally | Six packages, consumer type checks and 8 browser suites / 282 assertions; explicit isolated catalog 3 authorization recorded |
+| Native Windows, publication and deployment | Deferred | Separate acceptance; no deployment authorized |
+
 ## Goal
 
 The owner's goal (2026-10-01), restated:
@@ -294,6 +317,6 @@ PR.
   (PowerPoint acceptance and native header/footer),
   [opf#88](https://github.com/OpenPresentation/opf/issues/88) (site adoption)
 
-Editor 0.19.0 is trusted-published and independently verified at tag/gitHead `ac25857cca8ce776dd23b5ca58b38a06af9d963f`, workflow `38270637388`. Publisher 75979 and verifier 61972 exited 0; all ten checks pass, including integrity, provenance, three valid signatures with zero invalid/missing, GitHub Release and latest. T37 closes; progress is 30/40. CLI publication, final six-package registry/site acceptance and native T24/T31 remain open. [Editor receipts](../../evidence/rr20-editor019-release-progress/README.md).
+Historical T37 publication checkpoint: Editor 0.19.0 is trusted-published and independently verified at tag/gitHead `ac25857cca8ce776dd23b5ca58b38a06af9d963f`, workflow `38270637388`. Publisher 75979 and verifier 61972 exited 0; all ten checks pass, including integrity, provenance, three valid signatures with zero invalid/missing, GitHub Release and latest. T37 closes; progress is 30/40. CLI publication, final six-package registry/site acceptance and native T24/T31 remain open. [Editor receipts](../../evidence/rr20-editor019-release-progress/README.md).
 
 CLI 0.19.0 is trusted-published and independently verified at tag/gitHead `9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5`. Publisher 96437 and verifier 31875 exited 0; all ten checks pass, including provenance, three valid signatures with zero invalid/missing and latest. The original pre-tag range failure is retained; merged tooling repair #641 correctly accepts published renderer 0.19.1 within the unchanged ^0.19.0 contract. T38 closes; progress is 31/40. Final registry/site acceptance and native T24/T31 remain open. [Receipts](../../evidence/rr20-cli019-release-progress/README.md).

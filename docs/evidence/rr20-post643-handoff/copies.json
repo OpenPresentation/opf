@@ -1,0 +1,34 @@
+[
+  {
+    "file": "rr20-opf643-actual-merge-proof.json",
+    "sha256": "ca6746b5a802d2a6d4cd2c0b00342ae8ef572e0b283af1082c108230b43f85b1"
+  },
+  {
+    "file": "rr20-source-roll-after643-root-proof.json",
+    "sha256": "0412a2da917a93503f1563d9634e29ee14af28be9f18abcd329d5239ce0d87f8"
+  },
+  {
+    "file": "inventory-showcase-live-20261012.json",
+    "sha256": "a2244110c1258174c74fc899c5193a57dc58035f0d3aa31eaaf4600eec9c3223"
+  },
+  {
+    "file": "inventory-showcase-live-20261012-summary.json",
+    "sha256": "6de9445a30ecd1fcf4b88b327da6fe21a2f8107a885b9750f43d0c0ea4235c4c"
+  },
+  {
+    "file": "inventory-showcase-live-20261012-sync.json",
+    "sha256": "38d03303e3d05ef6f78e4c46d30acd39fab1b9ff0e9ff2dc05372173e8f6ecd1"
+  },
+  {
+    "file": "rr20-layout-showcase-final-review-proof.json",
+    "sha256": "de4b8c39b7e992cecd234a1a1aaf604e5d7ea6c307162eee7066502c9ed76378"
+  },
+  {
+    "file": "inventory-post-tutorial-20261012-summary.json",
+    "sha256": "3b16812061ccb528575108bf457d0262c7869b239f63539b96eba34a3f9cbf1e"
+  },
+  {
+    "file": "inventory-post-tutorial-20261012-sync.json",
+    "sha256": "7ba436074182ea9fd106586f0b919ecb915ea08a1e0aec9e9c4ea3afa6dd67ad"
+  }
+]

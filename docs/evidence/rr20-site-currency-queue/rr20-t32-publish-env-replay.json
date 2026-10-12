@@ -1,0 +1,217 @@
+{
+  "status": "passed",
+  "sourceCommit": "85089bf359a41950e5887d782452dd3884805386",
+  "sourceTree": "e0c1eac294bdb13c695b1e286b5fd90659a14faa",
+  "actualPublishedTagCommit": "b3e306d005d3cd0563964d541a834a8a50469536",
+  "rationale": "Final adopted main85089 is allowed final-graph replay, with genuine final registry devdependencies; it is not relabeled as the historicalb3e306 release checkout. Correct existingtag ref is replayed; noevent override or publication mutation.",
+  "environment": {
+    "node": "24.21.0",
+    "npm": "11.16.0",
+    "pnpm": "10.33.2",
+    "GITHUB_REF": "refs/tags/opf-v0.19.0",
+    "GITHUB_REF_NAME": "opf-v0.19.0",
+    "NODE_AUTH_TOKEN": "unset",
+    "NODE_OPTIONS": "unset",
+    "candidateSourceGoldenOverrides": "absent",
+    "npmrcLiteral": "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\nregistry=https://registry.npmjs.org/\nalways-auth=true\n",
+    "initialCoreCliDistAbsent": true
+  },
+  "commands": [
+    {
+      "name": "candidate-publication",
+      "command": [
+        "node",
+        "scripts/candidate-gallery.mjs",
+        "publication"
+      ],
+      "started": "2026-10-12T17:40:05.837428+00:00",
+      "finished": "2026-10-12T17:40:05.870147+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/candidate-publication.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "frozen-install",
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "started": "2026-10-12T17:40:05.870582+00:00",
+      "finished": "2026-10-12T17:40:06.782578+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/frozen-install.log",
+      "sha256": "f34cd7b273c7593719409f7057e845daa12c563b71a40cb91b11ee7116780e83"
+    },
+    {
+      "name": "tag-version",
+      "command": [
+        "node",
+        "-e",
+        "const p=require('./packages/javascript/package.json');if(process.env.GITHUB_REF_NAME!=='opf-v'+p.version)throw Error('tag/version mismatch');console.log('tag/version matches '+p.version)"
+      ],
+      "started": "2026-10-12T17:40:06.782832+00:00",
+      "finished": "2026-10-12T17:40:06.809245+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/tag-version.log",
+      "sha256": "397165a579f44977d66098c3bfef3c8c1e914dac17cf14af9a26ccd755ab05ae"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "pnpm",
+        "lint"
+      ],
+      "started": "2026-10-12T17:40:06.809496+00:00",
+      "finished": "2026-10-12T17:40:08.550499+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/lint.log",
+      "sha256": "59d2ec41b8f6c95e7ec1f2abcd79dd55ab213a20c3df12e67ddc4ed2d12da722"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "started": "2026-10-12T17:40:08.550816+00:00",
+      "finished": "2026-10-12T17:40:18.303040+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/typecheck.log",
+      "sha256": "8f7a333722efacf42667e996f5560ea9171094449cd4b60669b6aed8cb5c37c6"
+    },
+    {
+      "name": "full-test",
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "started": "2026-10-12T17:40:18.303584+00:00",
+      "finished": "2026-10-12T17:43:05.537036+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/full-test.log",
+      "sha256": "4ad815dc5b92d37d2377432d196fd919c8ee3946f794a02471ab88d6ab3892ab"
+    },
+    {
+      "name": "breaking",
+      "command": [
+        "pnpm",
+        "check:breaking"
+      ],
+      "started": "2026-10-12T17:43:05.537436+00:00",
+      "finished": "2026-10-12T17:43:06.971045+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/breaking.log",
+      "sha256": "008208f70ecc6347fa1614536cb84fb45c79eedf7db672376ca452541fd9c99b"
+    },
+    {
+      "name": "package-dry",
+      "command": [
+        "pnpm",
+        "--filter",
+        "@openpresentation/opf",
+        "pack:dry-run"
+      ],
+      "started": "2026-10-12T17:43:06.971330+00:00",
+      "finished": "2026-10-12T17:43:13.818609+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/package-dry.log",
+      "sha256": "e40687a7ce2741b381c4c201c4964a97d453d78b8c1f8afd1d6491eb7608de51"
+    },
+    {
+      "name": "examples",
+      "command": [
+        "pnpm",
+        "check:examples"
+      ],
+      "started": "2026-10-12T17:43:13.818887+00:00",
+      "finished": "2026-10-12T17:43:23.259164+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/examples.log",
+      "sha256": "a06f8e1941e81d83f417292e4ef01cb6b690bd15b4234412250e075ee8653921"
+    },
+    {
+      "name": "skills",
+      "command": [
+        "pnpm",
+        "test:skills"
+      ],
+      "started": "2026-10-12T17:43:23.259476+00:00",
+      "finished": "2026-10-12T17:43:25.232096+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/skills.log",
+      "sha256": "e7212413606f1bf10f8ec6fb723ebf99c5358c8d968040ec205a2bcb018ba972"
+    },
+    {
+      "name": "packed-smoke",
+      "command": [
+        "node",
+        "packages/javascript/test/packed-install-smoke.mjs"
+      ],
+      "started": "2026-10-12T17:43:25.232517+00:00",
+      "finished": "2026-10-12T17:43:54.022448+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/packed-smoke.log",
+      "sha256": "69e88c258dfc60cd70a450679c32109cea70096055dbdc39e104b1c0c0e0a278"
+    },
+    {
+      "name": "gallery-tracker",
+      "command": [
+        "pnpm",
+        "check:gallery-tracker"
+      ],
+      "started": "2026-10-12T17:43:54.022761+00:00",
+      "finished": "2026-10-12T17:43:55.556961+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/gallery-tracker.log",
+      "sha256": "c8fe7bbadab79729022258d83138e97e0884ade9a878f75c181a88aeec50dc71"
+    },
+    {
+      "name": "font-tracker",
+      "command": [
+        "pnpm",
+        "check:font-tracker"
+      ],
+      "started": "2026-10-12T17:43:55.557292+00:00",
+      "finished": "2026-10-12T17:43:57.049580+00:00",
+      "exit": 0,
+      "log": "/private/tmp/rr20-t32-publish-env-replay-results/font-tracker.log",
+      "sha256": "198970fa77bd84bd8c8eb98f6cf74fb7e9b8fd1380e6619fae4559288f626885"
+    }
+  ],
+  "oldFailureRetained": "/private/tmp/rr20-core019-dry-local-qualification.md",
+  "trackedHashCount": 14490,
+  "nativeWindows": "UNRUN",
+  "publication": "not executed",
+  "trackedChanged": [],
+  "gitStatus": "",
+  "workflowSha256": "6603211080c7f7d9ae0a0808b1b46da5d50458cb3836b13e7c15047537b35101",
+  "lockSha256": "f6b0249623d7585d8fbd14cf4c79df6b1cb96ba837d7b2f4478b67235f5504ca",
+  "exit": 0,
+  "transcriptSha256": "d89ae8dd32d4e541ea3a3a1c97e630df6e6c8afdee56f38fb92d92b8bd374d21",
+  "installedPackageIdentities": [
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "manifest": "/private/tmp/opf-t32-publish-env-replay/node_modules/.pnpm/@openpresentation+opf-render@0.19.1_@expo-google-fonts+arimo@0.4.3_@expo-google-fonts+c_8444e818994cf534ffc63ce71beb1655/node_modules/@openpresentation/opf-render/package.json"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "manifest": "/private/tmp/opf-t32-publish-env-replay/node_modules/.pnpm/@openpresentation+opf-pptx@0.19.0_@openpresentation+opf-render@0.19.1_@types+node@24.13.6/node_modules/@openpresentation/opf-pptx/package.json"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "2.0.0",
+      "manifest": "/private/tmp/opf-t32-publish-env-replay/node_modules/.pnpm/@openpresentation+gallery@2.0.0/node_modules/@openpresentation/gallery/package.json"
+    }
+  ],
+  "installedPackageIdentitySha256": "930913091ac1bd01f380be37c3d53aa55a87f7b0c65d9b826b97fc47b84f7a29",
+  "runnerSha256": "a213a06b2ec94d017827a2012cc0912d668f3ca72af0d9f52b221e2f09dadea7",
+  "terminalSession": 19751,
+  "terminalExit": 0,
+  "allCommandsPassed": true,
+  "historicGoldenSkip": "Existing renderer0.14/core0.14 SVG digest case explicitly skipped for installed0.19.1/0.19.0; no new skip flag.",
+  "finalTrackedSha256Manifest": "/private/tmp/rr20-t32-publish-env-replay-results/final-tracked-sha256.json",
+  "finalTrackedSha256ManifestHash": "57bcb0e478b90f1e5a059fc03a419bf1ecc4a597bfc5989fa127c5dc28a1c004"
+}

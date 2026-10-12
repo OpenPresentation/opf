@@ -1,0 +1,97 @@
+{
+  "at": "2026-10-12T17:01:43.386169+00:00",
+  "repos": [
+    {
+      "repo": "OpenPresentation/opf",
+      "before": "2de2889ddfb8ff1219352324400b01feecceeaab",
+      "head": "85089bf359a41950e5887d782452dd3884805386",
+      "remoteHead": "85089bf359a41950e5887d782452dd3884805386",
+      "inventoryHead": "85089bf359a41950e5887d782452dd3884805386",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "before": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "head": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "remoteHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "inventoryHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "before": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "head": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "remoteHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "inventoryHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "before": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "head": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "remoteHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "inventoryHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "before": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "head": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "remoteHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "inventoryHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "before": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "remoteHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "inventoryHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "before": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "remoteHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "inventoryHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "branch": "main",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "before": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "remoteHead": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "inventoryHead": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "branch": "master",
+      "clean": true,
+      "skipped": null,
+      "instructionsRead": true
+    }
+  ],
+  "prs": 7,
+  "issues": 43,
+  "graphqlCalls": 1,
+  "fetches": 8
+}
