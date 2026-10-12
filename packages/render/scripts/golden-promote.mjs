@@ -18,7 +18,7 @@ const args = process.argv.slice(2);
 const option = (name, fallback) => { const index = args.indexOf(name); return index < 0 ? fallback : args[index + 1]; };
 const out = path.resolve(option('--out', process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden')));
 const candidatePath = path.resolve(option('--candidate', path.join(out, 'candidate.json')));
-const selection = option('--baseline', process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.cover-centering.sha256.json'));
+const selection = option('--baseline', process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.rr81-v2-reviewed.sha256.json'));
 
 const resolved = resolveBaseline(selection);
 assert.equal(resolved.kind, 'directory', `${selection}: promotion needs a per-deck baseline directory (run scripts/golden-migrate.mjs on a single-file manifest first)`);

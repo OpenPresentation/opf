@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readBaseline} from './golden-store.mjs';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, copyFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -34,5 +35,21 @@ try {
   assert.equal(readFileSync(baseline, 'utf8'), approved, 'Updates must leave the approved baseline intact');
   rmSync(file);
   fails(run(), /Golden corpus must not be empty/);
+  if (!process.env.OPF_GOLDEN_BASELINE && !process.env.OPF_EXAMPLES_DIR) {
+    // Ordinary publish has no override. Explicit reviewed candidate corpora are checked by golden.mjs
+    // with their own selected baseline; do not force the current published corpus into those runs.
+    const ordinaryEnv = {...process.env, OPF_GOLDEN_OUT: path.join(temp,'ordinary')};
+    delete ordinaryEnv.OPF_GOLDEN_BASELINE; delete ordinaryEnv.OPF_EXAMPLES_DIR;
+    const ordinary = spawnSync(process.execPath,[runner],{encoding:'utf8',timeout:120000,env:ordinaryEnv});
+    succeeds(ordinary);
+    const selected = readBaseline(fileURLToPath(new URL('./golden/opf-examples-png.rr81-v2-reviewed.sha256.json', import.meta.url)));
+    const actual = JSON.parse(readFileSync(path.join(temp,'ordinary/candidate.json'),'utf8'));
+    assert.equal(Object.keys(selected.entries).length,807);
+    assert.deepEqual(actual.source,selected.source);
+    assert.deepEqual(actual.entries,selected.entries);
+    console.log('Ordinary published-core v2 baseline selection passed: 807 exact slides.');
+  } else {
+    console.log('Explicit corpus/baseline preserved; default probe is not applicable.');
+  }
   console.log('Golden gate passed: missing baseline, pixel drift, source drift, non-mutating candidate generation and empty-corpus rejection.');
 } finally { rmSync(temp, { recursive: true, force: true }); }
