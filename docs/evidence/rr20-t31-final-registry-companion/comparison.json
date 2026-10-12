@@ -1,0 +1,572 @@
+{
+  "originalSeal": {
+    "packetSha256": "be69008fd401b435c29696e8393b7aed1a1030ed11bd8b050600c2e83f80a945",
+    "offlineResultSha256": "bc40577eeca576af0d9b1a37e3ce71b2cfa03f2587a7801a1a011b8f000a74bd"
+  },
+  "comparisons": [
+    {
+      "file": "inputs/layout-title-auto.pptx",
+      "oldSha256": "906ed8a492e6ac05794e5aae5b3ea99cc9b91824632ecc0136590758dee309bf",
+      "currentSha256": "906ed8a492e6ac05794e5aae5b3ea99cc9b91824632ecc0136590758dee309bf",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/layout-media-regions.pptx",
+      "oldSha256": "0d41b9d6e7a26341f8c8667505dcccc2a00cf8ed45517c33c062eeb73dfbcd16",
+      "currentSha256": "0d41b9d6e7a26341f8c8667505dcccc2a00cf8ed45517c33c062eeb73dfbcd16",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/layout-empty-custom.pptx",
+      "oldSha256": "c004383313f9732ef385545c866cae8a3106a55a5559c50559da192ba1ff049d",
+      "currentSha256": "c004383313f9732ef385545c866cae8a3106a55a5559c50559da192ba1ff049d",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/table-save.pptx",
+      "oldSha256": "6714654e33d9a4e8465aee3078fbef7019c0d7e3ff7f5bf9d980b49718538022",
+      "currentSha256": "6714654e33d9a4e8465aee3078fbef7019c0d7e3ff7f5bf9d980b49718538022",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/furniture-inherited.pptx",
+      "oldSha256": "246c1f643c31171f16dae2f71b7d1cd79443ce942e14d1766458b5a96ff3624e",
+      "currentSha256": "246c1f643c31171f16dae2f71b7d1cd79443ce942e14d1766458b5a96ff3624e",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/furniture-flags.pptx",
+      "oldSha256": "e316ec123959075f738f4014a9719ea152cc0e09083869300e34c00f7b481651",
+      "currentSha256": "e316ec123959075f738f4014a9719ea152cc0e09083869300e34c00f7b481651",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/picture-control.pptx",
+      "oldSha256": "354d864c2251d40fe361f464ae9f70decb69fb71b543d6ad7c37b46436580916",
+      "currentSha256": "354d864c2251d40fe361f464ae9f70decb69fb71b543d6ad7c37b46436580916",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-treemap-category.pptx",
+      "oldSha256": "ae80f07372780aaab7f06698665c603e1aea27bdd95e4f7b4d97e3c6c65bbfd8",
+      "currentSha256": "ae80f07372780aaab7f06698665c603e1aea27bdd95e4f7b4d97e3c6c65bbfd8",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-histogram-single.pptx",
+      "oldSha256": "7c85973cd7816aca5ca5c91bdca0decdbe9e625b7dc79f637dc62dbb1bd891f8",
+      "currentSha256": "7c85973cd7816aca5ca5c91bdca0decdbe9e625b7dc79f637dc62dbb1bd891f8",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-histogram-category.pptx",
+      "oldSha256": "896a445d77d8e05e9400e3202f255770e7382386856f30493d92fabf03bf034a",
+      "currentSha256": "896a445d77d8e05e9400e3202f255770e7382386856f30493d92fabf03bf034a",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-pareto-multi.pptx",
+      "oldSha256": "c4cb406e855d7da0681ab3a41b20827dc3bd16f8af1956c443b21c229daeaea3",
+      "currentSha256": "c4cb406e855d7da0681ab3a41b20827dc3bd16f8af1956c443b21c229daeaea3",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that cannot represent multiple value series natively; all authored series are preserved in the fallback; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "inputs/chart-box-multi.pptx",
+      "oldSha256": "1fe05b3fdd6294c62f04b55535645b50005f4ebf642ac375c7ebe67260af9f44",
+      "currentSha256": "1fe05b3fdd6294c62f04b55535645b50005f4ebf642ac375c7ebe67260af9f44",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-waterfall-single.pptx",
+      "oldSha256": "68c84fe30b0b614ce458625a285c43ddef2986503daf00963afd548e53c4403a",
+      "currentSha256": "68c84fe30b0b614ce458625a285c43ddef2986503daf00963afd548e53c4403a",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ]
+    },
+    {
+      "file": "inputs/chart-funnel-category.pptx",
+      "oldSha256": "60967e5768c3bec209d10325a6d5183705fce35575b287954645d3ab9aab18bc",
+      "currentSha256": "60967e5768c3bec209d10325a6d5183705fce35575b287954645d3ab9aab18bc",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "inputs/chart-world-category.pptx",
+      "oldSha256": "1a99700028eb53efaecee40c0961a968175411f35d5b090d4ff54bbb0b28af29",
+      "currentSha256": "1a99700028eb53efaecee40c0961a968175411f35d5b090d4ff54bbb0b28af29",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "inputs/chart-all-seven.pptx",
+      "oldSha256": "71bdc5fd772ef83869e06deba63b362ea280c95b7f45c46fc48e9c97a82c56b3",
+      "currentSha256": "71bdc5fd772ef83869e06deba63b362ea280c95b7f45c46fc48e9c97a82c56b3",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/treemap-category-fallback.pptx",
+      "oldSha256": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+      "currentSha256": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/treemap-category-auto.pptx",
+      "oldSha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "currentSha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/treemap-category-native.pptx",
+      "oldSha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "currentSha256": "16bea43594f5df6a4c400edad3413e5f9107e6ab4983cd6658639edacce6a52c",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/histogram-single-fallback.pptx",
+      "oldSha256": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+      "currentSha256": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The histogram's single data column 'Sample' (6 values) was binned into 4 equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.",
+          "adaptation": "histogram-binned"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/histogram-single-auto.pptx",
+      "oldSha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "currentSha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/histogram-single-native.pptx",
+      "oldSha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "currentSha256": "5b419c0498bc1b35bc593084a2d74838cad12f7b2bf5c5e797785c02b39855b0",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/histogram-category-fallback.pptx",
+      "oldSha256": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+      "currentSha256": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/histogram-category-auto.pptx",
+      "oldSha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "currentSha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/histogram-category-native.pptx",
+      "oldSha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "currentSha256": "00f4e4f7c71394ad524a89bd5fe0fd5eab775552b4ba1260b4ce406adbe6b7cc",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/pareto-multi-fallback.pptx",
+      "oldSha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "currentSha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/pareto-multi-auto.pptx",
+      "oldSha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "currentSha256": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that cannot represent multiple value series natively; all authored series are preserved in the fallback; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "name": "pareto-multi",
+      "mode": "native",
+      "rejected": true,
+      "code": "unsupported-chart-data",
+      "details": {
+        "path": "slides.0.chart",
+        "series": [
+          "North",
+          "South",
+          "West"
+        ]
+      },
+      "partialArchive": false
+    },
+    {
+      "file": "chart-modes/box-multi-fallback.pptx",
+      "oldSha256": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+      "currentSha256": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/box-multi-auto.pptx",
+      "oldSha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "currentSha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/box-multi-native.pptx",
+      "oldSha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "currentSha256": "182d0e33271aa52ce7283a99711032d9ffcc8ca84db2dc694c659d6835c356b9",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/waterfall-single-fallback.pptx",
+      "oldSha256": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+      "currentSha256": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/waterfall-single-auto.pptx",
+      "oldSha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "currentSha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/waterfall-single-native.pptx",
+      "oldSha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "currentSha256": "28f834fd88cdf86d09c67f44f82277ac57707fdaf308b7bb54b2e5aafbe1dde6",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/funnel-category-fallback.pptx",
+      "oldSha256": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+      "currentSha256": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/funnel-category-auto.pptx",
+      "oldSha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "currentSha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/funnel-category-native.pptx",
+      "oldSha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "currentSha256": "03a75f7a3e8b47dd1b31239e06a791d0f7ce796a89b44842bbbb0a1f2973220f",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/world-category-fallback.pptx",
+      "oldSha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "currentSha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/world-category-auto.pptx",
+      "oldSha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "currentSha256": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/world-category-native.pptx",
+      "oldSha256": "ef65d95d1a5e4a70de9b9dfbe669f3c713e41b7750e9bb016bd40f0d773a3a9e",
+      "currentSha256": "ef65d95d1a5e4a70de9b9dfbe669f3c713e41b7750e9bb016bd40f0d773a3a9e",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-map-geodata",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows \"There was a problem getting the information for your map chart\" and draws nothing. The clustered column fallback shows the same values in readers without chartex support."
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/all-seven-fallback.pptx",
+      "oldSha256": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+      "currentSha256": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/all-seven-auto.pptx",
+      "oldSha256": "5ff9467587f1f31f483cbdf1b6fe629248e527d9620274db6584563683093502",
+      "currentSha256": "5ff9467587f1f31f483cbdf1b6fe629248e527d9620274db6584563683093502",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/all-seven-native.pptx",
+      "oldSha256": "5e1e39ffb6c5e69595101b9348f2351501cba505dec36ad0a7154a0deaa6024b",
+      "currentSha256": "5e1e39ffb6c5e69595101b9348f2351501cba505dec36ad0a7154a0deaa6024b",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-map-geodata",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows \"There was a problem getting the information for your map chart\" and draws nothing. The clustered column fallback shows the same values in readers without chartex support."
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/pareto-single-auto.pptx",
+      "oldSha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "currentSha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    },
+    {
+      "file": "chart-modes/pareto-single-fallback.pptx",
+      "oldSha256": "067249c618d694332e596ff52f63fe89304d7003f7d4052569bca104f5062001",
+      "currentSha256": "067249c618d694332e596ff52f63fe89304d7003f7d4052569bca104f5062001",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ]
+    },
+    {
+      "file": "chart-modes/pareto-single-native.pptx",
+      "oldSha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "currentSha256": "37d9447557cf0540dd6e46b3aad8347e39e2179614300c2041e4344fc40d9c4c",
+      "byteEqual": true,
+      "changedEntries": [],
+      "diagnostics": []
+    }
+  ],
+  "nativeAcceptance": "pending; no Office execution",
+  "freshRaster": false
+}

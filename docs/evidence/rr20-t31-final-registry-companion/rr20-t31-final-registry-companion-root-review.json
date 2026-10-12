@@ -1,0 +1,62 @@
+{
+  "exitCode": 0,
+  "session": 53808,
+  "archivesCompared": 46,
+  "allByteIdentical": true,
+  "zipEntryDifferences": 0,
+  "packetFilesChecked": 235,
+  "negativeControlsPassed": 9,
+  "nativeWindowsAcceptance": "UNRUN",
+  "fullSixPackageAcceptance": "PENDING",
+  "preservedHistoricalRoundTripFailures": [
+    "furniture-flags",
+    "chart-pareto-multi",
+    "chart-waterfall-single",
+    "chart-world-category",
+    "chart-all-seven"
+  ],
+  "registryPackages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "b3e306d005d3cd0563964d541a834a8a50469536",
+      "integrity": "sha512-glzhH9ZWG0RmYQA4k7+SNtCmx4m5moZl+3eXdEMU+GS/ex7uNTF0NchdS5sPUUGpXX3kAY9Au74t7xOribVycg=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "integrity": "sha512-Hn67Leg3rnALEEmY/0FWSB423vccf7m8jtnPA4QOQjFMuHofLMuN9r3t42gSF9ML4Cak1GiUdG8N5+vw23rSFQ=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "sourceSha": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "integrity": "sha512-mwV19g5bt0hjV9n0gin51Z736DNzrzCagFEQQHJErDgzkf8xOpEy37Y6/Oh9+rvHwSXrzQu73w3UW5bRdWDRCg=="
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "2.0.0",
+      "sourceSha": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "integrity": "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw=="
+    }
+  ],
+  "files": [
+    {
+      "path": "/private/tmp/rr20-t31-final-registry-companion/comparison/comparison.json",
+      "sha256": "01a4c7ff8f728c4072cc579342e02202374264eaf3dda0babc1499dac1557bef"
+    },
+    {
+      "path": "/private/tmp/rr20-t31-final-registry-companion/comparison/table-comparison.json",
+      "sha256": "8cbbb7ac589aa61f05cbf4e4c5814e449d80293f895b242f9864eb006000e43c"
+    },
+    {
+      "path": "/private/tmp/rr20-t31-final-registry-companion/registry-identities.json",
+      "sha256": "a80b13241c9769656e99ae4dc59b7efce0b37138d12195ebed7f3b3e4d33ec72"
+    },
+    {
+      "path": "/private/tmp/rr20-t31-final-registry-companion.log",
+      "sha256": "2d4ab3d675da90064770419d6c80dbc63dd784eda56121e766454cab9e372e18"
+    }
+  ]
+}

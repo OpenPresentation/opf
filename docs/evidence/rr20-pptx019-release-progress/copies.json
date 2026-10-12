@@ -30,5 +30,17 @@
   {
     "file": "rr20-pptx019-release-commit-gate.log",
     "sha256": "d13775c5cd9bac6cc9a053f62c7268d84f05790f363292728d8ebafb1c39e66b"
+  },
+  {
+    "file": "rr20-pptx019-registry-verified.json",
+    "sha256": "58e6d66d3cf9fc174493e4ef62027b8897b8ff378bf9b5789fe516ab1f3f622d"
+  },
+  {
+    "file": "rr20-pptx019-trusted-publish.log",
+    "sha256": "f68de6d46873c10af10261c793c85c28b3b0498880b922f52682eb05b957a273"
+  },
+  {
+    "file": "rr20-pptx019-independent-api-count.json",
+    "sha256": "4a7bbb66a726ac1cab9272df611f80a7301ad386e6e3c760a10d1b02dc1c9d3c"
   }
 ]

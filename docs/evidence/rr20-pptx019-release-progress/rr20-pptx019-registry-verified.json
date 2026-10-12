@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-pptx@0.19.0, integrity sha512-mwV19g5bt0hjV9n0gin51Z736DNzrzCagFEQQHJErDgzkf8xOpEy37Y6/Oh9+rvHwSXrzQu73w3UW5bRdWDRCg=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-pptx opf-pptx-v0.19.0 -> 6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead 6bb89f1e69326532d063bacadd3bbd2acf54bd8c = tag commit 6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "6bb89f1e6932 is on opf-pptx main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at 6bb89f1e6932 carries 0.19.0"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.19.0)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.19.0 from 6bb89f1e6932 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38254108977/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.19.0 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.19.0"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}
