@@ -2,12 +2,17 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {existsSync} from 'node:fs';
+import {createRequire} from 'node:module';
 import {mkdtemp,mkdir,readFile,writeFile,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url)),npmCli=process.env.npm_execpath;
 assert.ok(npmCli?.endsWith('npm-cli.js'),'Run with npm run test:packed');
+// The runner already requires npm; use its own semver implementation for declared test dependency ranges.
+const {satisfies}=createRequire(npmCli)('semver');
+assert.ok(satisfies('2.0.1','^2.0.0'));
+assert.ok(!satisfies('3.0.0','^2.0.0')&&!satisfies('2.0.1-next.0','^2.0.0'));
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-render-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
 const npm=(args,cwd)=>execFileSync(process.execPath,[npmCli,...args],{cwd,encoding:'utf8',maxBuffer:8*1024*1024});
@@ -40,10 +45,14 @@ console.log('Lean install: SVG works; PNG, raster PDF and font packs name what t
   // to the tarball and asks npm for a version it does not have yet (ETARGET); the override resolves the edge to the tarball too.
   // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
   const tarball=`file:${path.join(temporary,packed.filename)}`,coreName='@openpresentation/opf';
-  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:tarball,[coreName]:rootManifest.dependencies[coreName]},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
+  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:tarball,[coreName]:rootManifest.dependencies[coreName],'@openpresentation/gallery':rootManifest.devDependencies['@openpresentation/gallery']},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
   const peers=[...Object.keys(rootManifest.peerDependencies)].filter(name=>/^@expo-google-fonts\/(roboto|roboto-mono|arimo|caladea|cousine|gelasio|tinos|noto-sans)$/.test(name)||['sharp','@resvg/resvg-js','pdf-lib'].includes(name)).map(name=>`${name}@${rootManifest.devDependencies[name]}`);
   assert.equal(peers.length,11);
   npm(['install','--ignore-scripts','--no-fund','--no-audit',...peers],consumer);
+  const galleryRoot=path.join(consumer,'node_modules/@openpresentation/gallery');
+  assert.ok((await realpath(galleryRoot)).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Packed test gallery must be installed inside its consumer');
+  assert.ok(satisfies(JSON.parse(await readFile(path.join(galleryRoot,'package.json'),'utf8')).version,rootManifest.devDependencies['@openpresentation/gallery']),'Packed fixture gallery must satisfy its declared development range');
+  console.log('Packed fixture gallery2 is installed inside the consumer; renderer runtime dependencies remain unchanged.');
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-render');
   const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
   assert.equal(manifest.version,JSON.parse(await readFile(path.join(root,'package.json'),'utf8')).version);
