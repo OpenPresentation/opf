@@ -64,5 +64,9 @@
     "copy": "docs/evidence/rr20-render0191-release-progress/inventory-post-render239-20261012-sync.json",
     "bytes": 3373,
     "sha256": "e0715955c37cc14efe5d491c416d022088ca8013e7c85b922b9592c238f62644"
+  },
+  {
+    "file": "rr20-render0191-release-commit-gate.log",
+    "sha256": "d83045bd31940d192e27916df4486153b14f947e5dac3677cd9644920f3a7101"
   }
 ]
