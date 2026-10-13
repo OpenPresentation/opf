@@ -12,7 +12,9 @@
     "candidateHead": "146e477196405fe7d2283008f6fad34c12742599",
     "relation": "remote head is ancestor of qualified local candidate",
     "bootstrapPrepared": "49b1c09135903eb4e35ac68ac75c4447f4172bd6",
-    "remaining": "Use actual merged core/render ancestor pins, qualify strict bootstrap, then Gallery3 publication before engine registry adoption; remote PR description needs final sequence update"
+    "remaining": "Use actual merged core/render ancestor pins, qualify strict bootstrap, then Gallery3 publication before engine registry adoption",
+    "descriptionUpdated": true,
+    "descriptionScope": "Remote PR6 prose now records source merge then Gallery3 publication before engine registry adoption; unchanged remote code head3708ef9, local146e/49b1 remain pending"
   },
   "siteHold": {
     "reason": "No deployment authorized; site pushes may auto-deploy",
