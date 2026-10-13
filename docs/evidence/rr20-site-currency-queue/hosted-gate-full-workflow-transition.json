@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-10-13T17:34:29Z",
+  "reason": "Deliberate monitor replacement to refresh successful candidate-selection prerequisites in failing workflows; not a response to observation timeout and not an established diagnosis of CI failures",
+  "previousMonitor": {
+    "session": 69206,
+    "pid": 56498,
+    "exit": 143,
+    "log": "/private/tmp/rr20-qualified-runtime-hosted-gate.log",
+    "stoppedBySupervisor": true,
+    "githubJobsCancelled": false
+  },
+  "replacementMonitor": {
+    "session": 31422,
+    "toolingCommit": "2468e8b5",
+    "log": "/private/tmp/rr20-full-workflow-hosted-gate.log",
+    "intervalSeconds": 240,
+    "timeoutMinutes": 100,
+    "rerunScope": "all",
+    "merge": false,
+    "status": "running"
+  },
+  "sourceHeads": {
+    "opf": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "opf-render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "opf-pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85"
+  },
+  "releaseAcceptance": false
+}
