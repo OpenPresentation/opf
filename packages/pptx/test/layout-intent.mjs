@@ -193,7 +193,7 @@ let cases = 0;
   });
   const malformedRecords = [
     {name: 'Broken', areas: [null]},
-    {...structuredClone(heroA), areas: ['missing-region']},
+    {...structuredClone(heroA), areas: [['missing-region']]},
     {...structuredClone(heroA), $schema: 'https://example.com/untrusted-layout'}
   ];
   for (const record of malformedRecords) {
@@ -255,7 +255,7 @@ let cases = 0;
 
 // A slide record that overrides a registered layout id never changes other slides' layouts.
 {
-  const override = {...structuredClone(base), name: 'Overridden cover', areas: ['title'], columns: [1], rows: ['auto'], regions: {}};
+  const override = {...structuredClone(base), name: 'Overridden cover', areas: [['title']], columns: [1], rows: ['auto'], regions: {}};
   const deckC = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck C', catalogs: custom({'cover': override}),
     slides: [{layout: 'cover', title: 'Override one', subtitle: 'C'}, {layout: 'cover', title: 'Override two', subtitle: 'C'}]};
   assert.equal(validate(deckC, {only: ['format']}).valid, true);

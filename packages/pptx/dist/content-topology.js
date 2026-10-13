@@ -1,3 +1,4 @@
+import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from './source-run-styles.js';
 // Content topology (spec-gap closure P1): the structure of a slide's content
 // survives a PPTX round trip through the OPF_SLIDE_V1 record.
 //
@@ -286,6 +287,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const box = leafBox(path);
     if (box) leaf.box = box;
     if (block.bullets !== undefined && block.items === undefined && ['list', 'text'].includes(kind)) leaf.bullets = true;
+    if (kind === 'text') { const styles = sourceRunStyles(block.text); if (styles) leaf.sourceStyles = styles; }
     if (kind === 'text' && wrapped.has(`${path}.text`)) Object.assign(leaf, wrapped.get(`${path}.text`));
     return leaf;
   };
@@ -302,7 +304,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const fields = ROOT_PAYLOAD_FIELDS.filter(name => slide[name] !== undefined).map(field => {
       const box = boxes.get(`${base}.${field}`);
       const lines = field === 'text' ? wrapped.get(`${base}.text`) : undefined;
-      return box ? {field, box: [box.x, box.y, box.width, box.height].map(round1), ...lines} : {field};
+      const sourceStyles = field === 'text' ? sourceRunStyles(slide.text) : undefined;
+      return box ? {field, ...(sourceStyles ? {sourceStyles} : {}), box: [box.x, box.y, box.width, box.height].map(round1), ...lines} : {field, ...(sourceStyles ? {sourceStyles} : {})};
     });
     if (!fields.length) return undefined;
     if (fields.length === 1) return {form: 'root', ...fields[0]};
@@ -367,6 +370,43 @@ export function listLineBreaks(items, omit = () => {}) {
   return lists.length && lists.length <= MAX_LIST_PATHS && total <= MAX_LIST_BREAKS ? lists : undefined;
 }
 
+// Line identity only: no source words or formatting. Each row is [entry, role, first].
+export function listLineRoles(items, omit = () => {}) {
+  const lists = [];
+  for (const item of items ?? []) {
+    if (!['items', 'bullets'].includes(item?.field) || !Array.isArray(item?.text?.listEntries)) continue;
+    if (!item.text.listEntries.some(entry => entry.description?.richLines?.length)) continue;
+    const lines = [];
+    item.text.listEntries.forEach((entry, index) => {
+      for (const [role, text] of [['text', entry.text], ['description', entry.description]])
+        text?.richLines?.forEach((_, line) => lines.push([index, role, role === 'text' && line === 0]));
+    });
+    if (lines.length) lists.push([item.path, lines]);
+  }
+  if (!lists.length) return undefined;
+  try { return validateListRoles(lists); } catch {
+    for (const [path] of lists) omit(path, 'list line roles exceed the bounded record or cannot be recorded exactly');
+    return undefined;
+  }
+}
+
+export function validateListRoles(value) {
+  if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list roles.');
+  const paths = new Set(); let total = 0;
+  for (const row of value) {
+    if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== 'string' || !LIST_PATH.test(row[0]) || paths.has(row[0]) || !Array.isArray(row[1]) || !row[1].length) throw Error('Invalid list roles path.');
+    paths.add(row[0]); let entry = -1, description = false;
+    for (const line of row[1]) {
+      if (!Array.isArray(line) || line.length !== 3 || !Number.isSafeInteger(line[0]) || !['text', 'description'].includes(line[1]) || typeof line[2] !== 'boolean') throw Error('Invalid list role.');
+      if (line[2]) { if (line[0] !== entry + 1 || line[1] !== 'text') throw Error('Invalid list entry.'); entry++; description = false; }
+      else if (line[0] !== entry || entry < 0 || (description && line[1] === 'text')) throw Error('Invalid list continuation.');
+      if (line[1] === 'description') description = true;
+      if (++total > MAX_LIST_BREAKS) throw Error('Too many list roles.');
+    }
+  }
+  return value;
+}
+
 /** Throws when `value` is not a well-formed `lists` record (untrusted input). Returns it otherwise. */
 export function validateListBreaks(value) {
   if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list breaks record.');
@@ -429,9 +469,9 @@ const validWrapOf = value => validLines(value.lines) && validWrap(value.wrap) &&
 export const wrapOf = node => node.wrap ?? (node.lines === undefined ? undefined : {lines: node.lines});
 /** The leaf fields that record `wrapped` ({lines, gaps?} from wrappedLines). */
 const wrapRecord = wrapped => wrapped.gaps ? {wrap: wrapped} : {lines: wrapped.lines};
-const validField = value => object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box) && validWrapOf(value);
+const validField = value => { if (value?.sourceStyles !== undefined) validateSourceRunStyles(value.sourceStyles); return object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box) && validWrapOf(value); };
 /** The root payload leaves of a root-form record: [{field, box?}]. */
-export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box, lines: topology.lines, wrap: topology.wrap}];
+export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box, lines: topology.lines, wrap: topology.wrap, sourceStyles: topology.sourceStyles}];
 
 /** Throws when `value` is not a well-formed topology record. Returns it otherwise. */
 export function validateTopology(value) {
@@ -456,6 +496,7 @@ export function validateTopology(value) {
     if (item.comp !== undefined) throw Error('A content leaf has no composition.');
     if (!validBox(item.box)) throw Error('Invalid content box.');
     if (item.bullets !== undefined && (item.bullets !== true || !['list', 'text'].includes(item.k))) throw Error('Invalid bullets flag.');
+    if (item.sourceStyles !== undefined) validateSourceRunStyles(item.sourceStyles);
     if (!validWrapOf(item)) throw Error('Invalid wrapped line record.');
   };
   switch (value.form) {
@@ -517,7 +558,7 @@ const textRuns = value => typeof value === 'string' || (Array.isArray(value) && 
  * {reason} when a block matches no leaf or several blocks land on one leaf.
  * Leaves with no block are dropped: empty payloads export nothing.
  */
-export function rebuildContent(topology, blocks, bounds, placed) {
+export function rebuildContent(topology, blocks, bounds, placed, intactStyles = {}) {
   if (!Array.isArray(blocks) || !Array.isArray(bounds) || blocks.length !== bounds.length) return {reason: 'the imported blocks carry no native bounds'};
   const leaves = [];
   const collect = item => {
@@ -571,6 +612,7 @@ export function rebuildContent(topology, blocks, bounds, placed) {
   const payloadOf = leaf => {
     if (!leaf.matches.length) return undefined;
     const payload = clone(leaf.payload ?? blocks[leaf.matches[0]]);
+    if (leaf.kind === 'text' && leaf.node.sourceStyles) payload.text = restoreSourceRunStyles(payload.text, leaf.node.sourceStyles, intactStyles);
     // The imported block always names its type; the authored one may have left it implicit.
     if (!leaf.node.typed) delete payload.type;
     // The imported block names every list `items`; a payload authored as `bullets` takes its key back (a bullet has no description).

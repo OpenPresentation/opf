@@ -879,7 +879,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
-  const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs))
+  const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles))
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
@@ -1332,7 +1332,7 @@ function joinRich(a, b) {
 // `runs` (opf-pptx#212) holds the look export wrote on every run of a list ({text, description?}): a run value still equal to
 // it is inherited formatting, not authored run style, and is removed (as for a tagged heading), so an untouched round trip
 // adds no explicit sizes, families or colours; a value edited in PowerPoint differs and is kept. Without it runs are as read.
-function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null) {
+function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null, roles = null) {
   const lists = new Map();
   for (const item of items) {
     const match = /^OPF list (.+) line (\d+)$/.exec(item.name ?? '');
@@ -1345,6 +1345,10 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
   for (const [path, entries] of lists) {
     entries.sort((a, b) => a.line - b.line);
     if (!entries[0].item.paragraphs[0].bullet) continue;
+    const expectedRoles = roles?.get(path);
+    const validRoles = expectedRoles && expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2]);
+    const lineRoles = validRoles ? expectedRoles : null;
+    if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
@@ -1374,7 +1378,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
       if (paragraph.bullet) { paragraphs.push({...paragraph, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
-      else if (paragraph.maxFontSize < size - 0.01) {
+      else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
         if (current.description === undefined) current.description = text;
         else { current.description = join(current.description, text); applied.add(line); }
@@ -1885,7 +1889,7 @@ function resolvePresentationContext(presentation, options, core = coreContext({.
       // The primary color, which the exporter draws accent fills (table headers, tag, media badge) in. The `accent` ColorRef role is roles.accent.
       accent: normalizeHex(roles.primary),
       surface: normalizeHex(roles.surface),
-      border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
+      border: normalizeHex(roles.border)
     },
     variables
   };
@@ -2138,7 +2142,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const surface=itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
       slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
         rectRadius:8*Math.min(widthInches,heightInches)/720,
-        fill:paint(surface),line:{...paint(itemContext.colorScheme.accent5??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
+        fill:paint(surface),line:{...paint(`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
     if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
@@ -2178,7 +2182,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -2675,7 +2679,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
-  recordPayloadData(context, objectName, 'chart', presentation, path);
+  // Synthetic row-number categories are a native adaptation, not an authored
+  // data column. Full provenance restores the source form only on unchanged caches.
+  recordPayloadData(context, objectName, 'chart', presentation, path, undefined, {rowNumbers: chart.data?.columns?.length === 1 && chartData.adaptations?.some(entry => entry.adaptation === 'row-numbers') === true});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
@@ -2728,6 +2734,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     dataLabelFontSize: textSize / 100,
     showValue: false,
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
+    // Magnitude bars/columns/areas must not let Office auto-truncate a near-equal range.
+    ...(chartData.spec.family === "category" && ["bar", "area"].includes(chartData.type) && chartData.spec.grouping !== "percentStacked" ? {
+      ...(chartData.series.every(entry => entry.values.every(value => value == null || value >= 0)) ? {valAxisMinVal: 0} : {}),
+      ...(chartData.series.some(entry => entry.values.some(value => value < 0)) && chartData.series.every(entry => entry.values.every(value => value == null || value <= 0)) ? {valAxisMaxVal: 0} : {})
+    } : {}),
     barDir: chartData.barDir,
     barGrouping: chartData.barGrouping,
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
@@ -2774,11 +2785,11 @@ function comboChart(chartData, options, {palette, chartOptions, labelColor, font
 // RR-54: a chart or table that uses a dataset, DataColumn objects, a mapping, a data source or number formats records its
 // authored data form on its native frame (src/data-provenance.js), in `full` provenance mode only. `path` is the composed
 // item's path ("slides.0.blocks.1.chart"), which names the authored value (composition hands over the inline copy).
-function recordPayloadData(context, objectName, kind, presentation, path, layout) {
+function recordPayloadData(context, objectName, kind, presentation, path, layout, chartRecordOptions) {
   if (context.provenanceMode !== 'full' || !context.dataRecords || !presentation) return;
   let authored = presentation;
   for (const key of String(path).split('.')) authored = authored !== null && typeof authored === 'object' ? authored[Array.isArray(authored) ? Number(key) : key] : undefined;
-  const record = kind === 'chart' ? chartDataRecord(authored, presentation.datasets) : tableDataRecord(authored, layout);
+  const record = kind === 'chart' ? chartDataRecord(authored, presentation.datasets, chartRecordOptions) : tableDataRecord(authored, layout);
   if (record) {
     context.dataRecords.set(objectName, record);
     context.dataRecordPaths.set(objectName, String(path));
@@ -2800,7 +2811,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   }
 
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
-    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path,
+    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {})
   });
   const columnCount = layout.columnCount;
@@ -2850,7 +2861,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         ...(rich ? {bold:false,italic:false} : {}),
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
-        align: physicalAlignment(cellStyle.align ?? context.contentAlignment, cell.direction),
+        align: physicalAlignment(cell.alignment, cell.direction),
         valign: cellStyle.verticalAlign ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
@@ -2867,7 +2878,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   recordPayloadData(context, objectName, 'table', presentation, path, layout);
   // FA-27: the table's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker).
   if (typeof authoredTable?.alt === 'string') context.frameAlts.set(objectName, authoredTable.alt);
-  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:"accent5",width:1/scale}});
+  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}});
   slide.addTable(rows, {
     objectName,
     x: region.x,
@@ -2883,7 +2894,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     fontFace: context.fonts.body,
     fontSize: 15 * scale * 0.75,
     color: context.colors.text,
-    border: { type: "solid", color: nativeColor("accent5", context.colors.border, context), pt: 0.75 },
+    border: { type: "solid", color: context.colors.border, pt: 0.75 },
     margin: [6 * scale, 7.5 * scale, 3 * scale, 7.5 * scale],
     valign: "top"
   });

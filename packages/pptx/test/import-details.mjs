@@ -121,10 +121,20 @@ const colors = (deck, slide) => {
   for (const save of [false, true]) {
     const {deck, issues} = await read(save ? resave(bytes) : bytes);
     assert.deepEqual(issues.filter(issue => /reference|provenance|color/.test(issue.code)), [], `save ${save}`);
-    assert.deepEqual(colors(deck, 0), [['var', 'var:brand'], ['slot', 'accent2'], ['role', 'primary'], ['text', 'text'], ['hex', '#FF0000'], ['plain', '#FFFFFF']], `save ${save}`);
+    assert.deepEqual(colors(deck, 0), [['var', 'var:brand'], ['slot', 'accent2'], ['role', 'primary'], ['text', 'text'], ['hex', '#FF0000']], `save ${save}`);
     assert.deepEqual(colors(deck, 1).filter(([, color]) => !/^#/.test(color)), [['in a group', 'accent2'], ['x', 'accent2'], ['z', 'var:brand'], ['details', 'accent1'], ['q', 'primary']]);
     assert.deepEqual(colors(deck, 2), [['L', 'accent2'], ['R', 'var:brand']]);
     assert.deepEqual(deck.variables, colorDeck.variables);
+    assert.equal(deck.slides[0].text.find(run => typeof run !== 'string' && run.text === 'plain').color, undefined);
+    const replay = unzipSync(await exportDeck(deck));
+    const replayXml = dec.decode(replay['ppt/slides/slide1.xml']);
+    const plainRun = [...replayXml.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].find(match => match[0].includes('<a:t>plain</a:t>'))?.[0];
+    assert.ok(plainRun, 'the plain run remains a native text run');
+    if (!/<a:srgbClr val="FFFFFF"\/>/.test(plainRun)) {
+      assert.match(plainRun, /<a:schemeClr val="bg1"\/>/);
+      const lightBackground = dec.decode(replay['ppt/theme/theme1.xml']).match(/<a:lt1>([\s\S]*?)<\/a:lt1>/)?.[1];
+      assert.match(lightBackground, /(?:lastClr|val)="FFFFFF"/, 'bg1 resolves to native white on re-export');
+    }
     // Words and structure are untouched by the colour pass.
     assert.equal(deck.slides[0].blocks, undefined);
     assert.deepEqual(withoutColors(deck.slides[1].blocks[1]), {bullets: ['p', [{text: 'q'}]]});

@@ -265,8 +265,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 // catalog's in catalog order and then the embedded custom templates by id, used or not. A second script profile (its own slide
 // master, opf-pptx#168) gets the same set.
 {
-  const custom = {'zz-notes': {name: 'Notes', areas: ['title', 'notes'], rows: ['auto', 1], regions: {notes: {accepts: ['text', 'list']}}},
-    'aa-split': {name: 'Split', areas: ['title title', 'start end'], rows: ['auto', 1], regions: {start: {accepts: ['text']}, end: {accepts: ['image']}}}};
+  const custom = {'zz-notes': {name: 'Notes', areas: [['title'], ['notes']], rows: ['auto', 1], regions: {notes: {accepts: ['text', 'list']}}},
+    'aa-split': {name: 'Split', areas: [['title', 'title'], ['start', 'end']], rows: ['auto', 1], regions: {start: {accepts: ['text']}, end: {accepts: ['image']}}}};
   const deck = {name: 'One template', language: 'ja', catalogs: {custom: {layouts: custom}, gallery: {source: defaultCatalog.source}}, slides: [{layout: 'pillars', title: '日本語の見出し', blocks: [{text: 'ひらがな'}]},
     {title: '日本語の見出し', text: 'カタカナ', design: {fontScheme: 'gallery:ms-mincho'}}]};
   const catalogs = [gallery2, defaultCatalog];
@@ -321,7 +321,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 
 // ---- 3. A region pin round-trips (OPF_SLIDE_V1 records it); a custom template is one more layout.
 const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-split': {name: 'Roadmap split', summary: 'A roadmap with notes over metrics beside it.',
-  areas: ['title title', 'timeline notes', 'timeline metrics'], columns: [2, 1], rows: ['auto', 1, 1],
+  areas: [['title', 'title'], ['timeline', 'notes'], ['timeline', 'metrics']], columns: [2, 1], rows: ['auto', 1, 1],
   regions: {timeline: {accepts: ['timeline'], role: 'primary', flow: 'none'}, notes: {accepts: ['text', 'list'], role: 'secondary', flow: 'column'}, metrics: {accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}}}}}},
   slides: [{layout: 'roadmap-split', title: '2027 roadmap', blocks: [{timeline: {events: [{when: 'Q1', what: 'Pilot'}, {when: 'Q2', what: 'Launch'}]}},
     {metric: {value: 12, label: 'Pilot customers'}}, {metric: {value: '94%', label: 'Retention'}}, {items: ['Hiring two engineers', 'Security review in Q1']},
@@ -337,17 +337,25 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-// ---- 4. A long list in columns: one shape per line in its column at core's breaks, numbering across columns, every item back.
+// ---- 4. A long list in columns: one shape per visual line at core's breaks, numbering across columns, every item back.
 {
   const items = Array.from({length: 14}, (_, index) => `Agenda item ${index + 1} with a few more words`);
   const deck = {name: 'Agenda', catalogs: {custom: {layouts: {agenda: templates.agenda}}}, slides: [{layout: 'agenda', title: 'Agenda', blocks: [{items, numbering: 'arabic'}]}]};
   const {bytes: output, entries: parts} = await exportDeck(deck);
   const lines = [...text(parts, 'ppt/slides/slide1.xml').matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape).filter(shape => /name="OPF list slides\.0\.blocks\.0\.items line \d+"/.test(shape));
-  assert.equal(lines.length, 14, 'Every item is drawn, not only the first column');
-  const columns = [...new Set(lines.map(shape => Number(shape.match(/<a:off x="(-?\d+)"/)[1])))];
-  assert.equal(columns.length, 2, 'Two columns');
-  const starts = lines.map(shape => Number(shape.match(/startAt="(\d+)"/)?.[1] ?? 1));
-  assert.deepEqual(starts, Array.from({length: 14}, (_, index) => index + 1), 'Numbering continues across the columns');
+  const authored = [];
+  for (const shape of lines) {
+    const value = [...shape.matchAll(/<a:t>(.*?)<\/a:t>/g)].map(match => match[1]).join('');
+    if (/^Agenda item \d+\b/.test(value)) authored.push({value, number: Number(shape.match(/startAt="(\d+)"/)?.[1] ?? 1), x: Number(shape.match(/<a:off x="(-?\d+)"/)[1])});
+    else {
+      assert.ok(authored.length > 0, 'A continuation belongs to an authored item');
+      authored.at(-1).value += value;
+    }
+  }
+  assert.deepEqual(authored.map(item => item.value), items, 'Every authored item is drawn once, including its wrapped continuation lines');
+  const columns = [...new Set(authored.map(item => item.x))];
+  assert.equal(columns.length, 3, 'Larger readable list text uses three columns');
+  assert.deepEqual(authored.map(item => item.number), Array.from({length: 14}, (_, index) => index + 1), 'Numbering continues across the columns');
   assert.ok(!/numCol=/.test(text(parts, 'ppt/slides/slide1.xml')), 'No native multi-column body: core breaks the columns');
   const {imported} = await read(output);
   assert.ok(isDeepStrictEqual(imported, deck), JSON.stringify(imported.slides[0]));

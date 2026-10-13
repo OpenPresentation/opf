@@ -14,9 +14,9 @@ const toPptx = (presentation, options = {}) => exportPptx(presentation, {catalog
 const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultCatalog], ...options});
 
 // FF-24c: table cell fills, borders and text that name a theme slot or role, and
-// the engine's own table chrome (header accent, body surface, border, paired text),
-// are written as a:schemeClr and resolve to the deck theme; authored literals stay
-// literal. A theme switch recolors exactly the referenced parts.
+// the engine's theme-linked header/body/text chrome are written as a:schemeClr.
+// Structural default borders are neutral literals, and authored literal/slot
+// borders retain their exact semantics. A theme switch recolors referenced parts.
 
 const SLOT_NAMES = ['light1', 'dark1', 'light2', 'dark2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6', 'hyperlink', 'followedHyperlink'];
 const ROLE_NAMES = ['primary', 'secondary', 'accent', 'text', 'textSecondary', 'surface', 'background'];
@@ -84,8 +84,8 @@ for (const record of records.colorSchemes) {
 }
 
 // 2. The engine's own table chrome follows the theme too: header accent fill,
-// surface body fill, accent5 borders and text paired with its fill. Nothing in a
-// default table is a literal slot color, for every scheme on light and dark decks.
+// surface body fill and text paired with its fill. Structural borders are neutral
+// literals; authored slot borders above still follow the theme.
 let chrome = 0;
 for (const record of records.colorSchemes) {
   // The default theme (minimal) is a dark2 deck; light1 and light2 decks use the bg2 surface.
@@ -99,13 +99,14 @@ for (const record of records.colorSchemes) {
     const rows = rowsOf(slideXml(entries)), literal = rowsOf(slideXml(pinned));
     for (const [r, row] of rows.entries()) for (const [c, cell] of row.entries()) {
       const want = literal[r][c], where = `${record.id} ${slot ?? 'default'} r${r}c${c}`;
-      for (const [part, actual, expected] of [['fill', cell.fill, want.fill], ['text', cell.color, want.color], ...Object.keys(cell.borders).map(edge => [`border ${edge}`, cell.borders[edge], want.borders[edge]])]) {
+      for (const [part, actual, expected] of [['fill', cell.fill, want.fill], ['text', cell.color, want.color], ]) {
         assert.equal(actual.kind, 'scheme', `${where} ${part} is a scheme reference`);
         assert.equal(resolve(actual, theme), expected.val, `${where} ${part} resolves to the pinned literal`);
         chrome++;
       }
       assert.equal(cell.fill.val, r === 0 ? 'accent1' : (dark ? 'tx2' : 'bg2'), `${where} fill role`);
-      assert.deepEqual(edgeColors(cell).map(color => color.val), ['accent5', 'accent5', 'accent5', 'accent5']);
+      assert.ok(edgeColors(cell).every(color => color.kind === 'srgb'), `${where} neutral literal borders`);
+      assert.deepEqual(edgeColors(cell).map(color => color.val), Array(4).fill(dark ? '475569' : 'CBD5E1'));
       if (r > 0) assert.equal(cell.color.val, dark ? 'bg1' : 'tx1', `${where} body text pairs with the surface`);
       else assert.match(cell.color.val, /^(bg1|tx1)$/, `${where} header text is light1 or dark1`);
     }

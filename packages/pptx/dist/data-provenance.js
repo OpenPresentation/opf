@@ -211,9 +211,12 @@ export function tableEnvironmentEvidence(entries) {
 /** The hash of a dataset, or undefined when the map does not hold the id. */
 const datasetHash = (datasets, id) => own(datasets, id) ? hash(canonical(datasets[id])) : undefined;
 
-/** The record of a chart that uses an RR-54 data field, or undefined (the frame then carries no tag). */
-export function chartDataRecord(chart, datasets) {
-  if (!chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
+// Synthetic categories are recorded only when the exporter actually applied
+// row-numbers. Binned histogram fallbacks do not opt in: their native values are
+// counts, so restoring raw samples would give the imported column chart other data.
+/** Authored chart data whose source form the native cache alone cannot preserve. */
+export function chartDataRecord(chart, datasets, {rowNumbers = false} = {}) {
+  if (!rowNumbers && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
   const dataset = isDatasetRef(chart.data) ? datasetHash(datasets, chart.data.dataset) : undefined;
   return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
 }
@@ -415,7 +418,7 @@ const validWith = (payload, datasets) => isValidFormat({slides: [{title: 'Data',
  */
 export function restoreChartData(chart, record, evidence, {datasets, report}) {
   if (!record.evidence.includes(evidence)) {
-    report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.' + (record.highlight ? ' The chart highlight (series and categories named at export) was not restored either: its names refer to the data as exported.' : '')});
+    report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.' + (record.highlight ? ' The chart highlight (series and categories named at export) was not restored either: its names refer to the data as exported.' : '')});
     return chart;
   }
   if (isDatasetRef(record.data) && !own(datasets, record.data.dataset)) {

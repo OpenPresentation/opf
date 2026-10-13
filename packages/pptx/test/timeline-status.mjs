@@ -46,13 +46,17 @@ for(const options of [{},fontOptions]){
   const ext=shape=>Number(shape['p:spPr']['a:xfrm']['a:ext'].cx);
   assert.equal(ext(rings[0]),1.6*ext(current),'the ring ellipse is exactly 1.6 times the dot');
   assert.equal(ext(planned),ext(done),'a hollow marker is the same size as a filled one');
-  // Text: bold label for the current event, muted (>= 4.5:1) text for the planned one, the usual color elsewhere.
+  // Text: core measures the current label at 700 vs the ordinary 600. DrawingML's binary b flag
+  // cannot encode that full distinction: font resolution may map a 600 face to bold too, while
+  // the current ring always remains the native state cue. Planned text is muted.
   const runOf=(eventIndex,field)=>{
     const part=layout.parts.findIndex(p=>p.eventIndex===eventIndex&&p.role===field);
     const shape=named(shapes,new RegExp(`part ${part} line 0$`))[0];
     return array(array(shape['p:txBody']['a:p'])[0]['a:r'])[0]['a:rPr'];
   };
-  assert.equal(runOf(1,'what').b,'1');assert.notEqual(runOf(0,'what').b,'1');assert.notEqual(runOf(2,'what').b,'1');
+  assert.deepEqual([0,1,2].map(eventIndex=>layout.parts.find(part=>part.eventIndex===eventIndex&&part.role==='what').requestedStyle.fontWeight),[600,700,600]);
+  assert.equal(runOf(1,'what').b,'1');
+  assert.equal(runOf(0,'what').b,runOf(2,'what').b);
   const plannedColor=runOf(2,'what')['a:solidFill']?.['a:srgbClr']?.val;
   assert.ok(plannedColor&&colorContrast(`#${plannedColor}`,background)>=4.5,`planned text ${plannedColor}`);
   assert.equal(runOf(2,'when')['a:solidFill']['a:srgbClr'].val,plannedColor);

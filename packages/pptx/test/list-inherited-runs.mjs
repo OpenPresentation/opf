@@ -73,11 +73,13 @@ for (const [label, deck] of Object.entries(decks)) {
 {
   const source = {slides: [{title: 'List', items: ['first', 'second', 'third']}]};
   const bytes = await toPptx(structuredClone(source));
+  const inheritedSize = slideTag(bytes).listRuns[0][1].text.fontSize;
+  const editedSize = inheritedSize + 6;
   const edited = edit(bytes, (name, xml) => name !== 'ppt/slides/slide1.xml' ? xml : lineShape(xml, 'slides.0.items', 1, shape => shape
-    .replace(/<a:rPr lang="en-US" sz="\d+"/, '<a:rPr lang="en-US" sz="2400"')
+    .replace(/<a:rPr lang="en-US" sz="\d+"/, `<a:rPr lang="en-US" sz="${editedSize*100}"`)
     .replace(/(<a:rPr\b[^>]*>)<a:solidFill>[\s\S]*?<\/a:solidFill>/, '$1<a:solidFill><a:srgbClr val="FF0000"/></a:solidFill>')));
   const {deck} = await read(edited);
-  assert.deepEqual(deck.slides[0].items, ['first', [{text: 'second', fontSize: 24, color: '#FF0000'}], 'third'], 'only the edited run carries its native size and colour');
+  assert.deepEqual(deck.slides[0].items, ['first', [{text: 'second', fontSize: editedSize, color: '#FF0000'}], 'third'], 'only the edited run carries its native size and colour');
   // A family chosen for the whole list in PowerPoint differs from the recorded look on every run: observed everywhere.
   const family = edit(bytes, (name, xml) => name !== 'ppt/slides/slide1.xml' ? xml : xml.replace(/<p:sp><p:nvSpPr><p:cNvPr id="\d+" name="OPF list [\s\S]*?<\/p:sp>/g, shape => shape.replace(/<a:latin typeface="[^"]*"/g, '<a:latin typeface="Georgia"')));
   const {deck: restyled} = await read(family);

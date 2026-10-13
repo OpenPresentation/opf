@@ -451,10 +451,21 @@ for (const video of ['file:clip.mp4', 'data:video/mp4;base64,PRIVATE']) {
   const edited = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('<a:t>One</a:t>', '<a:t>Native  edit</a:t>'))));
   assert.deepEqual(edited.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'Native  edit'}, {type: 'text', text: ''}, {type: 'text', text: 'Two '}], 'Edited captions retain separate current native lines.');
   assert.deepEqual(edited.media, [['invalid-media-provenance', 'slides.0.video']]);
-  assert.deepEqual((await read(await toPptx(edited.doc, {seed: 1}))).doc.slides[0].blocks, [
-    {type:'text',text:[{text:url,underline:true,fontSize:18.75,fontFamily:'Aptos',color:'#FFFFFF',link:url}]},
+  const firstReplay = await toPptx(edited.doc, {seed: 1});
+  const secondImported = (await read(firstReplay)).doc;
+  assert.deepEqual(secondImported.slides[0].blocks, [
+    {type:'text',text:[{text:url,underline:true,link:url}]},
     {type:'text',text:'Native  edit'},{type:'text',text:''},{type:'text',text:'Two '}
   ]);
+  const nativeLinkStyle = archive => {
+    const xml = dec.decode(unzipSync(archive)['ppt/slides/slide1.xml']);
+    const run = [...xml.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].find(match => match[0].includes(`<a:t>${url}</a:t>`))?.[0];
+    assert.ok(run, 'the same URL remains a native text run');
+    return {size: run.match(/\bsz="([^"]+)"/)?.[1], family: run.match(/<a:latin typeface="([^"]+)"/)?.[1], color: run.match(/<a:(?:srgbClr|schemeClr) val="([^"]+)"/)?.[1]};
+  };
+  const firstStyle = nativeLinkStyle(firstReplay);
+  assert.deepEqual(firstStyle, {size:'1875', family:'Aptos', color:'FFFFFF'});
+  assert.deepEqual(nativeLinkStyle(await toPptx(secondImported, {seed: 1})), firstStyle);
   for (const provenance of ['references-only', false]) {
     const restricted = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1, provenance});
     const records = tagParts(unzipSync(restricted)).map(path => tagValue(dec.decode(unzipSync(restricted)[path])));

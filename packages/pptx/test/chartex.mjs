@@ -261,11 +261,11 @@ for (const [type, data, expectedType = type] of [
   assert.deepEqual(await importedChart(bytes), {type: expectedType, data}, `${type}: round trip`);
   checks++;
 }
-// A single value column for the other constructs is plotted against row numbers, so it re-imports with a Row column (reported as row-numbers).
+// Row numbers are still plotted and reported, while full provenance restores the authored single column.
 {
   const {bytes, diagnostics} = await exportDeck([{title: 'funnel', chart: {type: 'funnel', data: singleData}}]);
   assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.adaptation), ['row-numbers']);
-  assert.deepEqual(await importedChart(bytes), {type: 'funnel', data: {columns: ['Row', 'Sample'], rows: singleData.rows.map((row, index) => [String(index + 1), row[0]])}});
+  assert.deepEqual(await importedChart(bytes), {type: 'funnel', data: singleData});
 }
 // Several charts in one deck: numbered parts, distinct uniqueIds, each frame wrapped, and the whole export deterministic.
 {
@@ -394,12 +394,21 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     const diagnostics = [];
     const bytes = await toPptx(structuredClone(deck), {...(mode ? {chartex: mode} : {}), onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
     const parts = unzipSync(bytes);
-    return {bytes, diagnostics, chartexParts: Object.keys(parts).filter((part) => /^ppt\/charts\/chartEx\d+\.xml$/.test(part)).length, slides: Object.keys(parts).filter((part) => /^ppt\/slides\/slide\d+\.xml$/.test(part)).map((part) => strFromU8(parts[part]))};
+    return {
+      bytes, diagnostics,
+      chartexParts: Object.keys(parts).filter((part) => /^ppt\/charts\/chartEx\d+\.xml$/.test(part)).length,
+      layoutParts: Object.keys(parts).filter((part) => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(part)).length,
+      layoutTagParts: Object.keys(parts).filter((part) => /^ppt\/tags\/opfLayout\d+\.xml$/.test(part)).length,
+      slides: Object.keys(parts).filter((part) => /^ppt\/slides\/slide\d+\.xml$/.test(part)).map((part) => strFromU8(parts[part])),
+    };
   };
   for (const [name, deck] of Object.entries(fixture.decks)) {
     const fallback = await run(deck, 'fallback');
     assert.equal(digest(fallback.bytes), fixture.entries[name].sha256, `${name} (fallback): bytes identical to the reviewed archive fixture`);
+    assert.equal(fallback.bytes.byteLength, fixture.entries[name].bytes, `${name} (fallback): reviewed archive size`);
     assert.deepEqual(fallback.diagnostics, fixture.entries[name].diagnostics, `${name} (fallback): reviewed diagnostics`);
+    assert.equal(fallback.layoutParts, fixture.entries[name].layoutParts, `${name} (fallback): complete reviewed layout set`);
+    assert.equal(fallback.layoutTagParts, fixture.entries[name].layoutTagParts, `${name} (fallback): complete reviewed layout tags`);
     assert.equal(fallback.chartexParts, 0, `${name} (fallback): no chartex parts`);
     assert.ok(fallback.slides.every((slide) => !slide.includes('AlternateContent')), `${name} (fallback): no alternate content`);
     const maps = deck.slides.filter((slide) => slide.chart.type === 'world').length;

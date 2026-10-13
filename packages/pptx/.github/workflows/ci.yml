@@ -165,8 +165,11 @@ jobs:
       - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
         id: published-core
         run: node scripts/published-core-gate.mjs
+      - name: Explain candidate gallery published-dependency gate
+        if: needs.candidate-selection.outputs.candidate_gallery != ''
+        run: echo '::notice::The selected Gallery candidate requires the coordinated source graph; the separate published control checks registry dependencies, and candidate packed/browser suites run after linking.'
       - name: Verify PPTX with published dependencies
-        if: steps.published-core.outputs.skip != 'true'
+        if: steps.published-core.outputs.skip != 'true' && needs.candidate-selection.outputs.candidate_gallery == ''
         run: npm run test:packed
       - name: Resolve and link the explicitly authorized gallery
         id: candidate-gallery
@@ -361,8 +364,11 @@ jobs:
       - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
         id: published-core
         run: node scripts/published-core-gate.mjs
+      - name: Explain candidate gallery published-dependency gate
+        if: needs.candidate-selection.outputs.candidate_gallery != ''
+        run: echo '::notice::The selected Gallery candidate requires the coordinated source graph; the separate published control checks registry dependencies, and candidate packed/browser suites run after linking.'
       - name: Verify PPTX with published dependencies
-        if: steps.published-core.outputs.skip != 'true'
+        if: steps.published-core.outputs.skip != 'true' && needs.candidate-selection.outputs.candidate_gallery == ''
         run: npm run test:packed
       - name: Resolve and link the explicitly authorized gallery
         id: candidate-gallery

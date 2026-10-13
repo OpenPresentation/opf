@@ -177,8 +177,12 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.match(code.properties, /<a:latin typeface="Roboto Mono"/, 'the font scheme code family');
   assert.match(found.find(run => run.text === 'Run ').properties, /<a:latin typeface="Roboto"/);
   const {document} = await importDeck(bytes);
-  assert.deepEqual(document.slides[0].text.map(run => typeof run === 'string' ? run : [run.text, run.code === true, run.fontFamily]), [['Run ', false, 'Roboto'], ['npm install', true, undefined], [' now', false, 'Roboto']]);
+  assert.deepEqual(document.slides[0].text.map(run => typeof run === 'string' ? run : [run.text, run.code === true, run.fontFamily]), [['Run ', false, undefined], ['npm install', true, undefined], [' now', false, undefined]]);
   assert.equal(validate(document, {only: ['format']}).valid, true);
+  const reexported = await exportDeck(document);
+  const replayRuns = runs(reexported.slide());
+  assert.match(replayRuns.find(run => run.text === 'Run ').properties, /<a:latin typeface="Roboto"/);
+  assert.match(replayRuns.find(run => run.text === 'npm install').properties, /<a:latin typeface="Roboto Mono"/);
 }
 {
   // A run's own fontFamily wins over code; a body-family run is not mistaken for code.

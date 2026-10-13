@@ -16,7 +16,7 @@ for (let y = 0; y < 12; y++) {
     row.push(name);
     many.regions[name] = {accepts: x === 11 && y === 11 ? ['text'] : ['text', 'image']};
   }
-  many.areas.push(row.join(' '));
+  many.areas.push([...row]);
 }
 const indexes = Object.values(regionIndexes(many));
 assert.equal(new Set(indexes).size, 144, 'Maximum custom grid has no placeholder-index collisions across kinds');

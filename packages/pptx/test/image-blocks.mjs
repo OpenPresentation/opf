@@ -114,7 +114,7 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
 
 // A layout's image placeholder places the slide's image: the placement is the layout's, not the block's.
 {
-  const deck = { catalogs: { custom: { layouts: { 'hero-left': { name: 'Hero left', areas: ['title title', 'media body'], columns: [0.45, 0.55], rows: ['auto', 1], regions: {media: {accepts: ['image'], flow: 'none', bleed: true}, body: {accepts: ['text']}} } } } },
+  const deck = { catalogs: { custom: { layouts: { 'hero-left': { name: 'Hero left', areas: [['title', 'title'], ['media', 'body']], columns: [0.45, 0.55], rows: ['auto', 1], regions: {media: {accepts: ['image'], flow: 'none', bleed: true}, body: {accepts: ['text']}} } } } },
     slides: [{ layout: 'hero-left', title: 'Layout kept', text: 'Body', image: { src: uri(wide), alt: 'Wide' } }] };
   const item = imageItem(deck);
   assert.equal(item.region, 'media', 'The image binds to the layout media region');

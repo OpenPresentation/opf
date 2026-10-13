@@ -26,7 +26,8 @@ for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1
   const shape=timed.find(shape=>shape['p:nvSpPr']['p:cNvPr'].name.endsWith(`part ${partIndex} line ${index}`));assert.ok(shape);
   const native=array(shape['p:txBody']['a:p']).map(p=>array(p['a:r']).map(r=>r['a:t']??'').join('')).join('\n');assert.equal(native,part.text.slice(line.start,line.end));
   const fit=part.fit,placed=fit.placement?.lines[index],factor=part.alignment==='center'?.5:0,area=placed?{x:placed.x+placed.width*factor-part.box.width*factor,y:placed.baseline-fit.fontSize,width:part.box.width,height:placed.height}:{x:part.box.x,y:part.box.y+index*fit.lineHeight,width:part.box.width,height:fit.lineHeight};
-  const xfrm=shape['p:spPr']['a:xfrm'];for(const [actual,expected]of [[xfrm['a:off'].x,area.x],[xfrm['a:off'].y,area.y],[xfrm['a:ext'].cx,area.width],[xfrm['a:ext'].cy,area.height]])assert.equal(Number(actual),Math.round(expected*9525));
+  // The exporter passes pixel coordinates through inches; mirror that exact floating-point path before EMU rounding.
+  const xfrm=shape['p:spPr']['a:xfrm'];for(const [actual,expected]of [[xfrm['a:off'].x,area.x],[xfrm['a:off'].y,area.y],[xfrm['a:ext'].cx,area.width],[xfrm['a:ext'].cy,area.height]])assert.equal(Number(actual),Math.round(expected/96*914400));
   for(const p of array(shape['p:txBody']['a:p']))for(const run of array(p['a:r']))assert.equal(Number(run['a:rPr'].sz),Math.round(fit.fontSize*.75*100));
   for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto));
  }

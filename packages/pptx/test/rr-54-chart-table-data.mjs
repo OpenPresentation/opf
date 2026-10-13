@@ -251,12 +251,14 @@ const roundTripDeck = {
   checks += 2;
 }
 
-// 9. Documents without the new fields keep main's exact bytes.
+// 9. Reviewed archives keep exact bytes, including approved inline-table and single-column provenance updates.
 {
   const fixture = JSON.parse(readFileSync(new URL('./fixtures/rr-54-unchanged.json', import.meta.url), 'utf8'));
-  for (const [name, {deck, sha256, nativeSlideSha256}] of Object.entries(fixture.entries)) {
+  for (const [name, {deck, sha256, nativeSlideSha256, rr20PartCount, rr20Bytes}] of Object.entries(fixture.entries)) {
     const bytes = await toPptx(structuredClone(deck));
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (RR-59 repins only full-provenance plain tables)`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (reviewed table and single-column provenance updates)`);
+    assert.equal(bytes.length, rr20Bytes, `${name}: reviewed RR-20 archive size`);
+    assert.equal(Object.keys(unzipSync(bytes)).length, rr20PartCount, `${name}: reviewed RR-20 ZIP part count`);
     if (nativeSlideSha256) {
       const native = Object.entries(unzipSync(bytes)).filter(([path]) => /^ppt\/slides\/slide\d+\.xml$/.test(path)).map(([path, data]) => [path, strFromU8(data).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '')]);
       assert.equal(createHash('sha256').update(JSON.stringify(native)).digest('hex'), nativeSlideSha256, `${name}: pre-RR-59 native slide content remains unchanged`);

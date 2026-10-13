@@ -1,0 +1,324 @@
+{
+  "scope": "RR-20 ChartEx fallback archive refresh on coherent core3/gallery3 graph",
+  "runtime": "Node 24.21.0",
+  "sourceHeads": {
+    "publishedPptx": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+    "candidatePptx": "477c101abd38dde05d5a1c3d91b90173e5d88358",
+    "candidateCore": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+    "candidateGallery": "146e477196405fe7d2283008f6fad34c12742599",
+    "candidateRenderer": "013f39025d0cc63cc149228efb992dfad06838e5"
+  },
+  "sourceAttribution": {
+    "publishedPptxPlusPublishedGraph": "historical fixture bytes reproduced exactly for all nine decks",
+    "publishedPptxPlusCandidateGraph": "all nine preserve full ZIP part sets; exactly 28 OPF layout tags change only their decoded hash field, and comparison slideLayout12 has two content heights and footer placement adjusted for list32",
+    "candidatePptxPlusCandidateGraph": "full ZIP part sets preserved; chart XML changes only neutral gridline color and value-axis zero minimum where chart domain requires it"
+  },
+  "fixtures": {
+    "treemap-category": {
+      "sha256": {
+        "baseline": "26e5cd170506d5ae6bd3897f322499382d91bec5252051b57237a19f57fb3a94",
+        "old-source-current-graph": "5eee29e92a6620647c7b5a8ce460fcaf84796b626b324e7ceeeda13c9f89bd9d",
+        "candidate": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "histogram-single": {
+      "sha256": {
+        "baseline": "2a88212b9afe2d3a8971f2e10a13f4b7bc2a6894251231badf4076893b77beba",
+        "old-source-current-graph": "7311e3405cf6fa6c908a2cbbf9e69dfdf9105d89dd71185a67f1a0db9b3d4488",
+        "candidate": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": true
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "histogram-category": {
+      "sha256": {
+        "baseline": "9363a1d1b78636e6f781e7faa8d2d501d47e3240c72d8acb98fd90d446bc31af",
+        "old-source-current-graph": "553fd6d0a838c3be95ae18bb25d9d16b1187569b41588892eca099043324e7c9",
+        "candidate": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "pareto-multi": {
+      "sha256": {
+        "baseline": "da93a7d1c0666af4e35bce172039230ccac27462cfff3d616e9f70b656d448fc",
+        "old-source-current-graph": "1fcc77a6b1841a6c84e540de08728499cf9d8c42cc1e2040239590a83b1722d5",
+        "candidate": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": true
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "box-multi": {
+      "sha256": {
+        "baseline": "74c5f496318516e86b8d48941351edef2d76c36526064539a533072609f1373f",
+        "old-source-current-graph": "525986ecdaa221af9ef9fd337133cab8065bdbafd7fcd50523add5fd1e25a40a",
+        "candidate": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": true
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "waterfall-single": {
+      "sha256": {
+        "baseline": "61b63e183adf5bba90af5aa3deb242fbcd40607bcf29c59088219e75125fb641",
+        "old-source-current-graph": "051200c98ffaaa4b3f0fc2f2fcd368285108f7a18b6f6313dffb6599890763b1",
+        "candidate": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": true
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "funnel-category": {
+      "sha256": {
+        "baseline": "4eb0714e7389a82e000e7698a0a8cc6e793063a2a7a77719707988e25230a07f",
+        "old-source-current-graph": "01988b745155e8513f1f5ffece94c6c130a18193bfa23dd757ad1b1761d8d156",
+        "candidate": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4"
+      },
+      "partCount": 114,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "world-category": {
+      "sha256": {
+        "baseline": "434c12b1ec65e37e5b436edcf2644dbaace2a50cacf59a473634532be27a8919",
+        "old-source-current-graph": "b7f3d591005070029ba0681ae0e476daf92a253ba7e7d7441601f8adc2048b34",
+        "candidate": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914"
+      },
+      "partCount": 112,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": true
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    },
+    "all-seven": {
+      "sha256": {
+        "baseline": "e19efc7deaacbd0adcf72fc1d40aaa5aada0d739fc05c26e8b94b9d5dc27d698",
+        "old-source-current-graph": "76a42261e7e7d8c95158a4d91781fcd2e37edf3ab8cfd52c77e3b29218f53949",
+        "candidate": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082"
+      },
+      "partCount": 168,
+      "historicalToGraph": {
+        "changedPartCount": 29,
+        "layoutTagHashOnlyCount": 28,
+        "layout12Geometry": {
+          "contentCy": "3461576\u21923690176 (2)",
+          "footerY": "5499735\u21925728335",
+          "footerCy": "809625\u2192581025"
+        }
+      },
+      "graphToCandidate": {
+        "changedParts": [
+          "ppt/charts/chart1.xml",
+          "ppt/charts/chart2.xml",
+          "ppt/charts/chart3.xml",
+          "ppt/charts/chart4.xml",
+          "ppt/charts/chart5.xml",
+          "ppt/charts/chart6.xml",
+          "ppt/charts/chart7.xml"
+        ],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart2.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart3.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart4.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart5.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart6.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          },
+          {
+            "part": "ppt/charts/chart7.xml",
+            "neutralStroke": "3AC67A\u2192475569",
+            "newValueAxisMinZero": false
+          }
+        ]
+      },
+      "diagnosticsUnchanged": true
+    }
+  }
+}
